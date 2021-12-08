@@ -47,24 +47,21 @@ namespace eos
              * @name Simple observables
              */
             /// @{
+            /// Decay Rate
+            double decay_rate() const;
+
             /// Branching Ratio
             double branching_ratio() const;
 
-            /// Branching Ratio (CP averaged)
-            double branching_ratio_cp_averaged() const;
+            /// Amplitudes
+            double real_a_left() const;
+            double imag_a_left() const;
+            double real_a_right() const;
+            double imag_a_right() const;
 
-            /// Direct CP asymmetry A_CP
-            double cp_asymmetry() const;
-
-            /// Time dependent CP asymmetry S_K^*gamma
-            double s_kstar_gamma() const;
-
-            /// Time dependent CP asymmetry C_K^*gamma
-            double c_kstar_gamma() const;
-
-            /// Isospin asymmetry
-            double isospin_asymmetry() const;
-            /// @}
+            /// CKM phase
+            double real_q_over_p() const;
+            double imag_q_over_p() const;
 
             /*!
              * References used in the computation of our observables.

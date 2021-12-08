@@ -31,7 +31,6 @@
 #include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
-#include <eos/utils/save.hh>
 
 #include <cmath>
 

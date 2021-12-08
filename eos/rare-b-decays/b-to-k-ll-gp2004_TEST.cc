@@ -111,7 +111,10 @@ class BToKDileptonLowRecoilTest :
 
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),       1.5267386e-07, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.4236817e-03, 2*eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(14.18, 22.8),          2.2706273e-05, eps);
+
+                    Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  2.2706273e-05, eps);
+
                 }
             }
 
@@ -170,10 +173,13 @@ class BToKDileptonLowRecoilTest :
                 {
                     const double eps = 1e-5;
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),              1.5520940e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(14.18, 22.8),  1.4629637e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),                    5.3935506e-03, 2*eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(14.18, 22.8),                 0.0609245,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.5520940e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       5.3935506e-03, 2*eps);
+
+                    Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::BR",    p, k_mu, oo)->evaluate(),  1.4629637e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  0.0609245,     eps);
+
                 }
             }
         }
@@ -235,8 +241,8 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
 
             std::vector<ObservablePtr> observables;
             std::vector<std::string> observable_names = {
-                    "B->Kll::BR",
-                    "B->Kll::F_H",
+                    "B->Kll::BR_CP_specific",
+                    "B->Kll::F_H_CP_specific",
             };
             for (auto & s : observable_names)
             {

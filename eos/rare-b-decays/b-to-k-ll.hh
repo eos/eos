@@ -58,12 +58,8 @@ namespace eos
             // Integrated Observables
             double integrated_decay_width(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
-            double integrated_cp_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_flat_term(const double & s_min, const double & s_max) const;
-            double integrated_flat_term_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
-            double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
 
             /*!
@@ -74,7 +70,7 @@ namespace eos
             static const std::string kinematics_description_c_theta_l;
 
             /*!
-             * Auxilliary methods for unit tests and diagnostic purposes.
+             * Auxiliary methods for unit tests and diagnostic purposes.
              */
             Amplitudes amplitudes(const double & q2) const;
             std::array<double, 3> angular_coefficients(const double & q2) const;

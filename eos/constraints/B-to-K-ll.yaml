@@ -9,7 +9,7 @@
 # {{{
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@BaBar:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 1.36e-07
@@ -18,7 +18,7 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@BaBar:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[14.21,16.00]@BaBar:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.21, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 4.9e-08
@@ -27,7 +27,7 @@ B^+->K^+mu^+mu^-::BR[14.21,16.00]@BaBar:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@BaBar:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: 6.7e-08
@@ -45,7 +45,7 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@BaBar:2012A:
 # {{{
 B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle:2009A:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 0.04
@@ -54,7 +54,7 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle:2009A:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle:2009A:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: -0.04
@@ -63,7 +63,7 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle:2009A:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle:2009A:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: -0.02
@@ -72,7 +72,7 @@ B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle:2009A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle:2009A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 1.36e-07
@@ -81,7 +81,7 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle:2009A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle:2009A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 3.8e-08
@@ -90,7 +90,7 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle:2009A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle:2009A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: 9.8e-08
@@ -108,7 +108,7 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle:2009A:
 # {{{
 B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: -0.13
@@ -117,7 +117,7 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF:2011B:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.05
@@ -126,7 +126,7 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2011B:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: -0.09
@@ -135,7 +135,7 @@ B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2011B:
     dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 1.41e-07
@@ -144,7 +144,7 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 5.3e-08
@@ -153,7 +153,7 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: 4.8e-08
@@ -167,7 +167,7 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
 # {{{
 B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: -0.13
@@ -176,7 +176,7 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.07000000000000001
@@ -185,7 +185,7 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: -0.05
@@ -194,7 +194,7 @@ B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 1.35e-07
@@ -203,7 +203,7 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 4.2e-08
@@ -212,7 +212,7 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: u, tag: GP2004}
     mean: 5e-08
@@ -221,7 +221,7 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     dof: 1
 B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: d, tag: BFS2004}
     mean: 9.8e-08
@@ -230,7 +230,7 @@ B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     dof: 1
 B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: d, tag: BFS2004}
     mean: 1.11e-07
@@ -239,7 +239,7 @@ B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     dof: 1
 B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: d, tag: GP2004}
     mean: 7.26e-08
@@ -248,7 +248,7 @@ B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     dof: 1
 B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: d, tag: GP2004}
     mean: 4.3e-08
@@ -257,7 +257,7 @@ B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     dof: 1
 B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: d, tag: GP2004}
     mean: 2.14e-08
@@ -266,7 +266,7 @@ B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     dof: 1
 B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 22.86}
     options: {l: mu, q: d, tag: GP2004}
     mean: 2.6e-08
@@ -285,7 +285,7 @@ B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
 # {{{
 B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: -0.02
@@ -294,7 +294,7 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.01
@@ -303,7 +303,7 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 16, q2_max: 18}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.09
@@ -312,7 +312,7 @@ B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 18, q2_max: 22}
     options: {l: mu, q: u, tag: GP2004}
     mean: -0.02
@@ -321,7 +321,7 @@ B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 1.205e-07
@@ -330,7 +330,7 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 3.7674e-08
@@ -339,7 +339,7 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 16, q2_max: 18}
     options: {l: mu, q: u, tag: GP2004}
     mean: 3.54e-08
@@ -348,7 +348,7 @@ B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 18, q2_max: 22}
     options: {l: mu, q: u, tag: GP2004}
     mean: 3.12e-08
@@ -357,7 +357,7 @@ B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::F_Havg
+    observable: B->Kll::F_H
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 0.05
@@ -366,7 +366,7 @@ B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::F_Havg
+    observable: B->Kll::F_H
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.08
@@ -375,7 +375,7 @@ B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::F_Havg
+    observable: B->Kll::F_H
     kinematics: {q2_min: 16, q2_max: 18}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.18
@@ -384,7 +384,7 @@ B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb:2012C:
     dof: 1
 B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb:2012C:
     type: Gaussian
-    observable: B->Kll::F_Havg
+    observable: B->Kll::F_H
     kinematics: {q2_min: 18, q2_max: 22}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.14
@@ -407,7 +407,7 @@ B^+->K^+l^+l^-::R_K[1.00,6.00]@LHCb:2014C:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[1.10,6.00]@LHCb:2014B:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 1.1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: -0.005
@@ -416,7 +416,7 @@ B^+->K^+mu^+mu^-::A_FB[1.10,6.00]@LHCb:2014B:
     dof: 1
 B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb:2014B:
     type: Gaussian
-    observable: B->Kll::A_FBavg
+    observable: B->Kll::A_FB
     kinematics: {q2_min: 15, q2_max: 22}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.015
@@ -425,7 +425,7 @@ B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb:2014B:
     dof: 1
 B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1.1, q2_max: 2}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 2.097e-08
@@ -434,7 +434,7 @@ B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[2.00,3.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 2, q2_max: 3}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 2.82e-08
@@ -443,7 +443,7 @@ B^+->K^+mu^+mu^-::BR[2.00,3.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[3.00,4.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 3, q2_max: 4}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 2.54e-08
@@ -452,7 +452,7 @@ B^+->K^+mu^+mu^-::BR[3.00,4.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[4.00,5.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 4, q2_max: 5}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 2.21e-08
@@ -461,7 +461,7 @@ B^+->K^+mu^+mu^-::BR[4.00,5.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[5.00,6.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 5, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 2.31e-08
@@ -470,7 +470,7 @@ B^+->K^+mu^+mu^-::BR[5.00,6.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[1.10,6.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 1.1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 1.1858e-07
@@ -479,7 +479,7 @@ B^+->K^+mu^+mu^-::BR[1.10,6.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::BR[15.00,22.00]@LHCb:2014A:
     type: Gaussian
-    observable: B->Kll::BRavg
+    observable: B->Kll::BR
     kinematics: {q2_min: 15, q2_max: 22}
     options: {l: mu, q: u, tag: GP2004}
     mean: 8.470000000000001e-08
@@ -488,7 +488,7 @@ B^+->K^+mu^+mu^-::BR[15.00,22.00]@LHCb:2014A:
     dof: 1
 B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb:2014B:
     type: Gaussian
-    observable: B->Kll::F_Havg
+    observable: B->Kll::F_H
     kinematics: {q2_min: 1.1, q2_max: 6}
     options: {l: mu, q: u, tag: BFS2004}
     mean: 0.03
@@ -497,7 +497,7 @@ B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb:2014B:
     dof: 1
 B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb:2014B:
     type: Gaussian
-    observable: B->Kll::F_Havg
+    observable: B->Kll::F_H
     kinematics: {q2_min: 15, q2_max: 22}
     options: {l: mu, q: u, tag: GP2004}
     mean: 0.035
