@@ -22,7 +22,6 @@
 #include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/utils/save.hh>
 
 namespace eos
 {
@@ -449,45 +448,6 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::differential_p_prime_4(const double & s) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
-
-        // cf. [DMRV2012], p. 9, eq. (15)
-        return (a_c.j4 + a_c_bar.j4) / std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s));
-    }
-
-    double
-    BsToPhiDilepton::differential_p_prime_5(const double & s) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
-
-        // cf. [DMRV2012], p. 9, eq. (16)
-        return (a_c.j5 + a_c_bar.j5) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
-    }
-
-    double
-    BsToPhiDilepton::differential_p_prime_6(const double & s) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
-
-        // cf. [DMRV2012], p. 9, eq. (17)
-        return -1.0 * (a_c.j7 + a_c_bar.j7) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
-    }
-
-    double
     BsToPhiDilepton::differential_h_1(const double & s) const
     {
         // cf. [BHvD2010], p. 7, eq. (2.13)
@@ -583,18 +543,6 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::differential_j_6c_cp_averaged(const double & s) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
-
-        return 0.5 * (a_c.j6c + a_c_bar.j6c);
-    }
-
-    double
     BsToPhiDilepton::differential_j_6s(const double & s) const
     {
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
@@ -623,30 +571,6 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::differential_j_1c_plus_j_2c_cp_averaged(const double & s) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
-
-        return 0.5 * (a_c.j1c + a_c_bar.j1c + a_c.j2c + a_c_bar.j2c);
-    }
-
-    double
-    BsToPhiDilepton::differential_j_1s_minus_3j_2s_cp_averaged(const double & s) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
-
-        return 0.5 * (a_c.j1s + a_c_bar.j1s - 3.0 * (a_c.j2s + a_c_bar.j2s));
-    }
-
-    double
     BsToPhiDilepton::integrated_decay_width(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
@@ -657,18 +581,6 @@ namespace eos
     BsToPhiDilepton::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
         return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
-    }
-
-    double
-    BsToPhiDilepton::integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double br = integrated_branching_ratio(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        double br_bar = integrated_branching_ratio(s_min, s_max);
-
-        return 0.5 * (br + br_bar);
     }
 
     double
@@ -696,35 +608,11 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double a_fb = integrated_forward_backward_asymmetry(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        double a_fb_bar = integrated_forward_backward_asymmetry(s_min, s_max);
-
-        return 0.5 * (a_fb + a_fb_bar);
-    }
-
-    double
     BsToPhiDilepton::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
         // cf. [BHvD2012], eq. (A9)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
-    }
-
-    double
-    BsToPhiDilepton::integrated_longitudinal_polarisation_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double f_l = integrated_longitudinal_polarisation(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        double f_l_bar = integrated_longitudinal_polarisation(s_min, s_max);
-
-        return 0.5 * (f_l + f_l_bar);
     }
 
     double
@@ -736,48 +624,11 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::integrated_transversal_polarisation_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double f_t = integrated_transversal_polarisation(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        double f_t_bar = integrated_transversal_polarisation(s_min, s_max);
-
-        return 0.5 * (f_t + f_t_bar);
-    }
-
-    double
-    BsToPhiDilepton::integrated_cp_asymmetry(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        auto gamma     = _imp->decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-        _imp->amplitude_generator->cp_conjugate = true;
-        auto gamma_bar = _imp->decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        return (gamma - gamma_bar) / (gamma + gamma_bar);
-    }
-
-    double
     BsToPhiDilepton::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
     {
         // cf. [BHvD2010], eq. (2.10), p. 6
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return 0.5 * a_c.j3 / a_c.j2s;
-    }
-
-    double
-    BsToPhiDilepton::integrated_transverse_asymmetry_2_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        // cf. [BHvD2010], eq. (2.10), p. 6
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double a_t_2 = integrated_transverse_asymmetry_2(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        double a_t_2_bar = integrated_transverse_asymmetry_2(s_min, s_max);
-
-        return 0.5 * (a_t_2 + a_t_2_bar);
     }
 
     double
@@ -822,45 +673,6 @@ namespace eos
         // cf. [BS2011], eq. (30), p. 8
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return 0.5 * a_c.j9 / a_c.j2s;
-    }
-
-    double
-    BsToPhiDilepton::integrated_p_prime_4(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        // cf. [DMRV2012], p. 9, eq. (15)
-        return (a_c.j4 + a_c_bar.j4) / std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s));
-    }
-
-    double
-    BsToPhiDilepton::integrated_p_prime_5(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        // cf. [DMRV2012], p. 9, eq. (16)
-        return (a_c.j5 + a_c_bar.j5) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
-    }
-
-    double
-    BsToPhiDilepton::integrated_p_prime_6(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        // cf. [DMRV2012], p. 9, eq. (17)
-        return -1.0 * (a_c.j7 + a_c_bar.j7) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
     }
 
     double
@@ -938,24 +750,6 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::integrated_j_3_normalized(const double & s_min, const double & s_max) const
-    {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j3 / _imp->decay_width(a_c);
-    }
-
-    double
-    BsToPhiDilepton::integrated_j_3_normalized_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return (a_c.j3 + a_c_bar.j3) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-    double
     BsToPhiDilepton::integrated_j_4(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
@@ -1004,281 +798,9 @@ namespace eos
         return a_c.j9;
     }
 
-    double
-    BsToPhiDilepton::integrated_j_9_normalized(const double & s_min, const double & s_max) const
-    {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j9 / _imp->decay_width(a_c);
-    }
-
-    double
-    BsToPhiDilepton::integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return (a_c.j9 + a_c_bar.j9) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    // integrated CP-symmetrized angular coefficients (S_i)
-    double
-    BsToPhiDilepton::integrated_s_1s(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j1s + a_c_bar.j1s) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_1c(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j1c + a_c_bar.j1c) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_2s(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j2s + a_c_bar.j2s) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_2c(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j2c + a_c_bar.j2c) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_3(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j3 + a_c_bar.j3) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_4(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j4 + a_c_bar.j4) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_5(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j5 + a_c_bar.j5) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_6s(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j6s + a_c_bar.j6s) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_6c(const double & s_min, const double & s_max) const
-    {
-      Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-      AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-      _imp->amplitude_generator->cp_conjugate = true;
-      AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-      return 4.0 / 3.0 * (a_c.j6c + a_c_bar.j6c) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-
-    double
-    BsToPhiDilepton::integrated_s_7(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j7 + a_c_bar.j7) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_8(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j8 + a_c_bar.j8) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_s_9(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j9 + a_c_bar.j9) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    // integrated CP-antisymmetrized angular coefficients (A_i)
-    double
-    BsToPhiDilepton::integrated_a_1s(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j1s - a_c_bar.j1s) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_1c(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j1c - a_c_bar.j1c) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_2s(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j2s - a_c_bar.j2s) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_2c(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j2c - a_c_bar.j2c) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_3(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j3 - a_c_bar.j3) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_4(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j4 - a_c_bar.j4) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_5(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j5 - a_c_bar.j5) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_6s(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j6s - a_c_bar.j6s) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_7(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j7 - a_c_bar.j7) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_8(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j8 - a_c_bar.j8) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
-    double
-    BsToPhiDilepton::integrated_a_9(const double & s_min, const double & s_max) const
-    {
-        Save<bool> cp_conjugate(_imp->amplitude_generator->cp_conjugate, false);
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        _imp->amplitude_generator->cp_conjugate = true;
-        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
-
-        return 4.0 / 3.0 * (a_c.j9 - a_c_bar.j9) / (_imp->decay_width(a_c) + _imp->decay_width(a_c_bar));
-    }
-
+    /*!
+     * Probes of symmetry relations in the large-energy limit (q^2 << m_b^2)
+     */
     double
     BsToPhiDilepton::differential_symrel_le_a1v(const double & q2) const
     {

@@ -53,7 +53,7 @@ B^0->K^*0gamma::S_K+C_K@BaBar:2008A:
 # {{{
 B^+->K^*+gamma::BR@BaBar:2009A:
     type: Gaussian
-    observable: B->K^*gamma::BRavg
+    observable: B->K^*gamma::BR
     kinematics: {}
     options: {q: u, tag: BFS2004}
     mean: 4.22e-05
@@ -62,7 +62,7 @@ B^+->K^*+gamma::BR@BaBar:2009A:
     dof: 1
 B^0->K^*0gamma::BR@BaBar:2009A:
     type: Gaussian
-    observable: B->K^*gamma::BRavg
+    observable: B->K^*gamma::BR
     kinematics: {}
     options: {q: d, tag: BFS2004}
     mean: 4.47e-05
@@ -80,7 +80,7 @@ B^0->K^*0gamma::BR@BaBar:2009A:
 # {{{
 B^+->K^*+gamma::BR@Belle:2004A:
     type: Gaussian
-    observable: B->K^*gamma::BRavg
+    observable: B->K^*gamma::BR
     kinematics: {}
     options: {q: u, tag: BFS2004}
     mean: 4.25e-05
@@ -89,7 +89,7 @@ B^+->K^*+gamma::BR@Belle:2004A:
     dof: 1
 B^0->K^*0gamma::BR@Belle:2004A:
     type: Gaussian
-    observable: B->K^*gamma::BRavg
+    observable: B->K^*gamma::BR
     kinematics: {}
     options: {q: d, tag: BFS2004}
     mean: 4.01e-05
@@ -151,7 +151,7 @@ B^0->K^*0gamma::S_K+C_K@Belle:2006A:
 # {{{
 B^+->K^*+gamma::BR@CLEO:2000A:
     type: Gaussian
-    observable: B->K^*gamma::BRavg
+    observable: B->K^*gamma::BR
     kinematics: {}
     options: {q: u, tag: BFS2004}
     mean: 3.76e-05
@@ -160,7 +160,7 @@ B^+->K^*+gamma::BR@CLEO:2000A:
     dof: 1
 B^0->K^*0gamma::BR@CLEO:2000A:
     type: Gaussian
-    observable: B->K^*gamma::BRavg
+    observable: B->K^*gamma::BR
     kinematics: {}
     options: {q: d, tag: BFS2004}
     mean: 4.55e-05

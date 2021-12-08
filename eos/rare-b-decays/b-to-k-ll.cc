@@ -26,7 +26,6 @@
 #include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/utils/save.hh>
 
 
 namespace eos
@@ -225,26 +224,6 @@ namespace eos
         return _imp->differential_forward_backward_asymmetry_numerator(a) / _imp->unnormalized_decay_width(a);
     }
 
-    // double
-    // BToKDilepton::differential_ratio_muons_electrons(const double & s) const
-    // {
-    //     double br_electrons;
-    //     {
-    //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->p["mass::e"]());
-    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "e");
-    //         br_electrons = BToKDilepton::differential_branching_ratio(s);
-    //     }
-
-    //     double br_muons;
-    //     {
-    //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->p["mass::mu"]());
-    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "mu");
-    //         br_muons = BToKDilepton::differential_branching_ratio(s);
-    //     }
-
-    //     return br_muons / br_electrons;
-    // }
-
     double
     BToKDilepton::two_differential_decay_width(const double & s, const double & c_theta_l_LHCb) const
     {
@@ -275,51 +254,11 @@ namespace eos
     }
 
     double
-    BToKDilepton::integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double br = _imp->differential_branching_ratio(_imp->integrated_angular_coefficients(s_min, s_max));
-        _imp->amplitude_generator->cp_conjugate = true;
-        double br_bar = _imp->differential_branching_ratio(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        return (br + br_bar) / 2.0;
-    }
-
-    double
-    BToKDilepton::integrated_cp_asymmetry(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        auto gamma     = _imp->unnormalized_decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-        _imp->amplitude_generator->cp_conjugate = true;
-        auto gamma_bar = _imp->unnormalized_decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        return (gamma - gamma_bar) / (gamma + gamma_bar);
-    }
-
-    double
     BToKDilepton::integrated_flat_term(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a = _imp->integrated_angular_coefficients(s_min, s_max);
 
         return _imp->differential_flat_term_numerator(a) / _imp->unnormalized_decay_width(a);
-    }
-
-    double
-    BToKDilepton::integrated_flat_term_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double num_integrated = _imp->differential_flat_term_numerator(_imp->integrated_angular_coefficients(s_min, s_max));
-        double denom_integrated = _imp->unnormalized_decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        _imp->amplitude_generator->cp_conjugate = true;
-
-        num_integrated += _imp->differential_flat_term_numerator(_imp->integrated_angular_coefficients(s_min, s_max));
-        denom_integrated += _imp->unnormalized_decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        return num_integrated / denom_integrated;
     }
 
     double
@@ -330,47 +269,6 @@ namespace eos
         return _imp->differential_forward_backward_asymmetry_numerator(a) / _imp->unnormalized_decay_width(a);
 
     }
-
-    double
-    BToKDilepton::integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const
-    {
-        Save<bool> save(_imp->amplitude_generator->cp_conjugate, false);
-
-        double num_integrated = _imp->differential_forward_backward_asymmetry_numerator(_imp->integrated_angular_coefficients(s_min, s_max));
-        double denom_integrated = _imp->unnormalized_decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        _imp->amplitude_generator->cp_conjugate = true;
-
-        num_integrated += _imp->differential_forward_backward_asymmetry_numerator(_imp->integrated_angular_coefficients(s_min, s_max));
-        denom_integrated += _imp->unnormalized_decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
-
-        return num_integrated / denom_integrated;
-    }
-
-    // double
-    // BToKDilepton::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
-    // {
-    //     std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton::differential_branching_ratio),
-    //             this, std::placeholders::_1);
-
-    //     double br_electrons;
-    //     {
-    //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
-    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "e");
-    //         // br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
-    //         br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
-    //     }
-
-    //     double br_muons;
-    //     {
-    //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "mu");
-    //         br_muons = integrate<GSL::QNG>(integrand, s_min, s_max);
-    //     }
-
-    //     // cf. [BHP2007], Eq. (4.10), p. 6
-    //     return br_muons / br_electrons;
-    // }
 
 
     const std::string

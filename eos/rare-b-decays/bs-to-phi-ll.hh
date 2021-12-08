@@ -96,18 +96,6 @@ namespace eos
             // @}
 
             /*!
-             * @name Optimized observables for large recoil (@f$q^2@f$-differential)
-             *
-             * These transverse asymmetries partially cancel hadronic
-             * matrix elements at small @f$q^2@f$.
-             */
-            // @{
-            double differential_p_prime_4(const double & q2) const;
-            double differential_p_prime_5(const double & q2) const;
-            double differential_p_prime_6(const double & q2) const;
-            // @}
-
-            /*!
              * @name Optimized observables for low recoil (@f$q^2@f$-differential)
              *
              * These transverse asymmetries partially cancel hadronic
@@ -134,12 +122,9 @@ namespace eos
             double differential_j_5(const double & s) const;
             double differential_j_6s(const double & s) const;
             double differential_j_6c(const double & s) const;
-            double differential_j_6c_cp_averaged(const double & s) const;
             double differential_j_7(const double & s) const;
             double differential_j_8(const double & s) const;
             double differential_j_9(const double & s) const;
-            double differential_j_1c_plus_j_2c_cp_averaged(const double & s) const;
-            double differential_j_1s_minus_3j_2s_cp_averaged(const double & s) const;
             // @}
 
             /*!
@@ -152,26 +137,11 @@ namespace eos
             // @{
             double integrated_decay_width(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
-            double integrated_branching_ratio_cp_averaged(const double & q2_min, const double & q2_max) const;
             double integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
             double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const;
-            double integrated_longitudinal_polarisation_cp_averaged(const double & q2_min, const double & q2_max) const;
             double integrated_transversal_polarisation(const double & q2_min, const double & q2_max) const;
-            double integrated_transversal_polarisation_cp_averaged(const double & q2_min, const double & q2_max) const;
-            // @}
-
-            /*!
-             * @name Direct CP-asymmetry (@f$q^2@f$-integrated)
-             *
-             * These observables are integrated over q^2, the dilepton
-             * invariant mass. They arise from the CP-antisymmetrization
-             * of the decay modes @f$\bar{B}_s^0 \to \phi \ell^+ \ell^-@f$
-             * and @f$B_s^0 \to \phi \ell^+ \ell^-@f$.
-             */
-            // @{
-            double integrated_cp_asymmetry(const double & q2_min, const double & q2_max) const;
             // @}
 
             /*!
@@ -182,24 +152,11 @@ namespace eos
              */
             // @{
             double integrated_transverse_asymmetry_2(const double & q2_min, const double & q2_max) const;
-            double integrated_transverse_asymmetry_2_cp_averaged(const double & q2_min, const double & q2_max) const;
             double integrated_transverse_asymmetry_3(const double & q2_min, const double & q2_max) const;
             double integrated_transverse_asymmetry_4(const double & q2_min, const double & q2_max) const;
             double integrated_transverse_asymmetry_5(const double & q2_min, const double & q2_max) const;
             double integrated_transverse_asymmetry_re(const double & q2_min, const double & q2_max) const;
             double integrated_transverse_asymmetry_im(const double & q2_min, const double & q2_max) const;
-            // @}
-
-            /*!
-             * @name Optimized observables for large recoil (@f$q^2@f$-integrated)
-             *
-             * These transverse asymmetries partially cancel hadronic
-             * matrix elements at small @f$q^2@f$.
-             */
-            // @{
-            double integrated_p_prime_4(const double & q2_min, const double & q2_max) const;
-            double integrated_p_prime_5(const double & q2_min, const double & q2_max) const;
-            double integrated_p_prime_6(const double & q2_min, const double & q2_max) const;
             // @}
 
             /*!
@@ -225,8 +182,6 @@ namespace eos
             double integrated_j_2s(const double & q2_min, const double & q2_max) const;
             double integrated_j_2c(const double & q2_min, const double & q2_max) const;
             double integrated_j_3(const double & q2_min, const double & q2_max) const;
-            double integrated_j_3_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_j_3_normalized_cp_averaged(const double & q2_min, const double & q2_max) const;
             double integrated_j_4(const double & q2_min, const double & q2_max) const;
             double integrated_j_5(const double & q2_min, const double & q2_max) const;
             double integrated_j_6s(const double & q2_min, const double & q2_max) const;
@@ -234,101 +189,6 @@ namespace eos
             double integrated_j_7(const double & q2_min, const double & q2_max) const;
             double integrated_j_8(const double & q2_min, const double & q2_max) const;
             double integrated_j_9(const double & q2_min, const double & q2_max) const;
-            double integrated_j_9_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_j_9_normalized_cp_averaged(const double & q2_min, const double & q2_max) const;
-            // @}
-
-            /*!
-             * @name CP-symmetrized angular observables (@f$q^2@f$-integrated), in theory convention
-             */
-            // @{
-            double integrated_s_1s(const double & q2_min, const double & q2_max) const;
-            double integrated_s_1c(const double & q2_min, const double & q2_max) const;
-            double integrated_s_2s(const double & q2_min, const double & q2_max) const;
-            double integrated_s_2c(const double & q2_min, const double & q2_max) const;
-            double integrated_s_3(const double & q2_min, const double & q2_max) const;
-            double integrated_s_4(const double & q2_min, const double & q2_max) const;
-            double integrated_s_5(const double & q2_min, const double & q2_max) const;
-            double integrated_s_6s(const double & q2_min, const double & q2_max) const;
-            double integrated_s_6c(const double & q2_min, const double & q2_max) const;
-            double integrated_s_7(const double & q2_min, const double & q2_max) const;
-            double integrated_s_8(const double & q2_min, const double & q2_max) const;
-            double integrated_s_9(const double & q2_min, const double & q2_max) const;
-            // @}
-
-            /*!
-             * @name CP-symmetrized angular observables (@f$q^2@f$-integrated), in LHCb convention
-             */
-            // @{
-            double integrated_s_1s_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_1s(q2_min,q2_max);
-            }
-            double integrated_s_1c_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_1c(q2_min,q2_max);
-            }
-            double integrated_s_2s_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_2s(q2_min,q2_max);
-            }
-            double integrated_s_2c_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_2c(q2_min,q2_max);
-            }
-            double integrated_s_3_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_3(q2_min,q2_max);
-            }
-            double integrated_s_4_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return -integrated_s_4(q2_min,q2_max);
-            }
-            double integrated_s_5_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_5(q2_min,q2_max);
-            }
-            double integrated_s_6s_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return -integrated_s_6s(q2_min,q2_max);
-            }
-            double integrated_s_6c_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return  -integrated_s_6c(q2_min,q2_max);
-            }
-            double integrated_s_7_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return -integrated_s_7(q2_min,q2_max);
-            }
-            double integrated_s_8_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return integrated_s_8(q2_min,q2_max);
-            }
-            double integrated_s_9_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return -integrated_s_9(q2_min,q2_max);
-            }
-            double integrated_forward_backward_asymmetry_LHCb(const double & q2_min, const double & q2_max) const
-            {
-                return -integrated_forward_backward_asymmetry(q2_min,q2_max); 
-            }
-
-            /*!
-             * @name CP-antisymmetrized angular observables (@f$q^2@f$-integrated)
-             */
-            // @{
-            double integrated_a_1s(const double & q2_min, const double & q2_max) const;
-            double integrated_a_1c(const double & q2_min, const double & q2_max) const;
-            double integrated_a_2s(const double & q2_min, const double & q2_max) const;
-            double integrated_a_2c(const double & q2_min, const double & q2_max) const;
-            double integrated_a_3(const double & q2_min, const double & q2_max) const;
-            double integrated_a_4(const double & q2_min, const double & q2_max) const;
-            double integrated_a_5(const double & q2_min, const double & q2_max) const;
-            double integrated_a_6s(const double & q2_min, const double & q2_max) const;
-            double integrated_a_6c(const double & q2_min, const double & q2_max) const;
-            double integrated_a_7(const double & q2_min, const double & q2_max) const;
-            double integrated_a_8(const double & q2_min, const double & q2_max) const;
-            double integrated_a_9(const double & q2_min, const double & q2_max) const;
             // @}
 
             /*!

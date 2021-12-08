@@ -133,10 +133,11 @@ class BToKDileptonBFS2004BobethCompatibilityTest :
             const double tau_over_hbar = p["life_time::B_u"] / p["QM::hbar"];
             TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1, 6),
                                       2.898727023e-19 * tau_over_hbar, eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1, 6),
-                                      2.8855929e-19 * tau_over_hbar, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1, 6), 0.1097985735, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1, 6), 0.2788261376, eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(1, 6), 0.00455162022, 8 * eps);
+
+            Kinematics k_mu  = Kinematics({{"q2_min", 1.0}, {"q2_max", 6.0}});
+            TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::BR", p, k_mu, oo)->evaluate(),     2.8855929e-19 * tau_over_hbar, eps);
+            TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  0.00455162022,             8 * eps);
         }
 } b_to_k_dilepton_BFS2004_bobeth_compatibility_test;

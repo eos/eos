@@ -223,13 +223,20 @@ class BToKstarDileptonLowRecoilTest :
                 {
                     static const double eps = 1e-4;
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 19.21),                         2.77767e-7, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(14.18, 19.21),             2.63504e-7, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(14.18, 19.21),             -4.08565e-1, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(14.18, 19.21), -4.02902e-1, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(14.18, 19.21),              +0.34841,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation_cp_averaged(14.18, 19.21),  +0.34851,    eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(14.18, 19.21),                 -4.92697e-1, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2_cp_averaged(14.18, 19.21),     -4.91581e-1, eps);
+
+                    Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 19.21}});
+                    auto obs_BR   = Observable::make("B->K^*ll::BR", p, k_mu, oo);
+                    auto obs_FL   = Observable::make("B->K^*ll::F_L",  p, k_mu, oo);
+                    auto obs_AT2  = Observable::make("B->K^*ll::A_T^2",  p, k_mu, oo);
+                    auto obs_AFB  = Observable::make("B->K^*ll::A_FB",  p, k_mu, oo);
+
+                    TEST_CHECK_RELATIVE_ERROR(obs_BR->evaluate(),   2.63504e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_FL->evaluate(),   0.34851,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_AT2->evaluate(), -4.91581e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_AFB->evaluate(), -4.02902e-1, eps);
                 }
 
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
@@ -567,9 +574,9 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
 
             std::vector<ObservablePtr> observables;
             std::vector<std::string> observable_names = {
-                    "B->K^*ll::BR",
-                    "B->K^*ll::A_FB",
-                    "B->K^*ll::F_L"
+                    "B->K^*ll::BR_CP_specific",
+                    "B->K^*ll::A_FB_CP_specific",
+                    "B->K^*ll::F_L_CP_specific"
             };
             for (auto & s : observable_names)
             {
@@ -807,13 +814,41 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             }
 
             {
-                BToKstarDilepton d(p, oo);
+                Options o{
+                    {"model", "WET"},
+                    {"scan-mode", "cartesian"},
+                    {"tag", "GP2004"},
+                    {"form-factors", "KMPW2010"},
+                    {"l", "mu"},
+                    {"q", "d"}
+                };
+                Kinematics k{{"q2", q2}};
+
+                auto observables = Observables();
+                observables.insert("B->K^*ll::J_6c_cp_averaged(q2)", R"()", Unit::None(), Options(),
+                R"(
+                0.5 * (<<B->K^*ll::J_6c(q2);cp-conjugate=false>> + <<B->K^*ll::J_6c(q2);cp-conjugate=true>>)
+                )");
+                observables.insert("B->K^*ll::J1c_plus_J2c_cp_averaged(q2)", R"()", Unit::None(), Options(),
+                R"(
+                0.5 * (<<B->K^*ll::J_1c(q2);cp-conjugate=false>> + <<B->K^*ll::J_1c(q2);cp-conjugate=true>>
+                     + <<B->K^*ll::J_2c(q2);cp-conjugate=false>> + <<B->K^*ll::J_2c(q2);cp-conjugate=true>>)
+                )");
+                observables.insert("B->K^*ll::J1s_minus_3J2s_cp_averaged(q2)", R"()", Unit::None(), Options(),
+                R"(
+                0.5 * (<<B->K^*ll::J_1s(q2);cp-conjugate=false>> + <<B->K^*ll::J_1s(q2);cp-conjugate=true>>)
+                -
+                1.5 * (<<B->K^*ll::J_2s(q2);cp-conjugate=false>> + <<B->K^*ll::J_2s(q2);cp-conjugate=true>>)
+                )");
+                auto J6c_avg            = Observable::make("B->K^*ll::J_6c_cp_averaged(q2)", p, k, o);
+                auto J1c_plus_J2c_avg   = Observable::make("B->K^*ll::J1c_plus_J2c_cp_averaged(q2)", p, k, o);
+                auto J1s_minus_3J2s_avg = Observable::make("B->K^*ll::J1s_minus_3J2s_cp_averaged(q2)", p, k, o);
 
                 double eps = 7e-4;
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c_cp_averaged(q2), 0.5 * (-1.457760738e-20 -1.456196508e-20), eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c_plus_j_2c_cp_averaged(q2),
+                TEST_CHECK_RELATIVE_ERROR(J6c_avg->evaluate(), 0.5 * (-1.457760738e-20 -1.456196508e-20), eps);
+                TEST_CHECK_RELATIVE_ERROR(J1c_plus_J2c_avg->evaluate(),
                         0.5 * (4.48478951e-20 + 4.668428684e-20 + 6.966335387e-21 + 6.893410893e-21), eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s_minus_3j_2s_cp_averaged(q2),
+                TEST_CHECK_RELATIVE_ERROR(J1s_minus_3J2s_avg->evaluate(),
                         0.5 * (6.080153751e-20 + 6.154137843e-20 - 3.0 * (-6.418495462e-21 - 6.424911528e-21)), eps);
             }
         }
