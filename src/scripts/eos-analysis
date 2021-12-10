@@ -125,7 +125,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-IDX.
         dest = 'stride', action = 'store', type = int, default = 5
     )
     parser_sample_mcmc.add_argument('-p', '--number-of-preruns',
-        help = 'The number of prerun steps, which ared used to adapt the MCMC proposal to the posterior.',
+        help = 'The number of prerun steps, which are used to adapt the MCMC proposal to the posterior.',
         dest = 'preruns', action = 'store', type = int, default = 3
     )
     parser_sample_mcmc.add_argument('-n', '--number-of-prerun-samples',
@@ -166,7 +166,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
         dest = 'step_N', action = 'store', type = int, default = 500
     )
     parser_sample_pmc.add_argument('-s', '--number-of-adaptation-steps',
-        help = 'The number of adaptation steps, which ared used to adapt the PMC proposal to the posterior.',
+        help = 'The number of adaptation steps, which are used to adapt the PMC proposal to the posterior.',
         dest = 'steps', action = 'store', type = int, default = 10
     )
     parser_sample_pmc.add_argument('-t', '--perplexity-threshold',
@@ -180,6 +180,10 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
     parser_sample_pmc.add_argument('-c', '--continue-sampling',
         help = 'Whether to continue sampling from the previous `sample-pmc` results, or start fresh from the proposal obtained using `find-clusters`.',
         dest = 'continue_sampling', action = 'store_true', default = False
+    )
+    parser_sample_pmc.add_argument('-S', '--sigma-test-stat',
+        help = 'If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.',
+        dest = 'sigma_test_stat', action = 'store', type = lambda s: [float(item) for item in s.split(',')]
     )
     parser_sample_pmc.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
@@ -239,7 +243,7 @@ in EOS_BASE_DIRECTORY/posterior/mode.
         dest = 'init_file', action = 'store', type = str, default = ''
     )
     parser_find_mode.add_argument('--from-point',
-        help = 'The point from which the minization is started.',
+        help = 'The point from which the minimization is started.',
         dest = 'point', action = 'store', type = str, default = ''
     )
     parser_find_mode.add_argument('--use-random-seed',
@@ -259,7 +263,7 @@ in EOS_BASE_DIRECTORY/posterior/mode.
 '''
 Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
 
-Finding clusters and creating a Gaussian mixture density is a neccessary intermediate step before using the sample-pmc subcommand.
+Finding clusters and creating a Gaussian mixture density is a necessary intermediate step before using the sample-pmc subcommand.
 The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-*. All MCMC input files present will be used in the clustering.
 The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
 ''',
