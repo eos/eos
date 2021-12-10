@@ -31,13 +31,13 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
     :type analysis_file: str or `eos.AnalysisFile`
     :param posterior: The name of the posterior PDF from which to draw the samples.
     :type posterior: str
-    :param chain: The index assigned to the Markov chain. This value is used to seed the RNG for a reproducable analysis.
+    :param chain: The index assigned to the Markov chain. This value is used to seed the RNG for a reproducible analysis.
     :type chain: int >= 0
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     :param pre_N: The number of samples to be used for an adaptation in each prerun steps. These samples will be discarded.
     :type pre_N: int, optional
-    :param preruns: The number of prerun steps, which ared used to adapt the MCMC proposal to the posterior.
+    :param preruns: The number of prerun steps, which are used to adapt the MCMC proposal to the posterior.
     :type preruns: int, optional
     :param N: The number of samples to be stored in the output file. Defaults to 1000.
     :type N: int, optional
@@ -69,7 +69,7 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
     """
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
 
-    Finding clusters and creating a Gaussian mixture density is a neccessary intermediate step before using the sample-pmc subcommand.
+    Finding clusters and creating a Gaussian mixture density is a necessary intermediate step before using the sample-pmc subcommand.
     The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-*. All MCMC input files present will be used in the clustering.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
 
@@ -102,7 +102,8 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
 
 
 # Sample PMC
-def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000, perplexity_threshold=1.0, continue_sampling=False):
+def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000,
+               perplexity_threshold=1.0, continue_sampling=False, sigma_test_stat=None):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
@@ -117,7 +118,7 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type base_directory: str, optional
     :param step_N: The number of samples to be used in each adaptation step. These samples will be discarded. Defaults to 500.
     :type step_N: int > 0, optional
-    :param steps: The number of adaptation steps, which ared used to adapt the PMC proposal to the posterior. Defaults to 10.
+    :param steps: The number of adaptation steps, which are used to adapt the PMC proposal to the posterior. Defaults to 10.
     :type steps: int > 0, optional
     :param final_N: The number of samples to be stored in the output file. Defaults to 5000,
     :type final_N: int > 0, optional
@@ -125,7 +126,9 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type perplexity_threshold: 0.0 < float <= 1.0, optional
     :param continue_sampling: Whether to continue sampling from the previous `sample-pmc` results, or start fresh from the proposal obtained using `find-clusters`.
     :type continue_sampling: bool, optional
-    """
+    :param sigma_test_stat: If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
+    :type sigma_test_stat: list or iterable
+     """
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
     _set_log_file(output_path, 'log', mode='a' if continue_sampling else 'w')
@@ -148,7 +151,7 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
         weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
 
-    eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
+    eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal, sigma_test_stat=sigma_test_stat)
 
 
 # Predict observables

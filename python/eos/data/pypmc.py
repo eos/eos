@@ -215,7 +215,7 @@ class PMCSampler:
 
 
     @staticmethod
-    def create(path, parameters, samples, weights, proposal, compute_test_stat=False, sigma_test=_np.arange(0.5,5.5,.5)):
+    def create(path, parameters, samples, weights, proposal, sigma_test_stat=None):
         """ Write a new PMCSampler object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
@@ -226,10 +226,8 @@ class PMCSampler:
         :type samples: 2D numpy array
         :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
         :type weights: 1D numpy array, optional
-        :param compute_test_stat: (optional) If true, the weighted samples will be used to numerically estimate the inverse CDF of -2 * log(PDF) of the mixture.
-        :type compute_test_stat: bool
-        :param sigma_test: (optional) If compute_test_stat is true, the inverse CDF of -2*log(PDF) will be evaluated for the significance values contained in sigma_test.
-        :type sigma_test: list or iterable
+        :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
+        :type sigma_test_stat: list or iterable
         """
         description = {}
         description['version'] = eos.__version__
@@ -257,17 +255,17 @@ class PMCSampler:
 
         # The test statistics defaults to two empty lists
         description['test statistics'] = { "sigma": [], "densities": [] }
-        if compute_test_stat:
+        if sigma_test_stat:
             samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(purged_components, purged_weights, x)), samples)]
             ind = _np.argsort(samplesPDF)
             sorted_samplesPDF = _np.array(samplesPDF)[ind]
             sorted_weights = weights[ind]
             cumulant = 1.*sorted_weights.cumsum()/sorted_weights.sum()
-            percents = erf(sigma_test/_np.sqrt(2))
+            percents = erf(sigma_test_stat/_np.sqrt(2))
             weighted_percentile = _np.interp(percents, cumulant, sorted_samplesPDF)
 
             description['test statistics'] = {
-                "sigma": sigma_test.tolist(),
+                "sigma": sigma_test_stat.tolist(),
                 "densities": weighted_percentile.tolist()
             }
 
