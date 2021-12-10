@@ -373,12 +373,13 @@ class Analysis:
             return(parameter_samples, weights, np.array(observable_samples))
 
 
-    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand, return_final_only=True, final_perplexity_threshold=1.0):
+    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand,
+                    return_final_only=True, final_perplexity_threshold=1.0, weight_threshold=1e-10):
         """
         Return samples of the parameters and log(weights), and a mixture density adapted to the posterior.
 
         Obtains random samples of the log(posterior) using adaptive importance sampling following
-        the Popoulation Monte Carlo approach with PyPMC.
+        the Population Monte Carlo approach with PyPMC.
 
         :param log_proposal: Initial gaussian mixture density that shall be adapted to the posterior density.
         :type log_proposal: pypmc.density.mixture.MixtureDensity
@@ -388,9 +389,10 @@ class Analysis:
         :type steps: int
         :param final_N: Number of samples that shall be drawn after all adaptation steps.
         :type final_N: int
-        :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.importance_sampler.ImportancSampler)
+        :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.importance_sampler.ImportanceSampler)
         :param return_final_only: If set to True, only returns the samples and weights of the final sampling step, after all adaptations have finished.
-        :param final_perplexity_threshold: Adaptations are stopped if the perpexlity of the last adaptation step is above this threshold value.
+        :param final_perplexity_threshold: Adaptations are stopped if the perplexity of the last adaptation step is above this threshold value.
+        :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
 
         :return: A tuple of the parameters as array of length N = pre_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
@@ -463,7 +465,9 @@ class Analysis:
                     eps, adjusted_weights)
             eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, self._perplexity(adjusted_weights)))
             pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
+            # Normalize the weights and remove components with a weight smaller than weight_threshold
             sampler.proposal.normalize()
+            sampler.proposal.prune(threshold = weight_threshold)
             # stop adaptation if the perplexity of the last step is larger than the threshold
             if last_perplexity > final_perplexity_threshold:
                 eos.info('Perplexity threshold reached after {} step(s)'.format(step))
