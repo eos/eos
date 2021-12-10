@@ -1,6 +1,6 @@
 # Copyright (c) 2018 Frederik Beaujean
 # Copyright (c) 2017, 2018, 2021 Danny van Dyk
-# Copyright (c) 2021 Philip Lüghausen
+# Copyright (c) 2021 Philip Lüghausen, Méril Reboud
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,6 +62,36 @@ class Plotter:
         result = self.colors[self.__next_color]
         self.__next_color = (self.__next_color + 1) % len(self.colors)
         return(result)
+
+    @staticmethod
+    def _weighted_quantiles(values, quantiles, weights=None):
+        """ Compute the quantiles of a weighted sample, ignoring NaN values.
+        :param values: (array-like of *float*) -- Sample from which the quantiles are computed.
+        :param quantiles: (array-like of *float*) -- Quantiles to compute, the values must be in [0, 1]
+        :param weights: (array-like of *float*) -- Array of weights, which should be of the same length as values
+        :return: numpy.array with computed quantiles.
+        """
+        if weights is None:
+            weights = np.ones(len(values))
+        valid_indices = ~(np.isnan(values) + np.isnan(weights))
+        values = np.array(values)[valid_indices]
+        weights = np.array(weights)[valid_indices]
+        quantiles = np.array(quantiles)
+        if (np.any(quantiles < 0) or np.any(quantiles > 1)):
+            eos.error('Quantiles should be in [0, 1]')
+        if (np.any(weights < 0)):
+            eos.error('The sample weights cannot be negative')
+        if (np.sum(weights) == 0):
+            eos.error('The sum of the sample weights evaluated to zero')
+
+        sorter = np.argsort(values)
+        values = values[sorter]
+        weights = weights[sorter]
+
+        # Each sample's weight is half assigned to the the left and half assigned to the right of the point
+        weighted_quantiles = np.cumsum(weights) - 0.5 * weights
+        weighted_quantiles /= np.sum(weights)
+        return np.interp(quantiles, weighted_quantiles, values)
 
 
     def setup_plot(self):
@@ -446,10 +476,11 @@ class Plotter:
 
         For ``data`` object, the following keys are mandatory:
 
-         * ``xvalues`` (*tuple* of *float*) -- The values on the x axis at which the observable has been evaluated.
+         * ``xvalues`` (array-like of *float*) -- The values on the x axis at which the observable has been evaluated.
          * ``samples`` (*list* of tuples of *float*) -- The list of samples of the predictive distribution. Each tuple of samples
            corresponds to an evaluation of the observables at the kinematic configuration corresponding to the ``xvalues``
            entry with the same index.
+         * ``weights`` (array-like of *float*, optional) -- The weights of the samples, on a linear scale. Defaults to uniform weights.
 
         Example:
 
@@ -488,9 +519,12 @@ class Plotter:
 
             self.xvalues = None
             self.samples = None
+            self.weights = None
             if 'data' in item:
                 self.xvalues = np.array(item['data']['xvalues'])
                 self.samples = item['data']['samples']
+                if 'weights' in item['data']:
+                    self.weights = item['data']['weights']
             elif 'data-file' in item:
                 dfname = item['data-file']
                 eos.info('   plotting uncertainty propagation from "{}"'.format(dfname))
@@ -529,14 +563,14 @@ class Plotter:
             _ovalues_central = []
             _ovalues_higher  = []
             for i in range(len(self.samples[0])):
-                lower   = np.nanpercentile(self.samples[:, i], q=15.865)
-                central = np.nanpercentile(self.samples[:, i], q=50.000)
-                higher  = np.nanpercentile(self.samples[:, i], q=84.135)
+                lower, central, higher = self.plotter._weighted_quantiles(self.samples[:, i],
+                                                                         [0.15865, 0.5, 0.84135],
+                                                                         self.weights)
                 _ovalues_lower.append(lower)
                 _ovalues_central.append(central)
                 _ovalues_higher.append(higher)
 
-            xvalues = np.linspace(np.min(self.xvalues),np.max(self.xvalues), self.xsamples)
+            xvalues = np.linspace(np.min(self.xvalues), np.max(self.xvalues), self.xsamples)
             if self.xrange:
                 xvalues = np.ma.masked_outside(xvalues, float(self.xrange[0]), float(self.xrange[1]))
 
