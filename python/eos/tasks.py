@@ -103,7 +103,7 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
 
 # Sample PMC
 def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000,
-               perplexity_threshold=1.0, continue_sampling=False, sigma_test_stat=None):
+               perplexity_threshold=1.0, weight_threshold=1e-10, continue_sampling=False, sigma_test_stat=None):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
@@ -124,6 +124,8 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type final_N: int > 0, optional
     :param perplexity_threshold: The threshold for the perplexity in the last step after which further adaptation steps are to be skipped. Defaults to 1.0.
     :type perplexity_threshold: 0.0 < float <= 1.0, optional
+    :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
+    :type weight_threshold: 0.0 < float <= 1.0, optional.
     :param continue_sampling: Whether to continue sampling from the previous `sample-pmc` results, or start fresh from the proposal obtained using `find-clusters`.
     :type continue_sampling: bool, optional
     :param sigma_test_stat: If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
@@ -145,7 +147,7 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
         initial_proposal = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
 
     samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=step_N, steps=steps, final_N=final_N,
-                                                     rng=rng, final_perplexity_threshold=perplexity_threshold)
+                                                     rng=rng, final_perplexity_threshold=perplexity_threshold, weight_threshold=weight_threshold)
 
     if continue_sampling:
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)

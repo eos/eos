@@ -256,6 +256,7 @@ class PMCSampler:
         # The test statistics defaults to two empty lists
         description['test statistics'] = { "sigma": [], "densities": [] }
         if sigma_test_stat:
+            sigma_test_stat = _np.array(sigma_test_stat)
             samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(purged_components, purged_weights, x)), samples)]
             ind = _np.argsort(samplesPDF)
             sorted_samplesPDF = _np.array(samplesPDF)[ind]
