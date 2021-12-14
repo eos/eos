@@ -62,6 +62,7 @@ Lists the named prior PDFs defined within the scope of this analysis file.
     )
     parser_list_priors.set_defaults(cmd = cmd_list_priors)
 
+
     # list-likelihoods
     parser_list_likelihoods = subparsers.add_parser('list-likelihoods',
         parents = [common_subparser],
@@ -77,6 +78,7 @@ Lists the named likelihoods defined within the scope of this analysis file.
     )
     parser_list_likelihoods.set_defaults(cmd = cmd_list_likelihoods)
 
+
     # list-posteriors
     parser_list_posteriors = subparsers.add_parser('list-posteriors',
         parents = [common_subparser],
@@ -88,6 +90,7 @@ Lists the named posterior PDFs defined within the scope of this analysis file.
     )
     parser_list_posteriors.set_defaults(cmd = cmd_list_posteriors)
 
+
     # list-predictions
     parser_list_predictions = subparsers.add_parser('list-predictions',
         parents = [common_subparser],
@@ -98,6 +101,7 @@ Lists the named prediction sets defined within the scope of this analysis file.
         help = 'Lists the named predictions define in the analysis file.'
     )
     parser_list_predictions.set_defaults(cmd = cmd_list_predictions)
+
 
     # sample-mcmc
     parser_sample_mcmc = subparsers.add_parser('sample-mcmc',
@@ -146,6 +150,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-IDX.
     )
     parser_sample_mcmc.set_defaults(cmd = cmd_sample_mcmc)
 
+
     # sample-pmc
     parser_sample_pmc = subparsers.add_parser('sample-pmc',
         parents = [common_subparser],
@@ -181,9 +186,10 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
         help = 'The number of samples to be stored in the output file.',
         dest = 'final_N', action = 'store', type = int, default = 5000
     )
-    parser_sample_pmc.add_argument('-c', '--continue-sampling',
-        help = 'Whether to continue sampling from the previous `sample-pmc` results, or start fresh from the proposal obtained using `find-clusters`.',
-        dest = 'continue_sampling', action = 'store_true', default = False
+    parser_sample_pmc.add_argument('-p', '--initial-proposal',
+        help = """Specify where the initial proposal should be taken from; 'clusters' (default): use the proposal obtained using `find-clusters`;
+            'product': use the proposal obtained from `mixture_product`; 'pmc': continue sampling from the previous `sample-pmc` results.""",
+        dest = 'initial_proposal', action = 'store', type = str, default = 'clusters'
     )
     parser_sample_pmc.add_argument('-S', '--sigma-test-stat',
         help = 'If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.',
@@ -194,6 +200,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_sample_pmc.set_defaults(cmd = cmd_sample_pmc)
+
 
     # plot-samples
     parser_plot_samples = subparsers.add_parser('plot-samples',
@@ -220,6 +227,7 @@ The plots will be stored as PDF files within the respective sample inputs.
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_plot_samples.set_defaults(cmd = cmd_plot_samples)
+
 
     # find-mode
     parser_find_mode = subparsers.add_parser('find-mode',
@@ -260,6 +268,34 @@ in EOS_BASE_DIRECTORY/posterior/mode.
     )
     parser_find_mode.set_defaults(cmd = cmd_find_mode)
 
+
+    # mixture_product
+    parser_mixture_product = subparsers.add_parser('mixture-product',
+        parents = [common_subparser],
+        description =
+'''
+    Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
+
+    The input densities are read from EOS_BASE_DIRECTORY/POSTERIOR_i/pmc, where POSTERIOR_i is listed in posteriors.
+    The output density will be stored in EOS_BASE_DIRECTORY/POSTERIOR/product.
+''',
+        help = 'Compute the cartesian product of named posteriors.'
+    )
+    parser_mixture_product.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF for which the product is computed',
+        action = 'store', type = str
+    )
+    parser_mixture_product.add_argument('posteriors', metavar = 'POSTERIORS',
+        help = 'The list of name of the posteriors PDF that will be concatenated.',
+        action = 'store', type = lambda s: s.split(',')
+    )
+    parser_mixture_product.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_mixture_product.set_defaults(cmd = cmd_mixture_product)
+
+
     # find-clusters
     parser_find_clusters = subparsers.add_parser('find-clusters',
         parents = [common_subparser],
@@ -290,6 +326,7 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_find_clusters.set_defaults(cmd = cmd_find_clusters)
+
 
     # predict-observables
     parser_predict_observables = subparsers.add_parser('predict-observables',
@@ -324,7 +361,8 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
     )
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
 
-    # predict-observables
+
+    # run
     parser_run = subparsers.add_parser('run',
         parents = [common_subparser],
         description =
@@ -529,6 +567,11 @@ def cmd_find_clusters(args):
 # Sample PMC
 def cmd_sample_pmc(args):
     return eos.sample_pmc(**args_to_dict(args))
+
+
+# Cartesian product
+def cmd_mixture_product(args):
+    return eos.mixture_product(**args_to_dict(args))
 
 
 # Predict observables
