@@ -65,6 +65,7 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
         for p in analysis.varied_parameters:
             eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
 
+
 def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis_file=None):
     """
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
@@ -101,9 +102,29 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
     eos.data.MixtureDensity.create(output_path, density)
 
 
+def mixture_product(posterior, posteriors, base_directory='./', analysis_file=None):
+    """
+    Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
+
+    The input densities are read from EOS_BASE_DIRECTORY/POSTERIOR_i/pmc, where POSTERIOR_i is listed in posteriors.
+    The output density will be stored in EOS_BASE_DIRECTORY/POSTERIOR/product.
+
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param posteriors: The list of names of the posteriors whose mixture densities will be concatenated.
+    :type posteriors: iterable of str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    """
+
+    densities = [eos.data.PMCSampler(os.path.join(base_directory, p, 'pmc')).density() for p in posteriors]
+    output_path = os.path.join(base_directory, posterior, 'product')
+    eos.data.MixtureDensity.create(output_path, eos.data.MixtureDensity.cartesian_product(densities))
+
+
 # Sample PMC
 def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000,
-               perplexity_threshold=1.0, weight_threshold=1e-10, continue_sampling=False, sigma_test_stat=None):
+               perplexity_threshold=1.0, weight_threshold=1e-10, sigma_test_stat=None, initial_proposal='clusters'):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
@@ -126,30 +147,35 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type perplexity_threshold: 0.0 < float <= 1.0, optional
     :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
     :type weight_threshold: 0.0 < float <= 1.0, optional.
-    :param continue_sampling: Whether to continue sampling from the previous `sample-pmc` results, or start fresh from the proposal obtained using `find-clusters`.
-    :type continue_sampling: bool, optional
     :param sigma_test_stat: If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
     :type sigma_test_stat: list or iterable
+    :param initial_proposal: Specify where the initial proposal should be taken from; 'clusters' (default): use the proposal obtained using `find-clusters`;
+    'product': use the proposal obtained from `mixture_product`; 'pmc': continue sampling from the previous `sample-pmc` results.
+    :type initial_proposal: str, optional
      """
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
-    _set_log_file(output_path, 'log', mode='a' if continue_sampling else 'w')
+    _set_log_file(output_path, 'log', mode='a' if (initial_proposal == 'pmc') else 'w')
     if type(analysis_file) is not eos.AnalysisFile:
         _analysis_file = eos.AnalysisFile(analysis_file)
     else:
         _analysis_file = analysis_file
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
-    if continue_sampling:
+    if initial_proposal == 'clusters':
+        initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
+    elif initial_proposal == 'pmc':
         previous_sampler = eos.data.PMCSampler(os.path.join(base_directory, posterior, 'pmc'))
-        initial_proposal = previous_sampler.density()
+        initial_density = previous_sampler.density()
+    elif initial_proposal == 'product':
+        initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'product')).density()
     else:
-        initial_proposal = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
+        eos.error("Could not initialize proposal in sample_pmc: argument {} is not supported.".format(initial_proposal))
 
-    samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=step_N, steps=steps, final_N=final_N,
+    samples, weights, proposal = analysis.sample_pmc(initial_density, step_N=step_N, steps=steps, final_N=final_N,
                                                      rng=rng, final_perplexity_threshold=perplexity_threshold, weight_threshold=weight_threshold)
 
-    if continue_sampling:
+    if initial_proposal == 'pmc':
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
         weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
 

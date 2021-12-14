@@ -19,6 +19,7 @@ import numpy as _np
 import pypmc
 import yaml
 from scipy.special import erf
+from scipy.linalg import block_diag
 
 class MarkovChain:
     def __init__(self, path):
@@ -154,6 +155,51 @@ class MixtureDensity:
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
             yaml.dump(description, description_file, default_flow_style=False)
+
+    @staticmethod
+    def _cartesian_product(densityA, densityB):
+        """ Construct the cartesian product of two mixture densities. The means and covariances
+        of the components are copied and concatenated and the weights are multiplied. Note that
+        this product is not commutative, the order of densities affects the order of parameters
+        in the output density. Only Gaussian mixtures are supported.
+
+        :param densityA: First mixture density.
+        :type densityA: pypmc.density.MixtureDensity
+        :param densityB: Second mixture density.
+        :type densityB: pypmc.density.MixtureDensity
+        """
+        components = []
+        weights = []
+        for cA, wA in zip(densityA.components, densityA.weights):
+            if type(cA) is pypmc.density.gauss.Gauss:
+                for cB, wB in zip(densityB.components, densityB.weights):
+                    if type(cB) is pypmc.density.gauss.Gauss:
+                        cAB_mu = _np.concatenate((cA.mu, cB.mu))
+                        cAB_sigma = block_diag(cA.sigma, cB.sigma)
+                        components.append(pypmc.density.gauss.Gauss(cAB_mu, cAB_sigma))
+                        weights.append(wA * wB)
+                    else:
+                        raise RuntimeError('Unsupported type of MixtureDensity component: {}'.format(type(cB)))
+            else:
+                raise RuntimeError('Unsupported type of MixtureDensity component: {}'.format(type(cA)))
+        return pypmc.density.mixture.MixtureDensity(components, weights / _np.sum(weights))
+
+    @staticmethod
+    def cartesian_product(densities):
+        """ Construct the cartesian product of a list of mixture densities. The means and covariances
+        of the components are copied and concatenated and the weights are multiplied. Note that
+        this product is not commutative, the order of densities affects the order of parameters
+        in the output density. Only Gaussian mixtures are supported.
+
+        :param densities: List of mixture densities.
+        :type densities: iterable of pypmc.density.MixtureDensity
+        """
+
+        product_density = densities[0]
+        for density in densities[1:]:
+            product_density = MixtureDensity._cartesian_product(product_density, density)
+
+        return product_density
 
 
 class PMCSampler:
