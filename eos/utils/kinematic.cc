@@ -204,6 +204,17 @@ namespace eos
     }
 
     void
+    Kinematics::remove_alias(const std::string & alias)
+    {
+        const auto i(_imp->alias_map.find(alias));
+
+        if (_imp->alias_map.end() == i)
+            throw UnknownKinematicAliasError(alias);
+
+        _imp->alias_map.erase(i);
+    }
+
+    void
     Kinematics::clear_aliases()
     {
         _imp->alias_map.clear();
@@ -333,6 +344,11 @@ namespace eos
 
     DuplicateKinematicAliasError::DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw () :
         Exception("Alias: '" + alias + "' cannot be used for variable: '" + variable + "' since it was already defined")
+    {
+    }
+
+    UnknownKinematicAliasError::UnknownKinematicAliasError(const std::string & alias) throw () :
+        Exception("Unknown kinematic alias: '" + alias + "'")
     {
     }
 }
