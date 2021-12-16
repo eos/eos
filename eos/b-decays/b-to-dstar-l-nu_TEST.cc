@@ -99,26 +99,31 @@ class BToVectorLeptonNeutrinoTest :
                     { "integration-points",    "4096"    }
                 };
 
-                BToVectorLeptonNeutrino d(p, o);
+                Kinematics k
+                {
+                    { "q2_min", 0.001 }, { "q2_max", 10.689 },
+                };
 
                 const double eps = 1e-3;
                 // Christoph Bobeth: Adjusted test case because increased number of integration points
                 //                   in numerical integration from 256 -> 4096
+                BToVectorLeptonNeutrino d(p, o);
                 TEST_CHECK_NEARLY_EQUAL( 33.3247,     d.integrated_branching_ratio(0.001, 10.689), eps);
                 auto ir = d.prepare(0.001, 10.689);
                 TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_S1c(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_S2c(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_S2s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_S3 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.231808464, d.integrated_S4 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_S5 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S6c(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.200153929, d.integrated_S6s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S7 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S8 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S9 (ir),  eps);
+
+                TEST_CHECK_NEARLY_EQUAL( 0.409302220, Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.255523335, Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.409302220, Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.085174445, Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.134468151, Observable::make("B->D^*lnu::S_3",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.231808464, Observable::make("B->D^*lnu::S_4",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.165381861, Observable::make("B->D^*lnu::S_5",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.200153929, Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         Observable::make("B->D^*lnu::S_7",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         Observable::make("B->D^*lnu::S_8",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         Observable::make("B->D^*lnu::S_9",  p, k, o)->evaluate(), eps);
             }
 
             // comparison with Martin Jung in 3/2/1 model
@@ -171,24 +176,30 @@ class BToVectorLeptonNeutrinoTest :
                     { "integration-points",    "4096"    }
                 };
 
-                BToVectorLeptonNeutrino d(p, o);
+                Kinematics k
+                {
+                    { "q2_min", 3.157 }, { "q2_max", 10.689 },
+                };
 
                 const double eps = 1e-3;
+
+                BToVectorLeptonNeutrino d(p, o);
                 TEST_CHECK_NEARLY_EQUAL( 8.213,        d.integrated_branching_ratio(3.157, 10.689), eps);
                 auto ir = d.prepare(3.157, 10.689);
                 TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_S1c(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_S1s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_S2c(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_S2s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_S3 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1057578408, d.integrated_S4 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_S5 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.2766922602, d.integrated_S6c(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1598442669, d.integrated_S6s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S7 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S8 (ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S9 (ir),  eps);
+
+                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, Observable::make("B->D^*lnu::S_3",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1057578408, Observable::make("B->D^*lnu::S_4",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, Observable::make("B->D^*lnu::S_5",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.2766922602, Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1598442669, Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          Observable::make("B->D^*lnu::S_7",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          Observable::make("B->D^*lnu::S_8",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          Observable::make("B->D^*lnu::S_9",  p, k, o)->evaluate(), eps);
             }
 
             // New physics comparison with Martin Jung:
@@ -226,7 +237,7 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_u^*"].set(2.01000);
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
- 
+
                 p["cbmunumu::Re{cVL}"].set(+1.2);
                 p["cbmunumu::Im{cVL}"].set(+0.0);
                 p["cbmunumu::Re{cVR}"].set(-0.4*1.2);
@@ -254,25 +265,25 @@ class BToVectorLeptonNeutrinoTest :
                     { "integration-points",    "4096"    }
                 };
 
-                BToVectorLeptonNeutrino d(p, o);
+                Kinematics k
+                {
+                    { "q2_min", p["mass::mu"]* p["mass::mu"] }, { "q2_max", 10.689 },
+                };
 
                 const double eps = 1e-3;
-                const double q2min = p["mass::mu"]* p["mass::mu"];
-                const double q2max = 10.689;
-                // 
-                auto ir = d.prepare(q2min, q2max);
-                TEST_CHECK_NEARLY_EQUAL( 0.362439,  d.integrated_S1c(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.268109,  d.integrated_S1s(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.228862,  d.integrated_S2c(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0375834, d.integrated_S2s(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0600368, d.integrated_S3 (ir), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0897816, d.integrated_S4 (ir), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0837827, d.integrated_S5 (ir), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0716409, d.integrated_S6c(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0433597, d.integrated_S6s(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0205058, d.integrated_A7 (ir), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0113015, d.integrated_A8 (ir), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.013735,  d.integrated_A9 (ir), eps);
+
+                TEST_CHECK_NEARLY_EQUAL( 0.362439,  Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.268109,  Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.228862,  Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0375834, Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0600368, Observable::make("B->D^*lnu::S_3",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0897816, Observable::make("B->D^*lnu::S_4",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0837827, Observable::make("B->D^*lnu::S_5",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0716409, Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0433597, Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0205058, Observable::make("B->D^*lnu::A_7",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0113015, Observable::make("B->D^*lnu::A_8",  p, k, o)->evaluate(), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.013735,  Observable::make("B->D^*lnu::A_9",  p, k, o)->evaluate(), eps);
             }
 
             // SM tests cf. [DSD2014]
@@ -457,25 +468,7 @@ class BToVectorLeptonNeutrinoTest :
                     { "U",             "c"       },
                     { "I",             "1/2"     },
                     { "q",             "d"       },
-                    { "model",         "CKM" },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    },
-                    { "l",             "e"       },
-                };
-
-                BToVectorLeptonNeutrino de(p, o);
-
-                o.declare("l", "mu");
-                BToVectorLeptonNeutrino dmu(p, o);
-
-                o =
-                {
-                    { "U",             "c"       },
-                    { "I",             "1/2"     },
-                    { "q",             "d"       },
-                    { "model",         "CKM" },
+                    { "model",         "CKM"     },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -487,17 +480,24 @@ class BToVectorLeptonNeutrinoTest :
                     { "q2_e_min",  1.00 }, { "q2_e_max",  10.68 },
                 };
 
-                auto obs_BRavg   = Observable::make("B->D^*lnu::BRbar",   p, k, o);
-                auto obs_deltaBR = Observable::make("B->D^*lnu::DeltaBR", p, k, o);
+                auto obs_BRbar    = Observable::make("B->D^*lnu::BRbar",        p, k, o);
+                auto obs_deltaBR  = Observable::make("B->D^*lnu::DeltaBR",      p, k, o);
+
+                k =
+                {
+                    { "q2_min",  1.00 }, { "q2_max",  10.68 },
+                };
+                auto obs_e_BR  = Observable::make("B->D^*lnu::BR;l=e",    p, k, o);
+                auto obs_mu_BR = Observable::make("B->D^*lnu::BR;l=mu",   p, k, o);
 
                 const double eps = 1e-5;
                 TEST_CHECK_RELATIVE_ERROR(
-                    0.5 * (de.integrated_CPave_branching_ratio(1.00, 10.68) + dmu.integrated_CPave_branching_ratio(1.00, 10.68)),
-                    obs_BRavg->evaluate(),
+                    0.5 * (obs_e_BR->evaluate() + obs_mu_BR->evaluate()),
+                    obs_BRbar->evaluate(),
                     eps
                 );
                 TEST_CHECK_RELATIVE_ERROR(
-                    dmu.integrated_CPave_branching_ratio(1.00, 10.68) - de.integrated_CPave_branching_ratio(1.00, 10.68),
+                    obs_mu_BR->evaluate() - obs_e_BR->evaluate(),
                     obs_deltaBR->evaluate(),
                     eps
                 );

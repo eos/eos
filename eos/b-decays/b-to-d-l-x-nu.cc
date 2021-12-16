@@ -27,7 +27,6 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/utils/save.hh>
 
 namespace eos
 {

@@ -65,8 +65,7 @@ namespace eos
             class IntermediateResult;
             const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
-            double integrated_CPave_branching_ratio(const double & q2_min, const double & q2_max) const;
-            
+
             // integrate ratio of numerator and denominator
             double integrated_a_fb_leptonic(const IntermediateResult *) const;
             double integrated_amplitude_polarization_L(const IntermediateResult *) const;
@@ -93,38 +92,8 @@ namespace eos
             double integrated_J8 (const IntermediateResult *) const;
             double integrated_J9 (const IntermediateResult *) const;
 
-            // take ratio of integrated numerator and denominator
-            double integrated_CPave_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
-            double integrated_CPave_f_L(const double & q2_min, const double & q2_max) const;
-            double integrated_CPave_ftilde_L(const double & q2_min, const double & q2_max) const;
-
-            double integrated_S1c(const IntermediateResult *) const;
-            double integrated_S1s(const IntermediateResult *) const;
-            double integrated_S2c(const IntermediateResult *) const;
-            double integrated_S2s(const IntermediateResult *) const;
-            double integrated_S3 (const IntermediateResult *) const;
-            double integrated_S4 (const IntermediateResult *) const;
-            double integrated_S5 (const IntermediateResult *) const;
-            double integrated_S6c(const IntermediateResult *) const;
-            double integrated_S6s(const IntermediateResult *) const;
-            double integrated_S7 (const IntermediateResult *) const;
-            double integrated_S8 (const IntermediateResult *) const;
-            double integrated_S9 (const IntermediateResult *) const;
-
-            double integrated_A1c(const IntermediateResult *) const;
-            double integrated_A1s(const IntermediateResult *) const;
-            double integrated_A2c(const IntermediateResult *) const;
-            double integrated_A2s(const IntermediateResult *) const;
-            double integrated_A3 (const IntermediateResult *) const;
-            double integrated_A4 (const IntermediateResult *) const;
-            double integrated_A5 (const IntermediateResult *) const;
-            double integrated_A6c(const IntermediateResult *) const;
-            double integrated_A6s(const IntermediateResult *) const;
-            double integrated_A7 (const IntermediateResult *) const;
-            double integrated_A8 (const IntermediateResult *) const;
-            double integrated_A9 (const IntermediateResult *) const;
-
             // Integrated Observables - normalized(|Vcb|=1)
+            double normalized_decay_width(const double & q2_min, const double & q2_max) const;
             double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             // PDF
