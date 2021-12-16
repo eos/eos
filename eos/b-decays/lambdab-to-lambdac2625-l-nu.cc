@@ -26,7 +26,6 @@
 #include <eos/models/model.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/utils/save.hh>
 #include <math.h>
 
 namespace eos
