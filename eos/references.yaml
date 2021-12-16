@@ -471,6 +471,14 @@ Belle:2013A:
   inspire-id: Sibidanov:2013rkk
   title: Study of Exclusive $B \to X_u \ell \nu$ Decays and Extraction of $\|V_{ub}\|$
     using Full Reconstruction Tagging at the Belle Experiment
+Belle:2014A:
+  authors: Abdesselam, A. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1409.5269
+  inspire-id: Belle:2014eud
+  title: 'Measurement of the branching fraction of $B^+ \to \tau^+ \nu_\tau$ decays with the semileptonic tagging method and the full Belle data sample'
 Belle:2015A:
   authors: Glattauer, R. et al.
   collaboration: Belle

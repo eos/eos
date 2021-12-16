@@ -127,10 +127,10 @@ B^0_s->mu^+mu^-::BR@LHCb:2017A:
 # Belle #
 #########
 #
-# 2015
+# 2014
 #
 # {{{
-B^+->tau^+nu::BR@Belle:2015A:
+B^+->tau^+nu::BR@Belle:2014A:
     type: Gaussian
     observable: B_u->lnu::BR
     kinematics: {}
