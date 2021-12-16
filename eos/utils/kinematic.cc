@@ -174,6 +174,13 @@ namespace eos
             result += ", " + i->first + '=' + stringify(_imp->variables_data[i->second]);
         }
 
+        auto j(_imp->alias_map.cbegin()), j_end(_imp->alias_map.cend());
+        for ( ; j != j_end ; ++j)
+        {
+            result += ", " + j->first + "->" + _imp->variables_names[j->second];
+        }
+
+
         return result;
     }
 
