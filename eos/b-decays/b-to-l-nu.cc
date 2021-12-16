@@ -115,9 +115,9 @@ namespace eos
             const double mbatmu = model->m_b_msbar(mu);
             const double mUatmu = this->m_U_msbar(mu);
 
-            return power_of<2>(g_fermi * std::abs(this->v_Ub()) * f_B * m_l * beta_l())
+            return power_of<2>(g_fermi * std::abs(this->v_Ub()) * f_B * beta_l())
                 * m_B / (8.0 * M_PI)
-                * norm(ga - gp * m_B2 / (m_l * (mbatmu + mUatmu)));
+                * norm(ga * m_l - gp * m_B2 / (mbatmu + mUatmu));
         }
 
         double branching_ratio() const
