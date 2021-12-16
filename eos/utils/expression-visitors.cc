@@ -293,8 +293,12 @@ namespace eos::exp
             this->_kinematics,
             this->_options
             );
-        // Clear alias map
-        _kinematics.clear_aliases();
+
+        // Clear aliases installed as part of this expression
+        for (const auto & alias: kinematics_aliases)
+        {
+            _kinematics.remove_alias(alias.first);
+        }
 
         // Record the used parameters
         if (_parameter_user)
@@ -330,8 +334,12 @@ namespace eos::exp
             this->_kinematics,
             this->_options + e.observable->options()
             );
-        // Clear alias map
-        _kinematics.clear_aliases();
+
+        // Clear aliases installed as part of this expression
+        for (const auto & alias: kinematics_aliases)
+        {
+            _kinematics.remove_alias(alias.first);
+        }
 
         // Record the used parameters
         if (_parameter_user)
