@@ -46,6 +46,16 @@ namespace eos
         DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw ();
     };
 
+    /*!
+     * UnknownKinematicAliasError is thrown when no alias of a given
+     * name could be found.
+     */
+    struct UnknownKinematicAliasError :
+        public Exception
+    {
+        UnknownKinematicAliasError(const std::string & alias) throw ();
+    };
+
     // Forward declaration.
     class KinematicVariable;
 
@@ -102,6 +112,13 @@ namespace eos
              * @param name  Name of the existing variable; must exist!
              */
             void alias(const std::string & alias, const std::string & name);
+
+            /*!
+             * Remove an existing alias of a kinematic variable.
+             *
+             * @param alias Name of an existing alias that shall be removed.
+             */
+            void remove_alias(const std::string & alias);
 
             /*!
              * Reset all defined aliases.
