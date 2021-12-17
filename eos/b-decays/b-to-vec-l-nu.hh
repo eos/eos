@@ -68,30 +68,30 @@ namespace eos
             double integrated_CPave_branching_ratio(const double & q2_min, const double & q2_max) const;
             
             // integrate ratio of numerator and denominator
-            double integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
-            double integrated_amplitude_polarization_L(const double & q2_min, const double & q2_max) const;
-            double integrated_amplitude_polarization_T(const double & q2_min, const double & q2_max) const;
-            double integrated_f_L(const double & q2_min, const double & q2_max) const;
-            double integrated_ftilde_L(const double & q2_min, const double & q2_max) const;
-            double integrated_a_c_1(const double & q2_min, const double & q2_max) const;
-            double integrated_a_c_2(const double & q2_min, const double & q2_max) const;
-            double integrated_a_c_3(const double & q2_min, const double & q2_max) const;
-            double integrated_a_t_1(const double & q2_min, const double & q2_max) const;
-            double integrated_a_t_2(const double & q2_min, const double & q2_max) const;
-            double integrated_a_t_3(const double & q2_min, const double & q2_max) const;
+            double integrated_a_fb_leptonic(const IntermediateResult *) const;
+            double integrated_amplitude_polarization_L(const IntermediateResult *) const;
+            double integrated_amplitude_polarization_T(const IntermediateResult *) const;
+            double integrated_f_L(const IntermediateResult *) const;
+            double integrated_ftilde_L(const IntermediateResult *) const;
+            double integrated_a_c_1(const IntermediateResult *) const;
+            double integrated_a_c_2(const IntermediateResult *) const;
+            double integrated_a_c_3(const IntermediateResult *) const;
+            double integrated_a_t_1(const IntermediateResult *) const;
+            double integrated_a_t_2(const IntermediateResult *) const;
+            double integrated_a_t_3(const IntermediateResult *) const;
 
-            double integrated_J1c(const double & q2_min, const double & q2_max) const;
-            double integrated_J1s(const double & q2_min, const double & q2_max) const;
-            double integrated_J2c(const double & q2_min, const double & q2_max) const;
-            double integrated_J2s(const double & q2_min, const double & q2_max) const;
-            double integrated_J3 (const double & q2_min, const double & q2_max) const;
-            double integrated_J4 (const double & q2_min, const double & q2_max) const;
-            double integrated_J5 (const double & q2_min, const double & q2_max) const;
-            double integrated_J6c(const double & q2_min, const double & q2_max) const;
-            double integrated_J6s(const double & q2_min, const double & q2_max) const;
-            double integrated_J7 (const double & q2_min, const double & q2_max) const;
-            double integrated_J8 (const double & q2_min, const double & q2_max) const;
-            double integrated_J9 (const double & q2_min, const double & q2_max) const;
+            double integrated_J1c(const IntermediateResult *) const;
+            double integrated_J1s(const IntermediateResult *) const;
+            double integrated_J2c(const IntermediateResult *) const;
+            double integrated_J2s(const IntermediateResult *) const;
+            double integrated_J3 (const IntermediateResult *) const;
+            double integrated_J4 (const IntermediateResult *) const;
+            double integrated_J5 (const IntermediateResult *) const;
+            double integrated_J6c(const IntermediateResult *) const;
+            double integrated_J6s(const IntermediateResult *) const;
+            double integrated_J7 (const IntermediateResult *) const;
+            double integrated_J8 (const IntermediateResult *) const;
+            double integrated_J9 (const IntermediateResult *) const;
 
             // take ratio of integrated numerator and denominator
             double integrated_CPave_a_fb_leptonic(const double & q2_min, const double & q2_max) const;

@@ -105,8 +105,8 @@ class BToVectorLeptonNeutrinoTest :
                 // Christoph Bobeth: Adjusted test case because increased number of integration points
                 //                   in numerical integration from 256 -> 4096
                 TEST_CHECK_NEARLY_EQUAL( 33.3247,     d.integrated_branching_ratio(0.001, 10.689), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),  eps);
                 auto ir = d.prepare(0.001, 10.689);
+                TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_S1c(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_S2c(ir),  eps);
@@ -175,8 +175,8 @@ class BToVectorLeptonNeutrinoTest :
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL( 8.213,        d.integrated_branching_ratio(3.157, 10.689), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(3.157, 10.689),  eps);
                 auto ir = d.prepare(3.157, 10.689);
+                TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_S1c(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_S1s(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_S2c(ir),  eps);
@@ -321,16 +321,18 @@ class BToVectorLeptonNeutrinoTest :
 
                 const double eps = 1e-3;
 
+                auto ir = d.prepare(4.0, 10.68);
+
                 // the default lepton is muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 10.68), 25.4230, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(4.0, 10.68), 0.000494949, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(4.0, 10.68), 0.737489, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(4.0, 10.68), -0.130926, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(4.0, 10.68), 0.00266046, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(4.0, 10.68), 0.230111, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(4.0, 10.68), 0.0, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(4.0, 10.68), 0.0, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(4.0, 10.68), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(ir), 0.000494949, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(ir),     0.737489, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(ir),  -0.130926, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(ir),   0.00266046, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(ir),   0.230111, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(ir), 0.0, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(ir), 0.0, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(ir), 0.0, eps);
 
                 Kinematics k
                 {
@@ -421,14 +423,15 @@ class BToVectorLeptonNeutrinoTest :
 
                 // the default lepton is muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 10.68), 3431.13, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(4.0, 10.68), 0.0409932, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(4.0, 10.68), 0.50729, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(4.0, 10.68), 0.184031, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(4.0, 10.68), -0.0282197, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(4.0, 10.68), -0.42545, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(4.0, 10.68), 0.0000348895, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(4.0, 10.68), 0.000268975, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(4.0, 10.68), -0.0000320251, eps);
+                auto ir = d.prepare(4.0, 10.68);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(ir), 0.0409932, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(ir),    0.50729, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(ir),  0.184031, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(ir), -0.0282197, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(ir), -0.42545, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(ir),  0.0000348895, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(ir),  0.000268975, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(ir), -0.0000320251, eps);
 
                 Kinematics k
                 {
