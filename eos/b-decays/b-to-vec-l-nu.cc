@@ -519,162 +519,163 @@ namespace eos
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_fb_leptonic(const IntermediateResult * ir) const
     {
-        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_leptonic();
+        const auto & o   = ir->ao;
+        return o.a_fb_leptonic();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_amplitude_polarization_L(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_amplitude_polarization_L(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.normalized_amplitude_polarization_L() * std::norm(_imp->v_Ub());
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_amplitude_polarization_T(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_amplitude_polarization_T(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.normalized_amplitude_polarization_T() * std::norm(_imp->v_Ub());
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_f_L(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_f_L(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.f_L();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_ftilde_L(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_ftilde_L(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.ftilde_L();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_c_1(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_c_1(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.a_c_1();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_c_2(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_c_2(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.a_c_2();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_c_3(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_c_3(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.a_c_3();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_t_1(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_t_1(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.a_t_1();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_t_2(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_t_2(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.a_t_2();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_a_t_3(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_a_t_3(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return o.a_t_3();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J1c(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J1c(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv10();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J1s(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J1s(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv1T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J2c(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J2c(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv20();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J2s(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J2s(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv2T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J3(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J3(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv4T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J4(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J4(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv10T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J5(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J5(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv20T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J6c(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J6c(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv30();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J6s(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J6s(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv3T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J7(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J7(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv30T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J8(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J8(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv40T();
     }
 
     double
-    BToVectorLeptonNeutrino::integrated_J9(const double & q2_min, const double & q2_max) const
+    BToVectorLeptonNeutrino::integrated_J9(const IntermediateResult * ir) const
     {
-        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        const auto & o   = ir->ao;
         return 3.0 / 4.0 * o.vv5T();
     }
 
