@@ -362,7 +362,7 @@ namespace eos
 
             if (! completed)
             {
-                throw InternalError("Error when parsing expression in make_expression_observable");
+                throw InternalError("Error when parsing expression " + std::string(name) + " in make_expression_observable");
             }
         }
 
