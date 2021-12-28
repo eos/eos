@@ -1248,6 +1248,23 @@ LHCb:2015B:
   inspire-id: Aaij:2015xza
   title: Differential branching fraction and angular analysis of $\Lambda^{0}_{b}
     \rightarrow \Lambda \mu^+\mu^-$ decays
+LHCb:2015C:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1506.08777
+  inspire-id: LHCb:2015wdu
+  title: Angular analysis and differential branching fraction of the decay $B^0_s\to\phi\mu^+\mu^-$
+LHCb:2016A:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1606.04731
+  inspire-id: LHCb:2016ykl
+  title: Measurements of the S-wave fraction in $B^{0}\rightarrow K^{+}\pi^{-}\mu^{+}\mu^{-}$
+    decays and the $B^{0}\rightarrow K^{\ast}(892)^{0}\mu^{+}\mu^{-}$ differential branching fraction
 LHCb:2017A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
