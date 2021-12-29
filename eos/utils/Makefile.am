@@ -52,7 +52,6 @@ libeosutils_la_SOURCES = \
 	qualified-name.cc qualified-name.hh \
 	quantum-numbers.cc quantum-numbers.hh \
 	reference-name.cc reference-name.hh \
-	save.hh \
 	stringify.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
@@ -110,7 +109,6 @@ include_eos_utils_HEADERS = \
 	qualified-name.hh \
 	quantum-numbers.hh \
 	reference-name.hh \
-	save.hh \
 	stringify.hh \
 	thread.hh \
 	thread_pool.hh \
@@ -147,7 +145,6 @@ TESTS = \
 	qualified-name_TEST \
 	quantum-numbers_TEST \
 	reference-name_TEST \
-	save_TEST \
 	stringify_TEST \
 	verify_TEST \
 	wilson-polynomial_TEST
@@ -205,8 +202,6 @@ qualified_name_TEST_SOURCES = qualified-name_TEST.cc
 quantum_numbers_TEST_SOURCES = quantum-numbers_TEST.cc
 
 reference_name_TEST_SOURCES = reference-name_TEST.cc
-
-save_TEST_SOURCES = save_TEST.cc
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 
