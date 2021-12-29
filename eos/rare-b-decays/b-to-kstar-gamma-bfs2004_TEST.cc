@@ -33,6 +33,9 @@
 
 // Uncomment the following #define to generate new test data for the Bobeth compatibility tests
 //#define EOS_GENERATE_TEST_DATA
+#ifdef EOS_GENERATE_TEST_DATA
+#include <gsl/gsl_rng.h>
+#endif
 
 using namespace test;
 using namespace eos;
@@ -226,15 +229,14 @@ class BToKstarGammaBobethCompatibilityTest :
             observables.push_back(Observable::make("B->K^*gamma::BR_CP_specific;q=d",  p, k, o));
             observables.push_back(Observable::make("B->K^*gamma::S_K^*gamma;q=d", p, k, o));
             observables.push_back(Observable::make("B->K^*gamma::C_K^*gamma;q=d", p, k, o));
-
-            // This line is commented out since it requires a fix, see Github issue #456
-            // observables.push_back(Observable::make("B->K^*gamma::A_I", p, k, o));
+            observables.push_back(Observable::make("B->K^*gamma::A_I", p, k, o));
 
             std::string filename(EOS_SRCDIR "/eos/rare-b-decays/exclusive-b-to-s-gamma_TEST-btokstargamma.data");
 #ifdef EOS_GENERATE_TEST_DATA
             {
                 std::cout << "-- GENERATING test case data for B->K^*gamma --" << std::endl;
-                RandomNumberGenerator rng;
+                gsl_rng * rng = gsl_rng_alloc(gsl_rng_taus2);
+
                 std::fstream file(filename.c_str(), std::fstream::out);
                 file.precision(17);
 
@@ -242,7 +244,7 @@ class BToKstarGammaBobethCompatibilityTest :
                 {
                     for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
                     {
-                        *v = v->min() + (v->max() - v->min()) * rng();
+                        *v = v->min() + (v->max() - v->min()) * gsl_rng_uniform(rng);
                         file << *v << '\t';
                     }
 

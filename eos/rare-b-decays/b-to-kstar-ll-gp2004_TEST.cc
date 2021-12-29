@@ -33,6 +33,9 @@
 
 // Uncomment the following #define to generate new test data for the Bobeth compatibility tests
 //#define EOS_GENERATE_TEST_DATA
+#ifdef EOS_GENERATE_TEST_DATA
+#include <gsl/gsl_rng.h>
+#endif
 
 using namespace test;
 using namespace eos;
@@ -588,7 +591,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
 #ifdef EOS_GENERATE_TEST_DATA
             {
                 std::cout << "-- GENERATING test case data for B->K^*ll at low recoil --" << std::endl;
-                RandomNumberGenerator rng;
+                gsl_rng * rng = gsl_rng_alloc(gsl_rng_taus2);
                 std::fstream file(filename.c_str(), std::fstream::out);
                 file.precision(17);
 
@@ -596,7 +599,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
                 {
                     for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
                     {
-                        *v = v->min() + (v->max() - v->min()) * rng();
+                        *v = v->min() + (v->max() - v->min()) * gsl_rng_uniform(rng);
 
                         file << *v << '\t';
                     }
