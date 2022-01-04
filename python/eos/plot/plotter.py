@@ -1636,7 +1636,7 @@ class Plotter:
 
         Additional optional keys are:
 
-         * ``bins`` (*int*, optional) -- The number of bins in each dimension. Defaults to 100.
+         * ``bins`` (*int* or *list* of *int*, optional) -- The number of bins for both dimensions together  or in each dimension seperately. Defaults to 100 for both dimensions.
 
         Example:
 
