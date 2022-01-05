@@ -60,12 +60,14 @@ class Analysis:
     :type manual_constraints: dict, optional
     :param fixed_parameters: Values of parameters that are set when the analysis is defined.
     :type fixed_parameters: dict, optional
+    :param parameters: The optional set of parameters that shall be used for this analysis. Defaults to `None` which means that a new instance of :class:`eos.Parameters` is created.
+    :type parameters: :class:`eos.Parameters` or None, optional
     """
 
-    def __init__(self, priors, likelihood, global_options={}, manual_constraints={}, fixed_parameters={}):
+    def __init__(self, priors, likelihood, global_options={}, manual_constraints={}, fixed_parameters={}, parameters=None):
         """Constructor."""
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
-        self.parameters = eos.Parameters.Defaults()
+        self.parameters = parameters if parameters else eos.Parameters.Defaults()
         self.global_options = eos.Options()
         self._log_likelihood = eos.LogLikelihood(self.parameters)
         self._log_posterior = eos.LogPosterior(self._log_likelihood)
