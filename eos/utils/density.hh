@@ -56,31 +56,6 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<Density::IteratorTag, const ParameterDescription>;
-
-    /*!
-     * A product of two multivariate scalar functions
-     */
-    class ProductDensity :
-        public Density,
-        public PrivateImplementationPattern<ProductDensity>
-    {
-        public:
-            ProductDensity(const DensityPtr & x, const DensityPtr & y);
-            virtual ~ProductDensity();
-
-            /// Evaluate the density function at the current parameter point on the log scale.
-            virtual double evaluate() const;
-
-            /// Create an independent copy of this density function.
-            virtual DensityPtr clone() const;
-
-            /// Iterate over the parameters relevant to this density function.
-            ///@{
-            virtual Density::Iterator begin() const;
-            virtual Density::Iterator end() const;
-            ///@}
-    };
-
 }
 
 #endif
