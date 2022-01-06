@@ -8,6 +8,42 @@ This is a list of Frequently Asked Questions about EOS. Feel free to suggest new
 How Do I ...
 ************
 
+.. _faq-virtualenv:
+
+... use EOS within a virtual Python environment?
+================================================
+
+We highly recommend to use EOS within a virtual Python environment. To do so, you
+need to install the ``virtualenv`` package, and then create a new virtual environment:
+
+::
+
+    pip3 install virtualenv
+    virtualenv --python=python3 ~/eos
+
+
+The new virtual environment will now be activated.
+At any later point, you can (re-)activate the virtual environment by running the following command:
+
+::
+
+    ~/eos/bin/activate
+
+After activation, you can use install a binary distribution of EOS using ``pip3 install eoshep``.
+If you plan to install EOS from source, as discussed in `Installation`_, you must set the prefix
+to match the path to your virtual environment, here: ``~/eos``.
+
+To deactivate the virtual environment, run
+
+::
+
+    deactivate
+
+
+Of course, you can choose a different directory than ``~/eos`` to host your virtual environment. Please see
+the ``virtualenv`` `documentation <https://virtualenv.pypa.io/en/latest/>`_ for more information.
+
+
 ... use EOS remotely?
 =====================
 
