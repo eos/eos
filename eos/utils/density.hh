@@ -42,9 +42,6 @@ namespace eos
              */
             virtual double evaluate() const = 0;
 
-            /// Create an independent copy of this density function.
-            virtual DensityPtr clone() const = 0;
-
             /// Iterate over the parameters relevant to this density function.
             ///@{
             struct IteratorTag;
