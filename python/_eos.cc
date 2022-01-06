@@ -468,6 +468,9 @@ BOOST_PYTHON_MODULE(_eos)
     // ObservableCache
     class_<ObservableCache>("ObservableCache", no_init)
         .def("__iter__", range(&ObservableCache::begin, &ObservableCache::end))
+        .def("__getitem__", &ObservableCache::operator[])
+        .def("add", &ObservableCache::add)
+        .def("update", &ObservableCache::update)
         ;
 
     // ReferenceName
