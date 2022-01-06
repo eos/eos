@@ -69,6 +69,7 @@ class Analysis:
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = parameters if parameters else eos.Parameters.Defaults()
         self.global_options = eos.Options()
+        self._constraint_names = []
         self._log_likelihood = eos.LogLikelihood(self.parameters)
         self._log_posterior = eos.LogPosterior(self._log_likelihood)
         self.varied_parameters = []
@@ -129,17 +130,18 @@ class Analysis:
             p.set_max(maxv)
             self.varied_parameters.append(p)
 
-        # create the likelihood
-        for constraint_name in likelihood:
-            constraint = eos.Constraint.make(constraint_name, self.global_options)
-            self._log_likelihood.add(constraint)
-
-        # add manual constraints to the likelihood
+        # add manual constraints to the list of constraints
         for constraint_name, constraint_data in manual_constraints.items():
             import yaml
             yaml_string = yaml.dump(self._sanitize_manual_input(constraint_data))
             constraint_entry = eos.ConstraintEntry.deserialize(constraint_name, yaml_string)
-            constraint = constraint_entry.make(constraint_name, self.global_options)
+
+        # record all constraints that comprise the likelihood
+        self._constraint_names = list(likelihood) + list(manual_constraints.keys())
+
+        # create the likelihood
+        for constraint_name in self._constraint_names:
+            constraint = eos.Constraint.make(constraint_name, self.global_options)
             self._log_likelihood.add(constraint)
 
         # perform some sanity checks
