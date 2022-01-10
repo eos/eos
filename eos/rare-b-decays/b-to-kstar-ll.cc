@@ -26,6 +26,7 @@
 #include <eos/rare-b-decays/b-to-kstar-ll-gvdv2020.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos
@@ -810,7 +811,7 @@ namespace eos
     BToKstarDilepton::differential_symrel_le_a1v(const double & q2) const
     {
         const auto & ag = *_imp->amplitude_generator;
-        return pow(ag.m_B() + ag.m_Kstar(), 2) / (2.0 * ag.m_B() * ag.energy(q2))
+        return power_of<2>(ag.m_B() + ag.m_Kstar()) / (2.0 * ag.m_B() * ag.energy(q2))
             * ag.form_factors->a_1(q2) / ag.form_factors->v(q2);
     }
 

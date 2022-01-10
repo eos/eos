@@ -20,6 +20,7 @@
  */
 
 #include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/options-impl.hh>
@@ -156,11 +157,11 @@ namespace eos
                     // perp(P->V) = par(P->V)    3    1    3    0
                     // 0(P->V) aka long          3    1    2    2
 
-                    const double m_P2  = pow(m_P, 2);
-                    const double m_B2  = pow(m_B, 2),  m_B4 =  pow(m_B, 4);
-                    const double m_D02 = pow(m_D0, 2), m_D04 = pow(m_D0, 4);
+                    const double m_P2  = power_of<2>(m_P);
+                    const double m_B2  = power_of<2>(m_B),  m_B4 =  power_of<4>(m_B);
+                    const double m_D02 = power_of<2>(m_D0), m_D04 = power_of<4>(m_D0);
                     const double s_0   = this->t_0();
-                    const auto   z     = eos::nff_utils::z(q2, 4.0 * pow(m_D0, 2), s_0);
+                    const auto   z     = eos::nff_utils::z(q2, 4.0 * power_of<2>(m_D0), s_0);
                     const double Q2   = this->t_s();
                     const double chi = this->chiOPE();
 
@@ -182,12 +183,12 @@ namespace eos
                 inline complex<double> H_residue_jpsi(const unsigned phiParam[4], const complex<double> & alpha_0, const complex<double> & alpha_1,
                                                       const complex<double> & alpha_2) const
                 {
-                    const double m_Jpsi2  = pow(m_Jpsi, 2);
-                    const double m_psi2S2 = pow(m_psi2S, 2);
+                    const double m_Jpsi2  = power_of<2>(m_Jpsi);
+                    const double m_psi2S2 = power_of<2>(m_psi2S);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B + m_P, 2), s_p, s_0);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
+                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B + m_P), s_p, s_0);
                     const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,           s_p, s_0);
                     const auto z_psi2S = eos::nff_utils::z(m_psi2S2,          s_p, s_0);
 
@@ -201,12 +202,12 @@ namespace eos
                 inline complex<double> H_residue_psi2s(const unsigned phiParam[4], const complex<double> & alpha_0, const complex<double> & alpha_1,
                                                        const complex<double> & alpha_2) const
                 {
-                    const double m_Jpsi2  = pow(m_Jpsi, 2);
-                    const double m_psi2S2 = pow(m_psi2S, 2);
+                    const double m_Jpsi2  = power_of<2>(m_Jpsi);
+                    const double m_psi2S2 = power_of<2>(m_psi2S);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B + m_P, 2), s_p, s_0);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
+                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B + m_P), s_p, s_0);
                     const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,           s_p, s_0);
                     const auto z_psi2S = eos::nff_utils::z(m_psi2S2,          s_p, s_0);
 
@@ -224,11 +225,11 @@ namespace eos
                     const complex<double> alpha_2 = complex<double>(re_alpha_2_plus, im_alpha_2_plus);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2,              s_p, s_0);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B+m_P, 2), s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(pow(m_Jpsi, 2),  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(pow(m_psi2S, 2), s_p, s_0);
+                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B+m_P), s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi),  s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
 
                     const complex<double> blaschke_factor = eos::nff_utils::blaschke_cc(z, z_Jpsi, z_psi2S);
 
@@ -245,9 +246,9 @@ namespace eos
                     const complex<double> alpha_2 = complex<double>(re_alpha_2_plus, im_alpha_2_plus);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B + m_P, 2), s_p, s_0);
+                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B + m_P), s_p, s_0);
 
                     return eos::nff_utils::PGvDV2020(z, zBP, alpha_0, alpha_1, alpha_2);
                 }
@@ -304,7 +305,7 @@ namespace eos
                     results.add({ imag(this->phi(16.0, phiParam)), "Im{phi_+(q2 = 16.0)}" });
 
                     const double s_0   = this->t_0();
-                    const auto z1 = eos::nff_utils::z(1.0, 4.0 * pow(m_D0, 2), s_0);
+                    const auto z1 = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
 
                     results.add({ real(eos::nff_utils::PGvDV2020(z1, complex<double>(0.6,0.8), 2.0, 3.0, 4.0)),
                                 "Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, 2.0, 3.0, 4.0)}" });
@@ -391,12 +392,12 @@ namespace eos
                     // perp(P->V) = par(P->V)    5    1    3    0    2
                     // 0(P->V) aka long          5    1    2    2    2
 
-                    const double m_P2  = pow(m_P, 2);
-                    const double m_Bsst2 = pow(m_Bsst, 2);
-                    const double m_B2  = pow(m_B, 2),  m_B4 =  pow(m_B, 4);
-                    const double m_D02 = pow(m_D0, 2), m_D04 = pow(m_D0, 4);
+                    const double m_P2  = power_of<2>(m_P);
+                    const double m_Bsst2 = power_of<2>(m_Bsst);
+                    const double m_B2  = power_of<2>(m_B),  m_B4 =  power_of<4>(m_B);
+                    const double m_D02 = power_of<2>(m_D0), m_D04 = power_of<4>(m_D0);
                     const double s_0   = this->t_0();
-                    const auto   z     = eos::nff_utils::z(q2, 4.0 * pow(m_D0, 2), s_0);
+                    const auto   z     = eos::nff_utils::z(q2, 4.0 * power_of<2>(m_D0), s_0);
                     const double Q2   = this->t_s();
                     const double chi = this->chiOPE();
 
@@ -405,12 +406,12 @@ namespace eos
                     const complex<double> Nlambda = 4. * M_PI * pow(m_B2, 0.5 * (a - b + c + d - e) - 1.) * pow(2. * (4. * m_D02 - s_0) / 3. / chi, 0.5);
                     const complex<double> phi1 = -pow(2. * pow((4. * m_D02 - Q2) * (4. * m_D02 - s_0), 0.5) + 8. * m_D02 - Q2 - s_0, 0.5) /
                                                 (2. * pow((4. * m_D02 - Q2) * (4. * m_D02 - s_0), 0.5) + 8. * m_D02 + Q2 * (z - 1.) - s_0*(z + 1.));
-                    const complex<double> phi2 = pow(m_B4 * pow(z - 1., 4.) - 2. * m_B2 * pow(z - 1., 2) * (-16 * m_D02 * z + m_P2 * pow(z - 1., 2) +
+                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2. * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) +
                                                 s_0 * pow(z + 1., 2)) + pow(16 * m_D02 * z + m_P2 * pow(z - 1., 2) - s_0 * pow(z + 1., 2), 2), 0.5);
                     const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
                                                 (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0 * (z + 1.));
-                    const complex<double> phi4 = pow(s_0 * pow(z + 1., 2.) - 16. * z * m_D02, -0.5);
-                    const complex<double> phi5 = pow(s_0 * pow(z + 1., 2.) - 16. * z * m_D02 - m_Bsst2 * pow(-z + 1., 2.), 0.5);
+                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5);
+                    const complex<double> phi5 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02 - m_Bsst2 * power_of<2>(-z + 1.), 0.5);
 
                     return Nlambda * pow(1. + z, 0.5) * pow(1. - z, a - b + c + d - e - 1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d) * pow(phi5, e);
                 }
@@ -419,11 +420,11 @@ namespace eos
                 inline complex<double> H_residue_jpsi(const unsigned phiParam[5], const complex<double> & alpha_0, const complex<double> & alpha_1,
                                                       const complex<double> & alpha_2) const
                 {
-                    const double m_Jpsi2  = pow(m_Jpsi, 2);
-                    const double m_psi2S2 = pow(m_psi2S, 2);
+                    const double m_Jpsi2  = power_of<2>(m_Jpsi);
+                    const double m_psi2S2 = power_of<2>(m_psi2S);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
                     const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
@@ -437,11 +438,11 @@ namespace eos
                 inline complex<double> H_residue_psi2s(const unsigned phiParam[5], const complex<double> & alpha_0, const complex<double> & alpha_1,
                                                        const complex<double> & alpha_2) const
                 {
-                    const double m_Jpsi2  = pow(m_Jpsi, 2);
-                    const double m_psi2S2 = pow(m_psi2S, 2);
+                    const double m_Jpsi2  = power_of<2>(m_Jpsi);
+                    const double m_psi2S2 = power_of<2>(m_psi2S);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
                     const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
@@ -459,10 +460,10 @@ namespace eos
                     const complex<double> alpha_2 = complex<double>(re_alpha_2_plus, im_alpha_2_plus);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2,              s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(pow(m_Jpsi, 2),  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(pow(m_psi2S, 2), s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi),  s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
 
                     const complex<double> blaschke_factor = eos::nff_utils::blaschke_cc(z, z_Jpsi, z_psi2S);
 
@@ -479,7 +480,7 @@ namespace eos
                     const complex<double> alpha_2 = complex<double>(re_alpha_2_plus, im_alpha_2_plus);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2, s_p, s_0);
 
                     return eos::nff_utils::P(z, alpha_0, alpha_1, alpha_2);
@@ -535,7 +536,7 @@ namespace eos
                     results.add({ imag(this->phi(16.0, phiParam)), "Im{phi_+(q2 = 16.0)}" });
 
                     const double s_0   = this->t_0();
-                    const auto z1 = eos::nff_utils::z(1.0, 4.0 * pow(m_D0, 2), s_0);
+                    const auto z1 = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
 
                     results.add({ real(eos::nff_utils::P(z1, 2.0, 3.0, 4.0)), "Re{P(q2 = 1.0, 2.0, 3.0, 4.0)}" });
                     results.add({ imag(eos::nff_utils::P(z1, 2.0, 3.0, 4.0)), "Im{P(q2 = 1.0, 2.0, 3.0, 4.0)}" });

@@ -18,6 +18,7 @@
  */
 
 #include <eos/form-factors/mesonic.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-k-charmonium.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
@@ -101,8 +102,8 @@ namespace eos
 
         virtual double branching_ratio() const
         {
-            const auto lambda = eos::lambda(pow(m_B, 2), pow(m_K, 2), pow(m_psi, 2));
-            const auto prefactor = m_B * pow(g_fermi * abs(model->ckm_cb() * conj(model->ckm_cs())) / f_psi / pow(m_psi, 2), 2)
+            const auto lambda = eos::lambda(power_of<2>(m_B), power_of<2>(m_K), power_of<2>(m_psi));
+            const auto prefactor = m_B * power_of<2>(g_fermi * abs(model->ckm_cb() * conj(model->ckm_cs())) / f_psi / power_of<2>(m_psi))
                     * tau_B() / hbar() * pow(lambda, 1.5) / ( 2.0 * M_PI );
 
             return prefactor * norm(this->residue_H_plus());

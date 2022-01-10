@@ -352,7 +352,7 @@ namespace eos
         double norm(const double & s) const
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
-                * sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b())
+                * sqrt(s / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
                 * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (?), p. ??
         }
 
@@ -899,7 +899,7 @@ namespace eos
         double norm(const double & s) const
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
-                * sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b())
+                * sqrt(s / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
                 * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (3.18), p. 6
         }
 

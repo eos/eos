@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-base.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-bfs2004.hh>
@@ -82,7 +83,7 @@ namespace eos
 
         complex<double> q_over_p()
         {
-            double phi_d = arg(pow(conj(model->ckm_td()) * model->ckm_tb(), 2));
+            double phi_d = arg(power_of<2>(conj(model->ckm_td()) * model->ckm_tb()));
             return std::polar(1.0, -phi_d);
         }
 

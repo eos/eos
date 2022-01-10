@@ -389,8 +389,8 @@ namespace eos
             {{69.4495, 1.86168}, {1.18519, -74.4674}, {-23.7037, 0}, {0, 0}, {0, 0}}
         };
 
-        double m_c_hat = m_c / m_b, z = pow(m_c_hat, 2);
-        double s_hat = s / pow(m_b, 2);
+        double m_c_hat = m_c / m_b, z = power_of<2>(m_c_hat);
+        double s_hat = s / power_of<2>(m_b);
 
         complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
         if ((0.0 < s_hat) && (s_hat <= 0.45))
@@ -407,7 +407,7 @@ namespace eos
         }
 
         const double rho17[4] = {
-            1.94955 * pow(m_c_hat, 3), 11.6973 * m_c_hat, 70.1839 * m_c_hat, -3.8991 / m_c_hat + 159.863 * m_c_hat
+            1.94955 * power_of<3>(m_c_hat), 11.6973 * m_c_hat, 70.1839 * m_c_hat, -3.8991 / m_c_hat + 159.863 * m_c_hat
         };
 
         // real part
@@ -435,11 +435,11 @@ namespace eos
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
-                r = r + kap1730[l][m][0] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_c_hat), m);
+                r = r + kap1730[l][m][0] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1731[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
+                r = r + kap1731[l][m][0] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 0 ; l < 4; l++)
             r = r + rho17[l] * pow(s_hat, l);
@@ -469,11 +469,11 @@ namespace eos
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                i = i + kap1730[l][m][1] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_c_hat), m);
+                i = i + kap1730[l][m][1] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1731[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
+                i = i + kap1731[l][m][1] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         return r + complex<double>(0.0, 1.0) * i;
     }
@@ -492,9 +492,9 @@ namespace eos
                 {{7.26787, -17.3757}, {-17.9753, 14.8935}, {24.8889, 0}, {0, 0}, {0, 0}}
             };
 
-            const double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
+            const double m_q_hat = m_q / m_b, z = power_of<2>(m_q_hat);
 
-            const long double rho27 = -11.6973 * pow(m_q_hat, 3);
+            const long double rho27 = -11.6973 * power_of<3>(m_q_hat);
 
             // real part
             double r = 416.0 / 81.0 * log(mu / m_b);
@@ -591,11 +591,11 @@ namespace eos
             {{-416.697, -11.1701}, {-7.11111, 446.804}, {142.222, 0}, {0, 0}, {0, 0}}
         };
 
-        double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
+        double m_q_hat = m_q / m_b, z = power_of<2>(m_q_hat);
         double s_hat = s / m_b / m_b;
 
         const double rho27[4] = {
-            -11.6973 * pow(m_q_hat, 3), -70.1839 * m_q_hat, -421.103 * m_q_hat, 23.3946 / m_q_hat - 959.179 * m_q_hat
+            -11.6973 * power_of<3>(m_q_hat), -70.1839 * m_q_hat, -421.103 * m_q_hat, 23.3946 / m_q_hat - 959.179 * m_q_hat
         };
 
         if (s_hat == 0)
@@ -642,11 +642,11 @@ namespace eos
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
-                r = r + kap2730[l][m][0] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2730[l][m][0] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2731[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2731[l][m][0] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 4; l++)
             r = r + rho27[l] * pow(s_hat, l);
@@ -676,11 +676,11 @@ namespace eos
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                i = i + kap2730[l][m][1] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2730[l][m][1] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2731[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2731[l][m][1] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         return r + complex<double>(0.0, 1.0) * i;
     }
@@ -774,7 +774,7 @@ namespace eos
             {{-231.893, 18.6168}, {11.8519, 248.225}, {79.0123, 0}, {0, 0}, {0, 0}}
         };
 
-        double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
+        double m_q_hat = m_q / m_b, z = power_of<2>(m_q_hat);
         double s_hat = s / m_b / m_b;
 
         complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
@@ -792,16 +792,16 @@ namespace eos
         }
 
         const double rho19[4] = {
-            3.8991 * pow(m_q_hat, 3), -23.3946 * m_q_hat, -140.368 * m_q_hat, 7.79821 / m_q_hat - 319.726 * m_q_hat
+            3.8991 * power_of<3>(m_q_hat), -23.3946 * m_q_hat, -140.368 * m_q_hat, 7.79821 / m_q_hat - 319.726 * m_q_hat
         };
 
         // real part
         complex<double> r = (-1424.0 / 729.0 + 64.0 / 27.0 * log(m_q_hat)) * log(mu/m_b)
             - 16.0 / 243.0 * log(mu/m_b) * log_s_hat
-            + (16.0 / 1215.0 - 32.0 / 135.0 /pow(m_q_hat, 2)) * log(mu/m_b) * s_hat
-            + (4.0 / 2835.0 - 8.0 / 315.0 /pow(m_q_hat, 4)) * log(mu/m_b) * s_hat * s_hat
-            + (16.0 / 76545.0 - 32.0 /8505.0 / pow(m_q_hat, 6)) * log(mu/m_b) * pow(s_hat, 3)
-            - 256.0 / 243.0 * pow(log(mu/m_b), 2);
+            + (16.0 / 1215.0 - 32.0 / 135.0 /power_of<2>(m_q_hat)) * log(mu/m_b) * s_hat
+            + (4.0 / 2835.0 - 8.0 / 315.0 /power_of<4>(m_q_hat)) * log(mu/m_b) * s_hat * s_hat
+            + (16.0 / 76545.0 - 32.0 /8505.0 / power_of<6>(m_q_hat)) * log(mu/m_b) * power_of<3>(s_hat)
+            - 256.0 / 243.0 * power_of<2>(log(mu/m_b));
 
         for (int l = 3  ; l < 7 ; l++)
             for (int m = 0  ; m < 4  ; m++)
@@ -829,11 +829,11 @@ namespace eos
 
         for (int l = 0  ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
-                r = r + kap1930[l][m][0] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap1930[l][m][0] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 3  ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1931[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap1931[l][m][0] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0  ; l < 4; l++)
             r = r + rho19[l] * pow(s_hat, l);
@@ -867,11 +867,11 @@ namespace eos
 
         for (int l = 0 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                i = i + kap1930[l][m][1] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap1930[l][m][1] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1931[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap1931[l][m][1] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         return r + complex<double>(0.0, 1.0) * i;
     }
@@ -964,7 +964,7 @@ namespace eos
             {{1391.36, -111.701}, {-71.1111, -1489.35}, {-474.074, 0}, {0, 0}, {0, 0}}
         };
 
-        double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
+        double m_q_hat = m_q / m_b, z = power_of<2>(m_q_hat);
         double s_hat = s / m_b / m_b;
 
         complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
@@ -982,16 +982,16 @@ namespace eos
         }
 
         const double rho29[4] = {
-            -23.3946 * pow(m_q_hat, 3), 140.368 * m_q_hat, 842.206 * m_q_hat, -46.7892 / m_q_hat + 1918.36 * m_q_hat
+            -23.3946 * power_of<3>(m_q_hat), 140.368 * m_q_hat, 842.206 * m_q_hat, -46.7892 / m_q_hat + 1918.36 * m_q_hat
         };
 
         // real part
         complex<double> r = (256.0 / 243.0 - 128.0 / 9.0 * log(m_q_hat)) * log(mu / m_b)
             + 32.0 / 81.0 * log(mu / m_b) * log_s_hat
-            + (-32.0 / 405.0 + 64.0 / 45 / pow(m_q_hat, 2)) * log(mu / m_b) * s_hat
-            + (-8.0 / 945.0 + 16.0 / 105 / pow(m_q_hat, 4)) * log(mu / m_b) * s_hat * s_hat
-            + (-32.0 / 25515.0 + 64.0 / 2835 / pow(m_q_hat, 6)) * log(mu / m_b) * pow(s_hat, 3)
-            + 512.0 / 81.0 * pow(log(mu / m_b), 2);
+            + (-32.0 / 405.0 + 64.0 / 45 / power_of<2>(m_q_hat)) * log(mu / m_b) * s_hat
+            + (-8.0 / 945.0 + 16.0 / 105 / power_of<4>(m_q_hat)) * log(mu / m_b) * s_hat * s_hat
+            + (-32.0 / 25515.0 + 64.0 / 2835 / power_of<6>(m_q_hat)) * log(mu / m_b) * power_of<3>(s_hat)
+            + 512.0 / 81.0 * power_of<2>(log(mu / m_b));
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 4 ; m++)
@@ -1019,11 +1019,11 @@ namespace eos
 
         for (int l = 0 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
-                r = r + kap2930[l][m][0] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2930[l][m][0] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2931[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2931[l][m][0] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 4; l++)
             r = r + rho29[l] * pow(s_hat, l);
@@ -1057,11 +1057,11 @@ namespace eos
 
         for (int l = 0 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                i = i + kap2930[l][m][1] * pow(s_hat, 3) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2930[l][m][1] * power_of<3>(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2931[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2931[l][m][1] * power_of<3>(s_hat) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         return r + complex<double>(0.0, 1.0) * i;
     }

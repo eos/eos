@@ -17,9 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/bremsstrahlung.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
+#include <eos/rare-b-decays/bremsstrahlung.hh>
 
 #include <cmath>
 #include <limits>
@@ -37,13 +38,13 @@ namespace eos
         {
             double x = atan(sqrt((4.0 - t) / t));
 
-            result = 2.0 * M_PI * x - pow(M_PI, 2) / 2 - 2.0 * pow(x, 2);
+            result = 2.0 * M_PI * x - power_of<2>(M_PI) / 2 - 2.0 * power_of<2>(x);
         }
         else
         {
             double x = log((sqrt(t) + sqrt(t - 4.0)) / 2.0);
 
-            result = complex<double>(-pow(M_PI, 2) / 2.0 + 2.0 * pow(x, 2),
+            result = complex<double>(-power_of<2>(M_PI) / 2.0 + 2.0 * power_of<2>(x),
                     -2.0 * M_PI * x);
         }
 
@@ -96,7 +97,7 @@ namespace eos
     {
         double s_hat2 = s_hat * s_hat, w2 = w * w, w3 = w2 * w;
 
-        return 8.0 / 27.0 * (w - s_hat) * pow(1 - w, 2) / s_hat / w3 * (
+        return 8.0 / 27.0 * (w - s_hat) * power_of<2>(1 - w) / s_hat / w3 * (
                 (3.0 * w2 + 2 * s_hat2 * (2.0 + w) - s_hat * w * (5 - 2.0 * w)) * norm(Deltai_23(s_hat, w, z))
                 + (2.0 * s_hat2 * (2.0 + w) + s_hat * w * (1.0 + 2.0 * w)) * norm(Deltai_27(s_hat, w, z))
                 + 4.0 * s_hat * (w * (1.0 - w) - s_hat * (2.0 + w)) * real(Deltai_23(s_hat, w, z) * conj(Deltai_27(s_hat, w, z))));
@@ -121,8 +122,8 @@ namespace eos
         double x = s_hat / (1.0 + s_hat - w) / (w2 + s_hat * (1.0 - w));
 
         return 8.0 / 9.0 / (s_hat * w * (w - s_hat)) * (
-                (pow(w - s_hat, 2) * (2.0 * s_hat - w) * (1.0 - w)) * Deltai_23(s_hat, w, z)
-                - (2.0 * s_hat * pow(w - s_hat, 2) * (1.0 - w)) * Deltai_27(s_hat, w, z)
+                (power_of<2>(w - s_hat) * (2.0 * s_hat - w) * (1.0 - w)) * Deltai_23(s_hat, w, z)
+                - (2.0 * s_hat * power_of<2>(w - s_hat) * (1.0 - w)) * Deltai_27(s_hat, w, z)
                 + s_hat * w * ((1.0 + 2.0 * s_hat - 2.0 * w) * Deltai_23(s_hat, w, z)
                     - 2.0 * (1.0 + s_hat - w) * Deltai_27(s_hat, w, z)) * log(x));
     }
@@ -150,7 +151,7 @@ namespace eos
 
         return 8.0 / (9.0 * s_hat) * (
                 25.0 - 2.0 * pi2 - 27.0 * s_hat + 3.0 * s_hat2 - s_hat3 + 12.0 * (s_hat + s_hat2) * ln_s_hat
-                + 6.0 * pow(pi / 2.0 - atan1, 2) - 24.0 * reli2
+                + 6.0 * power_of<2>(pi / 2.0 - atan1) - 24.0 * reli2
                 - 12.0 * ((1.0 - s_hat) * sqrt_s_hat * sqrt_4_m_s_hat - 2.0 * atan2) * (atan3 - atan2));
     }
 

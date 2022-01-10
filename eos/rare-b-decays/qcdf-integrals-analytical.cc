@@ -759,55 +759,55 @@ namespace eos
             // End of asymptotic part
 
             // Begin of 1st Gegenbauer moment
-            complex<double> gb1 = (complex<double>(0,72)*dilogam2*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*pow(-4*mh2 + rho,2)) - 
-   (complex<double>(0,72)*dilogambm*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*pow(-4*mh2 + rho,2)) + 
-   (complex<double>(0,72)*dilogapbm*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*pow(-4*mh2 + rho,2)) + 
-   (144*atanh4mh2rho*pi*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*pow(-4*mh2 + rho,2)) - 
-   (72*pow(atan4mh2,2)*(rho*(mh2*(-2 + rho)*rho + mh4*(16 - 8*rho - 3*rho2)) + 4*mh6*(-8 + 4*rho + rho2 + rho3)))/
-    (rho*pow(-4*mh2 + rho,2)) + (72*pow(atanrho,2)*
+            complex<double> gb1 = (complex<double>(0,72)*dilogam2*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) - 
+   (complex<double>(0,72)*dilogambm*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) + 
+   (complex<double>(0,72)*dilogapbm*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) + 
+   (144*atanh4mh2rho*pi*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) - 
+   (72*power_of<2>(atan4mh2)*(rho*(mh2*(-2 + rho)*rho + mh4*(16 - 8*rho - 3*rho2)) + 4*mh6*(-8 + 4*rho + rho2 + rho3)))/
+    (rho*power_of<2>(-4*mh2 + rho)) + (72*power_of<2>(atanrho)*
       (rho*(mh2*(radixrho*(-2 + rho) - complex<double>(0,4)*(-1 + rho))*rho + mh4*(complex<double>(0,32)*(-1 + rho) + radixrho*(16 - 8*rho - 3*rho2))) + 
-        4.0*mh6*(complex<double>(0,-16)*(-1 + rho) + radixrho*(-8 + 4*rho + rho2 + rho3))))/(radixrho*rho*pow(-4*mh2 + rho,2)) + 
-   atanrho*((complex<double>(0,288)*atan4mh2*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*pow(-4*mh2 + rho,2)) - 
-      (6.0*(-16*pow(radixrho,4)*(-3*rho*(-8*mh4 + mh2*rho) + 16*mh6*(-3 + rho2)) - 
-           24*pow(radixrho,6)*(-(rho*(mh2*rho + mh4*(-8 + 3*rho))) + 4*mh6*(-4 + rho + rho2)) + 
-           24*pow(radixrho,2)*(rho*(mh2*rho - mh4*(8 + 3*rho)) + 4*mh6*(4 + rho + rho2)) + 
+        4.0*mh6*(complex<double>(0,-16)*(-1 + rho) + radixrho*(-8 + 4*rho + rho2 + rho3))))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) + 
+   atanrho*((complex<double>(0,288)*atan4mh2*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) - 
+      (6.0*(-16*power_of<4>(radixrho)*(-3*rho*(-8*mh4 + mh2*rho) + 16*mh6*(-3 + rho2)) - 
+           24*power_of<6>(radixrho)*(-(rho*(mh2*rho + mh4*(-8 + 3*rho))) + 4*mh6*(-4 + rho + rho2)) + 
+           24*power_of<2>(radixrho)*(rho*(mh2*rho - mh4*(8 + 3*rho)) + 4*mh6*(4 + rho + rho2)) + 
            rho2*(-64*mh6*(13 + 24*ln2 - 6*lndeltarho4mh2 + 12*lnmh + 12*lnradixrho - 6*lnrho + complex<double>(0,6)*pi)*(-1 + rho) + 
-              4*pow(rho,4) - 48*mh4*(9 + 16*ln2 - 4*lndeltarho4mh2 + 8*lnmh + 8*lnradixrho - 4*lnrho + complex<double>(0,4)*pi)*
+              4*power_of<4>(rho) - 48*mh4*(9 + 16*ln2 - 4*lndeltarho4mh2 + 8*lnmh + 8*lnradixrho - 4*lnrho + complex<double>(0,4)*pi)*
                (rho - rho2) + 60*mh2*rho2 + 96*ln2*mh2*rho2 - 24*lndeltarho4mh2*mh2*rho2 + 48*lnmh*mh2*rho2 + 
-              48*lnradixrho*mh2*rho2 - 24*lnrho*mh2*rho2 + complex<double>(0,24)*mh2*pi*rho2 + 9*rho*rho2 - 48*mh2*rho*rho2 + 6*pow(rho2,2) - 
+              48*lnradixrho*mh2*rho2 - 24*lnrho*mh2*rho2 + complex<double>(0,24)*mh2*pi*rho2 + 9*rho*rho2 - 48*mh2*rho*rho2 + 6*power_of<2>(rho2) - 
               10*rho3 - 12*mh2*rho3 - 96*ln2*mh2*rho3 + 24*lndeltarho4mh2*mh2*rho3 - 48*lnmh*mh2*rho3 - 48*lnradixrho*mh2*rho3 + 
               24*lnrho*mh2*rho3 - complex<double>(0,24)*mh2*pi*rho3 - 9*rho*rho3) + 
            12.0*radixrho*pi*rho2*(rho*(mh2*(-2 + rho)*rho + mh4*(16 - 8*rho - 3*rho2)) + 4*mh6*(-8 + 4*rho + rho2 + rho3))))/
-       (radixrho*rho3*pow(-4*mh2 + rho,2))) + 
-   atan4mh2*((-288*atanh4mh2rho*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*pow(-4*mh2 + rho,2)) + 
+       (radixrho*rho3*power_of<2>(-4*mh2 + rho))) + 
+   atan4mh2*((-288*atanh4mh2rho*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)))/(radixrho*rho*power_of<2>(-4*mh2 + rho)) + 
       (3.0*(96*mh4*pi*rho*(mh2*(radixrho*(-2 + rho) - complex<double>(0,2)*(-1 + rho))*rho + 
               mh4*(complex<double>(0,16)*(-1 + rho) + radixrho*(16 - 8*rho - 3*rho2))) + 
-           3*pow(radix4mh2,5)*radixrho*(mh2*rho*(-8*rho + 3*rho2) + 4*mh4*(4*rho - rho2 - rho3) + rho3) - 
-           2*pow(radix4mh2,3)*radixrho*(24*mh2*rho2 - 3*rho3 + 16*mh4*(-3*rho + rho3)) + 
+           3*power_of<5>(radix4mh2)*radixrho*(mh2*rho*(-8*rho + 3*rho2) + 4*mh4*(4*rho - rho2 - rho3) + rho3) - 
+           2*power_of<3>(radix4mh2)*radixrho*(24*mh2*rho2 - 3*rho3 + 16*mh4*(-3*rho + rho3)) + 
            384*mh4*mh6*pi*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-8 + 4*rho + rho2 + rho3)) + 
            3.0*radix4mh2*radixrho*(-(mh2*rho*(8*rho + 3*rho2)) + rho3 + 4*mh4*(4*rho + rho2 + rho3))))/
-       (4.*radixrho*mh4*rho*pow(-4*mh2 + rho,2))) + 
-   (-288*pow(radixrho,5)*mh4*(rho*(mh2*rho + mh4*(-8 + 3*rho)) - 4*mh6*(-4 + rho + rho2)) - 
-      96*pow(radixrho,3)*mh4*(3*rho*(2*mh2*rho + mh4*(-16 + 3*rho)) - 4*mh6*(-24 + 3*rho + 11*rho2)) - 
-      12.0*mh4*rho2*(-768*lnmh*mh6*pi - 768*lnradixrho*mh6*pi + 384*lnrho*mh6*pi + complex<double>(0,384)*mh6*pow(pi,2) - 
+       (4.*radixrho*mh4*rho*power_of<2>(-4*mh2 + rho))) + 
+   (-288*power_of<5>(radixrho)*mh4*(rho*(mh2*rho + mh4*(-8 + 3*rho)) - 4*mh6*(-4 + rho + rho2)) - 
+      96*power_of<3>(radixrho)*mh4*(3*rho*(2*mh2*rho + mh4*(-16 + 3*rho)) - 4*mh6*(-24 + 3*rho + 11*rho2)) - 
+      12.0*mh4*rho2*(-768*lnmh*mh6*pi - 768*lnradixrho*mh6*pi + 384*lnrho*mh6*pi + complex<double>(0,384)*mh6*power_of<2>(pi) - 
          complex<double>(0,448)*mh6*pi2 + 96*mh4*pi*rho + 384*lnmh*mh4*pi*rho + 384*lnradixrho*mh4*pi*rho - 192*lnrho*mh4*pi*rho - 
-         160*mh6*pi*rho + 768*lnmh*mh6*pi*rho + 768*lnradixrho*mh6*pi*rho - 384*lnrho*mh6*pi*rho - complex<double>(0,192)*mh4*pow(pi,2)*rho - 
-         complex<double>(0,384)*mh6*pow(pi,2)*rho + complex<double>(0,224)*mh4*pi2*rho + complex<double>(0,448)*mh6*pi2*rho - 4*pi*pow(rho,4) + 
+         160*mh6*pi*rho + 768*lnmh*mh6*pi*rho + 768*lnradixrho*mh6*pi*rho - 384*lnrho*mh6*pi*rho - complex<double>(0,192)*mh4*power_of<2>(pi)*rho - 
+         complex<double>(0,384)*mh6*power_of<2>(pi)*rho + complex<double>(0,224)*mh4*pi2*rho + complex<double>(0,448)*mh6*pi2*rho - 4*pi*power_of<4>(rho) + 
          96*ln2*pi*(-1 + rho)*(16*mh6 + rho*(-8*mh4 + mh2*rho)) - 36*mh2*pi*rho2 - 48*lnmh*mh2*pi*rho2 - 48*lnradixrho*mh2*pi*rho2 + 
          24*lnrho*mh2*pi*rho2 - 24*mh4*pi*rho2 - 384*lnmh*mh4*pi*rho2 - 384*lnradixrho*mh4*pi*rho2 + 192*lnrho*mh4*pi*rho2 + 
-         64*mh6*pi*rho2 + complex<double>(0,24)*mh2*pow(pi,2)*rho2 + complex<double>(0,192)*mh4*pow(pi,2)*rho2 - complex<double>(0,28)*mh2*pi2*rho2 - 
-         complex<double>(0,224)*mh4*pi2*rho2 - 9*pi*rho*rho2 + 48*mh2*pi*rho*rho2 - 72*mh4*pi*rho*rho2 - 6*pi*pow(rho2,2) - 
+         64*mh6*pi*rho2 + complex<double>(0,24)*mh2*power_of<2>(pi)*rho2 + complex<double>(0,192)*mh4*power_of<2>(pi)*rho2 - complex<double>(0,28)*mh2*pi2*rho2 - 
+         complex<double>(0,224)*mh4*pi2*rho2 - 9*pi*rho*rho2 + 48*mh2*pi*rho*rho2 - 72*mh4*pi*rho*rho2 - 6*pi*power_of<2>(rho2) - 
          24*lndeltarho4mh2*pi*(-1 + rho)*(16*mh6 - 8*mh4*rho + mh2*rho2) + 10*pi*rho3 - 12*mh2*pi*rho3 + 48*lnmh*mh2*pi*rho3 + 
-         48*lnradixrho*mh2*pi*rho3 - 24*lnrho*mh2*pi*rho3 + 96*mh6*pi*rho3 - complex<double>(0,24)*mh2*pow(pi,2)*rho3 + 
+         48*lnradixrho*mh2*pi*rho3 - 24*lnrho*mh2*pi*rho3 + 96*mh6*pi*rho3 - complex<double>(0,24)*mh2*power_of<2>(pi)*rho3 + 
          complex<double>(0,28)*mh2*pi2*rho3 + 9*pi*rho*rho3) + radixrho*
-       (-288*pow(mh4,2)*rho*(-8 + radix4mh2*pi*rho*(4*rho - rho2 - rho3)) + 
-         18*pow(mh2,2)*pow(rho,2)*(-32*mh2*pow(rho,2) + 3*pow(radix4mh2,2)*rho*rho2 + 4*rho3) + 
-         mh4*(512*mh6*(4*rho2 - 3*(3 + rho3)) - pow(rho,2)*
-             (18*pow(radix4mh2,2)*rho2 + 18*pow(radix4mh2,4)*rho2 - 
-               36*rho*(2 + 4*pow(radix4mh2,2) + 2*pow(radix4mh2,4) + 3*radix4mh2*pi*rho2) + 5*rho3 + 48*pow(radix4mh2,2)*rho3 + 
-               27*pow(radix4mh2,4)*rho3 + 120*radix4mh2*pi*rho3 - 
-               12*mh2*(-24 - rho3 + 3*pow(radix4mh2,2)*rho3 + 2*radix4mh2*pi*(-9*(-2 + rho)*rho2 + 2*rho3))))))/
-    (4.*radixrho*mh4*rho3*pow(-4*mh2 + rho,2));
+       (-288*power_of<2>(mh4)*rho*(-8 + radix4mh2*pi*rho*(4*rho - rho2 - rho3)) + 
+         18*power_of<2>(mh2)*power_of<2>(rho)*(-32*mh2*power_of<2>(rho) + 3*power_of<2>(radix4mh2)*rho*rho2 + 4*rho3) + 
+         mh4*(512*mh6*(4*rho2 - 3*(3 + rho3)) - power_of<2>(rho)*
+             (18*power_of<2>(radix4mh2)*rho2 + 18*power_of<4>(radix4mh2)*rho2 - 
+               36*rho*(2 + 4*power_of<2>(radix4mh2) + 2*power_of<4>(radix4mh2) + 3*radix4mh2*pi*rho2) + 5*rho3 + 48*power_of<2>(radix4mh2)*rho3 + 
+               27*power_of<4>(radix4mh2)*rho3 + 120*radix4mh2*pi*rho3 - 
+               12*mh2*(-24 - rho3 + 3*power_of<2>(radix4mh2)*rho3 + 2*radix4mh2*pi*(-9*(-2 + rho)*rho2 + 2*rho3))))))/
+    (4.*radixrho*mh4*rho3*power_of<2>(-4*mh2 + rho));
             // End of 1st Gegenbauer moment
 
             // Begin of 2nd Gegenbauer moment
@@ -1159,22 +1159,22 @@ namespace eos
             static const double zeta3 = 1.2020569031595942854;
 
             // Asymptotic part
-            complex<double> asymp = (-80*pow(atanh4mh2,3)*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,32)*pow(atanrho,3)*mh2*rho)/(4*mh2 - rho) - 
+            complex<double> asymp = (-80*power_of<3>(atanh4mh2)*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,32)*power_of<3>(atanrho)*mh2*rho)/(4*mh2 - rho) - 
    (12*zeta3*mh2*rho)/(4*mh2 - rho) - (complex<double>(0,24)*ln2*lnrhom1*mh2*pi*rho)/(4*mh2 - rho) + 
    (complex<double>(0,24)*lnmh*lnsigma*mh2*pi*rho)/(4*mh2 - rho) + 
-   (complex<double>(0,24)*lnmh*mh2*pi*rho*(8*ln2*mh2 - 4*lnrho*mh2 - rho - 2*ln2*rho + lnrho*rho))/pow(-4*mh2 + rho,2) + 
+   (complex<double>(0,24)*lnmh*mh2*pi*rho*(8*ln2*mh2 - 4*lnrho*mh2 - rho - 2*ln2*rho + lnrho*rho))/power_of<2>(-4*mh2 + rho) + 
    lntau*((complex<double>(0,48)*lnmh*mh2*pi*rho)/(4*mh2 - rho) - 
-      (complex<double>(0,48)*mh2*pi*rho*(mh2*rho + ln2*(-4*mh2 + rho)))/pow(-4*mh2 + rho,2)) + 
+      (complex<double>(0,48)*mh2*pi*rho*(mh2*rho + ln2*(-4*mh2 + rho)))/power_of<2>(-4*mh2 + rho)) + 
    atanh4mh2*((complex<double>(0,-96)*lnmh*mh2*pi*rho)/(4*mh2 - rho) - (complex<double>(0,48)*lntau*mh2*pi*rho)/(4*mh2 - rho) - 
       (complex<double>(0,24)*mh2*rho*(4*ln2*pi*(4*mh2 - rho) + complex<double>(0,1)*(radix4mh2 + complex<double>(0,2)*mh2*pi)*rho + lnrho*pi*(-4*mh2 + rho)))/
-       pow(-4*mh2 + rho,2)) + pow(atanrho,2)*((-48*atanh4mh2*mh2*rho)/(4*mh2 - rho) + (24*lnsigma*mh2*rho)/(4*mh2 - rho) + 
+       power_of<2>(-4*mh2 + rho)) + power_of<2>(atanrho)*((-48*atanh4mh2*mh2*rho)/(4*mh2 - rho) + (24*lnsigma*mh2*rho)/(4*mh2 - rho) + 
       (48.0*lntau*mh2*rho)/(4*mh2 - rho) + (24.0*mh2*rho*(complex<double>(0,1)*(complex<double>(0,1) + pi)*rho + 2*mh2*(complex<double>(0,-2)*pi + rho)))/
-       pow(-4*mh2 + rho,2)) + pow(atanh4mh2,2)*((24*lnsigma*mh2*rho)/(4*mh2 - rho) + (48.0*lntau*mh2*rho)/(4*mh2 - rho) + 
-      (24*mh2*rho*((-1.0 - complex<double>(0,3)*pi)*rho + 2*mh2*(complex<double>(0,6)*pi + rho)))/pow(-4*mh2 + rho,2)) + 
+       power_of<2>(-4*mh2 + rho)) + power_of<2>(atanh4mh2)*((24*lnsigma*mh2*rho)/(4*mh2 - rho) + (48.0*lntau*mh2*rho)/(4*mh2 - rho) + 
+      (24*mh2*rho*((-1.0 - complex<double>(0,3)*pi)*rho + 2*mh2*(complex<double>(0,6)*pi + rho)))/power_of<2>(-4*mh2 + rho)) + 
    atanrho*((48*atanh4mh2*mh2*pi*rho)/(4*mh2 - rho) - (24*lnsigma*mh2*pi*rho)/(4*mh2 - rho) - (48.0*lntau*mh2*pi*rho)/(4*mh2 - rho) + 
-      (4*mh2*rho*(24*radixrho*mh2 + pi*(complex<double>(0,-4)*mh2*(pi - complex<double>(0,3)*rho) + (6.0 + complex<double>(0,1)*pi)*rho)))/pow(-4*mh2 + rho,2)) + 
+      (4*mh2*rho*(24*radixrho*mh2 + pi*(complex<double>(0,-4)*mh2*(pi - complex<double>(0,3)*rho) + (6.0 + complex<double>(0,1)*pi)*rho)))/power_of<2>(-4*mh2 + rho)) + 
    (complex<double>(0,-4)*mh2*rho*(complex<double>(0,-6) + (complex<double>(0,-3) + 3*pi + pi3)*rho) + 3*rho2 + 
-      16*mh4*(3.0 + (3.0 - 3*radixrho*pi + complex<double>(0,1)*pi3)*rho - complex<double>(0,3)*(-1 + 2*ln2)*pi*rho2))/pow(-4*mh2 + rho,2) + 
+      16*mh4*(3.0 + (3.0 - 3*radixrho*pi + complex<double>(0,1)*pi3)*rho - complex<double>(0,3)*(-1 + 2*ln2)*pi*rho2))/power_of<2>(-4*mh2 + rho) + 
    (complex<double>(0,24)*mh2*pi*rho*diloginvx7)/(4*mh2 - rho) + (complex<double>(0,24)*mh2*pi*rho*diloginvx9)/(4*mh2 - rho) + 
    ((complex<double>(0,-24)*atanrho*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,12)*mh2*pi*rho)/(4*mh2 - rho))*dilogx4 + 
    (complex<double>(0,24)*mh2*pi*rho*dilogx5)/(4*mh2 - rho) - (complex<double>(0,48)*mh2*pi*rho*redilog2ap)/(4*mh2 - rho) + 
@@ -1183,28 +1183,28 @@ namespace eos
             // End of asymptotic part
 
             // Begin of 1st Gegenbauer moment
-            complex<double> gb1 = (-240*pow(atanh4mh2,3)*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,96)*pow(atanrho,3)*mh2*rho)/(4*mh2 - rho) - 
+            complex<double> gb1 = (-240*power_of<3>(atanh4mh2)*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,96)*power_of<3>(atanrho)*mh2*rho)/(4*mh2 - rho) - 
    (36*zeta3*mh2*rho)/(4*mh2 - rho) - (complex<double>(0,72)*ln2*lnrhom1*mh2*pi*rho)/(4*mh2 - rho) + 
    (complex<double>(0,72)*lnmh*lnsigma*mh2*pi*rho)/(4*mh2 - rho) + 
-   (complex<double>(0,72)*lnmh*mh2*pi*rho*(2*ln2*pow(-4*mh2 + rho,2) - lnrho*pow(-4*mh2 + rho,2) + 2*rho*(-2*mh2 + rho)))/
-    pow(4*mh2 - rho,3) + lntau*((complex<double>(0,144)*lnmh*mh2*pi*rho)/(4*mh2 - rho) + 
-      (complex<double>(0,144)*mh2*pi*rho*(ln2*pow(-4*mh2 + rho,2) + mh2*rho*(3*rho - mh2*(4 + 3*rho))))/pow(4*mh2 - rho,3)) + 
+   (complex<double>(0,72)*lnmh*mh2*pi*rho*(2*ln2*power_of<2>(-4*mh2 + rho) - lnrho*power_of<2>(-4*mh2 + rho) + 2*rho*(-2*mh2 + rho)))/
+    power_of<3>(4*mh2 - rho) + lntau*((complex<double>(0,144)*lnmh*mh2*pi*rho)/(4*mh2 - rho) + 
+      (complex<double>(0,144)*mh2*pi*rho*(ln2*power_of<2>(-4*mh2 + rho) + mh2*rho*(3*rho - mh2*(4 + 3*rho))))/power_of<3>(4*mh2 - rho)) + 
    atanh4mh2*((complex<double>(0,-288)*lnmh*mh2*pi*rho)/(4*mh2 - rho) - (complex<double>(0,144)*lntau*mh2*pi*rho)/(4*mh2 - rho) - 
-      (complex<double>(0,36)*mh2*rho*(8*ln2*pi*pow(-4*mh2 + rho,2) - 2*lnrho*pi*pow(-4*mh2 + rho,2) + 
-           rho*(-4*mh2*pi*(-3*rho + mh2*(4 + 3*rho)) + complex<double>(0,1)*radix4mh2*(-5*rho + mh2*(8 + 6*rho)))))/pow(4*mh2 - rho,3)) + 
-   pow(atanrho,2)*((-144*atanh4mh2*mh2*rho)/(4*mh2 - rho) + (72*lnsigma*mh2*rho)/(4*mh2 - rho) + (144.0*lntau*mh2*rho)/(4*mh2 - rho) + 
+      (complex<double>(0,36)*mh2*rho*(8*ln2*pi*power_of<2>(-4*mh2 + rho) - 2*lnrho*pi*power_of<2>(-4*mh2 + rho) + 
+           rho*(-4*mh2*pi*(-3*rho + mh2*(4 + 3*rho)) + complex<double>(0,1)*radix4mh2*(-5*rho + mh2*(8 + 6*rho)))))/power_of<3>(4*mh2 - rho)) + 
+   power_of<2>(atanrho)*((-144*atanh4mh2*mh2*rho)/(4*mh2 - rho) + (72*lnsigma*mh2*rho)/(4*mh2 - rho) + (144.0*lntau*mh2*rho)/(4*mh2 - rho) + 
       (72*mh2*rho*(2*mh2*(-2.0 + complex<double>(0,4)*pi - 3*rho)*rho + 2*mh4*(complex<double>(0,-8)*pi + rho*(4 + 3*rho)) + (2.0 - complex<double>(0,1)*pi)*rho2))/
-       pow(4*mh2 - rho,3)) + pow(atanh4mh2,2)*((72*lnsigma*mh2*rho)/(4*mh2 - rho) + (144.0*lntau*mh2*rho)/(4*mh2 - rho) + 
+       power_of<3>(4*mh2 - rho)) + power_of<2>(atanh4mh2)*((72*lnsigma*mh2*rho)/(4*mh2 - rho) + (144.0*lntau*mh2*rho)/(4*mh2 - rho) + 
       (72*mh2*rho*(-2*mh2*rho*(2.0 + complex<double>(0,12)*pi + 3*rho) + mh4*(complex<double>(0,48)*pi + 2*rho*(4 + 3*rho)) + (2.0 + complex<double>(0,3)*pi)*rho2))/
-       pow(4*mh2 - rho,3)) + atanrho*((144*atanh4mh2*mh2*pi*rho)/(4*mh2 - rho) - (72*lnsigma*mh2*pi*rho)/(4*mh2 - rho) - 
+       power_of<3>(4*mh2 - rho)) + atanrho*((144*atanh4mh2*mh2*pi*rho)/(4*mh2 - rho) - (72*lnsigma*mh2*pi*rho)/(4*mh2 - rho) - 
       (144.0*lntau*mh2*pi*rho)/(4*mh2 - rho) - (12*mh2*rho*
          (-72*radixrho*(-(mh2*rho) + mh4*(2 + rho)) + pi*
             (-4*mh2*rho*(6.0 + complex<double>(0,2)*pi + 9*rho) + 4*mh4*(complex<double>(0,4)*pi + 3*rho*(4 + 3*rho)) + (12.0 + complex<double>(0,1)*pi)*rho2)))/
-       pow(4*mh2 - rho,3)) + (3.0*(mh2*(12.0 + (33.0 + complex<double>(0,30)*pi + complex<double>(0,4)*pi3)*rho)*rho2 + 
+       power_of<3>(4*mh2 - rho)) + (3.0*(mh2*(12.0 + (33.0 + complex<double>(0,30)*pi + complex<double>(0,4)*pi3)*rho)*rho2 + 
         4*mh4*rho*(-12.0 + 4.0*(-12.0 - complex<double>(0,3)*pi + 9*radixrho*pi - complex<double>(0,2)*pi3)*rho + 
            complex<double>(0,9)*(complex<double>(0,1) - 4*pi + 8*ln2*pi)*rho2) - rho3 + 
         16*mh6*(4.0 + (15.0 - 18*radixrho*pi + complex<double>(0,4)*pi3)*rho + 
-           3.0*(3.0 + (complex<double>(0,4) - complex<double>(0,8)*ln2 - 3*radixrho)*pi)*rho2 - complex<double>(0,6)*(-1 + 4*ln2)*pi*rho3)))/pow(4*mh2 - rho,3) + 
+           3.0*(3.0 + (complex<double>(0,4) - complex<double>(0,8)*ln2 - 3*radixrho)*pi)*rho2 - complex<double>(0,6)*(-1 + 4*ln2)*pi*rho3)))/power_of<3>(4*mh2 - rho) + 
    (complex<double>(0,72)*mh2*pi*rho*diloginvx7)/(4*mh2 - rho) + (complex<double>(0,72)*mh2*pi*rho*diloginvx9)/(4*mh2 - rho) + 
    ((complex<double>(0,-72)*atanrho*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,36)*mh2*pi*rho)/(4*mh2 - rho))*dilogx4 + 
    (complex<double>(0,72)*mh2*pi*rho*dilogx5)/(4*mh2 - rho) - (complex<double>(0,144)*mh2*pi*rho*redilog2ap)/(4*mh2 - rho) + 
@@ -1213,29 +1213,29 @@ namespace eos
             // End of 1st Gegenbauer moment
 
             // Begin of 2nd Gegenbauer moment
-            complex<double> gb2 = (complex<double>(0,192)*pow(atanrho,3)*mh2*rho)/(4*mh2 - rho) - (72*zeta3*mh2*rho)/(4*mh2 - rho) + 
-   (480*pow(atanh4mh2,3)*mh2*rho)/(-4*mh2 + rho) + (complex<double>(0,144)*ln2*lnrhom1*mh2*pi*rho)/(-4*mh2 + rho) - 
+            complex<double> gb2 = (complex<double>(0,192)*power_of<3>(atanrho)*mh2*rho)/(4*mh2 - rho) - (72*zeta3*mh2*rho)/(4*mh2 - rho) + 
+   (480*power_of<3>(atanh4mh2)*mh2*rho)/(-4*mh2 + rho) + (complex<double>(0,144)*ln2*lnrhom1*mh2*pi*rho)/(-4*mh2 + rho) - 
    (complex<double>(0,144)*lnmh*lnsigma*mh2*pi*rho)/(-4*mh2 + rho) + 
-   (complex<double>(0,48)*lnmh*mh2*pi*rho*(6*ln2*pow(4*mh2 - rho,3) - 3*lnrho*pow(4*mh2 - rho,3) - 8*rho*(6*mh4 - 3*mh2*rho + rho2)))/
-    pow(-4*mh2 + rho,4) + lntau*((complex<double>(0,-288)*lnmh*mh2*pi*rho)/(-4*mh2 + rho) + 
-      (complex<double>(0,96)*mh2*pi*rho*(3*ln2*pow(4*mh2 - rho,3) + mh2*rho*(3*mh2*rho*(8 + 15*rho) - 18*rho2 - 2*mh4*(24 + 25*rho2))))/
-       pow(-4*mh2 + rho,4)) + atanh4mh2*((complex<double>(0,576)*lnmh*mh2*pi*rho)/(-4*mh2 + rho) + 
+   (complex<double>(0,48)*lnmh*mh2*pi*rho*(6*ln2*power_of<3>(4*mh2 - rho) - 3*lnrho*power_of<3>(4*mh2 - rho) - 8*rho*(6*mh4 - 3*mh2*rho + rho2)))/
+    power_of<4>(-4*mh2 + rho) + lntau*((complex<double>(0,-288)*lnmh*mh2*pi*rho)/(-4*mh2 + rho) + 
+      (complex<double>(0,96)*mh2*pi*rho*(3*ln2*power_of<3>(4*mh2 - rho) + mh2*rho*(3*mh2*rho*(8 + 15*rho) - 18*rho2 - 2*mh4*(24 + 25*rho2))))/
+       power_of<4>(-4*mh2 + rho)) + atanh4mh2*((complex<double>(0,576)*lnmh*mh2*pi*rho)/(-4*mh2 + rho) + 
       (complex<double>(0,288)*lntau*mh2*pi*rho)/(-4*mh2 + rho) + 
-      (8*mh2*rho*(complex<double>(0,-72)*ln2*pi*pow(4*mh2 - rho,3) + complex<double>(0,18)*lnrho*pi*pow(4*mh2 - rho,3) + 
+      (8*mh2*rho*(complex<double>(0,-72)*ln2*pi*power_of<3>(4*mh2 - rho) + complex<double>(0,18)*lnrho*pi*power_of<3>(4*mh2 - rho) + 
            rho*(-4*mh2*rho*(36*radix4mh2 + 55*radix4mh2*rho - complex<double>(0,54)*pi*rho) + 73*radix4mh2*rho2 + 
               complex<double>(0,24)*mh6*pi*(24 + 25*rho2) + 12*mh4*(complex<double>(0,-3)*pi*rho*(8 + 15*rho) + radix4mh2*(24 + 25*rho2)))))/
-       pow(-4*mh2 + rho,4)) + atanrho*((288*atanh4mh2*mh2*pi*rho)/(4*mh2 - rho) + (144*lnsigma*mh2*pi*rho)/(-4*mh2 + rho) + 
+       power_of<4>(-4*mh2 + rho)) + atanrho*((288*atanh4mh2*mh2*pi*rho)/(4*mh2 - rho) + (144*lnsigma*mh2*pi*rho)/(-4*mh2 + rho) + 
       (288.0*lntau*mh2*pi*rho)/(-4*mh2 + rho) - (8*mh2*rho*
-         (36*mh2*(complex<double>(0,1)*radixrho*pow(pi,2) - 12*(-1 + rho) + 2*radixrho*pi*(2 + 3*rho))*rho2 - 
-           36*mh4*rho*(complex<double>(0,4)*radixrho*pow(pi,2) - 6*(-6 + rho + 5*rho2) + radixrho*pi*(8 + 8*rho + 15*rho2)) + 
-           8*mh6*(224.0 + complex<double>(0,24)*radixrho*pow(pi,2) - 124*rho + 50*rho2 + 3*radixrho*pi*rho*(24 + 25*rho2) - 150*rho3) - 
-           complex<double>(0,3)*radixrho*pi*(complex<double>(0,-16) + pi)*rho3))/(radixrho*pow(-4*mh2 + rho,4))) + 
-   pow(atanrho,2)*((288*atanh4mh2*mh2*rho)/(-4*mh2 + rho) - (144*lnsigma*mh2*rho)/(-4*mh2 + rho) - 
+         (36*mh2*(complex<double>(0,1)*radixrho*power_of<2>(pi) - 12*(-1 + rho) + 2*radixrho*pi*(2 + 3*rho))*rho2 - 
+           36*mh4*rho*(complex<double>(0,4)*radixrho*power_of<2>(pi) - 6*(-6 + rho + 5*rho2) + radixrho*pi*(8 + 8*rho + 15*rho2)) + 
+           8*mh6*(224.0 + complex<double>(0,24)*radixrho*power_of<2>(pi) - 124*rho + 50*rho2 + 3*radixrho*pi*rho*(24 + 25*rho2) - 150*rho3) - 
+           complex<double>(0,3)*radixrho*pi*(complex<double>(0,-16) + pi)*rho3))/(radixrho*power_of<4>(-4*mh2 + rho))) + 
+   power_of<2>(atanrho)*((288*atanh4mh2*mh2*rho)/(-4*mh2 + rho) - (144*lnsigma*mh2*rho)/(-4*mh2 + rho) - 
       (288.0*lntau*mh2*rho)/(-4*mh2 + rho) + (48*mh2*rho*(12*mh2*(2.0 - complex<double>(0,3)*pi + 3*rho)*rho2 - 
            6*mh4*rho*(8.0 - complex<double>(0,24)*pi + 8*rho + 15*rho2) + (-8.0 + complex<double>(0,3)*pi)*rho3 + 4*mh6*(complex<double>(0,-48)*pi + 24*rho + 25*rho3)))/
-       pow(-4*mh2 + rho,4)) + pow(atanh4mh2,2)*((-144*lnsigma*mh2*rho)/(-4*mh2 + rho) - (288.0*lntau*mh2*rho)/(-4*mh2 + rho) + 
+       power_of<4>(-4*mh2 + rho)) + power_of<2>(atanh4mh2)*((-144*lnsigma*mh2*rho)/(-4*mh2 + rho) - (288.0*lntau*mh2*rho)/(-4*mh2 + rho) + 
       (48*mh2*rho*(12*mh2*(2.0 + complex<double>(0,9)*pi + 3*rho)*rho2 - 6*mh4*rho*(8.0 + complex<double>(0,72)*pi + 8*rho + 15*rho2) + 
-           (-8.0 - complex<double>(0,9)*pi)*rho3 + 4*mh6*(complex<double>(0,144)*pi + 24*rho + 25*rho3)))/pow(-4*mh2 + rho,4)) + 
+           (-8.0 - complex<double>(0,9)*pi)*rho3 + 4*mh6*(complex<double>(0,144)*pi + 24*rho + 25*rho3)))/power_of<4>(-4*mh2 + rho)) + 
    (9*radixrho*rho4 + 12*mh4*rho2*(complex<double>(0,72)*radixrho*pi3*rho + 
          144*pi*rho*(3.0 + complex<double>(0,1)*radixrho + (-3.0 + complex<double>(0,3)*radixrho - complex<double>(0,6)*ln2*radixrho)*rho) + 
          radixrho*(72 + 576*rho + 245*rho2)) - complex<double>(0,2)*radixrho*mh2*(complex<double>(0,-72) + (complex<double>(0,-533) + 438*pi + 36*pi3)*rho)*
@@ -1244,7 +1244,7 @@ namespace eos
             5.0*(3.0 - complex<double>(0,2)*radixrho + complex<double>(0,8)*ln2*radixrho)*rho2) - radixrho*(16 + 102*rho + 90*rho2 + 25*rho3)) + 
       64*mh8*(complex<double>(0,72)*radixrho*pi3*rho + radixrho*(36 + 256*rho + 75*rho2 + 225*rho3) + 
          3.0*pi*rho*(112.0 + (-62.0 + complex<double>(0,72)*radixrho - complex<double>(0,144)*ln2*radixrho)*rho + 25*rho2 - 
-            complex<double>(0,5)*(complex<double>(0,-15) - 8*radixrho + 48*ln2*radixrho)*rho3)))/(3.*radixrho*pow(-4*mh2 + rho,4)) + 
+            complex<double>(0,5)*(complex<double>(0,-15) - 8*radixrho + 48*ln2*radixrho)*rho3)))/(3.*radixrho*power_of<4>(-4*mh2 + rho)) + 
    (complex<double>(0,144)*mh2*pi*rho*diloginvx7)/(4*mh2 - rho) + (complex<double>(0,144)*mh2*pi*rho*diloginvx9)/(4*mh2 - rho) + 
    ((complex<double>(0,-144)*atanrho*mh2*rho)/(4*mh2 - rho) + (complex<double>(0,72)*mh2*pi*rho)/(4*mh2 - rho))*dilogx4 - 
    (complex<double>(0,144)*mh2*pi*rho*dilogx5)/(-4*mh2 + rho) - (complex<double>(0,288)*mh2*pi*rho*redilog2ap)/(4*mh2 - rho) + 
@@ -1264,8 +1264,8 @@ namespace eos
 
             // Asymptotic part
             complex<double> asymp = (complex<double>(0,-12)*atannu*pi*(-1 + rho))/radixrho - (6*lnrhom1*pi*(-1 + rho))/radixrho - (6*lnsigma*pi*(-1 + rho))/radixrho - 
-   (12.0*lntau*pi*(-1 + rho))/radixrho - (12*pow(atanh4mh2,2)*(2*mh2*(-2 + rho) + rho))/(-4*mh2 + rho) + 
-   (12*pow(atanrho,2)*(2*mh2*(radixrho*(-2 + rho) - complex<double>(0,4)*(-1 + rho)) + (radixrho + complex<double>(0,2)*(-1 + rho))*rho))/
+   (12.0*lntau*pi*(-1 + rho))/radixrho - (12*power_of<2>(atanh4mh2)*(2*mh2*(-2 + rho) + rho))/(-4*mh2 + rho) + 
+   (12*power_of<2>(atanrho)*(2*mh2*(radixrho*(-2 + rho) - complex<double>(0,4)*(-1 + rho)) + (radixrho + complex<double>(0,2)*(-1 + rho))*rho))/
     (radixrho*(4*mh2 - rho)) + (6*radixrho*(-4*mh2 + rho + complex<double>(0,1)*radix4mh2*pi*rho) + 
       pi*(-1 + rho)*(48*lnrho*mh2 - complex<double>(0,4)*mh2*pi + 6*rho - 12*lnrho*rho + complex<double>(0,1)*pi*rho + 24*ln2*(-4*mh2 + rho)))/
     (radixrho*(4*mh2 - rho)) + (12*atanh4mh2*(2*mh2*pi*(4.0 + complex<double>(0,1)*radixrho*(-2 + rho) - 4*rho) - 
@@ -1280,64 +1280,64 @@ namespace eos
 
             // Begin of 1st Gegenbauer moment
             complex<double> gb1 = (complex<double>(0,-36)*atannu*pi*(-1 + rho))/radixrho - (18*lnrhom1*pi*(-1 + rho))/radixrho - (18*lnsigma*pi*(-1 + rho))/radixrho - 
-   (36.0*lntau*pi*(-1 + rho))/radixrho + (36*pow(atanh4mh2,2)*(2*mh2*(4 - 3*rho)*rho - rho2 + 4*mh4*(-4 + 2*rho + rho2)))/
-    pow(-4*mh2 + rho,2) - (3.0*(pi*(-1 + rho)*(complex<double>(0,16)*mh4*pi - 24*mh2*rho + 48*mh4*rho - complex<double>(0,8)*mh2*pi*rho + 
-           24*ln2*pow(-4*mh2 + rho,2) - 12*lnrho*pow(-4*mh2 + rho,2) + 12*rho2 + complex<double>(0,1)*pi*rho2) - 
+   (36.0*lntau*pi*(-1 + rho))/radixrho + (36*power_of<2>(atanh4mh2)*(2*mh2*(4 - 3*rho)*rho - rho2 + 4*mh4*(-4 + 2*rho + rho2)))/
+    power_of<2>(-4*mh2 + rho) - (3.0*(pi*(-1 + rho)*(complex<double>(0,16)*mh4*pi - 24*mh2*rho + 48*mh4*rho - complex<double>(0,8)*mh2*pi*rho + 
+           24*ln2*power_of<2>(-4*mh2 + rho) - 12*lnrho*power_of<2>(-4*mh2 + rho) + 12*rho2 + complex<double>(0,1)*pi*rho2) - 
         3.0*radixrho*(16*mh4*(-3 + rho) + 4*mh2*(8.0 - complex<double>(0,1)*radix4mh2*pi*(-2 + rho) - rho)*rho + 
-           (-5.0 - complex<double>(0,4)*radix4mh2*pi)*rho2)))/(radixrho*pow(-4*mh2 + rho,2)) + 
-   (36*atanh4mh2*(2*atan4mh2rho*(-1 + rho)*pow(-4*mh2 + rho,2) + 
+           (-5.0 - complex<double>(0,4)*radix4mh2*pi)*rho2)))/(radixrho*power_of<2>(-4*mh2 + rho)) + 
+   (36*atanh4mh2*(2*atan4mh2rho*(-1 + rho)*power_of<2>(-4*mh2 + rho) + 
         2*mh2*rho*(radix4mh2*radixrho*(-2 + rho) + pi*(8 - 8*rho + complex<double>(0,1)*radixrho*(-4 + 3*rho))) + 
         (2*radix4mh2*radixrho + pi*(-2.0 + complex<double>(0,1)*radixrho + 2*rho))*rho2 + 
-        4*mh4*pi*(8.0*(-1 + rho) - complex<double>(0,1)*radixrho*(-4 + 2*rho + rho2))))/(radixrho*pow(-4*mh2 + rho,2)) + 
-   (36*pow(atanrho,2)*(-2*mh2*rho*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-4 + 3*rho)) - (radixrho + complex<double>(0,2)*(-1 + rho))*rho2 + 
-        4*mh4*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-4 + 2*rho + rho2))))/(radixrho*pow(-4*mh2 + rho,2)) + 
+        4*mh4*pi*(8.0*(-1 + rho) - complex<double>(0,1)*radixrho*(-4 + 2*rho + rho2))))/(radixrho*power_of<2>(-4*mh2 + rho)) + 
+   (36*power_of<2>(atanrho)*(-2*mh2*rho*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-4 + 3*rho)) - (radixrho + complex<double>(0,2)*(-1 + rho))*rho2 + 
+        4*mh4*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-4 + 2*rho + rho2))))/(radixrho*power_of<2>(-4*mh2 + rho)) + 
    atanrho*((-144*atanh4mh2*(-1 + rho))/radixrho + (36*lnrhom1*(-1 + rho))/radixrho + (36*lnsigma*(-1 + rho))/radixrho + 
       (72.0*lntau*(-1 + rho))/radixrho + (36.0*(complex<double>(0,-32)*mh4*pi + 16*radixrho*mh4*pi + 4*mh2*rho - 8*mh4*rho + 
            complex<double>(0,16)*mh2*pi*rho - 8*radixrho*mh2*pi*rho + complex<double>(0,32)*mh4*pi*rho - 8*radixrho*mh4*pi*rho + 
-           4*ln2*(-1 + rho)*pow(-4*mh2 + rho,2) - 2*lnrho*(-1 + rho)*pow(-4*mh2 + rho,2) - 2*rho2 - 4*mh2*rho2 + 8*mh4*rho2 - 
+           4*ln2*(-1 + rho)*power_of<2>(-4*mh2 + rho) - 2*lnrho*(-1 + rho)*power_of<2>(-4*mh2 + rho) - 2*rho2 - 4*mh2*rho2 + 8*mh4*rho2 - 
            complex<double>(0,2)*pi*rho2 + radixrho*pi*rho2 - complex<double>(0,16)*mh2*pi*rho2 + 6*radixrho*mh2*pi*rho2 - 4*radixrho*mh4*pi*rho2 + 
-           2*rho3 + complex<double>(0,2)*pi*rho3))/(radixrho*pow(-4*mh2 + rho,2))) + (complex<double>(0,36)*(-1 + rho)*dilogx13)/radixrho + 
+           2*rho3 + complex<double>(0,2)*pi*rho3))/(radixrho*power_of<2>(-4*mh2 + rho))) + (complex<double>(0,36)*(-1 + rho)*dilogx13)/radixrho + 
    (complex<double>(0,18)*(-1 + rho)*dilogx4)/radixrho - (complex<double>(0,36)*(-1 + rho)*redilogx12)/radixrho;
             // End of 1st Gegenbauer moment
 
             // Begin of 2nd Gegenbauer moment
-            complex<double> gb2 = (-72*atannu*pi*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
-   (complex<double>(0,36)*lnrhom1*pi*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
-   (complex<double>(0,36)*lnsigma*pi*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
-   (complex<double>(0,72)*lntau*pi*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
-   (complex<double>(0,72)*pow(atanh4mh2,2)*rho2*(12*mh2*(-1 + rho)*rho2 - 4*mh4*rho*(-12 + 4*rho + 5*rho2) + rho3 + 4*mh6*(-16 + 8*rho + 5*rho3)))/
-    (pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*pow(-4*mh2 + rho,3)) + 
-   (complex<double>(0,2)*rho2*(-3*pi*(-1 + rho)*(complex<double>(0,64)*mh6*pi + 24*ln2*pow(4*mh2 - rho,3) - 12*lnrho*pow(4*mh2 - rho,3) - 96*mh4*rho + 
+            complex<double> gb2 = (-72*atannu*pi*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
+   (complex<double>(0,36)*lnrhom1*pi*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
+   (complex<double>(0,36)*lnsigma*pi*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
+   (complex<double>(0,72)*lntau*pi*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
+   (complex<double>(0,72)*power_of<2>(atanh4mh2)*rho2*(12*mh2*(-1 + rho)*rho2 - 4*mh4*rho*(-12 + 4*rho + 5*rho2) + rho3 + 4*mh6*(-16 + 8*rho + 5*rho3)))/
+    (power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*power_of<3>(-4*mh2 + rho)) + 
+   (complex<double>(0,2)*rho2*(-3*pi*(-1 + rho)*(complex<double>(0,64)*mh6*pi + 24*ln2*power_of<3>(4*mh2 - rho) - 12*lnrho*power_of<3>(4*mh2 - rho) - 96*mh4*rho + 
            160*mh6*rho - complex<double>(0,48)*mh4*pi*rho + 48*mh2*rho2 - 240*mh4*rho2 + 240*mh6*rho2 + complex<double>(0,12)*mh2*pi*rho2 - 16*rho3 - 
            complex<double>(0,1)*pi*rho3) + radixrho*(3*mh2*(-192 + 55*rho + complex<double>(0,2)*radix4mh2*pi*(-24 + 25*rho))*rho2 + 
            16*mh6*(-112 + 15*rho + 45*rho2) + 36*mh4*rho*(44 - 20*rho - 5*rho2 - complex<double>(0,1)*radix4mh2*pi*(-8 + 5*rho2)) + 
            (73.0 + complex<double>(0,48)*radix4mh2*pi)*rho3)))/
-    (radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*pow(-4*mh2 + rho,3)) - 
-   (complex<double>(0,24)*atanh4mh2*rho2*(-6*atan4mh2rho*pow(4*mh2 - rho,3)*(-1 + rho) + 
+    (radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*power_of<3>(-4*mh2 + rho)) - 
+   (complex<double>(0,24)*atanh4mh2*rho2*(-6*atan4mh2rho*power_of<3>(4*mh2 - rho)*(-1 + rho) + 
         mh2*(complex<double>(0,36)*(complex<double>(0,2) + radixrho)*pi*(-1 + rho) + radix4mh2*radixrho*(-24 + 25*rho))*rho2 - 
         6*mh4*rho*(radix4mh2*radixrho*(-8 + 5*rho2) + 2*pi*(-24*(-1 + rho) + complex<double>(0,1)*radixrho*(-12 + 4*rho + 5*rho2))) + 
         (8*radix4mh2*radixrho + 3*pi*(-2.0 + complex<double>(0,1)*radixrho + 2*rho))*rho3 + 
         12*mh6*pi*(-32*(-1 + rho) + complex<double>(0,1)*radixrho*(-16 + 8*rho + 5*rho3))))/
-    (radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*pow(-4*mh2 + rho,3)) + 
-   (complex<double>(0,72)*pow(atanrho,2)*rho2*(12.0*(complex<double>(0,-2) + radixrho)*mh2*(-1 + rho)*rho2 - 
+    (radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*power_of<3>(-4*mh2 + rho)) + 
+   (complex<double>(0,72)*power_of<2>(atanrho)*rho2*(12.0*(complex<double>(0,-2) + radixrho)*mh2*(-1 + rho)*rho2 - 
         4*mh4*rho*(complex<double>(0,-24)*(-1 + rho) + radixrho*(-12 + 4*rho + 5*rho2)) + (radixrho + complex<double>(0,2)*(-1 + rho))*rho3 + 
         4*mh6*(complex<double>(0,-32)*(-1 + rho) + radixrho*(-16 + 8*rho + 5*rho3))))/
-    (radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*pow(-4*mh2 + rho,3)) + 
+    (radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*power_of<3>(-4*mh2 + rho)) + 
    atanrho*((complex<double>(0,288)*atanh4mh2*(-1 + rho)*rho2)/
-       (radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
-      (complex<double>(0,72)*lnrhom1*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
-      (complex<double>(0,72)*lnsigma*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
-      (complex<double>(0,144)*lntau*(-1 + rho)*rho2)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
-      (complex<double>(0,24)*rho2*(complex<double>(0,-384)*mh6*pi + 192*radixrho*mh6*pi + 12*ln2*pow(4*mh2 - rho,3)*(-1 + rho) - 
-           6*lnrho*pow(4*mh2 - rho,3)*(-1 + rho) + 48*mh4*rho - 80*mh6*rho + complex<double>(0,288)*mh4*pi*rho - 144*radixrho*mh4*pi*rho + 
+       (radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
+      (complex<double>(0,72)*lnrhom1*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
+      (complex<double>(0,72)*lnsigma*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
+      (complex<double>(0,144)*lntau*(-1 + rho)*rho2)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
+      (complex<double>(0,24)*rho2*(complex<double>(0,-384)*mh6*pi + 192*radixrho*mh6*pi + 12*ln2*power_of<3>(4*mh2 - rho)*(-1 + rho) - 
+           6*lnrho*power_of<3>(4*mh2 - rho)*(-1 + rho) + 48*mh4*rho - 80*mh6*rho + complex<double>(0,288)*mh4*pi*rho - 144*radixrho*mh4*pi*rho + 
            complex<double>(0,384)*mh6*pi*rho - 96*radixrho*mh6*pi*rho - 24*mh2*rho2 + 72*mh4*rho2 - 40*mh6*rho2 - complex<double>(0,72)*mh2*pi*rho2 + 
            36*radixrho*mh2*pi*rho2 - complex<double>(0,288)*mh4*pi*rho2 + 48*radixrho*mh4*pi*rho2 + 8*rho3 + 24*mh2*rho3 - 120*mh4*rho3 + 
            120*mh6*rho3 + complex<double>(0,6)*pi*rho3 - 3*radixrho*pi*rho3 + complex<double>(0,72)*mh2*pi*rho3 - 36*radixrho*mh2*pi*rho3 + 
            60*radixrho*mh4*pi*rho3 - 60*radixrho*mh6*pi*rho3 - 8*rho4 - complex<double>(0,6)*pi*rho4))/
-       (radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*pow(-4*mh2 + rho,3))) + 
-   (72*(-1 + rho)*rho2*dilogx13)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
-   (36*(-1 + rho)*rho2*dilogx4)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
-   (72*(-1 + rho)*rho2*redilogx12)/(radixrho*pow(complex<double>(0,-1) + radixrho,2)*(2*radixrho - complex<double>(0,1)*(-2 + rho)));
+       (radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))*power_of<3>(-4*mh2 + rho))) + 
+   (72*(-1 + rho)*rho2*dilogx13)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) + 
+   (36*(-1 + rho)*rho2*dilogx4)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho))) - 
+   (72*(-1 + rho)*rho2*redilogx12)/(radixrho*power_of<2>(complex<double>(0,-1) + radixrho)*(2*radixrho - complex<double>(0,1)*(-2 + rho)));
             // End of 2nd Gegenbauer moment
 
             return asymp + a1 * gb1 + a2 * gb2;
@@ -1353,14 +1353,14 @@ namespace eos
             // Asymptotic part
             complex<double> asymp = (complex<double>(0,-48)*atannu*mh2*pi*(-1 + rho))/(radixrho*rho) - (24*lnrhom1*mh2*pi*(-1 + rho))/(radixrho*rho) - 
    (24*lnsigma*mh2*pi*(-1 + rho))/(radixrho*rho) - (48.0*lntau*mh2*pi*(-1 + rho))/(radixrho*rho) - 
-   (24*pow(atanh4mh2,2)*mh2*(-((-2 + rho)*rho) + mh2*(-8 + 4*rho + rho2)))/(rho*(-4*mh2 + rho)) + 
+   (24*power_of<2>(atanh4mh2)*mh2*(-((-2 + rho)*rho) + mh2*(-8 + 4*rho + rho2)))/(rho*(-4*mh2 + rho)) + 
    (2*pi*(-1 + rho)*(-192*lnrho*mh4 + complex<double>(0,16)*mh4*pi - 24*mh2*rho + 48*lnrho*mh2*rho + 24*mh4*rho - complex<double>(0,4)*mh2*pi*rho + 
          96*ln2*(4*mh4 - mh2*rho) + 3*rho2) + 3*radixrho*
        (-16*mh4*(-5 + rho) + 4*mh2*rho*(-8.0 + complex<double>(0,1)*radix4mh2*pi*(-4 + rho) + rho) + (3.0 + complex<double>(0,2)*radix4mh2*pi)*rho2))/
     (2.*radixrho*rho*(-4*mh2 + rho)) - (6*atanh4mh2*(16*atan4mh2rho*mh2*(4*mh2 - rho)*(-1 + rho) + 
         2*mh2*(2*pi*(4.0 + complex<double>(0,1)*radixrho*(-2 + rho) - 4*rho) + radix4mh2*radixrho*(-4 + rho))*rho + 
         radix4mh2*radixrho*rho2 + 4*mh4*pi*(16*(-1 + rho) - complex<double>(0,1)*radixrho*(-8 + 4*rho + rho2))))/
-    (radixrho*rho*(-4*mh2 + rho)) - (24*pow(atanrho,2)*mh2*
+    (radixrho*rho*(-4*mh2 + rho)) - (24*power_of<2>(atanrho)*mh2*
       ((-(radixrho*(-2 + rho)) + complex<double>(0,4)*(-1 + rho))*rho + mh2*(complex<double>(0,-16)*(-1 + rho) + radixrho*(-8 + 4*rho + rho2))))/
     (radixrho*rho*(-4*mh2 + rho)) + atanrho*((-192*atanh4mh2*mh2*(-1 + rho))/(radixrho*rho) + 
       (48*lnrhom1*mh2*(-1 + rho))/(radixrho*rho) + (48*lnsigma*mh2*(-1 + rho))/(radixrho*rho) + 
@@ -1375,28 +1375,28 @@ namespace eos
             // Begin of 1st Gegenbauer moment
             complex<double> gb1 = (complex<double>(0,-144)*atannu*mh2*pi*(-1 + rho))/(radixrho*rho) - (72*lnrhom1*mh2*pi*(-1 + rho))/(radixrho*rho) - 
    (72*lnsigma*mh2*pi*(-1 + rho))/(radixrho*rho) - (144.0*lntau*mh2*pi*(-1 + rho))/(radixrho*rho) + 
-   (72*pow(atanh4mh2,2)*mh2*(mh2*rho*(16 - 8*rho - 3*rho2) + (-2 + rho)*rho2 + 4*mh4*(-8 + 4*rho + rho2 + rho3)))/
-    (rho*pow(-4*mh2 + rho,2)) + (-6*pi*(-1 + rho)*(complex<double>(0,64)*mh6*pi - 96*mh4*rho + 160*mh6*rho - complex<double>(0,32)*mh4*pi*rho + 
-         96*ln2*pow(-4*mh3 + mh*rho,2) - 48*lnrho*pow(-4*mh3 + mh*rho,2) + 36*mh2*rho2 - 72*mh4*rho2 + 96*mh6*rho2 + 
+   (72*power_of<2>(atanh4mh2)*mh2*(mh2*rho*(16 - 8*rho - 3*rho2) + (-2 + rho)*rho2 + 4*mh4*(-8 + 4*rho + rho2 + rho3)))/
+    (rho*power_of<2>(-4*mh2 + rho)) + (-6*pi*(-1 + rho)*(complex<double>(0,64)*mh6*pi - 96*mh4*rho + 160*mh6*rho - complex<double>(0,32)*mh4*pi*rho + 
+         96*ln2*power_of<2>(-4*mh3 + mh*rho) - 48*lnrho*power_of<2>(-4*mh3 + mh*rho) + 36*mh2*rho2 - 72*mh4*rho2 + 96*mh6*rho2 + 
          complex<double>(0,4)*mh2*pi*rho2 - rho3) + radixrho*(12*mh2*(-33 + 8*rho + complex<double>(0,1)*radix4mh2*pi*(-18 + 7*rho))*rho2 + 
          64*mh6*(-53 + 12*rho + 9*rho2) + 144*mh4*rho*(15 - 4*rho - rho2 - complex<double>(0,1)*radix4mh2*pi*(-4 + rho + rho2)) + 
-         (17.0 + complex<double>(0,6)*radix4mh2*pi)*rho3))/(2.*radixrho*rho*pow(-4*mh2 + rho,2)) + 
-   (72*pow(atanrho,2)*mh2*(mh2*rho*(complex<double>(0,32)*(-1 + rho) + radixrho*(16 - 8*rho - 3*rho2)) + 
+         (17.0 + complex<double>(0,6)*radix4mh2*pi)*rho3))/(2.*radixrho*rho*power_of<2>(-4*mh2 + rho)) + 
+   (72*power_of<2>(atanrho)*mh2*(mh2*rho*(complex<double>(0,32)*(-1 + rho) + radixrho*(16 - 8*rho - 3*rho2)) + 
         (radixrho*(-2 + rho) - complex<double>(0,4)*(-1 + rho))*rho2 + 4*mh4*(complex<double>(0,-16)*(-1 + rho) + radixrho*(-8 + 4*rho + rho2 + rho3))))/
-    (radixrho*rho*pow(-4*mh2 + rho,2)) + (6*atanh4mh2*
-      (48*atan4mh2rho*mh2*(-1 + rho)*pow(-4*mh2 + rho,2) + 
+    (radixrho*rho*power_of<2>(-4*mh2 + rho)) + (6*atanh4mh2*
+      (48*atan4mh2rho*mh2*(-1 + rho)*power_of<2>(-4*mh2 + rho) + 
         2*mh2*(6*pi*(complex<double>(0,-1)*radixrho*(-2 + rho) + 4*(-1 + rho)) + radix4mh2*radixrho*(18 - 7*rho))*rho2 + 
         12*mh4*rho*(2*radix4mh2*radixrho*(-4 + rho + rho2) + pi*(-32*(-1 + rho) + complex<double>(0,1)*radixrho*(-16 + 8*rho + 3*rho2))) - 
         radix4mh2*radixrho*rho3 - complex<double>(0,48)*mh6*pi*(complex<double>(0,16)*(-1 + rho) + radixrho*(-8 + 4*rho + rho2 + rho3))))/
-    (radixrho*rho*pow(-4*mh2 + rho,2)) + atanrho*((-576*atanh4mh2*mh2*(-1 + rho))/(radixrho*rho) + 
+    (radixrho*rho*power_of<2>(-4*mh2 + rho)) + atanrho*((-576*atanh4mh2*mh2*(-1 + rho))/(radixrho*rho) + 
       (144*lnrhom1*mh2*(-1 + rho))/(radixrho*rho) + (144*lnsigma*mh2*(-1 + rho))/(radixrho*rho) + 
       (288.0*lntau*mh2*(-1 + rho))/(radixrho*rho) + (6.0*
          (complex<double>(0,-768)*mh6*pi + 384*radixrho*mh6*pi + 96*mh4*rho - 160*mh6*rho + complex<double>(0,384)*mh4*pi*rho - 
            192*radixrho*mh4*pi*rho + complex<double>(0,768)*mh6*pi*rho - 192*radixrho*mh6*pi*rho + 
-           96*ln2*mh2*(-1 + rho)*pow(-4*mh2 + rho,2) - 48*lnrho*mh2*(-1 + rho)*pow(-4*mh2 + rho,2) - 36*mh2*rho2 - 24*mh4*rho2 + 
+           96*ln2*mh2*(-1 + rho)*power_of<2>(-4*mh2 + rho) - 48*lnrho*mh2*(-1 + rho)*power_of<2>(-4*mh2 + rho) - 36*mh2*rho2 - 24*mh4*rho2 + 
            64*mh6*rho2 - complex<double>(0,48)*mh2*pi*rho2 + 24*radixrho*mh2*pi*rho2 - complex<double>(0,384)*mh4*pi*rho2 + 96*radixrho*mh4*pi*rho2 - 
            48*radixrho*mh6*pi*rho2 + rho3 + 36*mh2*rho3 - 72*mh4*rho3 + 96*mh6*rho3 + complex<double>(0,48)*mh2*pi*rho3 - 
-           12*radixrho*mh2*pi*rho3 + 36*radixrho*mh4*pi*rho3 - 48*radixrho*mh6*pi*rho3 - rho4))/(radixrho*rho*pow(-4*mh2 + rho,2)))
+           12*radixrho*mh2*pi*rho3 + 36*radixrho*mh4*pi*rho3 - 48*radixrho*mh6*pi*rho3 - rho4))/(radixrho*rho*power_of<2>(-4*mh2 + rho)))
      + (complex<double>(0,144)*mh2*(-1 + rho)*dilogx13)/(radixrho*rho) + (complex<double>(0,72)*mh2*(-1 + rho)*dilogx4)/(radixrho*rho) - 
    (complex<double>(0,144)*mh2*(-1 + rho)*redilogx12)/(radixrho*rho);
             // End of 1st Gegenbauer moment
@@ -1404,38 +1404,38 @@ namespace eos
             // Begin of 2nd Gegenbauer moment
             complex<double> gb2 = (complex<double>(0,-288)*atannu*mh2*pi*(-1 + rho))/(radixrho*rho) - (144*lnrhom1*mh2*pi*(-1 + rho))/(radixrho*rho) - 
    (144*lnsigma*mh2*pi*(-1 + rho))/(radixrho*rho) - (288.0*lntau*mh2*pi*(-1 + rho))/(radixrho*rho) + 
-   (144*pow(atanh4mh2,2)*mh2*(6*mh2*rho2*(-4 + 2*rho + rho2) - (-2 + rho)*rho3 - 4*mh4*rho*(-24 + 12*rho + 2*rho2 + 5*rho3) + 
-        mh6*(-128 + 64*rho + 16*rho2 + 25*rho4)))/(pow(4*mh2 - rho,3)*rho) + 
+   (144*power_of<2>(atanh4mh2)*mh2*(6*mh2*rho2*(-4 + 2*rho + rho2) - (-2 + rho)*rho3 - 4*mh4*rho*(-24 + 12*rho + 2*rho2 + 5*rho3) + 
+        mh6*(-128 + 64*rho + 16*rho2 + 25*rho4)))/(power_of<3>(4*mh2 - rho)*rho) + 
    atanrho*((-1152*atanh4mh2*mh2*(-1 + rho))/(radixrho*rho) + (288*lnrhom1*mh2*(-1 + rho))/(radixrho*rho) + 
       (288*lnsigma*mh2*(-1 + rho))/(radixrho*rho) + (576.0*lntau*mh2*(-1 + rho))/(radixrho*rho) + 
-      (6.0*(complex<double>(0,-6144)*mh8*pi + 3072*radixrho*mh8*pi + 192*ln2*mh2*pow(4*mh2 - rho,3)*(-1 + rho) - 
-           96*lnrho*mh2*pow(4*mh2 - rho,3)*(-1 + rho) + 768*mh6*rho - 1408*mh8*rho + complex<double>(0,4608)*mh6*pi*rho - 
+      (6.0*(complex<double>(0,-6144)*mh8*pi + 3072*radixrho*mh8*pi + 192*ln2*mh2*power_of<3>(4*mh2 - rho)*(-1 + rho) - 
+           96*lnrho*mh2*power_of<3>(4*mh2 - rho)*(-1 + rho) + 768*mh6*rho - 1408*mh8*rho + complex<double>(0,4608)*mh6*pi*rho - 
            2304*radixrho*mh6*pi*rho + complex<double>(0,6144)*mh8*pi*rho - 1536*radixrho*mh8*pi*rho + rho5 - 480*mh4*rho2 + 
            256*mh6*rho2 + 608*mh8*rho2 - complex<double>(0,1152)*mh4*pi*rho2 + 576*radixrho*mh4*pi*rho2 - complex<double>(0,4608)*mh6*pi*rho2 + 
            1152*radixrho*mh6*pi*rho2 - 384*radixrho*mh8*pi*rho2 + 96*mh2*rho3 + 192*mh4*rho3 - 64*mh6*rho3 - 400*mh8*rho3 + 
            complex<double>(0,96)*mh2*pi*rho3 - 48*radixrho*mh2*pi*rho3 + complex<double>(0,1152)*mh4*pi*rho3 - 288*radixrho*mh4*pi*rho3 + 
            192*radixrho*mh6*pi*rho3 - rho4 - 96*mh2*rho4 + 288*mh4*rho4 - 960*mh6*rho4 + 1200*mh8*rho4 - complex<double>(0,96)*mh2*pi*rho4 + 
            24*radixrho*mh2*pi*rho4 - 144*radixrho*mh4*pi*rho4 + 480*radixrho*mh6*pi*rho4 - 600*radixrho*mh8*pi*rho4))/
-       (radixrho*pow(4*mh2 - rho,3)*rho)) + (-12*pi*(-1 + rho)*
-       (complex<double>(0,512)*mh8*pi + 192*ln2*mh2*pow(4*mh2 - rho,3) - 96*lnrho*mh2*pow(4*mh2 - rho,3) - 768*mh6*rho + 1408*mh8*rho - 
+       (radixrho*power_of<3>(4*mh2 - rho)*rho)) + (-12*pi*(-1 + rho)*
+       (complex<double>(0,512)*mh8*pi + 192*ln2*mh2*power_of<3>(4*mh2 - rho) - 96*lnrho*mh2*power_of<3>(4*mh2 - rho) - 768*mh6*rho + 1408*mh8*rho - 
          complex<double>(0,384)*mh6*pi*rho + 480*mh4*rho2 - 1024*mh6*rho2 + 800*mh8*rho2 + complex<double>(0,96)*mh4*pi*rho2 - 96*mh2*rho3 + 288*mh4*rho3 - 
          960*mh6*rho3 + 1200*mh8*rho3 - complex<double>(0,8)*mh2*pi*rho3 + rho4) + 
       radixrho*(12*mh4*rho2*(-1392 + 384*rho + 215*rho2 + complex<double>(0,2)*radix4mh2*pi*(-240 + 48*rho + 95*rho2)) + 
          8*mh2*(252 - 83*rho - complex<double>(0,9)*radix4mh2*pi*(-16 + 7*rho))*rho3 + 64*mh8*(-900 + 184*rho + 75*rho2 + 225*rho3) + 
          16*mh6*rho*(3232 - 672*rho - 720*rho2 - 225*rho3 - complex<double>(0,9)*radix4mh2*pi*(-64 + 16*rho + 25*rho3)) + 
-         (-43.0 - complex<double>(0,12)*radix4mh2*pi)*rho4))/(4.*radixrho*pow(4*mh2 - rho,3)*rho) + 
-   (144*pow(atanrho,2)*mh2*(6*mh2*rho2*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-4 + 2*rho + rho2)) + 
+         (-43.0 - complex<double>(0,12)*radix4mh2*pi)*rho4))/(4.*radixrho*power_of<3>(4*mh2 - rho)*rho) + 
+   (144*power_of<2>(atanrho)*mh2*(6*mh2*rho2*(complex<double>(0,-8)*(-1 + rho) + radixrho*(-4 + 2*rho + rho2)) + 
         (-(radixrho*(-2 + rho)) + complex<double>(0,4)*(-1 + rho))*rho3 - 
         4*mh4*rho*(complex<double>(0,-48)*(-1 + rho) + radixrho*(-24 + 12*rho + 2*rho2 + 5*rho3)) + 
-        mh6*(complex<double>(0,-256)*(-1 + rho) + radixrho*(-128 + 64*rho + 16*rho2 + 25*rho4))))/(radixrho*pow(4*mh2 - rho,3)*rho) + 
-   (6*atanh4mh2*(96*atan4mh2rho*mh2*pow(4*mh2 - rho,3)*(-1 + rho) - 
+        mh6*(complex<double>(0,-256)*(-1 + rho) + radixrho*(-128 + 64*rho + 16*rho2 + 25*rho4))))/(radixrho*power_of<3>(4*mh2 - rho)*rho) + 
+   (6*atanh4mh2*(96*atan4mh2rho*mh2*power_of<3>(4*mh2 - rho)*(-1 + rho) - 
         2*mh4*rho2*(radix4mh2*radixrho*(-240.0 + 48*rho + 95*rho2) + 
            complex<double>(0,72)*pi*(complex<double>(0,8)*(-1 + rho) + radixrho*(-4 + 2*rho + rho2))) + 
         6*mh2*(4*pi*(4.0 + complex<double>(0,1)*radixrho*(-2 + rho) - 4*rho) + radix4mh2*radixrho*(-16 + 7*rho))*rho3 + 
         12*mh6*rho*(radix4mh2*radixrho*(-64 + 16*rho + 25*rho3) + 
            complex<double>(0,8)*pi*(complex<double>(0,48)*(-1 + rho) + radixrho*(-24.0 + 12*rho + 2*rho2 + 5*rho3))) + radix4mh2*radixrho*rho4 - 
         complex<double>(0,24)*mh8*pi*(complex<double>(0,256)*(-1 + rho) + radixrho*(-128 + 64*rho + 16*rho2 + 25*rho4))))/
-    (radixrho*pow(4*mh2 - rho,3)*rho) + (complex<double>(0,288)*mh2*(-1 + rho)*dilogx13)/(radixrho*rho) + 
+    (radixrho*power_of<3>(4*mh2 - rho)*rho) + (complex<double>(0,288)*mh2*(-1 + rho)*dilogx13)/(radixrho*rho) + 
    (complex<double>(0,144)*mh2*(-1 + rho)*dilogx4)/(radixrho*rho) - (complex<double>(0,288)*mh2*(-1 + rho)*redilogx12)/(radixrho*rho);
             // End of 2nd Gegenbauer moment
 
@@ -1450,28 +1450,28 @@ namespace eos
             const double acotrho = pi / 2.0 - atanrho;
 
             // Begin of asymptotic part
-            complex<double> asymp = (4*mh4*(-312 + 768*mh2 + (288*mh2)/rho - (3*lnmqmu*pow(4*mh2 - rho,3))/(mh4*rho) + 72*rho - (144*rho)/(-1 + radix4mh2) + 
+            complex<double> asymp = (4*mh4*(-312 + 768*mh2 + (288*mh2)/rho - (3*lnmqmu*power_of<3>(4*mh2 - rho))/(mh4*rho) + 72*rho - (144*rho)/(-1 + radix4mh2) + 
        720*atanh4mh2*radix4mh2*rho + (144*rho)/(1 + radix4mh2) + (24*rho)/mh2 - (72*atanh4mh2*radix4mh2*rho)/mh2 + 
-       288*mh2*rho - 864*pow(atanh4mh2,2)*mh2*rho - (72*mh2*rho)/pow(-1 + radix4mh2,2) + (216*mh2*rho)/(-1 + radix4mh2) - 
-       (72*mh2*rho)/pow(1 + radix4mh2,2) - (216*mh2*rho)/(1 + radix4mh2) - complex<double>(0,360)*radix4mh2*pi*rho + 
+       288*mh2*rho - 864*power_of<2>(atanh4mh2)*mh2*rho - (72*mh2*rho)/power_of<2>(-1 + radix4mh2) + (216*mh2*rho)/(-1 + radix4mh2) - 
+       (72*mh2*rho)/power_of<2>(1 + radix4mh2) - (216*mh2*rho)/(1 + radix4mh2) - complex<double>(0,360)*radix4mh2*pi*rho + 
        (complex<double>(0,36)*radix4mh2*pi*rho)/mh2 + complex<double>(0,864)*atanh4mh2*mh2*pi*rho + 216*mh2*pi2*rho + 
-       72*pow(acotrho,2)*(4*mh2*(-3 + rho) - 3*rho)*rho - 216*pow(atanh4mh2,2)*rho2 - (18*rho2)/pow(-1 + radix4mh2,2) + 
-       (54*rho2)/(-1 + radix4mh2) + 144*atanh4mh2*radix4mh2*rho2 - (18*rho2)/pow(1 + radix4mh2,2) - (54*rho2)/(1 + radix4mh2) - 
+       72*power_of<2>(acotrho)*(4*mh2*(-3 + rho) - 3*rho)*rho - 216*power_of<2>(atanh4mh2)*rho2 - (18*rho2)/power_of<2>(-1 + radix4mh2) + 
+       (54*rho2)/(-1 + radix4mh2) + 144*atanh4mh2*radix4mh2*rho2 - (18*rho2)/power_of<2>(1 + radix4mh2) - (54*rho2)/(1 + radix4mh2) - 
        (2*rho2)/mh4 + (6*atanh4mh2*radix4mh2*rho2)/mh4 - (36*rho2)/mh2 + 
-       (12*atanh4mh2*radix4mh2*rho2)/mh2 + 288*pow(atanh4mh2,2)*mh2*rho2 - (16*mh2*rho2)/pow(-1 + radix4mh2,3) + 
-       (48*mh2*rho2)/pow(-1 + radix4mh2,2) + (96*mh2*rho2)/(-1 + radix4mh2) + (16*mh2*rho2)/pow(1 + radix4mh2,3) + 
-       (48*mh2*rho2)/pow(1 + radix4mh2,2) - (96*mh2*rho2)/(1 + radix4mh2) + complex<double>(0,216)*atanh4mh2*pi*rho2 - 
+       (12*atanh4mh2*radix4mh2*rho2)/mh2 + 288*power_of<2>(atanh4mh2)*mh2*rho2 - (16*mh2*rho2)/power_of<3>(-1 + radix4mh2) + 
+       (48*mh2*rho2)/power_of<2>(-1 + radix4mh2) + (96*mh2*rho2)/(-1 + radix4mh2) + (16*mh2*rho2)/power_of<3>(1 + radix4mh2) + 
+       (48*mh2*rho2)/power_of<2>(1 + radix4mh2) - (96*mh2*rho2)/(1 + radix4mh2) + complex<double>(0,216)*atanh4mh2*pi*rho2 - 
        complex<double>(0,72)*radix4mh2*pi*rho2 - (complex<double>(0,3)*radix4mh2*pi*rho2)/mh4 - (complex<double>(0,6)*radix4mh2*pi*rho2)/mh2 - 
        complex<double>(0,288)*atanh4mh2*mh2*pi*rho2 + 54*pi2*rho2 - 72*mh2*pi2*rho2 - 
-       (48*acotrho*radixrho*(3*rho*(-2 + 5*rho) + 4*mh2*(2 + rho + 3*rho2)))/rho))/(27.*pow(-1 + (4*mh2)/rho,3)*rho2);
+       (48*acotrho*radixrho*(3*rho*(-2 + 5*rho) + 4*mh2*(2 + rho + 3*rho2)))/rho))/(27.*power_of<3>(-1 + (4*mh2)/rho)*rho2);
             // End of asymptotic part
 
             // Begin of 1st Gegenbauer moment
-            complex<double> gb1 = (-64*acotrho*radixrho*mh4*(2 + 18*mh4*(-2 + rho) - 5*rho - 12*mh2*(2 + rho))*rho2)/pow(-4*mh2 + rho,4) + 
-   (96*pow(acotrho,2)*mh4*rho2*(-4*mh2*(-4 + rho)*rho + rho2 + 2*mh4*(8 - 8*rho + 3*rho2)))/pow(-4*mh2 + rho,4) + 
-   (96*pow(atanh4mh2,2)*mh4*rho2*(-4*mh2*(-4 + rho)*rho + rho2 + 2*mh4*(8 - 8*rho + 3*rho2)))/pow(-4*mh2 + rho,4) + 
-   atanh4mh2*((complex<double>(0,-96)*mh4*pi*rho2*(-4*mh2*(-4 + rho)*rho + rho2 + 2*mh4*(8 - 8*rho + 3*rho2)))/pow(-4*mh2 + rho,4) + 
-      (16*radix4mh2*mh4*rho2*(8 - 24*rho - 9*rho2 + 2*mh2*(-40 - 24*rho + 9*rho2)))/pow(-4*mh2 + rho,4)) + 
+            complex<double> gb1 = (-64*acotrho*radixrho*mh4*(2 + 18*mh4*(-2 + rho) - 5*rho - 12*mh2*(2 + rho))*rho2)/power_of<4>(-4*mh2 + rho) + 
+   (96*power_of<2>(acotrho)*mh4*rho2*(-4*mh2*(-4 + rho)*rho + rho2 + 2*mh4*(8 - 8*rho + 3*rho2)))/power_of<4>(-4*mh2 + rho) + 
+   (96*power_of<2>(atanh4mh2)*mh4*rho2*(-4*mh2*(-4 + rho)*rho + rho2 + 2*mh4*(8 - 8*rho + 3*rho2)))/power_of<4>(-4*mh2 + rho) + 
+   atanh4mh2*((complex<double>(0,-96)*mh4*pi*rho2*(-4*mh2*(-4 + rho)*rho + rho2 + 2*mh4*(8 - 8*rho + 3*rho2)))/power_of<4>(-4*mh2 + rho) + 
+      (16*radix4mh2*mh4*rho2*(8 - 24*rho - 9*rho2 + 2*mh2*(-40 - 24*rho + 9*rho2)))/power_of<4>(-4*mh2 + rho)) + 
    (8*mh4*((2*rho2)/mh2 + 3.0*(complex<double>(0,1)*radix4mh2*pi*(-8 + 24*rho + 9*rho2) + 
            (12 + 4*rho + (8 - 3*pi2)*rho2 + power_of<2>(1.0 - 4.0 * mh2)*(12 + 20*rho - 3*pi2*rho2) + 
               (1 - 4*mh2)*(-24 - 24*rho + (-4 + 6*pi2)*rho2))/(16.*mh4)) + 
@@ -1484,20 +1484,20 @@ namespace eos
               power_of<4>(1.0 - 4.0 * mh2)*(-4 - 24*rho - 63*rho2 + 27*rho3) - 16*rho4 - 
               6*power_of<2>(1.0 - 4.0 * mh2)*(4 + 24*rho + 47*rho2 - 59*rho3 + 15*rho4) + 
               power_of<3>(1.0 - 4.0 * mh2)*(16 + 96*rho + 228*rho2 - 180*rho3 + 27*rho4) + (1 - 4*mh2)*(16 + 96*rho + 132*rho2 - 244*rho3 + 91*rho4))
-             /(32.*mh8*rho2))))/(3.*pow(1 - (4*mh2)/rho,4)*rho2);
+             /(32.*mh8*rho2))))/(3.*power_of<4>(1 - (4*mh2)/rho)*rho2);
             // End of 1st Gegenbauer moment
 
             // Begin of 2nd Gegenbauer moment
             complex<double> gb2 = (-128*acotrho*radixrho*mh4*rho2*(rho*(-2 + 5*rho) + mh4*(96 + 228*rho - 90*rho2) + 4*mh2*(-2 + 17*rho + 6*rho2) + 
-        8*mh6*(26 - 35*rho + 15*rho2)))/pow(4*mh2 - rho,5) + 
-   (192*pow(acotrho,2)*mh4*rho2*(4*mh2*(-9 + 2*rho)*rho2 - 6*mh4*rho*(24 - 16*rho + 5*rho2) - rho3 + 
-        8*mh6*(-8 + 16*rho - 15*rho2 + 5*rho3)))/pow(4*mh2 - rho,5) + 
-   (192*pow(atanh4mh2,2)*mh4*rho2*(4*mh2*(-9 + 2*rho)*rho2 - 6*mh4*rho*(24 - 16*rho + 5*rho2) - rho3 + 
-        8*mh6*(-8.0 + 16*rho - 15*rho2 + 5*rho3)))/pow(4*mh2 - rho,5) + 
+        8*mh6*(26 - 35*rho + 15*rho2)))/power_of<5>(4*mh2 - rho) + 
+   (192*power_of<2>(acotrho)*mh4*rho2*(4*mh2*(-9 + 2*rho)*rho2 - 6*mh4*rho*(24 - 16*rho + 5*rho2) - rho3 + 
+        8*mh6*(-8 + 16*rho - 15*rho2 + 5*rho3)))/power_of<5>(4*mh2 - rho) + 
+   (192*power_of<2>(atanh4mh2)*mh4*rho2*(4*mh2*(-9 + 2*rho)*rho2 - 6*mh4*rho*(24 - 16*rho + 5*rho2) - rho3 + 
+        8*mh6*(-8.0 + 16*rho - 15*rho2 + 5*rho3)))/power_of<5>(4*mh2 - rho) + 
    atanh4mh2*((complex<double>(0,-192)*mh4*pi*rho2*(4*mh2*(-9 + 2*rho)*rho2 - 6*mh4*rho*(24 - 16*rho + 5*rho2) - rho3 + 
-           8*mh6*(-8.0 + 16*rho - 15*rho2 + 5*rho3)))/pow(4*mh2 - rho,5) + 
+           8*mh6*(-8.0 + 16*rho - 15*rho2 + 5*rho3)))/power_of<5>(4*mh2 - rho) + 
       (32*radix4mh2*mh4*rho2*(rho*(-8 + 24*rho + 13*rho2) + mh2*(-32 + 272*rho + 228*rho2 - 70*rho3) + 
-           8*mh4*(40.0 + 48*rho - 45*rho2 + 15*rho3)))/pow(4*mh2 - rho,5)) + 
+           8*mh4*(40.0 + 48*rho - 45*rho2 + 15*rho3)))/power_of<5>(4*mh2 - rho)) + 
    (16*mh4*((-5*rho2)/mh2 + 5.0*(complex<double>(0,-3)*radix4mh2*pi*(-8 + 24*rho + 13*rho2) + 
            (-36 - 52*rho + 3*(-8 + 3*pi2)*rho2 + power_of<2>(1.0 - 4.0 * mh2)*(-36 - 100*rho + 9*pi2*rho2) + 
               2*(1 - 4*mh2)*(36.0 + 76*rho + (6.0 - 9*pi2)*rho2))/(16.*mh4)) + 
@@ -1520,7 +1520,7 @@ namespace eos
                    45*(1 + pi2)*rho4) + 18*power_of<2>(1.0 - 4.0 * mh2)*
                  (-16 + 512*rho + 108*(3 + 2*pi2)*rho2 - 4*(109 + 36*pi2)*rho3 + 5*(20 + 9*pi2)*rho4) - 
                 4*(1 - 4*mh2)*(-48 + 1632*rho + 36*(13 + 18*pi2)*rho2 - 12*(113 + 36*pi2)*rho3 + 
-                   5*(91 + 27*pi2)*rho4))/(256.*mh8)))/rho2))/(15.*pow(-1 + (4*mh2)/rho,5)*rho2);
+                   5*(91 + 27*pi2)*rho4))/(256.*mh8)))/rho2))/(15.*power_of<5>(-1 + (4*mh2)/rho)*rho2);
             // End of 2nd Gegenbauer moment
 
             return asymp + a1 * gb1 + a2 * gb2;
@@ -1541,90 +1541,90 @@ namespace eos
             complex<double> asymp = (4*mh2*(24 - 24*lnrho - 24*lnmqmu*lnrho + 48*ln2 + 48*lnmqmu*ln2 - 184*mh2 + (48*mh2)/(-1 + radix4mh2) - 
         (48*mh2)/(1 + radix4mh2) - complex<double>(0,64)*radix4mh2*pi + complex<double>(0,64)*radix4mh2*mh2*pi + 12*pi2 + (104*mh2)/rho - 
         (48*lnmqmu*mh2)/rho + 40*rho + (12*rho)/(-1 + radix4mh2) - (12*rho)/(1 + radix4mh2) - (2*rho)/mh2 + 
-        (3*lnmqmu*rho)/mh2 + (6*mh2*rho)/pow(-1 + radix4mh2,2) - (18*mh2*rho)/(-1 + radix4mh2) + 
-        (6*mh2*rho)/pow(1 + radix4mh2,2) + (18*mh2*rho)/(1 + radix4mh2) + complex<double>(0,30)*radix4mh2*pi*rho - 
+        (3*lnmqmu*rho)/mh2 + (6*mh2*rho)/power_of<2>(-1 + radix4mh2) - (18*mh2*rho)/(-1 + radix4mh2) + 
+        (6*mh2*rho)/power_of<2>(1 + radix4mh2) + (18*mh2*rho)/(1 + radix4mh2) + complex<double>(0,30)*radix4mh2*pi*rho - 
         (complex<double>(0,3)*radix4mh2*pi*rho)/mh2 - 18*mh2*pi2*rho - 16*lnbm*(-5 + 12*mh2 + 3*rho) + 
-        16*lnmh*(-2 + 3*lnmqmu + 12*mh2 + 3*rho)))/(9.*pow(-1 + (4*mh2)/rho,3)*rho) + 
-   (64*acotrho*radixrho*mh2*rho*(2*(-4 + rho)*rho + 3*mh2*(-2 + 5*rho)))/(9.*pow(4*mh2 - rho,3)) + 
-   (32*pow(acotrho,2)*mh2*(-2 + 3*mh2*rho)*rho2)/(3.*pow(4*mh2 - rho,3)) + 
-   (32*pow(atanh4mh2,2)*mh2*(-2 + 3*mh2*rho)*rho2)/(3.*pow(4*mh2 - rho,3)) + 
-   atanh4mh2*((8*radix4mh2*(-64*mh4 + mh2*(64 - 30*rho) + 3*rho)*rho2)/(9.*pow(4*mh2 - rho,3)) + 
-      (32.0*mh2*(10.0 + complex<double>(0,6)*pi - 6*rho + mh2*(-24.0 - complex<double>(0,9)*pi*rho))*rho2)/(9.*pow(4*mh2 - rho,3)));
+        16*lnmh*(-2 + 3*lnmqmu + 12*mh2 + 3*rho)))/(9.*power_of<3>(-1 + (4*mh2)/rho)*rho) + 
+   (64*acotrho*radixrho*mh2*rho*(2*(-4 + rho)*rho + 3*mh2*(-2 + 5*rho)))/(9.*power_of<3>(4*mh2 - rho)) + 
+   (32*power_of<2>(acotrho)*mh2*(-2 + 3*mh2*rho)*rho2)/(3.*power_of<3>(4*mh2 - rho)) + 
+   (32*power_of<2>(atanh4mh2)*mh2*(-2 + 3*mh2*rho)*rho2)/(3.*power_of<3>(4*mh2 - rho)) + 
+   atanh4mh2*((8*radix4mh2*(-64*mh4 + mh2*(64 - 30*rho) + 3*rho)*rho2)/(9.*power_of<3>(4*mh2 - rho)) + 
+      (32.0*mh2*(10.0 + complex<double>(0,6)*pi - 6*rho + mh2*(-24.0 - complex<double>(0,9)*pi*rho))*rho2)/(9.*power_of<3>(4*mh2 - rho)));
             // End of asymptotic part
 
             // Begin of 1st Gegenbauer moment
             complex<double> gb1 = (4*mh2*(-108*lnmqmu + 72*lnrho + 72*lnmqmu*lnrho - 144*ln2 - 144*lnmqmu*ln2 + 216*mh2 - (576*mh2)/(-1 + radix4mh2) + 
-        (576*mh2)/(1 + radix4mh2) + 576*mh4 - (216*mh4)/pow(-1 + radix4mh2,2) + (648*mh4)/(-1 + radix4mh2) - 
-        (216*mh4)/pow(1 + radix4mh2,2) - (648*mh4)/(1 + radix4mh2) + complex<double>(0,300)*radix4mh2*pi - 
-        complex<double>(0,1272)*radix4mh2*mh2*pi - 36*pi2 + 648*mh4*pi2 - (672*mh4)/pow(rho,2) + 
-        (192*lnmqmu*mh4)/pow(rho,2) - (1224*mh2)/rho + (432*lnmqmu*mh2)/rho + (288*lnrho*mh2)/rho + (288*lnmqmu*lnrho*mh2)/rho - 
+        (576*mh2)/(1 + radix4mh2) + 576*mh4 - (216*mh4)/power_of<2>(-1 + radix4mh2) + (648*mh4)/(-1 + radix4mh2) - 
+        (216*mh4)/power_of<2>(1 + radix4mh2) - (648*mh4)/(1 + radix4mh2) + complex<double>(0,300)*radix4mh2*pi - 
+        complex<double>(0,1272)*radix4mh2*mh2*pi - 36*pi2 + 648*mh4*pi2 - (672*mh4)/power_of<2>(rho) + 
+        (192*lnmqmu*mh4)/power_of<2>(rho) - (1224*mh2)/rho + (432*lnmqmu*mh2)/rho + (288*lnrho*mh2)/rho + (288*lnmqmu*lnrho*mh2)/rho - 
         (576*ln2*mh2)/rho - (576*lnmqmu*ln2*mh2)/rho + (3744*mh4)/rho + (complex<double>(0,768)*radix4mh2*mh2*pi)/rho - 
         (complex<double>(0,768)*radix4mh2*mh4*pi)/rho - (144*mh2*pi2)/rho - 192*rho - (36*rho)/(-1 + radix4mh2) + 
-        (36*rho)/(1 + radix4mh2) + (2*rho)/mh2 - (3*lnmqmu*rho)/mh2 - (54*mh2*rho)/pow(-1 + radix4mh2,2) + 
-        (162*mh2*rho)/(-1 + radix4mh2) - (54*mh2*rho)/pow(1 + radix4mh2,2) - (162*mh2*rho)/(1 + radix4mh2) - 
-        (32*mh4*rho)/pow(-1 + radix4mh2,3) + (96*mh4*rho)/pow(-1 + radix4mh2,2) + (192*mh4*rho)/(-1 + radix4mh2) + 
-        (32*mh4*rho)/pow(1 + radix4mh2,3) + (96*mh4*rho)/pow(1 + radix4mh2,2) - (192*mh4*rho)/(1 + radix4mh2) - 
+        (36*rho)/(1 + radix4mh2) + (2*rho)/mh2 - (3*lnmqmu*rho)/mh2 - (54*mh2*rho)/power_of<2>(-1 + radix4mh2) + 
+        (162*mh2*rho)/(-1 + radix4mh2) - (54*mh2*rho)/power_of<2>(1 + radix4mh2) - (162*mh2*rho)/(1 + radix4mh2) - 
+        (32*mh4*rho)/power_of<3>(-1 + radix4mh2) + (96*mh4*rho)/power_of<2>(-1 + radix4mh2) + (192*mh4*rho)/(-1 + radix4mh2) + 
+        (32*mh4*rho)/power_of<3>(1 + radix4mh2) + (96*mh4*rho)/power_of<2>(1 + radix4mh2) - (192*mh4*rho)/(1 + radix4mh2) - 
         complex<double>(0,102)*radix4mh2*pi*rho + (complex<double>(0,3)*radix4mh2*pi*rho)/mh2 - complex<double>(0,144)*radix4mh2*mh2*pi*rho + 
         162*mh2*pi2*rho - 144*mh4*pi2*rho + (576*mh4)/(rho - radix4mh2*rho) + (576*mh4)/(rho + radix4mh2*rho) + 
         (48*lnbm*(48*mh4 + rho*(-5 + 3*rho) + 4*mh2*(-5 + 12*rho)))/rho - 
-        (48*lnmh*(48*mh4 + rho*(-2 + 3*lnmqmu + 3*rho) + 4*mh2*(-2 + 3*lnmqmu + 12*rho)))/rho))/(9.*pow(1 - (4*mh2)/rho,4)*rho) + 
-   (32*pow(acotrho,2)*mh2*(2*rho + 4*mh4*rho*(-9 + 2*rho) + mh2*(8 - 9*rho2))*rho2)/pow(-4*mh2 + rho,4) + 
-   (32*pow(atanh4mh2,2)*mh2*(2*rho + 4*mh4*rho*(-9 + 2*rho) + mh2*(8 - 9*rho2))*rho2)/pow(-4*mh2 + rho,4) - 
-   (64*acotrho*radixrho*mh2*rho*(mh2*rho*(-50 + 53*rho) + 2*(-4 + rho)*rho2 + 4*mh4*(-2 + 17*rho + 6*rho2)))/(3.*pow(-4*mh2 + rho,4)) + 
-   atanh4mh2*((8*radix4mh2*rho2*(256*mh6 + 2*mh2*rho*(-50 + 17*rho) - rho2 + 8*mh4*(-32 + 53*rho + 6*rho2)))/(3.*pow(-4*mh2 + rho,4)) + 
+        (48*lnmh*(48*mh4 + rho*(-2 + 3*lnmqmu + 3*rho) + 4*mh2*(-2 + 3*lnmqmu + 12*rho)))/rho))/(9.*power_of<4>(1 - (4*mh2)/rho)*rho) + 
+   (32*power_of<2>(acotrho)*mh2*(2*rho + 4*mh4*rho*(-9 + 2*rho) + mh2*(8 - 9*rho2))*rho2)/power_of<4>(-4*mh2 + rho) + 
+   (32*power_of<2>(atanh4mh2)*mh2*(2*rho + 4*mh4*rho*(-9 + 2*rho) + mh2*(8 - 9*rho2))*rho2)/power_of<4>(-4*mh2 + rho) - 
+   (64*acotrho*radixrho*mh2*rho*(mh2*rho*(-50 + 53*rho) + 2*(-4 + rho)*rho2 + 4*mh4*(-2 + 17*rho + 6*rho2)))/(3.*power_of<4>(-4*mh2 + rho)) + 
+   atanh4mh2*((8*radix4mh2*rho2*(256*mh6 + 2*mh2*rho*(-50 + 17*rho) - rho2 + 8*mh4*(-32 + 53*rho + 6*rho2)))/(3.*power_of<4>(-4*mh2 + rho)) + 
       (32*mh2*rho2*(2.0*rho*(-5.0 - complex<double>(0,3)*pi + 3*rho) + 12.0*mh4*(8.0 - complex<double>(0,1)*pi*rho*(-9 + 2*rho)) + 
-           mh2*(-40.0 + 96*rho + complex<double>(0,3)*pi*(-8 + 9*rho2))))/(3.*pow(-4*mh2 + rho,4)));
+           mh2*(-40.0 + 96*rho + complex<double>(0,3)*pi*(-8 + 9*rho2))))/(3.*power_of<4>(-4*mh2 + rho)));
             // End of 1st Gegenbauer moment
 
             // Begin of 2nd Gegenbauer moment
             complex<double> gb2 = (4*mh2*(-80 + 336*lnmqmu - 144*lnrho - 144*lnmqmu*lnrho + 288*ln2 + 288*lnmqmu*ln2 + 48*radix4mh2*ln2 - 
         48*ln2*radix4mh2 + 3936*mh2 + (2592*mh2)/(-1 + radix4mh2) - (2592*mh2)/(1 + radix4mh2) - 192*radix4mh2*ln2*mh2 + 
-        192*ln2*radix4mh2*mh2 - 5760*mh4 + (2592*mh4)/pow(-1 + radix4mh2,2) - (7776*mh4)/(-1 + radix4mh2) + 
-        (2592*mh4)/pow(1 + radix4mh2,2) + (7776*mh4)/(1 + radix4mh2) + 6480*mh6 + (1280*mh6)/pow(-1 + radix4mh2,3) - 
-        (3840*mh6)/pow(-1 + radix4mh2,2) - (7680*mh6)/(-1 + radix4mh2) - (1280*mh6)/pow(1 + radix4mh2,3) - 
-        (3840*mh6)/pow(1 + radix4mh2,2) + (7680*mh6)/(1 + radix4mh2) - complex<double>(0,768)*radix4mh2*pi + 
+        192*ln2*radix4mh2*mh2 - 5760*mh4 + (2592*mh4)/power_of<2>(-1 + radix4mh2) - (7776*mh4)/(-1 + radix4mh2) + 
+        (2592*mh4)/power_of<2>(1 + radix4mh2) + (7776*mh4)/(1 + radix4mh2) + 6480*mh6 + (1280*mh6)/power_of<3>(-1 + radix4mh2) - 
+        (3840*mh6)/power_of<2>(-1 + radix4mh2) - (7680*mh6)/(-1 + radix4mh2) - (1280*mh6)/power_of<3>(1 + radix4mh2) - 
+        (3840*mh6)/power_of<2>(1 + radix4mh2) + (7680*mh6)/(1 + radix4mh2) - complex<double>(0,768)*radix4mh2*pi + 
         complex<double>(0,48)*radix4mh2*pi + complex<double>(0,6816)*radix4mh2*mh2*pi - complex<double>(0,192)*radix4mh2*mh2*pi + 
-        complex<double>(0,5760)*radix4mh2*mh4*pi + 72*pi2 - 7776*mh4*pi2 + 5760*mh6*pi2 + (3264*mh6)/pow(rho,3) - 
-        (768*lnmqmu*mh6)/pow(rho,3) + (16512*mh4)/pow(rho,2) - (5376*lnmqmu*mh4)/pow(rho,2) - (2304*lnrho*mh4)/pow(rho,2) - 
-        (2304*lnmqmu*lnrho*mh4)/pow(rho,2) + (4608*ln2*mh4)/pow(rho,2) + (4608*lnmqmu*ln2*mh4)/pow(rho,2) + 
-        (768*radix4mh2*ln2*mh4)/pow(rho,2) - (768*ln2*radix4mh2*mh4)/pow(rho,2) - (38784*mh6)/pow(rho,2) + 
-        (4608*mh6)/((-1 + radix4mh2)*pow(rho,2)) - (4608*mh6)/((1 + radix4mh2)*pow(rho,2)) - 
-        (3072*radix4mh2*ln2*mh6)/pow(rho,2) + (3072*ln2*radix4mh2*mh6)/pow(rho,2) - 
-        (complex<double>(0,6912)*radix4mh2*mh4*pi)/pow(rho,2) + (complex<double>(0,768)*radix4mh2*mh4*pi)/pow(rho,2) + 
-        (complex<double>(0,9216)*radix4mh2*mh6*pi)/pow(rho,2) - (complex<double>(0,3072)*radix4mh2*mh6*pi)/pow(rho,2) + 
-        (1152*mh4*pi2)/pow(rho,2) + (4320*mh2)/rho - (1728*lnrho*mh2)/rho - (1728*lnmqmu*lnrho*mh2)/rho + 
+        complex<double>(0,5760)*radix4mh2*mh4*pi + 72*pi2 - 7776*mh4*pi2 + 5760*mh6*pi2 + (3264*mh6)/power_of<3>(rho) - 
+        (768*lnmqmu*mh6)/power_of<3>(rho) + (16512*mh4)/power_of<2>(rho) - (5376*lnmqmu*mh4)/power_of<2>(rho) - (2304*lnrho*mh4)/power_of<2>(rho) - 
+        (2304*lnmqmu*lnrho*mh4)/power_of<2>(rho) + (4608*ln2*mh4)/power_of<2>(rho) + (4608*lnmqmu*ln2*mh4)/power_of<2>(rho) + 
+        (768*radix4mh2*ln2*mh4)/power_of<2>(rho) - (768*ln2*radix4mh2*mh4)/power_of<2>(rho) - (38784*mh6)/power_of<2>(rho) + 
+        (4608*mh6)/((-1 + radix4mh2)*power_of<2>(rho)) - (4608*mh6)/((1 + radix4mh2)*power_of<2>(rho)) - 
+        (3072*radix4mh2*ln2*mh6)/power_of<2>(rho) + (3072*ln2*radix4mh2*mh6)/power_of<2>(rho) - 
+        (complex<double>(0,6912)*radix4mh2*mh4*pi)/power_of<2>(rho) + (complex<double>(0,768)*radix4mh2*mh4*pi)/power_of<2>(rho) + 
+        (complex<double>(0,9216)*radix4mh2*mh6*pi)/power_of<2>(rho) - (complex<double>(0,3072)*radix4mh2*mh6*pi)/power_of<2>(rho) + 
+        (1152*mh4*pi2)/power_of<2>(rho) + (4320*mh2)/rho - (1728*lnrho*mh2)/rho - (1728*lnmqmu*lnrho*mh2)/rho + 
         (3456*ln2*mh2)/rho + (3456*lnmqmu*ln2*mh2)/rho + (576*radix4mh2*ln2*mh2)/rho - (576*ln2*radix4mh2*mh2)/rho - 
         (27648*mh4)/rho + (10368*mh4)/((-1 + radix4mh2)*rho) - (2304*radix4mh2*ln2*mh4)/rho + (2304*ln2*radix4mh2*mh4)/rho - 
-        (20880*mh6)/rho + (3456*mh6)/(pow(-1 + radix4mh2,2)*rho) + (3456*mh6)/(pow(1 + radix4mh2,2)*rho) - 
+        (20880*mh6)/rho + (3456*mh6)/(power_of<2>(-1 + radix4mh2)*rho) + (3456*mh6)/(power_of<2>(1 + radix4mh2)*rho) - 
         (complex<double>(0,6912)*radix4mh2*mh2*pi)/rho + (complex<double>(0,576)*radix4mh2*mh2*pi)/rho + (complex<double>(0,24192)*radix4mh2*mh4*pi)/rho - 
         (complex<double>(0,2304)*radix4mh2*mh4*pi)/rho + (864*mh2*pi2)/rho - (10368*mh6*pi2)/rho + 480*rho + 
         (72*rho)/(-1 + radix4mh2) - (72*rho)/(1 + radix4mh2) - (2*rho)/mh2 + (3*lnmqmu*rho)/mh2 + 
-        (216*mh2*rho)/pow(-1 + radix4mh2,2) - (648*mh2*rho)/(-1 + radix4mh2) + (216*mh2*rho)/pow(1 + radix4mh2,2) + 
-        (648*mh2*rho)/(1 + radix4mh2) + (320*mh4*rho)/pow(-1 + radix4mh2,3) - (960*mh4*rho)/pow(-1 + radix4mh2,2) - 
-        (1920*mh4*rho)/(-1 + radix4mh2) - (320*mh4*rho)/pow(1 + radix4mh2,3) - (960*mh4*rho)/pow(1 + radix4mh2,2) + 
-        (1920*mh4*rho)/(1 + radix4mh2) + (180*mh6*rho)/pow(-1 + radix4mh2,4) - (600*mh6*rho)/pow(-1 + radix4mh2,3) + 
-        (270*mh6*rho)/pow(-1 + radix4mh2,2) + (2970*mh6*rho)/(-1 + radix4mh2) + (180*mh6*rho)/pow(1 + radix4mh2,4) + 
-        (600*mh6*rho)/pow(1 + radix4mh2,3) + (270*mh6*rho)/pow(1 + radix4mh2,2) - (2970*mh6*rho)/(1 + radix4mh2) + 
+        (216*mh2*rho)/power_of<2>(-1 + radix4mh2) - (648*mh2*rho)/(-1 + radix4mh2) + (216*mh2*rho)/power_of<2>(1 + radix4mh2) + 
+        (648*mh2*rho)/(1 + radix4mh2) + (320*mh4*rho)/power_of<3>(-1 + radix4mh2) - (960*mh4*rho)/power_of<2>(-1 + radix4mh2) - 
+        (1920*mh4*rho)/(-1 + radix4mh2) - (320*mh4*rho)/power_of<3>(1 + radix4mh2) - (960*mh4*rho)/power_of<2>(1 + radix4mh2) + 
+        (1920*mh4*rho)/(1 + radix4mh2) + (180*mh6*rho)/power_of<4>(-1 + radix4mh2) - (600*mh6*rho)/power_of<3>(-1 + radix4mh2) + 
+        (270*mh6*rho)/power_of<2>(-1 + radix4mh2) + (2970*mh6*rho)/(-1 + radix4mh2) + (180*mh6*rho)/power_of<4>(1 + radix4mh2) + 
+        (600*mh6*rho)/power_of<3>(1 + radix4mh2) + (270*mh6*rho)/power_of<2>(1 + radix4mh2) - (2970*mh6*rho)/(1 + radix4mh2) + 
         complex<double>(0,210)*radix4mh2*pi*rho - (complex<double>(0,3)*radix4mh2*pi*rho)/mh2 + complex<double>(0,1170)*radix4mh2*mh2*pi*rho - 
         complex<double>(0,1620)*radix4mh2*mh4*pi*rho - 648*mh2*pi2*rho + 1440*mh4*pi2*rho - 1620*mh6*pi2*rho + 
         (10368*mh6)/(rho - radix4mh2*rho) - (10368*mh4)/(rho + radix4mh2*rho) + (10368*mh6)/(rho + radix4mh2*rho) + 
         (48*lnbm*(64*(-6 - radix4mh2 + radix4mh2)*mh6 + 
              4*mh2*rho*(30 - 3*radix4mh2 - radix4mh2*(-3 + rho) + (-54 + radix4mh2)*rho) + 
              16*mh4*(10 + radix4mh2 - radix4mh2 - 3*radix4mh2*rho + 3*(-18 + radix4mh2)*rho) + 
-             (10 + radix4mh2 - radix4mh2 - 6*rho)*rho2))/pow(rho,2) + 
+             (10 + radix4mh2 - radix4mh2 - 6*rho)*rho2))/power_of<2>(rho) + 
         (96*lnmh*(192*mh6 + 12*mh2*rho*(-2 + 3*lnmqmu + 9*rho) + 16*mh4*(-2 + 3*lnmqmu + 27*rho) + (-2 + 3*lnmqmu + 3*rho)*rho2))/
-         pow(rho,2)))/(9.*pow(-1 + (4*mh2)/rho,5)*rho) + 
-   (64*pow(acotrho,2)*mh2*rho2*(-2*rho2 + 6*mh2*rho*(-4 + 3*rho2) + mh6*rho*(288 - 160*rho + 45*rho2) - 8*mh4*(4 - 27*rho2 + 5*rho3)))/
-    pow(4*mh2 - rho,5) + (64*pow(atanh4mh2,2)*mh2*rho2*
-      (-2*rho2 + 6*mh2*rho*(-4 + 3*rho2) + mh6*rho*(288 - 160*rho + 45*rho2) - 8*mh4*(4 - 27*rho2 + 5*rho3)))/pow(4*mh2 - rho,5) - 
+         power_of<2>(rho)))/(9.*power_of<5>(-1 + (4*mh2)/rho)*rho) + 
+   (64*power_of<2>(acotrho)*mh2*rho2*(-2*rho2 + 6*mh2*rho*(-4 + 3*rho2) + mh6*rho*(288 - 160*rho + 45*rho2) - 8*mh4*(4 - 27*rho2 + 5*rho3)))/
+    power_of<5>(4*mh2 - rho) + (64*power_of<2>(atanh4mh2)*mh2*rho2*
+      (-2*rho2 + 6*mh2*rho*(-4 + 3*rho2) + mh6*rho*(288 - 160*rho + 45*rho2) - 8*mh4*(4 - 27*rho2 + 5*rho3)))/power_of<5>(4*mh2 - rho) - 
    (128*acotrho*radixrho*mh2*rho*(-6*mh2*(-22 + 19*rho)*rho2 - 24*mh4*rho*(-10 + 23*rho + 5*rho2) - 2*(-4 + rho)*rho3 + 
-        mh6*(16 - 280*rho - 390*rho2 + 135*rho3)))/(3.*pow(4*mh2 - rho,5)) + 
+        mh6*(16 - 280*rho - 390*rho2 + 135*rho3)))/(3.*power_of<5>(4*mh2 - rho)) + 
    atanh4mh2*((8*radix4mh2*rho2*(-3072*mh8 + 2*mh2*(128 - 35*rho)*rho2 - 2*mh4*rho*(-1152 + 1136*rho + 195*rho2) + rho3 + 
-           12*mh6*(192 - 672*rho - 160*rho2 + 45*rho3)))/(3.*pow(4*mh2 - rho,5)) + 
+           12*mh6*(192 - 672*rho - 160*rho2 + 45*rho3)))/(3.*power_of<5>(4*mh2 - rho)) + 
       (64*mh2*rho2*(-2.0*(-5.0 + radix4mh2 - complex<double>(0,3)*pi + 3*rho)*rho2 + 
            2*mh2*rho*(4.0*(15.0 - 3*radix4mh2 - 27*rho + radix4mh2*rho) - complex<double>(0,9)*pi*(-4 + 3*rho2)) + 
            mh6*(128*(-3 + radix4mh2) - complex<double>(0,3)*pi*rho*(288 - 160*rho + 45*rho2)) + 
-           8*mh4*(4*(5 - radix4mh2 + 3.0*(-9.0 + radix4mh2)*rho) + complex<double>(0,3)*pi*(4 - 27*rho2 + 5*rho3))))/(3.*pow(4*mh2 - rho,5))
+           8*mh4*(4*(5 - radix4mh2 + 3.0*(-9.0 + radix4mh2)*rho) + complex<double>(0,3)*pi*(4 - 27*rho2 + 5*rho3))))/(3.*power_of<5>(4*mh2 - rho))
       );
             // End of 2nd Gegenbauer moment
 
@@ -1639,68 +1639,68 @@ namespace eos
             const double acotrho = pi / 2.0 - atanrho;
 
             // Begin of asymptotic part
-            complex<double> asymp = (-32*pow(acotrho,2)*(-3 + 2*mh2)*mh4)/(3.*pow(-1 + (4*mh2)/rho,3)) + 
-   (4*mh2*((-3*lnmqmu*pow(4*mh2 - rho,3))/(pow(mh,2)*rho2) + ((-2.0 - complex<double>(0,3)*radix4mh2*pi)*rho)/pow(mh,2) + 
+            complex<double> asymp = (-32*power_of<2>(acotrho)*(-3 + 2*mh2)*mh4)/(3.*power_of<3>(-1 + (4*mh2)/rho)) + 
+   (4*mh2*((-3*lnmqmu*power_of<3>(4*mh2 - rho))/(power_of<2>(mh)*rho2) + ((-2.0 - complex<double>(0,3)*radix4mh2*pi)*rho)/power_of<2>(mh) + 
         6.0*(10.0 + (-(-3.0 + 9*(1 - 4*mh2))/(4.*mh2) + complex<double>(0,8)*radix4mh2*pi)*rho) + 
-        6.0*mh2*(-60.0 - 28/rho + 3.0*(-(-1.0 - 4*mh2)/(4.*pow(mh2,2)) + complex<double>(0,2)*radix4mh2*pi - 3*pi2)*rho) + 
+        6.0*mh2*(-60.0 - 28/rho + 3.0*(-(-1.0 - 4*mh2)/(4.*power_of<2>(mh2)) + complex<double>(0,2)*radix4mh2*pi - 3*pi2)*rho) + 
         4*mh4*(-36.0 + 48/rho2 + 84/rho - ((-8 - 9*pi2 + 9*power_of<3>(1.0 - 4.0 * mh2)*pi2 - 
-                9*pow(1 - 4*mh2,2)*(4 + 3*pi2) + 3*(1 - 4*mh2)*(20 + 9*pi2))*rho)/(64.*pow(mh2,3)))))/
-    (27.*pow(-1 + (4*mh2)/rho,3)*rho) + (32*acotrho*radixrho*mh2*
-      (6*mh2*rho*(2 + rho) + 3*(-1 + rho)*rho2 + 4*mh4*(-4 - 2*rho + 3*rho2)))/(9.*pow(4*mh2 - rho,3)) - 
-   (32*pow(atanh4mh2,2)*(-3 + 2*mh2)*mh4*rho3)/(3.*pow(4*mh2 - rho,3)) + 
-   atanh4mh2*((-8*radix4mh2*(-1 + 16*mh2 + 12*mh4)*rho3)/(9.*pow(4*mh2 - rho,3)) + 
-      (complex<double>(0,10.666666666666666)*(-3 + 2*mh2)*mh4*pi*rho3)/pow(4*mh2 - rho,3));
+                9*power_of<2>(1 - 4*mh2)*(4 + 3*pi2) + 3*(1 - 4*mh2)*(20 + 9*pi2))*rho)/(64.*power_of<3>(mh2)))))/
+    (27.*power_of<3>(-1 + (4*mh2)/rho)*rho) + (32*acotrho*radixrho*mh2*
+      (6*mh2*rho*(2 + rho) + 3*(-1 + rho)*rho2 + 4*mh4*(-4 - 2*rho + 3*rho2)))/(9.*power_of<3>(4*mh2 - rho)) - 
+   (32*power_of<2>(atanh4mh2)*(-3 + 2*mh2)*mh4*rho3)/(3.*power_of<3>(4*mh2 - rho)) + 
+   atanh4mh2*((-8*radix4mh2*(-1 + 16*mh2 + 12*mh4)*rho3)/(9.*power_of<3>(4*mh2 - rho)) + 
+      (complex<double>(0,10.666666666666666)*(-3 + 2*mh2)*mh4*pi*rho3)/power_of<3>(4*mh2 - rho));
             // End of asymptotic part
 
             // Begin of 1st Gegenbauer moment
-            complex<double> gb1 = (32*acotrho*radixrho*mh2*(-18*mh2*rho - 36*mh4*rho - (-1 + rho)*rho + 12*mh6*(-2 + 3*rho))*rho2)/(3.*pow(-4*mh2 + rho,4)) - 
-   (32*pow(acotrho,2)*mh4*(-6*mh2*(-2 + rho) + 3*rho + mh4*(-8 + 6*rho))*rho3)/pow(-4*mh2 + rho,4) - 
-   (32*pow(atanh4mh2,2)*mh4*(-6*mh2*(-2 + rho) + 3*rho + mh4*(-8 + 6*rho))*rho3)/pow(-4*mh2 + rho,4) + 
-   atanh4mh2*((complex<double>(0,32)*mh4*pi*(-6*mh2*(-2 + rho) + 3*rho + mh4*(-8 + 6*rho))*rho3)/pow(-4*mh2 + rho,4) + 
-      (16*radix4mh2*mh2*(-2 + 3*rho - 6*mh4*(-4 + 3*rho) + mh2*(32 + 15*rho))*rho3)/(3.*pow(-4*mh2 + rho,4))) + 
+            complex<double> gb1 = (32*acotrho*radixrho*mh2*(-18*mh2*rho - 36*mh4*rho - (-1 + rho)*rho + 12*mh6*(-2 + 3*rho))*rho2)/(3.*power_of<4>(-4*mh2 + rho)) - 
+   (32*power_of<2>(acotrho)*mh4*(-6*mh2*(-2 + rho) + 3*rho + mh4*(-8 + 6*rho))*rho3)/power_of<4>(-4*mh2 + rho) - 
+   (32*power_of<2>(atanh4mh2)*mh4*(-6*mh2*(-2 + rho) + 3*rho + mh4*(-8 + 6*rho))*rho3)/power_of<4>(-4*mh2 + rho) + 
+   atanh4mh2*((complex<double>(0,32)*mh4*pi*(-6*mh2*(-2 + rho) + 3*rho + mh4*(-8 + 6*rho))*rho3)/power_of<4>(-4*mh2 + rho) + 
+      (16*radix4mh2*mh2*(-2 + 3*rho - 6*mh4*(-4 + 3*rho) + mh2*(32 + 15*rho))*rho3)/(3.*power_of<4>(-4*mh2 + rho))) + 
    (8*mh2*(-6 - 17*rho - (3*rho)/(-1 + radix4mh2) + (3*rho)/(1 + radix4mh2) - complex<double>(0,3)*radix4mh2*pi*(-2 + 3*rho) + 
         3*mh2*(complex<double>(0,-1)*radix4mh2*pi*(32 + 15*rho) + 
-           3*((-2*(-1 - 4*mh2))/mh2 - 4/rho + ((-8 + 3*pi2 + 3*pow(1 - 4*mh2,2)*pi2 + (1 - 4*mh2)*(4 - 6*pi2))*
-                 rho)/(16.*pow(mh2,2)))) + 6*mh4*(-9*pi2*(-2 + rho) + complex<double>(0,3)*radix4mh2*pi*(-4 + 3*rho) - 
+           3*((-2*(-1 - 4*mh2))/mh2 - 4/rho + ((-8 + 3*pi2 + 3*power_of<2>(1 - 4*mh2)*pi2 + (1 - 4*mh2)*(4 - 6*pi2))*
+                 rho)/(16.*power_of<2>(mh2)))) + 6*mh4*(-9*pi2*(-2 + rho) + complex<double>(0,3)*radix4mh2*pi*(-4 + 3*rho) - 
            (-2 - 9*rho + 3*rho2 + power_of<3>(1.0 - 4.0 * mh2)*(2 + 9*rho + 9*rho2) + (1 - 4*mh2)*(6 + 27*rho + 9*rho2 - 15*rho3) + 2*rho3 + 
-              3*pow(1 - 4*mh2,2)*(-2 - 9*rho - 7*rho2 + 3*rho3))/(16.*pow(mh2,3)*rho2)) + 
+              3*power_of<2>(1 - 4*mh2)*(-2 - 9*rho - 7*rho2 + 3*rho3))/(16.*power_of<3>(mh2)*rho2)) + 
         mh6*(18*pi2*(-4 + 3*rho) - (4 + 12*rho - 27*rho2 + 35*rho3 + power_of<4>(1.0 - 4.0 * mh2)*(4 + 12*rho - 27*rho2 + 27*rho3) - 
-              16*rho4 - 6*pow(1 - 4*mh2,2)*(-4 - 12*rho + 27*rho2 - 43*rho3 + 15*rho4) + 
+              16*rho4 - 6*power_of<2>(1 - 4*mh2)*(-4 - 12*rho + 27*rho2 - 43*rho3 + 15*rho4) + 
               power_of<3>(1.0 - 4.0 * mh2)*(-16 - 48*rho + 108*rho2 - 144*rho3 + 27*rho4) + 
-              (1 - 4*mh2)*(-16 - 48*rho + 108*rho2 - 176*rho3 + 91*rho4))/(32.*pow(mh2,4)*rho3))))/
-    (9.*pow(1 - (4*mh2)/rho,4)*rho);
+              (1 - 4*mh2)*(-16 - 48*rho + 108*rho2 - 176*rho3 + 91*rho4))/(32.*power_of<4>(mh2)*rho3))))/
+    (9.*power_of<4>(1 - (4*mh2)/rho)*rho);
             // End of 1st Gegenbauer moment
 
             // Begin of 2nd Gegenbauer moment
             complex<double> gb2 = (32*acotrho*radixrho*mh2*rho2*(24*mh6*(22 - 15*rho)*rho + 144*mh4*rho*(1 + rho) + 4*mh2*rho*(-2 + 11*rho) + (-1 + rho)*rho2 + 
-        24*mh8*(4 - 20*rho + 15*rho2)))/(3.*pow(4*mh2 - rho,5)) - 
-   (64*pow(acotrho,2)*mh4*(12*mh2*(-3 + rho)*rho + mh4*(-48 + 64*rho - 30*rho2) - 3*rho2 + mh6*(32 - 60*rho + 30*rho2))*rho3)/
-    pow(4*mh2 - rho,5) - (64*pow(atanh4mh2,2)*mh4*(12*mh2*(-3 + rho)*rho + mh4*(-48 + 64*rho - 30*rho2) - 3*rho2 + 
-        mh6*(32 - 60*rho + 30*rho2))*rho3)/pow(4*mh2 - rho,5) + 
+        24*mh8*(4 - 20*rho + 15*rho2)))/(3.*power_of<5>(4*mh2 - rho)) - 
+   (64*power_of<2>(acotrho)*mh4*(12*mh2*(-3 + rho)*rho + mh4*(-48 + 64*rho - 30*rho2) - 3*rho2 + mh6*(32 - 60*rho + 30*rho2))*rho3)/
+    power_of<5>(4*mh2 - rho) - (64*power_of<2>(atanh4mh2)*mh4*(12*mh2*(-3 + rho)*rho + mh4*(-48 + 64*rho - 30*rho2) - 3*rho2 + 
+        mh6*(32 - 60*rho + 30*rho2))*rho3)/power_of<5>(4*mh2 - rho) + 
    atanh4mh2*((-16*radix4mh2*mh2*(rho*(-2 + 3*rho) + mh4*(256 + 324*rho - 150*rho2) + 4*mh2*(-4 + 23*rho + 12*rho2) + 
-           12*mh6*(16 - 30*rho + 15*rho2))*rho3)/(3.*pow(4*mh2 - rho,5)) + 
+           12*mh6*(16 - 30*rho + 15*rho2))*rho3)/(3.*power_of<5>(4*mh2 - rho)) + 
       (complex<double>(0,64)*mh4*pi*(12*mh2*(-3 + rho)*rho + mh4*(-48 + 64*rho - 30*rho2) - 3*rho2 + mh6*(32 - 60*rho + 30*rho2))*rho3)/
-       pow(4*mh2 - rho,5)) + (4.0*mh2*(5.0*(12 - ((-31 + 43*(1 - 4*mh2))*rho)/(4.*mh2) + complex<double>(0,6)*radix4mh2*pi*(-2 + 3*rho)) + 
+       power_of<5>(4*mh2 - rho)) + (4.0*mh2*(5.0*(12 - ((-31 + 43*(1 - 4*mh2))*rho)/(4.*mh2) + complex<double>(0,6)*radix4mh2*pi*(-2 + 3*rho)) + 
         20*mh2*(-(52 + 44*(1 - 4*mh2))/(4.*mh2) + 60/rho - 
-           (9*(-8 + 3*pi2 + 3*pow(1 - 4*mh2,2)*pi2 + (1 - 4*mh2)*(4 - 6*pi2))*rho)/(16.*pow(mh2,2)) + 
+           (9*(-8 + 3*pi2 + 3*power_of<2>(1 - 4*mh2)*pi2 + (1 - 4*mh2)*(4 - 6*pi2))*rho)/(16.*power_of<2>(mh2)) + 
            (complex<double>(0,6)*radix4mh2*pi*(-4 + 23*rho + 12*rho2))/rho) + 
         (60*mh4*(complex<double>(0,-1)*radix4mh2*pi*rho*(-128 - 162*rho + 75*rho2) - 
              (-4 + 84*rho + 9*(-4 + 3*pi2)*rho2 - (8 + 9*pi2)*rho3 + 
                 power_of<3>(1.0 - 4.0 * mh2)*(4 - 60*rho - 9*(4 + 3*pi2)*rho2 + 9*pi2*rho3) - 
-                3*pow(1 - 4*mh2,2)*(4 - 68*rho - 3*(8 + 9*pi2)*rho2 + 3*(4 + 3*pi2)*rho3) + 
-                3*(1 - 4*mh2)*(4 - 76*rho - 27*pi2*rho2 + (20 + 9*pi2)*rho3))/(16.*pow(mh2,3))))/rho2 + 
+                3*power_of<2>(1 - 4*mh2)*(4 - 68*rho - 3*(8 + 9*pi2)*rho2 + 3*(4 + 3*pi2)*rho3) + 
+                3*(1 - 4*mh2)*(4 - 76*rho - 27*pi2*rho2 + (20 + 9*pi2)*rho3))/(16.*power_of<3>(mh2))))/rho2 + 
         20*mh6*(pi2*(576 - 432/rho - 270*rho) + (complex<double>(0,18)*radix4mh2*pi*(16 - 30*rho + 15*rho2))/rho + 
            (-4 - 48*rho - 99*rho2 + 199*rho3 + power_of<4>(1.0 - 4.0 * mh2)*(-4 - 48*rho - 243*rho2 + 135*rho3) - 80*rho4 - 
-              6*pow(1 - 4*mh2,2)*(4 + 48*rho + 195*rho2 - 263*rho3 + 75*rho4) + 
+              6*power_of<2>(1 - 4*mh2)*(4 + 48*rho + 195*rho2 - 263*rho3 + 75*rho4) + 
               power_of<3>(1.0 - 4.0 * mh2)*(16 + 192*rho + 900*rho2 - 828*rho3 + 135*rho4) + 
-              (1 - 4*mh2)*(16 + 192*rho + 612*rho2 - 1084*rho3 + 455*rho4))/(32.*pow(mh2,4)*rho3)) + 
+              (1 - 4*mh2)*(16 + 192*rho + 612*rho2 - 1084*rho3 + 455*rho4))/(32.*power_of<4>(mh2)*rho3)) + 
         8*mh8*(45*pi2*(-30 + 16/rho + 15*rho) + (8 + 60*rho + 552*rho5 - 390*rho2 + 1285*rho3 + 
-              5*pow(1 - 4*mh2,2)*(16 + 120*rho + 969*rho5 - 780*rho2 + 2906*rho3 - 3160*rho4) - 
+              5*power_of<2>(1 - 4*mh2)*(16 + 120*rho + 969*rho5 - 780*rho2 + 2906*rho3 - 3160*rho4) - 
               5*power_of<3>(1.0 - 4.0 * mh2)*(16 + 120*rho + 585*rho5 - 780*rho2 + 2778*rho3 - 2520*rho4) - 
               5*(1 - 4*mh2)*(8 + 60*rho + 687*rho5 - 390*rho2 + 1429*rho3 - 1745*rho4) + 
               5*power_of<4>(1.0 - 4.0 * mh2)*(8 + 60*rho + 135*rho5 - 390*rho2 + 1269*rho3 - 945*rho4) - 1475*rho4 + 
-              pow(radix4mh2,10)*(-8 - 60*rho + 390*rho2 - 1125*rho3 + 675*rho4))/(256.*pow(mh2,5)*rho4))))/
-    (45.*pow(-1 + (4*mh2)/rho,5)*rho);
+              power_of<10>(radix4mh2)*(-8 - 60*rho + 390*rho2 - 1125*rho3 + 675*rho4))/(256.*power_of<5>(mh2)*rho4))))/
+    (45.*power_of<5>(-1 + (4*mh2)/rho)*rho);
             // End of 2nd Gegenbauer moment
 
             return asymp + a1 * gb1 + a2 * gb2;
