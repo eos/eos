@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/mesonic.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
@@ -128,7 +129,7 @@ namespace eos
             const complex<double> res_H_perp = this->residue_H_perp();
             const complex<double> res_H_para = this->residue_H_para();
 
-            const double m_B = this->m_B(), m_B2 = pow(m_B, 2);
+            const double m_B = this->m_B(), m_B2 = power_of<2>(m_B);
             const double m_psi = this->m_psi();
 
             complex<double> A_perp = m_B2 / (f_psi * m_psi) * res_H_perp;
@@ -156,11 +157,11 @@ namespace eos
         double branching_ratio() const
         {
             const auto amps = amplitudes_bcvdv2016();
-            const auto lambda = eos::lambda(pow(m_B, 2), pow(m_Kstar, 2), pow(m_psi, 2));
+            const auto lambda = eos::lambda(power_of<2>(m_B), power_of<2>(m_Kstar), power_of<2>(m_psi));
             const auto prefactor = pow(g_fermi * abs(model->ckm_cb() * conj(model->ckm_cs())), 2)
                     * tau_B() / hbar() * sqrt(lambda) / (2.0 * M_PI * m_B);
 
-            return prefactor * (norm(amps.A_perp) + norm(amps.A_para) + pow(m_B/m_psi, 2) * norm(amps.A_long));
+            return prefactor * (norm(amps.A_perp) + norm(amps.A_para) + power_of<2>(m_B/m_psi) * norm(amps.A_long));
         }
 
     };

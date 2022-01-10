@@ -244,7 +244,7 @@ namespace eos
         // Form factor
         double xi_perp_zero = xi_perp();
 
-        double calN = sqrt(alpha_e * pow(m_B, 3) * pow(1.0 -  m_Kstar * m_Kstar / (m_B * m_B), 3) / (32.0 * pow(M_PI, 4))) * g_fermi
+        double calN = sqrt(alpha_e * power_of<3>(m_B) * power_of<3>(1.0 -  m_Kstar * m_Kstar / (m_B * m_B)) / (32.0 * power_of<4>(M_PI))) * g_fermi
                 * model->m_b_msbar(mu())
                 * abs(model->ckm_tb() * conj(model->ckm_ts()));
 

@@ -80,12 +80,12 @@ namespace eos
             static const double c7sm = -0.3;
 
             double m_c_hat = m_c_pole() / model->m_b_pole();
-            double z = pow(m_c_hat, 2);
-            double z2 = pow(z, 2), z3 = z * z2, z4 = z3 * z, lnz = log(z);
+            double z = power_of<2>(m_c_hat);
+            double z2 = power_of<2>(z), z3 = z * z2, z4 = z3 * z, lnz = log(z);
 
             // cf. [BMU1999], Eq. (46), p. 16
             double g = 1.0 - 8.0 * z + 8.0 * z3 - z4 - 12.0 * z2 * lnz;
-            double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
+            double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * power_of<2>(1.0 - m_c_hat));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu" /* fake lepton flavor */);

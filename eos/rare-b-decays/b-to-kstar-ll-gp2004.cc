@@ -21,6 +21,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
@@ -93,7 +94,7 @@ namespace eos
     {
         double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-        return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
+        return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B
                 * lambda_t * lambda_t * s_hat(s) * beta_l(s)
                 * std::sqrt(eos::lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP2008], Eq. (C.6), p. 21
     }
@@ -109,7 +110,7 @@ namespace eos
 
         const double m_B2 = m_B * m_B, m_Kstar2 = m_Kstar * m_Kstar, m2_diff = m_B2 - m_Kstar2;
         const double m_Kstarhat = m_Kstar / m_B;
-        const double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
+        const double m_Kstarhat2 = power_of<2>(m_Kstarhat);
         const double s_hat = s / m_B / m_B;
         const double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
         const double alpha_s = model->alpha_s(mu());
@@ -139,7 +140,7 @@ namespace eos
         complex<double> wilson_long2_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
         complex<double> wilson_long2_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
 
-        double formfactor_long1 = (1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1;
+        double formfactor_long1 = (1.0 - m_Kstarhat2 - s_hat) * power_of<2>(1.0 + m_Kstarhat) * a_1;
         double formfactor_long2 = -eos::lambda(1.0, m_Kstarhat2, s_hat) * a_2;
         // cf. [BHvD2010], Eq. (3.15), p. 10
         result.a_long_right = norm_s * prefactor_long * (wilson_long1_right * formfactor_long1 + wilson_long2_right * formfactor_long2);

@@ -132,7 +132,7 @@ namespace eos
 
             return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
                 - (5.0 + 4.0 * s_hat) / (3.0 * (1.0 + 2.0 * s_hat)) * ln1
-                - (2.0 * s_hat * (1.0 + s_hat) * (1.0 - 2.0 * s_hat)) / (3.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
+                - (2.0 * s_hat * (1.0 + s_hat) * (1.0 - 2.0 * s_hat)) / (3.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat)) * ln
                 + (5.0 + 9.0 * s_hat - 6.0 * s_hat2) / (6.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat));
         }
 
@@ -155,7 +155,7 @@ namespace eos
 
             return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
                 - (8.0 + s_hat) / (3.0 * (2.0 + s_hat)) * ln1
-                - (2.0 * s_hat * (2.0 - 2.0 * s_hat - s_hat2)) / (3.0 * pow(1.0 - s_hat, 2) * (2.0 + s_hat)) * ln
+                - (2.0 * s_hat * (2.0 - 2.0 * s_hat - s_hat2)) / (3.0 * power_of<2>(1.0 - s_hat) * (2.0 + s_hat)) * ln
                 - (16.0 - 11.0 * s_hat - 17.0 * s_hat2) / (18.0 * (1.0 - s_hat) * (2.0 + s_hat))
                 // We use mu_b in MSbar scheme globally, so use m_b_MSbar here instead of m_b_pole
                 - 8.0/3.0 * log(mu / m_b_MSbar());
@@ -169,7 +169,7 @@ namespace eos
 
             return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
                 - (2.0 + 7.0 * s_hat) / (9.0 * s_hat) * ln1
-                - (2.0 * s_hat * (3.0 - 2.0 * s_hat)) / (9.0 * pow(1.0 - s_hat, 2)) * ln
+                - (2.0 * s_hat * (3.0 - 2.0 * s_hat)) / (9.0 * power_of<2>(1.0 - s_hat)) * ln
                 + (5.0 - 9.0 * s_hat) / (18.0 * (1.0 - s_hat))
                 // We use mu_b in MSbar scheme globally, so use m_b_MSbar here instead of m_b_pole
                 - 4.0/3.0 * log(mu / m_b_MSbar());
@@ -241,10 +241,10 @@ namespace eos
             };
 
             double m_b = m_b_pole(), m_c = m_c_pole();
-            double s = s_hat * pow(m_b, 2);
+            double s = s_hat * power_of<2>(m_b);
 
             complex<double> g_b = g(4.0 / s_hat);
-            complex<double> g_c = g(4.0 * pow(m_c, 2) / s);
+            complex<double> g_c = g(4.0 * power_of<2>(m_c) / s);
 
             /* mu == mu in MSbar scheme, so use m_b_MSbar here */
             return gamma9[i-1] * log(m_b_MSbar / mu)
@@ -256,7 +256,7 @@ namespace eos
 
         complex<double> f9pen(const double & s_hat) const
         {
-            complex<double> g_tau = g(4.0 * pow(m_tau / m_b_pole(), 2) / s_hat);
+            complex<double> g_tau = g(4.0 * power_of<2>(m_tau / m_b_pole()) / s_hat);
 
             return 8.0 * log(m_b_MSbar / mu)
                 - 3.0 * (g_tau + 8.0 / 9.0 * log(m_b_MSbar / m_tau))
@@ -267,7 +267,7 @@ namespace eos
         // cf. [HLMW2005], Eq. (132), p. 29
         complex<double> F(const double & s_hat) const
         {
-            double r = s_hat * pow(m_b_pole() / m_c_pole(), 2) / 4.0;
+            double r = s_hat * power_of<2>(m_b_pole() / m_c_pole()) / 4.0;
             double x = sqrt(1.0 - 1.0 / r);
             complex<double> result;
 
@@ -289,10 +289,10 @@ namespace eos
             double m_b_pole = this->m_b_pole(), m_b_kin = model->m_b_kin(1.0);
             double log_m_l_hat = std::log(m_l / m_b_msbar);
             double m_s_hat = model->m_s_msbar(mu()) / m_b_msbar;
-            double s_hat = s / pow(m_b_pole, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+            double s_hat = s / power_of<2>(m_b_pole), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
             // We express lambda_2 as mu^2_G / 3.0 and neglect terms of
             // higher order in 1/m_b for that relation.
-            double lambda_1_hat = mu2_pi / pow(m_b_kin, 2), lambda_2_hat = mu2_g / (3.0 * pow(m_b_kin, 2));
+            double lambda_1_hat = mu2_pi / power_of<2>(m_b_kin), lambda_2_hat = mu2_g / (3.0 * power_of<2>(m_b_kin));
             double alpha_s = model->alpha_s(mu);
             double kappa = alpha_e / alpha_s, alpha_s_tilde = alpha_s / (4.0 * M_PI);
 
@@ -315,36 +315,36 @@ namespace eos
             // cf. [HLMW2005], Eqs. (112)-(115), p. 26
             // The HQE contributions proportional to lambda_{1,2}_hat have been adjusted to remove
             // the B->X_ulnu contributions. See also [LT2007].
-            double s77 = pow(1.0 - s_hat, 2) * (4.0 + 8.0 / s_hat) * (
+            double s77 = power_of<2>(1.0 - s_hat) * (4.0 + 8.0 / s_hat) * (
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_77(s_hat) + u1)
                     + kappa * uem
                     + 8.0 * alpha_s_tilde * kappa * EMContributions::omegaem_77(s_hat, log_m_l_hat)
                 )
-                + lambda_1_hat * pow(1.0 - s_hat, 2) * (2.0 + 4.0 / s_hat)
+                + lambda_1_hat * power_of<2>(1.0 - s_hat) * (2.0 + 4.0 / s_hat)
                 + lambda_2_hat * (30.0 * s_hat2 - 18.0 - 36.0 / s_hat);
 
-            double s79 = 12.0 * pow(1.0 - s_hat, 2) * (
+            double s79 = 12.0 * power_of<2>(1.0 - s_hat) * (
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_79(s_hat) + u1)
                     + kappa * uem
                     + 8.0 * alpha_s_tilde * kappa * EMContributions::omegaem_79(s_hat, log_m_l_hat)
                 )
-                + 6.0 * lambda_1_hat * pow(1.0 - s_hat, 2)
+                + 6.0 * lambda_1_hat * power_of<2>(1.0 - s_hat)
                 + 6.0 * lambda_2_hat * (-5.0 - 6.0 * s_hat + 7.0 * s_hat2);
 
-            double s99 = pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (
+            double s99 = power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat) * (
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_99(s_hat) + u1)
                     + kappa * uem
                     + 8.0 * alpha_s_tilde * kappa * EMContributions::omegaem_99(s_hat, log_m_l_hat)
-                    + 16.0 * pow(alpha_s_tilde, 2) * (omega2_99(s_hat) + u2 + 4.0 * u1 * omega1_99(s_hat))
+                    + 16.0 * power_of<2>(alpha_s_tilde) * (omega2_99(s_hat) + u2 + 4.0 * u1 * omega1_99(s_hat))
                 )
-                + lambda_1_hat * 0.5 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)
+                + lambda_1_hat * 0.5 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat)
                 + lambda_2_hat * 1.5 * (1.0 - 15.0 * s_hat2 + 10.0 * s_hat3);
 
             double s1010 = s99
-                + 8.0 * alpha_s_tilde * kappa * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (EMContributions::omegaem_1010(s_hat, log_m_l_hat) - EMContributions::omegaem_99(s_hat, log_m_l_hat));
+                + 8.0 * alpha_s_tilde * kappa * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat) * (EMContributions::omegaem_1010(s_hat, log_m_l_hat) - EMContributions::omegaem_99(s_hat, log_m_l_hat));
 
             /* Wilson coefficients */
             std::vector<complex<double>> wc = {
@@ -362,14 +362,14 @@ namespace eos
 
             /* Corrections, cf. [HLMW2005], Table 6, p. 18 */
             std::vector<complex<double>> m7 = {
-                -pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F17_massive, mu(), s, m_b_msbar, m_c),
-                -pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F27_massive, mu(), s, m_b_msbar, m_c),
+                -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F17_massive, mu(), s, m_b_msbar, m_c),
+                -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F27_massive, mu(), s, m_b_msbar, m_c),
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 alpha_s_tilde * kappa,
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F87_massless(mu, s, m_b_msbar),
+                -power_of<2>(alpha_s_tilde) * kappa * CharmLoops::F87_massless(mu, s, m_b_msbar),
                 0.0,
                 0.0,
                 0.0,
@@ -379,14 +379,14 @@ namespace eos
             };
 
             std::vector<complex<double>> m9 = {
-                alpha_s_tilde * kappa * f(1, s_hat) - pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F19_massive, mu(), s, m_b_msbar, m_c),
-                alpha_s_tilde * kappa * f(2, s_hat) - pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F29_massive, mu(), s, m_b_msbar, m_c),
+                alpha_s_tilde * kappa * f(1, s_hat) - power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F19_massive, mu(), s, m_b_msbar, m_c),
+                alpha_s_tilde * kappa * f(2, s_hat) - power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F29_massive, mu(), s, m_b_msbar, m_c),
                 alpha_s_tilde * kappa * f(3, s_hat),
                 alpha_s_tilde * kappa * f(4, s_hat),
                 alpha_s_tilde * kappa * f(5, s_hat),
                 alpha_s_tilde * kappa * f(6, s_hat),
                 0.0,
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F89_massless(s, m_b_msbar),
+                -power_of<2>(alpha_s_tilde) * kappa * CharmLoops::F89_massless(s, m_b_msbar),
                 1.0 + alpha_s_tilde * kappa * f9pen(s_hat),
                 0.0,
                 alpha_s_tilde * kappa * f(11, s_hat),
@@ -465,7 +465,7 @@ namespace eos
             /* bremsstrahlung */
             static const double c_tau1 = 1.0 / 27.0;
             static const double c_tau2 = - 2.0 / 9.0;
-            double z = pow(m_c / m_b_msbar, 2);
+            double z = power_of<2>(m_c / m_b_msbar);
             double itau_22 = real(memoise(Bremsstrahlung::itau_22, s_hat, z));
             double itau_27 = real(memoise(Bremsstrahlung::itau_27, s_hat, z));
             double itau_28 = real(memoise(Bremsstrahlung::itau_28, s_hat, z));
@@ -473,18 +473,18 @@ namespace eos
             double tau_78 = memoise(Bremsstrahlung::tau_78, s_hat);
             double tau_88 = memoise(Bremsstrahlung::tau_88, s_hat);
             double tau_89 = memoise(Bremsstrahlung::tau_89, s_hat);
-            double b11 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * c_tau1;
-            double b12 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * c_tau2 * 2.0;
-            double b22 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * QCD::casimir_f;
-            double b17 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_27 * c_tau2 * 2.0;
-            double b27 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_27 * QCD::casimir_f * 2.0;
-            double b18 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_28 * c_tau2 * 2.0;
-            double b28 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_28 * QCD::casimir_f * 2.0;
-            double b19 = pow(alpha_s_tilde, 2) * kappa * itau_29 * c_tau2 * 2.0;
-            double b29 = pow(alpha_s_tilde, 2) * kappa * itau_29 * QCD::casimir_f * 2.0;
-            double b78 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * tau_78 * 2.0 * QCD::casimir_f;
-            double b88 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * tau_88 * QCD::casimir_f;
-            double b89 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * tau_89 * 2.0 * QCD::casimir_f;
+            double b11 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_22 * c_tau1;
+            double b12 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_22 * c_tau2 * 2.0;
+            double b22 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_22 * QCD::casimir_f;
+            double b17 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_27 * c_tau2 * 2.0;
+            double b27 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_27 * QCD::casimir_f * 2.0;
+            double b18 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_28 * c_tau2 * 2.0;
+            double b28 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * itau_28 * QCD::casimir_f * 2.0;
+            double b19 = power_of<2>(alpha_s_tilde) * kappa * itau_29 * c_tau2 * 2.0;
+            double b29 = power_of<2>(alpha_s_tilde) * kappa * itau_29 * QCD::casimir_f * 2.0;
+            double b78 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * tau_78 * 2.0 * QCD::casimir_f;
+            double b88 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * tau_88 * QCD::casimir_f;
+            double b89 = power_of<3>(alpha_s_tilde) * power_of<2>(kappa) * tau_89 * 2.0 * QCD::casimir_f;
             phi_ll += norm(wc[1 - 1]) * b11 + real(wc[1 - 1] * conj(wc[2 - 1])) * b12 + norm(wc[2 - 1]) * b22;
             phi_ll += real(conj(wc[7 - 1]) * (wc[1 - 1] * b17 + wc[2 - 1] * b27));
             phi_ll += real(conj(wc[8 - 1]) * (wc[1 - 1] * b18 + wc[2 - 1] * b28));
@@ -497,18 +497,18 @@ namespace eos
             complex<double> cF = F(s_hat);
             // We use lambda_2 = mu2_g / 3.0 and neglect higher orders in 1/m_b in that
             // relation.
-            double c27 = - pow(alpha_s_tilde * kappa, 2) * 8.0 * mu2_g / (27.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2)
+            double c27 = - power_of<2>(alpha_s_tilde * kappa) * 8.0 * mu2_g / (27.0 * power_of<2>(m_c)) * power_of<2>(1.0 - s_hat)
                 * (1.0 + 6.0 * s_hat - s_hat2) / s_hat * real(cF);
-            double c29 = - alpha_s_tilde * kappa * 8.0 * mu2_g / (27.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF);
-            double c22 = - alpha_s_tilde * kappa * 8.0 * mu2_g / (27.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF * conj(m9[1]));
+            double c29 = - alpha_s_tilde * kappa * 8.0 * mu2_g / (27.0 * power_of<2>(m_c)) * power_of<2>(1.0 - s_hat) * (2.0 + s_hat) * real(cF);
+            double c22 = - alpha_s_tilde * kappa * 8.0 * mu2_g / (27.0 * power_of<2>(m_c)) * power_of<2>(1.0 - s_hat) * (2.0 + s_hat) * real(cF * conj(m9[1]));
             phi_ll += c22 * (-2.0 / 9.0 * norm(wc[0]) + 7.0 / 6.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
             phi_ll += c27 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[6]));
             phi_ll += c29 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[8]));
 
             /* log enhanced em */
-            double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * EMContributions::omegaem_22(s_hat, log_m_l_hat, mu);
-            complex<double> e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * EMContributions::omegaem_27(s_hat, log_m_l_hat, mu);
-            complex<double> e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * EMContributions::omegaem_29(s_hat, log_m_l_hat, mu);
+            double e22 = 8.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat) * power_of<3>(alpha_s_tilde * kappa) * EMContributions::omegaem_22(s_hat, log_m_l_hat, mu);
+            complex<double> e27 = 96.0 * power_of<2>(1.0 - s_hat) * power_of<3>(alpha_s_tilde * kappa) * EMContributions::omegaem_27(s_hat, log_m_l_hat, mu);
+            complex<double> e29 = 8.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat) * power_of<2>(alpha_s_tilde * kappa) * EMContributions::omegaem_29(s_hat, log_m_l_hat, mu);
             phi_ll += e22 * (16.0 / 9.0 * norm(wc[0]) + 8.0 / 3.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
             phi_ll += real(e27 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
             phi_ll += real(e29 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));
@@ -560,7 +560,7 @@ namespace eos
     double
     BToXsDilepton<HLMW2005>::differential_branching_ratio(const double & s) const
     {
-        return _imp->branching_ratio(s) / pow(_imp->m_b_pole(), 2);
+        return _imp->branching_ratio(s) / power_of<2>(_imp->m_b_pole());
     }
 
     double

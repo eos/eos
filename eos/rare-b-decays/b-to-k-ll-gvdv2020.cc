@@ -256,7 +256,7 @@ namespace eos
         result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
                       ((m_B2 - m_K2) / s * (calF_time / calF_plus - 1.0) - 1.0);
         result.F_V  = wc.c9() + wc.c9prime()
-                      + 2.0 * m_b_PS() / m_B / xi_pseudo(s) * (dff.calT - 16.0 * pow(M_PI, 2) * m_B / m_b_PS() * calH_plus)
+                      + 2.0 * m_b_PS() / m_B / xi_pseudo(s) * (dff.calT - 16.0 * power_of<2>(M_PI) * m_B / m_b_PS() * calH_plus)
                       + 8.0 * m_l * m_B / s * calF_T_plus / calF_plus * wc.cT();
 
         return result;

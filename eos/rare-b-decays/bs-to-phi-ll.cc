@@ -805,7 +805,7 @@ namespace eos
     BsToPhiDilepton::differential_symrel_le_a1v(const double & q2) const
     {
         const auto & ag = *_imp->amplitude_generator;
-        return pow(ag.m_B() + ag.m_V(), 2) / (2.0 * ag.m_B() * ag.energy(q2))
+        return power_of<2>(ag.m_B() + ag.m_V()) / (2.0 * ag.m_B() * ag.energy(q2))
             * ag.form_factors->a_1(q2) / ag.form_factors->v(q2);
     }
 
