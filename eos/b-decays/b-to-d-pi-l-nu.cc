@@ -292,8 +292,8 @@ namespace eos
             const double q2_min = power_of<2>(m_l());
             const double q2_max = 10.68;
 
-            const double c_d_max3 = pow(c_d_max, 3);
-            const double c_d_min3 = pow(c_d_min, 3);
+            const double c_d_max3 = power_of<3>(c_d_max);
+            const double c_d_min3 = power_of<3>(c_d_min);
 
             std::function<std::array<double, 2> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2d, this, std::placeholders::_1);
             const auto coeffs = integrate1D(f, 32, q2_min, q2_max);

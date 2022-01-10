@@ -77,43 +77,43 @@ namespace eos
         double G12T(const double & s) const { return form_factors->f_time_a(s); };
         double G120(const double & s) const { return form_factors->f_long_a(s); };
         double G12P(const double & s) const { return form_factors->f_perp_a(s); };
-        double s_plus(const double & s) const { return pow((m_LambdaB + m_LambdaC2595), 2) - s; };
-        double s_minus(const double & s) const { return pow((m_LambdaB - m_LambdaC2595), 2) - s; };
+        double s_plus(const double & s) const { return power_of<2>(m_LambdaB + m_LambdaC2595) - s; };
+        double s_minus(const double & s) const { return power_of<2>(m_LambdaB - m_LambdaC2595) - s; };
 
         // [BBGIOvD] parametrization for the differential decay width
         double a_l(const double & s) const
         {
-            double val = pow(F12T(s), 2.) * (pow(m_l, 2.) / s) * pow((m_LambdaB - m_LambdaC2595), 2.);
-            val += (pow(F120(s), 2.) * pow((m_LambdaB + m_LambdaC2595), 2.) + (pow(F12P(s), 2.)) * (pow(m_l, 2.) + s));
-            val += pow(G12T(s), 2.) * (pow(m_l, 2.) / s) * pow((m_LambdaB + m_LambdaC2595), 2.);
-            val += (pow(G120(s), 2.) * pow((m_LambdaB - m_LambdaC2595), 2.) + (pow(G12P(s), 2.)) * (pow(m_l, 2.) + s));
+            double val = power_of<2>(F12T(s)) * (power_of<2>(m_l) / s) * power_of<2>(m_LambdaB - m_LambdaC2595);
+            val += power_of<2>(F120(s)) * power_of<2>(m_LambdaB + m_LambdaC2595) + power_of<2>(F12P(s)) * (power_of<2>(m_l) + s);
+            val += power_of<2>(G12T(s)) * power_of<2>(m_l) / s * power_of<2>(m_LambdaB + m_LambdaC2595);
+            val += power_of<2>(G120(s)) * power_of<2>(m_LambdaB - m_LambdaC2595) + power_of<2>(G12P(s)) * (power_of<2>(m_l) + s);
             return val / 2.0;
         }
 
         double b_l(const double & s) const
         {
-            double val = 2. * (F12T(s) * F120(s) + G12T(s) * G120(s)) * pow(m_l, 2.) / s;
-            val *= (pow(m_LambdaB, 2.) - pow(m_LambdaC2595, 2.));
+            double val = 2. * (F12T(s) * F120(s) + G12T(s) * G120(s)) * power_of<2>(m_l) / s;
+            val *= (power_of<2>(m_LambdaB) - power_of<2>(m_LambdaC2595));
             val += (-4.) * s * (F12P(s) * G12P(s));
             return val / 2.0;
         }
 
         double c_l(const double & s) const
         {
-            double val = pow(F120(s), 2.) * pow(m_LambdaB + m_LambdaC2595, 2.);
-            val += (-1.) * s * pow(F12P(s), 2.);
-            val += pow(G120(s), 2.) * pow(m_LambdaB - m_LambdaC2595, 2.);
-            val += (-1.) * s * pow(G12P(s), 2.);
-            val *= (-1.) * (1. - pow(m_l, 2.) / s);
+            double val = power_of<2>(F120(s)) * power_of<2>(m_LambdaB + m_LambdaC2595);
+            val += (-1.) * s * power_of<2>(F12P(s));
+            val += power_of<2>(G120(s)) * power_of<2>(m_LambdaB - m_LambdaC2595);
+            val += (-1.) * s * power_of<2>(G12P(s));
+            val *= (-1.) * (1. - power_of<2>(m_l) / s);
             return val / 2.0;
         }
 
         double gamma_0(const double & s) const
         {
-            double val = pow(g_fermi, 2.) * sqrt(s_plus(s) * s_minus(s));
+            double val = power_of<2>(g_fermi) * sqrt(s_plus(s) * s_minus(s));
             val *= m_LambdaB * m_LambdaC2595;
-            val *= (1. / (96. * pow(M_PI * m_LambdaB, 3.)));
-            val *= pow((1. - pow(m_l, 2.) / s), 2.);
+            val *= (1. / (96. * power_of<3>(M_PI * m_LambdaB)));
+            val *= power_of<2>(1. - power_of<2>(m_l) / s);
             return val;
         }
 
@@ -152,7 +152,7 @@ namespace eos
                 return 0.0;
             }
 
-            return gamma_0(s) * (a_l(s) + b_l(s) * z + c_l(s) * pow(z, 2.));
+            return gamma_0(s) * (a_l(s) + b_l(s) * z + c_l(s) * power_of<2>(z));
         }
 
         double differential_decay_width(const double & s) const
@@ -257,8 +257,8 @@ namespace eos
     double
     LambdaBToLambdaC2595LeptonNeutrino::normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        const double abs_s_min = pow(_imp->m_l, 2);
-        const double abs_s_max = pow(_imp->m_LambdaB - _imp->m_LambdaC2595, 2);
+        const double abs_s_min = power_of<2>(_imp->m_l);
+        const double abs_s_max = power_of<2>(_imp->m_LambdaB - _imp->m_LambdaC2595);
 
         return _imp->integrated_branching_ratio(s_min, s_max) / _imp->integrated_branching_ratio(abs_s_min, abs_s_max);
     }
