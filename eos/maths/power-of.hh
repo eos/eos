@@ -22,6 +22,7 @@
 #define EOS_GUARD_EOS_MATHS_POWER_OF_HH 1
 
 #include <complex>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
@@ -50,6 +51,18 @@ namespace eos
     constexpr T_ power_of(const T_ & x)
     {
         return impl::PowerOf<n_, T_>::calculate(x);
+    }
+
+    template <unsigned n_>
+    constexpr double power_of(const Parameter & p)
+    {
+        return impl::PowerOf<n_, double>::calculate(p());
+    }
+
+    template <unsigned n_>
+    constexpr double power_of(const UsedParameter & p)
+    {
+        return impl::PowerOf<n_, double>::calculate(p());
     }
 }
 

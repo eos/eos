@@ -19,6 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/utils/parameters.hh>
 
 #include <cmath>
 #include <iostream>
@@ -68,6 +69,17 @@ class PowerOfTest :
                 TEST_CHECK_NEARLY_EQUAL(std::complex<double>(-9.6719, -1.56), power_of<4>(std::complex<double>(1.2, 1.3)), eps);
                 TEST_CHECK_NEARLY_EQUAL(std::complex<double>(2.985984, 0.0),  power_of<6>(std::complex<double>(1.2, 0.0)), eps);
                 TEST_CHECK_NEARLY_EQUAL(std::complex<double>(0.004096, 0.0),  power_of<6>(std::complex<double>(0.4, 0.0)), eps);
+            }
+
+            {
+                // Test power_of<n, eos.Parameter>>
+                static const double eps = 1e-14;
+
+                Parameters p = Parameters::Defaults();
+
+                TEST_CHECK_NEARLY_EQUAL(1.0,                              power_of<0>(p["mass::D^0"]), eps);
+                TEST_CHECK_NEARLY_EQUAL(p["mass::D^0"],                   power_of<1>(p["mass::D^0"]), eps);
+                TEST_CHECK_NEARLY_EQUAL(p["mass::D^0"] * p["mass::D^0"],  power_of<2>(p["mass::D^0"]), eps);
             }
         }
 } power_of_test;
