@@ -437,7 +437,9 @@ namespace eos
                         KinematicRange{ "cos(theta_k)^LHCb", -1.0,  +1.0,        BToKstarDilepton::kinematics_description_c_theta_k },
                         KinematicRange{ "phi^LHCb",           0.0,   2.0 * M_PI, BToKstarDilepton::kinematics_description_phi       }
                     ),
-                    &BToKstarDilepton::integrated_decay_width,
+                    std::function<double (const BToKstarDilepton *, const double &, const double &)>([] (const BToKstarDilepton * decay, const double & q2_min, const double & q2_max) -> double {
+                        return decay->integrated_decay_width(decay->prepare(q2_min, q2_max));
+                    }),
                     std::make_tuple(
                         "s_min",
                         "s_max"
@@ -453,7 +455,9 @@ namespace eos
                         KinematicRange{ "cos(theta_k)^LHCb", -1.0,   +1.0,        BToKstarDilepton::kinematics_description_c_theta_k },
                         KinematicRange{ "phi^LHCb",           0.0,    2.0 * M_PI, BToKstarDilepton::kinematics_description_phi }
                     ),
-                    &BToKstarDilepton::integrated_decay_width,
+                    std::function<double (const BToKstarDilepton *, const double &, const double &)>([] (const BToKstarDilepton * decay, const double & q2_min, const double & q2_max) -> double {
+                        return decay->integrated_decay_width(decay->prepare(q2_min, q2_max));
+                    }),
                     std::make_tuple(
                         "s_min",
                         "s_max"

@@ -22,6 +22,7 @@
 #include <eos/observable.hh>
 #include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <array>
@@ -108,45 +109,47 @@ class BToKstarDileptonLowRecoilTest :
                 /* q^2 = [14.00, 19.21] */
                 {
                     const double eps = 1e-4;
+                    auto ir = d.prepare(14.00, 19.21);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(14.00, 19.21), -0.4093, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(14.00, 19.21),  +0.3497, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(14.00, 19.21),     -0.4835, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(14.00, 19.21),     +1.6893, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(14.00, 19.21),     +0.5758, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(14.00, 19.21),      0.1244, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(14.00, 19.21),    -0.8391, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(14.00, 19.21),     0.0,    eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(14.00, 19.21),                        +0.9967, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(14.00, 19.21),                        -0.9727, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(14.00, 19.21),                        -0.9587, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(14.00, 19.21),                         0.0,    eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(14.00, 19.21),                         0.0,    eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.4093, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),  +0.3497, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.4835, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),     +1.6893, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),     +0.5758, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.1244, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.8391, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,    eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                        +0.9967, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.9727, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.9587, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,    eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,    eps);
 
-                    double a_fb = d.integrated_unnormalized_forward_backward_asymmetry(14.00, 19.21) / d.integrated_branching_ratio(14.00, 19.21);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(14.00, 19.21), a_fb,    eps);
+                    double a_fb = d.integrated_unnormalized_forward_backward_asymmetry(ir) / d.integrated_branching_ratio(ir);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), a_fb,    eps);
                 }
 
                 /* q^2 = [16.00, 19.21] */
                 {
                     const double eps = 1e-4;
+                    auto ir = d.prepare(16.00, 19.21);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(16.00, 19.21), -0.381708, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(16.00, 19.21),  +0.337697, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(16.00, 19.21),     -0.599389, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(16.00, 19.21),     +1.99535,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(16.00, 19.21),     +0.486256, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(16.00, 19.21),      0.112158, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(16.00, 19.21),    -0.768382, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(16.00, 19.21),     0.0,      eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(16.00, 19.21),                        +0.998622, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(16.00, 19.21),                        -0.970214, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(16.00, 19.21),                        -0.959887, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(16.00, 19.21),                         0.0,      eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(16.00, 19.21),                         0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.381708, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),  +0.337697, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.599389, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),     +1.99535,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),     +0.486256, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.112158, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.768382, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                        +0.998622, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.970214, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.959887, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,      eps);
 
-                    double a_fb = d.integrated_unnormalized_forward_backward_asymmetry(16.00, 19.21) / d.integrated_branching_ratio(16.00, 19.21);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(16.00, 19.21), a_fb,    eps);
+                    double a_fb = d.integrated_unnormalized_forward_backward_asymmetry(ir) / d.integrated_branching_ratio(ir);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), a_fb,    eps);
                 }
 
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
@@ -229,10 +232,12 @@ class BToKstarDileptonLowRecoilTest :
                 /* observables */
                 {
                     static const double eps = 1e-4;
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 19.21),                         2.77767e-7, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(14.18, 19.21),             -4.08565e-1, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(14.18, 19.21),              +0.34841,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(14.18, 19.21),                 -4.92697e-1, eps);
+                    auto ir = d.prepare(14.18, 19.21);
+
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(ir),                         2.77767e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir),             -4.08565e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(ir),              +0.34841,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(ir),                 -4.92697e-1, eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 19.21}});
                     auto obs_BR   = Observable::make("B->K^*ll::BR", p, k_mu, oo);
@@ -767,10 +772,12 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
                 TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(q2),   4.621083562e-22, eps);
 
                 TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(q2),      -0.1862620012, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(q2, q2_max), -0.1855108351, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(q2, q2_max), -1.004538219,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(q2, q2_max), -0.6513218755, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(q2, q2_max), -1.553614345,  eps);
+
+                auto ir = d.prepare(q2, q2_max);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir), -0.1855108351, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(ir), -1.004538219,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(ir), -0.6513218755, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(ir), -1.553614345,  eps);
             }
 
             {
@@ -816,10 +823,12 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
 
                 // j6c needed, nonzero only with tensor contributions
                 TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(q2),      -0.184288085,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(q2, q2_max), -0.1816297646, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(q2, q2_max), -1.004829116,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(q2, q2_max), -0.6687996564, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(q2, q2_max), -1.532088081,  eps);
+
+                auto ir = d.prepare(q2, q2_max);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir), -0.1816297646, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(ir), -1.004829116,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(ir), -0.6687996564, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(ir), -1.532088081,  eps);
             }
 
             {

@@ -27,43 +27,11 @@
 #include <eos/rare-b-decays/b-to-kstar-ll-bfs2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gvdv2020.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos
 {
-    struct BToKstarDilepton::AngularCoefficients
-    {
-        double j1s, j1c;
-        double j2s, j2c;
-        double j3;
-        double j4;
-        double j5;
-        double j6s, j6c;
-        double j7;
-        double j8;
-        double j9;
-
-        AngularCoefficients()
-        {
-        }
-
-        AngularCoefficients(const std::array<double, 12> & a) :
-            j1s(a[0]),
-            j1c(a[1]),
-            j2s(a[2]),
-            j2c(a[3]),
-            j3(a[4]),
-            j4(a[5]),
-            j5(a[6]),
-            j6s(a[7]),
-            j6c(a[8]),
-            j7(a[9]),
-            j8(a[10]),
-            j9(a[11])
-        {
-        }
-    };
-
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K}^* \ell^+ \ell^-@f$.
      */
@@ -80,6 +48,10 @@ namespace eos
         UsedParameter m_l;
         UsedParameter tau;
         UsedParameter mu;
+
+        using IntermediateResult = BToKstarDilepton::IntermediateResult;
+
+        IntermediateResult intermediate_result;
 
         static const std::vector<OptionSpecification> options;
 
@@ -235,6 +207,12 @@ namespace eos
             std::array<double, 12> integrated_angular_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
 
             return BToKstarDilepton::AngularCoefficients(integrated_angular_coefficients_array);
+        }
+
+        const IntermediateResult * prepare(const double & q2_min, const double & q2_max)
+        {
+            intermediate_result.ac = integrated_angular_coefficients(q2_min, q2_max);
+            return &intermediate_result;
         }
 
         inline double decay_width(const BToKstarDilepton::AngularCoefficients & a_c)
@@ -576,21 +554,27 @@ namespace eos
         return a_c.j9;
     }
 
-    double
-    BToKstarDilepton::integrated_decay_width(const double & s_min, const double & s_max) const
+    const BToKstarDilepton::IntermediateResult *
+    BToKstarDilepton::prepare(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return _imp->decay_width(a_c);
+        return _imp->prepare(q2_min, q2_max);
+    }
+
+
+    double
+    BToKstarDilepton::integrated_decay_width(const IntermediateResult * ir) const
+    {
+        return _imp->decay_width(ir->ac);
     }
 
     double
-    BToKstarDilepton::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_branching_ratio(const IntermediateResult * ir) const
     {
-        return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
+        return integrated_decay_width(ir) * _imp->tau() / _imp->hbar();
     }
 
     double
-    BToKstarDilepton::integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_unnormalized_forward_backward_asymmetry(const IntermediateResult * ir) const
     {
         // Convert from asymmetry in the decay width to asymmetry in the BR
         // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
@@ -599,209 +583,193 @@ namespace eos
 
         // cf. [BHvD2010], eq. (2.8), p. 6
         // cf. [BHvD2012], eq. (A7)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-
+        AngularCoefficients a_c = ir->ac;
         return (a_c.j6s + 0.5 * a_c.j6c) / Gamma;
      }
 
     double
-    BToKstarDilepton::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_forward_backward_asymmetry(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], eq. (2.8), p. 6
         // cf. [BHvD2012], eq. (A7)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return (a_c.j6s + 0.5 * a_c.j6c) / _imp->decay_width(a_c);
     }
 
     double
-    BToKstarDilepton::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_longitudinal_polarisation(const IntermediateResult * ir) const
     {
         // cf. [BHvD2012], eq. (A9)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BToKstarDilepton::integrated_transversal_polarisation(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transversal_polarisation(const IntermediateResult * ir) const
     {
         // cf. [BHvD2012], eq. (A10)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BToKstarDilepton::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transverse_asymmetry_2(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], eq. (2.10), p. 6
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transverse_asymmetry_3(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], eq. (2.11), p. 6
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-
+        AngularCoefficients a_c = ir->ac;
         return sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
-    BToKstarDilepton::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transverse_asymmetry_4(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], eq. (2.12), p. 6
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-
+        AngularCoefficients a_c = ir->ac;
         return sqrt((power_of<2>(a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)));
     }
 
     double
-    BToKstarDilepton::integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transverse_asymmetry_5(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-
+        AngularCoefficients a_c = ir->ac;
         // cf. [BS2011], eq. (34), p. 9 for the massless case
         return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
             / 8.0 / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::integrated_transverse_asymmetry_re(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transverse_asymmetry_re(const IntermediateResult * ir) const
     {
         // cf. [BS2011], eq. (38), p. 10
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return 0.25 * a_c.j6s / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::integrated_transverse_asymmetry_im(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_transverse_asymmetry_im(const IntermediateResult * ir) const
     {
         // cf. [BS2011], eq. (30), p. 8
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::integrated_h_1(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_h_1(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], p. 7, eq. (2.13)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
-    BToKstarDilepton::integrated_h_2(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_h_2(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], p. 7, eq. (2.14)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return  a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BToKstarDilepton::integrated_h_3(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_h_3(const IntermediateResult * ir) const
     {
         // cf. [BHvD2010], p. 7, eq. (2.15)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }
 
     double
-    BToKstarDilepton::integrated_h_4(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_h_4(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BToKstarDilepton::integrated_h_5(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_h_5(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = ir->ac;
         return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
     }
 
     // integrated angular coefficients
     double
-    BToKstarDilepton::integrated_j_1c(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_1c(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j1c;
+        return ir->ac.j1c;
     }
 
     double
-    BToKstarDilepton::integrated_j_1s(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_1s(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j1s;
+        return ir->ac.j1s;
     }
 
     double
-    BToKstarDilepton::integrated_j_2c(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_2c(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j2c;
+        return ir->ac.j2c;
     }
 
     double
-    BToKstarDilepton::integrated_j_2s(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_2s(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j2s;
+        return ir->ac.j2s;
     }
 
     double
-    BToKstarDilepton::integrated_j_3(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_3(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j3;
+        return ir->ac.j3;
     }
 
     double
-    BToKstarDilepton::integrated_j_4(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_4(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j4;
+        return ir->ac.j4;
     }
 
     double
-    BToKstarDilepton::integrated_j_5(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_5(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j5;
+        return ir->ac.j5;
     }
 
     double
-    BToKstarDilepton::integrated_j_6c(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_6c(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j6c;
+        return ir->ac.j6c;
     }
 
     double
-    BToKstarDilepton::integrated_j_6s(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_6s(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j6s;
+        return ir->ac.j6s;
     }
 
     double
-    BToKstarDilepton::integrated_j_7(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_7(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j7;
+        return ir->ac.j7;
     }
 
     double
-    BToKstarDilepton::integrated_j_8(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_8(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j8;
+        return ir->ac.j8;
     }
 
     double
-    BToKstarDilepton::integrated_j_9(const double & s_min, const double & s_max) const
+    BToKstarDilepton::integrated_j_9(const IntermediateResult * ir) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j9;
+        return ir->ac.j9;
     }
 
     /*!
