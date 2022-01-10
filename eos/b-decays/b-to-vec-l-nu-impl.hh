@@ -227,7 +227,6 @@ namespace eos
     {
         public:
             b_to_vec_l_nu::AngularObservables ao;
-            b_to_vec_l_nu::AngularObservables ao_bar;
 
             IntermediateResult()
             {
