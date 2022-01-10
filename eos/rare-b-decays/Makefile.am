@@ -16,7 +16,7 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-kstar-gamma.cc b-to-kstar-gamma.hh \
 	b-to-kstar-gamma-base.cc b-to-kstar-gamma-base.hh \
 	b-to-kstar-gamma-bfs2004.cc b-to-kstar-gamma-bfs2004.hh \
-	b-to-kstar-ll.cc b-to-kstar-ll.hh \
+	b-to-kstar-ll.cc b-to-kstar-ll.hh b-to-kstar-ll-impl.hh \
 	b-to-kstar-ll-base.cc b-to-kstar-ll-base.hh \
 	b-to-kstar-ll-bfs2004.cc b-to-kstar-ll-bfs2004.hh \
 	b-to-kstar-ll-gp2004.cc b-to-kstar-ll-gp2004.hh \

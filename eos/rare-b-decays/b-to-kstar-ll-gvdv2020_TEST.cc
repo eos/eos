@@ -19,6 +19,7 @@
 #include <eos/observable.hh>
 #include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 
 #include <iostream>

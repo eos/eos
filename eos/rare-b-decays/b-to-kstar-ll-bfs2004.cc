@@ -21,6 +21,7 @@
  */
 
 #include <eos/rare-b-decays/b-to-kstar-ll-bfs2004.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>

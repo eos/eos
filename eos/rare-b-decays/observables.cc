@@ -26,12 +26,14 @@
 #include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/rare-b-decays/bs-to-phi-charmonium.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
+#include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
@@ -912,13 +914,15 @@ namespace eos
                         <<B->K^*ll::dBR/ds;l=e>>
                         )"),
 
-                make_observable("B->K^*ll::A_FB_CP_specific", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::A_FB_CP_specific", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::Abar_FB",
+                make_cacheable_observable("B->K^*ll::Abar_FB", R"()",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_unnormalized_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -932,8 +936,9 @@ namespace eos
                                )
                         )"),
 
-                make_observable("B->K^*ll::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -955,8 +960,9 @@ namespace eos
                         (<<B->K^*ll::BR_CP_specific;cp-conjugate=false>> + <<B->K^*ll::BR_CP_specific;cp-conjugate=true>>)
                         )"),
 
-                make_observable("B->K^*ll::F_L_CP_specific", R"(F_L(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::F_L_CP_specific", R"(F_L(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_longitudinal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -970,8 +976,9 @@ namespace eos
                                )
                         )"),
 
-                make_observable("B->K^*ll::F_T_CP_specific", R"(F_T(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::F_T_CP_specific", R"(F_T(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transversal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -985,8 +992,9 @@ namespace eos
                                )
                         )"),
 
-                make_observable("B->K^*ll::A_T^2_CP_specific",
+                make_cacheable_observable("B->K^*ll::A_T^2_CP_specific",  R"()",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transverse_asymmetry_2,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1000,28 +1008,33 @@ namespace eos
                                )
                         )"),
 
-                make_observable("B->K^*ll::A_T^3",
+                make_cacheable_observable("B->K^*ll::A_T^3", R"(A_T^3(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transverse_asymmetry_3,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::A_T^4",
+                make_cacheable_observable("B->K^*ll::A_T^4", R"(A_T^4(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transverse_asymmetry_4,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::A_T^5",
+                make_cacheable_observable("B->K^*ll::A_T^5", R"(A_T^5(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transverse_asymmetry_5,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::A_T^re",
+                make_cacheable_observable("B->K^*ll::A_T^re", R"(\mathrm{Re}A_T(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transverse_asymmetry_re,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::A_T^im",
+                make_cacheable_observable("B->K^*ll::A_T^im", R"(\mathrm{Im}A_T(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_transverse_asymmetry_im,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1050,28 +1063,33 @@ namespace eos
                         &BToKstarDilepton::differential_h_5,
                         std::make_tuple("q2")),
 
-                make_observable("B->K^*ll::H_T^1",
+                make_cacheable_observable("B->K^*ll::H_T^1", R"(H_T^1(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_h_1,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::H_T^2",
+                make_cacheable_observable("B->K^*ll::H_T^2", R"(H_T^2(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_h_2,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::H_T^3",
+                make_cacheable_observable("B->K^*ll::H_T^3", R"(H_T^3(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_h_3,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::H_T^4",
+                make_cacheable_observable("B->K^*ll::H_T^4", R"(H_T^4(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_h_4,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::H_T^5",
+                make_cacheable_observable("B->K^*ll::H_T^5", R"(H_T^5(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_h_5,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1079,8 +1097,9 @@ namespace eos
                         Unit::GeV2(),
                         &BToKstarDilepton::a_fb_zero_crossing),
 
-                make_observable("B->K^*ll::Gamma_CP_specific",
+                make_cacheable_observable("B->K^*ll::Gamma_CP_specific", R"()",
                         Unit::GeV(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1090,28 +1109,33 @@ namespace eos
                         0.5 * (<<B->K^*ll::Gamma_CP_specific;cp-conjugate=false>> + <<B->K^*ll::Gamma_CP_specific;cp-conjugate=true>>)
                         )"),
 
-                make_observable("B->K^*ll::J_1s", R"(J_{1s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_1s", R"(J_{1s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_1s,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_1c", R"(J_{1c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_1c", R"(J_{1c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_1c,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_2s", R"(J_{2s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_2s", R"(J_{2s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_2s,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_2c", R"(J_{2c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_2c", R"(J_{2c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_2c,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_3", R"(J_3(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_3", R"(J_3(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_3,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1129,38 +1153,45 @@ namespace eos
                         (<<B->K^*ll::Gamma;cp-conjugate=false>> + <<B->K^*ll::Gamma;cp-conjugate=true>>)
                         )"),
 
-                make_observable("B->K^*ll::J_4", R"(J_4(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_4", R"(J_4(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_4,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_5", R"(J_5(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_5", R"(J_5(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_5,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_6s", R"(J_{6s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_6s", R"(J_{6s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_6s,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_6c", R"(J_{6c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_6c", R"(J_{6c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_6c,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_7", R"(J_7(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_7", R"(J_7(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_7,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_8", R"(J_8(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_8", R"(J_8(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_8,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->K^*ll::J_9", R"(J_9(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                make_cacheable_observable("B->K^*ll::J_9", R"(J_9(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
+                        &BToKstarDilepton::prepare,
                         &BToKstarDilepton::integrated_j_9,
                         std::make_tuple("q2_min", "q2_max")),
 

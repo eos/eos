@@ -19,6 +19,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gvdv2020.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/memoise.hh>
