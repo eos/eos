@@ -394,7 +394,7 @@ class Analysis:
         :param final_perplexity_threshold: Adaptations are stopped if the perplexity of the last adaptation step is above this threshold value.
         :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
 
-        :return: A tuple of the parameters as array of length N = pre_N * steps + final_N, the (linear) weights as array of length N, and the
+        :return: A tuple of the parameters as array of length N = step_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
 
         This method should be called after obtaining approximate samples of the
