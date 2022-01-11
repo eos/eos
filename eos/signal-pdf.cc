@@ -19,6 +19,7 @@
  */
 
 #include <eos/signal-pdf.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
@@ -58,7 +59,7 @@ namespace eos
                 {
                     using std::pow;
 
-                    return (9.0 * (z_max - z_min) + 4.0 * (pow(z_max, 2.0) - pow(z_min, 2.0)) + 3.0 * (pow(z_max, 3.0) - pow(z_min, 3.0)));
+                    return (9.0 * (z_max - z_min) + 4.0 * (power_of<2>(z_max) - power_of<2>(z_min)) + 3.0 * (power_of<3>(z_max) - power_of<3>(z_min)));
                 }
 
                 static const std::string description;
