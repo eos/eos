@@ -223,25 +223,25 @@ namespace eos
                 const double z4   = z2 * z2 * _enable_lp_z4;
                 const double z5   = z3 * z2 * _enable_lp_z5;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2
-                                  + (2.0 +       a) * pow(1.0 + a, 4) / (2.0 * a3) * z3
-                                  + (5.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4
-                                  + (3.0 + 2.0 * a) * pow(1.0 + a, 6) / (8.0 * a5) * z5;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2
+                                  + (2.0 +       a) * power_of<4>(1.0 + a) / (2.0 * a3) * z3
+                                  + (5.0 + 3.0 * a) * power_of<5>(1.0 + a) / (8.0 * a4) * z4
+                                  + (3.0 + 2.0 * a) * power_of<6>(1.0 + a) / (8.0 * a5) * z5;
 
-                const double wm12 =   4.0                  * pow(1.0 + a, 4) / a2         * z2
-                                  + ( 6.0 +  2.0 * a     ) * pow(1.0 + a, 5) / a3         * z3
-                                  + (25.0 + 14.0 * a + a2) * pow(1.0 + a, 6) / (4.0 * a4) * z4
-                                  + (11.0 +  8.0 * a + a2) * pow(1.0 + a, 7) / (2.0 * a5) * z5;
+                const double wm12 =   4.0                  * power_of<4>(1.0 + a) / a2         * z2
+                                  + ( 6.0 +  2.0 * a     ) * power_of<5>(1.0 + a) / a3         * z3
+                                  + (25.0 + 14.0 * a + a2) * power_of<6>(1.0 + a) / (4.0 * a4) * z4
+                                  + (11.0 +  8.0 * a + a2) * power_of<7>(1.0 + a) / (2.0 * a5) * z5;
 
-                const double wm13 =   8.0                  * pow(1.0 + a, 6) / a3         * z3
-                                  + (18.0 +  6.0 * a     ) * pow(1.0 + a, 7) / a4         * z4
-                                  + (51.0 + 30.0 * a + a2) * pow(1.0 + a, 8) / (2.0 * a5) * z5;
+                const double wm13 =   8.0                  * power_of<6>(1.0 + a) / a3         * z3
+                                  + (18.0 +  6.0 * a     ) * power_of<7>(1.0 + a) / a4         * z4
+                                  + (51.0 + 30.0 * a + a2) * power_of<8>(1.0 + a) / (2.0 * a5) * z5;
 
-                const double wm14 =  16.0             * pow(1.0 + a, 8) / a4 * z4
-                                  + (48.0 + 16.0 * a) * pow(1.0 + a, 9) / a5 * z5;
+                const double wm14 =  16.0             * power_of<8>(1.0 + a) / a4 * z4
+                                  + (48.0 + 16.0 * a) * power_of<9>(1.0 + a) / a5 * z5;
 
-                const double wm15 = 32.0 * pow(1.0 + a, 5) / a5 * z5;
+                const double wm15 = 32.0 * power_of<5>(1.0 + a) / a5 * z5;
 
                 return 1.0
                     + _xipone             * wm11
@@ -264,25 +264,25 @@ namespace eos
                 const double z4   = z2 * z2 * _enable_lp_z4;
                 const double z5   = z3 * z2 * _enable_lp_z5;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2
-                                  + (2.0 +       a) * pow(1.0 + a, 4) / (2.0 * a3) * z3
-                                  + (5.0 + 3.0 * a) * pow(1.0 + a, 5) / (8.0 * a4) * z4
-                                  + (3.0 + 2.0 * a) * pow(1.0 + a, 6) / (8.0 * a5) * z5;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2
+                                  + (2.0 +       a) * power_of<4>(1.0 + a) / (2.0 * a3) * z3
+                                  + (5.0 + 3.0 * a) * power_of<5>(1.0 + a) / (8.0 * a4) * z4
+                                  + (3.0 + 2.0 * a) * power_of<6>(1.0 + a) / (8.0 * a5) * z5;
 
-                const double wm12 =   4.0                  * pow(1.0 + a, 4) / a2         * z2
-                                  + ( 6.0 +  2.0 * a     ) * pow(1.0 + a, 5) / a3         * z3
-                                  + (25.0 + 14.0 * a + a2) * pow(1.0 + a, 6) / (4.0 * a4) * z4
-                                  + (11.0 +  8.0 * a + a2) * pow(1.0 + a, 7) / (2.0 * a5) * z5;
+                const double wm12 =   4.0                  * power_of<4>(1.0 + a) / a2         * z2
+                                  + ( 6.0 +  2.0 * a     ) * power_of<5>(1.0 + a) / a3         * z3
+                                  + (25.0 + 14.0 * a + a2) * power_of<6>(1.0 + a) / (4.0 * a4) * z4
+                                  + (11.0 +  8.0 * a + a2) * power_of<7>(1.0 + a) / (2.0 * a5) * z5;
 
-                const double wm13 =   8.0                  * pow(1.0 + a, 6) / a3         * z3
-                                  + (18.0 +  6.0 * a     ) * pow(1.0 + a, 7) / a4         * z4
-                                  + (51.0 + 30.0 * a + a2) * pow(1.0 + a, 8) / (2.0 * a5) * z5;
+                const double wm13 =   8.0                  * power_of<6>(1.0 + a) / a3         * z3
+                                  + (18.0 +  6.0 * a     ) * power_of<7>(1.0 + a) / a4         * z4
+                                  + (51.0 + 30.0 * a + a2) * power_of<8>(1.0 + a) / (2.0 * a5) * z5;
 
-                const double wm14 =  16.0             * pow(1.0 + a, 8) / a4 * z4
-                                  + (48.0 + 16.0 * a) * pow(1.0 + a, 9) / a5 * z5;
+                const double wm14 =  16.0             * power_of<8>(1.0 + a) / a4 * z4
+                                  + (48.0 + 16.0 * a) * power_of<9>(1.0 + a) / a5 * z5;
 
-                const double wm15 = 32.0 * pow(1.0 + a, 5) / a5 * z5;
+                const double wm15 = 32.0 * power_of<5>(1.0 + a) / a5 * z5;
 
                 return (1.0
                     + _xipone              * wm11
@@ -302,10 +302,10 @@ namespace eos
                 const double  z   = (_z(q2) - z_0);
                 const double z2   =  z * z * _enable_slp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _chi2one + _chi2pone * wm11 + _chi2ppone / 2.0 * wm12;
             }
@@ -319,10 +319,10 @@ namespace eos
                 const double  z   = (_z(q2) - z_0);
                 const double z2   =  z * z * _enable_slp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return 0.0 + _chi3pone * wm11 + _chi3ppone / 2.0 * wm12;
             }
@@ -336,10 +336,10 @@ namespace eos
                 const double  z   = (_z(q2) - z_0);
                 const double z2   =  z * z * _enable_slp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _etaone + _etapone * wm11 + _etappone / 2.0 * wm12;
             }
@@ -402,10 +402,10 @@ namespace eos
                 const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _l1one + _l1pone * wm11 + _l1ppone / 2.0 * wm12;
             }
@@ -418,10 +418,10 @@ namespace eos
                 const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _l2one + _l2pone * wm11 + _l2ppone / 2.0 * wm12;
             }
@@ -434,10 +434,10 @@ namespace eos
                 const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _l3one + _l3pone * wm11 + _l3ppone / 2.0 * wm12;
             }
@@ -450,10 +450,10 @@ namespace eos
                 const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _l4one + _l4pone * wm11 + _l4ppone / 2.0 * wm12;
             }
@@ -466,10 +466,10 @@ namespace eos
                 const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _l5one + _l5pone * wm11 + _l5ppone / 2.0 * wm12;
             }
@@ -482,10 +482,10 @@ namespace eos
                 const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
-                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
+                const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
+                                  + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+                const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
 
                 return _l6one + _l6pone * wm11 + _l6ppone / 2.0 * wm12;
             }

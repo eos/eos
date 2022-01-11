@@ -20,8 +20,9 @@
  */
 
 #include <eos/form-factors/b-lcdas.hh>
-#include <eos/utils/options-impl.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 #include <eos/utils/qualified-name.hh>
@@ -90,7 +91,7 @@ namespace eos
             const double omega_0 = lambda_B();
 
             const double limitWW = 1.0 / omega_0 * std::exp(-omega / omega_0);
-            const double nonWW   = -(lambda_E2 - lambda_H2) / (18.0 * pow(omega_0, 5)) *
+            const double nonWW   = -(lambda_E2 - lambda_H2) / (18.0 * power_of<5>(omega_0)) *
                 (
                     2.0 * omega_0 * omega_0 - 4.0 * omega_0 * omega + omega * omega
                 ) * std::exp(-omega / omega_0);
@@ -103,7 +104,7 @@ namespace eos
             const double omega_0 = lambda_B();
 
             const double limitWW = -omega / omega_0 * std::exp(-omega / omega_0);
-            const double nonWW   = (lambda_E2 - lambda_H2) / (18.0 * pow(omega_0, 4))
+            const double nonWW   = (lambda_E2 - lambda_H2) / (18.0 * power_of<4>(omega_0))
                 * (2.0 * omega_0 - omega) * omega * std::exp(-omega / omega_0);
 
             return limitWW + nonWW;
@@ -161,14 +162,14 @@ namespace eos
             const double Ei = gsl_sf_expint_Ei(-omega / omega_0);
             const double exp = std::exp(-omega / omega_0);
 
-            const double termA = -lambda_E2 / (6.0 * pow(omega_0, 2)) *
+            const double termA = -lambda_E2 / (6.0 * power_of<2>(omega_0)) *
                 (
                     (omega - 2.0 * omega_0) * Ei
                     + (omega + 2.0 * omega_0) * exp * (std::log(omega / omega_0) + gamma_E)
                     - 2.0 * omega * exp
                 );
-            const double termB = exp / (2.0 * omega_0) * pow(omega, 2) * (
-                    1.0 - (lambda_E2 - lambda_H2) / (36.0 * pow(omega_0, 2))
+            const double termB = exp / (2.0 * omega_0) * power_of<2>(omega) * (
+                    1.0 - (lambda_E2 - lambda_H2) / (36.0 * power_of<2>(omega_0))
                 );
 
             return termA + termB;
@@ -186,14 +187,14 @@ namespace eos
             const double Ei = gsl_sf_expint_Ei(-omega / omega_0);
             const double exp = std::exp(-omega / omega_0);
 
-            const double termA = lambda_E2 / (6.0 * pow(omega_0, 3)) *
+            const double termA = lambda_E2 / (6.0 * power_of<3>(omega_0)) *
                 (
                     - omega_0 * Ei
                     + (omega + omega_0) * exp * (std::log(omega / omega_0) + gamma_E)
                     - 2.0 * omega * exp
                 );
-            const double termB = exp / (2.0 * pow(omega_0, 2)) * (2.0 * omega_0 - omega) * omega * (
-                    1.0 - (lambda_E2 - lambda_H2) / (36.0 * pow(omega_0, 2))
+            const double termB = exp / (2.0 * power_of<2>(omega_0)) * (2.0 * omega_0 - omega) * omega * (
+                    1.0 - (lambda_E2 - lambda_H2) / (36.0 * power_of<2>(omega_0))
                 );
 
             return termA + termB;
@@ -207,13 +208,13 @@ namespace eos
             const double omega_0 = lambda_B();
             const double exp = std::exp(-omega / omega_0);
 
-            const double termA = lambda_E2 / (6.0 * pow(omega_0, 4)) * exp *
+            const double termA = lambda_E2 / (6.0 * power_of<4>(omega_0)) * exp *
                 (
                     - omega_0
                     - omega * (std::log(omega / omega_0) + gamma_E - 2.0)
                 );
-            const double termB = exp / (2.0 * pow(omega_0, 3)) * (2.0 * pow(omega_0, 2) - 4.0 * omega_0 * omega + pow(omega, 2)) * (
-                    1.0 - (lambda_E2 - lambda_H2) / (36.0 * pow(omega_0, 2))
+            const double termB = exp / (2.0 * power_of<3>(omega_0)) * (2.0 * power_of<2>(omega_0) - 4.0 * omega_0 * omega + power_of<2>(omega)) * (
+                    1.0 - (lambda_E2 - lambda_H2) / (36.0 * power_of<2>(omega_0))
                 );
 
             return termA + termB;
@@ -236,11 +237,11 @@ namespace eos
             const double exp_plus = std::exp(omega / omega_0);
 
             // integral of g_plus
-            const double  termA = -lambda_E2 / (12.0 * pow(omega_0, 2)) *
-            ((pow(omega, 2) - 4.0 * omega_0 * omega + 6.0 * pow(omega_0, 2)) * Ei - omega_0 * exp * (std::log(omega / omega_0) + gamma_E) * 2.0 * (3.0 * omega_0 + omega)
+            const double  termA = -lambda_E2 / (12.0 * power_of<2>(omega_0)) *
+            ((power_of<2>(omega) - 4.0 * omega_0 * omega + 6.0 * power_of<2>(omega_0)) * Ei - omega_0 * exp * (std::log(omega / omega_0) + gamma_E) * 2.0 * (3.0 * omega_0 + omega)
              - omega_0 * exp * (omega_0 - 5.0 * omega));
-            const double  termB = -exp / 2.0 * (2.0 * pow(omega_0, 2) + 2.0 * omega_0 * omega + pow(omega, 2)) * (1.0 - (lambda_E2 - lambda_H2) / (36.0 * pow(omega_0, 2)));
-            const double  int_glus = (termA - lambda_E2 / 12.0) + (termB + pow(omega_0, 2) - (lambda_E2 - lambda_H2) / 36.0);
+            const double  termB = -exp / 2.0 * (2.0 * power_of<2>(omega_0) + 2.0 * omega_0 * omega + power_of<2>(omega)) * (1.0 - (lambda_E2 - lambda_H2) / (36.0 * power_of<2>(omega_0)));
+            const double  int_glus = (termA - lambda_E2 / 12.0) + (termB + power_of<2>(omega_0) - (lambda_E2 - lambda_H2) / 36.0);
             // integral of g_minusWW
             const double int_gminusWW = (3.0 / 4.0) * exp * omega_0 * (exp_plus * omega_0 - omega - omega_0);
             return       int_glus - switch_gminus * int_gminusWW;
@@ -274,7 +275,7 @@ namespace eos
             const double omega_0 = lambda_B();
 
             // cf. [1703.02446], eq. (5.8), p. 17
-            return (lambda_E2 - lambda_H2) / (6.0 * pow(omega_0, 5)) * omega_1 * pow(omega_2, 2) * std::exp(-(omega_1 + omega_2) / omega_0);
+            return (lambda_E2 - lambda_H2) / (6.0 * power_of<5>(omega_0)) * omega_1 * power_of<2>(omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
         }
 
         inline double phi_4(const double & omega_1, const double & omega_2) const
@@ -282,15 +283,15 @@ namespace eos
             const double omega_0 = lambda_B();
 
             // cf. [1703.02446], eq. (5.8), p. 17
-            return (lambda_E2 + lambda_H2) / (6.0 * pow(omega_0, 4)) * pow(omega_2, 2) * std::exp(-(omega_1 + omega_2) / omega_0);
+            return (lambda_E2 + lambda_H2) / (6.0 * power_of<4>(omega_0)) * power_of<2>(omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
         }
 
         inline double phi_bar_3(const double & omega_1, const double & omega_2) const
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - (lambda_E2 - lambda_H2) / (6.0 * pow(omega_0, 4)) * (omega_0 + omega_1) * omega_2 * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
-            const double termB = (lambda_E2 - lambda_H2) / (6.0 * pow(omega_0, 3)) * omega_2 * omega_2 * std::exp(- omega_2 / omega_0);
+            const double termA = - (lambda_E2 - lambda_H2) / (6.0 * power_of<4>(omega_0)) * (omega_0 + omega_1) * omega_2 * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termB = (lambda_E2 - lambda_H2) / (6.0 * power_of<3>(omega_0)) * omega_2 * omega_2 * std::exp(- omega_2 / omega_0);
 
             return termA + termB;
         }
@@ -299,8 +300,8 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - (lambda_E2 + lambda_H2) / (6.0 * pow(omega_0, 3)) * omega_2 * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
-            const double termB = (lambda_E2 + lambda_H2) / (6.0 * pow(omega_0, 3)) * omega_2 * omega_2 * std::exp(- omega_2 / omega_0);
+            const double termA = - (lambda_E2 + lambda_H2) / (6.0 * power_of<3>(omega_0)) * omega_2 * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termB = (lambda_E2 + lambda_H2) / (6.0 * power_of<3>(omega_0)) * omega_2 * omega_2 * std::exp(- omega_2 / omega_0);
 
             return termA + termB;
         }
@@ -309,8 +310,8 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - (lambda_E2 - lambda_H2) / (6.0 * pow(omega_0, 4)) * omega_1 * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
-            const double termB = (lambda_E2 - lambda_H2) / (3.0 * pow(omega_0, 2)) * omega_1 * std::exp(- omega_1 / omega_0);
+            const double termA = - (lambda_E2 - lambda_H2) / (6.0 * power_of<4>(omega_0)) * omega_1 * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termB = (lambda_E2 - lambda_H2) / (3.0 * power_of<2>(omega_0)) * omega_1 * std::exp(- omega_1 / omega_0);
 
             return termA + termB;
         }
@@ -319,7 +320,7 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - (lambda_E2 + lambda_H2) / (6.0 * pow(omega_0, 3)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termA = - (lambda_E2 + lambda_H2) / (6.0 * power_of<3>(omega_0)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
             const double termB = (lambda_E2 + lambda_H2) / (3.0 * omega_0) * std::exp(- omega_1 / omega_0);
 
             return termA + termB;
@@ -329,9 +330,9 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = (lambda_E2 - lambda_H2) / (6.0 * pow(omega_0, 3)) * (omega_0 + omega_1) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termA = (lambda_E2 - lambda_H2) / (6.0 * power_of<3>(omega_0)) * (omega_0 + omega_1) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
             const double termB = - (lambda_E2 - lambda_H2) / (3.0 * omega_0) * (omega_0 + omega_1) * std::exp(- omega_1 / omega_0);
-            const double termC = - (lambda_E2 - lambda_H2) / (6.0 * pow(omega_0, 2)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(- omega_2 / omega_0);
+            const double termC = - (lambda_E2 - lambda_H2) / (6.0 * power_of<2>(omega_0)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(- omega_2 / omega_0);
             const double termD = - 1.0 / 3.0 * (- lambda_E2 + lambda_H2);
 
             return termA + termB + termC + termD;
@@ -341,9 +342,9 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = (lambda_E2 + lambda_H2) / (6.0 * pow(omega_0, 2)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termA = (lambda_E2 + lambda_H2) / (6.0 * power_of<2>(omega_0)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(-(omega_1 + omega_2) / omega_0);
             const double termB = - 1.0 / 3.0 * (lambda_E2 + lambda_H2) * std::exp(- omega_1 / omega_0);
-            const double termC = - (lambda_E2 + lambda_H2) / (6.0 * pow(omega_0, 2)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(- omega_2 / omega_0);
+            const double termC = - (lambda_E2 + lambda_H2) / (6.0 * power_of<2>(omega_0)) * (2.0 * omega_0 * omega_0 + 2.0 * omega_0 * omega_2 + omega_2 * omega_2) * std::exp(- omega_2 / omega_0);
             const double termD = - 1.0 / 3.0 * (- lambda_E2 - lambda_H2);
 
             return termA + termB + termC + termD;
@@ -353,8 +354,8 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - lambda_E2 / (3.0 * pow(omega_0, 3)) * (omega_0 + omega_1) * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
-            const double termB = lambda_E2 / (3.0 * pow(omega_0, 2)) * omega_2 * std::exp(- omega_2 / omega_0);
+            const double termA = - lambda_E2 / (3.0 * power_of<3>(omega_0)) * (omega_0 + omega_1) * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termB = lambda_E2 / (3.0 * power_of<2>(omega_0)) * omega_2 * std::exp(- omega_2 / omega_0);
 
             return termA + termB;
         }
@@ -363,7 +364,7 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - lambda_E2 / (3.0 * pow(omega_0, 2)) * ((-1.0 +  std::exp( omega_1 / omega_0))
+            const double termA = - lambda_E2 / (3.0 * power_of<2>(omega_0)) * ((-1.0 +  std::exp( omega_1 / omega_0))
                                * omega_0 - omega_1) * (omega_0 + omega_2)  * std::exp(-(omega_1 + omega_2) / omega_0);
             const double termB = lambda_E2 / (3.0 * omega_0) * ((-1.0 +  std::exp( omega_1 / omega_0))
                                * omega_0 - omega_1) * std::exp(- omega_1/ omega_0);
@@ -376,8 +377,8 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - lambda_H2 / (3.0 * pow(omega_0, 3)) * (omega_0 + omega_1) * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
-            const double termB = lambda_H2 / (3.0 * pow(omega_0, 2)) * omega_2 * std::exp(- omega_2 / omega_0);
+            const double termA = - lambda_H2 / (3.0 * power_of<3>(omega_0)) * (omega_0 + omega_1) * omega_2 * std::exp(-(omega_1 + omega_2) / omega_0);
+            const double termB = lambda_H2 / (3.0 * power_of<2>(omega_0)) * omega_2 * std::exp(- omega_2 / omega_0);
 
             return termA + termB;
         }
@@ -386,7 +387,7 @@ namespace eos
         {
             const double omega_0 = lambda_B();
 
-            const double termA = - lambda_H2 / (3.0 * pow(omega_0, 2)) * ((-1.0 +  std::exp( omega_1 / omega_0))
+            const double termA = - lambda_H2 / (3.0 * power_of<2>(omega_0)) * ((-1.0 +  std::exp( omega_1 / omega_0))
                                * omega_0 - omega_1) * (omega_0 + omega_2)  * std::exp(-(omega_1 + omega_2) / omega_0);
             const double termB = lambda_H2 / (3.0 * omega_0) * ((-1.0 +  std::exp( omega_1 / omega_0))
                                * omega_0 - omega_1) * std::exp(- omega_1/ omega_0);

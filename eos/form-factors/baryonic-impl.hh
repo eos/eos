@@ -468,11 +468,11 @@ namespace eos
             // auxiliary kinematics functions
             static constexpr double _s_plus(const double & s)
             {
-                return std::pow((mLb + mLcs), 2) - s;
+                return power_of<2>(mLb + mLcs) - s;
             }
             static constexpr double _s_minus(const double & s)
             {
-                return std::pow((mLb - mLcs), 2) - s;
+                return power_of<2>(mLb - mLcs) - s;
             }
 
             // parametrization of the Isgur-Wise functions
@@ -534,7 +534,7 @@ namespace eos
                 result -= 2.0 * (mLb + mLcs) * (mLb + mLcs) / (mLb - mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sm / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -559,7 +559,7 @@ namespace eos
                 result -= 2.0 * (mLb - mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sp / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -580,7 +580,7 @@ namespace eos
                 result -= 2.0 * mLb * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sp / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -606,7 +606,7 @@ namespace eos
                 result -= 2.0 * (mLb - mLcs) * (mLb - mLcs) / (mLb + mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sp / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -631,7 +631,7 @@ namespace eos
                 result -= 2.0 * (mLb + mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sm / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -652,7 +652,7 @@ namespace eos
                 result -= 2.0 * mLb * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sm / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -775,11 +775,11 @@ namespace eos
             // auxiliary kinematics functions
             static constexpr double _s_plus(const double & s)
             {
-                return std::pow((mLb + mLcs), 2) - s;
+                return power_of<2>((mLb + mLcs)) - s;
             }
             static constexpr double _s_minus(const double & s)
             {
-                return std::pow((mLb - mLcs), 2) - s;
+                return power_of<2>((mLb - mLcs)) - s;
             }
 
             // parametrization of the Isgur-Wise functions
@@ -841,7 +841,7 @@ namespace eos
                 result += (mLb + mLcs) * (mLb + mLcs) / (mLb - mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sm / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -866,7 +866,7 @@ namespace eos
                 result += (mLb - mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sp / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -887,7 +887,7 @@ namespace eos
                 result += mLb * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sp / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -897,7 +897,7 @@ namespace eos
                 const double sp   = _s_plus(s);
 
                 // next-to-leading-power IWF
-                double result = -0.5 * sqrt(sp / (mLcs * pow(mLb, 3))) * _z3b(s);
+                double result = -0.5 * sqrt(sp / (mLcs * power_of<3>(mLb))) * _z3b(s);
 
                 return result;
             }
@@ -923,7 +923,7 @@ namespace eos
                 result += (mLb - mLcs) * (mLb - mLcs) / (mLb + mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sp / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -948,7 +948,7 @@ namespace eos
                 result += (mLb + mLcs) * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sm / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -969,7 +969,7 @@ namespace eos
                 result += mLb * _z3b(s);
 
                 // normalisation
-                result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
+                result *= 0.5 * sqrt(sm / power_of<3>(mLb * mLcs));
 
                 return result;
             }
@@ -979,7 +979,7 @@ namespace eos
                 const double sm   = _s_minus(s);
 
                 // next-to-leading-power IWF
-                double result = -0.5 * sqrt(sm / (mLcs * pow(mLb, 3))) * _z3b(s);
+                double result = -0.5 * sqrt(sm / (mLcs * power_of<3>(mLb))) * _z3b(s);
 
                 return result;
             }

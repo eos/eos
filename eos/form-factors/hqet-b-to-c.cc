@@ -22,6 +22,7 @@
 #include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/stringify.hh>
 
 namespace eos
@@ -60,7 +61,7 @@ namespace eos
                 const double c1 = -1.0 / 3.0;
                 const double c2 = +4.0 / 30.0;
 
-                return c0 + (omega - 1.0) * c1 + pow(omega - 1.0, 2) * c2;
+                return c0 + (omega - 1.0) * c1 + power_of<2>(omega - 1.0) * c2;
             }
 
             return log(omega + sqrt(omega * omega - 1.0)) / sqrt(omega * omega - 1.0);
@@ -79,7 +80,7 @@ namespace eos
                 const double c1 = -10.0 / 9.0;
                 const double c2 = +2.0 / 150.0;
 
-                return c0 + (omega - 1.0) * c1 + pow(omega - 1.0, 2) * c2;
+                return c0 + (omega - 1.0) * c1 + power_of<2>(omega - 1.0) * c2;
             }
 
             const double omega_m = omega - sqrt(omega * omega - 1.0);
@@ -99,10 +100,10 @@ namespace eos
             if ((omega - 1.0) < 1.0e-5)
             {
                 const double c0 = z * log(z) / (z - 1.0);
-                const double c1 = z * (2.0 - 2.0 * z + (1.0 + z) * log(z)) / pow(z - 1.0, 3);
-                const double c2 = z * (1.0 + 9.0 * z - 9.0 * z * z - z * z + z + 6.0 * z * (1.0 + z) * log(z)) / (3.0 * pow(z - 1.0, 5));
+                const double c1 = z * (2.0 - 2.0 * z + (1.0 + z) * log(z)) / power_of<3>(z - 1.0);
+                const double c2 = z * (1.0 + 9.0 * z - 9.0 * z * z - z * z + z + 6.0 * z * (1.0 + z) * log(z)) / (3.0 * power_of<5>(z - 1.0));
 
-                return c0 + (omega - 1.0) * c1 + pow(omega - 1.0, 2) * c2;
+                return c0 + (omega - 1.0) * c1 + power_of<2>(omega - 1.0) * c2;
             }
 
             const double omega_m = omega - sqrt(omega * omega - 1.0);
@@ -128,7 +129,7 @@ namespace eos
         inline static double Z_hh(const double & omega)
         {
             return 8.0 / (81.0) * (94.0 / 9.0 - M_PI * M_PI) * (omega - 1.0)
-                - 4.0 / 135.0 * (92.0 / 9.0 - M_PI * M_PI) * pow(omega - 1.0, 2);
+                - 4.0 / 135.0 * (92.0 / 9.0 - M_PI * M_PI) * power_of<2>(omega - 1.0);
         }
 
         // S_{1,2,3}^{(5)} for the two currents are defined in [N1993] eq. (3.145)
@@ -192,7 +193,7 @@ namespace eos
         {
             const double denom = 1.0 - 2.0 * omega * z + z * z;
 
-            return z / pow(denom, 2) * (
+            return z / power_of<2>(denom) * (
                     2.0 * (omega - 1.0) * z * (1.0 + z) * log(z)
                     - (
                         (omega + 1.0) - 2.0 * omega * (2.0 * omega + 1.0) * z
@@ -205,7 +206,7 @@ namespace eos
         {
             const double denom = 1.0 - 2.0 * omega * z + z * z;
 
-            return z / pow(denom, 2) * (
+            return z / power_of<2>(denom) * (
                     2.0 * (omega + 1.0) * z * (1.0 - z) * log(z)
                     - (
                         (omega - 1.0) - 2.0 * omega * (2.0 * omega - 1.0) * z

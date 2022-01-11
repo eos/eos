@@ -169,8 +169,8 @@ namespace eos
         // exclusive results for the inelastic contributions
         double f_inel() const
         {
-            const double q2max = pow(m_Lambda_b - m_Lambda_c_2625, 2);
-            const double r     = pow((m_Lambda_b + m_Lambda_c_2625) / (m_Lambda_b - m_Lambda_c_2625), 2);
+            const double q2max = power_of<2>(m_Lambda_b - m_Lambda_c_2625);
+            const double r     = power_of<2>((m_Lambda_b + m_Lambda_c_2625) / (m_Lambda_b - m_Lambda_c_2625));
             const double fT    = ff_2595->f_time_v(q2max);
             const double f0    = ff_2595->f_long_v(q2max);
             const double fP    = ff_2595->f_perp_v(q2max);
@@ -180,16 +180,16 @@ namespace eos
             const double F32P  = ff_2625->f_perp32_v(q2max);
 
             // note the normalization N_A = 1.0 in [MvD2015].
-            const double f_inel_2595 =  1.0 / 3.0 * (pow(f0,   2) + r * pow(fT,   2) + 2.0 * pow(fP,   2));
-            const double f_inel_2625 =  2.0 / 3.0 * (pow(F120, 2) + r * pow(F12T, 2) + 2.0 * pow(F12P, 2) + 6.0 * pow(F32P, 2));
+            const double f_inel_2595 =  1.0 / 3.0 * (power_of<2>(f0) + r * power_of<2>(fT) + 2.0 * power_of<2>(fP));
+            const double f_inel_2625 =  2.0 / 3.0 * (power_of<2>(F120) + r * power_of<2>(F12T) + 2.0 * power_of<2>(F12P) + 6.0 * power_of<2>(F32P));
 
             return f_inel_2595 + f_inel_2625;
         }
 
         double g_inel() const
         {
-            const double q2max = pow(m_Lambda_b - m_Lambda_c_2625, 2);
-            const double r     = pow((m_Lambda_b + m_Lambda_c_2625) / (m_Lambda_b - m_Lambda_c_2625), 2);
+            const double q2max = power_of<2>(m_Lambda_b - m_Lambda_c_2625);
+            const double r     = power_of<2>((m_Lambda_b + m_Lambda_c_2625) / (m_Lambda_b - m_Lambda_c_2625));
             const double gT    = ff_2595->f_time_a(q2max);
             const double g0    = ff_2595->f_long_a(q2max);
             const double gP    = ff_2595->f_perp_a(q2max);
@@ -199,8 +199,8 @@ namespace eos
             const double G32P  = ff_2625->f_perp32_a(q2max);
 
             // note the normalization N_A = 3.0 in [MvD2015].
-            const double g_inel_2595 = 1.0 / 9.0 * (pow(g0,   2) + r * pow(gT,   2) + 2.0 * pow(gP,   2));
-            const double g_inel_2625 = 2.0 / 9.0 * (pow(G120, 2) + r * pow(G12T, 2) + 2.0 * pow(G12P, 2) + 6.0 * pow(G32P, 2));
+            const double g_inel_2595 = 1.0 / 9.0 * (power_of<2>(g0) + r * power_of<2>(gT) + 2.0 * power_of<2>(gP));
+            const double g_inel_2625 = 2.0 / 9.0 * (power_of<2>(G120) + r * power_of<2>(G12T) + 2.0 * power_of<2>(G12P) + 6.0 * power_of<2>(G32P));
 
             return g_inel_2595 + g_inel_2625;
         }
