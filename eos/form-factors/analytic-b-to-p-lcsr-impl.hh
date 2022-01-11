@@ -26,6 +26,7 @@
 #include <eos/form-factors/b-lcdas.hh>
 #include <eos/utils/exception.hh>
 #include <eos/maths/integrate.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
@@ -327,15 +328,15 @@ namespace eos
         {
             const double sigmabar = 1.0 - sigma;
 
-            return sigma * pow(m_B(), 2) + (pow(m_v(), 2) - sigma * q2) / sigmabar;
+            return sigma * power_of<2>(m_B()) + (power_of<2>(m_v()) - sigma * q2) / sigmabar;
         }
 
         double sigma(const double & s, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B());
+            const double m_v2 = power_of<2>(m_v());
 
-            return (m_B2 - q2 + s - std::sqrt(4.0 * (m_v2 - s) * m_B2 + pow(m_B2 - q2 + s, 2))) / (2.0 * m_B2);
+            return (m_B2 - q2 + s - std::sqrt(4.0 * (m_v2 - s) * m_B2 + power_of<2>(m_B2 - q2 + s))) / (2.0 * m_B2);
         }
 
         double sigma_0(const double & q2, const double & s0_0, const double & s0_1) const
@@ -357,7 +358,7 @@ namespace eos
 
             const double phi_plus  = this->phi_plus(sigma * m_B());
 
-            return C_1 * phi_plus; /* / pow(sigmabar, 1) */
+            return C_1 * phi_plus; /* / power_of<1>(sigmabar) */
         }
 
         inline
@@ -369,9 +370,9 @@ namespace eos
 
             const double phi_bar  = this->phi_bar(sigma * m_B);
 
-            const double C_2 = -m_B(); /* * pow(sigmabar, 2)*/
+            const double C_2 = -m_B(); /* * power_of<2>(sigmabar)*/
 
-            return C_2 * phi_bar; /* / pow(sigmabar, 2) */
+            return C_2 * phi_bar; /* / power_of<2>(sigmabar) */
         }
 
         inline
@@ -383,9 +384,9 @@ namespace eos
 
             const double phi_bar_d1  = this->phi_bar_d1(sigma * m_B);
 
-            const double C_2 = -m_B(); /* * pow(sigmabar, 2)*/
+            const double C_2 = -m_B(); /* * power_of<2>(sigmabar)*/
 
-            return C_2 * (m_B * phi_bar_d1); /* / pow(sigmabar, 2) */
+            return C_2 * (m_B * phi_bar_d1); /* / power_of<2>(sigmabar) */
         }
 
         inline
@@ -408,46 +409,46 @@ namespace eos
             const double g_plus    = this->g_plus(sigma * m_B);
             const double g_plus_d1 = this->g_plus_d1(sigma * m_B()) * m_B();
 
-            return -4.0 * (sigmabar * g_plus_d1 + g_plus) / pow(sigmabar, 2);
+            return -4.0 * (sigmabar * g_plus_d1 + g_plus) / power_of<2>(sigmabar);
         }
 
         inline
         double I3_fp_2pt_g_p(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_+
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_plus    = this->g_plus(sigma * m_B());
 
-            return +8.0 * m_v2 * g_plus / pow(sigmabar, 2);
+            return +8.0 * m_v2 * g_plus / power_of<2>(sigmabar);
         }
 
         inline
         double I3d1_fp_2pt_g_p(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_+
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_plus    = this->g_plus(sigma * m_B());
             const double g_plus_d1 = this->g_plus_d1(sigma * m_B()) * m_B();
 
-            return +8.0 * m_v2 * (g_plus_d1 * sigmabar + 2.0 * g_plus) / pow(sigmabar, 3);
+            return +8.0 * m_v2 * (g_plus_d1 * sigmabar + 2.0 * g_plus) / power_of<3>(sigmabar);
         }
 
         inline
         double I3d2_fp_2pt_g_p(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_+
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_plus    = this->g_plus(sigma * m_B());
             const double g_plus_d1 = this->g_plus_d1(sigma * m_B()) * m_B();
-            const double g_plus_d2 = this->g_plus_d2(sigma * m_B()) * pow(m_B(), 2);
+            const double g_plus_d2 = this->g_plus_d2(sigma * m_B()) * power_of<2>(m_B());
 
-            return +8.0 * m_v2 * (g_plus_d2 * pow(sigmabar, 2) + 4.0 * g_plus_d1 * sigmabar + 6.0 * g_plus) / pow(sigmabar, 4);
+            return +8.0 * m_v2 * (g_plus_d2 * power_of<2>(sigmabar) + 4.0 * g_plus_d1 * sigmabar + 6.0 * g_plus) / power_of<4>(sigmabar);
         }
 
         inline
@@ -470,75 +471,75 @@ namespace eos
             const double g_bar    = this->g_bar(sigma * m_B());
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B());
 
-            return -8.0 * m_B() * (g_bar_d1 * sigmabar * m_B + g_bar) / pow(sigmabar, 2);
+            return -8.0 * m_B() * (g_bar_d1 * sigmabar * m_B + g_bar) / power_of<2>(sigmabar);
         }
 
         inline
         double I3d2_fp_2pt_g_bar(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_bar
-            const double m_B2     = pow(m_B(), 2);
+            const double m_B2     = power_of<2>(m_B());
             const double sigmabar = 1.0 - sigma;
 
             const double g_bar    = this->g_bar(sigma * m_B());
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B());
             const double g_bar_d2 = this->g_bar_d2(sigma * m_B());
 
-            return -8.0 * m_B() * (g_bar_d2 * pow(sigmabar, 2) * m_B2 + 2.0 * g_bar_d1 * sigmabar * m_B() + 2.0 * g_bar) / pow(sigmabar, 3);
+            return -8.0 * m_B() * (g_bar_d2 * power_of<2>(sigmabar) * m_B2 + 2.0 * g_bar_d1 * sigmabar * m_B() + 2.0 * g_bar) / power_of<3>(sigmabar);
         }
 
         inline
         double I4_fp_2pt_g_bar(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_bar
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_bar    = this->g_bar(sigma * m_B());
 
-            return 24.0 * m_B() * m_v2 * g_bar / pow(sigmabar, 2);
+            return 24.0 * m_B() * m_v2 * g_bar / power_of<2>(sigmabar);
         }
 
         inline
         double I4d1_fp_2pt_g_bar(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_bar
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_bar    = this->g_bar(sigma * m_B());
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B()) * m_B();
 
-            return 24.0 * m_B() * m_v2 * (g_bar_d1 * sigmabar + 2.0 * g_bar) / pow(sigmabar, 3);
+            return 24.0 * m_B() * m_v2 * (g_bar_d1 * sigmabar + 2.0 * g_bar) / power_of<3>(sigmabar);
         }
 
         inline
         double I4d2_fp_2pt_g_bar(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_bar
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_bar    = this->g_bar(sigma * m_B());
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B()) * m_B();
-            const double g_bar_d2 = this->g_bar_d2(sigma * m_B()) * pow(m_B(), 2);
+            const double g_bar_d2 = this->g_bar_d2(sigma * m_B()) * power_of<2>(m_B());
 
-            return 24.0 * m_B() * m_v2 * (g_bar_d2 * pow(sigmabar, 2) + 4.0 * g_bar_d1 * sigmabar + 6.0 * g_bar) / pow(sigmabar, 4);
+            return 24.0 * m_B() * m_v2 * (g_bar_d2 * power_of<2>(sigmabar) + 4.0 * g_bar_d1 * sigmabar + 6.0 * g_bar) / power_of<4>(sigmabar);
         }
 
         inline
         double I4d3_fp_2pt_g_bar(const double & sigma, const double & /*q2*/) const
         {
             // two-particle contribution to f_+ proportional to g_bar
-            const double m_v2     = pow(m_v(), 2);
+            const double m_v2     = power_of<2>(m_v());
             const double sigmabar = 1.0 - sigma;
 
             const double g_bar    = this->g_bar(sigma * m_B());
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B()) * m_B();
-            const double g_bar_d2 = this->g_bar_d2(sigma * m_B()) * pow(m_B(), 2);
-            const double g_bar_d3 = this->g_bar_d3(sigma * m_B()) * pow(m_B(), 3);
+            const double g_bar_d2 = this->g_bar_d2(sigma * m_B()) * power_of<2>(m_B());
+            const double g_bar_d3 = this->g_bar_d3(sigma * m_B()) * power_of<3>(m_B());
 
-            return 24.0 * m_B() * m_v2 * (g_bar_d3 * pow(sigmabar, 3) + 6.0 * g_bar_d2 * pow(sigmabar, 2) + 18.0 * g_bar_d1 * sigmabar + 24.0 * g_bar) / pow(sigmabar, 5);
+            return 24.0 * m_B() * m_v2 * (g_bar_d3 * power_of<3>(sigmabar) + 6.0 * g_bar_d2 * power_of<2>(sigmabar) + 18.0 * g_bar_d1 * sigmabar + 24.0 * g_bar) / power_of<5>(sigmabar);
         }
 
         /* f_+ : 3-particle functions */
@@ -552,7 +553,7 @@ namespace eos
 
             const double phi_3 = this->phi_3(omega_1, omega_2);
 
-            const double C_2 = -(m_B * sigmabar * u + 2.0 * m_v) / (m_B * pow(sigmabar, 2));
+            const double C_2 = -(m_B * sigmabar * u + 2.0 * m_v) / (m_B * power_of<2>(sigmabar));
 
             return C_2 * phi_3;
         }
@@ -565,7 +566,7 @@ namespace eos
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_2 = u / (m_B * pow(sigmabar, 2));
+            const double C_2 = u / (m_B * power_of<2>(sigmabar));
 
             return C_2 * phi_bar_3;
         }
@@ -573,15 +574,15 @@ namespace eos
         double I3_fp_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_3
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
             const double C_3 = -2.0 * (u * (m_B2 * sigmabar2 + q2) + 4.0 * m_B * m_v * sigmabar + m_v2 * u)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -589,9 +590,9 @@ namespace eos
         double I3d1A_fp_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_3
-            const double m_B2     = pow(m_B, 2),   m_B3     = pow(m_B, 3);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3     = power_of<3>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
@@ -606,7 +607,7 @@ namespace eos
                                sigma * (2.0 * m_v2 * (2.0 * omega_1 + omega_2) + 4.0 * m_B2 * omega_1 * sigmabar * (-3.0 + sigmabar) +
                                2.0 * m_B3 * sigmabar * (-3.0 + 4.0 * sigmabar) + omega_1 * q2 * (4.0 - 5.0 * sigmabar) +
                                m_B * (12.0 * m_v * omega_2 * sigmabar + 2.0 * q2 * sigmabar * (-4.0 + sigmabar) + m_v2 * (4.0 - 11.0 * sigmabar)))))
-                               / (m_B * omega_2 * pow(sigmabar, 5));
+                               / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -616,15 +617,15 @@ namespace eos
             // three-particle contribution to f_+ proportional to phi_bar_3
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
             const double C_3 = (2.0 * (sigma - 2.0) * sigmabar * (2.0 * m_B2 * sigma - q2) + 4.0 * m_B2 * sigmabar + 8.0 * m_B * m_v * sigmabar
                              * (-sigma + sigmabar + 1.0) + m_v2 * (sigma + 5.0 * sigmabar - 1.0) - 2.0 * q2 * (sigma - 1.0) * sigma)
-                             / (2.0 * (-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / (2.0 * (-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -639,7 +640,7 @@ namespace eos
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_3 = -8.0 * m_B * m_v / (omega_2 * pow(sigmabar, 2));
+            const double C_3 = -8.0 * m_B * m_v / (omega_2 * power_of<2>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -654,7 +655,7 @@ namespace eos
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_v * u * (2.0 * m_B * sigmabar + m_v * (2.0 * u - 1.0))
-                             / (pow(sigmabar, 3));
+                             / (power_of<3>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -663,7 +664,7 @@ namespace eos
         {
             // three-particle contribution to f_+ proportional to phi_bar_bar_3
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
@@ -673,8 +674,8 @@ namespace eos
                                4.0 * m_B * sigma * sigmabar * (2.0 * m_B * m_v * sigma - omega_2 * (m_v - 2.0 * m_B * sigmabar)) +
                                omega_1 * (4.0 * sigmabar * (4.0 * m_B * m_v * sigma - omega_2 * (m_v - 2.0 * m_B * sigmabar)) +
                                sigmabar * (m_v * omega_2 + 4.0 * m_B * (m_v - 2.0 * m_v * sigma - omega_2 * sigmabar))) +
-                               2.0 * m_v * (-4.0 + 4.0 * sigma + sigmabar) * pow(omega_1, 2))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                               2.0 * m_v * (-4.0 + 4.0 * sigma + sigmabar) * power_of<2>(omega_1))
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -690,7 +691,7 @@ namespace eos
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_4 = 6.0 * m_v * (m_B - m_B * sigma) * (2.0 * m_B * sigmabar + m_v)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * phi_bar_bar_3;
         }
@@ -705,8 +706,8 @@ namespace eos
         {
             // three-particle contribution to f_+ proportional to phi_bar_bar_3
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
@@ -718,8 +719,8 @@ namespace eos
                                2.0 * omega_1 * (m_B * (-(2.0 * m_v) + omega_2) * sigmabar2 -
                                5.0 * (-1 + sigma) * (-(omega_2 * (m_v + 2.0 * m_B * (-1 + sigma))) + 4.0 * m_B * m_v * sigma) +
                                2.0 * (m_v * omega_2 + 4.0 * m_B * (m_v + omega_2 * (-1 + sigma) - 2.0 * m_v * sigma)) * sigmabar) +
-                               4.0 * m_v * (-5.0 + 5.0 * sigma + 2.0 * sigmabar) * pow(omega_1,2.0))
-                             / (pow(omega_2, 2) * pow(sigmabar, 6));
+                               4.0 * m_v * (-5.0 + 5.0 * sigma + 2.0 * sigmabar) * power_of<2>(omega_1))
+                             / (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -740,7 +741,7 @@ namespace eos
                     m_B * (m_v - 2.0 * m_v * sigma + 4.0 * m_B * (-1 + sigma) * sigma) * sigmabar +
                     omega_1 * (-(4.0 * m_B * (-1 + sigma) * (-2.0 + 2.0 * sigma + sigmabar)) + m_v * (-4.0 + 4.0 * sigma + sigmabar))) *
                     phi_bar_bar_3 + m_B * (-m_v + 2.0 * m_B * (-1 + sigma)) * (-1 + sigma) * (-omega_1 + m_B * sigma) * sigmabar * phi_bar_3)
-                    / (pow(omega_2, 2) * pow(sigmabar, 5));
+                    / (power_of<2>(omega_2) * power_of<5>(sigmabar));
         }
 
         double I4d2C_fp_3pt_phi_bar_bar_3(const double & sigma, const double & omega_2, const double & /*q2*/) const
@@ -748,13 +749,13 @@ namespace eos
             // three-particle contribution to f_+ proportional to phi_bar_bar_3
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
-            const double C_4 = 6.0 * m_B2 * m_v * (m_v - 2.0 * m_B * sigmabar) / (pow(omega_2, 2) * pow(sigmabar, 3));
+            const double C_4 = 6.0 * m_B2 * m_v * (m_v - 2.0 * m_B * sigmabar) / (power_of<2>(omega_2) * power_of<3>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -772,7 +773,7 @@ namespace eos
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             return     (6.0 * m_v * ((-4.0 * m_B * sigmabar - m_v) * phi_bar_bar_3
-                      - m_B * sigmabar * (-2.0 * m_B * sigmabar - m_v) * phi_bar_3)) / (pow(sigmabar, 4));
+                      - m_B * sigmabar * (-2.0 * m_B * sigmabar - m_v) * phi_bar_3)) / (power_of<4>(sigmabar));
         }
 
         double I2_fp_3pt_phi_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
@@ -796,7 +797,7 @@ namespace eos
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
-            const double C_2 = (u - 1.0) / (m_B * pow(sigmabar, 2));
+            const double C_2 = (u - 1.0) / (m_B * power_of<2>(sigmabar));
 
             return C_2 * phi_bar_4;
         }
@@ -804,15 +805,15 @@ namespace eos
         double I3_fp_3pt_phi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),  m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma,  sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),  m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma,  sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (m_B2 * sigmabar2 * u + 2.0 * m_B * m_v * sigmabar + m_v2 * (-(u - 1.0)) - q2 * u + q2)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -820,9 +821,9 @@ namespace eos
         double I3d1A_fp_3pt_phi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
@@ -837,7 +838,7 @@ namespace eos
                                m_B2 * (-3.0 + 4.0 * sigmabar))) +
                                q2 * (4.0 * omega_1 - 5.0 * omega_1 * sigmabar + 2.0 * m_B * sigmabar * (-4.0 + sigmabar) +
                                omega_2 * (4.0 - 5.0 * sigmabar))))
-                             / (m_B * omega_2 * pow(sigmabar, 5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -848,12 +849,12 @@ namespace eos
             const double omega_2  = m_B * sigma - omega_1;
 
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * m_B * (m_B * sigmabar2 + 2.0 * m_v * sigmabar)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+                             / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -863,14 +864,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to phi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = (2.0 * sigmabar * (2.0 * m_B * m_v * sigmabar + m_v2 + q2) - q2 * sigma2 + sigma * (q2 - q2 * sigmabar))
-                             / (omega_2 * pow(sigmabar, 4));
+                             / (omega_2 * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -885,7 +886,7 @@ namespace eos
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (m_B * sigmabar * (2.0 * u - 1.0) + 2.0 * m_v)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -893,17 +894,17 @@ namespace eos
         double I3d1A_fp_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2   = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2   = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (4.0 * m_B3 * sigma2 * sigmabar - m_B2 * sigmabar2 * (omega_2 + 4.0 * omega_1) +
                                2.0 * m_B * sigma * (m_B * sigmabar *  (2.0 * m_B * sigmabar - omega_2 - 4.0 * omega_1) + 3.0 * m_v * omega_2) +
                                2.0 * m_B * sigmabar * (m_v * omega_2 + omega_1 * (omega_2 + 2.0 * omega_1)) - 6.0 * m_v * omega_2 * omega_1)
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar,4));
+                             / (m_B * power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -919,7 +920,7 @@ namespace eos
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_B * sigmabar + 2.0 * m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+                             / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -934,15 +935,15 @@ namespace eos
         double I4_fp_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (m_B2 * sigmabar2 - q2) * (m_B * sigmabar * (2.0 * u - 1.0) + 2.0 * m_v)
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -950,10 +951,10 @@ namespace eos
         double I4d1A_fp_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -974,7 +975,7 @@ namespace eos
                                m_B * (3.0 * (4.0 * omega_1 + omega_2) * q2 * sigmabar - 4.0 * m_v * omega_1 * omega_2 * (-4.0 + sigmabar)) -
                                2.0 * m_B2 * (4.0 * m_v * omega_2 * (-1 + sigmabar) +
                                sigmabar * (2.0 * q2 * sigmabar - omega_1 * (2.0 * omega_1 + omega_2) * (-3.0 + sigmabar)))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (m_B * power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -984,14 +985,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * (m_B * sigmabar + 2.0 * m_v) * (m_B2 * sigmabar2 -q2)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * phi_bar_bar_4;
         }
@@ -1006,10 +1007,10 @@ namespace eos
         double I4d2A_fp_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -1033,7 +1034,7 @@ namespace eos
                               8.0 * m_B * omega_1 * (3.0 * q2 * sigmabar + m_v * omega_2 * (5.0 - 2.0 * sigmabar)) +
                               2.0 * m_B2 * (3.0 * sigmabar * (-(2.0 * q2 * sigmabar) + omega_1 * (2.0 * omega_1 + omega_2) * (-2.0 + sigmabar)) +
                               m_v * omega_2 * (10.0 + sigmabar * (-16.0 + 3.0 * sigmabar)))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -1043,9 +1044,9 @@ namespace eos
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_4     = this->phi_bar_4(omega_1, omega_2);
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -1065,14 +1066,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to phi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_B * (m_B * sigmabar - 2.0 * m_v) * (m_B2 * sigmabar2 - q2)
-                             / (pow(omega_2, 2) * pow(sigmabar, 4));
+                             / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -1083,9 +1084,9 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_4     = this->phi_bar_4(omega_1, omega_2);
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -1102,7 +1103,7 @@ namespace eos
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
-            const double C_2 = (1.0 - 2.0 * u) / (m_B * pow(sigmabar, 2));
+            const double C_2 = (1.0 - 2.0 * u) / (m_B * power_of<2>(sigmabar));
 
             return C_2 * psi_bar_4;
         }
@@ -1110,15 +1111,15 @@ namespace eos
         double I3_fp_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (2.0 * u - 1.0) * (-m_B2 * sigmabar2 + m_v2 + q2)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -1126,9 +1127,9 @@ namespace eos
         double I3d1A_fp_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
@@ -1138,7 +1139,7 @@ namespace eos
                                  3.0 * m_B2 * sigma2 * (-(2.0 * omega_1) - omega_2 + 2.0 * m_B * (-2.0 + sigmabar)) -
                                  2.0 * m_B * sigma * (3.0 * (m_v2 + q2) + m_B * (2.0 * omega_1 + omega_2) * (-3.0 + sigmabar) +
                                  m_B2 * (-3.0 + 4.0 * sigmabar))))
-                             / (m_B * omega_2 * pow(sigmabar, 4));
+                             / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -1148,13 +1149,13 @@ namespace eos
             // three-particle contribution to f_+ proportional to psi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
-            const double C_3 = 2.0 * (m_B2 * sigmabar2 - m_v2 - q2) / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+            const double C_3 = 2.0 * (m_B2 * sigmabar2 - m_v2 - q2) / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -1164,13 +1165,13 @@ namespace eos
             // three-particle contribution to f_+ proportional to psi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
-            const double C_3 = 2.0 * (m_B2 * sigmabar2 - m_v2 - q2) / (omega_2 * pow(sigmabar, 3));
+            const double C_3 = 2.0 * (m_B2 * sigmabar2 - m_v2 - q2) / (omega_2 * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -1185,7 +1186,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_v * u * (2.0 * m_B * sigmabar + m_v * (2.0 * u - 1.0))
-                             / (pow(sigmabar, 3));
+                             / (power_of<3>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1194,7 +1195,7 @@ namespace eos
         {
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -1204,8 +1205,8 @@ namespace eos
                                4.0 * m_B * sigma * sigmabar * (2.0 * m_B * m_v * sigma - omega_2 * (m_v - 2.0 * m_B * sigmabar)) +
                                omega_1 * (4.0 * sigmabar * (4.0 * m_B * m_v * sigma - omega_2 * (m_v - 2.0 * m_B * sigmabar)) +
                                sigmabar * (m_v * omega_2 + 4.0 * m_B * (m_v - 2.0 * m_v * sigma - omega_2 * sigmabar))) +
-                               2.0 * m_v * (-4.0 + 4.0 * sigma + sigmabar) * pow(omega_1, 2))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                               2.0 * m_v * (-4.0 + 4.0 * sigma + sigmabar) * power_of<2>(omega_1))
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1221,7 +1222,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * m_v * (m_B - m_B * sigma) * (2.0 * m_B * sigmabar + m_v)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1236,8 +1237,8 @@ namespace eos
         {
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -1249,8 +1250,8 @@ namespace eos
                                2.0 * omega_1 * (m_B * (-(2.0 * m_v) + omega_2) * sigmabar2 -
                                5.0 * (-1 + sigma) * (-(omega_2 * (m_v + 2.0 * m_B * (-1 + sigma))) + 4.0 * m_B * m_v * sigma) +
                                2.0 * (m_v * omega_2 + 4.0 * m_B * (m_v + omega_2 * (-1 + sigma) - 2.0 * m_v * sigma)) * sigmabar) +
-                               4.0 * m_v * (-5.0 + 5.0 * sigma + 2.0 * sigmabar) * pow(omega_1,2.0))
-                             / (pow(omega_2, 2) * pow(sigmabar, 6));
+                               4.0 * m_v * (-5.0 + 5.0 * sigma + 2.0 * sigmabar) * power_of<2>(omega_1))
+                             / (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1271,7 +1272,7 @@ namespace eos
                     m_B * (m_v - 2.0 * m_v * sigma + 4.0 * m_B * (-1 + sigma) * sigma) * sigmabar +
                     omega_1 * (-(4.0 * m_B * (-1 + sigma) * (-2.0 + 2.0 * sigma + sigmabar)) + m_v * (-4.0 + 4.0 * sigma + sigmabar))) *
                     psi_bar_bar_4 + m_B * (-m_v + 2.0 * m_B * (-1 + sigma)) * (-1 + sigma) * (-omega_1 + m_B * sigma) * sigmabar * psi_bar_4)
-                    / (pow(omega_2, 2) * pow(sigmabar, 5));
+                    / (power_of<2>(omega_2) * power_of<5>(sigmabar));
         }
 
         double I4d2C_fp_3pt_psiA_bar_bar_4(const double & sigma, const double & omega_2, const double & /*q2*/) const
@@ -1279,13 +1280,13 @@ namespace eos
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
-            const double C_4 = 6.0 * m_B2 * m_v * (m_v - 2.0 * m_B * sigmabar) / (pow(omega_2, 2) * pow(sigmabar, 3));
+            const double C_4 = 6.0 * m_B2 * m_v * (m_v - 2.0 * m_B * sigmabar) / (power_of<2>(omega_2) * power_of<3>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1303,7 +1304,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             return     (6.0 * m_v * ((-4.0 * m_B * sigmabar - m_v) * psi_bar_bar_4
-                      - m_B * sigmabar * (-2.0 * m_B * sigmabar - m_v) * psi_bar_4)) / (pow(sigmabar, 4));
+                      - m_B * sigmabar * (-2.0 * m_B * sigmabar - m_v) * psi_bar_4)) / (power_of<4>(sigmabar));
         }
 
         double I3_fp_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
@@ -1316,7 +1317,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (m_B * sigmabar * (2.0 * u - 1.0) + 2.0 * m_v)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -1324,17 +1325,17 @@ namespace eos
         double I3d1A_fp_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2   = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2   = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (4.0 * m_B3 * sigma2 * sigmabar - m_B2 * sigmabar2 * (omega_2 + 4.0 * omega_1) +
                                2.0 * m_B * sigma * (m_B * sigmabar *  (2.0 * m_B * sigmabar - omega_2 - 4.0 * omega_1) + 3.0 * m_v * omega_2) +
                                2.0 * m_B * sigmabar * (m_v * omega_2 + omega_1 * (omega_2 + 2.0 * omega_1)) - 6.0 * m_v * omega_2 * omega_1)
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar,4));
+                             / (m_B * power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -1350,7 +1351,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_B * sigmabar + 2.0 * m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+                             / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -1365,15 +1366,15 @@ namespace eos
         double I4_fp_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (m_B2 * sigmabar2 - q2) * (m_B * sigmabar * (2.0 * u - 1.0) + 2.0 * m_v)
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1381,10 +1382,10 @@ namespace eos
         double I4d1A_fp_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -1405,7 +1406,7 @@ namespace eos
                                m_B * (3.0 * (4.0 * omega_1 + omega_2) * q2 * sigmabar - 4.0 * m_v * omega_1 * omega_2 * (-4.0 + sigmabar)) -
                                2.0 * m_B2 * (4.0 * m_v * omega_2 * (-1 + sigmabar) +
                                sigmabar * (2.0 * q2 * sigmabar - omega_1 * (2.0 * omega_1 + omega_2) * (-3.0 + sigmabar)))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (m_B * power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1415,14 +1416,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * (m_B * sigmabar + 2.0 * m_v) * (m_B2 * sigmabar2 -q2)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1437,10 +1438,10 @@ namespace eos
         double I4d2A_fp_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -1464,7 +1465,7 @@ namespace eos
                               8.0 * m_B * omega_1 * (3.0 * q2 * sigmabar + m_v * omega_2 * (5.0 - 2.0 * sigmabar)) +
                               2.0 * m_B2 * (3.0 * sigmabar * (-(2.0 * q2 * sigmabar) + omega_1 * (2.0 * omega_1 + omega_2) * (-2.0 + sigmabar)) +
                               m_v * omega_2 * (10.0 + sigmabar * (-16.0 + 3.0 * sigmabar)))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1474,9 +1475,9 @@ namespace eos
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -1496,14 +1497,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to psi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_B * (m_B * sigmabar - 2.0 * m_v) * (m_B2 * sigmabar2 - q2)
-                             / (pow(omega_2, 2) * pow(sigmabar, 4));
+                             / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -1514,9 +1515,9 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -1592,7 +1593,7 @@ namespace eos
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
-            const double C_2 = 1.0 / (m_B * pow(sigmabar, 2));
+            const double C_2 = 1.0 / (m_B * power_of<2>(sigmabar));
 
             return C_2 * chi_bar_4;
         }
@@ -1600,15 +1601,15 @@ namespace eos
         double I3_fp_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_B2 * sigmabar2 * (2.0 * u - 1.0) + 4.0 * m_B * m_v * sigmabar + m_v2 + q2)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -1616,17 +1617,17 @@ namespace eos
         double I3d1A_fp_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (2.0 * omega_2 * sigma2 * q2 - 2.0 * m_B3 * sigmabar3 * sigma + 2.0 * omega_2 * q2 * sigma * (-1 + sigmabar) +
                                sigmabar * (-(3.0 * m_v2 * omega_2) - 3.0 * omega_2 * q2 - 8.0 * m_B * m_v * omega_2 * sigmabar +
                                m_B2 * sigmabar2 * (2.0 * omega_1 + omega_2 - 2.0 * m_B * sigmabar)))
-                             / (m_B * omega_2 * pow(sigmabar,5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -1636,15 +1637,15 @@ namespace eos
             // three-particle contribution to f_+ proportional to chi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = (2.0 * sigmabar * (m_B2 * sigmabar2 + 4.0 * m_B * m_v * sigmabar + m_v2 + q2) - q2 * sigma2 + sigma * (q2 - q2 * sigmabar))
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -1654,14 +1655,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to chi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = (-2.0 * sigmabar * (-m_B2 * sigmabar2 + 4.0 * m_B * m_v * sigmabar + m_v2 + q2) + q2 * sigma * sigma + q2 * sigma * (sigmabar - 1.0))
-                             / (omega_2 * pow(sigmabar, 4));
+                             / (omega_2 * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -1676,7 +1677,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_v * u * (2.0 * m_B * sigmabar + m_v * (2.0 * u - 1.0))
-                             / (pow(sigmabar, 3));
+                             / (power_of<3>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1685,7 +1686,7 @@ namespace eos
         {
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -1695,8 +1696,8 @@ namespace eos
                                4.0 * m_B * sigma * sigmabar * (2.0 * m_B * m_v * sigma - omega_2 * (m_v - 2.0 * m_B * sigmabar)) +
                                omega_1 * (4.0 * sigmabar * (4.0 * m_B * m_v * sigma - omega_2 * (m_v - 2.0 * m_B * sigmabar)) +
                                sigmabar * (m_v * omega_2 + 4.0 * m_B * (m_v - 2.0 * m_v * sigma - omega_2 * sigmabar))) +
-                               2.0 * m_v * (-4.0 + 4.0 * sigma + sigmabar) * pow(omega_1, 2))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                               2.0 * m_v * (-4.0 + 4.0 * sigma + sigmabar) * power_of<2>(omega_1))
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1712,7 +1713,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * m_v * (m_B - m_B * sigma) * (2.0 * m_B * sigmabar + m_v)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1727,8 +1728,8 @@ namespace eos
         {
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -1740,8 +1741,8 @@ namespace eos
                                2.0 * omega_1 * (m_B * (-(2.0 * m_v) + omega_2) * sigmabar2 -
                                5.0 * (-1 + sigma) * (-(omega_2 * (m_v + 2.0 * m_B * (-1 + sigma))) + 4.0 * m_B * m_v * sigma) +
                                2.0 * (m_v * omega_2 + 4.0 * m_B * (m_v + omega_2 * (-1 + sigma) - 2.0 * m_v * sigma)) * sigmabar) +
-                               4.0 * m_v * (-5.0 + 5.0 * sigma + 2.0 * sigmabar) * pow(omega_1,2.0))
-                             / (pow(omega_2, 2) * pow(sigmabar, 6));
+                               4.0 * m_v * (-5.0 + 5.0 * sigma + 2.0 * sigmabar) * power_of<2>(omega_1))
+                             / (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1762,7 +1763,7 @@ namespace eos
                     m_B * (m_v - 2.0 * m_v * sigma + 4.0 * m_B * (-1 + sigma) * sigma) * sigmabar +
                     omega_1 * (-(4.0 * m_B * (-1 + sigma) * (-2.0 + 2.0 * sigma + sigmabar)) + m_v * (-4.0 + 4.0 * sigma + sigmabar))) *
                     chi_bar_bar_4 + m_B * (-m_v + 2.0 * m_B * (-1 + sigma)) * (-1 + sigma) * (-omega_1 + m_B * sigma) * sigmabar * chi_bar_4)
-                    / (pow(omega_2, 2) * pow(sigmabar, 5));
+                    / (power_of<2>(omega_2) * power_of<5>(sigmabar));
         }
 
         double I4d2C_fp_3pt_chiA_bar_bar_4(const double & sigma, const double & omega_2, const double & /*q2*/) const
@@ -1770,13 +1771,13 @@ namespace eos
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
-            const double C_4 = 6.0 * m_B2 * m_v * (m_v - 2.0 * m_B * sigmabar) / (pow(omega_2, 2) * pow(sigmabar, 3));
+            const double C_4 = 6.0 * m_B2 * m_v * (m_v - 2.0 * m_B * sigmabar) / (power_of<2>(omega_2) * power_of<3>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1794,7 +1795,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             return     (6.0 * m_v * ((-4.0 * m_B * sigmabar - m_v) * chi_bar_bar_4
-                      - m_B * sigmabar * (-2.0 * m_B * sigmabar - m_v) * chi_bar_4)) / (pow(sigmabar, 4));
+                      - m_B * sigmabar * (-2.0 * m_B * sigmabar - m_v) * chi_bar_4)) / (power_of<4>(sigmabar));
         }
 
         double I3_fp_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
@@ -1807,7 +1808,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (m_B * sigmabar * (2.0 * u - 1.0) + 2.0 * m_v)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -1815,17 +1816,17 @@ namespace eos
         double I3d1A_fp_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2   = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2   = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (4.0 * m_B3 * sigma2 * sigmabar - m_B2 * sigmabar2 * (omega_2 + 4.0 * omega_1) +
                                2.0 * m_B * sigma * (m_B * sigmabar *  (2.0 * m_B * sigmabar - omega_2 - 4.0 * omega_1) + 3.0 * m_v * omega_2) +
                                2.0 * m_B * sigmabar * (m_v * omega_2 + omega_1 * (omega_2 + 2.0 * omega_1)) - 6.0 * m_v * omega_2 * omega_1)
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar,4));
+                             / (m_B * power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -1841,7 +1842,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_B * sigmabar + 2.0 * m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+                             / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -1856,15 +1857,15 @@ namespace eos
         double I4_fp_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (m_B2 * sigmabar2 - q2) * (m_B * sigmabar * (2.0 * u - 1.0) + 2.0 * m_v)
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1872,10 +1873,10 @@ namespace eos
         double I4d1A_fp_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -1896,7 +1897,7 @@ namespace eos
                                m_B * (3.0 * (4.0 * omega_1 + omega_2) * q2 * sigmabar - 4.0 * m_v * omega_1 * omega_2 * (-4.0 + sigmabar)) -
                                2.0 * m_B2 * (4.0 * m_v * omega_2 * (-1 + sigmabar) +
                                sigmabar * (2.0 * q2 * sigmabar - omega_1 * (2.0 * omega_1 + omega_2) * (-3.0 + sigmabar)))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (m_B * power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1906,14 +1907,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * (m_B * sigmabar + 2.0 * m_v) * (m_B2 * sigmabar2 -q2)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1928,10 +1929,10 @@ namespace eos
         double I4d2A_fp_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -1955,7 +1956,7 @@ namespace eos
                               8.0 * m_B * omega_1 * (3.0 * q2 * sigmabar + m_v * omega_2 * (5.0 - 2.0 * sigmabar)) +
                               2.0 * m_B2 * (3.0 * sigmabar * (-(2.0 * q2 * sigmabar) + omega_1 * (2.0 * omega_1 + omega_2) * (-2.0 + sigmabar)) +
                               m_v * omega_2 * (10.0 + sigmabar * (-16.0 + 3.0 * sigmabar)))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -1965,9 +1966,9 @@ namespace eos
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -1987,14 +1988,14 @@ namespace eos
             // three-particle contribution to f_+ proportional to chi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_B * (m_B * sigmabar - 2.0 * m_v) * (m_B2 * sigmabar2 - q2)
-                             / (pow(omega_2, 2) * pow(sigmabar, 4));
+                             / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -2005,9 +2006,9 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -2081,16 +2082,16 @@ namespace eos
         // {{{
         double integrand_fp_2pt_disp(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
-            const double etad3    = 24.0 * (eta - 1.0) * pow(eta, 2) * (2.0 * eta - 1.0) / pow(sigmabar, 3);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
+            const double etad3    = 24.0 * (eta - 1.0) * power_of<2>(eta) * (2.0 * eta - 1.0) / power_of<3>(sigmabar);
 
             const double I1   = I1_fp_2pt_phi_p(sigma, q2);
             const double I2   = I2_fp_2pt_phi_bar(sigma, q2)   + I2_fp_2pt_g_p(sigma, q2);
@@ -2106,19 +2107,19 @@ namespace eos
             double result = 0.0;
             result += -1.0 * I1;
             result += (etad1 * I2 + eta * I2d1) / m_B2;
-            result += -1.0 * (I3 * (pow(etad1, 2) + eta * etad2) + 3.0 * I3d1 * eta * etad1 + I3d2 * pow(eta, 2)) / (2.0 * m_B4);
-            result += I4 * (pow(eta, 2) * etad3 + 4.0 * eta * etad1 * etad2 + pow(etad1, 3)) / (6.0 * m_B6);
-            result += I4d1 * eta * (4.0 * eta * etad2 + 7.0 * pow(etad1, 2)) / (6.0 * m_B6);
-            result += I4d2 * 6.0 * pow(eta, 2) * etad1 / (6.0 * m_B6);
-            result += I4d3 * pow(eta, 3) / (6.0 * m_B6);
+            result += -1.0 * (I3 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I3d1 * eta * etad1 + I3d2 * power_of<2>(eta)) / (2.0 * m_B4);
+            result += I4 * (power_of<2>(eta) * etad3 + 4.0 * eta * etad1 * etad2 + power_of<3>(etad1)) / (6.0 * m_B6);
+            result += I4d1 * eta * (4.0 * eta * etad2 + 7.0 * power_of<2>(etad1)) / (6.0 * m_B6);
+            result += I4d2 * 6.0 * power_of<2>(eta) * etad1 / (6.0 * m_B6);
+            result += I4d3 * power_of<3>(eta) / (6.0 * m_B6);
             result *= exp;
             return result;
         }
 
         double integrand_fp_2pt_borel(const double & sigma, const double & q2) const
         {
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1   = I1_fp_2pt_phi_p(sigma, q2);
@@ -2138,15 +2139,15 @@ namespace eos
 
         double surface_fp_2pt(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fp_2pt_phi_bar(sigma, q2)   + I2_fp_2pt_g_p(sigma, q2);
             const double I3   = I3_fp_2pt_g_p(sigma, q2)       + I3_fp_2pt_g_bar(sigma, q2);
@@ -2158,9 +2159,9 @@ namespace eos
             double result = 0.0;
             result += -1.0 * eta * I2 / m_B2;
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
-            result += -1.0 / 6.0 * eta / m_B2 * (I4 / (pow( M2(), 2)));
+            result += -1.0 / 6.0 * eta / m_B2 * (I4 / (power_of<2>( M2())));
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
 
             return result;
@@ -2196,8 +2197,8 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             constexpr double I1 = 0.0;
@@ -2235,16 +2236,16 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fp_3pt_phi_3(sigma, omega_1, omega_2, q2)            + I2_fp_3pt_phi_bar_3(sigma, omega_1, omega_2, q2)
                               + I2_fp_3pt_phi_4(sigma, omega_1, omega_2, q2)            + I2_fp_3pt_phi_bar_4(sigma, omega_1, omega_2, q2)
@@ -2269,7 +2270,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -2283,16 +2284,16 @@ namespace eos
 
             const double omega_1 = sigma * m_B() * x_1;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -2311,7 +2312,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -2327,16 +2328,16 @@ namespace eos
 
             const double omega_2 = sigma * m_B() * (x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -2355,7 +2356,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -2367,16 +2368,16 @@ namespace eos
             // this does NOT includes the original factor of 1 / omega_2
             const double prefactor = 1.0;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
 
             constexpr double I2   = 0.0;
@@ -2393,7 +2394,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -2406,8 +2407,8 @@ namespace eos
 
         double integrand_fp_2pt_borel_m1(const double & sigma, const double & q2) const
         {
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1   = I1_fp_2pt_phi_p(sigma, q2);
@@ -2433,16 +2434,16 @@ namespace eos
 
         double surface_fp_2pt_m1(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
-            const double m_P2 = pow(m_P(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
+            const double m_P2 = power_of<2>(m_P());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fp_2pt_phi_bar(sigma, q2)   + I2_fp_2pt_g_p(sigma, q2);
             const double I3   = I3_fp_2pt_g_p(sigma, q2)       + I3_fp_2pt_g_bar(sigma, q2);
@@ -2456,7 +2457,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -2482,8 +2483,8 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1 = 0.0;
@@ -2527,16 +2528,16 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fp_3pt_phi_3(sigma, omega_1, omega_2, q2)            + I2_fp_3pt_phi_bar_3(sigma, omega_1, omega_2, q2)
                               + I2_fp_3pt_phi_4(sigma, omega_1, omega_2, q2)            + I2_fp_3pt_phi_bar_4(sigma, omega_1, omega_2, q2)
@@ -2561,7 +2562,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -2580,16 +2581,16 @@ namespace eos
 
             const double omega_1 = sigma * m_B() * x_1;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -2608,7 +2609,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -2629,16 +2630,16 @@ namespace eos
 
             const double omega_2 = sigma * m_B() * (x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -2657,7 +2658,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -2674,16 +2675,16 @@ namespace eos
             // this does NOT includes the original factor of 1 / omega_2
             const double prefactor = 1.0;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
 
             constexpr double I2   = 0.0;
@@ -2699,7 +2700,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -2826,7 +2827,7 @@ namespace eos
 
             const double phi_bar  = this->phi_bar(sigma * m_B);
 
-            const double C_2 = (2.0 * m_B * sigma * sigmabar - m_v) / (pow(sigmabar, 2));
+            const double C_2 = (2.0 * m_B * sigma * sigmabar - m_v) / (power_of<2>(sigmabar));
 
             return C_2 * phi_bar;
         }
@@ -2841,8 +2842,8 @@ namespace eos
             const double phi_bar     = this->phi_bar(sigma * m_B);
             const double phi_bar_d1  = this->phi_bar_d1(sigma * m_B);
 
-            const double C_2   = (2.0 * m_B * sigma * sigmabar - m_v) / (pow(sigmabar, 2)) * m_B;
-            const double C_2d1 = 2.0 * (m_B * sigmabar - m_v) / (pow(sigmabar, 3));
+            const double C_2   = (2.0 * m_B * sigma * sigmabar - m_v) / (power_of<2>(sigmabar)) * m_B;
+            const double C_2d1 = 2.0 * (m_B * sigmabar - m_v) / (power_of<3>(sigmabar));
 
             return C_2 * phi_bar_d1 + C_2d1 * phi_bar;
         }
@@ -2855,7 +2856,7 @@ namespace eos
 
             const double g_plus   = this->g_plus(sigma * m_B);
 
-            const double C_2 = (4.0 - 8.0 * sigmabar) / (pow(sigmabar, 2));
+            const double C_2 = (4.0 - 8.0 * sigmabar) / (power_of<2>(sigmabar));
 
             return C_2 * g_plus;
         }
@@ -2869,8 +2870,8 @@ namespace eos
             const double g_plus    = this->g_plus(sigma * m_B);
             const double g_plus_d1 = this->g_plus_d1(sigma * m_B);
 
-            const double C_2   = (4.0 - 8.0 * sigmabar) / (pow(sigmabar, 2)) * m_B;
-            const double C_2d1 = (8.0 - 8.0 * sigmabar) / (pow(sigmabar, 3));
+            const double C_2   = (4.0 - 8.0 * sigmabar) / (power_of<2>(sigmabar)) * m_B;
+            const double C_2d1 = (8.0 - 8.0 * sigmabar) / (power_of<3>(sigmabar));
 
             return C_2  * g_plus_d1 + C_2d1 * g_plus;
         }
@@ -2880,11 +2881,11 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to g_+
             const double sigmabar = 1.0 - sigma;
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_plus    = this->g_plus(sigma * m_B);
 
-            const double C_3 = 8.0 * m_v2 * (2.0 * sigmabar - 1.0) / (pow(sigmabar, 3));
+            const double C_3 = 8.0 * m_v2 * (2.0 * sigmabar - 1.0) / (power_of<3>(sigmabar));
 
             return C_3 * g_plus;
         }
@@ -2894,13 +2895,13 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to g_+
             const double sigmabar = 1.0 - sigma;
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_plus    = this->g_plus(sigma * m_B);
             const double g_plus_d1 = this->g_plus_d1(sigma * m_B);
 
-            const double C_3   = 8.0 * m_v2 * (2.0 * sigmabar - 1.0) / (pow(sigmabar, 3)) * m_B;
-            const double C_3d1 = 8.0 * m_v2 * (4.0 * sigmabar - 3.0) / (pow(sigmabar, 4));
+            const double C_3   = 8.0 * m_v2 * (2.0 * sigmabar - 1.0) / (power_of<3>(sigmabar)) * m_B;
+            const double C_3d1 = 8.0 * m_v2 * (4.0 * sigmabar - 3.0) / (power_of<4>(sigmabar));
 
             return C_3 * g_plus_d1 + C_3d1 * g_plus;
         }
@@ -2910,16 +2911,16 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to g_+
             const double sigmabar = 1.0 - sigma;
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_plus    = this->g_plus(sigma * m_B);
             const double g_plus_d1 = this->g_plus_d1(sigma * m_B);
             const double g_plus_d2 = this->g_plus_d2(sigma * m_B);
 
-            const double C_3   = 8.0 * m_v2 * (2.0 * sigmabar - 1.0) / (pow(sigmabar, 3)) * m_B2;
-            const double C_3d1 = 16.0 * m_v2 * (4.0 * sigmabar - 3.0) / (pow(sigmabar, 4)) * m_B;
-            const double C_3d2 = - 96.0 * m_v2 * sigma / (pow(sigmabar, 5));
+            const double C_3   = 8.0 * m_v2 * (2.0 * sigmabar - 1.0) / (power_of<3>(sigmabar)) * m_B2;
+            const double C_3d1 = 16.0 * m_v2 * (4.0 * sigmabar - 3.0) / (power_of<4>(sigmabar)) * m_B;
+            const double C_3d2 = - 96.0 * m_v2 * sigma / (power_of<5>(sigmabar));
 
             return C_3 * g_plus_d2 + C_3d1 * g_plus_d1 + C_3d2 * g_plus;
         }
@@ -2932,7 +2933,7 @@ namespace eos
 
             const double g_bar    = this->g_bar(sigma * m_B);
 
-            const double C_3 = 16.0 * sigma * m_B / (pow(sigmabar,2));
+            const double C_3 = 16.0 * sigma * m_B / (power_of<2>(sigmabar));
 
             return C_3 * g_bar;
         }
@@ -2946,8 +2947,8 @@ namespace eos
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
 
-            const double C_3   = 16.0 * sigma * m_B / (pow(sigmabar,2)) * m_B;
-            const double C_3d1 = - 16.0 * (sigmabar - 2.0) * m_B / (pow(sigmabar,3));
+            const double C_3   = 16.0 * sigma * m_B / (power_of<2>(sigmabar)) * m_B;
+            const double C_3d1 = - 16.0 * (sigmabar - 2.0) * m_B / (power_of<3>(sigmabar));
 
             return C_3 * g_bar_d1 + C_3d1 * g_bar;
         }
@@ -2957,15 +2958,15 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to gbar
             const double sigmabar = 1.0 - sigma;
-            const double m_B2 = pow(m_B, 2);
+            const double m_B2 = power_of<2>(m_B);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
             const double g_bar_d2 = this->g_bar_d2(sigma * m_B);
 
-            const double C_3   = 16.0 * sigma * m_B / (pow(sigmabar,2)) * m_B2;
-            const double C_3d1 = - 32.0 * (sigmabar - 2.0) * m_B2 / (pow(sigmabar,3));
-            const double C_3d2 = - 32.0 * (sigmabar - 3.0) * m_B / (pow(sigmabar,4));
+            const double C_3   = 16.0 * sigma * m_B / (power_of<2>(sigmabar)) * m_B2;
+            const double C_3d1 = - 32.0 * (sigmabar - 2.0) * m_B2 / (power_of<3>(sigmabar));
+            const double C_3d2 = - 32.0 * (sigmabar - 3.0) * m_B / (power_of<4>(sigmabar));
 
             return C_3 * g_bar_d2 + C_3d1 * g_bar_d1 + C_3d2 * g_bar;
         }
@@ -2975,11 +2976,11 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to gbar
             const double sigmabar = 1.0 - sigma;
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
 
-            const double C_4 = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (pow(sigmabar, 4));
+            const double C_4 = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (power_of<4>(sigmabar));
 
             return C_4 * g_bar;
         }
@@ -2989,13 +2990,13 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to gbar
             const double sigmabar = 1.0 - sigma;
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
 
-            const double C_4   = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (pow(sigmabar, 4)) * m_B;
-            const double C_4d1 = 48.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 3.0) + 2.0 * m_v) / (pow(sigmabar, 5));
+            const double C_4   = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (power_of<4>(sigmabar)) * m_B;
+            const double C_4d1 = 48.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 3.0) + 2.0 * m_v) / (power_of<5>(sigmabar));
 
             return C_4 * g_bar_d1 + C_4d1 * g_bar;
         }
@@ -3005,16 +3006,16 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to gbar
             const double sigmabar = 1.0 - sigma;
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
             const double g_bar_d2 = this->g_bar_d2(sigma * m_B);
 
-            const double C_4   = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (pow(sigmabar, 4)) * m_B2;
-            const double C_4d1 = 96.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 3.0) + 2.0 * m_v) / (pow(sigmabar, 5)) * m_B;
-            const double C_4d2 = 96.0 * m_v2 * (3.0 * m_B * sigmabar * (sigmabar - 2.0) + 5.0 * m_v) / (pow(sigmabar, 6));
+            const double C_4   = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (power_of<4>(sigmabar)) * m_B2;
+            const double C_4d1 = 96.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 3.0) + 2.0 * m_v) / (power_of<5>(sigmabar)) * m_B;
+            const double C_4d2 = 96.0 * m_v2 * (3.0 * m_B * sigmabar * (sigmabar - 2.0) + 5.0 * m_v) / (power_of<6>(sigmabar));
 
             return C_4 * g_bar_d2 + C_4d1 * g_bar_d1 + C_4d2 * g_bar;
         }
@@ -3024,18 +3025,18 @@ namespace eos
         {
             // two-particle contribution to f_± proportional to gbar
             const double sigmabar = 1.0 - sigma;
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
             const double g_bar_d2 = this->g_bar_d2(sigma * m_B);
             const double g_bar_d3 = this->g_bar_d3(sigma * m_B);
 
-            const double C_4   = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (pow(sigmabar, 4)) * m_B2 * m_B;
-            const double C_4d1 = 144.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 3.0) + 2.0 * m_v) / (pow(sigmabar, 5)) * m_B2;
-            const double C_4d2 = 288.0 * m_v2 * (3.0 * m_B * sigmabar * (sigmabar - 2.0) + 5.0 * m_v) / (pow(sigmabar, 6)) * m_B;
-            const double C_4d3 = 576.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 5.0) + 5.0 * m_v) / (pow(sigmabar, 7));
+            const double C_4   = 24.0 * m_v2 * (m_v - 2.0 * m_B * sigma * sigmabar) / (power_of<4>(sigmabar)) * m_B2 * m_B;
+            const double C_4d1 = 144.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 3.0) + 2.0 * m_v) / (power_of<5>(sigmabar)) * m_B2;
+            const double C_4d2 = 288.0 * m_v2 * (3.0 * m_B * sigmabar * (sigmabar - 2.0) + 5.0 * m_v) / (power_of<6>(sigmabar)) * m_B;
+            const double C_4d3 = 576.0 * m_v2 * (m_B * sigmabar * (2.0 * sigmabar - 5.0) + 5.0 * m_v) / (power_of<7>(sigmabar));
 
             return C_4 * g_bar_d3 + C_4d1 * g_bar_d2 + C_4d2 * g_bar_d1 + C_4d3 * g_bar;
         }
@@ -3051,7 +3052,7 @@ namespace eos
 
             const double phi_3 = this->phi_3(omega_1, omega_2);
 
-            const double C_2 = -(m_B * (2.0 * sigmabar - 3.0) * u + 4.0 * m_v) / (m_B * pow(sigmabar, 2));
+            const double C_2 = -(m_B * (2.0 * sigmabar - 3.0) * u + 4.0 * m_v) / (m_B * power_of<2>(sigmabar));
 
             return C_2 * phi_3;
         }
@@ -3064,7 +3065,7 @@ namespace eos
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_2 = - 2.0 * sigma * u / (m_B * pow(sigmabar, 3));
+            const double C_2 = - 2.0 * sigma * u / (m_B * power_of<3>(sigmabar));
 
             return C_2 * phi_bar_3;
         }
@@ -3072,15 +3073,15 @@ namespace eos
         double I3_fpm_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_3
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
             const double C_3 = - 2.0 * (m_B2 * sigmabar2 * (2.0 * sigmabar - 3.0) * u + 4.0 * m_B * m_v * sigmabar * (2.0 * sigmabar - 1.0)
-                             + m_v2 * (2.0 * sigmabar * u + u) + q2 * (2.0 * sigmabar - 1.0) * u)/ (m_B * pow(sigmabar, 4));
+                             + m_v2 * (2.0 * sigmabar * u + u) + q2 * (2.0 * sigmabar - 1.0) * u)/ (m_B * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -3088,10 +3089,10 @@ namespace eos
         double I3d1A_fpm_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_3
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
@@ -3102,7 +3103,7 @@ namespace eos
                                  m_B2 * (-1 + 6.0 * sigma2 - 2.0 * sigma)) +
                                  sigmabar * (12.0 * m_v * omega_2 * (1 - 2.0 * sigma) +
                                  sigma * (11.0 * m_v2 + 3.0 * q2 - 6.0 * q2 * sigma - 3.0 * m_B2 * (1 + 2.0 * sigma) * sigmabar)))))
-                               / (m_B * omega_2 * pow(sigmabar, 5));
+                               / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -3112,15 +3113,15 @@ namespace eos
             // three-particle contribution to f_± proportional to phi_bar_3
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
             const double C_3 = -2.0 * (sigmabar * (m_B2 * (-2.0 * sigma2 + sigma + 1.0) + 4.0 * m_B * m_v * (2.0 * sigma - 1.0) -
                                 3.0 * m_v2 - q2 * sigmabar) + sigma * (q2 * sigma - m_v2))
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -3135,7 +3136,7 @@ namespace eos
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_3 = 8.0 * m_B * m_v * (2.0 * sigma - 1.0) / (omega_2 * pow(sigmabar, 3));
+            const double C_3 = 8.0 * m_B * m_v * (2.0 * sigma - 1.0) / (omega_2 * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -3150,7 +3151,7 @@ namespace eos
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_v * u * (m_v * (2.0 * sigmabar + 1.0) * (2.0 * u - 1.0) - 4.0 * m_B * sigma * sigmabar)
-                             / (pow(sigmabar, 4));
+                             / (power_of<4>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -3159,7 +3160,7 @@ namespace eos
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_3
             const double m_v      = this->m_v(), m_B2 = m_B * m_B;
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
@@ -3172,7 +3173,7 @@ namespace eos
                                m_B * m_v * (4.0 * omega_1 + omega_2) * (-3.0 + sigmabar)) +
                                4.0 * m_B * sigma2 * (4.0 * omega_1 * omega_2 - 2.0 * m_v * (4.0 * omega_1 + omega_2) +
                                3.0 * m_B * m_v * (-2.0 + sigmabar) + m_B * omega_2 * (4.0 - 3.0 * sigmabar)))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -3188,7 +3189,7 @@ namespace eos
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_4 = 6.0 * m_v * m_B * (-4.0 * m_B * sigma * sigmabar - 2.0 * m_v * sigma + 3.0 * m_v)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * phi_bar_bar_3;
         }
@@ -3202,9 +3203,9 @@ namespace eos
         double I4d2A_fpm_3pt_phi_bar_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_3
-            const double m_v      = this->m_v(), m_B2 = pow(m_B, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_v      = this->m_v(), m_B2 = power_of<2>(m_B);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
@@ -3218,7 +3219,7 @@ namespace eos
                                2.0 * m_B2 * sigmabar * (3.0 * m_v * (-4.0 + sigmabar) + omega_2 * (8.0 - 3.0 * sigmabar)) +
                                m_B * (4.0 * omega_1 * omega_2 * (-5.0 + 4.0 * sigmabar) -
                                m_v * (4.0 * omega_1 + omega_2) * (-15.0 + 8.0 * sigmabar))))
-                             / (pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -3227,7 +3228,7 @@ namespace eos
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_3
             const double omega_2  = m_B * sigma - omega_1;
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
@@ -3247,13 +3248,13 @@ namespace eos
             // three-particle contribution to f_± proportional to phi_bar_bar_3
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
-            const double C_4 = -6.0 * m_B2 * m_v * (2.0 * sigma * (m_v - 2.0 * m_B * sigmabar) - 3.0 * m_v) / (pow(omega_2, 2) * pow(sigmabar, 4));
+            const double C_4 = -6.0 * m_B2 * m_v * (2.0 * sigma * (m_v - 2.0 * m_B * sigmabar) - 3.0 * m_v) / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -3282,7 +3283,7 @@ namespace eos
 
             const double phi_4 = this->phi_4(omega_1, omega_2);
 
-            const double C_2 = -(2.0 * sigmabar + 1.0) * (u - 1.0) / pow(sigmabar, 2);
+            const double C_2 = -(2.0 * sigmabar + 1.0) * (u - 1.0) / power_of<2>(sigmabar);
 
             return C_2 * phi_4;
         }
@@ -3295,7 +3296,7 @@ namespace eos
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
-            const double C_2 = -2.0 * sigma * (u - 1.0) / (m_B * pow(sigmabar, 3));
+            const double C_2 = -2.0 * sigma * (u - 1.0) / (m_B * power_of<3>(sigmabar));
 
             return C_2 * phi_bar_4;
         }
@@ -3303,16 +3304,16 @@ namespace eos
         double I3_fpm_3pt_phi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),  m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma,  sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),  m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma,  sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_B2 * sigmabar2 * (-2.0 * sigmabar * u + u + 1.0) + m_B * m_v * (1.0 - 4.0 * sigmabar)
                              * sigmabar + m_v2 * (2.0 * sigmabar + 1.0) * (u - 1.0) + q2 * (2.0 * sigmabar - 1.0) * (u - 1.0))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -3320,9 +3321,9 @@ namespace eos
         double I3d1A_fpm_3pt_phi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
@@ -3338,7 +3339,7 @@ namespace eos
                                m_v2 * (4.0 * omega_1 + 4.0 * omega_2 - 11.0 * m_B * sigmabar) +
                                sigmabar * (-(5.0 * (omega_1 + omega_2) * q2) + m_B * q2 * (-3.0 + 2.0 * sigmabar) +
                                m_B3 * (3.0 - 6.0 * sigmabar) + m_B2 * (9.0 * omega_1 + 3.0 * omega_2 - 4.0 * omega_1 * sigmabar))))
-                             / (m_B * omega_2 * pow(sigmabar, 5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -3354,7 +3355,7 @@ namespace eos
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * m_B * (2.0 * sigma * (-m_B * sigma + m_B + 2.0 * m_v) - 3.0 * m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+                             / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -3364,14 +3365,14 @@ namespace eos
             // three-particle contribution to f_± proportional to phi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (sigmabar * (m_B2 * (-sigmabar) + m_B * m_v * (3.0 - 4.0 * sigma) + 3.0 * m_v2 - q2 * sigma + q2) + sigma * (m_v2 - q2 * sigma))
-                             / (omega_2 * pow(sigmabar, 4));
+                             / (omega_2 * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -3386,7 +3387,7 @@ namespace eos
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (2.0 * m_B * (sigmabar - 2.0) * sigmabar * (2.0 * u - 1.0) + m_v * (4.0 * sigmabar - 3.0))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -3394,9 +3395,9 @@ namespace eos
         double I3d1A_fpm_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3), sigma4   = pow(sigma, 4);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma), sigma4   = power_of<4>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -3409,7 +3410,7 @@ namespace eos
                                3.0 * m_B * (4.0 * omega_1 + omega_2) * sigmabar) +
                                4.0 * sigma * (4.0 * m_v * omega_1 * omega_2 + 2.0 * m_B2 * (4.0 * omega_1 + omega_2) - 2.0 * m_B3 * sigmabar +
                                m_B * omega_1 * (2.0 * omega_1 + omega_2) * sigmabar + m_B * m_v * (omega_2 - 2.0 * omega_2 * sigmabar)))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (m_B * power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -3420,13 +3421,13 @@ namespace eos
             const double omega_2  = m_B * sigma - omega_1;
 
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (2.0 * m_B * (sigma2 - 1.0) - 4.0 * m_v * sigma + m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -3441,16 +3442,16 @@ namespace eos
         double I4_fpm_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (m_v * (4.0 * sigmabar - 1.0) * (m_B2 * sigmabar2 - q2) - 2.0 * m_B * sigma * sigmabar * (2.0 * u - 1.0) * (m_B2 * sigmabar2 - q2)
                              +m_B * m_v2 * sigmabar * (2.0 * u - 1.0) - m_v3)
-                             / (m_B * pow(sigmabar, 5));
+                             / (m_B * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -3458,10 +3459,10 @@ namespace eos
         double I4d1A_fpm_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -3499,7 +3500,7 @@ namespace eos
                                  4.0 * m_B3 * (3.0 * q2 * sigmabar * (1 + 2.0 * sigmabar) +
                                  3.0 * m_v * omega_2 * sigmabar * (-7.0 + 3.0 * sigmabar) +
                                  m_v2 * (-5.0 + sigmabar * (10.0 + 3.0 * sigmabar))))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -3509,10 +3510,10 @@ namespace eos
             // three-particle contribution to f_± proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -3520,7 +3521,7 @@ namespace eos
                              (-m_v2 + q2 * sigma) - sigmabar * (-(4.0 * m_v3) - 2.0 * m_B * q2 * sigma * (-2.0 + sigma) +
                                m_B * m_v2 * (5.0 + 2.0 * sigma) + m_v * q2 * (-9.0 + 4.0 * sigma) -
                                3.0 * m_B2 * m_v * (-3.0 + 4.0 * sigma) * sigmabar))
-                             / (pow(sigmabar, 5) * omega_2);
+                             / (power_of<5>(sigmabar) * omega_2);
 
             return C_4 * phi_bar_bar_4;
         }
@@ -3535,10 +3536,10 @@ namespace eos
         double I4d2A_fpm_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4), sigmabar5 = pow(sigmabar, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar), sigmabar5 = power_of<5>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -3578,7 +3579,7 @@ namespace eos
                                 15.0 * (-(2.0 * m_v * omega_2) + omega_1 * (2.0 * omega_1 + omega_2)) * q2 +
                                 5.0 * m_B * (4.0 * omega_1 + omega_2) * (3.0 * m_v2 - 5.0 * q2 * sigmabar) -
                                 6.0 * m_B2 * (10.0 * m_v * (m_v + omega_2) * sigmabar + q2 * (5.0 + sigmabar * (5.0 - 6.0 * sigmabar))))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 7));
+                             / (m_B * power_of<2>(omega_2) * power_of<7>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -3588,10 +3589,10 @@ namespace eos
             // three-particle contribution to f_± proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double phi_bar_4     = this->phi_bar_4(omega_1, omega_2);
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -3627,10 +3628,10 @@ namespace eos
             // three-particle contribution to f_± proportional to phi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -3638,7 +3639,7 @@ namespace eos
                              (-m_v2 + q2 * sigma) * (2.0 * m_B * (-1 + sigma2) + m_v * (-1 + 4.0 * sigma)) +
                                sigmabar * (-(4.0 * m_v3) + 2.0 * m_B * q2 * sigma * (-2.0 + sigma) - m_B * m_v2 * (5.0 + 2.0 * sigma) +
                                m_v * q2 * (-9.0 + 4.0 * sigma) - 3.0 * m_B2 * m_v * (-3.0 + 4.0 * sigma) * sigmabar))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -3649,10 +3650,10 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_4     = this->phi_bar_4(omega_1, omega_2);
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -3675,7 +3676,7 @@ namespace eos
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
-            const double C_2 = 2.0 * sigma * (2.0 * u - 1.0) / (m_B * pow(sigmabar, 3));
+            const double C_2 = 2.0 * sigma * (2.0 * u - 1.0) / (m_B * power_of<3>(sigmabar));
 
             return C_2 * psi_bar_4;
         }
@@ -3683,16 +3684,16 @@ namespace eos
         double I3_fpm_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * ((2.0 * sigmabar - 1.0) * (2.0 * u - 1.0) * (m_B2 * sigmabar2 - q2) + 2.0 * m_B * m_v * sigmabar +
                                 m_v2 * (2.0 * sigmabar + 1.0) * (-(2.0 * u - 1.0)))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -3700,9 +3701,9 @@ namespace eos
         double I3d1A_fpm_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
@@ -3716,7 +3717,7 @@ namespace eos
                                  sigma * (m_v2 * (8.0 * omega_1 + 4.0 * omega_2 - 22 * m_B * sigmabar) -
                                  sigmabar * (5.0 * (2.0 * omega_1 + omega_2) * q2 + 2.0 * m_B * q2 * (3.0 - 2.0 * sigmabar) +
                                  6.0 * m_B3 * (-1 + 2.0 * sigmabar) + m_B2 * (2.0 * omega_1 + omega_2) * (-9.0 + 4.0 * sigmabar)))))
-                             /  (m_B * omega_2 * pow(sigmabar, 5));
+                             /  (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -3726,14 +3727,14 @@ namespace eos
             // three-particle contribution to f_± proportional to psi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (sigmabar * (m_B2 * (-(2.0 * sigma - 1.0)) * sigmabar + 2.0 * m_B * m_v - 3.0 * m_v2 - q2 * sigmabar) + sigma * (q2 * sigma - m_v2))
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -3743,14 +3744,14 @@ namespace eos
             // three-particle contribution to f_± proportional to psi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (sigmabar * (m_B2 * (-(2.0 * sigma - 1.0)) * sigmabar - 2.0 * m_B * m_v - 3.0 * m_v2 - q2 * sigmabar) + sigma * (q2 * sigma - m_v2))
-                             / (omega_2 * pow(sigmabar, 4));
+                             / (omega_2 * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -3765,7 +3766,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_v * u * (m_v * (2.0 * sigmabar + 1.0) * (2.0 * u - 1.0) - 4.0 * m_B * sigma * sigmabar)
-                             / (pow(sigmabar, 4));
+                             / (power_of<4>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -3774,7 +3775,7 @@ namespace eos
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
             const double m_v      = this->m_v(), m_B2 = m_B * m_B;
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -3787,7 +3788,7 @@ namespace eos
                                m_B * m_v * (4.0 * omega_1 + omega_2) * (-3.0 + sigmabar)) +
                                4.0 * m_B * sigma2 * (4.0 * omega_1 * omega_2 - 2.0 * m_v * (4.0 * omega_1 + omega_2) +
                                3.0 * m_B * m_v * (-2.0 + sigmabar) + m_B * omega_2 * (4.0 - 3.0 * sigmabar)))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -3803,7 +3804,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * m_v * m_B * (-4.0 * m_B * sigma * sigmabar - 2.0 * m_v * sigma + 3.0 * m_v)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * psi_bar_bar_4;
         }
@@ -3817,9 +3818,9 @@ namespace eos
         double I4d2A_fpm_3pt_psiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
-            const double m_v      = this->m_v(), m_B2 = pow(m_B, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_v      = this->m_v(), m_B2 = power_of<2>(m_B);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -3833,7 +3834,7 @@ namespace eos
                                2.0 * m_B2 * sigmabar * (3.0 * m_v * (-4.0 + sigmabar) + omega_2 * (8.0 - 3.0 * sigmabar)) +
                                m_B * (4.0 * omega_1 * omega_2 * (-5.0 + 4.0 * sigmabar) -
                                m_v * (4.0 * omega_1 + omega_2) * (-15.0 + 8.0 * sigmabar))))
-                             / (pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -3842,7 +3843,7 @@ namespace eos
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
@@ -3862,13 +3863,13 @@ namespace eos
             // three-particle contribution to f_± proportional to psi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
-            const double C_4 = -6.0 * m_B2 * m_v * (2.0 * sigma * (m_v - 2.0 * m_B * sigmabar) - 3.0 * m_v) / (pow(omega_2, 2) * pow(sigmabar, 4));
+            const double C_4 = -6.0 * m_B2 * m_v * (2.0 * sigma * (m_v - 2.0 * m_B * sigmabar) - 3.0 * m_v) / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -3899,7 +3900,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (2.0 * m_B * (sigmabar - 2.0) * sigmabar * (2.0 * u - 1.0) + m_v * (4.0 * sigmabar - 3.0))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -3907,9 +3908,9 @@ namespace eos
         double I3d1A_fpm_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3), sigma4   = pow(sigma, 4);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma), sigma4   = power_of<4>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -3922,7 +3923,7 @@ namespace eos
                                3.0 * m_B * (4.0 * omega_1 + omega_2) * sigmabar) +
                                4.0 * sigma * (4.0 * m_v * omega_1 * omega_2 + 2.0 * m_B2 * (4.0 * omega_1 + omega_2) - 2.0 * m_B3 * sigmabar +
                                m_B * omega_1 * (2.0 * omega_1 + omega_2) * sigmabar + m_B * m_v * (omega_2 - 2.0 * omega_2 * sigmabar)))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (m_B * power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -3933,13 +3934,13 @@ namespace eos
             const double omega_2  = m_B * sigma - omega_1;
 
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (2.0 * m_B * (sigma2 - 1.0) - 4.0 * m_v * sigma + m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -3954,16 +3955,16 @@ namespace eos
         double I4_fpm_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (m_v * (4.0 * sigmabar - 1.0) * (m_B2 * sigmabar2 - q2) - 2.0 * m_B * sigma * sigmabar * (2.0 * u - 1.0) * (m_B2 * sigmabar2 - q2)
                              +m_B * m_v2 * sigmabar * (2.0 * u - 1.0) - m_v3)
-                             / (m_B * pow(sigmabar, 5));
+                             / (m_B * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -3971,10 +3972,10 @@ namespace eos
         double I4d1A_fpm_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -4012,7 +4013,7 @@ namespace eos
                                  4.0 * m_B3 * (3.0 * q2 * sigmabar * (1 + 2.0 * sigmabar) +
                                  3.0 * m_v * omega_2 * sigmabar * (-7.0 + 3.0 * sigmabar) +
                                  m_v2 * (-5.0 + sigmabar * (10.0 + 3.0 * sigmabar))))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -4022,10 +4023,10 @@ namespace eos
             // three-particle contribution to f_± proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -4033,7 +4034,7 @@ namespace eos
                              (-m_v2 + q2 * sigma) - sigmabar * (-(4.0 * m_v3) - 2.0 * m_B * q2 * sigma * (-2.0 + sigma) +
                                m_B * m_v2 * (5.0 + 2.0 * sigma) + m_v * q2 * (-9.0 + 4.0 * sigma) -
                                3.0 * m_B2 * m_v * (-3.0 + 4.0 * sigma) * sigmabar))
-                             / (pow(sigmabar, 5) * omega_2);
+                             / (power_of<5>(sigmabar) * omega_2);
 
             return C_4 * psi_bar_bar_4;
         }
@@ -4048,10 +4049,10 @@ namespace eos
         double I4d2A_fpm_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4), sigmabar5 = pow(sigmabar, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar), sigmabar5 = power_of<5>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -4091,7 +4092,7 @@ namespace eos
                                 15.0 * (-(2.0 * m_v * omega_2) + omega_1 * (2.0 * omega_1 + omega_2)) * q2 +
                                 5.0 * m_B * (4.0 * omega_1 + omega_2) * (3.0 * m_v2 - 5.0 * q2 * sigmabar) -
                                 6.0 * m_B2 * (10.0 * m_v * (m_v + omega_2) * sigmabar + q2 * (5.0 + sigmabar * (5.0 - 6.0 * sigmabar))))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 7));
+                             / (m_B * power_of<2>(omega_2) * power_of<7>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -4101,10 +4102,10 @@ namespace eos
             // three-particle contribution to f_± proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -4140,10 +4141,10 @@ namespace eos
             // three-particle contribution to f_± proportional to psi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -4151,7 +4152,7 @@ namespace eos
                              (-m_v2 + q2 * sigma) * (2.0 * m_B * (-1 + sigma2) + m_v * (-1 + 4.0 * sigma)) +
                                sigmabar * (-(4.0 * m_v3) + 2.0 * m_B * q2 * sigma * (-2.0 + sigma) - m_B * m_v2 * (5.0 + 2.0 * sigma) +
                                m_v * q2 * (-9.0 + 4.0 * sigma) - 3.0 * m_B2 * m_v * (-3.0 + 4.0 * sigma) * sigmabar))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -4162,10 +4163,10 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -4247,7 +4248,7 @@ namespace eos
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
-            const double C_2 = -2.0 * sigma / (m_B * pow(sigmabar, 3));
+            const double C_2 = -2.0 * sigma / (m_B * power_of<3>(sigmabar));
 
             return C_2 * chi_bar_4;
         }
@@ -4255,16 +4256,16 @@ namespace eos
         double I3_fpm_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_B2 * sigmabar2 * (-2.0 * sigmabar - 4.0 * sigma * u + 1.0) + 4.0 * m_B * m_v * sigmabar * (2.0 * sigmabar - 1.0)
                              + m_v2 * (2.0 * sigmabar + 1.0) + q2 * (2.0 * sigmabar - 1.0))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -4272,9 +4273,9 @@ namespace eos
         double I3d1A_fpm_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
@@ -4287,7 +4288,7 @@ namespace eos
                                  sigma * (4.0 * m_v2 * omega_2 - 24 * m_B * m_v * omega_2 * sigmabar -
                                  sigmabar * (5.0 * omega_2 * q2 + 8.0 * m_B3 * sigmabar +
                                  m_B2 * (-(12.0 * omega_1) - 9.0 * omega_2 + 8.0 * omega_1 * sigmabar + 4.0 * omega_2 * sigmabar)))))
-                             / (m_B * omega_2 * pow(sigmabar,5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -4297,16 +4298,16 @@ namespace eos
             // three-particle contribution to f_± proportional to chi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (sigmabar * (m_B2 * (-2.0 * sigma2 + sigma + 1.0) + 4.0 * m_B * m_v
                              * (2.0 * sigma - 1.0) - 3.0 * m_v2 - q2 * sigmabar) + sigma * (q2 * sigma - m_v2))
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -4316,15 +4317,15 @@ namespace eos
             // three-particle contribution to f_± proportional to chi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (sigmabar * (m_B2 * (-(2.0 * sigma - 1.0)) * sigmabar + 4.0 * m_B * m_v
                              * (2.0 * sigma - 1.0) - 3.0 * m_v2 - q2 * sigmabar) + sigma * (q2 * sigma - m_v2))
-                             / (omega_2 * pow(sigmabar, 4));
+                             / (omega_2 * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -4339,7 +4340,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -6.0 * m_v * u * (m_v * (2.0 * sigmabar + 1.0) * (2.0 * u - 1.0) - 4.0 * m_B * sigma * sigmabar)
-                             / (pow(sigmabar, 4));
+                             / (power_of<4>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4348,7 +4349,7 @@ namespace eos
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
             const double m_v      = this->m_v(), m_B2 = m_B * m_B;
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -4361,7 +4362,7 @@ namespace eos
                                m_B * m_v * (4.0 * omega_1 + omega_2) * (-3.0 + sigmabar)) +
                                4.0 * m_B * sigma2 * (4.0 * omega_1 * omega_2 - 2.0 * m_v * (4.0 * omega_1 + omega_2) +
                                3.0 * m_B * m_v * (-2.0 + sigmabar) + m_B * omega_2 * (4.0 - 3.0 * sigmabar)))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4377,7 +4378,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * m_v * m_B * (-4.0 * m_B * sigma * sigmabar - 2.0 * m_v * sigma + 3.0 * m_v)
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4391,9 +4392,9 @@ namespace eos
         double I4d2A_fpm_3pt_chiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
-            const double m_v      = this->m_v(), m_B2 = pow(m_B, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_v      = this->m_v(), m_B2 = power_of<2>(m_B);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -4407,7 +4408,7 @@ namespace eos
                                2.0 * m_B2 * sigmabar * (3.0 * m_v * (-4.0 + sigmabar) + omega_2 * (8.0 - 3.0 * sigmabar)) +
                                m_B * (4.0 * omega_1 * omega_2 * (-5.0 + 4.0 * sigmabar) -
                                m_v * (4.0 * omega_1 + omega_2) * (-15.0 + 8.0 * sigmabar))))
-                             / (pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4416,7 +4417,7 @@ namespace eos
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
@@ -4436,13 +4437,13 @@ namespace eos
             // three-particle contribution to f_± proportional to chi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
-            const double C_4 = -6.0 * m_B2 * m_v * (2.0 * sigma * (m_v - 2.0 * m_B * sigmabar) - 3.0 * m_v) / (pow(omega_2, 2) * pow(sigmabar, 4));
+            const double C_4 = -6.0 * m_B2 * m_v * (2.0 * sigma * (m_v - 2.0 * m_B * sigmabar) - 3.0 * m_v) / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4473,7 +4474,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (2.0 * m_B * (sigmabar - 2.0) * sigmabar * (2.0 * u - 1.0) + m_v * (4.0 * sigmabar - 3.0))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -4481,9 +4482,9 @@ namespace eos
         double I3d1A_fpm_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3), sigma4   = pow(sigma, 4);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma), sigma4   = power_of<4>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -4496,7 +4497,7 @@ namespace eos
                                3.0 * m_B * (4.0 * omega_1 + omega_2) * sigmabar) +
                                4.0 * sigma * (4.0 * m_v * omega_1 * omega_2 + 2.0 * m_B2 * (4.0 * omega_1 + omega_2) - 2.0 * m_B3 * sigmabar +
                                m_B * omega_1 * (2.0 * omega_1 + omega_2) * sigmabar + m_B * m_v * (omega_2 - 2.0 * omega_2 * sigmabar)))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (m_B * power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -4507,13 +4508,13 @@ namespace eos
             const double omega_2  = m_B * sigma - omega_1;
 
             const double m_v      = this->m_v();
-            const double sigma2   = pow(sigma, 2);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (2.0 * m_B * (sigma2 - 1.0) - 4.0 * m_v * sigma + m_v)
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / ((-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -4528,16 +4529,16 @@ namespace eos
         double I4_fpm_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (m_v * (4.0 * sigmabar - 1.0) * (m_B2 * sigmabar2 - q2) - 2.0 * m_B * sigma * sigmabar * (2.0 * u - 1.0) * (m_B2 * sigmabar2 - q2)
                              +m_B * m_v2 * sigmabar * (2.0 * u - 1.0) - m_v3)
-                             / (m_B * pow(sigmabar, 5));
+                             / (m_B * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4545,10 +4546,10 @@ namespace eos
         double I4d1A_fpm_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -4586,7 +4587,7 @@ namespace eos
                                  4.0 * m_B3 * (3.0 * q2 * sigmabar * (1 + 2.0 * sigmabar) +
                                  3.0 * m_v * omega_2 * sigmabar * (-7.0 + 3.0 * sigmabar) +
                                  m_v2 * (-5.0 + sigmabar * (10.0 + 3.0 * sigmabar))))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4596,10 +4597,10 @@ namespace eos
             // three-particle contribution to f_± proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -4607,7 +4608,7 @@ namespace eos
                              (-m_v2 + q2 * sigma) - sigmabar * (-(4.0 * m_v3) - 2.0 * m_B * q2 * sigma * (-2.0 + sigma) +
                                m_B * m_v2 * (5.0 + 2.0 * sigma) + m_v * q2 * (-9.0 + 4.0 * sigma) -
                                3.0 * m_B2 * m_v * (-3.0 + 4.0 * sigma) * sigmabar))
-                             / (pow(sigmabar, 5) * omega_2);
+                             / (power_of<5>(sigmabar) * omega_2);
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4622,10 +4623,10 @@ namespace eos
         double I4d2A_fpm_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_± proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4), sigmabar5 = pow(sigmabar, 5);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar), sigmabar5 = power_of<5>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -4665,7 +4666,7 @@ namespace eos
                                 15.0 * (-(2.0 * m_v * omega_2) + omega_1 * (2.0 * omega_1 + omega_2)) * q2 +
                                 5.0 * m_B * (4.0 * omega_1 + omega_2) * (3.0 * m_v2 - 5.0 * q2 * sigmabar) -
                                 6.0 * m_B2 * (10.0 * m_v * (m_v + omega_2) * sigmabar + q2 * (5.0 + sigmabar * (5.0 - 6.0 * sigmabar))))))
-                             / (m_B * pow(omega_2, 2) * pow(sigmabar, 7));
+                             / (m_B * power_of<2>(omega_2) * power_of<7>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4675,10 +4676,10 @@ namespace eos
             // three-particle contribution to f_± proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -4714,10 +4715,10 @@ namespace eos
             // three-particle contribution to f_± proportional to chi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -4725,7 +4726,7 @@ namespace eos
                              (-m_v2 + q2 * sigma) * (2.0 * m_B * (-1 + sigma2) + m_v * (-1 + 4.0 * sigma)) +
                                sigmabar * (-(4.0 * m_v3) + 2.0 * m_B * q2 * sigma * (-2.0 + sigma) - m_B * m_v2 * (5.0 + 2.0 * sigma) +
                                m_v * q2 * (-9.0 + 4.0 * sigma) - 3.0 * m_B2 * m_v * (-3.0 + 4.0 * sigma) * sigmabar))
-                             / (pow(omega_2, 2) * pow(sigmabar, 5));
+                             / (power_of<2>(omega_2) * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -4736,10 +4737,10 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -4819,16 +4820,16 @@ namespace eos
         // {{{
         double integrand_fpm_2pt_disp(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
-            const double etad3    = 24.0 * (eta - 1.0) * pow(eta, 2) * (2.0 * eta - 1.0) / pow(sigmabar, 3);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
+            const double etad3    = 24.0 * (eta - 1.0) * power_of<2>(eta) * (2.0 * eta - 1.0) / power_of<3>(sigmabar);
 
             const double I1   = I1_fpm_2pt_phi_p(sigma, q2);
             const double I2   = I2_fpm_2pt_phi_bar(sigma, q2)   + I2_fpm_2pt_g_p(sigma, q2);
@@ -4844,11 +4845,11 @@ namespace eos
             double result = 0.0;
             result += -1.0 * I1;
             result += (etad1 * I2 + eta * I2d1) / m_B2;
-            result += -1.0 * (I3 * (pow(etad1, 2) + eta * etad2) + 3.0 * I3d1 * eta * etad1 + I3d2 * pow(eta, 2)) / (2.0 * m_B4);
-            result += I4 * (pow(eta, 2) * etad3 + 4.0 * eta * etad1 * etad2 + pow(etad1, 3)) / (6.0 * m_B6);
-            result += I4d1 * eta * (4.0 * eta * etad2 + 7.0 * pow(etad1, 2)) / (6.0 * m_B6);
-            result += I4d2 * 6.0 * pow(eta, 2) * etad1 / (6.0 * m_B6);
-            result += I4d3 * pow(eta, 3) / (6.0 * m_B6);
+            result += -1.0 * (I3 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I3d1 * eta * etad1 + I3d2 * power_of<2>(eta)) / (2.0 * m_B4);
+            result += I4 * (power_of<2>(eta) * etad3 + 4.0 * eta * etad1 * etad2 + power_of<3>(etad1)) / (6.0 * m_B6);
+            result += I4d1 * eta * (4.0 * eta * etad2 + 7.0 * power_of<2>(etad1)) / (6.0 * m_B6);
+            result += I4d2 * 6.0 * power_of<2>(eta) * etad1 / (6.0 * m_B6);
+            result += I4d3 * power_of<3>(eta) / (6.0 * m_B6);
             result *= exp;
 
             return result;
@@ -4856,8 +4857,8 @@ namespace eos
 
         double integrand_fpm_2pt_borel(const double & sigma, const double & q2) const
         {
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1   = I1_fpm_2pt_phi_p(sigma, q2);
@@ -4877,15 +4878,15 @@ namespace eos
 
         double surface_fpm_2pt(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fpm_2pt_phi_bar(sigma, q2)   + I2_fpm_2pt_g_p(sigma, q2);
             const double I3   = I3_fpm_2pt_g_p(sigma, q2)       + I3_fpm_2pt_g_bar(sigma, q2);
@@ -4897,9 +4898,9 @@ namespace eos
             double result = 0.0;
             result += -1.0 * eta * I2 / m_B2;
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
-            result += -1.0 / 6.0 * eta / m_B2 * (I4 / (pow( M2(), 2)));
+            result += -1.0 / 6.0 * eta / m_B2 * (I4 / (power_of<2>( M2())));
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
 
             return result;
@@ -4935,8 +4936,8 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             constexpr double I1 = 0.0;
@@ -4974,16 +4975,16 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fpm_3pt_phi_3(sigma, omega_1, omega_2, q2)            + I2_fpm_3pt_phi_bar_3(sigma, omega_1, omega_2, q2)
                               + I2_fpm_3pt_phi_4(sigma, omega_1, omega_2, q2)            + I2_fpm_3pt_phi_bar_4(sigma, omega_1, omega_2, q2)
@@ -5008,7 +5009,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -5022,16 +5023,16 @@ namespace eos
 
             const double omega_1 = sigma * m_B() * x_1;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -5050,7 +5051,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -5066,16 +5067,16 @@ namespace eos
 
             const double omega_2 = sigma * m_B() * (x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -5094,7 +5095,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -5106,16 +5107,16 @@ namespace eos
             // this does NOT includes the original factor of 1 / omega_2
             const double prefactor = 1.0;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
 
             constexpr double I2   = 0.0;
@@ -5132,7 +5133,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -5145,8 +5146,8 @@ namespace eos
 
         double integrand_fpm_2pt_borel_m1(const double & sigma, const double & q2) const
         {
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1   = I1_fpm_2pt_phi_p(sigma, q2);
@@ -5172,16 +5173,16 @@ namespace eos
 
         double surface_fpm_2pt_m1(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
-            const double m_P2 = pow(m_P(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
+            const double m_P2 = power_of<2>(m_P());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fpm_2pt_phi_bar(sigma, q2)   + I2_fpm_2pt_g_p(sigma, q2);
             const double I3   = I3_fpm_2pt_g_p(sigma, q2)       + I3_fpm_2pt_g_bar(sigma, q2);
@@ -5195,7 +5196,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -5221,8 +5222,8 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1 = 0.0;
@@ -5266,16 +5267,16 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fpm_3pt_phi_3(sigma, omega_1, omega_2, q2)            + I2_fpm_3pt_phi_bar_3(sigma, omega_1, omega_2, q2)
                               + I2_fpm_3pt_phi_4(sigma, omega_1, omega_2, q2)            + I2_fpm_3pt_phi_bar_4(sigma, omega_1, omega_2, q2)
@@ -5300,7 +5301,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -5319,16 +5320,16 @@ namespace eos
 
             const double omega_1 = sigma * m_B() * x_1;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -5347,7 +5348,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -5368,16 +5369,16 @@ namespace eos
 
             const double omega_2 = sigma * m_B() * (x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -5396,7 +5397,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -5413,16 +5414,16 @@ namespace eos
             // this does NOT includes the original factor of 1 / omega_2
             const double prefactor = 1.0;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
 
             constexpr double I2   = 0.0;
@@ -5438,7 +5439,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -5559,13 +5560,13 @@ namespace eos
         double I2_fT_2pt_phi_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to phibar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double phi_bar  = this->phi_bar(sigma * m_B);
 
-            const double C_2 = (-m_B2 * sigmabar2 + m_v2 + 2.0 * q2 * sigmabar - q2) / (pow(sigmabar, 2) * m_B);
+            const double C_2 = (-m_B2 * sigmabar2 + m_v2 + 2.0 * q2 * sigmabar - q2) / (power_of<2>(sigmabar) * m_B);
 
             return C_2 * phi_bar;
         }
@@ -5574,15 +5575,15 @@ namespace eos
         double I2d1_fT_2pt_phi_bar(const double & sigma, const double & q2) const
         {
             // first derivative of two-particle contribution to f_T proportional to phibar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double phi_bar     = this->phi_bar(sigma * m_B);
             const double phi_bar_d1  = this->phi_bar_d1(sigma * m_B);
 
-            const double C_2   = (-m_B2 * sigmabar2 + m_v2 + 2.0 * q2 * sigmabar - q2) / pow(sigmabar, 2);
-            const double C_2d1 = 2.0 * (m_v2 - q2 * sigma) / (pow(sigmabar, 3) * m_B);
+            const double C_2   = (-m_B2 * sigmabar2 + m_v2 + 2.0 * q2 * sigmabar - q2) / power_of<2>(sigmabar);
+            const double C_2d1 = 2.0 * (m_v2 - q2 * sigma) / (power_of<3>(sigmabar) * m_B);
 
             return C_2 * phi_bar_d1 + C_2d1 * phi_bar;
         }
@@ -5595,7 +5596,7 @@ namespace eos
 
             const double g_bar    = this->g_bar(sigma * m_B);
 
-            const double C_2 = 8.0 / (pow(sigmabar,2) * m_B);
+            const double C_2 = 8.0 / (power_of<2>(sigmabar) * m_B);
 
             return C_2 * g_bar;
         }
@@ -5609,8 +5610,8 @@ namespace eos
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
 
-            const double C_2   =  8.0 / pow(sigmabar,2);
-            const double C_2d1 =  16.0 / (pow(sigmabar,3) * m_B);
+            const double C_2   =  8.0 / power_of<2>(sigmabar);
+            const double C_2d1 =  16.0 / (power_of<3>(sigmabar) * m_B);
 
             return C_2 * g_bar_d1 + C_2d1 * g_bar;
         }
@@ -5619,9 +5620,9 @@ namespace eos
         double I3_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
 
@@ -5634,15 +5635,15 @@ namespace eos
         double I3d1_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
 
             const double C_3   = -8.0 * (m_B2 * sigmabar2 + 2.0 * m_v2 - 2.0 * q2 * sigmabar + q2) / sigmabar3;
-            const double C_3d1 = -8.0 * (m_B2 * sigmabar2 + 6.0 * m_v2 + q2 * (3.0 - 4.0 * sigmabar)) / (pow(sigmabar, 4) * m_B);
+            const double C_3d1 = -8.0 * (m_B2 * sigmabar2 + 6.0 * m_v2 + q2 * (3.0 - 4.0 * sigmabar)) / (power_of<4>(sigmabar) * m_B);
 
             return C_3 * g_bar_d1 + C_3d1 * g_bar;
         }
@@ -5651,17 +5652,17 @@ namespace eos
         double I3d2_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
             const double g_bar_d2 = this->g_bar_d2(sigma * m_B);
 
             const double C_3   = -8.0 * (m_B2 * sigmabar2 + 2.0 * m_v2 - 2.0 * q2 * sigmabar + q2) / sigmabar3 * m_B;
-            const double C_3d1 = -16.0 * (m_B2 * sigmabar2 + 6.0 * m_v2 + q2 * (3.0 - 4.0 * sigmabar)) / (pow(sigmabar, 4));
-            const double C_3d2 = -16.0 * (m_B2 * sigmabar2 + 12.0 * m_v2 + 6.0 * q2 * sigma) / (pow(sigmabar, 5) * m_B);
+            const double C_3d1 = -16.0 * (m_B2 * sigmabar2 + 6.0 * m_v2 + q2 * (3.0 - 4.0 * sigmabar)) / (power_of<4>(sigmabar));
+            const double C_3d2 = -16.0 * (m_B2 * sigmabar2 + 12.0 * m_v2 + 6.0 * q2 * sigma) / (power_of<5>(sigmabar) * m_B);
 
             return C_3 * g_bar_d2 + C_3d1 * g_bar_d1 + C_3d2 * g_bar;
         }
@@ -5670,9 +5671,9 @@ namespace eos
         double I4_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar4 = pow(sigmabar, 4);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
 
@@ -5685,9 +5686,9 @@ namespace eos
         double I4d1_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar4 = pow(sigmabar, 4), sigmabar5 = pow(sigmabar, 5);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar4 = power_of<4>(sigmabar), sigmabar5 = power_of<5>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
@@ -5701,10 +5702,10 @@ namespace eos
         double I4d2_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar4 = pow(sigmabar, 4), sigmabar5 = pow(sigmabar, 5);
-            const double sigmabar6 = pow(sigmabar, 6);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar4 = power_of<4>(sigmabar), sigmabar5 = power_of<5>(sigmabar);
+            const double sigmabar6 = power_of<6>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
@@ -5721,10 +5722,10 @@ namespace eos
         double I4d3_fT_2pt_g_bar(const double & sigma, const double & q2) const
         {
             // two-particle contribution to f_T proportional to gbar
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar4 = pow(sigmabar, 4), sigmabar5 = pow(sigmabar, 5);
-            const double sigmabar6 = pow(sigmabar, 6);
-            const double m_B2 = pow(m_B, 2);
-            const double m_v = this->m_v(), m_v2 = pow(m_v, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar4 = power_of<4>(sigmabar), sigmabar5 = power_of<5>(sigmabar);
+            const double sigmabar6 = power_of<6>(sigmabar);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v = this->m_v(), m_v2 = power_of<2>(m_v);
 
             const double g_bar    = this->g_bar(sigma * m_B);
             const double g_bar_d1 = this->g_bar_d1(sigma * m_B);
@@ -5734,7 +5735,7 @@ namespace eos
             const double C_4   = 24.0 * m_v2 * (m_B2 * sigmabar2 - m_v2 - 2.0 * q2 * sigmabar + q2) / sigmabar4 * m_B2;
             const double C_4d1 = 144.0 * m_v2 * (m_B2 * sigmabar2 - 2.0 * m_v2 + q2 * (2.0 - 3.0 * sigmabar)) / sigmabar5 * m_B;
             const double C_4d2 = 24.0 * m_v2 * (18.0 * m_B2 * sigmabar2 - 60.0 * m_v2 + q2 * (60.0 - 72.0 * sigmabar)) / sigmabar6;
-            const double C_4d3 = 576.0 * m_v2 * (m_B2 * sigmabar2 - 5.0 * m_v2 + 5.0 * q2 * sigma) / (pow(sigmabar, 7) * m_B);
+            const double C_4d3 = 576.0 * m_v2 * (m_B2 * sigmabar2 - 5.0 * m_v2 + 5.0 * q2 * sigma) / (power_of<7>(sigmabar) * m_B);
 
             return C_4 * g_bar_d3 + C_4d1 * g_bar_d2 + C_4d2 * g_bar_d1 + C_4d3 * g_bar;
         }
@@ -5749,7 +5750,7 @@ namespace eos
 
             const double phi_3 = this->phi_3(omega_1, omega_2);
 
-            const double C_1 = 2.0 * u / (m_B * m_B * pow(sigmabar, 2));
+            const double C_1 = 2.0 * u / (m_B * m_B * power_of<2>(sigmabar));
 
             return C_1 * phi_3;
         }
@@ -5757,14 +5758,14 @@ namespace eos
         double I2_fT_3pt_phi_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_3
-            const double m_B2 = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2 = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_3 = this->phi_3(omega_1, omega_2);
 
-            const double C_2 = -2.0 * u * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2) / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = -2.0 * u * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2) / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * phi_3;
         }
@@ -5772,14 +5773,14 @@ namespace eos
         double I2_fT_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_T proportional to phi_bar_3
-            const double m_B2 = pow(m_B, 2);
+            const double m_B2 = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_2 = 4.0 * (m_v + m_B * u * sigmabar) / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = 4.0 * (m_v + m_B * u * sigmabar) / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * phi_bar_3;
         }
@@ -5787,14 +5788,14 @@ namespace eos
         double I3_fT_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_3
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_3 = - 4.0 * (m_v + m_B * u * sigmabar) * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2) / (m_B2 * pow(sigmabar, 4));
+            const double C_3 = - 4.0 * (m_v + m_B * u * sigmabar) * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2) / (m_B2 * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -5802,10 +5803,10 @@ namespace eos
         double I3d1A_fT_3pt_phi_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_3
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2),   m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v),   m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
@@ -5815,7 +5816,7 @@ namespace eos
                                m_B * sigmabar * (-(3.0 * m_B * sigma2 * q2) - 2.0 * m_B3 * sigmabar2 * sigma +
                                m_B * sigmabar2 * (q2 + m_B2 * (-1 + 2.0 * sigma)) +
                                omega_1 * (sigma * (3.0 * q2 - 2.0 * m_B2 * sigmabar) - sigmabar * (q2 + m_B2 * (-2.0 + sigmabar)))))
-                             / (m_B2 * omega_2 * pow(sigmabar, 5));
+                             / (m_B2 * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -5825,14 +5826,14 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_3
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
             const double C_3 = -4.0 * (m_v + m_B * sigmabar) * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * (-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / (m_B * (-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -5842,13 +5843,13 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_3
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_3 = this->phi_bar_3(omega_1, omega_2);
 
-            const double C_3 = 4.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (m_B * omega_2 * pow(sigmabar, 4));
+            const double C_3 = 4.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_3;
         }
@@ -5862,7 +5863,7 @@ namespace eos
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
-            const double C_3 = 12.0 * m_v * u / (m_B * pow(sigmabar, 3));
+            const double C_3 = 12.0 * m_v * u / (m_B * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_bar_3;
         }
@@ -5876,7 +5877,7 @@ namespace eos
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_3 = 12.0 * m_v * (3.0 * sigma * m_B + m_B * sigmabar - 3.0 * omega_1)
-                               / (m_B * omega_2 * pow(sigmabar, 4));
+                               / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_bar_3;
         }
@@ -5891,7 +5892,7 @@ namespace eos
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
-            const double C_3 = -12.0 * m_v / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+            const double C_3 = -12.0 * m_v / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_bar_3;
         }
@@ -5906,15 +5907,15 @@ namespace eos
         double I4_fT_3pt_phi_bar_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_3
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_4 = -12.0 * m_v * u * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2)
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -5922,9 +5923,9 @@ namespace eos
         double I4d1A_fT_3pt_phi_bar_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_3
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
@@ -5932,7 +5933,7 @@ namespace eos
                                sigma * (-(4.0 * q2) + 3.0 * m_B2 * sigmabar))) +
                                m_B * (4.0 * sigma * (m_v2 - q2 * sigma) + sigmabar2 * (q2 + m_B2 * (-1 + 2.0 * sigma)) +
                                sigmabar * (m_v2 + sigma * (q2 - 3.0 * m_B2 * sigmabar))))
-                             / (m_B * omega_2 * pow(sigmabar, 5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -5942,14 +5943,14 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_bar_3
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
             const double C_4 = -12.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * phi_bar_bar_3;
         }
@@ -5963,8 +5964,8 @@ namespace eos
         double I4d2A_fT_3pt_phi_bar_bar_3(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_3
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double sigma2   = pow(sigma, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
@@ -5974,7 +5975,7 @@ namespace eos
                                m_B * sigmabar * (4.0 * m_v2 + 2.0 * q2 * sigmabar + m_B2 * sigmabar * (-3.0 + sigmabar)) +
                                2.0 * sigma * (5.0 * omega_1 * q2 - 3.0 * m_B2 * omega_1 * sigmabar + 3.0 * m_B3 * (-1 + sigmabar) * sigmabar +
                                m_B * (5.0 * m_v2 - q2 * sigmabar)))
-                             / (m_B * omega_2 * pow(sigmabar, 6));
+                             / (m_B * omega_2 * power_of<6>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -5983,7 +5984,7 @@ namespace eos
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_3
             const double omega_2  = m_B * sigma - omega_1;
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_3     = this->phi_bar_3(omega_1, omega_2);
@@ -6000,13 +6001,13 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_bar_3
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_bar_3 = this->phi_bar_bar_3(omega_1, omega_2);
 
-            const double C_4 = 12.0 * m_B * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (pow(omega_2, 2) * pow(sigmabar, 4));
+            const double C_4 = 12.0 * m_B * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * phi_bar_bar_3;
         }
@@ -6017,7 +6018,7 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_3     = this->phi_bar_3(omega_1, omega_2);
@@ -6035,7 +6036,7 @@ namespace eos
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
-            const double C_2 = -2.0 / (m_B * pow(sigmabar, 2));
+            const double C_2 = -2.0 / (m_B * power_of<2>(sigmabar));
 
             return C_2 * phi_bar_4;
         }
@@ -6043,14 +6044,14 @@ namespace eos
         double I3_fT_3pt_phi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),  m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma,  sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),  m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma,  sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2)
-                             / (m_B * pow(sigmabar, 3));
+                             / (m_B * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -6058,14 +6059,14 @@ namespace eos
         double I3d1A_fT_3pt_phi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (3.0 * m_v2 + (q2 + m_B2 * (-2.0 + sigmabar)) * sigmabar + sigma * (-3.0 * q2 + 2.0 * m_B2 * sigmabar))
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -6075,14 +6076,14 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+                             / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -6092,14 +6093,14 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double phi_bar_4 = this->phi_bar_4(omega_1, omega_2);
 
             const double C_3 = -2.0 * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (omega_2 * pow(sigmabar, 3));
+                             / (omega_2 * power_of<3>(sigmabar));
 
             return C_3 * phi_bar_4;
         }
@@ -6107,13 +6108,13 @@ namespace eos
         double I2_fT_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_4
-            const double m_B2 = pow(m_B, 2);
+            const double m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
-            const double C_2 = -4.0 * u * (-1.0 + 2.0 * u) / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = -4.0 * u * (-1.0 + 2.0 * u) / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * phi_bar_bar_4;
         }
@@ -6121,15 +6122,15 @@ namespace eos
         double I3_fT_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (-1.0 + 2.0 * u) * (m_v2 + q2 * (5.0 - 4.0 * sigmabar) - m_B2 * sigmabar2)
-                             / (m_B2 * pow(sigmabar, 4));
+                             / (m_B2 * power_of<4>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -6137,10 +6138,10 @@ namespace eos
         double I3d1A_fT_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3),   m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3), sigma4   = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B),   m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma), sigma4   = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -6161,7 +6162,7 @@ namespace eos
                                4.0 * m_B * (4.0 * omega_1 + omega_2) * (5.0 * (m_v2 + q2) - 3.0 * q2 * sigmabar) +
                                4.0 * m_B2 * (-(omega_1 * (2.0 * omega_1 + omega_2) * sigmabar) + 8.0 * q2 * sigmabar +
                                2.0 * m_v2 * (-5.0 + 8.0 * sigmabar))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B2 * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -6171,14 +6172,14 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (m_v2 * (4.0 - 4.0 * sigma - 5.0 * sigmabar) - 4.0 * sigma * q2 * sigmabar + sigmabar * (-q2 + m_B2 * sigmabar2))
-                             / (m_B * (-omega_1 + m_B * sigma) * pow(sigmabar, 5));
+                             / (m_B * (-omega_1 + m_B * sigma) * power_of<5>(sigmabar));
 
             return C_3 * phi_bar_bar_4;
         }
@@ -6193,16 +6194,16 @@ namespace eos
         double I4_fT_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B4     = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B4     = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (-1.0 + 2.0 * u) * (m_v4 - 2.0 * m_B2 * q2 * sigmabar3 + m_B4 * sigmabar4 + q2 * q2 * (-1.0 + 2.0 * sigmabar)
                              + 2.0 * m_v2 * sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B2 * pow(sigmabar, 5));
+                             / (m_B2 * power_of<5>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -6210,10 +6211,10 @@ namespace eos
         double I4d1A_fT_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -6230,8 +6231,8 @@ namespace eos
                                 (3.0 * m_v4 + 12.0 * m_v2 * q2 * sigmabar - 3.0 * m_B4 * sigmabar3 * (-2.0 + 2.0 * sigma - 3.0 * sigmabar) +
                                 m_B2 * (sigmabar2 * (-m_v2 + q2 * sigma) + sigmabar2 * (-(5.0 * m_v2) + q2 * (-11.0 + 10.0 * sigma)) -
                                 sigmabar2 * (12.0 * m_v2 + 13.0 * q2 * sigmabar)) +
-                                (-(6.0 * sigma2) + sigmabar * (7.0 + 2.0 * sigmabar) + sigma * (3.0 - 4.0 * sigmabar)) * pow(q2,2.0))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 7));
+                                (-(6.0 * sigma2) + sigmabar * (7.0 + 2.0 * sigmabar) + sigma * (3.0 - 4.0 * sigmabar)) * power_of<2>(q2))))
+                             / (m_B2 * power_of<2>(omega_2) * power_of<7>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -6241,15 +6242,15 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 2.0 * (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                                m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * pow(sigmabar, 6) * omega_2);
+                             / (m_B * power_of<6>(sigmabar) * omega_2);
 
             return C_4 * phi_bar_bar_4;
         }
@@ -6264,10 +6265,10 @@ namespace eos
         double I4d2A_fT_3pt_phi_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to phi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5), m_B6 = pow(m_B, 6);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B), m_B6 = power_of<6>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
@@ -6280,7 +6281,7 @@ namespace eos
                                m_v2 * (2.0 * sigmabar2 * q2 * (1 + 5.0 * sigmabar) +
                                omega_1 * (2.0 * omega_1 + omega_2) * (-15.0 + sigmabar * (-40 + 19.0 * sigmabar))) +
                                q2 * sigmabar * (6.0 * sigmabar2 * q2 - omega_1 * (2.0 * omega_1 + omega_2) * (66 + sigmabar * (-53 + 5.0 * sigmabar)))) +
-                               sigma5 * (-60 * m_B6 * sigmabar2 + 30 * m_B4 * q2 * sigmabar + 84 * m_B2 * pow(q2,2.0)) +
+                               sigma5 * (-60 * m_B6 * sigmabar2 + 30 * m_B4 * q2 * sigmabar + 84 * m_B2 * power_of<2>(q2)) +
                                sigma3 * (6.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (-15.0 + 8.0 * sigmabar) +
                                15.0 * m_B3 * (4.0 * omega_1 + omega_2) * sigmabar * (m_v2 + 2.0 * q2 * (1 + sigmabar)) -
                                6.0 * m_B6 * sigmabar2 * (33 + 2.0 * sigmabar * (-24 + 5.0 * sigmabar)) +
@@ -6289,17 +6290,17 @@ namespace eos
                                q2 * (15.0 + (81 - 70 * sigmabar) * sigmabar)) +
                                m_B2 * (84 * m_v4 + 6.0 * m_v2 * q2 * (28 - 57 * sigmabar) +
                                q2 * sigmabar * (15.0 * omega_1 * (2.0 * omega_1 + omega_2) - 2.0 * q2 * (63 + 2.0 * sigmabar))) +
-                               42 * omega_1 * (2.0 * omega_1 + omega_2) * pow(q2,2.0)) -
+                               42 * omega_1 * (2.0 * omega_1 + omega_2) * power_of<2>(q2)) -
                                m_B * sigma4 * (-30 * m_B4 * (4.0 * omega_1 + omega_2) * sigmabar2 +
                                15.0 * m_B2 * (4.0 * omega_1 + omega_2) * q2 * sigmabar + 60 * m_B5 * sigmabar2 * (-3.0 + 2.0 * sigmabar) +
                                12.0 * m_B * q2 * (14.0 * m_v2 + q2 * (7.0 - 10.0 * sigmabar)) +
-                               10.0 * m_B3 * sigmabar * (3.0 * m_v2 + q2 * (6.0 + 5.0 * sigmabar)) + 42 * (4.0 * omega_1 + omega_2) * pow(q2,2.0)
+                               10.0 * m_B3 * sigmabar * (3.0 * m_v2 + q2 * (6.0 + 5.0 * sigmabar)) + 42 * (4.0 * omega_1 + omega_2) * power_of<2>(q2)
                                ) + omega_1 * (2.0 * omega_1 + omega_2) *
                                (m_v4 * (-42 + 87 * sigmabar) + 3.0 * m_v2 * q2 * sigmabar * (13.0 + 7.0 * sigmabar) +
-                               5.0 * sigmabar2 * (5.0 - 2.0 * sigmabar) * pow(q2,2.0)) +
+                               5.0 * sigmabar2 * (5.0 - 2.0 * sigmabar) * power_of<2>(q2)) +
                                m_B * (4.0 * omega_1 + omega_2) * sigmabar *
                                (-(3.0 * m_v2 * q2 * sigmabar * (3.0 + 5.0 * sigmabar)) + 3.0 * m_v4 * (4.0 - 9.0 * sigmabar) +
-                               sigmabar2 * (-11.0 + 2.0 * sigmabar) * pow(q2,2.0)) +
+                               sigmabar2 * (-11.0 + 2.0 * sigmabar) * power_of<2>(q2)) +
                                sigma2 * (6.0 * omega_1 * (2.0 * omega_1 + omega_2) * q2 * (-(7.0 * (2.0 * m_v2 + q2)) + 6.0 * q2 * sigmabar) +
                                9.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (11.0 + 2.0 * sigmabar * (-6.0 + sigmabar)) +
                                6.0 * m_B6 * sigmabar2 * (13.0 + 3.0 * sigmabar * (-13.0 + 6.0 * sigmabar)) -
@@ -6312,7 +6313,7 @@ namespace eos
                                q2 * sigmabar * (2.0 * q2 * sigmabar * (-5.0 + 26 * sigmabar) +
                                5.0 * omega_1 * (2.0 * omega_1 + omega_2) * (6.0 + 7.0 * sigmabar))) -
                                m_B * (4.0 * omega_1 + omega_2) * (42 * m_v4 + 21 * m_v2 * q2 * (4.0 - 7.0 * sigmabar) -
-                               sigmabar * (51 + 10.0 * sigmabar) * pow(q2,2.0))) +
+                               sigmabar * (51 + 10.0 * sigmabar) * power_of<2>(q2))) +
                                sigma * (6.0 * m_B6 * sigmabar3 * (8.0 - 9.0 * sigmabar) -
                                3.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (13.0 + 9.0 * sigmabar * (-3.0 + sigmabar)) +
                                m_B4 * sigmabar2 * (m_v2 * (-20.0 + 30 * sigmabar2 - 68 * sigmabar) +
@@ -6326,10 +6327,10 @@ namespace eos
                                q2 * (6.0 * sigmabar2 * q2 * (7.0 - 2.0 * sigmabar) -
                                omega_1 * (2.0 * omega_1 + omega_2) * (-15.0 + sigmabar * (-101 + 37 * sigmabar)))) +
                                omega_1 * (2.0 * omega_1 + omega_2) * (42 * m_v4 + 3.0 * m_v2 * q2 * (28 - 41 * sigmabar) -
-                               sigmabar * (39 + 16.0 * sigmabar) * pow(q2,2.0)) -
+                               sigmabar * (39 + 16.0 * sigmabar) * power_of<2>(q2)) -
                                m_B * (4.0 * omega_1 + omega_2) * (m_v4 * (-42 + 99 * sigmabar) + 3.0 * m_v2 * q2 * sigmabar * (21 - 4.0 * sigmabar) +
-                               2.0 * sigmabar2 * (8.0 - 9.0 * sigmabar) * pow(q2,2.0))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 8));
+                               2.0 * sigmabar2 * (8.0 - 9.0 * sigmabar) * power_of<2>(q2))))
+                             / (m_B2 * power_of<2>(omega_2) * power_of<8>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -6339,10 +6340,10 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_4     = this->phi_bar_4(omega_1, omega_2);
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -6356,19 +6357,19 @@ namespace eos
                     omega_1 * (3.0 * m_v4 * (-4.0 + 9.0 * sigmabar) -
                     sigmabar2 * (m_B2 - q2) * (q2 * (11.0 - 2.0 * sigmabar) + 3.0 * m_B2 * (-4.0 + 3.0 * sigmabar)) +
                     m_v2 * sigmabar * (3.0 * q2 * (3.0 + 5.0 * sigmabar) + m_B2 * (-5.0 + sigmabar * (-18.0 + 5.0 * sigmabar)))) +
-                    sigma4 * (12.0 * m_B5 * sigmabar2 - 5.0 * m_B3 * q2 * sigmabar - 12.0 * m_B * pow(q2,2.0)) +
+                    sigma4 * (12.0 * m_B5 * sigmabar2 - 5.0 * m_B3 * q2 * sigmabar - 12.0 * m_B * power_of<2>(q2)) +
                     sigma3 * (-(12.0 * m_B4 * omega_1 * sigmabar2) + 5.0 * m_B2 * omega_1 * q2 * sigmabar +
                     12.0 * m_B5 * sigmabar2 * (-3.0 + sigmabar) + 4.0 * m_B * q2 * (6.0 * m_v2 + 3.0 * q2 - 2.0 * q2 * sigmabar) +
-                    m_B3 * sigmabar * (5.0 * m_v2 + 2.0 * q2 * (5.0 + 8.0 * sigmabar)) + 12.0 * omega_1 * pow(q2,2.0)) +
+                    m_B3 * sigmabar * (5.0 * m_v2 + 2.0 * q2 * (5.0 + 8.0 * sigmabar)) + 12.0 * omega_1 * power_of<2>(q2)) +
                     sigma2 * (-(9.0 * m_B4 * omega_1 * sigmabar2 * (-4.0 + sigmabar)) +
                     9.0 * m_B5 * sigmabar2 * (4.0 - 3.0 * sigmabar) +
                     6.0 * omega_1 * q2 * (-(4.0 * m_v2) + q2 * (-2.0 + sigmabar)) -
                     m_B2 * omega_1 * sigmabar * (5.0 * m_v2 + q2 * (10.0 + 17.0 * sigmabar)) +
                     m_B3 * sigmabar * (-(m_v2 * (10.0 + 17.0 * sigmabar)) + q2 * (-5.0 + sigmabar * (-38 + 15.0 * sigmabar))) +
-                    m_B * (-(12.0 * m_v4) + m_v2 * q2 * (-24 + 37 * sigmabar) + sigmabar * (11.0 + 8.0 * sigmabar) * pow(q2,2.0))) +
+                    m_B * (-(12.0 * m_v4) + m_v2 * q2 * (-24 + 37 * sigmabar) + sigmabar * (11.0 + 8.0 * sigmabar) * power_of<2>(q2))) +
                     omega_1 * sigma * (12.0 * m_v4 + m_v2 * (q2 * (24 - 33 * sigmabar) + 2.0 * m_B2 * sigmabar * (5.0 + 9.0 * sigmabar)) +
                     sigmabar * (18.0 * m_B4 * sigmabar * (-2.0 + sigmabar) +
-                    5.0 * m_B2 * q2 * (1 - 2.0 * sigmabar * (-4.0 + sigmabar)) - (9.0 + 8.0 * sigmabar) * pow(q2,2.0)))) +
+                    5.0 * m_B2 * q2 * (1 - 2.0 * sigmabar * (-4.0 + sigmabar)) - (9.0 + 8.0 * sigmabar) * power_of<2>(q2)))) +
                     2.0 * m_B * (-omega_1 + m_B * sigma) * sigmabar *
                     (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                     m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)) * phi_bar_4);
@@ -6379,16 +6380,16 @@ namespace eos
             // three-particle contribution to f_T proportional to phi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -(2.0 * (-(2.0 * (m_v2 - q2 * sigma) * sigmabar) +
                                 (5.0 * m_v2 - 3.0 * m_B2 * sigmabar2 + q2 * (3.0 - 2.0 * sigma)) * sigmabar) *
                                 (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)))
-                             /  (pow(omega_2, 2) * pow(sigmabar, 6));
+                             /  (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * phi_bar_bar_4;
         }
@@ -6399,9 +6400,9 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double phi_bar_4     = this->phi_bar_4(omega_1, omega_2);
             const double phi_bar_bar_4 = this->phi_bar_bar_4(omega_1, omega_2);
@@ -6410,7 +6411,7 @@ namespace eos
                      ((m_v2 - q2 * sigma) * (-(7.0 * m_v2) + m_B2 * sigmabar2 - 5.0 * q2 + 6.0 * q2 * sigma) * sigmabar +
                      sigmabar2 * (q2 * (5.0 * m_v2 + q2) - m_B2 * (2.0 * m_v2 + q2 - 3.0 * q2 * sigma) * sigmabar) +
                      sigmabar3 * (9.0 * m_B4 * sigmabar2 + m_B2 * (-(5.0 * m_v2) - 11.0 * q2 + 10.0 * q2 * sigma) +
-                     2.0 * pow(q2,2.0)) + 4.0 * sigmabar * pow(m_v2 - q2 * sigma,2.0)) +
+                     2.0 * power_of<2>(q2)) + 4.0 * sigmabar * power_of<2>(m_v2 - q2 * sigma)) +
                      m_B * sigmabar * (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                      m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)) * phi_bar_4);
         }
@@ -6418,13 +6419,13 @@ namespace eos
         double I2_fT_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_T proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
             const double m_v      = this->m_v();
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
-            const double C_2 = -4.0 * m_v / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = -4.0 * m_v / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * psi_bar_4;
         }
@@ -6432,14 +6433,14 @@ namespace eos
         double I3_fT_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = 4.0 * m_v * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2)
-                             / (m_B2 * pow(sigmabar, 4));
+                             / (m_B2 * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -6447,14 +6448,14 @@ namespace eos
         double I3d1A_fT_3pt_psi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = -4.0 * m_v * (4.0 * m_v2 + 2.0 * q2 * sigmabar + m_B2 * (-3.0 + sigmabar) * sigmabar + sigma * (-4.0 * q2 + 3.0 * m_B2 * sigmabar))
-                             /  (m_B2 * pow(sigmabar, 5));
+                             /  (m_B2 * power_of<5>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -6464,14 +6465,14 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = 4.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * (-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / (m_B * (-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -6481,14 +6482,14 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4 = this->psi_bar_4(omega_1, omega_2);
 
             const double C_3 = -4.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * omega_2 * pow(sigmabar, 4));
+                             / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_4;
         }
@@ -6502,7 +6503,7 @@ namespace eos
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
-            const double C_3 = 12.0 * m_v * u / (m_B * pow(sigmabar, 3));
+            const double C_3 = 12.0 * m_v * u / (m_B * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -6516,7 +6517,7 @@ namespace eos
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 12.0 * m_v * (3.0 * sigma * m_B + m_B * sigmabar - 3.0 * omega_1)
-                               / (m_B * omega_2 * pow(sigmabar, 4));
+                               / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -6531,7 +6532,7 @@ namespace eos
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
-            const double C_3 = -12.0 * m_v / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+            const double C_3 = -12.0 * m_v / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -6546,15 +6547,15 @@ namespace eos
         double I4_fT_3pt_psiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -12.0 * m_v * u * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2)
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6562,9 +6563,9 @@ namespace eos
         double I4d1A_fT_3pt_psiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -6572,7 +6573,7 @@ namespace eos
                                sigma * (-(4.0 * q2) + 3.0 * m_B2 * sigmabar))) +
                                m_B * (4.0 * sigma * (m_v2 - q2 * sigma) + sigmabar2 * (q2 + m_B2 * (-1 + 2.0 * sigma)) +
                                sigmabar * (m_v2 + sigma * (q2 - 3.0 * m_B2 * sigmabar))))
-                             / (m_B * omega_2 * pow(sigmabar, 5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6582,14 +6583,14 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -12.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6603,8 +6604,8 @@ namespace eos
         double I4d2A_fT_3pt_psiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double sigma2   = pow(sigma, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -6614,7 +6615,7 @@ namespace eos
                                m_B * sigmabar * (4.0 * m_v2 + 2.0 * q2 * sigmabar + m_B2 * sigmabar * (-3.0 + sigmabar)) +
                                2.0 * sigma * (5.0 * omega_1 * q2 - 3.0 * m_B2 * omega_1 * sigmabar + 3.0 * m_B3 * (-1 + sigmabar) * sigmabar +
                                m_B * (5.0 * m_v2 - q2 * sigmabar)))
-                             / (m_B * omega_2 * pow(sigmabar, 6));
+                             / (m_B * omega_2 * power_of<6>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6623,7 +6624,7 @@ namespace eos
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
@@ -6640,13 +6641,13 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
-            const double C_4 = 12.0 * m_B * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (pow(omega_2, 2) * pow(sigmabar, 4));
+            const double C_4 = 12.0 * m_B * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6657,7 +6658,7 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
@@ -6671,13 +6672,13 @@ namespace eos
         double I2_fT_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2 = pow(m_B, 2);
+            const double m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
-            const double C_2 = -4.0 * u * (-1.0 + 2.0 * u) / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = -4.0 * u * (-1.0 + 2.0 * u) / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * psi_bar_bar_4;
         }
@@ -6685,15 +6686,15 @@ namespace eos
         double I3_fT_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (-1.0 + 2.0 * u) * (m_v2 + q2 * (5.0 - 4.0 * sigmabar) - m_B2 * sigmabar2)
-                             / (m_B2 * pow(sigmabar, 4));
+                             / (m_B2 * power_of<4>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -6701,10 +6702,10 @@ namespace eos
         double I3d1A_fT_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3),   m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3), sigma4   = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B),   m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma), sigma4   = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -6725,7 +6726,7 @@ namespace eos
                                4.0 * m_B * (4.0 * omega_1 + omega_2) * (5.0 * (m_v2 + q2) - 3.0 * q2 * sigmabar) +
                                4.0 * m_B2 * (-(omega_1 * (2.0 * omega_1 + omega_2) * sigmabar) + 8.0 * q2 * sigmabar +
                                2.0 * m_v2 * (-5.0 + 8.0 * sigmabar))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B2 * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -6735,14 +6736,14 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (m_v2 * (4.0 - 4.0 * sigma - 5.0 * sigmabar) - 4.0 * sigma * q2 * sigmabar + sigmabar * (-q2 + m_B2 * sigmabar2))
-                             / (m_B * (-omega_1 + m_B * sigma) * pow(sigmabar, 5));
+                             / (m_B * (-omega_1 + m_B * sigma) * power_of<5>(sigmabar));
 
             return C_3 * psi_bar_bar_4;
         }
@@ -6757,16 +6758,16 @@ namespace eos
         double I4_fT_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B4     = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B4     = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (-1.0 + 2.0 * u) * (m_v4 - 2.0 * m_B2 * q2 * sigmabar3 + m_B4 * sigmabar4 + q2 * q2 * (-1.0 + 2.0 * sigmabar)
                              + 2.0 * m_v2 * sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B2 * pow(sigmabar, 5));
+                             / (m_B2 * power_of<5>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6774,10 +6775,10 @@ namespace eos
         double I4d1A_fT_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -6794,8 +6795,8 @@ namespace eos
                                 (3.0 * m_v4 + 12.0 * m_v2 * q2 * sigmabar - 3.0 * m_B4 * sigmabar3 * (-2.0 + 2.0 * sigma - 3.0 * sigmabar) +
                                 m_B2 * (sigmabar2 * (-m_v2 + q2 * sigma) + sigmabar2 * (-(5.0 * m_v2) + q2 * (-11.0 + 10.0 * sigma)) -
                                 sigmabar2 * (12.0 * m_v2 + 13.0 * q2 * sigmabar)) +
-                                (-(6.0 * sigma2) + sigmabar * (7.0 + 2.0 * sigmabar) + sigma * (3.0 - 4.0 * sigmabar)) * pow(q2,2.0))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 7));
+                                (-(6.0 * sigma2) + sigmabar * (7.0 + 2.0 * sigmabar) + sigma * (3.0 - 4.0 * sigmabar)) * power_of<2>(q2))))
+                             / (m_B2 * power_of<2>(omega_2) * power_of<7>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6805,15 +6806,15 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 2.0 * (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                                m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * pow(sigmabar, 6) * omega_2);
+                             / (m_B * power_of<6>(sigmabar) * omega_2);
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6828,10 +6829,10 @@ namespace eos
         double I4d2A_fT_3pt_psiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to psi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5), m_B6 = pow(m_B, 6);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B), m_B6 = power_of<6>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
@@ -6844,7 +6845,7 @@ namespace eos
                                m_v2 * (2.0 * sigmabar2 * q2 * (1 + 5.0 * sigmabar) +
                                omega_1 * (2.0 * omega_1 + omega_2) * (-15.0 + sigmabar * (-40 + 19.0 * sigmabar))) +
                                q2 * sigmabar * (6.0 * sigmabar2 * q2 - omega_1 * (2.0 * omega_1 + omega_2) * (66 + sigmabar * (-53 + 5.0 * sigmabar)))) +
-                               sigma5 * (-60 * m_B6 * sigmabar2 + 30 * m_B4 * q2 * sigmabar + 84 * m_B2 * pow(q2,2.0)) +
+                               sigma5 * (-60 * m_B6 * sigmabar2 + 30 * m_B4 * q2 * sigmabar + 84 * m_B2 * power_of<2>(q2)) +
                                sigma3 * (6.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (-15.0 + 8.0 * sigmabar) +
                                15.0 * m_B3 * (4.0 * omega_1 + omega_2) * sigmabar * (m_v2 + 2.0 * q2 * (1 + sigmabar)) -
                                6.0 * m_B6 * sigmabar2 * (33 + 2.0 * sigmabar * (-24 + 5.0 * sigmabar)) +
@@ -6853,17 +6854,17 @@ namespace eos
                                q2 * (15.0 + (81 - 70 * sigmabar) * sigmabar)) +
                                m_B2 * (84 * m_v4 + 6.0 * m_v2 * q2 * (28 - 57 * sigmabar) +
                                q2 * sigmabar * (15.0 * omega_1 * (2.0 * omega_1 + omega_2) - 2.0 * q2 * (63 + 2.0 * sigmabar))) +
-                               42 * omega_1 * (2.0 * omega_1 + omega_2) * pow(q2,2.0)) -
+                               42 * omega_1 * (2.0 * omega_1 + omega_2) * power_of<2>(q2)) -
                                m_B * sigma4 * (-30 * m_B4 * (4.0 * omega_1 + omega_2) * sigmabar2 +
                                15.0 * m_B2 * (4.0 * omega_1 + omega_2) * q2 * sigmabar + 60 * m_B5 * sigmabar2 * (-3.0 + 2.0 * sigmabar) +
                                12.0 * m_B * q2 * (14.0 * m_v2 + q2 * (7.0 - 10.0 * sigmabar)) +
-                               10.0 * m_B3 * sigmabar * (3.0 * m_v2 + q2 * (6.0 + 5.0 * sigmabar)) + 42 * (4.0 * omega_1 + omega_2) * pow(q2,2.0)
+                               10.0 * m_B3 * sigmabar * (3.0 * m_v2 + q2 * (6.0 + 5.0 * sigmabar)) + 42 * (4.0 * omega_1 + omega_2) * power_of<2>(q2)
                                ) + omega_1 * (2.0 * omega_1 + omega_2) *
                                (m_v4 * (-42 + 87 * sigmabar) + 3.0 * m_v2 * q2 * sigmabar * (13.0 + 7.0 * sigmabar) +
-                               5.0 * sigmabar2 * (5.0 - 2.0 * sigmabar) * pow(q2,2.0)) +
+                               5.0 * sigmabar2 * (5.0 - 2.0 * sigmabar) * power_of<2>(q2)) +
                                m_B * (4.0 * omega_1 + omega_2) * sigmabar *
                                (-(3.0 * m_v2 * q2 * sigmabar * (3.0 + 5.0 * sigmabar)) + 3.0 * m_v4 * (4.0 - 9.0 * sigmabar) +
-                               sigmabar2 * (-11.0 + 2.0 * sigmabar) * pow(q2,2.0)) +
+                               sigmabar2 * (-11.0 + 2.0 * sigmabar) * power_of<2>(q2)) +
                                sigma2 * (6.0 * omega_1 * (2.0 * omega_1 + omega_2) * q2 * (-(7.0 * (2.0 * m_v2 + q2)) + 6.0 * q2 * sigmabar) +
                                9.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (11.0 + 2.0 * sigmabar * (-6.0 + sigmabar)) +
                                6.0 * m_B6 * sigmabar2 * (13.0 + 3.0 * sigmabar * (-13.0 + 6.0 * sigmabar)) -
@@ -6876,7 +6877,7 @@ namespace eos
                                q2 * sigmabar * (2.0 * q2 * sigmabar * (-5.0 + 26 * sigmabar) +
                                5.0 * omega_1 * (2.0 * omega_1 + omega_2) * (6.0 + 7.0 * sigmabar))) -
                                m_B * (4.0 * omega_1 + omega_2) * (42 * m_v4 + 21 * m_v2 * q2 * (4.0 - 7.0 * sigmabar) -
-                               sigmabar * (51 + 10.0 * sigmabar) * pow(q2,2.0))) +
+                               sigmabar * (51 + 10.0 * sigmabar) * power_of<2>(q2))) +
                                sigma * (6.0 * m_B6 * sigmabar3 * (8.0 - 9.0 * sigmabar) -
                                3.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (13.0 + 9.0 * sigmabar * (-3.0 + sigmabar)) +
                                m_B4 * sigmabar2 * (m_v2 * (-20.0 + 30 * sigmabar2 - 68 * sigmabar) +
@@ -6890,10 +6891,10 @@ namespace eos
                                q2 * (6.0 * sigmabar2 * q2 * (7.0 - 2.0 * sigmabar) -
                                omega_1 * (2.0 * omega_1 + omega_2) * (-15.0 + sigmabar * (-101 + 37 * sigmabar)))) +
                                omega_1 * (2.0 * omega_1 + omega_2) * (42 * m_v4 + 3.0 * m_v2 * q2 * (28 - 41 * sigmabar) -
-                               sigmabar * (39 + 16.0 * sigmabar) * pow(q2,2.0)) -
+                               sigmabar * (39 + 16.0 * sigmabar) * power_of<2>(q2)) -
                                m_B * (4.0 * omega_1 + omega_2) * (m_v4 * (-42 + 99 * sigmabar) + 3.0 * m_v2 * q2 * sigmabar * (21 - 4.0 * sigmabar) +
-                               2.0 * sigmabar2 * (8.0 - 9.0 * sigmabar) * pow(q2,2.0))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 8));
+                               2.0 * sigmabar2 * (8.0 - 9.0 * sigmabar) * power_of<2>(q2))))
+                             / (m_B2 * power_of<2>(omega_2) * power_of<8>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6903,10 +6904,10 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -6920,19 +6921,19 @@ namespace eos
                     omega_1 * (3.0 * m_v4 * (-4.0 + 9.0 * sigmabar) -
                     sigmabar2 * (m_B2 - q2) * (q2 * (11.0 - 2.0 * sigmabar) + 3.0 * m_B2 * (-4.0 + 3.0 * sigmabar)) +
                     m_v2 * sigmabar * (3.0 * q2 * (3.0 + 5.0 * sigmabar) + m_B2 * (-5.0 + sigmabar * (-18.0 + 5.0 * sigmabar)))) +
-                    sigma4 * (12.0 * m_B5 * sigmabar2 - 5.0 * m_B3 * q2 * sigmabar - 12.0 * m_B * pow(q2,2.0)) +
+                    sigma4 * (12.0 * m_B5 * sigmabar2 - 5.0 * m_B3 * q2 * sigmabar - 12.0 * m_B * power_of<2>(q2)) +
                     sigma3 * (-(12.0 * m_B4 * omega_1 * sigmabar2) + 5.0 * m_B2 * omega_1 * q2 * sigmabar +
                     12.0 * m_B5 * sigmabar2 * (-3.0 + sigmabar) + 4.0 * m_B * q2 * (6.0 * m_v2 + 3.0 * q2 - 2.0 * q2 * sigmabar) +
-                    m_B3 * sigmabar * (5.0 * m_v2 + 2.0 * q2 * (5.0 + 8.0 * sigmabar)) + 12.0 * omega_1 * pow(q2,2.0)) +
+                    m_B3 * sigmabar * (5.0 * m_v2 + 2.0 * q2 * (5.0 + 8.0 * sigmabar)) + 12.0 * omega_1 * power_of<2>(q2)) +
                     sigma2 * (-(9.0 * m_B4 * omega_1 * sigmabar2 * (-4.0 + sigmabar)) +
                     9.0 * m_B5 * sigmabar2 * (4.0 - 3.0 * sigmabar) +
                     6.0 * omega_1 * q2 * (-(4.0 * m_v2) + q2 * (-2.0 + sigmabar)) -
                     m_B2 * omega_1 * sigmabar * (5.0 * m_v2 + q2 * (10.0 + 17.0 * sigmabar)) +
                     m_B3 * sigmabar * (-(m_v2 * (10.0 + 17.0 * sigmabar)) + q2 * (-5.0 + sigmabar * (-38 + 15.0 * sigmabar))) +
-                    m_B * (-(12.0 * m_v4) + m_v2 * q2 * (-24 + 37 * sigmabar) + sigmabar * (11.0 + 8.0 * sigmabar) * pow(q2,2.0))) +
+                    m_B * (-(12.0 * m_v4) + m_v2 * q2 * (-24 + 37 * sigmabar) + sigmabar * (11.0 + 8.0 * sigmabar) * power_of<2>(q2))) +
                     omega_1 * sigma * (12.0 * m_v4 + m_v2 * (q2 * (24 - 33 * sigmabar) + 2.0 * m_B2 * sigmabar * (5.0 + 9.0 * sigmabar)) +
                     sigmabar * (18.0 * m_B4 * sigmabar * (-2.0 + sigmabar) +
-                    5.0 * m_B2 * q2 * (1 - 2.0 * sigmabar * (-4.0 + sigmabar)) - (9.0 + 8.0 * sigmabar) * pow(q2,2.0)))) +
+                    5.0 * m_B2 * q2 * (1 - 2.0 * sigmabar * (-4.0 + sigmabar)) - (9.0 + 8.0 * sigmabar) * power_of<2>(q2)))) +
                     2.0 * m_B * (-omega_1 + m_B * sigma) * sigmabar *
                     (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                     m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)) * psi_bar_4);
@@ -6943,16 +6944,16 @@ namespace eos
             // three-particle contribution to f_T proportional to psi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -(2.0 * (-(2.0 * (m_v2 - q2 * sigma) * sigmabar) +
                                 (5.0 * m_v2 - 3.0 * m_B2 * sigmabar2 + q2 * (3.0 - 2.0 * sigma)) * sigmabar) *
                                 (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)))
-                             /  (pow(omega_2, 2) * pow(sigmabar, 6));
+                             /  (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * psi_bar_bar_4;
         }
@@ -6963,9 +6964,9 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double psi_bar_4     = this->psi_bar_4(omega_1, omega_2);
             const double psi_bar_bar_4 = this->psi_bar_bar_4(omega_1, omega_2);
@@ -6974,7 +6975,7 @@ namespace eos
                      ((m_v2 - q2 * sigma) * (-(7.0 * m_v2) + m_B2 * sigmabar2 - 5.0 * q2 + 6.0 * q2 * sigma) * sigmabar +
                      sigmabar2 * (q2 * (5.0 * m_v2 + q2) - m_B2 * (2.0 * m_v2 + q2 - 3.0 * q2 * sigma) * sigmabar) +
                      sigmabar3 * (9.0 * m_B4 * sigmabar2 + m_B2 * (-(5.0 * m_v2) - 11.0 * q2 + 10.0 * q2 * sigma) +
-                     2.0 * pow(q2,2.0)) + 4.0 * sigmabar * pow(m_v2 - q2 * sigma,2.0)) +
+                     2.0 * power_of<2>(q2)) + 4.0 * sigmabar * power_of<2>(m_v2 - q2 * sigma)) +
                      m_B * sigmabar * (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                      m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)) * psi_bar_4);
         }
@@ -7047,14 +7048,14 @@ namespace eos
         double I2_fT_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_T proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2);
+            const double m_B2     = power_of<2>(m_B);
             const double m_v      = this->m_v();
             const double sigmabar = 1.0 - sigma;
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
-            const double C_2 = 4.0 * (m_v + m_B * u * sigmabar) / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = 4.0 * (m_v + m_B * u * sigmabar) / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * chi_bar_4;
         }
@@ -7062,15 +7063,15 @@ namespace eos
         double I3_fT_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = -4.0 * (m_v + m_B * u * sigmabar) * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2)
-                             / (m_B2 * pow(sigmabar, 4));
+                             / (m_B2 * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -7078,10 +7079,10 @@ namespace eos
         double I3d1A_fT_3pt_chi_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v3 = pow(m_v, 3);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v3 = power_of<3>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
@@ -7091,7 +7092,7 @@ namespace eos
                                m_B * sigmabar * (-(3.0 * m_B * sigma2 * q2) - 2.0 * m_B3 * sigmabar2 * sigma +
                                m_B * sigmabar2 * (q2 + m_B2 * (-1 + 2.0 * sigma)) +
                                omega_1 * (sigma * (3.0 * q2 - 2.0 * m_B2 * sigmabar) - sigmabar * (q2 + m_B2 * (-2.0 + sigmabar)))))
-                             / (m_B2 * omega_2 * pow(sigmabar,5));
+                             / (m_B2 * omega_2 * power_of<5>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -7101,14 +7102,14 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = -4.0 * (m_v + m_B * sigmabar) * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * (-omega_1 + m_B * sigma) * pow(sigmabar, 4));
+                             / (m_B * (-omega_1 + m_B * sigma) * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -7118,14 +7119,14 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4 = this->chi_bar_4(omega_1, omega_2);
 
             const double C_3 = 4.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * omega_2 * pow(sigmabar, 4));
+                             / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_4;
         }
@@ -7139,7 +7140,7 @@ namespace eos
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
-            const double C_3 = 12.0 * m_v * u / (m_B * pow(sigmabar, 3));
+            const double C_3 = 12.0 * m_v * u / (m_B * power_of<3>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -7153,7 +7154,7 @@ namespace eos
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 12.0 * m_v * (3.0 * sigma * m_B + m_B * sigmabar - 3.0 * omega_1)
-                               / (m_B * omega_2 * pow(sigmabar, 4));
+                               / (m_B * omega_2 * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -7168,7 +7169,7 @@ namespace eos
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
-            const double C_3 = -12.0 * m_v / ((-omega_1 + m_B * sigma) * pow(sigmabar, 3));
+            const double C_3 = -12.0 * m_v / ((-omega_1 + m_B * sigma) * power_of<3>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -7183,15 +7184,15 @@ namespace eos
         double I4_fT_3pt_chiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -12.0 * m_v * u * (-m_v2 + q2 - 2.0 * q2 * sigmabar + m_B2 * sigmabar2)
-                             / (m_B * pow(sigmabar, 4));
+                             / (m_B * power_of<4>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7199,9 +7200,9 @@ namespace eos
         double I4d1A_fT_3pt_chiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -7209,7 +7210,7 @@ namespace eos
                                sigma * (-(4.0 * q2) + 3.0 * m_B2 * sigmabar))) +
                                m_B * (4.0 * sigma * (m_v2 - q2 * sigma) + sigmabar2 * (q2 + m_B2 * (-1 + 2.0 * sigma)) +
                                sigmabar * (m_v2 + sigma * (q2 - 3.0 * m_B2 * sigmabar))))
-                             / (m_B * omega_2 * pow(sigmabar, 5));
+                             / (m_B * omega_2 * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7219,14 +7220,14 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -12.0 * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (pow(sigmabar, 4) * omega_2);
+                             / (power_of<4>(sigmabar) * omega_2);
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7240,8 +7241,8 @@ namespace eos
         double I4d2A_fT_3pt_chiA_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2), m_B3 = pow(m_B, 3);
-            const double sigma2   = pow(sigma, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B), m_B3 = power_of<3>(m_B);
+            const double sigma2   = power_of<2>(sigma);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -7251,7 +7252,7 @@ namespace eos
                                m_B * sigmabar * (4.0 * m_v2 + 2.0 * q2 * sigmabar + m_B2 * sigmabar * (-3.0 + sigmabar)) +
                                2.0 * sigma * (5.0 * omega_1 * q2 - 3.0 * m_B2 * omega_1 * sigmabar + 3.0 * m_B3 * (-1 + sigmabar) * sigmabar +
                                m_B * (5.0 * m_v2 - q2 * sigmabar)))
-                             / (m_B * omega_2 * pow(sigmabar, 6));
+                             / (m_B * omega_2 * power_of<6>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7260,7 +7261,7 @@ namespace eos
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
@@ -7277,13 +7278,13 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
-            const double C_4 = 12.0 * m_B * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (pow(omega_2, 2) * pow(sigmabar, 4));
+            const double C_4 = 12.0 * m_B * m_v * (m_v2 - sigma * q2 + sigmabar * (q2 - m_B2 * sigmabar)) / (power_of<2>(omega_2) * power_of<4>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7294,7 +7295,7 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_B2 = pow(m_B, 2);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
@@ -7308,13 +7309,13 @@ namespace eos
         double I2_fT_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & /*q2*/) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2 = pow(m_B, 2);
+            const double m_B2 = power_of<2>(m_B);
             const double sigmabar = 1.0 - sigma;
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
-            const double C_2 = -4.0 * u * (-1.0 + 2.0 * u) / (m_B2 * pow(sigmabar, 3));
+            const double C_2 = -4.0 * u * (-1.0 + 2.0 * u) / (m_B2 * power_of<3>(sigmabar));
 
             return C_2 * chi_bar_bar_4;
         }
@@ -7322,15 +7323,15 @@ namespace eos
         double I3_fT_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * u * (-1.0 + 2.0 * u) * (m_v2 + q2 * (5.0 - 4.0 * sigmabar) - m_B2 * sigmabar2)
-                             / (m_B2 * pow(sigmabar, 4));
+                             / (m_B2 * power_of<4>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -7338,10 +7339,10 @@ namespace eos
         double I3d1A_fT_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2),   m_B3 = pow(m_B, 3),   m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigma2   = pow(sigma, 2), sigma3   = pow(sigma, 3), sigma4   = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B),   m_B3 = power_of<3>(m_B),   m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3   = power_of<3>(sigma), sigma4   = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -7362,7 +7363,7 @@ namespace eos
                                4.0 * m_B * (4.0 * omega_1 + omega_2) * (5.0 * (m_v2 + q2) - 3.0 * q2 * sigmabar) +
                                4.0 * m_B2 * (-(omega_1 * (2.0 * omega_1 + omega_2) * sigmabar) + 8.0 * q2 * sigmabar +
                                2.0 * m_v2 * (-5.0 + 8.0 * sigmabar))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 6));
+                             / (m_B2 * power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -7372,14 +7373,14 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(),   m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(),   m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_3 = 2.0 * (m_v2 * (4.0 - 4.0 * sigma - 5.0 * sigmabar) - 4.0 * sigma * q2 * sigmabar + sigmabar * (-q2 + m_B2 * sigmabar2))
-                             / (m_B * (-omega_1 + m_B * sigma) * pow(sigmabar, 5));
+                             / (m_B * (-omega_1 + m_B * sigma) * power_of<5>(sigmabar));
 
             return C_3 * chi_bar_bar_4;
         }
@@ -7394,16 +7395,16 @@ namespace eos
         double I4_fT_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B4     = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2     = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B4     = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2     = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
             const double u        = (sigma * m_B() - omega_1) / omega_2;
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 6.0 * u * (-1.0 + 2.0 * u) * (m_v4 - 2.0 * m_B2 * q2 * sigmabar3 + m_B4 * sigmabar4 + q2 * q2 * (-1.0 + 2.0 * sigmabar)
                              + 2.0 * m_v2 * sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B2 * pow(sigmabar, 5));
+                             / (m_B2 * power_of<5>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7411,10 +7412,10 @@ namespace eos
         double I4d1A_fT_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -7431,8 +7432,8 @@ namespace eos
                                 (3.0 * m_v4 + 12.0 * m_v2 * q2 * sigmabar - 3.0 * m_B4 * sigmabar3 * (-2.0 + 2.0 * sigma - 3.0 * sigmabar) +
                                 m_B2 * (sigmabar2 * (-m_v2 + q2 * sigma) + sigmabar2 * (-(5.0 * m_v2) + q2 * (-11.0 + 10.0 * sigma)) -
                                 sigmabar2 * (12.0 * m_v2 + 13.0 * q2 * sigmabar)) +
-                                (-(6.0 * sigma2) + sigmabar * (7.0 + 2.0 * sigmabar) + sigma * (3.0 - 4.0 * sigmabar)) * pow(q2,2.0))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 7));
+                                (-(6.0 * sigma2) + sigmabar * (7.0 + 2.0 * sigmabar) + sigma * (3.0 - 4.0 * sigmabar)) * power_of<2>(q2))))
+                             / (m_B2 * power_of<2>(omega_2) * power_of<7>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7442,15 +7443,15 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = 2.0 * (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                                m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar))
-                             / (m_B * pow(sigmabar, 6) * omega_2);
+                             / (m_B * power_of<6>(sigmabar) * omega_2);
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7465,10 +7466,10 @@ namespace eos
         double I4d2A_fT_3pt_chiB_bar_bar_4(const double & sigma, const double & omega_1, const double & omega_2, const double & q2) const
         {
             // three-particle contribution to f_T proportional to chi_bar_bar_4
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5), m_B6 = pow(m_B, 6);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4), sigma5 = pow(sigma, 5);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3), sigmabar4 = pow(sigmabar, 4);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B), m_B6 = power_of<6>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma), sigma5 = power_of<5>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar), sigmabar4 = power_of<4>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
@@ -7481,7 +7482,7 @@ namespace eos
                                m_v2 * (2.0 * sigmabar2 * q2 * (1 + 5.0 * sigmabar) +
                                omega_1 * (2.0 * omega_1 + omega_2) * (-15.0 + sigmabar * (-40 + 19.0 * sigmabar))) +
                                q2 * sigmabar * (6.0 * sigmabar2 * q2 - omega_1 * (2.0 * omega_1 + omega_2) * (66 + sigmabar * (-53 + 5.0 * sigmabar)))) +
-                               sigma5 * (-60 * m_B6 * sigmabar2 + 30 * m_B4 * q2 * sigmabar + 84 * m_B2 * pow(q2,2.0)) +
+                               sigma5 * (-60 * m_B6 * sigmabar2 + 30 * m_B4 * q2 * sigmabar + 84 * m_B2 * power_of<2>(q2)) +
                                sigma3 * (6.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (-15.0 + 8.0 * sigmabar) +
                                15.0 * m_B3 * (4.0 * omega_1 + omega_2) * sigmabar * (m_v2 + 2.0 * q2 * (1 + sigmabar)) -
                                6.0 * m_B6 * sigmabar2 * (33 + 2.0 * sigmabar * (-24 + 5.0 * sigmabar)) +
@@ -7490,17 +7491,17 @@ namespace eos
                                q2 * (15.0 + (81 - 70 * sigmabar) * sigmabar)) +
                                m_B2 * (84 * m_v4 + 6.0 * m_v2 * q2 * (28 - 57 * sigmabar) +
                                q2 * sigmabar * (15.0 * omega_1 * (2.0 * omega_1 + omega_2) - 2.0 * q2 * (63 + 2.0 * sigmabar))) +
-                               42 * omega_1 * (2.0 * omega_1 + omega_2) * pow(q2,2.0)) -
+                               42 * omega_1 * (2.0 * omega_1 + omega_2) * power_of<2>(q2)) -
                                m_B * sigma4 * (-30 * m_B4 * (4.0 * omega_1 + omega_2) * sigmabar2 +
                                15.0 * m_B2 * (4.0 * omega_1 + omega_2) * q2 * sigmabar + 60 * m_B5 * sigmabar2 * (-3.0 + 2.0 * sigmabar) +
                                12.0 * m_B * q2 * (14.0 * m_v2 + q2 * (7.0 - 10.0 * sigmabar)) +
-                               10.0 * m_B3 * sigmabar * (3.0 * m_v2 + q2 * (6.0 + 5.0 * sigmabar)) + 42 * (4.0 * omega_1 + omega_2) * pow(q2,2.0)
+                               10.0 * m_B3 * sigmabar * (3.0 * m_v2 + q2 * (6.0 + 5.0 * sigmabar)) + 42 * (4.0 * omega_1 + omega_2) * power_of<2>(q2)
                                ) + omega_1 * (2.0 * omega_1 + omega_2) *
                                (m_v4 * (-42 + 87 * sigmabar) + 3.0 * m_v2 * q2 * sigmabar * (13.0 + 7.0 * sigmabar) +
-                               5.0 * sigmabar2 * (5.0 - 2.0 * sigmabar) * pow(q2,2.0)) +
+                               5.0 * sigmabar2 * (5.0 - 2.0 * sigmabar) * power_of<2>(q2)) +
                                m_B * (4.0 * omega_1 + omega_2) * sigmabar *
                                (-(3.0 * m_v2 * q2 * sigmabar * (3.0 + 5.0 * sigmabar)) + 3.0 * m_v4 * (4.0 - 9.0 * sigmabar) +
-                               sigmabar2 * (-11.0 + 2.0 * sigmabar) * pow(q2,2.0)) +
+                               sigmabar2 * (-11.0 + 2.0 * sigmabar) * power_of<2>(q2)) +
                                sigma2 * (6.0 * omega_1 * (2.0 * omega_1 + omega_2) * q2 * (-(7.0 * (2.0 * m_v2 + q2)) + 6.0 * q2 * sigmabar) +
                                9.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (11.0 + 2.0 * sigmabar * (-6.0 + sigmabar)) +
                                6.0 * m_B6 * sigmabar2 * (13.0 + 3.0 * sigmabar * (-13.0 + 6.0 * sigmabar)) -
@@ -7513,7 +7514,7 @@ namespace eos
                                q2 * sigmabar * (2.0 * q2 * sigmabar * (-5.0 + 26 * sigmabar) +
                                5.0 * omega_1 * (2.0 * omega_1 + omega_2) * (6.0 + 7.0 * sigmabar))) -
                                m_B * (4.0 * omega_1 + omega_2) * (42 * m_v4 + 21 * m_v2 * q2 * (4.0 - 7.0 * sigmabar) -
-                               sigmabar * (51 + 10.0 * sigmabar) * pow(q2,2.0))) +
+                               sigmabar * (51 + 10.0 * sigmabar) * power_of<2>(q2))) +
                                sigma * (6.0 * m_B6 * sigmabar3 * (8.0 - 9.0 * sigmabar) -
                                3.0 * m_B5 * (4.0 * omega_1 + omega_2) * sigmabar2 * (13.0 + 9.0 * sigmabar * (-3.0 + sigmabar)) +
                                m_B4 * sigmabar2 * (m_v2 * (-20.0 + 30 * sigmabar2 - 68 * sigmabar) +
@@ -7527,10 +7528,10 @@ namespace eos
                                q2 * (6.0 * sigmabar2 * q2 * (7.0 - 2.0 * sigmabar) -
                                omega_1 * (2.0 * omega_1 + omega_2) * (-15.0 + sigmabar * (-101 + 37 * sigmabar)))) +
                                omega_1 * (2.0 * omega_1 + omega_2) * (42 * m_v4 + 3.0 * m_v2 * q2 * (28 - 41 * sigmabar) -
-                               sigmabar * (39 + 16.0 * sigmabar) * pow(q2,2.0)) -
+                               sigmabar * (39 + 16.0 * sigmabar) * power_of<2>(q2)) -
                                m_B * (4.0 * omega_1 + omega_2) * (m_v4 * (-42 + 99 * sigmabar) + 3.0 * m_v2 * q2 * sigmabar * (21 - 4.0 * sigmabar) +
-                               2.0 * sigmabar2 * (8.0 - 9.0 * sigmabar) * pow(q2,2.0))))
-                             / (m_B2 * pow(omega_2, 2) * pow(sigmabar, 8));
+                               2.0 * sigmabar2 * (8.0 - 9.0 * sigmabar) * power_of<2>(q2))))
+                             / (m_B2 * power_of<2>(omega_2) * power_of<8>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7540,10 +7541,10 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B3 = pow(m_B, 3), m_B4 = pow(m_B, 4), m_B5 = pow(m_B, 5);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2), m_v4 = pow(m_v, 4);
-            const double sigma2   = pow(sigma, 2), sigma3 = pow(sigma, 3), sigma4 = pow(sigma, 4);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B3 = power_of<3>(m_B), m_B4 = power_of<4>(m_B), m_B5 = power_of<5>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v), m_v4 = power_of<4>(m_v);
+            const double sigma2   = power_of<2>(sigma), sigma3 = power_of<3>(sigma), sigma4 = power_of<4>(sigma);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -7557,19 +7558,19 @@ namespace eos
                     omega_1 * (3.0 * m_v4 * (-4.0 + 9.0 * sigmabar) -
                     sigmabar2 * (m_B2 - q2) * (q2 * (11.0 - 2.0 * sigmabar) + 3.0 * m_B2 * (-4.0 + 3.0 * sigmabar)) +
                     m_v2 * sigmabar * (3.0 * q2 * (3.0 + 5.0 * sigmabar) + m_B2 * (-5.0 + sigmabar * (-18.0 + 5.0 * sigmabar)))) +
-                    sigma4 * (12.0 * m_B5 * sigmabar2 - 5.0 * m_B3 * q2 * sigmabar - 12.0 * m_B * pow(q2,2.0)) +
+                    sigma4 * (12.0 * m_B5 * sigmabar2 - 5.0 * m_B3 * q2 * sigmabar - 12.0 * m_B * power_of<2>(q2)) +
                     sigma3 * (-(12.0 * m_B4 * omega_1 * sigmabar2) + 5.0 * m_B2 * omega_1 * q2 * sigmabar +
                     12.0 * m_B5 * sigmabar2 * (-3.0 + sigmabar) + 4.0 * m_B * q2 * (6.0 * m_v2 + 3.0 * q2 - 2.0 * q2 * sigmabar) +
-                    m_B3 * sigmabar * (5.0 * m_v2 + 2.0 * q2 * (5.0 + 8.0 * sigmabar)) + 12.0 * omega_1 * pow(q2,2.0)) +
+                    m_B3 * sigmabar * (5.0 * m_v2 + 2.0 * q2 * (5.0 + 8.0 * sigmabar)) + 12.0 * omega_1 * power_of<2>(q2)) +
                     sigma2 * (-(9.0 * m_B4 * omega_1 * sigmabar2 * (-4.0 + sigmabar)) +
                     9.0 * m_B5 * sigmabar2 * (4.0 - 3.0 * sigmabar) +
                     6.0 * omega_1 * q2 * (-(4.0 * m_v2) + q2 * (-2.0 + sigmabar)) -
                     m_B2 * omega_1 * sigmabar * (5.0 * m_v2 + q2 * (10.0 + 17.0 * sigmabar)) +
                     m_B3 * sigmabar * (-(m_v2 * (10.0 + 17.0 * sigmabar)) + q2 * (-5.0 + sigmabar * (-38 + 15.0 * sigmabar))) +
-                    m_B * (-(12.0 * m_v4) + m_v2 * q2 * (-24 + 37 * sigmabar) + sigmabar * (11.0 + 8.0 * sigmabar) * pow(q2,2.0))) +
+                    m_B * (-(12.0 * m_v4) + m_v2 * q2 * (-24 + 37 * sigmabar) + sigmabar * (11.0 + 8.0 * sigmabar) * power_of<2>(q2))) +
                     omega_1 * sigma * (12.0 * m_v4 + m_v2 * (q2 * (24 - 33 * sigmabar) + 2.0 * m_B2 * sigmabar * (5.0 + 9.0 * sigmabar)) +
                     sigmabar * (18.0 * m_B4 * sigmabar * (-2.0 + sigmabar) +
-                    5.0 * m_B2 * q2 * (1 - 2.0 * sigmabar * (-4.0 + sigmabar)) - (9.0 + 8.0 * sigmabar) * pow(q2,2.0)))) +
+                    5.0 * m_B2 * q2 * (1 - 2.0 * sigmabar * (-4.0 + sigmabar)) - (9.0 + 8.0 * sigmabar) * power_of<2>(q2)))) +
                     2.0 * m_B * (-omega_1 + m_B * sigma) * sigmabar *
                     (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                     m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)) * chi_bar_4);
@@ -7580,16 +7581,16 @@ namespace eos
             // three-particle contribution to f_T proportional to chi_bar_bar_4
             const double omega_1  = m_B * sigma;
 
-            const double m_B2     = pow(m_B, 2);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double m_B2     = power_of<2>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
 
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
 
             const double C_4 = -(2.0 * (-(2.0 * (m_v2 - q2 * sigma) * sigmabar) +
                                 (5.0 * m_v2 - 3.0 * m_B2 * sigmabar2 + q2 * (3.0 - 2.0 * sigma)) * sigmabar) *
                                 (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)))
-                             /  (pow(omega_2, 2) * pow(sigmabar, 6));
+                             /  (power_of<2>(omega_2) * power_of<6>(sigmabar));
 
             return C_4 * chi_bar_bar_4;
         }
@@ -7600,9 +7601,9 @@ namespace eos
             const double omega_1  = m_B * sigma;
             const double omega_2  = m_B * sigma - omega_1;
 
-            const double m_B2     = pow(m_B, 2), m_B4 = pow(m_B, 4);
-            const double m_v      = this->m_v(), m_v2 = pow(m_v, 2);
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2), sigmabar3 = pow(sigmabar, 3);
+            const double m_B2     = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
+            const double m_v      = this->m_v(), m_v2 = power_of<2>(m_v);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar), sigmabar3 = power_of<3>(sigmabar);
 
             const double chi_bar_4     = this->chi_bar_4(omega_1, omega_2);
             const double chi_bar_bar_4 = this->chi_bar_bar_4(omega_1, omega_2);
@@ -7611,7 +7612,7 @@ namespace eos
                      ((m_v2 - q2 * sigma) * (-(7.0 * m_v2) + m_B2 * sigmabar2 - 5.0 * q2 + 6.0 * q2 * sigma) * sigmabar +
                      sigmabar2 * (q2 * (5.0 * m_v2 + q2) - m_B2 * (2.0 * m_v2 + q2 - 3.0 * q2 * sigma) * sigmabar) +
                      sigmabar3 * (9.0 * m_B4 * sigmabar2 + m_B2 * (-(5.0 * m_v2) - 11.0 * q2 + 10.0 * q2 * sigma) +
-                     2.0 * pow(q2,2.0)) + 4.0 * sigmabar * pow(m_v2 - q2 * sigma,2.0)) +
+                     2.0 * power_of<2>(q2)) + 4.0 * sigmabar * power_of<2>(m_v2 - q2 * sigma)) +
                      m_B * sigmabar * (3.0 * m_B2 * sigmabar3 - 2.0 * q2 * sigma * sigmabar + q2 * (-3.0 + 2.0 * sigma) * sigmabar +
                      m_v2 * (2.0 - 2.0 * sigma - 5.0 * sigmabar)) * (m_v2 - q2 * sigma + sigmabar * (q2 - m_B2 * sigmabar)) * chi_bar_4);
         }
@@ -7686,16 +7687,16 @@ namespace eos
         // {{{
         double integrand_fT_2pt_disp(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
-            const double etad3    = 24.0 * (eta - 1.0) * pow(eta, 2) * (2.0 * eta - 1.0) / pow(sigmabar, 3);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
+            const double etad3    = 24.0 * (eta - 1.0) * power_of<2>(eta) * (2.0 * eta - 1.0) / power_of<3>(sigmabar);
 
             const double I1   = I1_fT_2pt_phi_bar(sigma, q2);
             const double I2   = I2_fT_2pt_phi_bar(sigma, q2)   + I2_fT_2pt_g_bar(sigma, q2);
@@ -7711,11 +7712,11 @@ namespace eos
             double result = 0.0;
             result += -1.0 * I1;
             result += (etad1 * I2 + eta * I2d1) / m_B2;
-            result += -1.0 * (I3 * (pow(etad1, 2) + eta * etad2) + 3.0 * I3d1 * eta * etad1 + I3d2 * pow(eta, 2)) / (2.0 * m_B4);
-            result += I4 * (pow(eta, 2) * etad3 + 4.0 * eta * etad1 * etad2 + pow(etad1, 3)) / (6.0 * m_B6);
-            result += I4d1 * eta * (4.0 * eta * etad2 + 7.0 * pow(etad1, 2)) / (6.0 * m_B6);
-            result += I4d2 * 6.0 * pow(eta, 2) * etad1 / (6.0 * m_B6);
-            result += I4d3 * pow(eta, 3) / (6.0 * m_B6);
+            result += -1.0 * (I3 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I3d1 * eta * etad1 + I3d2 * power_of<2>(eta)) / (2.0 * m_B4);
+            result += I4 * (power_of<2>(eta) * etad3 + 4.0 * eta * etad1 * etad2 + power_of<3>(etad1)) / (6.0 * m_B6);
+            result += I4d1 * eta * (4.0 * eta * etad2 + 7.0 * power_of<2>(etad1)) / (6.0 * m_B6);
+            result += I4d2 * 6.0 * power_of<2>(eta) * etad1 / (6.0 * m_B6);
+            result += I4d3 * power_of<3>(eta) / (6.0 * m_B6);
             result *= exp;
 
             return result;
@@ -7723,8 +7724,8 @@ namespace eos
 
         double integrand_fT_2pt_borel(const double & sigma, const double & q2) const
         {
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1   = I1_fT_2pt_phi_bar(sigma, q2);
@@ -7744,15 +7745,15 @@ namespace eos
 
         double surface_fT_2pt(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fT_2pt_phi_bar(sigma, q2) + I2_fT_2pt_g_bar(sigma, q2);
             const double I3   = I3_fT_2pt_g_bar(sigma, q2);
@@ -7765,9 +7766,9 @@ namespace eos
             double result = 0.0;
             result += -1.0 * eta * I2 / m_B2;
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
-            result += -1.0 / 6.0 * eta / m_B2 * (I4 / (pow( M2(), 2)));
+            result += -1.0 / 6.0 * eta / m_B2 * (I4 / (power_of<2>( M2())));
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
 
             return result;
@@ -7803,8 +7804,8 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1 = I1_fT_3pt_phi_3(sigma, omega_1, omega_2, q2);
@@ -7843,16 +7844,16 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fT_3pt_phi_3(sigma, omega_1, omega_2, q2)            + I2_fT_3pt_phi_bar_3(sigma, omega_1, omega_2, q2)
                               + I2_fT_3pt_phi_bar_4(sigma, omega_1, omega_2, q2)        + I2_fT_3pt_phi_bar_bar_4(sigma, omega_1, omega_2, q2)
@@ -7878,7 +7879,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -7892,16 +7893,16 @@ namespace eos
 
             const double omega_1 = sigma * m_B() * x_1;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -7920,7 +7921,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -7936,16 +7937,16 @@ namespace eos
 
             const double omega_2 = sigma * m_B() * (x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -7964,7 +7965,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -7976,16 +7977,16 @@ namespace eos
             // this does NOT includes the original factor of 1 / omega_2
             const double prefactor = 1.0;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
 
             constexpr double I2   = 0.0;
@@ -8002,7 +8003,7 @@ namespace eos
             result +=  0.5 * eta / m_B2 * (I3 / M2() + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result += -1.0 / 6.0 * eta / m_B2 * (I4 / M4);
             result += -1.0 / 6.0 * eta / (m_B4 * M2() ) * (eta * I4d1 + I4 * etad1);
-            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result *= exp;
             result *= prefactor;
 
@@ -8015,8 +8016,8 @@ namespace eos
 
         double integrand_fT_2pt_borel_m1(const double & sigma, const double & q2) const
         {
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1   = I1_fT_2pt_phi_bar(sigma, q2);
@@ -8042,16 +8043,16 @@ namespace eos
 
         double surface_fT_2pt_m1(const double & sigma, const double & q2) const
         {
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
-            const double m_P2 = pow(m_P(), 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
+            const double m_P2 = power_of<2>(m_P());
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fT_2pt_phi_bar(sigma, q2)   + I2_fT_2pt_g_bar(sigma, q2);
             const double I3   = I3_fT_2pt_g_bar(sigma, q2);
@@ -8065,7 +8066,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -8092,8 +8093,8 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_P2 = pow(m_P(), 2);
-            const double M4   = pow(M2, 2), M6 = pow(M2, 3);
+            const double m_P2 = power_of<2>(m_P());
+            const double M4   = power_of<2>(M2), M6 = power_of<3>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
             const double I1 = I1_fT_3pt_phi_3(sigma, omega_1, omega_2, q2);
@@ -8139,16 +8140,16 @@ namespace eos
             const double omega_1 = sigma * m_B() * x_1;
             const double omega_2 = sigma * m_B() * (xbar_1 + x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             const double I2   = I2_fT_3pt_phi_3(sigma, omega_1, omega_2, q2)            + I2_fT_3pt_phi_bar_3(sigma, omega_1, omega_2, q2)
                               + I2_fT_3pt_phi_bar_4(sigma, omega_1, omega_2, q2)
@@ -8175,7 +8176,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -8194,16 +8195,16 @@ namespace eos
 
             const double omega_1 = sigma * m_B() * x_1;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -8222,7 +8223,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -8243,16 +8244,16 @@ namespace eos
 
             const double omega_2 = sigma * m_B() * (x_2 / xbar_2);
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
             constexpr double I2   = 0.0;
             constexpr double I3   = 0.0;
@@ -8271,7 +8272,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -8288,16 +8289,16 @@ namespace eos
             // this does NOT includes the original factor of 1 / omega_2
             const double prefactor = 1.0;
 
-            const double m_B2 = pow(m_B(), 2), m_B4 = pow(m_B(), 4), m_B6 = pow(m_B(), 6);
-            const double m_P2 = pow(m_P(), 2);
-            const double m_v2 = pow(m_v(), 2);
-            const double M4   = pow(M2, 2);
+            const double m_B2 = power_of<2>(m_B()), m_B4 = power_of<4>(m_B()), m_B6 = power_of<6>(m_B());
+            const double m_P2 = power_of<2>(m_P());
+            const double m_v2 = power_of<2>(m_v());
+            const double M4   = power_of<2>(M2);
             const double exp  = std::exp((-s(sigma, q2) + m_P2) / M2());
 
-            const double sigmabar = 1.0 - sigma, sigmabar2 = pow(sigmabar, 2);
+            const double sigmabar = 1.0 - sigma, sigmabar2 = power_of<2>(sigmabar);
             const double eta      = 1.0 / (1.0 + (m_v2 - q2) / (sigmabar2 * m_B2));
             const double etad1    = 2.0 * (eta - 1.0) * eta / sigmabar;
-            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / pow(sigmabar, 2);
+            const double etad2    = 2.0 * (eta - 1.0) * eta * (4.0 * eta - 1.0) / power_of<2>(sigmabar);
 
 
             constexpr double I2   = 0.0;
@@ -8313,7 +8314,7 @@ namespace eos
             result1 +=  0.5 * eta / m_B2 * (I3 / M2 + eta / m_B2 * I3d1 + I3 * etad1 / m_B2);
             result1 += -1.0 / 6.0 * eta / m_B2 * (I4 / (M4));
             result1 += -1.0 / 6.0 * eta / (m_B4 * M2 ) * (eta * I4d1 + I4 * etad1);
-            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (pow(etad1, 2) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * pow(eta, 2));
+            result1 += -1.0 / 6.0 * eta / m_B6 * (I4 * (power_of<2>(etad1) + eta * etad2) + 3.0 * I4d1 * eta * etad1 + I4d2 * power_of<2>(eta));
             result1 *=  exp * s(sigma, q2);
 
             double result2 = 0.0;
@@ -8355,7 +8356,7 @@ namespace eos
                              - surface_fT_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * pow(m_B(), 2) * (m_B() + m_P()) / (f_P() * (pow(m_B(), 2) - pow(m_P(), 2) - q2)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<2>(m_B()) * (m_B() + m_P()) / (f_P() * (power_of<2>(m_B()) - power_of<2>(m_P()) - q2)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
         }
 
         double normalized_moment_1_f_t(const double & q2) const
@@ -9521,8 +9522,8 @@ namespace eos
     double
     AnalyticFormFactorBToPLCSR<Process_>::f_0(const double & q2) const
     {
-        const double m_B = this->_imp->m_B(), m_B2 = pow(m_B, 2);
-        const double m_P = this->_imp->m_P(), m_P2 = pow(m_P, 2);
+        const double m_B = this->_imp->m_B(), m_B2 = power_of<2>(m_B);
+        const double m_P = this->_imp->m_P(), m_P2 = power_of<2>(m_P);
 
         return (this->_imp->f_pm(q2)-this->_imp->f_p(q2)) * q2 / (m_B2 - m_P2) + this->_imp->f_p(q2);
     }

@@ -157,7 +157,7 @@ namespace eos
 
         inline double R_int_denom_integrand(const double & q2)
         {
-            return eos::lambda(m_B() * m_B(), 0.135 * 0.135, q2) / pow(b_to_pi_ff->f_p(q2), 2);
+            return eos::lambda(m_B() * m_B(), 0.135 * 0.135, q2) / power_of<2>(b_to_pi_ff->f_p(q2));
         }
 
         inline double R_int_denom()
@@ -271,11 +271,11 @@ namespace eos
             const double L = std::log((r1m1 + r2) / r2);
 
             const double result_a0 = (3.0 * r1m1 * (r1m1 + 2.0 * r2)
-                - 6.0 * r2 * (r1m1 + r2) * L) / pow(r1m1, 3);
+                - 6.0 * r2 * (r1m1 + r2) * L) / power_of<3>(r1m1);
             const double result_a2 = 3.0 *
                 (r1m1 * (r1m1 + 2.0 * r2) * (r1m1 * r1m1 + 30.0 * r1m1 * r2 + 30.0 * r2 * r2)
                 - 12.0 * r2 * (r1m1 + r2) * (r1m1 * r1m1 + 5.0 * r1m1 * r2 + 5.0 * r2 * r2) * L)
-                / pow(r1m1, 5);
+                / power_of<5>(r1m1);
 
             return result_a0 + pi.a2pi(mu) * result_a2;
         }
@@ -288,11 +288,11 @@ namespace eos
 
             const double L = std::log((r1m1 + r2) / r2);
 
-            const double result_a0 = 6.0 * r2 * ((r1m1 + r2) * L - r1m1) / pow(r1m1, 2);
+            const double result_a0 = 6.0 * r2 * ((r1m1 + r2) * L - r1m1) / power_of<2>(r1m1);
             const double result_a2 = -6.0 * r2 *
                 (r1m1 * (16.0 * r1m1 * r1m1 + 45.0 * r1m1 * r2 + 30.0 * r2 * r2)
                  - 6.0 * (r1m1 + r2) * (r1m1 * r1m1 + 5.0 * r1m1 * r2 + 5.0 * r2 * r2) * L)
-                / pow(r1m1, 4);
+                / power_of<4>(r1m1);
 
             return result_a0 + pi.a2pi(mu) * result_a2;
         }
@@ -328,7 +328,7 @@ namespace eos
             const double L = std::log((r1m1 + r2) / r2);
 
             const double result = 2.0 * m_B() * pi.mupi(mu) / k2
-                * (r1m1 - (r1m1 + r2) * L) / pow(r1m1, 2);
+                * (r1m1 - (r1m1 + r2) * L) / power_of<2>(r1m1);
 
             return result;
         }
@@ -342,7 +342,7 @@ namespace eos
             const double L = std::log((r1m1 + r2) / r2);
 
             const double result = -2.0 * m_B() * pi.mupi(mu) / k2
-                * (r1m1 - r2 * L) / pow(r1m1, 2);
+                * (r1m1 - r2 * L) / power_of<2>(r1m1);
 
             return result;
         }
@@ -645,8 +645,8 @@ namespace eos
 
         inline double f_perp_im_res_qhat2(const double & q2, const double & k2) const
         {
-            const double m_B2 = pow(this->m_B(), 2);
-            const double m_Bst2 = pow(this->m_Bst(), 2);
+            const double m_B2 = power_of<2>(this->m_B());
+            const double m_Bst2 = power_of<2>(this->m_Bst());
             /* divided by i */
             const double Im_contracted_T_perp = -1.0 * sqrt(k2 * lambda(q2, k2)) * (m_B2 + m_Bst2)
                     / (4.0 * m_B() * m_Bst2);
@@ -656,8 +656,8 @@ namespace eos
 
         inline double f_para_im_res_qhat2(const double & q2, const double & k2) const
         {
-            const double m_B2 = pow(this->m_B(), 2), m_B4 = pow(this->m_B(), 4);
-            const double m_Bst2 = pow(this->m_Bst(), 2);
+            const double m_B2 = power_of<2>(this->m_B()), m_B4 = power_of<4>(this->m_B());
+            const double m_Bst2 = power_of<2>(this->m_Bst());
             /* divided by i */
             const double Im_contracted_T_para = -1.0 * sqrt(k2) * (m_B4 + m_Bst2 * (q2 - k2) + m_B2 * (q2 - 3.0 * m_Bst2 - k2))
                     / (4.0 * m_B() * m_Bst2);
@@ -667,8 +667,8 @@ namespace eos
 
         inline double f_long_im_res_qhat2(const double & q2, const double & k2) const
         {
-            const double m_B2 = pow(this->m_B(), 2);
-            const double m_Bst2 = pow(this->m_Bst(), 2);
+            const double m_B2 = power_of<2>(this->m_B());
+            const double m_Bst2 = power_of<2>(this->m_Bst());
             /* divided by i */
             const double Im_contracted_T_long = -1.0 * (k2 * (m_B2 + m_Bst2) - (m_B2 - q2) * (m_B2 - m_Bst2))
                     * (k2 * m_Bst2 + m_B2 * (q2 - m_Bst2))
@@ -679,8 +679,8 @@ namespace eos
 
         inline double f_time_im_res_qhat2(const double & q2, const double & k2) const
         {
-            const double m_B2 = pow(this->m_B(), 2);
-            const double m_Bst2 = pow(this->m_Bst(), 2);
+            const double m_B2 = power_of<2>(this->m_B());
+            const double m_Bst2 = power_of<2>(this->m_Bst());
             /* divided by i */
             const double Im_contracted_T_time = -1.0 * (m_B2 * (m_B2 - m_Bst2) * (m_Bst2 - q2) - k2 * m_Bst2 * (m_B2 + m_Bst2))
                     / (2.0 * m_B() * m_Bst2 * std::sqrt(q2));
