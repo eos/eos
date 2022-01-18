@@ -20,6 +20,7 @@ import eos
 import copy as _cp
 import numpy as np
 import scipy
+import pypmc
 
 class BestFitPoint:
     """
@@ -191,7 +192,8 @@ class Analysis:
 
     @staticmethod
     def _perplexity(weights):
-        """Helper function that computes the perplexity of an array of weights"""
+        """Helper function that computes the perplexity of an array of weights.
+           Non positive and NaN weights are neglected in the calculation."""
         # sum positive finite weights only
         weights_sum = np.sum(weights,
             where = np.logical_or(weights > 0, np.isfinite(weights)))
@@ -206,6 +208,10 @@ class Analysis:
             perplexity = np.exp(entropy) / len(normalized_weights)
             return perplexity
 
+    @staticmethod
+    def _ess(weights):
+        """Helper function that computes the effective sample size of an array of weights"""
+        return pypmc.tools.convergence.ess(weights)
 
     def clone(self):
         """Returns an independent instance of eos.Analysis."""
@@ -314,7 +320,6 @@ class Analysis:
         .. note::
            This method requiries the PyPMC python module, which can be installed from PyPI.
         """
-        import pypmc
         try:
             from tqdm.auto import tqdm
             progressbar = tqdm
@@ -424,7 +429,6 @@ class Analysis:
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
         """
-        import pypmc
         try:
             from tqdm.auto import tqdm
             progressbar = tqdm
@@ -457,8 +461,10 @@ class Analysis:
             origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
             samples = sampler.samples[:]
-            last_perplexity = self._perplexity(np.copy(sampler.weights[-1][:, 0]))
-            eos.info('Perplexity of the last samples after sampling in step {}: {}'.format(step, last_perplexity))
+            last_weights = np.copy(sampler.weights[-1][:, 0])
+            last_perplexity = self._perplexity(last_weights)
+            last_ess = self._ess(last_weights)
+            eos.info(f'Convergence diagnostics of the last samples after sampling in step {step}: perplexity = {last_perplexity}, ESS = {last_ess}')
             if last_perplexity < 0.05:
                 eos.warn("Last step's perplexity is very low. This could possibly be improved by running the markov chains that are used to form the initial PDF for a bit longer")
             weights = sampler.weights[:][:, 0]
@@ -467,14 +473,14 @@ class Analysis:
             adjusted_weights = np.where(
                     np.logical_or(adjusted_weights <= 0, np.isnan(adjusted_weights)),
                     eps, adjusted_weights)
-            eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, self._perplexity(adjusted_weights)))
+            eos.info(f'Convergence diagnostics of all previous samples after sampling in step {step}: perplexity = {self._perplexity(adjusted_weights)}, ESS = {self._ess(adjusted_weights)}')
             pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
             # Normalize the weights and remove components with a weight smaller than weight_threshold
             sampler.proposal.normalize()
             sampler.proposal.prune(threshold = weight_threshold)
             # stop adaptation if the perplexity of the last step is larger than the threshold
             if last_perplexity > final_perplexity_threshold:
-                eos.info('Perplexity threshold reached after {} step(s)'.format(step))
+                eos.info(f'Perplexity threshold reached after {step} step(s)')
                 break
 
         # draw final samples
@@ -499,7 +505,8 @@ class Analysis:
             samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])
             weights = sampler.weights[:][:, 0]
         perplexity = self._perplexity(np.copy(weights))
-        eos.info('Perplexity after final samples: {}'.format(perplexity))
+        ess = self._ess(np.copy(weights))
+        eos.info(f'Convergence diagnostics after final samples: perplexity = {perplexity}, ESS = {ess}')
 
         return samples, weights, sampler.proposal
 
