@@ -420,9 +420,9 @@ namespace eos
     template <typename Decay_, typename ... PDFArgs_, typename ... PDFKinematicRanges_, typename ... NormArgs_, typename ... NormKinematicNames_>
     SignalPDFEntry * make_concrete_signal_pdf_entry(const QualifiedName & name,
             const Options & default_options,
-            double (Decay_::* pdf)(const PDFArgs_ & ...) const,
+            const std::function<double (const Decay_ *, const PDFArgs_ & ...)> & pdf,
             const std::tuple<PDFKinematicRanges_ ...> & _pdf_kinematic_ranges,
-            double (Decay_::* norm)(const NormArgs_ & ...) const,
+            const std::function<double (const Decay_ *, const NormArgs_ & ...)> & norm,
             const std::tuple<NormKinematicNames_ ...> & _norm_kinematic_names)
     {
         static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments as kinematics ranges!");
@@ -438,9 +438,9 @@ namespace eos
 
         return new ConcreteSignalPDFEntry<Decay_, PDFSignature, sizeof...(PDFArgs_), NormSignature, sizeof...(NormArgs_)>(name,
                 default_options,
-                std::function<PDFSignature>(std::mem_fn(pdf)),
+                pdf,
                 pdf_kinematic_ranges,
-                std::function<NormSignature>(std::mem_fn(norm)),
+                norm,
                 norm_kinematic_names);
     }
 }
