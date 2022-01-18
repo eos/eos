@@ -124,7 +124,8 @@ def mixture_product(posterior, posteriors, base_directory='./', analysis_file=No
 
 # Sample PMC
 def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000,
-               perplexity_threshold=1.0, weight_threshold=1e-10, sigma_test_stat=None, initial_proposal='clusters'):
+               perplexity_threshold=1.0, weight_threshold=1e-10, sigma_test_stat=None, initial_proposal='clusters',
+               pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05, pmc_lookback=1):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
@@ -152,6 +153,16 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :param initial_proposal: Specify where the initial proposal should be taken from; 'clusters' (default): use the proposal obtained using `find-clusters`;
     'product': use the proposal obtained from `mixture_product`; 'pmc': continue sampling from the previous `sample-pmc` results.
     :type initial_proposal: str, optional
+    :param pmc_iterations: Maximum number of update of the PMC, changing this value may make the update unstable.
+    :type pmc_iterations: int > 0, optional, advanced
+    :param pmc_rel_tol: Relative tolerance of the PMC. If two consecutive values of the current density log-likelihood are relatively smaller than this value, the convergence is declared.
+    :type pmc_rel_tol: float > 0.0, optional, advanced
+    :param pmc_abs_tol: Absolute tolerance of the PMC. If two consecutive values of the current density log-likelihood are smaller than this value, the convergence is declared.
+    :type pmc_abs_tol: float > 0.0, optional, advanced
+    :param pmc_lookback: Use reweighted samples from the previous update steps when adjusting the mixture density.
+            The parameter determines the number of update steps to "look back".
+            The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
+    :type pmc_lookback: int >= 0, optional
      """
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
@@ -173,7 +184,9 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
         eos.error("Could not initialize proposal in sample_pmc: argument {} is not supported.".format(initial_proposal))
 
     samples, weights, proposal = analysis.sample_pmc(initial_density, step_N=step_N, steps=steps, final_N=final_N,
-                                                     rng=rng, final_perplexity_threshold=perplexity_threshold, weight_threshold=weight_threshold)
+                                                     rng=rng, final_perplexity_threshold=perplexity_threshold,
+                                                     weight_threshold=weight_threshold, pmc_iterations=pmc_iterations,
+                                                     pmc_rel_tol=pmc_rel_tol, pmc_abs_tol=pmc_abs_tol, pmc_lookback=pmc_lookback)
 
     if initial_proposal == 'pmc':
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)

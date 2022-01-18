@@ -384,7 +384,7 @@ class Analysis:
 
     def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand,
                     return_final_only=True, final_perplexity_threshold=1.0, weight_threshold=1e-10,
-                    pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05):
+                    pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05, pmc_lookback=1):
         """
         Return samples of the parameters and log(weights), and a mixture density adapted to the posterior.
 
@@ -406,6 +406,9 @@ class Analysis:
         :param pmc_iterations: (advanced) Maximum number of update of the PMC, changing this value may make the update unstable.
         :param pmc_rel_tol: (advanced) Relative tolerance of the PMC. If two consecutive values of the current density log-likelihood are relatively smaller than this value, the convergence is declared.
         :param pmc_abs_tol: (advanced) Absolute tolerance of the PMC. If two consecutive values of the current density log-likelihood are smaller than this value, the convergence is declared.
+        :param pmc_lookback: (advanced) Use reweighted samples from the previous update steps when adjusting the mixture density.
+            The parameter determines the number of update steps to "look back".
+            The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
 
         :return: A tuple of the parameters as array of length N = step_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
@@ -458,33 +461,44 @@ class Analysis:
         sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True, rng=rng)
         generating_components = []
 
-        eps = np.finfo(float).eps
+        # list of proposals used to generate the samples. These proposals are not modified by `combine_weights`
+        proposals = [sampler.proposal]
 
         # carry out adaptions
         for step in progressbar(range(steps), desc="Adaptions", leave=False):
             origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
-            samples = sampler.samples[:]
+
+            # Compute the indicators for the current step
             last_weights = np.copy(sampler.weights[-1][:, 0])
             last_perplexity = self._perplexity(last_weights)
             last_ess = self._ess(last_weights)
             eos.info(f'Convergence diagnostics of the last samples after sampling in step {step}: perplexity = {last_perplexity}, ESS = {last_ess}')
             if last_perplexity < 0.05:
                 eos.warn("Last step's perplexity is very low. This could possibly be improved by running the markov chains that are used to form the initial PDF for a bit longer")
-            weights = sampler.weights[:][:, 0]
-            adjusted_weights = np.copy(weights)
-            # replace negative and nan weights by eps
-            adjusted_weights = np.where(
-                    np.logical_or(adjusted_weights <= 0, np.isnan(adjusted_weights)),
-                    eps, adjusted_weights)
-            eos.info(f'Convergence diagnostics of all previous samples after sampling in step {step}: perplexity = {self._perplexity(adjusted_weights)}, ESS = {self._ess(adjusted_weights)}')
-            pmc = pypmc.mix_adapt.pmc.PMC(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True)
+
+            # Use the samples of the last pmc_lookback steps to update the mixture
+            samples = sampler.samples[-pmc_lookback:]
+            weights = sampler.weights[-pmc_lookback:][:, 0]
+            eos.info(f'Convergence diagnostics of all previous samples after sampling in step {step}: perplexity = {self._perplexity(weights)}, ESS = {self._ess(weights)}')
+
+            # Reevaluate the weights of the previous pmc_lookback steps
+            reevaluated_weights = pypmc.sampler.importance_sampling.combine_weights(
+                 samples.reshape(-1, step_N, len(self.varied_parameters)),
+                 weights.reshape(-1, step_N),
+                 proposals[-pmc_lookback:]
+                )[:][:,0]
+
+            pmc = pypmc.mix_adapt.pmc.PMC(samples, sampler.proposal, reevaluated_weights, mincount=0, rb=True)
             # Update the proposal. Components with small weights are only pruned after the updates, this may slower the procedure but ensures that small weights are not removed to early.
             pmc.run(iterations=pmc_iterations, prune=0.0, rel_tol=pmc_rel_tol, abs_tol=pmc_abs_tol)
-            # Normalize the weights and remove components with a weight smaller than weight_threshold
             sampler.proposal = pmc.density
+            proposals.append(sampler.proposal)
+
+            # Normalize the weights and remove components with a weight smaller than weight_threshold
             sampler.proposal.normalize()
             sampler.proposal.prune(threshold = weight_threshold)
+
             # stop adaptation if the perplexity of the last step is larger than the threshold
             if last_perplexity > final_perplexity_threshold:
                 eos.info(f'Perplexity threshold reached after {step} step(s)')

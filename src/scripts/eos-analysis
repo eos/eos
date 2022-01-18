@@ -186,6 +186,22 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
         help = 'The number of samples to be stored in the output file.',
         dest = 'final_N', action = 'store', type = int, default = 5000
     )
+    parser_sample_pmc.add_argument('--pmc_iterations',
+        help = 'The maximum number of update of the PMC, changing this value may make the update unstable',
+        dest = 'pmc_iterations', action = 'store', type = int, default = 1
+    )
+    parser_sample_pmc.add_argument('--pmc-rel-tol',
+        help = 'Relative tolerance of the PMC update.',
+        dest = 'pmc_rel_tol', action = 'store', type = float, default = 1e-10
+    )
+    parser_sample_pmc.add_argument('--pmc-abs-tol',
+        help = 'Absolute tolerance of the PMC update.',
+        dest = 'pmc_abs_tol', action = 'store', type = float, default = 1e-5
+    )
+    parser_sample_pmc.add_argument('-l', '--pmc-lookback',
+        help = 'The number of previous steps whose samples are used to update the PMC. 1 (default) means that only last step is used ; 0 means that all available steps are used.',
+        dest = 'pmc_lookback', action = 'store', type = int, default = 1
+    )
     parser_sample_pmc.add_argument('-p', '--initial-proposal',
         help = """Specify where the initial proposal should be taken from; 'clusters' (default): use the proposal obtained using `find-clusters`;
             'product': use the proposal obtained from `mixture_product`; 'pmc': continue sampling from the previous `sample-pmc` results.""",
