@@ -383,7 +383,8 @@ class Analysis:
 
 
     def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand,
-                    return_final_only=True, final_perplexity_threshold=1.0, weight_threshold=1e-10):
+                    return_final_only=True, final_perplexity_threshold=1.0, weight_threshold=1e-10,
+                    pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05):
         """
         Return samples of the parameters and log(weights), and a mixture density adapted to the posterior.
 
@@ -402,6 +403,9 @@ class Analysis:
         :param return_final_only: If set to True, only returns the samples and weights of the final sampling step, after all adaptations have finished.
         :param final_perplexity_threshold: Adaptations are stopped if the perplexity of the last adaptation step is above this threshold value.
         :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
+        :param pmc_iterations: (advanced) Maximum number of update of the PMC, changing this value may make the update unstable.
+        :param pmc_rel_tol: (advanced) Relative tolerance of the PMC. If two consecutive values of the current density log-likelihood are relatively smaller than this value, the convergence is declared.
+        :param pmc_abs_tol: (advanced) Absolute tolerance of the PMC. If two consecutive values of the current density log-likelihood are smaller than this value, the convergence is declared.
 
         :return: A tuple of the parameters as array of length N = step_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
@@ -474,8 +478,11 @@ class Analysis:
                     np.logical_or(adjusted_weights <= 0, np.isnan(adjusted_weights)),
                     eps, adjusted_weights)
             eos.info(f'Convergence diagnostics of all previous samples after sampling in step {step}: perplexity = {self._perplexity(adjusted_weights)}, ESS = {self._ess(adjusted_weights)}')
-            pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
+            pmc = pypmc.mix_adapt.pmc.PMC(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True)
+            # Update the proposal. Components with small weights are only pruned after the updates, this may slower the procedure but ensures that small weights are not removed to early.
+            pmc.run(iterations=pmc_iterations, prune=0.0, rel_tol=pmc_rel_tol, abs_tol=pmc_abs_tol)
             # Normalize the weights and remove components with a weight smaller than weight_threshold
+            sampler.proposal = pmc.density
             sampler.proposal.normalize()
             sampler.proposal.prune(threshold = weight_threshold)
             # stop adaptation if the perplexity of the last step is larger than the threshold
