@@ -113,6 +113,24 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--parameter" == argument)
+                {
+                    std::string parameter_name(*(++a));
+                    double parameter_value = destringify<double>(*(++a));
+
+                    try
+                    {
+                        Parameter parameter = parameters[parameter_name];
+                        parameter = parameter_value;
+                    }
+                    catch (UnknownParameterError & e)
+                    {
+                        throw DoUsage("Unknown parameter '" + parameter_name + "'");
+                    }
+
+                    continue;
+                }
+
                 throw DoUsage("Unknown command line argument: " + argument);
             }
         }
@@ -157,7 +175,7 @@ main(int argc, char * argv[])
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-print-polynomial" << std::endl;
         std::cout << "  [--coefficient WILSONCOEFFICIENT]*" << std::endl;
-        std::cout << "  [[--kinematics NAME VALUE]* --observable NAME]+" << std::endl;
+        std::cout << "  [[--kinematics NAME VALUE]* [--parameter NAME VALUE]* --observable NAME]+" << std::endl;
     }
     catch(Exception & e)
     {
