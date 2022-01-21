@@ -13,12 +13,14 @@ groups:
           min:     +0.1349763
           max:     +0.1349773
           latex:   '$m_{\pi^0}$'
+          unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::pi^+' :
           central: +0.13957039
           min:     +0.13956921
           max:     +0.13957057
           latex:   '$m_{\pi^\pm}$'
+          unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       # K meson masses
       'mass::K_d' :
@@ -26,12 +28,14 @@ groups:
           min:     +0.497598
           max:     +0.497624
           latex:   '$m_{K^0}$'
+          unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::K_u' :
           central: +0.493677
           min:     +0.493661
           max:     +0.493693
           latex:   '$m_{K^\pm}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2012], p. 39'
       # D meson masses
       'mass::D_d' :
@@ -39,30 +43,35 @@ groups:
           min:     +1.86960
           max:     +1.86970
           latex:   '$m_{D^\pm}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::D^+' :
           central: +1.86965
           min:     +1.86960
           max:     +1.86970
           latex:   '$m_{D^\pm}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::D_u' :
           central: +1.86483
           min:     +1.86478
           max:     +1.86488
           latex:   '$m_{D^0}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2016]'
       'mass::D^0' :
           central: +1.86483
           min:     +1.86478
           max:     +1.86488
           latex:   '$m_{D^0}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2016]'
       'mass::D_s' :
           central: +1.96834
           min:     +1.96827
           max:     +1.96841
           latex:   '$m_{D_s}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       # B meson masses
       'mass::B_d' :
@@ -70,24 +79,28 @@ groups:
           min:     +5.27953
           max:     +5.27977
           latex:   '$m_{B^0}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::B_u' :
           central: +5.27934
           min:     +5.27922
           max:     +5.27946
           latex:   '$m_{B^\pm}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::B_s' :
           central: +5.36688
           min:     +5.36674
           max:     +5.36702
           latex:   '$m_{B^0_s}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::B_c' :
           central: +6.27447
           min:     +6.27415
           max:     +6.27479
           latex:   '$m_{B_c^\pm}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], October 2021'
       # B^* meson masses
       'mass::B_d^*' :
@@ -95,12 +108,14 @@ groups:
           min:     +5.32449
           max:     +5.32491
           latex:   '$m_{B^*}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::B_s^*' :
           central: +5.4154
           min:     +5.4139
           max:     +5.4172
           latex:   '$m_{B_s^*}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
   # }}}
 
@@ -115,24 +130,28 @@ groups:
           min:     +0.77477
           max:     +0.77545
           latex:   '$m_{\rho^\pm}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::rho^0' :
           central: +0.77526
           min:     +0.77403
           max:     +0.77549
           latex:   '$m_{\rho^0}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::omega' :
           central: +0.78266
           min:     +0.78235
           max:     +0.78279
           latex:   '$m_{\omega}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::phi' :
           central: +1.019461
           min:     +1.019445
           max:     +1.019477
           latex:   '$m_{\phi}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       # K meson masses
       'mass::K_d^*' :
@@ -140,12 +159,14 @@ groups:
           min:     +0.89535
           max:     +0.89575
           latex:   '$m_{K^{0*}}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::K_u^*' :
           central: +0.89166
           min:     +0.89140
           max:     +0.89192
           latex:   '$m_{K^{\pm*}}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2012], p. 45'
       # D meson masses
       'mass::D_d^*' :
@@ -153,18 +174,21 @@ groups:
           min:     +2.01021
           max:     +2.01031
           latex:   '$m_{D^{\pm*}}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2016]'
       'mass::D_u^*' :
           central: +2.00685
           min:     +2.00680
           max:     +2.00690
           latex:   '$m_{D^{0*}}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2016]'
       'mass::D_s^*' :
           central: +2.1122
           min:     +2.1118
           max:     +2.1126
           latex:   '$m_{D_s^*}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       # Charmonium masses
       'mass::J/psi' :
@@ -172,36 +196,42 @@ groups:
           min:     +3.096894
           max:     +3.096906
           latex:   '$m_{J/\psi}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::psi(2S)' :
           central: +3.68610
           min:     +3.68604
           max:     +3.68616
           latex:   '$m_{\psi(2S)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::psi(3770)' :
           central: +3.7737
           min:     +3.7733
           max:     +3.7741
           latex:   '$m_{\psi(3770)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::psi(4040)' :
           central: +4.039
           min:     +4.038
           max:     +4.040
           latex:   '$m_{\psi(4040)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::psi(4160)' :
           central: +4.191
           min:     +4.186
           max:     +4.196
           latex:   '$m_{\psi(4160)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::psi(4415)' :
           central: +4.421
           min:     +4.417
           max:     +4.425
           latex:   '$m_{\psi(4415)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
   # }}}
 
@@ -216,6 +246,7 @@ groups:
           min:     +1.115677
           max:     +1.115689
           latex:   '$m_{\Lambda}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2012], p. 149'
       # c baryon masses
       'mass::Lambda_c' :
@@ -223,18 +254,21 @@ groups:
           min:     +2.28632
           max:     +2.28660
           latex:   '$m_{\Lambda_c}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
       'mass::Lambda_c(2625)' :
           central: +2.62811
           min:     +2.62792
           max:     +2.62830
           latex:   '$m_{\Lambda_c(2625)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2016], p. 175'
       'mass::Lambda_c(2595)' :
           central: +2.59225
           min:     +2.59197
           max:     +2.59253
           latex:   '$m_{\Lambda_c(2595)}$'
+          unit:     'GeV'
           comments: 'cf. [PDG2016], p. 175'
       # b baryon masses
       'mass::Lambda_b' :
@@ -242,6 +276,7 @@ groups:
           min:     +5.61843
           max:     +5.61977
           latex:   '$m_{\Lambda_b}$'
+          unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
   # }}}
 
@@ -255,121 +290,141 @@ groups:
           min:     +0.1892
           max:     +0.1918
           latex:    '$f_{\bar{B}^0}$'
-          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+          unit:     'GeV'
+          comments: 'cf. [Fermilab-MILC-2017]'
       'decay-constant::B_u' :
           central: +0.1894
           min:     +0.1880
           max:     +0.1908
           latex:    '$f_{B^-}$'
-          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+          unit:     'GeV'
+          comments: 'cf. [Fermilab-MILC-2017]'
       'decay-constant::B_s' :
           central: +0.2307
           min:     +0.2294
           max:     +0.2330
           latex:    '$f_{\bar{B}_s^0}$'
-          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+          unit:     'GeV'
+          comments: 'cf. [Fermilab-MILC-2017]'
       'decay-constant::B_c' :
           central: +0.434
           min:     +0.419
           max:     +0.449
           latex:    '$f_{B_c^\pm}$'
-          comments: 'GeV, cf. [HPQCD2015B], eq. (20)'
+          unit:     'GeV'
+          comments: 'cf. [HPQCD2015B], eq. (20)'
       'decay-constant::K_d' :
           central: +0.1561
           min:     +0.155
           max:     +0.1572
           latex:    '$f_{\bar{K}^0}$'
-          comments: 'GeV, cf. [LATAVG2011]'
+          unit:     'GeV'
+          comments: 'cf. [LATAVG2011]'
       'decay-constant::K_u' :
           central: +0.1561
           min:     +0.155
           max:     +0.1572
           latex:    '$f_{K^-}$'
-          comments: 'GeV, cf. [LATAVG2011]'
+          unit:     'GeV'
+          comments: 'cf. [LATAVG2011]'
       'decay-constant::K' :
           central: +0.1561
           min:     +0.155
           max:     +0.1572
           latex:    '$f_{\bar{K}}$'
-          comments: 'GeV, cf. [LATAVG2011]'
+          unit:     'GeV'
+          comments: 'cf. [LATAVG2011]'
       'decay-constant::K_d^*' :
           central: +0.204
           min:     +0.197
           max:     +0.211
           latex:    '$f_{\bar{K}^{*0}}$'
-          comments: 'GeV, cf. [BSZ2015]'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A]'
       'decay-constant::K_u^*' :
           central: +0.204
           min:     +0.197
           max:     +0.211
           latex:    '$f_{K^{*-}}$'
-          comments: 'GeV, cf. [BSZ2015]'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A]'
       'decay-constant::pi' :
           central: +0.1302
           min:     +0.1288
           max:     +0.1326
           latex:    '$f_\pi$'
-          comments: 'GeV, cf. [FLAG2013], eq. (43)'
+          unit:     'GeV'
+          comments: 'cf. [FLAG2013], eq. (43)'
       'decay-constant::J/psi' :
           central: +0.2773
           min:     +0.2733
           max:     +0.2807
           latex:    '$f_{J/\psi}$'
-          comments: 'GeV, cf. [KMPW2010], table 5, multiplied by 2/3'
+          unit:     'GeV'
+          comments: 'cf. [KMPW2010], table 5, multiplied by 2/3'
       'decay-constant::psi(2S)' :
           central: +0.1980
           min:     +0.1967
           max:     +0.2000
           latex:    '$f_{\psi(2S)}$'
-          comments: 'GeV, cf. [KMPW2010], table 5, multiplied by 2/3'
+          unit:     'GeV'
+          comments: 'cf. [KMPW2010], table 5, multiplied by 2/3'
       'decay-constant::rho' :
           central: +0.213
           min:     +0.208
           max:     +0.218
           latex:    '$f_{\rho}$'
-          comments: 'GeV, cf. [BSZ2015]'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A]'
       'decay-constant::phi' :
           central: +0.233
           min:     +0.228
           max:     +0.238
           latex:    '$f_{\phi}$'
-          comments: 'GeV, cf. [BSZ2015]'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A]'
       'decay-constant::D_d' :
           central: +0.2127
           min:     +0.2121
           max:     +0.2133
           latex:    '$f_{D^-}$'
-          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+          unit:     'GeV'
+          comments: 'cf. [Fermilab-MILC-2017]'
       'decay-constant::D_u' :
           central: +0.2116
           min:     +0.2109
           max:     +0.2123
           latex:    '$f_{D^0}$'
-          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+          unit:     'GeV'
+          comments: 'cf. [Fermilab-MILC-2017]'
       'decay-constant::D_s' :
           central: +0.2499
           min:     +0.2494
           max:     +0.2504
           latex:    '$f_{D_s^-}$'
-          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+          unit:     'GeV'
+          comments: 'cf. [Fermilab-MILC-2017]'
       'decay-constant::D_d^*' :
           central: +0.242
           min:     +0.222
           max:     +0.252
           latex:    '$f_{D^{*-}}$'
-          comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+          unit:     'GeV'
+          comments: 'cf. [GKPR2013], symmetrized errors'
       'decay-constant::D_u^*' :
           central: +0.242
           min:     +0.222
           max:     +0.252
           latex:    '$f_{D^{*0}}$'
-          comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+          unit:     'GeV'
+          comments: 'cf. [GKPR2013], symmetrized errors'
       'decay-constant::D_s^*' :
           central: +0.293
           min:     +0.274
           max:     +0.312
           latex:    '$f_{D_s^{*0}}$'
-          comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+          unit:     'GeV'
+          comments: 'cf. [GKPR2013], symmetrized errors'
       # 3-particle couplings
       'decay-constant::g_{B^*Bpi}' :
           central: +30.0
@@ -389,30 +444,35 @@ groups:
           central: +1.519e-12
           min:     +1.512e-12
           max:     +1.526e-12
+          unit:     's'
           latex:    '$\tau_{B_d}$'
           comments: 'cf. [PDG2012], p. 84'
       'life_time::B_u' :
           central: +1.641e-12
           min:     +1.633e-12
           max:     +1.649e-12
+          unit:     's'
           latex:    '$\tau_{B_u}$'
           comments: 'cf. [PDG2012], p. 70'
       'life_time::B_s' :
           central: +1.516e-12
           min:     +1.505e-12
           max:     +1.527e-12
+          unit:     's'
           latex:    '$\tau_{B_s}$'
           comments: 'cf. [PDG-Live], September 2013'
       'life_time::B_c' :
           central: +0.510e-12
           min:     +0.501e-12
           max:     +0.519e-12
+          unit:     's'
           latex:    '$\tau_{B_c}$'
           comments: 'cf. [PDG-Live], October 2021'
       'life_time::B@Y(4S)' :
           central: +1.580e-12
           min:     +1.573e-12
           max:     +1.589e-12
+          unit:     's'
           latex:    '$\tau_{B(\Upsilon(4S))}$'
           comments: 'based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)'
       # Decay width differences in neutral meson systems
@@ -420,25 +480,28 @@ groups:
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\tau_{\Delta B_d}$'
+          latex:    '$\Delta \Gamma_{B_d}$'
+          unit:     's^-1'
           comments: 'smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]'
       'life_time::Delta_B_s' :
           central: +0.081e+12
           min:     +0.070e+12
           max:     +0.092e+12
-          latex:    '$\tau_{\Delta B_s}$'
+          latex:    '$\Delta \Gamma_{B_s}$'
+          unit:     's^-1'
           comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
   # }}}
 
   # Mean Baryon Lifetimes
   # {{{
   - title: 'Mean Baryon Lifetimes'
-    description: '' 
-    parameters: 
+    description: ''
+    parameters:
       'life_time::Lambda_b' :
           central: +1.471e-12
           min:     +1.462e-12
           max:     +1.480e-12
+          unit:     's'
           latex:    '$\tau_{\Lambda_b}$'
           comments: 'cf. PDG2019 update by [HFLAV]'
   # }}}
@@ -453,24 +516,30 @@ groups:
           central: +0.642
           min:     +0.629
           max:     +0.655
+          unit:     '1'
+          latex:    '$\alpha_{-}^{\Lambda}$'
           comments: 'cf. [PDG2012+]'
       # Decay parameter of the Lambda_c baryon from FOCUS collaboration
       'Lambda_c::alpha' :
           central: -0.780
           min:     -0.986
           max:     -0.574
+          unit:     '1'
+          latex:    '$\alpha_{-}^{\Lambda_c}$'
           comments: 'cf. [PDG2018]'
       # General polarisation parameter for the Lambda_b baryon polarisation
       'Lambda_b::polarisation@unpolarised' :
           central:  0.0
           min:      0.0
           max:      0.0
+          unit:     '1'
       # Polarisation parameter for the Lambda_b baryon polarisation at the LHCb
       # experiment
       'Lambda_b::polarisation@LHCb' :
           central: +0.06
           min:     -0.01
           max:     +0.13
+          unit:     '1'
   # }}}
 
   # Parameters in Light-Cone Distribution Amplitudes
@@ -484,162 +553,188 @@ groups:
           min:     +0.16
           max:     +0.16
           latex:    '$a^{\pi}_2(1\,\GeV)$'
-          comments: ' // cf. [DKMMO2008]'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
       'pi::a4@1GeV' :
           central: +0.04
           min:     +0.04
           max:     +0.04
           latex:    '$a^{\pi}_4(1\,\GeV)$'
-          comments: ' // cf. [DKMMO2008]'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
       'pi::f3@1GeV' :
           central: +0.0045
           min:     +0.0030
           max:     +0.0060
           latex:    '$f^{\pi}_3(1\,\GeV)$'
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
       'pi::omega3@1GeV' :
           central: -1.5
           min:     -2.2
           max:     -0.8
           latex:    '$\omega^{\pi}_3(1\,\GeV)$'
-          comments: ' // cf. [DKMMO2008]'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
       'pi::omega4@1GeV' :
           central: +0.2
           min:     +0.2
           max:     +0.2
           latex:    '$\omega^{\pi}_4(1\,\GeV)$'
-          comments: ' // cf. [DKMMO2008]'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
       'pi::delta^2@1GeV' :
           central: +0.18
           min:     +0.12
           max:     +0.24
           latex:    '$(\delta^{\pi})^2(1\,\GeV)$'
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
       # K^* LCDA parameters
       'K^*::a_1_para@1GeV' :
           central: +0.06
           min:     +0.00
           max:     +0.10
           latex:    '$a^{K^*}_{1,\parallel}(1\,\GeV)$'
-          comments: 'cf. [BSZ2015], table 1'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
       'K^*::a_2_para@1GeV' :
           central: +0.16
           min:     +0.07
           max:     +0.23
           latex:    '$a^{K^*}_{2,\parallel}(1\,\GeV)$'
-          comments: 'cf. [BSZ2015], table 1'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
       'K^*::f_para' :
           central: +0.204
           min:     +0.197
           max:     +0.211
           latex:    '$f^{K^*}_{\parallel}(1\,\GeV)$'
-          comments: 'cf. [BSZ2015], table 1'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A], table 1'
       'K^*::a_1_perp@1GeV' :
           central: +0.04
           min:     +0.01
           max:     +0.07
           latex:    '$a^{K^*}_{1,\perp}(1\,\GeV)$'
-          comments: 'cf. [BSZ2015], table 1'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
       'K^*::a_2_perp@1GeV' :
           central: +0.10
           min:     +0.02
           max:     +0.18
           latex:    '$a^{K^*}_{2,\perp}(1\,\GeV)$'
-          comments: 'cf. [BSZ2015], table 1'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
       'K^*::f_perp@1GeV' :
           central: +0.159
           min:     +0.153
           max:     +0.165
           latex:    '$f^{K^*}_{\perp}(1\,\GeV)$'
-          comments: 'cf. [BSZ2015], table 1'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A], table 1'
       # B->K LCDA Parameter
       'K::a_1@1GeV' :
           central: +0.06
           min:     +0.03
           max:     +0.09
           latex:    '$a^{K}_{1}(1\,\GeV)$'
-          comments: ' // cf. [BBL2006], Table 3'
+          unit:     '1'
+          comments: 'cf. [BBL:2006A], Table 3'
       'K::a_2@1GeV' :
           central: +0.25
           min:     +0.10
           max:     +0.4
           latex:    '$a^{K}_{2}(1\,\GeV)$'
-          comments: ' // cf. [BBL2006], Table 3'
+          unit:     '1'
+          comments: 'cf. [BBL:2006A], Table 3'
       'K::a_4@1GeV' :
           central: -0.015
           min:     -0.115
           max:     +0.085
           latex:    '$a^{K}_{4}(1\,\GeV)$'
-          comments: ' // cf. [BZ2004v3], Eq. (24)'
+          unit:     '1'
+          comments: 'cf. [BZ2004v3], Eq. (24)'
       'K::a_1@2.2GeV' :
           central: +0.048
           min:     +0.024
           max:     +0.071
           latex:    '$a^{K}_{1}(2.2\,\GeV)$'
-          comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
+          unit:     '1'
+          comments: 'cf. [BBL:2006A], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
       'K::a_2@2.2GeV' :
           central: +0.174
           min:     +0.070
           max:     +0.278
           latex:    '$a^{K}_{2}(2.2\,\GeV)$'
-          comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
+          unit:     '1'
+          comments: 'cf. [BBL:2006A], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
       'K::a_4@2.2GeV' :
           central: -0.0089
           min:     -0.0679
           max:     +0.0502
           latex:    '$a^{K}_{4}(2.2\,\GeV)$'
-          comments: ' // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25'
+          unit:     '1'
+          comments: 'cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25'
       # B->K^*, K^* LCDA parameters
       'B->K^*::f_Kstar_par' :
           central: +0.217
           min:     +0.212
           max:     +0.222
           latex:    '$f^{K^*}_{\parallel}$'
-          comments: ' // GeV, cf. [BHvD2010], Table I'
+          unit:     'GeV'
+          comments: 'cf. [BHvD:2010A], Table I'
       'B->K^*::f_Kstar_perp@2GeV' :
           central: +0.173
           min:     +0.168
           max:     +0.178
           latex:    '$f^{K^*}_{\perp}(2\,\GeV)$'
-          comments: ' // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I'
+          unit:     'GeV'
+          comments: '@2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD:2010A], Table I'
       # B LCDA parameters
       'B::1/lambda_B_p' :
           central: +2.1739
           min:     +1.60
           max:     +2.80
           latex:    '$1/\lambda_{B,+}$'
-          comments: ' // GeV^{-1}, cf. [GKvD2018]'
+          unit:     'GeV^-1'
+          comments: 'cf. [GKvD:2018A]'
       'B::lambda_E^2' :
           central: +0.03
           min:     +0.01
           max:     +0.05
           latex:    '$\lambda_E^2$'
-          comments: 'GeV^2, cf. [NT2011]'
+          unit:     'GeV^2'
+          comments: 'cf. [NT:2011A]'
       'B::lambda_H^2' :
           central: +0.06
           min:     +0.03
           max:     +0.09
           latex:    '$\lambda_H^2$'
-          comments: 'GeV^2, cf. [NT2011]'
+          unit:     'GeV^2'
+          comments: 'cf. [NT:2011A]'
       # B_s LCDA parameters
       'B_s::1/lambda_B_p' :
           central: +2.0
           min:     +1.5
           max:     +2.5
           latex:    '$1/\lambda_{B_s,+}$'
-          comments: ' // GeV^{-1}, cf. [GKvD2018]'
+          unit:     'GeV^-1'
+          comments: 'cf. [GKvD:2018A]'
       'B_s::lambda_E^2' :
           central: +0.03
           min:     +0.01
           max:     +0.05
           latex:    '$\lambda_E^2(B_s)$'
-          comments: 'GeV^2, cf. [NT2011]'
+          unit:     'GeV^2'
+          comments: 'cf. [NT:2011A]'
       'B_s::lambda_H^2' :
           central: +0.06
           min:     +0.03
           max:     +0.09
           latex:    '$\lambda_H^2(B_s)$'
-          comments: 'GeV^2, cf. [NT2011]'
+          unit:     'GeV^2'
+          comments: 'cf. [NT:2011A]'
   # }}}
 
   # Parameters in the Heavy Quark Exapnsion
@@ -653,48 +748,56 @@ groups:
           min:     -0.20
           max:     -0.20
           latex:   '$\lambda_1$'
-          comment: 'cf. @REF[ALGH2001]@, Table 2, p. 13'
+          unit:    'GeV^2'
+          comment: 'cf. [ALGH:2001A], Table 2, p. 13'
       'HQET::lambda_2' :
           central: +0.12
           min:     +0.12
           max:     +0.12
           latex:   '$\lambda_2$'
-          comment: 'cf. @REF[ALGH2001]@, Table 2, p. 13'
+          unit:    'GeV^2'
+          comment: 'cf. [ALGH:2001A], Table 2, p. 13'
       # Heavy Quark Expansion parameters for hadronic matrix elements ~ <B|O|B>
       'B->B::mu_pi^2@1GeV' :
           central: +0.45
           min:     +0.35
           max:     +0.55
           latex:   '$\mu_\pi^2(1\,\GeV)$'
-          comment: 'cf. @REF[BBMU2003]@, Eq. (19), p. 9'
+          unit:    'GeV^2'
+          comment: 'cf. [BBMU:2003A], Eq. (19), p. 9'
       'B->B::mu_G^2@1GeV' :
           central: +0.35
           min:     +0.33
           max:     +0.38
           latex:   '$\mu_G^2(1\,\GeV)$'
-          comment: 'cf. @REF[BBMU2003]@, Eq. (17), p. 9'
+          unit:    'GeV^2'
+          comment: 'cf. [BBMU:2003A], Eq. (17), p. 9'
       'B->B::rho_D^3@1GeV' :
           central: +0.20
           min:     +0.10
           max:     +0.30
           latex:   '$\rho_D^3(1\,\GeV)$'
-          comment: 'cf. @REF[BBMU2003]@, between Eqs. (19),(20), p. 9'
+          unit:    'GeV^3'
+          comment: 'cf. [BBMU:2003A], between Eqs. (19),(20), p. 9'
       'B->B::rho_LS^3@1GeV' :
           central: -0.15
           min:     -0.30
           max:     -0.00
           latex:   '$\rho_{LS}^3(1\,\GeV)$'
-          comment: 'cf. @REF[BBMU2003]@, Eq. (20), p. 9'
+          unit:    'GeV^3'
+          comment: 'cf. [BBMU:2003A], Eq. (20), p. 9'
       # Heavy Quark Expansion parameters for hadronic matrix elements ~ <Lambda_b|O|Lambda_b>
       'Lambda_b->Lambda_b::mu_pi^2@1GeV' :
           central: +0.50
           min:     +0.40
           max:     +0.60
           latex:   '$\mu_\pi^2(1\,\GeV)$'
-          comment: 'cf. @REF[MvD2015]@'
+          unit:    'GeV^2'
+          comment: 'cf. [MvD:2016A]'
       'Lambda_b->Lambda_b::rho_D^3@1GeV' :
           central: +0.17
           min:     +0.09
           max:     +0.25
           latex:   '$\rho_D^3(1\,\GeV)$'
-          comment: 'cf. @REF[MvD2015]@'
+          unit:    'GeV^2'
+          comment: 'cf. [MvD:2016A]'

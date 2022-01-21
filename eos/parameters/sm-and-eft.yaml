@@ -58,6 +58,7 @@ groups:
           central: +0.1184
           min:     +0.1191
           max:     +0.1177
+          unit:     '1'
           latex:    '$\alpha_s(M_Z)$'
           comments: 'cf. [PDG2012], p. 1'
       'QCD::mu_t' :
@@ -88,6 +89,7 @@ groups:
           central: +0.012
           min:     +0.000
           max:     +0.018
+          unit:     '1'
           latex:    '$\left\langle \frac{\alpha_s}{\pi} G^2\right\rangle$'
       'QCD::m_0^2' :
           central: +0.89443
@@ -100,31 +102,36 @@ groups:
           central: +0.55
           min:     +0.1
           max:     +1.0
-          comments: 'cf. [DKMMO2008]'
+          unit:     '1'
           latex:    '$\left\langle \bar{q} q\bar{q}q\right\rangle / \left\langle \bar{q}q\right\rangle^2$'
+          comments: 'cf. [DKMMO2008]'
       # Wolfenstein parameters of CKM, cf. [UTFIT2013]
       'CKM::A' :
           central: +0.827
           min:     +0.814
           max:     +0.840
+          unit:    '1'
           latex:   '$A_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[A]@'
       'CKM::lambda' :
           central: +0.22535
           min:     +0.22470
           max:     +0.22600
+          unit:    '1'
           latex:   '$\lambda_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[\lambda]@'
       'CKM::rhobar' :
           central: +0.132
           min:     +0.111
           max:     +0.153
+          unit:    '1'
           latex:   '$\bar{\rho}_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[\bar{\rho}]@'
       'CKM::etabar' :
           central: +0.350
           min:     +0.336
           max:     +0.364
+          unit:    '1'
           latex:   '$\bar{\eta}_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[\bar{\eta}]@'
       # Lepton masses
