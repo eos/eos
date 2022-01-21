@@ -14,27 +14,32 @@ groups:
           central: +0.542
           min:     +0.51875
           max:     +0.56525
-          latex:    'R_1^{B_s\leftrightarrow \bar{B}_s}'
+          unit:     '1'
+          latex:    '$R_1^{B_s\leftrightarrow \bar{B}_s}$'
       'B_s<->Bbar_s::R^2' :
           central: -0.545
           min:     -0.57
           max:     -0.52
-          latex:    'R_2^{B_s\leftrightarrow \bar{B}_s}'
+          unit:     '1'
+          latex:    '$R_2^{B_s\leftrightarrow \bar{B}_s}$'
       'B_s<->Bbar_s::R^3' :
           central: +0.109
           min:     +0.10175
           max:     +0.11625
-          latex:    'R_3^{B_s\leftrightarrow \bar{B}_s}'
+          unit:     '1'
+          latex:    '$R_3^{B_s\leftrightarrow \bar{B}_s}$'
       'B_s<->Bbar_s::R^4' :
           central: +0.9125
           min:     +0.875
           max:     +0.95
-          latex:    'R_4^{B_s\leftrightarrow \bar{B}_s}'
+          unit:     '1'
+          latex:    '$R_4^{B_s\leftrightarrow \bar{B}_s}$'
       'B_s<->Bbar_s::R^5' :
           central: +0.48625
           min:     +0.46725
           max:     +0.50525
-          latex:    'R_5^{B_s\leftrightarrow \bar{B}_s}'
+          unit:     '1'
+          latex:    '$R_5^{B_s\leftrightarrow \bar{B}_s}$'
   # }}}
 
   # Parameters in B -> P Form Factor Parametrizations
@@ -42,222 +47,229 @@ groups:
   - title: 'Parameters in $B\to P$ Form Factor Parametrizations'
     description: ''
     parameters:
-      # form factor parameters for B->pi in [BCL2008] parametrization, with
-      # f_+ taken from [IKMvD2014]
+      # form factor parameters for B->pi in [BCL:2008A] parametrization, with
+      # f_+ taken from [IKMvD:2014A]
       'B->pi::f_+(0)@BCL2008' :
           central: +0.307
           min:     +0.287
           max:     +0.327
           latex:    '$f_+^{B\to \pi}(0)$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_+^1@BCL2008' :
           central: -1.31
           min:     +1.73
           max:     -0.89
           latex:    '$b_{+, 1}^{B\to \pi}$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_+^2@BCL2008' :
           central: -0.904
           min:     -1.348
           max:     -0.460
           latex:    '$b_{+, 2}^{B\to \pi}$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_+^3@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{+, 3}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 4$'
       'B->pi::b_+^4@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{+, 4}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 4$'
       'B->pi::b_0^1@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{0, 1}^{B\to \pi}$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_0^2@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{0, 2}^{B\to \pi}$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_0^3@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{0, 3}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 3$'
       'B->pi::b_0^4@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{0, 4}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 4$'
       'B->pi::b_0^5@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{0, 5}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 5$'
       'B->pi::f_T(0)@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$f^{B\to \pi}_T(0)$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_T^1@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{T, 1}^{B\to \pi}$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_T^2@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{T, 2}^{B\to \pi}$'
-          comments: ''
+          unit:     '1'
       'B->pi::b_T^3@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{T, 3}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 4$'
       'B->pi::b_T^4@BCL2008' :
           central: +0.00
           min:     +0.00
           max:     +0.00
           latex:    '$b_{T, 4}^{B\to \pi}$'
+          unit:     '1'
           comments: 'only used when $K \geq 5$'
-      # form factor parameters for B->pi inspired by [BSZ2015]
+      # form factor parameters for B->pi inspired by [BSZ:2015A]
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       'B->pi::alpha^f+_0@BSZ2015' :
           central: +0.1959500850585235
           min:     +0.1959500850585235
           max:     +0.1959500850585235
           latex:    '$\alpha_{+,0}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^f+_1@BSZ2015' :
           central: -0.7763565146997043
           min:     -0.7763565146997043
           max:     -0.7763565146997043
           latex:    '$\alpha_{+,1}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^f+_2@BSZ2015' :
           central: -0.19660537219243024
           min:     -0.19660537219243024
           max:     -0.19660537219243024
           latex:    '$\alpha_{+,2}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^f0_1@BSZ2015' :
           central: -0.01446803146697799
           min:     -0.01446803146697799
           max:     -0.01446803146697799
           latex:    '$\alpha_{0,1}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^f0_2@BSZ2015' :
           central: -0.19529667411047308
           min:     -0.19529667411047308
           max:     -0.19529667411047308
           latex:    '$\alpha_{0,2}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^fT_0@BSZ2015' :
           central: +0.17311654822482725
           min:     +0.17311654822482725
           max:     +0.17311654822482725
           latex:    '$\alpha_{T,0}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^fT_1@BSZ2015' :
           central: -0.40903716524130396
           min:     -0.40903716524130396
           max:     -0.40903716524130396
           latex:    '$\alpha_{T,1}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->pi::alpha^fT_2@BSZ2015' :
           central: -0.2580355775883392
           min:     -0.2580355775883392
           max:     -0.2580355775883392
           latex:    '$\alpha_{T,2}^{B \to \pi,\mathrm{BSZ2015}}$'
-          comments: ''
-      # form factor parameters for B->K for [BCL2008] parametrization
+          unit:     '1'
+      # form factor parameters for B->K for [BCL:2008A] parametrization
       'B->K::f_+(0)@BCL2008' :
           central: +0.0
           min:     +0.0
           max:     +0.0
           latex:    '$f_+^{B\to K}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K::f_T(0)@BCL2008' :
           central: +0.0
           min:     +0.0
           max:     +0.0
           latex:    '$f_T^{B\to K}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K::b_+^1@BCL2008' :
           central: +0.0
           min:     +0.0
           max:     +0.0
           latex:    '$b_{+,1}^{B \to K,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->K::b_+^2@BCL2008' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          comments: ''
+          unit:     '1'
           latex:    '$b_{+,2}^{B \to K,\mathrm{BCL2008}}$'
       'B->K::b_0^1@BCL2008' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          comments: ''
+          unit:     '1'
           latex:    '$b_{0,1}^{B \to K,\mathrm{BCL2008}}$'
       'B->K::b_0^2@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{0,2}^{B \to K,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->K::b_0^3@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{0,3}^{B \to K,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->K::b_T^1@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{T,1}^{B \to K,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->K::b_T^2@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{T,2}^{B \to K,\mathrm{BCL2008}}$'
-          comments: ''
-      # form factor parameters for B->K according to [BZ2004v2] (approximate)
+          unit:     '1'
+      # form factor parameters for B->K according to [BZ:2004C] (approximate)
       'B->K::fp_uncertainty@BZ2004v2' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta f_+^{B\to K}$'
-          comments: ''
+          unit:     '1'
       'B->K::f0_uncertainty@BZ2004v2' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta f_0^{B\to K}$'
-          comments: ''
+          unit:     '1'
       'B->K::ft_uncertainty@BZ2004v2' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta f_t^{B\to K}$'
-          comments: ''
+          unit:     '1'
       # form factor parameters for B->K simple series expansion (SSE) based on
       # LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
       'B->K::alpha^V0_0@BFW2010' :
@@ -265,394 +277,394 @@ groups:
           min:     +0.48
           max:     +0.48
           latex:    '$\alpha_{V_0,0}^{B \to K,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^V0_1@BFW2010' :
           central: -1.05
           min:     -1.05
           max:     -1.05
           latex:    '$\alpha_{V_0,1}^{B \to K,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^Vt_0np@BFW2010' :
           central: +0.52
           min:     +0.52
           max:     +0.52
           latex:    '$\alpha_{V_t,0np}^{B \to K,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^Vt_1np@BFW2010' :
           central: -1.4
           min:     -1.4
           max:     -1.4
           latex:    '$\alpha_{V_t,1np}^{B \to K,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^T0_0@BFW2010' :
           central: +0.48
           min:     +0.48
           max:     +0.48
           latex:    '$\alpha_{T_0,0}^{B \to K,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^T0_1@BFW2010' :
           central: -1.09
           min:     -1.09
           max:     -1.09
           latex:    '$\alpha_{T_0,1}^{B \to K,\mathrm{BFW2010}}$'
-          comments: ''
-      # form factor parameters for B->K inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B->K inspired by [BSZ:2015A]
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       'B->K::alpha^f+_0@BSZ2015' :
           central: +0.32908992854636815
           min:     +0.32908992854636815
           max:     +0.32908992854636815
           latex:    '$\alpha_{+,0}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^f+_1@BSZ2015' :
           central: -0.8669465867427438
           min:     -0.8669465867427438
           max:     -0.8669465867427438
           latex:    '$\alpha_{+,1}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^f+_2@BSZ2015' :
           central: +0.006095669673341246
           min:     +0.006095669673341246
           max:     +0.006095669673341246
           latex:    '$\alpha_{+,2}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^f0_1@BSZ2015' :
           central: +0.19511719957037596
           min:     +0.19511719957037596
           max:     +0.19511719957037596
           latex:    '$\alpha_{0,1}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^f0_2@BSZ2015' :
           central: -0.4461264576740431
           min:     -0.4461264576740431
           max:     -0.4461264576740431
           latex:    '$\alpha_{0,2}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^fT_0@BSZ2015' :
           central: +0.2993831492500477
           min:     +0.2993831492500477
           max:     +0.2993831492500477
           latex:    '$\alpha_{T,0}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^fT_1@BSZ2015' :
           central: -0.7735456824025474
           min:     -0.7735456824025474
           max:     -0.7735456824025474
           latex:    '$\alpha_{T,1}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K::alpha^fT_2@BSZ2015' :
           central: +0.009554375102511888
           min:     +0.009554375102511888
           max:     +0.009554375102511888
           latex:    '$\alpha_{T,2}^{B \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       # form factor parameters for B->K according to [KMPW2010], Table 4, p. 31
       'B->K::F^p(0)@KMPW2010' :
           central: +0.34
           min:     +0.32
           max:     +0.39
           latex:    '$F_+^{B\to K,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K::F^t(0)@KMPW2010' :
           central: +0.39
           min:     +0.36
           max:     +0.44
           latex:    '$F_t^{B\to K,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K::b^p_1@KMPW2010' :
           central: -2.1
           min:     -3.7
           max:     -1.2
           latex:    '$b_{+,1}^{B \to K,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::b^0_1@KMPW2010' :
           central: -4.3
           min:     -5.2
           max:     -3.5
           latex:    '$b_{0,1}^{B \to K,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K::b^t_1@KMPW2010' :
           central: -2.2
           min:     -4.2
           max:     -1.2
           latex:    '$b_{t,1}^{B \to K,\mathrm{KMPW2010}}$'
-          comments: ''
-      # form factor parameters for B_s->K inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B_s->K inspired by [BSZ:2015A]
       'B_s->K::alpha^f+_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,0}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^f+_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,1}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^f+_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,2}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^f0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{0,1}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^f0_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{0,2}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^fT_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,0}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^fT_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,1}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K::alpha^fT_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,2}^{B_s \to K,\mathrm{BSZ2015}}$'
-          comments: ''
-      # form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
+          unit:     '1'
+      # form factor parameters for B->D from [BIvD2016] for [BCL:2008A] parametrization
       'B->D::f_+(0)@BCL2008' :
           central: +0.66
           min:     +0.62
           max:     +0.69
           latex:    '$f_+^{B \to D,\mathrm{BCL2008}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->D::f_T(0)@BCL2008' :
           central: +0.0
           min:     +0.0
           max:     +0.0
           latex:    '$f_T^{B \to D,\mathrm{BCL2008}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->D::b_+^1@BCL2008' :
           central: -4.00
           min:     -5.00
           max:     -3.10
           latex:    '$b_{+,1}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->D::b_+^2@BCL2008' :
           central: -0.80
           min:     -5.60
           max:     +3.40
           latex:    '$b_{+,2}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->D::b_0^1@BCL2008' :
           central: +0.40
           min:     -0.20
           max:     +0.80
           latex:    '$b_{0,1}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->D::b_0^2@BCL2008' :
           central: -1.20
           min:     -5.60
           max:     +3.20
           latex:    '$b_{0,2}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->D::b_0^3@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{0,3}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->D::b_T^1@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{T,1}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
+          unit:     '1'
       'B->D::b_T^2@BCL2008' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$b_{T,2}^{B \to D,\mathrm{BCL2008}}$'
-          comments: ''
-      # form factor parameters for B->D inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B->D inspired by [BSZ:2015A]
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       'B->D::alpha^f+_0@BSZ2015' :
           central: +0.680881482963591
           min:     +0.680881482963591
           max:     +0.680881482963591
           latex:    '$\alpha_{+,0}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^f+_1@BSZ2015' :
           central: -2.221782088112512
           min:     -2.221782088112512
           max:     -2.221782088112512
           latex:    '$\alpha_{+,1}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^f+_2@BSZ2015' :
           central: +0.6541000835887975
           min:     +0.6541000835887975
           max:     +0.6541000835887975
           latex:    '$\alpha_{+,2}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^f0_1@BSZ2015' :
           central: +0.5779088408438552
           min:     +0.5779088408438552
           max:     +0.5779088408438552
           latex:    '$\alpha_{0,1}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^f0_2@BSZ2015' :
           central: +1.3271162015486215
           min:     +1.3271162015486215
           max:     +1.3271162015486215
           latex:    '$\alpha_{0,2}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^fT_0@BSZ2015' :
           central: +0.5648201165054019
           min:     +0.5648201165054019
           max:     +0.5648201165054019
           latex:    '$\alpha_{T,0}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^fT_1@BSZ2015' :
           central: -2.5027753865334676
           min:     -2.5027753865334676
           max:     -2.5027753865334676
           latex:    '$\alpha_{T,1}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D::alpha^fT_2@BSZ2015' :
           central: +10.591752810763625
           min:     +10.591752810763625
           max:     +10.591752810763625
           latex:    '$\alpha_{T,2}^{B \to D,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       # form factor parameters for B->D for [BGL:1997A]
       'B->D::a^f+_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{+,0}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f+_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{+,1}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f+_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{+,2}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f+_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{+,3}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f0_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{0,0}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f0_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{0,1}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f0_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{0,2}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^f0_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{0,3}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^fT_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{T,0}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^fT_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{T,1}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^fT_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{T,2}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D::a^fT_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{T,3}^{B\to D,\mathrm{BGL97}}$'
-          comments: ''
-      # form factor parameters for B_s->D_s inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B_s->D_s inspired by [BSZ:2015A]
       'B_s->D_s::alpha^f+_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,0}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^f+_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^f+_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^f0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{0,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^f0_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{0,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^fT_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,0}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^fT_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s::alpha^fT_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
   # }}}
 
   # Parameters in B -> V Form Factor Parametrizations
@@ -666,171 +678,171 @@ groups:
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta a_0^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::a1_uncertainty@BZ2004' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta a_1^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::a2_uncertainty@BZ2004' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta a_2^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::v_uncertainty@BZ2004' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta v^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::t1_uncertainty@BZ2004' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta t_1^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::t2_uncertainty@BZ2004' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta t_2^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::t3_uncertainty@BZ2004' :
           central: +1.0
           min:     +0.85
           max:     +1.15
           latex:    '$\Delta t_3^{B \to K^*,\mathrm{BZ2004}}$'
-          comments: ''
+          unit:     '1'
       # form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
       'B->K^*::F^V(0)@KMPW2010' :
           central: +0.36
           min:     +0.24
           max:     +0.59
           latex:    '$V^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::F^A0(0)@KMPW2010' :
           central: +0.29
           min:     +0.22
           max:     +0.39
           latex:    '$A_0^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::F^A1(0)@KMPW2010' :
           central: +0.25
           min:     +0.15
           max:     +0.41
           latex:    '$A_1^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::F^A2(0)@KMPW2010' :
           central: +0.23
           min:     +0.13
           max:     +0.42
           latex:    '$A_2^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::F^T1(0)@KMPW2010' :
           central: +0.31
           min:     +0.21
           max:     +0.49
           latex:    '$T_1^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::F^T2(0)@KMPW2010' :
           central: +0.31
           min:     +0.21
           max:     +0.49
           latex:    '$T_2^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::F^T3(0)@KMPW2010' :
           central: +0.22
           min:     +0.12
           max:     +0.39
           latex:    '$T_3^{B \to K^*,\mathrm{KMPW2010}}(0)$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^V_1@KMPW2010' :
           central: -4.8
           min:     -5.2
           max:     -4.0
           latex:    '$b_{V,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^A0_1@KMPW2010' :
           central: -18.2
           min:     -21.2
           max:     -16.9
           latex:    '$b_{A_0,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^A1_1@KMPW2010' :
           central: +0.34
           min:     -0.46
           max:     +1.2
           latex:    '$b_{A_1,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^A2_1@KMPW2010' :
           central: -0.85
           min:     -2.2
           max:     +2.03
           latex:    '$b_{A_2,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^T1_1@KMPW2010' :
           central: -4.6
           min:     -5.01
           max:     -3.79
           latex:    '$b_{T_1,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^T2_1@KMPW2010' :
           central: -3.2
           min:     -5.4
           max:     -1.1
           latex:    '$b_{T_2,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::b^T3_1@KMPW2010' :
           central: -10.3
           min:     -13.4
           max:     -7.8
           latex:    '$b_{T_3,1}^{B \to K^*,\mathrm{KMPW2010}}$'
-          comments: ''
+          unit:     '1'
       # form factor parameter for B_s->K^* according to [FMvD2015].
       'B_s->K^*::F_perp(0)@FMvD2015' :
           central: 0.349
           min:     0.349
           max:     0.349
           latex:    '$F_{\perp}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::F_para(0)@FMvD2015' :
           central: 0.379
           min:     0.379
           max:     0.379
           latex:    '$F_{\parallel}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::F_long(0)@FMvD2015' :
           central: 0.314
           min:     0.314
           max:     0.314
           latex:    '$F_{0}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::F_time(0)@FMvD2015' :
           central: 0.314
           min:     0.314
           max:     0.314
           latex:    '$F_{t}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::beta_perp^1@FMvD2015' :
           central: -4.980
           min:     -4.980
           max:     -4.980
           latex:    '$\beta_{\perp,1}^{B_s \to K^*,\mathrm{FMvD2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::beta_para^1@FMvD2015' :
           central: +0.065
           min:     +0.065
           max:     +0.065
           latex:    '$\beta_{\parallel,1}^{B_s \to K^*,\mathrm{FMvD2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::beta_time^1@FMvD2015' :
           central: +0.065
           min:     +0.065
           max:     +0.065
           latex:    '$\beta_{t,1}^{B_s \to K^*,\mathrm{FMvD2015}}$'
-          comments: ''
+          unit:     '1'
       # form factor parameters for B->K^* simple series expansion (SSE) based on
       # LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
       'B->K^*::beta^V0_0@BFW2010' :
@@ -838,158 +850,158 @@ groups:
           min:     +0.31
           max:     +0.31
           latex:    '$\beta_{V_0,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^V0_1@BFW2010' :
           central: +0.74
           min:     +0.74
           max:     +0.74
           latex:    '$\beta_{V_0,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^V1_0@BFW2010' :
           central: +0.62
           min:     +0.62
           max:     +0.62
           latex:    '$\beta_{V_1,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^V1_1@BFW2010' :
           central: -1.4
           min:     -1.4
           max:     -1.4
           latex:    '$\beta_{V_1,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^V2_0@BFW2010' :
           central: +0.45
           min:     +0.45
           max:     +0.45
           latex:    '$\beta_{V_2,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^V2_1@BFW2010' :
           central: +0.35
           min:     +0.35
           max:     +0.35
           latex:    '$\beta_{V_2,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^Vt_0@BFW2010' :
           central: +0.49
           min:     +0.49
           max:     +0.49
           latex:    '$\beta_{V_t,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::beta^Vt_1@BFW2010' :
           central: -1.4
           min:     -1.4
           max:     -1.4
           latex:    '$\beta_{V_t,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          comments: ''
-      # form factor parameters for B_s->K^* inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B_s->K^* inspired by [BSZ:2015A]
       'B_s->K^*::alpha^A0_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A0_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A1_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A1_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A1_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A12_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_{12},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^A12_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_{12},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^V_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^V_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^V_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T1_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T1_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T1_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T2_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_2,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T2_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_2,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T23_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T23_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->K^*::alpha^T23_2@BSZ2015' :
           central:  0.0
           min:      0.0
@@ -997,115 +1009,115 @@ groups:
           latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
       # form-factor parameters for B->omega
       # note that no lattice results exists for B->omega FFs yet
-      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->omega::alpha^A0_0@BSZ2015' :
           central: +0.327866
           min:     +0.279787
           max:     +0.375945
           latex:    '$\alpha_{A_0,0}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A0_1@BSZ2015' :
           central: -0.826659
           min:     -1.127102
           max:     -0.526216
           latex:    '$\alpha_{A_0,1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A0_2@BSZ2015' :
           central: +1.42113
           min:     +0.17424
           max:     +2.66802
           latex:    '$\alpha_{A_0,2}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A1_0@BSZ2015' :
           central: +0.242567
           min:     +0.211711
           max:     +0.273423
           latex:    '$\alpha_{A_1,0}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A1_1@BSZ2015' :
           central: +0.342791
           min:     +0.103183
           max:     +0.582399
           latex:    '$\alpha_{A_1,1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A1_2@BSZ2015' :
           central: +0.0926204
           min:     -0.4777986
           max:     +0.6630394
           latex:    '$\alpha_{A_1,2}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A12_1@BSZ2015' :
           central: +0.655890
           min:     +0.397071
           max:     +0.914709
           latex:    '$\alpha_{A_{12},1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^A12_2@BSZ2015' :
           central: +0.277567
           min:     -0.705228
           max:     +1.260362
           latex:    '$\alpha_{A_{12},2}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^V_0@BSZ2015' :
           central: +0.304239
           min:     +0.266032
           max:     +0.342446
           latex:    '$\alpha_{V,0}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^V_1@BSZ2015' :
           central: -0.832336
           min:     -1.122775
           max:     -0.541897
           latex:    '$\alpha_{V,1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^V_2@BSZ2015' :
           central: +1.71741
           min:     +0.47443
           max:     +2.96039
           latex:    '$\alpha_{V,2}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T1_0@BSZ2015' :
           central: +0.251370
           min:     +0.220439
           max:     +0.282301
           latex:    '$\alpha_{T_1,0}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T1_1@BSZ2015' :
           central: -0.715314
           min:     -0.939744
           max:     -0.490884
           latex:    '$\alpha_{T_1,1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T1_2@BSZ2015' :
           central: +1.41463
           min:     +0.40802
           max:     +2.42124
           latex:    '$\alpha_{T_1,2}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T2_1@BSZ2015' :
           central: +0.412936
           min:     +0.184325
           max:     +0.641547
           latex:    '$\alpha_{T_2,1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T2_2@BSZ2015' :
           central: +0.460141
           min:     -0.108437
           max:     +1.028719
           latex:    '$\alpha_{T_2,2}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T23_0@BSZ2015' :
           central: +0.682582
           min:     +0.592369
           max:     +0.772795
           latex:    '$\alpha_{T_{23},0}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T23_1@BSZ2015' :
           central: +1.64618
           min:     +1.02697
           max:     +2.26539
           latex:    '$\alpha_{T_{23},1}^{B \to \omega,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->omega::alpha^T23_2@BSZ2015' :
           central: +2.46950
           min:     +0.27794
@@ -1114,115 +1126,115 @@ groups:
       # form-factor parameters for B->rho
       # new updated results based on LCSR-only fit from the GKvD2018 calculation
       # note that no lattice results exists for B->rho FFs yet
-      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->rho::alpha^A0_0@BSZ2015' :
           central: +0.2925336490766787
           min:     +0.2925336490766787
           max:     +0.2925336490766787
           latex:    '$\alpha_{A_0,0}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A0_1@BSZ2015' :
           central: -0.7432269609691062
           min:     -0.7432269609691062
           max:     -0.7432269609691062
           latex:    '$\alpha_{A_0,1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A0_2@BSZ2015' :
           central: -0.013648222902133517
           min:     -0.013648222902133517
           max:     -0.013648222902133517
           latex:    '$\alpha_{A_0,2}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A1_0@BSZ2015' :
           central: +0.2142700210705677
           min:     +0.2142700210705677
           max:     +0.2142700210705677
           latex:    '$\alpha_{A_1,0}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A1_1@BSZ2015' :
           central: +0.4948341716573042
           min:     +0.4948341716573042
           max:     +0.4948341716573042
           latex:    '$\alpha_{A_1,1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A1_2@BSZ2015' :
           central: -0.5898416575860281
           min:     -0.5898416575860281
           max:     -0.5898416575860281
           latex:    '$\alpha_{A_1,2}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A12_1@BSZ2015' :
           central: +0.5301085432518904
           min:     +0.5301085432518904
           max:     +0.5301085432518904
           latex:    '$\alpha_{A_{12},1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^A12_2@BSZ2015' :
           central: -0.1698995165626285
           min:     -0.1698995165626285
           max:     -0.1698995165626285
           latex:    '$\alpha_{A_{12},2}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^V_0@BSZ2015' :
           central: +0.2712565197401259
           min:     +0.2712565197401259
           max:     +0.2712565197401259
           latex:    '$\alpha_{V,0}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^V_1@BSZ2015' :
           central: -0.4925853027266176
           min:     -0.4925853027266176
           max:     -0.4925853027266176
           latex:    '$\alpha_{V,1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^V_2@BSZ2015' :
           central: -1.1971343036772617
           min:     -1.1971343036772617
           max:     -1.1971343036772617
           latex:    '$\alpha_{V,2}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T1_0@BSZ2015' :
           central: +0.2375503875107005
           min:     +0.2375503875107005
           max:     +0.2375503875107005
           latex:    '$\alpha_{T_1,0}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T1_1@BSZ2015' :
           central: -0.45934079379480375
           min:     -0.45934079379480375
           max:     -0.45934079379480375
           latex:    '$\alpha_{T_1,1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T1_2@BSZ2015' :
           central: -0.8719619977491347
           min:     -0.8719619977491347
           max:     -0.8719619977491347
           latex:    '$\alpha_{T_1,2}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T2_1@BSZ2015' :
           central: +0.648543608510588
           min:     +0.648543608510588
           max:     +0.648543608510588
           latex:    '$\alpha_{T_2,1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T2_2@BSZ2015' :
           central: -0.8367381225762223
           min:     -0.8367381225762223
           max:     -0.8367381225762223
           latex:    '$\alpha_{T_2,2}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T23_0@BSZ2015' :
           central: +0.558651527683086
           min:     +0.558651527683086
           max:     +0.558651527683086
           latex:    '$\alpha_{T_{23},0}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T23_1@BSZ2015' :
           central: +0.9756780226625973
           min:     +0.9756780226625973
           max:     +0.9756780226625973
           latex:    '$\alpha_{T_{23},1}^{B \to \rho,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->rho::alpha^T23_2@BSZ2015' :
           central: -0.617057014268725
           min:     -0.617057014268725
@@ -1230,562 +1242,563 @@ groups:
           latex:    '$\alpha_{T_{23},2}^{B \to \rho,\mathrm{BSZ2015}}$'
       # form-factor parameters for B->K*
       # new updated results based on a combined LQCD+LCSR fit from the GKvD2018 calculation
-      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->K^*::alpha^A0_0@BSZ2015' :
           central: +0.333565209671414
           min:     +0.333565209671414
           max:     +0.333565209671414
           latex:    '$\alpha_{A_0,0}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A0_1@BSZ2015' :
           central: -1.1164087925500106
           min:     -1.1164087925500106
           max:     -1.1164087925500106
           latex:    '$\alpha_{A_0,1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A0_2@BSZ2015' :
           central: +2.497069832700105
           min:     +2.497069832700105
           max:     +2.497069832700105
           latex:    '$\alpha_{A_0,2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A1_0@BSZ2015' :
           central: +0.28899504979162
           min:     +0.28899504979162
           max:     +0.28899504979162
           latex:    '$\alpha_{A_1,0}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A1_1@BSZ2015' :
           central: +0.4566061262798284
           min:     +0.4566061262798284
           max:     +0.4566061262798284
           latex:    '$\alpha_{A_1,1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A1_2@BSZ2015' :
           central: +1.1829764611868705
           min:     +1.1829764611868705
           max:     +1.1829764611868705
           latex:    '$\alpha_{A_1,2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A12_1@BSZ2015' :
           central: +0.5041466779610547
           min:     +0.5041466779610547
           max:     +0.5041466779610547
           latex:    '$\alpha_{A_{12},1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^A12_2@BSZ2015' :
           central: +0.523751990094357
           min:     +0.523751990094357
           max:     +0.523751990094357
           latex:    '$\alpha_{A_{12},2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^V_0@BSZ2015' :
           central: +0.3641736466070142
           min:     +0.3641736466070142
           max:     +0.3641736466070142
           latex:    '$\alpha_{V,0}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^V_1@BSZ2015' :
           central: -1.0924590752515513
           min:     -1.0924590752515513
           max:     -1.0924590752515513
           latex:    '$\alpha_{V,1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^V_2@BSZ2015' :
           central: +2.5954783573262934
           min:     +2.5954783573262934
           max:     +2.5954783573262934
           latex:    '$\alpha_{V,2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T1_0@BSZ2015' :
           central: +0.31922162296608125
           min:     +0.31922162296608125
           max:     +0.31922162296608125
           latex:    '$\alpha_{T_1,0}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T1_1@BSZ2015' :
           central: -0.9539833567723242
           min:     -0.9539833567723242
           max:     -0.9539833567723242
           latex:    '$\alpha_{T_1,1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T1_2@BSZ2015' :
           central: +2.040771175053964
           min:     +2.040771175053964
           max:     +2.040771175053964
           latex:    '$\alpha_{T_1,2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T2_1@BSZ2015' :
           central: +0.6020794846388718
           min:     +0.6020794846388718
           max:     +0.6020794846388718
           latex:    '$\alpha_{T_2,1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T2_2@BSZ2015' :
           central: +1.699282551872677
           min:     +1.699282551872677
           max:     +1.699282551872677
           latex:    '$\alpha_{T_2,2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T23_0@BSZ2015' :
           central: +0.6058860992660229
           min:     +0.6058860992660229
           max:     +0.6058860992660229
           latex:    '$\alpha_{T_{23},0}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T23_1@BSZ2015' :
           central: +0.8867716020286049
           min:     +0.8867716020286049
           max:     +0.8867716020286049
           latex:    '$\alpha_{T_{23},1}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->K^*::alpha^T23_2@BSZ2015' :
           central: +1.8831160249369858
           min:     +1.8831160249369858
           max:     +1.8831160249369858
           latex:    '$\alpha_{T_{23},2}^{B \to K^*,\mathrm{BSZ2015}}$'
-          comments: ''
-      # form factor parameters for B_s->phi inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B_s->phi inspired by [BSZ:2015A]
       'B_s->phi::alpha^A0_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A0_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A1_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A1_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A1_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A12_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_{12},1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^A12_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_{12},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^V_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^V_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^V_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T1_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T1_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T1_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T2_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_2,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T2_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_2,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T23_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T23_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->phi::alpha^T23_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
-      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->D^*::alpha^A0_0@BSZ2015' :
           central: +0.6759274184148141
           min:     +0.6759274184148141
           max:     +0.6759274184148141
           latex:    '$\alpha_{A_0,0}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A0_1@BSZ2015' :
           central: -2.6637000799846655
           min:     -2.6637000799846655
           max:     -2.6637000799846655
           latex:    '$\alpha_{A_0,1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A0_2@BSZ2015' :
           central: +9.24495323738047
           min:     +9.24495323738047
           max:     +9.24495323738047
           latex:    '$\alpha_{A_0,2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A1_0@BSZ2015' :
           central: +0.601315572767782
           min:     +0.601315572767782
           max:     +0.601315572767782
           latex:    '$\alpha_{A_1,0}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A1_1@BSZ2015' :
           central: +0.2689438444495897
           min:     +0.2689438444495897
           max:     +0.2689438444495897
           latex:    '$\alpha_{A_1,1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A1_2@BSZ2015' :
           central: +10.486032487112988
           min:     +10.486032487112988
           max:     +10.486032487112988
           latex:    '$\alpha_{A_1,2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A12_1@BSZ2015' :
           central: -0.14876383294863582
           min:     -0.14876383294863582
           max:     -0.14876383294863582
           latex:    '$\alpha_{A_{12},1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^A12_2@BSZ2015' :
           central: +5.724359813703122
           min:     +5.724359813703122
           max:     +5.724359813703122
           latex:    '$\alpha_{A_{12},2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^V_0@BSZ2015' :
           central: +0.6851323923652662
           min:     +0.6851323923652662
           max:     +0.6851323923652662
           latex:    '$\alpha_{V,0}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^V_1@BSZ2015' :
           central: -1.1678379355866901
           min:     -1.1678379355866901
           max:     -1.1678379355866901
           latex:    '$\alpha_{V,1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^V_2@BSZ2015' :
           central: -4.016847943717434
           min:     -4.016847943717434
           max:     -4.016847943717434
           latex:    '$\alpha_{V,2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T1_0@BSZ2015' :
           central: +0.6302298493900512
           min:     +0.6302298493900512
           max:     +0.6302298493900512
           latex:    '$\alpha_{T_1,0}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T1_1@BSZ2015' :
           central: -1.4175767766320952
           min:     -1.4175767766320952
           max:     -1.4175767766320952
           latex:    '$\alpha_{T_1,1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T1_2@BSZ2015' :
           central: -0.6878528871949201
           min:     -0.6878528871949201
           max:     -0.6878528871949201
           latex:    '$\alpha_{T_1,2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T2_1@BSZ2015' :
           central: +1.5226848746033717
           min:     +1.5226848746033717
           max:     +1.5226848746033717
           latex:    '$\alpha_{T_2,1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T2_2@BSZ2015' :
           central: +0.006625613047247359
           min:     +0.006625613047247359
           max:     +0.006625613047247359
           latex:    '$\alpha_{T_2,2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T23_0@BSZ2015' :
           central: +0.806230464649646
           min:     +0.806230464649646
           max:     +0.806230464649646
           latex:    '$\alpha_{T_{23},0}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T23_1@BSZ2015' :
           central: +0.5855443911134184
           min:     +0.5855443911134184
           max:     +0.5855443911134184
           latex:    '$\alpha_{T_{23},1}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::alpha^T23_2@BSZ2015' :
           central: +4.667079193615467
           min:     +4.667079193615467
           max:     +4.667079193615467
           latex:    '$\alpha_{T_{23},2}^{B \to D^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       # form factor parameters for B->D^* for [BGL:1997A]
       'B->D^*::a^g_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{g,0}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^g_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{g,1}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^g_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{g,2}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^g_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{g,3}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^f_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{f,0}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^f_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{f,1}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^f_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{f,2}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^f_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{f,3}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F1_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_1,0}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F1_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_1,1}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F1_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_1,2}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F1_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_1,3}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F2_0@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_2,0}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F2_1@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_2,1}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F2_2@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_2,2}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
+          unit:     '1'
       'B->D^*::a^F2_3@BGL1997' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:    '$a_{F_2,3}^{B\to D^*,\mathrm{BGL97}}$'
-          comments: ''
-      # form factor parameters for B_s->D_s^* inspired by [BSZ2015]
+          unit:     '1'
+      # form factor parameters for B_s->D_s^* inspired by [BSZ:2015A]
       'B_s->D_s^*::alpha^A0_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,0}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A0_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_0,2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A1_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,0}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A1_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A1_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_1,2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A12_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_{12},1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^A12_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{A_{12},2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^V_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,0}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^V_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^V_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{V,2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T1_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,0}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T1_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T1_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_1,2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T2_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_2,1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T2_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_2,2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T23_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},0}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T23_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},1}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
-          comments: ''
+          unit:     '1'
       'B_s->D_s^*::alpha^T23_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},2}^{B_s \to D_s^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
   # }}}
 
   # Parameters in B -> P P Form Factor Parametrizations
@@ -1799,36 +1812,43 @@ groups:
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::a^Fperp_0_1@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::a^Fperp_0_2@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::a^Fperp_0_3@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::a^Fperp_1_0@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::a^Fperp_1_1@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::a^Fperp_1_2@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:    '$a_{\perp,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
       'B->pipi::b^Fperp_0_0@FvDV2018' :
           central: 0.0
@@ -2225,90 +2245,103 @@ groups:
   - title: 'Parameters in LCSR Calculations with Light-Meson LCDAs'
     description: ''
     parameters:
-      # form factor parameters for LCSR calculation according to [DKMMO2008]
+      # form factor parameters for LCSR calculation according to [DKMMO:2008A]
       'B->pi::zeta(NNLO)@DKMMO2008' :
           central: 0.0
           min:     -1.0
           max:     +1.0
-          comments: ''
+          unit:     '1'
           latex:    '$\zeta\mathrm{(NNLO)}$'
       'B->pi::M^2@DKMMO2008' :
           central: +16.0
           min:     +15.0
           max:     +20.0
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    '$M^2\,\mathrm{(LCSR)}$'
       'B->pi::Mp^2@DKMMO2008' :
           central: +5.0
           min:     +5.0
           max:     +5.0
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    '$M^2\,\mathrm{(SVZSR)}$'
       'B->pi::mu@DKMMO2008' :
           central: +3.0
           min:     +3.0
           max:     +3.0
-          comments: ' // GeV, cf. [DKMMO2008]'
+          unit:     'GeV'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    '$\mu^{B \to \pi,\mathrm{DKMMO2008}}$'
       'B->pi::s_0^+(0)@DKMMO2008' :
           central: +35.75
           min:     +35.75
           max:     +35.75
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    '$s_0^{f_+}(q^2 = 0)$'
       "B->pi::s_0^+'(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0'^{f_+}(q^2 = 0)$"
       "B->pi::s_0^+''(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0''^{f_+}(q^2 = 0)$"
       "B->pi::s_0^0(0)@DKMMO2008" :
           central: +36.00
           min:     +36.00
           max:     +36.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0^{f_0}(q^2 = 0)$"
       "B->pi::s_0^0'(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0'^{f_0}(q^2 = 0)$"
       "B->pi::s_0^0''(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0''^{f_0}(q^2 = 0)$"
       'B->pi::s_0^T(0)@DKMMO2008' :
           central: +35.75
           min:     +35.75
           max:     +35.75
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    '$s_0^{f_T}(q^2 = 0)$'
       "B->pi::s_0^T'(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0'^{f_T}(q^2 = 0)$"
       "B->pi::s_0^T''(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0''^{f_T}(q^2 = 0)$"
       'B->pi::sp_0^B@DKMMO2008' :
           central: +35.6
           min:     +35.5
           max:     +36.0
-          comments: ' // GeV^2, cf. [DKMMO2008]'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
           latex:    '$s_0^{f_B}$'
       # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO2006] and [KMPW2010].
       "B->K^*::s_0@LCSR" :
@@ -2316,13 +2349,13 @@ groups:
           min:     1.7
           max:     1.7
           latex:    '$s_0^{B \to K^*, \mathrm{(LCSR)}}$'
-          comments: "GeV^2"
+          unit:     'GeV^2'
       "B->K^*::M^2@LCSR" :
           central: 1.0
           min:     0.75
           max:     1.25
           latex:    '$(M^2)^{B \to K^*, \mathrm{(LCSR)}}$'
-          comments: "GeV^2"
+          unit:     'GeV^2'
   # }}}
 
   # Parameters in LCSR Calculations with B-meson LCDAs
@@ -2336,342 +2369,342 @@ groups:
           min:     0.7
           max:     0.7
           latex:    '$s_{0_{+,0} }^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->pi::s_0^+,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{+,1} }^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->pi::s_0^+/-,0@B-LCSR' :
           central: 0.7
           min:     0.7
           max:     0.7
           latex:    '$s_{0_{\pm,0} }^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->pi::s_0^+/-,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{\pm,1} }^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->pi::s_0^T,0@B-LCSR' :
           central: 0.7
           min:     0.7
           max:     0.7
           latex:    '$s_{0_{T,0} }^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->pi::s_0^T,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T,1} }^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->pi::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->pi::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B \to \pi, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B->K hadronic matrix elements, cf. [GKvD2018]
       'B->K::s_0^+,0@B-LCSR' :
           central: 1.05
           min:     1.05
           max:     1.05
           latex:    '$s_{0_{+,0} }^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K::s_0^+,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{+,1} }^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K::s_0^+/-,0@B-LCSR' :
           central: 1.05
           min:     1.05
           max:     1.05
           latex:    '$s_{0_{\pm,0} }^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K::s_0^+/-,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{\pm,1} }^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K::s_0^T,0@B-LCSR' :
           central: 1.05
           min:     1.05
           max:     1.05
           latex:    '$s_{0_{T,0} }^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K::s_0^T,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T,1} }^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B \to K, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B_s->K hadronic matrix elements
       'B_s->K::s_0^+,0@B-LCSR' :
           central: 1.05
           min:     1.05
           max:     1.05
           latex:    '$s_{0_{+,0} }^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K::s_0^+,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{+,1} }^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K::s_0^+/-,0@B-LCSR' :
           central: 1.05
           min:     1.05
           max:     1.05
           latex:    '$s_{0_{\pm,0} }^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K::s_0^+/-,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{\pm,1} }^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K::s_0^T,0@B-LCSR' :
           central: 1.05
           min:     1.05
           max:     1.05
           latex:    '$s_{0_{T,0} }^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K::s_0^T,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T,1} }^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B_s \to K, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B->D hadronic matrix elements, cf. [GKvD2018]
       'B->D::s_0^+,0@B-LCSR' :
           central: 6.0
           min:     6.0
           max:     6.0
           latex:    '$s_{0_{+,0} }^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D::s_0^+,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{+,1} }^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D::s_0^+/-,0@B-LCSR' :
           central: 6.0
           min:     6.0
           max:     6.0
           latex:    '$s_{0_{\pm,0} }^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D::s_0^+/-,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{\pm,1} }^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D::s_0^T,0@B-LCSR' :
           central: 6.0
           min:     6.0
           max:     6.0
           latex:    '$s_{0_{T,0} }^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D::s_0^T,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T,1} }^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D::M^2@B-LCSR' :
           central: 4.5
           min:     3.0
           max:     6.0
           latex:    '$(M^2)^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D::mu@B-LCSR' :
           central: 2.1213
           min:     2.1213
           max:     2.1213
           latex:    '$\mu^{B \to D, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B_s->D_s hadronic matrix elements
       'B_s->D_s::s_0^+,0@B-LCSR' :
           central: 6.0
           min:     6.0
           max:     6.0
           latex:    '$s_{0_{+,0} }^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s::s_0^+,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{+,1} }^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s::s_0^+/-,0@B-LCSR' :
           central: 6.0
           min:     6.0
           max:     6.0
           latex:    '$s_{0_{\pm,0} }^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s::s_0^+/-,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{\pm,1} }^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s::s_0^T,0@B-LCSR' :
           central: 6.0
           min:     6.0
           max:     6.0
           latex:    '$s_{0_{T,0} }^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s::s_0^T,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T,1} }^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s::M^2@B-LCSR' :
           central: 4.5
           min:     3.0
           max:     6.0
           latex:    '$(M^2)^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s::mu@B-LCSR' :
           central: 2.1213
           min:     2.1213
           max:     2.1213
           latex:    '$\mu^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B->rho hadronic matrix elements, cf. [GKvD2018]
       'B->rho::s_0^A1,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{A_1,0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^A1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_1,1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::s_0^A2,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{A_2,0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^A2,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_2,1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::s_0^A30,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{A_{30},0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^A30,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_{30},1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::s_0^V,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{V,0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^V,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{V,1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::s_0^T1,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{T_1,0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^T1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_1,1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::s_0^T23A,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{T_{23A},0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^T23A,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23A},1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::s_0^T23B,0@B-LCSR' :
           central: 1.6
           min:     1.6
           max:     1.6
           latex:    '$s_{0_{T_{23B},0} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::s_0^T23B,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23B},1} }^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->rho::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->rho::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B \to \rho \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
 
       # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [GKvD2018]
       'B->K^*::s_0^A1,0@B-LCSR' :
@@ -2679,485 +2712,485 @@ groups:
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_1,0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^A1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_1,1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::s_0^A2,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_2,0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^A2,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_2,1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::s_0^A30,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_{30},0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^A30,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_{30},1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::s_0^V,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{V,0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^V,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{V,1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::s_0^T1,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_1,0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^T1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_1,1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::s_0^T23A,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_{23A},0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^T23A,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23A},1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::s_0^T23B,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_{23B},0}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::s_0^T23B,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23B},1}}^{B \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->K^*::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B \to K^* \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->K^*::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B \to K^* \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B_s->K^* hadronic matrix elements
       'B_s->K^*::s_0^A1,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_1,0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^A1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_1,1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::s_0^A2,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_2,0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^A2,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_2,1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::s_0^A30,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_{30},0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^A30,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_{30},1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::s_0^V,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{V,0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^V,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{V,1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::s_0^T1,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_1,0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^T1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_1,1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::s_0^T23A,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_{23A},0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^T23A,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23A},1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::s_0^T23B,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_{23B},0}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::s_0^T23B,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23B},1}}^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->K^*::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->K^*::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B->D^* hadronic matrix elements, cf. [GKvD2018]
       'B->D^*::s_0^A1,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{A_1,0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^A1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_1,1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::s_0^A2,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{A_2,0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^A2,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_2,1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::s_0^A30,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{A_{30},0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^A30,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_{30},1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::s_0^V,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{V,0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^V,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{V,1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::s_0^T1,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{T_1,0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^T1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_1,1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::s_0^T23A,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{T_{23A},0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^T23A,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23A},1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::s_0^T23B,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{T_{23B},0}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::s_0^T23B,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23B},1}}^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B->D^*::M^2@B-LCSR' :
           central: 4.5
           min:     3.0
           max:     6.0
           latex:    '$(M^2)^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B->D^*::mu@B-LCSR' :
           central: 2.1213
           min:     2.1213
           max:     2.1213
           latex:    '$\mu^{B \to D^*, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B_s->D_s^* hadronic matrix elements
       'B_s->D_s^*::s_0^A1,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{A_1,0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^A1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_1,1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::s_0^A2,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{A_2,0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^A2,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_2,1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::s_0^A30,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{A_{30},0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^A30,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_{30},1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::s_0^V,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{V,0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^V,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{V,1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::s_0^T1,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{T_1,0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^T1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_1,1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::s_0^T23A,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{T_{23A},0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^T23A,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23A},1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::s_0^T23B,0@B-LCSR' :
           central: 8.0
           min:     8.0
           max:     8.0
           latex:    '$s_{0_{T_{23B},0}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::s_0^T23B,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23B},1}}^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->D_s^*::M^2@B-LCSR' :
           central: 4.5
           min:     3.0
           max:     6.0
           latex:    '$(M^2)^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->D_s^*::mu@B-LCSR' :
           central: 2.1213
           min:     2.1213
           max:     2.1213
           latex:    '$\mu^{B_s \to D_s^*, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
       # parameters for LCSR calculation of B_s->phi hadronic matrix elements
       'B_s->phi::s_0^A1,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_1,0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^A1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_1,1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::s_0^A2,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_2,0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^A2,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_2,1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::s_0^A30,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{A_{30},0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^A30,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{A_{30},1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::s_0^V,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{V,0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^V,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{V,1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::s_0^T1,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_1,0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^T1,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_1,1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::s_0^T23A,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_{23A},0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^T23A,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23A},1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::s_0^T23B,0@B-LCSR' :
           central: 1.7
           min:     1.7
           max:     1.7
           latex:    '$s_{0_{T_{23B},0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::s_0^T23B,1@B-LCSR' :
           central: 0.0
           min:     0.0
           max:     1.0
           latex:    '$s_{0_{T_{23B},1} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: '1'
+          unit:     '1'
       'B_s->phi::M^2@B-LCSR' :
           central: 1.0
           min:     0.5
           max:     1.5
           latex:    '$(M^2)^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: 'GeV^2'
+          unit:     'GeV^2'
       'B_s->phi::mu@B-LCSR' :
           central: 1.0
           min:     0.7
           max:     0.3
           latex:    '$\mu^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
-          comments: ''
+          unit:     '1'
   # }}}
 
   # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
@@ -3172,243 +3205,232 @@ groups:
           min:     +0.22
           max:     +0.34
           latex:    '$f_0^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
-          comments: ''
+          unit:     '1'
       'Lambda_b->Lambda::b_1_0^V@BFvD2014' :
           central: -11.00
           min:     -19.00
           max:     -6.00
           latex:    '$b_{1,0}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::f_0^A(0)@BFvD2014' :
           central: +0.27
           min:     +0.21
           max:     +0.33
           latex:    '$f_0^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
-          comments: ''
       'Lambda_b->Lambda::b_1_0^A@BFvD2014' :
           central: -8.00
           min:     -16.00
           max:     -5.00
           latex:    '$b_{1,0}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::f_perp^V(0)@BFvD2014' :
           central: +0.28
           min:     +0.22
           max:     +0.34
           latex:    '$f_{\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
-          comments: ''
       'Lambda_b->Lambda::b_1_perp^V@BFvD2014' :
           central: -11.00
           min:     -19.00
           max:     -6.00
           latex:    '$b_{1,\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::f_perp^A(0)@BFvD2014' :
           central: +0.30
           min:     +0.24
           max:     +0.36
           latex:    '$f_{\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
-          comments: ''
       'Lambda_b->Lambda::b_1_perp^A@BFvD2014' :
           central: -6.00
           min:     -12.00
           max:     -3.00
           latex:    '$b_{1,\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::sigma_perp^V@BFvD2014' :
           central: 0.00
           min:     -0.20
           max:     +0.20
           latex:    '$\sigma_{\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::sigma_perp^A@BFvD2014' :
           central: 0.00
           min:     -0.30
           max:     +0.30
           latex:    '$\sigma_{\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::sigma_long^V@BFvD2014' :
           central: 0.00
           min:     -0.21
           max:     +0.21
           latex:    '$\sigma_{0}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       'Lambda_b->Lambda::sigma_long^A@BFvD2014' :
           central: 0.00
           min:     -0.30
           max:     +0.30
           latex:    '$\sigma_{0}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
-          comments: ''
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [DM2016], table ?, p. ??
       'Lambda_b->Lambda::a_0_time^V@DM2016' :
           central: +0.373
           min:     +0.373
           max:     +0.373
+          unit:     '1'
           latex:    '$a_{t,0}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_time^V@DM2016' :
           central: -0.939
           min:     -0.939
           max:     -0.939
+          unit:     '1'
           latex:    '$a_{t,1}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_time^V@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{t,2}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_time^A@DM2016' :
           central: +0.403
           min:     +0.403
           max:     +0.403
+          unit:     '1'
           latex:    '$a_{t,0}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_time^A@DM2016' :
           central: -1.029
           min:     -1.029
           max:     -1.029
+          unit:     '1'
           latex:    '$a_{t,1}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_time^A@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{t,2}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_long^V@DM2016' :
           central: +0.422
           min:     +0.422
           max:     +0.422
+          unit:     '1'
           latex:    '$a_{0,0}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_long^V@DM2016' :
           central: -1.139
           min:     -1.139
           max:     -1.139
+          unit:     '1'
           latex:    '$a_{0,1}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_long^V@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_perp^V@DM2016' :
           central: +0.518
           min:     +0.518
           max:     +0.518
+          unit:     '1'
           latex:    '$a_{\perp,0}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_perp^V@DM2016' :
           central: -1.350
           min:     -1.350
           max:     -1.350
+          unit:     '1'
           latex:    '$a_{\perp,1}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_perp^V@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{V,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_long^A@DM2016' :
           central: +0.356
           min:     +0.356
           max:     +0.356
+          unit:     '1'
           latex:    '$a_{0,0}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_long^A@DM2016' :
           central: -1.061
           min:     -1.061
           max:     -1.061
+          unit:     '1'
           latex:    '$a_{0,1}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_long^A@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_perp^A@DM2016' :
           central: -1.136
           min:     -1.136
           max:     -1.136
+          unit:     '1'
           latex:    '$a_{\perp,1}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_perp^A@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{A,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_long^T@DM2016' :
           central: +0.496
           min:     +0.496
           max:     +0.496
+          unit:     '1'
           latex:    '$a_{0,0}^{T,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_long^T@DM2016' :
           central: -1.128
           min:     -1.128
           max:     -1.128
+          unit:     '1'
           latex:    '$a_{0,1}^{T,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_long^T@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{T,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_perp^T@DM2016' :
           central: +0.388
           min:     +0.388
           max:     +0.388
+          unit:     '1'
           latex:    '$a_{\perp,0}^{T,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_perp^T@DM2016' :
           central: -0.962
           min:     -0.962
           max:     -0.962
+          unit:     '1'
           latex:    '$a_{\perp,1}^{T,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_perp^T@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{T,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_0_long^T5@DM2016' :
           central: +0.340
           min:     +0.340
           max:     +0.340
+          unit:     '1'
           latex:    '$a_{0,0}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_long^T5@DM2016' :
           central: -0.770
           min:     -0.770
           max:     -0.770
+          unit:     '1'
           latex:    '$a_{0,1}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_long^T5@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_1_perp^T5@DM2016' :
           central: -0.801
           min:     -0.801
           max:     -0.801
+          unit:     '1'
           latex:    '$a_{\perp,1}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       'Lambda_b->Lambda::a_2_perp^T5@DM2016' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
-          comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
       # [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
       # params for tensor FFs are included.
@@ -3416,170 +3438,170 @@ groups:
           central: +0.74392566003686
           min:     +0.74392566003686
           max:     +0.74392566003686
+          unit:     '1'
           latex:    '$a_{t,0}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_time^V@DKMR2017' :
           central: -4.6476511382467
           min:     -4.6476511382467
           max:     -4.6476511382467
+          unit:     '1'
           latex:    '$a_{t,1}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_time^V@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{t,2}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_time^A@DKMR2017' :
           central: +0.73960499809758
           min:     +0.73960499809758
           max:     +0.73960499809758
+          unit:     '1'
           latex:    '$a_{t,0}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_time^A@DKMR2017' :
           central: -4.3664554520299
           min:     -4.3664554520299
           max:     -4.3664554520299
+          unit:     '1'
           latex:    '$a_{t,1}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_time^A@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{t,2}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_long^V@DKMR2017' :
           central: +0.81458549275845
           min:     +0.81458549275845
           max:     +0.81458549275845
+          unit:     '1'
           latex:    '$a_{0,0}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_long^V@DKMR2017' :
           central: -4.8987680713973
           min:     -4.8987680713973
           max:     -4.8987680713973
+          unit:     '1'
           latex:    '$a_{0,1}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_long^V@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_perp^V@DKMR2017' :
           central: +1.077996185173
           min:     +1.077996185173
           max:     +1.077996185173
+          unit:     '1'
           latex:    '$a_{\perp,0}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_perp^V@DKMR2017' :
           central: -6.4170836206134
           min:     -6.4170836206134
           max:     -6.4170836206134
+          unit:     '1'
           latex:    '$a_{\perp,1}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_perp^V@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{V,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_long^A@DKMR2017' :
           central: +0.6846557018386
           min:     +0.6846557018386
           max:     +0.6846557018386
+          unit:     '1'
           latex:    '$a_{0,0}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_long^A@DKMR2017' :
           central: -4.4311552783827
           min:     -4.4311552783827
           max:     -4.4311552783827
+          unit:     '1'
           latex:    '$a_{0,1}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_long^A@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_perp^A@DKMR2017' :
           central: -4.4633624514401
           min:     -4.4633624514401
           max:     -4.4633624514401
+          unit:     '1'
           latex:    '$a_{\perp,1}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_perp^A@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{A,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_long^T@DKMR2017' :
           central: +0.97518189850197
           min:     +0.97518189850197
           max:     +0.97518189850197
+          unit:     '1'
           latex:    '$a_{0,0}^{T,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_long^T@DKMR2017' :
           central: -5.4999842229709
           min:     -5.4999842229709
           max:     -5.4999842229709
+          unit:     '1'
           latex:    '$a_{0,1}^{T,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_long^T@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{T,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_perp^T@DKMR2017' :
           central: +0.70539533108116
           min:     +0.70539533108116
           max:     +0.70539533108116
+          unit:     '1'
           latex:    '$a_{\perp,0}^{T,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_perp^T@DKMR2017' :
           central: -4.3577976693726
           min:     -4.3577976693726
           max:     -4.3577976693726
+          unit:     '1'
           latex:    '$a_{\perp,1}^{T,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_perp^T@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{T,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_0_long^T5@DKMR2017' :
           central: +0.67275080357035
           min:     +0.67275080357035
           max:     +0.67275080357035
+          unit:     '1'
           latex:    '$a_{0,0}^{T5,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_long^T5@DKMR2017' :
           central: -4.4321757873186
           min:     -4.4321757873186
           max:     -4.4321757873186
+          unit:     '1'
           latex:    '$a_{0,1}^{T5,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_long^T5@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{0,2}^{T5,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_1_perp^T5@DKMR2017' :
           central: -4.4927847697461
           min:     -4.4927847697461
           max:     -4.4927847697461
+          unit:     '1'
           latex:    '$a_{\perp,1}^{T5,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
       'Lambda_b->Lambda_c::a_2_perp^T5@DKMR2017' :
           central: +0.000
           min:     +0.000
           max:     +0.000
+          unit:     '1'
           latex:    '$a_{\perp,2}^{T5,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
-          comments: ''
   # }}}
 
   # Parameters of the Heavy Quark Expansion of Heavy-to-Heavy Form Factors
@@ -3967,27 +3989,32 @@ groups:
           min:     +4.2
           max:     +4.2
           latex:    '$\mu^{b \to s c \bar{c}}$'
+          unit:     'GeV'
           comments: 'Renormalization scale for the Wilson coefficients.'
       'b->sccbar::mu_c' :
           central: +2.56
           min:     +1.28
           max:     +2.56
           latex:    '$\mu_c^{b \to s c \bar{c}}$'
+          unit:     'GeV'
           comments: 'Renormalization scale for the charm quark mass.'
       'b->sccbar::t_0' :
           central: +10.0
           min:     +10.0
           max:     +10.0
+          unit:     'GeV^2'
           latex:    '$t_0$'
       'b->sccbar::t_s' :
           central: -17.4724
           min:     -17.4724
           max:     -17.4724
+          unit:     'GeV^2'
           latex:    '$t_s$'
       'b->sccbar::chiOPE@GvDV2020' :
           central: +0.000181
           min:     +0.000179
           max:     +0.000183
+          unit:     'GeV^-2'
           latex:    '$\chi_{\mathrm{OPE}}$'
           comments: 'Dispersive bound in the OPE at t_s = -m_b^2'
       'B->K^*ccbar::Re{alpha_0^perp}@GvDV2020' :
@@ -4204,6 +4231,7 @@ groups:
           central: +0.000181
           min:     +0.000179
           max:     +0.000183
+          unit:     'GeV^-2'
           latex:    '$\chi_{\mathrm{OPE}}$'
           comments: 'Dispersive bound in the OPE at t_s = -m_b^2'
       'B->K^*ccbar::Re{alpha_0^perp}@GRvDV2021' :
@@ -4429,20 +4457,19 @@ groups:
           min:     +0.89
           max:     +1.11
           latex:    '$\Delta\xi_{\perp}$'
-          comments: ''
       'formfactors::xi_par_uncertainty' :
           central: +1.0
           min:     +0.86
           max:     +1.14
           latex:    '$\Delta\xi_{\parallel}$'
-          comments: ''
       # form factor parameters for QCDF calculation according to [BFvD2016]
       'B->pipi::mu@BFvD2016' :
           central: 1.5
           min:     1.0
           max:     2.0
           latex:    '$\mu^{B \to \pi\pi,\mathrm{BFvD2016}}$'
-          comments: ' // GeV, cf. [BFvD2016]'
+          unit:     'GeV'
+          comments: 'cf. [BFvD2016]'
       # subleading parameter for Lambda_b -> Lambda ll decays according to
       # [MvD2016].
       'Lambda_b->Lambdall::r_perp_0@MvD2016' :
@@ -4450,130 +4477,109 @@ groups:
           min:     -0.03
           max:     +0.03
           latex:    '$r_{\perp,0}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
-          comments: ''
       'Lambda_b->Lambdall::r_perp_1@MvD2016' :
           central: 0.00
           min:     -0.03
           max:     +0.03
           latex:    '$r_{\perp,1}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
-          comments: ''
       'Lambda_b->Lambdall::r_para_0@MvD2016' :
           central: 0.00
           min:     -0.03
           max:     +0.03
           latex:    '$r_{\parallel,0}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
-          comments: ''
       'Lambda_b->Lambdall::r_para_1@MvD2016' :
           central: 0.00
           min:     -0.03
           max:     +0.03
           latex:    '$r_{\parallel,1}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
-          comments: ''
       # Zero-Recoil Sum Rule for Lambda_b -> Lambda_c form factor
       'Lambda_b->Lambda_c::mu@ZRSR' :
           central: +0.75
           min:     +0.75
           max:     +0.75
           latex:    '$\mu^{\Lambda_b \to \Lambda_c , \mathrm{ZRSR}}$'
-          comments: ''
       'Lambda_b->Lambda_c::wM@ZRSR' :
           central: +0.75
           min:     +0.75
           max:     +0.75
           latex:    '$wM^{\Lambda_b \to \Lambda_c , \mathrm{ZRSR}}$'
-          comments: ''
       # B->K^*ll uncertainties from subleading terms for Large Recoil
       'B->K^*ll::A_long_uncertainty@LargeRecoil' :
           central: +1.0
           min:     +0.95
           max:     +1.05
           latex:    '$\Delta A_0^{B \to K^* \ell^+\ell^- , \mathrm{LargeRecoil}}$'
-          comments: ''
       'B->K^*ll::A_para_uncertainty@LargeRecoil' :
           central: +1.0
           min:     +0.95
           max:     +1.05
           latex:    '$\Delta A_{\parallel}^{B \to K^* \ell^+\ell^- , \mathrm{LargeRecoil}}$'
-          comments: ''
       'B->K^*ll::A_perp_uncertainty@LargeRecoil' :
           central: +1.0
           min:     +0.95
           max:     +1.05
           latex:    '$\Delta A_{\perp}^{B \to K^* \ell^+\ell^- , \mathrm{LargeRecoil}}$'
-          comments: ''
       # B->Pll uncertainties at subleading order at Large Recoil
       'B->Pll::Lambda_pseudo@LargeRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
           latex:    '$\Lambda_P^{B \to P \ell^+\ell^- , \mathrm{LargeRecoil}}$'
-          comments: ''
       'B->Pll::sl_phase_pseudo@LargeRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
           latex:    '$sl_P^{B \to P \ell^+\ell^- , \mathrm{LargeRecoil}}$'
-          comments: ''
       # B->Pll uncertainties at subleading order at Low Recoil
       'B->Pll::Lambda_pseudo@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
           latex:    '$\Lambda_P^{B \to P \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Pll::sl_phase_pseudo@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
           latex:    '$sl_P^{B \to P \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       # B->Vll uncertainties at subleading order at Low Recoil
       'B->Vll::Lambda@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
           latex:    '$\Lambda^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::Lambda_0@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
           latex:    '$\Lambda_0^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::Lambda_pa@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
           latex:    '$\Lambda_{\parallel}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::Lambda_pp@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
           latex:    '$\Lambda_{\perp}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::sl_phase@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
           latex:    '$sl^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::sl_phase_0@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
           latex:    '$sl_0^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::sl_phase_pa@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
           latex:    '$sl_{\parallel}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
       'B->Vll::sl_phase_pp@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
           latex:    '$sl_{\perp}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
-          comments: ''
   # }}}
