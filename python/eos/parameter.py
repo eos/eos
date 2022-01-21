@@ -118,9 +118,11 @@ class Parameters(_Parameters):
                     if 0 == len(latex):
                         latex = '---'
 
-                    unit = '&mdash;'
-                    if Unit.Undefined() == parameter.unit():
-                        unit = fr'$${parameter.unit().latex()}$$'
+                    unit = parameter.unit()
+                    if unit == Unit.Undefined() or unit.latex() == '1':
+                        unit = '&mdash;'
+                    else:
+                        unit = r'$$\left[ {latex} \right]$$'.format(latex=unit.latex())
 
                     value = parameter.evaluate()
 
