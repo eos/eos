@@ -44,8 +44,12 @@ namespace eos
                 none,
                 gev,
                 gev2,
+                gev3,
+                inverse_gev,
                 inverse_gev2,
                 inverse_gev4,
+                s,
+                inverse_s,
                 inverse_ps,
                 gev_s
             };
@@ -61,8 +65,12 @@ namespace eos
             static Unit None();
             static Unit GeV();
             static Unit GeV2();
+            static Unit GeV3();
+            static Unit InverseGeV();
             static Unit InverseGeV2();
             static Unit InverseGeV4();
+            static Unit Second();
+            static Unit InverseSecond();
             static Unit InversePicoSecond();
             static Unit GeVSecond();
 

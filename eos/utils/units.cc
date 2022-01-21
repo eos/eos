@@ -37,11 +37,14 @@ namespace eos
             "1",
             R"(\textrm{GeV})",
             R"(\textrm{GeV}^2)",
+            R"(\textrm{GeV}^3)",
+            R"(\textrm{GeV}^{-1})",
             R"(\textrm{GeV}^{-2})",
             R"(\textrm{GeV}^{-4})",
+            R"(\textrm{s})",
+            R"(\textrm{s}^{-1})",
             R"(\textrm{ps}^{-1})",
             R"(\textrm{GeV}\,\textrm{s})",
-            R"(\textrm{undefined})"
         };
 
         return representations[static_cast<int>(_id)];
@@ -55,8 +58,12 @@ namespace eos
             { "1",       Id::none         },
             { "GeV",     Id::gev          },
             { "GeV^2",   Id::gev2         },
+            { "GeV^3",   Id::gev3         },
             { "GeV^-2",  Id::inverse_gev2 },
+            { "GeV^-1",  Id::inverse_gev  },
             { "GeV^-4",  Id::inverse_gev4 },
+            { "s",       Id::s            },
+            { "s^-1",    Id::inverse_s    },
             { "ps^-1",   Id::inverse_ps   },
             { "GeV s",   Id::gev_s        }
         };
@@ -98,6 +105,18 @@ namespace eos
     }
 
     Unit
+    Unit::GeV3()
+    {
+        return Unit(Id::gev3);
+    }
+
+    Unit
+    Unit::InverseGeV()
+    {
+        return Unit(Id::inverse_gev);
+    }
+
+    Unit
     Unit::InverseGeV2()
     {
         return Unit(Id::inverse_gev2);
@@ -107,6 +126,18 @@ namespace eos
     Unit::InverseGeV4()
     {
         return Unit(Id::inverse_gev4);
+    }
+
+    Unit
+    Unit::Second()
+    {
+        return Unit(Id::s);
+    }
+
+    Unit
+    Unit::InverseSecond()
+    {
+        return Unit(Id::inverse_s);
     }
 
     Unit
