@@ -22,9 +22,10 @@
 
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factors.hh>
-#include <eos/utils/apply.hh>
 #include <eos/utils/tuple-maker.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
+
+#include <tuple>
 
 namespace eos
 {
@@ -88,7 +89,7 @@ namespace eos
             {
                 std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
 
-                return apply(_form_factor_function, values);
+                return std::apply(_form_factor_function, values);
             };
 
             virtual Parameters parameters()

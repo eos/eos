@@ -21,7 +21,6 @@
 #define EOS_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH 1
 
 #include <eos/observable-impl.hh>
-#include <eos/utils/apply.hh>
 #include <eos/utils/join.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/tuple-maker.hh>
@@ -31,6 +30,7 @@
 #include <array>
 #include <functional>
 #include <string>
+#include <tuple>
 
 namespace eos
 {
@@ -86,7 +86,7 @@ namespace eos
             {
                 std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
 
-                return apply(_function, values);
+                return std::apply(_function, values);
             };
 
             virtual Parameters parameters()
