@@ -7,7 +7,6 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosutils.la
 libeosutils_la_SOURCES = \
-	apply.hh \
 	cartesian-product.hh \
 	concrete_observable.cc concrete_observable.hh \
 	concrete-cacheable-observable.hh \
@@ -77,7 +76,6 @@ libeosutils_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
-	apply.hh \
 	cartesian-product.hh \
 	concrete_observable.hh \
 	concrete-signal-pdf.hh \
@@ -123,7 +121,6 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
-	apply_TEST \
 	cacheable-observable_TEST \
 	cartesian-product_TEST \
 	expression-parser_TEST \
@@ -156,8 +153,6 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
-
-apply_TEST_SOURCES = apply_TEST.cc
 
 cacheable_observable_TEST_SOURCES = cacheable_observable_TEST.cc
 
