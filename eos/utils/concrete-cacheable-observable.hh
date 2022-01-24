@@ -21,7 +21,6 @@
 #define EOS_GUARD_SRC_UTILS_CONCRETE_CACHEABLE_OBSERVABLE_HH 1
 
 #include <eos/observable-impl.hh>
-#include <eos/utils/apply.hh>
 #include <eos/utils/join.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/tuple-maker.hh>
@@ -30,6 +29,7 @@
 #include <array>
 #include <functional>
 #include <string>
+#include <tuple>
 
 namespace eos
 {
@@ -177,7 +177,7 @@ namespace eos
             {
                 std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
 
-                const typename Decay_::IntermediateResult * intermediate_result = apply(_prepare_fn, values);
+                const typename Decay_::IntermediateResult * intermediate_result = std::apply(_prepare_fn, values);
 
                 return _evaluate_fn(_decay.get(), intermediate_result);
             };
@@ -186,7 +186,7 @@ namespace eos
             {
                 std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
 
-                return apply(_prepare_fn, values);
+                return std::apply(_prepare_fn, values);
             }
 
             virtual double evaluate(const CacheableObservable::IntermediateResult * intermediate_result) const
@@ -231,7 +231,7 @@ namespace eos
                  */
                 std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = other->_argument_tuple;
 
-                return ObservablePtr(new ConcreteCachedObservable<Decay_, Args_ ...>(_name, _parameters, _kinematics, _options, other->_decay, apply(other->_prepare_fn, values), _prepare_fn, _evaluate_fn, _kinematics_names));
+                return ObservablePtr(new ConcreteCachedObservable<Decay_, Args_ ...>(_name, _parameters, _kinematics, _options, other->_decay, std::apply(other->_prepare_fn, values), _prepare_fn, _evaluate_fn, _kinematics_names));
             }
 
             virtual ObservablePtr clone() const

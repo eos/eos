@@ -21,7 +21,6 @@
 #define EOS_GUARD_EOS_UTILS_CONCRETE_SIGNAL_PDF_HH 1
 
 #include <eos/signal-pdf.hh>
-#include <eos/utils/apply.hh>
 #include <eos/utils/density-impl.hh>
 #include <eos/utils/tuple-maker.hh>
 
@@ -221,6 +220,19 @@ namespace eos
         {
             return to_array(std::forward<Tuple_>(tuple), make_indices<Tuple_>());
         }
+
+        // convert Decay_ + std::array to std::tuple such that std::apply can be used
+        template <typename T_, std::size_t N_, std::size_t ... indices_>
+        auto make_tuple(const T_ * t, const std::array<double, N_> & a, std::index_sequence<indices_ ...>)
+        {
+            return std::make_tuple(t, std::get<indices_>(a) ...);
+        }
+
+        template <typename T_, std::size_t N_>
+        auto convert_to_tuple(const T_ * t, const std::array<double, N_> & args)
+        {
+            return make_tuple(t , args, std::make_index_sequence<N_>());
+        }
     }
 
     template <typename Decay_, typename PDFSignature_, unsigned pdf_args_, typename NormSignature_, unsigned norm_args_>
@@ -286,7 +298,7 @@ namespace eos
             {
                 std::array<double, pdf_args_> pdf_arguments = impl::evaluate(_pdf_arguments);
 
-                double result = apply(_pdf, &_decay, pdf_arguments);
+                double result = std::apply(_pdf, impl::convert_to_tuple(&_decay, pdf_arguments));
 
                 return (result > 0 ? std::log(result) : -std::numeric_limits<double>::max());
             };
@@ -295,7 +307,7 @@ namespace eos
             {
                 std::array<double, norm_args_> norm_arguments = impl::evaluate(_norm_arguments);
 
-                double result = apply(_norm, &_decay, norm_arguments);
+                double result = std::apply(_norm, impl::convert_to_tuple(&_decay, norm_arguments));
 
                 return (result > 0 ? std::log(result) : -std::numeric_limits<double>::max());
             };
