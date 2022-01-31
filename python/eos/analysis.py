@@ -131,18 +131,18 @@ class Analysis:
             p.set_max(maxv)
             self.varied_parameters.append(p)
 
-        # add manual constraints to the list of constraints
-        for constraint_name, constraint_data in manual_constraints.items():
-            import yaml
-            yaml_string = yaml.dump(self._sanitize_manual_input(constraint_data))
-            constraint_entry = eos.ConstraintEntry.deserialize(constraint_name, yaml_string)
-
         # record all constraints that comprise the likelihood
         self._constraint_names = list(likelihood) + list(manual_constraints.keys())
 
         # create the likelihood
         for constraint_name in self._constraint_names:
-            constraint = eos.Constraint.make(constraint_name, self.global_options)
+            if constraint_name in manual_constraints.keys():
+                import yaml
+                yaml_string = yaml.dump(self._sanitize_manual_input(manual_constraints[constraint_name]))
+                constraint_entry = eos.ConstraintEntry.deserialize(constraint_name, yaml_string)
+                constraint = constraint_entry.make(constraint_name, self.global_options)
+            else:
+                constraint = eos.Constraint.make(constraint_name, self.global_options)
             self._log_likelihood.add(constraint)
 
         # perform some sanity checks
