@@ -3,8 +3,16 @@ import eos
 import numpy as np
 import yaml
 
+def wilson_is_missing():
+    try:
+        import wilson
+        return False
+    except ModuleNotFoundError:
+        return True
+
 class ClassMethodTests(unittest.TestCase):
 
+    @unittest.skipIf(wilson_is_missing(), "Test is missing the module 'wilson'")
     def test_importing_from_wcxf(self):
 
         from wilson import Wilson
