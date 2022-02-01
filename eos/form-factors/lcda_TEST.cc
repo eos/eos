@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/lcda.hh>
+#include <eos/form-factors/lcda.hh>
 
 #include <cmath>
 

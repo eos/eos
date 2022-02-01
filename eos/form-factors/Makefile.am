@@ -20,6 +20,7 @@ libeosformfactors_la_SOURCES = \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
 	kstar-lcdas.cc kstar-lcdas.hh \
+	lcda.cc lcda.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	mesonic-hqet.hh \
 	mesonic-processes.hh \
@@ -60,6 +61,7 @@ TESTS = \
 	b-lcdas_TEST \
 	hqet-b-to-c_TEST \
 	kstar-lcdas_TEST \
+	lcda_TEST \
 	mesonic_TEST \
 	mesonic-hqet_TEST \
 	parametric-bgl1997_TEST \
@@ -91,6 +93,8 @@ b_lcdas_TEST_SOURCES = b-lcdas_TEST.cc
 hqet_b_to_c_TEST_SOURCES = hqet-b-to-c_TEST.cc
 
 kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
+
+lcda_TEST_SOURCES = lcda_TEST.cc
 
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 
