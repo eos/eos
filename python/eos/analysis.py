@@ -451,12 +451,25 @@ class Analysis:
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
 
         # rescale log_proposal arguments to [-1, 1]
-        for component in log_proposal.components:
+        for n, component in enumerate(log_proposal.components):
             rescaled_mu = self._par_to_x(component.mu)
             rescaled_sigma = np.array([[
                 4 * component.sigma[i, j] / (bj[1] - bj[0]) / (bi[1] - bi[0]) for j, bj in enumerate(self.bounds)
                 ] for i, bi in enumerate(self.bounds)])
-            component.update(rescaled_mu, rescaled_sigma)
+            try:
+                component.update(rescaled_mu, rescaled_sigma)
+            except np.linalg.LinAlgError:
+                # The failure is probably due to a non positive definite matrix. We add the problematic smallest eigenvalue
+                # to the diagonal to ensure that all eigenvalues are now strictly positive
+                smallest_eigenvalue = np.abs(np.min(np.linalg.eigvalsh(rescaled_sigma)))
+                rescaled_sigma += (1.0 + np.finfo(float).eps) * np.diag(smallest_eigenvalue * np.ones(len(rescaled_mu)))
+                try:
+                    component.update(rescaled_mu, rescaled_sigma)
+                    eos.warn(f"Components {n} was singular, {-smallest_eigenvalue} is manually added to the diagonal.")
+                except np.linalg.LinAlgError:
+                    log_proposal.weights[n] = 0
+                    eos.warn(f"Components {n} could not be rescaled, the corresponding weight was {log_proposal.weights[n]} "
+                            f"and is now set to zero.")
 
         # create PMC sampler
         sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True, rng=rng)
@@ -474,14 +487,17 @@ class Analysis:
             last_weights = np.copy(sampler.weights[-1][:, 0])
             last_perplexity = self._perplexity(last_weights)
             last_ess = self._ess(last_weights)
-            eos.info(f'Convergence diagnostics of the last samples after sampling in step {step}: perplexity = {last_perplexity}, ESS = {last_ess}')
+            eos.info(f'Convergence diagnostics of the last samples after sampling in step {step}: '
+                     f'perplexity = {last_perplexity}, ESS = {last_ess}')
             if last_perplexity < 0.05:
-                eos.warn("Last step's perplexity is very low. This could possibly be improved by running the markov chains that are used to form the initial PDF for a bit longer")
+                eos.warn("Last step's perplexity is very low. This could possibly be improved by running "
+                         "the markov chains that are used to form the initial PDF for a bit longer")
 
             # Use the samples of the last pmc_lookback steps to update the mixture
             samples = sampler.samples[-pmc_lookback:]
             weights = sampler.weights[-pmc_lookback:][:, 0]
-            eos.info(f'Convergence diagnostics of all previous samples after sampling in step {step}: perplexity = {self._perplexity(weights)}, ESS = {self._ess(weights)}')
+            eos.info(f'Convergence diagnostics of all previous samples after sampling in step {step}: '
+                     f'perplexity = {self._perplexity(weights)}, ESS = {self._ess(weights)}')
 
             # Reevaluate the weights of the previous pmc_lookback steps
             reevaluated_weights = pypmc.sampler.importance_sampling.combine_weights(
@@ -510,12 +526,25 @@ class Analysis:
         generating_components.append(origins)
 
         # rescale proposal components back to their physical bounds
-        for component in sampler.proposal.components:
+        for n, component in enumerate(sampler.proposal.components):
             rescaled_mu = self._x_to_par(component.mu)
             rescaled_sigma = np.array([[
                 component.sigma[i, j] * (bj[1] - bj[0]) * (bi[1] - bi[0]) / 4 for j, bj in enumerate(self.bounds)
                 ] for i, bi in enumerate(self.bounds)])
-            component.update(rescaled_mu, rescaled_sigma)
+            try:
+                component.update(rescaled_mu, rescaled_sigma)
+            except np.linalg.LinAlgError:
+                # The failure is probably due to a non positive definite matrix. We add the problematic smallest eigenvalue
+                # to the diagonal to ensure that all eigenvalues are now strictly positive
+                smallest_eigenvalue = np.abs(np.min(np.linalg.eigvalsh(rescaled_sigma)))
+                rescaled_sigma += (1.0 + np.finfo(float).eps) * np.diag(smallest_eigenvalue * np.ones(len(rescaled_mu)))
+                try:
+                    component.update(rescaled_mu, rescaled_sigma)
+                    eos.warn(f"Components {n} was singular, {-smallest_eigenvalue} is manually added to the diagonal.")
+                except np.linalg.LinAlgError:
+                    log_proposal.weights[n] = 0
+                    eos.warn(f"Components {n} could not be rescaled, the corresponding weight was {log_proposal.weights[n]} "
+                            f"and is now set to zero.")
 
         # rescale the samples back to their physical bounds
         if return_final_only:
