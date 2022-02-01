@@ -33,7 +33,6 @@ libeosutils_la_SOURCES = \
 	join.hh \
 	kinematic.cc kinematic.hh \
 	kmatrix.hh kmatrix-impl.hh\
-	lcda.cc lcda.hh \
 	lock.cc lock.hh \
 	log.cc log.hh \
 	memoise.cc memoise.hh \
@@ -91,7 +90,6 @@ include_eos_utils_HEADERS = \
 	join.hh \
 	kinematic.hh \
 	kmatrix.hh kmatrix-impl.hh\
-	lcda.hh \
 	lock.hh \
 	log.hh \
 	memoise.hh \
@@ -129,7 +127,6 @@ TESTS = \
 	join_TEST \
 	kinematic_TEST \
 	kmatrix_TEST \
-	lcda_TEST \
 	log_TEST \
 	memoise_TEST \
 	mutable_TEST \
@@ -171,8 +168,6 @@ join_TEST_SOURCES = join_TEST.cc
 kinematic_TEST_SOURCES = kinematic_TEST.cc
 
 kmatrix_TEST_SOURCES = kmatrix_TEST.cc
-
-lcda_TEST_SOURCES = lcda_TEST.cc
 
 log_TEST_SOURCES = log_TEST.cc
 
