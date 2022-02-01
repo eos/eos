@@ -1254,6 +1254,7 @@ class Plotter:
          * ``bandwidth`` (*float*) -- The factor by which the automatically determined kernel bandwidth is scaled. See the SciPy documentation
            for ``gaussian_kde``, ``bw_method='silverman'``. Defaults to 1.
          * ``range`` (*tuple* of two *float*) -- The minimum and maximum value of the x coordinate for which the smooth histogram is plotted.
+         * ``level`` (*float*) -- The probability level of the contour. Defaults to ``68.27``.
 
         Example:
 
@@ -1316,7 +1317,7 @@ class Plotter:
                 self.weights = None
 
             self.bw       = item['bandwidth'] if 'bandwidth' in item else None
-            self.level    = item['level']     if 'level'     in item else 68.29
+            self.level    = item['level']     if 'level'     in item else 68.27
             self.xrange   = item['range']     if 'range'     in item else plotter.xrange
 
         def plot(self):
@@ -1370,7 +1371,7 @@ class Plotter:
            If ``'lines'`` is provided, the contour lines are drawn.
            If ``'areas'`` is provided, the contour areas are filled.
            Defaults to ``['lines']``.
-         * ``levels`` (*list* of *float*) -- The probability levels of the contours. Defaults to ``[0.68, 0.95, 0.99]``.
+         * ``levels`` (*list* of *float*) -- The probability levels of the contours. Defaults to ``[68, 95, 99]``.
 
         Example:
 
