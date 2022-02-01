@@ -232,6 +232,7 @@ class Analysis:
                             If not specified, optimization starts at the current parameter point.
         :type start_point: iterable, optional
         :param rng: Optional random number generator
+        :param \**kwargs: Are passed to `scipy.optimize.minimize`
 
         """
         if start_point == None:
@@ -239,16 +240,16 @@ class Analysis:
         elif start_point == "random":
             start_point = [p.inverse_cdf(rng.uniform()) for p in self._log_posterior.log_priors()]
 
-        default_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
-        if kwargs is None:
-            kwargs = default_kwargs
+        scipy_opt_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
+        # Update default values. If no keyword arguments are passed, kwargs is an empty dict
+        scipy_opt_kwargs.update(kwargs)
 
         res = scipy.optimize.minimize(
             self.negative_log_pdf,
             self._par_to_x(start_point),
             args=None,
             bounds=[(-1.0, 1.0) for b in self.bounds],
-            **kwargs)
+            **scipy_opt_kwargs)
 
         if not res.success:
             eos.warn('Optimization did not succeed')
