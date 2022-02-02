@@ -156,10 +156,13 @@ def __format_Observable(obs):
 
 def __format_GoodnessOfFit(gof):
     result = '<table>\n'
-    result += '<tr><th>constraint</th><th>&chi;<sup>2</sup></th><th>d.o.f.</th></tr>\n'
+    result += '<tr><th>constraint</th><th>&chi;<sup>2</sup></th><th>d.o.f.</th><th>local p-value</th></tr>\n'
     for entry in gof:
-        result += '<tr><td><tt>{name}</tt></td><td>{chi2:6.4f}</td><td>{dof}</td></tr>\n'.format(
-            name=entry[0], chi2=entry[1].chi2, dof=entry[1].dof)
+        local_chi2 = entry[1].chi2
+        local_dof = entry[1].dof
+        local_pvalue = 1.0 - scipy.stats.chi2(local_dof).cdf(local_chi2)
+        result += '<tr><td><tt>{name}</tt></td><td>{chi2:6.4f}</td><td>{dof}</td><td>{local_p:6.4f}%</td></tr>\n'.format(
+            name=entry[0], chi2=local_chi2, dof=local_dof, local_p=local_pvalue * 100)
     result += '</table><br/>\n'
     chi2 = gof.total_chi_square()
     dof  = gof.total_degrees_of_freedom()
