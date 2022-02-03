@@ -20,6 +20,7 @@
 #include <test/test.hh>
 #include <eos/models/model.hh>
 #include <eos/models/ckm.hh>
+#include <eos/models/standard-model.hh>
 
 #include <cmath>
 
@@ -121,3 +122,47 @@ class CKMMatrixElementsTest :
             }
         }
 } ckm_matrix_elements_test;
+
+class CKMDefaultValuesTest :
+    public TestCase
+{
+    public:
+        CKMDefaultValuesTest() :
+            TestCase("ckm_default_values_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test passing of CKM matrix elements via polar parametrisations */
+            {
+                static const double eps = 1e-8;
+
+                Parameters p = Parameters::Defaults();
+                Options o{ };
+
+                StandardModel sm(p);
+                CKMScanModel ckm(p, o);
+
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_ud()),    abs(ckm.ckm_ud()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_us()),    abs(ckm.ckm_us()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_ub()),    abs(ckm.ckm_ub()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_cd()),    abs(ckm.ckm_cd()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_cs()),    abs(ckm.ckm_cs()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_cb()),    abs(ckm.ckm_cb()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_td()),    abs(ckm.ckm_td()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_ts()),    abs(ckm.ckm_ts()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( abs(sm.ckm_tb()),    abs(ckm.ckm_tb()),  eps);
+
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_ud()),    arg(ckm.ckm_ud()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_us()),    arg(ckm.ckm_us()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_ub()),    arg(ckm.ckm_ub()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_cd()),    arg(ckm.ckm_cd()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_cs()),    arg(ckm.ckm_cs()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_cb()),    arg(ckm.ckm_cb()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_td()),    arg(ckm.ckm_td()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_ts()),    arg(ckm.ckm_ts()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( arg(sm.ckm_tb()),    arg(ckm.ckm_tb()),  eps);
+            }
+        }
+} ckm_default_values_test;
