@@ -50,8 +50,11 @@ class BToDileptonTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["sbmumu::mu"] = 4.2;
-                p["b->smumu::Re{c10}"] = -4.150;
-                p["b->smumu::Re{c10'}"] = 0.000;
+                p["sbee::mu"]   = 4.2;
+                p["b->smumu::Re{c10}"]  = -4.150;
+                p["b->smumu::Re{c10'}"] =  0.000;
+                p["b->see::Re{c10}"]    = -4.150;
+                p["b->see::Re{c10'}"]   =  0.000;
                 // PDG 2010 CKM parameters
                 p["CKM::A"]             =  0.812;
                 p["CKM::lambda"]        =  0.22543;

@@ -103,7 +103,7 @@ namespace eos
 
         xi_t calc_amplitudes() const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), opt_l.value());
 
             double factor = power_of<2>(m_B()) / 2.0 / m_l / (m_b + m_q);
             complex<double> S = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B)) * factor * (wc.cS() - wc.cSprime());
@@ -129,7 +129,7 @@ namespace eos
             double lambda_t = abs(lambda(model.get()));
             double beta_l = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B()));
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), opt_l.value());
 
             return power_of<2>(g_fermi() * alpha_e() * lambda_t * f_B()) / 64.0 / power_of<3>(M_PI) * tau_B / hbar
                 * beta_l * power_of<3>(m_B()) * (
