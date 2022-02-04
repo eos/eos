@@ -253,7 +253,7 @@ class Analysis:
 
         if not res.success:
             eos.warn('Optimization did not succeed')
-            eos.warn('  optimizer'' message reas: {}'.format(res.message))
+            eos.warn('  optimizer'' message reads: {}'.format(res.message))
         else:
             eos.info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
 
