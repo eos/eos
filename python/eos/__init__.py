@@ -43,6 +43,7 @@ from .plot import *
 from .analysis import Analysis, BestFitPoint
 from .analysis_file import AnalysisFile
 from .constraint import Constraints
+from .ipython import __ipython__
 from .observable import Observables
 from .parameter import Parameters
 from .reference import References
@@ -85,6 +86,12 @@ def _log_callback(id, level, msg):
 
 _register_log_callback(_log_callback)
 
+# log to stderr by default
+import logging
+logger = logging.getLogger('EOS')
+logger.setLevel(logging.INFO)
+logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+
 import time as _time
 import os as _os
 def installation_time():
@@ -93,28 +100,19 @@ def installation_time():
 def installation_dir():
     return _os.path.dirname(eos.__file__)
 
-__ipython__ = False
-try:
-    if __IPYTHON__:
-        __ipython__ = True
-        ip = get_ipython()
-        html_formatter = ip.display_formatter.formatters['text/html']
+# setup IPython integration
+if __ipython__:
+    ip = get_ipython()
+    html_formatter = ip.display_formatter.formatters['text/html']
 
-        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Kinematics, __format_Options
-        from .ipython import __format_Observable, __format_ObservableEntry, __format_GoodnessOfFit, __format_Reference
-        html_formatter.for_type(Parameter, __format_Parameter)
-        html_formatter.for_type(KinematicVariable, __format_KinematicVariable)
-        html_formatter.for_type(Kinematics, __format_Kinematics)
-        html_formatter.for_type(Options, __format_Options)
-        html_formatter.for_type(Observable, __format_Observable)
-        html_formatter.for_type(ObservableEntry, __format_ObservableEntry)
-        html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
-        html_formatter.for_type(Reference, __format_Reference)
-
-        # print logger in notebook
-        import logging
-        logger = logging.getLogger('EOS')
-        logger.setLevel(logging.INFO)
-        logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-except NameError as e:
-    pass
+    # add the html formatter to the html display hook
+    from .ipython import __format_Parameter, __format_KinematicVariable, __format_Kinematics, __format_Options
+    from .ipython import __format_Observable, __format_ObservableEntry, __format_GoodnessOfFit, __format_Reference
+    html_formatter.for_type(Parameter, __format_Parameter)
+    html_formatter.for_type(KinematicVariable, __format_KinematicVariable)
+    html_formatter.for_type(Kinematics, __format_Kinematics)
+    html_formatter.for_type(Options, __format_Options)
+    html_formatter.for_type(Observable, __format_Observable)
+    html_formatter.for_type(ObservableEntry, __format_ObservableEntry)
+    html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
+    html_formatter.for_type(Reference, __format_Reference)
