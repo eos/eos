@@ -16,11 +16,70 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+import contextlib
+import functools
+import inspect
 import logging
 import numpy as _np
 import os
 import pypmc
 
+from .ipython import __ipython__
+
+class LogfileHandler:
+    def __init__(self, path, name='log', mode='w'):
+        self.path = path
+        self.name = name
+        self.mode = mode
+        self.formatter = logging.Formatter('%(asctime)-15s %(levelname)-8s %(message)s')
+        self.handler = logging.FileHandler(os.path.join(path, name), mode=mode)
+        self.handler.setFormatter(self.formatter)
+
+    def __enter__(self):
+        eos.logger.addHandler(self.handler)
+
+    def __exit__(self, type, value, traceback):
+        eos.logger.removeHandler(self.handler)
+
+
+def task(output, mode=lambda **kwargs: 'w'):
+    def _task(func):
+        @functools.wraps(func)
+        def task_wrapper(*args, **kwargs):
+            # extract default arguments
+            _args = {
+                k: v.default
+                for k, v in inspect.signature(func).parameters.items()
+                if v.default is not inspect.Parameter.empty
+            }
+            _args.update(zip(func.__code__.co_varnames, args))
+            _args.update(kwargs)
+            # create output directory
+            outputpath = ('{base_directory}/' + output).format(**_args)
+            os.makedirs(outputpath, exist_ok=True)
+            # create invocation-specific log file handler
+            handler = LogfileHandler(path=outputpath, mode=mode(**_args))
+            # use invocation-specific log file handler
+            with handler:
+                iaccordion = None
+                ioutput = contextlib.suppress() # can be replaced with contextlib.nullcontext once Python >=3.7 is ensured
+                if __ipython__:
+                    import ipywidgets as _ipywidgets
+                    ioutput = _ipywidgets.Output(layout={'height': '200px'})
+                    iaccordion = _ipywidgets.Accordion(children=[ioutput])
+                    iaccordion.set_title(0, output.format(**_args))
+                    display(iaccordion)
+                # use invocation-specific ipython output widget (if available)
+                with ioutput:
+                    result = func(*args, **kwargs)
+                    if iaccordion:
+                        iaccordion.selected_index = None
+                    return result
+        return task_wrapper
+    return _task
+
+
+@task('{posterior}/mcmc-{chain:04}')
 def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150, preruns=3, N=1000, stride=5, cov_scale=0.1, start_point=None):
     """
     Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
@@ -49,8 +108,6 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
     :type start_point: list-like, optional
     """
 
-    output_path = os.path.join(base_directory, posterior, 'mcmc-{:04}'.format(int(chain)))
-    _set_log_file(output_path, 'log')
     if type(analysis_file) is not eos.AnalysisFile:
         _analysis_file = eos.AnalysisFile(analysis_file)
     else:
@@ -59,13 +116,14 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
         samples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point)
-        eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
+        eos.data.MarkovChain.create(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, weights)
     except RuntimeError as e:
         eos.error('encountered run time error ({e}) in parameter point:'.format(e=e))
         for p in analysis.varied_parameters:
             eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
 
 
+@task('{posterior}/clusters')
 def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis_file=None):
     """
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
@@ -85,8 +143,6 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
     """
 
     import pathlib
-    output_path = os.path.join(base_directory, posterior, 'clusters')
-    _set_log_file(output_path, 'log')
     input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, posterior)).glob('mcmc-*')]
     chains    = [eos.data.MarkovChain(path).samples for path in input_paths]
     n = len(chains[0])
@@ -99,9 +155,10 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
     eos.info('Found {} groups using an R value threshold of {}'.format(len(groups), threshold))
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
     eos.info(f'Created mixture density with {len(density.components)} components')
-    eos.data.MixtureDensity.create(output_path, density)
+    eos.data.MixtureDensity.create(os.path.join(base_directory, posterior, 'clusters'), density)
 
 
+@task('{posterior}/product')
 def mixture_product(posterior, posteriors, base_directory='./', analysis_file=None):
     """
     Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
@@ -123,6 +180,7 @@ def mixture_product(posterior, posteriors, base_directory='./', analysis_file=No
 
 
 # Sample PMC
+@task('{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
 def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000,
                perplexity_threshold=1.0, weight_threshold=1e-10, sigma_test_stat=None, initial_proposal='clusters',
                pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05, pmc_lookback=1):
@@ -165,8 +223,6 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type pmc_lookback: int >= 0, optional
      """
 
-    output_path = os.path.join(base_directory, posterior, 'pmc')
-    _set_log_file(output_path, 'log', mode='a' if (initial_proposal == 'pmc') else 'w')
     if type(analysis_file) is not eos.AnalysisFile:
         _analysis_file = eos.AnalysisFile(analysis_file)
     else:
@@ -192,10 +248,11 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
         weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
 
-    eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal, sigma_test_stat=sigma_test_stat)
+    eos.data.PMCSampler.create(os.path.join(base_directory, posterior, 'pmc'), analysis.varied_parameters, samples, weights, proposal, sigma_test_stat=sigma_test_stat)
 
 
 # Predict observables
+@task('{posterior}/pred-{prediction}')
 def predict_observables(analysis_file, posterior, prediction, base_directory='./', begin=0, end=-1):
     '''
     Predicts a set of observables based on previously obtained PMC samples.
@@ -248,6 +305,7 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
 
 
 # Run analysis steps
+@task('')
 def run_steps(analysis_file, base_directory='./'):
     """
     Runs a list of predefined steps recorded in the analysis file.
@@ -267,10 +325,3 @@ def run_steps(analysis_file, base_directory='./'):
         _analysis_file = analysis_file
     _analysis_file.run()
 
-
-def _set_log_file(path, name='log', mode='w'):
-    os.makedirs(path, exist_ok=True)
-    formatter = logging.Formatter('%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
-    handler = logging.FileHandler(os.path.join(path, name), mode=mode)
-    handler.setFormatter(formatter)
-    eos.logger.addHandler(handler)
