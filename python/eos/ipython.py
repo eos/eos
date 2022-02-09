@@ -187,3 +187,25 @@ def __format_Reference(ref):
     result += f'<tr><th>title</th><td>{ref.title()}</td></tr>'
     result += '</table>\n'
     return(result)
+
+
+__ipython__ = False
+try:
+    if __IPYTHON__:
+        __ipython__ = True
+        ip = get_ipython()
+        html_formatter = ip.display_formatter.formatters['text/html']
+
+        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Kinematics, __format_Options
+        from .ipython import __format_Observable, __format_ObservableEntry, __format_GoodnessOfFit, __format_Reference
+        html_formatter.for_type(Parameter, __format_Parameter)
+        html_formatter.for_type(KinematicVariable, __format_KinematicVariable)
+        html_formatter.for_type(Kinematics, __format_Kinematics)
+        html_formatter.for_type(Options, __format_Options)
+        html_formatter.for_type(Observable, __format_Observable)
+        html_formatter.for_type(ObservableEntry, __format_ObservableEntry)
+        html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
+        html_formatter.for_type(Reference, __format_Reference)
+
+except NameError as e:
+    pass
