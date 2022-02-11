@@ -298,7 +298,10 @@ namespace eos
                 /// Branching ratio of B -> K psi
                 make_observable("B->Kpsi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}\psi))",
                         Unit::None(),
-                        &BToKCharmonium::branching_ratio)
+                        &BToKCharmonium::branching_ratio),
+                make_observable("B->Kpsi::plus_phase",
+                        Unit::None(),
+                        &BToKCharmonium::plus_phase)
             }
 
         );
@@ -326,6 +329,9 @@ namespace eos
                 make_observable("B->K^*psi::long_polarization",
                         Unit::None(),
                         &BToKstarCharmonium::long_polarization),
+                make_observable("B->K^*psi::long_phase",
+                        Unit::None(),
+                        &BToKstarCharmonium::long_phase),
                 make_observable("B->K^*psi::delta_perp_long",
                         Unit::None(),
                         &BToKstarCharmonium::delta_perp_long),
@@ -375,6 +381,12 @@ namespace eos
                 make_observable("B_s->phipsi::long_polarization",
                         Unit::None(),
                         &BsToPhiCharmonium::long_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phipsi::long_phase",
+                        Unit::None(),
+                        &BsToPhiCharmonium::long_phase,
                         std::make_tuple(),
                         Options{ { "q", "s" } }),
 

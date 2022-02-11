@@ -50,6 +50,7 @@ namespace eos
 
             /// Branching ratio
             double branching_ratio() const;
+            double plus_phase() const;
 
             ///@}
 

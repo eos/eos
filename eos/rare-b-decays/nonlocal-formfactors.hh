@@ -22,6 +22,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/lagrange-polynomial.hh>
 #include <eos/maths/szego-polynomial.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors-fwd.hh>
 #include <eos/utils/diagnostics.hh>
