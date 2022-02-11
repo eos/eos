@@ -12,6 +12,7 @@ libeosmaths_la_SOURCES = \
 	gsl-interface.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	integrate-cubature.cc integrate-cubature.hh \
+	lagrange-polynomial.hh \
 	matrix.hh \
 	polylog.cc polylog.hh \
 	power-of.hh \
@@ -36,6 +37,7 @@ include_eos_utils_HEADERS = \
 	gsl-interface.hh \
 	integrate.hh \
 	integrate-cubature.hh \
+	lagrange-polynomial.hh \
 	matrix.hh \
 	polylog.hh \
 	power-of.hh \
@@ -48,6 +50,7 @@ TESTS = \
 	derivative_TEST \
 	gsl-interface_TEST \
 	integrate_TEST \
+	lagrange-polynomial_TEST \
 	matrix_TEST \
 	polylog_TEST \
 	power_of_TEST \
@@ -68,6 +71,8 @@ gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
+
+lagrange_polynomial_TEST_SOURCES = lagrange-polynomial_TEST.cc
 
 matrix_TEST_SOURCES = matrix_TEST.cc
 

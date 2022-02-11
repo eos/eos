@@ -26,7 +26,7 @@
 namespace eos
 {
     /*
-     * Reprensentation of a Szego polynomial in the form of its
+     * Representation of a Szego polynomial in the form of its
      * Verblunsky coefficients. We assume real-valued Vernblunsky
      * coefficients.
      */
