@@ -26,6 +26,7 @@ namespace eos
 {
     using std::abs;
     using std::complex;
+    using std::polar;
 }
 
 #endif
