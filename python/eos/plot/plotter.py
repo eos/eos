@@ -614,9 +614,13 @@ class Plotter:
             if 'hdf5-file' not in item and 'data' not in item:
                 raise KeyError('neither hdf5-file nor data specified')
 
+
+            self.weights = None
             if 'data' in item:
                 self.xvalues = item['data']['xvalues']
                 self.samples = item['data']['samples']
+                if 'weights' in item['data']:
+                    self.weights = item['data']['weights']
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
@@ -671,9 +675,9 @@ class Plotter:
             ovalues_central = []
             ovalues_higher  = []
             for i in range(len(self.xvalues)):
-                lower   = np.percentile(self.samples[:, i], q=15.865)
-                central = np.percentile(self.samples[:, i], q=50.000)
-                higher  = np.percentile(self.samples[:, i], q=84.135)
+                lower, central, higher = self.plotter._weighted_quantiles(self.samples[:, i],
+                                                                         [0.15865, 0.5, 0.84135],
+                                                                         self.weights)
                 ovalues_lower.append(lower)
                 ovalues_central.append(central)
                 ovalues_higher.append(higher)
