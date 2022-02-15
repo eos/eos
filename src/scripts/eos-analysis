@@ -118,7 +118,8 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-IDX.
         help = 'The name of the posterior PDF from which to draw the samples.'
     )
     parser_sample_mcmc.add_argument('chain', metavar = 'CHAIN-IDX',
-        help = 'The index assigned to the Markov chain. This value is used to seed the RNG for a reproducible analysis.'
+        help = 'The index assigned to the Markov chain. This value is used to seed the RNG for a reproducible analysis.',
+        type = int
     )
     parser_sample_mcmc.add_argument('-N', '--number-of-samples',
         help = 'The number of samples to be stored in the output file.',
