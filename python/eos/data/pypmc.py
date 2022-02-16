@@ -245,18 +245,21 @@ class PMCSampler:
 
 
     @staticmethod
-    def _evaluate_mixture_pdf(components, weights, x):
-        """ Internal function that evaluate the PDF of the mixture density at point x."""
+    def _evaluate_mixture_pdf(density, x):
+        """ Internal function that evaluates the PDF of the mixture density at point x."""
         def evaluate_component(comp, x):
+            # To limit numerical instabilities, the covariance matrix is devided by the median of its diagonal entries
+            median_variance = _np.median(_np.diag(comp.sigma))
             chi2 = _np.dot(
-                _np.transpose(x - comp["mu"]),
-                _np.dot(_np.linalg.inv(comp["sigma"]), x - comp["mu"])
+                _np.transpose(x - comp.mu) / median_variance,
+                _np.dot(_np.linalg.inv(comp.sigma / median_variance), x - comp.mu)
             )
-            return (2*_np.pi)**(-0.5*len(x)) / _np.sqrt(_np.linalg.det(comp['sigma'])) * _np.exp(-0.5*chi2)
+            return (2 * _np.pi * median_variance)**(-0.5 * len(x)) * _np.exp(-0.5 * chi2) \
+                / _np.sqrt(_np.linalg.det(comp.sigma / median_variance))
 
         return _np.sum(
-            _np.array(weights)
-            * _np.array([evaluate_component(comp, _np.array(x)) for comp in components])
+            _np.array(density.weights)
+            * _np.array([evaluate_component(comp, _np.array(x)) for comp in density.components])
         )
 
 
@@ -271,7 +274,9 @@ class PMCSampler:
         :param samples: Samples as a 2D array of shape (N, P).
         :type samples: 2D numpy array
         :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
-        :type weights: 1D numpy array, optional
+        :type weights: 1D numpy array
+        :param proposal: Mixture density that describes the PMC sampler's proposal.
+        :type proposal: pypmc.density.mixture.MixtureDensity
         :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
         :type sigma_test_stat: list or iterable
         """
@@ -303,7 +308,7 @@ class PMCSampler:
         description['test statistics'] = { "sigma": [], "densities": [] }
         if sigma_test_stat:
             sigma_test_stat = _np.array(sigma_test_stat)
-            samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(purged_components, purged_weights, x)), samples)]
+            samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(proposal, x)), samples)]
             ind = _np.argsort(samplesPDF)
             sorted_samplesPDF = _np.array(samplesPDF)[ind]
             sorted_weights = weights[ind]
