@@ -19,11 +19,19 @@
 #define EOS_GUARD_EOS_MATHS_LAGRANGE_POLYNOMIAL_HH 1
 
 #include <eos/maths/complex.hh>
+#include <eos/maths/szego-polynomial.hh>
 
 #include <array>
+#include <numeric>
 
 namespace eos
 {
+    template <unsigned order_, unsigned n_>
+    class LagrangePolynomialDerivative;
+
+    template <unsigned order_, unsigned n_>
+    class LagrangePolynomialCoefficients;
+
     /*
      * Representation of a complex Lagrange polynomial.
      * The polynomial L satisfies L(x_values) = y_values.
@@ -36,6 +44,11 @@ namespace eos
 
         public:
             LagrangePolynomial(std::array<complex<double>, order_ + 1 > && x_values) :
+                _x_values(std::move(x_values))
+            {
+            }
+
+            LagrangePolynomial(const std::array<complex<double>, order_ + 1 > & x_values) :
                 _x_values(x_values)
             {
             }
@@ -47,7 +60,7 @@ namespace eos
             LagrangePolynomial & operator= (const LagrangePolynomial &) = default;
 
             // Evaluate the Lagrange polynomial
-            complex<double> operator() (const std::array<complex<double>, order_ + 1 > & y_values, const complex<double> & z) const
+            complex<double> constexpr operator() (const std::array<complex<double>, order_ + 1> & y_values, const complex<double> & z) const
             {
                 complex<double> result = 0;
                 complex<double> partial_result;
@@ -66,6 +79,139 @@ namespace eos
                 }
 
                 return result;
+            }
+
+            // Returns the array of derivatives of the polynomial evaluated at zero
+            std::array<complex<double>, order_ + 1> get_coefficients(const std::array<complex<double>, order_ + 1> & y_values) const
+            {
+                LagrangePolynomialCoefficients<order_, order_> lpc;
+
+                return lpc.fill_coefficients(_x_values, y_values);
+            }
+    };
+
+
+    template <unsigned order_>
+    class LagrangePolynomialDerivative<order_, 0>
+    {
+        public:
+            complex<double> constexpr evaluate(const std::array<complex<double>, order_ + 1> & x_values,
+                                               const std::array<complex<double>, order_ + 1> & y_values,
+                                               const complex<double> & z) const
+            {
+                LagrangePolynomial<order_> polynomial(x_values);
+
+                return polynomial(y_values, z);
+            }
+    };
+
+    template <unsigned n_>
+    class LagrangePolynomialDerivative<0, n_>
+    {
+        public:
+            complex<double> constexpr evaluate(const std::array<complex<double>, 1> &,
+                                               const std::array<complex<double>, 1> &,
+                                               const complex<double> &) const
+            {
+                return 0.;
+            }
+    };
+
+    template <>
+    class LagrangePolynomialDerivative<0, 0>
+    {
+        public:
+            complex<double> constexpr evaluate(const std::array<complex<double>, 1> &,
+                                               const std::array<complex<double>, 1> & y_values,
+                                               const complex<double> &) const
+            {
+                return y_values[0];
+            }
+    };
+
+    template <unsigned order_, unsigned n_>
+    class LagrangePolynomialDerivative
+    {
+        private:
+            std::array<complex<double>, order_ + 1> _make_derivative(const std::array<complex<double>, order_ + 1> & x_values,
+                                                                     const std::array<complex<double>, order_ + 1> & y_values,
+                                                                     const complex<double> & z) const
+            {
+                std::array<complex<double>, order_ + 1> derivatives;
+
+                for (unsigned i = 0 ; i < order_ + 1 ; ++i)
+                {
+                    std::array<complex<double>, order_> new_y_values;
+
+                    for (unsigned k = 0 ; k < order_ + 1 ; ++k)
+                    {
+                        if (k < i)
+                        {
+                            new_y_values[k] = y_values[k] / (x_values[k] - x_values[i]);
+                        }
+                        else if (k > i)
+                        {
+                            new_y_values[k - 1] = y_values[k] / (x_values[k] - x_values[i]);
+                        }
+                    }
+
+                    LagrangePolynomialDerivative<order_ - 1, n_ - 1> d;
+
+                    std::array<complex<double>, order_> new_x_values;
+                    std::copy(x_values.begin(), x_values.begin() + i, new_x_values.begin());
+                    std::copy(x_values.begin() + i + 1, x_values.end(), new_x_values.begin() + i);
+
+                    derivatives[i] = d.evaluate(new_x_values, new_y_values, z);
+                }
+
+                return derivatives;
+            }
+
+
+        public:
+            complex<double> constexpr evaluate(const std::array<complex<double>, order_ + 1> & x_values,
+                                               const std::array<complex<double>, order_ + 1> & y_values,
+                                               const complex<double> & z) const
+            {
+                std::array<complex<double>, order_ + 1> derivatives = _make_derivative(x_values, y_values, z);
+
+                return std::accumulate(derivatives.begin(), derivatives.end(), complex<double>(0., 0.));
+            }
+    };
+
+    template <unsigned order_>
+    class LagrangePolynomialCoefficients<order_, 0>
+    {
+        public:
+            std::array<complex<double>, order_ + 1> fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values,
+                                                                      const std::array<complex<double>, order_ + 1> & y_values) const
+            {
+                std::array<complex<double>, order_ + 1> coefficients;
+
+                LagrangePolynomialDerivative<order_, 0> dL;
+
+                coefficients[0] = dL.evaluate(x_values, y_values, 0.);
+
+                return coefficients;
+            }
+    };
+
+    template <unsigned order_, unsigned n_>
+    class LagrangePolynomialCoefficients
+    {
+        public:
+            std::array<complex<double>, order_ + 1> fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values,
+                                                                      const std::array<complex<double>, order_ + 1> & y_values) const
+            {
+                LagrangePolynomialCoefficients<order_, n_ - 1> lpc;
+
+                std::array<complex<double>, order_ + 1> coefficients = lpc.fill_coefficients(x_values, y_values);
+
+                LagrangePolynomialDerivative<order_, n_> dL;
+
+                coefficients[n_] = dL.evaluate(x_values, y_values, 0.);
+
+                return coefficients;
             }
     };
 }
