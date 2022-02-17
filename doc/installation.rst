@@ -99,6 +99,7 @@ We recommend installing the most up-to-date Python package from the Python Packa
   pip3 install --user --upgrade h5py matplotlib numpy pypmc pyyaml scipy
 
 
+.. _installation-from-source:
 
 *****************************
 Build and Install from Source

@@ -30,7 +30,7 @@ At any later point, you can (re-)activate the virtual environment by running the
     ~/eos/bin/activate
 
 After activation, you can use install a binary distribution of EOS using ``pip3 install eoshep``.
-If you plan to install EOS from source, as discussed in `Installation`_, you must set the prefix
+If you plan to install EOS from source, as discussed in the :ref:`installation section<installation-from-source>`, you must set the prefix
 to match the path to your virtual environment, here: ``~/eos``.
 
 To deactivate the virtual environment, run
