@@ -1265,6 +1265,14 @@ LHCb:2016A:
   inspire-id: LHCb:2016ykl
   title: Measurements of the S-wave fraction in $B^{0}\rightarrow K^{+}\pi^{-}\mu^{+}\mu^{-}$
     decays and the $B^{0}\rightarrow K^{\ast}(892)^{0}\mu^{+}\mu^{-}$ differential branching fraction
+LHCb:2016B:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1608.04855
+  inspire-id: LHCb:2016tuh
+  title: First study of the CP-violating phase and decay-width difference in $B_s^0\to\psi(2S)\phi$ decays
 LHCb:2017A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
