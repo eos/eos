@@ -22,6 +22,7 @@
 #include <eos/maths/power-of.hh>
 
 #include <array>
+#include <gsl/gsl_matrix.h>
 
 namespace eos
 {
@@ -129,6 +130,55 @@ namespace eos
                 };
 
                 return result;
+            }
+
+            // Table of coefficients of the Szego polynomials. It can be used e.g. to decompose a polynomial on the orthonormal basis.
+            // The coefficients are computed by induction as derivative evaluated at zero. The result is an upper triangle matrix.
+            gsl_matrix * coefficient_matrix() const
+            {
+                gsl_matrix * coefficients(gsl_matrix_calloc(order_ + 1, order_ + 1));
+                gsl_matrix * coefficients_star(gsl_matrix_calloc(order_ + 1, order_ + 1));
+
+                // Fill first line
+                gsl_matrix_set(coefficients,      0, 0, 1.);
+                gsl_matrix_set(coefficients_star, 0, 0, 1.);
+
+                for (unsigned i = 1 ; i <= order_ ; ++i)
+                {
+                    gsl_matrix_set(coefficients,      i, 0, 0.);
+                    gsl_matrix_set(coefficients_star, i, 0, 0.);
+                }
+
+                // Fill first column, cf. [S:2004B], eq. (1.4), p.2
+                for (unsigned k = 1 ; k <= order_ ; ++k)
+                {
+                    gsl_matrix_set(coefficients,      0, k, - _verblunsky_coefficients[k - 1]);
+                    gsl_matrix_set(coefficients_star, 0, k,                                1.);
+                }
+
+                // Fill coefficient matrix. We use real-valued Verblunsky coefficients only.
+                // The relation is derived from [S:2004B], eq. (1.4-5), p.2
+                for (unsigned k = 1 ; k <= order_ ; ++k)
+                {
+                    for (unsigned i = 1 ; i <= order_ ; ++i)
+                    {
+                        gsl_matrix_set(coefficients,      i, k, i * gsl_matrix_get(coefficients, i - 1, k - 1)
+                                        - _verblunsky_coefficients[k - 1] * gsl_matrix_get(coefficients_star, i, k - 1));
+                        gsl_matrix_set(coefficients_star, i, k, gsl_matrix_get(coefficients_star, i, k - 1)
+                                        - i * _verblunsky_coefficients[k - 1] * gsl_matrix_get(coefficients, i - 1, k - 1));
+                    }
+                }
+
+                // Normalize all coefficients
+                for (unsigned k = 0 ; k <= order_ ; ++k)
+                {
+                    for (unsigned i = 0 ; i <= order_ ; ++i)
+                    {
+                        gsl_matrix_set(coefficients, i, k, gsl_matrix_get(coefficients, i, k) / _norms[k]);
+                    }
+                }
+
+                return coefficients;
             }
     };
 }
