@@ -56,6 +56,33 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2014D:
     dof: 4
 # }}}
 #
+# 2016
+#
+# {{{
+B_s->phipsi2S::PolarizationAmplitude@LHCb:2016B:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phipsi::perp_polarization
+        - B_s->phipsi::long_polarization
+        - B_s->phipsi::delta_para_long
+        - B_s->phipsi::delta_perp_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {psi: "psi(2S)"}, {psi: "psi(2S)"}, {psi: "psi(2S)"}, {psi: "psi(2S)"} ]
+    means: [ 0.264, 0.422, 3.67, 3.29 ]
+    sigma-stat-hi: [ 0.024, 0.014, 0.13, 0.43 ]
+    sigma-stat-lo: [ 0.023, 0.014, 0.18, 0.39 ]
+    sigma-sys: [ 0.002, 0.003, 0.03, 0.04 ]
+    correlations:
+        - [ 1.00,-0.54,-0.31,-0.05 ]
+        - [-0.54, 1.00, 0.05,-0.02 ]
+        - [-0.31, 0.05, 1.00, 0.26 ]
+        - [-0.05,-0.02, 0.26, 1.00 ]
+    dof: 4
+# }}}
+#
 # 2019
 #
 # {{{
