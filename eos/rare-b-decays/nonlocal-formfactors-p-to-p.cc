@@ -30,6 +30,9 @@
 #include <map>
 #include <numeric>
 
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_blas.h>
+
 namespace eos
 {
     using std::abs;
@@ -86,6 +89,26 @@ namespace eos
                 }
 
                 virtual complex<double> P_ratio_plus(const double &) const
+                {
+                    return 0.0;
+                }
+
+                virtual double weak_bound() const
+                {
+                    return 0.0;
+                }
+
+                virtual double strong_bound() const
+                {
+                    return 0.0;
+                }
+
+                virtual double weak_bound_log_likelihood() const
+                {
+                    return 0.0;
+                }
+
+                virtual double strong_bound_log_likelihood() const
                 {
                     return 0.0;
                 }
@@ -406,6 +429,26 @@ namespace eos
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
+                virtual double weak_bound() const
+                {
+                    return 0.;
+                }
+
+                virtual double strong_bound() const
+                {
+                    return 0.;
+                }
+
+                virtual double weak_bound_log_likelihood() const
+                {
+                    return 0.0;
+                }
+
+                virtual double strong_bound_log_likelihood() const
+                {
+                    return 0.0;
+                }
+
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<nff::PToP>(new GvDV2020<Process_>(p, o));
@@ -485,10 +528,15 @@ namespace eos
                 UsedParameter t_s;
                 // ...and value of the dispersion bound at that point in the OPE
                 UsedParameter chiOPE;
+                UsedParameter bound;
+                UsedParameter bound_uncertainty;
 
                 // Lagrange interpolating polynomial
                 const static unsigned interpolation_order = 5;
                 const LagrangePolynomial<interpolation_order> lagrange;
+
+                // Orthogonal polynomials on an arc of the unit circle used for the computation of dispersive bounds
+                const SzegoPolynomial<interpolation_order> orthonormal_polynomials;
 
                 GRvDV2022order5(const Parameters & p, const Options & o) :
                     form_factors(FormFactorFactory<PToP>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
@@ -518,13 +566,20 @@ namespace eos
 
                     t_s(p["b->sccbar::t_s"], *this),
                     chiOPE(p["b->sccbar::chiOPE@GvDV2020"], *this),
+                    bound(p["b->sccbar::bound@GvDV2020"], *this),
+                    bound_uncertainty(p["b->sccbar::bound_uncertainty@GvDV2020"], *this),
 
                     lagrange({eos::nff_utils::z(-7.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(-5.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(-3.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(-1.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(power_of<2>(m_Jpsi),  4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())})
+                              eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())}),
+
+                    // The parameters of the polynomial expension are computed using t0 = 4.0 and
+                    // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
+                    orthonormal_polynomials(2.487638017,
+                        {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436})
                 {
                     this->uses(*form_factors);
                 }
@@ -729,6 +784,100 @@ namespace eos
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
+                inline std::pair<gsl_vector *, gsl_vector *> orthonormal_coefficients() const
+                {
+                    const std::array<complex<double>, interpolation_order + 1> interpolation_values{
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),
+                        complex<double>(re_at_m5_plus, im_at_m5_plus),
+                        complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),
+                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                    };
+
+                    std::array<complex<double>, interpolation_order + 1> dL = lagrange.get_coefficients(interpolation_values);
+
+                    // Split array of derivatives to real and imaginary parts
+                    gsl_vector * dL_real_part = gsl_vector_calloc(interpolation_order + 1);
+                    gsl_vector * dL_imag_part = gsl_vector_calloc(interpolation_order + 1);
+
+                    for (unsigned i = 0; i <= interpolation_order; ++i)
+                    {
+                        gsl_vector_set(dL_real_part, i, real(dL[i]));
+                        gsl_vector_set(dL_imag_part, i, imag(dL[i]));
+                    }
+
+                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
+
+                    // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_imag_part);
+
+                    return std::make_pair(dL_real_part, dL_imag_part);
+                }
+
+                virtual double weak_bound() const
+                {
+                    auto coefficients = orthonormal_coefficients();
+
+                    double largest_absolute_coeff = 0.0, coeff;
+
+                    for (unsigned i = 0; i <= interpolation_order; ++i)
+                    {
+                        coeff =   power_of<2>(gsl_vector_get(coefficients.first,  i))
+                                + power_of<2>(gsl_vector_get(coefficients.second, i));
+                        if (coeff > largest_absolute_coeff)
+                        {
+                            largest_absolute_coeff = coeff;
+                        }
+                    }
+
+                    return largest_absolute_coeff;
+                }
+
+                virtual double strong_bound() const
+                {
+                    auto coefficients = orthonormal_coefficients();
+
+                    double coefficient_sum = 0.0;
+
+                    for (unsigned i = 0; i <= interpolation_order; ++i)
+                    {
+                        coefficient_sum +=   power_of<2>(gsl_vector_get(coefficients.first,  i))
+                                           + power_of<2>(gsl_vector_get(coefficients.second, i));
+                    }
+
+                    return coefficient_sum;
+                }
+
+                virtual double weak_bound_log_likelihood() const
+                {
+                    const double saturation = weak_bound();
+                    if (saturation < this->bound)
+                    {
+                        return 0.;
+                    }
+                    else
+                    {
+                        // Halfnormal constraint
+                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                    }
+                }
+
+                virtual double strong_bound_log_likelihood() const
+                {
+                    const double saturation = strong_bound();
+                    if (saturation < this->bound)
+                    {
+                        return 0.;
+                    }
+                    else
+                    {
+                        // Halfnormal constraint
+                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                    }
+                }
+
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<nff::PToP>(new GRvDV2022order5<Process_>(p, o));
@@ -786,10 +935,15 @@ namespace eos
                 UsedParameter t_s;
                 // ...and value of the dispersion bound at that point in the OPE
                 UsedParameter chiOPE;
+                UsedParameter bound;
+                UsedParameter bound_uncertainty;
 
                 // Lagrange interpolating polynomial
                 const static unsigned interpolation_order = 6;
                 const LagrangePolynomial<interpolation_order> lagrange;
+
+                // Orthogonal polynomials on an arc of the unit circle used for the computation of dispersive bounds
+                const SzegoPolynomial<interpolation_order> orthonormal_polynomials;
 
                 GRvDV2022order6(const Parameters & p, const Options & o) :
                     form_factors(FormFactorFactory<PToP>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
@@ -821,14 +975,21 @@ namespace eos
 
                     t_s(p["b->sccbar::t_s"], *this),
                     chiOPE(p["b->sccbar::chiOPE@GvDV2020"], *this),
+                    bound(p["b->sccbar::bound@GvDV2020"], *this),
+                    bound_uncertainty(p["b->sccbar::bound_uncertainty@GvDV2020"], *this),
 
                     lagrange({eos::nff_utils::z(-7.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(-5.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(-3.0, 4.0 * power_of<2>(m_D0), t_0()),
                               eos::nff_utils::z(-1.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              0.,
+                              0., // z(t_0) = 0. by construction
                               eos::nff_utils::z(power_of<2>(m_Jpsi),  4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())})
+                              eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())}),
+
+                    // The parameters of the polynomial expension are computed using t0 = 4.0 and
+                    // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
+                    orthonormal_polynomials(2.487638017,
+                        {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436, -0.8112876795})
                 {
                     this->uses(*form_factors);
                 }
@@ -1038,6 +1199,101 @@ namespace eos
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
+                inline std::pair<gsl_vector *, gsl_vector *> orthonormal_coefficients() const
+                {
+                    const std::array<complex<double>, interpolation_order + 1> interpolation_values{
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),
+                        complex<double>(re_at_m5_plus, im_at_m5_plus),
+                        complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),
+                        complex<double>(re_at_t0_plus, im_at_t0_plus),
+                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                    };
+
+                    std::array<complex<double>, interpolation_order + 1> dL = lagrange.get_coefficients(interpolation_values);
+
+                    // Split array of derivatives to real and imaginary parts
+                    gsl_vector * dL_real_part = gsl_vector_calloc(interpolation_order + 1);
+                    gsl_vector * dL_imag_part = gsl_vector_calloc(interpolation_order + 1);
+
+                    for (unsigned i = 0; i <= interpolation_order; ++i)
+                    {
+                        gsl_vector_set(dL_real_part, i, real(dL[i]));
+                        gsl_vector_set(dL_imag_part, i, imag(dL[i]));
+                    }
+
+                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
+
+                    // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_imag_part);
+
+                    return std::make_pair(dL_real_part, dL_imag_part);
+                }
+
+                virtual double weak_bound() const
+                {
+                    auto coefficients = orthonormal_coefficients();
+
+                    double largest_absolute_coeff = 0.0, coeff;
+
+                    for (unsigned i = 0; i <= interpolation_order; ++i)
+                    {
+                        coeff =  power_of<2>(gsl_vector_get(coefficients.first,  i))
+                               + power_of<2>(gsl_vector_get(coefficients.second, i));
+                        if (coeff > largest_absolute_coeff)
+                        {
+                            largest_absolute_coeff = coeff;
+                        }
+                    }
+
+                    return largest_absolute_coeff;
+                }
+
+                virtual double strong_bound() const
+                {
+                    auto coefficients = orthonormal_coefficients();
+
+                    double coefficient_sum = 0.0;
+
+                    for (unsigned i = 0; i <= interpolation_order; ++i)
+                    {
+                        coefficient_sum +=  power_of<2>(gsl_vector_get(coefficients.first,  i))
+                                          + power_of<2>(gsl_vector_get(coefficients.second, i));
+                    }
+
+                    return coefficient_sum;
+                }
+
+                virtual double weak_bound_log_likelihood() const
+                {
+                    const double saturation = weak_bound();
+                    if (saturation < this->bound)
+                    {
+                        return 0.;
+                    }
+                    else
+                    {
+                        // Halfnormal constraint
+                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                    }
+                }
+
+                virtual double strong_bound_log_likelihood() const
+                {
+                    const double saturation = strong_bound();
+                    if (saturation < this->bound)
+                    {
+                        return 0.;
+                    }
+                    else
+                    {
+                        // Halfnormal constraint
+                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                    }
+                }
+
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<nff::PToP>(new GRvDV2022order6<Process_>(p, o));
@@ -1209,9 +1465,44 @@ namespace eos
 
     template <typename Process_>
     double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::weak_bound() const
+    {
+        return this->_imp->nff->weak_bound();
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::weak_bound_log_likelihood() const
+    {
+        return this->_imp->nff->weak_bound_log_likelihood();
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::strong_bound() const
+    {
+        return this->_imp->nff->strong_bound();
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::strong_bound_log_likelihood() const
+    {
+        return this->_imp->nff->strong_bound_log_likelihood();
+    }
+
+    template <typename Process_>
+    double
     NonlocalFormFactorObservable<Process_, nff::PToP>::re_normalized_moment_A(const double & q2) const
     {
         return real(this->_imp->nff->normalized_moment_A(q2));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::im_normalized_moment_A(const double & q2) const
+    {
+        return imag(this->_imp->nff->normalized_moment_A(q2));
     }
 
     template <typename Process_>

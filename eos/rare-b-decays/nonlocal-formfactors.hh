@@ -115,6 +115,16 @@ namespace eos
 
             ///@}
 
+            ///@name Dispersive bounds
+            ///@{
+
+            virtual double weak_bound() const = 0;
+            virtual double strong_bound() const = 0;
+            virtual double weak_bound_log_likelihood() const = 0;
+            virtual double strong_bound_log_likelihood() const = 0;
+
+            ///@}
+
             /// Factory method.
             static NonlocalFormFactorPtr<nff::PToP> make(const QualifiedName & name, const Parameters & p, const Options & o);
 
@@ -172,6 +182,16 @@ namespace eos
             double im_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
             double re_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
             double im_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
+
+            ///@}
+
+            ///@name Dispersive bounds
+            ///@{
+
+            double weak_bound() const;
+            double weak_bound_log_likelihood() const;
+            double strong_bound() const;
+            double strong_bound_log_likelihood() const;
 
             ///@}
 
@@ -275,6 +295,16 @@ namespace eos
 
             ///@}
 
+            ///@name Dispersive bounds
+            ///@{
+
+            virtual double weak_bound() const = 0;
+            virtual double strong_bound() const = 0;
+            virtual double weak_bound_log_likelihood() const = 0;
+            virtual double strong_bound_log_likelihood() const = 0;
+
+            ///@}
+
             /// Factory method.
             static NonlocalFormFactorPtr<nff::PToV> make(const QualifiedName & name, const Parameters & p, const Options & o);
 
@@ -363,6 +393,16 @@ namespace eos
             double im_F_ratio_para_complex(const double & re_q2, const double & im_q2) const;
             double re_F_ratio_long_complex(const double & re_q2, const double & im_q2) const;
             double im_F_ratio_long_complex(const double & re_q2, const double & im_q2) const;
+            ///@}
+
+            ///@name Dispersive bounds
+            ///@{
+
+            double weak_bound() const;
+            double weak_bound_log_likelihood() const;
+            double strong_bound() const;
+            double strong_bound_log_likelihood() const;
+
             ///@}
 
             /*!
