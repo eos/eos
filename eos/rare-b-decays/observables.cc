@@ -485,6 +485,23 @@ namespace eos
                         Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::im_F_ratio_plus_complex,
                         std::make_tuple("q2_real", "q2_imag")),
+
+                make_observable("B->K::strong_bound",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::strong_bound,
+                        std::make_tuple()),
+                make_observable("B->K::weak_bound",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::weak_bound,
+                        std::make_tuple()),
+                make_observable("B->K::weak_bound_log_likelihood",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::weak_bound_log_likelihood,
+                        std::make_tuple()),
+                make_observable("B->K::strong_bound_log_likelihood",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::strong_bound_log_likelihood,
+                        std::make_tuple()),
             }
 
         );
@@ -640,6 +657,24 @@ namespace eos
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_F_ratio_long_complex,
                         std::make_tuple("q2_real", "q2_imag")),
 
+                make_observable("B->K^*::strong_bound",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::strong_bound,
+                        std::make_tuple()),
+                make_observable("B->K^*::weak_bound",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::weak_bound,
+                        std::make_tuple()),
+                make_observable("B->K^*::weak_bound_log_likelihood",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::weak_bound_log_likelihood,
+                        std::make_tuple()),
+                make_observable("B->K^*::strong_bound_log_likelihood",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::strong_bound_log_likelihood,
+                        std::make_tuple()),
+
+
                 make_observable("B_s->phi::re_H_perp(q2)", R"(\mathrm{Re}\mathcal{H}_\perp^{B_s \to \phi}(q^2))",
                         Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_perp,
@@ -752,6 +787,23 @@ namespace eos
                         Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_long_complex,
                         std::make_tuple("q2_real", "q2_imag")),
+
+                make_observable("B_s->phi::strong_bound",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::strong_bound,
+                        std::make_tuple()),
+                make_observable("B_s->phi::weak_bound",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::weak_bound,
+                        std::make_tuple()),
+                make_observable("B_s->phi::weak_bound_log_likelihood",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::weak_bound_log_likelihood,
+                        std::make_tuple()),
+                make_observable("B_s->phi::strong_bound_log_likelihood",
+                        Unit::None(),
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::strong_bound_log_likelihood,
+                        std::make_tuple()),
             }
 
         );
