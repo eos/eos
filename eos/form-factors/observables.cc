@@ -790,17 +790,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[A_1]@HQE>>
+                        <<B->D^*::a_1[A_1]@HQE>>
                         /
-                        <<B->D::a_0[A_1]@HQE>>
+                        <<B->D^*::a_0[A_1]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[A_1]@HQE", R"(a_2^{A_1}/a_0^{A_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[A_1]@HQE>>
+                        <<B->D^*::a_2[A_1]@HQE>>
                         /
-                        <<B->D::a_0[A_1]@HQE>>
+                        <<B->D^*::a_0[A_1]@HQE>>
                         )"),
 
                 make_observable("B->D^*::a_0[A_5]@HQE", R"(a_0^{A_5})",
@@ -818,17 +818,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[A_5]@HQE>>
+                        <<B->D^*::a_1[A_5]@HQE>>
                         /
-                        <<B->D::a_0[A_5]@HQE>>
+                        <<B->D^*::a_0[A_5]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[A_5]@HQE", R"(a_2^{A_5}/a_0^{A_5})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[A_5]@HQE>>
+                        <<B->D^*::a_2[A_5]@HQE>>
                         /
-                        <<B->D::a_0[A_5]@HQE>>
+                        <<B->D^*::a_0[A_5]@HQE>>
                         )"),
 
                 make_observable("B->D^*::a_0[P_1]@HQE", R"(a_0^{P_1})",
@@ -846,17 +846,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[P_1]@HQE>>
+                        <<B->D^*::a_1[P_1]@HQE>>
                         /
-                        <<B->D::a_0[P_1]@HQE>>
+                        <<B->D^*::a_0[P_1]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[P_1]@HQE", R"(a_2^{P_1}/a_0^{P_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[P_1]@HQE>>
+                        <<B->D^*::a_2[P_1]@HQE>>
                         /
-                        <<B->D::a_0[P_1]@HQE>>
+                        <<B->D^*::a_0[P_1]@HQE>>
                         )"),
 
                 make_observable("B->D^*::a_0[V_4]@HQE", R"(a_0^{V_4})",
@@ -874,17 +874,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[V_4]@HQE>>
+                        <<B->D^*::a_1[V_4]@HQE>>
                         /
-                        <<B->D::a_0[V_4]@HQE>>
+                        <<B->D^*::a_0[V_4]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[V_4]@HQE", R"(a_2^{V_4}/a_0^{V_4})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[V_4]@HQE>>
+                        <<B->D^*::a_2[V_4]@HQE>>
                         /
-                        <<B->D::a_0[V_4]@HQE>>
+                        <<B->D^*::a_0[V_4]@HQE>>
                         )"),
             }
         );
