@@ -45,7 +45,11 @@ namespace eos
         qnp::Prefix pp = qn.prefix_part();
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
+        auto result = std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     template <typename Transition_, typename Tuple_, typename ... Args_>
@@ -57,7 +61,11 @@ namespace eos
         qnp::Prefix pp = qn.prefix_part();
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
+        auto result = std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     // B -> P(seudoscalar)
