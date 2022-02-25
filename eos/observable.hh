@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2016-2019 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016-2019, 2022 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,12 +23,14 @@
 #include <eos/observable-fwd.hh>
 #include <eos/reference.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/instantiation_policy.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/units.hh>
 
+#include <map>
 #include <string>
 
 namespace eos
@@ -240,6 +242,24 @@ namespace eos
 
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
     extern template class WrappedForwardIterator<Observables::SectionIteratorTag, const ObservableSection &>;
+
+    class ObservableEntries :
+        public InstantiationPolicy<ObservableEntries, Singleton>
+    {
+        private:
+            std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> * _entries;
+
+            ObservableEntries();
+
+            ~ObservableEntries();
+
+        public:
+            friend class InstantiationPolicy<ObservableEntries, Singleton>;
+
+            inline const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> & entries() const { return *_entries; }
+
+            bool insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value);
+    };
 }
 
 #endif
