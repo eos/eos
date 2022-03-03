@@ -256,7 +256,7 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
 @task('{posterior}/pred-{prediction}')
 def predict_observables(analysis_file, posterior, prediction, base_directory='./', begin=0, end=-1):
     '''
-    Predicts a set of observables based on previously obtained PMC samples.
+    Predicts a set of observables based on previously obtained importance samples.
 
     The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
@@ -281,7 +281,7 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
         _analysis_file = analysis_file
     observables = _analysis_file.observables(prediction, _parameters)
 
-    data = eos.data.PMCSampler(os.path.join(base_directory, posterior, 'pmc'))
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
     try:
         from tqdm import tqdm
