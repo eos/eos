@@ -285,7 +285,7 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
     try:
-        from tqdm import tqdm
+        from tqdm.auto import tqdm
         progressbar = tqdm
     except ImportError:
         progressbar = lambda x: x
