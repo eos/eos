@@ -531,14 +531,14 @@ def cmd_plot_samples(args):
     import pathlib
     input_path = pathlib.Path(os.path.join(args.base_directory, args.posterior))
     inputs  = [str(d) for d in input_path.glob('mcmc-*')]
-    inputs += [str(d) for d in input_path.glob('pmc')]
+    inputs += [str(d) for d in input_path.glob('samples')]
     for input in inputs:
         info('plotting samples in \'{}\''.format(input))
         basename = os.path.basename(os.path.normpath(input))
         if basename.startswith('mcmc-'):
             data = eos.data.MarkovChain(input)
-        elif basename.startswith('pmc'):
-            data = eos.data.PMCSampler(input)
+        elif basename.startswith('samples'):
+            data = eos.data.ImportanceSamples(input)
         else:
             raise RuntimeError('unsupported data set: {}'.format(input))
 
@@ -547,7 +547,7 @@ def cmd_plot_samples(args):
             info('plotting histogram for {}'.format(p['name']))
             if data.type in ['Prediction']:
                 label = eos.Observables()[p['name']]
-            elif data.type in ['MarkovChain', 'PMCSampler']:
+            elif data.type in ['MarkovChain', 'ImportanceSamples']:
                 pp = parameters[p['name']]
                 label = pp.latex()
             else:
