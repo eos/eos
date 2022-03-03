@@ -482,6 +482,14 @@ class Plotter:
            entry with the same index.
          * ``weights`` (array-like of *float*, optional) -- The weights of the samples, on a linear scale. Defaults to uniform weights.
 
+        The following keys are optional:
+
+         * ``band`` (a *list* containing ``'lines'``, ``'areas'``, or both) -- The setting for the illustration of the band.
+           If ``'outer'`` is provided, the band's outer lines are drawn.
+           If ``'median'`` is provided, the band's median line is drawn.
+           If ``'area'`` is provided, the band's areas are filled.
+           Defaults to ``['area', 'outer', 'median']``.
+
         Example:
 
         .. code-block::
@@ -556,6 +564,7 @@ class Plotter:
                 self.xvalues = np.array(_xvalues)
                 self.samples = uncfile.data()
 
+            self.band   = item['band']  if 'band'  in item else ['area', 'outer', 'median']
             self.xrange = item['range'] if 'range' in item else None
 
         def plot(self):
@@ -586,10 +595,13 @@ class Plotter:
             ovalues_central = interpolate(self.xvalues, _ovalues_central, xvalues)
             ovalues_higher  = interpolate(self.xvalues, _ovalues_higher,  xvalues)
 
-            self.plotter.ax.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
-            self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color)
-            self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color)
-            self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color)
+            if 'area' in self.band:
+                self.plotter.ax.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
+            if 'outer' in self.band:
+                self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color, ls=self.style)
+                self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color, ls=self.style)
+            if 'median' in self.band:
+                self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color, ls=self.style)
 
 
     class UncertaintyBinned(BasePlot):
