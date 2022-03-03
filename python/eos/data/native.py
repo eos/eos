@@ -328,6 +328,76 @@ class PMCSampler:
         _np.save(os.path.join(path, 'weights.npy'), weights)
 
 
+class ImportanceSamples:
+    def __init__(self, path):
+        """ Read an ImportanceSamples object from disk.
+
+        :param path: Path to the storage location.
+        :type path: str
+        """
+        if not os.path.exists(path) or not os.path.isdir(path):
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+
+        f = os.path.join(path, 'description.yaml')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+
+        with open(f, 'r') as df:
+            description = yaml.load(df, Loader=yaml.SafeLoader)
+
+        if not description['type'] == 'ImportanceSamples':
+            raise RuntimeError('Path {} not pointing to an ImportanceSamples object'.format(path))
+
+        self.type = 'ImportanceSamples'
+        self.varied_parameters = description['parameters']
+        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
+
+        f = os.path.join(path, 'samples.npy')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('Samples file {} does not exist or is not a file'.format(f))
+        self.samples = _np.load(f)
+
+        f = os.path.join(path, 'weights.npy')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('Weights file {} does not exist or is not a file'.format(f))
+        self.weights = _np.load(f)
+
+
+    @staticmethod
+    def create(path, parameters, samples, weights):
+        """ Write a new ImportanceSamples object to disk.
+
+        :param path: Path to the storage location, which will be created as a directory.
+        :type path: str
+        :param parameters: Parameter descriptions as a 1D array of shape (P, ).
+        :type parameters: list or iterable of eos.Parameter
+        :param samples: Samples as a 2D array of shape (N, P).
+        :type samples: 2D numpy array
+        :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
+        :type weights: 1D numpy array, optional
+        """
+        description = {}
+        description['version'] = eos.__version__
+        description['type'] = 'ImportanceSamples'
+        description['parameters'] = [{
+            'name': p.name(),
+            'min': p.min(),
+            'max': p.max()
+        } for p in parameters]
+
+        if not samples.shape[1] == len(parameters):
+            raise RuntimeError('Shape of samples {} incompatible with number of parameters {}'.format(samples.shape, len(parameters)))
+
+        if not weights is None and not samples.shape[0] == weights.shape[0]:
+            raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
+
+        os.makedirs(path, exist_ok=True)
+        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
+            yaml.dump(description, description_file, default_flow_style=False)
+        _np.save(os.path.join(path, 'samples.npy'), samples)
+        _np.save(os.path.join(path, 'weights.npy'), weights)
+
+
 class Prediction:
     def __init__(self, path):
         """ Read a Prediction object from disk.
