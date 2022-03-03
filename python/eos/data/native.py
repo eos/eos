@@ -228,16 +228,6 @@ class PMCSampler:
         self.components        = _np.array([pypmc.density.gauss.Gauss(_np.array(c['mu']), _np.array(c['sigma'])) for c in description['proposal']['components']])
         self.component_weights = _np.array(description['proposal']['weights'])
 
-        f = os.path.join(path, 'samples.npy')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Samples file {} does not exist or is not a file'.format(f))
-        self.samples = _np.load(f)
-
-        f = os.path.join(path, 'weights.npy')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Weights file {} does not exist or is not a file'.format(f))
-        self.weights = _np.load(f)
-
 
     def density(self):
         """ Return a pypmc.density.MixtureDensity. """
@@ -264,21 +254,19 @@ class PMCSampler:
 
 
     @staticmethod
-    def create(path, parameters, samples, weights, proposal, sigma_test_stat=None):
+    def create(path, parameters, proposal, sigma_test_stat=None, samples=None, weights=None):
         """ Write a new PMCSampler object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
-        :param parameters: Parameter descriptions as a 1D array of shape (N, ).
+        :param parameters: Parameter descriptions as a 1D array of shape (P, ).
         :type parameters: list or iterable of eos.Parameter
-        :param samples: Samples as a 2D array of shape (N, P).
-        :type samples: 2D numpy array
-        :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
-        :type weights: 1D numpy array
-        :param proposal: Mixture density that describes the PMC sampler's proposal.
-        :type proposal: pypmc.density.mixture.MixtureDensity
         :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
         :type sigma_test_stat: list or iterable
+        :param samples: Samples as a 2D array of shape (N, P). Needed to generate the test statistic.
+        :type samples: 2D numpy array, optional
+        :param weights: Weights on a linear scale as a 2D array of shape (N, 1). Needed to generate the test statistic.
+        :type weights: 1D numpy array, optional
         """
         description = {}
         description['version'] = eos.__version__
@@ -298,15 +286,9 @@ class PMCSampler:
                 purged_weights.append(w)
         description['proposal'] = { 'components': purged_components, 'weights': purged_weights }
 
-        if not samples.shape[1] == len(parameters):
-            raise RuntimeError('Shape of samples {} incompatible with number of parameters {}'.format(samples.shape, len(parameters)))
-
-        if not weights is None and not samples.shape[0] == weights.shape[0]:
-            raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
-
         # The test statistics defaults to two empty lists
         description['test statistics'] = { "sigma": [], "densities": [] }
-        if sigma_test_stat:
+        if sigma_test_stat and samples and weights:
             sigma_test_stat = _np.array(sigma_test_stat)
             samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(proposal, x)), samples)]
             ind = _np.argsort(samplesPDF)
@@ -324,8 +306,6 @@ class PMCSampler:
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
             yaml.dump(description, description_file, default_flow_style=False)
-        _np.save(os.path.join(path, 'samples.npy'), samples)
-        _np.save(os.path.join(path, 'weights.npy'), weights)
 
 
 class ImportanceSamples:

@@ -248,7 +248,8 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
         weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
 
-    eos.data.PMCSampler.create(os.path.join(base_directory, posterior, 'pmc'), analysis.varied_parameters, samples, weights, proposal, sigma_test_stat=sigma_test_stat)
+    eos.data.PMCSampler.create(os.path.join(base_directory, posterior, 'pmc'), analysis.varied_parameters, proposal,
+                               sigma_test_stat=sigma_test_stat, samples=samples, weights=weights)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
 
 
