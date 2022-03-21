@@ -110,14 +110,14 @@ The differential branching fraction is accessible through the name ``B->Dlnu::dB
                'label': r'$\ell=\mu$',
                'type': 'observable',
                'observable': 'B->Dlnu::dBR/dq2;l=mu',
-               'kinematic': 'q2',
+               'variable': 'q2',
                'range': [0.02, 11.60],
            },
            {
                'label': r'$\ell=\tau$',
                'type': 'observable',
                'observable': 'B->Dlnu::dBR/dq2;l=tau',
-               'kinematic': 'q2',
+               'variable': 'q2',
                'range': [3.17, 11.60],
            }
        ]
@@ -376,7 +376,7 @@ using the following code:
                'label': r'$\ell=e$',
                'type': 'observable',
                'observable': 'B->Dlnu::dBR/dq2;l=e,q=d',
-               'kinematic': 'q2',
+               'variable': 'q2',
                'color': 'black',
                'range': [0.02, 11.63],
            },
@@ -731,24 +731,20 @@ while keeping all other kinematic variables fixed. The latter is achieved via th
            {
                'label': r'samples ($\ell=\mu$)',
                'type': 'histogram',
-               'data': {
-                   'samples': mu_samples
-               },
+               'data': { 'samples': mu_samples },
                'color': 'C0'
            },
            {
                'label': r'samples ($\ell=\tau$)',
                'type': 'histogram',
-               'data': {
-                   'samples': tau_samples
-               },
+               'data': { 'samples': tau_samples },
                'color': 'C1'
            },
            {
                'label': r'PDF ($\ell=\mu$)',
                'type': 'signal-pdf',
                'pdf': 'B->Dlnu::dGamma/dq2;l=mu',
-               'kinematic': 'q2',
+               'variable': 'q2',
                'range': [0.02, 11.60],
                'kinematics': {
                    'q2_min':  0.02,
@@ -760,7 +756,7 @@ while keeping all other kinematic variables fixed. The latter is achieved via th
                'label': r'PDF ($\ell=\tau$)',
                'type': 'signal-pdf',
                'pdf': 'B->Dlnu::dGamma/dq2;l=tau',
-               'kinematic': 'q2',
+               'variable': 'q2',
                'range': [3.17, 11.60],
                'kinematics': {
                    'q2_min':  3.17,
