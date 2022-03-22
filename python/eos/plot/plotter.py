@@ -1548,6 +1548,96 @@ class Plotter:
                 return ([], [])
 
 
+    class ExternalLikelihood2D(BasePlot):
+        """Plots contours of a user-provided function"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting a user-provided Likelihood
+        -----------------------------------
+
+        The following key is mandatory:
+
+         * ``likelihood`` (*evaluable*, see below) -- The 2D probability density that will be plotted.
+
+        The following keys are optional:
+
+         * ``contours`` (a *list* containing ``'lines'``, ``'areas'``, or both) -- The setting for the illustration of the contours.
+           If ``'lines'`` is provided, the contour lines are drawn.
+           If ``'areas'`` is provided, the contour areas are filled.
+           Defaults to ``['lines']``.
+         * ``levels`` (*list* of *float*) -- The probability levels of the contours. Defaults to ``[68, 95, 99]``.
+         * ``xrange`` (*list* of *float*) -- The x-axis range where the likelihood is evaluated, defaults to the plot ranges if provided.
+         * ``yrange`` (*list* of *float*) -- The y-axis range where the likelihood is evaluated, defaults to the plot ranges if provided.
+
+        """)
+
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if not self.plotter.xrange and 'xrange' not in item:
+                raise KeyError('xrange was not specified')
+            if not self.plotter.yrange and 'yrange' not in item:
+                raise KeyError('yrange was not specified')
+            if 'likelihood' not in item:
+                raise KeyError('likelihood was not specified')
+
+            self.likelihood = item['likelihood']
+            self.levels   = item['levels']    if 'levels'    in item else [0, 68, 95, 99]
+            if 0 not in self.levels:
+                self.levels = [0] + self.levels
+            self.contours = item['contours']  if 'contours'  in item else ['lines']
+            self.xrange   = item['xrange']    if 'xrange'    in item else self.plotter.xrange
+            self.yrange   = item['yrange']    if 'yrange'    in item else self.plotter.yrange
+            if type(self.style) is not list:
+                self.style= [self.style]
+
+        def plot(self):
+            xx, yy = np.mgrid[self.xrange[0]:self.xrange[1]:100j, self.yrange[0]:self.yrange[1]:100j]
+            positions = np.vstack([xx.ravel(), yy.ravel()])
+            pdf = np.reshape([self.likelihood(point) for point in positions.T], xx.shape)
+            pdf /= pdf.sum()
+
+            # find the PDF value corresponding to a given cummulative probability
+            plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+            plevels = []
+            labels = []
+            for level in self.levels:
+                plevels.append(scipy.optimize.brentq(plevel, 0., 1., args=(pdf, level / 100.0)))
+                labels.append('{}%'.format(level))
+
+            if 'areas' in self.contours:
+                colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
+                plt.contourf(pdf.transpose(),
+                             colors=colors,
+                             extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                             levels=plevels[::-1])
+
+            CS = plt.contour(pdf.transpose(),
+                             colors=self.color,
+                             extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                             levels=plevels[::-1],
+                             linestyles=self.style[::-1])
+
+            if 'labels' in self.contours:
+                fmt = {}
+                for level, label in zip(CS.levels, labels[::-1]):
+                    fmt[level] = label
+
+                plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+        def handles_labels(self):
+            if self.label:
+                handle = None
+                if 'areas' in self.contours:
+                    handle = plt.Rectangle((0,0),1,1, color=self.color)
+                else:
+                    handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
+
+                return ([handle], [self.label])
+            else:
+                return ([], [])
+
+
     class Histogram1D(BasePlot):
         """Plots a 1D histogram of pre-existing random samples"""
 
@@ -1905,6 +1995,7 @@ class Plotter:
         'histogram2D':           Histogram2D,
         'kde':                   KernelDensityEstimate1D,
         'kde2D':                 KernelDensityEstimate2D,
+        'likelihood2D':          ExternalLikelihood2D,
         'observable':            Observable,
         'point':                 Point,
         'signal-pdf':            SignalPDF,
