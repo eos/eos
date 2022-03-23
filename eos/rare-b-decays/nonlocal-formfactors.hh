@@ -118,6 +118,7 @@ namespace eos
             ///@name Dispersive bounds
             ///@{
 
+            virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const = 0;
             virtual double weak_bound() const = 0;
             virtual double strong_bound() const = 0;
             virtual double weak_bound_log_likelihood() const = 0;
@@ -188,6 +189,8 @@ namespace eos
             ///@name Dispersive bounds
             ///@{
 
+            double get_real_alpha(const unsigned & i) const;
+            double get_imag_alpha(const unsigned & i) const;
             double weak_bound() const;
             double weak_bound_log_likelihood() const;
             double strong_bound() const;
@@ -298,6 +301,9 @@ namespace eos
             ///@name Dispersive bounds
             ///@{
 
+            virtual complex<double> get_orthonormal_perp_coefficients(const unsigned & i) const = 0;
+            virtual complex<double> get_orthonormal_para_coefficients(const unsigned & i) const = 0;
+            virtual complex<double> get_orthonormal_long_coefficients(const unsigned & i) const = 0;
             virtual double weak_bound() const = 0;
             virtual double strong_bound() const = 0;
             virtual double weak_bound_log_likelihood() const = 0;
@@ -398,6 +404,12 @@ namespace eos
             ///@name Dispersive bounds
             ///@{
 
+            double get_real_perp_alpha(const unsigned & i) const;
+            double get_imag_perp_alpha(const unsigned & i) const;
+            double get_real_para_alpha(const unsigned & i) const;
+            double get_imag_para_alpha(const unsigned & i) const;
+            double get_real_long_alpha(const unsigned & i) const;
+            double get_imag_long_alpha(const unsigned & i) const;
             double weak_bound() const;
             double weak_bound_log_likelihood() const;
             double strong_bound() const;
