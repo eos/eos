@@ -93,6 +93,11 @@ namespace eos
                     return 0.0;
                 }
 
+                virtual complex<double> get_orthonormal_coefficients(const unsigned &) const
+                {
+                    return 0.0;
+                }
+
                 virtual double weak_bound() const
                 {
                     return 0.0;
@@ -427,6 +432,21 @@ namespace eos
                     const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
+                }
+
+                virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
+                {
+                    const std::array<complex<double>, 7> alpha{
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
+                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
+                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
+                    };
+
+                    return alpha[i];
                 }
 
                 virtual double weak_bound() const
@@ -814,6 +834,14 @@ namespace eos
                     gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_imag_part);
 
                     return std::make_pair(dL_real_part, dL_imag_part);
+                }
+
+                virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
+                {
+                    auto coefficients = orthonormal_coefficients();
+
+                    return complex<double>(gsl_vector_get(coefficients.first,  i),
+                                           gsl_vector_get(coefficients.second, i));
                 }
 
                 virtual double weak_bound() const
@@ -1232,6 +1260,14 @@ namespace eos
                     return std::make_pair(dL_real_part, dL_imag_part);
                 }
 
+                virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
+                {
+                    auto coefficients = orthonormal_coefficients();
+
+                    return complex<double>(gsl_vector_get(coefficients.first,  i),
+                                           gsl_vector_get(coefficients.second, i));
+                }
+
                 virtual double weak_bound() const
                 {
                     auto coefficients = orthonormal_coefficients();
@@ -1461,6 +1497,21 @@ namespace eos
     NonlocalFormFactorObservable<Process_, nff::PToP>::im_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const
     {
         return imag(this->_imp->nff->F_ratio_plus(complex<double>(re_q2, im_q2)));
+    }
+
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::get_real_alpha(const unsigned & i) const
+    {
+        return real(this->_imp->nff->get_orthonormal_coefficients(i));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::get_imag_alpha(const unsigned & i) const
+    {
+        return imag(this->_imp->nff->get_orthonormal_coefficients(i));
     }
 
     template <typename Process_>

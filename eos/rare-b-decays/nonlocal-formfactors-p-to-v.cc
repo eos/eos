@@ -155,6 +155,21 @@ namespace eos
                     return 0.0;
                 }
 
+                virtual complex<double> get_orthonormal_perp_coefficients(const unsigned &) const
+                {
+                    return 0.0;
+                }
+
+                virtual complex<double> get_orthonormal_para_coefficients(const unsigned &) const
+                {
+                    return 0.0;
+                }
+
+                virtual complex<double> get_orthonormal_long_coefficients(const unsigned &) const
+                {
+                    return 0.0;
+                }
+
                 virtual double weak_bound() const
                 {
                     return 0.0;
@@ -760,6 +775,46 @@ namespace eos
                 virtual complex<double> normalized_moment_V23(const double &) const
                 {
                     return 0.0;
+                }                virtual complex<double> get_orthonormal_perp_coefficients(const unsigned & i) const
+                {
+                    const std::array<complex<double>, 6> alpha_perp{
+                        complex<double>(re_alpha_0_perp, im_alpha_0_perp),
+                        complex<double>(re_alpha_1_perp, im_alpha_1_perp),
+                        complex<double>(re_alpha_2_perp, im_alpha_2_perp),
+                        complex<double>(re_alpha_3_perp, im_alpha_3_perp),
+                        complex<double>(re_alpha_4_perp, im_alpha_4_perp),
+                        complex<double>(re_alpha_5_perp, im_alpha_5_perp),
+                    };
+
+                    return alpha_perp[i];
+                }
+
+                virtual complex<double> get_orthonormal_para_coefficients(const unsigned & i) const
+                {
+                    const std::array<complex<double>, 6> alpha_para{
+                        complex<double>(re_alpha_0_para, im_alpha_0_para),
+                        complex<double>(re_alpha_1_para, im_alpha_1_para),
+                        complex<double>(re_alpha_2_para, im_alpha_2_para),
+                        complex<double>(re_alpha_3_para, im_alpha_3_para),
+                        complex<double>(re_alpha_4_para, im_alpha_4_para),
+                        complex<double>(re_alpha_5_para, im_alpha_5_para),
+                    };
+
+                    return alpha_para[i];
+                }
+
+                virtual complex<double> get_orthonormal_long_coefficients(const unsigned & i) const
+                {
+                    const std::array<complex<double>, 6> alpha_long{
+                        complex<double>(re_alpha_0_long, im_alpha_0_long),
+                        complex<double>(re_alpha_1_long, im_alpha_1_long),
+                        complex<double>(re_alpha_2_long, im_alpha_2_long),
+                        complex<double>(re_alpha_3_long, im_alpha_3_long),
+                        complex<double>(re_alpha_4_long, im_alpha_4_long),
+                        complex<double>(re_alpha_5_long, im_alpha_5_long),
+                    };
+
+                    return alpha_long[i];
                 }
 
                 virtual double weak_bound() const
@@ -1453,6 +1508,30 @@ namespace eos
                     return std::make_pair(dL_real_part, dL_imag_part);
                 }
 
+                virtual complex<double> get_orthonormal_perp_coefficients(const unsigned & i) const
+                {
+                    auto coefficients = orthonormal_perp_coefficients();
+
+                    return complex<double>(gsl_vector_get(coefficients.first,  i),
+                                           gsl_vector_get(coefficients.second, i));
+                }
+
+                virtual complex<double> get_orthonormal_para_coefficients(const unsigned & i) const
+                {
+                    auto coefficients = orthonormal_para_coefficients();
+
+                    return complex<double>(gsl_vector_get(coefficients.first,  i),
+                                           gsl_vector_get(coefficients.second, i));
+                }
+
+                virtual complex<double> get_orthonormal_long_coefficients(const unsigned & i) const
+                {
+                    auto coefficients = orthonormal_long_coefficients();
+
+                    return complex<double>(gsl_vector_get(coefficients.first,  i),
+                                           gsl_vector_get(coefficients.second, i));
+                }
+
                 virtual double weak_bound() const
                 {
                     auto perp_coefficients = orthonormal_perp_coefficients();
@@ -1916,6 +1995,50 @@ namespace eos
     NonlocalFormFactorObservable<Process_, nff::PToV>::re_normalized_moment_V23(const double & q2) const
     {
         return real(this->_imp->nff->normalized_moment_V23(q2));
+    }
+
+
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToV>::get_real_perp_alpha(const unsigned & i) const
+    {
+        return real(this->_imp->nff->get_orthonormal_perp_coefficients(i));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToV>::get_imag_perp_alpha(const unsigned & i) const
+    {
+        return imag(this->_imp->nff->get_orthonormal_perp_coefficients(i));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToV>::get_real_para_alpha(const unsigned & i) const
+    {
+        return real(this->_imp->nff->get_orthonormal_para_coefficients(i));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToV>::get_imag_para_alpha(const unsigned & i) const
+    {
+        return imag(this->_imp->nff->get_orthonormal_para_coefficients(i));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToV>::get_real_long_alpha(const unsigned & i) const
+    {
+        return real(this->_imp->nff->get_orthonormal_long_coefficients(i));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToV>::get_imag_long_alpha(const unsigned & i) const
+    {
+        return imag(this->_imp->nff->get_orthonormal_long_coefficients(i));
     }
 
     template <typename Process_>
