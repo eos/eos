@@ -125,14 +125,14 @@ class BToKstarDileptonGvDV2020Test :
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.07717e-10, eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  9.27529e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.62003e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.63585e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.61881e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.63600e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  6.33040e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  7.44445e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  6.32784e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  7.44143e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45544e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.80092e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45112e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.79261e-11, eps);
        }
     }
 } b_to_kstar_dilepton_GvDV2020_test;
@@ -240,14 +240,14 @@ class BToKstarDileptonJavierTest :
 
             BToKstarDilepton c(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  2.17500e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  2.17471e-20,  eps);
             TEST_CHECK_RELATIVE_ERROR(c.differential_j_1c(q2),  1.35530e-19,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  7.25000e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  7.24905e-21,  eps);
             TEST_CHECK_RELATIVE_ERROR(c.differential_j_2c(q2), -1.35530e-19,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -5.82559e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -5.82749e-21,  eps);
             TEST_CHECK_RELATIVE_ERROR(c.differential_j_4(q2),   3.70203e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -4.24896e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -2.23092e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -4.24826e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -2.23057e-20,  eps);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_6c(q2),  0.0,  1e-20);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_7(q2),   0.0,  1e-20);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_8(q2),   0.0,  1e-20);
