@@ -43,7 +43,6 @@ class PlotterObservableVariableTests(unittest.TestCase):
     def setUp(self):
         self.plot_args = copy.deepcopy(self.plot_args_prototype)
 
-
     def test_variable_key_0(self):
         "Check valid case: variable is kinematic"
 
@@ -64,7 +63,7 @@ class PlotterObservableVariableTests(unittest.TestCase):
 
         self.plot_args['contents'][0].pop('variable')
         with self.assertRaisesRegex(ValueError,
-            "Missing key for plot of observable 'B->Dlnu::dBR/dq2;l=e,q=d': 'variable'"):
+                "Mandatory keys are missing: \['variable'\]"):
             eos.plot.Plotter(self.plot_args).plot()
 
 
@@ -84,21 +83,22 @@ class PlotterObservableVariableTests(unittest.TestCase):
 
         self.plot_args['contents'][0]['kinematics'] = {'q2': 0.1}
 
-        with self.assertRaisesRegex(ValueError,
-            "Variable 'q2' of observable 'B->Dlnu::dBR/dq2;l=e,q=d' is also " +
-            "specified as a fix kinematic with value 0.1"):
+        with self.assertLogs('EOS', level='WARNING') as cm:
             eos.plot.Plotter(self.plot_args).plot()
+            self.assertTrue(r"Ignore 'q2' contained in 'kinematics': is also 'variable'"
+                    in [r.msg for r in cm.records])
 
 
     def test_variable_key_5(self):
         "Pass the variable key again as a fix parameter"
 
         self.plot_args['contents'][0]['variable'] = 'mass::tau'
+        self.plot_args['contents'][0]['kinematics'] = {'q2': 0.0}
 
-        with self.assertRaisesRegex(ValueError,
-            "Variable 'mass::tau' of observable 'B->Dlnu::dBR/dq2;l=e,q=d' is also " +
-            "specified as a fix parameter with value 1.0"):
+        with self.assertLogs('EOS', level='WARNING') as cm:
             eos.plot.Plotter(self.plot_args).plot()
+            self.assertTrue(r"Ignore 'mass::tau' contained in 'parameters': is also 'variable'"
+                    in [r.msg for r in cm.records])
 
 
     def test_kinematics_key_0(self):

@@ -12,7 +12,7 @@ class BaseSpec:
     but a value can be set and the object tracks if the value was
     used.
     """
-    
+
     def __init__(self, name, default = None, optional = False):
 
         self.name = name
@@ -21,7 +21,7 @@ class BaseSpec:
         self._value = None
         self.optional = optional
         # might want to force default value other than None of spec is optional
-    
+
     @property
     def value(self):
         # is treated like an attribute via property dec
@@ -48,12 +48,12 @@ class BaseSpecTest(unittest.TestCase):
     def test_was_used(self):
         s = BaseSpec(name ='name')
         s.validate_set(3.1415)
-        
+
         self.assertFalse(s.was_used)
         value = s.value
         self.assertIs(value, 3.1415)
         self.assertTrue(s.was_used)
-    
+
     def test_default(self):
         ref = 'hi mom'
         s = BaseSpec(name='name', default=ref)
@@ -65,7 +65,7 @@ class ObservableSpec(BaseSpec):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
+
     def validate_set(self, value):
         "``string`` -- The name of the observable; see `the complete list of observables <../observables.html>`_."
         try:
@@ -116,7 +116,7 @@ class VariableSpec(BaseSpec):
 
             except RuntimeError:
                 raise ValueError(f"Value of 'variable' for observable '{obs_name}'"
-                                 f" is neither a valid kinematic variable nor parameter: {value}")
+                                 f" is neither a valid kinematic variable nor parameter: '{value}'")
 
     @property
     def type(self):
@@ -184,8 +184,9 @@ class KinematicsSpec(BaseSpec):
                 # might also want to test that arguments are floats
 
         if not invalid_names == []:
-            raise ValueError(f"'{name}' for observable '{obs_name}'"
-                             f" contain invalid names: {invalid_names}")
+            raise ValueError(
+                    f"Kinematic quantity '{name}' does not match known ones "
+                    f"for observable '{obs_name}': {valid_kin_vars}")
         else:
             self._value = value
 
@@ -204,7 +205,7 @@ class KinematicsSpecTest(unittest.TestCase):
         s.observable_name = 'B->Dlnu::dBR/dq2;l=mu'
         with self.assertRaises(ValueError):
             s.validate_set({'q2': 1.0, 'q3': 5.0})
-    
+
     def test_wrong_argument_no_dict(self):
         s = KinematicsSpec(name = 'kinematics')
         try:
@@ -221,7 +222,7 @@ class ParametersSpec(BaseSpec):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.observable_name = None
-    
+
     def validate_set(self, value):
         "``dict`` like ``{parameter: value}`` -- ``parameter`` must be a valid name, ``value`` must be a float"
 
@@ -253,7 +254,7 @@ class ParametersSpecTest(unittest.TestCase):
         ref = {'mass::tau': 1.0}
         s.validate_set(ref)
         self.assertEqual(s.value, ref)
-    
+
     def test_invalid(self):
         s = ParametersSpec(name='parameters')
         s.observable_name = 'some_observable'
@@ -279,7 +280,7 @@ class RangeSpec(BaseSpec):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
+
     def validate_set(self, value):
         "(*list* or *tuple* of two *float* like [min, max]) -- Range of the x-axis"
         try:
@@ -306,7 +307,7 @@ class RangeSpecTests(unittest.TestCase):
         ref = (1.0, 2.0)
         s.validate_set(ref) # must not raise error
         self.assertEqual(s.value, ref)
-    
+
     def test_invalid(self):
         "Pass a value instead of list"
         s = RangeSpec(name = 'range')
@@ -318,6 +319,29 @@ class RangeSpecTests(unittest.TestCase):
         s = RangeSpec(name = 'range')
         with self.assertRaises(ValueError):
             s.validate_set([1.0, 2.0, 3.0])
+
+
+class ParameterFileSpec(BaseSpec):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def validate_set(self, value):
+        "``str`` -- the path of a hdf5 file containing parameters"
+        if not isinstance(value, str):
+            raise ValueError(f"{self.name} must be a string")
+
+class ParameterFileSpecTests(unittest.TestCase):
+
+    def test_valid(self):
+        s = ParameterFileSpec(name = 'parameters-from-file')
+        s.validate_set('some/path.file')
+
+    def test_valid(self):
+        s = ParameterFileSpec(name = 'parameters-from-file')
+        with self.assertRaises(ValueError):
+            s.validate_set(3.1415)
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -339,7 +363,7 @@ class Specs:
         like [BaseSpec( ), BaseSpec( ),   ]
         """
         self.specs_dict = {spec.name: spec for spec in template}
-    
+
     def validate_set(self, values):
         "Validate and set user-provided values"
 
@@ -351,34 +375,36 @@ class Specs:
                     mand_keys_missing.append(name)
         if not mand_keys_missing == []:
             raise ValueError(f"Mandatory keys are missing: {mand_keys_missing}")
-        
+
         # validate and set all provided values
         spec_names = self.names
         for name in values.keys():
             if name in spec_names:
                 self[name].validate_set(values[name])
             else:
-                logger.warning(f"Ignore unknown argument: {name}: {values[name]}")
-    
+                # Do NOT issue a warning here to keep use case general
+                pass
+
     def __enter__(self):
         # want to use context manager like: `with Specs as specs``
         return self
 
     def __exit__(self, type, value, traceback):
         if type is None: # no exception occured within the context manager
-            mand_unused_specs = []
+            # check if implementation actually uses all parameters
+            unused_specs = []
             for name, spec in self.specs_dict.items():
-                if spec.was_used == False and spec.optional == False:
-                    mand_unused_specs.append(name)
-            if not mand_unused_specs == []:
-                raise ImplementationError(f"Mandatory specifications were not used: {mand_unused_specs}")
+                if spec.was_used == False:
+                    unused_specs.append(name)
+            if not unused_specs == []:
+                raise ImplementationError(f"Specifications were not used: {nused_specs}")
         else: # re-raise occured exceptions
             return False
-    
+
     @property
     def names(self):
         return self.specs_dict.keys()
-    
+
     def __getitem__(self, key):
         try:
             return self.specs_dict[key]

@@ -16,6 +16,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+from copy import deepcopy
 import inspect
 import matplotlib
 import matplotlib.pyplot as plt
@@ -341,20 +342,6 @@ class Plotter:
         --------------------
 
         Contents items of type ``observable`` are used to display one of the built-in `observables <../observables.html>`_.
-        The following keys are mandatory:
-
-         * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable that will be plotted.
-           Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
-         * ``range`` (*list* or *tuple* of two *float*) --The tuple of [minimal, maximal] values of the specified kinematic variable
-           for which the observable will be evaluated.
-
-        Exactly one of the following keys is mandatory, to specify either a kinematic variable or a parameter to which the x coordinate
-        will be mapped:
-
-         * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
-         * ``kinematic`` (*str*) -- Alias for ``variable``.
-         * ``parameter`` (*str*) -- The name of the parameter to which the x axis will be mapped;
-           see `the complete list of parameters <../parameters.html>`_.
 
         Example:
 
@@ -364,8 +351,8 @@ class Plotter:
                'plot': { ... },
                'contents': [
                    {
-                       'label': r'$\ell=\mu$',
                        'type': 'observable',
+                       'label': r'$\ell=\mu$',
                        'observable': 'B->Dlnu::dBR/dq2;l=mu',
                        'variable': 'q2',
                        'range': [0.02, 11.60],
@@ -374,80 +361,75 @@ class Plotter:
            }
         """)
 
+        from .specs import Specs, ParametersSpec, KinematicsSpec,\
+        RangeSpec, ObservableSpec, VariableSpec, ParameterFileSpec
+
+        specs_prototype = Specs([
+            ObservableSpec(name='observable'),
+            VariableSpec(name='variable'),
+            KinematicsSpec(name='kinematics', optional=True, default={}),
+            ParametersSpec(name='parameters', optional=True, default={}),
+            # ParameterFileSpec(name='parameter-file', optional=True, default=None)
+        ])
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
+            self.specs = deepcopy(self.specs_prototype)
 
         def plot(self):
-            item = self.item
-            oname = item['observable']
+            item = self.item.copy()
 
-            obs_entry = eos.Observables._get_obs_entry(oname)
-            valid_kin_vars = [kv for kv in obs_entry.kinematic_variables()]
-            eos.info('   plotting EOS observable "{}"'.format(oname))
-
-            # create kinematics
             kinematics = eos.Kinematics()
-            if 'kinematics' in item:
-                for k, v in item['kinematics'].items():
-                    if k not in valid_kin_vars:
-                        raise ValueError("Kinematic quantity '" + k + "' does not " +
-                        "match known ones for observable '" + oname + "': " + valid_kin_vars.__repr__())
-                    kinematics.declare(k, v)
-
-            # create parameters
             parameters = eos.Parameters.Defaults()
-            if 'parameters' in item and 'parameters-from-file' in item:
-                eos.warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
-
-            if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
-                eos.warn('    overriding parameters from file')
-                parameters.override_from_file(item['parameters-from-file'])
-
-            if 'parameters' in item and type(item['parameters']) is dict:
-                for key, value in item['parameters'].items():
-                    parameters.set(key, value)
-
-            # create (empty) options
             options = eos.Options()
 
+            # process user input
+            # need oname for some specs
+            try:
+                oname = item['observable']
+            except KeyError:
+                raise ValueError("Missing key: 'observable'")
+            self.specs['variable'].observable_name = oname
+            self.specs['kinematics'].observable_name = oname
+            self.specs['parameters'].observable_name = oname
 
-            #
-            # handle plot variable, create kinematic or parameter
-            #
+            self.specs.validate_set(item)
 
-            if not 'variable' in item:
-                raise ValueError("Missing key for plot of observable '" + oname + "': 'variable'")
+            with self.specs as specs:
+                # process all spec values
 
-            # variable is passed *again* as kinematic or parameter?
-            if 'parameters' in item and item['variable'] in item['parameters']:
-                val = item['parameters'].get(item['variable'])
-                raise ValueError("Variable '" + item['variable'] + "' of observable '" + oname + "' is " +
-                        "also specified as a fix parameter with value " + str(val))
-            if 'kinematics' in item and item['variable'] in item['kinematics']:
-                val = item['kinematics'].get(item['variable'])
-                raise ValueError("Variable '" + item['variable'] + "' of observable '" + oname + "' is " +
-                        "also specified as a fix kinematic with value " + str(val))
+                oname = specs['observable'].value
 
-            # Declare variable that is either parameter or kinematic
-            var = None
+                var_name = specs['variable'].value
+                if specs['variable'].type == 'kinematic':
+                    var = kinematics.declare(var_name, np.nan)
+                if specs['variable'].type == 'parameter':
+                    var = parameters.declare(var_name, np.nan)
 
-            # does the variable correspond to one of the kinematic variables?
-            if item['variable'] in valid_kin_vars:
-                var = kinematics.declare(item['variable'], np.nan)
-            else: # if not,
-                # is the variable name a QualifiedName?
-                try:
-                    qn = eos.QualifiedName(item['variable'])
-                    var = parameters.declare(qn, np.nan)
-                except RuntimeError:
-                    raise ValueError("Value of 'variable' for observable '" + oname +
-                        "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
+                # is 'variable' in parameters or kinematics?
+                for q in ['kinematics', 'parameters']:
+                    if var_name in specs[q].value:
+                        item[q].pop(var_name, None)
+                        eos.warn(f"Ignore '{var_name}' contained in '{q}': is also 'variable'")
 
-            # create observable
+                # TODO: implement the below protype
+                # if specs['parameter-file'].value is not None:
+                #     if specs['parameters'].value is not {}:
+                #         eos.warn("Overriding parameters from file")
+                #         # ... specs['parameters'].value = {} ...
+                #     pass
+
+                for key, value in specs['parameters'].value.items():
+                    parameters.set(key, value)
+
+                for key, value in specs['kinematics'].value.items():
+                    kinematics.declare(key, value)
+
+
             observable = eos.Observable.make(oname, parameters, kinematics, options)
 
-            xvalues = np.linspace(self.xlo, self.xhi, self.xsamples + 1)
             ovalues = np.array([])
+            xvalues = np.linspace(self.xlo, self.xhi, self.xsamples + 1)
             for xvalue in xvalues:
                 var.set(xvalue)
                 ovalues = np.append(ovalues, observable.evaluate())

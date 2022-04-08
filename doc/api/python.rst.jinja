@@ -232,6 +232,12 @@ All item types recognize the following optional keys:
 
 {{ value.content }}
 
+This plot type uses the following keys:
+
+{% for arg in value.arguments %}
+ * {{ arg }}
+{% endfor %}
+
 {% endif %}
 {% endfor %}
 

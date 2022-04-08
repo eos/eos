@@ -17,7 +17,8 @@ EXTRA_DIST = \
 	eos/data/native.py \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
-	eos/plot/plotter.py
+	eos/plot/plotter.py \
+	eos/plot/specs.py
 
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
@@ -55,7 +56,8 @@ eosplotdir = $(pkgpythondir)/plot
 eosplot_SCRIPTS = \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
-	eos/plot/plotter.py
+	eos/plot/plotter.py \
+	eos/plot/specs.py
 
 _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la
