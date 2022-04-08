@@ -986,7 +986,7 @@ namespace eos
                 make_expression_observable("B->K^*ll::P'_6(q2)", R"(P'_6(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q2))",
                         Unit::None(),
                         R"(
-                        0.5 * (<<B->K^*ll::J_7(q2);cp-conjugate=false>> + <<B->K^*ll::J_7(q2);cp-conjugate=true>>)
+                        -0.5 * (<<B->K^*ll::J_7(q2);cp-conjugate=false>> + <<B->K^*ll::J_7(q2);cp-conjugate=true>>)
                         /
                         ( -1.0 *
                           (<<B->K^*ll::J_2c(q2);cp-conjugate=false>> + <<B->K^*ll::J_2c(q2);cp-conjugate=true>>) *
@@ -1322,7 +1322,7 @@ namespace eos
                 make_expression_observable("B->K^*ll::P'_6", R"(P'_6(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
-                        0.5 * (<<B->K^*ll::J_7;cp-conjugate=false>> + <<B->K^*ll::J_7;cp-conjugate=true>>)
+                        -0.5 * (<<B->K^*ll::J_7;cp-conjugate=false>> + <<B->K^*ll::J_7;cp-conjugate=true>>)
                         /
                         ( -1.0 *
                           (<<B->K^*ll::J_2c;cp-conjugate=false>> + <<B->K^*ll::J_2c;cp-conjugate=true>>) *
