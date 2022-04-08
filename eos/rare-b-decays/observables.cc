@@ -1191,10 +1191,21 @@ namespace eos
                         &BToKstarDilepton::integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max")),
 
+                make_observable("B->K^*ll::Gamma_CP_specific(q2)", R"()",
+                        Unit::GeV(),
+                        &BToKstarDilepton::differential_decay_width,
+                        std::make_tuple("q2")),
+
                 make_expression_observable("B->K^*ll::Gamma", R"(\Gamma(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B->K^*ll::Gamma_CP_specific;cp-conjugate=false>> + <<B->K^*ll::Gamma_CP_specific;cp-conjugate=true>>)
+                        )"),
+
+                make_expression_observable("B->K^*ll::Gamma(q2)", R"(\Gamma^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B->K^*ll::Gamma_CP_specific(q2);cp-conjugate=false>> + <<B->K^*ll::Gamma_CP_specific(q2);cp-conjugate=true>>)
                         )"),
 
                 make_cacheable_observable("B->K^*ll::J_1s", R"(J_{1s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
@@ -1330,11 +1341,25 @@ namespace eos
                          ) ^ 0.5
                         )"),
 
+                make_expression_observable("B->K^*ll::S_1s(q2)", R"(S_{1s}^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_1s(q2);cp-conjugate=false>> + <<B->K^*ll::J_1s(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B->K^*ll::S_1s", R"(S_{1s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B->K^*ll::J_1s;cp-conjugate=false>> + <<B->K^*ll::J_1s;cp-conjugate=true>>)
                                   / <<B->K^*ll::Gamma>>
+                        )"),
+
+                make_expression_observable("B->K^*ll::S_1c(q2)", R"(S_{1c}^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_1c(q2);cp-conjugate=false>> + <<B->K^*ll::J_1c(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B->K^*ll::S_1c", R"(S_{1c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
@@ -1344,11 +1369,25 @@ namespace eos
                                   / <<B->K^*ll::Gamma>>
                         )"),
 
+                make_expression_observable("B->K^*ll::S_2s(q2)", R"(S_{2s}^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_2s(q2);cp-conjugate=false>> + <<B->K^*ll::J_2s(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B->K^*ll::S_2s", R"(S_{2s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B->K^*ll::J_2s;cp-conjugate=false>> + <<B->K^*ll::J_2s;cp-conjugate=true>>)
                                   / <<B->K^*ll::Gamma>>
+                        )"),
+
+                make_expression_observable("B->K^*ll::S_2c(q2)", R"(S_{2c}^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_2c(q2);cp-conjugate=false>> + <<B->K^*ll::J_2c(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B->K^*ll::S_2c", R"(S_{2c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
@@ -1358,11 +1397,25 @@ namespace eos
                                   / <<B->K^*ll::Gamma>>
                         )"),
 
+                make_expression_observable("B->K^*ll::S_3(q2)", R"(S_3^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_3(q2);cp-conjugate=false>> + <<B->K^*ll::J_3(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B->K^*ll::S_3", R"(S_3(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B->K^*ll::J_3;cp-conjugate=false>> + <<B->K^*ll::J_3;cp-conjugate=true>>)
                                   / <<B->K^*ll::Gamma>>
+                        )"),
+
+                make_expression_observable("B->K^*ll::S_4(q2)", R"(S_4^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_4(q2);cp-conjugate=false>> + <<B->K^*ll::J_4(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B->K^*ll::S_4", R"(S_4(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
@@ -1372,11 +1425,25 @@ namespace eos
                                   / <<B->K^*ll::Gamma>>
                         )"),
 
+                make_expression_observable("B->K^*ll::S_5(q2)", R"(S_5^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_5(q2);cp-conjugate=false>> + <<B->K^*ll::J_5(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B->K^*ll::S_5", R"(S_5(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B->K^*ll::J_5;cp-conjugate=false>> + <<B->K^*ll::J_5;cp-conjugate=true>>)
                                   / <<B->K^*ll::Gamma>>
+                        )"),
+
+                make_expression_observable("B->K^*ll::S_6s(q2)", R"(S_{6s}^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_6s(q2);cp-conjugate=false>> + <<B->K^*ll::J_6s(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B->K^*ll::S_6s", R"(S_{6s}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
@@ -1386,11 +1453,25 @@ namespace eos
                                   / <<B->K^*ll::Gamma>>
                         )"),
 
+                make_expression_observable("B->K^*ll::S_6c(q2)", R"(S_{6c}^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_6c(q2);cp-conjugate=false>> + <<B->K^*ll::J_6c(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B->K^*ll::S_6c", R"(S_{6c}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B->K^*ll::J_6c;cp-conjugate=false>> + <<B->K^*ll::J_6c;cp-conjugate=true>>)
                                   / <<B->K^*ll::Gamma>>
+                        )"),
+
+                make_expression_observable("B->K^*ll::S_7(q2)", R"(S_7^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_7(q2);cp-conjugate=false>> + <<B->K^*ll::J_7(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B->K^*ll::S_7", R"(S_7(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
@@ -1400,11 +1481,25 @@ namespace eos
                                   / <<B->K^*ll::Gamma>>
                         )"),
 
+                make_expression_observable("B->K^*ll::S_8(q2)", R"(S_8^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_8(q2);cp-conjugate=false>> + <<B->K^*ll::J_8(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B->K^*ll::S_8", R"(S_8(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B->K^*ll::J_8;cp-conjugate=false>> + <<B->K^*ll::J_8;cp-conjugate=true>>)
                                   / <<B->K^*ll::Gamma>>
+                        )"),
+
+                make_expression_observable("B->K^*ll::S_9(q2)", R"(S_9^{\bar{B}\to \bar{K}^*\ell^+\ell^-}(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B->K^*ll::J_9(q2);cp-conjugate=false>> + <<B->K^*ll::J_9(q2);cp-conjugate=true>>)
+                                  / <<B->K^*ll::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B->K^*ll::S_9", R"(S_9(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
