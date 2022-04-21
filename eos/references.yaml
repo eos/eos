@@ -556,6 +556,14 @@ Belle:2019B:
     id: oai:arXiv.org:1904.02440
   inspire-id: Belle:2019oag
   title: Test of Lepton-Flavor Universality in ${B\to K^\ast\ell^+\ell^-}$ Decays at Belle
+Belle:2019C:
+  authors: Choudhury, S. et. al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1908.01848
+  inspire-id: Belle:2019xld
+  title: Test of lepton flavor universality and search for lepton flavor violation in $B \rightarrow K\ell \ell$ decays
 BGNS:2014A:
   authors: Buras, Andrzej J. and Girrbach-Noe, Jennifer and Niehoff, Christoph and Straub, David M.
   eprint:
