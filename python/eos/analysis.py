@@ -69,11 +69,13 @@ class Analysis:
         """Constructor."""
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = parameters if parameters else eos.Parameters.Defaults()
+        """The set of parameters used for this analysis."""
         self.global_options = eos.Options()
         self._constraint_names = []
         self._log_likelihood = eos.LogLikelihood(self.parameters)
         self._log_posterior = eos.LogPosterior(self._log_likelihood)
         self.varied_parameters = []
+        """The set of parameters that are varied in this analysis."""
         self.bounds = []
 
         eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, {nmanual} manually-entered constraints and {nparams} fixed parameters.'.format(
@@ -220,7 +222,7 @@ class Analysis:
 
 
     def goodness_of_fit(self):
-        """Returns a goodness-of-fit summary for the current parameter point."""
+        """Returns a :class:`GoodnessOfFit` object that summarizes the quality of the fit for the current parameter point."""
         return eos.GoodnessOfFit(self._log_posterior)
 
 
