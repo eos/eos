@@ -1650,6 +1650,58 @@ namespace eos
                         )"),
 
                 // S_i observables in the LHCb angular convention:
+                make_expression_observable("B->K^*ll::S_1s_LHCb(q2)", R"(S_{1s}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_1s(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_1c_LHCb(q2)", R"(S_{1c}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_1c(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_2s_LHCb(q2)", R"(S_{2s}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_2s(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_2c_LHCb(q2)", R"(S_{2c}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_2c(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_3_LHCb(q2)", R"(S_3^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_3(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_4_LHCb(q2)", R"(S_4^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*ll::S_4(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_5_LHCb(q2)", R"(S_5^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_5(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_6s_LHCb(q2)", R"(S_{6s}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*ll::S_6s(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_6c_LHCb(q2)", R"(S_{6c}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*ll::S_6c(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_7_LHCb(q2)", R"(S_7^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*ll::S_7(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_8_LHCb(q2)", R"(S_8^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*ll::S_8(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::S_9_LHCb(q2)", R"(S_9^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*ll::S_9(q2)>> )"),
+
+                make_expression_observable("B->K^*ll::A_FB_LHCb(q2)", R"(A_\mathrm{FB}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*ll::A_FB(q2)>> )"),
+
                 make_expression_observable("B->K^*ll::S_1s_LHCb", R"(S_{1s}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::None(),
                         R"( <<B->K^*ll::S_1s>> )"),
@@ -1702,6 +1754,7 @@ namespace eos
                         Unit::None(),
                         R"( -1.0 * <<B->K^*ll::A_FB>> )"),
 
+
                 make_expression_observable("B->K^*ll::R_K^*", R"(R_{K^*})",
                         Unit::None(),
                         R"(
@@ -1748,6 +1801,10 @@ namespace eos
                         Unit::None(),
                         &BToKstarDilepton::H_long_corrections,
                         std::make_tuple("q2")),
+
+
+
+
 
 
                 // B_s^0 -> \phi \ell^+ \ell^-
@@ -1817,11 +1874,83 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "q", "s" } }),
 
+                make_observable("B_s->phill::Gamma_CP_specific(q2)",
+                        Unit::GeV(),
+                        &BsToPhiDilepton::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
+
                 make_expression_observable("B_s->phill::Gamma", R"(\Gamma(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->phill::Gamma_CP_specific;cp-conjugate=false>> + <<B_s->phill::Gamma_CP_specific;cp-conjugate=true>>)
                         )"),
+
+                make_expression_observable("B_s->phill::Gamma(q2)", R"(\Gamma(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->phill::Gamma_CP_specific(q2);cp-conjugate=false>> + <<B_s->phill::Gamma_CP_specific(q2);cp-conjugate=true>>)
+                        )"),
+
+                make_observable("B_s->phill::J_1s(q2)", R"(J_{1s}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_1s,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_1c(q2)", R"(J_{1c}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_1c,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_2s(q2)", R"(J_{2s}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_2s,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_2c(q2)", R"(J_{2c}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_2c,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_3(q2)", R"(J_3(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_3,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_4(q2)", R"(J_4(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_4,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_5(q2)", R"(J_5(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_5,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_6s(q2)", R"(J_{6s}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_6s,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_6c(q2)", R"(J_{6c}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_6c,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_7(q2)", R"(J_7(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_7,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_8(q2)", R"(J_8(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_8,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::J_9(q2)", R"(J_9(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BsToPhiDilepton::differential_j_9,
+                        std::make_tuple("q2")),
 
                 make_observable("B_s->phill::J_1s", R"(J_{1s}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
@@ -1902,11 +2031,25 @@ namespace eos
                                   / <<B_s->phill::Gamma>>
                         )"),
 
+                make_expression_observable("B_s->phill::S_1s(q2)", R"(S_{1s}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_1s(q2);cp-conjugate=false>> + <<B_s->phill::J_1s(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q^2)>>
+                        )"),
+
                 make_expression_observable("B_s->phill::S_1c", R"(S_{1c}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_1c;cp-conjugate=false>> + <<B_s->phill::J_1c;cp-conjugate=true>>)
                                   / <<B_s->phill::Gamma>>
+                        )"),
+
+                make_expression_observable("B_s->phill::S_1c(q2)", R"(S_{1c}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_1c(q2);cp-conjugate=false>> + <<B_s->phill::J_1c(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q^2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_2s", R"(S_{2s}(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -1916,11 +2059,25 @@ namespace eos
                                   / <<B_s->phill::Gamma>>
                         )"),
 
+                make_expression_observable("B_s->phill::S_2s(q2)", R"(S_{2s}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_2s(q2);cp-conjugate=false>> + <<B_s->phill::J_2s(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B_s->phill::S_2c", R"(S_{2c}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_2c;cp-conjugate=false>> + <<B_s->phill::J_2c;cp-conjugate=true>>)
                                   / <<B_s->phill::Gamma>>
+                        )"),
+
+                make_expression_observable("B_s->phill::S_2c(q2)", R"(S_{2c}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_2c(q2);cp-conjugate=false>> + <<B_s->phill::J_2c(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_3", R"(S_3(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -1930,11 +2087,25 @@ namespace eos
                                   / <<B_s->phill::Gamma>>
                         )"),
 
+                make_expression_observable("B_s->phill::S_3(q2)", R"(S_3(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_3(q2);cp-conjugate=false>> + <<B_s->phill::J_3(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B_s->phill::S_4", R"(S_4(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_4;cp-conjugate=false>> + <<B_s->phill::J_4;cp-conjugate=true>>)
                                   / <<B_s->phill::Gamma>>
+                        )"),
+
+                make_expression_observable("B_s->phill::S_4(q2)", R"(S_4(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_4(q2);cp-conjugate=false>> + <<B_s->phill::J_4(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_5", R"(S_5(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -1944,11 +2115,25 @@ namespace eos
                                   / <<B_s->phill::Gamma>>
                         )"),
 
+                make_expression_observable("B_s->phill::S_5(q2)", R"(S_5(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_5(q2);cp-conjugate=false>> + <<B_s->phill::J_5(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B_s->phill::S_6s", R"(S_{6s}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_6s;cp-conjugate=false>> + <<B_s->phill::J_6s;cp-conjugate=true>>)
                                   / <<B_s->phill::Gamma>>
+                        )"),
+
+                make_expression_observable("B_s->phill::S_6s(q2)", R"(S_{6s}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_6s(q2);cp-conjugate=false>> + <<B_s->phill::J_6s(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_6c", R"(S_{6c}(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -1958,11 +2143,25 @@ namespace eos
                                   / <<B_s->phill::Gamma>>
                         )"),
 
+                make_expression_observable("B_s->phill::S_6c(q2)", R"(S_{6c}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_6c(q2);cp-conjugate=false>> + <<B_s->phill::J_6c(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B_s->phill::S_7", R"(S_7(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_7;cp-conjugate=false>> + <<B_s->phill::J_7;cp-conjugate=true>>)
                                   / <<B_s->phill::Gamma>>
+                        )"),
+
+                make_expression_observable("B_s->phill::S_7(q2)", R"(S_7(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_7(q2);cp-conjugate=false>> + <<B_s->phill::J_7(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_8", R"(S_8(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -1972,11 +2171,25 @@ namespace eos
                                   / <<B_s->phill::Gamma>>
                         )"),
 
+                make_expression_observable("B_s->phill::S_8(q2)", R"(S_8(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_8(q2);cp-conjugate=false>> + <<B_s->phill::J_8(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
+                        )"),
+
                 make_expression_observable("B_s->phill::S_9", R"(S_9(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_9;cp-conjugate=false>> + <<B_s->phill::J_9;cp-conjugate=true>>)
                                   / <<B_s->phill::Gamma>>
+                        )"),
+
+                make_expression_observable("B_s->phill::S_9(q2)", R"(S_9(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        2.0 / 3.0 * (<<B_s->phill::J_9(q2);cp-conjugate=false>> + <<B_s->phill::J_9(q2);cp-conjugate=true>>)
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::A_1s", R"(A_{1s}(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -2115,6 +2328,58 @@ namespace eos
                 make_expression_observable("B_s->phill::A_FB_LHCb", R"(A_\mathrm{FB}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         R"( -1.0 * <<B_s->phill::A_FB>> )"),
+
+                make_expression_observable("B_s->phill::S_1s_LHCb(q2)", R"(S_{1s}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_1s(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_1c_LHCb(q2)", R"(S_{1c}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_1c(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_2s_LHCb(q2)", R"(S_{2s}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_2s(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_2c_LHCb(q2)", R"(S_{2c}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_2c(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_3_LHCb(q2)", R"(S_3^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_3(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_4_LHCb(q2)", R"(S_4^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B_s->phill::S_4(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_5_LHCb(q2)", R"(S_5^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_5(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_6s_LHCb(q2)", R"(S_{6s}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B_s->phill::S_6s(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_6c_LHCb(q2)", R"(S_{6c}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B_s->phill::S_6c(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_7_LHCb(q2)", R"(S_7^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B_s->phill::S_7(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_8_LHCb(q2)", R"(S_8^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phill::S_8(q2)>> )"),
+
+                make_expression_observable("B_s->phill::S_9_LHCb(q2)", R"(S_9^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B_s->phill::S_9(q2)>> )"),
+
+                make_expression_observable("B_s->phill::A_FB_LHCb(q2)", R"(A_\mathrm{FB}^\mathrm{LHCb}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"( -1.0 * <<B_s->phill::A_FB(q2)>> )"),
 
                 make_expression_observable("B_s->phill::R_phi", R"(R_\phi)",
                         Unit::None(),
