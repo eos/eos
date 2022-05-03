@@ -1291,11 +1291,11 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data nor data-file nor hdf5-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
-                eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
+                eos.warn('   both data and one of data-file, hdf5-file specified; assuming interactive use is intended')
 
             self.samples = None
             self.weights = None
@@ -1310,7 +1310,31 @@ class Plotter:
                     self.weights = np.exp(item['data']['log_weights'])
                 else:
                     self.weights = None
+            elif 'data-file' in item:
+                if 'variable' not in item:
+                    raise KeyError('no variable specificed')
 
+                dfname = item['data-file']
+                eos.info('   plotting KDE for "{}"'.format(dfname))
+                prefix = os.path.split(dfname)[-1]
+                eos.info(f'   prefix = {prefix}')
+                if prefix.startswith('mcmc-'):
+                    df  = eos.data.MarkovChain(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = None
+                elif prefix.startswith('samples'):
+                    df = eos.data.ImportanceSamples(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = df.weights
+                elif prefix.startswith('pred-'):
+                    df = eos.data.Prediction(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = df.weights
+                else:
+                    raise ValueError(f'Do not recognize data-file prefix: {dfname}')
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting histogram from file "{}"'.format(h5fname))
