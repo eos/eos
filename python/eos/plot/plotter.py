@@ -1618,8 +1618,13 @@ class Plotter:
                     idx = df.lookup_table[item['variable']]
                     self.samples = df.samples[:, idx]
                     self.weights = None
-                elif prefix.startswith('pmc'):
-                    df = eos.data.PMCSampler(dfname)
+                elif prefix.startswith('samples'):
+                    df = eos.data.ImportanceSamples(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = df.weights
+                elif prefix.startswith('pred-'):
+                    df = eos.data.Prediction(dfname)
                     idx = df.lookup_table[item['variable']]
                     self.samples = df.samples[:, idx]
                     self.weights = df.weights
