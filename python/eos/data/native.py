@@ -400,6 +400,7 @@ class Prediction:
 
         self.type = 'Prediction'
         self.varied_parameters = description['observables']
+        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
 
         f = os.path.join(path, 'samples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
