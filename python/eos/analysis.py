@@ -148,11 +148,12 @@ class Analysis:
         # perform some sanity checks
         varied_parameter_names = set([p.name() for p in self.varied_parameters])
         used_parameter_names = set()
+        fixed_parameter_names = set(fixed_parameters.keys())
         for observable in self._log_likelihood.observable_cache():
             for i in observable.used_parameter_ids():
                 used_parameter_names.add(self.parameters.by_id(i).name())
 
-        used_but_unvaried = used_parameter_names - varied_parameter_names
+        used_but_unvaried = used_parameter_names - varied_parameter_names - fixed_parameter_names
         if (len(used_but_unvaried) > 0):
             eos.info('likelihood probably depends on {} parameter(s) that do not appear in the prior; check prior?'.format(len(used_but_unvaried)))
         for n in used_but_unvaried:
