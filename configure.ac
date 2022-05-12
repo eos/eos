@@ -370,10 +370,8 @@ AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 AC_OUTPUT(
 	Makefile
-	debian/control-bionic
-	debian/control-disco
 	debian/control-focal
-	debian/control-xenial
+	debian/control-jammy
 	debian/Makefile
 	eos/Makefile
 	eos/b-decays/Makefile
