@@ -18,11 +18,11 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
                     - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: focal,    cxx: clang++-12,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
@@ -86,9 +86,9 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Documentation on ${{ matrix.cfg.os }}
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
@@ -133,11 +133,11 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
                     - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: focal,    cxx: clang++-12,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
@@ -165,11 +165,11 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
                     - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: focal,    cxx: clang++-12,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
@@ -208,10 +208,10 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
@@ -290,9 +290,9 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-        name: Deploy documentation
-        runs-on: ubuntu-18.04
+                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+        name: Deploy documentation on ${{ matrix.cfg.os }}
+        runs-on: ubuntu-20.04
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
