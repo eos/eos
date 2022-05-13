@@ -24,6 +24,7 @@
 
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/b-lcdas-exponential.hh> // TODO: remove explicit dependency; rely on factory method
 #include <eos/utils/exception.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
@@ -66,7 +67,7 @@ namespace eos
         // renormalization scale
         UsedParameter mu;
 
-        std::shared_ptr<BMesonLCDAsBase> b_lcdas_ptr;
+        std::shared_ptr<BMesonLCDAs> b_lcdas_ptr;
 
         // switches to enable/disable certain contributions
         SwitchOption opt_2pt;
@@ -106,9 +107,9 @@ namespace eos
             opt_method(o, "method", { "borel", "dispersive" }, "borel"),
             switch_borel(opt_method.value() == "borel")
         {
-            // TODO switch on quark flavor here
-            b_lcdas_ptr = std::make_shared<BMesonLCDAs>(
-                    BMesonLCDAs(p, o + Options{ { "q", stringify(Process_::q_s) } })
+            // TODO implement logic here
+            b_lcdas_ptr = std::make_shared<b_lcdas::Exponential>(
+                    b_lcdas::Exponential(p, o + Options{ { "q", stringify(Process_::q_s) } })
                     );
 
             u.uses(*b_lcdas_ptr);

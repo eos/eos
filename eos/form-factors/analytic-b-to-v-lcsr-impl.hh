@@ -23,7 +23,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_V_LCSR_IMPL_HH 1
 
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/b-lcdas-exponential.hh>
 #include <eos/utils/exception.hh>
 #include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
@@ -76,7 +76,7 @@ namespace eos
         // renormalization scale
         UsedParameter mu;
 
-        BMesonLCDAs b_lcdas;
+        b_lcdas::Exponential b_lcdas;
 
         // switches to enable/disable certain contributions
         SwitchOption opt_2pt;

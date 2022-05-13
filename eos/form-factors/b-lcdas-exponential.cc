@@ -4,6 +4,7 @@
  * Copyright (c) 2017 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +20,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/b-lcdas-exponential.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
@@ -31,10 +32,8 @@
 
 namespace eos
 {
-    // BMesonLCDAsBase
-    // eos/form-factors/analytic-b-to-p-...hh
     template <>
-    struct Implementation<BMesonLCDAs>
+    struct Implementation<b_lcdas::Exponential>
     {
         SwitchOption opt_q;
 
@@ -452,208 +451,211 @@ namespace eos
         }
     };
 
-    BMesonLCDAs::BMesonLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<BMesonLCDAs>(new Implementation<BMesonLCDAs>(p, o, *this))
+namespace b_lcdas
+{
+    Exponential::Exponential(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<Exponential>(new Implementation<Exponential>(p, o, *this))
     {
     }
 
-    BMesonLCDAs::~BMesonLCDAs() = default;
+    Exponential::~Exponential() = default;
 
     double
-    BMesonLCDAs::phi_plus(const double & omega) const
+    Exponential::phi_plus(const double & omega) const
     {
         return _imp->phi_plus(omega);
     }
 
     double
-    BMesonLCDAs::phi_minus(const double & omega) const
+    Exponential::phi_minus(const double & omega) const
     {
         return _imp->phi_minus(omega);
     }
 
     double
-    BMesonLCDAs::phi_bar(const double & omega) const
+    Exponential::phi_bar(const double & omega) const
     {
         return _imp->phi_bar(omega);
     }
 
     double
-    BMesonLCDAs::phi_bar_d1(const double & omega) const
+    Exponential::phi_bar_d1(const double & omega) const
     {
         return _imp->phi_bar_d1(omega);
     }
 
     double
-    BMesonLCDAs::g_plus(const double & omega) const
+    Exponential::g_plus(const double & omega) const
     {
         return _imp->g_plus(omega);
     }
 
     double
-    BMesonLCDAs::g_plus_d1(const double & omega) const
+    Exponential::g_plus_d1(const double & omega) const
     {
         return _imp->g_plus_d1(omega);
     }
 
     double
-    BMesonLCDAs::g_plus_d2(const double & omega) const
+    Exponential::g_plus_d2(const double & omega) const
     {
         return _imp->g_plus_d2(omega);
     }
 
     double
-    BMesonLCDAs::g_minusWW(const double & omega) const
+    Exponential::g_minusWW(const double & omega) const
     {
         return _imp->g_minusWW(omega);
     }
 
     double
-    BMesonLCDAs::g_minusWW_d1(const double & omega) const
+    Exponential::g_minusWW_d1(const double & omega) const
     {
         return _imp->g_minusWW_d1(omega);
     }
 
     double
-    BMesonLCDAs::g_minusWW_d2(const double & omega) const
+    Exponential::g_minusWW_d2(const double & omega) const
     {
         return _imp->g_minusWW_d2(omega);
     }
 
     double
-    BMesonLCDAs::g_bar(const double & omega) const
+    Exponential::g_bar(const double & omega) const
     {
         return _imp->g_bar(omega);
     }
 
     double
-    BMesonLCDAs::g_bar_d1(const double & omega) const
+    Exponential::g_bar_d1(const double & omega) const
     {
         return _imp->g_bar_d1(omega);
     }
 
     double
-    BMesonLCDAs::g_bar_d2(const double & omega) const
+    Exponential::g_bar_d2(const double & omega) const
     {
         return _imp->g_bar_d2(omega);
     }
 
     double
-    BMesonLCDAs::g_bar_d3(const double & omega) const
+    Exponential::g_bar_d3(const double & omega) const
     {
         return _imp->g_bar_d3(omega);
     }
 
     double
-    BMesonLCDAs::phi_3(const double & omega_1, const double & omega_2) const
+    Exponential::phi_3(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_3(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_4(const double & omega_1, const double & omega_2) const
+    Exponential::phi_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_bar_3(const double & omega_1, const double & omega_2) const
+    Exponential::phi_bar_3(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_bar_3(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_bar_4(const double & omega_1, const double & omega_2) const
+    Exponential::phi_bar_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_bar_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_bar2_3(const double & omega_1, const double & omega_2) const
+    Exponential::phi_bar2_3(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_bar2_3(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_bar2_4(const double & omega_1, const double & omega_2) const
+    Exponential::phi_bar2_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_bar2_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_bar_bar_3(const double & omega_1, const double & omega_2) const
+    Exponential::phi_bar_bar_3(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_bar_bar_3(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::phi_bar_bar_4(const double & omega_1, const double & omega_2) const
+    Exponential::phi_bar_bar_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->phi_bar_bar_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::psi_bar_4(const double & omega_1, const double & omega_2) const
+    Exponential::psi_bar_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->psi_bar_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::psi_bar_bar_4(const double & omega_1, const double & omega_2) const
+    Exponential::psi_bar_bar_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->psi_bar_bar_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::chi_bar_4(const double & omega_1, const double & omega_2) const
+    Exponential::chi_bar_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->chi_bar_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::chi_bar_bar_4(const double & omega_1, const double & omega_2) const
+    Exponential::chi_bar_bar_4(const double & omega_1, const double & omega_2) const
     {
         return _imp->chi_bar_bar_4(omega_1, omega_2);
     }
 
     double
-    BMesonLCDAs::inverse_lambda_plus() const
+    Exponential::inverse_lambda_plus() const
     {
         return 1.0 / _imp->lambda_B();
     }
 
     double
-    BMesonLCDAs::psi_A(const double & omega, const double & xi) const
+    Exponential::psi_A(const double & omega, const double & xi) const
     {
         return _imp->psi_A(omega, xi);
     }
 
     double
-    BMesonLCDAs::psi_V(const double & omega, const double & xi) const
+    Exponential::psi_V(const double & omega, const double & xi) const
     {
         return _imp->psi_V(omega, xi);
     }
 
     double
-    BMesonLCDAs::X_A(const double & omega, const double & xi) const
+    Exponential::X_A(const double & omega, const double & xi) const
     {
         return _imp->X_A(omega, xi);
     }
 
     double
-    BMesonLCDAs::Y_A(const double & omega, const double & xi) const
+    Exponential::Y_A(const double & omega, const double & xi) const
     {
         return _imp->Y_A(omega, xi);
     }
 
     double
-    BMesonLCDAs::Xbar_A(const double & omega, const double & xi) const
+    Exponential::Xbar_A(const double & omega, const double & xi) const
     {
         return _imp->Xbar_A(omega, xi);
     }
 
     double
-    BMesonLCDAs::Ybar_A(const double & omega, const double & xi) const
+    Exponential::Ybar_A(const double & omega, const double & xi) const
     {
         return _imp->Ybar_A(omega, xi);
     }
+}
 }

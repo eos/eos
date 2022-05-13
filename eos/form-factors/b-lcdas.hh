@@ -37,10 +37,20 @@ namespace eos
      * TODO: Default implementation of the methods that throws NotImplementedError?
      *
      */
-    class BMesonLCDAsBase :
+    class BMesonLCDAs:
         public ParameterUser
     {
         public:
+            // Can this work...? The logic should be implemented in the observables.
+            // static std::shared_ptr<BMesonLCDAs> make(const std::string & model, const Parameters & parameters, const Options & options) {
+            //     if (model == "exp") {
+            //         return std::make_shared<b_lcdas::Exponential>(b_lcdas::Exponential(parameters, options));
+            //     }
+            //     else {
+            //         throw std::logic_error("No other model than 'exp' implemented (WIP)");
+            //     }
+            // };
+
             /*!
              * Leading twist two-particle LCDAs
              *
@@ -116,100 +126,9 @@ namespace eos
             virtual double Xbar_A(const double & omega, const double & xi) const = 0;
             virtual double Ybar_A(const double & omega, const double & xi) const = 0;
 
+            // TODO: Does this method belong here? Is this for testing implementations only?
             /* Internal diagnostics */
             // virtual Diagnostics diagnostics() const = 0;
-    };
-
-    /*!
-     * Decomposition of B-meson to vacuum matrix elements of light-cone
-     * dominated operators.
-     *
-     * For the two-particle decomposition, we use the parametrization as
-     * defined in [KMO2006], eq. (17), p. 7.
-     *
-     * For the three-particle decomposition, we use the parametrization
-     * as defined in [KMO2006], eq. (28), p. 10.
-     */
-    class BMesonLCDAs :
-        public BMesonLCDAsBase,
-        public PrivateImplementationPattern<BMesonLCDAs>
-    {
-        public:
-            BMesonLCDAs(const Parameters &, const Options &);
-            ~BMesonLCDAs();
-
-            /*!
-             * Leading twist two-particle LCDAs
-             * omega: plus-component of the spectator momentum
-             */
-            double phi_plus(const double & omega) const;
-            double phi_minus(const double & omega) const;
-            double phi_bar(const double & omega) const;
-            double phi_bar_d1(const double & omega) const;
-
-            /*!
-             * Next-to-leading twist two-particle LCDAs
-             * omega: plus-component of the spectator momentum
-             */
-            double g_plus(const double & omega) const;
-            double g_plus_d1(const double & omega) const;
-            double g_plus_d2(const double & omega) const;
-
-            double g_minusWW(const double & omega) const;
-            double g_minusWW_d1(const double & omega) const;
-            double g_minusWW_d2(const double & omega) const;
-
-            double g_bar(const double & omega) const;
-            double g_bar_d1(const double & omega) const;
-            double g_bar_d2(const double & omega) const;
-            double g_bar_d3(const double & omega) const;
-
-            /*!
-             * Leading power three-particle LCDAs
-             * omega_1: plus-component of the spectator momentum
-             * omega_2: plus-component of the gluon momentum
-             * */
-            double phi_3(const double & omega_1, const double & omega_2) const;
-            double phi_4(const double & omega_1, const double & omega_2) const;
-
-            double phi_bar_3(const double & omega_1, const double & omega_2) const;
-            double phi_bar_4(const double & omega_1, const double & omega_2) const;
-
-            double phi_bar2_3(const double & omega_1, const double & omega_2) const;
-            double phi_bar2_4(const double & omega_1, const double & omega_2) const;
-
-            double phi_bar_bar_3(const double & omega_1, const double & omega_2) const;
-            double phi_bar_bar_4(const double & omega_1, const double & omega_2) const;
-
-            double psi_bar_4(const double & omega_1, const double & omega_2) const;
-            double chi_bar_4(const double & omega_1, const double & omega_2) const;
-
-            double psi_bar_bar_4(const double & omega_1, const double & omega_2) const;
-            double chi_bar_bar_4(const double & omega_1, const double & omega_2) const;
-            /*!
-             * Pseudo observables for the two-particle LCDAs
-             */
-            double inverse_lambda_plus() const;
-
-            /*!
-             * Leading power three-particle LCDAs
-             * omega: plus-component of the spectator momentum
-             * xi:    plus-component of the gluon momentum
-             * */
-            double psi_A(const double & omega, const double & xi) const;
-            double psi_V(const double & omega, const double & xi) const;
-            double X_A(const double & omega, const double & xi) const;
-            double Y_A(const double & omega, const double & xi) const;
-
-            /*!
-             * Auxiliary functions for the three-particle LCDAs
-             * See [KMO2006], below eq. (72), p. 28 for their definition.
-             */
-            double Xbar_A(const double & omega, const double & xi) const;
-            double Ybar_A(const double & omega, const double & xi) const;
-
-            /* Internal diagnostics */
-            Diagnostics diagnostics() const;
     };
 }
 
