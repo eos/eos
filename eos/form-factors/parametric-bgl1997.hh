@@ -35,10 +35,11 @@ namespace eos
             const double _t_p, _t_m;
             const double _chi_1m, _chi_0p;
             const double _chi_1p, _chi_0m;
+            const double _chi_T_1m, _chi_T_1p;
 
         public:
             double _z(const double & t, const double & t_0) const;
-            double _phi(const double & s, const double & t_0, const unsigned & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const;
+            double _phi(const double & s, const double & t_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const;
 
             BGL1997FormFactorBase(const Parameters &, const Options &, ParameterUser &, const double t_p, const double t_m);
             ~BGL1997FormFactorBase();
@@ -53,6 +54,8 @@ namespace eos
     {
         private:
             std::array<UsedParameter, 4> _a_g, _a_f, _a_F1, _a_F2;
+            std::array<UsedParameter, 4> _a_T1;
+            std::array<UsedParameter, 3> _a_T2, _a_T23;
 
             const double _mB, _mB2, _mV, _mV2;
             const double _t_0;
@@ -69,6 +72,9 @@ namespace eos
             double f(const double & s) const;
             double F1(const double & s) const;
             double F2(const double & s) const;
+
+            double a_T2_0() const;
+            double a_T23_0() const;
 
             virtual double v(const double & s) const;
             virtual double a_0(const double & s) const;

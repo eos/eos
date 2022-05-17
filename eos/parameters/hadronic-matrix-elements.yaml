@@ -1491,6 +1491,78 @@ groups:
           max:     0.0
           latex:    '$a_{F_2,3}^{B\to D^*,\mathrm{BGL97}}$'
           unit:     '1'
+      'B->D^*::a^T1_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_1,0}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T1_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_1,1}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T1_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_1,2}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T1_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_1,3}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T2_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_2,0}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T2_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_2,1}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T2_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_2,2}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T2_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_2,3}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T23_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_{23},0}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T23_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_{23},1}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T23_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_{23},2}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
+      'B->D^*::a^T23_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T_{23},3}^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     '1'
       # form factor parameters for B_s->D_s^* inspired by [BSZ:2015A]
       'B_s->D_s^*::alpha^A0_0@BSZ2015' :
           central:  0.0
