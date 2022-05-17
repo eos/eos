@@ -76,6 +76,52 @@ namespace eos
         static constexpr double tp_1m  = mR2_1m;
         static constexpr double tp_1p  = mR2_1p;
     };
+
+    /*
+     * J=1/2^+ -> J=1/2^- transitions
+     */
+
+    struct LambdaBToLambdaC2595 {
+        static constexpr const char * label = "Lambda_b->Lambda_c(2595)";
+        // initial state mass
+        static constexpr double m1 = 5.61951;
+        // final state mass
+        static constexpr double m2 = 2.59225;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // pair production threshold: Lambda_b + Lambda_c(2625)
+        static constexpr double tp = (m1 + m2) * (m1 + m2);
+        // first resonances sorted by spin/parity
+        // we use the shifts from [DLM2015], table VII.
+        static constexpr double mBc = 6.2751;
+        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
+        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+    };
+
+    /*
+     * J=1/2^+ -> J=3/2^- transitions
+     */
+
+    struct LambdaBToLambdaC2625 {
+        static constexpr const char * label = "Lambda_b->Lambda_c(2625)";
+        // initial state mass
+        static constexpr double m1 = 5.61951;
+        // final state mass
+        static constexpr double m2 = 2.62811;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // pair production threshold: Lambda_b + Lambda_c(2625)
+        static constexpr double tp = (m1 + m2) * (m1 + m2);
+        // first resonances sorted by spin/parity
+        // we use the shifts from [DLM2015], table VII.
+        static constexpr double mBc = 6.2751;
+        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
+        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+    };
 }
 
 #endif
