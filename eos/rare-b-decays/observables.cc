@@ -74,349 +74,6 @@ namespace eos
     // }}}
 
 
-    // B_q -> P l^+l^-
-    // {{{
-    ObservableGroup
-    make_b_to_p_ll_group()
-    {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_q \to P \ell^+\ell^-$ decays)",
-            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
-            {
-                // B -> K ll, Large Recoil
-                make_observable("B->Kll::d^2Gamma", R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
-                        Unit::InverseGeV2(),
-                        &BToKDilepton::two_differential_decay_width,
-                        std::make_tuple("s", "cos(theta_l)")),
-
-                make_observable("B->Kll::dBR/ds", R"(d\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &BToKDilepton::differential_branching_ratio,
-                        std::make_tuple("q2")),
-
-                make_observable("B->Kll::F_H(q2)", R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
-                        Unit::None(),
-                        &BToKDilepton::differential_flat_term,
-                        std::make_tuple("q2")),
-
-                make_observable("B->Kll::A_FB(q2)", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
-                        Unit::None(),
-                        &BToKDilepton::differential_forward_backward_asymmetry,
-                        std::make_tuple("q2")),
-
-                make_expression_observable("B->Kll::R_K(q2)", R"(R_K(q^2))",
-                        Unit::None(),
-                        R"(
-                        <<B->Kll::dBR/ds;l=mu>>
-                        /
-                        <<B->Kll::dBR/ds;l=e>>
-                        )"),
-
-                make_observable("B->Kll::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        &BToKDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max")),
-
-                make_expression_observable("B->Kll::BR", R"(\bar{\mathcal{B}}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        R"(
-                        0.5 * (
-                               <<B->Kll::BR_CP_specific;cp-conjugate=false>>
-                               +
-                               <<B->Kll::BR_CP_specific;cp-conjugate=true>>
-                               )
-                        )"),
-
-                make_expression_observable("B->Kll::NormalizedBR", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/\mathcal{B}(\bar{B}\to \bar{K}J/\psi))",
-                        Unit::None(),
-                        R"(
-                        <<B->Kll::BR>> / <<B->Kpsi::BR;psi=J/psi>>
-                        )"),
-
-                make_expression_observable("B->Kll::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        R"(
-                        (<<B->Kll::BR_CP_specific;cp-conjugate=false>> - <<B->Kll::BR_CP_specific;cp-conjugate=true>>)
-                        /
-                        (<<B->Kll::BR_CP_specific;cp-conjugate=false>> + <<B->Kll::BR_CP_specific;cp-conjugate=true>>)
-                        )"),
-
-                make_observable("B->Kll::Gamma", R"(\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::GeV(),
-                        &BToKDilepton::integrated_decay_width,
-                        std::make_tuple("q2_min", "q2_max")),
-
-                make_observable("B->Kll::F_H_CP_specific", R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        &BToKDilepton::integrated_flat_term,
-                        std::make_tuple("q2_min", "q2_max")),
-
-                make_expression_observable("B->Kll::F_H", R"(\bar F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        R"(
-                        0.5 * (
-                               <<B->Kll::F_H_CP_specific;cp-conjugate=false>>
-                               +
-                               <<B->Kll::F_H_CP_specific;cp-conjugate=true>>
-                               )
-                        )"),
-
-                make_observable("B->Kll::A_FB_CP_specific", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        &BToKDilepton::integrated_forward_backward_asymmetry,
-                        std::make_tuple("q2_min", "q2_max")),
-
-                make_expression_observable("B->Kll::A_FB", R"(\bar A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
-                        Unit::None(),
-                        R"(
-                        0.5 * (
-                               <<B->Kll::A_FB_CP_specific;cp-conjugate=false>>
-                               +
-                               <<B->Kll::A_FB_CP_specific;cp-conjugate=true>>
-                               )
-                        )"),
-
-                make_expression_observable("B->Kll::R_K", R"(R_K)",
-                        Unit::None(),
-                        R"(
-                        <<B->Kll::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
-                        /
-                        <<B->Kll::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
-                        )"),
-            }
-        );
-
-        return ObservableGroup(imp);
-    }
-    // }}}
-
-    // B_q -> V gamma
-    // {{{
-    ObservableGroup
-    make_b_to_v_gamma_group()
-    {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_q \to V \gamma$ decays)",
-            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
-            {
-                // B -> K^* gamma
-                make_observable("B->K^*gamma::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\gamma))",
-                        Unit::None(),
-                        &BToKstarGamma::branching_ratio),
-
-                make_expression_observable("B->K^*gamma::BR", R"(\bar{\mathcal{B}}(\bar{B}\to \bar{K}^*\gamma))",
-                        Unit::None(),
-                        R"(
-                        0.5 * (
-                               <<B->K^*gamma::BR_CP_specific;cp-conjugate=false>>
-                               +
-                               <<B->K^*gamma::BR_CP_specific;cp-conjugate=true>>
-                               )
-                        )"),
-
-                make_expression_observable("B->K^*gamma::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}^*\gamma))",
-                        Unit::None(),
-                        R"(
-                        (<<B->K^*gamma::BR_CP_specific;cp-conjugate=false>> - <<B->K^*gamma::BR_CP_specific;cp-conjugate=true>>)
-                        /
-                        (<<B->K^*gamma::BR_CP_specific;cp-conjugate=false>> + <<B->K^*gamma::BR_CP_specific;cp-conjugate=true>>)
-                        )"),
-
-                // {S,C}_K^*gamma are calculated for B as the first state, Bbar as the second.
-                // This is the opposite order than in B->K^*ll.
-                make_observable("B->K^*gamma::Gamma_CP_specific",
-                        Unit::None(),
-                        &BToKstarGamma::decay_rate),
-                make_observable("B->K^*gamma::real_q_over_p",
-                        Unit::None(),
-                        &BToKstarGamma::real_q_over_p),
-                make_observable("B->K^*gamma::imag_q_over_p",
-                        Unit::None(),
-                        &BToKstarGamma::imag_q_over_p),
-                make_observable("B->K^*gamma::real_a_left",
-                        Unit::None(),
-                        &BToKstarGamma::real_a_left),
-                make_observable("B->K^*gamma::imag_a_left",
-                        Unit::None(),
-                        &BToKstarGamma::imag_a_left),
-                make_observable("B->K^*gamma::real_a_right",
-                        Unit::None(),
-                        &BToKstarGamma::real_a_right),
-                make_observable("B->K^*gamma::imag_a_right",
-                        Unit::None(),
-                        &BToKstarGamma::imag_a_right),
-
-                make_expression_observable("B->K^*gamma::S_K^*gamma", R"(S_{K^*\gamma})",
-                        Unit::None(),
-                        R"(
-                        -2.0 * (
-                            <<B->K^*gamma::real_q_over_p>> * (
-                                    <<B->K^*gamma::real_a_left;cp-conjugate=true>>  * <<B->K^*gamma::imag_a_right;cp-conjugate=false>>
-                                  - <<B->K^*gamma::imag_a_left;cp-conjugate=true>>  * <<B->K^*gamma::real_a_right;cp-conjugate=false>>
-                                  + <<B->K^*gamma::real_a_right;cp-conjugate=true>> * <<B->K^*gamma::imag_a_left;cp-conjugate=false>>
-                                  - <<B->K^*gamma::imag_a_right;cp-conjugate=true>> * <<B->K^*gamma::real_a_left;cp-conjugate=false>>
-                            )
-                            +
-                            <<B->K^*gamma::imag_q_over_p>> * (
-                                    <<B->K^*gamma::real_a_left;cp-conjugate=true>>  * <<B->K^*gamma::real_a_right;cp-conjugate=false>>
-                                  + <<B->K^*gamma::real_a_right;cp-conjugate=true>> * <<B->K^*gamma::real_a_left;cp-conjugate=false>>
-                                  + <<B->K^*gamma::imag_a_left;cp-conjugate=true>>  * <<B->K^*gamma::imag_a_right;cp-conjugate=false>>
-                                  + <<B->K^*gamma::imag_a_right;cp-conjugate=true>> * <<B->K^*gamma::imag_a_left;cp-conjugate=false>>
-                            )
-                        )
-                        /
-                        (<<B->K^*gamma::Gamma_CP_specific;cp-conjugate=false>> + <<B->K^*gamma::Gamma_CP_specific;cp-conjugate=true>>)
-                        )"),
-
-                make_expression_observable("B->K^*gamma::C_K^*gamma", R"(C_{K^*\gamma})",
-                        Unit::None(),
-                        R"( -1.0 * <<B->K^*gamma::A_CP>> )"),
-
-                make_expression_observable("B->K^*gamma::A_I", R"(A_\mathrm{I}(\bar{B}\to \bar{K}^*\gamma))",
-                        Unit::None(),
-                        R"(
-                        (<<B->K^*gamma::BR_CP_specific;q=d>> - <<B->K^*gamma::BR_CP_specific;q=u>>)
-                        /
-                        (<<B->K^*gamma::BR_CP_specific;q=d>> + <<B->K^*gamma::BR_CP_specific;q=u>>)
-                        )"),
-            }
-        );
-
-        return ObservableGroup(imp);
-    }
-    // }}}
-
-    // B_q -> P charmonium
-    // {{{
-    ObservableGroup
-    make_b_to_p_charmonium_group()
-    {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_q \to P \psi$ decays)",
-            R"(The option "q" selects the spectator quark flavor.)",
-            {
-                /// Branching ratio of B -> K psi
-                make_observable("B->Kpsi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}\psi))",
-                        Unit::None(),
-                        &BToKCharmonium::branching_ratio),
-                make_observable("B->Kpsi::plus_phase",
-                        Unit::None(),
-                        &BToKCharmonium::plus_phase)
-            }
-
-        );
-
-        return ObservableGroup(imp);
-    }
-    // }}}
-
-    // B_q -> V charmonium
-    // {{{
-    ObservableGroup
-    make_b_to_v_charmonium_group()
-    {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_q \to V \psi$ decays)",
-            R"(The option "q" selects the spectator quark flavor.)",
-            {
-                // Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
-                make_observable("B->K^*psi::perp_polarization",
-                        Unit::None(),
-                        &BToKstarCharmonium::perp_polarization),
-                make_observable("B->K^*psi::para_polarization",
-                        Unit::None(),
-                        &BToKstarCharmonium::para_polarization),
-                make_observable("B->K^*psi::long_polarization",
-                        Unit::None(),
-                        &BToKstarCharmonium::long_polarization),
-                make_observable("B->K^*psi::long_phase",
-                        Unit::None(),
-                        &BToKstarCharmonium::long_phase),
-                make_observable("B->K^*psi::delta_perp_long",
-                        Unit::None(),
-                        &BToKstarCharmonium::delta_perp_long),
-                make_observable("B->K^*psi::delta_para_long",
-                        Unit::None(),
-                        &BToKstarCharmonium::delta_para_long),
-
-                // Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
-                make_observable("B->K^*psi::S_1s_LHCb", R"(S_{1s}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::S_1s_LHCb),
-                make_observable("B->K^*psi::S_1c_LHCb", R"(S_{1c}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::S_1c_LHCb),
-                make_observable("B->K^*psi::S_3_LHCb", R"(S_{3}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::S_3_LHCb),
-                make_observable("B->K^*psi::S_4_LHCb", R"(S_{4}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::S_4_LHCb),
-                make_observable("B->K^*psi::S_8_LHCb", R"(S_{8}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::S_8_LHCb),
-                make_observable("B->K^*psi::S_9_LHCb", R"(S_{9}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::S_9_LHCb),
-
-                // Branching ratio of B -> K^* psi
-                make_observable("B->K^*psi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}^*\psi))",
-                        Unit::None(),
-                        &BToKstarCharmonium::branching_ratio),
-
-
-                // Angular observables as detected in the decay B_s -> phi psi (-> l^+ l^-)
-                make_observable("B_s->phipsi::perp_polarization",
-                        Unit::None(),
-                        &BsToPhiCharmonium::perp_polarization,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                make_observable("B_s->phipsi::para_polarization",
-                        Unit::None(),
-                        &BsToPhiCharmonium::para_polarization,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                make_observable("B_s->phipsi::long_polarization",
-                        Unit::None(),
-                        &BsToPhiCharmonium::long_polarization,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                make_observable("B_s->phipsi::long_phase",
-                        Unit::None(),
-                        &BsToPhiCharmonium::long_phase,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                make_observable("B_s->phipsi::delta_perp_long",
-                        Unit::None(),
-                        &BsToPhiCharmonium::delta_perp_long,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                make_observable("B_s->phipsi::delta_para_long",
-                        Unit::None(),
-                        &BsToPhiCharmonium::delta_para_long,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                // Branching ratio of B -> phi psi
-                make_observable("B_s->phipsi::BR", R"(\mathcal{B}(\bar{B}_s \to \phi\psi))",
-                        Unit::None(),
-                        &BsToPhiCharmonium::branching_ratio,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } })
-
-            }
-
-        );
-
-        return ObservableGroup(imp);
-    }
-    // }}}
-
     // B_q -> P
     // {{{
     ObservableGroup
@@ -517,6 +174,7 @@ namespace eos
         return ObservableGroup(imp);
     }
     // }}}
+
 
     // B_q -> V
     // {{{
@@ -886,6 +544,353 @@ namespace eos
                         std::make_tuple()),
             }
 
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+
+    // B_q -> P charmonium
+    // {{{
+    ObservableGroup
+    make_b_to_p_charmonium_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to P \psi$ decays)",
+            R"(The option "q" selects the spectator quark flavor.)",
+            {
+                /// Branching ratio of B -> K psi
+                make_observable("B->Kpsi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}\psi))",
+                        Unit::None(),
+                        &BToKCharmonium::branching_ratio),
+                make_observable("B->Kpsi::plus_phase",
+                        Unit::None(),
+                        &BToKCharmonium::plus_phase)
+            }
+
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+
+    // B_q -> V charmonium
+    // {{{
+    ObservableGroup
+    make_b_to_v_charmonium_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to V \psi$ decays)",
+            R"(The option "q" selects the spectator quark flavor.)",
+            {
+                // Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
+                make_observable("B->K^*psi::perp_polarization",
+                        Unit::None(),
+                        &BToKstarCharmonium::perp_polarization),
+                make_observable("B->K^*psi::para_polarization",
+                        Unit::None(),
+                        &BToKstarCharmonium::para_polarization),
+                make_observable("B->K^*psi::long_polarization",
+                        Unit::None(),
+                        &BToKstarCharmonium::long_polarization),
+                make_observable("B->K^*psi::long_phase",
+                        Unit::None(),
+                        &BToKstarCharmonium::long_phase),
+                make_observable("B->K^*psi::delta_perp_long",
+                        Unit::None(),
+                        &BToKstarCharmonium::delta_perp_long),
+                make_observable("B->K^*psi::delta_para_long",
+                        Unit::None(),
+                        &BToKstarCharmonium::delta_para_long),
+
+                // Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
+                make_observable("B->K^*psi::S_1s_LHCb", R"(S_{1s}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::S_1s_LHCb),
+                make_observable("B->K^*psi::S_1c_LHCb", R"(S_{1c}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::S_1c_LHCb),
+                make_observable("B->K^*psi::S_3_LHCb", R"(S_{3}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::S_3_LHCb),
+                make_observable("B->K^*psi::S_4_LHCb", R"(S_{4}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::S_4_LHCb),
+                make_observable("B->K^*psi::S_8_LHCb", R"(S_{8}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::S_8_LHCb),
+                make_observable("B->K^*psi::S_9_LHCb", R"(S_{9}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::S_9_LHCb),
+
+                // Branching ratio of B -> K^* psi
+                make_observable("B->K^*psi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}^*\psi))",
+                        Unit::None(),
+                        &BToKstarCharmonium::branching_ratio),
+
+
+                // Angular observables as detected in the decay B_s -> phi psi (-> l^+ l^-)
+                make_observable("B_s->phipsi::perp_polarization",
+                        Unit::None(),
+                        &BsToPhiCharmonium::perp_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phipsi::para_polarization",
+                        Unit::None(),
+                        &BsToPhiCharmonium::para_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phipsi::long_polarization",
+                        Unit::None(),
+                        &BsToPhiCharmonium::long_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phipsi::long_phase",
+                        Unit::None(),
+                        &BsToPhiCharmonium::long_phase,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phipsi::delta_perp_long",
+                        Unit::None(),
+                        &BsToPhiCharmonium::delta_perp_long,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phipsi::delta_para_long",
+                        Unit::None(),
+                        &BsToPhiCharmonium::delta_para_long,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                // Branching ratio of B -> phi psi
+                make_observable("B_s->phipsi::BR", R"(\mathcal{B}(\bar{B}_s \to \phi\psi))",
+                        Unit::None(),
+                        &BsToPhiCharmonium::branching_ratio,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } })
+
+            }
+
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+
+    // B_q -> V gamma
+    // {{{
+    ObservableGroup
+    make_b_to_v_gamma_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to V \gamma$ decays)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
+            {
+                // B -> K^* gamma
+                make_observable("B->K^*gamma::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\gamma))",
+                        Unit::None(),
+                        &BToKstarGamma::branching_ratio),
+
+                make_expression_observable("B->K^*gamma::BR", R"(\bar{\mathcal{B}}(\bar{B}\to \bar{K}^*\gamma))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (
+                               <<B->K^*gamma::BR_CP_specific;cp-conjugate=false>>
+                               +
+                               <<B->K^*gamma::BR_CP_specific;cp-conjugate=true>>
+                               )
+                        )"),
+
+                make_expression_observable("B->K^*gamma::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}^*\gamma))",
+                        Unit::None(),
+                        R"(
+                        (<<B->K^*gamma::BR_CP_specific;cp-conjugate=false>> - <<B->K^*gamma::BR_CP_specific;cp-conjugate=true>>)
+                        /
+                        (<<B->K^*gamma::BR_CP_specific;cp-conjugate=false>> + <<B->K^*gamma::BR_CP_specific;cp-conjugate=true>>)
+                        )"),
+
+                // {S,C}_K^*gamma are calculated for B as the first state, Bbar as the second.
+                // This is the opposite order than in B->K^*ll.
+                make_observable("B->K^*gamma::Gamma_CP_specific",
+                        Unit::None(),
+                        &BToKstarGamma::decay_rate),
+                make_observable("B->K^*gamma::real_q_over_p",
+                        Unit::None(),
+                        &BToKstarGamma::real_q_over_p),
+                make_observable("B->K^*gamma::imag_q_over_p",
+                        Unit::None(),
+                        &BToKstarGamma::imag_q_over_p),
+                make_observable("B->K^*gamma::real_a_left",
+                        Unit::None(),
+                        &BToKstarGamma::real_a_left),
+                make_observable("B->K^*gamma::imag_a_left",
+                        Unit::None(),
+                        &BToKstarGamma::imag_a_left),
+                make_observable("B->K^*gamma::real_a_right",
+                        Unit::None(),
+                        &BToKstarGamma::real_a_right),
+                make_observable("B->K^*gamma::imag_a_right",
+                        Unit::None(),
+                        &BToKstarGamma::imag_a_right),
+
+                make_expression_observable("B->K^*gamma::S_K^*gamma", R"(S_{K^*\gamma})",
+                        Unit::None(),
+                        R"(
+                        -2.0 * (
+                            <<B->K^*gamma::real_q_over_p>> * (
+                                    <<B->K^*gamma::real_a_left;cp-conjugate=true>>  * <<B->K^*gamma::imag_a_right;cp-conjugate=false>>
+                                  - <<B->K^*gamma::imag_a_left;cp-conjugate=true>>  * <<B->K^*gamma::real_a_right;cp-conjugate=false>>
+                                  + <<B->K^*gamma::real_a_right;cp-conjugate=true>> * <<B->K^*gamma::imag_a_left;cp-conjugate=false>>
+                                  - <<B->K^*gamma::imag_a_right;cp-conjugate=true>> * <<B->K^*gamma::real_a_left;cp-conjugate=false>>
+                            )
+                            +
+                            <<B->K^*gamma::imag_q_over_p>> * (
+                                    <<B->K^*gamma::real_a_left;cp-conjugate=true>>  * <<B->K^*gamma::real_a_right;cp-conjugate=false>>
+                                  + <<B->K^*gamma::real_a_right;cp-conjugate=true>> * <<B->K^*gamma::real_a_left;cp-conjugate=false>>
+                                  + <<B->K^*gamma::imag_a_left;cp-conjugate=true>>  * <<B->K^*gamma::imag_a_right;cp-conjugate=false>>
+                                  + <<B->K^*gamma::imag_a_right;cp-conjugate=true>> * <<B->K^*gamma::imag_a_left;cp-conjugate=false>>
+                            )
+                        )
+                        /
+                        (<<B->K^*gamma::Gamma_CP_specific;cp-conjugate=false>> + <<B->K^*gamma::Gamma_CP_specific;cp-conjugate=true>>)
+                        )"),
+
+                make_expression_observable("B->K^*gamma::C_K^*gamma", R"(C_{K^*\gamma})",
+                        Unit::None(),
+                        R"( -1.0 * <<B->K^*gamma::A_CP>> )"),
+
+                make_expression_observable("B->K^*gamma::A_I", R"(A_\mathrm{I}(\bar{B}\to \bar{K}^*\gamma))",
+                        Unit::None(),
+                        R"(
+                        (<<B->K^*gamma::BR_CP_specific;q=d>> - <<B->K^*gamma::BR_CP_specific;q=u>>)
+                        /
+                        (<<B->K^*gamma::BR_CP_specific;q=d>> + <<B->K^*gamma::BR_CP_specific;q=u>>)
+                        )"),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+
+    // B_q -> P l^+l^-
+    // {{{
+    ObservableGroup
+    make_b_to_p_ll_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to P \ell^+\ell^-$ decays)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
+            {
+                // B -> K ll, Large Recoil
+                make_observable("B->Kll::d^2Gamma", R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
+                        Unit::InverseGeV2(),
+                        &BToKDilepton::two_differential_decay_width,
+                        std::make_tuple("s", "cos(theta_l)")),
+
+                make_observable("B->Kll::dBR/ds", R"(d\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToKDilepton::differential_branching_ratio,
+                        std::make_tuple("q2")),
+
+                make_observable("B->Kll::F_H(q2)", R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BToKDilepton::differential_flat_term,
+                        std::make_tuple("q2")),
+
+                make_observable("B->Kll::A_FB(q2)", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &BToKDilepton::differential_forward_backward_asymmetry,
+                        std::make_tuple("q2")),
+
+                make_expression_observable("B->Kll::R_K(q2)", R"(R_K(q^2))",
+                        Unit::None(),
+                        R"(
+                        <<B->Kll::dBR/ds;l=mu>>
+                        /
+                        <<B->Kll::dBR/ds;l=e>>
+                        )"),
+
+                make_observable("B->Kll::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        &BToKDilepton::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_expression_observable("B->Kll::BR", R"(\bar{\mathcal{B}}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (
+                               <<B->Kll::BR_CP_specific;cp-conjugate=false>>
+                               +
+                               <<B->Kll::BR_CP_specific;cp-conjugate=true>>
+                               )
+                        )"),
+
+                make_expression_observable("B->Kll::NormalizedBR", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/\mathcal{B}(\bar{B}\to \bar{K}J/\psi))",
+                        Unit::None(),
+                        R"(
+                        <<B->Kll::BR>> / <<B->Kpsi::BR;psi=J/psi>>
+                        )"),
+
+                make_expression_observable("B->Kll::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                        (<<B->Kll::BR_CP_specific;cp-conjugate=false>> - <<B->Kll::BR_CP_specific;cp-conjugate=true>>)
+                        /
+                        (<<B->Kll::BR_CP_specific;cp-conjugate=false>> + <<B->Kll::BR_CP_specific;cp-conjugate=true>>)
+                        )"),
+
+                make_observable("B->Kll::Gamma", R"(\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::GeV(),
+                        &BToKDilepton::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B->Kll::F_H_CP_specific", R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        &BToKDilepton::integrated_flat_term,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_expression_observable("B->Kll::F_H", R"(\bar F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (
+                               <<B->Kll::F_H_CP_specific;cp-conjugate=false>>
+                               +
+                               <<B->Kll::F_H_CP_specific;cp-conjugate=true>>
+                               )
+                        )"),
+
+                make_observable("B->Kll::A_FB_CP_specific", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        &BToKDilepton::integrated_forward_backward_asymmetry,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_expression_observable("B->Kll::A_FB", R"(\bar A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (
+                               <<B->Kll::A_FB_CP_specific;cp-conjugate=false>>
+                               +
+                               <<B->Kll::A_FB_CP_specific;cp-conjugate=true>>
+                               )
+                        )"),
+
+                make_expression_observable("B->Kll::R_K", R"(R_K)",
+                        Unit::None(),
+                        R"(
+                        <<B->Kll::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        /
+                        <<B->Kll::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                        )"),
+            }
         );
 
         return ObservableGroup(imp);
@@ -2035,7 +2040,7 @@ namespace eos
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_1s(q2);cp-conjugate=false>> + <<B_s->phill::J_1s(q2);cp-conjugate=true>>)
-                                  / <<B_s->phill::Gamma(q^2)>>
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_1c", R"(S_{1c}(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -2049,7 +2054,7 @@ namespace eos
                         Unit::None(),
                         R"(
                         2.0 / 3.0 * (<<B_s->phill::J_1c(q2);cp-conjugate=false>> + <<B_s->phill::J_1c(q2);cp-conjugate=true>>)
-                                  / <<B_s->phill::Gamma(q^2)>>
+                                  / <<B_s->phill::Gamma(q2)>>
                         )"),
 
                 make_expression_observable("B_s->phill::S_2s", R"(S_{2s}(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -2467,6 +2472,7 @@ namespace eos
     }
     // }}}
 
+
     // Lambda_b -> Lambda l^+ l^-
     // {{{
     ObservableGroup
@@ -2812,6 +2818,7 @@ namespace eos
     }
     // }}}
 
+
     // B -> X_s {gamma, l^+ l^-}
     // {{{
     ObservableGroup
@@ -2858,6 +2865,7 @@ namespace eos
         return ObservableGroup(imp);
     }
     // }}}
+
 
     // Pseudo-observables for Non-local Matrix Elements
     // {{{
@@ -2918,6 +2926,7 @@ namespace eos
     }
     // }}}
 
+
     ObservableSection
     make_rare_b_decays_section()
     {
@@ -2928,24 +2937,20 @@ namespace eos
                 // B_q -> l^+ l^-
                 make_b_to_ll_group(),
 
-                // B_q -> P l^+ l^-
-                make_b_to_p_ll_group(),
-
-                // B_q -> V gamma
-                make_b_to_v_gamma_group(),
-
-                // B_q -> V l^+ l^-
-                make_b_to_v_ll_group(),
-
-                // B_q -> P
+                // B_q -> M
                 make_b_to_p_group(),
-
-                // B_q -> V
                 make_b_to_v_group(),
 
                 // B_q -> M charmonium
                 make_b_to_p_charmonium_group(),
                 make_b_to_v_charmonium_group(),
+
+                // B_q -> V gamma
+                make_b_to_v_gamma_group(),
+
+                // B_q -> M l^+ l^-
+                make_b_to_p_ll_group(),
+                make_b_to_v_ll_group(),
 
                 // Lambda_b -> Lambda l^+ l^-
                 make_lambdab_to_lambda_ll_group(),
