@@ -29,6 +29,8 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
+#include <numeric>
+
 namespace eos
 {
     BGL1997FormFactorBase::BGL1997FormFactorBase(const Parameters &, const Options &, ParameterUser &, const double t_p, const double t_m) :
@@ -37,7 +39,9 @@ namespace eos
         _chi_1m( 5.131e-04), // TODO remove hard-coded numerical values
         _chi_0p( 6.204e-03),
         _chi_1p( 3.894e-04),
-        _chi_0m(19.421e-03)
+        _chi_0m(19.421e-03),
+        _chi_T_1m( 8.64e-03 / 4.2 / 4.2), // both at scale 2.31 GeV
+        _chi_T_1p( 4.79e-03 / 4.2 / 4.2)
     {
     }
 
@@ -50,7 +54,7 @@ namespace eos
     }
 
     double
-    BGL1997FormFactorBase::_phi(const double & s, const double & t_0, const unsigned & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const
+    BGL1997FormFactorBase::_phi(const double & s, const double & t_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const
     {
         const double sq_tp    = std::sqrt(_t_p);
         const double sq_tp_t  = std::sqrt(_t_p - s);
@@ -101,6 +105,18 @@ namespace eos
                  UsedParameter(p[_par_name("F2_1")], *this),
                  UsedParameter(p[_par_name("F2_2")], *this),
                  UsedParameter(p[_par_name("F2_3")], *this) }},
+        _a_T1{{  UsedParameter(p[_par_name("T1_0")], *this),
+                 UsedParameter(p[_par_name("T1_1")], *this),
+                 UsedParameter(p[_par_name("T1_2")], *this),
+                 UsedParameter(p[_par_name("T1_3")], *this) }},
+        _a_T2{{ /* T2_0 parameter determined by identity T1(0) = T2(0) */ 
+                 UsedParameter(p[_par_name("T2_1")], *this),
+                 UsedParameter(p[_par_name("T2_2")], *this),
+                 UsedParameter(p[_par_name("T2_3")], *this) }},
+        _a_T23{{ /* T23_0 parameter determined by identity between T2 and T23 at q2 = t_- */
+                 UsedParameter(p[_par_name("T23_1")], *this),
+                 UsedParameter(p[_par_name("T23_2")], *this),
+                 UsedParameter(p[_par_name("T23_3")], *this) }},
         _mB(BToDstar::mB),
         _mB2(power_of<2>(_mB)),
         _mV(BToDstar::mV),
@@ -197,27 +213,84 @@ namespace eos
     }
 
     double
-    BGL1997FormFactors<BToDstar>::t_1(const double & /*s*/) const
+    BGL1997FormFactors<BToDstar>::t_1(const double & s) const
     {
-        return 0.0;  //  TODO
+        // resonances for 1^-, which have overlap with the tensor current
+        const double blaschke = _z(s, 6.329 * 6.329) * _z(s, 6.910 * 6.910) * _z(s, 7.020 * 7.020);
+        const double phi      = _phi(s, _t_0, 24.0, 3, 3, 2, _chi_T_1m);
+        const double z        = _z(s, _t_0);
+        const double series   = _a_T1[0] + _a_T1[1] * z + _a_T1[2] * z * z + _a_T1[3] * z * z * z;
+
+        return series / phi / blaschke;
     }
 
     double
-    BGL1997FormFactors<BToDstar>::t_2(const double & /*s*/) const
+    BGL1997FormFactors<BToDstar>::a_T2_0() const
     {
-        return 0.0;  //  TODO
+        const double x_T2 = _z(0.0, 6.739 * 6.739) * _z(0.0, 6.750 * 6.750) * _z(0.0, 7.145 * 7.145) * _z(0.0, 7.150 * 7.150) * _phi(0.0, _t_0, 24.0 / (_t_p * _t_m), 1, 1, 2, _chi_T_1p);
+        const double x_T1 = _z(0.0, 6.329 * 6.329) * _z(0.0, 6.910 * 6.910) * _z(0.0, 7.020 * 7.020)                          * _phi(0.0, _t_0, 24.0,                 3, 3, 2, _chi_T_1m);
+
+        const double z = _z(0.0, _t_0);
+        std::array<double, 4> an, zn;
+        zn[0] = 1.0;
+        an[0]  = x_T2 * this->_a_T1[0] * zn[0];
+        for (unsigned i = 1 ; i < an.size() ; ++i)
+        {
+            an[i] = x_T2 * this->_a_T1[i] - x_T1 * this->_a_T2[i - 1];
+            zn[i] = z * zn[i - 1];
+        }
+        return std::inner_product(an.begin(), an.end(), zn.begin(), 0.0) / (zn[0] * x_T1);
     }
 
     double
-    BGL1997FormFactors<BToDstar>::t_3(const double & /*s*/) const
+    BGL1997FormFactors<BToDstar>::t_2(const double & s) const
     {
-        return 0.0;  //  TODO
+        // resonances for 1^+, which have overlap with the tensor current
+        const double blaschke = _z(s, 6.739 * 6.739) * _z(s, 6.750 * 6.750) * _z(s, 7.145 * 7.145) * _z(s, 7.150 * 7.150);
+        const double phi      = _phi(s, _t_0, 24.0 / (_t_p * _t_m), 1, 1, 2, _chi_T_1p);
+        const double z        = _z(s, _t_0);
+        const double series   = a_T2_0() + _a_T2[0] * z + _a_T2[1] * z * z + _a_T2[2] * z * z * z;
+
+        return series / phi / blaschke;
     }
 
     double
-    BGL1997FormFactors<BToDstar>::t_23(const double & /*s*/) const
+    BGL1997FormFactors<BToDstar>::t_3(const double & s) const
     {
-        return 0.0;  //  TODO
+        return (
+                (_mB2 - _mV2) * (_mB2 + 3.0 * _mV2 - s) * this->t_2(s)
+                - 8.0 * _mB * _mV2 * (_mB - _mV) * this->t_23(s)
+        ) / eos::lambda(_mB2, _mV2, s);
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::a_T23_0() const
+    {
+        const double x_T2  = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 24.0 / (_t_p * _t_m),       1, 1, 2, _chi_T_1p);
+        const double x_T23 = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 3.0 * _t_p / (_mB2 * _mV2), 1, 1, 1, _chi_T_1p)
+                           / (8.0 * _mB * _mV2) * ((_mB + _mV) * (_mB2 + 3.0 * _mV2 - _t_m));
+        const double z = _z(_t_m, _t_0);
+        std::array<double, 4> an, zn;
+        zn[0] = 1.0;
+        an[0]  = x_T23 * this->a_T2_0() * zn[0]; // a_T2[0] is the linear coefficient; we need the constant part
+        for (unsigned i = 1 ; i < an.size() ; ++i)
+        {
+            an[i] = x_T23 * this->_a_T2[i - 1] - x_T2 * this->_a_T23[i - 1];
+            zn[i] = z * zn[i - 1];
+        }
+        return std::inner_product(an.begin(), an.end(), zn.begin(), 0.0) / (zn[0] * x_T2);
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::t_23(const double & s) const
+    {
+        // resonances for 1^+, which have overlap with the tensor current
+        const double blaschke = _z(s, 6.739 * 6.739) * _z(s, 6.750 * 6.750) * _z(s, 7.145 * 7.145) * _z(s, 7.150 * 7.150);
+        const double phi      = _phi(s, _t_0, 3.0 * _t_p / (_mB2 * _mV2), 1.0, 1.0, 1.0, _chi_T_1p);
+        const double z        = _z(s, _t_0);
+        const double series   = a_T23_0() + _a_T23[0] * z + _a_T23[1] * z * z + _a_T23[2] * z * z * z;
+
+        return series / phi / blaschke;
     }
 
     double
@@ -326,9 +399,15 @@ namespace eos
     }
 
     double
-    BGL1997FormFactors<BToD>::f_t(const double & /*s*/) const
+    BGL1997FormFactors<BToD>::f_t(const double & s) const
     {
-        return 0.0; //  TODO
+        // resonances for 1^-
+        const double blaschke = _z(s, 6.329 * 6.329) * _z(s, 6.910 * 6.910) * _z(s, 7.020 * 7.020);
+        const double phi      = _phi(s, _t_0, 48.0 * _t_p, 3, 3, 1, _chi_T_1m);
+        const double z        = _z(s, _t_0);
+        const double series   = _a_f_t[0] + _a_f_t[1] * z + _a_f_t[2] * z * z + _a_f_t[3] * z * z * z;
+
+        return series / phi / blaschke;
     }
 
     double
