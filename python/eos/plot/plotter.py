@@ -1961,7 +1961,12 @@ class Plotter:
 
 
     def plot(self):
-        """Produces the plot"""
+        """Produces the plot
+
+        :returns:
+            - fig (:py:class:`matplotlib.figure.Figure`) - the created figure
+            - ax (:py:class:`matplotlib.axes.Axes`) - the created axes
+        """
         self.setup_plot()
         self.plot_contents()
 
@@ -1969,6 +1974,8 @@ class Plotter:
 
         if self.output:
             plt.savefig(self.output, bbox_inches='tight', dpi=300)
+
+        return self.fig, self.ax
 
 
 def variable_to_latex(variable):
