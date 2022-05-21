@@ -912,6 +912,15 @@ namespace eos
                 return result;
             }
 
+            // tensor current
+            virtual double f_long12_t(const double &) const { throw InternalError("HQETFormFactors::f_long12_t(): not implemented"); }
+            virtual double f_perp12_t(const double &) const { throw InternalError("HQETFormFactors::f_perp12_t(): not implemented"); }
+            virtual double f_perp32_t(const double &) const { throw InternalError("HQETFormFactors::f_perp32_t(): not implemented"); }
+            virtual double f_long12_t5(const double &) const { throw InternalError("HQETFormFactors::f_long12_t5(): not implemented"); }
+            virtual double f_perp12_t5(const double &) const { throw InternalError("HQETFormFactors::f_perp12_t5(): not implemented"); }
+            virtual double f_perp32_t5(const double &) const { throw InternalError("HQETFormFactors::f_perp32_t5(): not implemented"); }
+
+
             virtual Diagnostics diagnostics() const
             {
                 Diagnostics results;
