@@ -122,15 +122,23 @@ namespace eos
         public:
             virtual ~FormFactors();
 
-            virtual double f_time12_v(const double & s) const = 0;
-            virtual double f_long12_v(const double & s) const = 0;
+            virtual double f_time12_v(const double & s) const = 0; // a.k.a zero
+            virtual double f_long12_v(const double & s) const = 0; // a.k.a plus
             virtual double f_perp12_v(const double & s) const = 0;
             virtual double f_perp32_v(const double & s) const = 0;
 
-            virtual double f_time12_a(const double & s) const = 0;
-            virtual double f_long12_a(const double & s) const = 0;
+            virtual double f_time12_a(const double & s) const = 0; // a.k.a zero
+            virtual double f_long12_a(const double & s) const = 0; // a.k.a plus
             virtual double f_perp12_a(const double & s) const = 0;
             virtual double f_perp32_a(const double & s) const = 0;
+
+            virtual double f_long12_t(const double & s) const = 0; // a.k.a plus
+            virtual double f_perp12_t(const double & s) const = 0;
+            virtual double f_perp32_t(const double & s) const = 0;
+
+            virtual double f_long12_t5(const double & s) const = 0; // a.k.a plus
+            virtual double f_perp12_t5(const double & s) const = 0;
+            virtual double f_perp32_t5(const double & s) const = 0;
 
             virtual Diagnostics diagnostics() const;
     };
