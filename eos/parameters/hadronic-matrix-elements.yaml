@@ -3000,6 +3000,51 @@ groups:
           unit:     '1'
   # }}}
 
+  # Dispersive bounds in b -> s currents
+  # {{{
+  - title: 'Dispersive bounds in the OPE for b -> s currents'
+    description: ''
+    parameters:
+      # [BFW:2010A] using a reference masse mb = 4.2 GeV
+      'b->s::chiOPE[0^+_V]' :
+          central:  1.42e-02
+          min:      1.42e-02
+          max:      1.42e-02
+          latex:    '$\chi_V^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->s::chiOPE[1^-_V]' :
+          central:  6.80e-04
+          min:      6.80e-04
+          max:      6.80e-04
+          latex:    '$\chi_V^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->s::chiOPE[0^-_A]' :
+          central:  1.57e-02
+          min:      1.57e-02
+          max:      1.57e-02
+          latex:    '$\chi_A^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->s::chiOPE[1^+_A]' :
+          central:  6.40e-04
+          min:      6.40e-04
+          max:      6.40e-04
+          latex:    '$\chi_A^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      # Mind the factor of 1/4 due to the definition of the current
+      'b->s::chiOPE[1^-_T]' :
+          central:  4.55e-04
+          min:      4.55e-04
+          max:      4.55e-04
+          latex:    '$\chi_T^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->s::chiOPE[1^+_T5]' :
+          central:  4.24e-04
+          min:      4.24e-04
+          max:      4.24e-04
+          latex:    '$\chi_{T_5}^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+  # }}}
+
   # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
   # {{{
   - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
@@ -4102,6 +4147,24 @@ groups:
           max:     +1.05
           latex:    '$\rho_{3b}$'
           comments: "Slope of the NLO IW function, [-1.0, 1.0]"
+  # }}}
+
+  # Parameters in 1/2^+ -> 3/2^- Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      'Lambda_b->Lambda(1520)::a^(%1%,%2%)_%3%@ABR2022' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%3%^{%1%,%2%,\Lambda_b \to \Lambda(1520) ,\mathrm{ABR2022}}$'
+          matrix:
+            - ["t12", "012", "perp12", "perp32"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3, 4]
+          comments: ''
   # }}}
 
   #

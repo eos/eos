@@ -122,6 +122,37 @@ namespace eos
         static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
         static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
     };
+
+    struct LambdaBToLambda1520 {
+        static constexpr const char * label = "Lambda_b->Lambda(1520)";
+        // initial state mass
+        static constexpr double m1 = 5.620;
+        // final state mass
+        static constexpr double m2 = 1.520;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // scalar pair production threshold: B + K
+        static constexpr double tp = (5.279 + 0.494) * (5.279 + 0.494);
+        // // vector pair production threshold: B + K*
+        // static constexpr double tpv = (5.279 + 0.896) * (5.279 + 0.896);
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) = - z(tm, t0)
+        static constexpr double t0 = 9.865;
+        // first resonances sorted by spin/parity
+        static constexpr double mR2_0m = 5.367 * 5.367;
+        static constexpr double mR2_0p = 5.711 * 5.711;
+        static constexpr double mR2_1m = 5.416 * 5.416;
+        static constexpr double mR2_1p = 5.750 * 5.750;
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0m_a  = 1.57e-2;
+        static constexpr double chi_0p_v  = 1.42e-2;
+        static constexpr double chi_1m_v  = 1.20e-2 / (4.2 * 4.2);
+        static constexpr double chi_1p_a  = 1.13e-2 / (4.2 * 4.2);
+        static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
+        static constexpr double chi_1p_t5 = 0.748e-2 / (4.2 * 4.2);
+
+        static const SzegoPolynomial<5> orthonormal_polynomials;
+    };
 }
 
 #endif

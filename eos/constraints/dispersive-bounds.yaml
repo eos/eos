@@ -35,3 +35,63 @@ b->c::Bound[1^-]:
     # same relative uncertainty as for 1^+, cf. [BG:2016A], eq. (2.8), p.5
     uncertainty: 0.0093549
 # }}}
+
+###########################
+# b -> s unitarity bounds #
+###########################
+# {{{
+Lambda_b->Lambda(1520)::Bound[0^+_V]:
+    type: UniformBound
+    observables:
+        - 'B_s0::Saturation[0^+_V]'
+        - 'Lambda_b->Lambda(1520)::Saturation[0^+_V]@ABR2022'
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    bound: 1.0
+    uncertainty: 0.1
+Lambda_b->Lambda(1520)::Bound[1^-_V]:
+    type: UniformBound
+    observables:
+        - 'B_s^*::Saturation[1^-_V]'
+        - 'Lambda_b->Lambda(1520)::Saturation[1^-_V]@ABR2022'
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    bound: 1.0
+    uncertainty: 0.1
+Lambda_b->Lambda(1520)::Bound[0^-_A]:
+    type: UniformBound
+    observables:
+        - 'B_s::Saturation[0^-_A]'
+        - 'Lambda_b->Lambda(1520)::Saturation[0^-_A]@ABR2022'
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    bound: 1.0
+    uncertainty: 0.1
+Lambda_b->Lambda(1520)::Bound[1^+_A]:
+    type: UniformBound
+    observables:
+        - 'B_s1::Saturation[1^+_A]'
+        - 'Lambda_b->Lambda(1520)::Saturation[1^+_A]@ABR2022'
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    bound: 1.0
+    uncertainty: 0.1
+Lambda_b->Lambda(1520)::Bound[1^-_T]:
+    type: UniformBound
+    observables:
+        - 'B_s^*::Saturation[1^-_T]'
+        - 'Lambda_b->Lambda(1520)::Saturation[1^-_T]@ABR2022'
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    bound: 1.0
+    uncertainty: 0.1
+Lambda_b->Lambda(1520)::Bound[1^+_T5]:
+    type: UniformBound
+    observables:
+        - 'B_s1::Saturation[1^+_T5]'
+        - 'Lambda_b->Lambda(1520)::Saturation[1^+_T5]@ABR2022'
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    bound: 1.0
+    uncertainty: 0.1
+# }}}
