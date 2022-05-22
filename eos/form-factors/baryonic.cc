@@ -20,6 +20,7 @@
 
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/baryonic-processes.hh>
+#include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/utils/destringify.hh>
 
@@ -243,6 +244,21 @@ namespace eos
     const constexpr double LambdaBToLambdaC2625::mR2_1m;
     const constexpr double LambdaBToLambdaC2625::mR2_1p;
 
+    /* Lambda_b -> Lambda(1520) */
+
+    const constexpr double LambdaBToLambda1520::tm;
+    const constexpr double LambdaBToLambda1520::tp;
+    // const constexpr double LambdaBToLambda1520::tpv;
+    const constexpr double LambdaBToLambda1520::mR2_0m;
+    const constexpr double LambdaBToLambda1520::mR2_0p;
+    const constexpr double LambdaBToLambda1520::mR2_1m;
+    const constexpr double LambdaBToLambda1520::mR2_1p;
+    const SzegoPolynomial<5> LambdaBToLambda1520::orthonormal_polynomials
+    {
+        3.42519, { 0.578049, -0.624505, 0.641153, -0.647652, 0.650567 }
+    };
+
+
     FormFactors<OneHalfPlusToThreeHalfMinus>::~FormFactors()
     {
     }
@@ -257,6 +273,7 @@ namespace eos
     FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors
     {
         { "Lambda_b->Lambda_c(2625)::HQET",          &HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>::make },
+        { "Lambda_b->Lambda(1520)::ABR2022",         &ABR2022FormFactors<LambdaBToLambda1520>::make },
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>
