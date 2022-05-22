@@ -27,6 +27,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -1414,6 +1415,88 @@ namespace eos
 
     // }}}
 
+    // 1/2^+ -> 3/2^-
+    // {{{
+
+    // Lambda_b -> Lambda(1520)
+    // {{{
+    ObservableGroup
+    make_lambdab_to_threehalf_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $\Lambda_b \to \Lambda^*$ transitions)",
+            R"(Pseudo observables representing the full basis of $\Lambda_b \to \Lambda^*$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_time12^V(q2)", R"(f_t^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_time12_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^V(q2)", R"(f_0^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^V(q2)", R"(f_\perp^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^V(q2)", R"(f_{\perp'}^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_time12^A(q2)", R"(f_t^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_time12_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^A(q2)", R"(f_0^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^A(q2)", R"(f_\perp^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^A(q2)", R"(f_{\perp'}^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^T(q2)", R"(f_0^{T,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^T(q2)", R"(f_\perp^{T,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^T(q2)", R"(f_{\perp'}^{T,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^T5(q2)", R"(f_0^{T5,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_t5, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^T5(q2)", R"(f_\perp^{T5,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_t5, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^T5(q2)", R"(f_{\perp'}^{T5,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_t5, std::make_tuple("q2")),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[0^+_V]@ABR2022", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_0p_v),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^-_V]@ABR2022", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1m_v),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[0^-_A]@ABR2022", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_0m_a),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^+_A]@ABR2022", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1p_a),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^-_T]@ABR2022", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1m_t),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^+_T5]@ABR2022", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1p_t5),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
+
     // unitarity bounds
     // {{{
 
@@ -1471,6 +1554,43 @@ namespace eos
                 make_observable("b->c::Bound[1^-]@BGL", R"(B^{b\to c}_{1^-})",
                         Unit::None(),
                         &BGLUnitarityBounds::bound_1m),
+
+                // cf. [BMRvD:2021A] eq. (31-33)
+                make_expression_observable("B_s0::Saturation[0^+_V]", R"(\textrm{Saturation}_{B_{s,0}}[0^+_V])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s,0>>^2 / <<mass::B_s,0>>^2 / <<b->s::chiOPE[0^+_V]>>
+                        )"),
+
+                make_expression_observable("B_s^*::Saturation[1^-_V]", R"(\textrm{Saturation}_{B_s^*}[1^-_V])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s^*>>^2 / <<mass::B_s^*>>^4 / <<b->s::chiOPE[1^-_V]>>
+                        )"),
+
+                make_expression_observable("B_s::Saturation[0^-_A]", R"(\textrm{Saturation}_{B_s^0}[0^-_A])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s>>^2 / <<mass::B_s>>^2 / <<b->s::chiOPE[0^-_A]>>
+                        )"),
+
+                make_expression_observable("B_s1::Saturation[1^+_A]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_A])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s,1>>^2 / <<mass::B_s,1>>^4 / <<b->s::chiOPE[1^+_A]>>
+                        )"),
+
+                make_expression_observable("B_s^*::Saturation[1^-_T]", R"(\textrm{Saturation}_{B_s^*}[1^-_T])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s^*,T>>^2 / <<mass::B_s^*>>^4 / <<b->s::chiOPE[1^-_T]>>
+                        )"),
+
+                make_expression_observable("B_s1::Saturation[1^+_T5]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5}])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s,1^T>>^2 / <<mass::B_s,1>>^4 / <<b->s::chiOPE[1^+_T5]>>
+                        )"),
             }
         );
 
@@ -1511,6 +1631,9 @@ namespace eos
                 // Lb -> 1/2^+
                 make_lambdab_to_lambda_form_factors_group(),
                 make_lambdab_to_lambdac_form_factors_group(),
+
+                // Lb -> 3/2^-
+                make_lambdab_to_threehalf_form_factors_group(),
 
                 // unitarity bounds
                 make_unitarity_bounds_group(),
