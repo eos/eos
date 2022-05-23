@@ -122,15 +122,14 @@ namespace eos
         {
         case 's':
             // These values are computed using t_0 = 4 GeV^2, m_Bs = 5.366 GeV and m_phi = 1.020 GeV
-            return std::make_shared<SzegoPolynomial<5u>>(2.183089972,
-                        std::array<double, 5u>{0.8129215018, -0.8432369157, 0.8499839788, -0.8521601702, 0.8531112932});
+            return std::make_shared<SzegoPolynomial<5u>>(2.18309,
+                        std::array<double, 5u>{0.812922, -0.843237, 0.849984, -0.85216,  0.853111});
             break;
         default: // opt_q = u, d
             // These values are computed using t_0 = 4 GeV^2, m_B = 5.279 GeV and m_K* = 0.896 GeV
-            return std::make_shared<SzegoPolynomial<5u>>(2.280936266,
-                        std::array<double, 5u>{0.7968910836, -0.8291134667, 0.836537321, -0.8389470208, 0.8399975032});
+            return std::make_shared<SzegoPolynomial<5u>>(2.27631,
+                        std::array<double, 5u>{.79766,  -0.829794, 0.837185, -0.839583, 0.840629});
             break;
         }
     }
-
 }

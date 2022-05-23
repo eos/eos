@@ -127,7 +127,7 @@ class BsToPhiDileptonGvDV2020Test :
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.893601e-11, eps);
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  2.518067e-11, eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right),  1.052884e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   4.419875e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   4.419939e-12, eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   8.057138e-11, eps);
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.210007e-10, eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  1.030067e-10, eps);

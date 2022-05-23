@@ -97,26 +97,25 @@ class NonlocalFormFactorGvDV2020Test :
                 };
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp(16.0)), -0.761178,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_perp(16.0)), -1.025598,   eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_para(16.0)), -1.467510,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_para(16.0)), -1.877480,   eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_long(16.0)),  2.278766,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_long(16.0)),  1.340658,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp(16.0)), -0.765303,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_perp(16.0)), -1.031884,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_para(16.0)), -1.475739,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_para(16.0)), -1.888891,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_long(16.0)),  2.291979,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_long(16.0)),  1.349007,   eps);
 
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp_residue_jpsi()),  -30.9653,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_perp_residue_jpsi()),  -36.3466,   eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp_residue_psi2s()),   3.4865,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_perp_residue_psi2s()),   4.05179,  eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_para_residue_jpsi()),  -63.2528,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_para_residue_jpsi()),  -68.634,    eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_para_residue_psi2s()),   6.87827,  eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_para_residue_psi2s()),   7.44356,  eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_long_residue_jpsi()),   29.8167,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_long_residue_jpsi()),   31.4962,   eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_long_residue_psi2s()),  -6.0986,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_long_residue_psi2s()),  -6.43428,  eps);
-
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp_residue_jpsi()),  -31.142,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_perp_residue_jpsi()),  -36.5503,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp_residue_psi2s()), 3.50665,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_perp_residue_psi2s()), 4.0751,    eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_para_residue_jpsi()),  -63.5918,  eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_para_residue_jpsi()),  -69.0001,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_para_residue_psi2s()), 6.91734,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_para_residue_psi2s()), 7.48579,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_long_residue_jpsi()),  29.9732,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_long_residue_jpsi()),  31.6611,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_long_residue_psi2s()), -6.13303,  eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_long_residue_psi2s()), -6.47059,  eps);
             }
         }
 } nonlocal_formfactor_gvdv2020_test;

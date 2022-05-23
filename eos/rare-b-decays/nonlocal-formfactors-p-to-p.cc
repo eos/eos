@@ -214,8 +214,8 @@ namespace eos
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    polynomials(2.487638017,
-                                {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436, -0.8112876795})
+                    polynomials(2.48247,
+                                {0.762292, -0.798241, 0.807153, -0.810097, 0.811376, -0.812046})
                 {
                     this->uses(*form_factors);
                 }
@@ -598,8 +598,8 @@ namespace eos
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    orthonormal_polynomials(2.487638017,
-                        {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436})
+                    orthonormal_polynomials(2.48247,
+                                            {0.762292, -0.798241, 0.807153, -0.810097, 0.811376})
                 {
                     this->uses(*form_factors);
                 }
@@ -1016,8 +1016,8 @@ namespace eos
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    orthonormal_polynomials(2.487638017,
-                        {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436, -0.8112876795})
+                    orthonormal_polynomials(2.48247,
+                                {0.762292, -0.798241, 0.807153, -0.810097, 0.811376, -0.812046})
                 {
                     this->uses(*form_factors);
                 }

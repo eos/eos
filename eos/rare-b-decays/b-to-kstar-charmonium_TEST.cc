@@ -87,14 +87,13 @@ class BToKstarCharmoniumGvDV2020Test :
 
             BToKstarCharmonium c(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  89.546064, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  90.39310588, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(c.S_1c_LHCb(),  0.0168472445, eps);
-            TEST_CHECK_RELATIVE_ERROR(c.S_1s_LHCb(),  0.7373645665, eps);
-            TEST_CHECK_RELATIVE_ERROR(c.S_3_LHCb(),   0.2111739095, eps);
-            TEST_CHECK_RELATIVE_ERROR(c.S_4_LHCb(),   0.0485842716, eps);
-            TEST_CHECK_RELATIVE_ERROR(c.S_8_LHCb(),  -0.0040291232, eps);
-            TEST_CHECK_RELATIVE_ERROR(c.S_9_LHCb(),   0.0117985619, eps);
-
+            TEST_CHECK_RELATIVE_ERROR(c.S_1c_LHCb(), 0.0168648,    eps);
+            TEST_CHECK_RELATIVE_ERROR(c.S_1s_LHCb(), 0.737351,     eps);
+            TEST_CHECK_RELATIVE_ERROR(c.S_3_LHCb(),  0.212483,     eps);
+            TEST_CHECK_RELATIVE_ERROR(c.S_4_LHCb(),  0.0484953,    eps);
+            TEST_CHECK_RELATIVE_ERROR(c.S_8_LHCb(),  -0.00403161,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.S_9_LHCb(),  0.011769,     eps);
         }
 } b_to_kstar_charmonium_GvDV2020_test;
