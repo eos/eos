@@ -940,7 +940,7 @@ namespace eos
                 const LagrangePolynomial<interpolation_order> lagrange;
 
                 // Orthogonal polynomials on an arc of the unit circle used for the computation of dispersive bounds
-                const SzegoPolynomial<interpolation_order> orthonormal_polynomials;
+                std::shared_ptr<SzegoPolynomial<5u>> orthonormal_polynomials;
 
                 std::string _final_state() const
                 {
@@ -1023,9 +1023,8 @@ namespace eos
                               eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())}),
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
-                    // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    orthonormal_polynomials(2.487638017,
-                        {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436})
+                    // the masses are set to mB(s) = 5.279 (5.366) and mKst(phi) = 0.896 (1.02) (same values as for local form-factors)
+                    orthonormal_polynomials(PolynomialsFactory::create(opt_q.value()))
                 {
                     this->uses(*form_factors);
                 }
@@ -1435,7 +1434,7 @@ namespace eos
                         gsl_vector_set(dL_imag_part, i, imag(dL[i]));
                     }
 
-                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
+                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials->coefficient_matrix();
 
                     // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
                     gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);
@@ -1467,7 +1466,7 @@ namespace eos
                         gsl_vector_set(dL_imag_part, i, imag(dL[i]));
                     }
 
-                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
+                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials->coefficient_matrix();
 
                     // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
                     gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);
@@ -1499,7 +1498,7 @@ namespace eos
                         gsl_vector_set(dL_imag_part, i, imag(dL[i]));
                     }
 
-                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
+                    const gsl_matrix * coefficient_matrix = orthonormal_polynomials->coefficient_matrix();
 
                     // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
                     gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);

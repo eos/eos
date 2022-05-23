@@ -113,26 +113,20 @@ class BToKstarDileptonGvDV2020Test :
             BToKstarDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.37402e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.96243e-11, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.46919e-12, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.74463e-12, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   5.67827e-12, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   7.31160e-11, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.07717e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  9.27529e-11, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.61881e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.63600e-11, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  6.32784e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  7.44143e-11, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45112e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.79261e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.37556e-10,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.97866e-11,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.31528e-12,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.90684e-12,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   5.95711e-12,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   7.3417e-11,   eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.07997e-10,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  9.3054e-11,   eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.60422e-11,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.65281e-11,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  6.31325e-11,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  7.42463e-11,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45112e-10,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.79261e-11,  eps);
        }
     }
 } b_to_kstar_dilepton_GvDV2020_test;
@@ -240,14 +234,14 @@ class BToKstarDileptonJavierTest :
 
             BToKstarDilepton c(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  2.17471e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1c(q2),  1.35530e-19,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  7.24905e-21,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2c(q2), -1.35530e-19,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -5.82749e-21,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_4(q2),   3.70203e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -4.24826e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -2.23057e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  2.15934e-20, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1c(q2),  1.35573e-19, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  7.19779e-21, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2c(q2), -1.35573e-19, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -5.80562e-21, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_4(q2),   3.69172e-20, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -4.23490e-20, eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -2.21942e-20, eps);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_6c(q2),  0.0,  1e-20);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_7(q2),   0.0,  1e-20);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_8(q2),   0.0,  1e-20);

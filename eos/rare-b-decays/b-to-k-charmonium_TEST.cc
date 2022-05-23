@@ -48,7 +48,7 @@ class BToKCharmoniumGvDV2020Test :
 
             BToKCharmonium c(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  109982.6197301, 1e-5);
+            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  111261.941431, 1e-5);
 
         }
 } b_to_k_charmonium_GvDV2020_test;
