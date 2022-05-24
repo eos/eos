@@ -1413,6 +1413,14 @@ M:2006A:
     id: oai:arXiv.org:hep-ph/0609232
   inspire-id: Misiak:2006zs
   title: Estimate of $\mathcal{B}(\bar B \to X_s \gamma)$ at $\mathcal{O}(\alpha_s^2)$
+MR:2021A:
+  authors: Meinel, S. and Rendon, G.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2107.13140
+  inspire-id: Meinel:2021mdj
+  title: $\Lambda_c\to\Lambda^*(1520)$ form factors from lattice QCD and improved analysis of
+    the $\Lambda_b\to\Lambda^*(1520)$ and $\Lambda_b\to\Lambda_c^*(2595,2625)$ form factors
 MvD:2016A:
   authors: Meinel, Stefan and van Dyk, Danny
   eprint:
