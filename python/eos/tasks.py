@@ -23,6 +23,8 @@ import logging
 import numpy as _np
 import os
 import pypmc
+import scipy
+import sys
 
 from .ipython import __ipython__
 
@@ -77,6 +79,105 @@ def task(output, mode=lambda **kwargs: 'w'):
                     return result
         return task_wrapper
     return _task
+
+
+@task('{posterior}/mode-{label}')
+def find_mode(analysis_file, posterior, base_directory='./', optimizations=3, start_point=None, chain=None, seed=None, label='default'):
+    '''
+    Finds the mode of the named posterior.
+
+    The optimization process can be initialized either with a random point,
+    a provided parameter point, or by extracting the point with the largest posterior
+    from among previously obtained MCMC samples. The optimization can be iterated to
+    increase the accuracy of the result.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior PDF from which to draw the samples.
+    :type posterior: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param optimizations: The number of calls to the optimization algorithm.
+    :type optimizations: int, optional
+    :param start_point: If provided, the optimization will start at this point.
+    :type start_point: `numpy.ndarray`, optional
+    :param chain: If provided, the optimization will start at the point with the largest posterior of previously computed MCMC samples.
+        The samples are expected to be stored in the `mcmc-XXXX` subdirectories of the `base_directory`, where 'XXXX' is the provided int.
+    :type chain: int, optional
+    :param seed: If provided, the optimization will start from a random point and the random number generator will be seeded with this value.
+    :type seed: int, optional
+    '''
+    if optimizations < 1:
+        raise ValueError('The number of optimizations should be larger than zero.')
+
+    if not seed is None and not start_point is None:
+        raise ValueError('The arguments seed and start_point are mutually exclusive')
+
+    if not seed is None and not chain is None:
+        raise ValueError('The arguments seed and chain are mutually exclusive')
+
+    if not chain is None and not start_point is None:
+        raise ValueError('The arguments chain and start_point are mutually exclusive')
+
+    if type(analysis_file) is not eos.AnalysisFile:
+        _analysis_file = eos.AnalysisFile(analysis_file)
+    else:
+        _analysis_file = analysis_file
+    analysis = _analysis_file.analysis(posterior)
+    min_chi2 = sys.float_info.max
+    gof = None
+    bfp = None
+
+    eos.info(f'Starting minimization in {optimizations} points')
+
+    if not start_point is None:
+        _start_point = _np.array(start_point)
+        eos.info('Starting optimization from user-provided point')
+
+        _bfp = analysis.optimize(start_point=_start_point)
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
+        _chi2 = _gof.total_chi_square()
+    elif not chain is None:
+        eos.info('Initializing starting point from MCMC data file')
+        _chain = eos.data.MarkovChain(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'))
+        idx_mode = _np.argmax(_chain.weights)
+        for p, v in zip(analysis.varied_parameters, _chain.samples[idx_mode]):
+            p.set(v)
+
+        _bfp = analysis.optimize()
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
+        _chi2 = _gof.total_chi_square()
+    else:
+        eos.info('Starting optimization from a random point')
+        if seed is None:
+            seed = 17
+        _bfp = analysis.optimize(start_point='random', rng=_np.random.mtrand.RandomState(seed))
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
+        _chi2 = _gof.total_chi_square()
+
+    for i in range(optimizations - 1):
+        starting_point = [float(p) for p in analysis.varied_parameters]
+        _bfp = analysis.optimize(start_point = starting_point)
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
+        _chi2 = _gof.total_chi_square()
+        if _chi2 < min_chi2:
+            gof = _gof
+            bfp = _bfp
+            min_chi2 = _chi2
+
+    eos.info(f'Minimization finished, best point is:')
+    for p, v in zip(analysis.varied_parameters, _bfp.point):
+        eos.info('  - {} -> {}'.format(p.name(), v))
+    eos.info('total chi^2 = {}'.format(min_chi2))
+    pvalue = (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))
+    eos.info('p value = {:.1f}%'.format(100 * pvalue))
+    eos.info('individual test statistics:')
+    for n, e in gof:
+        eos.info('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
+
+    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue)
+
+    return (bfp, gof)
 
 
 @task('{posterior}/mcmc-{chain:04}')
