@@ -13,7 +13,7 @@ How Do I ...
 ... use EOS within a virtual Python environment?
 ================================================
 
-We highly recommend to use EOS within a virtual Python environment. To do so, you
+We highly recommend to use EOS within a **virtual Python environment**. To do so, you
 need to install the ``virtualenv`` package, and then create a new virtual environment:
 
 ::
@@ -22,25 +22,39 @@ need to install the ``virtualenv`` package, and then create a new virtual enviro
     virtualenv --python=python3 ~/eos
 
 
-The new virtual environment will now be activated.
+The new virtual environment will now be **activated**.
+That means, the `python` (and `pip`) command will now execute the local binary instead of a system-wide one.
 At any later point, you can (re-)activate the virtual environment by running the following command:
 
 ::
 
-    ~/eos/bin/activate
+    source ~/eos/bin/activate
 
-After activation, you can use install a binary distribution of EOS using ``pip3 install eoshep``.
+
+While activated, you can **install** a binary distribution of EOS using ``pip install eoshep``.
 If you plan to install EOS from source, as discussed in the :ref:`installation section<installation-from-source>`, you must set the prefix
 to match the path to your virtual environment, here: ``~/eos``.
 
-To deactivate the virtual environment, run
+You most likely want to install **jupyter and notebook**.
+To be able to access the virtual environment from the notebook interface, you also need to *install it* (details `here <https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments>`_).
+While activated, execute the following:
+
+::
+
+    pip install jupyter notebook
+    python -m ipykernel install --user --name venv-eos --display-name "python3 with EOS"
+
+
+You can now **use jupyter** with ``python -m jupyter notebook`` and choose *python3 with EOS* as a kernel.
+
+To **deactivate** the virtual environment, run
 
 ::
 
     deactivate
 
 
-Of course, you can choose a different directory than ``~/eos`` to host your virtual environment. Please see
+Of course, you can choose a **different directory** than ``~/eos`` to host your virtual environment. Please see
 the ``virtualenv`` `documentation <https://virtualenv.pypa.io/en/latest/>`_ for more information.
 
 
