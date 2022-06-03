@@ -120,6 +120,13 @@ namespace eos
                 double Xbar_A(const double & omega, const double & xi) const;
                 double Ybar_A(const double & omega, const double & xi) const;
 
+                /*!
+                *  B to gamma l nu
+                */
+                double L0() const;
+                double L0inc(const double & Omega) const;
+                double Binc(const double & Omega, const double & sigma) const;
+
                 /* Internal diagnostics */
                 Diagnostics diagnostics() const;
         };

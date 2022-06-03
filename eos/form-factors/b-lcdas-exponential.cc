@@ -29,6 +29,12 @@
 #include <eos/utils/qualified-name.hh>
 
 #include <gsl/gsl_sf_expint.h>
+#include <stdexcept>
+class NotImplemented : public std::logic_error
+{
+public:
+    NotImplemented() : std::logic_error("Function not yet implemented") { };
+};
 
 namespace eos
 {
@@ -449,6 +455,21 @@ namespace eos
             return -lambda_E_2 / (24.0 * omega_0_3) * xi * std::exp(-(xi + omega) / omega_0)
                 * (-3.0 * xi + 13.0 * omega + 6.0 * omega_0 + 3.0 * std::exp(omega / omega_0) * (xi - 2.0 * omega_0));
         }
+
+        inline double L0() const
+        {
+            return lambda_B_inv();
+        }
+
+        inline double L0inc(const double & Omega) const
+        {
+            throw NotImplemented();
+        }
+
+        inline double Binc(const double & Omega, const double & sigma)
+        {
+            throw NotImplemented();
+        }
     };
 
 namespace b_lcdas
@@ -656,6 +677,24 @@ namespace b_lcdas
     Exponential::Ybar_A(const double & omega, const double & xi) const
     {
         return _imp->Ybar_A(omega, xi);
+    }
+
+    double
+    Exponential::L0() const
+    {
+        return _imp->L0();
+    }
+
+    double
+    Exponential::L0inc(const double & Omega) const
+    {
+        return _imp->L0inc(Omega);
+    }
+
+    double
+    Exponential::Binc(const double & Omega, const double & sigma) const
+    {
+        return _imp->Binc(Omega, sigma);
     }
 }
 }

@@ -1,9 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Danny van Dyk
- * Copyright (c) 2018 Nico Gubernari
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,32 +23,27 @@
 
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
-#include <eos/utils/options.hh>
+// #include <eos/utils/options.hh>
 
 namespace eos
 {
     /*!
-     * Decomposition of B-meson to vacuum matrix elements of light-cone
-     * dominated operators.
-     *
-     * The abtract base class defines the interface used in sum rules.
-     * TODO: Add interface for B to gamma l nu
-     * TODO: Default implementation of the methods that throws NotImplementedError?
-     *
+     * Abtract base class
      */
     class BMesonLCDAs:
         public ParameterUser
     {
         public:
-            // Can this work...? The logic should be implemented in the observables.
-            // static std::shared_ptr<BMesonLCDAs> make(const std::string & model, const Parameters & parameters, const Options & options) {
-            //     if (model == "exp") {
-            //         return std::make_shared<b_lcdas::Exponential>(b_lcdas::Exponential(parameters, options));
-            //     }
-            //     else {
-            //         throw std::logic_error("No other model than 'exp' implemented (WIP)");
-            //     }
-            // };
+            /*!
+             * Quantities entering B to gamma l nu
+             *
+             * L0                 = int[dw, 0, infty] 1/w phi+(w)
+             * L0inc(Omega)       = int[dw, 0, Omega] 1/w phi+(w)
+             * Binc(Omega, sigma) = int[dw, 0, Omega] exp(-sigma w) phi+(w)
+             */
+            virtual double L0() const = 0;
+            virtual double L0inc(const double & Omega) const = 0;
+            virtual double Binc(const double & Omega, const double & sigma) const = 0;
 
             /*!
              * Leading twist two-particle LCDAs
