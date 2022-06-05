@@ -48,6 +48,17 @@ namespace eos
         UsedParameter lambda_E2;
         UsedParameter lambda_H2;
 
+        UsedParameter w0;
+        UsedParameter a0;
+        UsedParameter a1;
+        UsedParameter a2;
+        UsedParameter a3;
+        UsedParameter a4;
+        UsedParameter a5;
+        UsedParameter a6;
+        UsedParameter a7;
+        UsedParameter a8;
+
         SwitchOption opt_gminus;
 
         double switch_gminus;
@@ -64,6 +75,16 @@ namespace eos
         }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            w0(p[parameter("omega0").str()], u),
+            a0(p[parameter("a0").str()], u),
+            a1(p[parameter("a1").str()], u),
+            a2(p[parameter("a2").str()], u),
+            a3(p[parameter("a3").str()], u),
+            a4(p[parameter("a4").str()], u),
+            a5(p[parameter("a5").str()], u),
+            a6(p[parameter("a6").str()], u),
+            a7(p[parameter("a7").str()], u),
+            a8(p[parameter("a8").str()], u),
             opt_q(o, "q", { "u", "d", "s" }, "u"),
             lambda_B_inv(p[parameter("1/lambda_B_p").str()], u),
             lambda_E2(p[parameter("lambda_E^2").str()], u),
@@ -77,9 +98,16 @@ namespace eos
             }
         }
 
+        // inline const std::array<const double, 9> get_a_vec()
+        // {
+        //     return std::array<const double, 9> {
+        //         a0, a1, a2, a3, a4, a5, a6, a7, a8
+        //     };
+        // }
+
         inline double L0() const
         {
-            return lambda_B_inv();
+            throw NotImplemented();
         }
 
         inline double L0inc(const double & Omega) const
