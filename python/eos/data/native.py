@@ -21,6 +21,58 @@ import yaml
 from scipy.special import erf
 from scipy.linalg import block_diag
 
+class Mode:
+    def __init__(self, path):
+        """ Read a posterior's (local) mode from a file.
+
+        :param path: Path to the storage location.
+        :type path: str
+        """
+        if not os.path.exists(path) or not os.path.isdir(path):
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+
+        f = os.path.join(path, 'description.yaml')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+
+        with open(f, 'r') as df:
+            description = yaml.load(df, Loader=yaml.SafeLoader)
+
+        if not description['type'] == 'Mode':
+            raise RuntimeError('Path {} not pointing to a Mode file'.format(path))
+
+        self.type = 'Mode'
+        self.varied_parameters = description['parameters']
+        self.mode = description['mode']
+        self.pvalue = description['pvalue']
+
+    @staticmethod
+    def create(path, parameters, mode, pvalue):
+        """ Write a new MarkovChain object to disk.
+
+        :param path: Path to the storage location, which will be created as a directory.
+        :type path: str
+        :param parameters: Parameter descriptions as a 1D array of shape (N, ).
+        :type parameters: list or iterable of eos.Parameter
+        :param mode: The mode to be stored.
+        :type mode: numpy.ndarray
+        """
+        description = {}
+        description['version'] = eos.__version__
+        description['type'] = 'Mode'
+        description['parameters'] = [{
+            'name': p.name(),
+            'min': p.min(),
+            'max': p.max()
+        } for p in parameters]
+        description['mode'] = mode.tolist()
+        description['pvalue'] = pvalue
+
+        os.makedirs(path, exist_ok=True)
+        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
+            yaml.dump(description, description_file, default_flow_style=False)
+
+
 class MarkovChain:
     def __init__(self, path):
         """ Read a MarkovChain object from disk.
