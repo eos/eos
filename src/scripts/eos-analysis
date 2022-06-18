@@ -257,28 +257,32 @@ The optimization process can be initialized either with a random point,
 a provided parameter point, or by extracting the point with the largest posterior
 from among previously obtained MCMC samples. The optimization can be iterated to
 increase the accuracy of the result. The output will be stored
-in EOS_BASE_DIRECTORY/posterior/mode.
+in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
 ''',
         help = 'Finds the mode of a named posterior.'
     )
     parser_find_mode.add_argument('posterior', metavar = 'POSTERIOR',
         help = 'The name of the posterior PDF that will be maximized.',
     )
-    parser_find_mode.add_argument('-p', '--starting-points',
+    parser_find_mode.add_argument('-o', '--optimizations',
         help = 'The number of calls to the optimization algorithm.',
-        dest = 'points', action = 'store', type = int, default = 3
+        dest = 'optimizations', action = 'store', type = int, default = 3
     )
-    parser_find_mode.add_argument('-i', '--init-from-file',
-        help = 'The name of an MCMC data file from which the maximization is started.',
-        dest = 'init_file', action = 'store', type = str, default = ''
+    parser_find_mode.add_argument('-c', '--from-mcmc',
+        help = 'The chain index of an MCMC data file from which the maximization is started.',
+        dest = 'chain', action = 'store', type = int, default = None
     )
-    parser_find_mode.add_argument('--from-point',
+    parser_find_mode.add_argument('-p', '--from-point',
         help = 'The point from which the minimization is started.',
-        dest = 'point', action = 'store', type = str, default = ''
+        dest = 'start_point', action = 'store', type = str, default = None
     )
-    parser_find_mode.add_argument('--use-random-seed',
+    parser_find_mode.add_argument('-s', '--use-random-seed',
         help = 'The seed used to generate the random starting point of the minimization.',
-        dest = 'seed', action = 'store', type = int
+        dest = 'seed', action = 'store', type = int, default = None
+    )
+    parser_find_mode.add_argument('-L', '--label',
+        help = 'The label used for the generated data file.',
+        dest = 'label', action = 'store', type = str, default = '-default'
     )
     parser_find_mode.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
@@ -455,86 +459,7 @@ class RNG:
 
 # Find mode
 def cmd_find_mode(args):
-    analysis_file = make_analysis_file(args)
-    analysis = analysis_file.analysis(args.posterior)
-    min_chi2 = sys.float_info.max
-    gof = None
-    bfp = None
-
-    if args.points < 1:
-        raise ValueError('The number of optimizations should be larger than zero.')
-    if args.point and args.init_file:
-        raise ValueError('The --from-point and --init-from-file options are mutually exclusive.')
-    if args.point and args.seed:
-        raise ValueError('The --from-point and --use-random-seed options are mutually exclusive.')
-    if args.seed and args.init_file:
-        raise ValueError('The --use-random-seed and --init-from-file options are mutually exclusive.')
-
-    info('Starting minimization in {} points'.format(args.points))
-    if args.point != '':
-        starting_point = args.point
-        starting_point.strip()
-        starting_point = starting_point.split()
-        starting_point = [float(x) for x in starting_point]
-
-        info('Starting minimization from point: {}'.format(starting_point))
-
-        _bfp = analysis.optimize(start_point = starting_point)
-        _gof = eos.GoodnessOfFit(analysis._log_posterior)
-        _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
-            gof = _gof
-            bfp = _bfp
-            min_chi2 = _chi2
-    elif args.init_file != '':
-        info('Initializing starting point from MCMC data file')
-        chain = eos.data.MarkovChain(os.path.join(args.base_directory, args.posterior, args.init_file))
-        idx_mode = _np.argmax(chain.weights)
-        for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
-            p.set(v)
-
-        _bfp = analysis.optimize()
-        _gof = eos.GoodnessOfFit(analysis._log_posterior)
-        _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
-            gof = _gof
-            bfp = _bfp
-            min_chi2 = _chi2
-    else:
-        info('Starting minimization from point a random point')
-        seed = 17
-        if args.seed:
-            seed = args.seed
-
-        _bfp = analysis.optimize(start_point='random', rng=_np.random.mtrand.RandomState(seed))
-        _gof = eos.GoodnessOfFit(analysis._log_posterior)
-        _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
-            gof = _gof
-            bfp = _bfp
-            min_chi2 = _chi2
-
-    for i in range(args.points - 1):
-        starting_point = [float(p) for p in analysis.varied_parameters]
-        _bfp = analysis.optimize(start_point = starting_point)
-        _gof = eos.GoodnessOfFit(analysis._log_posterior)
-        _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
-            gof = _gof
-            bfp = _bfp
-            min_chi2 = _chi2
-
-    print('best-fit point:')
-    for p, v in zip(analysis.varied_parameters, _bfp.point):
-        print('  - {} -> {}'.format(p.name(), v))
-    print('total chi^2 = {}'.format(min_chi2))
-    print('p value = {:.1f}%'.format(100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))))
-    print('individual test statistics:')
-    for n, e in gof:
-        print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
-    print('individual observable values:')
-    for o in _bfp.analysis._log_likelihood.observable_cache():
-        print('  - {n}[{k}];{o} -> {v:f}'.format(n=o.name(), k=o.kinematics(), o=o.options(), v=o.evaluate()))
+    return eos.tasks.find_mode(**args_to_dict(args))
 
 
 # Plot samples
