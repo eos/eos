@@ -1,5 +1,23 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
+/*
+ * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2022 Viktor Kuschke
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 
@@ -15,6 +33,7 @@ namespace eos
 
     namespace dilog_impl
     {
+        // for the dilogarithm the coefficients of f1 are : Zeta(2 - m) / m! starting from m = 0 to m = max_iterations
         std::array<complex<double>, max_iterations> series_coefficient_f1
         {{
             +1.6449340668482264365,       0.0,
@@ -46,7 +65,7 @@ namespace eos
              0.0,                        +2.2667187016766123705e-45
         }};
 
-        // used for |z| < 0.5 : series expansion of the polylogarithm for n = 2
+        // used for |z| < 0.5 : series expansion of the polylogarithm for n = 2 around the origin
         complex<double> f0(const complex<double> & z)
         {
             static const double eps = std::numeric_limits<double>::epsilon();
@@ -69,7 +88,7 @@ namespace eos
             return result;
         }
 
-        // used for |z| > 0.5 and |z| < 2.0
+        // used for |z| >= 0.5 and |z| <= 2.0
         complex<double> f1(const complex<double> & z)
         {
             complex<double> result(0.0, 0.0);
@@ -78,6 +97,11 @@ namespace eos
             complex<double> lnlnz = std::log(-lnz);
             complex<double> x(1.0, 0.0);
 
+            // + 0.0 and - 0.0 are processed differently by the std::log():
+            // if x > 0 std::log(- x + 0.0 i) = std::log(x) + i*Pi, that is the main branch of log,
+            // whereas std::log(- x - 0.0 i) = std::log(x) - i*Pi.
+            // If z > 1 real, lnz > 0 real and -lnz has imaginary part (- 0.0 i),
+            // therefore the imaginary part of lnlnz has to be changed from (- i*Pi) to (i*Pi) by complex conjugation.
             if ((lnz.imag() == 0.0) && (lnz.real() > 0.0))
                 lnlnz = std::conj(lnlnz);
 
@@ -91,12 +115,14 @@ namespace eos
             return result;
         }
 
+        // used for |z| > 2.0
         complex<double> g(const complex<double> & z)
         {
             const complex<double> lnz = std::log(z);
             complex<double> a = -power_of<2>(complex<double>(0.0, 2.0 * M_PI)) / 2.0;
             complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
             double theta = 0.0;
+
             if ((z.imag() < 0.0) || ((z.real() >= 1.0) && (z.imag() == 0.0)))
             {
                 theta = 1.0;
@@ -109,7 +135,7 @@ namespace eos
         }
     }
 
-    // Calculation of the dilogarithm based on [C2006]
+    // Calculation of the dilogarithm based on [C:2006A]
     complex<double> dilog(const complex<double> & z)
     {
         // special cases
@@ -123,16 +149,17 @@ namespace eos
             return -M_PI * M_PI / 12.0;
 
         if (std::abs(z) < 0.5)
-            return dilog_impl::f0(z);
+            return dilog_impl::f0(z); // series expansion around the origin
 
         if (std::abs(z) > 2.0)
-            return dilog_impl::g(z) - dilog_impl::f0(1.0 / z);
+            return dilog_impl::g(z) - dilog_impl::f0(1.0 / z); // reflection formula
 
         return dilog_impl::f1(z);
     }
 
     namespace trilog_impl
     {
+        // for the trilogarithm the coefficients of f1 are : Zeta(3 - m) / m! starting from m = 0
         std::array<complex<double>, max_iterations> series_coefficient_f1
         {{
             +1.2020569031595943,         +1.6449340668482264,
@@ -164,7 +191,7 @@ namespace eos
             -1.8599148146309811e-45,      0.0
         }};
 
-        // used for |z| < 0.5 : series expansion of the polylogarithm
+        // used for |z| < 0.5 : series expansion of the polylogarithm for n = 3 around the origin
         complex<double> f0(const complex<double> & z)
         {
             static const double eps = std::numeric_limits<double>::epsilon();
@@ -187,7 +214,7 @@ namespace eos
             return result;
         }
 
-        // used for |z| > 0.5 and |z| < 2.0
+        // used for |z| >= 0.5 and |z| <= 2.0
         complex<double> f1(const complex<double> & z)
         {
             complex<double> result(0.0, 0.0);
@@ -196,6 +223,11 @@ namespace eos
             complex<double> lnlnz = std::log(-lnz);
             complex<double> x(1.0, 0.0);
 
+            // + 0.0 and - 0.0 are processed differently by the std::log():
+            // if x > 0 std::log(- x + 0.0 i) = std::log(x) + i*Pi, that is the main branch of log,
+            // whereas std::log(- x - 0.0 i) = std::log(x) - i*Pi.
+            // If z > 1 real, lnz > 0 real and -lnz has imaginary part (- 0.0 i),
+            // therefore the imaginary part of lnlnz has to be changed from (- i*Pi) to (i*Pi) by complex conjugation.
             if ((lnz.imag() == 0.0) && (lnz.real() > 0.0))
                 lnlnz = std::conj(lnlnz);
 
@@ -209,12 +241,14 @@ namespace eos
             return result;
         }
 
+        // used for |z| > 2.0
         complex<double> g(const complex<double> & z)
         {
             const complex<double> lnz = std::log(z);
             complex<double> a = -power_of<3>(complex<double>(0.0, 2.0 * M_PI)) / 6.0;
             complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
             double theta = 0.0;
+
             if ((z.imag() < 0.0) || ((z.real() >= 1.0) && (z.imag() == 0.0)))
             {
                 theta = 1.0;
@@ -227,7 +261,7 @@ namespace eos
         }
     }
 
-    // Calculation of the trilogarithm based on [C2006]
+    // Calculation of the trilogarithm based on [C:2006A]
     complex<double> trilog(const complex<double> & z)
     {
         static const double aperys_constant = 1.2020569031595942854;
@@ -243,10 +277,10 @@ namespace eos
             return -3.0 / 4.0 * aperys_constant;
 
         if (std::abs(z) < 0.5)
-            return trilog_impl::f0(z);
+            return trilog_impl::f0(z); // series expansion around the origin
 
         if (std::abs(z) > 2.0)
-            return trilog_impl::g(z) + trilog_impl::f0(1.0 / z);
+            return trilog_impl::g(z) + trilog_impl::f0(1.0 / z); // reflection formula
 
         return trilog_impl::f1(z);
     }
