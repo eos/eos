@@ -130,7 +130,7 @@ namespace eos
                 make_expression_observable("B->Kll::NormalizedBR", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/\mathcal{B}(\bar{B}\to \bar{K}J/\psi))",
                         Unit::None(),
                         R"(
-                        <<B->Kll::BR>> / <<B->Kpsi::BR>>
+                        <<B->Kll::BR>> / <<B->Kpsi::BR;psi=J/psi>>
                         )"),
 
                 make_expression_observable("B->Kll::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
@@ -1657,7 +1657,7 @@ namespace eos
                 make_expression_observable("B->K^*ll::NormalizedBR", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\ell^+\ell^-)/\mathcal{B}(\bar{B}\to \bar{K}^*J/\psi))",
                         Unit::None(),
                         R"(
-                        <<B->K^*ll::BR>> / <<B->K^*psi::BR>>
+                        <<B->K^*ll::BR>> / <<B->K^*psi::BR;psi=J/psi>>
                         )"),
 
                 make_observable("B->K^*ll::real_C9_perp(q2)",
@@ -2071,7 +2071,7 @@ namespace eos
                 make_expression_observable("B_s->phill::NormalizedBR", R"(\mathcal{B}(\bar{B}_s\to \phi\ell^+\ell^-)/\mathcal{B}(\bar{B}_s\to\phi J/\psi))",
                         Unit::None(),
                         R"(
-                        <<B_s->phill::BR>> / <<B_s->phipsi::BR>>
+                        <<B_s->phill::BR>> / <<B_s->phipsi::BR;psi=J/psi>>
                         )"),
 
                 // Time-integrated branching ratio [DV:2015A] eq. (47)
@@ -2113,7 +2113,7 @@ namespace eos
                 make_expression_observable("B_s->phill::NormalizedexpBR", R"(\langle\mathcal{B}\rangle(B_s->\phi\ell\ell)/\mathcal{B}(B_s->\phi J/\psi))",
                         Unit::None(),
                         R"(
-                        <<B_s->phill::expBR>> / <<B_s->phipsi::BR>>
+                        <<B_s->phill::expBR>> / <<B_s->phipsi::BR;psi=J/psi>>
                         )"),
 
                 make_observable("B_s->phill::real_C9_perp(q2)",

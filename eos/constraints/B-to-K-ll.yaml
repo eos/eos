@@ -558,7 +558,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[1.10,2.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 1.1, q2_max: 2}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 21.01e-06
     sigma-stat: {hi: 1.35e-06, lo: -1.35e-06}
     sigma-sys: {hi: 0.19e-06, lo: -0.19e-06}
@@ -567,7 +567,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[2.00,3.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 2, q2_max: 3}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 28.26e-06
     sigma-stat: {hi: 1.60e-06, lo: -1.60e-06}
     sigma-sys: {hi: 0.20e-06, lo: -0.20e-06}
@@ -576,7 +576,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[3.00,4.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 3, q2_max: 4}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 25.45e-06
     sigma-stat: {hi: 1.50e-06, lo: -1.50e-06}
     sigma-sys: {hi: 0.22e-06, lo: -0.22e-06}
@@ -585,7 +585,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[4.00,5.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 4, q2_max: 5}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 22.14e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.16e-06, lo: -0.16e-06}
@@ -594,7 +594,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[5.00,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 5, q2_max: 6}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 23.15e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.22e-06, lo: -0.22e-06}
@@ -603,7 +603,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[6.00,7.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 6, q2_max: 7}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 24.55e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.16e-06, lo: -0.16e-06}
@@ -612,7 +612,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[7.00,8.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 7, q2_max: 8}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 23.15e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.22e-06, lo: -0.22e-06}
@@ -621,7 +621,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[11.00,11.80]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 11, q2_max: 11.8}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 14.19e-06
     sigma-stat: {hi: 1.04e-06, lo: -1.04e-06}
     sigma-sys: {hi: 0.12e-06, lo: -0.12e-06}
@@ -630,7 +630,7 @@ B^+->K^+mu^+mu^-::NormalizedBR[11.80,12.50]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 11.8, q2_max: 12.5}
-    options: {l: mu, q: u, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 13.54e-06
     sigma-stat: {hi: 0.84e-06, lo: -0.84e-06}
     sigma-sys: {hi: 0.13e-06, lo: -0.13e-06}
@@ -640,7 +640,7 @@ B^0->K^0mu^+mu^-::NormalizedBR[2.00,4.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 2, q2_max: 4}
-    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 40.30e-06
     sigma-stat: {hi: 11.85e-06, lo: -10.56e-06}
     sigma-sys: {hi: 0.24e-06, lo: -0.24e-06}
@@ -649,7 +649,7 @@ B^0->K^0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 4, q2_max: 6}
-    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 37.28e-06
     sigma-stat: {hi: 11.42e-06, lo: -10.34e-06}
     sigma-sys: {hi: 0.36e-06, lo: -0.36e-06}
@@ -658,7 +658,7 @@ B^0->K^0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 6, q2_max: 8}
-    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 58.19e-06
     sigma-stat: {hi: 12.5e-06, lo: -11.42e-06}
     sigma-sys: {hi: 0.56e-06, lo: -0.56e-06}
@@ -667,7 +667,7 @@ B^0->K^0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
     kinematics: {q2_min: 11, q2_max: 12.5}
-    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 20.53e-06
     sigma-stat: {hi: 7.27e-06, lo: -6.47e-06}
     sigma-sys: {hi: 0.1e-06, lo: -0.1e-06}
