@@ -51,6 +51,7 @@ libeosutils_la_SOURCES = \
 	quantum-numbers.cc quantum-numbers.hh \
 	reference-name.cc reference-name.hh \
 	stringify.hh \
+	test-observable.cc test-observable.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
