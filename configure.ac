@@ -364,7 +364,7 @@ fi
 dnl }}}
 
 dnl {{{ output
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
