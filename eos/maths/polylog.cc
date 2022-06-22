@@ -285,4 +285,129 @@ namespace eos
         return trilog_impl::f1(z);
     }
 
+    namespace quadlog_impl
+    {
+        // for the quadlogarithm the coefficients of f1 are : Zeta(4 - m) / m! starting from m = 0
+        std::array<complex<double>, max_iterations> series_coefficient_f1
+        {{
+            +1.082323233711138192,        +1.20205690315959428,
+            +0.822467033424113218,         0.0,
+            -0.020833333333333333,        -0.000694444444444444,
+            0.0,                          +1.65343915343915344e-6,
+            0.0,                          -1.09354441365023376e-8,
+            0.0,                          +1.04383784939340495e-10,
+            0.0,                          -1.21659423006224353e-12,
+            0.0,                          +1.61300065283501013e-14,
+            0.0,                          -2.34288104528793397e-16,
+            0.0,                          +3.64387716752943635e-18,
+            0.0,                          -5.97748681166655845e-20,
+            0.0,                          +1.02337130555150662e-21,
+            0.0,                          -1.81455956138347481e-23,
+            0.0,                          +3.31302580384912710e-25,
+            0.0,                          -6.20097932653619404e-27,
+            0.0,                          +1.18564508541733498e-28,
+            0.0,                          -2.30933574895902886e-30,
+            0.0,                          +4.57154846962710279e-32,
+            0.0,                          -9.18043553394696105e-34,
+            0.0,                          +1.86724930429686274e-35,
+            0.0,                          -3.84151865355610607e-37,
+            0.0,                          +7.98497695925718450e-39,
+            0.0,                          -1.67529999957552667e-40,
+            0.0,                          +3.54482588247949023e-42,
+            0.0,                          -7.55897735281915726e-44,
+            0.0,                          +1.62337486205260288e-45,
+            0.0,                          -3.50927323515279455e-47
+        }};
+
+        // used for |z| < 0.5 : series expansion of the polylogarithm for n = 4 around the origin
+        complex<double> f0(const complex<double> & z)
+        {
+            static const double eps = std::numeric_limits<double>::epsilon();
+
+            complex<double> result(0.0, 0.0);
+            complex<double> x = 1.0;
+
+            for (int i = 1 ; i < max_iterations ; ++i)
+            {
+                x *= z;
+
+                complex<double> summand = x / power_of<4>(double(i));
+
+                result += summand;
+
+                if (abs(summand / result) < eps)
+                    break;
+            }
+
+            return result;
+        }
+
+        // used for |z| >= 0.5 and |z| <= 2.0
+        complex<double> f1(const complex<double> & z)
+        {
+            complex<double> result(0.0, 0.0);
+
+            const complex<double> lnz = std::log(z);
+            complex<double> lnlnz = std::log(-lnz);
+            complex<double> x(1.0, 0.0);
+
+            // + 0.0 and - 0.0 are processed differently by the std::log():
+            // if x > 0 std::log(- x + 0.0 i) = std::log(x) + i*Pi, that is the main branch of log,
+            // whereas std::log(- x - 0.0 i) = std::log(x) - i*Pi.
+            // If z > 1 real, lnz > 0 real and -lnz has imaginary part (- 0.0 i),
+            // therefore the imaginary part of lnlnz has to be changed from (- i*Pi) to (i*Pi) by complex conjugation.
+            if ((lnz.imag() == 0.0) && (lnz.real() > 0.0))
+                lnlnz = std::conj(lnlnz);
+
+            for (int i = 0 ; i < max_iterations ; ++i)
+            {
+                result += series_coefficient_f1[i] * x;
+                x *= lnz;
+            }
+            result += (1.0 / 6.0) * lnz * lnz * lnz * (11.0 / 6.0 - lnlnz);
+
+            return result;
+        }
+
+        // used for |z| > 2.0
+        complex<double> g(const complex<double> & z)
+        {
+            const complex<double> lnz = std::log(z);
+            const complex<double> a = - 2.0 / 3.0 * power_of<4>(M_PI);
+            const complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
+            double theta = 0.0;
+
+            if ((z.imag() < 0.0) || ((z.real() >= 1.0) && (z.imag() == 0.0)))
+            {
+                theta = 1.0;
+            }
+
+            complex<double> result = a * (-1.0 / 30.0 + b * b * (1.0 - 2.0 * b * (1.0 - 0.5 * b)))
+                + complex<double>(0.0, -M_PI / 3.0) * theta * power_of<3>(lnz);
+
+            return result;
+        }
+    }
+
+    // Calculation of the quadlogarithm based on [C:2006A]
+    complex<double> quadlog(const complex<double> & z)
+    {
+        // special cases
+        if (z == complex<double>(0.0, 0.0))
+            return complex<double>(0.0);
+
+        if (z == complex<double>(1.0, 0.0))
+            return power_of<4>(M_PI) / 90.0;
+
+        if (z == complex<double>(-1.0, 0.0))
+            return - power_of<4>(M_PI) * 7.0 / 720.0;
+
+        if (std::abs(z) < 0.5)
+            return quadlog_impl::f0(z); // series around the origin
+
+        if (std::abs(z) > 2.0)
+            return - quadlog_impl::f0(1.0 / z) + quadlog_impl::g(z) ; // reflection formula
+
+        return quadlog_impl::f1(z);
+    }
 }

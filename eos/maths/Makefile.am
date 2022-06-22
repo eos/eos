@@ -27,6 +27,7 @@ libeosmaths_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
+	polylog_TEST_quadlog.bin \
 	polylog_TEST_trilog.bin \
 	polylog_TEST_z.bin
 
