@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2022 Viktor Kuschke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,6 +28,8 @@ namespace eos
     complex<double> dilog(const complex<double> & z) __attribute__ ((pure));
 
     complex<double> trilog(const complex<double> & z) __attribute__ ((pure));
+
+    complex<double> quadlog(const complex<double> & z) __attribute__ ((pure));
 }
 
 #endif

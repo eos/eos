@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2022 Viktor Kuschke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,6 +51,7 @@ class PolylogarithmTest :
             std::ifstream z_file(EOS_SRCDIR "/eos/maths/polylog_TEST_z.bin");
             std::ifstream dilog_file(EOS_SRCDIR "/eos/maths/polylog_TEST_dilog.bin");
             std::ifstream trilog_file(EOS_SRCDIR "/eos/maths/polylog_TEST_trilog.bin");
+            std::ifstream quadlog_file(EOS_SRCDIR "/eos/maths/polylog_TEST_quadlog.bin");
 
             static const double eps = 1e-12;
 
@@ -65,6 +67,9 @@ class PolylogarithmTest :
             if (! trilog_file)
                 TEST_CHECK_FAILED("Cannot open polylog_TEST_trilog.bin");
 
+            if (! quadlog_file)
+                TEST_CHECK_FAILED("Cannot open polylog_TEST_quadlog.bin");
+
             while (! z_file.eof())
             {
                 complex<double> z = read_complex(z_file);
@@ -72,11 +77,15 @@ class PolylogarithmTest :
                 complex<double> dilog_value = dilog(z);
                 complex<double> trilog_reference = read_complex(trilog_file);
                 complex<double> trilog_value = trilog(z);
+                complex<double> quadlog_reference = read_complex(quadlog_file);
+                complex<double> quadlog_value = quadlog(z);
 
-                TEST_CHECK_NEARLY_EQUAL(real(dilog_reference),  real(dilog_value),  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(dilog_reference),  imag(dilog_value),  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(trilog_reference), real(trilog_value), eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(trilog_reference), imag(trilog_value), eps);
+                TEST_CHECK_NEARLY_EQUAL(real(dilog_reference),   real(dilog_value),     eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(dilog_reference),   imag(dilog_value),     eps);
+                TEST_CHECK_NEARLY_EQUAL(real(trilog_reference),  real(trilog_value),    eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(trilog_reference),  imag(trilog_value),    eps);
+                TEST_CHECK_NEARLY_EQUAL(real(quadlog_reference), real(quadlog_value), 5*eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(quadlog_reference), imag(quadlog_value), 5*eps);
             }
 
             // check that the C implementation handles z = -2.0 - i 0.0
@@ -84,9 +93,11 @@ class PolylogarithmTest :
             static const complex<double> c1(1.0, 0.0), c05(0.5, 0.0), c2(2.0, 0.0);
             static const complex<double> z    = (c2 - c1) / (c05 - c1); // which turns out to be (-2.0,-0.0)
             static const complex<double> zbar = (c05 - c1) / (c2 - c1); // which turns out to be (-0.5,-0.0)
-            TEST_CHECK_RELATIVE_ERROR(real(dilog(-c2)),   +real(dilog(z)),     eps); // has no imaginary part
-            TEST_CHECK_RELATIVE_ERROR(real(trilog(-c2)),  +real(trilog(z)),    eps); // has no imaginary part
-            TEST_CHECK_RELATIVE_ERROR(real(dilog(-c05)),  +real(dilog(zbar)),  eps); // has no imaginary part
-            TEST_CHECK_RELATIVE_ERROR(real(trilog(-c05)), +real(trilog(zbar)), eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(dilog(-c2)),    +real(dilog(z)),      eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(trilog(-c2)),   +real(trilog(z)),     eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(quadlog(-c2)),  +real(quadlog(z)),    eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(dilog(-c05)),   +real(dilog(zbar)),   eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(trilog(-c05)),  +real(trilog(zbar)),  eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(quadlog(-c05)), +real(quadlog(zbar)), eps); // has no imaginary part
         }
 } polylogarithm_test;
