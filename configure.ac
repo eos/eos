@@ -1,7 +1,7 @@
 dnl vim: set sw=8 sts=8 noet ft=config foldmethod=marker foldmarker={{{,}}}:
 
-AC_INIT([EOS], [1.0.2])
-AC_PREREQ(2.5)
+AC_INIT([EOS],[1.0.2])
+AC_PREREQ([2.69])
 AC_CONFIG_SRCDIR([])
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(1.9)
@@ -368,8 +368,7 @@ AM_CONFIG_HEADER(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
-AC_OUTPUT(
-	Makefile
+AC_CONFIG_FILES([Makefile
 	debian/control-focal
 	debian/control-jammy
 	debian/Makefile
@@ -393,5 +392,6 @@ AC_OUTPUT(
 	test/Makefile
 	python/Makefile
 	python/setup.py
-	)
+	])
+AC_OUTPUT
 dnl }}}
