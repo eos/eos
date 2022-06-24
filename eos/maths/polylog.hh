@@ -27,7 +27,6 @@ namespace eos
     complex<double> dilog(const complex<double> & z) __attribute__ ((pure));
 
     complex<double> trilog(const complex<double> & z) __attribute__ ((pure));
-
 }
 
 #endif

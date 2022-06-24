@@ -93,7 +93,7 @@ namespace eos
         {
             complex<double> result(0.0, 0.0);
 
-            complex<double> lnz = std::log(z);
+            const complex<double> lnz = std::log(z);
             complex<double> lnlnz = std::log(-lnz);
             complex<double> x(1.0, 0.0);
 
@@ -119,8 +119,8 @@ namespace eos
         complex<double> g(const complex<double> & z)
         {
             const complex<double> lnz = std::log(z);
-            complex<double> a = -power_of<2>(complex<double>(0.0, 2.0 * M_PI)) / 2.0;
-            complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
+            const complex<double> a = -power_of<2>(complex<double>(0.0, 2.0 * M_PI)) / 2.0;
+            const complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
             double theta = 0.0;
 
             if ((z.imag() < 0.0) || ((z.real() >= 1.0) && (z.imag() == 0.0)))
@@ -219,7 +219,7 @@ namespace eos
         {
             complex<double> result(0.0, 0.0);
 
-            complex<double> lnz = std::log(z);
+            const complex<double> lnz = std::log(z);
             complex<double> lnlnz = std::log(-lnz);
             complex<double> x(1.0, 0.0);
 
@@ -245,8 +245,8 @@ namespace eos
         complex<double> g(const complex<double> & z)
         {
             const complex<double> lnz = std::log(z);
-            complex<double> a = -power_of<3>(complex<double>(0.0, 2.0 * M_PI)) / 6.0;
-            complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
+            const complex<double> a = -power_of<3>(complex<double>(0.0, 2.0 * M_PI)) / 6.0;
+            const complex<double> b = complex<double>(0.0, -0.5 / M_PI) * lnz;
             double theta = 0.0;
 
             if ((z.imag() < 0.0) || ((z.real() >= 1.0) && (z.imag() == 0.0)))
