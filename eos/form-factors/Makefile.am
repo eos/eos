@@ -18,6 +18,7 @@ libeosformfactors_la_SOURCES = \
 	baryonic-processes.hh \
 	b-lcdas.cc b-lcdas.hh \
 	b-lcdas-exponential.cc b-lcdas-exponential.hh \
+	b-lcdas-flvd2022.cc b-lcdas-flvd2022.hh \
 	form-factor-adapter.hh \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
@@ -53,6 +54,7 @@ include_eos_rarebdecays_HEADERS = \
 	analytic-b-to-pi-pi.hh \
 	b-lcdas.hh \
 	b-lcdas-exponential.hh \
+	b-lcdas-flvd2022.hh \
 	form-factor-adapter.hh \
 	form-factors.hh \
 	observables.hh \
@@ -74,6 +76,7 @@ TESTS = \
 	analytic-b-to-v-lcsr_TEST \
 	baryonic_TEST \
 	b-lcdas-exponential_TEST \
+	b-lcdas-flvd2022_TEST \
 	hqet-b-to-c_TEST \
 	k-lcdas_TEST \
 	kstar-lcdas_TEST \
@@ -109,6 +112,8 @@ analytic_b_to_v_lcsr_TEST_SOURCES = analytic-b-to-v-lcsr_TEST.cc
 baryonic_TEST_SOURCES = baryonic_TEST.cc
 
 b_lcdas_exponential_TEST_SOURCES = b-lcdas-exponential_TEST.cc
+
+b_lcdas_flvd2022_TEST_SOURCES = b-lcdas-flvd2022_TEST.cc
 
 hqet_b_to_c_TEST_SOURCES = hqet-b-to-c_TEST.cc
 

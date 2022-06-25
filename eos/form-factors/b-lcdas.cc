@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/b-lcdas-exponential.hh>
+#include <eos/form-factors/b-lcdas-flvd2022.hh>
 #include <eos/utils/exception.hh>
 
 #include <functional>
@@ -35,6 +36,7 @@ namespace eos
         using type = std::function<BMesonLCDAs * (const Parameters &, const Options &)>;
         const std::map<std::string, type> models = {
             { "exponential",      &b_lcdas::Exponential::make      },
+            { "FLvD2022",         &b_lcdas::FLvD2022::make         }
         };
 
         auto i = models.find(name);
