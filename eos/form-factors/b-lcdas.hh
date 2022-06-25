@@ -24,9 +24,11 @@
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <memory>
 #include <string>
+#include <tuple>
 
 namespace eos
 {
@@ -47,6 +49,15 @@ namespace eos
              * Factory method
              */
             static std::shared_ptr<BMesonLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
+
+            /*!
+             * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
+             *
+             * mu: the renormalization scale
+             */
+            struct CoefficientIteratorTag;
+            using CoefficientIterator = WrappedForwardIterator<CoefficientIteratorTag, const double &>;
+            virtual std::tuple<CoefficientIterator, CoefficientIterator> coefficient_range(const double & mu) const = 0;
 
             /*!
              * Leading twist two-particle LCDAs
@@ -126,6 +137,8 @@ namespace eos
             /* Internal diagnostics */
             virtual Diagnostics diagnostics() const = 0;
     };
+
+    extern template class WrappedForwardIterator<BMesonLCDAs::CoefficientIteratorTag, const double &>;
 }
 
 #endif

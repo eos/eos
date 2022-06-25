@@ -906,6 +906,13 @@ FLS:2021A:
     id: oai:arXiv.org:2111.04327
   inspire-id: Felkl:2021uxi
   title: 'A Tale of Invisibility: Constraints on New Physics in $b\to s\nu\nu$'
+FLvD:2022A:
+  authors: Feldmann, Thorsten and Lueghausen, Philip and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2203.15679
+  inspire-id: Feldmann:2022uok
+  title: 'Systematic Parametrization of the Leading $B$-meson Light-Cone Distribution Amplitude'
 FM:2002A:
   authors: Feldmann, Thorsten and Matias, Joaquim
   eprint:
