@@ -30,6 +30,7 @@
 #include <eos/utils/options-impl.hh>
 
 #include <string>
+#include <tuple>
 
 namespace eos
 {
@@ -141,6 +142,13 @@ namespace eos
                  */
                 virtual double Xbar_A(const double &omega, const double &xi) const final override;
                 virtual double Ybar_A(const double &omega, const double &xi) const final override;
+
+                /*!
+                 * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
+                 *
+                 * mu: the renormalization scale
+                 */
+                virtual std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator> coefficient_range(const double & mu) const final override;
 
                 /* Internal diagnostics */
                 virtual Diagnostics diagnostics() const final override;

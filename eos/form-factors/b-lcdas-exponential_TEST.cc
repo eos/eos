@@ -25,8 +25,10 @@
 
 #include <eos/models/model.hh>
 
+#include <array>
 #include <cmath>
 #include <limits>
+#include <numeric>
 
 using namespace test;
 using namespace eos;
@@ -756,6 +758,20 @@ class ExponentialTest :
                     TEST_CHECK_NEARLY_EQUAL( 1.2470600e-2, B.chi_bar_bar_4(1.0, 0.3), eps);
                     TEST_CHECK_NEARLY_EQUAL( 2.3773500e-2, B.chi_bar_bar_4(3.0, 0.3), eps);
                 }
+            }
+
+            /* coefficient interface */
+            {
+                Parameters p = Parameters::Defaults();
+                Exponential B(p, Options{ { "q", "u" } });
+                auto [c, c_end] = B.coefficient_range(1.0);
+
+                std::array<double, 9> ref = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+                for (auto it = c; it != c_end; ++it)
+                {
+                    TEST_CHECK_NEARLY_EQUAL(*it, ref[std::distance(c, it)], 1e-15);
+                }
+
             }
         }
 } b_lcdas_exponential_test;

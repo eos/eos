@@ -27,6 +27,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/qcd.hh>
 #include <eos/utils/qualified-name.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <gsl/gsl_sf_expint.h>
 
@@ -483,6 +484,13 @@ namespace eos
                 * (-3.0 * xi + 13.0 * omega + 6.0 * omega_0 + 3.0 * std::exp(omega / omega_0) * (xi - 2.0 * omega_0));
         }
 
+        std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator>
+        Exponential::coefficient_range(const double & mu) const
+        {
+            static const std::array<double, 9> cs = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+            return {cs.begin(), cs.end()};
+        }
+
         Diagnostics Exponential::diagnostics() const
         {
             Diagnostics results;
@@ -490,6 +498,11 @@ namespace eos
             return results;
         }
     }
+
+    template <>
+    struct WrappedForwardIteratorTraits<BMesonLCDAs::CoefficientIteratorTag>
+    {
+        using UnderlyingIterator = std::array<double, 9>::const_iterator;
+    };
+    template class WrappedForwardIterator<BMesonLCDAs::CoefficientIteratorTag, const double &>;
 }
-
-
