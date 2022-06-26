@@ -44,7 +44,9 @@ class LogfileHandler:
         eos.logger.removeHandler(self.handler)
 
 
-def task(output, mode=lambda **kwargs: 'w'):
+_tasks = {}
+
+def task(name, output, mode=lambda **kwargs: 'w'):
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
@@ -77,11 +79,12 @@ def task(output, mode=lambda **kwargs: 'w'):
                     if iaccordion:
                         iaccordion.selected_index = None
                     return result
+        _tasks[name] = func
         return task_wrapper
     return _task
 
 
-@task('{posterior}/mode-{label}')
+@task('find-mode', '{posterior}/mode-{label}')
 def find_mode(analysis_file, posterior, base_directory='./', optimizations=3, start_point=None, chain=None, seed=None, label='default'):
     '''
     Finds the mode of the named posterior.
@@ -180,7 +183,7 @@ def find_mode(analysis_file, posterior, base_directory='./', optimizations=3, st
     return (bfp, gof)
 
 
-@task('{posterior}/mcmc-{chain:04}')
+@task('sample-mcmc', '{posterior}/mcmc-{chain:04}')
 def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150, preruns=3, N=1000, stride=5, cov_scale=0.1, start_point=None):
     """
     Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
@@ -224,7 +227,7 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
             eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
 
 
-@task('{posterior}/clusters')
+@task('find-clusters', '{posterior}/clusters')
 def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis_file=None):
     """
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
@@ -259,7 +262,7 @@ def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis
     eos.data.MixtureDensity.create(os.path.join(base_directory, posterior, 'clusters'), density)
 
 
-@task('{posterior}/product')
+@task('mixture-product', '{posterior}/product')
 def mixture_product(posterior, posteriors, base_directory='./', analysis_file=None):
     """
     Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
@@ -281,7 +284,7 @@ def mixture_product(posterior, posteriors, base_directory='./', analysis_file=No
 
 
 # Sample PMC
-@task('{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
+@task('sample-pmc', '{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
 def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000,
                perplexity_threshold=1.0, weight_threshold=1e-10, sigma_test_stat=None, initial_proposal='clusters',
                pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05, pmc_lookback=1):
@@ -355,7 +358,7 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
 
 
 # Predict observables
-@task('{posterior}/pred-{prediction}')
+@task('predict-observables', '{posterior}/pred-{prediction}')
 def predict_observables(analysis_file, posterior, prediction, base_directory='./', begin=0, end=-1):
     '''
     Predicts a set of observables based on previously obtained importance samples.
@@ -408,7 +411,7 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
 
 
 # Run analysis steps
-@task('')
+@task('run-steps', '')
 def run_steps(analysis_file, base_directory='./'):
     """
     Runs a list of predefined steps recorded in the analysis file.
