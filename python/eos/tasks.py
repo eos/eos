@@ -58,7 +58,7 @@ def task(name, output, mode=lambda **kwargs: 'w'):
             }
             _args.update(zip(func.__code__.co_varnames, args))
             _args.update(kwargs)
-            if 'analysis_file' in _args and type(_args['analysis_file']) not in [eos.AnalysisFile, None]:
+            if 'analysis_file' in _args and type(_args['analysis_file']) is str:
                 _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
             # create output directory
             outputpath = ('{base_directory}/' + output).format(**_args)
@@ -81,7 +81,7 @@ def task(name, output, mode=lambda **kwargs: 'w'):
                     if iaccordion:
                         iaccordion.selected_index = None
                     return result
-        _tasks[name] = func
+        _tasks[name] = task_wrapper
         return task_wrapper
     return _task
 
@@ -397,12 +397,12 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
 
 
 # Run analysis steps
-@task('run-steps', '')
-def run_steps(analysis_file:str, base_directory:str='./'):
+@task('run', '')
+def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor:str='serial'):
     """
     Runs a list of predefined steps recorded in the analysis file.
 
-    Each step corresponds to a call to one of the following common tasks:
+    Each step corresponds to a call to one or more of the common tasks, e.g.,
      - sample-mcmc
      - find-cluster
      - sample-pmc
@@ -410,6 +410,54 @@ def run_steps(analysis_file:str, base_directory:str='./'):
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param dry_run: The flag that disables execution and insteads prints the full information on the tasks that would be run to standard output. Defaults to `False`.
+    :type dry_run: bool, optional
+    :param executor: The flag that governs the execution type for the tasks. Currently only supports `serial` execution. Defaults to `serial`.
+    :type executor: str, optional
     """
-    analysis_file.run()
+    try:
+        exec = Executor.make(executor, steps=analysis_file.steps(base_directory), dry_run=dry_run)
+        exec.run()
+        exec.join()
+    except Exception as e:
+        raise e
+
+
+class Executor:
+    _factory_methods = {}
+
+    def __init__(self, steps, dry_run):
+        self._steps = steps
+        self._dry_run = dry_run
+
+    @staticmethod
+    def register(name, type):
+        Executor._factory_methods.update({name: type})
+
+    @staticmethod
+    def make(executor, **kwargs):
+        if executor not in Executor._factory_methods:
+            raise ValueError(f'Task "run" encountered invalid executor "{executor}"')
+
+        return Executor._factory_methods[executor](**kwargs)
+
+
+class SerialExecutor(Executor):
+    def __init__(self, steps, dry_run=False):
+        Executor.__init__(self, steps, dry_run)
+
+    def run(self):
+        pass
+
+    def join(self):
+        for name, desc, task, arguments in self._steps:
+            if self._dry_run:
+                print(f'eos-analysis {task} {arguments}')
+            else:
+                _tasks[task](**arguments)
+
+Executor.register('serial', SerialExecutor)
+
 

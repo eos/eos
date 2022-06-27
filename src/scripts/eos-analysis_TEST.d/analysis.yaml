@@ -79,3 +79,28 @@ predictions:
       - name: B->pilnu::P(q2_min,q2_max)
         kinematics: { 'q2_min': 0.01, 'q2_max': 2.00 }
       - name: B_u->lnu::BR
+
+steps:
+  - name: optimize
+    iterations:
+      - posterior: CKM+FF
+        seed: 123
+    tasks:
+      - task: find-mode
+        arguments:
+          label: 'seed-{seed}'
+
+  - name: sample
+    iterations:
+      - { posterior: CKM+FF }
+    tasks:
+      - task: sample-mcmc
+        arguments:
+          chain: '0,1-2,3'
+          pre_N: 500
+
+      - task: find-clusters
+
+      - task: sample-pmc
+        arguments:
+          step_N: 1000
