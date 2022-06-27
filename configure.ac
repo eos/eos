@@ -41,7 +41,7 @@ dnl }}}
 
 dnl {{{ check for compiler requirements
 dnl {{{ check for -std=c++17
-AC_MSG_CHECKING([for C++14 support])
+AC_MSG_CHECKING([for C++17 support])
 CHECK_CXXFLAG([-std=c++17])
 dnl }}}
 dnl {{{ check for braced initializers
