@@ -402,10 +402,11 @@ namespace eos::exp
             // Set or alias kinematic specifications
             for (const auto & value : kinematics_values)
             {
-                kinematic_set.insert(value.first);
+                kinematic_set.erase(value.first);
             }
             for (const auto & alias : kinematics_aliases)
             {
+                kinematic_set.erase(alias.first);
                 kinematic_set.insert(alias.second);
             }
 
@@ -439,10 +440,11 @@ namespace eos::exp
         // Set or alias kinematic specifications
         for (const auto & value : kinematics_values)
         {
-            kinematic_set.insert(value.first);
+            kinematic_set.erase(value.first);
         }
         for (const auto & alias : kinematics_aliases)
         {
+            kinematic_set.erase(alias.first);
             kinematic_set.insert(alias.second);
         }
 
@@ -460,10 +462,11 @@ namespace eos::exp
         // Set or alias kinematic specifications
         for (const auto & value : kinematics_values)
         {
-            kinematic_set.insert(value.first);
+            kinematic_set.erase(value.first);
         }
         for (const auto & alias : kinematics_aliases)
         {
+            kinematic_set.erase(alias.first);
             kinematic_set.insert(alias.second);
         }
 
