@@ -15,6 +15,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef EOS_GUARD_EOS_UTILS_EXPRESSION_CACHER_HH
+#define EOS_GUARD_EOS_UTILS_EXPRESSION_CACHER_HH 1
+
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/observable_cache.hh>
 
@@ -41,3 +44,5 @@ namespace eos::exp
             Expression visit(const CachedObservableExpression & e);
     };
 }
+
+#endif
