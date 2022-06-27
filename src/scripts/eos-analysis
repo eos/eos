@@ -389,13 +389,17 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
         parents = [common_subparser],
         description =
 '''
-Runs a list of subcommands.
+Runs a list of subcommands based on the pre-recorded steps defined within an analysis.
 ''',
         help = 'Runs a list of subcommands.'
     )
     parser_run.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_run.add_argument('-d', '--dry-run',
+        help = 'Perform a dry run only. Outputs the list of subcommands that would be run instead of running them.',
+        dest = 'dry_run', action = 'store_true', default = False
     )
     parser_run.set_defaults(cmd = cmd_run)
 
@@ -534,7 +538,7 @@ def cmd_predict_observables(args):
 
 # Run steps
 def cmd_run(args):
-    return eos.run_steps(**args_to_dict(args))
+    return eos.run(**args_to_dict(args))
 
 
 # List priors
