@@ -39,7 +39,7 @@ TESTS = \
 	wet_TEST \
 	wilson-coefficients_TEST
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosmodels.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/libeos.la

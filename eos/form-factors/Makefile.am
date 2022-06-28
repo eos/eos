@@ -71,7 +71,7 @@ TESTS = \
 	pi-lcdas_TEST \
 	unitarity-bounds_TEST
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosformfactors.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
