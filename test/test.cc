@@ -18,7 +18,10 @@
  */
 
 #include <test/test.hh>
+#include <eos/observable.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
+#include <eos/utils/test-observable.hh>
 
 #include <cxxabi.h>
 #include <cstdlib>
@@ -101,6 +104,18 @@ int main(int, char ** argv)
 
     eos::Log::instance()->set_program_name(program_name);
     eos::Log::instance()->set_log_level(eos::ll_debug);
+
+    // Set up the observable test environment
+    auto test_function = [](const eos::Parameters & p, const std::vector<eos::KinematicVariable> & kv, const eos::Options & o)
+    {
+        return p["mass::c"] * std::stoi(o.get("multiplier", "1")) * (kv[1] - kv[0]);
+    };
+
+    std::shared_ptr<const eos::TestObservableEntry> obs_entry = std::make_shared<const eos::TestObservableEntry>(
+        "test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{"q2_min", "q2_max"}
+    );
+    eos::ObservableEntries::instance()->insert("test::obs1", obs_entry);
+
 
     for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()),
             i_end(test::TestCasesHolder::instance()->test_cases.end()) ; i != i_end ; ++i)
