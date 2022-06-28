@@ -57,7 +57,7 @@ TESTS = \
 	power_of_TEST \
 	szego-polynomial_TEST
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosmaths.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/utils/libeosutils.la \

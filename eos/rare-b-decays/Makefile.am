@@ -100,7 +100,7 @@ TESTS = \
 	qcdf-integrals_TEST
 
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosrarebdecays.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/utils/libeosutils.la \

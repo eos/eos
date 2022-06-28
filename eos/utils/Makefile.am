@@ -144,7 +144,7 @@ TESTS = \
 	verify_TEST \
 	wilson-polynomial_TEST
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosutils.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
