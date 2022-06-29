@@ -1090,7 +1090,6 @@ B^+->K^*+mu^+mu^-::A_FB[10.09,12.86]@CMS:2020A:
 # {{{
 B^0->K^*0mu^+mu^-::AngularObservables[2.00,4.00]@ATLAS:2018B:
     type: MultivariateGaussian
-    dim: 6
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -1126,7 +1125,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.00,4.00]@ATLAS:2018B:
     dof: 6
 B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@ATLAS:2018B:
     type: MultivariateGaussian
-    dim: 6
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -1898,7 +1896,6 @@ B^+->K^*+mu^+mu^-::NormalizedBR[15.00,22.00]@LHCb:2014A:
 # {{{
 B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb:2015A:
     type: MultivariateGaussian
-    dim: 5
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -1930,7 +1927,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb:2015A:
     dof: 5
 B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb:2015A:
     type: MultivariateGaussian
-    dim: 5
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -1962,7 +1958,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb:2015A:
     dof: 5
 B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb:2015A:
     type: MultivariateGaussian
-    dim: 5
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -1994,7 +1989,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb:2015A:
     dof: 5
 B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb:2015A:
     type: MultivariateGaussian
-    dim: 5
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -2026,7 +2020,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb:2015A:
     dof: 5
 B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb:2015A:
     type: MultivariateGaussian
-    dim: 5
     observables:
         -   B->K^*ll::F_L
         -   B->K^*ll::S_3
@@ -2164,7 +2157,6 @@ B^0->K^*0mu^+mu^-::R_K^*[1.10,6.00]@LHCb:2017B:
 # {{{
 B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2196,7 +2188,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2228,7 +2219,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2260,7 +2250,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2292,7 +2281,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2324,7 +2312,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2356,7 +2343,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2388,7 +2374,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020A:
     dof: 8
 B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020A:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2421,7 +2406,6 @@ B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020A:
 #
 B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2453,7 +2437,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2485,7 +2468,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2517,7 +2499,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2549,7 +2530,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2581,7 +2561,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2613,7 +2592,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb
@@ -2645,7 +2623,6 @@ B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020B:
     dof: 8
 B^+->K^*+mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020B:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B->K^*ll::F_L
         - B->K^*ll::S_3_LHCb

@@ -53,7 +53,6 @@ B->K^*psi2S::BR@PDG:2020A:
 # {{{
 B^0->K^*0Jpsi::PolarizationAmplitude@LHCb:2013E:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B->K^*psi::para_polarization
         - B->K^*psi::perp_polarization

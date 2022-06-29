@@ -27,7 +27,6 @@ B^0->K^*0gamma::S_K@BaBar:2008A:
     dof: 1
 B^0->K^*0gamma::S_K+C_K@BaBar:2008A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   B->K^*gamma::S_K^*gamma
         -   B->K^*gamma::C_K^*gamma
@@ -122,7 +121,6 @@ B^0->K^*0gamma::S_K@Belle:2006A:
     dof: 1
 B^0->K^*0gamma::S_K+C_K@Belle:2006A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   B->K^*gamma::S_K^*gamma
         -   B->K^*gamma::C_K^*gamma
@@ -178,7 +176,6 @@ B^0->K^*0gamma::BR@CLEO:2000A:
 # {{{
 B^0->K^*0gamma::S_K+C_K@HFAG:2011A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   B->K^*gamma::S_K^*gamma
         -   B->K^*gamma::C_K^*gamma

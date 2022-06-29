@@ -34,7 +34,6 @@ B_s->phipsi2S::BR@PDG:2020A:
 # {{{
 B_s->phiJpsi::PolarizationAmplitude@LHCb:2014D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phipsi::perp_polarization
         - B_s->phipsi::long_polarization
@@ -61,7 +60,6 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2014D:
 # {{{
 B_s->phipsi2S::PolarizationAmplitude@LHCb:2016B:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phipsi::perp_polarization
         - B_s->phipsi::long_polarization
@@ -88,7 +86,6 @@ B_s->phipsi2S::PolarizationAmplitude@LHCb:2016B:
 # {{{
 B_s->phiJpsi::PolarizationAmplitude@LHCb:2019A:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phipsi::perp_polarization
         - B_s->phipsi::long_polarization
@@ -115,7 +112,6 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2019A:
 # {{{
 B_s->phiJpsi::PolarizationAmplitude@LHCb:2021C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phipsi::perp_polarization
         - B_s->phipsi::long_polarization
@@ -146,7 +142,6 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2021C:
 # {{{
 B_s->phiJpsi::PolarizationAmplitude@CMS:2020B:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phipsi::perp_polarization
         - B_s->phipsi::long_polarization
@@ -178,7 +173,6 @@ B_s->phiJpsi::PolarizationAmplitude@CMS:2020B:
 # Two solutions where found for the phases, solution (a) is implemented below
 B_s->phiJpsi::PolarizationAmplitude@ATLAS:2020A:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phipsi::para_polarization
         - B_s->phipsi::long_polarization

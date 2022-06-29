@@ -830,10 +830,10 @@ class Plotter:
                 elif constraint['type'] == 'MultivariateGaussian(Covariance)':
                     if not self.observable:
                         raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
-                    dim = constraint['dim']
                     covariance = np.array(constraint['covariance'])
                     observables = constraint['observables']
                     means = constraint['means']
+                    dim = len(means)
                     kinematics = constraint['kinematics']
 
                     xvalues = []
@@ -860,13 +860,13 @@ class Plotter:
                 elif constraint['type'] == 'MultivariateGaussian':
                     if not self.observable:
                         raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
-                    dim = constraint['dim']
                     sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
                     sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
                     sigma_sys = np.array(constraint['sigma-sys'])
                     sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
                     observables = constraint['observables']
                     means = constraint['means']
+                    dim = len(means)
                     kinematics = constraint['kinematics']
 
                     xvalues = []
@@ -1136,12 +1136,12 @@ class Plotter:
                     yerrors.append([sigma_hi, sigma_lo])
                     idx = idx + 1
                 elif constraint['type'] == 'MultivariateGaussian(Covariance)':
-                    dim         = constraint['dim']
                     observables = constraint['observables']
                     kinematics  = constraint['kinematics']
                     options     = constraint['options']
                     covariance  = np.array(constraint['covariance'])
                     means       = constraint['means']
+                    dim         = len(means)
 
                     for i in range(0, dim):
                         latex = '$' + eos.Observables()[observables[i]].latex() + '$'
@@ -1152,13 +1152,13 @@ class Plotter:
                         yerrors.append([sigma, sigma])
                         idx = idx + 1
                 elif constraint['type'] == 'MultivariateGaussian':
-                    dim = constraint['dim']
                     observables = constraint['observables']
                     sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
                     sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
                     sigma_sys = np.array(constraint['sigma-sys'])
                     sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
                     means = constraint['means']
+                    dim = len(means)
 
                     for i in range(0, dim):
                         latex = '$' + eos.Observables()[observables[i]].latex() + '$'

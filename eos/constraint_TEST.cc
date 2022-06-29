@@ -50,8 +50,7 @@ class ConstraintDeserializationTest :
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mean: 6e-07\n"
                     "sigma-stat: {hi: 1.2e-08, lo: −3.4e-08}\n"
-                    "sigma-sys: {hi: 4.6e-08, lo: −7.8e-08}\n"
-                    "dof: 1"
+                    "sigma-sys: {hi: 4.6e-08, lo: −7.8e-08}"
                 ); // sigma-stat.lo and sigma-sys.lo contain a U+2212 (minus sign, '−'), rather than a '-'.
 
                 TEST_CHECK_THROWS(ConstraintEntryEncodingError, std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Gaussian", input)));
@@ -67,8 +66,7 @@ class ConstraintDeserializationTest :
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mean: 6e-07\n"
                     "sigma-stat: {hi: 1.2e-08, lo: -3.4e-08}\n"
-                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}\n"
-                    "dof: 1"
+                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -80,6 +78,8 @@ class ConstraintDeserializationTest :
                 entry->serialize(out);
 
                 std::string output(out.c_str());
+
+                std::cout << output << std::endl;
 
                 TEST_CHECK(input == output);
             }
@@ -94,8 +94,7 @@ class ConstraintDeserializationTest :
                     "options: {l: mu, form-factors: DM2016}\n"
                     "mean: 6e-07\n"
                     "sigma-stat: {hi: 1.2e-08, lo: -3.4e-08}\n"
-                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}\n"
-                    "dof: 1"
+                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -121,8 +120,7 @@ class ConstraintDeserializationTest :
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mean: 6e-07\n"
                     "sigma-stat: {hi: 1.2e-08, lo: -3.4e-08}\n"
-                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}\n"
-                    "dof: 1"
+                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}"
                 );
 
                 YAML::Node node1 = YAML::Load(input1);
@@ -136,8 +134,7 @@ class ConstraintDeserializationTest :
                     "options: {form-factors: DM2016, l: mu, l: tau}\n"
                     "mean: 6e-07\n"
                     "sigma-stat: {hi: 1.2e-08, lo: -3.4e-08}\n"
-                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}\n"
-                    "dof: 1"
+                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}"
                 );
 
                 YAML::Node node2 = YAML::Load(input2);
@@ -157,8 +154,7 @@ class ConstraintDeserializationTest :
                         "options: {}\n"
                         "mean: 4.3\n"
                         "sigma-stat: {hi: 0.1, lo: -0.1}\n"
-                        "sigma-sys: {hi: 0.0, lo: -0.0}\n"
-                        "dof: 1"
+                        "sigma-sys: {hi: 0.0, lo: -0.0}"
                     );
 
                     YAML::Node node = YAML::Load(input);
@@ -192,8 +188,7 @@ class ConstraintDeserializationTest :
                         "options: {}\n"
                         "mean: 4.3\n"
                         "sigma-stat: {hi: 0.4, lo: -0.4}\n"
-                        "sigma-sys: {hi: 0.3, lo: -0.3}\n"
-                        "dof: 1"
+                        "sigma-sys: {hi: 0.3, lo: -0.3}"
                     );
 
                     YAML::Node node = YAML::Load(input);
@@ -230,8 +225,7 @@ class ConstraintDeserializationTest :
                     "mode: 6e-07\n"
                     "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
                     "alpha: 0.17132\n"
-                    "lambda: 5.78825e-09\n"
-                    "dof: 1"
+                    "lambda: 5.78825e-09"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -259,8 +253,7 @@ class ConstraintDeserializationTest :
                     "mode: 6e-07\n"
                     "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
                     "alpha: 0.17132\n"
-                    "lambda: 5.78825e-09\n"
-                    "dof: 1"
+                    "lambda: 5.78825e-09"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -287,8 +280,7 @@ class ConstraintDeserializationTest :
                     "mode: 6e-07\n"
                     "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
                     "alpha: 0.17132\n"
-                    "lambda: 5.78825e-09\n"
-                    "dof: 1"
+                    "lambda: 5.78825e-09"
                 );
 
                 YAML::Node node1 = YAML::Load(input1);
@@ -303,8 +295,7 @@ class ConstraintDeserializationTest :
                     "mode: 6e-07\n"
                     "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
                     "alpha: 0.17132\n"
-                    "lambda: 5.78825e-09\n"
-                    "dof: 1"
+                    "lambda: 5.78825e-09"
                 );
 
                 YAML::Node node2 = YAML::Load(input2);
@@ -323,8 +314,7 @@ class ConstraintDeserializationTest :
                     "mode: 0.53\n"
                     "sigma: {hi: 0.1, lo: 0.19}\n"
                     "alpha: 0.383056\n"
-                    "lambda: 0.0687907\n"
-                    "dof: 1"
+                    "lambda: 0.0687907"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -477,7 +467,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
@@ -515,7 +504,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
@@ -553,7 +541,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input1(
                     "type: MultivariateGaussian\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
@@ -579,7 +566,6 @@ class ConstraintDeserializationTest :
 
                 static const std::string input2(
                     "type: MultivariateGaussian\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
                     "  - Lambda_b->Lambda::f_perp^V(s)\n"
@@ -609,7 +595,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::b(MSbar)\n"
                     "  - mass::c\n"
@@ -653,7 +638,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 7\n"
                     "observables:\n"
                     "  - B->D::f_+(s)\n"
                     "  - B->D::f_+(s)\n"
@@ -708,7 +692,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 7\n"
                     "observables:\n"
                     "  - B->D::f_+(s)\n"
                     "  - B->D::f_+(s)\n"
@@ -763,7 +746,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input1(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 7\n"
                     "observables:\n"
                     "  - B->D::f_+(s)\n"
                     "  - B->D::f_+(s)\n"
@@ -806,7 +788,6 @@ class ConstraintDeserializationTest :
 
                 static const std::string input2(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 7\n"
                     "observables:\n"
                     "  - B->D::f_+(s)\n"
                     "  - B->D::f_+(s)\n"
@@ -853,7 +834,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::b(MSbar)\n"
                     "  - mass::c\n"
@@ -894,7 +874,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::s(2GeV)\n"
                     "  - mass::b(MSbar)\n"
@@ -941,7 +920,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::s(2GeV)\n"
                     "  - mass::b(MSbar)\n"
@@ -988,7 +966,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: MultivariateGaussian(Covariance)\n"
-                    "dim: 3\n"
                     "observables:\n"
                     "  - mass::b(MSbar)\n"
                     "  - mass::c\n"
@@ -1140,7 +1117,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: Mixture\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::b(MSbar)\n"
                     "  - mass::c\n"
@@ -1185,7 +1161,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: Mixture\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::b(MSbar)\n"
                     "  - mass::c\n"
@@ -1231,7 +1206,6 @@ class ConstraintDeserializationTest :
             {
                 static const std::string input(
                     "type: Mixture\n"
-                    "dim: 2\n"
                     "observables:\n"
                     "  - mass::b(MSbar)\n"
                     "  - mass::c\n"
