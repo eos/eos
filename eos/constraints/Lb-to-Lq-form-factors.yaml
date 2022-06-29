@@ -6,7 +6,6 @@
 # {{{
 Lambda_b->Lambda::f_long^A@BFvD:2014A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   Lambda_b->Lambda::f_long^A(q2)
         -   Lambda_b->Lambda::f_long^A(q2)
@@ -26,7 +25,6 @@ Lambda_b->Lambda::f_long^A@BFvD:2014A:
     dof: 2
 Lambda_b->Lambda::f_perp+long^V+A@BFvD:2014A:
     type: MultivariateGaussian
-    dim: 4
     observables:
         -   Lambda_b->Lambda::f_perp^V(q2)
         -   Lambda_b->Lambda::f_perp^A(q2)
@@ -54,7 +52,6 @@ Lambda_b->Lambda::f_perp+long^V+A@BFvD:2014A:
     dof: 4
 Lambda_b->Lambda::f_perp^A@BFvD:2014A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   Lambda_b->Lambda::f_perp^A(q2)
         -   Lambda_b->Lambda::f_perp^A(q2)
@@ -74,7 +71,6 @@ Lambda_b->Lambda::f_perp^A@BFvD:2014A:
     dof: 2
 Lambda_b->Lambda::f_perp^V@BFvD:2014A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   Lambda_b->Lambda::f_perp^V(q2)
         -   Lambda_b->Lambda::f_perp^V(q2)
@@ -94,7 +90,6 @@ Lambda_b->Lambda::f_perp^V@BFvD:2014A:
     dof: 2
 Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM:2016A:
     type: MultivariateGaussian(Covariance)
-    dim: 22
     observables:
         -   Lambda_b->Lambda::a_0_long^V@DM2016
         -   Lambda_b->Lambda::a_1_long^V@DM2016
@@ -191,7 +186,6 @@ Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM:2016A:
     dof: 22
 Lambda_b->Lambda::f_time+long+perp^V+A+T+T5[HO,no-prior]@DM:2016A:
     type: MultivariateGaussian(Covariance)
-    dim: 25
     observables: [
                                            'Lambda_b->Lambda::f_time^V(q2)',  'Lambda_b->Lambda::f_time^V(q2)',  # no f_time^V(13)
         'Lambda_b->Lambda::f_perp^V(q2)',  'Lambda_b->Lambda::f_perp^V(q2)',  'Lambda_b->Lambda::f_perp^V(q2)',
@@ -269,7 +263,6 @@ Lambda_b->Lambda::f_time+long+perp^V+A+T+T5[HO,no-prior]@DM:2016A:
     dof: 25
 Lambda_b->Lambda::f_time+long+perp^V+A+T+T5[nominal,no-prior]@DM:2016A:
     type: MultivariateGaussian(Covariance)
-    dim: 25
     observables: [
                                            'Lambda_b->Lambda::f_time^V(q2)',  'Lambda_b->Lambda::f_time^V(q2)',  # no f_time^V(13)
         'Lambda_b->Lambda::f_perp^V(q2)',  'Lambda_b->Lambda::f_perp^V(q2)',  'Lambda_b->Lambda::f_perp^V(q2)',
@@ -353,7 +346,6 @@ Lambda_b->Lambda::f_time+long+perp^V+A+T+T5[nominal,no-prior]@DM:2016A:
 # {{{
 Lambda_b->Lambda::f_long^V@BFvD:2014A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   Lambda_b->Lambda::f_long^V(q2)
         -   Lambda_b->Lambda::f_long^V(q2)
@@ -373,7 +365,6 @@ Lambda_b->Lambda::f_long^V@BFvD:2014A:
     dof: 0
 Lambda_b->Lambda_c::f_perp+long+time^V+A+T+T5@DKMR:2017A:
     type: MultivariateGaussian(Covariance)
-    dim: 18
     observables:
         -   Lambda_b->Lambda_c::a_0_long^V@DKMR2017
         -   Lambda_b->Lambda_c::a_1_long^V@DKMR2017

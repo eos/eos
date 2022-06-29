@@ -50,7 +50,6 @@ Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb:2015B:
 # {{{
 Lambda_b->Lambdamu^+mu^-::AngularObservables[15.0,20.0]@LHCb:2018A:
     type: MultivariateGaussian
-    dim: 9
     observables:
         [
           'Lambda_b->Lambdall::M_2@LowRecoil',  'Lambda_b->Lambdall::M_3@LowRecoil',  'Lambda_b->Lambdall::M_4@LowRecoil',
@@ -116,7 +115,6 @@ Lambda_b->Lambdamu^+mu^-::AngularObservables[15.0,20.0]@LHCb:2018A:
 
 Lambda_b->Lambdamu^+mu^-::AngularObservables[all,15.0,20.0]@LHCb:2018A:
     type: MultivariateGaussian
-    dim: 33
     observables:
         [
                                                 'Lambda_b->Lambdall::M_2@LowRecoil',  'Lambda_b->Lambdall::M_3@LowRecoil',

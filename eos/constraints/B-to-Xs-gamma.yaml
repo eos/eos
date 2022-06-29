@@ -36,7 +36,6 @@ B->X_sgamma::E_2[1.8]@BaBar:2012C:
     dof: 1
 B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar:2012C:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   B->X_sgamma::E_1(E_min)@NLO
         -   B->X_sgamma::E_2(E_min)@NLO
@@ -83,7 +82,6 @@ B->X_sgamma::E_2[1.8]@Belle:2008A:
     dof: 1
 B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle:2008A:
     type: MultivariateGaussian
-    dim: 2
     observables:
         -   B->X_sgamma::E_1(E_min)@NLO
         -   B->X_sgamma::E_2(E_min)@NLO
@@ -117,7 +115,6 @@ B->X_sgamma::BR[1.8]@Belle:2009B:
     dof: 1
 B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle:2009B:
     type: MultivariateGaussian
-    dim: 3
     observables:
         -   B->X_sgamma::BR(E_min)@NLO
         -   B->X_sgamma::E_1(E_min)@NLO

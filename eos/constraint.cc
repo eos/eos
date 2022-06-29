@@ -158,15 +158,12 @@ namespace eos
 
         double central, sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys;
 
-        unsigned number_of_observations;
-
         GaussianConstraintEntry(const std::string & name,
                 const QualifiedName & observable,
                 const Kinematics & kinematics, const Options & options,
                 const double & central,
                 const double & sigma_hi_stat, const double & sigma_lo_stat,
-                const double & sigma_hi_sys, const double & sigma_lo_sys,
-                const unsigned & number_of_observations = 1u) :
+                const double & sigma_hi_sys, const double & sigma_lo_sys) :
             ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
@@ -175,8 +172,7 @@ namespace eos
             sigma_hi_stat(sigma_hi_stat),
             sigma_lo_stat(sigma_lo_stat),
             sigma_hi_sys(sigma_hi_sys),
-            sigma_lo_sys(sigma_lo_sys),
-            number_of_observations(number_of_observations)
+            sigma_lo_sys(sigma_lo_sys)
         {
         }
 
@@ -255,15 +251,13 @@ namespace eos
             out << YAML::Key << "hi" << YAML::Value << sigma_hi_sys;
             out << YAML::Key << "lo" << YAML::Value << sigma_lo_sys;
             out << YAML::EndMap;
-            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
-            out << YAML::EndMap;
         }
 
         static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
         {
             static const std::string required_keys[] =
             {
-                "observable", "kinematics", "options", "mean", "sigma-stat", "sigma-sys", "dof"
+                "observable", "kinematics", "options", "mean", "sigma-stat", "sigma-sys"
             };
 
             for (auto && k : required_keys)
@@ -276,7 +270,7 @@ namespace eos
 
             static const std::string scalar_keys[] =
             {
-                "observable", "mean", "dof"
+                "observable", "mean"
             };
 
             for (auto && k : scalar_keys)
@@ -304,7 +298,6 @@ namespace eos
             {
                 QualifiedName observable(n["observable"].as<std::string>());
                 double mean = n["mean"].as<double>();
-                unsigned dof = n["dof"].as<unsigned>();
 
                 Kinematics kinematics;
                 std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
@@ -342,7 +335,7 @@ namespace eos
                 double sigma_lo_sys  = n["sigma-sys"]["lo"].as<double>();
 
                 return new GaussianConstraintEntry(name.str(), observable, kinematics, options, mean,
-                        sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys, dof);
+                        sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -366,15 +359,12 @@ namespace eos
 
         double alpha, lambda;
 
-        unsigned number_of_observations;
-
         LogGammaConstraintEntry(const std::string & name,
                 const QualifiedName & observable,
                 const Kinematics & kinematics, const Options & options,
                 const double & central,
                 const double & sigma_hi, const double & sigma_lo,
-                const double & alpha, const double & lambda,
-                const unsigned & number_of_observations = 1u) :
+                const double & alpha, const double & lambda) :
             ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
@@ -383,8 +373,7 @@ namespace eos
             sigma_hi(sigma_hi),
             sigma_lo(sigma_lo),
             alpha(alpha),
-            lambda(lambda),
-            number_of_observations(number_of_observations)
+            lambda(lambda)
         {
         }
 
@@ -418,7 +407,7 @@ namespace eos
             double min = this->central - this->sigma_lo;
             double max = this->central + this->sigma_hi;
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::LogGamma(cache, observable, min, this->central, max, alpha, lambda, 1u);
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::LogGamma(cache, observable, min, this->central, max, alpha, lambda);
 
             return Constraint(name, { observable }, { block });
         }
@@ -457,7 +446,6 @@ namespace eos
             out << YAML::EndMap;
             out << YAML::Key << "alpha" << YAML::Value << alpha;
             out << YAML::Key << "lambda" << YAML::Value << lambda;
-            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
 
@@ -465,7 +453,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "observable", "kinematics", "options", "mode", "sigma", "alpha", "lambda", "dof"
+                "observable", "kinematics", "options", "mode", "sigma", "alpha", "lambda"
             };
 
             for (auto && k : required_keys)
@@ -478,7 +466,7 @@ namespace eos
 
             static const std::string scalar_keys[] =
             {
-                "observable", "mode", "alpha", "lambda", "dof"
+                "observable", "mode", "alpha", "lambda"
             };
 
             for (auto && k : scalar_keys)
@@ -506,7 +494,6 @@ namespace eos
             {
                 QualifiedName observable(n["observable"].as<std::string>());
                 double mode = n["mode"].as<double>();
-                unsigned dof = n["dof"].as<unsigned>();
 
                 Kinematics kinematics;
                 std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
@@ -545,7 +532,7 @@ namespace eos
                 double lambda = n["lambda"].as<double>();
 
                 return new LogGammaConstraintEntry(name.str(), observable, kinematics, options, mode,
-                        sigma_hi, sigma_lo, alpha, lambda, dof);
+                        sigma_hi, sigma_lo, alpha, lambda);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -891,7 +878,6 @@ namespace eos
             out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian";
-            out << YAML::Key << "dim" << YAML::Value << dim;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observable_names)
             {
@@ -963,7 +949,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "dim", "observables", "kinematics", "options", "means", "sigma-stat-hi", "sigma-stat-lo", "sigma-sys", "correlations", "dof"
+                "observables", "kinematics", "options", "means", "sigma-stat-hi", "sigma-stat-lo", "sigma-sys", "correlations"
             };
 
             for (auto && k : required_keys)
@@ -971,19 +957,6 @@ namespace eos
                 if (! n[k].IsDefined())
                 {
                     throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
-                }
-            }
-
-            static const std::string scalar_keys[] =
-            {
-                "dim", "dof"
-            };
-
-            for (auto && k : scalar_keys)
-            {
-                if (YAML::NodeType::Scalar != n[k].Type())
-                {
-                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
                 }
             }
 
@@ -1002,8 +975,6 @@ namespace eos
 
             try
             {
-                unsigned dof = n["dof"].as<unsigned>();
-
                 std::vector<QualifiedName> observables;
                 for (auto && o : n["observables"])
                 {
@@ -1063,6 +1034,19 @@ namespace eos
                 {
                     means.push_back(v.as<double>());
                 }
+
+                // Test for the presence of the optional "dof" parameter
+                unsigned dof;
+                if (n["dof"])
+                {
+                    if (YAML::NodeType::Scalar != n["dof"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "optonal key 'dof' not mapped to a scalar value");
+                    }
+                    dof = n["dof"].as<unsigned>();
+                }
+                else
+                    dof = means.size();
 
                 std::vector<double> sigma_stat_hi;
                 for (auto && v : n["sigma-stat-hi"])
@@ -1243,7 +1227,6 @@ namespace eos
             out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian(Covariance)";
-            out << YAML::Key << "dim" << YAML::Value << dim_meas;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observables)
             {
@@ -1311,7 +1294,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "dim", "observables", "kinematics", "options", "means", "covariance", "dof"
+                "observables", "kinematics", "options", "means", "covariance"
             };
 
             for (auto && k : required_keys)
@@ -1319,19 +1302,6 @@ namespace eos
                 if (! n[k].IsDefined())
                 {
                     throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
-                }
-            }
-
-            static const std::string scalar_keys[] =
-            {
-                "dim", "dof"
-            };
-
-            for (auto && k : scalar_keys)
-            {
-                if (YAML::NodeType::Scalar != n[k].Type())
-                {
-                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
                 }
             }
 
@@ -1350,8 +1320,6 @@ namespace eos
 
             try
             {
-                unsigned dof = n["dof"].as<unsigned>();
-
                 std::vector<QualifiedName> observables;
                 for (auto && o : n["observables"])
                 {
@@ -1416,6 +1384,19 @@ namespace eos
                 {
                     gsl_vector_set(means, i, _means[i]);
                 }
+
+                // Test for the presence of the optional "dof" parameter
+                unsigned dof;
+                if (n["dof"])
+                {
+                    if (YAML::NodeType::Scalar != n["dof"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "optonal key 'dof' not mapped to a scalar value");
+                    }
+                    dof = n["dof"].as<unsigned>();
+                }
+                else
+                    dof = _means.size();
 
                 std::vector<std::vector<double>> _covariance;
                 for (auto && row : n["covariance"])
@@ -1795,7 +1776,6 @@ namespace eos
             out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "Mixture";
-            out << YAML::Key << "dim" << YAML::Value << dim_meas;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observables)
             {
@@ -1882,7 +1862,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "dim", "observables", "kinematics", "options", "components", "weights", "test statistics", "dof"
+                "observables", "kinematics", "options", "components", "weights", "test statistics"
             };
 
             for (auto && k : required_keys)
@@ -1890,19 +1870,6 @@ namespace eos
                 if (! n[k].IsDefined())
                 {
                     throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
-                }
-            }
-
-            static const std::string scalar_keys[] =
-            {
-                "dim", "dof"
-            };
-
-            for (auto && k : scalar_keys)
-            {
-                if (YAML::NodeType::Scalar != n[k].Type())
-                {
-                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
                 }
             }
 
@@ -1921,8 +1888,6 @@ namespace eos
 
             try
             {
-                unsigned dof = n["dof"].as<unsigned>();
-
                 std::vector<QualifiedName> observables;
                 for (auto && o : n["observables"])
                 {
@@ -2030,6 +1995,19 @@ namespace eos
                     }
                     covariances.emplace_back(std::move(covariance));
                 }
+
+                // Test for the presence of the optional "dof" parameter or infer it from the first component
+                unsigned dof;
+                if (n["dof"])
+                {
+                    if (YAML::NodeType::Scalar != n["dof"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "optonal key 'dof' not mapped to a scalar value");
+                    }
+                    dof = n["dof"].as<unsigned>();
+                }
+                else
+                    dof = means[0]->size;
 
                 std::vector<double> weights;
                 for (auto && v : n["weights"])

@@ -9,7 +9,6 @@
 # {{{
 B^+->omegalnu::BR@BPR:2021A:
     type: MultivariateGaussian
-    dim: 5
     observables:
       - B->omegalnu::BR
       - B->omegalnu::BR

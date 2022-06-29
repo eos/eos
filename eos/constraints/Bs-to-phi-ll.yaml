@@ -63,7 +63,6 @@ B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2015C:
 #
 B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -95,7 +94,6 @@ B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb:2015C:
     dof: 8
 B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -127,7 +125,6 @@ B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb:2015C:
     dof: 8
 B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -159,7 +156,6 @@ B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb:2015C:
     dof: 8
 B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -191,7 +187,6 @@ B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2015C:
     dof: 8
 B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -223,7 +218,6 @@ B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2015C:
     dof: 8
 B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 8
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -256,7 +250,6 @@ B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
 #
 B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -278,7 +271,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb:2015C:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -300,7 +292,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb:2015C:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -322,7 +313,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb:2015C:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -344,7 +334,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2015C:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -366,7 +355,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb:2015C:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb:2015C:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -471,7 +459,6 @@ B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2021A:
 # {{{
 B_s->phimu^+mu^-::AngularObservablesNoA[0.10,0.98]@LHCb:2021D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -494,7 +481,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,0.98]@LHCb:2021D:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[1.10,4.00]@LHCb:2021D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -517,7 +503,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[1.10,4.00]@LHCb:2021D:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[4.00,6.00]@LHCb:2021D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -540,7 +525,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[4.00,6.00]@LHCb:2021D:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[6.00,8.00]@LHCb:2021D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -563,7 +547,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[6.00,8.00]@LHCb:2021D:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2021D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb
@@ -586,7 +569,6 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2021D:
     dof: 4
 B_s->phimu^+mu^-::AngularObservablesNoA[15.00,19.00]@LHCb:2021D:
     type: MultivariateGaussian
-    dim: 4
     observables:
         - B_s->phill::F_L
         - B_s->phill::S_3_LHCb

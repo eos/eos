@@ -7,7 +7,6 @@
 # {{{
 B^0->D^+e^-nu::BRs@Belle:2015A:
     type: MultivariateGaussian(Covariance)
-    dim: 10
     observables:
         [ B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,
           B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR  ]
@@ -41,7 +40,6 @@ B^0->D^+e^-nu::BRs@Belle:2015A:
     dof: 10
 B^0->D^+mu^-nu::BRs@Belle:2015A:
     type: MultivariateGaussian(Covariance)
-    dim: 10
     observables:
         [ B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,
           B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR,    B->Dlnu::BR  ]
@@ -77,7 +75,6 @@ B^0->D^+mu^-nu::BRs@Belle:2015A:
     dof: 10
 B^0->D^+l^-nu::KinematicalDistribution[w]@Belle:2015A:
     type: MultivariateGaussian(Covariance)
-    dim: 9
     observables: ['B->Dlnu::P(w_min,w_max)', 'B->Dlnu::P(w_min,w_max)', 'B->Dlnu::P(w_min,w_max)',
       'B->Dlnu::P(w_min,w_max)', 'B->Dlnu::P(w_min,w_max)', 'B->Dlnu::P(w_min,w_max)',
       'B->Dlnu::P(w_min,w_max)', 'B->Dlnu::P(w_min,w_max)', 'B->Dlnu::P(w_min,w_max)']
@@ -143,7 +140,6 @@ B^0->D^+l^-nu::KinematicalDistribution[w]@Belle:2015A:
 # {{{
 B->D^(*)lnu::R_D^(*)@HFLAV:2019A:
     type: MultivariateGaussian(Covariance)
-    dim: 2
     observables:
         [ B->Dlnu::R_D, B->D^*lnu::R_D^*]
     options:
