@@ -30,7 +30,7 @@ namespace eos
     {
         if (_data_x.size() != _data_y.size())
         {
-            throw InternalError("Interpolation: dimensions of x and y data does not match");
+            throw InternalError("Interpolation: dimensions of x and y data do not match");
         }
         gsl_interp_init(_interp.get(), &_data_x[0], &_data_y[0], _data_x.size());
     }
