@@ -463,6 +463,27 @@ namespace eos
     }
     // }}}
 
+    // B -> gamma
+    // {{{
+    ObservableGroup
+    make_b_to_gamma_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $B\to \gamma$ transitions)",
+            R"(Pseudo observables representing the full basis of $B\to \gamma$ form factors.)",
+            {
+                make_form_factor_adapter("B->gamma::F_V(E_gamma)", R"(F_V^{B\to \gamma}(E_\gamma))",
+                        &FormFactors<PToGamma>::F_V, std::make_tuple("E_gamma")),
+
+                make_form_factor_adapter("B->gamma::F_A(E_gamma)", R"(F_A^{B\to \gamma}(E_\gamma))",
+                        &FormFactors<PToGamma>::F_A, std::make_tuple("E_gamma")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // B -> rho
     // {{{
     ObservableGroup
@@ -1615,6 +1636,7 @@ namespace eos
                 make_bs_to_ds_form_factors_group(),
 
                 // B -> V
+                make_b_to_gamma_form_factors_group(),
                 make_b_to_omega_form_factors_group(),
                 make_b_to_rho_form_factors_group(),
                 make_b_to_kstar_form_factors_group(),

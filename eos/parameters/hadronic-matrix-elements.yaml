@@ -1680,6 +1680,49 @@ groups:
           unit:     '1'
   # }}}
 
+  # Parameters in B -> gamma Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $B\to \gamma$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for B->gamma
+      'B->gamma::mu@FLvD2022QCDF' :
+          central: +1.5
+          min:     +1.0
+          max:     +2.0
+          latex:    '$\mu^{B \to \gamma, \mathrm{FLvD2022QCDF}}$'
+          unit:     'GeV'
+          comments: "cf. [BBJW:2018A]"
+      'B->gamma::M^2@FLvD2022QCDF' :
+          central: +1.25
+          min:     +1.0
+          max:     +1.5
+          latex:    '$M^{B \to \gamma, \mathrm{FLvD2022QCDF}}$'
+          unit:     'GeV'
+          comments: "cf. [BBJW:2018A]"
+      'B->gamma::s_0@FLvD2022QCDF' :
+          central: +1.5
+          min:     +1.4
+          max:     +1.6
+          latex:    '$s_0^{B \to \gamma, \mathrm{FLvD2022QCDF}}$'
+          unit:     'GeV^2'
+          comments: "cf. [BBJW:2018A]"
+      'B->gamma::mu_h1@FLvD2022QCDF' :
+          central: +4.8
+          min:     +4.7
+          max:     +4.9
+          latex:    '$\mu_{h1}^{B \to \gamma, \mathrm{FLvD2022QCDF}}$'
+          unit:     'GeV'
+          comments: "cf. [BR:2011A]"
+      'B->gamma::mu_h2@FLvD2022QCDF' :
+          central: +4.8
+          min:     +4.7
+          max:     +4.9
+          latex:    '$\mu_{h2}^{B \to \gamma, \mathrm{FLvD2022QCDF}}$'
+          unit:     'GeV'
+          comments: "cf. [BR:2011A]"
+  # }}}
+
   # Parameters in B -> P P Form Factor Parametrizations
   # {{{
   - title: 'Parameters in $B\to PP$ Form Factor Parametrizations'

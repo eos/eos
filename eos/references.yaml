@@ -122,6 +122,13 @@ BBGORvD:2018A:
   inspire-id: Boer:2018vpx
   title: Testing lepton flavour universality in semileptonic $\Lambda_b \to \Lambda_c^*$
     decays
+BBJW:2018A:
+  authors: 'Beneke, M. and Braun, V. M. and Ji, Yao and Wei, Yan-Bing'
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1804.04962
+  inspire-id: Beneke:2018wjp
+  title: 'Radiative leptonic decay $B\to \gamma \ell \nu_\ell$ with subleading power corrections'
 BBL:1995A:
   authors: Buchalla, Gerhard and Buras, Andrzej J. and Lautenbacher, Markus E.
   eprint:
@@ -310,6 +317,13 @@ BPR:2021A:
     id: oai:arXiv.org:2104.05739
   inspire-id: Bernlochner:2021rel
   title: '$B\to \rho \ell \bar{\nu}$ and $\omega\to \ell \bar{\nu}$ in and beyond the Standard Model: Improved predictions and $\abs{V_{ub}}$'
+BR:2011A:
+  authors: Beneke, M. and Rohrwild, J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1110.3228
+  inspire-id: Beneke:2011nf
+  title: 'B meson distribution amplitude from B --\ensuremath{>} \textbackslash{}gamma l \textbackslash{}nu}'
 BS:2011A:
   authors: Becirevic, Damir and Schneider, Elia
   eprint:
