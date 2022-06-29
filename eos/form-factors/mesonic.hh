@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
+ * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -43,6 +44,8 @@ namespace eos
      * V: Light vector meson.
      */
     struct PToV { };
+
+    struct PToGamma { };
 
     struct PToP { };
 
@@ -105,6 +108,33 @@ namespace eos
             static std::shared_ptr<FormFactors<PToV>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
             static OptionSpecification option_specification(const qnp::Prefix & process);
             static OptionSpecification option_specification();
+    };
+
+    template <>
+    class FormFactors<PToGamma> :
+        public virtual ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            // axial form factor
+            virtual double F_A(const double & Egamma) const = 0;
+
+            // vector form factor
+            virtual double F_V(const double & Egamma) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<PToGamma>
+    {
+        public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<PToGamma> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
+            static std::shared_ptr<FormFactors<PToGamma>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
     template <>
