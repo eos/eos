@@ -1227,7 +1227,6 @@ B_s->K^*::A_12@FNAL+MILC:2013A:
   correlations:
     - [1, 0.334]
     - [0.334, 1]
-  dof: 0
 B_s->K^*::A_1@FNAL+MILC:2013A:
   type: MultivariateGaussian
   observables:
@@ -1246,7 +1245,6 @@ B_s->K^*::A_1@FNAL+MILC:2013A:
   correlations:
     - [1, 0.305]
     - [0.305, 1]
-  dof: 0
 B_s->K^*::V@FNAL+MILC:2013A:
   type: MultivariateGaussian
   observables:
@@ -1265,7 +1263,6 @@ B_s->K^*::V@FNAL+MILC:2013A:
   correlations:
     - [1, 0.271]
     - [0.271, 1]
-  dof: 0
 B_s->K^*::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
