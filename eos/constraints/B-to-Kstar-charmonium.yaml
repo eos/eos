@@ -13,7 +13,6 @@ B^0->K^*0Jpsi::BR@PDG:2020A:
     mean: 1.27e-3
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 5.e-5, lo: 5.e-5}
-    dof: 1
 B^0->K^*0psi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B->K^*psi::BR
@@ -22,7 +21,6 @@ B^0->K^*0psi2S::BR@PDG:2020A:
     mean: 5.9e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 4.e-5, lo: 4.e-5}
-    dof: 1
 B->K^*Jpsi::BR@PDG:2020A:
     type: Gaussian
     observable: B->K^*psi::BR
@@ -31,7 +29,6 @@ B->K^*Jpsi::BR@PDG:2020A:
     mean: 1.43e-3
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 8.e-5, lo: 8.e-5}
-    dof: 1
 B->K^*psi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B->K^*psi::BR
@@ -40,7 +37,6 @@ B->K^*psi2S::BR@PDG:2020A:
     mean: 6.7e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 1.4e-4, lo: 1.4e-4}
-    dof: 1
 # }}}
 
 
@@ -89,7 +85,6 @@ B^0->K^*0psi2S::S_1s_LHCb@BaBar:2007A:
     mean: 0.39
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.04, lo: 0.04}
-    dof: 1
 B^0->K^*0psi2S::S_3_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_3_LHCb
@@ -98,7 +93,6 @@ B^0->K^*0psi2S::S_3_LHCb@BaBar:2007A:
     mean: 0.04
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.06, lo: 0.06}
-    dof: 1
 B^0->K^*0psi2S::S_4_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_4_LHCb
@@ -107,7 +101,6 @@ B^0->K^*0psi2S::S_4_LHCb@BaBar:2007A:
     mean: -0.20
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.04, lo: 0.04}
-    dof: 1
 B^0->K^*0psi2S::S_8_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_8_LHCb
@@ -116,7 +109,6 @@ B^0->K^*0psi2S::S_8_LHCb@BaBar:2007A:
     mean: -0.09
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.08, lo: 0.08}
-    dof: 1
 B^0->K^*0psi2S::S_9_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_9_LHCb
@@ -125,5 +117,4 @@ B^0->K^*0psi2S::S_9_LHCb@BaBar:2007A:
     mean: -0.15
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.06, lo: 0.06}
-    dof: 1
 # }}}
