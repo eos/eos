@@ -15,7 +15,6 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@BaBar:2012A:
     mean: 1.36e-07
     sigma-stat: {hi: 2.7e-08, lo: -2.4e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[2.00,4.30]@BaBar:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -24,7 +23,6 @@ B^+->K^+mu^+mu^-::BR[2.00,4.30]@BaBar:2012A:
     mean: 0.49e-07
     sigma-stat: {hi: 1.5e-08, lo: -1.3e-08}
     sigma-sys: {hi: 1e-09, lo: -1e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[4.30,8.12]@BaBar:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -33,7 +31,6 @@ B^+->K^+mu^+mu^-::BR[4.30,8.12]@BaBar:2012A:
     mean: 0.94e-07
     sigma-stat: {hi: 2.0e-08, lo: -1.9e-08}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[10.11,12.89]@BaBar:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -42,7 +39,6 @@ B^+->K^+mu^+mu^-::BR[10.11,12.89]@BaBar:2012A:
     mean: 0.90e-07
     sigma-stat: {hi: 2.0e-08, lo: -1.9e-08}
     sigma-sys: {hi: 4e-09, lo: -4e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[14.21,16.00]@BaBar:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -51,7 +47,6 @@ B^+->K^+mu^+mu^-::BR[14.21,16.00]@BaBar:2012A:
     mean: 4.9e-08
     sigma-stat: {hi: 1.5e-08, lo: -1.4e-08}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@BaBar:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -60,7 +55,6 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@BaBar:2012A:
     mean: 6.7e-08
     sigma-stat: {hi: 2.3e-08, lo: -2.1e-08}
     sigma-sys: {hi: 5e-09, lo: -5e-09}
-    dof: 1
 # }}}
 
 #########
@@ -78,7 +72,6 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle:2009A:
     mean: 0.04
     sigma-stat: {hi: 0.16, lo: -0.13}
     sigma-sys: {hi: 0.05, lo: -0.05}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle:2009A:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -87,7 +80,6 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle:2009A:
     mean: -0.04
     sigma-stat: {hi: 0.26, lo: -0.32}
     sigma-sys: {hi: 0.05, lo: -0.05}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle:2009A:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -96,7 +88,6 @@ B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle:2009A:
     mean: -0.02
     sigma-stat: {hi: 0.08, lo: -0.11}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle:2009A:
     type: Gaussian
     observable: B->Kll::BR
@@ -105,7 +96,6 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle:2009A:
     mean: 1.36e-07
     sigma-stat: {hi: 2.3e-08, lo: -2.1e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle:2009A:
     type: Gaussian
     observable: B->Kll::BR
@@ -114,7 +104,6 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle:2009A:
     mean: 3.8e-08
     sigma-stat: {hi: 1.9e-08, lo: -1.2e-08}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle:2009A:
     type: Gaussian
     observable: B->Kll::BR
@@ -123,7 +112,6 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle:2009A:
     mean: 9.8e-08
     sigma-stat: {hi: 2e-08, lo: -1.9e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
-    dof: 1
 # }}}
 #
 # 2019
@@ -137,7 +125,6 @@ B^+->K^+mu^+mu^-::BR[0.10,4.00]@Belle:2019C:
     mean: 1.76e-07
     sigma-stat: {hi: 4.1e-08, lo: -3.7e-08}
     sigma-sys: {hi: 4e-09, lo: -4e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[4.00,8.12]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -146,7 +133,6 @@ B^+->K^+mu^+mu^-::BR[4.00,8.12]@Belle:2019C:
     mean: 1.24e-07
     sigma-stat: {hi: 2.8e-08, lo: -2.5e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -155,7 +141,6 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle:2019C:
     mean: 2.30e-07
     sigma-stat: {hi: 4.1e-08, lo: -3.8e-08}
     sigma-sys: {hi: 5e-09, lo: -5e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[10.20,12.80]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -164,7 +149,6 @@ B^+->K^+mu^+mu^-::BR[10.20,12.80]@Belle:2019C:
     mean: 0.86e-07
     sigma-stat: {hi: 2.2e-08, lo: -2.0e-08}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,22.86]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -173,7 +157,6 @@ B^+->K^+mu^+mu^-::BR[14.18,22.86]@Belle:2019C:
     mean: 1.34e-07
     sigma-stat: {hi: 2.4e-08, lo: -2.2e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 #
 B^+->K^+e^+e^-::BR[0.10,4.00]@Belle:2019C:
     type: Gaussian
@@ -183,7 +166,6 @@ B^+->K^+e^+e^-::BR[0.10,4.00]@Belle:2019C:
     mean: 1.80e-07
     sigma-stat: {hi: 3.3e-08, lo: -3.0e-08}
     sigma-sys: {hi: 5e-09, lo: -5e-09}
-    dof: 1
 B^+->K^+e^+e^-::BR[4.00,8.12]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -192,7 +174,6 @@ B^+->K^+e^+e^-::BR[4.00,8.12]@Belle:2019C:
     mean: 0.96e-07
     sigma-stat: {hi: 2.4e-08, lo: -2.4e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 B^+->K^+e^+e^-::BR[1.00,6.00]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -201,7 +182,6 @@ B^+->K^+e^+e^-::BR[1.00,6.00]@Belle:2019C:
     mean: 1.66e-07
     sigma-stat: {hi: 3.2e-08, lo: -2.9e-08}
     sigma-sys: {hi: 4e-09, lo: -4e-09}
-    dof: 1
 B^+->K^+e^+e^-::BR[10.20,12.80]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -210,7 +190,6 @@ B^+->K^+e^+e^-::BR[10.20,12.80]@Belle:2019C:
     mean: 0.44e-07
     sigma-stat: {hi: 2.0e-08, lo: -1.7e-08}
     sigma-sys: {hi: 1e-09, lo: -1e-09}
-    dof: 1
 B^+->K^+e^+e^-::BR[14.18,22.86]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::BR
@@ -219,7 +198,6 @@ B^+->K^+e^+e^-::BR[14.18,22.86]@Belle:2019C:
     mean: 1.18e-07
     sigma-stat: {hi: 2.5e-08, lo: -2.2e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 #
 B^+->K^+l^+l^-::R_K[0.10,4.00]@Belle:2019C:
     type: Gaussian
@@ -229,7 +207,6 @@ B^+->K^+l^+l^-::R_K[0.10,4.00]@Belle:2019C:
     mean: 1.01
     sigma-stat: {hi: 0.28, lo: -0.25}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 B^+->K^+l^+l^-::R_K[4.00,8.12]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::R_K
@@ -238,7 +215,6 @@ B^+->K^+l^+l^-::R_K[4.00,8.12]@Belle:2019C:
     mean: 0.85
     sigma-stat: {hi: 0.30, lo: -0.24}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+l^+l^-::R_K[1.00,6.00]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::R_K
@@ -247,7 +223,6 @@ B^+->K^+l^+l^-::R_K[1.00,6.00]@Belle:2019C:
     mean: 1.03
     sigma-stat: {hi: 0.28, lo: -0.24}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+l^+l^-::R_K[10.20,12.80]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::R_K
@@ -256,7 +231,6 @@ B^+->K^+l^+l^-::R_K[10.20,12.80]@Belle:2019C:
     mean: 1.97
     sigma-stat: {hi: 1.03, lo: -0.89}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 B^+->K^+l^+l^-::R_K[14.18,22.86]@Belle:2019C:
     type: Gaussian
     observable: B->Kll::R_K
@@ -265,7 +239,6 @@ B^+->K^+l^+l^-::R_K[14.18,22.86]@Belle:2019C:
     mean: 1.16
     sigma-stat: {hi: 0.30, lo: -0.27}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 # }}}
 
 
@@ -288,7 +261,6 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF:2011B:
     mean: -0.13
     sigma-stat: {hi: 0.09, lo: -0.09}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -297,7 +269,6 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2011B:
     mean: 0.05
     sigma-stat: {hi: 0.11, lo: -0.09}
     sigma-sys: {hi: 0.03, lo: -0.03}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -306,7 +277,6 @@ B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2011B:
     mean: -0.09
     sigma-stat: {hi: 0.13, lo: -0.17}
     sigma-sys: {hi: 0.03, lo: -0.03}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::BR
@@ -315,7 +285,6 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     mean: 1.41e-07
     sigma-stat: {hi: 2e-08, lo: -2e-08}
     sigma-sys: {hi: 9e-09, lo: -9e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::BR
@@ -324,7 +293,6 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     mean: 5.3e-08
     sigma-stat: {hi: 1e-08, lo: -1.9e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::BR
@@ -333,7 +301,6 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     mean: 4.8e-08
     sigma-stat: {hi: 1.1e-08, lo: -1.1e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 # }}}
 #
 # 2012
@@ -347,7 +314,6 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF:2012A:
     mean: -0.13
     sigma-stat: {hi: 0.1, lo: -0.11}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -356,7 +322,6 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF:2012A:
     mean: 0.07000000000000001
     sigma-stat: {hi: 0.08, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -365,7 +330,6 @@ B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF:2012A:
     mean: -0.05
     sigma-stat: {hi: 0.1, lo: -0.18}
     sigma-sys: {hi: 0.05, lo: -0.05}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -374,7 +338,6 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     mean: 1.35e-07
     sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -383,7 +346,6 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     mean: 4.2e-08
     sigma-stat: {hi: 8e-09, lo: -8e-09}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -392,7 +354,6 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     mean: 5e-08
     sigma-stat: {hi: 1e-08, lo: -1e-08}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::BR
@@ -401,7 +362,6 @@ B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     mean: 9.8e-08
     sigma-stat: {hi: 6.139999999999999e-08, lo: -6.139999999999999e-08}
     sigma-sys: {hi: 7.4e-09, lo: -7.4e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -410,7 +370,6 @@ B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     mean: 1.11e-07
     sigma-stat: {hi: 5.2e-08, lo: -5.2e-08}
     sigma-sys: {hi: 1.4e-08, lo: -1.4e-08}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::BR
@@ -419,7 +378,6 @@ B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     mean: 7.26e-08
     sigma-stat: {hi: 2.57e-08, lo: -2.57e-08}
     sigma-sys: {hi: 5.4e-09, lo: -5.4e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -428,7 +386,6 @@ B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     mean: 4.3e-08
     sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
     sigma-sys: {hi: 4e-09, lo: -4e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     type: Gaussian
     observable: B->Kll::BR
@@ -437,7 +394,6 @@ B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2011B:
     mean: 2.14e-08
     sigma-stat: {hi: 1.82e-08, lo: -1.82e-08}
     sigma-sys: {hi: 1.6e-09, lo: -1.6e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     type: Gaussian
     observable: B->Kll::BR
@@ -446,7 +402,6 @@ B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF:2012A:
     mean: 2.6e-08
     sigma-stat: {hi: 1.5e-08, lo: -1.5e-08}
     sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
 # }}}
 
 
@@ -465,7 +420,6 @@ B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb:2012C:
     mean: -0.02
     sigma-stat: {hi: 0.03, lo: -0.05}
     sigma-sys: {hi: 0.01, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -474,7 +428,6 @@ B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb:2012C:
     mean: 0.01
     sigma-stat: {hi: 0.06, lo: -0.12}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -483,7 +436,6 @@ B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb:2012C:
     mean: 0.09
     sigma-stat: {hi: 0.09, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.01, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -492,7 +444,6 @@ B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb:2012C:
     mean: -0.02
     sigma-stat: {hi: 0.11, lo: -0.11}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::BR
@@ -501,7 +452,6 @@ B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb:2012C:
     mean: 1.205e-07
     sigma-stat: {hi: 8.5e-09, lo: -8.5e-09}
     sigma-sys: {hi: 7e-09, lo: -7e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::BR
@@ -510,7 +460,6 @@ B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb:2012C:
     mean: 3.7674e-08
     sigma-stat: {hi: 3.64e-09, lo: -3.64e-09}
     sigma-sys: {hi: 1.456e-09, lo: -1.456e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::BR
@@ -519,7 +468,6 @@ B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb:2012C:
     mean: 3.54e-08
     sigma-stat: {hi: 3.6e-09, lo: -3.6e-09}
     sigma-sys: {hi: 1.8e-09, lo: -1.8e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::BR
@@ -528,7 +476,6 @@ B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb:2012C:
     mean: 3.12e-08
     sigma-stat: {hi: 4e-09, lo: -4e-09}
     sigma-sys: {hi: 1.6e-09, lo: -1.6e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::F_H
@@ -537,7 +484,6 @@ B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb:2012C:
     mean: 0.05
     sigma-stat: {hi: 0.08, lo: -0.05}
     sigma-sys: {hi: 0.04, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::F_H
@@ -546,7 +492,6 @@ B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb:2012C:
     mean: 0.08
     sigma-stat: {hi: 0.28, lo: -0.08}
     sigma-sys: {hi: 0.02, lo: -0.01}
-    dof: 1
 B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::F_H
@@ -555,7 +500,6 @@ B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb:2012C:
     mean: 0.18
     sigma-stat: {hi: 0.22, lo: -0.14}
     sigma-sys: {hi: 0.01, lo: -0.04}
-    dof: 1
 B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb:2012C:
     type: Gaussian
     observable: B->Kll::F_H
@@ -564,7 +508,6 @@ B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb:2012C:
     mean: 0.14
     sigma-stat: {hi: 0.31, lo: -0.14}
     sigma-sys: {hi: 0.01, lo: -0.02}
-    dof: 1
 # }}}
 #
 # 2014
@@ -578,7 +521,6 @@ B^+->K^+l^+l^-::R_K[1.00,6.00]@LHCb:2014C:
     mean: 0.745
     sigma-stat: {hi: 0.09, lo: 0.074}
     sigma-sys: {hi: 0.036, lo: 0.036}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[1.10,6.00]@LHCb:2014B:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -587,7 +529,6 @@ B^+->K^+mu^+mu^-::A_FB[1.10,6.00]@LHCb:2014B:
     mean: -0.005
     sigma-stat: {hi: 0.015, lo: -0.015}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb:2014B:
     type: Gaussian
     observable: B->Kll::A_FB
@@ -596,7 +537,6 @@ B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb:2014B:
     mean: 0.015
     sigma-stat: {hi: 0.015, lo: -0.015}
     sigma-sys: {hi: 0.01, lo: -0.01}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[0.10,0.98]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -605,7 +545,6 @@ B^+->K^+mu^+mu^-::BR[0.10,0.98]@LHCb:2014A:
     mean: 2.9216e-08
     sigma-stat: {hi: 1.584e-09, lo: -1.584e-09}
     sigma-sys: {hi: 1.496e-09, lo: -1.496e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -614,7 +553,6 @@ B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb:2014A:
     mean: 2.097e-08
     sigma-stat: {hi: 1.35e-09, lo: -1.35e-09}
     sigma-sys: {hi: 1.08e-09, lo: -1.08e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[2.00,3.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -623,7 +561,6 @@ B^+->K^+mu^+mu^-::BR[2.00,3.00]@LHCb:2014A:
     mean: 2.82e-08
     sigma-stat: {hi: 1.6e-09, lo: -1.6e-09}
     sigma-sys: {hi: 1.4e-09, lo: -1.4e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[3.00,4.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -632,7 +569,6 @@ B^+->K^+mu^+mu^-::BR[3.00,4.00]@LHCb:2014A:
     mean: 2.54e-08
     sigma-stat: {hi: 1.5e-09, lo: -1.5e-09}
     sigma-sys: {hi: 1.3e-09, lo: -1.3e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[4.00,5.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -641,7 +577,6 @@ B^+->K^+mu^+mu^-::BR[4.00,5.00]@LHCb:2014A:
     mean: 2.21e-08
     sigma-stat: {hi: 1.4e-09, lo: -1.4e-09}
     sigma-sys: {hi: 1.1e-09, lo: -1.1e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[5.00,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -650,7 +585,6 @@ B^+->K^+mu^+mu^-::BR[5.00,6.00]@LHCb:2014A:
     mean: 2.31e-08
     sigma-stat: {hi: 1.4e-09, lo: -1.4e-09}
     sigma-sys: {hi: 1.2e-09, lo: -1.2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[6.00,7.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -659,7 +593,6 @@ B^+->K^+mu^+mu^-::BR[6.00,7.00]@LHCb:2014A:
     mean: 2.45e-08
     sigma-stat: {hi: 1.4e-09, lo: -1.4e-09}
     sigma-sys: {hi: 1.2e-09, lo: -1.2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[7.00,8.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -668,7 +601,6 @@ B^+->K^+mu^+mu^-::BR[7.00,8.00]@LHCb:2014A:
     mean: 2.31e-08
     sigma-stat: {hi: 1.4e-09, lo: -1.4e-09}
     sigma-sys: {hi: 1.2e-09, lo: -1.2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[1.10,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -677,7 +609,6 @@ B^+->K^+mu^+mu^-::BR[1.10,6.00]@LHCb:2014A:
     mean: 1.1858e-07
     sigma-stat: {hi: 3.43e-09, lo: -3.43e-09}
     sigma-sys: {hi: 5.88e-09, lo: -5.88e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::BR[15.00,22.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -686,7 +617,6 @@ B^+->K^+mu^+mu^-::BR[15.00,22.00]@LHCb:2014A:
     mean: 8.470000000000001e-08
     sigma-stat: {hi: 2.8e-09, lo: -2.8e-09}
     sigma-sys: {hi: 4.2e-09, lo: -4.2e-09}
-    dof: 1
 B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb:2014B:
     type: Gaussian
     observable: B->Kll::F_H
@@ -695,7 +625,6 @@ B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb:2014B:
     mean: 0.03
     sigma-stat: {hi: 0.03, lo: -0.03}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb:2014B:
     type: Gaussian
     observable: B->Kll::F_H
@@ -704,7 +633,6 @@ B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb:2014B:
     mean: 0.035
     sigma-stat: {hi: 0.035, lo: -0.035}
     sigma-sys: {hi: 0.02, lo: -0.02}
-    dof: 1
 #
 B^0->K^0mu^+mu^-::BR[0.10,2.00]@LHCb:2014A:
     type: Gaussian
@@ -714,7 +642,6 @@ B^0->K^0mu^+mu^-::BR[0.10,2.00]@LHCb:2014A:
     mean: 23.18e-09
     sigma-stat: {hi: 11.21e-09, lo: -9.88e-09}
     sigma-sys: {hi: 1.14e-09, lo: -1.14e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[2.00,4.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -723,7 +650,6 @@ B^0->K^0mu^+mu^-::BR[2.00,4.00]@LHCb:2014A:
     mean: 37.4e-09
     sigma-stat: {hi: 11.e-09, lo: -9.8e-09}
     sigma-sys: {hi: 1.8e-09, lo: -1.8e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[4.00,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -732,7 +658,6 @@ B^0->K^0mu^+mu^-::BR[4.00,6.00]@LHCb:2014A:
     mean: 34.6e-09
     sigma-stat: {hi: 10.6e-09, lo: -9.6e-09}
     sigma-sys: {hi: 1.8e-09, lo: -1.8e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[6.00,8.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -741,7 +666,6 @@ B^0->K^0mu^+mu^-::BR[6.00,8.00]@LHCb:2014A:
     mean: 54.e-09
     sigma-stat: {hi: 11.6e-09, lo: -10.6e-09}
     sigma-sys: {hi: 2.8e-09, lo: -2.8e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[11.00,12.50]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -750,7 +674,6 @@ B^0->K^0mu^+mu^-::BR[11.00,12.50]@LHCb:2014A:
     mean: 19.05e-09
     sigma-stat: {hi: 6.75e-09, lo: -6.e-09}
     sigma-sys: {hi: 0.9e-09, lo: -0.9e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[15.00,17.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -759,7 +682,6 @@ B^0->K^0mu^+mu^-::BR[15.00,17.00]@LHCb:2014A:
     mean: 28.6e-09
     sigma-stat: {hi: 7.e-09, lo: -6.4e-09}
     sigma-sys: {hi: 1.4e-09, lo: -1.4e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[17.00,22.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -768,7 +690,6 @@ B^0->K^0mu^+mu^-::BR[17.00,22.00]@LHCb:2014A:
     mean: 39.e-09
     sigma-stat: {hi: 8.5e-09, lo: -7.5e-09}
     sigma-sys: {hi: 2.e-09, lo: -2.e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[1.10,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -777,7 +698,6 @@ B^0->K^0mu^+mu^-::BR[1.10,6.00]@LHCb:2014A:
     mean: 91.63e-09
     sigma-stat: {hi: 17.15e-09, lo: -15.68e-09}
     sigma-sys: {hi: 4.41e-09, lo: -4.41e-09}
-    dof: 1
 B^0->K^0mu^+mu^-::BR[15.00,22.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::BR
@@ -786,7 +706,6 @@ B^0->K^0mu^+mu^-::BR[15.00,22.00]@LHCb:2014A:
     mean: 66.5e-09
     sigma-stat: {hi: 11.2e-09, lo: -10.5e-09}
     sigma-sys: {hi: 3.5e-09, lo: -3.5e-09}
-    dof: 1
 # The following measurements are normalized to B^+->K^+J/psi = (0.998 ± 0.014 ± 0.040) × 10−3
 # The values are extracted from the experimental paper via
 #     mean = BR_mean / Norm_mean
@@ -800,7 +719,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb:2014A:
     mean: 29.27e-06
     sigma-stat: {hi: 1.59e-06, lo: -1.59e-06}
     sigma-sys: {hi: 0.26e-06, lo: -0.26e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[1.10,2.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -809,7 +727,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[1.10,2.00]@LHCb:2014A:
     mean: 21.01e-06
     sigma-stat: {hi: 1.35e-06, lo: -1.35e-06}
     sigma-sys: {hi: 0.19e-06, lo: -0.19e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[2.00,3.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -818,7 +735,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[2.00,3.00]@LHCb:2014A:
     mean: 28.26e-06
     sigma-stat: {hi: 1.60e-06, lo: -1.60e-06}
     sigma-sys: {hi: 0.20e-06, lo: -0.20e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[3.00,4.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -827,7 +743,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[3.00,4.00]@LHCb:2014A:
     mean: 25.45e-06
     sigma-stat: {hi: 1.50e-06, lo: -1.50e-06}
     sigma-sys: {hi: 0.22e-06, lo: -0.22e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[4.00,5.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -836,7 +751,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[4.00,5.00]@LHCb:2014A:
     mean: 22.14e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.16e-06, lo: -0.16e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[5.00,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -845,7 +759,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[5.00,6.00]@LHCb:2014A:
     mean: 23.15e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.22e-06, lo: -0.22e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[6.00,7.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -854,7 +767,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[6.00,7.00]@LHCb:2014A:
     mean: 24.55e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.16e-06, lo: -0.16e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[7.00,8.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -863,7 +775,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[7.00,8.00]@LHCb:2014A:
     mean: 23.15e-06
     sigma-stat: {hi: 1.40e-06, lo: -1.40e-06}
     sigma-sys: {hi: 0.22e-06, lo: -0.22e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[11.00,11.80]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -872,7 +783,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[11.00,11.80]@LHCb:2014A:
     mean: 14.19e-06
     sigma-stat: {hi: 1.04e-06, lo: -1.04e-06}
     sigma-sys: {hi: 0.12e-06, lo: -0.12e-06}
-    dof: 1
 B^+->K^+mu^+mu^-::NormalizedBR[11.80,12.50]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -881,7 +791,6 @@ B^+->K^+mu^+mu^-::NormalizedBR[11.80,12.50]@LHCb:2014A:
     mean: 13.54e-06
     sigma-stat: {hi: 0.84e-06, lo: -0.84e-06}
     sigma-sys: {hi: 0.13e-06, lo: -0.13e-06}
-    dof: 1
 # The following measurements are normalized to B^0->K^0J/psi = (0.928 ± 0.013 ± 0.037) × 10−3
 # The values are extracted from the experimental paper via
 #     mean = BR_mean / Norm_mean
@@ -895,7 +804,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[0.10,2.00]@LHCb:2014A:
     mean: 24.98e-06
     sigma-stat: {hi: 12.08e-06, lo: -10.65e-06}
     sigma-sys: {hi: 0.17e-06, lo: -0.17e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[2.00,4.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -904,7 +812,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[2.00,4.00]@LHCb:2014A:
     mean: 40.30e-06
     sigma-stat: {hi: 11.85e-06, lo: -10.56e-06}
     sigma-sys: {hi: 0.24e-06, lo: -0.24e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -913,7 +820,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2014A:
     mean: 37.28e-06
     sigma-stat: {hi: 11.42e-06, lo: -10.34e-06}
     sigma-sys: {hi: 0.36e-06, lo: -0.36e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -922,7 +828,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2014A:
     mean: 58.19e-06
     sigma-stat: {hi: 12.5e-06, lo: -11.42e-06}
     sigma-sys: {hi: 0.56e-06, lo: -0.56e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -931,7 +836,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2014A:
     mean: 20.53e-06
     sigma-stat: {hi: 7.27e-06, lo: -6.47e-06}
     sigma-sys: {hi: 0.1e-06, lo: -0.1e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -940,7 +844,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2014A:
     mean: 30.82e-06
     sigma-stat: {hi: 7.54e-06, lo: -6.90e-06}
     sigma-sys: {hi: 0.21e-06, lo: -0.21e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[17.00,22.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -949,7 +852,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[17.00,22.00]@LHCb:2014A:
     mean: 42.03e-06
     sigma-stat: {hi: 9.16e-06, lo: -8.08e-06}
     sigma-sys: {hi: 0.38e-06, lo: -0.38e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[1.10,6.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -958,7 +860,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[1.10,6.00]@LHCb:2014A:
     mean: 98.74e-06
     sigma-stat: {hi: 18.48e-06, lo: -16.90e-06}
     sigma-sys: {hi: 0.58e-06, lo: -0.58e-06}
-    dof: 1
 B^0->K^0mu^+mu^-::NormalizedBR[15.00,22.00]@LHCb:2014A:
     type: Gaussian
     observable: B->Kll::NormalizedBR
@@ -967,7 +868,6 @@ B^0->K^0mu^+mu^-::NormalizedBR[15.00,22.00]@LHCb:2014A:
     mean: 71.66e-06
     sigma-stat: {hi: 12.07e-06, lo: -11.31e-06}
     sigma-sys: {hi: 0.74e-06, lo: -0.74e-06}
-    dof: 1
 # }}}
 #
 # 2021
@@ -981,5 +881,4 @@ B^+->K^+l^+l^-::R_K[1.10,6.00]@LHCb:2021A:
     mean: 0.846
     sigma-stat: {hi: 0.042, lo: -0.039}
     sigma-sys: {hi: 0.013, lo: -0.012}
-    dof: 1
 # }}}

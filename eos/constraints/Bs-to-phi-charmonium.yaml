@@ -13,7 +13,6 @@ B_s->phiJpsi::BR@PDG:2020A:
     mean: 1.08e-3
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 8.e-5, lo: 8.e-5}
-    dof: 1
 B_s->phipsi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
@@ -22,7 +21,6 @@ B_s->phipsi2S::BR@PDG:2020A:
     mean: 5.4e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 6.e-5, lo: 6.e-5}
-    dof: 1
 # }}}
 
 ########
@@ -52,7 +50,6 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2014D:
         - [-0.70, 1.00,-0.38,-0.28 ]
         - [ 0.03,-0.38, 1.00, 0.47 ]
         - [ 0.08,-0.28, 0.47, 1.00 ]
-    dof: 4
 # }}}
 #
 # 2016
@@ -78,7 +75,6 @@ B_s->phipsi2S::PolarizationAmplitude@LHCb:2016B:
         - [-0.54, 1.00, 0.05,-0.02 ]
         - [-0.31, 0.05, 1.00, 0.26 ]
         - [-0.05,-0.02, 0.26, 1.00 ]
-    dof: 4
 # }}}
 #
 # 2019
@@ -104,7 +100,6 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2019A:
         - [-0.64, 1.00, 0.01,-0.02 ]
         - [ 0.01, 0.01, 1.00, 0.25 ]
         - [ 0.07,-0.02, 0.25, 1.00 ]
-    dof: 4
 # }}}
 #
 # 2021
@@ -130,7 +125,6 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2021C:
         - [-0.66, 1.00, 0.08,-0.17 ]
         - [-0.06, 0.08, 1.00,-0.03 ]
         - [ 0.10,-0.17,-0.03, 1.00 ]
-    dof: 4
 # }}}
 
 #######
@@ -160,7 +154,6 @@ B_s->phiJpsi::PolarizationAmplitude@CMS:2020B:
         - [-0.56, 1.00,-0.03, 0.01 ]
         - [-0.03,-0.03, 1.00, 0.26 ]
         - [ 0.01, 0.01, 0.26, 1.00 ]
-    dof: 4
 # }}}
 
 #########
@@ -191,5 +184,4 @@ B_s->phiJpsi::PolarizationAmplitude@ATLAS:2020A:
         - [-0.341, 1.00, -0.034,-0.103 ]
         - [ 0.13, -0.034,  1.00, 0.254 ]
         - [ 0.522,-0.103, 0.254, 1.00  ]
-    dof: 4
 # }}}

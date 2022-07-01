@@ -15,7 +15,6 @@ B^0_s->mu^+mu^-::BR@ATLAS:2018A:
     mean: 2.8e-9
     sigma-stat: { hi: 0.8e-9, lo: 0.7e-9 }
     sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
-    dof: 1
 # }}}
 
 #######
@@ -47,7 +46,6 @@ B^0_s->mu^+mu^-::BR@CMS:2016A:
     mean: 3.0e-9
     sigma-stat: { hi: 1.0e-9, lo: 0.9e-9 }
     sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
-    dof: 1
 # }}}
 #
 # 2019
@@ -61,7 +59,6 @@ B^0_s->mu^+mu^-::BR@CMS:2019A:
     mean: 2.9e-9
     sigma-stat: { hi: 0.7e-9, lo: 0.6e-9 }
     sigma-sys: { hi: 0.2e-9, lo: 0.2e-9 }
-    dof: 1
 # }}}
 
 ##############
@@ -106,7 +103,6 @@ B^0_s->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
     mean: 2.69e-9
     sigma-stat: { hi: 0., lo: 0. }
     sigma-sys: { hi: 0.37e-9, lo: 0.35e-9 }
-    dof: 1
 B^0_d->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
     type: Gaussian
     observable: B_q->ll::BR@Untagged
@@ -115,7 +111,6 @@ B^0_d->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
     mean: 0.6e-9
     sigma-stat: { hi: 0.e-9, lo: 0.e-9 }
     sigma-sys: { hi: 0.7e-9, lo: 0.7e-9 }
-    dof: 1
 # }}}
 
 ########
@@ -147,7 +142,6 @@ B^0_s->mu^+mu^-::BR@LHCb:2017A:
     mean: 3.0e-9
     sigma-stat: { hi: 0.6e-9, lo: 0.6e-9 }
     sigma-sys: { hi: 0.3e-9, lo: 0.2e-9 }
-    dof: 1
 # }}}
 #
 # 2021
@@ -161,7 +155,6 @@ B^0_s->mu^+mu^-::BR@LHCb:2021B:
     mean: 3.09e-9
     sigma-stat: { hi: 0.46e-9, lo: 0.43e-9 }
     sigma-sys: { hi: 0.15e-9, lo: 0.11e-9 }
-    dof: 1
 # }}}
 
 #########
@@ -179,7 +172,6 @@ B^+->tau^+nu::BR@Belle:2014A:
     mean: 1.25e-4
     sigma-stat: { hi: 0.28e-4, lo: 0.28e-4 }
     sigma-sys: { hi: 0.27e-4, lo: 0.27e-4 }
-    dof: 1
 # }}}
 #
 # 2019
@@ -193,5 +185,4 @@ B^+->mu^+nu::BR@Belle:2019A:
     mean: 5.3e-7
     sigma-stat: { hi: 2.0e-7, lo: 2.0e-7 }
     sigma-sys: { hi: 0.9e-7, lo: 0.9e-7 }
-    dof: 1
 # }}}

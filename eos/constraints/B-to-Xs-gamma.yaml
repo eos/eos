@@ -15,7 +15,6 @@ B->X_sgamma::BR[1.8]@BaBar:2012C:
     mean: 0.000321
     sigma-stat: {hi: 1.5e-05, lo: -1.5e-05}
     sigma-sys: {hi: 2.9e-05, lo: -2.9e-05}
-    dof: 1
 B->X_sgamma::E_1[1.8]@BaBar:2012C:
     type: Gaussian
     observable: B->X_sgamma::E_1(E_min)@NLO
@@ -24,7 +23,6 @@ B->X_sgamma::E_1[1.8]@BaBar:2012C:
     mean: 2.267
     sigma-stat: {hi: 0.019, lo: -0.019}
     sigma-sys: {hi: 0.032, lo: -0.032}
-    dof: 1
 B->X_sgamma::E_2[1.8]@BaBar:2012C:
     type: Gaussian
     observable: B->X_sgamma::E_2(E_min)@NLO
@@ -33,7 +31,6 @@ B->X_sgamma::E_2[1.8]@BaBar:2012C:
     mean: 0.0484
     sigma-stat: {hi: 0.0053, lo: -0.0053}
     sigma-sys: {hi: 0.0077, lo: -0.0077}
-    dof: 1
 B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar:2012C:
     type: MultivariateGaussian
     observables:
@@ -52,7 +49,6 @@ B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar:2012C:
     correlations:
         -   [1, -0.88]
         -   [-0.88, 1]
-    dof: 2
 # }}}
 
 #########
@@ -70,7 +66,6 @@ B->X_sgamma::E_1[1.8]@Belle:2008A:
     mean: 2.292
     sigma-stat: {hi: 0.027, lo: 0.027}
     sigma-sys: {hi: 0.033, lo: 0.033}
-    dof: 1
 B->X_sgamma::E_2[1.8]@Belle:2008A:
     type: Gaussian
     observable: B->X_sgamma::E_2(E_min)@NLO
@@ -79,7 +74,6 @@ B->X_sgamma::E_2[1.8]@Belle:2008A:
     mean: 0.0305
     sigma-stat: {hi: 0.079, lo: 0.079}
     sigma-sys: {hi: 0.099, lo: 0.099}
-    dof: 1
 B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle:2008A:
     type: MultivariateGaussian
     observables:
@@ -98,7 +92,6 @@ B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle:2008A:
     correlations:
         -   [1, -0.46]
         -   [-0.46, 1]
-    dof: 2
 # }}}
 #
 # 2009
@@ -112,7 +105,6 @@ B->X_sgamma::BR[1.8]@Belle:2009B:
     mean: 0.000336
     sigma-stat: {hi: 1.3e-05, lo: -1.3e-05}
     sigma-sys: {hi: 2.5e-05, lo: -2.5e-05}
-    dof: 1
 B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle:2009B:
     type: MultivariateGaussian
     observables:
@@ -135,6 +127,5 @@ B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle:2009B:
         -   [1, 0.67, 0.8]
         -   [0.67, 1, 0.78]
         -   [0.8, 0.78, 1]
-    dof: 3
 # }}}
 
