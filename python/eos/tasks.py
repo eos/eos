@@ -58,6 +58,8 @@ def task(name, output, mode=lambda **kwargs: 'w'):
             }
             _args.update(zip(func.__code__.co_varnames, args))
             _args.update(kwargs)
+            if 'analysis_file' in _args and type(_args['analysis_file']) not in [eos.AnalysisFile, None]:
+                _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
             # create output directory
             outputpath = ('{base_directory}/' + output).format(**_args)
             os.makedirs(outputpath, exist_ok=True)
@@ -75,7 +77,7 @@ def task(name, output, mode=lambda **kwargs: 'w'):
                     display(iaccordion)
                 # use invocation-specific ipython output widget (if available)
                 with ioutput:
-                    result = func(*args, **kwargs)
+                    result = func(**_args)
                     if iaccordion:
                         iaccordion.selected_index = None
                     return result
@@ -122,11 +124,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     if not chain is None and not start_point is None:
         raise ValueError('The arguments chain and start_point are mutually exclusive')
 
-    if type(analysis_file) is not eos.AnalysisFile:
-        _analysis_file = eos.AnalysisFile(analysis_file)
-    else:
-        _analysis_file = analysis_file
-    analysis = _analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior)
     min_chi2 = sys.float_info.max
     gof = None
     bfp = None
@@ -212,11 +210,7 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     :type start_point: list-like, optional
     """
 
-    if type(analysis_file) is not eos.AnalysisFile:
-        _analysis_file = eos.AnalysisFile(analysis_file)
-    else:
-        _analysis_file = analysis_file
-    analysis = _analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
         samples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point)
@@ -327,11 +321,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     :type pmc_lookback: int >= 0, optional
      """
 
-    if type(analysis_file) is not eos.AnalysisFile:
-        _analysis_file = eos.AnalysisFile(analysis_file)
-    else:
-        _analysis_file = analysis_file
-    analysis = _analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
     if initial_proposal == 'clusters':
         initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
@@ -380,11 +370,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type begin: int
     '''
     _parameters = eos.Parameters()
-    if type(analysis_file) is not eos.AnalysisFile:
-        _analysis_file = eos.AnalysisFile(analysis_file)
-    else:
-        _analysis_file = analysis_file
-    observables = _analysis_file.observables(prediction, _parameters)
+    observables = analysis_file.observables(prediction, _parameters)
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -425,9 +411,5 @@ def run_steps(analysis_file:str, base_directory:str='./'):
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
     """
-    if type(analysis_file) is not eos.AnalysisFile:
-        _analysis_file = eos.AnalysisFile(analysis_file)
-    else:
-        _analysis_file = analysis_file
-    _analysis_file.run()
+    analysis_file.run()
 
