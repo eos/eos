@@ -9,6 +9,16 @@ export EOS_BASE_DIRECTORY=$(mktemp -d)
 echo using PYTHON=${PYTHON} >&2
 echo using PYTHONPATH=${PYTHONPATH} >&2
 
+###########################################
+## Run the Analysis's steps automaticall ##
+###########################################
+echo running analysis steps test ... >&2
+$PYTHON ${SOURCE_DIR}/eos-analysis \
+    run \
+    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+echo ... success >&2
+
+
 ###########################
 ## Analysis optimization ##
 ###########################
