@@ -1218,8 +1218,8 @@ B_s->K^*::A_12@FNAL+MILC:2013A:
     - {q2: 15}
     - {q2: 19.21}
   options:
-    - {form-factors: FMvD2015}
-    - {form-factors: FMvD2015}
+    - {form-factors: BSZ2015}
+    - {form-factors: BSZ2015}
   means: [0.342, 0.408]
   sigma-stat-hi: [0.016, 0.016]
   sigma-stat-lo: [0.016, 0.016]
@@ -1236,8 +1236,8 @@ B_s->K^*::A_1@FNAL+MILC:2013A:
     - {q2: 15}
     - {q2: 19.21}
   options:
-    - {form-factors: FMvD2015}
-    - {form-factors: FMvD2015}
+    - {form-factors: BSZ2015}
+    - {form-factors: BSZ2015}
   means: [0.427, 0.548]
   sigma-stat-hi: [0.015, 0.015]
   sigma-stat-lo: [0.015, 0.015]
@@ -1254,8 +1254,8 @@ B_s->K^*::V@FNAL+MILC:2013A:
     - {q2: 15}
     - {q2: 19.21}
   options:
-    - {form-factors: FMvD2015}
-    - {form-factors: FMvD2015}
+    - {form-factors: BSZ2015}
+    - {form-factors: BSZ2015}
   means: [0.872, 1.722]
   sigma-stat-hi: [0.066, 0.066]
   sigma-stat-lo: [0.066, 0.066]
