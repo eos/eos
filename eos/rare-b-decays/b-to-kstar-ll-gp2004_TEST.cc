@@ -101,7 +101,7 @@ class BToKstarDileptonLowRecoilTest :
                     {"model", "WET"},
                     {"tag", "GP2004"},
                     {"l", "mu"},
-                    {"form-factors", "BZ2004"}
+                    {"form-factors", "BSZ2015"}
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -111,19 +111,19 @@ class BToKstarDileptonLowRecoilTest :
                     const double eps = 1e-4;
                     auto ir = d.prepare(14.00, 19.21);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.4093, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),  +0.3497, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.4835, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),     +1.6893, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),     +0.5758, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.1244, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.8391, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,    eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                        +0.9967, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.9727, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.9587, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,    eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,    eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.410151, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),   0.315794, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.548440, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),      1.847569, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),      0.524309, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.122853, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.799275, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                         0.997726, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.968699, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.955853, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,      eps);
 
                     double a_fb = d.integrated_unnormalized_forward_backward_asymmetry(ir) / d.integrated_branching_ratio(ir);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), a_fb,    eps);
@@ -134,17 +134,17 @@ class BToKstarDileptonLowRecoilTest :
                     const double eps = 1e-4;
                     auto ir = d.prepare(16.00, 19.21);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.381708, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),  +0.337697, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.599389, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),     +1.99535,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),     +0.486256, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.112158, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.768382, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.374292, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),   0.308243, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.657588, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),      2.198274, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),      0.439617, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.108524, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.721433, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,      eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                        +0.998622, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.970214, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.959887, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                         0.999119, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.966399, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.957599, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,      eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,      eps);
 
@@ -154,22 +154,22 @@ class BToKstarDileptonLowRecoilTest :
 
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
-                    static const double eps = 1e-19; // 1e-7 smaller than results
+                    static const double eps = 1e-7;
 
                     auto amps = d.amplitudes(16.00);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_left),  -9.860564941316e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_left),  -2.941484608501e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_right), +8.071641897174e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_right), -2.941484608501e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_left),  +7.179697602811e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_left),  +2.141760651448e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_right), -5.877142772730e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_right), +2.141760651448e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_left),  -1.139839686524e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_left),  -3.400232049605e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_right), +9.330477335285e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_right), -3.400232049605e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -8.7364051e-11,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.606138825e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.15142934e-12,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -2.606138825e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   6.474212323e-11, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),   1.931308806e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right), -5.299648017e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  1.931308806e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),  -1.115955078e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),  -3.328982372e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  9.134963179e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right), -3.328982372e-12, eps);
                 }
             }
 
@@ -224,7 +224,7 @@ class BToKstarDileptonLowRecoilTest :
                     {"model", "WET"},
                     {"tag", "GP2004"},
                     {"l", "mu"},
-                    {"form-factors", "BZ2004"}
+                    {"form-factors", "BSZ2015"}
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -234,10 +234,10 @@ class BToKstarDileptonLowRecoilTest :
                     static const double eps = 1e-4;
                     auto ir = d.prepare(14.18, 19.21);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(ir),                         2.77767e-7, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir),             -4.08565e-1, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(ir),              +0.34841,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(ir),                 -4.92697e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(ir),               2.458835412e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir),   -0.4087203569,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(ir),     0.3149021373,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(ir),       -0.5572039303,    eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 19.21}});
                     auto obs_BR   = Observable::make("B->K^*ll::BR", p, k_mu, oo);
@@ -245,30 +245,30 @@ class BToKstarDileptonLowRecoilTest :
                     auto obs_AT2  = Observable::make("B->K^*ll::A_T^2",  p, k_mu, oo);
                     auto obs_AFB  = Observable::make("B->K^*ll::A_FB",  p, k_mu, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(obs_BR->evaluate(),   2.63504e-7, eps);
-                    TEST_CHECK_RELATIVE_ERROR(obs_FL->evaluate(),   0.34851,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(obs_AT2->evaluate(), -4.91581e-1, eps);
-                    TEST_CHECK_RELATIVE_ERROR(obs_AFB->evaluate(), -4.02902e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_BR->evaluate(),   2.331870232e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_FL->evaluate(),   0.3149648891,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_AT2->evaluate(), -0.556111894,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_AFB->evaluate(), -0.4031418964,    eps);
                 }
 
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
-                    static const double eps = 1e-19; // 1e-7 smaller than results
+                    static const double eps = 1e-7;
 
                     auto amps = d.amplitudes(16.00);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_left),  -2.41522826885e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_left),  -9.96805582174e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_right), -2.41522826886e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_right), +7.68695280669e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_left),  +1.75858165484e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_left),  +7.25796411402e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_right), +1.75858165484e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_right), -5.59704205262e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_left),  -2.79190193386e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_left),  -1.15226517859e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_right), -2.79190193386e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_right), +8.88579298412e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -2.139878667e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -8.831641416e-11, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right), -2.139878667e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right),  6.810596969e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.585781415e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),   6.544788278e-11, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  1.585781415e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right), -5.047070313e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),  -2.733399423e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),  -1.128120202e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right), -2.733399423e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  8.699596903e-12, eps);
                 }
             }
 
@@ -318,29 +318,29 @@ class BToKstarDileptonLowRecoilTest :
                     {"model", "WET"},
                     {"tag", "GP2004"},
                     {"l", "mu"},
-                    {"form-factors", "BZ2004"}
+                    {"form-factors", "BSZ2015"}
                 };
 
                 BToKstarDilepton d(p, oo);
 
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
-                    static const double eps = 1e-19; // 1e-7 smaller than results
+                    static const double eps = 1e-7;
 
                     auto amps = d.amplitudes(16.00);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_left),  -2.413541335202e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_left),  -2.939430107299e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_right), -2.413541335202e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_right), -2.939430107299e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_left),  +1.757353360762e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_left),  +2.140264723229e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_right), +1.757353360762e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_right), +2.140264723229e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_left),  -2.789951909754e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_left),  -3.397857132935e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_right), -2.789951909754e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_right), -3.397857132935e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_left),  -2.138384054e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_left),  -2.604318549e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_long_right), -2.138384054e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_long_right), -2.604318549e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_left),   1.584673814e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_left),   1.929959869e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_perp_right),  1.584673814e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_perp_right),  1.929959869e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_left),  -2.731490261e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_left),  -3.326657221e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(amps.a_para_right), -2.731490261e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(amps.a_para_right), -3.326657221e-12, eps);
                 }
             }
         }
@@ -421,7 +421,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                     { "model",        "WET" },
                     { "l",            "mu"         },
                     { "tag",          "GP2004"     },
-                    { "form-factors", "BZ2004"     }
+                    { "form-factors", "BSZ2015"     }
                 };
 
                 for (const auto & name : names)
@@ -571,7 +571,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             o.declare("l", "mu");
             o.declare("q", "d");
             o.declare("tag", "GP2004");
-            o.declare("form-factors", "BZ2004");
+            o.declare("form-factors", "BSZ2015");
 
             std::vector<Parameter> variations;
 
@@ -739,45 +739,45 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
                 BToKstarDilepton d(p, oo);
                 auto amps = d.amplitudes(q2);
 
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>( 4.021407965e-11, -1.564297789e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>( 8.645626526e-11,  8.331646455e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-7.455049449e-11,  4.565517978e-12), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>( 3.565928422e-11,  2.577481906e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-7.541145186e-11,  4.618243535e-12), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>( 3.607110071e-11,  2.607248335e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>( 4.022237305e-11, -1.565547054e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>( 8.648694084e-11,  8.335187033e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-7.452197142e-11,  4.596972947e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>( 3.56948263e-11,   2.58076248e-11 ), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-7.540711414e-11,  4.651573987e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>( 3.611879543e-11,  2.611415763e-11), eps);
 
                 // nearly identically implemented, only difference from alpha_s
                 eps = 1e-3;
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time,       complex<double>(-1.677697256e-10, -3.507403558e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_scal,       complex<double>( 2.767698228e-12,  2.767698228e-12), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_perp,  complex<double>( 2.38060e-11,      3.70316e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_long,  complex<double>( 2.64511e-11,      3.96767e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_perp,  complex<double>( 1.46932e-11,      2.28561e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_perp,  complex<double>( 1.63258e-11,      2.44887e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_para,  complex<double>( 3.12340e-11,      4.6851e-11 ),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_para,  complex<double>( 2.81106e-11,      4.37276e-11),     eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time,       complex<double>(-1.678438392e-10, -3.508952983e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_scal,       complex<double>( 2.768920882e-12,  2.768920882e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_perp,  complex<double>( 2.381028679e-11,  3.703822389e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_long,  complex<double>( 2.645587421e-11,  3.968381131e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_perp,  complex<double>( 1.469979946e-11,  2.286635471e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_perp,  complex<double>( 1.633311051e-11,  2.449966576e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_para,  complex<double>( 3.124004517e-11,  4.686006776e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_para,  complex<double>( 2.811604066e-11,  4.373606324e-11), eps);
 
                 eps = 1e-3;
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s(q2),  6.080153751e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c(q2),  4.48478951e-20,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2s(q2), -6.418495462e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2c(q2),  6.966335387e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_3(q2),   1.032048382e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_4(q2),  -9.218261443e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_5(q2),  -5.01299633e-21,  10*eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6s(q2), -2.407918046e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c(q2), -1.457760738e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_7(q2),  -2.413388446e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_8(q2),  -3.305335877e-22, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(q2),   4.621083562e-22, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s(q2),  6.085019472e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c(q2),  4.489187687e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2s(q2), -6.421382622e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2c(q2),  6.967884897e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_3(q2),   1.032360198e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_4(q2),  -9.221388938e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_5(q2),  -5.020415785e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6s(q2), -2.409650924e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c(q2), -1.458618418e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_7(q2),  -2.414995565e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_8(q2),  -3.305986949e-22, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(q2),   4.620491199e-22, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(q2),      -0.1862620012, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(q2),      -0.1862325546, eps);
 
                 auto ir = d.prepare(q2, q2_max);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir), -0.1855108351, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(ir), -1.004538219,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(ir), -0.6513218755, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(ir), -1.553614345,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir), -0.1855329818, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(ir), -1.004548102,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(ir), -0.6518372271, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(ir), -1.553829809,  eps);
             }
 
             {
@@ -787,48 +787,48 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
                 auto amps = d.amplitudes(q2);
 
                 double eps = 7e-3;
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>( 4.021407965e-11,  1.843164004e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>( 8.645626526e-11, -8.05278024e-11 ), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-7.455049449e-11, -8.452349138e-12), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>( 3.565928422e-11, -2.966165022e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-7.541145186e-11, -8.549962337e-12), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>( 3.607110071e-11, -3.000420215e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>( 4.022237305e-11,  1.840549748e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>( 8.648694084e-11, -8.060184339e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-7.452197142e-11, -8.434606297e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>( 3.56948263e-11,  -2.964525815e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-7.540711414e-11, -8.534789239e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>( 3.611879543e-11, -2.999737289e-11), eps);
 
                 // nearly identically implemented, only difference from alpha_s
                 eps = 1e-3;
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time,       complex<double>(-1.677697256e-10,  3.507403558e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_scal,       complex<double>( 2.767698228e-12, -2.767698228e-12), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_perp,  complex<double>( 2.3806e-11,      -3.70316e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_long,  complex<double>( 2.64511e-11,     -3.96767e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_perp,  complex<double>( 1.46932e-11,     -2.28561e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_perp,  complex<double>( 1.63258e-11,     -2.44887e-11),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_para,  complex<double>( 3.1234e-11,      -4.6851e-11 ),     eps);
-                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_para,  complex<double>( 2.81106e-11,     -4.37276e-11),     eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time,       complex<double>(-1.678438392e-10,  3.508952983e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_scal,       complex<double>( 2.768920882e-12, -2.768920882e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_perp,  complex<double>( 2.381028679e-11, -3.703822389e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_long,  complex<double>( 2.645587421e-11, -3.968381131e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_perp,  complex<double>( 1.469979946e-11, -2.286635471e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_perp,  complex<double>( 1.633311051e-11, -2.449966576e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_time_para,  complex<double>( 3.124004517e-11, -4.686006776e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_para,  complex<double>( 2.811604066e-11, -4.373606324e-11), eps);
 
                 eps = 1e-3;
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s(q2),  6.154137843e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c(q2),  4.668428684e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2s(q2), -6.424911528e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2c(q2),  6.893410893e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_3(q2),   1.023638282e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_4(q2),  -9.167284751e-21, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_5(q2),  -5.227165173e-21, 10*eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6s(q2), -2.437095943e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c(q2), -1.456196508e-20, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_7(q2),   2.417311002e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s(q2),  6.158136673e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c(q2),  4.670611082e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2s(q2), -6.427703401e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2c(q2),  6.895804905e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_3(q2),   1.024056268e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_4(q2),  -9.171018962e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_5(q2),  -5.232104087e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6s(q2), -2.43848199e-20,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c(q2), -1.457072802e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_7(q2),   2.418865485e-21, eps);
 
                 eps = 3.5e-3;
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_8(q2),   2.569833906e-22, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(q2),  -3.592801961e-22, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_8(q2),   2.57868544e-22,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(q2),  -3.604004966e-22, eps);
 
                 // j6c needed, nonzero only with tensor contributions
-                TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(q2),      -0.184288085,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(q2),      -0.1842839266,  eps);
 
                 auto ir = d.prepare(q2, q2_max);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir), -0.1816297646, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(ir), -1.004829116,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(ir), -0.6687996564, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(ir), -1.532088081,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir), -0.1816844542, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(ir), -1.004836959,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(ir), -0.6691776451, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(ir), -1.53250009,  eps);
             }
 
             {
@@ -870,4 +870,5 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
                         0.5 * (6.080153751e-20 + 6.154137843e-20 - 3.0 * (-6.418495462e-21 - 6.424911528e-21)), eps);
             }
         }
+
 } b_to_kstar_dilepton_tensor_low_recoil_bobeth_compatibility_test;
