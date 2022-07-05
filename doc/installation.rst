@@ -65,7 +65,7 @@ You might need to install the ``curl`` program first, if not already installed. 
 
 ::
 
-  pip3 install --user --upgrade h5py matplotlib numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade h5py matplotlib networkx numpy pypmc pyyaml scipy
 
 
 *******
@@ -154,17 +154,20 @@ h5py
 matplotlib
   the Python plotting library in version 2.0 or higher;
 
+networkx
+  the Python graph library (needed for some functionality);
+
 scipy
   the Python scientific library;
 
 pypmc
-  the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods;
+  the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods (needed for some functionality);
 
 PyYAML
   the Python YAML parser and emitter library;
 
 wilson
-  the Python library for matching, translating, and running Wilson coefficients in the Weak Effective Theory and the Standard Model Effective Theory.
+  the Python library for matching, translating, and running Wilson coefficients in the Weak Effective Theory and the Standard Model Effective Theory (needed for some functionality).
 
 We recommend you install the above packages via your system's software management system.
 
@@ -186,7 +189,7 @@ by running the following commands:
   # for the 'System Software'
   sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
   # for the 'Python Software'
-  sudo apt-get install python3-dev libboost-python-dev python3-h5py python3-matplotlib python3-scipy python3-yaml
+  sudo apt-get install python3-dev libboost-python-dev python3-h5py python3-matplotlib python3-networkx python3-scipy python3-yaml
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 
