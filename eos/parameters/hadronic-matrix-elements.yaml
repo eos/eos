@@ -251,25 +251,6 @@ groups:
           max:      0.0
           latex:    '$b_{T,2}^{B \to K,\mathrm{BCL2008}}$'
           unit:     '1'
-      # form factor parameters for B->K according to [BZ:2004C] (approximate)
-      'B->K::fp_uncertainty@BZ2004v2' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta f_+^{B\to K}$'
-          unit:     '1'
-      'B->K::f0_uncertainty@BZ2004v2' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta f_0^{B\to K}$'
-          unit:     '1'
-      'B->K::ft_uncertainty@BZ2004v2' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta f_t^{B\to K}$'
-          unit:     '1'
       # form factor parameters for B->K simple series expansion (SSE) based on
       # LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
       'B->K::alpha^V0_0@BFW2010' :
@@ -672,49 +653,6 @@ groups:
   - title: 'Parameters in $B\to V$ Form Factor Parametrizations'
     description: ''
     parameters:
-      # form factor parameters for B->K^* according to [BZ2004] (approximate)
-      'B->K^*::a0_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta a_0^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::a1_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta a_1^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::a2_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta a_2^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::v_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta v^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::t1_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta t_1^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::t2_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta t_2^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::t3_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta t_3^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
       # form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
       'B->K^*::F^V(0)@KMPW2010' :
           central: +0.36

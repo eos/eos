@@ -96,7 +96,7 @@ class BToKDileptonLowRecoilTest :
                 {
                     {"model", "WET"},
                     {"tag", "GP2004"},
-                    {"form-factors", "BZ2004v2"}
+                    {"form-factors", "BSZ2015"}
                 };
 
                 BToKDilepton d(p, oo);
@@ -104,25 +104,24 @@ class BToKDileptonLowRecoilTest :
                 /* q^2 = [14.18, 22.8] */
                 {
                     const double eps = 1e-5;
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), 2.498607492e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), 2.454634936e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), 2.374070832e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), 2.244476570e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), 2.046333084e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), 1.749827352e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), 1.312607210e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), 6.929281810e-09, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), 1.579971652e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), 2.025238741e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), 1.899886633e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), 1.738963008e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), 1.539123232e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), 1.29652424e-08,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), 1.00782375e-08,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), 6.73399981e-09,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), 3.087993652e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), 6.462015435e-11, eps);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(15.0), 0.005562348378, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), 0.008213626852, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(15.0), 0.006603539281, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), 0.01733521142,  eps);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),       1.5267386e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.4236817e-03, 2*eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.022118645e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007311610961,  eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
-                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  2.2706273e-05, eps);
-
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  2.256013988e-05, eps);
                 }
             }
 
@@ -174,7 +173,7 @@ class BToKDileptonLowRecoilTest :
                     {"model", "WET"},
                     {"tag", "GP2004"},
                     {"l", "mu"},
-                    {"form-factors", "BZ2004v2"}
+                    {"form-factors", "BSZ2015"}
                 };
 
                 BToKDilepton d(p, oo);
@@ -183,13 +182,12 @@ class BToKDileptonLowRecoilTest :
                 {
                     const double eps = 1e-5;
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.5520940e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       5.3935506e-03, 2*eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.037434453e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007257353156,  eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
-                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::BR",    p, k_mu, oo)->evaluate(),  1.4629637e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  0.0609245,     eps);
-
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::BR",    p, k_mu, oo)->evaluate(),  9.795048059e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  0.05914176957,   eps);
                 }
             }
         }
