@@ -84,12 +84,6 @@ namespace eos
     const double KMPW2010FormFactors<PToV>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
     template class KMPW2010FormFactors<PToV>;
 
-    // [BFW2010]
-    template class BFW2010FormFactors<BToKstar, PToV>;
-
-    /* B_s -> K^* */
-    // [BFW2010]
-    template class BFW2010FormFactors<BsToKstar, PToV>;
 
     FormFactors<PToV>::~FormFactors()
     {
@@ -101,12 +95,10 @@ namespace eos
         { "B->omega::BSZ2015",    &BSZ2015FormFactors<BToOmega,   PToV>::make         },
         { "B->rho::BSZ2015",      &BSZ2015FormFactors<BToRho,     PToV>::make         },
         { "B->K^*::KMPW2010",     &KMPW2010FormFactors<PToV>::make                    },
-        { "B->K^*::BFW2010",      &BFW2010FormFactors<BToKstar,   PToV>::make         },
         { "B->K^*::BSZ2015",      &BSZ2015FormFactors<BToKstar,   PToV>::make         },
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
         { "B->D^*::HQET",         &HQETFormFactors<BToDstar,      PToV>::make         },
         { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar>::make                 },
-        { "B_s->K^*::BFW2010",    &BFW2010FormFactors<BsToKstar,  PToV>::make         },
         { "B_s->K^*::FMvD2015",   &FMvD2015FormFactors<BsToKstar>::make               },
         { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
         { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
@@ -236,17 +228,6 @@ namespace eos
     template class KMPW2010FormFactors<PToP>;
 
 
-    // mass B_u, cf. [PDG 2010]
-    const double BFW2010FormFactors<BToK, PToP>::_m_B       = 5.27917;
-    // mass K^+, cf. [PDG 2010]
-    const double BFW2010FormFactors<BToK, PToP>::_m_K       = 0.493677;
-    // mass B_s^* (1-)
-    const double BFW2010FormFactors<BToK, PToP>::_m_Bs2     = 5.412 * 5.412;
-    const double BFW2010FormFactors<BToK, PToP>::_tau_p     = (_m_B + _m_K) * (_m_B + _m_K);
-    const double BFW2010FormFactors<BToK, PToP>::_tau_m     = (_m_B - _m_K) * (_m_B - _m_K);
-    const double BFW2010FormFactors<BToK, PToP>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
-    template class BFW2010FormFactors<BToK, PToP>;
-
     /* B_{u,d} -> pi */
 
     // [BCL2008]
@@ -258,6 +239,7 @@ namespace eos
 
     // [BCL2008]
     template class BCL2008FormFactors<BToD, 3u>;
+
 
     FormFactors<PToP>::~FormFactors() = default;
 
@@ -291,7 +273,6 @@ namespace eos
         // b -> s
         { "B->K::BCL2008",       &BCL2008FormFactors<BToK, 3u>::make              },
         { "B->K::KMPW2010",      &KMPW2010FormFactors<PToP>::make                 },
-        { "B->K::BFW2010",       &BFW2010FormFactors<BToK,   PToP>::make          },
         { "B->K::BSZ2015",       &BSZ2015FormFactors<BToK,   PToP>::make          },
         // b -> u
         { "B->pi::BCL2008",      &BCL2008FormFactors<BToPi, 3u>::make             },

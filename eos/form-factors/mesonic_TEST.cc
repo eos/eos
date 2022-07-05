@@ -841,58 +841,6 @@ class BToKKMPW2010FormFactorsTest :
         }
 } b_to_k_kmpw2010_form_factors_test;
 
-class BToBFW2010FormFactorsTest :
-    public TestCase
-{
-    public:
-        BToBFW2010FormFactorsTest() :
-            TestCase("b_to_k_bfw2010_form_factors_test")
-        {
-        }
-
-        virtual void run() const
-        {
-            static const double eps = 1e-10;
-
-            Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::BFW2010", p, Options{ });
-            TEST_CHECK(0 != ff.get());
-
-            TEST_CHECK_NEARLY_EQUAL(0.3285329106071, ff->f_p( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.3765270351772, ff->f_p( 2.3), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4352582092738, ff->f_p( 4.6), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5083556849771, ff->f_p( 6.9), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6012033334785, ff->f_p( 9.2), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.7221134890713, ff->f_p(11.5), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.8845704673796, ff->f_p(13.8), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.1118693561113, ff->f_p(16.1), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.4477383401655, ff->f_p(18.4), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.9842848427703, ff->f_p(20.7), eps);
-
-            TEST_CHECK_NEARLY_EQUAL(0.3529456128368, ff->f_t( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4057232066867, ff->f_t( 2.3), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4703717236260, ff->f_t( 4.6), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5509131505349, ff->f_t( 6.9), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6533164641168, ff->f_t( 9.2), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.7868011822009, ff->f_t(11.5), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.9663293753277, ff->f_t(13.8), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.2177594231842, ff->f_t(16.1), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.5896500926049, ff->f_t(18.4), eps);
-            TEST_CHECK_NEARLY_EQUAL(2.1843219169364, ff->f_t(20.7), eps);
-
-            TEST_CHECK_NEARLY_EQUAL(0.3208496768629, ff->f_0( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.3456358228669, ff->f_0( 2.3), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.3724574045224, ff->f_0( 4.6), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4016438048517, ff->f_0( 6.9), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4336098586343, ff->f_0( 9.2), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4688881948925, ff->f_0(11.5), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5081785681054, ff->f_0(13.8), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5524262352940, ff->f_0(16.1), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6029528628018, ff->f_0(18.4), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6616893406433, ff->f_0(20.7), eps);
-        }
-} b_to_k_bfw2010_form_factors_test;
-
 class BToDstarBSZ2015FormFactorsTest :
 public TestCase
 {
