@@ -99,7 +99,6 @@ namespace eos
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
         { "B->D^*::HQET",         &HQETFormFactors<BToDstar,      PToV>::make         },
         { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar>::make                 },
-        { "B_s->K^*::FMvD2015",   &FMvD2015FormFactors<BsToKstar>::make               },
         { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
         { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
         { "B_s->D_s^*::HQET",     &HQETFormFactors<BsToDsstar,    PToV>::make         },
