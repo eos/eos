@@ -361,20 +361,22 @@ class Plotter:
            }
         """)
 
-        from .specs import Specs, ParametersSpec, KinematicsSpec,\
-        RangeSpec, ObservableSpec, VariableSpec, ParameterFileSpec
+        # from .specs import SpecCollection, ParametersSpec, KinematicsSpec,\
+        # RangeSpec, ObservableSpec, VariableSpec, ParameterFileSpec
+        from .specs import SpecCollection, ObservableSpec, VariableSpec
 
-        specs_prototype = Specs([
+        specs_prototype = SpecCollection([
             ObservableSpec(name='observable'),
             VariableSpec(name='variable'),
-            KinematicsSpec(name='kinematics', optional=True, default={}),
-            ParametersSpec(name='parameters', optional=True, default={}),
+            # KinematicsSpec(name='kinematics', optional=True, default={}),
+            # ParametersSpec(name='parameters', optional=True, default={}),
             # ParameterFileSpec(name='parameter-file', optional=True, default=None)
         ])
 
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
             self.specs = deepcopy(self.specs_prototype)
+            self.specs.set_and_validate(item)
 
         def plot(self):
             item = self.item.copy()
@@ -383,18 +385,7 @@ class Plotter:
             parameters = eos.Parameters.Defaults()
             options = eos.Options()
 
-            # process user input
-            # need oname for some specs
-            try:
-                oname = item['observable']
-            except KeyError:
-                raise ValueError("Missing key: 'observable'")
-            self.specs['variable'].observable_name = oname
-            self.specs['kinematics'].observable_name = oname
-            self.specs['parameters'].observable_name = oname
-
-            self.specs.validate_set(item)
-
+            # use the specs here; this guarantees that the values are actually used in the implementation
             with self.specs as specs:
                 # process all spec values
 
@@ -407,10 +398,10 @@ class Plotter:
                     var = parameters.declare(var_name, np.nan)
 
                 # is 'variable' in parameters or kinematics?
-                for q in ['kinematics', 'parameters']:
-                    if var_name in specs[q].value:
-                        item[q].pop(var_name, None)
-                        eos.warn(f"Ignore '{var_name}' contained in '{q}': is also 'variable'")
+                # for q in ['kinematics', 'parameters']:
+                #     if var_name in specs[q].value:
+                #         item[q].pop(var_name, None)
+                #         eos.warn(f"Ignore '{var_name}' contained in '{q}': is also 'variable'")
 
                 # TODO: implement the below protype
                 # if specs['parameter-file'].value is not None:
@@ -419,11 +410,11 @@ class Plotter:
                 #         # ... specs['parameters'].value = {} ...
                 #     pass
 
-                for key, value in specs['parameters'].value.items():
-                    parameters.set(key, value)
+                # for key, value in specs['parameters'].value.items():
+                #     parameters.set(key, value)
 
-                for key, value in specs['kinematics'].value.items():
-                    kinematics.declare(key, value)
+                # for key, value in specs['kinematics'].value.items():
+                #     kinetics.declare(key, value)
 
 
             observable = eos.Observable.make(oname, parameters, kinematics, options)
