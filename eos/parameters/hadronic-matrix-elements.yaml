@@ -4365,13 +4365,13 @@ groups:
               - [ "Re", "Im" ]
               - [ "m7", "m5", "m3", "m1", "t0" ]
               - [ "perp", "para", "long"]
-      'B->K^*ccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->K^*ccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B\to K^*c\bar{c}}(%2%)$'
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
-              - [ "Abs", "Arg" ]
+              - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
               - [ "perp", "para", "long"]
       'B->K^*ccbar::Arg_Hhat_at_%1%_%2%@GRvDV2022' :
@@ -4400,13 +4400,13 @@ groups:
               - [ "Re", "Im" ]
               - [ "m7", "m5", "m3", "m1", "t0" ]
               - [ "perp", "para", "long"]
-      'B_s->phiccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B_s->phiccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B_s\to \phi c\bar{c}}(%2%)$'
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
-              - [ "Abs", "Arg" ]
+              - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
               - [ "perp", "para", "long"]
       'B_s->phiccbar::Arg_Hhat_at_%1%_%2%@GRvDV2022' :
@@ -4435,13 +4435,13 @@ groups:
               - [ "Re", "Im" ]
               - [ "m7", "m5", "m3", "m1", "t0" ]
               - [ "plus" ]
-      'B->Kccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->Kccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B\to Kc\bar{c}}(%2%)$'
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B\to Kc\bar{c}}(%2%)$'
           matrix:
-              - [ "Abs", "Arg" ]
+              - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
               - [ "plus" ]
   # }}}
