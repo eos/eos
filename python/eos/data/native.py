@@ -340,9 +340,9 @@ class PMCSampler:
 
         # The test statistics defaults to two empty lists
         description['test statistics'] = { "sigma": [], "densities": [] }
-        if sigma_test_stat and samples and weights:
+        if sigma_test_stat is not None and samples is not None and weights is not None:
             sigma_test_stat = _np.array(sigma_test_stat)
-            samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(proposal, x)), samples)]
+            samplesPDF = list(map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(proposal, x)), samples))
             ind = _np.argsort(samplesPDF)
             sorted_samplesPDF = _np.array(samplesPDF)[ind]
             sorted_weights = weights[ind]
