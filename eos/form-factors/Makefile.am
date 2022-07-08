@@ -26,6 +26,7 @@ libeosformfactors_la_SOURCES = \
 	mesonic-hqet.hh \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
+	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
 	parametric-bmrvd2022.hh parametric-bmrvd2022-impl.hh parametric-bmrvd2022.cc \
 	pi-lcdas.cc pi-lcdas.hh \
@@ -48,6 +49,7 @@ include_eos_rarebdecays_HEADERS = \
 	form-factor-adapter.hh \
 	form-factors.hh \
 	observables.hh \
+	parametric-bcl2008.hh \
 	parametric-bgl1997.hh \
 	pi-lcdas.hh
 
@@ -66,6 +68,7 @@ TESTS = \
 	lcda_TEST \
 	mesonic_TEST \
 	mesonic-hqet_TEST \
+	parametric-bcl2008_TEST \
 	parametric-bgl1997_TEST \
 	parametric-bmrvd2022_TEST \
 	pi-lcdas_TEST \
@@ -102,6 +105,8 @@ lcda_TEST_SOURCES = lcda_TEST.cc
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 
 mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
+
+parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
 
 parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
 

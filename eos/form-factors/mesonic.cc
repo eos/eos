@@ -26,6 +26,7 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
@@ -229,16 +230,7 @@ namespace eos
 
     /* B_{u,d} -> pi */
 
-    // [BCL2008]
-    template class BCL2008FormFactors<BToPi, 3u>;
-    template class BCL2008FormFactors<BToPi, 4u>;
-    template class BCL2008FormFactors<BToPi, 5u>;
-
     /* B_{u,d} -> D */
-
-    // [BCL2008]
-    template class BCL2008FormFactors<BToD, 3u>;
-
 
     FormFactors<PToP>::~FormFactors() = default;
 
