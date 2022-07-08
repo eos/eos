@@ -183,6 +183,23 @@ BES:2002A:
     id: oai:arXiv.org:hep-ex/0102003
   inspire-id: BES:2001ckj
   title: Measurements of the cross-section for $e^+ e^- \to$ hadrons at center-of-mass energies from 2 GeV to 5 GeV
+BES:2006A:
+  authors: Ablikim, M. et al.
+  collaboration: BES
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0612054
+  inspire-id: Ablikim:2006mb
+  title: Measurements of the continuum $R_{uds}$ and $R$ values in $e^+ e^-$ annihilation in the energy region between 3.650 and 3.872-GeV
+BES:2006B:
+  authors: Ablikim, M. et al.
+  collaboration: BES
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0605105
+  inspire-id: BES:2006dso
+  title: Measurements of the cross-sections for $e^+ e^- \to$ hadrons at 3.650-GeV, 3.6648-GeV, 3.773-GeV
+    and the branching fraction for $\psi(3770) \to$ non-$D\bar{D}$
 BES:2008A:
   authors: Ablikim, M. et al.
   collaboration: BES
