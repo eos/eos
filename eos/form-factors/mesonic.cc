@@ -28,6 +28,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
+#include <eos/form-factors/parametric-bsz2015.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -40,8 +41,6 @@ namespace eos
     /* P -> V Processes */
 
     /* B_{u,d} -> omega */
-    // [BSZ2015]
-    template class BSZ2015FormFactors<BToOmega, PToV>;
 
     /* B_{u,d} -> K^* */
 

@@ -29,6 +29,7 @@ libeosformfactors_la_SOURCES = \
 	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
 	parametric-bmrvd2022.hh parametric-bmrvd2022-impl.hh parametric-bmrvd2022.cc \
+	parametric-bsz2015.hh parametric-bsz2015-impl.hh parametric-bsz2015.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
@@ -51,6 +52,7 @@ include_eos_rarebdecays_HEADERS = \
 	observables.hh \
 	parametric-bcl2008.hh \
 	parametric-bgl1997.hh \
+	parametric-bsz2015.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -71,6 +73,7 @@ TESTS = \
 	parametric-bcl2008_TEST \
 	parametric-bgl1997_TEST \
 	parametric-bmrvd2022_TEST \
+	parametric-bsz2015_TEST \
 	pi-lcdas_TEST \
 	unitarity-bounds_TEST
 LDADD = \
@@ -109,6 +112,8 @@ mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
 parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
 
 parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
+
+parametric_bsz2015_TEST_SOURCES = parametric-bsz2015_TEST.cc
 
 parametric_bmrvd2022_TEST_SOURCES = parametric-bmrvd2022_TEST.cc
 
