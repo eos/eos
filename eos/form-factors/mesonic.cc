@@ -29,6 +29,7 @@
 #include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
+#include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -69,20 +70,6 @@ namespace eos
     constexpr double BsToDsstar::mR2_1p;
 
 
-    // mass B_d, cf. [PDG 2010]
-    const double KMPW2010FormFactors<PToV>::_m_B       = 5.2795;
-    // mass K^*0, cf. [PDG 2010]
-    const double KMPW2010FormFactors<PToV>::_m_Kstar   = 0.89594;
-    // mass B_s (0-), cf. [KMPW2010]
-    const double KMPW2010FormFactors<PToV>::_m_Bs2_0m  = 5.366 * 5.366;
-    // mass B_s (1-), cf. [KMPW2010]
-    const double KMPW2010FormFactors<PToV>::_m_Bs2_1m  = 5.412 * 5.412;
-    // mass B_s (1+), cf. [KMPW2010]
-    const double KMPW2010FormFactors<PToV>::_m_Bs2_1p  = 5.829 * 5.829;
-    const double KMPW2010FormFactors<PToV>::_tau_p     = (_m_B + _m_Kstar) * (_m_B + _m_Kstar);
-    const double KMPW2010FormFactors<PToV>::_tau_m     = (_m_B - _m_Kstar) * (_m_B - _m_Kstar);
-    const double KMPW2010FormFactors<PToV>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
-    template class KMPW2010FormFactors<PToV>;
 
 
     FormFactors<PToV>::~FormFactors()
@@ -214,17 +201,6 @@ namespace eos
 
     // [BCL2008]
     template class BCL2008FormFactors<BToK, 3u>;
-
-    // mass B_u, cf. [PDG 2010]
-    const double KMPW2010FormFactors<PToP>::_m_B      = 5.27917;
-    // mass K^+, cf. [PDG 2010]
-    const double KMPW2010FormFactors<PToP>::_m_K      = 0.493677;
-    // mass B_s^* (1-), cf. [KMPW2010]
-    const double KMPW2010FormFactors<PToP>::_m_Bs2    = 5.412 * 5.412;
-    const double KMPW2010FormFactors<PToP>::_tau_p    = (_m_B + _m_K) * (_m_B + _m_K);
-    const double KMPW2010FormFactors<PToP>::_tau_m    = (_m_B - _m_K) * (_m_B - _m_K);
-    const double KMPW2010FormFactors<PToP>::_tau_0    = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
-    template class KMPW2010FormFactors<PToP>;
 
 
     /* B_{u,d} -> pi */
