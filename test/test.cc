@@ -114,7 +114,7 @@ int main(int, char ** argv)
     std::shared_ptr<const eos::TestObservableEntry> obs_entry = std::make_shared<const eos::TestObservableEntry>(
         "test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{"q2_min", "q2_max"}
     );
-    eos::ObservableEntries::instance()->insert("test::obs1", obs_entry);
+    eos::ObservableEntries::instance()->insert_or_assign("test::obs1", obs_entry);
 
 
     for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()),
