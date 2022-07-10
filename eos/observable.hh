@@ -258,7 +258,7 @@ namespace eos
 
             inline const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> & entries() const { return *_entries; }
 
-            bool insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value);
+            void insert_or_assign(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value);
     };
 }
 

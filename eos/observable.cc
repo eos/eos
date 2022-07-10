@@ -66,13 +66,16 @@ namespace eos
 
     ObservableEntries::~ObservableEntries() = default;
 
-    bool
-    ObservableEntries::insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
+    void
+    ObservableEntries::insert_or_assign(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
     {
-        auto inserted = _entries->insert(std::pair<QualifiedName, std::shared_ptr<const ObservableEntry>>(key, value));
+        auto result = _entries->insert_or_assign(key, value);
 
-        // true if the insertion was successfull
-        return inserted.second;
+        if (result.second) 
+        {
+            Log::instance()->message("[ObservableEntries.insert_or_assign]", ll_warning)
+                << "Entry for observable " << key.str() << " has been replaced.";
+        }
     }
 
     ObservablePtr
@@ -337,12 +340,7 @@ namespace eos
             throw InternalError("Could not create expression '" + input + "'");
         }
 
-        bool insertion_success = ObservableEntries::instance()->insert(name, std::shared_ptr<const ObservableEntry>(expression_observable_entry));
-
-        if (! insertion_success)
-        {
-            throw InternalError("Could not insert observable entry '" + name.str() + "'");
-        }
+        ObservableEntries::instance()->insert_or_assign(name, std::shared_ptr<const ObservableEntry>(expression_observable_entry));
     }
 
     std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
