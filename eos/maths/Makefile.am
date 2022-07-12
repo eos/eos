@@ -15,6 +15,8 @@ libeosmaths_la_SOURCES = \
 	interpolation.cc interpolation.hh \
 	lagrange-polynomial.hh \
 	matrix.hh \
+	multiplepolylog-li22.cc multiplepolylog-li22.hh \
+	multiplepolylog-li22-const.cc multiplepolylog-li22-const.hh \
 	polylog.cc polylog.hh \
 	power-of.hh \
 	szego-polynomial.hh
@@ -42,6 +44,8 @@ include_eos_utils_HEADERS = \
 	interpolation.hh \
 	lagrange-polynomial.hh \
 	matrix.hh \
+	multiplepolylog-li22.hh \
+	multiplepolylog-li22-const.hh \
 	polylog.hh \
 	power-of.hh \
 	szego-polynomial.hh
@@ -56,6 +60,7 @@ TESTS = \
 	interpolation_TEST \
 	lagrange-polynomial_TEST \
 	matrix_TEST \
+	multiplepolylog_TEST \
 	polylog_TEST \
 	power_of_TEST \
 	szego-polynomial_TEST
@@ -81,6 +86,8 @@ interpolation_TEST_SOURCES = interpolation_TEST.cc
 lagrange_polynomial_TEST_SOURCES = lagrange-polynomial_TEST.cc
 
 matrix_TEST_SOURCES = matrix_TEST.cc
+
+multiplepolylog_TEST_SOURCES = multiplepolylog_TEST.cc
 
 polylog_TEST_SOURCES = polylog_TEST.cc
 
