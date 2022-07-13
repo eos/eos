@@ -526,6 +526,11 @@ def cmd_sample_pmc(args):
     return eos.sample_pmc(**args_to_dict(args))
 
 
+# Nested sampling
+def cmd_sample_nested(args):
+    return eos.sample_nested(**args_to_dict(args))
+
+
 # Cartesian product
 def cmd_mixture_product(args):
     return eos.mixture_product(**args_to_dict(args))
