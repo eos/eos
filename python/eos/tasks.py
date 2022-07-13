@@ -425,6 +425,34 @@ def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor
         raise e
 
 
+# Nested sampling
+@task('sample-nested', '{posterior}/nested')
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=0.05):
+    """
+    Samples from a likelihood associated with a named posterior using dynamic nested sampling.
+
+    The results of the find-cluster command are expected in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
+    The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/nested.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param bound: The option for bounding the target distribution. For valid values, see the dynesty documentation. Defaults to 'multi'.
+    :type bound: str, optional
+    :param nlive: The number of live points.
+    :type nlive: int, optional
+    :param dlogz: Relative tolerance for the remaining evidence. Defaults to 5%.
+    :type dlogz: float, optional
+    """
+
+    analysis = analysis_file.analysis(posterior)
+    samples = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz)    
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples)
+
+
 class Executor:
     _factory_methods = {}
 

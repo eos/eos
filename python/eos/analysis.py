@@ -564,6 +564,60 @@ class Analysis:
 
         return samples, weights, sampler.proposal
 
+
+    def log_likelihood(self, x, *args):
+        """
+        Adapter for use with external sampling software (e.g. dynesty) to aid when sampling from the log(likelihood).
+        
+        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
+        :type x: iterable
+        :param args: Dummy parameter (ignored)
+        :type args: optional
+        """
+        for p, v in zip(self.varied_parameters, self._x_to_par(x)):
+            p.set(v)
+
+        try:
+            return(self._log_likelihood.evaluate())
+        except RuntimeError as e:
+            eos.error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
+            for p in self.varied_parameters:
+                eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+            return(-np.inf)
+
+    
+    def _prior_transform(self, u):
+        """
+        Adapter for use with external sampling software to aid when sampling from the log(prior).
+        
+        :param u: The input probability point on the hypercube [0, 1)**D
+        :type u: iterable
+        """
+        return self._par_to_x([prior.inverse_cdf(p) for prior, p in zip(self._log_posterior.log_priors(), u)])
+
+    
+    def sample_nested(self, bound='multi', nlive=250, dlogz=0.05):
+        """
+        Return samples of the parameters.
+
+        Obtains random samples of log(likelihood) using dynamic nested sampling with dynesty.
+
+        :param bound: The option for bounding the target distribution. For valid values, see the dynesty documentation. Defaults to 'multi'.
+        :type bound: str, optional
+        :param nlive: The number of live points.
+        :type nlive: int, optional
+        :param dlogz: Relative tolerance for the remaining evidence. Defaults to 5%.
+        :type dlogz: float, optional
+
+        .. note::
+           This method requires the dynesty python module, which can be installed from PyPI.
+        """
+        import dynesty
+        sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive)
+        sampler.run_nested(dlogz_init=dlogz)
+        return sampler.results
+    
+
     def _repr_html_(self):
         result = r'''
         <table>
