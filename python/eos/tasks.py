@@ -427,7 +427,7 @@ def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor
 
 # Nested sampling
 @task('sample-nested', '{posterior}/nested')
-def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=0.05):
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
@@ -446,11 +446,14 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type nlive: int, optional
     :param dlogz: Relative tolerance for the remaining evidence. Defaults to 5%.
     :type dlogz: float, optional
+    :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
+    :type maxiter: int, optional
     """
-
     analysis = analysis_file.analysis(posterior)
-    samples = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz)    
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples)
+    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter)
+    samples = map(analysis._x_to_par, results.samples)
+    weights = _np.exp(results.logwt - results.logz[-1])
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
 
 
 class Executor:

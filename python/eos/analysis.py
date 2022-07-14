@@ -568,13 +568,13 @@ class Analysis:
     def log_likelihood(self, x, *args):
         """
         Adapter for use with external sampling software (e.g. dynesty) to aid when sampling from the log(likelihood).
-        
+
         :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
         :type x: iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
-        for p, v in zip(self.varied_parameters, self._x_to_par(x)):
+        for p, v in zip(self.varied_parameters, x):
             p.set(v)
 
         try:
@@ -585,18 +585,18 @@ class Analysis:
                 eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
             return(-np.inf)
 
-    
+
     def _prior_transform(self, u):
         """
         Adapter for use with external sampling software to aid when sampling from the log(prior).
-        
+
         :param u: The input probability point on the hypercube [0, 1)**D
         :type u: iterable
         """
-        return self._par_to_x([prior.inverse_cdf(p) for prior, p in zip(self._log_posterior.log_priors(), u)])
+        return np.array([prior.inverse_cdf(p) for prior, p in zip(self._log_posterior.log_priors(), u)])
 
-    
-    def sample_nested(self, bound='multi', nlive=250, dlogz=0.05):
+
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None):
         """
         Return samples of the parameters.
 
@@ -606,17 +606,19 @@ class Analysis:
         :type bound: str, optional
         :param nlive: The number of live points.
         :type nlive: int, optional
-        :param dlogz: Relative tolerance for the remaining evidence. Defaults to 5%.
+        :param dlogz: The relative tolerance for the remaining evidence. Defaults to 1.0.
         :type dlogz: float, optional
+        :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
+        :type maxiter: int, optional
 
         .. note::
            This method requires the dynesty python module, which can be installed from PyPI.
         """
         import dynesty
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive)
-        sampler.run_nested(dlogz_init=dlogz)
+        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter)
         return sampler.results
-    
+
 
     def _repr_html_(self):
         result = r'''
