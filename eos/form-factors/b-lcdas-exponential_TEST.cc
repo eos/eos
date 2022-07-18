@@ -4,6 +4,7 @@
  * Copyright (c) 2017 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,23 +21,23 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/b-lcdas-exponential.hh>
 
 #include <eos/models/model.hh>
 
 #include <cmath>
 #include <limits>
-#include <vector>
 
 using namespace test;
 using namespace eos;
+using namespace eos::b_lcdas;
 
-class BMesonLCDAsTest :
+class ExponentialTest :
     public TestCase
 {
     public:
-        BMesonLCDAsTest() :
-            TestCase("b_lcdas_test")
+        ExponentialTest() :
+            TestCase("b_lcdas_exponential_test")
         {
         }
 
@@ -54,7 +55,7 @@ class BMesonLCDAsTest :
 
                 /* Two-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q", "u" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.537484,   B.phi_plus(1.0),    eps);
@@ -129,7 +130,7 @@ class BMesonLCDAsTest :
 
                 /* Three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q", "u" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.0         , B.phi_3(1.0, 0.1), eps);
@@ -288,7 +289,7 @@ class BMesonLCDAsTest :
                     TEST_CHECK_NEARLY_EQUAL( 3.0990400e-2, B.chi_bar_bar_4(3.0, 0.5), eps);
                 }
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q", "u" } });
 
                     // psi_A at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL( 1.0811700e-3, B.psi_A(1.0, 0.1), eps);
@@ -345,7 +346,7 @@ class BMesonLCDAsTest :
 
                 /* Auxiliary functions to three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q", "u" } });
 
                     // Xbar_A at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL( 2.1832900e-2, B.Xbar_A(1.0, 0.1),eps);
@@ -384,7 +385,7 @@ class BMesonLCDAsTest :
 
                 /* Two-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q", "u" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.537484,   B.phi_plus(1.0),    eps);
@@ -459,7 +460,7 @@ class BMesonLCDAsTest :
 
                 /* Three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q", "u" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(-7.0511100e-3, B.phi_3(1.0, 0.1), eps);
@@ -628,7 +629,7 @@ class BMesonLCDAsTest :
 
                 /* Two-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "s" } });
+                    Exponential B(p, Options{ { "q", "s" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.527341,   B.phi_plus(1.0),    eps);
@@ -683,7 +684,7 @@ class BMesonLCDAsTest :
 
                 /* Three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ { "q", "s" } });
+                    Exponential B(p, Options{ { "q", "s" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(-1.0810700e-3, B.phi_3(1.0, 0.1), eps);
@@ -757,4 +758,4 @@ class BMesonLCDAsTest :
                 }
             }
         }
-} b_lcdas_test;
+} b_lcdas_exponential_test;
