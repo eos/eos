@@ -35,8 +35,8 @@
 #include <eos/utils/stringify.hh>
 
 #include <functional>
-
 #include <iostream>
+#include <memory>
 
 namespace eos
 {
@@ -76,7 +76,7 @@ namespace eos
         // renormalization scale
         UsedParameter mu;
 
-        BMesonLCDAs b_lcdas;
+        std::shared_ptr<BMesonLCDAs> b_lcdas;
 
         // switches to enable/disable certain contributions
         SwitchOption opt_2pt;
@@ -120,7 +120,7 @@ namespace eos
             s0_1_T23B(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T23B,1@B-LCSR"], u),
             M2(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::M^2@B-LCSR"], u),
             mu(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::mu@B-LCSR"], u),
-            b_lcdas(p, o + Options{ { "q", stringify(Process_::q_s) } }), // operator+ is ordered!
+            b_lcdas(BMesonLCDAs::make("exponential", p, o + Options{ { "q", stringify(Process_::q_s) } })), // operator+ is ordered!
             opt_2pt(o, "2pt", { "tw2+3", "all", "off" }, "all"),
             opt_3pt(o, "3pt", { "tw3+4", "all", "off" }, "all"),
             switch_2pt_phi(1.0),
@@ -129,7 +129,7 @@ namespace eos
             opt_method(o, "method", { "borel", "dispersive" }, "borel"),
             switch_borel(opt_method.value() == "borel")
         {
-            u.uses(b_lcdas);
+            u.uses(*b_lcdas);
 
             switch (Process_::q_v)
             {
@@ -249,133 +249,133 @@ namespace eos
         inline
         double phi_plus(const double & omega) const
         {
-            return switch_2pt_phi * b_lcdas.phi_plus(omega);
+            return switch_2pt_phi * b_lcdas->phi_plus(omega);
         }
 
         inline
         double phi_bar(const double & omega) const
         {
-            return switch_2pt_phi * b_lcdas.phi_bar(omega);
+            return switch_2pt_phi * b_lcdas->phi_bar(omega);
         }
 
         inline
         double phi_bar_d1(const double & omega) const
         {
-            return switch_2pt_phi * b_lcdas.phi_bar_d1(omega);
+            return switch_2pt_phi * b_lcdas->phi_bar_d1(omega);
         }
 
         inline
         double g_plus(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_plus(omega);
+            return switch_2pt_g * b_lcdas->g_plus(omega);
         }
 
         inline
         double g_plus_d1(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_plus_d1(omega);
+            return switch_2pt_g * b_lcdas->g_plus_d1(omega);
         }
 
         inline
         double g_plus_d2(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_plus_d2(omega);
+            return switch_2pt_g * b_lcdas->g_plus_d2(omega);
         }
 
         inline
         double g_bar(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_bar(omega);
+            return switch_2pt_g * b_lcdas->g_bar(omega);
         }
 
         inline
         double g_bar_d1(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_bar_d1(omega);
+            return switch_2pt_g * b_lcdas->g_bar_d1(omega);
         }
 
         inline
         double g_bar_d2(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_bar_d2(omega);
+            return switch_2pt_g * b_lcdas->g_bar_d2(omega);
         }
 
         inline
         double g_bar_d3(const double & omega) const
         {
-            return switch_2pt_g * b_lcdas.g_bar_d3(omega);
+            return switch_2pt_g * b_lcdas->g_bar_d3(omega);
         }
 
         inline
         double phi_3(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_3(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_3(omega_1, omega_2);
         }
 
         inline
         double phi_bar_3(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_bar_3(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_bar_3(omega_1, omega_2);
         }
 
         inline
         double phi_bar2_3(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_bar2_3(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_bar2_3(omega_1, omega_2);
         }
 
         inline
         double phi_bar_bar_3(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_bar_bar_3(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_bar_bar_3(omega_1, omega_2);
         }
 
         inline
         double phi_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_4(omega_1, omega_2);
         }
 
         inline
         double phi_bar_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_bar_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_bar_4(omega_1, omega_2);
         }
 
         inline
         double phi_bar2_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_bar2_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_bar2_4(omega_1, omega_2);
         }
 
         inline
         double phi_bar_bar_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.phi_bar_bar_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->phi_bar_bar_4(omega_1, omega_2);
         }
 
         inline
         double psi_bar_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.psi_bar_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->psi_bar_4(omega_1, omega_2);
         }
 
         inline
         double psi_bar_bar_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.psi_bar_bar_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->psi_bar_bar_4(omega_1, omega_2);
         }
 
         inline
         double chi_bar_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.chi_bar_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->chi_bar_4(omega_1, omega_2);
         }
 
         inline
         double chi_bar_bar_4(const double omega_1, const double omega_2) const
         {
-            return switch_3pt * b_lcdas.chi_bar_bar_4(omega_1, omega_2);
+            return switch_3pt * b_lcdas->chi_bar_bar_4(omega_1, omega_2);
         }
 
         // }}}
