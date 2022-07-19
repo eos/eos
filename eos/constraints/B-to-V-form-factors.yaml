@@ -1203,7 +1203,7 @@ B_s->K^*::T_2@BSZ:2015A:
   sigma-sys: {hi: 0, lo: 0}
 B_s->K^*::T_23@BSZ:2015A:
   type: Gaussian
-  observable: 'B_s->K^*::A_0(q2)'
+  observable: 'B_s->K^*::T_23(q2)'
   kinematics: {q2: 0.1}
   options: {form-factors: BSZ2015}
   mean: 0.597
