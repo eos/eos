@@ -895,117 +895,117 @@ groups:
           unit:     '1'
       # form factor parameters for B_s->K^* inspired by [BSZ:2015A]
       'B_s->K^*::alpha^A0_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.362963
+          min:      0.362963
+          max:      0.362963
           latex:    '$\alpha_{A_0,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A0_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.362957
+          min:      -0.362957
+          max:      -0.362957
           latex:    '$\alpha_{A_0,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A0_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  8.02781
+          min:      8.02781
+          max:      8.02781
           latex:    '$\alpha_{A_0,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.223059
+          min:      0.223059
+          max:      0.223059
           latex:    '$\alpha_{A_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.239792
+          min:      0.239792
+          max:      0.239792
           latex:    '$\alpha_{A_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  1.76787
+          min:      1.76787
+          max:      1.76787
           latex:    '$\alpha_{A_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A12_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  1.11596
+          min:      1.11596
+          max:      1.11596
           latex:    '$\alpha_{A_{12},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A12_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  3.42926
+          min:      3.42926
+          max:      3.42926
           latex:    '$\alpha_{A_{12},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.278079
+          min:      0.278079
+          max:      0.278079
           latex:    '$\alpha_{V,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.819609
+          min:      -0.819609
+          max:      -0.819609
           latex:    '$\alpha_{V,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  5.07652
+          min:      5.07652
+          max:      5.07652
           latex:    '$\alpha_{V,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.236867
+          min:      0.236867
+          max:      0.236867
           latex:    '$\alpha_{T_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.74862
+          min:      -0.74862
+          max:      -0.74862
           latex:    '$\alpha_{T_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  2.49014
+          min:      2.49014
+          max:      2.49014
           latex:    '$\alpha_{T_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T2_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.31254
+          min:      0.31254
+          max:      0.31254
           latex:    '$\alpha_{T_2,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T2_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  1.58141
+          min:      1.58141
+          max:      1.58141
           latex:    '$\alpha_{T_2,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.603261
+          min:      0.603261
+          max:      0.603261
           latex:    '$\alpha_{T_{23},0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  2.39992
+          min:      2.39992
+          max:      2.39992
           latex:    '$\alpha_{T_{23},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  9.64299
+          min:      9.64299
+          max:      9.64299
           latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
       # form-factor parameters for B->omega
       # note that no lattice results exists for B->omega FFs yet
