@@ -290,14 +290,15 @@ namespace eos
             }
 
             /*!
-             * Create a new LogLikelihoodBlock for a unform bound on the parameter space expressed through a single observable.
+             * Create a new LogLikelihoodBlock for a uniform bound by summing individual contributions and applying a gaussian-like penalty
+             * beyond the bound.
              *
-             * @note The value of the LogLikelihood is returned by the observables, and should only take the
-             * values 0 (for a valid parameter point), and -inf (for an invalid point).
-             *
-             * @param observable The pseudo observable implementing the bound.
+             * @param observables The pseudo observables implementing the contributions to the bound.
+             * @param bound The value of the bound.
+             * @param uncetainty The uncertainty entering the gaussian-like penalty.
              */
-            static LogLikelihoodBlockPtr UniformBound(ObservableCache cache, const ObservablePtr & observable);
+            static LogLikelihoodBlockPtr UniformBound(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+                                                      const double & bound, const double & uncertainty);
     };
 
     /*!

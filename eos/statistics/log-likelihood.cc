@@ -1059,11 +1059,20 @@ namespace eos
         {
             ObservableCache cache;
 
-            ObservableCache::Id id;
+            std::vector<ObservableCache::Id> ids;
 
-            UniformBoundBlock(const ObservableCache & cache, ObservableCache::Id id) :
+            const unsigned number_of_observables;
+
+            const double bound;
+            const double uncertainty;
+
+            UniformBoundBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> && ids,
+                              const double & bound, const double & uncertainty) :
                 cache(cache),
-                id(id)
+                ids(ids),
+                number_of_observables(ids.size()),
+                bound(bound),
+                uncertainty(uncertainty)
             {
             }
 
@@ -1073,14 +1082,41 @@ namespace eos
 
             virtual std::string as_string() const
             {
-                std::string result = "UniformBound: current value = " + stringify(cache[id]);
+                std::string result = "UniformBound: ";
+                result += "bound = " + stringify(bound) + " +- " + stringify(uncertainty);
 
                 return result;
             }
 
             virtual double evaluate() const
             {
-                return cache[id];
+                double saturation = 0.0;
+
+                for (auto i : ids)
+                {
+                    saturation += cache[i];
+                }
+
+                if (saturation < 0.0)
+                {
+                    throw InternalError("Contribution to the uniform bound must be positive; found to be negative!");
+                }
+                else if ((0.0 <= saturation) && (saturation < bound))
+                {
+                    return 0.0;
+                }
+                else
+                {
+                    if (uncertainty == 0.0)
+                    {
+                        return - std::numeric_limits<double>::infinity();
+                    }
+                    else
+                    {
+                        // add a gaussian like penalty
+                        return - 0.5 * power_of<2>((saturation - bound) / uncertainty);
+                    }
+                }
             }
 
             virtual unsigned number_of_observations() const
@@ -1105,9 +1141,15 @@ namespace eos
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
-                ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
+                std::vector<ObservableCache::Id> ids;
 
-                return LogLikelihoodBlockPtr(new UniformBoundBlock(cache, cache.add(observable)));
+                // add observables to cache
+                for (auto i = 0u ; i < number_of_observables ; ++i)
+                {
+                    ids.push_back(cache.add(this->cache.observable(this->ids[i])->clone(cache.parameters())));
+                }
+
+                return LogLikelihoodBlockPtr(new UniformBoundBlock(cache, std::move(ids), bound, uncertainty));
             }
         };
     }
@@ -1242,9 +1284,16 @@ namespace eos
     }
 
     LogLikelihoodBlockPtr
-    LogLikelihoodBlock::UniformBound(ObservableCache cache, const ObservablePtr & observable)
+    LogLikelihoodBlock::UniformBound(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+            const double & bound, const double & uncertainty)
     {
-        return LogLikelihoodBlockPtr(new implementation::UniformBoundBlock(cache, cache.add(observable)));
+        std::vector<unsigned> indices;
+        for (auto & o : observables)
+        {
+            indices.push_back(cache.add(o));
+        }
+
+        return LogLikelihoodBlockPtr(new implementation::UniformBoundBlock(cache, std::move(indices), bound, uncertainty));
     }
 
     template <>

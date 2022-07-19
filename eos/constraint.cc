@@ -1472,20 +1472,34 @@ namespace eos
     struct UniformBoundConstraintEntry :
         public ConstraintEntryBase
     {
-        QualifiedName observable;
+        std::vector<QualifiedName> observable_names;
 
-        Kinematics kinematics;
+        std::vector<Kinematics> kinematics;
 
-        Options options;
+        std::vector<Options> options;
+
+        const double bound;
+        const double uncertainty;
+
+        unsigned number_of_observables;
 
         UniformBoundConstraintEntry(const std::string & name,
-                const QualifiedName & observable,
-                const Kinematics & kinematics, const Options & options) :
-            ConstraintEntryBase(name, observable),
-            observable(observable),
+                const std::vector<QualifiedName> & observable_names,
+                const std::vector<Kinematics> & kinematics,
+                const std::vector<Options> & options,
+                const double & bound,
+                const double & uncertainty) :
+            ConstraintEntryBase(name, observable_names),
+            observable_names(observable_names),
             kinematics(kinematics),
-            options(options)
+            options(options),
+            bound(bound),
+            uncertainty(uncertainty),
+            number_of_observables(observable_names.size())
         {
+            if (number_of_observables != kinematics.size()) { throw InternalError("UniformBoundConstraintEntry: wrong number of kinematics"); }
+
+            if (number_of_observables != options.size()) { throw InternalError("UniformBoundConstraintEntry: wrong number of options"); }
         }
 
         virtual ~UniformBoundConstraintEntry() = default;
@@ -1502,29 +1516,33 @@ namespace eos
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
-            for (const auto & [key, value] : this->options)
+
+            std::vector<ObservablePtr> observables(number_of_observables, nullptr);
+            for (auto i = 0u ; i < number_of_observables ; ++i)
             {
-                if (options.has(key) && (value != options[key]))
+                for (const auto & [key, value] : this->options[i])
                 {
-                    Log::instance()->message("[UniformBoundConstraintEntry.make]", ll_debug)
-                        << "Constraint '" << name << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
+                    if (options.has(key) && (value != options[key]))
+                    {
+                        Log::instance()->message("[UniformBoundConstraintEntry.make]", ll_debug)
+                            << "Constraint '" << name << "' in observable '" << this->observable_names[i] << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
+                    }
                 }
+
+                observables[i] = Observable::make(this->observable_names[i], parameters, this->kinematics[i], this->options[i] + options);
+                if (! observables[i].get())
+                    throw InternalError("make_uniform_bound_constraint<" + stringify(number_of_observables) + ">: " + name.str() + ": '" + this->observable_names[i].str() + "' is not a valid observable name");
             }
 
-            ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
-            if (! observable.get())
-                throw InternalError("make_uniform_bound_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::UniformBound(cache, observables, this->bound, this->uncertainty);
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::UniformBound(cache, observable);
-
-            return Constraint(name, { observable }, { block });
+            return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
 
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
-            os << "    type: UniformBound" << std::endl;
-            os << "    observable: " << observable << std::endl;
+            os << "    type: UniformBound<" << number_of_observables << ">" << std::endl;
 
             return os;
         }
@@ -1534,19 +1552,36 @@ namespace eos
             out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "UniformBound";
-            out << YAML::Key << "observable" << YAML::Value << observable.full();
-            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : observable_names)
+            {
+                out << o.full();
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::BeginSeq;
             for (const auto & k : kinematics)
             {
-                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & kk : k)
+                {
+                    out << YAML::Key << kk.name() << YAML::Value << kk.evaluate();
+                }
+                out << YAML::EndMap;
             }
-            out << YAML::EndMap;
-            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            out << YAML::EndSeq;
+            out << YAML::Key << "options" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : options)
             {
-                out << YAML::Key << o.first << YAML::Value << o.second;
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & oo : o)
+                {
+                    out << YAML::Key << oo.first << YAML::Value << oo.second;
+                }
+                out << YAML::EndMap;
             }
-            out << YAML::EndMap;
+            out << YAML::EndSeq;
+            out << YAML::Key << "bound" << YAML::Value << bound;
+            out << YAML::Key << "uncertainty" << YAML::Value << uncertainty;
             out << YAML::EndMap;
         }
 
@@ -1554,7 +1589,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "observable", "kinematics", "options"
+                "observables", "kinematics", "options", "bound", "uncertainty"
             };
 
             for (auto && k : required_keys)
@@ -1567,7 +1602,7 @@ namespace eos
 
             static const std::string scalar_keys[] =
             {
-                "observable"
+                "bound", "uncertainty"
             };
 
             for (auto && k : scalar_keys)
@@ -1578,54 +1613,79 @@ namespace eos
                 }
             }
 
-            static const std::string map_keys[] =
+            static const std::string seq_keys[] =
             {
-                "kinematics", "options"
+                "observables", "kinematics", "options"
             };
 
-            for (auto && k : map_keys)
+            for (auto && k : seq_keys)
             {
-                if (YAML::NodeType::Map != n[k].Type())
+                if (YAML::NodeType::Sequence != n[k].Type())
                 {
-                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a map");
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a sequence");
                 }
             }
 
             try
             {
-                QualifiedName observable(n["observable"].as<std::string>());
-
-                Kinematics kinematics;
-                std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
-                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
-                // by sorting the entries lexicographically.
-                kinematics_nodes.sort(&impl::less);
-                std::set<std::string> kinematics_keys;
-                for (auto && k : kinematics_nodes)
+                std::vector<QualifiedName> observables;
+                for (auto && o : n["observables"])
                 {
-                    std::string key = k.first.as<std::string>();
-                    if (! kinematics_keys.insert(key).second)
-                        throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
-
-                    kinematics.declare(key, k.second.as<double>());
+                    observables.push_back(QualifiedName(o.as<std::string>()));
                 }
 
-                Options options;
-                std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(n["options"].begin(), n["options"].end());
-                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
-                // by sorting the entries lexicographically.
-                options_nodes.sort(&impl::less);
-                std::set<std::string> options_keys;
-                for (auto && o : options_nodes)
+                std::vector<Kinematics> kinematics;
+                for (auto && entry : n["kinematics"])
                 {
-                    std::string key = o.first.as<std::string>();
-                    if (! options_keys.insert(key).second)
-                        throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in kinematics sequence");
+                    }
 
-                    options.declare(key, o.second.as<std::string>());
+                    kinematics.push_back(Kinematics{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    kinematics_nodes.sort(&impl::less);
+                    std::set<std::string> kinematics_keys;
+                    for (auto && k : kinematics_nodes)
+                    {
+                        std::string key = k.first.as<std::string>();
+                        if (! kinematics_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                        kinematics.back().declare(key, k.second.as<double>());
+                    }
                 }
 
-                return new UniformBoundConstraintEntry(name.str(), observable, kinematics, options);
+                std::vector<Options> options;
+                for (auto && entry : n["options"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in options sequence");
+                    }
+
+                    options.push_back(Options{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    options_nodes.sort(&impl::less);
+                    std::set<std::string> options_keys;
+                    for (auto && o : options_nodes)
+                    {
+                        std::string key = o.first.as<std::string>();
+                        if (! options_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                        options.back().declare(key, o.second.as<std::string>());
+                    }
+                }
+
+                double bound       = n["bound"].as<double>();
+                double uncertainty = n["uncertainty"].as<double>();
+
+                return new UniformBoundConstraintEntry(name.str(), observables, kinematics, options, bound, uncertainty);
             }
             catch (QualifiedNameSyntaxError & e)
             {
