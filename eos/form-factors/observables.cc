@@ -1440,22 +1440,6 @@ namespace eos
                         Unit::None(),
                         &HQETUnitarityBounds::bound_1m),
 
-                make_observable("b->c::Prior[0^+]@CLN", R"(B^{b\to c}_{0^+})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_0p_prior),
-
-                make_observable("b->c::Prior[0^-]@CLN", R"(B^{b\to c}_{0^-})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_0m_prior),
-
-                make_observable("b->c::Prior[1^+]@CLN", R"(B^{b\to c}_{1^+})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_1p_prior),
-
-                make_observable("b->c::Prior[1^-]@CLN", R"(B^{b\to c}_{1^-})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_1m_prior),
-
                 make_observable("b->c::Bound[0^+]@OPE", R"(B^{b\to c}_{0^+})",
                         Unit::None(),
                         &OPEUnitarityBounds::bound_0p),
@@ -1487,22 +1471,6 @@ namespace eos
                 make_observable("b->c::Bound[1^-]@BGL", R"(B^{b\to c}_{1^-})",
                         Unit::None(),
                         &BGLUnitarityBounds::bound_1m),
-
-                make_observable("b->c::Prior[0^+]@BGL", R"(B^{b\to c}_{0^+})",
-                        Unit::None(),
-                        &BGLUnitarityBounds::bound_0p_prior),
-
-                make_observable("b->c::Prior[0^-]@BGL", R"(B^{b\to c}_{0^-})",
-                        Unit::None(),
-                        &BGLUnitarityBounds::bound_0m_prior),
-
-                make_observable("b->c::Prior[1^+]@BGL", R"(B^{b\to c}_{1^+})",
-                        Unit::None(),
-                        &BGLUnitarityBounds::bound_1p_prior),
-
-                make_observable("b->c::Prior[1^-]@BGL", R"(B^{b\to c}_{1^-})",
-                        Unit::None(),
-                        &BGLUnitarityBounds::bound_1m_prior),
             }
         );
 
