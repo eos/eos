@@ -143,7 +143,7 @@ yaml-cpp
 The Python interface to EOS requires the additional software:
 
 python3
-  the Python interpreter in version 3.5 or higher, and required header files;
+  the Python interpreter in version 3.7 or higher, and required header files;
 
 BOOST
   the BOOST C++ library ``boost-python`` for interfacing Python and C++;
@@ -313,9 +313,9 @@ For ``BASH``, which is the default Debian/Ubuntu shell, add the following lines 
 ::
 
   export PATH+=":$PREFIX/bin"
-  export PYTHONPATH+=":$PREFIX/lib/python3.6/site-packages"
+  export PYTHONPATH+=":$PREFIX/lib/python3.7/site-packages"
 
-Note that in the above the ``python3.6`` piece must be replaced by the appropriate Python version with which EOS was built.
+Note that in the above the ``python3.7`` piece must be replaced by the appropriate Python version with which EOS was built.
 You can determine the correct value by running the following command:
 
 ::
