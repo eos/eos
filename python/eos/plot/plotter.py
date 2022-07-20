@@ -407,8 +407,11 @@ class Plotter:
                 for key, value in item['parameters'].items():
                     parameters.set(key, value)
 
-            # create (empty) options
+            # create options
             options = eos.Options()
+            if 'options' in item and type(item['options']) is dict:
+                for key, value in item['options'].items():
+                    options.declare(key, value)
 
 
             #
