@@ -1899,8 +1899,11 @@ class Plotter:
                 for k, v in item['kinematics'].items():
                     kinematics.declare(k, v)
 
-            # create (empty) options
+            # create options
             options = eos.Options()
+            if 'options' in item and type(item['options']) is dict:
+                for key, value in item['options'].items():
+                    options.declare(key, value)
 
             # create observable
             pdf  = eos.SignalPDF.make(pname, parameters, kinematics, options)
