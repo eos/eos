@@ -840,6 +840,14 @@ EHMRR:2010A:
     id: oai:arXiv.org:1005.0571
   inspire-id: Egede:2010zc
   title: New physics reach of the decay mode $\bar{B} \to \bar{K}^{*0}\ell^+\ell^-$
+ETM:2017A:
+  authors: Lubicz, V. and Melis, A. and Simula, S.
+  collaboration: ETM
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1707.04529
+  inspire-id: Lubicz:2017asp
+  title: Masses and decay constants of D*$_{(s)}$ and B*$_{(s)}$ mesons with N$_f = 2 + 1 + 1$ twisted mass fermions
 F:2012A:
   authors: Fleischer, Robert
   eprint:
@@ -1377,6 +1385,13 @@ LHCb:2021D:
     id: oai:arXiv.org:2107.13428
   inspire-id: LHCb:2021xxq
   title: Angular analysis of the rare decay $B_s^0\to\phi\mu^+\mu^-$
+LMPW:2015A:
+  authors: Lang, C. B. and Mohler, Daniel and Prelovsek, Sasa and Woloshyn, R. M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1501.01646
+  inspire-id: Lang:2015hza
+  title: Predicting positive parity $B_s$ mesons from lattice QCD
 LMvD:2021A:
   authors: Leljak, Domagoj and Melic, Blazenka and van Dyk, Danny
   eprint:
@@ -1458,6 +1473,14 @@ PDG:2020A:
 PS:1997A:
   authors: Peskin, M. and Schroeder, D.
   title: An Introduction to Quantum Field Theory
+PZ:2021A:
+  authors: Pullin, B. and Zwicky, R.
+  journal: JHEP 09 (2021) 023
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2106.13617
+  inspire-id: Pullin:2021ebn
+  title: Radiative decays of heavy-light mesons and the $ {f}_{H,{H}^{\ast },{H}_1}^{(T)} $ decay constants
 RBC+UKQCD:2015A:
   authors: Flynn, J. M. and Izubuchi, T. and Kawanai, T. and Lehner, C. and Soni, A. and Van de Water, R. S. and Witzel, O.
   title: $B \to \pi \ell \nu$ and $B_s \to K \ell \nu$ form factors and $|V_{ub}|$ from 2+1-flavor lattice QCD with domain-wall light quarks and relativistic heavy quarks
