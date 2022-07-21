@@ -71,7 +71,7 @@ namespace eos
     {
         auto result = _entries->insert_or_assign(key, value);
 
-        if (result.second) 
+        if (! result.second)
         {
             Log::instance()->message("[ObservableEntries.insert_or_assign]", ll_warning)
                 << "Entry for observable " << key.str() << " has been replaced.";
