@@ -497,3 +497,63 @@ class Prediction:
             yaml.dump(description, description_file, default_flow_style=False)
         _np.save(os.path.join(path, 'samples.npy'), samples)
         _np.save(os.path.join(path, 'weights.npy'), weights)
+
+
+class DynestyResults:
+    def __init__(self, path):
+        """ Read Results object (in the dynesty.results module) from disk.
+
+        :param path: Path to the storage location.
+        :type path: str
+        """
+        if not os.path.exists(path) or not os.path.isdir(path):
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+
+        f = os.path.join(path, 'description.yaml')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+
+        with open(f, 'r') as df:
+            description = yaml.load(df, Loader=yaml.SafeLoader)
+
+        if not description['type'] == 'DynestyResults':
+            raise RuntimeError('Path {} not pointing to a DynestyResults file'.format(path))
+
+        self.type = 'DynestyResults'
+        self.varied_parameters = description['parameters']
+        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
+
+        f = os.path.join(path, 'dynesty_results.npy')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('Dynesty results file {} does not exist or is not a file'.format(f))
+        self.results = _np.load(f)
+        self.samples = self.results.samples
+        self.weights = _np.exp(self.results.logwt - self.results.logz[-1])
+
+
+    @staticmethod
+    def create(path, parameters, results):
+        """ Write a new Results object (in the dynesty.results module) to disk.
+
+        :param path: Path to the storage location, which will be created as a directory.
+        :type path: str
+        :param parameters: Parameter descriptions as a 1D array of shape (N, ).
+        :type parameters: list or iterable of eos.Parameter
+        :param mode: The results of a nested sampling run.
+        :type mode: dynesty.results.Results
+        """
+        description = {}
+        description['version'] = eos.__version__
+        description['type'] = 'DynestyResults'
+        description['parameters'] = [{
+            'name': p.name(),
+            'min': p.min(),
+            'max': p.max()
+        } for p in parameters]
+
+        os.makedirs(path, exist_ok=True)
+        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
+            yaml.dump(description, description_file, default_flow_style=False)
+
+        res_dict = results.asdict()
+        _np.save(os.path.join(path, 'dynesty_results.npy'), res_dict)
