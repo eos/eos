@@ -32,6 +32,7 @@
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda1520-ll.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -2819,6 +2820,90 @@ namespace eos
     // }}}
 
 
+    // Lambda_b -> Lambda(1520) l^+ l^-
+    // {{{
+    ObservableGroup
+    make_lambdab_to_lambda1520_ll_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\Lambda_b \to \Lambda(1520))\ell^+\ell^-$ decays)",
+            R"(The option "l" selects the charged lepton flavor.)",
+            {
+                // Lambda_b -> Lambda(1520) l^+ l^-
+                make_observable("Lambda_b->Lambda(1520)ll::dBR/dq2", R"(d\mathcal{B}(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &LambdaBToLambda1520Dilepton::differential_branching_ratio,
+                        std::make_tuple("q2")),
+
+                make_observable("Lambda_b->Lambda(1520)ll::Gamma_CP_specific(q2)",
+                        Unit::GeV(),
+                        &LambdaBToLambda1520Dilepton::differential_decay_width,
+                        std::make_tuple("q2")),
+
+                make_observable("Lambda_b->Lambda(1520)ll::A_FB^l(q2)",
+                        Unit::None(),
+                        &LambdaBToLambda1520Dilepton::differential_forward_backward_asymmetry,
+                        std::make_tuple("q2")),
+
+                make_expression_observable("Lambda_b->Lambda(1520)ll::Gamma(q2)", R"(\Gamma(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<Lambda_b->Lambda(1520)ll::Gamma_CP_specific(q2);cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::Gamma_CP_specific(q2);cp-conjugate=true>>)
+                        )"),
+
+                make_observable("Lambda_b->Lambda(1520)ll::L_1cc(q2)", R"(L_{1cc}(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        &LambdaBToLambda1520Dilepton::differential_L_1cc,
+                        std::make_tuple("q2")),
+
+                make_expression_observable("Lambda_b->Lambda(1520)ll::S_1cc(q2)", R"(S_{1cc}(\Lambda_b\to\Lambda(1520)\ell^+\ell^-)(q^2))",
+                        Unit::None(),
+                        R"(
+                            (<<Lambda_b->Lambda(1520)ll::L_1cc(q2);cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::L_1cc(q2);cp-conjugate=true>>)
+                            / <<Lambda_b->Lambda(1520)ll::Gamma(q2)>>
+                        )"),
+
+                make_observable("Lambda_b->Lambda(1520)ll::BR", R"(\mathcal{B}(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-))",
+                        Unit::None(),
+                        &LambdaBToLambda1520Dilepton::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda(1520)ll::Gamma_CP_specific",
+                        Unit::GeV(),
+                        &LambdaBToLambda1520Dilepton::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_expression_observable("Lambda_b->Lambda(1520)ll::Gamma", R"(\Gamma(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<Lambda_b->Lambda(1520)ll::Gamma_CP_specific;cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::Gamma_CP_specific;cp-conjugate=true>>)
+                        )"),
+
+                make_observable("Lambda_b->Lambda(1520)ll::A_FB^l", R"(A_\mathrm{FB}^\ell(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-))",
+                        Unit::None(),
+                        &LambdaBToLambda1520Dilepton::integrated_forward_backward_asymmetry,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda(1520)ll::L_1cc", R"(L_{1cc}(\bar{\Lambda}_b\to\bar{\Lambda}(1520)\ell^+\ell^-))",
+                        Unit::None(),
+                        &LambdaBToLambda1520Dilepton::integrated_L_1cc,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_expression_observable("Lambda_b->Lambda(1520)ll::S_1cc", R"(S_{1cc}(\Lambda_b\to\Lambda(1520)\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                            (<<Lambda_b->Lambda(1520)ll::L_1cc;cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::L_1cc;cp-conjugate=true>>)
+                            / <<Lambda_b->Lambda(1520)ll::Gamma>>
+                        )"),
+
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+
     // B -> X_s {gamma, l^+ l^-}
     // {{{
     ObservableGroup
@@ -2954,6 +3039,9 @@ namespace eos
 
                 // Lambda_b -> Lambda l^+ l^-
                 make_lambdab_to_lambda_ll_group(),
+
+                // Lambda_b -> Lambda l^+ l^-
+                make_lambdab_to_lambda1520_ll_group(),
 
                 // B -> X_s {gamma, l^+ l^-}
                 make_b_to_xs_group(),

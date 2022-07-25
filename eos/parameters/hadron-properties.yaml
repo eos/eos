@@ -262,6 +262,13 @@ groups:
           latex:   '$m_{\Lambda}$'
           unit:     'GeV'
           comments: 'cf. [PDG2012], p. 149'
+      'mass::Lambda(1520)' :
+          central: +1.518
+          min:     +1.517
+          max:     +1.119
+          latex:   '$m_{\Lambda(1520)}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2020'
       # c baryon masses
       'mass::Lambda_c' :
           central: +2.28646
