@@ -36,6 +36,9 @@ libeosrarebdecays_la_SOURCES = \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh \
 	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
+	lambda-b-to-lambda1520-gamma.cc lambda-b-to-lambda1520-gamma.hh \
+	lambda-b-to-lambda1520-gamma-base.cc lambda-b-to-lambda1520-gamma-base.hh \
+	lambda-b-to-lambda1520-gamma-naive.cc lambda-b-to-lambda1520-gamma-naive.hh \
 	lambda-b-to-lambda1520-ll.cc lambda-b-to-lambda1520-ll.hh \
 	lambda-b-to-lambda1520-ll-base.cc lambda-b-to-lambda1520-ll-base.hh \
 	lambda-b-to-lambda1520-ll-naive.cc lambda-b-to-lambda1520-ll-naive.hh \
@@ -97,6 +100,7 @@ TESTS = \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
 	lambda-b-to-lambda-dilepton_TEST \
+	lambda-b-to-lambda1520-gamma-naive_TEST \
 	lambda-b-to-lambda1520-ll-naive_TEST \
 	long-distance_TEST \
 	nonlocal-formfactors-p-to-p_TEST \
@@ -150,6 +154,8 @@ inclusive_b_to_s_dilepton_TEST_SOURCES = inclusive-b-to-s-dilepton_TEST.cc
 inclusive_b_to_s_gamma_TEST_SOURCES = inclusive-b-to-s-gamma_TEST.cc
 
 lambda_b_to_lambda_dilepton_TEST_SOURCES = lambda-b-to-lambda-dilepton_TEST.cc
+
+lambda_b_to_lambda1520_gamma_naive_TEST_SOURCES = lambda-b-to-lambda1520-gamma-naive_TEST.cc
 
 lambda_b_to_lambda1520_ll_naive_TEST_SOURCES = lambda-b-to-lambda1520-ll-naive_TEST.cc
 
