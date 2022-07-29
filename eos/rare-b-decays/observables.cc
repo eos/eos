@@ -33,6 +33,7 @@
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-ll.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda1520-gamma.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -2904,6 +2905,27 @@ namespace eos
     // }}}
 
 
+    // Lambda_b -> Lambda(1520) gamma
+    // {{{
+    ObservableGroup
+    make_lambdab_to_lambda1520_gamma_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\Lambda_b \to \Lambda(1520)) \gamma$ decays)",
+            R"()",
+            {
+                // Lambda_b -> Lambda(1520) gamma
+                make_observable("Lambda_b->Lambda(1520)gamma::BR", R"(\mathcal{B}(\Lambda_b\to\Lambda(1520)\gamma))",
+                        Unit::None(),
+                        &LambdaBToLambda1520Gamma::branching_ratio)
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+
     // B -> X_s {gamma, l^+ l^-}
     // {{{
     ObservableGroup
@@ -3042,6 +3064,9 @@ namespace eos
 
                 // Lambda_b -> Lambda l^+ l^-
                 make_lambdab_to_lambda1520_ll_group(),
+
+                // Lambda_b -> Lambda gamma
+                make_lambdab_to_lambda1520_gamma_group(),
 
                 // B -> X_s {gamma, l^+ l^-}
                 make_b_to_xs_group(),
