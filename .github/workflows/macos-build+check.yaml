@@ -31,17 +31,18 @@ jobs:
             - name: Prepare VM
               shell: bash
               env:
-                PYTHON: /usr/local/bin/python3.9
+                PYTHON: /usr/local/bin/python3.10
               run: |
                 export HOMEBREW_LOGS=/tmp
                 brew tap eos/eos
-                brew outdated python@3.9 || brew upgrade python@3.9 || true
+                brew outdated python@3.10 || brew upgrade python@3.10 || true
                 rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
                 brew outdated boost || brew upgrade boost || true
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
                 brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
-                brew link --overwrite --force python@3.9
-                $PYTHON -m pip install -U cython h5py matplotlib networkx numpy "pypmc>=1.2" PyYAML scipy wilson
+                brew link --overwrite --force python@3.10
+                $PYTHON -m pip install -U cython h5py matplotlib networkx numpy PyYAML scipy wilson
+                $PYTHON -m pip install -U "pypmc>=1.2"
 
             - name: Create build directory
               shell: bash
@@ -51,14 +52,14 @@ jobs:
               shell: bash
               env:
                 CXXFLAGS: "-O2 -g -march=x86-64"
-                PYTHON: /usr/local/bin/python3.9
+                PYTHON: /usr/local/bin/python3.10
               run: |
                 echo ===
                 ls -ld /usr/local/Cellar/python*
                 echo ===
-                ls -ld /usr/local/Cellar/python@3.9/
+                ls -ld /usr/local/Cellar/python@3.10/
                 echo ===
-                find /usr/local/Cellar/python@3.9 -name "python3*"
+                find /usr/local/Cellar/python@3.10 -name "python3*"
                 echo ===
                 SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
                 echo using boost-python suffix ${SUFFIX}
