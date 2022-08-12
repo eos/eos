@@ -956,6 +956,13 @@ FNAL+MILC:2017A:
     id: oai:arXiv.org:1712.09262
   inspire-id: Bazavov:2017lyh
   title: $B$- and $D$-meson leptonic decay constants from four-flavor lattice QCD
+FTW:2016A:
+  authors: Frellesvig, Hjalte and Tommasini, Damiano and Wever, Christopher
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1601.02649
+  inspire-id: Frellesvig:2016ske
+  title: On the reduction of generalized polylogarithms to $\text{Li}_n$ and $\text{Li}_{2,2}$ and on the evaluation thereof
 FvDV:2018A:
   authors: Feldmann, Th. and van Dyk, D. and Vos, K.K.
   eprint:
