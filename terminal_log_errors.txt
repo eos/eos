@@ -1,0 +1,71 @@
+make  all-recursive
+make[1]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos'
+Making all in test
+make[2]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/test'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/test'
+Making all in eos
+make[2]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos'
+Making all in constraints
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/constraints'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/constraints'
+Making all in parameters
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/parameters'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/parameters'
+Making all in utils
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/utils'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/utils'
+Making all in maths
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/maths'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/maths'
+Making all in models
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/models'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/models'
+Making all in statistics
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/statistics'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/statistics'
+Making all in form-factors
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/form-factors'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/form-factors'
+Making all in rare-b-decays
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/rare-b-decays'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/rare-b-decays'
+Making all in b-decays
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/b-decays'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/b-decays'
+Making all in d-decays
+make[3]: Entering directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/d-decays'
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO2/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosbdecays_la-d-to-psd-l-nu.lo -MD -MP -MF .deps/libeosbdecays_la-d-to-psd-l-nu.Tpo -c -o libeosbdecays_la-d-to-psd-l-nu.lo `test -f 'd-to-psd-l-nu.cc' || echo './'`d-to-psd-l-nu.cc
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO2/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosbdecays_la-d-to-psd-l-nu.lo -MD -MP -MF .deps/libeosbdecays_la-d-to-psd-l-nu.Tpo -c d-to-psd-l-nu.cc  -fPIC -DPIC -o .libs/libeosbdecays_la-d-to-psd-l-nu.o
+d-to-psd-l-nu.cc: In member function ‘std::string eos::Implementation<eos::DToPseudoscalarLeptonNeutrino>::_P() const’:
+d-to-psd-l-nu.cc:138:61: error: ‘Q’ was not declared in this scope
+  138 |             const auto p = process_map.find(std::make_tuple(Q, q, I)); //changed
+      |                                                             ^
+d-to-psd-l-nu.cc:135:24: warning: unused variable ‘U’ [-Wunused-variable]
+  135 |             const char U = opt_Q.value()[0]; //changed
+      |                        ^
+d-to-psd-l-nu.cc: In constructor ‘eos::Implementation<eos::DToPseudoscalarLeptonNeutrino>::Implementation(const eos::Parameters&, const eos::Options&, eos::ParameterUser&)’:
+d-to-psd-l-nu.cc:188:17: error: ‘v_cQ’ was not declared in this scope; did you mean ‘v_Qc’?
+  188 |                 v_cQ      = std::bind(&ModelComponent<components::CKM>::ckm_cd, model.get());// ckm_ub -> ckm_cd; v_Ub -> v_cQ
+      |                 ^~~~
+      |                 v_Qc
+d-to-psd-l-nu.cc:194:17: error: ‘v_cQ’ was not declared in this scope; did you mean ‘v_Qc’?
+  194 |                 v_cQ      = std::bind(&ModelComponent<components::CKM>::ckm_cs, model.get()); //changed v_Ub -> v_cQ
+      |                 ^~~~
+      |                 v_Qc
+make[3]: *** [Makefile:712: libeosbdecays_la-d-to-psd-l-nu.lo] Error 1
+make[3]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos/d-decays'
+make[2]: *** [Makefile:975: all-recursive] Error 1
+make[2]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos/eos'
+make[1]: *** [Makefile:439: all-recursive] Error 1
+make[1]: Leaving directory '/media/zxz12/ESD-ISO2/eos-master/test_ios/eos'
+make: *** [Makefile:371: all] Error 2

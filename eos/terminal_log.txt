@@ -1,0 +1,97 @@
+Making all in constraints
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/constraints'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/constraints'
+Making all in parameters
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/parameters'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/parameters'
+Making all in utils
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/utils'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/utils'
+Making all in maths
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/maths'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/maths'
+Making all in models
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/models'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/models'
+Making all in statistics
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/statistics'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/statistics'
+Making all in form-factors
+make[1]: Entering directory '/media/zxz12/ESD-ISO/eos-master/test_ios/eos/eos/form-factors'
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-d-to-pi.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-d-to-pi.Tpo -c -o libeosformfactors_la-analytic-d-to-pi.lo `test -f 'analytic-d-to-pi.cc' || echo './'`analytic-d-to-pi.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-pi-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-pi-lcsr.Tpo -c -o libeosformfactors_la-analytic-b-to-pi-lcsr.lo `test -f 'analytic-b-to-pi-lcsr.cc' || echo './'`analytic-b-to-pi-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-k-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-k-lcsr.Tpo -c -o libeosformfactors_la-analytic-b-to-k-lcsr.lo `test -f 'analytic-b-to-k-lcsr.cc' || echo './'`analytic-b-to-k-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-d-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-d-lcsr.Tpo -c -o libeosformfactors_la-analytic-b-to-d-lcsr.lo `test -f 'analytic-b-to-d-lcsr.cc' || echo './'`analytic-b-to-d-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-k-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-k-lcsr.Tpo -c -o libeosformfactors_la-analytic-bs-to-k-lcsr.lo `test -f 'analytic-bs-to-k-lcsr.cc' || echo './'`analytic-bs-to-k-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-ds-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-ds-lcsr.Tpo -c -o libeosformfactors_la-analytic-bs-to-ds-lcsr.lo `test -f 'analytic-bs-to-ds-lcsr.cc' || echo './'`analytic-bs-to-ds-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-kstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-kstar-lcsr.Tpo -c -o libeosformfactors_la-analytic-bs-to-kstar-lcsr.lo `test -f 'analytic-bs-to-kstar-lcsr.cc' || echo './'`analytic-bs-to-kstar-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-dsstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-dsstar-lcsr.Tpo -c -o libeosformfactors_la-analytic-bs-to-dsstar-lcsr.lo `test -f 'analytic-bs-to-dsstar-lcsr.cc' || echo './'`analytic-bs-to-dsstar-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-phi-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-phi-lcsr.Tpo -c -o libeosformfactors_la-analytic-bs-to-phi-lcsr.lo `test -f 'analytic-bs-to-phi-lcsr.cc' || echo './'`analytic-bs-to-phi-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-rho-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-rho-lcsr.Tpo -c -o libeosformfactors_la-analytic-b-to-rho-lcsr.lo `test -f 'analytic-b-to-rho-lcsr.cc' || echo './'`analytic-b-to-rho-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-kstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-kstar-lcsr.Tpo -c -o libeosformfactors_la-analytic-b-to-kstar-lcsr.lo `test -f 'analytic-b-to-kstar-lcsr.cc' || echo './'`analytic-b-to-kstar-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-dstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-dstar-lcsr.Tpo -c -o libeosformfactors_la-analytic-b-to-dstar-lcsr.lo `test -f 'analytic-b-to-dstar-lcsr.cc' || echo './'`analytic-b-to-dstar-lcsr.cc
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-mesonic.lo -MD -MP -MF .deps/libeosformfactors_la-mesonic.Tpo -c -o libeosformfactors_la-mesonic.lo `test -f 'mesonic.cc' || echo './'`mesonic.cc
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-d-to-pi.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-d-to-pi.Tpo -c analytic-d-to-pi.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-d-to-pi.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-ds-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-ds-lcsr.Tpo -c analytic-bs-to-ds-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-bs-to-ds-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-d-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-d-lcsr.Tpo -c analytic-b-to-d-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-b-to-d-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-k-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-k-lcsr.Tpo -c analytic-bs-to-k-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-bs-to-k-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-phi-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-phi-lcsr.Tpo -c analytic-bs-to-phi-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-bs-to-phi-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-kstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-kstar-lcsr.Tpo -c analytic-bs-to-kstar-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-bs-to-kstar-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-bs-to-dsstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-bs-to-dsstar-lcsr.Tpo -c analytic-bs-to-dsstar-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-bs-to-dsstar-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-rho-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-rho-lcsr.Tpo -c analytic-b-to-rho-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-b-to-rho-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-k-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-k-lcsr.Tpo -c analytic-b-to-k-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-b-to-k-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-kstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-kstar-lcsr.Tpo -c analytic-b-to-kstar-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-b-to-kstar-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-pi-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-pi-lcsr.Tpo -c analytic-b-to-pi-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-b-to-pi-lcsr.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-analytic-b-to-dstar-lcsr.lo -MD -MP -MF .deps/libeosformfactors_la-analytic-b-to-dstar-lcsr.Tpo -c analytic-b-to-dstar-lcsr.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-analytic-b-to-dstar-lcsr.o
+/bin/bash ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../..    -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic  -g -O2 -std=c++17 -MT libeosformfactors_la-observables.lo -MD -MP -MF .deps/libeosformfactors_la-observables.Tpo -c -o libeosformfactors_la-observables.lo `test -f 'observables.cc' || echo './'`observables.cc
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-mesonic.lo -MD -MP -MF .deps/libeosformfactors_la-mesonic.Tpo -c mesonic.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-mesonic.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../.. -I/media/zxz12/ESD-ISO/eos-master/test_ios/eos -std=c++17 -Wall -Wextra -pedantic -g -O2 -std=c++17 -MT libeosformfactors_la-observables.lo -MD -MP -MF .deps/libeosformfactors_la-observables.Tpo -c observables.cc  -fPIC -DPIC -o .libs/libeosformfactors_la-observables.o
+analytic-d-to-pi.cc:2124:5: error: no declaration matches ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MDp_lcsr(const double&) const’
+ 2124 |     AnalyticFormFactorBToPiDKMMO2008::MDp_lcsr(const double & q2) const
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2124:5: note: no functions named ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MDp_lcsr(const double&) const’
+In file included from analytic-d-to-pi.cc:21:
+../../eos/form-factors/analytic-d-to-pi.hh:32:11: note: ‘class eos::AnalyticFormFactorBToPiDKMMO2008’ defined here
+   32 |     class AnalyticFormFactorBToPiDKMMO2008 :
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2130:5: error: no declaration matches ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MD0_lcsr(const double&) const’
+ 2130 |     AnalyticFormFactorBToPiDKMMO2008::MD0_lcsr(const double & q2) const
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2130:5: note: no functions named ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MD0_lcsr(const double&) const’
+In file included from analytic-d-to-pi.cc:21:
+../../eos/form-factors/analytic-d-to-pi.hh:32:11: note: ‘class eos::AnalyticFormFactorBToPiDKMMO2008’ defined here
+   32 |     class AnalyticFormFactorBToPiDKMMO2008 :
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2136:5: error: no declaration matches ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MDT_lcsr(const double&) const’
+ 2136 |     AnalyticFormFactorBToPiDKMMO2008::MDT_lcsr(const double & q2) const
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2136:5: note: no functions named ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MDT_lcsr(const double&) const’
+In file included from analytic-d-to-pi.cc:21:
+../../eos/form-factors/analytic-d-to-pi.hh:32:11: note: ‘class eos::AnalyticFormFactorBToPiDKMMO2008’ defined here
+   32 |     class AnalyticFormFactorBToPiDKMMO2008 :
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2142:5: error: no declaration matches ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MD_svz() const’
+ 2142 |     AnalyticFormFactorBToPiDKMMO2008::MD_svz() const
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analytic-d-to-pi.cc:2142:5: note: no functions named ‘double eos::AnalyticFormFactorBToPiDKMMO2008::MD_svz() const’
+In file included from analytic-d-to-pi.cc:21:
+../../eos/form-factors/analytic-d-to-pi.hh:32:11: note: ‘class eos::AnalyticFormFactorBToPiDKMMO2008’ defined here
+   32 |     class AnalyticFormFactorBToPiDKMMO2008 :
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[1]: *** [Makefile:1110: libeosformfactors_la-analytic-d-to-pi.lo] Error 1
+make[1]: *** Waiting for unfinished jobs....
+In file included from mesonic.cc:28:
+../../eos/form-factors/mesonic-hqet.hh: In instantiation of ‘double eos::HQETFormFactors<Process_, eos::PToV>::t_1(const double&) const [with Process_ = eos::BsToDsstar]’:
+../../eos/form-factors/mesonic-hqet.hh:1278:28:   required from here
+../../eos/form-factors/mesonic-hqet.hh:1281:30: warning: unused variable ‘w’ [-Wunused-variable]
+ 1281 |                 const double w = _w(q2);
+      |                              ^
+../../eos/form-factors/mesonic-hqet.hh: In instantiation of ‘double eos::HQETFormFactors<Process_, eos::PToV>::t_1(const double&) const [with Process_ = eos::BToDstar]’:
+../../eos/form-factors/mesonic-hqet.hh:1278:28:   required from here
+../../eos/form-factors/mesonic-hqet.hh:1281:30: warning: unused variable ‘w’ [-Wunused-variable]

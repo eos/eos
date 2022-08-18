@@ -1,0 +1,3 @@
+ cd .. && /bin/bash /media/zxz12/ESD-ISO/eos-master/test_ios/eos/config/missing automake-1.16 --gnu eos/Makefile
+/bin/bash: /media/zxz12/ESD-ISO/eos-master/test_ios/eos/config/missing: Permission denied
+make: *** [Makefile:721: Makefile.in] Error 126
