@@ -15,8 +15,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EXPRESSION_PARSER_HH
-#define EXPRESSION_PARSER_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_EXPRESSION_PARSER_HH
+#define EOS_GUARD_EOS_UTILS_EXPRESSION_PARSER_HH 1
 
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp>

@@ -127,8 +127,8 @@ namespace eos
         static constexpr const char * label = "B->K^*";
         static constexpr double mB = 5.279;
         static constexpr double mV = 0.896;
-        static constexpr double mR2_0m = 5.336 * 5.336;
-        static constexpr double mR2_1m = 5.412 * 5.412;
+        static constexpr double mR2_0m = 5.366 * 5.366;
+        static constexpr double mR2_1m = 5.415 * 5.415;
         static constexpr double mR2_1p = 5.829 * 5.829;
     };
 
@@ -157,8 +157,8 @@ namespace eos
         static constexpr const char * label = "B_s->phi";
         static constexpr double mB = 5.366;
         static constexpr double mV = 1.020;
-        static constexpr double mR2_0m = 5.336 * 5.336;
-        static constexpr double mR2_1m = 5.412 * 5.412;
+        static constexpr double mR2_0m = 5.366 * 5.366;
+        static constexpr double mR2_1m = 5.415 * 5.415;
         static constexpr double mR2_1p = 5.829 * 5.829;
     };
 

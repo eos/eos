@@ -1,6 +1,5 @@
 B->pipi::F_time[sys=0.30]@FvDV:2018A:
   type: MultivariateGaussian(Covariance)
-  dim: 41
   observables: ['B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)',
     'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)',
     'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)',
@@ -553,11 +552,9 @@ B->pipi::F_time[sys=0.30]@FvDV:2018A:
     0.14269910910279038, 0.14639385634901375, 17423.876388043733, 3417.9684972669697,
     13474.829343191723, 2642.590728519101, 9525.782298339644, 1867.2129597712633,
     4759.655938186188]
-  dof: 41
 
 B->pipi::F_long[sys=0.30]@FvDV:2018A:
   type: MultivariateGaussian(Covariance)
-  dim: 41
   observables: ['B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)',
     'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)',
     'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)',
@@ -1109,11 +1106,9 @@ B->pipi::F_long[sys=0.30]@FvDV:2018A:
     0.1626439048371867, 0.15206372608404223, 35972.76474683789, 9358.273942552787,
     27741.817016307283, 6164.839503033901, 19581.233561599973, 4071.321264504802,
     20045.443356562646]
-  dof: 41
 
 B->pipi::F_perp[sys=0.30]@FvDV:2018A:
   type: MultivariateGaussian(Covariance)
-  dim: 41
   observables: ['B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)',
     'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)',
     'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)',
@@ -1671,11 +1666,9 @@ B->pipi::F_perp[sys=0.30]@FvDV:2018A:
     0.0015409629976639325, 0.0016134625562472637, 0.001570658088053109, 0.0004296276222721422,
     0.00039196049406112367, 0.00033285057106630274, 32.001531741788256, 23.45515926809863,
     33.84170318066, 29.549079873080178, 33.13061407400936, 31.28963435785168, 64.08054200749756]
-  dof: 41
 
 B->pipi::F_para[sys=0.30]@FvDV:2018A:
   type: MultivariateGaussian(Covariance)
-  dim: 41
   observables: ['B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)',
     'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)',
     'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)',
@@ -2236,4 +2229,3 @@ B->pipi::F_para[sys=0.30]@FvDV:2018A:
     -0.009407808380783039, -0.012609866912671228, 360.74167277590567, 374.3306818252609,
     293.4077477424704, 303.59246940801404, 226.25305014176087, 233.3237426468702,
     1036.7699745307375]
-  dof: 41

@@ -12,6 +12,8 @@ libeosmaths_la_SOURCES = \
 	gsl-interface.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	integrate-cubature.cc integrate-cubature.hh \
+	interpolation.cc interpolation.hh \
+	lagrange-polynomial.hh \
 	matrix.hh \
 	polylog.cc polylog.hh \
 	power-of.hh \
@@ -26,6 +28,7 @@ libeosmaths_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
+	polylog_TEST_quadlog.bin \
 	polylog_TEST_trilog.bin \
 	polylog_TEST_z.bin
 
@@ -36,6 +39,8 @@ include_eos_utils_HEADERS = \
 	gsl-interface.hh \
 	integrate.hh \
 	integrate-cubature.hh \
+	interpolation.hh \
+	lagrange-polynomial.hh \
 	matrix.hh \
 	polylog.hh \
 	power-of.hh \
@@ -48,12 +53,14 @@ TESTS = \
 	derivative_TEST \
 	gsl-interface_TEST \
 	integrate_TEST \
+	interpolation_TEST \
+	lagrange-polynomial_TEST \
 	matrix_TEST \
 	polylog_TEST \
 	power_of_TEST \
 	szego-polynomial_TEST
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosmaths.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
@@ -68,6 +75,10 @@ gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
+
+interpolation_TEST_SOURCES = interpolation_TEST.cc
+
+lagrange_polynomial_TEST_SOURCES = lagrange-polynomial_TEST.cc
 
 matrix_TEST_SOURCES = matrix_TEST.cc
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019, 2021 Danny van Dyk
+ * Copyright (c) 2019, 2021, 2022 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +32,11 @@
 
 namespace eos
 {
+    namespace impl
+    {
+        extern std::map<QualifiedName, ObservableEntryPtr> observable_entries;
+    }
+
     template <>
     struct Implementation<ObservableGroup>
     {
@@ -77,7 +82,11 @@ namespace eos
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, "", unit, function, std::make_tuple(), forced_options));
+        auto result = std::make_pair(qn, make_concrete_observable_entry(qn, "", unit, function, std::make_tuple(), forced_options));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     template <typename Decay_, typename ... Args_>
@@ -89,7 +98,11 @@ namespace eos
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, unit, function, std::make_tuple(), forced_options));
+        auto result = std::make_pair(qn, make_concrete_observable_entry(qn, latex, unit, function, std::make_tuple(), forced_options));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
@@ -101,7 +114,11 @@ namespace eos
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, "", unit, function, kinematics_names, forced_options));
+        auto result = std::make_pair(qn, make_concrete_observable_entry(qn, "", unit, function, kinematics_names, forced_options));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
@@ -114,7 +131,11 @@ namespace eos
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, unit, function, kinematics_names, forced_options));
+        auto result = std::make_pair(qn, make_concrete_observable_entry(qn, latex, unit, function, kinematics_names, forced_options));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     /* Helper functions to create ObservableEntry for a cacheable observable */
@@ -129,7 +150,11 @@ namespace eos
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_cacheable_observable_entry(qn, latex, unit, prepare_fn, evaluate_fn, kinematics_names, forced_options));
+        auto result = std::make_pair(qn, make_concrete_cacheable_observable_entry(qn, latex, unit, prepare_fn, evaluate_fn, kinematics_names, forced_options));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     /* expressions involving observables */

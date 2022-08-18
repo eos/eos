@@ -21,7 +21,7 @@
 #include <eos/maths/szego-polynomial.hh>
 
 #include <cmath>
-#include <iostream>
+#include <gsl/gsl_matrix.h>
 
 using namespace test;
 using namespace eos;
@@ -37,7 +37,7 @@ class SzegoPolynomialTest :
 
         virtual void run() const
         {
-            // test case
+            // Test the evaluation
             {
                 SzegoPolynomial<5u> p{
                     2.47895, // norm of the measure
@@ -88,5 +88,20 @@ class SzegoPolynomialTest :
                     TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.40550250, -0.45614032),  1.0e-5);
                 }
             }
+
+            // Test the coefficients
+            {
+                SzegoPolynomial<5u> p{
+                    2.47895, // norm of the measure
+                    { 0.762914, -0.7988, 0.807686, -0.81062, 0.811894 }
+                };
+
+                gsl_matrix * coefficient_matrix = p.coefficient_matrix();
+
+                TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 0, 0),  0.6351351032391984,  1.0e-5);
+                TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 1, 2), -2.24105,  1.0e-5);
+                TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 3, 4), -75.8351,  1.0e-5);
+            }
+
         }
 } szego_polynomial_test;

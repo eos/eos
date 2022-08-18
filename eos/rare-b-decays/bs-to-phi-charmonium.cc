@@ -77,7 +77,7 @@ namespace eos
             m_Bs(p["mass::B_s"], u),
             tau_Bs(p["life_time::B_s"], u),
             m_phi(p["mass::phi"], u),
-            opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "GRvDV2021" }, "GvDV2020"),
+            opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
             nonlocal_formfactor(NonlocalFormFactor<nff::PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o)),
             opt_psi(o, "psi", { "J/psi", "psi(2S)" }, "J/psi"),
             m_psi(p["mass::" + opt_psi.value()], u),
@@ -200,6 +200,14 @@ namespace eos
         const auto amps = _imp->amplitudes_experimental();
 
         return norm(amps.A_long) / (norm(amps.A_perp) + norm(amps.A_para) + norm(amps.A_long));
+    }
+
+    double
+    BsToPhiCharmonium::long_phase() const
+    {
+        const auto amps = _imp->amplitudes_experimental();
+
+        return arg(amps.A_long);
     }
 
     double

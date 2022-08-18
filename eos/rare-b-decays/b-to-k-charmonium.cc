@@ -31,6 +31,7 @@
 
 namespace eos
 {
+    using std::arg;
     using std::norm;
     using std::sqrt;
 
@@ -76,7 +77,7 @@ namespace eos
             m_B(p["mass::B_" + opt_q.value()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             m_K(p["mass::K_" + opt_q.value()], u),
-            opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "GRvDV2021" }, "GvDV2020"),
+            opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
             nonlocal_formfactor(NonlocalFormFactor<nff::PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o)),
             opt_psi(o, "psi", { "J/psi", "psi(2S)" }, "J/psi"),
             m_psi(p["mass::" + opt_psi.value()], u),
@@ -129,6 +130,13 @@ namespace eos
     BToKCharmonium::branching_ratio() const
     {
         return _imp->branching_ratio();
+    }
+
+    double
+    BToKCharmonium::plus_phase() const
+    {
+
+        return arg(_imp->residue_H_plus());
     }
 
     const std::set<ReferenceName>

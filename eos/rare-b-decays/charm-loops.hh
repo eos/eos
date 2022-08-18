@@ -21,18 +21,27 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_CHARM_LOOPS_HH 1
 
 #include <eos/maths/complex.hh>
+#include <eos/maths/interpolation.hh>
 #include <eos/models/model.hh>
 
 #include <vector>
 
 namespace eos
 {
-    struct CharmLoopsInput
+    class CharmLoopsInterpolation
     {
-        size_t npoints;
-        std::vector<double> x;
-        std::vector<double> y_real;
-        std::vector<double> y_imag;
+        private:
+        const CSplineInterpolation real_part;
+        const CSplineInterpolation imag_part;
+
+        public:
+        CharmLoopsInterpolation(std::vector<double> x, std::vector<double> y_real, std::vector<double> y_imag):
+            real_part(x, y_real),
+            imag_part(x, y_imag)
+        {}
+        ~CharmLoopsInterpolation() = default;
+
+        complex<double> operator()(const double & s) const { return complex<double>(real_part(s), imag_part(s)); };
     };
 
     struct CharmLoops
@@ -79,9 +88,6 @@ namespace eos
         static complex<double> F19_massive_Qsb(const double & s);
         static complex<double> F27_massive_Qsb(const double & s);
         static complex<double> F29_massive_Qsb(const double & s);
-
-        // Helper function for the evaluation of charmless contributions
-        static complex<double> CharmSpline(const CharmLoopsInput & input_data, const double & s);
     };
 
     struct ShortDistanceLowRecoil

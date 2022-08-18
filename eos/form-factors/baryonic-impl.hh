@@ -35,6 +35,10 @@
 
 namespace eos
 {
+    /*
+     * J=1/2^+ -> J=1/2^+ transitions
+     */
+
     /* Form Factors according to [MvD2016] for J=1/2^+ -> 1/2^+ transitions */
     template <typename Process_> class MvD2016FormFactors;
 
@@ -114,27 +118,27 @@ namespace eos
         virtual double f_time_v(const double & s) const
         {
             static const double mR2 = Process_::mR2_0p;
-            
+
             const double z = _z(s, Process_::tp_0p, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_v() + _alpha_1_time_v() * z + _alpha_2_time_v() * z2);
         }
 
         virtual double f_long_v(const double & s) const
         {
             static const double mR2 = Process_::mR2_1m;
-            
+
             const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_v() + _alpha_1_long_v() * z + _alpha_2_long_v() * z2);
         }
 
         virtual double f_perp_v(const double & s) const
         {
             static const double mR2 = Process_::mR2_1m;
-            
+
             const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_v() + _alpha_1_perp_v() * z + _alpha_2_perp_v() * z2);
         }
 
@@ -142,25 +146,25 @@ namespace eos
         virtual double f_time_a(const double & s) const
         {
             static const double mR2 = Process_::mR2_0m;
-            
+
             const double z = _z(s, Process_::tp_0m, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_a() + _alpha_1_time_a() * z + _alpha_2_time_a() * z2);
         }
 
         virtual double f_long_a(const double & s) const
         {
             static const double mR2 = Process_::mR2_1p;
-            
+
             const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_a() + _alpha_1_long_a() * z + _alpha_2_long_a() * z2);
         }
 
         virtual double f_perp_a(const double & s) const
         {
             static const double mR2 = Process_::mR2_1p;
-            
+
             const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
 
             // Using alpha_0_long_a instead of alpha_0_perp_a, in order to
@@ -172,18 +176,18 @@ namespace eos
         virtual double f_long_t(const double & s) const
         {
             static const double mR2 = Process_::mR2_1m;
-            
+
             const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t() + _alpha_1_long_t() * z + _alpha_2_long_t() * z2);
         }
 
         virtual double f_perp_t(const double & s) const
         {
             static const double mR2 = Process_::mR2_1m;
-            
+
             const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_t() + _alpha_1_perp_t() * z + _alpha_2_perp_t() * z2);
         }
 
@@ -191,18 +195,18 @@ namespace eos
         virtual double f_long_t5(const double & s) const
         {
             static const double mR2 = Process_::mR2_1p;
-            
+
             const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
-            
+
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_long_t5() * z + _alpha_2_long_t5() * z2);
         }
 
         virtual double f_perp_t5(const double & s) const
         {
             static const double mR2 = Process_::mR2_1p;
-            
+
             const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
-            
+
             // Using alpha_0_long_t5 instead of alpha_0_perp_t5, in order to
             // fulfill relation eq. (8), [DM2016], p. 3.
             return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_perp_t5() * z + _alpha_2_perp_t5() * z2);
@@ -385,24 +389,6 @@ namespace eos
     /*
      * J=1/2^+ -> J=1/2^- transitions
      */
-    struct LambdaBToLambdaC2595 {
-        static constexpr const char * label = "Lambda_b->Lambda_c(2595)";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 2.59225;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // pair production threshold: Lambda_b + Lambda_c(2625)
-        static constexpr double tp = (m1 + m2) * (m1 + m2);
-        // first resonances sorted by spin/parity
-        // we use the shifts from [DLM2015], table VII.
-        static constexpr double mBc = 6.2751;
-        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
-        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-    };
 
     template <typename Process_> class HQETFormFactors<OneHalfPlusToOneHalfMinus, Process_> :
         public FormFactors<OneHalfPlusToOneHalfMinus>
@@ -692,24 +678,6 @@ namespace eos
     /*
      * J=1/2^+ -> J=3/2^- transitions
      */
-    struct LambdaBToLambdaC2625 {
-        static constexpr const char * label = "Lambda_b->Lambda_c(2625)";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 2.62811;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // pair production threshold: Lambda_b + Lambda_c(2625)
-        static constexpr double tp = (m1 + m2) * (m1 + m2);
-        // first resonances sorted by spin/parity
-        // we use the shifts from [DLM2015], table VII.
-        static constexpr double mBc = 6.2751;
-        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
-        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-    };
 
     template <typename Process_> class HQETFormFactors<OneHalfPlusToThreeHalfMinus, Process_> :
         public FormFactors<OneHalfPlusToThreeHalfMinus>
@@ -943,6 +911,15 @@ namespace eos
 
                 return result;
             }
+
+            // tensor current
+            virtual double f_long12_t(const double &) const { throw InternalError("HQETFormFactors::f_long12_t(): not implemented"); }
+            virtual double f_perp12_t(const double &) const { throw InternalError("HQETFormFactors::f_perp12_t(): not implemented"); }
+            virtual double f_perp32_t(const double &) const { throw InternalError("HQETFormFactors::f_perp32_t(): not implemented"); }
+            virtual double f_long12_t5(const double &) const { throw InternalError("HQETFormFactors::f_long12_t5(): not implemented"); }
+            virtual double f_perp12_t5(const double &) const { throw InternalError("HQETFormFactors::f_perp12_t5(): not implemented"); }
+            virtual double f_perp32_t5(const double &) const { throw InternalError("HQETFormFactors::f_perp32_t5(): not implemented"); }
+
 
             virtual Diagnostics diagnostics() const
             {

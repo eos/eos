@@ -15,7 +15,6 @@ Lambda_b->Lambdamu^+mu^-::A_FB^h[15.0,20.0]@LHCb:2015B:
     mean: -0.29
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.03}
-    dof: 1
 Lambda_b->Lambdamu^+mu^-::A_FB^l[15.0,20.0]@LHCb:2015B:
     type: Gaussian
     observable: Lambda_b->Lambdall::A_FB^l@LowRecoil
@@ -24,7 +23,6 @@ Lambda_b->Lambdamu^+mu^-::A_FB^l[15.0,20.0]@LHCb:2015B:
     mean: -0.05
     sigma-stat: {hi: 0.09, lo: -0.09}
     sigma-sys: {hi: 0.03, lo: -0.03}
-    dof: 1
 Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@LHCb:2015B:
     type: Gaussian
     observable: Lambda_b->Lambdall::BR@LowRecoil
@@ -33,7 +31,6 @@ Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@LHCb:2015B:
     mean: 6e-07
     sigma-stat: {hi: 4.5e-08, lo: -4.5e-08}
     sigma-sys: {hi: 1.25e-07, lo: -1.25e-07}
-    dof: 1
 Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb:2015B:
     type: Gaussian
     observable: Lambda_b->Lambdall::F_0@LowRecoil
@@ -42,7 +39,6 @@ Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb:2015B:
     mean: 0.61
     sigma-stat: {hi: 0.11, lo: -0.14}
     sigma-sys: {hi: 0.03, lo: -0.03}
-    dof: 1
 # }}}
 #
 # 2018
@@ -50,7 +46,6 @@ Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb:2015B:
 # {{{
 Lambda_b->Lambdamu^+mu^-::AngularObservables[15.0,20.0]@LHCb:2018A:
     type: MultivariateGaussian
-    dim: 9
     observables:
         [
           'Lambda_b->Lambdall::M_2@LowRecoil',  'Lambda_b->Lambdall::M_3@LowRecoil',  'Lambda_b->Lambdall::M_4@LowRecoil',
@@ -112,11 +107,9 @@ Lambda_b->Lambdamu^+mu^-::AngularObservables[15.0,20.0]@LHCb:2018A:
       - [
           +0.0524017900, -0.0331790900, -0.0350079300, -0.0130836700, +0.0462239000, -0.1170601000, +0.0517177800, -0.2975840000, +1.0000000000
         ]
-    dof: 9
 
 Lambda_b->Lambdamu^+mu^-::AngularObservables[all,15.0,20.0]@LHCb:2018A:
     type: MultivariateGaussian
-    dim: 33
     observables:
         [
                                                 'Lambda_b->Lambdall::M_2@LowRecoil',  'Lambda_b->Lambdall::M_3@LowRecoil',
@@ -375,7 +368,6 @@ Lambda_b->Lambdamu^+mu^-::AngularObservables[all,15.0,20.0]@LHCb:2018A:
           +0.0012404120, -0.0157861100, -0.0192205200, -0.0687998000, -0.0539470500, +0.0056092202, -0.0301489400, -0.0523550200, +0.0340634700,
           +0.0113651600, -0.1484538000, -0.2405703000, +0.0756371100, -0.0718598200, -0.0395250000, +1.0000000000
         ]
-    dof: 33
 # }}}
 #
 # Updated 2015 LHCb BF
@@ -389,5 +381,4 @@ Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@BMvD:2019A:
     mean: 3.49e-07
     sigma-stat: {hi: 2.6e-08, lo: -2.6e-08}
     sigma-sys: {hi: 9.2e-08, lo: -9.2e-08}
-    dof: 1
 # }}}

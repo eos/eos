@@ -117,6 +117,20 @@ groups:
           latex:   '$m_{B_s^*}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::B_s,0' :
+          central: +5.711
+          min:     +5.688
+          max:     +5.734
+          latex:   '$m_{B_{s,0}}$'
+          unit:     'GeV'
+          comments: 'cf. [LMPW:2015A]'
+      'mass::B_s,1' :
+          central: +5.750
+          min:     +5.775
+          max:     +5.725
+          latex:   '$m_{B_{s,1}}$'
+          unit:     'GeV'
+          comments: 'cf. [LMPW:2015A]'
   # }}}
 
   # Vector Meson Masses
@@ -248,6 +262,13 @@ groups:
           latex:   '$m_{\Lambda}$'
           unit:     'GeV'
           comments: 'cf. [PDG2012], p. 149'
+      'mass::Lambda(1520)' :
+          central: +1.518
+          min:     +1.517
+          max:     +1.119
+          latex:   '$m_{\Lambda(1520)}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2020'
       # c baryon masses
       'mass::Lambda_c' :
           central: +2.28646
@@ -313,6 +334,48 @@ groups:
           latex:    '$f_{B_c^\pm}$'
           unit:     'GeV'
           comments: 'cf. [HPQCD2015B], eq. (20)'
+      'decay-constant::B_d^*' :
+          central: +0.1864
+          min:     +0.1793
+          max:     +0.1935
+          latex:    '$f_{\bar{B}^*}$'
+          unit:     'GeV'
+          comments: 'cf. [ETM:2017A]'
+      'decay-constant::B_s^*' :
+          central: +0.2231
+          min:     +0.2175
+          max:     +0.2287
+          latex:    '$f_{\bar{B}_s^*}$'
+          unit:     'GeV'
+          comments: 'cf. [ETM:2017A]'
+      'decay-constant::B_s^*,T' :
+          central: +0.236
+          min:     +0.215
+          max:     +0.258
+          latex:    '$f_{\bar{B}_s^{*,T}}$'
+          unit:     'GeV'
+          comments: 'cf. [PZ:2021A]'
+      'decay-constant::B_s,0' :
+          central: +0.25
+          min:     +0.2
+          max:     +0.3
+          latex:    '$f_{\bar{B}_{s,0}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::B_s,1' :
+          central: +0.305
+          min:     +0.332
+          max:     +0.279
+          latex:    '$f_{\bar{B}_{s,1}}$'
+          unit:     'GeV'
+          comments: 'cf. [PZ:2021A]'
+      'decay-constant::B_s,1^T' :
+          central: +0.285
+          min:     +0.310
+          max:     +0.261
+          latex:    '$f_{\bar{B}_{s,1}^T}$'
+          unit:     'GeV'
+          comments: 'cf. [PZ:2021A]'
       'decay-constant::K_d' :
           central: +0.1561
           min:     +0.155

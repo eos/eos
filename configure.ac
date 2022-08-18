@@ -1,7 +1,7 @@
 dnl vim: set sw=8 sts=8 noet ft=config foldmethod=marker foldmarker={{{,}}}:
 
-AC_INIT([EOS], [1.0.1])
-AC_PREREQ(2.5)
+AC_INIT([EOS],[1.0.5])
+AC_PREREQ([2.69])
 AC_CONFIG_SRCDIR([])
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(1.9)
@@ -41,7 +41,7 @@ dnl }}}
 
 dnl {{{ check for compiler requirements
 dnl {{{ check for -std=c++17
-AC_MSG_CHECKING([for C++14 support])
+AC_MSG_CHECKING([for C++17 support])
 CHECK_CXXFLAG([-std=c++17])
 dnl }}}
 dnl {{{ check for braced initializers
@@ -233,7 +233,7 @@ AC_ARG_WITH([boost-python-suffix],
 dnl }}}
 dnl {{{ python checks (you can change the required python version below)
 if test "x$enable_python" == xyes ; then
-	AM_PATH_PYTHON([3.6])
+	AM_PATH_PYTHON([3.7])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="`python$PYTHON_VERSION-config --libs`"
 	if python$PYTHON_VERSION-config --libs --embed 2>&1 > /dev/null ; then
@@ -364,16 +364,13 @@ fi
 dnl }}}
 
 dnl {{{ output
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
-AC_OUTPUT(
-	Makefile
-	debian/control-bionic
-	debian/control-disco
+AC_CONFIG_FILES([Makefile
 	debian/control-focal
-	debian/control-xenial
+	debian/control-jammy
 	debian/Makefile
 	eos/Makefile
 	eos/b-decays/Makefile
@@ -396,5 +393,6 @@ AC_OUTPUT(
 	test/Makefile
 	python/Makefile
 	python/setup.py
-	)
+	])
+AC_OUTPUT
 dnl }}}

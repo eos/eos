@@ -1,5 +1,5 @@
 # we use a pre-built base image; see github.com/eos/docker.io
-image: eoshep/build-essentials:gitpod
+image: eoshep/gitpod:latest
 
 tasks:
   - name: main terminal

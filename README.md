@@ -61,18 +61,21 @@ The main authors are:
  * Frederik Beaujean,
  * Christoph Bobeth <christoph.bobeth@gmail.com>,
  * Nico Gubernari <nicogubernari@gmail.com>,
- * Meril Reboud <reboud@gmail.com>,
+ * Meril Reboud <merilreboud@gmail.com>,
 
 with further code contributions by:
 
  * Marzia Bordone,
  * Thomas Blake,
+ * Lorenz Gaertner,
  * Elena Graverini,
  * Stephan Jahn,
  * Ahmet Kokulu,
+ * Viktor Kuschke,
  * Stephan Kürten,
  * Philip Lüghausen,
  * Bastian Müller,
+ * Filip Novak,
  * Stefanie Reichert,
  * Eduardo Romero,
  * Rafael Silva Coutinho,

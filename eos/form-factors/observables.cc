@@ -27,6 +27,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -45,7 +46,11 @@ namespace eos
         qnp::Prefix pp = qn.prefix_part();
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
+        auto result = std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     template <typename Transition_, typename Tuple_, typename ... Args_>
@@ -57,7 +62,11 @@ namespace eos
         qnp::Prefix pp = qn.prefix_part();
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
+        auto result = std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
+
+        impl::observable_entries.insert(result);
+
+        return result;
     }
 
     // B -> P(seudoscalar)
@@ -782,17 +791,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[A_1]@HQE>>
+                        <<B->D^*::a_1[A_1]@HQE>>
                         /
-                        <<B->D::a_0[A_1]@HQE>>
+                        <<B->D^*::a_0[A_1]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[A_1]@HQE", R"(a_2^{A_1}/a_0^{A_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[A_1]@HQE>>
+                        <<B->D^*::a_2[A_1]@HQE>>
                         /
-                        <<B->D::a_0[A_1]@HQE>>
+                        <<B->D^*::a_0[A_1]@HQE>>
                         )"),
 
                 make_observable("B->D^*::a_0[A_5]@HQE", R"(a_0^{A_5})",
@@ -810,17 +819,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[A_5]@HQE>>
+                        <<B->D^*::a_1[A_5]@HQE>>
                         /
-                        <<B->D::a_0[A_5]@HQE>>
+                        <<B->D^*::a_0[A_5]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[A_5]@HQE", R"(a_2^{A_5}/a_0^{A_5})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[A_5]@HQE>>
+                        <<B->D^*::a_2[A_5]@HQE>>
                         /
-                        <<B->D::a_0[A_5]@HQE>>
+                        <<B->D^*::a_0[A_5]@HQE>>
                         )"),
 
                 make_observable("B->D^*::a_0[P_1]@HQE", R"(a_0^{P_1})",
@@ -838,17 +847,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[P_1]@HQE>>
+                        <<B->D^*::a_1[P_1]@HQE>>
                         /
-                        <<B->D::a_0[P_1]@HQE>>
+                        <<B->D^*::a_0[P_1]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[P_1]@HQE", R"(a_2^{P_1}/a_0^{P_1})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[P_1]@HQE>>
+                        <<B->D^*::a_2[P_1]@HQE>>
                         /
-                        <<B->D::a_0[P_1]@HQE>>
+                        <<B->D^*::a_0[P_1]@HQE>>
                         )"),
 
                 make_observable("B->D^*::a_0[V_4]@HQE", R"(a_0^{V_4})",
@@ -866,17 +875,17 @@ namespace eos
                 make_expression_observable("B->D^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_1[V_4]@HQE>>
+                        <<B->D^*::a_1[V_4]@HQE>>
                         /
-                        <<B->D::a_0[V_4]@HQE>>
+                        <<B->D^*::a_0[V_4]@HQE>>
                         )"),
 
                 make_expression_observable("B->D^*::a_2/a_0[V_4]@HQE", R"(a_2^{V_4}/a_0^{V_4})",
                         Unit::None(),
                         R"(
-                        <<B->D::a_2[V_4]@HQE>>
+                        <<B->D^*::a_2[V_4]@HQE>>
                         /
-                        <<B->D::a_0[V_4]@HQE>>
+                        <<B->D^*::a_0[V_4]@HQE>>
                         )"),
             }
         );
@@ -1406,6 +1415,88 @@ namespace eos
 
     // }}}
 
+    // 1/2^+ -> 3/2^-
+    // {{{
+
+    // Lambda_b -> Lambda(1520)
+    // {{{
+    ObservableGroup
+    make_lambdab_to_threehalf_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $\Lambda_b \to \Lambda^*$ transitions)",
+            R"(Pseudo observables representing the full basis of $\Lambda_b \to \Lambda^*$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_time12^V(q2)", R"(f_t^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_time12_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^V(q2)", R"(f_0^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^V(q2)", R"(f_\perp^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^V(q2)", R"(f_{\perp'}^{V,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_time12^A(q2)", R"(f_t^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_time12_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^A(q2)", R"(f_0^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^A(q2)", R"(f_\perp^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^A(q2)", R"(f_{\perp'}^{A,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^T(q2)", R"(f_0^{T,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^T(q2)", R"(f_\perp^{T,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^T(q2)", R"(f_{\perp'}^{T,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_long12^T5(q2)", R"(f_0^{T5,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_long12_t5, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp12^T5(q2)", R"(f_\perp^{T5,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp12_t5, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_b->Lambda(1520)::f_perp32^T5(q2)", R"(f_{\perp'}^{T5,\Lambda_b\to\Lambda(1520)}(q^2))",
+                        &FormFactors<OneHalfPlusToThreeHalfMinus>::f_perp32_t5, std::make_tuple("q2")),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[0^+_V]@ABR2022", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_0p_v),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^-_V]@ABR2022", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1m_v),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[0^-_A]@ABR2022", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_0m_a),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^+_A]@ABR2022", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1p_a),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^-_T]@ABR2022", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1m_t),
+
+                make_observable("Lambda_b->Lambda(1520)::Saturation[1^+_T5]@ABR2022", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
+                        &ABR2022FormFactors<LambdaBToLambda1520>::saturation_1p_t5),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
+
     // unitarity bounds
     // {{{
 
@@ -1431,22 +1522,6 @@ namespace eos
                 make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\to c}_{1^-})",
                         Unit::None(),
                         &HQETUnitarityBounds::bound_1m),
-
-                make_observable("b->c::Prior[0^+]@CLN", R"(B^{b\to c}_{0^+})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_0p_prior),
-
-                make_observable("b->c::Prior[0^-]@CLN", R"(B^{b\to c}_{0^-})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_0m_prior),
-
-                make_observable("b->c::Prior[1^+]@CLN", R"(B^{b\to c}_{1^+})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_1p_prior),
-
-                make_observable("b->c::Prior[1^-]@CLN", R"(B^{b\to c}_{1^-})",
-                        Unit::None(),
-                        &HQETUnitarityBounds::bound_1m_prior),
 
                 make_observable("b->c::Bound[0^+]@OPE", R"(B^{b\to c}_{0^+})",
                         Unit::None(),
@@ -1480,21 +1555,42 @@ namespace eos
                         Unit::None(),
                         &BGLUnitarityBounds::bound_1m),
 
-                make_observable("b->c::Prior[0^+]@BGL", R"(B^{b\to c}_{0^+})",
+                // cf. [BMRvD:2021A] eq. (31-33)
+                make_expression_observable("B_s0::Saturation[0^+_V]", R"(\textrm{Saturation}_{B_{s,0}}[0^+_V])",
                         Unit::None(),
-                        &BGLUnitarityBounds::bound_0p_prior),
+                        R"(
+                        <<decay-constant::B_s,0>>^2 / <<mass::B_s,0>>^2 / <<b->s::chiOPE[0^+_V]>>
+                        )"),
 
-                make_observable("b->c::Prior[0^-]@BGL", R"(B^{b\to c}_{0^-})",
+                make_expression_observable("B_s^*::Saturation[1^-_V]", R"(\textrm{Saturation}_{B_s^*}[1^-_V])",
                         Unit::None(),
-                        &BGLUnitarityBounds::bound_0m_prior),
+                        R"(
+                        <<decay-constant::B_s^*>>^2 / <<mass::B_s^*>>^4 / <<b->s::chiOPE[1^-_V]>>
+                        )"),
 
-                make_observable("b->c::Prior[1^+]@BGL", R"(B^{b\to c}_{1^+})",
+                make_expression_observable("B_s::Saturation[0^-_A]", R"(\textrm{Saturation}_{B_s^0}[0^-_A])",
                         Unit::None(),
-                        &BGLUnitarityBounds::bound_1p_prior),
+                        R"(
+                        <<decay-constant::B_s>>^2 / <<mass::B_s>>^2 / <<b->s::chiOPE[0^-_A]>>
+                        )"),
 
-                make_observable("b->c::Prior[1^-]@BGL", R"(B^{b\to c}_{1^-})",
+                make_expression_observable("B_s1::Saturation[1^+_A]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_A])",
                         Unit::None(),
-                        &BGLUnitarityBounds::bound_1m_prior),
+                        R"(
+                        <<decay-constant::B_s,1>>^2 / <<mass::B_s,1>>^4 / <<b->s::chiOPE[1^+_A]>>
+                        )"),
+
+                make_expression_observable("B_s^*::Saturation[1^-_T]", R"(\textrm{Saturation}_{B_s^*}[1^-_T])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s^*,T>>^2 / <<mass::B_s^*>>^4 / <<b->s::chiOPE[1^-_T]>>
+                        )"),
+
+                make_expression_observable("B_s1::Saturation[1^+_T5]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5}])",
+                        Unit::None(),
+                        R"(
+                        <<decay-constant::B_s,1^T>>^2 / <<mass::B_s,1>>^4 / <<b->s::chiOPE[1^+_T5]>>
+                        )"),
             }
         );
 
@@ -1535,6 +1631,9 @@ namespace eos
                 // Lb -> 1/2^+
                 make_lambdab_to_lambda_form_factors_group(),
                 make_lambdab_to_lambdac_form_factors_group(),
+
+                // Lb -> 3/2^-
+                make_lambdab_to_threehalf_form_factors_group(),
 
                 // unitarity bounds
                 make_unitarity_bounds_group(),

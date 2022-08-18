@@ -310,24 +310,52 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__iter__", range(&Parameters::begin, &Parameters::end))
         .def("declare", &Parameters::declare, return_value_policy<return_by_value>())
         .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
-        .def("set", &Parameters::set)
+        .def("set", &Parameters::set,
+            R"(
+            Set the value of a parameter.
+
+            :param name: The name of the parameter to set.
+            :type name: str
+            :param value: The value to set the parameter to.
+            :type value: float
+            )")
         .def("has", &Parameters::has)
         .def("override_from_file", &Parameters::override_from_file)
         ;
 
     // Parameter
-    class_<Parameter>("Parameter", no_init)
+    class_<Parameter>("Parameter", R"(
+            Represents a single real-valued scalar parameter in EOS.
+
+            Users cannot directly create new objects of this class. However, new named sets of parameters can be created,
+            via the :class:`eos.Parameters <eos.Parameters>` class, from which the parameter of interest can be extracted, inspected, and altered.
+        )", no_init)
         .def(float_(self))
         .def("central", &Parameter::central, return_value_policy<copy_const_reference>())
         .def("max", &Parameter::max, return_value_policy<copy_const_reference>())
         .def("min", &Parameter::min, return_value_policy<copy_const_reference>())
-        .def("name", &Parameter::name, return_value_policy<copy_const_reference>())
-        .def("latex", &Parameter::latex, return_value_policy<copy_const_reference>())
+        .def("name", &Parameter::name, return_value_policy<copy_const_reference>(),
+            R"(
+            Returns the name of the parameter.
+            )")
+        .def("latex", &Parameter::latex, return_value_policy<copy_const_reference>(),
+            R"(
+            Returns the LaTeX representation of the parameter.
+            )")
         .def("unit", &Parameter::unit)
-        .def("set", &Parameter::set)
+        .def("set", &Parameter::set,
+            R"(
+            Set the value of a parameter.
+
+            :param value: The value to set the parameter to.
+            :type value: float
+            )")
         .def("set_max", &Parameter::set_max)
         .def("set_min", &Parameter::set_min)
-        .def("evaluate", &Parameter::evaluate)
+        .def("evaluate", &Parameter::evaluate,
+            R"(
+            Return the current value of a parameter.
+            )")
         ;
 
     // ParameterUser

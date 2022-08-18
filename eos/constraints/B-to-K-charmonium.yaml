@@ -13,7 +13,6 @@ B^0->K^0Jpsi::BR@PDG:2020A:
     mean: 8.68e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 3.e-5, lo: 3.e-5}
-    dof: 1
 B^0->K^0psi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B->Kpsi::BR
@@ -22,7 +21,6 @@ B^0->K^0psi2S::BR@PDG:2020A:
     mean: 5.8e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 5.e-5, lo: 5.e-5}
-    dof: 1
 B->KJpsi::BR@PDG:2020A:
     type: Gaussian
     observable: B->Kpsi::BR
@@ -31,7 +29,6 @@ B->KJpsi::BR@PDG:2020A:
     mean: 10.06e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 2.7e-5, lo: 2.7e-5}
-    dof: 1
 B->Kpsi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B->Kpsi::BR
@@ -40,5 +37,4 @@ B->Kpsi2S::BR@PDG:2020A:
     mean: 6.19e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 2.2e-5, lo: 2.2e-5}
-    dof: 1
 # }}}

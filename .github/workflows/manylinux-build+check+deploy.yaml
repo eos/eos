@@ -20,12 +20,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
-                    - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
-                    - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
-                    - { pypath: cp39-cp39,  pysuffix: cp39, pyboostsuffix: 39 }
+                    - { pypath: cp37-cp37m,  pysuffix: cp37,  pyboostsuffix: 37  }
+                    - { pypath: cp38-cp38,   pysuffix: cp38,  pyboostsuffix: 38  }
+                    - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
+                    - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
         container:
-            image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
+            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v2
@@ -89,12 +89,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
-                    - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
-                    - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
-                    - { pypath: cp39-cp39,  pysuffix: cp39, pyboostsuffix: 39 }
+                    - { pypath: cp37-cp37m,  pysuffix: cp37,  pyboostsuffix: 37  }
+                    - { pypath: cp38-cp38,   pysuffix: cp38,  pyboostsuffix: 38  }
+                    - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
+                    - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
         container:
-            image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
+            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
@@ -128,12 +128,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
-                    - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
-                    - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
-                    - { pypath: cp39-cp39,  pysuffix: cp39, pyboostsuffix: 39 }
+                    - { pypath: cp37-cp37m,  pysuffix: cp37,  pyboostsuffix: 37  }
+                    - { pypath: cp38-cp38,   pysuffix: cp38,  pyboostsuffix: 38  }
+                    - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
+                    - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
         container:
-            image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
+            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
@@ -159,10 +159,6 @@ jobs:
                 export VERSION=$(make -s print-VERSION)
                 popd
                 pushd _src
-                # check if this is a tagged commit, and export a flag variable.
-                if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then
-                  export EOS_IS_TAGGED=1
-                fi
                 popd
                 mkdir _pypi
                 pushd _pypi
@@ -172,7 +168,7 @@ jobs:
                 for f in $(ldd _eos.so | grep '=>' | grep -E "$LIBRARIES" | awk '{print $3}') ; do
                     cp $f ./
                 done
-                if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
+                if [[ ${GITHUB_EVENT_NAME} == "release" ]] ; then
                     cp ../_build/python/setup.py ./
                 else
                     export VERSION=$(sed -ne "s/^.*version='\([^']*\)',/\1/p" < ../_build/python/setup.py)

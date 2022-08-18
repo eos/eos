@@ -219,6 +219,43 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
     parser_sample_pmc.set_defaults(cmd = cmd_sample_pmc)
 
 
+    # sample-nested
+    parser_sample_nested = subparsers.add_parser('sample-nested',
+        parents = [common_subparser],
+        description =
+'''
+Samples from a likelihood associated with a named posterior using dynamic nested sampling.
+
+The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/nested.
+''',
+        help = 'Samples from a likelihood (associated with a posterior) using dynamic nested sampling.'
+    )
+    parser_sample_nested.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
+    )
+    parser_sample_nested.add_argument('-B', '--target-bound',
+        help = 'The method used to approximately bound the prior using the current set of live points. Conditions the sampling methods used to propose new live points. For valid values, see the dynesty documentation.',
+        dest = 'bound', action = 'store', type = str, default = 'multi'
+    )
+    parser_sample_nested.add_argument('-n', '--number-of-live-points',
+        help = 'The number of live points.',
+        dest = 'nlive', action = 'store', type = int, default = 250
+    )
+    parser_sample_nested.add_argument('-d', '--evidence-tolerance',
+        help = 'The relative tolerance for the remaining evidence.',
+        dest = 'dlogz', action = 'store', type = float, default = 1.0
+    )
+    parser_sample_nested.add_argument('-m', '--max-number-iterations',
+        help = 'The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.',
+        dest = 'maxiter', action = 'store', type = int, default = None
+    )
+    parser_sample_nested.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_sample_nested.set_defaults(cmd = cmd_sample_nested)
+
+
     # plot-samples
     parser_plot_samples = subparsers.add_parser('plot-samples',
         parents = [common_subparser],
@@ -253,31 +290,36 @@ The plots will be stored as PDF files within the respective sample inputs.
 '''
 Finds the mode of the named posterior.
 
-The optimization process can be initialized either with a provided
-parameter point, or by extracting the point with the largest posterior
-from among previously obtained MCMC samples. The output will be stored
-in EOS_BASE_DIRECTORY/posterior/mode.
+The optimization process can be initialized either with a random point,
+a provided parameter point, or by extracting the point with the largest posterior
+from among previously obtained MCMC samples. The optimization can be iterated to
+increase the accuracy of the result. The output will be stored
+in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
 ''',
         help = 'Finds the mode of a named posterior.'
     )
     parser_find_mode.add_argument('posterior', metavar = 'POSTERIOR',
         help = 'The name of the posterior PDF that will be maximized.',
     )
-    parser_find_mode.add_argument('-p', '--starting-points',
-        help = 'The number of parameter points from which maximization is started.',
-        dest = 'points', action = 'store', type = int, default = 10
+    parser_find_mode.add_argument('-o', '--optimizations',
+        help = 'The number of calls to the optimization algorithm.',
+        dest = 'optimizations', action = 'store', type = int, default = 3
     )
-    parser_find_mode.add_argument('-i', '--init-from-file',
-        help = 'The name of an MCMC data file from which the maximization is started.',
-        dest = 'init_file', action = 'store', type = str, default = ''
+    parser_find_mode.add_argument('-c', '--from-mcmc',
+        help = 'The chain index of an MCMC data file from which the maximization is started.',
+        dest = 'chain', action = 'store', type = int, default = None
     )
-    parser_find_mode.add_argument('--from-point',
+    parser_find_mode.add_argument('-p', '--from-point',
         help = 'The point from which the minimization is started.',
-        dest = 'point', action = 'store', type = str, default = ''
+        dest = 'start_point', action = 'store', type = str, default = None
     )
-    parser_find_mode.add_argument('--use-random-seed',
+    parser_find_mode.add_argument('-s', '--use-random-seed',
         help = 'The seed used to generate the random starting point of the minimization.',
-        dest = 'seed', action = 'store', type = int, default = 17
+        dest = 'seed', action = 'store', type = int, default = None
+    )
+    parser_find_mode.add_argument('-L', '--label',
+        help = 'The label used for the generated data file.',
+        dest = 'label', action = 'store', type = str, default = '-default'
     )
     parser_find_mode.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
@@ -384,13 +426,17 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
         parents = [common_subparser],
         description =
 '''
-Runs a list of subcommands.
+Runs a list of subcommands based on the pre-recorded steps defined within an analysis.
 ''',
         help = 'Runs a list of subcommands.'
     )
     parser_run.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_run.add_argument('-d', '--dry-run',
+        help = 'Perform a dry run only. Outputs the list of subcommands that would be run instead of running them.',
+        dest = 'dry_run', action = 'store_true', default = False
     )
     parser_run.set_defaults(cmd = cmd_run)
 
@@ -454,76 +500,7 @@ class RNG:
 
 # Find mode
 def cmd_find_mode(args):
-    analysis_file = make_analysis_file(args)
-    analysis = analysis_file.analysis(args.posterior)
-    min_chi2 = sys.float_info.max
-    gof = None
-    bfp = None
-
-    if args.point and args.init_file:
-        raise ValueError('The -p and -i options are mutually exclusive.')
-    if args.point and args.seed:
-        raise ValueError('The -p and --use-random-seed options are mutually exclusive.')
-
-    if args.point != '':
-        starting_point = args.point
-        starting_point.strip()
-        starting_point = starting_point.split()
-        starting_point = [float(x) for x in starting_point]
-
-        info('Starting minimization from point: {}'.format(starting_point))
-
-        _bfp = analysis.optimize(starting_point)
-        _gof = eos.GoodnessOfFit(analysis._log_posterior)
-        _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
-            gof = _gof
-            bfp = _bfp
-            min_chi2 = _chi2
-    elif args.seed:
-        seed = args.seed
-        info('Starting minimization from point a random point')
-
-        _bfp = analysis.optimize(start_point='random', rng=_np.random.mtrand.RandomState(seed))
-        _gof = eos.GoodnessOfFit(analysis._log_posterior)
-        _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
-            gof = _gof
-            bfp = _bfp
-            min_chi2 = _chi2
-    else:
-        info('Starting minimization in {} points'.format(args.points))
-        starting_points = []
-        if args.init_file != '':
-            info('Initializing starting point from MCMC data file')
-            chain = eos.data.MarkovChain(os.path.join(args.base_directory, args.posterior, args.init_file))
-            idx_mode = _np.argmax(chain.weights)
-            for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
-                p.set(v)
-        else:
-            info('Using random starting point')
-
-        for i in range(args.points):
-            starting_point = [float(p) for p in analysis.varied_parameters]
-            _bfp = analysis.optimize(starting_point)
-            _gof = eos.GoodnessOfFit(analysis._log_posterior)
-            _chi2 = _gof.total_chi_square()
-            if _chi2 < min_chi2:
-                gof = _gof
-                bfp = _bfp
-                min_chi2 = _chi2
-
-    print('best-fit point:')
-    for p, v in zip(analysis.varied_parameters, _bfp.point):
-        print('  - {} -> {}'.format(p.name(), v))
-    print('total chi^2 = {}'.format(min_chi2))
-    print('p value = {:.1f}%'.format(100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))))
-    print('individual test statistics:')
-    for n, e in gof:
-        print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
-    print('individual observable values:')
-    for o in _bfp.analysis._log_likelihood.observable_cache():
-        print('  - {n}[{k}];{o} -> {v:f}'.format(n=o.name(), k=o.kinematics(), o=o.options(), v=o.evaluate()))
+    return eos.tasks.find_mode(**args_to_dict(args))
 
 
 # Plot samples
@@ -531,14 +508,14 @@ def cmd_plot_samples(args):
     import pathlib
     input_path = pathlib.Path(os.path.join(args.base_directory, args.posterior))
     inputs  = [str(d) for d in input_path.glob('mcmc-*')]
-    inputs += [str(d) for d in input_path.glob('pmc')]
+    inputs += [str(d) for d in input_path.glob('samples')]
     for input in inputs:
         info('plotting samples in \'{}\''.format(input))
         basename = os.path.basename(os.path.normpath(input))
         if basename.startswith('mcmc-'):
             data = eos.data.MarkovChain(input)
-        elif basename.startswith('pmc'):
-            data = eos.data.PMCSampler(input)
+        elif basename.startswith('samples'):
+            data = eos.data.ImportanceSamples(input)
         else:
             raise RuntimeError('unsupported data set: {}'.format(input))
 
@@ -547,7 +524,7 @@ def cmd_plot_samples(args):
             info('plotting histogram for {}'.format(p['name']))
             if data.type in ['Prediction']:
                 label = eos.Observables()[p['name']]
-            elif data.type in ['MarkovChain', 'PMCSampler']:
+            elif data.type in ['MarkovChain', 'ImportanceSamples']:
                 pp = parameters[p['name']]
                 label = pp.latex()
             else:
@@ -586,6 +563,11 @@ def cmd_sample_pmc(args):
     return eos.sample_pmc(**args_to_dict(args))
 
 
+# Nested sampling
+def cmd_sample_nested(args):
+    return eos.sample_nested(**args_to_dict(args))
+
+
 # Cartesian product
 def cmd_mixture_product(args):
     return eos.mixture_product(**args_to_dict(args))
@@ -598,7 +580,7 @@ def cmd_predict_observables(args):
 
 # Run steps
 def cmd_run(args):
-    return eos.run_steps(**args_to_dict(args))
+    return eos.run(**args_to_dict(args))
 
 
 # List priors

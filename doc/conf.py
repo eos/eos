@@ -14,7 +14,6 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-
 # -- Project information -----------------------------------------------------
 
 import eos
@@ -39,7 +38,8 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.autosectionlabel',
     'sphinxarg.ext',
-    'sphinxcontrib.contentui'
+    'sphinxcontrib.contentui',
+    'nbsphinx'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

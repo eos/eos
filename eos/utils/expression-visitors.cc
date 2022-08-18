@@ -16,6 +16,7 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/observable-impl.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/expression-cacher.hh>
@@ -385,20 +386,47 @@ namespace eos::exp
     {
         std::set<std::string> kinematic_set;
 
-        const auto & kinematics_values = e.kinematics_specification.values;
-        const auto & kinematics_aliases = e.kinematics_specification.aliases;
+        const auto & entries = impl::observable_entries;
+        const auto & it = entries.find(e.observable_name);
 
-        // Set or alias kinematic specifications
-        for (const auto & value : kinematics_values)
+        // check if 'e' matches the name of a known observable
+        if (it != entries.end())
         {
-            kinematic_set.insert(value.first);
-        }
-        for (const auto & alias : kinematics_aliases)
-        {
-            kinematic_set.insert(alias.second);
+            const auto entry = it->second;
+
+            kinematic_set.insert(entry->begin_kinematic_variables(), entry->end_kinematic_variables());
+
+            const auto & kinematics_values = e.kinematics_specification.values;
+            const auto & kinematics_aliases = e.kinematics_specification.aliases;
+
+            // Set or alias kinematic specifications
+            for (const auto & value : kinematics_values)
+            {
+                kinematic_set.erase(value.first);
+            }
+            for (const auto & alias : kinematics_aliases)
+            {
+                kinematic_set.erase(alias.first);
+                kinematic_set.insert(alias.second);
+            }
+
+            return kinematic_set;
         }
 
-        return kinematic_set;
+        // otherwise check if 'e' matches the name of a parameter
+        if (kinematic_set.empty())
+        {
+            auto parameters = eos::Parameters::Defaults();
+
+            // observable_name.full() is used below because if the observable has options, it cannot be a parameter
+            auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == e.observable_name.full(); });
+            if (parameters.end() != i)
+            {
+                return kinematic_set;
+            }
+        }
+
+        throw InternalError("Expression '" + e.observable_name.full() + "' is neither a known Observable nor a Parameter");
     }
 
     std::set<std::string>
@@ -412,10 +440,11 @@ namespace eos::exp
         // Set or alias kinematic specifications
         for (const auto & value : kinematics_values)
         {
-            kinematic_set.insert(value.first);
+            kinematic_set.erase(value.first);
         }
         for (const auto & alias : kinematics_aliases)
         {
+            kinematic_set.erase(alias.first);
             kinematic_set.insert(alias.second);
         }
 
@@ -433,10 +462,11 @@ namespace eos::exp
         // Set or alias kinematic specifications
         for (const auto & value : kinematics_values)
         {
-            kinematic_set.insert(value.first);
+            kinematic_set.erase(value.first);
         }
         for (const auto & alias : kinematics_aliases)
         {
+            kinematic_set.erase(alias.first);
             kinematic_set.insert(alias.second);
         }
 

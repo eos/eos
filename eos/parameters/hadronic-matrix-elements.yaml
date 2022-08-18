@@ -251,63 +251,6 @@ groups:
           max:      0.0
           latex:    '$b_{T,2}^{B \to K,\mathrm{BCL2008}}$'
           unit:     '1'
-      # form factor parameters for B->K according to [BZ:2004C] (approximate)
-      'B->K::fp_uncertainty@BZ2004v2' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta f_+^{B\to K}$'
-          unit:     '1'
-      'B->K::f0_uncertainty@BZ2004v2' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta f_0^{B\to K}$'
-          unit:     '1'
-      'B->K::ft_uncertainty@BZ2004v2' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta f_t^{B\to K}$'
-          unit:     '1'
-      # form factor parameters for B->K simple series expansion (SSE) based on
-      # LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
-      'B->K::alpha^V0_0@BFW2010' :
-          central: +0.48
-          min:     +0.48
-          max:     +0.48
-          latex:    '$\alpha_{V_0,0}^{B \to K,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K::alpha^V0_1@BFW2010' :
-          central: -1.05
-          min:     -1.05
-          max:     -1.05
-          latex:    '$\alpha_{V_0,1}^{B \to K,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K::alpha^Vt_0np@BFW2010' :
-          central: +0.52
-          min:     +0.52
-          max:     +0.52
-          latex:    '$\alpha_{V_t,0np}^{B \to K,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K::alpha^Vt_1np@BFW2010' :
-          central: -1.4
-          min:     -1.4
-          max:     -1.4
-          latex:    '$\alpha_{V_t,1np}^{B \to K,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K::alpha^T0_0@BFW2010' :
-          central: +0.48
-          min:     +0.48
-          max:     +0.48
-          latex:    '$\alpha_{T_0,0}^{B \to K,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K::alpha^T0_1@BFW2010' :
-          central: -1.09
-          min:     -1.09
-          max:     -1.09
-          latex:    '$\alpha_{T_0,1}^{B \to K,\mathrm{BFW2010}}$'
-          unit:     '1'
       # form factor parameters for B->K inspired by [BSZ:2015A]
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       'B->K::alpha^f+_0@BSZ2015' :
@@ -672,49 +615,6 @@ groups:
   - title: 'Parameters in $B\to V$ Form Factor Parametrizations'
     description: ''
     parameters:
-      # form factor parameters for B->K^* according to [BZ2004] (approximate)
-      'B->K^*::a0_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta a_0^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::a1_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta a_1^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::a2_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta a_2^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::v_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta v^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::t1_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta t_1^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::t2_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta t_2^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
-      'B->K^*::t3_uncertainty@BZ2004' :
-          central: +1.0
-          min:     +0.85
-          max:     +1.15
-          latex:    '$\Delta t_3^{B \to K^*,\mathrm{BZ2004}}$'
-          unit:     '1'
       # form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
       'B->K^*::F^V(0)@KMPW2010' :
           central: +0.36
@@ -800,212 +700,119 @@ groups:
           max:     -7.8
           latex:    '$b_{T_3,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
-      # form factor parameter for B_s->K^* according to [FMvD2015].
-      'B_s->K^*::F_perp(0)@FMvD2015' :
-          central: 0.349
-          min:     0.349
-          max:     0.349
-          latex:    '$F_{\perp}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          unit:     '1'
-      'B_s->K^*::F_para(0)@FMvD2015' :
-          central: 0.379
-          min:     0.379
-          max:     0.379
-          latex:    '$F_{\parallel}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          unit:     '1'
-      'B_s->K^*::F_long(0)@FMvD2015' :
-          central: 0.314
-          min:     0.314
-          max:     0.314
-          latex:    '$F_{0}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          unit:     '1'
-      'B_s->K^*::F_time(0)@FMvD2015' :
-          central: 0.314
-          min:     0.314
-          max:     0.314
-          latex:    '$F_{t}^{B_s \to K^*,\mathrm{FMvD2015}}(0)$'
-          unit:     '1'
-      'B_s->K^*::beta_perp^1@FMvD2015' :
-          central: -4.980
-          min:     -4.980
-          max:     -4.980
-          latex:    '$\beta_{\perp,1}^{B_s \to K^*,\mathrm{FMvD2015}}$'
-          unit:     '1'
-      'B_s->K^*::beta_para^1@FMvD2015' :
-          central: +0.065
-          min:     +0.065
-          max:     +0.065
-          latex:    '$\beta_{\parallel,1}^{B_s \to K^*,\mathrm{FMvD2015}}$'
-          unit:     '1'
-      'B_s->K^*::beta_time^1@FMvD2015' :
-          central: +0.065
-          min:     +0.065
-          max:     +0.065
-          latex:    '$\beta_{t,1}^{B_s \to K^*,\mathrm{FMvD2015}}$'
-          unit:     '1'
-      # form factor parameters for B->K^* simple series expansion (SSE) based on
-      # LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
-      'B->K^*::beta^V0_0@BFW2010' :
-          central: +0.31
-          min:     +0.31
-          max:     +0.31
-          latex:    '$\beta_{V_0,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^V0_1@BFW2010' :
-          central: +0.74
-          min:     +0.74
-          max:     +0.74
-          latex:    '$\beta_{V_0,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^V1_0@BFW2010' :
-          central: +0.62
-          min:     +0.62
-          max:     +0.62
-          latex:    '$\beta_{V_1,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^V1_1@BFW2010' :
-          central: -1.4
-          min:     -1.4
-          max:     -1.4
-          latex:    '$\beta_{V_1,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^V2_0@BFW2010' :
-          central: +0.45
-          min:     +0.45
-          max:     +0.45
-          latex:    '$\beta_{V_2,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^V2_1@BFW2010' :
-          central: +0.35
-          min:     +0.35
-          max:     +0.35
-          latex:    '$\beta_{V_2,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^Vt_0@BFW2010' :
-          central: +0.49
-          min:     +0.49
-          max:     +0.49
-          latex:    '$\beta_{V_t,0}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
-      'B->K^*::beta^Vt_1@BFW2010' :
-          central: -1.4
-          min:     -1.4
-          max:     -1.4
-          latex:    '$\beta_{V_t,1}^{B \to K^*,\mathrm{BFW2010}}$'
-          unit:     '1'
       # form factor parameters for B_s->K^* inspired by [BSZ:2015A]
       'B_s->K^*::alpha^A0_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.362963
+          min:      0.362963
+          max:      0.362963
           latex:    '$\alpha_{A_0,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A0_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.362957
+          min:      -0.362957
+          max:      -0.362957
           latex:    '$\alpha_{A_0,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A0_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  8.02781
+          min:      8.02781
+          max:      8.02781
           latex:    '$\alpha_{A_0,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.223059
+          min:      0.223059
+          max:      0.223059
           latex:    '$\alpha_{A_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.239792
+          min:      0.239792
+          max:      0.239792
           latex:    '$\alpha_{A_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  1.76787
+          min:      1.76787
+          max:      1.76787
           latex:    '$\alpha_{A_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A12_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  1.11596
+          min:      1.11596
+          max:      1.11596
           latex:    '$\alpha_{A_{12},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^A12_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  3.42926
+          min:      3.42926
+          max:      3.42926
           latex:    '$\alpha_{A_{12},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.278079
+          min:      0.278079
+          max:      0.278079
           latex:    '$\alpha_{V,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.819609
+          min:      -0.819609
+          max:      -0.819609
           latex:    '$\alpha_{V,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  5.07652
+          min:      5.07652
+          max:      5.07652
           latex:    '$\alpha_{V,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.236867
+          min:      0.236867
+          max:      0.236867
           latex:    '$\alpha_{T_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.74862
+          min:      -0.74862
+          max:      -0.74862
           latex:    '$\alpha_{T_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  2.49014
+          min:      2.49014
+          max:      2.49014
           latex:    '$\alpha_{T_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T2_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.31254
+          min:      0.31254
+          max:      0.31254
           latex:    '$\alpha_{T_2,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T2_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  1.58141
+          min:      1.58141
+          max:      1.58141
           latex:    '$\alpha_{T_2,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.603261
+          min:      0.603261
+          max:      0.603261
           latex:    '$\alpha_{T_{23},0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  2.39992
+          min:      2.39992
+          max:      2.39992
           latex:    '$\alpha_{T_{23},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  9.64299
+          min:      9.64299
+          max:      9.64299
           latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
       # form-factor parameters for B->omega
       # note that no lattice results exists for B->omega FFs yet
@@ -3193,6 +3000,51 @@ groups:
           unit:     '1'
   # }}}
 
+  # Dispersive bounds in b -> s currents
+  # {{{
+  - title: 'Dispersive bounds in the OPE for b -> s currents'
+    description: ''
+    parameters:
+      # [BFW:2010A] using a reference masse mb = 4.2 GeV
+      'b->s::chiOPE[0^+_V]' :
+          central:  1.42e-02
+          min:      1.42e-02
+          max:      1.42e-02
+          latex:    '$\chi_V^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->s::chiOPE[1^-_V]' :
+          central:  6.80e-04
+          min:      6.80e-04
+          max:      6.80e-04
+          latex:    '$\chi_V^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->s::chiOPE[0^-_A]' :
+          central:  1.57e-02
+          min:      1.57e-02
+          max:      1.57e-02
+          latex:    '$\chi_A^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->s::chiOPE[1^+_A]' :
+          central:  6.40e-04
+          min:      6.40e-04
+          max:      6.40e-04
+          latex:    '$\chi_A^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      # Mind the factor of 1/4 due to the definition of the current
+      'b->s::chiOPE[1^-_T]' :
+          central:  4.55e-04
+          min:      4.55e-04
+          max:      4.55e-04
+          latex:    '$\chi_T^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->s::chiOPE[1^+_T5]' :
+          central:  4.24e-04
+          min:      4.24e-04
+          max:      4.24e-04
+          latex:    '$\chi_{T_5}^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+  # }}}
+
   # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
   # {{{
   - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
@@ -4297,6 +4149,24 @@ groups:
           comments: "Slope of the NLO IW function, [-1.0, 1.0]"
   # }}}
 
+  # Parameters in 1/2^+ -> 3/2^- Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      'Lambda_b->Lambda(1520)::a^(%1%,%2%)_%3%@ABR2022' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%3%^{%1%,%2%,\Lambda_b \to \Lambda(1520) ,\mathrm{ABR2022}}$'
+          matrix:
+            - ["t12", "012", "perp12", "perp32"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3, 4]
+          comments: ''
+  # }}}
+
   #
   # {{{
   - title: 'Parameters in Non-Local Matrix Elements for $B\to P$ and $B\to V$ transitions'
@@ -4335,6 +4205,18 @@ groups:
           unit:     'GeV^-2'
           latex:    '$\chi_{\mathrm{OPE}}$'
           comments: 'Dispersive bound in the OPE at t_s = -m_b^2'
+      'b->sccbar::bound@GvDV2020' :
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          latex:    '$\mathcal{B}(b\to sc\bar{c})$'
+          comments: 'Normalized dispersive bound'
+      'b->sccbar::bound_uncertainty@GvDV2020' :
+          central: +0.1
+          min:     +0.1
+          max:     +0.1
+          latex:    '$\delta\mathcal{B}(b\to sc\bar{c})$'
+          comments: 'Uncertainty of the normalized dispersive bound'
       'B->K^*ccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
           central: 0
           min:     0
@@ -4344,6 +4226,32 @@ groups:
               - [ "Re", "Im" ]
               - [ "0", "1", "2", "3", "4", "5" ]
               - [ "perp", "para", "long"]
+      'B->K^*ccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B\to K^*c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+              - [ "perp", "para", "long"]
+      'B->K^*ccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B\to K^*c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+              - [ "perp", "para", "long"]
+      'B->K^*ccbar::Arg_Hhat_at_%1%_%2%@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_\%2%^{B\to K^*c\bar{c}}(%1%)$'
+          matrix:
+              - [ "Jpsi", "psi2S" ]
+              - [ "perp_minus_long", "para_minus_long" ]
       'B_s->phiccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
           central: 0
           min:     0
@@ -4353,6 +4261,32 @@ groups:
               - [ "Re", "Im" ]
               - [ "0", "1", "2", "3", "4", "5" ]
               - [ "perp", "para", "long"]
+      'B_s->phiccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+              - [ "perp", "para", "long"]
+      'B_s->phiccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+              - [ "perp", "para", "long"]
+      'B_s->phiccbar::Arg_Hhat_at_%1%_%2%@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_\%2%^{B_s\to phic\bar{c}}(%1%)$'
+          matrix:
+              - [ "Jpsi", "psi2S" ]
+              - [ "perp_minus_long", "para_minus_long" ]
       'B->Kccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
           central: 0
           min:     0
@@ -4362,39 +4296,23 @@ groups:
               - [ "Re", "Im" ]
               - [ "0", "1", "2", "3", "4", "5", "6" ]
               - [ "plus" ]
-      'b->sccbar::chiOPE@GRvDV2021' :
-          central: +0.000181
-          min:     +0.000179
-          max:     +0.000183
-          unit:     'GeV^-2'
-          latex:    '$\chi_{\mathrm{OPE}}$'
-          comments: 'Dispersive bound in the OPE at t_s = -m_b^2'
-      'B->K^*ccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
+      'B->Kccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to K^*c\bar{c}}$'
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B\to Kc\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3", "4", "5" ]
-              - [ "perp", "para", "long"]
-      'B_s->phiccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+              - [ "plus" ]
+      'B->Kccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B_s\to \phi c\bar{c}}$'
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B\to Kc\bar{c}}(%2%)$'
           matrix:
-              - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3", "4", "5" ]
-              - [ "perp", "para", "long"]
-      'B->Kccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
-          central: 0
-          min:     0
-          max:     0
-          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to Kc\bar{c}}$'
-          matrix:
-              - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3", "4", "5", "6" ]
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
               - [ "plus" ]
   # }}}
 
