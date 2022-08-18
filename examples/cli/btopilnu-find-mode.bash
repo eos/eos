@@ -6,4 +6,4 @@ eos-analysis                             \
     find-mode                            \
     -f btopilnu.analysis                 \
     th+exp                               \
-    -i $EOS_BASE_DIRECTORY/th+exp/mcmc-0000
+    -c 0000

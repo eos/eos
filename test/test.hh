@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WILSON_FITTER_GUARD_TEST_TEST_HH
-#define WILSON_FITTER_GUARD_TEST_TEST_HH 1
+#ifndef EOS_GUARD_TEST_TEST_HH
+#define EOS_GUARD_TEST_TEST_HH 1
 
 #include <config.h>
 #include <eos/utils/exception.hh>

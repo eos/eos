@@ -41,7 +41,7 @@ namespace eos
         f_K(p["decay-constant::K_" + o.get("q", "d")], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, "q", { "d", "u" }, "d"),
-        opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "GRvDV2021", "naive" }, "GvDV2020"),
+        opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
         nonlocal_formfactor(NonlocalFormFactor<nff::PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o))
     {
     }

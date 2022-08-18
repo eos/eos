@@ -60,7 +60,7 @@ class BsToKstarLeptonNeutrinoTest :
 
                 Options oo;
                 oo.declare("model", "WET");
-                oo.declare("form-factors", "FMvD2015");
+                oo.declare("form-factors", "BSZ2015");
 
                 BsToKstarLeptonNeutrino d(p, oo);
 
@@ -68,17 +68,17 @@ class BsToKstarLeptonNeutrinoTest :
                 {
                     const double eps = 1e-4;
 
-                    TEST_CHECK_NEARLY_EQUAL(-0.4135349871, d.integrated_forward_backward_asymmetry(14.00, 19.21), eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.3518246532, d.integrated_longitudinal_polarisation(14.00, 19.21),  eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.5011185215, d.integrated_transverse_asymmetry_2(14.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL( 1.7292976680, d.integrated_transverse_asymmetry_3(14.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.5748039652, d.integrated_transverse_asymmetry_4(14.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.0794505257, d.integrated_transverse_asymmetry_5(14.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.8506648478, d.integrated_transverse_asymmetry_re(14.00, 19.21),    eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.4125863683, d.integrated_forward_backward_asymmetry(14.00, 19.21), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.3482936714, d.integrated_longitudinal_polarisation(14.00, 19.21),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.5132406718, d.integrated_transverse_asymmetry_2(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.7577913835, d.integrated_transverse_asymmetry_3(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.5655315082, d.integrated_transverse_asymmetry_4(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0775462723, d.integrated_transverse_asymmetry_5(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.8441151078, d.integrated_transverse_asymmetry_re(14.00, 19.21),    eps);
                     TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_transverse_asymmetry_im(14.00, 19.21),    eps);
                     TEST_CHECK_NEARLY_EQUAL( 0.9969214819, d.integrated_h_1(14.00, 19.21),                        eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.9940071566, d.integrated_h_2(14.00, 19.21),                        eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.9829972541, d.integrated_h_3(14.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9940864123, d.integrated_h_2(14.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9835366074, d.integrated_h_3(14.00, 19.21),                        eps);
                     TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_h_4(14.00, 19.21),                        eps);
                     TEST_CHECK_NEARLY_EQUAL(-0,            d.integrated_h_5(14.00, 19.21),                        eps);
                 }
@@ -86,17 +86,17 @@ class BsToKstarLeptonNeutrinoTest :
                 /* q^2 = [16.00, 19.21] */
                 {
                     const double eps = 1e-4;
-                    TEST_CHECK_NEARLY_EQUAL(-0.3954967727, d.integrated_forward_backward_asymmetry(16.00, 19.21), eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.3394169517, d.integrated_longitudinal_polarisation(16.00, 19.21),  eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.5876929534, d.integrated_transverse_asymmetry_2(16.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL( 1.9600282930, d.integrated_transverse_asymmetry_3(16.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.5067653631, d.integrated_transverse_asymmetry_4(16.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.0658956517, d.integrated_transverse_asymmetry_5(16.00, 19.21),     eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.7982781751, d.integrated_transverse_asymmetry_re(16.00, 19.21),    eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.3959778457, d.integrated_forward_backward_asymmetry(16.00, 19.21), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.3354919677, d.integrated_longitudinal_polarisation(16.00, 19.21),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.5932022373, d.integrated_transverse_asymmetry_2(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.9770010813, d.integrated_transverse_asymmetry_3(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.5022878134, d.integrated_transverse_asymmetry_4(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0648764771, d.integrated_transverse_asymmetry_5(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.7945283357, d.integrated_transverse_asymmetry_re(16.00, 19.21),    eps);
                     TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_transverse_asymmetry_im(16.00, 19.21),    eps);
-                    TEST_CHECK_NEARLY_EQUAL( 0.9988251301, d.integrated_h_1(16.00, 19.21),                        eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.9932744499, d.integrated_h_2(16.00, 19.21),                        eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.9866443167, d.integrated_h_3(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.9989890567, d.integrated_h_1(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9930235503, d.integrated_h_2(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9869261553, d.integrated_h_3(16.00, 19.21),                        eps);
                     TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_h_4(16.00, 19.21),                        eps);
                     TEST_CHECK_NEARLY_EQUAL(-0,            d.integrated_h_5(16.00, 19.21),                        eps);
                 }

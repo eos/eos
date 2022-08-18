@@ -83,99 +83,19 @@ class NonlocalFormFactorGvDV2020Test :
                 };
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(-1.0)),  0.09205107389108,   eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(-1.0)),  0.11107379720400,   eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(0.0)),   0.,                 eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(0.0)),   0.,                 eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(4.0)),  -0.726740909982928,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(4.0)),  -0.868844878978099,  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(12.0)),  7.94707073360654,   eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(12.0)),  9.306172848800037,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(-1.0)),  0.0925106365,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(-1.0)),  0.1116021529,   eps);
+                TEST_CHECK_NEARLY_EQUAL(  real(nff->H_plus(0.0)),   0.,             eps);
+                TEST_CHECK_NEARLY_EQUAL(  imag(nff->H_plus(0.0)),   0.,             eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(4.0)),  -0.7306769592,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(4.0)),  -0.8733733008,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(12.0)),  7.9949120618,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(12.0)),  9.3613667608,   eps);
 
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus_residue_jpsi()),   11.46205588287294,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus_residue_jpsi()),   13.52065260822002,  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus_residue_psi2s()), -3.089134313454883,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus_residue_psi2s()), -3.595356292756863,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_jpsi()),   11.5294356,  eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_jpsi()),   13.5982909,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_psi2s()), -3.10770287,  eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_psi2s()), -3.61681383,  eps);
             }
         }
 } nonlocal_formfactor_gvdv2020_test;
-
-
-class NonlocalFormFactorGvDV2021Test :
-    public TestCase
-{
-    public:
-        NonlocalFormFactorGvDV2021Test() :
-            TestCase("nonlocal_formfactor_GvDV2021_test")
-        {
-        }
-
-        virtual void run() const
-        {
-            static const double eps = 1e-5;
-
-            {
-                Parameters p = Parameters::Defaults();
-                p["mass::B_d"]                                = 5.279;
-                p["mass::K_d"]                                = 0.492;
-                p["mass::J/psi"]                              = 3.0969;
-                p["mass::psi(2S)"]                            = 3.6860;
-                p["mass::B_s^*"]                              = 5.4154;
-                p["mass::D^0"]                                = 1.86723;
-                p["b->sccbar::t_0"]                           = 4.0;
-                p["b->sccbar::t_s"]                           = -17.4724;
-                p["b->sccbar::chiOPE@GRvDV2021"]              = 1.81e-4;
-                p["B->Kccbar::Re{alpha_0^plus}@GRvDV2021"]    = 2.0;
-                p["B->Kccbar::Im{alpha_0^plus}@GRvDV2021"]    = 3.0;
-                p["B->Kccbar::Re{alpha_1^plus}@GRvDV2021"]    = 4.0;
-                p["B->Kccbar::Im{alpha_1^plus}@GRvDV2021"]    = 5.0;
-                p["B->Kccbar::Re{alpha_2^plus}@GRvDV2021"]    = 6.0;
-                p["B->Kccbar::Im{alpha_2^plus}@GRvDV2021"]    = 7.0;
-                p["B->Kccbar::Re{alpha_3^plus}@GRvDV2021"]    = 0.0;
-                p["B->Kccbar::Im{alpha_3^plus}@GRvDV2021"]    = 0.0;
-                p["B->Kccbar::Re{alpha_4^plus}@GRvDV2021"]    = 0.0;
-                p["B->Kccbar::Im{alpha_4^plus}@GRvDV2021"]    = 0.0;
-                p["B->Kccbar::Re{alpha_5^plus}@GRvDV2021"]    = 0.0;
-                p["B->Kccbar::Im{alpha_5^plus}@GRvDV2021"]    = 0.0;
-
-                Options o = { { "model", "WET" } };
-
-                auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GRvDV2021", p, o);
-
-
-                auto diagnostics = nff->diagnostics();
-
-                std::cout << "Diagnostics:" << std::endl;
-                for (auto & d : diagnostics)
-                {
-                    std::cout << d.description << ": " << d.value << std::endl;
-                }
-                std::cout << "Diagnostics ended" << std::endl;
-
-                static const std::vector<std::pair<double, double>> reference
-                {
-                    std::make_pair( 0.8835558,  eps),  // Re{P(q2 = 1.0, 2.0, 3.0, 4.0)}
-                    std::make_pair( 0.0,        eps),  // Im{P(q2 = 1.0, 2.0, 3.0, 4.0)}
-                    std::make_pair( 0.8835558,  eps),  // Re{P(q2 = 1.0, (2.0,5.0), (3.0,6.0), (4.0,7.0))}
-                    std::make_pair( 2.165236,   eps),  // Im{P(q2 = 1.0, (2.0,5.0), (3.0,6.0), (4.0,7.0))}
-                };
-                TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
-
-
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(-1.0)),  0.0174583192607786,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(-1.0)),  0.0253239353342969,  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(0.0)),   0.,                  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(0.0)),   0.,                  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(4.0)),  -0.0959414569689401,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(4.0)),  -0.1439121854534102,  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(12.0)),  0.3846562670363007,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(12.0)),  0.6019561272742963,  eps);
-
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus_residue_jpsi()),   0.7846262367768398,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus_residue_jpsi()),   1.242956592032815,   eps);
-                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus_residue_psi2s()), -0.1495996738226507,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus_residue_psi2s()), -0.2065313797574414,  eps);
-            }
-        }
-} nonlocal_formfactor_grvdv2021_test;
-

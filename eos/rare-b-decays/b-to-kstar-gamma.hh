@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_GAMMA_HH
-#define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_GAMMA_HH 1
+#ifndef EOS_GUARD_SRC_RARE_B_DECAYS_B_TO_KSTAR_GAMMA_HH
+#define EOS_GUARD_SRC_RARE_B_DECAYS_B_TO_KSTAR_GAMMA_HH 1
 
 #include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/decays.hh>

@@ -69,11 +69,13 @@ class Analysis:
         """Constructor."""
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = parameters if parameters else eos.Parameters.Defaults()
+        """The set of parameters used for this analysis."""
         self.global_options = eos.Options()
         self._constraint_names = []
         self._log_likelihood = eos.LogLikelihood(self.parameters)
         self._log_posterior = eos.LogPosterior(self._log_likelihood)
         self.varied_parameters = []
+        """The set of parameters that are varied in this analysis."""
         self.bounds = []
 
         eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, {nmanual} manually-entered constraints and {nparams} fixed parameters.'.format(
@@ -148,11 +150,12 @@ class Analysis:
         # perform some sanity checks
         varied_parameter_names = set([p.name() for p in self.varied_parameters])
         used_parameter_names = set()
+        fixed_parameter_names = set(fixed_parameters.keys())
         for observable in self._log_likelihood.observable_cache():
             for i in observable.used_parameter_ids():
                 used_parameter_names.add(self.parameters.by_id(i).name())
 
-        used_but_unvaried = used_parameter_names - varied_parameter_names
+        used_but_unvaried = used_parameter_names - varied_parameter_names - fixed_parameter_names
         if (len(used_but_unvaried) > 0):
             eos.info('likelihood probably depends on {} parameter(s) that do not appear in the prior; check prior?'.format(len(used_but_unvaried)))
         for n in used_but_unvaried:
@@ -219,7 +222,7 @@ class Analysis:
 
 
     def goodness_of_fit(self):
-        """Returns a goodness-of-fit summary for the current parameter point."""
+        """Returns a :class:`GoodnessOfFit` object that summarizes the quality of the fit for the current parameter point."""
         return eos.GoodnessOfFit(self._log_posterior)
 
 
@@ -560,6 +563,62 @@ class Analysis:
         eos.info(f'Convergence diagnostics after final samples: perplexity = {perplexity}, ESS = {ess}')
 
         return samples, weights, sampler.proposal
+
+
+    def log_likelihood(self, x, *args):
+        """
+        Adapter for use with external sampling software (e.g. dynesty) to aid when sampling from the log(likelihood).
+
+        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
+        :type x: iterable
+        :param args: Dummy parameter (ignored)
+        :type args: optional
+        """
+        for p, v in zip(self.varied_parameters, x):
+            p.set(v)
+
+        try:
+            return(self._log_likelihood.evaluate())
+        except RuntimeError as e:
+            eos.error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
+            for p in self.varied_parameters:
+                eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+            return(-np.inf)
+
+
+    def _prior_transform(self, u):
+        """
+        Adapter for use with external sampling software to aid when sampling from the log(prior).
+
+        :param u: The input probability point on the hypercube [0, 1)**D
+        :type u: iterable
+        """
+        return np.array([prior.inverse_cdf(p) for prior, p in zip(self._log_posterior.log_priors(), u)])
+
+
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None):
+        """
+        Return samples of the parameters.
+
+        Obtains random samples of log(likelihood) using dynamic nested sampling with dynesty.
+
+        :param bound: The option for bounding the target distribution. For valid values, see the dynesty documentation. Defaults to 'multi'.
+        :type bound: str, optional
+        :param nlive: The number of live points.
+        :type nlive: int, optional
+        :param dlogz: The relative tolerance for the remaining evidence. Defaults to 1.0.
+        :type dlogz: float, optional
+        :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
+        :type maxiter: int, optional
+
+        .. note::
+           This method requires the dynesty python module, which can be installed from PyPI.
+        """
+        import dynesty
+        sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive)
+        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter)
+        return sampler.results
+
 
     def _repr_html_(self):
         result = r'''

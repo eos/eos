@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011, 2014, 2017 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
+ * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -23,6 +24,7 @@
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>
@@ -1244,12 +1246,7 @@ namespace eos
     complex<double>
     CharmLoops::F17_massive_Qsb(const double & s)
     {
-        if (s < 0.0 or s > 15.0)
-        {
-            throw InternalError("CharmLoop::F17_massive_Qsb used outside its domain of validity, s = " + stringify(s));
-        }
-
-        CharmLoopsInput F17_massive_Qsb_Input = CharmLoopsInput{31,
+        const static thread_local CharmLoopsInterpolation F17_massive_Qsb_Interpolation = {
                 {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
                  3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
                  12.9, 13.6, 14.3, 15.},
@@ -1267,17 +1264,26 @@ namespace eos
                 -0.0153357, -0.0158529, -0.0163428, -0.0168083, -0.0172516,
                 -0.0176749, -0.0180799, -0.018468, -0.0188407, -0.019199, -0.0195441}};
 
-        return CharmSpline(F17_massive_Qsb_Input, s);
+        if (s < 0.0)
+        {
+            Log::instance()->message("[CharmLoop::F17_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 0 GeV^2.";
+            return F17_massive_Qsb_Interpolation(0.);
+        }
+        else if (s > 15.0)
+        {
+            Log::instance()->message("[CharmLoop::F17_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 15 GeV^2.";
+            return F17_massive_Qsb_Interpolation(15.);
+        }
+        else return F17_massive_Qsb_Interpolation(s);
+
     }
+
     complex<double>
     CharmLoops::F19_massive_Qsb(const double & s)
     {
-        if (s < 0.0 or s > 15.0)
-        {
-            throw InternalError("CharmLoop::F19_massive_Qsb used outside its domain of validity, s = " + stringify(s));
-        }
-
-        CharmLoopsInput F19_massive_Qsb_Input = CharmLoopsInput{31,
+        const static thread_local CharmLoopsInterpolation F19_massive_Qsb_Interpolation = {
                 {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
                  3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
                  12.9, 13.6, 14.3, 15.},
@@ -1292,18 +1298,26 @@ namespace eos
                 0.186865, 0.182712, 0.178816, 0.175143, 0.171667, 0.168367, 0.165223,
                 0.162222, 0.159348, 0.156591}};
 
+        if (s < 0.0)
+        {
+            Log::instance()->message("[CharmLoop::F19_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 0 GeV^2.";
+            return F19_massive_Qsb_Interpolation(0.);
+        }
+        else if (s > 15.0)
+        {
+            Log::instance()->message("[CharmLoop::F19_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 15 GeV^2.";
+            return F19_massive_Qsb_Interpolation(15.);
+        }
+        else return F19_massive_Qsb_Interpolation(s);
 
-        return CharmSpline(F19_massive_Qsb_Input, s);
     }
+
     complex<double>
     CharmLoops::F27_massive_Qsb(const double & s)
     {
-        if (s < 0.0 or s > 15.0)
-        {
-            throw InternalError("CharmLoop::F27_massive_Qsb used outside its domain of validity, s = " + stringify(s));
-        }
-
-        CharmLoopsInput F27_massive_Qsb_Input = CharmLoopsInput{31,
+        const static thread_local CharmLoopsInterpolation F27_massive_Qsb_Interpolation = {
                 {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
                  3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
                  12.9, 13.6, 14.3, 15.},
@@ -1318,18 +1332,26 @@ namespace eos
                 0.0852322, 0.0887275, 0.0920144, 0.0951175, 0.098057, 0.10085,
                 0.10351, 0.106049, 0.108479, 0.110808, 0.113044, 0.115194, 0.117265}};
 
+        if (s < 0.0)
+        {
+            Log::instance()->message("[CharmLoop::F27_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 0 GeV^2.";
+            return F27_massive_Qsb_Interpolation(0.);
+        }
+        else if (s > 15.0)
+        {
+            Log::instance()->message("[CharmLoop::F27_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 15 GeV^2.";
+            return F27_massive_Qsb_Interpolation(15.);
+        }
+        else return F27_massive_Qsb_Interpolation(s);
 
-        return CharmSpline(F27_massive_Qsb_Input, s);
     }
+
     complex<double>
     CharmLoops::F29_massive_Qsb(const double & s)
     {
-        if (s < 0.0 or s > 15.0)
-        {
-            throw InternalError("CharmLoop::F29_massive_Qsb used outside its domain of validity, s = " + stringify(s));
-        }
-
-        CharmLoopsInput F29_massive_Qsb_Input = CharmLoopsInput{31,
+        const static thread_local CharmLoopsInterpolation F29_massive_Qsb_Interpolation = {
                 {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
                  3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
                  12.9, 13.6, 14.3, 15.},
@@ -1344,25 +1366,18 @@ namespace eos
                 -1.12119, -1.09627, -1.07289, -1.05086, -1.03, -1.0102, -0.99134,
                 -0.973329, -0.956087, -0.939546}};
 
-        return CharmSpline(F29_massive_Qsb_Input, s);
-    }
-
-    complex<double>
-    CharmLoops::CharmSpline(const CharmLoopsInput & input_data, const double & s)
-    {
-        size_t npoints             = input_data.npoints;
-        std::vector<double> x      = input_data.x;
-        std::vector<double> y_real = input_data.y_real;
-        std::vector<double> y_imag = input_data.y_imag;
-
-        gsl_interp_accel *acc = gsl_interp_accel_alloc();
-        gsl_spline *real_spline = gsl_spline_alloc(gsl_interp_cspline, npoints);
-        gsl_spline *imag_spline = gsl_spline_alloc(gsl_interp_cspline, npoints);
-
-        // Interpolate with spline
-        gsl_spline_init(real_spline, &x[0], &y_real[0], npoints);
-        gsl_spline_init(imag_spline, &x[0], &y_imag[0], npoints);
-
-        return complex<double>(gsl_spline_eval(real_spline, s, acc), gsl_spline_eval(imag_spline, s, acc));
+        if (s < 0.0)
+        {
+            Log::instance()->message("[CharmLoop::F29_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 0 GeV^2.";
+            return F29_massive_Qsb_Interpolation(0.);
+        }
+        else if (s > 15.0)
+        {
+            Log::instance()->message("[CharmLoop::F29_massive_Qsb]", ll_error)
+                    << "This function is evaluated outside its domain of validity, at s = " <<  stringify(s) << " GeV^2. Returning the value at s = 15 GeV^2.";
+            return F29_massive_Qsb_Interpolation(15.);
+        }
+        else return F29_massive_Qsb_Interpolation(s);
     }
 }

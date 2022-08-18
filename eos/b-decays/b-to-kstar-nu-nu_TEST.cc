@@ -81,10 +81,10 @@ class BToKDineutrinoTest :
                 const double eps = 1e-4;
 
                 TEST_CHECK_RELATIVE_ERROR(2.84988e-06, d.integrated_branching_ratio( 0.00,  8.00), eps);
-                TEST_CHECK_RELATIVE_ERROR(4.07784e-06, d.integrated_branching_ratio( 8.00, 16.00), eps);
-                TEST_CHECK_RELATIVE_ERROR(1.11189e-06, d.integrated_branching_ratio(16.00, 19.21), eps);
+                TEST_CHECK_RELATIVE_ERROR(4.07642e-06, d.integrated_branching_ratio( 8.00, 16.00), eps);
+                TEST_CHECK_RELATIVE_ERROR(1.11148e-06, d.integrated_branching_ratio(16.00, 19.21), eps);
 
-                TEST_CHECK_RELATIVE_ERROR(8.03962e-06, d.integrated_branching_ratio( 0.00, 19.21), eps);
+                TEST_CHECK_RELATIVE_ERROR(8.03757e-06, d.integrated_branching_ratio( 0.00, 19.21), eps);
             }
         }
 } b_to_kstar_nu_nu_test;

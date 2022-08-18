@@ -104,7 +104,7 @@ class BToKDileptonGvDV2020Test :
 
 
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_A,  complex<double>(2.803705304, 6.000000000),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_V,  complex<double>(116.0731147, 135.4259671),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_V,  complex<double>(116.5855166, 136.0359514),  eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_S,  complex<double>(3.128079910, 5.971788919),  eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_P,  complex<double>(3.752453111, 6.011203332),  eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_T,  complex<double>(6.062177880, 9.430054481),  eps);
@@ -170,11 +170,11 @@ class BToKDileptonJavierTest :
             static const double q2 = 1.0;
 
             auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GvDV2020", p, oo);
-            TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(q2)), -0.0001715707,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(q2)), -0.0001717492,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(q2)),  0.,        eps);
 
             BToKDilepton c(p, oo);
-            TEST_CHECK_RELATIVE_ERROR(c.two_differential_decay_width(q2, 0),  1.498155e-19,  eps);
-            TEST_CHECK_EQUAL(         c.two_differential_decay_width(q2, 1),  0.               );
+            TEST_CHECK_RELATIVE_ERROR(c.two_differential_decay_width(q2, 0),  1.498599e-19,  eps);
+            TEST_CHECK_EQUAL(         c.two_differential_decay_width(q2, 1),  0.                );
         }
 } b_to_k_dilepton_Javier_test;

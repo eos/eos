@@ -26,8 +26,12 @@ libeosformfactors_la_SOURCES = \
 	mesonic-hqet.hh \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
+	parametric-abr2022.hh parametric-abr2022-impl.hh parametric-abr2022.cc \
+	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
 	parametric-bmrvd2022.hh parametric-bmrvd2022-impl.hh parametric-bmrvd2022.cc \
+	parametric-bsz2015.hh parametric-bsz2015-impl.hh parametric-bsz2015.cc \
+	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
@@ -48,7 +52,11 @@ include_eos_rarebdecays_HEADERS = \
 	form-factor-adapter.hh \
 	form-factors.hh \
 	observables.hh \
+	parametric-abr2022.hh \
+	parametric-bcl2008.hh \
 	parametric-bgl1997.hh \
+	parametric-bsz2015.hh \
+	parametric-kmpw2010.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -66,12 +74,16 @@ TESTS = \
 	lcda_TEST \
 	mesonic_TEST \
 	mesonic-hqet_TEST \
+	parametric-abr2022_TEST \
+	parametric-bcl2008_TEST \
 	parametric-bgl1997_TEST \
 	parametric-bmrvd2022_TEST \
+	parametric-bsz2015_TEST \
+	parametric-kmpw2010_TEST \
 	pi-lcdas_TEST \
 	unitarity-bounds_TEST
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	libeosformfactors.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
@@ -103,9 +115,17 @@ mesonic_TEST_SOURCES = mesonic_TEST.cc
 
 mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
 
+parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
+
+parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
+
 parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
 
+parametric_bsz2015_TEST_SOURCES = parametric-bsz2015_TEST.cc
+
 parametric_bmrvd2022_TEST_SOURCES = parametric-bmrvd2022_TEST.cc
+
+parametric_kmpw2010_TEST_SOURCES = parametric-kmpw2010_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 

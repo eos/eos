@@ -56,7 +56,7 @@ TESTS = \
 	reference_TEST
 
 LDADD = \
-	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/test/libeostest.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \

@@ -556,6 +556,21 @@ Belle:2019B:
     id: oai:arXiv.org:1904.02440
   inspire-id: Belle:2019oag
   title: Test of Lepton-Flavor Universality in ${B\to K^\ast\ell^+\ell^-}$ Decays at Belle
+Belle:2019C:
+  authors: Choudhury, S. et. al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1908.01848
+  inspire-id: Belle:2019xld
+  title: Test of lepton flavor universality and search for lepton flavor violation in $B \rightarrow K\ell \ell$ decays
+BG:2016A:
+  authors: Bigi, Dante and Gambino, Paolo
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1606.08030
+  inspire-id: Bigi:2016mdz
+  title: Revisiting $B\to D \ell \nu$
 BGNS:2014A:
   authors: Buras, Andrzej J. and Girrbach-Noe, Jennifer and Niehoff, Christoph and Straub, David M.
   eprint:
@@ -566,7 +581,7 @@ BGNS:2014A:
 C:2006A:
   authors: Crandall, R.E.
   title: Note on fast polylogarithm computation
-  url: http://people.reed.edu/~crandall/papers/Polylog.pdf
+  url: https://www.reed.edu/physics/faculty/crandall/papers/Polylog.pdf
 C:2010A:
   authors: Crooks, G.E.
   eprint:
@@ -810,6 +825,13 @@ DMRV:2012A:
   inspire-id: DescotesGenon:2012zf
   title: Implications from clean observables for the binned analysis of $B \to K*\mu^+\mu^-$
     at large recoil
+DN:2019A:
+  authors: Descotes-Genon, S. and Novoa-Brunet, M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1903.00448
+  inspire-id: Descotes-Genon:2019dbw
+  title: Angular analysis of the rare decay $\Lambda_b\to \Lambda(1520)(\to NK)\ell^+\ell^-$
 EGN:2010A:
   authors: Ewerth, Thorsten and Gambino, Paolo and Nandi, Soumitra
   eprint:
@@ -825,6 +847,14 @@ EHMRR:2010A:
     id: oai:arXiv.org:1005.0571
   inspire-id: Egede:2010zc
   title: New physics reach of the decay mode $\bar{B} \to \bar{K}^{*0}\ell^+\ell^-$
+ETM:2017A:
+  authors: Lubicz, V. and Melis, A. and Simula, S.
+  collaboration: ETM
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1707.04529
+  inspire-id: Lubicz:2017asp
+  title: Masses and decay constants of D*$_{(s)}$ and B*$_{(s)}$ mesons with N$_f = 2 + 1 + 1$ twisted mass fermions
 F:2012A:
   authors: Fleischer, Robert
   eprint:
@@ -855,6 +885,13 @@ FLAG:2013A:
     id: oai:arXiv.org:1310.8555
   inspire-id: Aoki:2013ldr
   title: Review of lattice results concerning low-energy particle physics
+FLAG:2021A:
+  authors: Aoki, Y. et al.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2111.09849
+  inspire-id: Aoki:2021kgd
+  title: FLAG Review 2021
 FLS:2021A:
   authors: Felkl, Tobias and Li, Sze Lok and Schmidt, Michael A.
   eprint:
@@ -903,6 +940,14 @@ FNAL+MILC:2015C:
     id: oai:arXiv.org:1507.01618
   inspire-id: FermilabLattice:2015cdh
   title: $B\to\pi\ell\ell$ form factors for new-physics searches from lattice QCD
+FNAL+MILC:2015D:
+  authors: Bailey, Jon A. et al.
+  collaboration: Fermilab Lattice, MILC
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1509.06235
+  inspire-id: Bailey:2015dka
+  title: $B\to Kl^+l^-$ Decay Form Factors from Three-Flavor Lattice QCD
 FNAL+MILC:2017A:
   authors: Bazavov, A. et al.
   collaboration: Fermilab Lattice, MILC
@@ -1265,6 +1310,14 @@ LHCb:2016A:
   inspire-id: LHCb:2016ykl
   title: Measurements of the S-wave fraction in $B^{0}\rightarrow K^{+}\pi^{-}\mu^{+}\mu^{-}$
     decays and the $B^{0}\rightarrow K^{\ast}(892)^{0}\mu^{+}\mu^{-}$ differential branching fraction
+LHCb:2016B:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1608.04855
+  inspire-id: LHCb:2016tuh
+  title: First study of the CP-violating phase and decay-width difference in $B_s^0\to\psi(2S)\phi$ decays
 LHCb:2017A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1339,6 +1392,13 @@ LHCb:2021D:
     id: oai:arXiv.org:2107.13428
   inspire-id: LHCb:2021xxq
   title: Angular analysis of the rare decay $B_s^0\to\phi\mu^+\mu^-$
+LMPW:2015A:
+  authors: Lang, C. B. and Mohler, Daniel and Prelovsek, Sasa and Woloshyn, R. M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1501.01646
+  inspire-id: Lang:2015hza
+  title: Predicting positive parity $B_s$ mesons from lattice QCD
 LMvD:2021A:
   authors: Leljak, Domagoj and Melic, Blazenka and van Dyk, Danny
   eprint:
@@ -1360,6 +1420,14 @@ M:2006A:
     id: oai:arXiv.org:hep-ph/0609232
   inspire-id: Misiak:2006zs
   title: Estimate of $\mathcal{B}(\bar B \to X_s \gamma)$ at $\mathcal{O}(\alpha_s^2)$
+MR:2021A:
+  authors: Meinel, S. and Rendon, G.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2107.13140
+  inspire-id: Meinel:2021mdj
+  title: $\Lambda_c\to\Lambda^*(1520)$ form factors from lattice QCD and improved analysis of
+    the $\Lambda_b\to\Lambda^*(1520)$ and $\Lambda_b\to\Lambda_c^*(2595,2625)$ form factors
 MvD:2016A:
   authors: Meinel, Stefan and van Dyk, Danny
   eprint:
@@ -1420,6 +1488,14 @@ PDG:2020A:
 PS:1997A:
   authors: Peskin, M. and Schroeder, D.
   title: An Introduction to Quantum Field Theory
+PZ:2021A:
+  authors: Pullin, B. and Zwicky, R.
+  journal: JHEP 09 (2021) 023
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2106.13617
+  inspire-id: Pullin:2021ebn
+  title: Radiative decays of heavy-light mesons and the $ {f}_{H,{H}^{\ast },{H}_1}^{(T)} $ decay constants
 RBC+UKQCD:2015A:
   authors: Flynn, J. M. and Izubuchi, T. and Kawanai, T. and Lehner, C. and Soni, A. and Van de Water, R. S. and Witzel, O.
   title: $B \to \pi \ell \nu$ and $B_s \to K \ell \nu$ form factors and $|V_{ub}|$ from 2+1-flavor lattice QCD with domain-wall light quarks and relativistic heavy quarks

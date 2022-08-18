@@ -54,6 +54,7 @@ namespace eos
             double para_polarization() const;
             double long_polarization() const;
 
+            double long_phase() const;
             double delta_perp_long() const;
             double delta_para_long() const;
 

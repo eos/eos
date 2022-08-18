@@ -101,7 +101,7 @@ class ExpressionParserTest :
 
             // testing parsing and evaluation of observables
             {
-                ExpressionTest test("<<B->Dlnu::BR;l=tau>>[q2_min=>q2_min_tau] / <<B->Dlnu::BR;l=mu>>[q2_min=0.0]");
+                ExpressionTest test("<<test::obs1;multiplier=2>>[q2_min=>q2_min_num] / <<test::obs1>>[q2_min=0.0]");
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
@@ -111,9 +111,9 @@ class ExpressionParserTest :
 
                 TEST_CHECK(test.completed);
                 TEST_CHECK_EQUAL_STR(
-                    "BinaryExpression(ObservableNameExpression(B->Dlnu::BR;l=tau, aliases=[q2_min=>q2_min_tau])"
+                    "BinaryExpression(ObservableNameExpression(test::obs1;multiplier=2, aliases=[q2_min=>q2_min_num])"
                     " / "
-                    "ObservableNameExpression(B->Dlnu::BR;l=mu, values=[q2_min=0]))",
+                    "ObservableNameExpression(test::obs1, values=[q2_min=0]))",
                     out.str()
                 );
 
@@ -124,43 +124,46 @@ class ExpressionParserTest :
                 ExpressionKinematicReader kinematic_reader;
                 std::set<std::string> kinematic_set = test.e.accept_returning<std::set<std::string>>(kinematic_reader);
 
-                std::set<std::string> expected_kinematic{"q2_min", "q2_min_tau"};
+                std::set<std::string> expected_kinematic{"q2_max", "q2_min_num"};
                 TEST_CHECK_EQUAL(expected_kinematic, kinematic_set);
             }
 
             // Test numerical evaluation
             {
-                ExpressionTest test("<<B->Dlnu::BR;l=tau>>[q2_min=>q2_min_tau] / <<B->Dlnu::BR;l=mu>>[q2_min=>q2_min_mu]");
+                ExpressionTest test("<<test::obs1;multiplier=2>>[q2_min=>q2_min_num] / <<test::obs1>>[q2_min=>q2_min_denom]");
+
+                // Extract kinematic variables from an expression
+                ExpressionKinematicReader kinematic_reader;
+                std::set<std::string> kinematic_set = test.e.accept_returning<std::set<std::string>>(kinematic_reader);
+
+                for (auto kin : kinematic_set)
+                {
+                    std::cout << kin << std::endl;
+                }
+
 
                 Parameters p = Parameters::Defaults();
-                p["CKM::abs(V_cb)"]        =  0.042;
-                p["cbmunumu::Re{cVL}"]     =  1.0066;
-                p["cbtaunutau::Re{cVL}"]   =  1.0066;
+                p["mass::c"] = 1.2;
 
-                Kinematics k     = Kinematics({{"q2_min_tau", 3.15702}, {"q2_min_mu", 0.011164}, {"q2_max", 11.62}});
-                Kinematics k_tau = Kinematics({{"q2_min", 3.15702},  {"q2_max", 11.62}});
-                Kinematics k_mu  = Kinematics({{"q2_min", 0.011164}, {"q2_max", 11.62}});
+                Kinematics k       = Kinematics({{"q2_min_num", 4.0}, {"q2_min_denom", 3.0}, {"q2_max", 10.0}});
+                Kinematics k_num   = Kinematics({{"q2_min", 4.0},  {"q2_max", 10.0}});
+                Kinematics k_denom = Kinematics({{"q2_min", 3.0},  {"q2_max", 10.0}});
 
-                Options o
-                {
-                    { "model",        "WET" },
-                    { "form-factors", "BCL2008"    },
-                    { "U",            "c"          },
-                    { "q",            "d"          }
-                };
+                auto obs_num   = Observable::make("test::obs1;multiplier=2", p, k_num,   Options());
+                auto obs_denom = Observable::make("test::obs1",              p, k_denom, Options());
 
-                auto obs_tau = Observable::make("B->Dlnu::BR;l=tau", p, k_tau, o);
-                auto obs_mu  = Observable::make("B->Dlnu::BR;l=mu",  p, k_mu,  o);
+                TEST_CHECK_RELATIVE_ERROR(obs_num->evaluate(),   14.4,  1e-10);
+                TEST_CHECK_RELATIVE_ERROR(obs_denom->evaluate(),  8.4,  1e-10);
 
                 // Make and evaluate expression
-                ExpressionMaker maker(p, k, o);
+                ExpressionMaker maker(p, k, Options());
                 Expression assessable_test = test.e.accept_returning<Expression>(maker);
 
                 ExpressionEvaluator evaluator;
 
                 TEST_CHECK_RELATIVE_ERROR(
                     assessable_test.accept_returning<double>(evaluator),
-                    obs_tau->evaluate() / obs_mu->evaluate(),
+                    obs_num->evaluate() / obs_denom->evaluate(),
                     1e-3);
 
 

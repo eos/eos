@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_OBSERVABLE_CACHE_HH
-#define EOS_GUARD_SRC_UTILS_OBSERVABLE_CACHE_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_OBSERVABLE_CACHE_HH
+#define EOS_GUARD_EOS_UTILS_OBSERVABLE_CACHE_HH 1
 
 #include <eos/observable.hh>
 #include <eos/utils/observable_set.hh>

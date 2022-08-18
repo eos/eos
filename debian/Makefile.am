@@ -1,11 +1,9 @@
-CLEANFILES = 
+CLEANFILES =
 MAINTAINERCLEANFILES = Makefile.in
 
 EXTRA_DIST = \
-    control-xenial.in \
-    control-bionic.in \
-    control-disco.in  \
-    control-focal.in
+    control-focal.in \
+    control-jammy.in
 
 # produce the .deb file manually
 deb:

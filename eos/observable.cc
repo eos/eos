@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2017, 2021 Danny van Dyk
+ * Copyright (c) 2010-2017, 2021-2022 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2018, 2019 Nico Gubernari
@@ -29,6 +29,7 @@
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser-impl.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/observable_stub.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -39,61 +40,43 @@
 
 namespace eos
 {
-    std::vector<ObservableSection>
-    make_observable_sections()
-    {
-        return std::vector<ObservableSection>({
-            make_b_decays_section(),
-            make_rare_b_decays_section(),
-            make_form_factors_section(),
-            make_meson_mixing_section(),
-        });
-    }
-
-    std::map<QualifiedName, ObservableEntryPtr>
-    make_observable_entries()
+    namespace impl
     {
         std::map<QualifiedName, ObservableEntryPtr> observable_entries;
-
-        for (auto && section : make_observable_sections())
-        {
-            for (auto && group : section)
-            {
-                observable_entries.insert(group.begin(), group.end());
-            }
-        }
-        return observable_entries;
     }
 
-    class ObservableEntries :
-        public InstantiationPolicy<ObservableEntries, Singleton>
+    ObservableEntries::ObservableEntries() :
+        _entries(&impl::observable_entries)
     {
-        private:
-            std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> _entries;
+        std::vector<std::function<ObservableSection ()>> section_makers = {
+            make_form_factors_section,
+            make_b_decays_section,
+            make_rare_b_decays_section,
+            make_meson_mixing_section,
+        };
 
-            ObservableEntries() :
-                _entries(make_observable_entries())
+        for (const auto & section_maker : section_makers)
+        {
+            for (const auto & group : section_maker())
             {
+                _entries->insert(group.begin(), group.end());
             }
+        }
+    }
 
-            ~ObservableEntries() = default;
+    ObservableEntries::~ObservableEntries() = default;
 
-        public:
-            friend class InstantiationPolicy<ObservableEntries, Singleton>;
+    void
+    ObservableEntries::insert_or_assign(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
+    {
+        auto result = _entries->insert_or_assign(key, value);
 
-            const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> & entries() const
-            {
-                return _entries;
-            }
-
-            bool insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
-            {
-                auto inserted = _entries.insert(std::pair<QualifiedName, std::shared_ptr<const ObservableEntry>>(key, value));
-
-                // true if the insertion was successfull
-                return inserted.second;
-            }
-    };
+        if (! result.second)
+        {
+            Log::instance()->message("[ObservableEntries.insert_or_assign]", ll_warning)
+                << "Entry for observable " << key.str() << " has been replaced.";
+        }
+    }
 
     ObservablePtr
     Observable::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
@@ -119,6 +102,38 @@ namespace eos
 
         return ObservablePtr();
     }
+
+    class ObservableSections :
+        public InstantiationPolicy<ObservableSections, Singleton>
+    {
+        private:
+            std::vector<ObservableSection> _sections;
+
+            ObservableSections()
+            {
+                // ensure that the observable entries have been generated already
+                auto entries = std::distance(ObservableEntries::instance()->entries().begin(), ObservableEntries::instance()->entries().end());
+                Log::instance()->message("ObservableSections::ObservableSections()", ll_debug)
+                    << "Total number of registered observables: " << entries;
+
+                _sections = std::vector<ObservableSection>({
+                    make_b_decays_section(),
+                    make_rare_b_decays_section(),
+                    make_meson_mixing_section(),
+                    make_form_factors_section(),
+                });
+            }
+
+            ~ObservableSections() = default;
+
+        public:
+            friend class InstantiationPolicy<ObservableSections, Singleton>;
+
+            const std::vector<ObservableSection> & sections() const
+            {
+                return _sections;
+            }
+    };
 
     /* ObservableEntry */
 
@@ -241,15 +256,9 @@ namespace eos
         std::map<QualifiedName, ObservableEntryPtr> observable_entries;
 
         Implementation() :
-            observable_sections(make_observable_sections())
+            observable_sections(ObservableSections::instance()->sections()),
+            observable_entries(ObservableEntries::instance()->entries())
         {
-            for (auto && section : observable_sections)
-            {
-                for (auto && group : section)
-                {
-                    observable_entries.insert(group.begin(), group.end());
-                }
-            }
         }
     };
 
@@ -331,12 +340,7 @@ namespace eos
             throw InternalError("Could not create expression '" + input + "'");
         }
 
-        bool insertion_success = ObservableEntries::instance()->insert(name, std::shared_ptr<const ObservableEntry>(expression_observable_entry));
-
-        if (! insertion_success)
-        {
-            throw InternalError("Could not insert observable entry '" + name.str() + "'");
-        }
+        ObservableEntries::instance()->insert_or_assign(name, std::shared_ptr<const ObservableEntry>(expression_observable_entry));
     }
 
     std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
@@ -366,7 +370,10 @@ namespace eos
             }
         }
 
-        return std::make_pair(qn, ObservableEntryPtr(new ExpressionObservableEntry(qn, std::string(latex), unit, expression, Options{})));
-    }
+        auto result = std::make_pair(qn, ObservableEntryPtr(new ExpressionObservableEntry(qn, std::string(latex), unit, expression, Options{})));
 
+        impl::observable_entries.insert(result);
+
+        return result;
+    }
 }

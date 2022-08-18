@@ -1660,26 +1660,6 @@ namespace eos
             return result;
         }
 
-        double bound_0p_prior() const
-        {
-            const double value = bound_0p();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0130561; // cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
-        }
-
         double bound_0m() const
         {
             // 3 rows of form factors with 3 columns (one column per z coefficient)
@@ -1724,26 +1704,6 @@ namespace eos
             }
 
             return result;
-        }
-
-        double bound_0m_prior() const
-        {
-            const double value = bound_0m();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 0^- unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0130561; // using the same relative uncertainty as for 0^+, cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
         }
 
         double bound_1p() const
@@ -1808,26 +1768,6 @@ namespace eos
             return result;
         }
 
-        double bound_1p_prior() const
-        {
-            const double value = bound_1p();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 1^+ unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0093549; // cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
-        }
-
         double bound_1m() const
         {
             // 3 rows of form factors with 3 columns (one column per z coefficient)
@@ -1889,26 +1829,6 @@ namespace eos
 
             return result;
         }
-
-        double bound_1m_prior() const
-        {
-            const double value = bound_1m();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 1^- unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0093549; // same relative uncertainty as for 1^-, cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
-        }
         // }}}
     };
 
@@ -1948,30 +1868,6 @@ namespace eos
     HQETUnitarityBounds::bound_1m() const
     {
         return _imp->bound_1m();
-    }
-
-    double
-    HQETUnitarityBounds::bound_0p_prior() const
-    {
-        return _imp->bound_0p_prior();
-    }
-
-    double
-    HQETUnitarityBounds::bound_0m_prior() const
-    {
-        return _imp->bound_0m_prior();
-    }
-
-    double
-    HQETUnitarityBounds::bound_1p_prior() const
-    {
-        return _imp->bound_1p_prior();
-    }
-
-    double
-    HQETUnitarityBounds::bound_1m_prior() const
-    {
-        return _imp->bound_1m_prior();
     }
 
     const std::set<ReferenceName>
@@ -2254,26 +2150,6 @@ namespace eos
             return result;
         }
 
-        double bound_0p_prior() const
-        {
-            const double value = bound_0p();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0130561; // cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
-        }
-
         double bound_0m() const
         {
             double result = 0.0;
@@ -2284,26 +2160,6 @@ namespace eos
             }
 
             return result;
-        }
-
-        double bound_0m_prior() const
-        {
-            const double value = bound_0m();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 0^- unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0130561; // using the same relative uncertainty as for 0^+, cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
         }
 
         double bound_1p() const
@@ -2319,26 +2175,6 @@ namespace eos
             return result;
         }
 
-        double bound_1p_prior() const
-        {
-            const double value = bound_1p();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 1^+ unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0093549; // cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
-        }
-
         double bound_1m() const
         {
             double result = 0.0;
@@ -2350,26 +2186,6 @@ namespace eos
             }
 
             return result;
-        }
-
-        double bound_1m_prior() const
-        {
-            const double value = bound_1m();
-
-            if (value < 0.0)
-            {
-                throw InternalError("Contribution to 1^- unitarity bound must be positive; found to be negative!");
-            }
-            else if ((0.0 <= value) && (value < 1.0))
-            {
-                return 0.0;
-            }
-            else
-            {
-                // add an r-fit like penalty
-                static const double sigma = 0.0093549; // same relative uncertainty as for 1^-, cf. [BG2016], eq. (2.8), p.5
-                return -power_of<2>((value - 1.0) / sigma) / 2.0;
-            }
         }
         // }}}
     };
@@ -2409,30 +2225,6 @@ namespace eos
     BGLUnitarityBounds::bound_1m() const
     {
         return _imp->bound_1m();
-    }
-
-    double
-    BGLUnitarityBounds::bound_0p_prior() const
-    {
-        return _imp->bound_0p_prior();
-    }
-
-    double
-    BGLUnitarityBounds::bound_0m_prior() const
-    {
-        return _imp->bound_0m_prior();
-    }
-
-    double
-    BGLUnitarityBounds::bound_1p_prior() const
-    {
-        return _imp->bound_1p_prior();
-    }
-
-    double
-    BGLUnitarityBounds::bound_1m_prior() const
-    {
-        return _imp->bound_1m_prior();
     }
 
     const std::set<ReferenceName>

@@ -22,6 +22,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/lagrange-polynomial.hh>
 #include <eos/maths/szego-polynomial.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors-fwd.hh>
 #include <eos/utils/diagnostics.hh>
@@ -114,6 +115,17 @@ namespace eos
 
             ///@}
 
+            ///@name Dispersive bounds
+            ///@{
+
+            virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const = 0;
+            virtual double weak_bound() const = 0;
+            virtual double strong_bound() const = 0;
+            virtual double weak_bound_log_likelihood() const = 0;
+            virtual double strong_bound_log_likelihood() const = 0;
+
+            ///@}
+
             /// Factory method.
             static NonlocalFormFactorPtr<nff::PToP> make(const QualifiedName & name, const Parameters & p, const Options & o);
 
@@ -171,6 +183,18 @@ namespace eos
             double im_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
             double re_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
             double im_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
+
+            ///@}
+
+            ///@name Dispersive bounds
+            ///@{
+
+            double get_real_alpha(const unsigned & i) const;
+            double get_imag_alpha(const unsigned & i) const;
+            double weak_bound() const;
+            double weak_bound_log_likelihood() const;
+            double strong_bound() const;
+            double strong_bound_log_likelihood() const;
 
             ///@}
 
@@ -274,6 +298,19 @@ namespace eos
 
             ///@}
 
+            ///@name Dispersive bounds
+            ///@{
+
+            virtual complex<double> get_orthonormal_perp_coefficients(const unsigned & i) const = 0;
+            virtual complex<double> get_orthonormal_para_coefficients(const unsigned & i) const = 0;
+            virtual complex<double> get_orthonormal_long_coefficients(const unsigned & i) const = 0;
+            virtual double weak_bound() const = 0;
+            virtual double strong_bound() const = 0;
+            virtual double weak_bound_log_likelihood() const = 0;
+            virtual double strong_bound_log_likelihood() const = 0;
+
+            ///@}
+
             /// Factory method.
             static NonlocalFormFactorPtr<nff::PToV> make(const QualifiedName & name, const Parameters & p, const Options & o);
 
@@ -362,6 +399,22 @@ namespace eos
             double im_F_ratio_para_complex(const double & re_q2, const double & im_q2) const;
             double re_F_ratio_long_complex(const double & re_q2, const double & im_q2) const;
             double im_F_ratio_long_complex(const double & re_q2, const double & im_q2) const;
+            ///@}
+
+            ///@name Dispersive bounds
+            ///@{
+
+            double get_real_perp_alpha(const unsigned & i) const;
+            double get_imag_perp_alpha(const unsigned & i) const;
+            double get_real_para_alpha(const unsigned & i) const;
+            double get_imag_para_alpha(const unsigned & i) const;
+            double get_real_long_alpha(const unsigned & i) const;
+            double get_imag_long_alpha(const unsigned & i) const;
+            double weak_bound() const;
+            double weak_bound_log_likelihood() const;
+            double strong_bound() const;
+            double strong_bound_log_likelihood() const;
+
             ///@}
 
             /*!

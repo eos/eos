@@ -407,8 +407,11 @@ class Plotter:
                 for key, value in item['parameters'].items():
                     parameters.set(key, value)
 
-            # create (empty) options
+            # create options
             options = eos.Options()
+            if 'options' in item and type(item['options']) is dict:
+                for key, value in item['options'].items():
+                    options.declare(key, value)
 
 
             #
@@ -481,6 +484,14 @@ class Plotter:
            corresponds to an evaluation of the observables at the kinematic configuration corresponding to the ``xvalues``
            entry with the same index.
          * ``weights`` (array-like of *float*, optional) -- The weights of the samples, on a linear scale. Defaults to uniform weights.
+
+        The following keys are optional:
+
+         * ``band`` (a *list* containing ``'lines'``, ``'areas'``, or both) -- The setting for the illustration of the band.
+           If ``'outer'`` is provided, the band's outer lines are drawn.
+           If ``'median'`` is provided, the band's median line is drawn.
+           If ``'area'`` is provided, the band's areas are filled.
+           Defaults to ``['area', 'outer', 'median']``.
 
         Example:
 
@@ -556,6 +567,7 @@ class Plotter:
                 self.xvalues = np.array(_xvalues)
                 self.samples = uncfile.data()
 
+            self.band   = item['band']  if 'band'  in item else ['area', 'outer', 'median']
             self.xrange = item['range'] if 'range' in item else None
 
         def plot(self):
@@ -586,10 +598,13 @@ class Plotter:
             ovalues_central = interpolate(self.xvalues, _ovalues_central, xvalues)
             ovalues_higher  = interpolate(self.xvalues, _ovalues_higher,  xvalues)
 
-            self.plotter.ax.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
-            self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color)
-            self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color)
-            self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color)
+            if 'area' in self.band:
+                self.plotter.ax.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
+            if 'outer' in self.band:
+                self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color, ls=self.style)
+                self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color, ls=self.style)
+            if 'median' in self.band:
+                self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color, ls=self.style)
 
 
     class UncertaintyBinned(BasePlot):
@@ -602,9 +617,13 @@ class Plotter:
             if 'hdf5-file' not in item and 'data' not in item:
                 raise KeyError('neither hdf5-file nor data specified')
 
+
+            self.weights = None
             if 'data' in item:
                 self.xvalues = item['data']['xvalues']
                 self.samples = item['data']['samples']
+                if 'weights' in item['data']:
+                    self.weights = item['data']['weights']
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
@@ -659,9 +678,9 @@ class Plotter:
             ovalues_central = []
             ovalues_higher  = []
             for i in range(len(self.xvalues)):
-                lower   = np.percentile(self.samples[:, i], q=15.865)
-                central = np.percentile(self.samples[:, i], q=50.000)
-                higher  = np.percentile(self.samples[:, i], q=84.135)
+                lower, central, higher = self.plotter._weighted_quantiles(self.samples[:, i],
+                                                                         [0.15865, 0.5, 0.84135],
+                                                                         self.weights)
                 ovalues_lower.append(lower)
                 ovalues_central.append(central)
                 ovalues_higher.append(higher)
@@ -814,10 +833,10 @@ class Plotter:
                 elif constraint['type'] == 'MultivariateGaussian(Covariance)':
                     if not self.observable:
                         raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
-                    dim = constraint['dim']
                     covariance = np.array(constraint['covariance'])
                     observables = constraint['observables']
                     means = constraint['means']
+                    dim = len(means)
                     kinematics = constraint['kinematics']
 
                     xvalues = []
@@ -844,13 +863,13 @@ class Plotter:
                 elif constraint['type'] == 'MultivariateGaussian':
                     if not self.observable:
                         raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
-                    dim = constraint['dim']
                     sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
                     sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
                     sigma_sys = np.array(constraint['sigma-sys'])
                     sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
                     observables = constraint['observables']
                     means = constraint['means']
+                    dim = len(means)
                     kinematics = constraint['kinematics']
 
                     xvalues = []
@@ -1120,12 +1139,12 @@ class Plotter:
                     yerrors.append([sigma_hi, sigma_lo])
                     idx = idx + 1
                 elif constraint['type'] == 'MultivariateGaussian(Covariance)':
-                    dim         = constraint['dim']
                     observables = constraint['observables']
                     kinematics  = constraint['kinematics']
                     options     = constraint['options']
                     covariance  = np.array(constraint['covariance'])
                     means       = constraint['means']
+                    dim         = len(means)
 
                     for i in range(0, dim):
                         latex = '$' + eos.Observables()[observables[i]].latex() + '$'
@@ -1136,13 +1155,13 @@ class Plotter:
                         yerrors.append([sigma, sigma])
                         idx = idx + 1
                 elif constraint['type'] == 'MultivariateGaussian':
-                    dim = constraint['dim']
                     observables = constraint['observables']
                     sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
                     sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
                     sigma_sys = np.array(constraint['sigma-sys'])
                     sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
                     means = constraint['means']
+                    dim = len(means)
 
                     for i in range(0, dim):
                         latex = '$' + eos.Observables()[observables[i]].latex() + '$'
@@ -1279,11 +1298,11 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data nor data-file nor hdf5-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
-                eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
+                eos.warn('   both data and one of data-file, hdf5-file specified; assuming interactive use is intended')
 
             self.samples = None
             self.weights = None
@@ -1298,7 +1317,31 @@ class Plotter:
                     self.weights = np.exp(item['data']['log_weights'])
                 else:
                     self.weights = None
+            elif 'data-file' in item:
+                if 'variable' not in item:
+                    raise KeyError('no variable specificed')
 
+                dfname = item['data-file']
+                eos.info('   plotting KDE for "{}"'.format(dfname))
+                prefix = os.path.split(dfname)[-1]
+                eos.info(f'   prefix = {prefix}')
+                if prefix.startswith('mcmc-'):
+                    df  = eos.data.MarkovChain(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = None
+                elif prefix.startswith('samples'):
+                    df = eos.data.ImportanceSamples(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = df.weights
+                elif prefix.startswith('pred-'):
+                    df = eos.data.Prediction(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = df.weights
+                else:
+                    raise ValueError(f'Do not recognize data-file prefix: {dfname}')
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting histogram from file "{}"'.format(h5fname))
@@ -1508,6 +1551,96 @@ class Plotter:
                 return ([], [])
 
 
+    class ExternalLikelihood2D(BasePlot):
+        """Plots contours of a user-provided function"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting a user-provided Likelihood
+        -----------------------------------
+
+        The following key is mandatory:
+
+         * ``likelihood`` (*evaluable*, see below) -- The 2D probability density that will be plotted.
+
+        The following keys are optional:
+
+         * ``contours`` (a *list* containing ``'lines'``, ``'areas'``, or both) -- The setting for the illustration of the contours.
+           If ``'lines'`` is provided, the contour lines are drawn.
+           If ``'areas'`` is provided, the contour areas are filled.
+           Defaults to ``['lines']``.
+         * ``levels`` (*list* of *float*) -- The probability levels of the contours. Defaults to ``[68, 95, 99]``.
+         * ``xrange`` (*list* of *float*) -- The x-axis range where the likelihood is evaluated, defaults to the plot ranges if provided.
+         * ``yrange`` (*list* of *float*) -- The y-axis range where the likelihood is evaluated, defaults to the plot ranges if provided.
+
+        """)
+
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if not self.plotter.xrange and 'xrange' not in item:
+                raise KeyError('xrange was not specified')
+            if not self.plotter.yrange and 'yrange' not in item:
+                raise KeyError('yrange was not specified')
+            if 'likelihood' not in item:
+                raise KeyError('likelihood was not specified')
+
+            self.likelihood = item['likelihood']
+            self.levels   = item['levels']    if 'levels'    in item else [0, 68, 95, 99]
+            if 0 not in self.levels:
+                self.levels = [0] + self.levels
+            self.contours = item['contours']  if 'contours'  in item else ['lines']
+            self.xrange   = item['xrange']    if 'xrange'    in item else self.plotter.xrange
+            self.yrange   = item['yrange']    if 'yrange'    in item else self.plotter.yrange
+            if type(self.style) is not list:
+                self.style= [self.style]
+
+        def plot(self):
+            xx, yy = np.mgrid[self.xrange[0]:self.xrange[1]:100j, self.yrange[0]:self.yrange[1]:100j]
+            positions = np.vstack([xx.ravel(), yy.ravel()])
+            pdf = np.reshape([self.likelihood(point) for point in positions.T], xx.shape)
+            pdf /= pdf.sum()
+
+            # find the PDF value corresponding to a given cummulative probability
+            plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+            plevels = []
+            labels = []
+            for level in self.levels:
+                plevels.append(scipy.optimize.brentq(plevel, 0., 1., args=(pdf, level / 100.0)))
+                labels.append('{}%'.format(level))
+
+            if 'areas' in self.contours:
+                colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
+                plt.contourf(pdf.transpose(),
+                             colors=colors,
+                             extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                             levels=plevels[::-1])
+
+            CS = plt.contour(pdf.transpose(),
+                             colors=self.color,
+                             extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                             levels=plevels[::-1],
+                             linestyles=self.style[::-1])
+
+            if 'labels' in self.contours:
+                fmt = {}
+                for level, label in zip(CS.levels, labels[::-1]):
+                    fmt[level] = label
+
+                plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+        def handles_labels(self):
+            if self.label:
+                handle = None
+                if 'areas' in self.contours:
+                    handle = plt.Rectangle((0,0),1,1, color=self.color)
+                else:
+                    handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
+
+                return ([handle], [self.label])
+            else:
+                return ([], [])
+
+
     class Histogram1D(BasePlot):
         """Plots a 1D histogram of pre-existing random samples"""
 
@@ -1582,8 +1715,13 @@ class Plotter:
                     idx = df.lookup_table[item['variable']]
                     self.samples = df.samples[:, idx]
                     self.weights = None
-                elif prefix.startswith('pmc'):
-                    df = eos.data.PMCSampler(dfname)
+                elif prefix.startswith('samples'):
+                    df = eos.data.ImportanceSamples(dfname)
+                    idx = df.lookup_table[item['variable']]
+                    self.samples = df.samples[:, idx]
+                    self.weights = df.weights
+                elif prefix.startswith('pred-'):
+                    df = eos.data.Prediction(dfname)
                     idx = df.lookup_table[item['variable']]
                     self.samples = df.samples[:, idx]
                     self.weights = df.weights
@@ -1761,8 +1899,11 @@ class Plotter:
                 for k, v in item['kinematics'].items():
                     kinematics.declare(k, v)
 
-            # create (empty) options
+            # create options
             options = eos.Options()
+            if 'options' in item and type(item['options']) is dict:
+                for key, value in item['options'].items():
+                    options.declare(key, value)
 
             # create observable
             pdf  = eos.SignalPDF.make(pname, parameters, kinematics, options)
@@ -1860,6 +2001,7 @@ class Plotter:
         'histogram2D':           Histogram2D,
         'kde':                   KernelDensityEstimate1D,
         'kde2D':                 KernelDensityEstimate2D,
+        'likelihood2D':          ExternalLikelihood2D,
         'observable':            Observable,
         'point':                 Point,
         'signal-pdf':            SignalPDF,
@@ -1920,7 +2062,12 @@ class Plotter:
 
 
     def plot(self):
-        """Produces the plot"""
+        """Produces the plot
+
+        :returns:
+            - fig (:py:class:`matplotlib.figure.Figure`) - the created figure
+            - ax (:py:class:`matplotlib.axes.Axes`) - the created axes
+        """
         self.setup_plot()
         self.plot_contents()
 
@@ -1928,6 +2075,8 @@ class Plotter:
 
         if self.output:
             plt.savefig(self.output, bbox_inches='tight', dpi=300)
+
+        return self.fig, self.ax
 
 
 def variable_to_latex(variable):
