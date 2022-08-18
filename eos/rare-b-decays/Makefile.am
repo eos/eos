@@ -29,6 +29,14 @@ libeosrarebdecays_la_SOURCES = \
 	bs-to-phi-ll-bfs2004.cc bs-to-phi-ll-bfs2004.hh \
 	bs-to-phi-ll-gvdv2020.cc bs-to-phi-ll-gvdv2020.hh \
 	charm-loops.cc charm-loops.hh \
+	charm-loops-analytic.cc charm-loops-impl.hh \
+	charm-loops-analytic-F27b.cc \
+	charm-loops-analytic-F29b.cc \
+	charm-loops-analytic-weight4.cc \
+	charm-loops-analytic-weight4wx3wx4.cc \
+	charm-loops-analytic-weight4w4w5w7.cc \
+	charm-loops-analytic-F27d.cc \
+	charm-loops-analytic-F29d.cc \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
@@ -95,6 +103,7 @@ TESTS = \
 	bs-to-phi-ll-bfs2004_TEST \
 	bs-to-phi-ll-gvdv2020_TEST \
 	charm-loops_TEST \
+	charm-loops-analytic_TEST \
 	em-contributions_TEST \
 	hard-scattering_TEST \
 	inclusive-b-to-s-dilepton_TEST \
@@ -144,6 +153,8 @@ bs_to_phi_ll_bfs2004_TEST_SOURCES = bs-to-phi-ll-bfs2004_TEST.cc
 bs_to_phi_ll_gvdv2020_TEST_SOURCES = bs-to-phi-ll-gvdv2020_TEST.cc
 
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
+
+charm_loops_analytic_TEST_SOURCES = charm-loops-analytic_TEST.cc
 
 em_contributions_TEST_SOURCES = em-contributions_TEST.cc
 
