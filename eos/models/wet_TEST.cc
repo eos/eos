@@ -21,6 +21,8 @@
 #include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
 #include <eos/models/wet.hh>
+#include <eos/models/standard-model.hh>
+
 
 #include <algorithm>
 #include <cmath>
@@ -265,6 +267,47 @@ class WilsonCoefficientsSBSBTest :
             }
         }
 } wilson_coefficients_sbsbs_test;
+
+class WilsonCoefficientsSBNuNuTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsSBNuNuTest() :
+            TestCase("wilson_coefficients_sbnunu_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test comparing WC of WET and SM */
+            {
+                static const double eps = 1e-8;
+
+                Parameters p = reference_parameters();  
+
+                Options o{}; 
+
+                StandardModel sm(p);
+
+                const auto sm_wc = sm.wet_sbnunu(false);
+
+                WilsonScanModel wsm(p, o);
+
+                const auto wsm_wc = wsm.wet_sbnunu(false);
+
+                TEST_CHECK_NEARLY_EQUAL(real(sm_wc.cVL()), real(wsm_wc.cVL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(sm_wc.cVL()), imag(wsm_wc.cVL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(sm_wc.cVR()), real(wsm_wc.cVR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(sm_wc.cVR()), imag(wsm_wc.cVR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(sm_wc.cSL()), real(wsm_wc.cSL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(sm_wc.cSL()), imag(wsm_wc.cSL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(sm_wc.cSR()), real(wsm_wc.cSR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(sm_wc.cSR()), imag(wsm_wc.cSR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(sm_wc.cTL()), real(wsm_wc.cTL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(sm_wc.cTL()), imag(wsm_wc.cTL()),  eps);
+            }
+        }
+} wilson_coefficients_sbnunu_test;
 
 class ConstrainedWilsonScanModelTest:
     public TestCase
