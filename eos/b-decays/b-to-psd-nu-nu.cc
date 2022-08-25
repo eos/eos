@@ -176,11 +176,16 @@ namespace eos
         {
             const double m_B = this->m_B(), m_B2 = m_B * m_B;
             const double m_P = this->m_P(), m_P2 = m_P * m_P;
+            const double m_b = model->m_b_msbar(mu);
+            const double m_s = model->m_s_msbar(mu);
             const double lambda = eos::lambda(m_B2, m_P2, q2), sqrt_lambda = std::sqrt(lambda);
 
             const auto wc = this->wc();
 
             const double f_p = form_factors->f_p(q2);
+            const double f_0 = form_factors->f_0(q2);
+            const double f_t = form_factors->f_t(q2);
+
 
             // using different normalization than [FLS:2021A], eq. (1)
             // note that eq. (1) is a Lagrangian, while we use the Hamiltonian definition
@@ -190,9 +195,13 @@ namespace eos
 
             // first term in square brackets in [FLS:2021A], eq. (8)
             const double contr_vector = lambda / 24.0 * f_p * f_p * std::norm(wc.cVL() +  wc.cVR());
+            // second line in [FLS:2021A], eq. (8) (ignoring the {bs} Wilson coefficients)
+            const double contr_scalar = q2 * power_of<2>((m_B2 - m_P2) / (m_b - m_s)) / 8 * f_0 * f_0 * std::norm(wc.cSL() +  wc.cSR());
+            // third line in [FLS:2021A], eq. (8) (ignoring the {bs} Wilson coefficients)
+            const double contr_tensor = q2 * 2/3 * lambda / power_of<2>(m_B + m_P) * f_t * f_t * std::norm(wc.cTL());
 
             // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
-            return 3.0 * norm * contr_vector;
+            return 3.0 * norm * (contr_vector + contr_scalar + contr_tensor);
         }
 
         // differential branching_ratio
