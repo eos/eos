@@ -255,8 +255,14 @@ namespace eos
     {
         private:
             /* sbnunu Wilson coefficients */
-            UsedParameter _re_cl, _im_cl;
-            UsedParameter _re_cr, _im_cr;
+            // vector
+            UsedParameter _re_cvl, _im_cvl;
+            UsedParameter _re_cvr, _im_cvr;
+            // scalar
+            UsedParameter _re_csl, _im_csl;
+            UsedParameter _re_csr, _im_csr;
+            // tensor
+            UsedParameter _re_ctl, _im_ctl;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
