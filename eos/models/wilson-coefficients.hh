@@ -164,27 +164,57 @@ namespace eos
     template <> struct WilsonCoefficients<wc::SBNuNu>
     {
         /*
-         * Assuming only left-handed neutrinos, only two operators exist beyond the SM.
+         * Assuming only left-handed neutrinos, only two vector operators exist beyond the SM.
          * These two operators are defined via
          *
-         * H^eff = 4 G_F / sqrt(2) V_tb V_ts^* (
-         *             C_L alpha_e / (2 pi) * [sbar gamma^mu P_L b] [nubar gamma_mu P_L nu]
-         *             C_R alpha_e / (2 pi) * [sbar gamma^mu P_R b] [nubar gamma_mu P_L nu]
+         * H^eff_vec = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) (
+         *             C_VL [sbar gamma^mu P_L b][nubar gamma_mu P_L nu] 
+         *             C_VR [sbar gamma^mu P_R b][nubar gamma_mu P_L nu] 
          *         )
-         *       = 4 G_F / sqrt(2) V_tb V_ts^* ( C_L O_L + C_R O_R )
+         *       = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_VL O_VL + C_VR O_VR )
+         * 
+         * O_VR extends the SM to include coupling to RH fermions.
+         * 
+         * Furthermore, we can add the scalar and tensor operators according to [FLS:2021A], eq. (2).
+         * These operators go beyond the SM, by including Majorana neutrinos. 
+         * 
+         * The scalar operator contributions are 
+         * 
+         * H^eff_sca = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_SL O_SL + C_SR O_SR )
+         * 
+         * where
+         * O_SL = [sbar P_L b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
+         * O_SR = [sbar P_R b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
+         * 
+         * The tensor operator contribution is
+         * 
+         * H^eff_ten = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) C_TL O_TL
+         * 
+         * where
+         * O_TL = [sbar sigma_{mu nu} P_L b][bar(nu_L^c) sigma^{mu nu} P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
+         * 
+         * 
+         * In total we then have
+         * H^eff = H^eff_vec + H^eff_sca + H^eff_ten
+         * 
          *
          * C++ idx -> operator
-         * 0       -> O_L
-         * 1       -> O_R
+         * 0       -> O_VL
+         * 1       -> O_VR
+         * 2       -> O_SL
+         * 3       -> O_SR
+         * 4       -> O_TL
          */
-        std::array<complex<double>, 2> _coefficients;
+        std::array<complex<double>, 5> _coefficients;
 
         /*! Default ctor */
         WilsonCoefficients();
 
-        inline complex<double> cL()   const { return _coefficients[0]; }
-        inline complex<double> cR()   const { return _coefficients[1]; }
-    };
-}
+        inline complex<double> cVL()   const { return _coefficients[0]; }
+        inline complex<double> cVR()   const { return _coefficients[1]; }
+        inline complex<double> cSL()   const { return _coefficients[2]; }
+        inline complex<double> cSR()   const { return _coefficients[3]; }
+        inline complex<double> cTL()   const { return _coefficients[4]; }
+    };}
 
 #endif

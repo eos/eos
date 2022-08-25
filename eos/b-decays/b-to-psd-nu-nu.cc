@@ -189,7 +189,7 @@ namespace eos
                 * sqrt_lambda / (power_of<3>(4.0 * M_PI * m_B));
 
             // first term in square brackets in [FLS:2021A], eq. (8)
-            const double contr_vector = lambda / 24.0 * f_p * f_p * std::norm(wc.cL() +  wc.cR());
+            const double contr_vector = lambda / 24.0 * f_p * f_p * std::norm(wc.cVL() +  wc.cVR());
 
             // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
             return 3.0 * norm * contr_vector;

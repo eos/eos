@@ -501,10 +501,16 @@ class WilsonCoefficientsSBNuNuTest :
                 StandardModel model(parameters);
 
                 WilsonCoefficients<wc::SBNuNu> wc = model.wet_sbnunu(false);
-                TEST_CHECK_NEARLY_EQUAL( 6.605426281, real(wc.cL()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cL()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.cR()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 6.605426281, real(wc.cVL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cVL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.cVR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cVR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.cSL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cSL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.cSR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cSR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.cTL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cTL()),  eps);
             }
         }
 } wilson_coefficients_sbnunu_test;

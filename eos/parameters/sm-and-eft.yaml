@@ -1343,23 +1343,56 @@ groups:
           max:     120.0
           latex:   '$\mu_0^{\bar{s}b\bar{\nu}\nu}$'
           unit:    'GeV'
-      'sbnunu::Re{cL}' :
-          central: 1.0
-          min:     1.0
-          max:     1.0
+        # Vector coefficients
+      'sbnunu::Re{cVL}' :
+          central: 6.605426281
+          min:     6.605426281
+          max:     6.605426281
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
-      'sbnunu::Im{cL}' :
+      'sbnunu::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
-      'sbnunu::Re{cR}' :
+      'sbnunu::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_R}$'
-      'sbnunu::Im{cR}' :
+      'sbnunu::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_R}$'
+        # Scalar coefficients
+      'sbnunu::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_L}$'
+      'sbnunu::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_L}$'
+      'sbnunu::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_R}$'
+      'sbnunu::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_R}$'
+        # Tensor coefficients
+      'sbnunu::Re{cTL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{T_L}$'
+      'sbnunu::Im{cTL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{T_L}$'

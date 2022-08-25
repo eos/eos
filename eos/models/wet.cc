@@ -471,10 +471,16 @@ namespace eos
 
     /* sbnunu Wilson coefficients */
     WilsonScanComponent<components::WET::SBNuNu>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
-    _re_cl(p["sbnunu::Re{cL}"], u),
-    _im_cl(p["sbnunu::Im{cL}"], u),
-    _re_cr(p["sbnunu::Re{cR}"], u),
-    _im_cr(p["sbnunu::Im{cR}"], u)
+        _re_cvl(p["sbnunu::Re{cVL}"], u),
+        _im_cvl(p["sbnunu::Im{cVL}"], u),
+        _re_cvr(p["sbnunu::Re{cVR}"], u),
+        _im_cvr(p["sbnunu::Im{cVR}"], u),
+        _re_csl(p["sbnunu::Re{cSL}"], u),
+        _im_csl(p["sbnunu::Im{cSL}"], u),
+        _re_csr(p["sbnunu::Re{cSR}"], u),
+        _im_csr(p["sbnunu::Im{cSR}"], u),
+        _re_ctl(p["sbnunu::Re{cTL}"], u),
+        _im_ctl(p["sbnunu::Im{cTL}"], u)
     {
     }
 
@@ -483,9 +489,12 @@ namespace eos
     {
         WilsonCoefficients<wc::SBNuNu> result;
 
-        result._coefficients = std::array<complex<double>, 2>{{
-            complex<double>(_re_cl,  _im_cl),
-            complex<double>(_re_cr,  _im_cr)
+        result._coefficients = std::array<complex<double>, 5>{{
+            complex<double>(_re_cvl,  _im_cvl),
+            complex<double>(_re_cvr,  _im_cvr),
+            complex<double>(_re_csl,  _im_csl),
+            complex<double>(_re_csr,  _im_csr),
+            complex<double>(_re_ctl,  _im_ctl)
         }};
 
         if (cp_conjugate)
