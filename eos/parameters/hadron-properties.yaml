@@ -665,6 +665,60 @@ groups:
           latex:    '$(\delta^{\pi})^2(1\,\GeV)$'
           unit:     'GeV^2'
           comments: 'cf. [DKMMO:2008A]'
+      # Kaon LCDA parameters
+      'K::a1@1GeV' :
+          central: -0.07
+          min:     -0.10
+          max:     -0.04
+          latex:    '$a^{\pi}_1(1\,\GeV)$'
+          unit:     '1'
+      'K::a2@1GeV' :
+          central: +0.24
+          min:     +0.16
+          max:     +0.32
+          latex:    '$a^{\pi}_2(1\,\GeV)$'
+          unit:     '1'
+      'K::f3@1GeV' :
+          central: +0.0045
+          min:     +0.0030
+          max:     +0.0060
+          latex:    '$f^{K}_3(1\,\GeV)$'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+      'K::omega3@1GeV' :
+          central: -1.5
+          min:     -2.2
+          max:     -0.8
+          latex:    '$\omega^{K}_3(1\,\GeV)$'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
+      'K::lambda3@1GeV' :
+          central:  1.6
+          min:      2.3
+          max:      0.7
+          latex:    '$\lambda^{K}_3(1\,\GeV)$'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
+      'K::omega4@1GeV' :
+          central: +0.2
+          min:     +0.2
+          max:     +0.2
+          latex:    '$\omega^{K}_4(1\,\GeV)$'
+          unit:     '1'
+          comments: 'cf. [DKMMO:2008A]'
+      'K::delta^2@1GeV' :
+          central: +0.18
+          min:     +0.12
+          max:     +0.24
+          latex:    '$(\delta^{K})^2(1\,\GeV)$'
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+      'K::kappa4@1GeV' :
+          central: -0.09
+          min:     -0.11
+          max:     -0.07
+          latex:    '$(\kappa_{4K})(1\,\GeV)$'
+          unit:     'GeV^2'
       # K^* LCDA parameters
       'K^*::a_1_para@1GeV' :
           central: +0.06
