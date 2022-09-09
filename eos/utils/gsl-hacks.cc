@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2022 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -68,7 +68,7 @@ namespace eos
 
         void gsl_error_handler_hack()
         {
-            gsl_error_handler_t * previous_gsl_error_handler = gsl_set_error_handler(&gsl_error_handler);
+            gsl_error_handler_t * previous_gsl_error_handler __attribute__ ((unused)) = gsl_set_error_handler(&gsl_error_handler);
         }
     }
 }
