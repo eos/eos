@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (c) 2020 Danny van Dyk
+# Copyright (c) 2020-2022 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -448,24 +448,25 @@ def main():
     parser = _parser()
     args = parser.parse_args()
 
-    if args.verbose > 3:
-        args.verbose = 3
-
-    levels = {
-        0: logging.ERROR,
-        1: logging.WARNING,
-        2: logging.INFO,
-        3: logging.DEBUG
-    }
-
-    logging.basicConfig(level=levels[args.verbose])
-
     if not 'cmd' in args:
         parser.print_help()
     elif not callable(args.cmd):
         parser.print_help()
     else:
+        if args.verbose > 3:
+            args.verbose = 3
+
+        levels = {
+            0: logging.ERROR,
+            1: logging.WARNING,
+            2: logging.INFO,
+            3: logging.DEBUG
+        }
+
+        logging.basicConfig(level=levels[args.verbose])
+
         args.cmd(args)
+
 
 
 def make_analysis_file(args):
