@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011-2022 Danny van Dyk
  *
  * Based upon 'paludis/util/log.cc', which is
  *
@@ -259,7 +259,7 @@ namespace eos
 
     LogMessageHandler::~LogMessageHandler()
     {
-        if ((! std::uncaught_exception()) && (! _message.empty()))
+        if ((0 == std::uncaught_exceptions()) && (! _message.empty()))
         {
             _log->_message(_id, _log_level, _message);
         }
