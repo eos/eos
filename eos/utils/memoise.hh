@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2022 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -43,9 +43,9 @@ namespace std
         {
             return *reinterpret_cast<const uint64_t *>(&u);
         }
-        else if (sizeof(U_) == sizeof(uint32_t))
+        else if (sizeof(U_) == sizeof(int32_t))
         {
-            return static_cast<const uint64_t>(*reinterpret_cast<const uint32_t *>(&u));
+            return static_cast<uint64_t>(*reinterpret_cast<const uint32_t *>(&u));
         }
     }
 
