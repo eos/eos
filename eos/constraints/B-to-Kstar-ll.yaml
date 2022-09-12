@@ -214,7 +214,7 @@ B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@Belle:2016A:
     mean: 0.43
     sigma-stat: {hi: 0.26, lo: -0.28}
     sigma-sys: {hi: 0.10, lo: -0.10}
-B^0->K^*0mu^+mu^-::P'_5[10.09,6.00]@Belle:2016A:
+B^0->K^*0mu^+mu^-::P'_5[10.09,12.90]@Belle:2016A:
     type: Gaussian
     observable: B->K^*ll::P'_5
     kinematics: {q2_min: 10.09, q2_max: 12.90}
