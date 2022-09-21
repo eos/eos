@@ -24,6 +24,8 @@
 
 namespace eos
 {
+    using namespace std::complex_literals;
+
     using std::abs;
     using std::complex;
     using std::polar;
