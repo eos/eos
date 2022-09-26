@@ -206,6 +206,11 @@ BES:2008A:
   inspire-id: BES:2008rkr
   title: Measurements of the line shapes of D anti-D production and the ratio of the production rates of D+ D- and
     D0 anti-D0 in e+ e- annihilation at psi(3770) resonance
+BES:2017A:
+  authors: Julin, Andy Jarod
+  collaboration: BES
+  inspire-id: Julin:2017jcl
+  title: Measurement of $D\overline{D}$ Decays from the psi(3770) Resonance
 BES:2021A:
   authors: Ablikim, M. et al.
   collaboration: BESIII
