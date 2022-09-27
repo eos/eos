@@ -85,7 +85,7 @@ namespace eos
     	static const std::vector<OptionSpecification> options;
 
         std::function<double (const double &)> m_Q_msbar; //mass down-type quarks
-        std::function<complex<double> ()> v_Qc; //CKM element
+        std::function<complex<double> ()> v_cQ; //CKM element
         std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
 
         GSL::QAGS::Config int_config;
@@ -132,7 +132,7 @@ namespace eos
 
         inline std::string _P() const
         {
-            const char U = opt_Q.value()[0]; //changed
+            const char Q = opt_Q.value()[0]; //changed
             const char q = opt_q.value()[0];
             const std::string I = opt_I.value();
             const auto p = process_map.find(std::make_tuple(Q, q, I)); //changed
@@ -357,7 +357,7 @@ namespace eos
         // differential decay width
         double differential_decay_width(const double & s) const
         {
-            return normalized_differential_decay_width(s) * std::norm(v_Qc()); //changed v_Ub -> v_Qc
+            return normalized_differential_decay_width(s) * std::norm(v_cQ()); //changed v_Ub -> v_cQ
         }
 
         // differential branching_ratio
