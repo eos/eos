@@ -6,6 +6,7 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosformfactors.la
 libeosformfactors_la_SOURCES = \
+	analytic-d-to-pi.hh analytic-d-to-pi.cc \
 	analytic-b-to-pi.hh analytic-b-to-pi.cc \
 	analytic-b-to-pi-pi.hh analytic-b-to-pi-pi.cc \
 	analytic-b-to-p-lcsr.hh analytic-b-to-p-lcsr-impl.hh \
@@ -46,6 +47,7 @@ libeosformfactors_la_LIBADD = \
 
 include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \
+	analytic-d-to-pi.hh \
 	analytic-b-to-pi.hh \
 	analytic-b-to-pi-pi.hh \
 	b-lcdas.hh \

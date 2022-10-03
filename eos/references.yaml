@@ -1125,6 +1125,13 @@ KM:2005A:
     id: oai:arXiv.org:hep-ph/0502060
   inspire-id: Kruger:2005ep
   title: Probing new physics via the transverse amplitudes of $B^0\to K^{*0} (\to K^- \pi^+) \ell^+\ell^-$ at large recoil
+KMMO:2009A:
+  authors: Khodjamirian, A. and Klein, Ch. and Mannel, Th. and Offen, N.
+  eprint:
+    arxive: arXiv
+    id: oai:arxiv.org:0907.2842
+  inspire-id: Khodjamirian:2009ys
+  title: Semileptonic charm decays $D\!\to\! \pi  \ell \nu_\ell$ and $D\!\to\! K \ell \nu_\ell$ from QCD Light-Cone Sum Rules 
 KMO:2005A:
   authors: Khodjamirian, A. and Mannel, Th. and Offen, N.
   eprint:
