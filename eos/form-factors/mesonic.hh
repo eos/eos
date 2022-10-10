@@ -84,7 +84,6 @@ namespace eos
             virtual double f_perp_T(const double & q2) const = 0;
             virtual double f_para_T(const double & q2) const = 0;
             virtual double f_long_T(const double & q2) const = 0;
-            virtual double f_long_T_Normalized(const double & q2) const = 0;
 
             // for access in the complex q2 plane
             virtual complex<double> v(const complex<double> & q2) const;

@@ -158,11 +158,6 @@ namespace eos
         return 0.;
     }
 
-    double
-    KMPW2010FormFactors<PToV>::f_long_T_Normalized(const double &) const
-    {
-        return 0.;
-    }
 
     double
     KMPW2010FormFactors<PToP>::_calc_z(const double & s)

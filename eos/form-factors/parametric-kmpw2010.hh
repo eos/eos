@@ -80,8 +80,6 @@ namespace eos
             virtual double f_para_T(const double &) const;
 
             virtual double f_long_T(const double &) const;
-
-            virtual double f_long_T_Normalized(const double &) const;
     };
 
     extern template class KMPW2010FormFactors<PToV>;

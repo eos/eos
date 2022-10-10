@@ -674,9 +674,6 @@ namespace eos
                 make_form_factor_adapter("B->K^*::F_long_T(q2)", R"(\mathcal{F}_{0,T}^{B\to K^*}(q^2))",
                         &FormFactors<PToV>::f_long_T, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->K^*::F_long_T(q2)_Normalized",
-                        &FormFactors<PToV>::f_long_T_Normalized, std::make_tuple("q2")),
-
                 make_expression_observable("B->K^*::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
                         Unit::None(),
                         R"( <<B->K^*::V(q2)>> / <<B->K^*::A_1(q2)>> )"),
@@ -739,10 +736,6 @@ namespace eos
                 make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)", R"(\mathcal{F}_{0,T}(q^2)/\mathcal{F}_0(q^2))",
                         Unit::None(),
                         R"( <<B->K^*::F_long_T(q2)>> / <<B->K^*::F_long(q2)>> )"),
-
-                make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} \mathcal{F}_{0,T}(q^2)/\mathcal{F}_0(q^2))",
-                        Unit::None(),
-                        R"( <<B->K^*::F_long_T(q2)_Normalized>> / <<B->K^*::F_long(q2)>> )"),
             }
         );
 
@@ -1110,9 +1103,6 @@ namespace eos
                 make_form_factor_adapter("B_s->phi::F_long_T(q2)", R"(\mathcal{F}_{0,T}^{B_s\to \phi}(q^2))",
                         &FormFactors<PToV>::f_long_T, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B_s->phi::F_long_T(q2)_Normalized",
-                        &FormFactors<PToV>::f_long_T_Normalized, std::make_tuple("q2")),
-
                 make_expression_observable("B_s->phi::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
                         Unit::None(),
                         R"( <<B_s->phi::V(q2)>> / <<B_s->phi::A_1(q2)>> )"),
@@ -1175,10 +1165,6 @@ namespace eos
                 make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)", R"(\mathcal{F}_{0,T}(q^2)/\mathcal{F}_0(q^2))",
                         Unit::None(),
                         R"( <<B_s->phi::F_long_T(q2)>> / <<B_s->phi::F_long(q2)>> )"),
-
-                make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} \mathcal{F}_{0,T}(q^2)/\mathcal{F}_0(q^2))",
-                        Unit::None(),
-                        R"( <<B_s->phi::F_long_T(q2)_Normalized>> / <<B_s->phi::F_long(q2)>> )"),
             }
         );
 

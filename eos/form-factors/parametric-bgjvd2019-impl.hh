@@ -796,13 +796,6 @@ namespace eos
     }
 
     template <typename Process_>
-    double
-    HQETFormFactors<Process_, PToV>::f_long_T_Normalized(const double &) const
-    {
-        return 0.;
-    }
-
-    template <typename Process_>
     Diagnostics
     HQETFormFactors<Process_, PToV>::diagnostics() const
     {

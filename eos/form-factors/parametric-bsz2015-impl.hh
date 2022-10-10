@@ -308,16 +308,6 @@ namespace eos
 
     template <typename Process_>
     double
-    BSZ2015FormFactors<Process_, PToV>::f_long_T_Normalized(const double & s) const
-    {
-        const double lambda = eos::lambda(_mB2, _mV2, s);
-
-        return _mB2 * (_mB2 + 3*_mV2 - s) / (2 * pow(_mB, 3) * _mV) * t_2(s)
-                - _mB2 * lambda / (2 * pow(_mB, 3) * _mV * (_mB2 - _mV2)) * t_3(s);
-    }
-
-    template <typename Process_>
-    double
     BSZ2015FormFactors<Process_, PToP>::_calc_tau_0(const double & m_B, const double & m_P)
     {
         const double tau_p = power_of<2>(m_B + m_P);
