@@ -108,8 +108,6 @@ namespace eos
             virtual double f_para_T(const double & s) const;
 
             virtual double f_long_T(const double & s) const;
-
-            virtual double f_long_T_Normalized(const double & s) const;
     };
 
     extern template class BSZ2015FormFactors<BToRho, PToV>;

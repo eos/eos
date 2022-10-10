@@ -306,7 +306,6 @@ namespace eos
             virtual double f_perp_T(const double &) const override;
             virtual double f_para_T(const double &) const override;
             virtual double f_long_T(const double &) const override;
-            virtual double f_long_T_Normalized(const double &) const override;
 
             Diagnostics diagnostics() const;
     };

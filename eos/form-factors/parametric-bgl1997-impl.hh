@@ -368,13 +368,6 @@ namespace eos
         return 0.0;  //  TODO
     }
 
-    double
-    BGL1997FormFactors<BToDstar>::f_long_T_Normalized(const double & /*s*/) const
-    {
-        return 0.0;  //  TODO
-    }
-
-
 
     std::string
     BGL1997FormFactors<BToD>::_par_name(const std::string & ff_name)

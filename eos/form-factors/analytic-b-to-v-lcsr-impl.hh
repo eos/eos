@@ -23326,13 +23326,6 @@ namespace eos
     }
 
     template <typename Process_>
-    double
-    AnalyticFormFactorBToVLCSR<Process_>::f_long_T_Normalized(const double &) const
-    {
-        return 0.0;
-    }
-
-    template <typename Process_>
     Diagnostics
     AnalyticFormFactorBToVLCSR<Process_>::diagnostics() const
     {
