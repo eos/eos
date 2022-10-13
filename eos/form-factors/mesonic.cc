@@ -253,6 +253,11 @@ namespace eos
         { "B->D::BGL1997",       &BGL1997FormFactors<BToD>::make                  },
         { "B_s->D_s::BSZ2015",   &BSZ2015FormFactors<BsToDs, PToP>::make          },
         { "B_s->D_s::HQET",      &HQETFormFactors<BsToDs,    PToP>::make          },
+        // c -> d
+        { "D->pi::BSZ2015",      &BSZ2015FormFactors<DToPi,  PToP>::make          },
+        { "D_s->K::BSZ2015",     &BSZ2015FormFactors<DsToK,  PToP>::make          },
+        // c -> s
+        { "D->K::BSZ2015",       &BSZ2015FormFactors<DToK,   PToP>::make          },
         // analytic computations
         { "B->pi::DKMMO2008",    &AnalyticFormFactorBToPiDKMMO2008::make          },
         { "B->pi::B-LCSR",       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
