@@ -92,6 +92,43 @@ namespace eos
         static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
 
+    struct DToPi {
+        using Transition = PToP;
+        static constexpr const char * label = "D->pi";
+        static constexpr const double m_B = 1.867;
+        static constexpr const double m_P = 0.135;
+        static constexpr const double m2_Br1m = 2.007 * 2.007; // D^*0
+        static constexpr const double m2_Br0p = 2.300 * 2.300; // D^*0 scalar
+        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
+        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+        static constexpr const bool uses_tensor_form_factors = true;
+    };
+
+    struct DToK {
+        using Transition = PToP;
+        static constexpr const char * label = "D->K";
+        static constexpr const double m_B = 1.867;
+        static constexpr const double m_P = 0.492;
+        static constexpr const double m2_Br1m = 2.714 * 2.714; // Ds1
+        static constexpr const double m2_Br0p = 2.317 * 2.317; // Ds0
+        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
+        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+        static constexpr const bool uses_tensor_form_factors = true;
+    };
+
+    struct DsToK {
+        using Transition = PToP;
+        static constexpr const char * label = "D_s->K";
+        static constexpr const double m_B = 1.968;
+        static constexpr const double m_P = 0.492;
+        static constexpr const double m2_Br1m = 2.007 * 2.007; // D^*0
+        static constexpr const double m2_Br0p = 2.300 * 2.300; // D^*0 scalar
+        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
+        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+        static constexpr const bool uses_tensor_form_factors = true;
+    };
+
+
     /* P -> V Processes */
 
     struct BToDstar {

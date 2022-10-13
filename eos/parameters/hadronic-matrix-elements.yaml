@@ -3045,6 +3045,43 @@ groups:
           unit:     'GeV^-2'
   # }}}
 
+  # Parameters in D -> P Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $D\to P$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for D->pi inspired by [BSZ:2015A]
+      'D->pi::alpha^%1%_%2%@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$\alpha_{%1%,%2%}^{D \to \pi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - ["0", "1", "2"]
+      # form factor parameters for D_s->K inspired by [BSZ:2015A]
+      'D_s->K::alpha^%1%_%2%@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$\alpha_{%1%,%2%}^{D_s \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - ["0", "1", "2"]
+      # form factor parameters for D->K inspired by [BSZ:2015A]
+      'D->K::alpha^%1%_%2%@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$\alpha_{%1%,%2%}^{D \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - ["0", "1", "2"]
+  # }}}
+
   # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
   # {{{
   - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
