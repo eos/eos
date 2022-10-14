@@ -21,13 +21,15 @@ Basic rules are used to parse the input string
 
   * Spaces are ignored and can be added arbitrarily for readability.
   * The parser supports usual arithmetic operations ``+``, ``-``, ``*``, ``/`` and ``^`` and parenthesized expressions; usual precedence rules of arithmetics apply.
-  * ``<<...>>`` encapsulates the name of an EOS object, which must either be the name of parameter or an observables.
+  * ``<<...>>`` encapsulates the name of an EOS object, which must either be the name of a parameter or of an observable.
     Any such must therefore adhere to the restrictions of ``eos.QualifiedName``, for example ``<<mass::mu>>`` or ``<<B_u->lnu::BR>>``.
+  * ``{...}`` enscapsulates the name of a kinematic variable, e.g. ``{q2}``.
 
 The following strings are valid observable expressions
 
   * ``"(<<mass::B_d>>^2 - 4 * <<mass::mu>>^2) ^ 0.5"``
   * ``"1.0 / <<B_u->lnu::BR@l=mu>>"``
+  * ``"<<B->K::f_+(q2)>> * (1 - {q2} / <<mass::B_d>>^2)"``
 
 Aliasing
 ~~~~~~~~
