@@ -86,7 +86,6 @@ namespace eos::exp
                  kinematics_specification(kinematics_specification)
             {
             }
-
     };
 
     class ObservableExpression
