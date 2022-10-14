@@ -86,7 +86,7 @@ class ExpressionParserTest :
 
                 TEST_CHECK(test.completed);
                 TEST_CHECK_EQUAL(test.e.accept_returning<double>(evaluator), 7.0);
-                TEST_CHECK_EQUAL("BinaryExpression(ConstantExpression(1) + BinaryExpression(ConstantExpression(2) * ConstantExpression(3)))", out.str());
+                TEST_CHECK_EQUAL_STR("BinaryExpression(ConstantExpression(1) + BinaryExpression(ConstantExpression(2) * ConstantExpression(3)))", out.str());
 
                 // Simple exponentiation
                 ExpressionTest test2("1+2^2*3");
@@ -101,6 +101,8 @@ class ExpressionParserTest :
 
             // testing parsing and evaluation of observables
             {
+                // test::obs1 is a test observable that requires two kinematic specifications, q2_min and q2_max
+                // it returns p[mass::c] * multiplier * (q2_max - q2_min)
                 ExpressionTest test("<<test::obs1;multiplier=2>>[q2_min=>q2_min_num] / <<test::obs1>>[q2_min=0.0]");
 
                 std::stringstream out;
@@ -131,16 +133,6 @@ class ExpressionParserTest :
             // Test numerical evaluation
             {
                 ExpressionTest test("<<test::obs1;multiplier=2>>[q2_min=>q2_min_num] / <<test::obs1>>[q2_min=>q2_min_denom]");
-
-                // Extract kinematic variables from an expression
-                ExpressionKinematicReader kinematic_reader;
-                std::set<std::string> kinematic_set = test.e.accept_returning<std::set<std::string>>(kinematic_reader);
-
-                for (auto kin : kinematic_set)
-                {
-                    std::cout << kin << std::endl;
-                }
-
 
                 Parameters p = Parameters::Defaults();
                 p["mass::c"] = 1.2;
