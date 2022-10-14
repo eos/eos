@@ -45,6 +45,7 @@ namespace eos
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> primary_expr;
         qi::rule<Iterator, eos::exp::ConstantExpression()       , ascii::space_type> constant;
         qi::rule<Iterator, std::string()                        , ascii::space_type> observable_name;
+        qi::rule<Iterator, std::string()                        , ascii::space_type> kinematic_variable_name;
 
         using KinematicsSpecification = eos::exp::KinematicsSpecification;
 

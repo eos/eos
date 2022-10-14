@@ -75,6 +75,28 @@ namespace eos::exp
             void operator() (const std::pair<std::string, std::string> & alias) { aliases.insert(alias); }
     };
 
+    class KinematicVariableNameExpression
+    {
+        public:
+            std::string variable_name;
+
+            KinematicVariableNameExpression(const std::string & variable_name) :
+                 variable_name(variable_name)
+            {
+            }
+    };
+
+    class KinematicVariableExpression
+    {
+        public:
+            KinematicVariable kinematic_variable;
+
+            KinematicVariableExpression(const KinematicVariable & kinematic_variable) :
+                kinematic_variable(kinematic_variable)
+            {
+            }
+    };
+
     class ObservableNameExpression
     {
         public:
