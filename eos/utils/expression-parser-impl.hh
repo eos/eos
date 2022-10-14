@@ -67,14 +67,27 @@ namespace eos
             return eos::exp::Expression(eos::exp::ObservableNameExpression(name, spec));
         };
 
+        auto make_kinematic_variable = [] (const std::string & name)
+        {
+            return eos::exp::Expression(eos::exp::KinematicVariableNameExpression(name));
+        };
+
         primary_expr =
               ('(' >> expression >> ')')                   [ _val = _1 ]
             | constant                                     [ _val = _1 ]
             | (observable_name >> kinematics)              [ _val = phx::bind(make_observable, _1, _2) ]
             | observable_name                              [ _val = phx::bind(make_observable, _1, KinematicsSpecification()) ]
+            | kinematic_variable_name                      [ _val = phx::bind(make_kinematic_variable, _1) ]
             ;
 
         constant = double_ | int_;
+
+        kinematic_variable_name =
+              "{"
+            >> as_string [ lexeme [ *(char_ - "}")  ] ] [ _val = _1 ]
+            >> "}"
+            ;
+
         observable_name =
               "<<"
             >> as_string [ lexeme [ *(char_ - ">>")  ] ] [ _val = _1 ]

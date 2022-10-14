@@ -37,6 +37,10 @@ namespace eos::exp
 
             double visit(ObservableExpression & e);
 
+            double visit(KinematicVariableNameExpression & e);
+
+            double visit(KinematicVariableExpression & e);
+
             double visit(CachedObservableExpression & e);
 
     };

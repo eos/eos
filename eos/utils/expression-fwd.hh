@@ -26,9 +26,19 @@ namespace eos::exp
     class ConstantExpression;
     class ObservableNameExpression;
     class ObservableExpression;
+    class KinematicVariableNameExpression;
+    class KinematicVariableExpression;
     class CachedObservableExpression;
 
-    using Expression = OneOf<BinaryExpression, ConstantExpression, ObservableNameExpression, ObservableExpression, CachedObservableExpression>;
+    using Expression = OneOf<
+        BinaryExpression,
+        ConstantExpression,
+        ObservableNameExpression,
+        ObservableExpression,
+        KinematicVariableNameExpression,
+        KinematicVariableExpression,
+        CachedObservableExpression
+    >;
 }
 
 #endif

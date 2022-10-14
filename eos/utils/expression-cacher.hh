@@ -41,6 +41,10 @@ namespace eos::exp
 
             Expression visit(const ObservableExpression & e);
 
+            Expression visit(const KinematicVariableNameExpression & e);
+
+            Expression visit(const KinematicVariableExpression & e);
+
             Expression visit(const CachedObservableExpression & e);
     };
 }
