@@ -19,8 +19,8 @@
 import eos
 
 project = 'EOS'
-copyright = '2019-2021, Danny van Dyk and others'
-author = 'Danny van Dyk and others'
+copyright = '2019-2022, The EOS Authors'
+author = 'The EOS Authors'
 master_doc = 'index'
 
 # The full version, including alpha/beta/rc tags
