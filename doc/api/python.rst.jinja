@@ -6,6 +6,9 @@ Python API
 Module ``eos``
 **************
 
+Basic Classes
+=============
+
 EOS provides its basic functionality via the main ``eos`` module.
 
 .. autoclass:: eos.Analysis
@@ -79,6 +82,39 @@ EOS provides its basic functionality via the main ``eos`` module.
 
 .. autoclass:: eos.Unit
    :members:
+
+
+Common Tasks
+============
+
+In addition to the basic classes, EOS provides functions to carry out often-repeated tasks,
+such as finding the mode of a posterior, sampling from a posterior, and similar.
+Tasks require a description of the statistical analysis (see :class:`eos.Analysis`) by means
+of an analysis file. For a documentation of its format, see :class:`eos.AnalysisFile`.
+
+Tasks store their results in a hierarchy for directories below a user-provided base directory.
+This ensures that tasks can readily use results produced by another task.
+
+Mode Finding
+------------
+
+.. autofunction:: eos.find_mode
+
+Sampling and Auxilliary Tasks
+-----------------------------
+
+.. autofunction:: eos.sample_mcmc
+
+.. autofunction:: eos.find_clusters
+
+.. autofunction:: eos.mixture_product
+
+.. autofunction:: eos.sample_pmc
+
+.. autofunction:: eos.sample_nested
+
+.. autofunction:: eos.predict_observables
+
 
 *******************
 Module ``eos.data``
