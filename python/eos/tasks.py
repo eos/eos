@@ -306,8 +306,14 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     :type weight_threshold: 0.0 < float <= 1.0, optional.
     :param sigma_test_stat: If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
     :type sigma_test_stat: list or iterable
-    :param initial_proposal: Specify where the initial proposal should be taken from; 'clusters' (default): use the proposal obtained using `find-clusters`;
-    'product': use the proposal obtained from `mixture_product`; 'pmc': continue sampling from the previous `sample-pmc` results.
+    :param initial_proposal: Specify where the initial proposal should be taken from:
+
+     * ``clusters``: use the proposal obtained using `find-clusters` (default)
+
+     * ``product``: use the proposal obtained from `mixture_product`
+
+     * ``pmc``: continue sampling from the previous `sample-pmc` results.
+
     :type initial_proposal: str, optional
     :param pmc_iterations: Maximum number of update of the PMC, changing this value may make the update unstable.
     :type pmc_iterations: int > 0, optional, advanced
