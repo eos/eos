@@ -321,11 +321,9 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     :type pmc_rel_tol: float > 0.0, optional, advanced
     :param pmc_abs_tol: Absolute tolerance of the PMC. If two consecutive values of the current density log-likelihood are smaller than this value, the convergence is declared.
     :type pmc_abs_tol: float > 0.0, optional, advanced
-    :param pmc_lookback: Use reweighted samples from the previous update steps when adjusting the mixture density.
-            The parameter determines the number of update steps to "look back".
-            The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
+    :param pmc_lookback: Use reweighted samples from the previous update steps when adjusting the mixture density. The parameter determines the number of update steps to "look back". The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
     :type pmc_lookback: int >= 0, optional
-     """
+    """
 
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
