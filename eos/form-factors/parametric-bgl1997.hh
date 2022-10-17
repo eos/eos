@@ -53,7 +53,8 @@ namespace eos
         public FormFactors<PToV>
     {
         private:
-            std::array<UsedParameter, 4> _a_g, _a_f, _a_F1, _a_F2;
+            std::array<UsedParameter, 4> _a_g, _a_f;
+            std::array<UsedParameter, 3> _a_F1, _a_F2;
             std::array<UsedParameter, 4> _a_T1;
             std::array<UsedParameter, 3> _a_T2, _a_T23;
 
@@ -73,6 +74,8 @@ namespace eos
             double F1(const double & s) const;
             double F2(const double & s) const;
 
+            double a_F1_0() const;
+            double a_F2_0() const;
             double a_T2_0() const;
             double a_T23_0() const;
 

@@ -97,11 +97,11 @@ namespace eos
                  UsedParameter(p[_par_name("f_1")],  *this),
                  UsedParameter(p[_par_name("f_2")],  *this),
                  UsedParameter(p[_par_name("f_3")],  *this) }},
-        _a_F1{{  UsedParameter(p[_par_name("F1_0")], *this),
+        _a_F1{{  /* F1_0 parameter determined by identity F1(t_-) = (mB - mV) * f(t_-) */
                  UsedParameter(p[_par_name("F1_1")], *this),
                  UsedParameter(p[_par_name("F1_2")], *this),
                  UsedParameter(p[_par_name("F1_3")], *this) }},
-        _a_F2{{  UsedParameter(p[_par_name("F2_0")], *this),
+        _a_F2{{  /* F2_0 parameter determined by identity between F2 and F1 at q2 = 0 */
                  UsedParameter(p[_par_name("F2_1")], *this),
                  UsedParameter(p[_par_name("F2_2")], *this),
                  UsedParameter(p[_par_name("F2_3")], *this) }},
@@ -159,15 +159,54 @@ namespace eos
     }
 
     double
+    BGL1997FormFactors<BToDstar>::a_F1_0() const
+    {
+        const double x_f  = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 24.0, 1, 1, 1, _chi_1p);
+        const double x_F1 = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 48.0, 1, 1, 2, _chi_1p)
+                          * (_mB - _mV);
+
+        const double z = _z(_t_m, _t_0);
+        std::array<double, 4> an, zn;
+        zn[0] = 1.0;
+        an[0]  = x_F1 * this->_a_f[0] * zn[0];
+        for (unsigned i = 1 ; i < an.size() ; ++i)
+        {
+            an[i] = x_F1 * this->_a_f[i] - x_f * this->_a_F1[i - 1];
+            zn[i] = z * zn[i - 1];
+        }
+        return std::inner_product(an.begin(), an.end(), zn.begin(), 0.0) / (zn[0] * x_f);
+    }
+
+    double
     BGL1997FormFactors<BToDstar>::F1(const double & s) const
     {
         // resonances for 1^+
         const double blaschke = _z(s, 6.739 * 6.739) * _z(s, 6.750 * 6.750) * _z(s, 7.145 * 7.145) * _z(s, 7.150 * 7.150);
         const double phi      = _phi(s, _t_0, 48, 1, 1, 2, _chi_1p);
         const double z        = _z(s, _t_0);
-        const double series   = _a_F1[0] + _a_F1[1] * z + _a_F1[2] * z * z + _a_F1[3] * z * z * z;
+        const double series   = a_F1_0() + _a_F1[0] * z + _a_F1[1] * z * z + _a_F1[2] * z * z * z;
 
         return series / phi / blaschke;
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::a_F2_0() const
+    {
+        const double r    = _mV / _mB;
+        const double wmax = (_mB2 + _mV2) / (2.0 * _mB * _mV);
+        const double x_F1 = _z(0.0, 6.739 * 6.739) * _z(0.0, 6.750 * 6.750) * _z(0.0, 7.145 * 7.145) * _z(0.0, 7.150 * 7.150) * _phi(0.0, _t_0, 48.0, 1, 1, 2, _chi_1p);
+        const double x_F2 = _z(0.0, 6.275 * 6.275) * _z(0.0, 6.871 * 6.871) * _z(0.0, 7.250 * 7.250) *                          _phi(0.0, _t_0, 64.0, 3, 3, 1, _chi_0m)
+                          * (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * _mB2);
+        const double z = _z(0.0, _t_0);
+        std::array<double, 4> an, zn;
+        zn[0] = 1.0;
+        an[0]  = x_F2 * this->a_F1_0() * zn[0]; // a_F1[0] is the linear coefficient; we need the constant part
+        for (unsigned i = 1 ; i < an.size() ; ++i)
+        {
+            an[i] = x_F2 * this->_a_F1[i - 1] - x_F1 * this->_a_F2[i - 1];
+            zn[i] = z * zn[i - 1];
+        }
+        return std::inner_product(an.begin(), an.end(), zn.begin(), 0.0) / (zn[0] * x_F1);
     }
 
     double
@@ -177,7 +216,7 @@ namespace eos
         const double blaschke = _z(s, 6.275 * 6.275) * _z(s, 6.871 * 6.871) * _z(s, 7.250 * 7.250);
         const double phi      = _phi(s, _t_0, 64, 3, 3, 1, _chi_0m);
         const double z        = _z(s, _t_0);
-        const double series   = _a_F2[0] + _a_F2[1] * z + _a_F2[2] * z * z + _a_F2[3] * z * z * z;
+        const double series   = a_F2_0() + _a_F2[0] * z + _a_F2[1] * z * z + _a_F2[2] * z * z * z;
 
         return series / phi / blaschke;
     }

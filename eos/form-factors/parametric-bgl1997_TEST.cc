@@ -78,6 +78,8 @@ class BGL1997FormFactorsTest :
                 const double mB(BToDstar::mB);
                 const double mV(BToDstar::mV);
                 const double t_m = (mB - mV) * (mB - mV);
+                const double r   = mV / mB, wmax = (mB * mB + mV * mV) / (2.0 * mB * mV);
+                const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);
                 BGL1997FormFactors<BToDstar> ff(p, Options{ });
 
                 p["B->D^*::a^g_0@BGL1997"] = 0.1e-02;
@@ -90,12 +92,12 @@ class BGL1997FormFactorsTest :
                 p["B->D^*::a^f_2@BGL1997"] = 0.3e-02;
                 p["B->D^*::a^f_3@BGL1997"] = 0.4e-02;
 
-                p["B->D^*::a^F1_0@BGL1997"] = 0.1e-02;
+                /* F1_0 parameter determined by identity F1(t_-) = (mB - mV) * f(t_-) */
                 p["B->D^*::a^F1_1@BGL1997"] = 0.2e-02;
                 p["B->D^*::a^F1_2@BGL1997"] = 0.3e-02;
                 p["B->D^*::a^F1_3@BGL1997"] = 0.4e-02;
 
-                p["B->D^*::a^F2_0@BGL1997"] = 0.1e-02;
+                /* F2_0 parameter determined by identity between F2 and F1 at q2 = 0 */
                 p["B->D^*::a^F2_1@BGL1997"] = 0.2e-02;
                 p["B->D^*::a^F2_2@BGL1997"] = 0.3e-02;
                 p["B->D^*::a^F2_3@BGL1997"] = 0.4e-02;
@@ -123,13 +125,18 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.620714, ff.f(+1.0), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.647914, ff.f(+4.0), eps);
 
-                TEST_CHECK_NEARLY_EQUAL( 12.448531, ff.F1(-2.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 12.736923, ff.F1(+1.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 13.101888, ff.F1(+4.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 2.1225e-4, ff.a_F1_0(), 1.0e-8);
+                TEST_CHECK_NEARLY_EQUAL( 3.3597400, ff.F1(-2.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 3.1657300, ff.F1(+1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 2.9555500, ff.F1(+4.0), eps);
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0463648, ff.F2(-2.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0498538, ff.F2(+1.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0540411, ff.F2(+4.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 5.8478e-3, ff.a_F2_0(), 1.0e-7);
+                TEST_CHECK_NEARLY_EQUAL( 0.2546860, ff.F2(-2.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2803997, ff.F2(+1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.3115880, ff.F2(+4.0), eps);
+
+                TEST_CHECK_NEARLY_EQUAL( ff.F1(t_m), (mB - mV) * ff.f(t_m),  eps);
+                TEST_CHECK_NEARLY_EQUAL( ff.F2(0.0), F2factor  * ff.F1(0.0), eps);
 
                 TEST_CHECK_NEARLY_EQUAL( 0.0869380, ff.t_1(-2.0), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0928776, ff.t_1(+1.0), eps);
@@ -158,12 +165,13 @@ class BGL1997FormFactorsTest :
                 p["B->D^*::a^f_2@BGL1997"] = 0.2e-02;
                 p["B->D^*::a^f_3@BGL1997"] = 0.1e-02;
 
+                /* F1_0 parameter determined by identity F1(t_-) = (mB - mV) * f(t_-) */
                 p["B->D^*::a^F1_0@BGL1997"] = 0.4e-02;
                 p["B->D^*::a^F1_1@BGL1997"] = 0.3e-02;
                 p["B->D^*::a^F1_2@BGL1997"] = 0.2e-02;
                 p["B->D^*::a^F1_3@BGL1997"] = 0.1e-02;
 
-                p["B->D^*::a^F2_0@BGL1997"] = 0.4e-02;
+                /* F2_0 parameter determined by identity between F2 and F1 at q2 = 0 */
                 p["B->D^*::a^F2_1@BGL1997"] = 0.3e-02;
                 p["B->D^*::a^F2_2@BGL1997"] = 0.2e-02;
                 p["B->D^*::a^F2_3@BGL1997"] = 0.1e-02;
@@ -191,13 +199,18 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL( 2.410521, ff.f(+1.0), eps);
                 TEST_CHECK_NEARLY_EQUAL( 2.564134, ff.f(+4.0), eps);
 
-                TEST_CHECK_NEARLY_EQUAL( 47.474000, ff.F1(-2.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 49.463380, ff.F1(+1.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 51.850996, ff.F1(+4.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 7.3850e-4, ff.a_F1_0(), 1.0e-8);
+                TEST_CHECK_NEARLY_EQUAL( 9.8438000, ff.F1(-2.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 9.8358614, ff.F1(+1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 9.8422500, ff.F1(+4.0), eps);
 
-                TEST_CHECK_NEARLY_EQUAL( 0.176818, ff.F2(-2.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.193605, ff.F2(+1.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.213869, ff.F2(+4.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.789e-2, ff.a_F2_0(), 2.0e-6);
+                TEST_CHECK_NEARLY_EQUAL( 0.773754, ff.F2(-2.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.854227, ff.F2(+1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.951860, ff.F2(+4.0), eps);
+
+                TEST_CHECK_NEARLY_EQUAL( ff.F1(t_m), (mB - mV) * ff.f(t_m),  eps);
+                TEST_CHECK_NEARLY_EQUAL( ff.F2(0.0), F2factor  * ff.F1(0.0), eps);
 
                 TEST_CHECK_NEARLY_EQUAL( 0.331549, ff.t_1(-2.0), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.360687, ff.t_1(+1.0), eps);
