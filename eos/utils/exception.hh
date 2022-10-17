@@ -47,6 +47,13 @@ namespace eos
             InternalError(const std::string & message) throw ();
     };
 
+    class UnknownObservableError :
+        public Exception
+    {
+        public:
+            UnknownObservableError(const std::string & message) throw ();
+    };
+
     class GSLError :
         public Exception
     {

@@ -43,6 +43,11 @@ class ObservableTest :
                     observables.insert("mass::ratio", "m_r", Unit::None(), Options(), "<<mass::mu>> /* <<mass::tau>>")
                 );
 
+                TEST_CHECK_THROWS(
+                    UnknownObservableError,
+                    observables.insert("mass::ratio", "m_r", Unit::None(), Options(), "<<mass::qwerty>>")
+                );
+
                 observables.insert("mass::ratio", "m_r", Unit::None(), Options(), "<<mass::mu>> / <<mass::tau>>");
 
                 Parameters p = Parameters::Defaults();

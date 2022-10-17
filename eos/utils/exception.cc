@@ -41,6 +41,11 @@ namespace eos
     {
     }
 
+    UnknownObservableError::UnknownObservableError(const std::string & message) throw () :
+        Exception("Unknown Observable Error: " + message)
+    {
+    }
+
     GSLError::GSLError(const std::string & message) throw () :
         Exception("GSL Error: " + message)
     {

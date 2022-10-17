@@ -100,6 +100,8 @@ namespace eos
             }
         }
 
+        throw UnknownObservableError("Expression '" + name.full() + "' is neither a known Observable nor a Parameter");
+
         return ObservablePtr();
     }
 
