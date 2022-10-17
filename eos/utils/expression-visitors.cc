@@ -426,7 +426,7 @@ namespace eos::exp
             }
         }
 
-        throw InternalError("Expression '" + e.observable_name.full() + "' is neither a known Observable nor a Parameter");
+        throw UnknownObservableError("Expression '" + e.observable_name.full() + "' is neither a known Observable nor a Parameter");
     }
 
     std::set<std::string>
