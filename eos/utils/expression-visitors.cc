@@ -414,29 +414,30 @@ namespace eos::exp
     /*
      * ExpressionKinematicReader
      */
+    void
+    ExpressionKinematicReader::clear()
+    {
+        this->kinematics.clear();
+        this->aliases.clear();
+    }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const BinaryExpression & e)
     {
-        std::set<std::string> lhs_set = std::move(e.lhs.accept_returning<std::set<std::string>>(*this));
-        std::set<std::string> rhs_set = std::move(e.rhs.accept_returning<std::set<std::string>>(*this));
-        lhs_set.insert(rhs_set.begin(), rhs_set.end());
-
-        return lhs_set;
+        e.lhs.accept(*this);
+        e.rhs.accept(*this);
     }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const ConstantExpression &)
     {
-        std::set<std::string> empty_set;
-
-        return empty_set;
     }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const ObservableNameExpression & e)
     {
         std::set<std::string> kinematic_set;
+        std::set<std::string> alias_set;
 
         const auto & entries = impl::observable_entries;
         const auto & it = entries.find(e.observable_name);
@@ -455,14 +456,19 @@ namespace eos::exp
             for (const auto & value : kinematics_values)
             {
                 kinematic_set.erase(value.first);
+                alias_set.insert(value.first);
             }
             for (const auto & alias : kinematics_aliases)
             {
                 kinematic_set.erase(alias.first);
+                alias_set.insert(alias.first);
                 kinematic_set.insert(alias.second);
             }
 
-            return kinematic_set;
+            this->kinematics.insert(kinematic_set.begin(), kinematic_set.end());
+            this->aliases.insert(alias_set.begin(), alias_set.end());
+
+            return;
         }
 
         // otherwise check if 'e' matches the name of a parameter
@@ -474,17 +480,18 @@ namespace eos::exp
             auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == e.observable_name.full(); });
             if (parameters.end() != i)
             {
-                return kinematic_set;
+                return;
             }
         }
 
         throw UnknownObservableError("Expression '" + e.observable_name.full() + "' is neither a known Observable nor a Parameter");
     }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const ObservableExpression & e)
     {
         std::set<std::string> kinematic_set;
+        std::set<std::string> alias_set;
 
         const auto & kinematics_values = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
@@ -493,36 +500,36 @@ namespace eos::exp
         for (const auto & value : kinematics_values)
         {
             kinematic_set.erase(value.first);
+            alias_set.insert(value.first);
         }
         for (const auto & alias : kinematics_aliases)
         {
             kinematic_set.erase(alias.first);
+            alias_set.insert(alias.first);
             kinematic_set.insert(alias.second);
         }
 
-        return kinematic_set;
+        this->kinematics.insert(kinematic_set.begin(), kinematic_set.end());
+        this->aliases.insert(alias_set.begin(), alias_set.end());
     }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const KinematicVariableNameExpression & e)
     {
-        std::set<std::string> kinematic_set{e.variable_name};
-
-        return kinematic_set;
+        this->kinematics.insert(e.variable_name);
     }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const KinematicVariableExpression & e)
     {
-        std::set<std::string> kinematic_set{e.kinematic_variable.name()};
-
-        return kinematic_set;
+        this->kinematics.insert(e.kinematic_variable.name());
     }
 
-    std::set<std::string>
+    void
     ExpressionKinematicReader::visit(const CachedObservableExpression & e)
     {
         std::set<std::string> kinematic_set;
+        std::set<std::string> alias_set;
 
         const auto & kinematics_values = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
@@ -531,14 +538,17 @@ namespace eos::exp
         for (const auto & value : kinematics_values)
         {
             kinematic_set.erase(value.first);
+            alias_set.insert(value.first);
         }
         for (const auto & alias : kinematics_aliases)
         {
             kinematic_set.erase(alias.first);
+            alias_set.insert(alias.first);
             kinematic_set.insert(alias.second);
         }
 
-        return kinematic_set;
+        this->kinematics.insert(kinematic_set.begin(), kinematic_set.end());
+        this->aliases.insert(alias_set.begin(), alias_set.end());
     }
 
     /*

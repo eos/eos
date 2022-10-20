@@ -123,10 +123,22 @@ namespace eos
 
         // Read kinematic variables
         exp::ExpressionKinematicReader kinematic_reader;
+        expression.accept(kinematic_reader);
 
-        const std::set<std::string> & kinematic_set = expression.accept_returning<std::set<std::string>>(kinematic_reader);
+        // Check the absence of overlap between the used kinematic variables and the aliased variables
+        std::set<std::string> intersection;
+        std::set_intersection(
+            kinematic_reader.kinematics.begin(), kinematic_reader.kinematics.end(),
+            kinematic_reader.aliases.begin(), kinematic_reader.aliases.end(),
+            std::inserter(intersection, intersection.begin())
+        );
 
-        _kinematics_names.assign(kinematic_set.begin(), kinematic_set.end());
+        if (! intersection.empty())
+        {
+            throw InternalError("An aliased kinematic variable is still present in the expression.");
+        }
+
+        _kinematics_names.assign(kinematic_reader.kinematics.begin(), kinematic_reader.kinematics.end());
     }
 
     ObservableEntry::KinematicVariableIterator
