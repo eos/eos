@@ -23,26 +23,35 @@
 
 namespace eos::exp
 {
-    // Visit the expression tree and return the set of kinematics names used by its components
+    // Visit the expression tree and return two sets of kinematics:
+    // the first set contains the variables used in the expression
+    // the second set contains the aliased variables.
     class ExpressionKinematicReader
     {
         public:
+
+            std::set<std::string> kinematics;
+            std::set<std::string> aliases;
+
             ExpressionKinematicReader() = default;
             ~ExpressionKinematicReader() = default;
 
-            std::set<std::string> visit(const BinaryExpression & e);
+            // Clear the sets of kinematics and aliases
+            void clear();
 
-            std::set<std::string> visit(const ConstantExpression &);
+            void visit(const BinaryExpression & e);
 
-            std::set<std::string> visit(const ObservableNameExpression & e);
+            void visit(const ConstantExpression &);
 
-            std::set<std::string> visit(const ObservableExpression & e);
+            void visit(const ObservableNameExpression & e);
 
-            std::set<std::string> visit(const KinematicVariableNameExpression & e);
+            void visit(const ObservableExpression & e);
 
-            std::set<std::string> visit(const KinematicVariableExpression & e);
+            void visit(const KinematicVariableNameExpression & e);
 
-            std::set<std::string> visit(const CachedObservableExpression & e);
+            void visit(const KinematicVariableExpression & e);
+
+            void visit(const CachedObservableExpression & e);
     };
 }
 

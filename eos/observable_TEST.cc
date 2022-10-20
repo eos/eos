@@ -115,6 +115,18 @@ class ObservableTest :
                 auto obs_2S1c = Observable::make("B->D^*lnu::2*S_1c", p, k, o);
                 TEST_CHECK_EQUAL(observable->evaluate(), 2 * obs_2S1c->evaluate());
             }
+
+            /* Test inserion of a problematic observable */
+            {
+                auto observables = Observables();
+
+                TEST_CHECK_THROWS(InternalError,
+                    observables.insert("test::problematic_observable", R"()", Unit::Undefined(), Options(),
+                    R"(
+                        <<test::obs1>>[q2_min=>q2_min_num] * {q2_min}
+                    )")
+                );
+            }
         }
 
 } observable_test;

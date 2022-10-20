@@ -122,10 +122,10 @@ class ExpressionParserTest :
 
                 // Extract kinematic variables from an expression
                 ExpressionKinematicReader kinematic_reader;
-                std::set<std::string> kinematic_set = test.e.accept_returning<std::set<std::string>>(kinematic_reader);
+                test.e.accept(kinematic_reader);
 
                 std::set<std::string> expected_kinematic{"q2_mu", "q2_e"};
-                TEST_CHECK_EQUAL(expected_kinematic, kinematic_set);
+                TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
 
                 // Make and evaluate expression
                 Kinematics k = Kinematics({{"q2_mu", 4.0},  {"q2_e", 3.0}});
@@ -171,10 +171,16 @@ class ExpressionParserTest :
 
                 // Extract kinematic variables from an expression
                 ExpressionKinematicReader kinematic_reader;
-                std::set<std::string> kinematic_set = test.e.accept_returning<std::set<std::string>>(kinematic_reader);
+                test.e.accept(kinematic_reader);
 
                 std::set<std::string> expected_kinematic{"q2_max", "q2_min_num"};
-                TEST_CHECK_EQUAL(expected_kinematic, kinematic_set);
+                TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
+
+                // Check the aliased kinematics are correctly aliased
+                std::set<std::string> intersection;
+                intersection.insert(kinematic_reader.kinematics.begin(), kinematic_reader.kinematics.end());
+                intersection.insert(kinematic_reader.aliases.begin(), kinematic_reader.aliases.end());
+                TEST_CHECK_EQUAL(intersection.size(), kinematic_reader.kinematics.size() + kinematic_reader.aliases.size());
             }
 
             // Test numerical evaluation
@@ -294,29 +300,32 @@ class ExpressionParserTest :
                 // Simple case, no conflict
                 ExpressionTest test("<<test::obs1>>[q2_min=>q2_min_num] * {q2_min_num}");
                 ExpressionKinematicReader kinematic_reader;
-                std::set<std::string> kinematic_set = test.e.accept_returning<std::set<std::string>>(kinematic_reader);
+                test.e.accept(kinematic_reader);
                 std::set<std::string> expected_kinematic{"q2_max", "q2_min_num"};
 
-                TEST_CHECK_EQUAL(expected_kinematic, kinematic_set);
+                TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
+
+                // Check the overlap between the set of used kinematic variables and the set of aliased variables
+                std::set<std::string> intersection;
+                std::set_intersection(
+                    kinematic_reader.kinematics.begin(), kinematic_reader.kinematics.end(),
+                    kinematic_reader.aliases.begin(), kinematic_reader.aliases.end(),
+                    std::inserter(intersection, intersection.begin())
+                );
+                TEST_CHECK(intersection.empty());
 
                 // Problematic case, conflict between the alias and the kinematic variable
                 ExpressionTest test2("<<test::obs1>>[q2_min=>q2_min_num] * {q2_min}");
-                std::set<std::string> kinematic_set2 = test2.e.accept_returning<std::set<std::string>>(kinematic_reader);
-                std::set<std::string> expected_kinematic2{"q2_max", "q2_min", "q2_min_num"};
+                kinematic_reader.clear();
+                test2.e.accept(kinematic_reader);
 
-                TEST_CHECK_EQUAL(expected_kinematic2, kinematic_set2);
-
-                // Make and evaluate expression
-                Parameters p = Parameters::Defaults();
-                Kinematics k = Kinematics({{"q2_min", 3.0}, {"q2_max", 10.0}});
-                double obs_value = Observable::make("test::obs1", p, k, Options())->evaluate();
-
-                k = Kinematics({{"q2_min", 4.0}, {"q2_min_num", 3.0}, {"q2_max", 10.0}});
-                ExpressionMaker maker(p, k, Options());
-                Expression assessable_test = test2.e.accept_returning<Expression>(maker);
-                ExpressionEvaluator evaluator;
-
-                // TEST_CHECK_RELATIVE_ERROR(assessable_test.accept_returning<double>(evaluator), 4.0 * obs_value, 1e-3);
+                intersection.clear();
+                std::set_intersection(
+                    kinematic_reader.kinematics.begin(), kinematic_reader.kinematics.end(),
+                    kinematic_reader.aliases.begin(), kinematic_reader.aliases.end(),
+                    std::inserter(intersection, intersection.begin())
+                );
+                TEST_CHECK(! intersection.empty());
             }
         }
 } expression_parser_test;
