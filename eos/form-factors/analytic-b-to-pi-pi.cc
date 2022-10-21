@@ -277,7 +277,7 @@ namespace eos
                 - 12.0 * r2 * (r1m1 + r2) * (r1m1 * r1m1 + 5.0 * r1m1 * r2 + 5.0 * r2 * r2) * L)
                 / power_of<5>(r1m1);
 
-            return result_a0 + pi.a2pi(mu) * result_a2;
+            return result_a0 + pi.a2(mu) * result_a2;
         }
 
         inline double integral_lo_tw2_f2(const double & q2, const double & k2, const double & z) const
@@ -294,7 +294,7 @@ namespace eos
                  - 6.0 * (r1m1 + r2) * (r1m1 * r1m1 + 5.0 * r1m1 * r2 + 5.0 * r2 * r2) * L)
                 / power_of<4>(r1m1);
 
-            return result_a0 + pi.a2pi(mu) * result_a2;
+            return result_a0 + pi.a2(mu) * result_a2;
         }
 
         /*
@@ -327,7 +327,7 @@ namespace eos
 
             const double L = std::log((r1m1 + r2) / r2);
 
-            const double result = 2.0 * m_B() * pi.mupi(mu) / k2
+            const double result = 2.0 * m_B() * pi.mu3(mu) / k2
                 * (r1m1 - (r1m1 + r2) * L) / power_of<2>(r1m1);
 
             return result;
@@ -341,7 +341,7 @@ namespace eos
 
             const double L = std::log((r1m1 + r2) / r2);
 
-            const double result = -2.0 * m_B() * pi.mupi(mu) / k2
+            const double result = -2.0 * m_B() * pi.mu3(mu) / k2
                 * (r1m1 - r2 * L) / power_of<2>(r1m1);
 
             return result;
@@ -368,7 +368,7 @@ namespace eos
 
             const double L = std::log((r1m1 + r2) / r2);
 
-            const double result = +2.0 * m_B() * pi.mupi(mu) / k2
+            const double result = +2.0 * m_B() * pi.mu3(mu) / k2
                 * (r1m1 + r2) * L / r1m1;
 
             return result;

@@ -77,12 +77,18 @@ class PionLCDAsTest :
                 PionLCDAs pi(p, Options{ });
 
                 // coefficients at mu = 1.0 GeV, 2.0 GeV and 3.0 GeV
-                TEST_CHECK_NEARLY_EQUAL( 0.17,      pi.a2pi(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.126731,  pi.a2pi(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.112741,  pi.a2pi(3.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.06,      pi.a4pi(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0391213, pi.a4pi(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0329952, pi.a4pi(3.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,       pi.a1(1.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,       pi.a1(2.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,       pi.a1(3.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.17,      pi.a2(1.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.126731,  pi.a2(2.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.112741,  pi.a2(3.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,       pi.a3(1.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,       pi.a3(2.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,       pi.a3(3.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.06,      pi.a4(1.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0391213, pi.a4(2.0),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0329952, pi.a4(3.0),   eps);
 
                 // scale mu = 1.0 GeV
                 TEST_CHECK_NEARLY_EQUAL( 0.0,     pi.phi(0.0, 1.0), eps);
@@ -104,18 +110,18 @@ class PionLCDAsTest :
                 PionLCDAs pi(p, Options{ });
 
                 // coefficients at mu = 1.0 GeV, 2.0 GeV and 3.0 GeV
-                TEST_CHECK_NEARLY_EQUAL( 0.0045,         pi.f3pi(1.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.003257533016, pi.f3pi(2.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.002864248153, pi.f3pi(3.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.846675085,    pi.mupi(1.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 2.434973113,    pi.mupi(2.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 2.697094626,    pi.mupi(3.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.01868720856,  pi.eta3pi(1.0),      eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0102592843,   pi.eta3pi(2.0),      eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.008143983155, pi.eta3pi(3.0),      eps);
-                TEST_CHECK_NEARLY_EQUAL(-1.5,            pi.omega3pi(1.0),    eps);
-                TEST_CHECK_NEARLY_EQUAL(-1.124800783,    pi.omega3pi(2.0),    eps);
-                TEST_CHECK_NEARLY_EQUAL(-1.002982205,    pi.omega3pi(3.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0045,         pi.f3(1.0),        eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.003257533016, pi.f3(2.0),        eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.002864248153, pi.f3(3.0),        eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.846675085,    pi.mu3(1.0),       eps);
+                TEST_CHECK_NEARLY_EQUAL( 2.434973113,    pi.mu3(2.0),       eps);
+                TEST_CHECK_NEARLY_EQUAL( 2.697094626,    pi.mu3(3.0),       eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.01868720856,  pi.eta3(1.0),      eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0102592843,   pi.eta3(2.0),      eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.008143983155, pi.eta3(3.0),      eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.5,            pi.omega3(1.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.124800783,    pi.omega3(2.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.002982205,    pi.omega3(3.0),    eps);
 
                 // phi3p, scale mu = 1.0 GeV
                 TEST_CHECK_NEARLY_EQUAL( 1.23828994,   pi.phi3p(0.1, 1.0),    eps);
