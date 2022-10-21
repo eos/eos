@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2020 Danny van Dyk
+ * Copyright (c) 2014-2022 Danny van Dyk
  * Copyright (c) 2019, 2020 Domagoj Leljak
  *
  * This file is part of the EOS project. EOS is free software;
@@ -69,7 +69,7 @@ namespace eos
         UsedParameter cond_GG;
         UsedParameter r_vac;
 
-        PionLCDAs pi;
+        std::shared_ptr<PionLCDAs> lcdas;
 
         GSL::QAGS::Config config;
 
@@ -98,7 +98,7 @@ namespace eos
             m02(p["QCD::m_0^2"], u),
             cond_GG(p["QCD::cond_GG"], u),
             r_vac(p["QCD::r_vac"], u),
-            pi(p, o),
+            lcdas(new PionLCDAs(p, o)),
             config(GSL::QAGS::Config().epsrel(1e-3))
         {
             using namespace std::placeholders;
@@ -173,8 +173,8 @@ namespace eos
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double Mprime4 = Mprime2 * Mprime2;
 
-            const double cond_qq_mu = -fpi * fpi * this->pi.mupi(mu) / 2.0; // <qq>@mu
-            const double cond_qq_1 = -fpi * fpi * this->pi.mupi(1.0) / 2.0; // <qq>@1GeV
+            const double cond_qq_mu = -fpi * fpi * this->lcdas->mu3(mu) / 2.0; // <qq>@mu
+            const double cond_qq_1 = -fpi * fpi * this->lcdas->mu3(1.0) / 2.0; // <qq>@1GeV
 
             const double alpha_s_mu = model->alpha_s(mu());
             const double alpha_s_1 = model->alpha_s(1.0); // alpha_s@1GeV
@@ -217,8 +217,8 @@ namespace eos
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double Mprime4 = Mprime2 * Mprime2;
 
-            const double cond_qq_mu = -fpi * fpi * this->pi.mupi(mu) / 2.0; // <qq>@mu
-            const double cond_qq_1 = -fpi * fpi * this->pi.mupi(1.0) / 2.0; // <qq>@1GeV
+            const double cond_qq_mu = -fpi * fpi * this->lcdas->mu3(mu) / 2.0; // <qq>@mu
+            const double cond_qq_1 = -fpi * fpi * this->lcdas->mu3(1.0) / 2.0; // <qq>@1GeV
 
             const double alpha_s_mu = model->alpha_s(mu());
             const double alpha_s_1 = model->alpha_s(1.0); // alpha_s@1GeV
@@ -272,7 +272,7 @@ namespace eos
             //  1.0 -> integral of derivative w.r.t. -1/M^2
             const double weight = (1.0 - _select_weight) + _select_weight * (mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / u;
 
-            return weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) / u * this->pi.phi(u, mu);
+            return weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) / u * this->lcdas->phi(u, mu);
         }
 
         double F_lo_tw2(const double & q2, const double & _M2, const double & _select_weight = 0.0, const double & _select_corr = 0.0) const
@@ -289,41 +289,41 @@ namespace eos
         double F_lo_tw3_integrand(const double & u, const double & q2, const double & _M2, const double & _select_weight) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi;
-            const double mupi = pi.mupi(mu);
-            const double omega3pi = pi.omega3pi(mu);
+            const double mu3 = lcdas->mu3(mu);
+            const double omega3 = lcdas->omega3(mu);
 
             // auxilliary functions and their first derivatives
             auto I3 = [&] (const double & u) -> double
             {
                 const double u3 = u * u * u, ubar2 = (1.0 - u) * (1.0 - u);
 
-                return 5.0 / 2.0 * u3 * ubar2 * (12.0 + (7.0 * u - 4) * omega3pi);
+                return 5.0 / 2.0 * u3 * ubar2 * (12.0 + (7.0 * u - 4) * omega3);
             };
             auto I3_d1 = [&] (const double & u) -> double
             {
                 const double u2 = u * u, ubar = 1.0 - u;
 
-                return 15.0 * u2 * ubar * (6.0 - 10.0 * u - (2.0 - 8.0 * u + 7.0 * u2) * omega3pi);
+                return 15.0 * u2 * ubar * (6.0 - 10.0 * u - (2.0 - 8.0 * u + 7.0 * u2) * omega3);
             };
             auto I3bar = [&] (const double & u) -> double
             {
                 const double u3 = u * u * u, ubar2 = (1.0 - u) * (1.0 - u);
 
-                return 5.0 / 2.0 * u3 * ubar2 * (24.0 * u + 6.0 * u * omega3pi - 3.0 * (omega3pi + 4.0));
+                return 5.0 / 2.0 * u3 * ubar2 * (24.0 * u + 6.0 * u * omega3 - 3.0 * (omega3 + 4.0));
             };
             auto I3bar_d1 = [&] (const double & u) -> double
             {
                 const double u2 = u * u, u3 = u2 * u;
 
-                return 15.0 / 2.0 * u2 * (12.0 * u3 - 25.0 * u2 + 16.0 * u - 3.0) * (omega3pi + 4.0);
+                return 15.0 / 2.0 * u2 * (12.0 * u3 - 25.0 * u2 + 16.0 * u - 3.0) * (omega3 + 4.0);
             };
 
             const double u2 = u * u;
-            const double tw3a = pi.phi3p(u, mu)
+            const double tw3a = lcdas->phi3p(u, mu)
                 + (
-                    pi.phi3s(u, mu) / u
-                    - (mb2 + q2 - u2 * mpi2) / (2 * (mb2 - q2 + u2 * mpi2)) * pi.phi3s_d1(u, mu)
-                    - (2 * u * mpi2 * mb2) / power_of<2>(mb2 - q2 + u2 * mpi2) * pi.phi3s(u, mu)
+                    lcdas->phi3s(u, mu) / u
+                    - (mb2 + q2 - u2 * mpi2) / (2 * (mb2 - q2 + u2 * mpi2)) * lcdas->phi3s_d1(u, mu)
+                    - (2 * u * mpi2 * mb2) / power_of<2>(mb2 - q2 + u2 * mpi2) * lcdas->phi3s(u, mu)
                 ) / 3.0;
             const double tw3b = 2.0 / u * (mb2 - q2 - u2 * mpi2) / (mb2 - q2 + u2 * mpi2)
                 * (I3_d1(u) - (2.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * I3(u));
@@ -336,7 +336,7 @@ namespace eos
             const double weight = (1.0 - _select_weight) + _select_weight * (mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / u;
 
             return std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2))
-                * weight * (mupi / mb * tw3a - pi.f3pi(mu) / (mb * fpi) * (tw3b + tw3c));
+                * weight * (mu3 / mb * tw3a - lcdas->f3(mu) / (mb * fpi) * (tw3b + tw3c));
         }
 
         double F_lo_tw3(const double & q2, const double & _M2, const double & _select_weight = 0.0, const double & _select_corr = 0.0) const
@@ -355,9 +355,9 @@ namespace eos
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
             const double s0 = s0B(q2) * (1.0 - _select_corr) + s0tilB(q2) * _select_corr;
             const double u0 = std::max(1e-10, (mb2 - q2) / (s0 - q2));
-            const double a2pi = pi.a2pi(mu);
-            const double deltapipi = pi.deltapipi(mu);
-            const double omega4pi = pi.omega4pi(mu);
+            const double a2pi = lcdas->a2(mu);
+            const double delta4 = lcdas->delta4(mu);
+            const double omega4 = lcdas->omega4(mu);
 
             // auxilliary functions and their first derivatives
             auto I4 = [&] (const double & u) -> double
@@ -367,7 +367,7 @@ namespace eos
 
                 return -1.0 / 24.0 * u * ubar * (
                         mpi2 * (54.0 * u3 - 81.0 * u2 + 27.0 * ubar + 27.0 * a2pi * (16.0 * u3 - 29.0 * u2 + 13.0 * u - 1.0))
-                        + 16.0 * u * (20.0 * u - 30.0) * deltapipi
+                        + 16.0 * u * (20.0 * u - 30.0) * delta4
                     );
             };
             auto I4_d1 = [&] (const double & u) -> double
@@ -379,7 +379,7 @@ namespace eos
                             (10.0 * u4 - 20.0 * u3 + 6.0 * u2 + 4.0 * u - 1.0)
                             + a2pi * (80.0 * u4 - 180.0 * u3 + 126.0 * u2 - 28.0 * u + 1)
                         )
-                        + 160.0 * u * (6.0 - 15.0 * u + 8.0 * u2) * deltapipi
+                        + 160.0 * u * (6.0 - 15.0 * u + 8.0 * u2) * delta4
                     );
             };
             auto I4bar = [&] (const double & u) -> double
@@ -394,8 +394,8 @@ namespace eos
                         )
                         - 20.0 * u * (
                             (12.0 - 20.0 * u)
-                            + (378.0 * u2 - 567.0 * u + 189.0) * omega4pi
-                        ) * deltapipi
+                            + (378.0 * u2 - 567.0 * u + 189.0) * omega4
+                        ) * delta4
                     );
             };
             auto I4barI = [&] (const double & u) -> double
@@ -408,7 +408,7 @@ namespace eos
                             9.0 * (3.0 + 2.0 * ubar * u)
                             + 9.0 * a2pi * (32.0 * u2 - 26.0 * u - 3.0)
                         )
-                        + 40.0 * u * (4.0 + 63.0 * ubar * omega4pi) * deltapipi
+                        + 40.0 * u * (4.0 + 63.0 * ubar * omega4) * delta4
                     );
             };
             auto I4bar_d1 = [&] (const double & u) -> double
@@ -422,8 +422,8 @@ namespace eos
                         )
                         + 40.0 * u * (
                             (-40.0 * u2 + 48.0 * u - 12.0)
-                            + 189.0 * (5.0 * u3 - 10.0 *  u2 + 6.0 * u - 1.0) * omega4pi
-                        ) * deltapipi
+                            + 189.0 * (5.0 * u3 - 10.0 *  u2 + 6.0 * u - 1.0) * omega4
+                        ) * delta4
                     );
             };
             std::function<double (const double &)> integrand(
@@ -431,11 +431,11 @@ namespace eos
                 {
                     const double u2 = u * u;
 
-                    const double tw4psi = u * pi.psi4(u, mu) + (mb2 - q2 - u2 * mpi2) / (mb2 - q2 + u2 * mpi2) * pi.psi4_i(u, mu);
+                    const double tw4psi = u * lcdas->psi4(u, mu) + (mb2 - q2 - u2 * mpi2) / (mb2 - q2 + u2 * mpi2) * lcdas->psi4_i(u, mu);
                     const double tw4phi = (
-                            pi.phi4_d2(u, mu)
-                            - 6.0 * u * mpi2 / (mb2 - q2 + u2 * mpi2) * pi.phi4_d1(u, mu)
-                            + 12.0 * u * mpi4 / power_of<2>(mb2 - q2 + u2 * mpi2) * pi.phi4(u, mu)
+                            lcdas->phi4_d2(u, mu)
+                            - 6.0 * u * mpi2 / (mb2 - q2 + u2 * mpi2) * lcdas->phi4_d1(u, mu)
+                            + 12.0 * u * mpi4 / power_of<2>(mb2 - q2 + u2 * mpi2) * lcdas->phi4(u, mu)
                         ) * mb2 * u / (4 * (mb2 - q2 + u2 * mpi2));
                     const double tw4I4 = I4_d1(u) - 2.0 * u * mpi2 / (mb2 - q2 + u2 * mpi2) * I4(u);
                     const double tw4I4bar1 = (u * I4bar_d1(u) + (mb2 - q2 - 3.0 * u2 * mpi2) / (mb2 - q2 + u2 * mpi2) * I4bar(u)) * 2.0 * u * mpi2 / (mb2 - q2 + u2 * mpi2);
@@ -461,7 +461,7 @@ namespace eos
             // analytically continued. See also comment at beginning of Appendix B
             // of [DKMMO2008], p. 21.
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
-            const double a2pi = pi.a2pi(mu), a4pi = pi.a4pi(mu);
+            const double a2pi = lcdas->a2(mu), a4pi = lcdas->a4(mu);
             const double r1 = q2 / mb2;
 
             // imaginary parts of the hard scattering kernel, integrated over rho.
@@ -662,7 +662,7 @@ namespace eos
             const double r1 = q2 / mb2;
             const double lmu = 2.0 * std::log(mb / mu());
 
-            const double mupi = pi.mupi(mu);
+            const double mu3 = lcdas->mu3(mu);
 
             auto T1tw3ptheta1mrho = [&] (const double & r1, const double & r2) -> double
             {
@@ -835,7 +835,7 @@ namespace eos
             //  1.0 -> integral of derivative w.r.t. -1/M^2
             const double weight = (1.0 - _select_weight) + _select_weight * mb2;
 
-            return fpi * mupi * mb * (
+            return fpi * mu3 * mb * (
                     integrate<GSL::QAGS>(integrand, 1.0 + eps, s0B(q2) / mb2, config)
                     - (
                         2.0 / (1.0 - r1) * (4.0 - 3.0 * lmu)
@@ -849,26 +849,26 @@ namespace eos
         double Ftil_lo_tw3_integrand(const double & u, const double & q2, const double _M2, const double _select_weight) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi;
-            const double mupi = pi.mupi(mu);
-            const double omega3pi = pi.omega3pi(mu);
+            const double mu3 = lcdas->mu3(mu);
+            const double omega3 = lcdas->omega3(mu);
 
             // auxilliary functions and their first derivatives
             auto I3til = [&] (const double & u) -> double
             {
                 const double u2 = u * u, ubar2 = (1.0 - u) * (1.0 - u);
 
-                return 5.0 / 2.0 * u2 * ubar2 * (28.0 * u2 * omega3pi - 2.0 * u * (17.0 * omega3pi + 12.0) + 9.0 * (omega3pi + 4.0));
+                return 5.0 / 2.0 * u2 * ubar2 * (28.0 * u2 * omega3 - 2.0 * u * (17.0 * omega3 + 12.0) + 9.0 * (omega3 + 4.0));
             };
             auto I3til_d1 = [&] (const double & u) -> double
             {
                 const double u2 = u * u, u3 = u2 * u;
 
-                return 15.0 * u * (u - 1.0) * (28.0 * u3 * omega3pi - u2 * (47.0 * omega3pi + 20.0) + u * (23.0 * omega3pi + 36.0) - 3.0 * (omega3pi + 4.0));
+                return 15.0 * u * (u - 1.0) * (28.0 * u3 * omega3 - u2 * (47.0 * omega3 + 20.0) + u * (23.0 * omega3 + 36.0) - 3.0 * (omega3 + 4.0));
             };
 
             const double u2 = u * u;
-            const double tw3a = pi.phi3p(u, mu) / u
-                + 1 / (6 * u) * pi.phi3s_d1(u, mu);
+            const double tw3a = lcdas->phi3p(u, mu) / u
+                + 1 / (6 * u) * lcdas->phi3s_d1(u, mu);
             const double tw3b = mpi2 / (mb2 - q2 + u2 * mpi2)
                 * (I3til_d1(u) - (2.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * I3til(u));
 
@@ -878,7 +878,7 @@ namespace eos
             const double weight = (1.0 - _select_weight) + _select_weight * (mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / u;
 
             return std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) * weight
-                * (mupi / mb * tw3a + pi.f3pi(mu) / (mb * fpi) * tw3b);
+                * (mu3 / mb * tw3a + lcdas->f3(mu) / (mb * fpi) * tw3b);
         }
 
         double Ftil_lo_tw3(const double & q2, const double & _M2, const double & _select_weight = 0.0) const
@@ -895,9 +895,9 @@ namespace eos
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
             const double u0 = std::max(1e-10, (mb2 - q2) / (s0tilB(q2) - q2));
-            const double a2pi = pi.a2pi(mu);
-            const double deltapipi = pi.deltapipi(mu);
-            const double omega4pi = pi.omega4pi(mu);
+            const double a2pi = lcdas->a2(mu);
+            const double delta4 = lcdas->delta4(mu);
+            const double omega4 = lcdas->omega4(mu);
 
             // auxilliary functions and their first derivatives
             auto I4bar = [&] (const double & u) -> double
@@ -912,8 +912,8 @@ namespace eos
                         )
                         - 20.0 * u * (
                             (12.0 - 20.0 * u)
-                            + (378.0 * u2 - 567.0 * u + 189.0) * omega4pi
-                        ) * deltapipi
+                            + (378.0 * u2 - 567.0 * u + 189.0) * omega4
+                        ) * delta4
                     );
             };
             auto I4barI = [&] (const double & u) -> double
@@ -926,7 +926,7 @@ namespace eos
                             9.0 * (3.0 + 2.0 * ubar * u)
                             + 9.0 * a2pi * (32.0 * u2 - 26.0 * u - 3.0)
                         )
-                        + 40.0 * u * (4.0 + 63.0 * ubar * omega4pi) * deltapipi
+                        + 40.0 * u * (4.0 + 63.0 * ubar * omega4) * delta4
                     );
             };
             auto I4bar_d1 = [&] (const double & u) -> double
@@ -940,8 +940,8 @@ namespace eos
                         )
                         + 40.0 * u * (
                             (-40.0 * u2 + 48.0 * u - 12.0)
-                            + 189.0 * (5.0 * u3 - 10.0 *  u2 + 6.0 * u - 1.0) * omega4pi
-                        ) * deltapipi
+                            + 189.0 * (5.0 * u3 - 10.0 *  u2 + 6.0 * u - 1.0) * omega4
+                        ) * delta4
                     );
             };
             std::function<double (const double &)> integrand(
@@ -949,7 +949,7 @@ namespace eos
                 {
                     const double u2 = u * u;
 
-                    const double tw4psi = pi.psi4(u, mu) - (2.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * pi.psi4_i(u, mu);
+                    const double tw4psi = lcdas->psi4(u, mu) - (2.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * lcdas->psi4_i(u, mu);
                     const double tw4I4bar = (- I4bar_d1(u) + (6.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * I4bar(u) + (12.0 * u2 * mpi4) / power_of<2>(mb2 - q2 + u2 * mpi2) * I4barI(u)) * 2.0 * u * mpi2 / (mb2 - q2 + u2 * mpi2);
 
                     // _select_weight:
@@ -972,7 +972,7 @@ namespace eos
             // analytically continued. See also comment at beginning of Appendix B
             // of [DKMMO2008], p. 21.
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
-            const double a2pi = pi.a2pi(mu), a4pi = pi.a4pi(mu);
+            const double a2pi = lcdas->a2(mu), a4pi = lcdas->a4(mu);
             const double r1 = q2 / mb2;
 
             // imaginary parts of the hard scattering kernel, integrated over rho.
@@ -1120,7 +1120,7 @@ namespace eos
             const double r1 = q2 / mb2;
             const double lmu = 2.0 * std::log(mb / mu());
 
-            const double mupi = pi.mupi(mu);
+            const double mu3 = lcdas->mu3(mu);
 
             auto T1tiltw3ptheta1mrho = [&] (const double & r1, const double & r2) -> double
             {
@@ -1222,7 +1222,7 @@ namespace eos
 
             try
             {
-                return fpi * mupi * mb * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB(q2) / mb2, config);
+                return fpi * mu3 * mb * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB(q2) / mb2, config);
             }
             catch (...)
             {
@@ -1239,7 +1239,7 @@ namespace eos
             //  1.0 -> integral of derivative w.r.t. -1/M^2
             const double weight = (1.0 - _select_weight) + _select_weight * (mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / u;
 
-            return weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) / u * this->pi.phi(u, mu);
+            return weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) / u * this->lcdas->phi(u, mu);
         }
 
         double FT_lo_tw2(const double & q2, const double & _M2, const double & _select_weight = 0.0) const
@@ -1255,7 +1255,7 @@ namespace eos
         double FT_lo_tw3_integrand(const double & u, const double & q2, const double & _M2, const double & _select_weight) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi;
-            const double mupi = pi.mupi(mu);
+            const double mu3 = lcdas->mu3(mu);
             const double u2 = u * u;
 
             // _select_weight:
@@ -1263,8 +1263,8 @@ namespace eos
             //  1.0 -> integral of derivative w.r.t. -1/M^2
             const double weight = (1.0 - _select_weight) + _select_weight * (mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / u;
 
-            return - mb * mupi * weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2))
-                * (pi.phi3s_d1(u, mu) - 2 * u * mpi2 * pi.phi3s(u, mu) / (mb2 - q2 + u2 * mpi2)) / (3.0 * (mb2 - q2 + u2 * mpi2));
+            return - mb * mu3 * weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2))
+                * (lcdas->phi3s_d1(u, mu) - 2 * u * mpi2 * lcdas->phi3s(u, mu) / (mb2 - q2 + u2 * mpi2)) / (3.0 * (mb2 - q2 + u2 * mpi2));
         }
 
         double FT_lo_tw3(const double & q2, const double & _M2, const double & _select_weight = 0.0) const
@@ -1281,9 +1281,9 @@ namespace eos
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
             const double u0 = std::max(1e-10, (mb2 - q2) / (s0TB(q2) - q2));
-            const double a2pi = pi.a2pi(mu);
-            const double deltapipi = pi.deltapipi(mu);
-            const double omega4pi = pi.omega4pi(mu);
+            const double a2pi = lcdas->a2(mu);
+            const double delta4 = lcdas->delta4(mu);
+            const double omega4 = lcdas->omega4(mu);
 
             // auxilliary functions and their first derivatives
             auto I4T = [&] (const double & u) -> double
@@ -1298,8 +1298,8 @@ namespace eos
                         )
                         + 10.0 * (
                             40.0 * u2 * ubar2
-                            - 21.0 * (-40.0 * u5 + 87.0 * u4 - 54.0 * u3 + 9.0 * u2 - 2.0 * u + 4.0 * (6.0 * u2 - 15.0 * u + 10.0) * u3 * std::atanh(1 - 2.0 * u) - 2.0 * std::log(ubar)) * omega4pi
-                        ) * deltapipi
+                            - 21.0 * (-40.0 * u5 + 87.0 * u4 - 54.0 * u3 + 9.0 * u2 - 2.0 * u + 4.0 * (6.0 * u2 - 15.0 * u + 10.0) * u3 * std::atanh(1 - 2.0 * u) - 2.0 * std::log(ubar)) * omega4
+                        ) * delta4
                     );
             };
             auto I4T_d1 = [&] (const double & u) -> double
@@ -1314,8 +1314,8 @@ namespace eos
                         )
                         + 40.0 * u * (
                             4.0 * (1.0 - 3.0 * u + 2.0 * u2)
-                            + 21.0 * ubar * (-1.0 + 8.0 * u - 10.0 * u2 - 6.0 * ubar * u * std::atanh(1 - 2.0 * u)) * omega4pi
-                        ) * deltapipi
+                            + 21.0 * ubar * (-1.0 + 8.0 * u - 10.0 * u2 - 6.0 * ubar * u * std::atanh(1 - 2.0 * u)) * omega4
+                        ) * delta4
                     );
             };
             std::function<double (const double &)> integrand(
@@ -1323,8 +1323,8 @@ namespace eos
                 {
                     const double u2 = u * u;
 
-                    const double tw4phi1 = (pi.phi4_d1(u, mu) - 2 * u * mpi2 * pi.phi4(u, mu) / (mb2 - q2 + u2 * mpi2)) / 4.0;
-                    const double tw4phi2 = - mb2 * u * (pi.phi4_d2(u, mu) - 6.0 * u * mpi2 * pi.phi4_d1(u, mu) / (mb2 - q2 + u2 * mpi2) + 12.0 * u * mpi4 * pi.phi4(u, mu) / power_of<2>(mb2 - q2 + u2 * mpi2))
+                    const double tw4phi1 = (lcdas->phi4_d1(u, mu) - 2 * u * mpi2 * lcdas->phi4(u, mu) / (mb2 - q2 + u2 * mpi2)) / 4.0;
+                    const double tw4phi2 = - mb2 * u * (lcdas->phi4_d2(u, mu) - 6.0 * u * mpi2 * lcdas->phi4_d1(u, mu) / (mb2 - q2 + u2 * mpi2) + 12.0 * u * mpi4 * lcdas->phi4(u, mu) / power_of<2>(mb2 - q2 + u2 * mpi2))
                         / (4.0 * (mb2 - q2 + u2 * mpi2));
                     const double tw4I4T = - (I4T_d1(u) - 2.0 * u * mpi2 * I4T(u) / (mb2 - q2 + u2 * mpi2));
 
@@ -1348,7 +1348,7 @@ namespace eos
             // analytically continued. See also comment at beginning of Appendix B
             // of [DKMMO2008], p. 21.
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
-            const double a2pi = pi.a2pi(mu), a4pi = pi.a4pi(mu);
+            const double a2pi = lcdas->a2(mu), a4pi = lcdas->a4(mu);
             const double r1 = q2 / mb2;
 
             // imaginary parts of the hard scattering kernel, integrated over rho.
@@ -1575,7 +1575,7 @@ namespace eos
             const double r1 = q2 / mb2;
             const double lmu = 2.0 * std::log(mb / mu());
 
-            const double mupi = pi.mupi(mu);
+            const double mu3 = lcdas->mu3(mu);
 
             auto T1Ttw3ptheta1mrho = [&] (const double & r1, const double & r2) -> double
             {
@@ -1700,7 +1700,7 @@ namespace eos
             //  1.0 -> integral of derivative w.r.t. -1/M^2
             const double weight = (1.0 - _select_weight) + _select_weight * mb2;
 
-            return fpi * mupi * (integrate<GSL::QAGS>(integrand, 1.0 + eps, s0TB(q2) / mb2, config)
+            return fpi * mu3 * (integrate<GSL::QAGS>(integrand, 1.0 + eps, s0TB(q2) / mb2, config)
                     - 4.0 * (4.0 - 3.0 * lmu) * weight * std::exp(-mb2 / _M2) / power_of<2>(1.0 - q2 / mb2)
                     );
         }

@@ -35,18 +35,22 @@ namespace eos
             ~PionLCDAs();
 
             /* Twist 2 LCDA (even) Gegenbauer coefficients */
-            double a2pi(const double & mu) const;
-            double a4pi(const double & mu) const;
+            double a1(const double &) const { return 0.0; }
+            double a2(const double & mu) const;
+            double a3(const double &) const { return 0.0; }
+            double a4(const double & mu) const;
 
             /* Twist 3 LCDA parameters */
-            double mupi(const double & mu) const;
-            double f3pi(const double & mu) const;
-            double eta3pi(const double & mu) const;
-            double omega3pi(const double & mu) const;
+            double mu3(const double & mu) const;
+            double f3(const double & mu) const;
+            double eta3(const double & mu) const;
+            double lambda3(const double & mu) const { return 0.0; }
+            double omega3(const double & mu) const;
 
             /* Twist 4 LCDA parameter */
-            double deltapipi(const double & mu) const;
-            double omega4pi(const double & mu) const;
+            double delta4(const double & mu) const;
+            double kappa4(const double & mu) const { return 0.0; }
+            double omega4(const double & mu) const;
 
             /* Twist 2 LCDA */
             double phi(const double & u, const double & mu) const;
