@@ -153,6 +153,12 @@ namespace eos
     {
     }
 
+    PseudoscalarLCDAs *
+    PionLCDAs::make(const Parameters & p, const Options & o)
+    {
+        return new PionLCDAs(p, o);
+    }
+
     double
     PionLCDAs::a2(const double & mu) const
     {

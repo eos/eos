@@ -162,7 +162,6 @@ namespace eos
         double delta4K(const double & mu) const
         {
             const double c_rge  = this->c_rge(mu);
-            const double mu_0   = 1.0;
 
             return delta4K_0 * std::pow(c_rge, 32.0 / 9.0) + 1.0 / 8.0 * m_K * m_K * (1.0 - std::pow(c_rge, 32.0 / 9.0));
         }
@@ -182,7 +181,6 @@ namespace eos
         double omega4K(const double & mu) const
         {
             const double c_rge  = this->c_rge(mu);
-            const double mu_0   = 1.0;
 
             return 1.0 / delta4K(mu) * omega4K_0 * delta4K_0 * std::pow(c_rge, 10.0);
         }
@@ -196,6 +194,12 @@ namespace eos
 
     KaonLCDAs::~KaonLCDAs()
     {
+    }
+
+    PseudoscalarLCDAs *
+    KaonLCDAs::make(const Parameters & p, const Options & o)
+    {
+        return new KaonLCDAs(p, o);
     }
 
     double
@@ -322,7 +326,7 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
+        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x;
         const double c1 = 3.0 * x;
         const double c2 = (15.0 * x2 - 3.0) / 2.0;
         const double c3 = (35.0 * x3 - 15.0 * x) / 2.0;
@@ -384,9 +388,6 @@ namespace eos
         const double a2K = _imp->a2K(mu);
 
         // Twist 3 coefficients
-        const double rhopK    = power_of<2>((m_s + m_ud) / _imp->m_K); // EOM constraints, cf. [BBL:2006A], cf. eq. (3.12)
-        const double rhomK    = power_of<2>((m_s - m_ud) / _imp->m_K); // identical in the limit m_q -> 0
-        const double eta3K    = _imp->eta3K(mu);
         const double omega3K  = _imp->omega3K(mu);
         const double lambda3K = _imp->lambda3K(mu);
         const double f3K      = _imp->f3K(mu);
@@ -401,7 +402,7 @@ namespace eos
 
         const double u2 = u * u, u3 = u2 * u, lnu = std::log(u);
         const double ubar = 1.0 - u, ubar2 = ubar * ubar, ubar3 = ubar2 * ubar, lnubar = std::log(ubar);
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
+        const double x = 2.0 * u - 1.0;
 
         // Twist 4 contributions
         const double phi4T4 = 200.0 / 3.0 * delta4K * u2 * ubar2 + 20.0 * u2 * ubar2 * x * (4.0 * theta1K - 5.0 * theta2K)
@@ -436,9 +437,6 @@ namespace eos
         const double a2K = _imp->a2K(mu);
 
         // Twist 3 coefficients
-        const double rhopK    = power_of<2>((m_s + m_ud) / _imp->m_K); // EOM constraints, cf. [BBL:2006A], cf. eq. (3.12)
-        const double rhomK    = power_of<2>((m_s - m_ud) / _imp->m_K); // identical in the limit m_q -> 0
-        const double eta3K    = _imp->eta3K(mu);
         const double omega3K  = _imp->omega3K(mu);
         const double lambda3K = _imp->lambda3K(mu);
         const double f3K      = _imp->f3K(mu);
@@ -452,8 +450,8 @@ namespace eos
         const double phi2K    = -7.0 / 20.0 * a1K * delta4K;
 
         const double u2 = u * u, u3 = u2 * u, u4 = u3 * u, u5 = u4 * u, lnu = std::log(u);
-        const double ubar = 1.0 - u, ubar2 = ubar * ubar, ubar3 = ubar2 * ubar, lnubar = std::log(ubar);
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
+        const double ubar = 1.0 - u, ubar2 = ubar * ubar, lnubar = std::log(ubar);
+        const double x = 2.0 * u - 1.0;
 
         // Twist 4 derivatives contributions
         const double phi4T4_d1 = 20.0 * ubar2 * lnubar * (8.0 * (1.0 + 2.0 * u) * phi2K - 63.0 * u2 * omega4K * delta4K)
@@ -489,9 +487,6 @@ namespace eos
         const double a2K = _imp->a2K(mu);
 
         // Twist 3 coefficients
-        const double rhopK    = power_of<2>((m_s + m_ud) / _imp->m_K); // EOM constraints, cf. [BBL:2006A], cf. eq. (3.12)
-        const double rhomK    = power_of<2>((m_s - m_ud) / _imp->m_K); // identical in the limit m_q -> 0
-        const double eta3K    = _imp->eta3K(mu);
         const double omega3K  = _imp->omega3K(mu);
         const double lambda3K = _imp->lambda3K(mu);
         const double f3K      = _imp->f3K(mu);
@@ -504,9 +499,8 @@ namespace eos
         const double theta2K  = -7.0 / 5.0 * a1K * delta4K;
         const double phi2K    = -7.0 / 20.0 * a1K * delta4K;
 
-        const double u2 = u * u, u3 = u2 * u, u4 = u3 * u, u5 = u4 * u, lnu = std::log(u);
-        const double ubar = 1.0 - u, ubar2 = ubar * ubar, ubar3 = ubar2 * ubar, lnubar = std::log(ubar);
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
+        const double u2 = u * u, u3 = u2 * u, u4 = u3 * u, lnu = std::log(u);
+        const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Twist 4 derivatives contributions
         const double phi4T4_d2 = 400.0 / 3.0 * (1.0 - 6.0 * u + 6.0 * u2) * delta4K
@@ -544,7 +538,6 @@ namespace eos
         // Twist 3 coefficients
         const double rhopK    = power_of<2>((m_s + m_ud) / _imp->m_K); // EOM constraints, cf. [BBL:2006A], cf. eq. (3.12)
         const double rhomK    = power_of<2>((m_s - m_ud) / _imp->m_K); // identical in the limit m_q -> 0
-        const double eta3K    = _imp->eta3K(mu);
         const double omega3K  = _imp->omega3K(mu);
         const double lambda3K = _imp->lambda3K(mu);
         const double f3K      = _imp->f3K(mu);
@@ -552,13 +545,11 @@ namespace eos
         // Twist 4 coefficients
         const double delta4K  = _imp->delta4K(mu);
         const double kappa4K  = _imp->kappa4K(mu);
-        const double omega4K  = _imp->omega4K(mu);
         const double theta1K  = 7.0 / 10.0 * a1K * delta4K;
         const double theta2K  = -7.0 / 5.0 * a1K * delta4K;
-        const double phi2K    = -7.0 / 20.0 * a1K * delta4K;
 
-        const double u2 = u * u, u3 = u2 * u, lnu = std::log(u);
-        const double ubar = 1.0 - u, ubar2 = ubar * ubar, ubar3 = ubar2 * ubar, lnubar = std::log(ubar);
+        const double lnu = std::log(u);
+        const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Gegenbauer polynomials C_n^(1/2)
         const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
@@ -598,7 +589,6 @@ namespace eos
         // Twist 3 coefficients
         const double rhopK    = power_of<2>((m_s + m_ud) / _imp->m_K); // EOM constraints, cf. [BBL:2006A], cf. eq. (3.12)
         const double rhomK    = power_of<2>((m_s - m_ud) / _imp->m_K); // identical in the limit m_q -> 0
-        const double eta3K    = _imp->eta3K(mu);
         const double omega3K  = _imp->omega3K(mu);
         const double lambda3K = _imp->lambda3K(mu);
         const double f3K      = _imp->f3K(mu);
@@ -606,21 +596,11 @@ namespace eos
         // Twist 4 coefficients
         const double delta4K  = _imp->delta4K(mu);
         const double kappa4K  = _imp->kappa4K(mu);
-        const double omega4K  = _imp->omega4K(mu);
         const double theta1K  = 7.0 / 10.0 * a1K * delta4K;
         const double theta2K  = -7.0 / 5.0 * a1K * delta4K;
-        const double phi2K    = -7.0 / 20.0 * a1K * delta4K;
 
         const double u2 = u * u, u3 = u2 * u, u4 = u3 * u, lnu = std::log(u);
-        const double ubar = 1.0 - u, ubar2 = ubar * ubar, ubar3 = ubar2 * ubar, lnubar = std::log(ubar);
-
-        // Gegenbauer polynomials C_n^(1/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
-        const double c0 = 1.0;
-        const double c1 = x;
-        const double c2 = (3.0 * x2 - 1.0) / 2.0;
-        const double c3 = (5.0 * x3 - 3.0 * x) / 2.0;
-        const double c4 = (35.0 * x4 - 30.0 * x2 + 3.0) / 8.0;
+        const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Twist 4 contributions
         const double psi4T4_i = -5.0 / 3.0 * u * ubar * (delta4K * (8.0 * u - 4.0)

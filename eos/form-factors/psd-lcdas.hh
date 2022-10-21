@@ -40,10 +40,12 @@ namespace eos
             virtual double mu3(const double & mu) const = 0;
             virtual double f3(const double & mu) const = 0;
             virtual double eta3(const double & mu) const = 0;
+            virtual double lambda3(const double & mu) const = 0;
             virtual double omega3(const double & mu) const = 0;
 
             /* Twist 4 LCDA parameter */
             virtual double delta4(const double & mu) const = 0;
+            virtual double kappa4(const double & mu) const = 0;
             virtual double omega4(const double & mu) const = 0;
 
             /* Twist 2 LCDA */

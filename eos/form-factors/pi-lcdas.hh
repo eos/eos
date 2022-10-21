@@ -20,6 +20,7 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PI_LCDAS_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PI_LCDAS_HH 1
 
+#include <eos/form-factors/psd-lcdas.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -28,44 +29,47 @@ namespace eos
 {
     class PionLCDAs :
         public ParameterUser,
+        public PseudoscalarLCDAs,
         public PrivateImplementationPattern<PionLCDAs>
     {
         public:
             PionLCDAs(const Parameters &, const Options &);
             ~PionLCDAs();
 
+            static PseudoscalarLCDAs * make(const Parameters &, const Options &);
+
             /* Twist 2 LCDA (even) Gegenbauer coefficients */
-            double a1(const double &) const { return 0.0; }
-            double a2(const double & mu) const;
-            double a3(const double &) const { return 0.0; }
-            double a4(const double & mu) const;
+            double a1(const double & /*mu*/) const override { return 0.0; }
+            double a2(const double & mu) const override;
+            double a3(const double & /*mu*/) const override { return 0.0; }
+            double a4(const double & mu) const override;
 
             /* Twist 3 LCDA parameters */
-            double mu3(const double & mu) const;
-            double f3(const double & mu) const;
-            double eta3(const double & mu) const;
-            double lambda3(const double & mu) const { return 0.0; }
-            double omega3(const double & mu) const;
+            double mu3(const double & mu) const override;
+            double f3(const double & mu) const override;
+            double eta3(const double & mu) const override;
+            double lambda3(const double & /*mu*/) const override { return 0.0; }
+            double omega3(const double & mu) const override;
 
             /* Twist 4 LCDA parameter */
-            double delta4(const double & mu) const;
-            double kappa4(const double & mu) const { return 0.0; }
-            double omega4(const double & mu) const;
+            double delta4(const double & mu) const override;
+            double kappa4(const double & /*mu*/) const override { return 0.0; }
+            double omega4(const double & mu) const override;
 
             /* Twist 2 LCDA */
-            double phi(const double & u, const double & mu) const;
+            double phi(const double & u, const double & mu) const override;
 
             /* Twist 3 LCDAs and their derivatives */
-            double phi3p(const double & u, const double & mu) const;
-            double phi3s(const double & u, const double & mu) const;
-            double phi3s_d1(const double & u, const double & mu) const;
+            double phi3p(const double & u, const double & mu) const override;
+            double phi3s(const double & u, const double & mu) const override;
+            double phi3s_d1(const double & u, const double & mu) const override;
 
             /* Twist 4 LCDAs, their derivatives and integrals */
-            double phi4(const double & u, const double & mu) const;
-            double phi4_d1(const double & u, const double & mu) const;
-            double phi4_d2(const double & u, const double & mu) const;
-            double psi4(const double & u, const double & mu) const;
-            double psi4_i(const double & u, const double & mu) const;
+            double phi4(const double & u, const double & mu) const override;
+            double phi4_d1(const double & u, const double & mu) const override;
+            double phi4_d2(const double & u, const double & mu) const override;
+            double psi4(const double & u, const double & mu) const override;
+            double psi4_i(const double & u, const double & mu) const override;
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;

@@ -44,6 +44,7 @@ libeosformfactors_la_SOURCES = \
 	parametric-kkvdz2022.hh parametric-kkvdz2022.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
 	pi-lcdas.cc pi-lcdas.hh \
+	psd-lcdas.cc psd-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
 libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
