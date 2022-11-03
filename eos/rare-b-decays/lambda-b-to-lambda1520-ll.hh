@@ -161,6 +161,10 @@ namespace eos
         complex<double> a_para1_right, a_para1_left;
         complex<double> a_perp0_right, a_perp0_left;
         complex<double> a_para0_right, a_para0_left;
+        complex<double> a_perpS_right, a_perpS_left;
+        complex<double> a_paraS_right, a_paraS_left;
+        complex<double> a_perpt_right, a_perpt_left;
+        complex<double> a_parat_right, a_parat_left;
     };
 
     struct LambdaBToLambda1520Dilepton::AngularCoefficients

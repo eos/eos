@@ -39,6 +39,7 @@ namespace eos
         SwitchOption opt_l;
 
         UsedParameter hbar;
+        UsedParameter m_l;
         UsedParameter tau;
         UsedParameter mu;
 
@@ -48,6 +49,7 @@ namespace eos
             model(Model::make(o.get("model", "WET"), p, o)),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             hbar(p["QM::hbar"], u),
+            m_l(p["mass::" + opt_l.value()], u),
             tau(p["life_time::Lambda_b"], u),
             mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u)
         {
@@ -71,74 +73,202 @@ namespace eos
 
         inline std::array<double, 12> angular_coefficients_array(const LambdaBToLambda1520Dilepton::Amplitudes & A, const double & s) const
         {
-            // cf. [DN:2019A], eq. (4.2)
-            // neglecting lepton masses
+            // cf. [DD:2020A], app. G, which agrees with [DN:2019A], eq. (4.2) for massless leptons
             std::array<double, 12> result;
 
+            double z = 4.0 * power_of<2>(m_l()) / s;
+            double y = m_l / std::sqrt(s);
+            double beta2 = 1.0 - z;
+            double beta = std::sqrt(beta2);
+
             // L1c
-            result[0] = - 2.0 * real(
-                  A.a_perp1_left  * conj(A.a_para1_left) - A.a_perp1_right * conj(A.a_para1_right)
-               );
+            result[0] = - 2.0 * beta * real(
+                A.a_perp1_left  * conj(A.a_para1_left) - A.a_perp1_right * conj(A.a_para1_right)
+                + y * (
+                      A.a_paraS_left  * conj(A.a_para0_left)  + A.a_paraS_right * conj(A.a_para0_left)
+                    + A.a_perpS_left  * conj(A.a_perp0_left)  + A.a_perpS_right * conj(A.a_perp0_left)
+                    + A.a_paraS_right * conj(A.a_para0_right) + A.a_paraS_left  * conj(A.a_para0_right)
+                    + A.a_perpS_right * conj(A.a_perp0_right) + A.a_perpS_left  * conj(A.a_perp0_right)
+                )
+            );
+
             // L1cc
-            result[1] = (
+            result[1] =
                   norm(A.a_para1_left) + norm(A.a_perp1_left) + norm(A.a_para1_right) + norm(A.a_perp1_right)
-               );
+                + norm(A.a_paraS_left) + norm(A.a_perpS_left) + norm(A.a_paraS_right) + norm(A.a_perpS_right)
+                + 2.0 * y * real(
+                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
+                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
+                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
+                ) +  2.0 * y * y * (
+                      norm(A.a_para0_left) - norm(A.a_para1_left) - norm(A.a_paraS_left) + norm(A.a_parat_left)
+                    + norm(A.a_perp0_left) - norm(A.a_perp1_left) - norm(A.a_perpS_left) + norm(A.a_perpt_left)
+                    + norm(A.a_para0_right) - norm(A.a_para1_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
+                    + norm(A.a_perp0_right) - norm(A.a_perp1_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
+                ) + 2.0 * y * y * real(
+                    A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
+                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
+                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
+                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
+                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
+                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
+                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
+                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
+            );
+
             // L1ss
-            result[2] = 1.0 / 2.0 * (
-                  2.0 * norm(A.a_para0_left) + 2.0 * norm(A.a_perp0_left) + norm(A.a_para1_left) + norm(A.a_perp1_left)
-                  + 2.0 * norm(A.a_para0_right) + 2.0 * norm(A.a_perp0_right) + norm(A.a_para1_right) + norm(A.a_perp1_right)
-               );
+            result[2] = 0.5 * (
+                  2.0 * norm(A.a_para0_left)  + 2.0 * norm(A.a_perp0_left)  + norm(A.a_para1_left)  + norm(A.a_perp1_left)
+                + 2.0 * norm(A.a_para0_right) + 2.0 * norm(A.a_perp0_right) + norm(A.a_para1_right) + norm(A.a_perp1_right)
+                + 2.0 * norm(A.a_paraS_left)  + 2.0 * norm(A.a_perpS_left)
+                + 2.0 * norm(A.a_paraS_right) + 2.0 * norm(A.a_perpS_right)
+                ) + 2.0 * y * real(
+                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
+                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
+                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
+                ) + 2.0 * y * y * (
+                    - norm(A.a_para0_left)  - norm(A.a_paraS_left)  + norm(A.a_parat_left)
+                    - norm(A.a_perp0_left)  - norm(A.a_perpS_left)  + norm(A.a_perpt_left)
+                    - norm(A.a_para0_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
+                    - norm(A.a_perp0_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
+                ) + 2.0 * y * y * real(
+                      A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
+                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
+                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
+                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
+                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
+                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
+                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
+                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
+            );
+
             // L2c
-            result[3] = - 1.0 / 2.0 * real(
-                  A.a_perp1_left * conj(A.a_para1_left) + 3.0 * A.b_perp1_left * conj(A.b_para1_left)
-                  - (A.a_perp1_right * conj(A.a_para1_right) + 3.0 * A.b_perp1_right * conj(A.b_para1_right))
-               );
+            result[3] = - 0.5 * beta * real(
+                  A.a_perp1_left  * conj(A.a_para1_left)  + 3.0 * A.b_perp1_left  * conj(A.b_para1_left)
+                - A.a_perp1_right * conj(A.a_para1_right) - 3.0 * A.b_perp1_right * conj(A.b_para1_right)
+                + y * (
+                      A.a_paraS_left  * conj(A.a_para0_left)  + A.a_paraS_right * conj(A.a_para0_left)
+                    + A.a_perpS_left  * conj(A.a_perp0_left)  + A.a_perpS_right * conj(A.a_perp0_left)
+                    + A.a_paraS_right * conj(A.a_para0_right) + A.a_paraS_left  * conj(A.a_para0_right)
+                    + A.a_perpS_right * conj(A.a_perp0_right) + A.a_perpS_left  * conj(A.a_perp0_right)
+                )
+            );
+
+
             // L2cc
-            result[4] = 1.0 / 4.0 * (
-                  norm(A.a_para1_left) + norm(A.a_perp1_left) + 3.0 * norm(A.b_para1_left) + 3.0 * norm(A.b_perp1_left)
-                  * norm(A.a_para1_right) + norm(A.a_perp1_right) + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right)
-               );
+            result[4] = 0.25 * (
+                  norm(A.a_para1_left)  + norm(A.a_perp1_left)  + 3.0 * norm(A.b_para1_left)  + 3.0 * norm(A.b_perp1_left)
+                + norm(A.a_para1_right) + norm(A.a_perp1_right) + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right)
+                + norm(A.a_paraS_left)  + norm(A.a_perpS_left)  + norm(A.a_paraS_right)  + norm(A.a_perpS_right)
+                ) + 0.5 * y * real(
+                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
+                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
+                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
+                ) + 0.5 * y * y * (
+                      norm(A.a_para0_left)  - norm(A.a_para1_left)  - norm(A.a_paraS_left)  + norm(A.a_parat_left)
+                    + norm(A.a_perp0_left)  - norm(A.a_perp1_left)  - norm(A.a_perpS_left)  + norm(A.a_perpt_left)
+                    - 3.0 * norm(A.b_para1_left)  - 3.0 * norm(A.b_perp1_left)
+                    + norm(A.a_para0_right) - norm(A.a_para1_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
+                    + norm(A.a_perp0_right) - norm(A.a_perp1_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
+                    - 3.0 * norm(A.b_para1_right) - 3.0 * norm(A.b_perp1_right)
+                ) + 0.5 * y * y * real(
+                      A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
+                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
+                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
+                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
+                    + 3.0 * A.b_para1_right * conj(A.b_para1_left) + 3.0 * A.b_perp1_right * conj(A.b_perp1_left)
+                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
+                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
+                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
+                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
+                    + 3.0 * A.b_para1_left * conj(A.b_para1_right) + 3.0 * A.b_perp1_left * conj(A.b_perp1_right)
+            );
+
             // L2ss
-            result[5] = 1.0 / 8.0 * (
+            result[5] = 0.125 * (
                   2.0 * norm(A.a_para0_left) + norm(A.a_para1_left) + 2.0 * norm(A.a_perp0_left) + norm(A.a_perp1_left)
-                  + 3.0 * norm(A.b_para1_left) + 3.0 * norm(A.b_perp1_left) - 2.0 * sqrt(3.0) * real(
-                    A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left)
-                  )
-                  + 2.0 * norm(A.a_para0_right) + norm(A.a_para1_right) + 2.0 * norm(A.a_perp0_right) + norm(A.a_perp1_right)
-                  + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right) - 2.0 * sqrt(3.0) * real(
-                    A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right)
-                  )
-               );
-            // L3ss
-            result[6] = sqrt(3.0) / 2.0 * real(
-                  A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left)
+                + 2.0 * norm(A.a_paraS_left) + 2.0 * norm(A.a_perpS_left) + 3.0 * norm(A.b_para1_left) + 3.0 * norm(A.b_perp1_left)
+                + 2.0 * norm(A.a_para0_right) + norm(A.a_para1_right) + 2.0 * norm(A.a_perp0_right) + norm(A.a_perp1_right)
+                + 2.0 * norm(A.a_paraS_right) + 2.0 * norm(A.a_perpS_right) + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right)
+                - 2.0 * sqrt(3.0) * real(
+                    A.b_para1_left  * conj(A.a_para1_left)  - A.b_perp1_left *  conj(A.a_perp1_left)
                   + A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right)
-               );
+                )
+            ) + 0.5 * y * real(
+                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
+                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
+                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
+            ) + 0.5 * y * y * (
+                    - norm(A.a_para0_left)  - norm(A.a_paraS_left)  + norm(A.a_parat_left)
+                    - norm(A.a_perp0_left)  - norm(A.a_perpS_left)  + norm(A.a_perpt_left)
+                    - norm(A.a_para0_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
+                    - norm(A.a_perp0_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
+            ) + 0.5 * y * y * real(
+                      A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
+                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
+                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
+                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
+                    + 2.0 * sqrt(3.0) * (A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left))
+                    + 3.0 * A.b_para1_right * conj(A.a_para1_left) + 3.0 * A.b_perp1_right * conj(A.a_perp1_left)
+                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
+                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
+                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
+                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
+                    + 2.0 * sqrt(3.0) * (A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right))
+                    + 3.0 * A.b_para1_left * conj(A.a_para1_right) + 3.0 * A.b_perp1_left * conj(A.a_perp1_right)
+            );
+
+            // L3ss
+            result[6] = sqrt(3.0) / 2.0 * beta2 * real(
+                  A.b_para1_left  * conj(A.a_para1_left)  - A.b_perp1_left  * conj(A.a_perp1_left)
+                + A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right)
+            );
+
             // L4ss
-            result[7] = sqrt(3.0) / 2.0 * imag(
-                  A.b_perp1_left * conj(A.a_para1_left) - A.b_para1_left * conj(A.a_perp1_left)
-                  + A.b_perp1_right * conj(A.a_para1_right) - A.b_para1_right * conj(A.a_perp1_right)
-               );
+            result[7] = sqrt(3.0) / 2.0 * beta2 * imag(
+                  A.b_perp1_left  * conj(A.a_para1_left)  - A.b_para1_left  * conj(A.a_perp1_left)
+                + A.b_perp1_right * conj(A.a_para1_right) - A.b_para1_right * conj(A.a_perp1_right)
+            );
+
             // L5s
-            result[8] = sqrt(3.0 / 2.0) * real(
-                  A.b_perp1_left * conj(A.a_para0_left) - A.b_para1_left * conj(A.a_perp0_left)
-                  - A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
-               );
+            result[8] = sqrt(3.0 / 2.0) * beta * real(
+                  A.b_perp1_left  * conj(A.a_para0_left)  - A.b_para1_left  * conj(A.a_perp0_left)
+                - A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
+                - y * (
+                      A.b_para1_right * conj(A.a_paraS_left)  - A.b_perp1_right * conj(A.a_perpS_left)
+                    + A.a_paraS_left  * conj(A.b_para1_left)  - A.a_perpS_left  * conj(A.b_perp1_left)
+                    + A.b_para1_left  * conj(A.a_paraS_right) - A.b_perp1_left  * conj(A.a_perpS_right)
+                    + A.a_paraS_right * conj(A.b_para1_right) - A.a_perpS_right * conj(A.b_perp1_right)
+                )
+            );
+
             // L5sc
-            result[9] = - sqrt(3.0 / 2.0) * real(
-                  A.b_para1_left * conj(A.a_para0_left) - A.b_perp1_left * conj(A.a_perp0_left)
-                  + A.b_para1_right * conj(A.a_para0_right) - A.b_perp1_right * conj(A.a_perp0_right)
-               );
+            result[9] = - sqrt(3.0 / 2.0) * beta2 * real(
+                  A.b_para1_left  * conj(A.a_para0_left)  - A.b_perp1_left  * conj(A.a_perp0_left)
+                + A.b_para1_right * conj(A.a_para0_right) - A.b_perp1_right * conj(A.a_perp0_right)
+            );
+
             // L6s
-            result[10] = sqrt(3.0 / 2.0) * imag(
-                  A.b_para1_left * conj(A.a_para0_left) - A.b_perp1_left * conj(A.a_perp0_left)
-                  - A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
-               );
+            result[10] = sqrt(3.0 / 2.0) * beta * imag(
+                  A.b_para1_left  * conj(A.a_para0_left)  - A.b_perp1_left  * conj(A.a_perp0_left)
+                - A.b_perp1_right * conj(A.a_para0_right) + A.b_para1_right * conj(A.a_perp0_right)
+                - y * (
+                      A.b_perp1_right * conj(A.a_paraS_left)  - A.b_para1_right * conj(A.a_perpS_left)
+                    + A.a_perpS_left  * conj(A.b_para1_left)  - A.a_paraS_left  * conj(A.b_perp1_left)
+                    + A.b_perp1_left  * conj(A.a_paraS_right) - A.b_para1_left  * conj(A.a_perpS_right)
+                    + A.a_perpS_right * conj(A.b_para1_right) - A.a_paraS_right * conj(A.b_perp1_right)
+                )
+            );
+
             // L6sc
-            result[11] = - sqrt(3.0 / 2.0) * imag(
-                  A.b_perp1_left * conj(A.a_para0_left) - A.b_para1_left * conj(A.a_perp0_left)
-                  + A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
-               );
+            result[11] = - sqrt(3.0 / 2.0) * beta2 * imag(
+                  A.b_perp1_left  * conj(A.a_para0_left)  - A.b_para1_left * conj(A.a_perp0_left)
+                + A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
+            );
 
             return result;
         }
@@ -161,7 +291,6 @@ namespace eos
 
             return LambdaBToLambda1520Dilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
-
 
         inline double decay_width(const LambdaBToLambda1520Dilepton::AngularCoefficients & a_c)
         {
@@ -470,7 +599,7 @@ namespace eos
     const std::string
     LambdaBToLambda1520Dilepton::description = "\
 The decay \bar{Lambda_b}->\bar{Lambda}(1520) l^+ l^-, with l=e,mu,tau \
-a charged lepton assumed to be massless and the \bar{Lambda}(1520) further \
+a charged lepton and the \bar{Lambda}(1520) further \
 decaying to \bar{N} K. Various theory models can be selected using the \
 'tag' option";
 

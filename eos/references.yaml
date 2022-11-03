@@ -755,6 +755,13 @@ DBG:2013A:
     id: oai:arXiv.org:1307.6653
   inspire-id: Dutta:2013qaa
   title: 'Effective theory approach to new physics in $b \to u$ and $b \to c$ leptonic and semileptonic decays'
+DD:2020A:
+  authors: Das, Diganta and Das, Jaydeb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2003.08366
+  inspire-id: Das:2020cpv
+  title: The $\Lambda_b\to\Lambda^\ast(1520)(\to N\!\bar{K})\ell^+\ell^-$ decay at low-recoil in HQET
 DDHLMSW:2019A:
   authors: Dowdall, R.J. and Davies, C.T.H. and Horgan, R.R. and Lepage, G.P. and Monahan, C.J. and Shigemitsu, J. and Wingate, M.
   collaboration: HPQCD

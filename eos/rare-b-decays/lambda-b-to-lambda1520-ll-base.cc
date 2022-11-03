@@ -31,6 +31,7 @@ namespace eos
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         hbar(p["QM::hbar"], *this),
+        m_l(p["mass::" + opt_l.value()], *this),
         m_Lb(p["mass::Lambda_b"], *this),
         m_Lstar(p["mass::Lambda(1520)"], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
@@ -51,5 +52,11 @@ namespace eos
     LambdaBToLambda1520Dilepton::AmplitudeGenerator::lambda(const double & s) const
     {
         return eos::lambda(m_Lb() * m_Lb(), m_Lstar() * m_Lstar(), s);
+    }
+
+    double
+    LambdaBToLambda1520Dilepton::AmplitudeGenerator::beta_l(const double & s) const
+    {
+        return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
     }
 }

@@ -75,13 +75,21 @@ class LambdaBToLambda1520DileptonNaiveTest :
             p["b->s::c8"] = 0.;
             p["sbmumu::mu"] = 4.2;
             p["b->smumu::Re{c9}"] = 4.2;
-            p["b->smumu::Im{c9}"] = 0.;
+            p["b->smumu::Im{c9}"] = 0.1;
             p["b->smumu::Re{c9'}"] = 0.;
             p["b->smumu::Im{c9'}"] = 0.;
             p["b->smumu::Re{c10}"] = -4.3;
-            p["b->smumu::Im{c10}"] = 0.;
+            p["b->smumu::Im{c10}"] = 0.2;
             p["b->smumu::Re{c10'}"] = 0.;
             p["b->smumu::Im{c10'}"] = 0.;
+            p["b->smumu::Re{cS}"] = 0.3;
+            p["b->smumu::Im{cS}"] = 0.4;
+            p["b->smumu::Re{cS'}"] = 0.;
+            p["b->smumu::Im{cS'}"] = 0.;
+            p["b->smumu::Re{cP}"] = -0.5;
+            p["b->smumu::Im{cP}"] = -0.6;
+            p["b->smumu::Re{cP'}"] = 0.;
+            p["b->smumu::Im{cP'}"] = 0.;
 
             p["CKM::abs(V_ub)"] = 0.;
             p["CKM::arg(V_ub)"] = 0.;
@@ -115,18 +123,26 @@ class LambdaBToLambda1520DileptonNaiveTest :
             LambdaBToLambda1520Dilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_right,  complex<double>(-0.0416087,0.00161803)   , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_left,   complex<double>(-0.0256064,0.00161803)   , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.b_para1_right,  complex<double>(-0.042223,-0.000368419)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.b_para1_left,   complex<double>(-0.0458667,-0.000368419) , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_right,  complex<double>(0.0105526,-0.000410356)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_left,   complex<double>(0.00649415,-0.000410356) , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_right,  complex<double>(0.010993,-0.000347111)   , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_left,   complex<double>(0.00756008,-0.000347111) , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_right,  complex<double>(0.000820407,-0.0127529)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_left,   complex<double>(-0.125306,-0.0127529)    , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para0_right,  complex<double>(-0.00451516,0.00240086)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para0_left,   complex<double>(0.0192293,0.00240086)    , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_right,  complex<double>(-0.0411362,0.00215154), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_left,   complex<double>(-0.0253156,0.0014157), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.b_para1_right,  complex<double>(-0.0417436,-0.000489896), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.b_para1_left,   complex<double>(-0.0453458,-0.000322348), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_right,  complex<double>(0.0104327,-0.000545661), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_left,   complex<double>(0.0064204,-0.000359041), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_right,  complex<double>(0.0108682,-0.000461563), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_left,   complex<double>(0.00747423,-0.000303705), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_right,  complex<double>(0.00081109,-0.0169579), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_left,   complex<double>(-0.123883,-0.0111582), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para0_right,  complex<double>(-0.00446388,0.00319248), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para0_left,   complex<double>(0.0190109,0.00210063), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perpt_right,  complex<double>(-0.0629889,0.00292971), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perpt_left,   complex<double>(0.0629889,-0.00292971), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_parat_right,  complex<double>(0.0121739,-0.000566226), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_parat_left,   complex<double>(-0.0121739,0.000566226), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perpS_right,  complex<double>(-0.000716257,-0.000716257), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perpS_left,   complex<double>(0.00286503,0.00358129), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_paraS_right,  complex<double>(0.000689419,0.000689419), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_paraS_left,   complex<double>(-0.00275768,-0.0034471), eps);
         }
     }
 } lambda_b_to_lambda1520_ll_naive_test;
