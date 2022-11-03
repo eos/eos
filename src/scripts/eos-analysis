@@ -421,6 +421,28 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
 
 
+    # corner-plot
+    parser_corner_plot = subparsers.add_parser('corner_plot',
+        parents = [common_subparser],
+        description =
+'''
+Generate a corner plot of the 1-D and 2-D marginalized posteriors.
+
+The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
+The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
+''',
+        help = 'Generate a corner plot of the 1-D and 2-D marginalized posteriors.'
+    )
+    parser_corner_plot.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which the samples were drawn.'
+    )
+    parser_corner_plot.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_corner_plot.set_defaults(cmd = cmd_corner_plot)
+
+
     # run
     parser_run = subparsers.add_parser('run',
         parents = [common_subparser],
@@ -567,6 +589,11 @@ def cmd_sample_pmc(args):
 # Nested sampling
 def cmd_sample_nested(args):
     return eos.sample_nested(**args_to_dict(args))
+
+
+# Nested sampling
+def cmd_corner_plot(args):
+    return eos.corner_plot(**args_to_dict(args))
 
 
 # Cartesian product
