@@ -460,6 +460,64 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     eos.data.DynestyResults.create(os.path.join(base_directory, posterior, 'dynesty_results'), analysis.varied_parameters, results)
 
 
+# Corner plot
+@task('corner-plot', '{posterior}/plots')
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
+    """
+    Generates a corner plot of the 1-D and 2-D marginalized posteriors.
+
+    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    """
+    p = eos.Parameters()
+    f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+    size = f.samples.shape[-1]
+    fig, axes = plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
+
+    for i in range(size):
+        # diagonal
+        ax = axes[i, i]
+        samples = f.samples[:, i]
+        xmin = np.min(samples)
+        xmax = np.max(samples)
+        ax.set_xlim((xmin, xmax))
+
+        ax.set_xlabel(p[eos.QualifiedName(varied_parameters[i].name())].latex())
+        ax.set_ylabel(p[eos.QualifiedName(varied_parameters[i].name())].latex())
+
+        ax.hist(samples, weights=f.weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
+        ax.set_aspect(np.diff((xmin, xmax))[0] / np.diff(ax.get_ylim())[0])
+
+        for j in range(0, size):
+            if j < i:
+                axes[i, j].set_axis_off()
+
+            if j <= i:
+                continue
+
+            ax = axes[i, j]
+            xsamples = f.samples[:, j]
+            ysamples = f.samples[:, i]
+            xmin = np.min(xsamples)
+            xmax = np.max(xsamples)
+            ymin = np.min(ysamples)
+            ymax = np.max(ysamples)
+            ax.set_xlim((xmin, xmax))
+            ax.set_ylim((ymin, ymax))
+            ax.set_aspect(np.diff((xmin, xmax))[0] / np.diff((ymin, ymax))[0])
+            ax.hist2d(xsamples, ysamples, weights=weights, alpha=1.0, bins=100, cmap='Greys')
+
+    fig.tight_layout()
+    fig.savefig(os.path.join(base_directory, posterior, 'plots', 'corner-plot.pdf'))
+
+
 class Executor:
     _factory_methods = {}
 
