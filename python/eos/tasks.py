@@ -476,7 +476,8 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     """
-    p = eos.Parameters()
+    analysis = analysis_file.analysis(posterior)
+    p = analysis.varied_parameters
     f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
     size = f.samples.shape[-1]
     fig, axes = plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
@@ -489,8 +490,8 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
         xmax = np.max(samples)
         ax.set_xlim((xmin, xmax))
 
-        ax.set_xlabel(p[eos.QualifiedName(varied_parameters[i].name())].latex())
-        ax.set_ylabel(p[eos.QualifiedName(varied_parameters[i].name())].latex())
+        ax.set_xlabel(p[i].latex())
+        ax.set_ylabel(p[i].latex())
 
         ax.hist(samples, weights=f.weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
         ax.set_aspect(np.diff((xmin, xmax))[0] / np.diff(ax.get_ylim())[0])
