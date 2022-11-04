@@ -591,7 +591,7 @@ def cmd_sample_nested(args):
     return eos.sample_nested(**args_to_dict(args))
 
 
-# Nested sampling
+# Corner plot
 def cmd_corner_plot(args):
     return eos.corner_plot(**args_to_dict(args))
 
