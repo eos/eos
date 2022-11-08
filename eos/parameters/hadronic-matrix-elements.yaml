@@ -2582,7 +2582,7 @@ groups:
   - title: 'Parameters in LCSR Calculations with Light-Meson LCDAs'
     description: ''
     parameters:
-      # form factor parameters for LCSR calculation according to [DKMMO:2008A]
+      # B->pi form factor parameters for LCSR calculation according to [DKMMO:2008A]
       'B->pi::zeta(NNLO)@DKMMO2008' :
           central: 0.0
           min:     -1.0
@@ -2674,6 +2674,104 @@ groups:
           comments: 'cf. [DKMMO:2008A]'
           latex:    "$s_0''^{f_T}(q^2 = 0)$"
       'B->pi::sp_0^B@DKMMO2008' :
+          central: +35.6
+          min:     +35.5
+          max:     +36.0
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    '$s_0^{f_B}$'
+      # B_s->K form factor parameters for LCSR calculation using the [DKMMO:2008A] code, with [DM:2008A] adjustments
+      'B_s->K::zeta(NNLO)@DKMMO2008' :
+          central: 0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\zeta\mathrm{(NNLO)}$'
+      'B_s->K::M^2@DKMMO2008' :
+          central: +16.0
+          min:     +15.0
+          max:     +20.0
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    '$M^2\,\mathrm{(LCSR)}$'
+      'B_s->K::Mp^2@DKMMO2008' :
+          central: +5.0
+          min:     +5.0
+          max:     +5.0
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    '$M^2\,\mathrm{(SVZSR)}$'
+      'B_s->K::mu@DKMMO2008' :
+          central: +3.0
+          min:     +3.0
+          max:     +3.0
+          unit:     'GeV'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    '$\mu^{B_s \to K,\mathrm{DKMMO2008}}$'
+      'B_s->K::s_0^+(0)@DKMMO2008' :
+          central: +35.75
+          min:     +35.75
+          max:     +35.75
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    '$s_0^{f_+}(q^2 = 0)$'
+      "B_s->K::s_0^+'(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0'^{f_+}(q^2 = 0)$"
+      "B_s->K::s_0^+''(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0''^{f_+}(q^2 = 0)$"
+      "B_s->K::s_0^0(0)@DKMMO2008" :
+          central: +36.00
+          min:     +36.00
+          max:     +36.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0^{f_0}(q^2 = 0)$"
+      "B_s->K::s_0^0'(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0'^{f_0}(q^2 = 0)$"
+      "B_s->K::s_0^0''(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0''^{f_0}(q^2 = 0)$"
+      'B_s->K::s_0^T(0)@DKMMO2008' :
+          central: +35.75
+          min:     +35.75
+          max:     +35.75
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    '$s_0^{f_T}(q^2 = 0)$'
+      "B_s->K::s_0^T'(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0'^{f_T}(q^2 = 0)$"
+      "B_s->K::s_0^T''(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          unit:     'GeV^2'
+          comments: 'cf. [DKMMO:2008A]'
+          latex:    "$s_0''^{f_T}(q^2 = 0)$"
+      'B_s->K::sp_0^B@DKMMO2008' :
           central: +35.6
           min:     +35.5
           max:     +36.0

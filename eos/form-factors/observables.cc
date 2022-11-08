@@ -19,7 +19,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/form-factors/form-factor-adapter.hh>
-#include <eos/form-factors/analytic-b-to-pi.hh>
+#include <eos/form-factors/analytic-b-to-psd-dkmmo2008.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
@@ -125,26 +125,33 @@ namespace eos
                 // auxiliary variables, e.g. for determining the pi-LCSR/SVZ threshold parameters
                 make_observable("B->pi::M_B(f_+,LCSR)@DKMMO2008",
                         Unit::GeV(),
-                        &AnalyticFormFactorBToPiDKMMO2008::MBp_lcsr,
-                        std::make_tuple("q2")),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::MBp_lcsr,
+                        std::make_tuple("q2"),
+                        Options{ { "q", "d" } }),
 
                 make_observable("B->pi::M_B(f_0,LCSR)@DKMMO2008",
                         Unit::GeV(),
-                        &AnalyticFormFactorBToPiDKMMO2008::MB0_lcsr,
-                        std::make_tuple("q2")),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::MB0_lcsr,
+                        std::make_tuple("q2"),
+                        Options{ { "q", "d" } }),
 
                 make_observable("B->pi::M_B(f_T,LCSR)@DKMMO2008",
                         Unit::GeV(),
-                        &AnalyticFormFactorBToPiDKMMO2008::MBT_lcsr,
-                        std::make_tuple("q2")),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::MBT_lcsr,
+                        std::make_tuple("q2"),
+                        Options{ { "q", "d" } }),
 
                 make_observable("B->pi::M_B(SVZ)@DKMMO2008",
                         Unit::GeV(),
-                        &AnalyticFormFactorBToPiDKMMO2008::MB_svz),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::MB_svz,
+                        std::make_tuple(),
+                        Options{ { "q", "d" } }),
 
                 make_observable("B->pi::f_B@DKMMO2008",
                         Unit::GeV(),
-                        &AnalyticFormFactorBToPiDKMMO2008::decay_constant),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::decay_constant,
+                        std::make_tuple(),
+                        Options{ { "q", "d" } }),
             }
         );
 
@@ -358,6 +365,7 @@ namespace eos
                 make_form_factor_adapter("B_s->K::f_-(q2)", R"(f_-^{B_s\to \bar{K}}(q^2))",
                         &FormFactors<PToP>::f_m, std::make_tuple("q2")),
 
+                // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B_s->K::f_+[s^1/s^0](q2)",
                         Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_p,
@@ -372,6 +380,37 @@ namespace eos
                         Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
+
+                // auxiliary variables, e.g. for determining the pi-LCSR/SVZ threshold parameters
+                make_observable("B_s->K::M_B(f_+,LCSR)@DKMMO2008",
+                        Unit::GeV(),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::MBp_lcsr,
+                        std::make_tuple("q2"),
+                        Options{ }),
+
+                make_observable("B_s->K::M_B(f_0,LCSR)@DKMMO2008",
+                        Unit::GeV(),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::MB0_lcsr,
+                        std::make_tuple("q2"),
+                        Options{ }),
+
+                make_observable("B_s->K::M_B(f_T,LCSR)@DKMMO2008",
+                        Unit::GeV(),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::MBT_lcsr,
+                        std::make_tuple("q2"),
+                        Options{ }),
+
+                make_observable("B_s->K::M_B(SVZ)@DKMMO2008",
+                        Unit::GeV(),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::MB_svz,
+                        std::make_tuple(),
+                        Options{ }),
+
+                make_observable("B_s->K::f_B@DKMMO2008",
+                        Unit::GeV(),
+                        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::decay_constant,
+                        std::make_tuple(),
+                        Options{ })
             }
         );
 
