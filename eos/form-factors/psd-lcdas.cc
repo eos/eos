@@ -37,6 +37,7 @@ namespace eos
         static const std::map<KeyType, ValueType> lcdas
         {
             { "pi",   &PionLCDAs::make     },
+            { "K",    &KaonLCDAs::make     },
             { "Kbar", &AntiKaonLCDAs::make }
         };
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/analytic-b-to-pi.hh>
+#include <eos/form-factors/analytic-b-to-psd-dkmmo2008.hh>
 #include <eos/form-factors/mesonic.hh>
 
 #include <cmath>
@@ -55,7 +55,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             /* Decay Constant */
             {
                 Parameters p = Parameters::Defaults();
-                AnalyticFormFactorBToPiDKMMO2008 ff(p, Options{ });
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ });
                 p["mass::B_d"] = 5.2795;
                 p["mass::b(MSbar)"] = 4.2;
                 p["B->pi::mu@DKMMO2008"] = 4.2;
@@ -78,18 +78,19 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                     std::make_pair(-4.62757,  eps), // rho_1(s = 22.05, m_b = 4.16, mu = 4.16)
                     std::make_pair(+0.67764,  eps), // rho_1(s = 25.20, m_b = 4.16, mu = 4.16)
                     std::make_pair( 0.22315, 1e-3), // f_B
+                    std::make_pair( 5.33019,  eps), // M_B for SVZ
                     std::make_pair( 1.00000,  eps), // rescale factor for f_+ at s =  0.0 GeV^2
                     std::make_pair( 1.09380,  eps), // rescale factor for f_+ at s = 10.0 GeV^2
                     std::make_pair( 1.00000,  eps), // rescale factor for f_0 at s =  0.0 GeV^2
-                    std::make_pair( 1.14094,  eps), // rescale factor for f_0 at s = 10.0 GeV^2
+                    std::make_pair( 1.14083,  eps), // rescale factor for f_0 at s = 10.0 GeV^2
                     std::make_pair( 1.00000,  eps), // rescale factor for f_T at s =  0.0 GeV^2
-                    std::make_pair( 1.07378,  eps), // rescale factor for f_T at s = 10.0 GeV^2
-                    std::make_pair( 5.30192,  eps), // M_B for f_+ at s =  0.0 GeV^2
-                    std::make_pair( 5.32090,  eps), // M_B for f_+ at s = 10.0 GeV^2
-                    std::make_pair( 5.30192,  eps), // M_B for f_0 at s =  0.0 GeV^2
-                    std::make_pair( 5.35978,  eps), // M_B for f_0 at s = 10.0 GeV^2
-                    std::make_pair( 5.30249,  eps), // M_B for f_T at s =  0.0 GeV^2
-                    std::make_pair( 5.34911,  eps), // M_B for f_T at s = 10.0 GeV^2
+                    std::make_pair( 1.07377,  eps), // rescale factor for f_T at s = 10.0 GeV^2
+                    std::make_pair( 5.30187,  eps), // M_B for f_+ at s =  0.0 GeV^2
+                    std::make_pair( 5.32078,  eps), // M_B for f_+ at s = 10.0 GeV^2
+                    std::make_pair( 5.30187,  eps), // M_B for f_0 at s =  0.0 GeV^2
+                    std::make_pair( 5.35957,  eps), // M_B for f_0 at s = 10.0 GeV^2
+                    std::make_pair( 5.30246,  eps), // M_B for f_T at s =  0.0 GeV^2
+                    std::make_pair( 5.34903,  eps), // M_B for f_T at s = 10.0 GeV^2
                 };
 
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
@@ -130,7 +131,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["QCD::r_vac"] = 1.0;
                 p["QCD::alpha_s(MZ)"] = 0.1184;
 
-                AnalyticFormFactorBToPiDKMMO2008 ff(p, Options{ });
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ });
 
                 // LO, tw2
                 TEST_CHECK_NEARLY_EQUAL( 0.1167, ff.F_lo_tw2(-5.0),  eps);
@@ -173,7 +174,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL( 0.3777, ff.f_p( 5.0), 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.5346, ff.f_p(10.0), 10 * eps);
 
-                AnalyticFormFactorBToPiDKMMO2008 ff_no_rescale(p, Options{{"rescale-borel", "0"}});
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, Options{{"rescale-borel", "0"}});
 
                 // Ftil LO, tw3
                 TEST_CHECK_NEARLY_EQUAL( 0.0283, ff_no_rescale.Ftil_lo_tw3(-10.0), 1. * eps);
@@ -256,13 +257,13 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL(-0.2879, ff_no_rescale.FT_nlo_tw3( 10.0), 1. * eps);
 
                 // fT form factor @ mu = 3.0
-                TEST_CHECK_NEARLY_EQUAL( 0.1751, ff_no_rescale.f_t(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2171, ff_no_rescale.f_t( -5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2638, ff_no_rescale.f_t( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2781, ff_no_rescale.f_t(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2937, ff_no_rescale.f_t(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3728, ff_no_rescale.f_t(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.5326, ff_no_rescale.f_t( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1750, ff_no_rescale.f_t(-10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2169, ff_no_rescale.f_t( -5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2636, ff_no_rescale.f_t( -1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2779, ff_no_rescale.f_t(  0.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2935, ff_no_rescale.f_t(  1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_t(  5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.5322, ff_no_rescale.f_t( 10.0), 1. * eps);
             }
 
             {
@@ -297,18 +298,18 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["QCD::r_vac"] = 1.0;
                 p["QCD::alpha_s(MZ)"] = 0.1176;
 
-                AnalyticFormFactorBToPiDKMMO2008 ff_no_rescale(p, Options{{"rescale-borel", "0"}});
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, Options{{"rescale-borel", "0"}});
 
                 TEST_CHECK_NEARLY_EQUAL( 0.2644, ff_no_rescale.f_p(  0.0),   2 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.4964, ff_no_rescale.f_p( 10.0),  15 * eps);
                 // f_0(0) = f_+(0)
-                TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_0( 10.0),   2 * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_0( 10.0),   7 * eps);
 
                 // The values for f_T used here differe from the published manuscript due to a typeo
                 // in the formulas for the leading-order expression. The shift is ~2%, and the values
                 // below are taken from an updated Mathematica notebook free of this typo.
                 TEST_CHECK_NEARLY_EQUAL( 0.2606, ff_no_rescale.f_t(  0.0),  10 * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4990, ff_no_rescale.f_t( 10.0),  15 * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4990, ff_no_rescale.f_t( 10.0),  19 * eps);
             }
         }
 } analytic_form_factor_b_to_pi_DKMMO2008_test;

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2020 Danny van Dyk
+ * Copyright (c) 2014-2023 Danny van Dyk
  * Copyright (c) 2019, 2020 Domagoj Leljak
  *
  * This file is part of the EOS project. EOS is free software;
@@ -18,25 +18,27 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_PI_HH
-#define EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_PI_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_PSD_DKMMO2008_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_PSD_DKMMO2008_HH 1
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
+#include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>
 
 namespace eos
 {
-    class AnalyticFormFactorBToPiDKMMO2008 :
+    template <QuarkFlavor q1_, QuarkFlavor q2_, QuarkFlavor qs_>
+    class AnalyticFormFactorBToPseudoscalarDKMMO2008 :
         public FormFactors<PToP>,
-        PrivateImplementationPattern<AnalyticFormFactorBToPiDKMMO2008>
+        PrivateImplementationPattern<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>
     {
         public:
-            AnalyticFormFactorBToPiDKMMO2008(const Parameters &, const Options &);
+            AnalyticFormFactorBToPseudoscalarDKMMO2008(const Parameters &, const Options &);
 
-            ~AnalyticFormFactorBToPiDKMMO2008();
+            ~AnalyticFormFactorBToPseudoscalarDKMMO2008();
 
             static FormFactors<PToP> * make(const Parameters &, const Options &);
 
@@ -88,6 +90,9 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
+
+    extern template class AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>;
+    extern template class AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>;
 }
 
 #endif

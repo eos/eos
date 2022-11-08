@@ -670,13 +670,25 @@ groups:
           central: -0.07
           min:     -0.10
           max:     -0.04
-          latex:    '$a^{\pi}_1(1\,\mathrm{GeV})$'
+          latex:    '$a^{K}_1(1\,\mathrm{GeV})$'
           unit:     '1'
       'K::a2@1GeV' :
           central: +0.24
           min:     +0.16
           max:     +0.32
-          latex:    '$a^{\pi}_2(1\,\mathrm{GeV})$'
+          latex:    '$a^{K}_2(1\,\mathrm{GeV})$'
+          unit:     '1'
+      'K::a3@1GeV' :
+          central:  0.00
+          min:     -0.10
+          max:     +0.10
+          latex:    '$a^{K}_3(1\,\mathrm{GeV})$'
+          unit:     '1'
+      'K::a4@1GeV' :
+          central: +0.00
+          min:     -0.10
+          max:     +0.10
+          latex:    '$a^{K}_4(1\,\mathrm{GeV})$'
           unit:     '1'
       'K::f3@1GeV' :
           central: +0.0045

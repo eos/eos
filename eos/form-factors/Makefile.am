@@ -7,7 +7,9 @@ AM_LDFLAGS = @AM_LDFLAGS@
 lib_LTLIBRARIES = libeosformfactors.la
 libeosformfactors_la_SOURCES = \
 	analytic-b-to-gamma-qcdf.cc analytic-b-to-gamma-qcdf.hh \
-	analytic-b-to-pi.hh analytic-b-to-pi.cc \
+	analytic-b-to-psd-dkmmo2008.hh analytic-b-to-psd-dkmmo2008-impl.hh \
+	analytic-b-to-pi-dkmmo2008.cc \
+	analytic-bs-to-k-dkmmo2008.cc \
 	analytic-b-to-pi-pi.hh analytic-b-to-pi-pi.cc \
 	analytic-b-to-p-lcsr.hh analytic-b-to-p-lcsr-impl.hh \
 	analytic-b-to-pi-lcsr.cc  analytic-b-to-k-lcsr.cc  analytic-b-to-d-lcsr.cc \
@@ -58,8 +60,8 @@ libeosformfactors_la_LIBADD = \
 
 include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \
-	analytic-b-to-pi.hh \
 	analytic-b-to-pi-pi.hh \
+	analytic-b-to-psd-dkmmo2008.hh \
 	b-lcdas.hh \
 	b-lcdas-exponential.hh \
 	b-lcdas-flvd2022.hh \
@@ -86,6 +88,7 @@ AM_TESTS_ENVIRONMENT = \
 TESTS = \
 	analytic-b-to-gamma-qcdf_TEST \
 	analytic-b-to-pi_TEST \
+	analytic-bs-to-k_TEST \
 	analytic-b-to-pi-pi_TEST \
 	analytic-b-to-p-lcsr_TEST \
 	analytic-b-to-v-lcsr_TEST \
@@ -124,6 +127,8 @@ check_PROGRAMS = $(TESTS)
 analytic_b_to_gamma_qcdf_TEST_SOURCES = analytic-b-to-gamma-qcdf_TEST.cc
 
 analytic_b_to_pi_TEST_SOURCES = analytic-b-to-pi_TEST.cc
+
+analytic_bs_to_k_TEST_SOURCES = analytic-bs-to-k_TEST.cc
 
 analytic_b_to_pi_pi_TEST_SOURCES = analytic-b-to-pi-pi_TEST.cc
 analytic_b_to_pi_pi_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)

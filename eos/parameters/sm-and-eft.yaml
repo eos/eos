@@ -85,6 +85,12 @@ groups:
           max:     +0.5
           unit:     'GeV'
           latex:    '$\Lambda_\mathrm{QCD}$'
+      'QCD::cond_ss@2GeV' :
+          central: -0.0164566592
+          min:     -0.0237514
+          max:     -0.0103664
+          unit:     'GeV^3'
+          latex:    '$\left\langle \bar{s} s\right\rangle_{\mu=2\,\mathrm{GeV}}$'
       'QCD::cond_GG' :
           central: +0.012
           min:     +0.000
