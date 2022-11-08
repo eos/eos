@@ -21,7 +21,6 @@
 
 #include <test/test.hh>
 #include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 

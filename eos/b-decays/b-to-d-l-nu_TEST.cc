@@ -85,15 +85,15 @@ class BToDLeptonNeutrinoTest :
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
-                    { "l",             "e"       },
-                    { "model",         "CKM" },
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    }
+                    { "l",             "e"         },
+                    { "model",         "CKM"       },
+                    { "U",             "c"         },
+                    { "q",             "d"         },
+                    { "I",             "1/2"       },
+                    { "z-order-lp",    "3"         },
+                    { "z-order-slp",   "2"         },
+                    { "z-order-sslp",  "1"         },
+                    { "form-factors",  "BGJvD2019" }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, o);
@@ -139,15 +139,15 @@ class BToDLeptonNeutrinoTest :
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
-                    { "l",             "tau"     },
-                    { "model",         "CKM" },
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    }
+                    { "l",             "tau"       },
+                    { "model",         "CKM"       },
+                    { "U",             "c"         },
+                    { "q",             "d"         },
+                    { "I",             "1/2"       },
+                    { "z-order-lp",    "3"         },
+                    { "z-order-slp",   "2"         },
+                    { "z-order-sslp",  "1"         },
+                    { "form-factors",  "BGJvD2019" }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, o);
