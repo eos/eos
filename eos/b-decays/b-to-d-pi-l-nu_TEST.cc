@@ -74,12 +74,12 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "l",             "tau"     },
-                    { "q",             "d"       },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    }
+                    { "l",             "tau"       },
+                    { "q",             "d"         },
+                    { "z-order-lp",    "3"         },
+                    { "z-order-slp",   "2"         },
+                    { "z-order-sslp",  "1"         },
+                    { "form-factors",  "BGJvD2019" }
                 };
 
                 BToDPiLeptonNeutrino d(p, o);
@@ -124,12 +124,12 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "l",             "mu"      },
-                    { "q",             "d"       },
-                    { "z-order-lp",    "2"       },
-                    { "z-order-slp",   "1"       },
-                    { "z-order-sslp",  "0"       },
-                    { "form-factors",  "HQET"    }
+                    { "l",             "mu"        },
+                    { "q",             "d"         },
+                    { "z-order-lp",    "2"         },
+                    { "z-order-slp",   "1"         },
+                    { "z-order-sslp",  "0"         },
+                    { "form-factors",  "BGJvD2019" }
                 };
 
                 BToDPiLeptonNeutrino d(p, o);

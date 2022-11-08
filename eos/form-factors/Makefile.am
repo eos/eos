@@ -24,12 +24,12 @@ libeosformfactors_la_SOURCES = \
 	kstar-lcdas.cc kstar-lcdas.hh \
 	lcda.cc lcda.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
-	mesonic-hqet.hh \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
 	parametric-abr2022.hh parametric-abr2022-impl.hh parametric-abr2022.cc \
 	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
+	parametric-bgjvd2019.hh parametric-bgjvd2019-impl.hh parametric-bgjvd2019.cc \
 	parametric-bmrvd2022.hh parametric-bmrvd2022-impl.hh parametric-bmrvd2022.cc \
 	parametric-bsz2015.hh parametric-bsz2015-impl.hh parametric-bsz2015.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
@@ -56,6 +56,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-abr2022.hh \
 	parametric-bcl2008.hh \
 	parametric-bgl1997.hh \
+	parametric-bgjvd2019.hh \
 	parametric-bsz2015.hh \
 	parametric-kmpw2010.hh \
 	pi-lcdas.hh
@@ -75,10 +76,10 @@ TESTS = \
 	kstar-lcdas_TEST \
 	lcda_TEST \
 	mesonic_TEST \
-	mesonic-hqet_TEST \
 	parametric-abr2022_TEST \
 	parametric-bcl2008_TEST \
 	parametric-bgl1997_TEST \
+	parametric-bgjvd2019_TEST \
 	parametric-bmrvd2022_TEST \
 	parametric-bsz2015_TEST \
 	parametric-kmpw2010_TEST \
@@ -117,13 +118,13 @@ lcda_TEST_SOURCES = lcda_TEST.cc
 
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 
-mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
-
 parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
 
 parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
 
 parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
+
+parametric_bgjvd2019_TEST_SOURCES = parametric-bgjvd2019_TEST.cc
 
 parametric_bsz2015_TEST_SOURCES = parametric-bsz2015_TEST.cc
 

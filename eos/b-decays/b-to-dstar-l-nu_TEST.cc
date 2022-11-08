@@ -87,16 +87,16 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "l",             "e"       },
-                    { "model",         "CKM" },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    },
-                    { "integration-points",    "4096"    }
+                    { "U",                  "c"         },
+                    { "q",                  "d"         },
+                    { "I",                  "1/2"       },
+                    { "l",                  "e"         },
+                    { "model",              "CKM"       },
+                    { "z-order-lp",         "3"         },
+                    { "z-order-slp",        "2"         },
+                    { "z-order-sslp",       "1"         },
+                    { "form-factors",       "BGJvD2019" },
+                    { "integration-points", "4096"      }
                 };
 
                 Kinematics k
@@ -164,16 +164,16 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "l",             "tau"     },
-                    { "model",         "CKM" },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    },
-                    { "integration-points",    "4096"    }
+                    { "U",                  "c"         },
+                    { "q",                  "d"         },
+                    { "I",                  "1/2"       },
+                    { "l",                  "tau"       },
+                    { "model",              "CKM"       },
+                    { "z-order-lp",         "3"         },
+                    { "z-order-slp",        "2"         },
+                    { "z-order-sslp",       "1"         },
+                    { "form-factors",       "BGJvD2019" },
+                    { "integration-points", "4096"      }
                 };
 
                 Kinematics k
@@ -253,16 +253,16 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "l",             "mu"      },
-                    { "model",         "WET" },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    },
-                    { "integration-points",    "4096"    }
+                    { "U",                  "c"         },
+                    { "q",                  "d"         },
+                    { "I",                  "1/2"       },
+                    { "l",                  "mu"        },
+                    { "model",              "WET"       },
+                    { "z-order-lp",         "3"         },
+                    { "z-order-slp",        "2"         },
+                    { "z-order-sslp",       "1"         },
+                    { "form-factors",       "BGJvD2019" },
+                    { "integration-points", "4096"      }
                 };
 
                 Kinematics k
@@ -465,14 +465,14 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",             "c"       },
-                    { "I",             "1/2"     },
-                    { "q",             "d"       },
-                    { "model",         "CKM"     },
-                    { "z-order-lp",    "3"       },
-                    { "z-order-slp",   "2"       },
-                    { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    },
+                    { "U",             "c"         },
+                    { "I",             "1/2"       },
+                    { "q",             "d"         },
+                    { "model",         "CKM"       },
+                    { "z-order-lp",    "3"         },
+                    { "z-order-slp",   "2"         },
+                    { "z-order-sslp",  "1"         },
+                    { "form-factors",  "BGJvD2019" },
                 };
                 Kinematics k
                 {

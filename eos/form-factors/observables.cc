@@ -25,9 +25,9 @@
 #include <eos/form-factors/b-lcdas.hh>
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
-#include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
+#include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>

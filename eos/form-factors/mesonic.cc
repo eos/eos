@@ -24,10 +24,10 @@
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
-#include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
+#include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/utils/destringify.hh>
@@ -84,11 +84,11 @@ namespace eos
         { "B->K^*::KMPW2010",     &KMPW2010FormFactors<PToV>::make                    },
         { "B->K^*::BSZ2015",      &BSZ2015FormFactors<BToKstar,   PToV>::make         },
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
-        { "B->D^*::HQET",         &HQETFormFactors<BToDstar,      PToV>::make         },
+        { "B->D^*::BGJvD2019",    &HQETFormFactors<BToDstar,      PToV>::make         },
         { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar>::make                 },
         { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
         { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
-        { "B_s->D_s^*::HQET",     &HQETFormFactors<BsToDsstar,    PToV>::make         },
+        { "B_s->D_s^*::BGJvD2019",&HQETFormFactors<BsToDsstar,    PToV>::make         },
         { "B_s->phi::BSZ2015",    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
         // analytic computations
         { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
@@ -249,10 +249,10 @@ namespace eos
         // b -> c
         { "B->D::BCL2008",       &BCL2008FormFactors<BToD, 3u>::make              },
         { "B->D::BSZ2015",       &BSZ2015FormFactors<BToD,   PToP>::make          },
-        { "B->D::HQET",          &HQETFormFactors<BToD,      PToP>::make          },
+        { "B->D::BGJvD2019",     &HQETFormFactors<BToD,      PToP>::make          },
         { "B->D::BGL1997",       &BGL1997FormFactors<BToD>::make                  },
         { "B_s->D_s::BSZ2015",   &BSZ2015FormFactors<BsToDs, PToP>::make          },
-        { "B_s->D_s::HQET",      &HQETFormFactors<BsToDs,    PToP>::make          },
+        { "B_s->D_s::BGJvD2019", &HQETFormFactors<BsToDs,    PToP>::make          },
         // c -> d
         { "D->pi::BSZ2015",      &BSZ2015FormFactors<DToPi,  PToP>::make          },
         { "D_s->K::BSZ2015",     &BSZ2015FormFactors<DsToK,  PToP>::make          },
@@ -396,7 +396,7 @@ namespace eos
     {
         // parametrizations
         // b -> c
-        { "B^*->D::HQET",        &HQETFormFactors<BstarToD, VToP>::make          },
+        { "B^*->D::BGJvD2019",        &HQETFormFactors<BstarToD, VToP>::make          },
     };
 
     std::shared_ptr<FormFactors<VToP>>
@@ -438,7 +438,7 @@ namespace eos
         // parametrizations
         // b -> c
         // not yet supported
-        { "B^*->D^*::HQET",      &HQETFormFactors<BstarToDstar, VToV>::make      },
+        { "B^*->D^*::BGJvD2019",      &HQETFormFactors<BstarToDstar, VToV>::make      },
     };
 
     std::shared_ptr<FormFactors<VToV>>

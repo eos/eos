@@ -41,7 +41,7 @@ namespace eos
             m_Dstar(p["mass::D_d^*"], u),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
-            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "HQET"), p, o))
+            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "BGJvD2019"), p, o))
         {
             if (! ff.get())
                 throw InternalError("Form factors not found!");
