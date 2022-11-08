@@ -28,7 +28,7 @@
 namespace eos
 {
     template <>
-    struct Implementation<KaonLCDAs>
+    struct Implementation<AntiKaonLCDAs>
     {
         std::shared_ptr<Model> model;
 
@@ -101,7 +101,7 @@ namespace eos
             if (mu < _mu_t)
                 return result * std::pow(alpha_s_mu / alpha_s_b, 1.0 / QCD::beta_function_nf_5[0]);
 
-            throw InternalError("Implementation<KaonLCDAs>: RGE coefficient must not be evolved above mu_t = " + stringify(_mu_t()));
+            throw InternalError("Implementation<AntiKaonLCDAs>: RGE coefficient must not be evolved above mu_t = " + stringify(_mu_t()));
         }
 
         inline double a1K(const double & mu) const
@@ -187,83 +187,83 @@ namespace eos
 
     };
 
-    KaonLCDAs::KaonLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<KaonLCDAs>(new Implementation<KaonLCDAs>(p, o, *this))
+    AntiKaonLCDAs::AntiKaonLCDAs(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<AntiKaonLCDAs>(new Implementation<AntiKaonLCDAs>(p, o, *this))
     {
     }
 
-    KaonLCDAs::~KaonLCDAs()
+    AntiKaonLCDAs::~AntiKaonLCDAs()
     {
     }
 
     PseudoscalarLCDAs *
-    KaonLCDAs::make(const Parameters & p, const Options & o)
+    AntiKaonLCDAs::make(const Parameters & p, const Options & o)
     {
-        return new KaonLCDAs(p, o);
+        return new AntiKaonLCDAs(p, o);
     }
 
     double
-    KaonLCDAs::a1(const double & mu) const
+    AntiKaonLCDAs::a1(const double & mu) const
     {
         return _imp->a1K(mu);
     }
 
     double
-    KaonLCDAs::a2(const double & mu) const
+    AntiKaonLCDAs::a2(const double & mu) const
     {
         return _imp->a2K(mu);
     }
 
     double
-    KaonLCDAs::mu3(const double & mu) const
+    AntiKaonLCDAs::mu3(const double & mu) const
     {
         return _imp->muK(mu);
     }
 
     double
-    KaonLCDAs::f3(const double & mu) const
+    AntiKaonLCDAs::f3(const double & mu) const
     {
         return _imp->f3K(mu);
     }
 
     double
-    KaonLCDAs::eta3(const double & mu) const
+    AntiKaonLCDAs::eta3(const double & mu) const
     {
         return _imp->eta3K(mu);
     }
 
     double
-    KaonLCDAs::lambda3(const double & mu) const
+    AntiKaonLCDAs::lambda3(const double & mu) const
     {
         return _imp->lambda3K(mu);
     }
 
     double
-    KaonLCDAs::omega3(const double & mu) const
+    AntiKaonLCDAs::omega3(const double & mu) const
     {
         return _imp->omega3K(mu);
     }
 
     double
-    KaonLCDAs::delta4(const double & mu) const
+    AntiKaonLCDAs::delta4(const double & mu) const
     {
         return _imp->delta4K(mu);
     }
 
     double
-    KaonLCDAs::kappa4(const double & mu) const
+    AntiKaonLCDAs::kappa4(const double & mu) const
     {
         return _imp->kappa4K(mu);
     }
 
     double
-    KaonLCDAs::omega4(const double & mu) const
+    AntiKaonLCDAs::omega4(const double & mu) const
     {
         return _imp->omega4K(mu);
     }
 
     double
-    KaonLCDAs::phi(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(3/2)
         const double x = 2.0 * u - 1.0, x2 = x * x;
@@ -274,7 +274,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::phi3p(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi3p(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s = _imp->model->m_s_msbar(mu);
@@ -308,7 +308,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::phi3s(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi3s(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s = _imp->model->m_s_msbar(mu);
@@ -344,7 +344,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::phi3s_d1(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi3s_d1(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s = _imp->model->m_s_msbar(mu);
@@ -374,7 +374,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::phi4(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi4(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s  = _imp->model->m_s_msbar(mu);
@@ -423,7 +423,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::phi4_d1(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi4_d1(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s  = _imp->model->m_s_msbar(mu);
@@ -473,7 +473,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::phi4_d2(const double & u, const double & mu) const
+    AntiKaonLCDAs::phi4_d2(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s  = _imp->model->m_s_msbar(mu);
@@ -522,7 +522,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::psi4(const double & u, const double & mu) const
+    AntiKaonLCDAs::psi4(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s  = _imp->model->m_s_msbar(mu);
@@ -573,7 +573,7 @@ namespace eos
     }
 
     double
-    KaonLCDAs::psi4_i(const double & u, const double & mu) const
+    AntiKaonLCDAs::psi4_i(const double & u, const double & mu) const
     {
         // strange quark mass
         const double m_s  = _imp->model->m_s_msbar(mu);
@@ -622,7 +622,7 @@ namespace eos
     }
 
     Diagnostics
-    KaonLCDAs::diagnostics() const
+    AntiKaonLCDAs::diagnostics() const
     {
         Diagnostics results;
 

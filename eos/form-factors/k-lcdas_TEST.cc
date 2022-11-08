@@ -30,11 +30,11 @@
 using namespace test;
 using namespace eos;
 
-class KaonLCDAsTest :
+class AntiKaonLCDAsTest :
     public TestCase
 {
     public:
-        KaonLCDAsTest() :
+        AntiKaonLCDAsTest() :
             TestCase("k_lcdas_test")
         {
         }
@@ -58,7 +58,7 @@ class KaonLCDAsTest :
 
             /* Diagnostics */
             {
-                KaonLCDAs k(p, Options{ });
+                AntiKaonLCDAs k(p, Options{ });
                 Diagnostics diagnostics = k.diagnostics();
                 static const std::vector<std::pair<double, double>> reference
                 {
@@ -74,7 +74,7 @@ class KaonLCDAsTest :
 
             /* Twist 2 */
             {
-                KaonLCDAs k(p, Options{ });
+                AntiKaonLCDAs k(p, Options{ });
 
                 // coefficients at mu = 1.0 GeV, 2.0 GeV and 3.0 GeV
                 TEST_CHECK_NEARLY_EQUAL(-0.0525,     k.a1(1.0),   eps);
@@ -102,7 +102,7 @@ class KaonLCDAsTest :
 
             /* Twist 3 */
             {
-                KaonLCDAs k(p, Options{ });
+                AntiKaonLCDAs k(p, Options{ });
 
                 // Using alpha_s, m_s_msbar, m_ud_msbar from eos, with omega3 and lambda3 tested as f3K.omega3(mu), reproduced by Carolina Bolognani
                 // coefficients at mu = 1.0 GeV, 2.0 GeV and 3.0 GeV
@@ -155,7 +155,7 @@ class KaonLCDAsTest :
 
             /* Twist 4 */
             {
-                KaonLCDAs k(p, Options{ });
+                AntiKaonLCDAs k(p, Options{ });
 
                 // coefficients at mu = 1.0 GeV, 2.0 GeV and 3.0 GeV
                 TEST_CHECK_NEARLY_EQUAL( 0.18,       k.delta4(1.0),   eps);

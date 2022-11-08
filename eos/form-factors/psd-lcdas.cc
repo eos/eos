@@ -36,8 +36,8 @@ namespace eos
         using ValueType = std::function<PseudoscalarLCDAs * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> lcdas
         {
-            { "pi", &PionLCDAs::make },
-            { "K",  &KaonLCDAs::make }
+            { "pi",   &PionLCDAs::make     },
+            { "Kbar", &AntiKaonLCDAs::make }
         };
 
         std::shared_ptr<PseudoscalarLCDAs> result;

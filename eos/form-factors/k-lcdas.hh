@@ -28,14 +28,14 @@
 
 namespace eos
 {
-    class KaonLCDAs :
+    class AntiKaonLCDAs :
         public ParameterUser,
         public PseudoscalarLCDAs,
-        public PrivateImplementationPattern<KaonLCDAs>
+        public PrivateImplementationPattern<AntiKaonLCDAs>
     {
         public:
-            KaonLCDAs(const Parameters &, const Options &);
-            ~KaonLCDAs();
+            AntiKaonLCDAs(const Parameters &, const Options &);
+            ~AntiKaonLCDAs();
 
             static PseudoscalarLCDAs * make(const Parameters &, const Options &);
 
