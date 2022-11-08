@@ -75,6 +75,54 @@ namespace eos
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
+
+    class KaonLCDAs :
+        public ParameterUser,
+        public PseudoscalarLCDAs,
+        public PrivateImplementationPattern<KaonLCDAs>
+    {
+        public:
+            KaonLCDAs(const Parameters &, const Options &);
+            ~KaonLCDAs();
+
+            static PseudoscalarLCDAs * make(const Parameters &, const Options &);
+
+            /* Twist 2 LCDA Gegenbauer coefficients */
+            double a1(const double & mu) const override;
+            double a2(const double & mu) const override;
+            double a3(const double & /*mu*/) const override { return 0.0; }
+            double a4(const double & /*mu*/) const override { return 0.0; }
+
+            /* Twist 3 LCDA parameters */
+            double mu3(const double & mu) const override;
+            double f3(const double & mu) const override;
+            double eta3(const double & mu) const override;
+            double lambda3(const double & mu) const override;
+            double omega3(const double & mu) const override;
+
+            /* Twist 4 LCDA parameter */
+            double delta4(const double & mu) const override;
+            double kappa4(const double & mu) const override;
+            double omega4(const double & mu) const override;
+
+            /* Twist 2 LCDA */
+            double phi(const double & u, const double & mu) const override;
+
+            /* Twist 3 LCDAs and their derivatives */
+            double phi3p(const double & u, const double & mu) const override;
+            double phi3s(const double & u, const double & mu) const override;
+            double phi3s_d1(const double & u, const double & mu) const override;
+
+            /* Twist 4 LCDAs, their derivatives and integrals */
+            double phi4(const double & u, const double & mu) const override;
+            double phi4_d1(const double & u, const double & mu) const override;
+            double phi4_d2(const double & u, const double & mu) const override;
+            double psi4(const double & u, const double & mu) const override;
+            double psi4_i(const double & u, const double & mu) const override;
+
+            /* Internal diagnostics */
+            Diagnostics diagnostics() const;
+    };
 }
 
 #endif
