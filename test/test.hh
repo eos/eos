@@ -69,72 +69,32 @@ namespace test
 #define TEST_CHECK_NEARLY_EQUAL(a, b, eps) \
     do \
     { \
-        std::cout << "TEST_CHECK_NEARLY_EQUAL(" + stringify(b) + ", "  #b  ", " #eps ");" << std::endl; \
+        std::cout << "TEST_CHECK_NEARLY_EQUAL(" #a ", "  + stringify(a) +  ", " #eps ");" << std::endl; \
     } \
     while (false)
 
 #define TEST_CHECK_RELATIVE_ERROR(a, b, eps) \
     do \
     { \
-        std::cout << "TEST_CHECK_RELATIVE_ERROR(" + stringify(b) + ", "  #b  ", " #eps ");" << std::endl; \
+        std::cout << "TEST_CHECK_RELATIVE_ERROR(" #a ", "  + stringify(a) +  ", " #eps ");" << std::endl; \
     } \
     while (false)
 
 #define TEST_CHECK_EQUAL(a, b) \
     do \
     { \
+        std::cout << "TEST_CHECK_EQUAL(" #a ", "  + stringify(a) + ");" << std::endl; \
+    } \
+    while (false)
+
+#define TEST_CHECK_RELATIVE_ERROR_C(a, b, eps) \
+    do \
+    { \
+        std::cout << "TEST_CHECK_RELATIVE_ERROR_C(" #a ", "  + stringify(a) +  ", " #eps ");" << std::endl; \
     } \
     while (false)
 
 #else
-
-#define TEST_SECTION(name, body) \
-    do \
-    { \
-        std::cout << name << "> begins" << std::endl; \
-        body \
-        std::cout << name << "> ends" << std::endl; \
-    } \
-    while (false)
-
-#define TEST_CHECK(a) \
-    do \
-    { \
-        if (! (a)) \
-            throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is false"); \
-    } \
-    while (false)
-
-#define TEST_CHECK_MSG(a, msg) \
-    do \
-    { \
-        if (! (a)) \
-            throw TestCaseFailedException(__LINE__, __FILE__, msg); \
-    } \
-    while (false)
-
-#define TEST_CHECK_EQUAL(a, b) \
-    do \
-    { \
-        if (! ((a) == (b))) \
-            throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is not equal to '" #b "'"); \
-    } \
-    while (false)
-
-#define TEST_CHECK_EQUAL_STR(a, b) \
-    do \
-    { \
-        if (! ((a) == (b))) \
-            throw TestCaseFailedException(__LINE__, __FILE__, "'" + stringify(a) + "' is not equal to '" + stringify(b) + "'"); \
-    } \
-    while (false)
-
-#define TEST_CHECK_FAILED(s) \
-    do \
-    { \
-        throw TestCaseFailedException(__LINE__, __FILE__, s); \
-    } \
-    while (false)
 
 #define TEST_CHECK_NEARLY_EQUAL(a, b, eps) \
     do \
@@ -169,6 +129,14 @@ namespace test
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "One relative error of '" #a "' = '" + stringify(a_val, 16u) + "' and '" #b "' = '" + stringify(b_val, 16u) + "' is greater than " + stringify(eps, 16u) + ". The results are " + \
                     stringify(std::abs((a_val - b_val) / a_val)) + " and " + stringify(std::abs((a_val - b_val) / b_val), 16u)); \
+    } \
+    while (false)
+
+#define TEST_CHECK_EQUAL(a, b) \
+    do \
+    { \
+        if (! ((a) == (b))) \
+            throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is not equal to '" #b "'"); \
     } \
     while (false)
 
@@ -213,6 +181,48 @@ namespace test
                                           "' is greater than " + stringify(eps, 16u) + ". The results are " + \
                                           stringify(std::abs((a_val_i - b_val_i) / a_val_i)) + " and " + \
                                           stringify(std::abs((a_val_i - b_val_i) / b_val_i), 16u)); \
+    } \
+    while (false)
+
+#endif
+
+#define TEST_SECTION(name, body) \
+    do \
+    { \
+        std::cout << name << "> begins" << std::endl; \
+        body \
+        std::cout << name << "> ends" << std::endl; \
+    } \
+    while (false)
+
+#define TEST_CHECK(a) \
+    do \
+    { \
+        if (! (a)) \
+            throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is false"); \
+    } \
+    while (false)
+
+#define TEST_CHECK_MSG(a, msg) \
+    do \
+    { \
+        if (! (a)) \
+            throw TestCaseFailedException(__LINE__, __FILE__, msg); \
+    } \
+    while (false)
+
+#define TEST_CHECK_EQUAL_STR(a, b) \
+    do \
+    { \
+        if (! ((a) == (b))) \
+            throw TestCaseFailedException(__LINE__, __FILE__, "'" + stringify(a) + "' is not equal to '" + stringify(b) + "'"); \
+    } \
+    while (false)
+
+#define TEST_CHECK_FAILED(s) \
+    do \
+    { \
+        throw TestCaseFailedException(__LINE__, __FILE__, s); \
     } \
     while (false)
 
@@ -274,8 +284,6 @@ namespace test
         } \
     } \
     while (false)
-
-#endif
 
 }
 #endif
