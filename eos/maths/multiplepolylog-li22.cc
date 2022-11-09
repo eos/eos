@@ -53,7 +53,7 @@ namespace eos
                 return next*ccli2logA0[nc] + li2logA0rec(next*lsq, nc+1, lsq);
             }
             return next*ccli2logA0[nc];
-        };
+        }
 
         complex<double> li2logA0(const complex<double> &x){
             const complex<double> mlog = -std::log(1.0-x);
@@ -902,7 +902,7 @@ namespace eos
                 return li221y(y);
             }
 
-            if(absxy>1.42857)
+            if(1.0 / absxy < 0.7)
             {
 
                 if(absx<0.3){
@@ -955,12 +955,12 @@ namespace eos
                 return li22smallastuffle(x,y);
             }
 
-            if(absx>1.42857){
+            if(1.0 / absx < 0.7){
                 debug("Ec (diagonal+inversion)");
                 return li22smallainv(x,y);
             }
 
-            if(absy>1.42857){
+            if(1.0 / absy < 0.7){
                 debug("Ed (diagonal+inv+st)");
                 return li22smallainvstuffle(x,y);
             }
