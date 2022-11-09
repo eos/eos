@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/stringify.hh>
 #include <eos/utils/qcd.hh>
 #include <eos/maths/power-of.hh>
 
@@ -185,12 +186,31 @@ namespace eos
     }
 
     double
-    QCD::m_q_pole(const double & m_q_MSbar, const double & alpha_s_mb, const double & nf)
+    QCD::m_q_pole(const double & m_q_MSbar, const double & alpha_s_mb, const double & nf, unsigned int loop_order)
     {
         double a_s = alpha_s_mb / M_PI;
 
         // cf. [CERN2003-002], Eq. (16), p. 45
-        return m_q_MSbar * (1.0 + a_s * (4.0/3.0 + a_s * (13.44 - 1.04 * nf + a_s * (190.8 - 26.7 * nf + 0.65 * nf * nf))));
+        // Collect result from the inside out: m_q_MSbar * (1.0 + a_s ... * (... + a_s ... ) )
+        double result = 0.0;
+        switch (loop_order)
+        {
+            case 3:
+                result = 190.8 - 26.7 * nf + 0.65 * power_of<2>(nf);
+                // fall through
+            case 2:
+                result = 13.44 - 1.04 * nf + a_s * result;
+                // fall through
+            case 1:
+                result = 4.0 / 3.0 + a_s * result;
+                // fall through
+            case 0:
+                result = 1.0 + a_s * result;
+                break;
+            default:
+                throw InternalError("QCD::m_q_pole: loop order " + stringify(loop_order) + " not yet implemented");
+        }
+        return m_q_MSbar * result;
     }
 
     double

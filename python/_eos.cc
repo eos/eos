@@ -210,6 +210,9 @@ namespace impl
     {
         Log::instance()->message(id, log_level) << m;
     }
+
+    // wrapper to avoid issues with virtual inheritance and overloading
+    double m_b_pole_wrapper_noargs(Model& m) { return m.m_b_pole(); }
 }
 
 BOOST_PYTHON_MODULE(_eos)
@@ -486,6 +489,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("m_b_kin",    &Model::m_b_kin)
         .def("m_b_msbar",  &Model::m_b_msbar)
         .def("m_b_pole",   &Model::m_b_pole)
+        .def("m_b_pole",   &impl::m_b_pole_wrapper_noargs)
         .def("m_c_kin",    &Model::m_c_kin)
         .def("m_c_msbar",  &Model::m_c_msbar)
         .def("m_c_pole",   &Model::m_c_pole)

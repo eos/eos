@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2017 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018, 2021 Christoph Bobeth
+ * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,11 +23,13 @@
 #include <eos/models/top-loops.hh>
 #include <eos/models/standard-model.hh>
 #include <eos/utils/log.hh>
+#include <eos/utils/stringify.hh>
 #include <eos/maths/matrix.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 
+#include <array>
 #include <cmath>
 
 #include <gsl/gsl_sf_clausen.h>
@@ -266,28 +269,43 @@ namespace implementation
     }
 
     double
-    SMComponent<components::QCD>::m_b_pole() const
+    SMComponent<components::QCD>::m_b_pole(unsigned int loop_order) const
     {
         // The true (central) pole mass of the bottom is very close to the values
         // that can be calculated by the following quadratic polynomial.
         // This holds vor 4.13 <= m_b_MSbar <= 4.37, which corresponds to the values from [PDG2010].
-        static const double m0 = 4.19, a = 4.7266, b = 1.14485, c = -0.168099;
+        using Coefficients = std::array<double, 4>;
+        static const std::array<Coefficients, 4> c = {{
+            // m0,                a,                 b,                   c
+            { 0.0,                0.0,               1.0,                 0.0                 }, // trivial order
+            { 3.8870091768922093, 4.156247812901621, 1.2735213574282815, -0.25935468202619605 }, // loop order 1
+            { 3.962932009714688,  4.38323050264802,  1.2544893957664187, -0.26527600396378315 }, // loop order 2
+            { 4.19,               4.7266,            1.14485,            -0.168099            }  // loop order 3
+        }};
+        if (loop_order > c.size() - 1) {
+            throw InternalError("SMComponent<components::QCD>::m_b_pole: maximum loop order (" + stringify(c.size() - 1) + ") exceeded (" + stringify(loop_order) + ")");
+        }
         double m_b_MSbar = _m_b_MSbar__qcd();
-        double m_b_pole = a + (m_b_MSbar - m0) * b + power_of<2>(m_b_MSbar - m0) * c;
 
+        // Initial guess
+        //                a                               m0                  b                                          m0                  c
+        double m_b_pole = c[loop_order][1] + (m_b_MSbar - c[loop_order][0]) * c[loop_order][2] + power_of<2>(m_b_MSbar - c[loop_order][0]) * c[loop_order][3];
+
+        // Iterative fixed-point procedure
         for (int i = 0 ; i < 10 ; ++i)
         {
             m_b_MSbar = m_b_msbar(m_b_pole);
-            double next = QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_pole), 5.0);
+            // Neglect the dependence of alpha_s on the loop order
+            double next = QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_pole), 5.0, loop_order);
 
             double delta = (m_b_pole - next) / m_b_pole;
             m_b_pole = next;
 
             if (std::abs(delta) < 1e-3)
-                break;
+                return m_b_pole;
         }
 
-        return m_b_pole;
+        throw InternalError("SMComponent<components::QCD>::m_b_pole: fixed-point procedure did not converge");
     }
 
     double
