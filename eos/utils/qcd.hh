@@ -78,7 +78,7 @@ namespace eos
              * @param alpha_s     alpha_s at the scale m_q
              * @param nf          number of active QCD flavors that control the calculation
              */
-            static double m_q_pole(const double & m_q, const double & alpha_s, const double & nf);
+            static double m_q_pole(const double & m_q, const double & alpha_s, const double & nf, unsigned int loop_order = 3);
 
             /*!
              * Calculate the shift from MSbar scheme to potential-Subtracted mass (PS mass).
