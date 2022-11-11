@@ -85,8 +85,8 @@ namespace eos
     double
     KMPW2010FormFactors<PToV>::a_12(const double & s) const
     {
-        const double mB = BToKstar::mB, mB2 = mB * mB;
-        const double mV = BToKstar::mV, mV2 = mV * mV;
+        const double mB = BToKstar::m_B, mB2 = mB * mB;
+        const double mV = BToKstar::m_V, mV2 = mV * mV;
         const double lambda = eos::lambda(mB2, mV2, s);
 
         return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
@@ -114,8 +114,8 @@ namespace eos
     double
     KMPW2010FormFactors<PToV>::t_23(const double & s) const
     {
-        const double mB = BToKstar::mB, mB2 = mB * mB;
-        const double mV = BToKstar::mV, mV2 = mV * mV;
+        const double mB = BToKstar::m_B, mB2 = mB * mB;
+        const double mV = BToKstar::m_V, mV2 = mV * mV;
         const double lambda = eos::lambda(mB2, mV2, s);
 
         return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s)
