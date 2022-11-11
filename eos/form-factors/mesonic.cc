@@ -29,6 +29,7 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
+#include <eos/form-factors/parametric-fvdv2018.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
