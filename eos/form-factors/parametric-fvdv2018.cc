@@ -1,10 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2014, 2015, 2018 Danny van Dyk
- * Copyright (c) 2015 Frederik Beaujean
- * Copyright (c) 2015 Christoph Bobeth
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2010-2022 Danny van Dyk
+ * Copyright (c) 2018 Keri Vos
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,12 +18,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/mesonic-impl.hh>
+#include <eos/form-factors/parametric-fvdv2018-impl.hh>
 
-#include <vector>
-
-using namespace test;
-using namespace eos;
-
+namespace eos
+{
+    template class FvDV2018FormFactors<BToPiPi>;
+}

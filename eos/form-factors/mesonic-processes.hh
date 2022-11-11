@@ -209,6 +209,24 @@ namespace eos
         static constexpr double mR2_1p = 5.723 * 5.723;
     };
 
+    /* P -> PP Processes */
+
+    struct BToPiPi {
+        using Transition = PToPP;
+        static constexpr const char * label = "B->pipi";
+        static constexpr double mB  = 5.2795;
+        static constexpr double mP1 = 0.13957;
+        static constexpr double mP2 = 0.13957;
+
+        // for pole and t_0 calculation in zhat
+        static constexpr double mBst = 5.32465;
+
+        // for pole calculation in z, depending on the current at hand
+        static constexpr double mR2_1m = 5.32465;
+        static constexpr double mR2_1p = 5.72590;
+        static constexpr double mR2_0m = 5.27932;
+    };
+
     /* V -> P Processes */
 
     struct BstarToD {
