@@ -88,7 +88,7 @@ namespace eos
     }
 
     BGL1997FormFactors<BToDstar>::BGL1997FormFactors(const Parameters & p, const Options & o) :
-        BGL1997FormFactorBase(p, o, *this, power_of<2>(BToDstar::mB + BToDstar::mV), power_of<2>(BToDstar::mB - BToDstar::mV)),
+        BGL1997FormFactorBase(p, o, *this, power_of<2>(BToDstar::m_B + BToDstar::m_V), power_of<2>(BToDstar::m_B - BToDstar::m_V)),
         _a_g{{   UsedParameter(p[_par_name("g_0")],  *this),
                  UsedParameter(p[_par_name("g_1")],  *this),
                  UsedParameter(p[_par_name("g_2")],  *this),
@@ -117,9 +117,9 @@ namespace eos
                  UsedParameter(p[_par_name("T23_1")], *this),
                  UsedParameter(p[_par_name("T23_2")], *this),
                  UsedParameter(p[_par_name("T23_3")], *this) }},
-        _mB(BToDstar::mB),
+        _mB(BToDstar::m_B),
         _mB2(power_of<2>(_mB)),
-        _mV(BToDstar::mV),
+        _mV(BToDstar::m_V),
         _mV2(power_of<2>(_mV)),
         // here optimal t_0 = sqrt(t_p) (sqrt(m_B) - sqrt(m_M))^2
         _t_0((_mB + _mV)* power_of<2>(std::sqrt(_mB) - std::sqrt(_mV)))

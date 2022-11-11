@@ -37,9 +37,9 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::_z(const double & t) const
     {
-        static constexpr double mB  = Process_::mB;
-        static constexpr double mP1 = Process_::mP1;
-        static constexpr double mP2 = Process_::mP2;
+        static constexpr double mB  = Process_::m_B;
+        static constexpr double mP1 = Process_::m_P1;
+        static constexpr double mP2 = Process_::m_P2;
 
         static constexpr double t_p = power_of<2>(mB + mP1 + mP2);
         static constexpr double t_0 = 0.0;
@@ -51,9 +51,9 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::_zhat(const double & that) const
     {
-        static constexpr double mB    = Process_::mB;
-        static constexpr double mP2   = Process_::mP2;
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mB    = Process_::m_B;
+        static constexpr double mP2   = Process_::m_P2;
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         static constexpr double that_p = power_of<2>(mB + mP2);
         static const     double that_0 = that_p - std::sqrt(that_p * (that_p - mBst2));
@@ -65,7 +65,7 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::_blaschke(const double & z, const double & zh) const
     {
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double zBst2  = _z(mBst2);
         const double zhBst2 = _zhat(mBst2);
@@ -81,9 +81,9 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::_blaschke_res_qhat2(const double & z) const
     {
-        static constexpr double mB    = Process_::mB;
-        static constexpr double mP2   = Process_::mP2;
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mB    = Process_::m_B;
+        static constexpr double mP2   = Process_::m_P2;
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         static constexpr double that_p = power_of<2>(mB + mP2);
 
@@ -202,8 +202,8 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_perp(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mP2 = Process_::mP2, mP22 = mP2 * mP2;
+        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
         const double E2     = (mB2 + k2 - q2 - ctheta * std::sqrt(lambda)) / (4.0 * mB);
@@ -227,8 +227,8 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_perp_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double lambda = eos::lambda(q2, k2, mB2);
         const double z  = this->_z(q2);
@@ -249,8 +249,8 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_para(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mP2 = Process_::mP2, mP22 = mP2 * mP2;
+        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
         const double E2     = (mB2 + k2 - q2 - ctheta * std::sqrt(lambda)) / (4.0 * mB);
@@ -274,8 +274,8 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_para_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double z  = this->_z(q2);
         const double zh = this->_z(mBst2);
@@ -295,8 +295,8 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_long(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mP2 = Process_::mP2, mP22 = mP2 * mP2;
+        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
         const double E2     = (mB2 + k2 - q2 - ctheta * std::sqrt(lambda)) / (4.0 * mB);
@@ -320,8 +320,8 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_long_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double lambda = eos::lambda(q2, k2, mB2);
         const double z  = this->_z(q2);
@@ -342,8 +342,8 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_time(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mP2 = Process_::mP2, mP22 = mP2 * mP2;
+        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
         const double E2     = (mB2 + k2 - q2 - ctheta * std::sqrt(lambda)) / (4.0 * mB);
@@ -367,8 +367,8 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_time_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::mB,  mB2  = mB  * mB;
-        static constexpr double mBst2 = power_of<2>(Process_::mBst);
+        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double z  = this->_z(q2);
         const double zh = this->_z(mBst2);

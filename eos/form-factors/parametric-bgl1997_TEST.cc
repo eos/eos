@@ -49,8 +49,8 @@ class BGL1997FormFactorsTest :
             /* Outer function */
             {
                 BGL1997FormFactors<BToDstar> ff(p, Options{ });
-                const double m_B(BToDstar::mB);
-                const double m_V(BToDstar::mV);
+                const double m_B(BToDstar::m_B);
+                const double m_V(BToDstar::m_V);
                 const double t_0((m_B + m_V)* power_of<2>(std::sqrt(m_B) - std::sqrt(m_V)));
 
                 //TEST_CHECK_NEARLY_EQUAL( 0.0535063, ff._z(1.0, 2.0), eps);
@@ -75,8 +75,8 @@ class BGL1997FormFactorsTest :
 
             /* B -> D^* FFs */
             {
-                const double mB(BToDstar::mB);
-                const double mV(BToDstar::mV);
+                const double mB(BToDstar::m_B);
+                const double mV(BToDstar::m_V);
                 const double t_m = (mB - mV) * (mB - mV);
                 const double r   = mV / mB, wmax = (mB * mB + mV * mV) / (2.0 * mB * mV);
                 const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);

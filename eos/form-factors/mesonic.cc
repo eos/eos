@@ -43,37 +43,6 @@ namespace eos
 {
     /* P -> V Processes */
 
-    /* B_{u,d} -> omega */
-
-    /* B_{u,d} -> K^* */
-
-    constexpr double BToDstar::mR2_0m;
-    constexpr double BToDstar::mR2_1m;
-    constexpr double BToDstar::mR2_1p;
-
-    constexpr double BToKstar::mR2_0m;
-    constexpr double BToKstar::mR2_1m;
-    constexpr double BToKstar::mR2_1p;
-
-    constexpr double BToRho::mR2_0m;
-    constexpr double BToRho::mR2_1m;
-    constexpr double BToRho::mR2_1p;
-
-    constexpr double BsToPhi::mR2_0m;
-    constexpr double BsToPhi::mR2_1m;
-    constexpr double BsToPhi::mR2_1p;
-
-    constexpr double BsToKstar::mR2_0m;
-    constexpr double BsToKstar::mR2_1m;
-    constexpr double BsToKstar::mR2_1p;
-
-    constexpr double BsToDsstar::mR2_0m;
-    constexpr double BsToDsstar::mR2_1m;
-    constexpr double BsToDsstar::mR2_1p;
-
-
-
-
     FormFactors<PToV>::~FormFactors()
     {
     }
@@ -197,6 +166,11 @@ namespace eos
         return result;
     }
 
+    /* B_{u,d} -> omega */
+
+    /* B_{u,d} -> K^* */
+
+
     /* P -> gamma Processes */
 
     FormFactors<PToGamma>::~FormFactors()
@@ -278,10 +252,6 @@ namespace eos
     /* P -> P Processes */
 
     /* B_{u,d} -> K */
-
-    // [BCL2008]
-    template class BCL2008FormFactors<BToK, 3u>;
-
 
     /* B_{u,d} -> pi */
 
@@ -409,21 +379,6 @@ namespace eos
     }
 
     /* P -> PP Processes */
-
-    constexpr double BToPi::m2_Br1m;
-    constexpr double BToPi::m2_Br0p;
-
-    constexpr double BToK::m2_Br1m;
-    constexpr double BToK::m2_Br0p;
-
-    constexpr double BToD::m2_Br1m;
-    constexpr double BToD::m2_Br0p;
-
-    constexpr double BsToK::m2_Br1m;
-    constexpr double BsToK::m2_Br0p;
-
-    constexpr double BsToDs::m2_Br1m;
-    constexpr double BsToDs::m2_Br0p;
 
     FormFactors<PToPP>::~FormFactors()
     {

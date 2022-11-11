@@ -83,13 +83,13 @@ namespace eos
             throw InternalError("invalid value for q2");
         }
     }
-    
+
     double
     KKvDZ2022FormFactors::_width_rho(const double & q2) const
     {
         const double constant_rho_width_approximation = 0.1474;
         const double m_pion = BToPi::m_P, m_pion_sq = m_pion * m_pion;
-        const double m_rho = BToRho::mV, m_rho_sq = m_rho * m_rho;
+        const double m_rho = BToRho::m_V, m_rho_sq = m_rho * m_rho;
 
         if (q2 - 4.0 * m_pion_sq > 0.0)
         {
@@ -108,7 +108,7 @@ namespace eos
     double
     KKvDZ2022FormFactors::_z_omega(const double & k2) const
     {
-        const double m_B = BToOmega::mB, m_omega = BToOmega::mV;
+        const double m_B = BToOmega::m_B, m_omega = BToOmega::m_V;
         const double t_p_omega = power_of<2>(m_B + m_omega), t_m_omega = power_of<2>(m_B - m_omega);
         const double t_0_omega = t_p_omega*(1.0 - sqrt(1.0 - t_m_omega/t_p_omega));
 
@@ -118,7 +118,7 @@ namespace eos
     double
     KKvDZ2022FormFactors::_z_rho(const double & k2) const
     {
-        const double m_B = BToOmega::mB, m_rho = BToRho::mV;
+        const double m_B = BToOmega::m_B, m_rho = BToRho::m_V;
         const double t_p_rho = power_of<2>(m_B + m_rho), t_m_rho = power_of<2>(m_B - m_rho);
         const double t_0_rho = t_p_rho*(1.0 - sqrt(1.0 - t_m_rho/t_p_rho));
 
@@ -130,7 +130,7 @@ namespace eos
     {
         double a_0(a[0]),a_1(a[1]),a_2(a[2]);
         const double diff_z = _z_omega(k2) - _z_omega(0.0);
-        const double m_omega = BToOmega::mV, m_omega_sq = m_omega * m_omega;
+        const double m_omega = BToOmega::m_V, m_omega_sq = m_omega * m_omega;
 
         return 1.0 / (1.0 - k2 / m_r_sq) * ( m_omega_sq / ( m_omega_sq - q2 - 1.0i * m_omega * _width_omega(q2) ) ) *
                 (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z) );
@@ -141,7 +141,7 @@ namespace eos
     {
         double a_0(a[0]),a_1(a[1]),a_2(a[2]);
         const double diff_z = _z_rho(k2) - _z_rho(0.0);
-        const double m_rho = BToRho::mV, m_rho_sq = m_rho * m_rho;
+        const double m_rho = BToRho::m_V, m_rho_sq = m_rho * m_rho;
 
         return 1.0 / (1.0 - k2 / m_r_sq) * ( m_rho_sq / ( m_rho_sq - q2 - 1.0i * sqrt(q2) * _width_rho(q2) ) ) *
                 (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z) );
@@ -166,7 +166,7 @@ namespace eos
     complex<double>
     KKvDZ2022FormFactors::F_3(const double & q2, const double & k2) const
     {
-        const double m_B = BToOmega::mB;
+        const double m_B = BToOmega::m_B;
 
         return _calc_ff_contribution_omega(q2, k2, m_B * m_B, _a_omega[2]) + _calc_ff_contribution_rho(q2, k2, m_B * m_B, _a_rho[2]);
     }

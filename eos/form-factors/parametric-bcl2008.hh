@@ -110,7 +110,7 @@ namespace eos
 
         public:
             BCL2008FormFactorBase(const Parameters & p, const Options &);
-            
+
             virtual double f_p(const double & s) const;
 
             virtual double f_0(const double & s) const;
