@@ -24,7 +24,6 @@
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
-#include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>

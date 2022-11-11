@@ -23,7 +23,7 @@ libeosformfactors_la_SOURCES = \
 	k-lcdas.cc k-lcdas.hh \
 	kstar-lcdas.cc kstar-lcdas.hh \
 	lcda.cc lcda.hh \
-	mesonic.cc mesonic.hh mesonic-impl.hh \
+	mesonic.cc mesonic.hh \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
 	parametric-abr2022.hh parametric-abr2022-impl.hh parametric-abr2022.cc \
@@ -76,7 +76,6 @@ TESTS = \
 	k-lcdas_TEST \
 	kstar-lcdas_TEST \
 	lcda_TEST \
-	mesonic_TEST \
 	parametric-abr2022_TEST \
 	parametric-bcl2008_TEST \
 	parametric-bgl1997_TEST \
@@ -116,8 +115,6 @@ k_lcdas_TEST_SOURCES = k-lcdas_TEST.cc
 kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 
 lcda_TEST_SOURCES = lcda_TEST.cc
-
-mesonic_TEST_SOURCES = mesonic_TEST.cc
 
 parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
 
