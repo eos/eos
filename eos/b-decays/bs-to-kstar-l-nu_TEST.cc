@@ -58,6 +58,9 @@ class BsToKstarLeptonNeutrinoTest :
                 // mu lepton mass
                 p["mass::mu"] = 0.1056583715;
 
+                // Resonance masses for the form-factors
+                p["mass::B_d,1@BSZ2015"] = 5.723;
+
                 Options oo;
                 oo.declare("model", "WET");
                 oo.declare("form-factors", "BSZ2015");

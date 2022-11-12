@@ -22,6 +22,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 
@@ -32,6 +33,57 @@ namespace eos
     /* Form Factors according to [BSZ2015] */
     template <typename Process_, typename Transition_> class BSZ2015FormFactors;
 
+    template <typename Process_, typename Transition_> class BSZ2015FormFactorTraits;
+
+    template <typename Process_>
+    class BSZ2015FormFactorTraits<Process_, PToV> :
+        public virtual ParameterUser
+    {
+        public:
+            // The following parameters are part of the parameterization and should match the
+            // the ones used for the extraction of the coefficients of the z-expension
+            UsedParameter m_B, m_V;
+            UsedParameter m_R_0m, m_R_1m, m_R_1p;
+
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_0m_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
+
+            BSZ2015FormFactorTraits(const Parameters & p) :
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
+                m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
+                m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
+                m_R_1p(UsedParameter(p[resonance_1p_names.at(Process_::partonic_transition)], *this))
+            {
+            }
+
+            double tp() const
+            {
+                return power_of<2>(m_B + m_V);
+            }
+
+            double tm() const
+            {
+                return power_of<2>(m_B - m_V);
+            }
+
+            double t0() const
+            {
+                return tp() * (1.0 - std::sqrt(1.0 - tm() / tp()));
+            }
+
+            complex<double> calc_z(const complex<double> & s) const
+            {
+                return (std::sqrt(tp() - s) - std::sqrt(tp() - t0())) / (std::sqrt(tp() - s) + std::sqrt(tp() - t0()));
+            }
+
+            double calc_z(const double & s) const
+            {
+                return real(calc_z(complex<double>(s, 0.0)));
+            }
+    };
+
     template <typename Process_> class BSZ2015FormFactors<Process_, PToV> :
         public FormFactors<PToV>
     {
@@ -41,15 +93,9 @@ namespace eos
             // use constraint (B.6) in [BSZ2015] to remove A_12(0)
             std::array<UsedParameter, 2> _a_A12, _a_T2;
 
-            const double _mB, _mB2, _mV, _mV2, _kin_factor;
-            const double _tau_p, _tau_0;
-            const double _z_0;
+            const BSZ2015FormFactorTraits<Process_, PToV> _traits;
 
-            static double _calc_tau_0(const double & m_B, const double & m_V);
-
-            complex<double> _calc_z(const complex<double> & s) const;
-
-            double _calc_z(const double & s) const;
+            const UsedParameter & _mB, _mV;
 
             template <typename Parameter_>
             complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const;
