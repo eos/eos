@@ -26,40 +26,41 @@
 namespace eos
 {
     template <typename Process_>
-    double
-    BSZ2015FormFactors<Process_, PToV>::_calc_tau_0(const double & m_B, const double & m_V)
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToV>::resonance_0m_names
     {
-        const double tau_p = power_of<2>(m_B + m_V);
-        const double tau_m = power_of<2>(m_B - m_V);
-        return tau_p * (1.0 - std::sqrt(1.0 - tau_m / tau_p));
-    }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@BSZ2015" }
+    };
 
     template <typename Process_>
-    complex<double>
-    BSZ2015FormFactors<Process_, PToV>::_calc_z(const complex<double> & s) const
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToV>::resonance_1m_names
     {
-        const complex<double> tau_p(_tau_p, 0.0);
-        const complex<double> tau_0(_tau_0, 0.0);
-
-        return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
-    }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" }
+    };
 
     template <typename Process_>
-    double
-    BSZ2015FormFactors<Process_, PToV>::_calc_z(const double & s) const
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToV>::resonance_1p_names
     {
-        return real(_calc_z(complex<double>(s, 0.0)));
-    }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@BSZ2015" }
+    };
 
     template <typename Process_>
     template <typename Parameter_>
     complex<double>
-    BSZ2015FormFactors<Process_, PToV>::_calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+    BSZ2015FormFactors<Process_, PToV>::_calc_ff(const complex<double> & s, const double & m_R, const std::array<Parameter_, 3> & a) const
     {
         const complex<double> a_0(a[0]), a_1(a[1]), a_2(a[2]);
 
-        const complex<double> diff_z = _calc_z(s) - _z_0;
-        return 1.0 / (1.0 - s / m2_R) *
+        const complex<double> diff_z = _traits.calc_z(s) - _traits.calc_z(0.0);
+        return 1.0 / (1.0 - s / power_of<2>(m_R)) *
                 (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
     }
 
@@ -91,14 +92,9 @@ namespace eos
                     UsedParameter(p[_par_name("A12_2")], *this) }},
         _a_T2{{  UsedParameter(p[_par_name("T2_1")],  *this),
                     UsedParameter(p[_par_name("T2_2")],  *this) }},
-        _mB(Process_::mB),
-        _mB2(power_of<2>(_mB)),
-        _mV(Process_::mV),
-        _mV2(power_of<2>(_mV)),
-        _kin_factor((_mB2 - _mV2) / (8.0 * _mB * _mV)),
-        _tau_p(power_of<2>(_mB + _mV)),
-        _tau_0(_calc_tau_0(_mB, _mV)),
-        _z_0(_calc_z(0))
+        _traits(p),
+        _mB(_traits.m_B),
+        _mV(_traits.m_V)
     {
     }
 
@@ -118,21 +114,21 @@ namespace eos
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::v(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::mR2_1m, _a_V);
+        return _calc_ff(s, _traits.m_R_1m, _a_V);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::a_0(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::mR2_0m, _a_A0);
+        return _calc_ff(s, _traits.m_R_0m, _a_A0);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::a_1(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::mR2_1p, _a_A1);
+        return _calc_ff(s, _traits.m_R_1p, _a_A1);
     }
 
     template <typename Process_>
@@ -142,29 +138,29 @@ namespace eos
         // use constraint (B.6) in [BSZ2015] to remove A_12(0)
         std::array<double, 3> values
         {{
-            _kin_factor * _a_A0[0],
+            (power_of<2>(_mB) - power_of<2>(_mV)) / (8.0 * _mB * _mV) * _a_A0[0],
             _a_A12[1 - 1],
             _a_A12[2 - 1],
         }};
 
-        return _calc_ff(s, Process_::mR2_1p, values);
+        return _calc_ff(s, _traits.m_R_1p, values);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::a_2(const complex<double> & s) const
     {
-        const complex<double> lambda = eos::lambda(complex<double>(_mB2, 0.0), complex<double>(_mV2, 0.0), s);
+        const complex<double> lambda = eos::lambda(complex<double>(power_of<2>(_mB), 0.0), complex<double>(power_of<2>(_mV), 0.0), s);
 
-        return (power_of<2>(_mB + _mV) * (_mB2 - _mV2 - s) * a_1(s)
-                - 16.0 * _mB * _mV2 * (_mB + _mV) * a_12(s)) / lambda;
+        return (power_of<2>(_mB + _mV) * (power_of<2>(_mB) - power_of<2>(_mV) - s) * a_1(s)
+                - 16.0 * _mB * power_of<2>(_mV) * (_mB + _mV) * a_12(s)) / lambda;
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::t_1(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::mR2_1m, _a_T1);
+        return _calc_ff(s, _traits.m_R_1m, _a_T1);
     }
 
     template <typename Process_>
@@ -178,14 +174,14 @@ namespace eos
             _a_T2[1 - 1],
             _a_T2[2 - 1],
         }};
-        return _calc_ff(s, Process_::mR2_1p, values);
+        return _calc_ff(s, _traits.m_R_1p, values);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::t_23(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::mR2_1p, _a_T23);
+        return _calc_ff(s, _traits.m_R_1p, _a_T23);
     }
 
     template <typename Process_>
@@ -248,19 +244,19 @@ namespace eos
     double
     BSZ2015FormFactors<Process_, PToV>::t_3(const double & s) const
     {
-        const double lambda = eos::lambda(_mB2, _mV2, s);
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
 
-        return ((_mB2 - _mV2) * (_mB2 + 3.0 * _mV2 - s) * t_2(s)
-                - 8.0 * _mB * _mV2 * (_mB - _mV) * t_23(s)) / lambda;
+        return ((power_of<2>(_mB) - power_of<2>(_mV)) * (power_of<2>(_mB) + 3.0 * power_of<2>(_mV) - s) * t_2(s)
+                - 8.0 * _mB * power_of<2>(_mV) * (_mB - _mV) * t_23(s)) / lambda;
     }
 
     template <typename Process_>
     double
     BSZ2015FormFactors<Process_, PToV>::f_perp(const double & s) const
     {
-        const double lambda = eos::lambda(_mB2, _mV2, s);
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
 
-        return pow(2*lambda, 0.5) / _mB / (_mB + _mV) * v(s);
+        return pow(2 * lambda, 0.5) / _mB / (_mB + _mV) * v(s);
     }
 
     template <typename Process_>
@@ -274,37 +270,38 @@ namespace eos
     double
     BSZ2015FormFactors<Process_, PToV>::f_long(const double & s) const
     {
-        const double lambda = eos::lambda(_mB2, _mV2, s);
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
 
-        return ((_mB2 - _mV2 - s) * pow(_mB + _mV, 2) * a_1(s) - lambda * a_2(s))
-                / (2 * _mV * _mB2 * (_mB + _mV));
+        return ((power_of<2>(_mB) - power_of<2>(_mV) - s) * power_of<2>(_mB + _mV) * a_1(s) - lambda * a_2(s))
+                / (2 * _mV * power_of<2>(_mB) * (_mB + _mV));
     }
 
     template <typename Process_>
     double
     BSZ2015FormFactors<Process_, PToV>::f_perp_T(const double & s) const
     {
-        const double lambda = eos::lambda(_mB2, _mV2, s);
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
 
-        return pow(2*lambda, 0.5) / _mB2 * t_1(s);
+        return pow(2*lambda, 0.5) / power_of<2>(_mB) * t_1(s);
     }
 
     template <typename Process_>
     double
     BSZ2015FormFactors<Process_, PToV>::f_para_T(const double & s) const
     {
-        return pow(2, 0.5) * (_mB2 - _mV2) / _mB2 * t_2(s);
+        return pow(2, 0.5) * (power_of<2>(_mB) - power_of<2>(_mV)) / power_of<2>(_mB) * t_2(s);
     }
 
     template <typename Process_>
     double
     BSZ2015FormFactors<Process_, PToV>::f_long_T(const double & s) const
     {
-        const double lambda = eos::lambda(_mB2, _mV2, s);
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
 
-        return s * (_mB2 + 3*_mV2 - s) / (2 * pow(_mB, 3) * _mV) * t_2(s)
-                - s * lambda / (2 * pow(_mB, 3) * _mV * (_mB2 - _mV2)) * t_3(s);
+        return s * (power_of<2>(_mB) + 3 * power_of<2>(_mV) - s) / (2 * power_of<3>(_mB) * _mV) * t_2(s)
+                - s * lambda / (2 * power_of<3>(_mB) * _mV * (power_of<2>(_mB) - power_of<2>(_mV))) * t_3(s);
     }
+
 
     template <typename Process_>
     double
