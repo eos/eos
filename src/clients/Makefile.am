@@ -1,7 +1,8 @@
 CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
-AM_CXXFLAGS = -I$(top_srcdir) -std=c++14 -Wall -Wextra -pedantic
+AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_LDFLAGS = @AM_LDFLAGS@
 
 noinst_LIBRARIES = libcli.a
 
