@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010-2022 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,15 +19,107 @@
 
 #include <eos/utils/exception.hh>
 
+#include <list>
+
 namespace eos
 {
-    Exception::Exception(const std::string & message) throw () :
-        _message(message)
+    namespace impl
+    {
+        static thread_local std::list<std::tuple<source_location, std::string>> context;
+    }
+
+    Context::Context(const std::string & entry, const source_location location)
+    {
+        impl::context.push_back(std::make_tuple(location, entry));
+    }
+
+    Context::Context(const Context & other) = default;
+
+    Context &
+    Context::operator= (const Context & other) = default;
+
+    Context::~Context() noexcept(false)
+    {
+        if (impl::context.empty())
+            throw InternalError("empty context");
+
+        impl::context.pop_back();
+    }
+
+    std::string
+    Context::backtrace(const std::string & delimiter) const
+    {
+        if (impl::context.empty())
+            return "";
+
+        std::string result;
+
+        auto append = [&](const std::tuple<source_location, std::string> & entry)
+        {
+            result += std::get<1>(entry) + "[" + std::get<0>(entry).file_name() + ":" + std::to_string(std::get<0>(entry).line()) + " -> " + std::get<0>(entry).function_name() + "]";
+            result += delimiter;
+        };
+
+        for (auto c = impl::context.cbegin(), c_end = impl::context.cend() ; c != c_end ; ++c)
+        {
+            append(*c);
+        }
+
+        return result;
+    }
+
+    class Exception::ContextData
+    {
+        public:
+            std::list<std::tuple<source_location, std::string>> local_context;
+
+            ContextData()
+            {
+                // use assign to ensure copying each element
+                local_context.assign(impl::context.begin(), impl::context.end());
+            }
+
+            ContextData(const ContextData &) = default;
+            ~ContextData() = default;
+    };
+
+    Exception::Exception(const std::string & message) noexcept :
+        _message(message),
+        _context_data(std::make_unique<ContextData>())
     {
     }
 
-    Exception::~Exception() throw ()
+    Exception::Exception(const Exception & other) :
+        std::exception(other),
+        _message(other._message),
+        _context_data(std::make_unique<ContextData>(*other._context_data))
     {
+    }
+
+    Exception::~Exception() noexcept
+    {
+    }
+
+    std::string
+    Exception::backtrace(const std::string & delimiter) const
+    {
+        if (_context_data->local_context.empty())
+            return "";
+
+        std::string result;
+
+        auto append = [&](const std::tuple<source_location, std::string> & entry)
+        {
+            result += std::get<1>(entry) + " [" + std::get<0>(entry).file_name() + ":" + std::to_string(std::get<0>(entry).line()) + " -> " + std::get<0>(entry).function_name() + "]";
+            result += delimiter;
+        };
+
+        for (auto c = _context_data->local_context.cbegin(), c_end = _context_data->local_context.cend() ; c != c_end ; ++c)
+        {
+            append(*c);
+        }
+
+        return result;
     }
 
     const char *
