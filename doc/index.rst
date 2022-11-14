@@ -2,7 +2,7 @@ EOS: A software for Flavor Physics Phenomenology
 ================================================
 
 EOS is a software framework for applications in high-energy physics; in particular flavor physics.
-It is written in C++17, and provides both a C++17 and a Python3 API. The Python3 API is the recommended
+It is written in C++20, and provides both a C++20 and a Python3 API. The Python3 API is the recommended
 interface.
 
 EOS has been authored with three use cases in mind.

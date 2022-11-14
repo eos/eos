@@ -20,7 +20,7 @@ high-energy flavor physics:
 
 An up-to-date list of publications that use EOS can be found [here](https://eos.github.io/publications/).
 
-EOS is written in C++17 and designed to be used through its Python 3 interface,
+EOS is written in C++20 and designed to be used through its Python 3 interface,
 ideally within a Jupyter notebook environment.
 It depends on as a small set of external software:
 
