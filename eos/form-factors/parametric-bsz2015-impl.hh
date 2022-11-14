@@ -303,41 +303,34 @@ namespace eos
     }
 
 
+    // P -> P
     template <typename Process_>
-    double
-    BSZ2015FormFactors<Process_, PToP>::_calc_tau_0(const double & m_B, const double & m_P)
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToP>::resonance_0p_names
     {
-        const double tau_p = power_of<2>(m_B + m_P);
-        const double tau_m = power_of<2>(m_B - m_P);
-        return tau_p * (1.0 - std::sqrt(1.0 - tau_m / tau_p));
-    }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,0@BSZ2015" }
+    };
 
     template <typename Process_>
-    complex<double>
-    BSZ2015FormFactors<Process_, PToP>::_calc_z(const complex<double> & s) const
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToP>::resonance_1m_names
     {
-        const complex<double> tau_p(_tau_p, 0.0);
-        const complex<double> tau_0(_tau_0, 0.0);
-
-        return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
-    }
-
-    template <typename Process_>
-    double
-    BSZ2015FormFactors<Process_, PToP>::_calc_z(const double & s) const
-    {
-        return real(_calc_z(complex<double>(s, 0.0)));
-    }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" }
+    };
 
     template <typename Process_>
     template <typename Parameter_>
     complex<double>
-    BSZ2015FormFactors<Process_, PToP>::_calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+    BSZ2015FormFactors<Process_, PToP>::_calc_ff(const complex<double> & s, const double & m_R, const std::array<Parameter_, 3> & a) const
     {
         const complex<double> a_0(a[0]), a_1(a[1]), a_2(a[2]);
 
-        const complex<double> diff_z = _calc_z(s) - _z_0;
-        return 1.0 / (1.0 - s / m2_R) *
+        const complex<double> diff_z = _traits.calc_z(s) - _traits.calc_z(0.0);
+        return 1.0 / (1.0 - s / power_of<2>(m_R)) *
                 (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
     }
 
@@ -358,13 +351,9 @@ namespace eos
                 UsedParameter(p[_par_name("fT_2")], *this) }},
         _a_fz{{ UsedParameter(p[_par_name("f0_1")], *this),
                 UsedParameter(p[_par_name("f0_2")], *this) }},
-        _mB(Process_::m_B),
-        _mB2(power_of<2>(_mB)),
-        _mP(Process_::m_P),
-        _mP2(power_of<2>(_mP)),
-        _tau_p(power_of<2>(_mB + _mP)),
-        _tau_0(_calc_tau_0(_mB, _mP)),
-        _z_0(_calc_z(0))
+        _traits(p),
+        _mB(_traits.m_B),
+        _mP(_traits.m_P)
     {
     }
 
@@ -384,14 +373,14 @@ namespace eos
     complex<double>
     BSZ2015FormFactors<Process_, PToP>::f_p(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::m2_Br1m, _a_fp);
+        return _calc_ff(s, _traits.m_R_1m, _a_fp);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToP>::f_t(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::m2_Br1m, _a_ft);
+        return _calc_ff(s, _traits.m_R_1m, _a_ft);
     }
 
     template <typename Process_>
@@ -406,14 +395,14 @@ namespace eos
             _a_fz[2 - 1],
         }};
 
-        return _calc_ff(s, Process_::m2_Br0p, values);
+        return _calc_ff(s, _traits.m_R_0p, values);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToP>::f_plus_T(const complex<double> & s) const
     {
-        return _calc_ff(s, Process_::m2_Br1m, _a_ft) * s / _mB / (_mB + _mP);
+        return _calc_ff(s, _traits.m_R_1m, _a_ft) * s / _mB() / (_mB + _mP);
     }
 
     template <typename Process_>

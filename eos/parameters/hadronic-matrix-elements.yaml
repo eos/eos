@@ -47,6 +47,18 @@ groups:
   - title: 'Masses used in BSZ-like Form Factor Parametrizations'
     description: ''
     parameters:
+      'mass::pi^0@BSZ2015' :
+          central: +0.135
+          min:     +0.135
+          max:     +0.135
+          latex:    '$m_{\pi^0}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::pi^+@BSZ2015' :
+          central: +0.135
+          min:     +0.135
+          max:     +0.135
+          latex:    '$m_{\pi^\pm}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::K_d@BSZ2015' :
           central: +0.492
           min:     +0.492
@@ -58,6 +70,24 @@ groups:
           min:     +0.492
           max:     +0.492
           latex:    '$m_{K_u}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::D_d@BSZ2015' :
+          central: +1.870
+          min:     +1.870
+          max:     +1.870
+          latex:   '$m_{D^\pm}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::D_u@BSZ2015' :
+          central: +1.867
+          min:     +1.867
+          max:     +1.867
+          latex:   '$m_{D^0}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::D_s@BSZ2015' :
+          central: +1.968
+          min:     +1.968
+          max:     +1.968
+          latex:   '$m_{D_s}^\mathrm{BSZ}$'
           unit:     'GeV'
       'mass::rho^+@BSZ2015' :
           central: +0.7751
@@ -82,6 +112,30 @@ groups:
           min:     +1.02
           max:     +1.02
           latex:   '$m_{\phi}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::B_d@BSZ2015' :
+          central: +5.279
+          min:     +5.279
+          max:     +5.279
+          latex:    '$m_{B_d}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::B_u@BSZ2015' :
+          central: +5.279
+          min:     +5.279
+          max:     +5.279
+          latex:    '$m_{B_u}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::B_s@BSZ2015' :
+          central: +5.366
+          min:     +5.366
+          max:     +5.366
+          latex:    '$m_{B_s}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::B_c@BSZ2015' :
+          central: +6.2751
+          min:     +6.2751
+          max:     +6.2751
+          latex:    '$m_{B_c}^\mathrm{BSZ}$'
           unit:     'GeV'
       'mass::K_d^*@BSZ2015' :
           central: +0.896
@@ -113,30 +167,6 @@ groups:
           max:     +2.1121
           latex:   '$m_{D_s^*}^\mathrm{BSZ}$'
           unit:     'GeV'
-      'mass::B_d@BSZ2015' :
-          central: +5.279
-          min:     +5.279
-          max:     +5.279
-          latex:    '$m_{B_d}^\mathrm{BSZ}$'
-          unit:     'GeV'
-      'mass::B_u@BSZ2015' :
-          central: +5.279
-          min:     +5.279
-          max:     +5.279
-          latex:    '$m_{B_u}^\mathrm{BSZ}$'
-          unit:     'GeV'
-      'mass::B_s@BSZ2015' :
-          central: +5.366
-          min:     +5.366
-          max:     +5.366
-          latex:    '$m_{B_s}^\mathrm{BSZ}$'
-          unit:     'GeV'
-      'mass::B_c@BSZ2015' :
-          central: +6.2751
-          min:     +6.2751
-          max:     +6.2751
-          latex:    '$m_{B_c}^\mathrm{BSZ}$'
-          unit:     'GeV'
       'mass::B_d^*@BSZ2015' :
           central: +5.325
           min:     +5.325
@@ -155,11 +185,23 @@ groups:
           max:     +6.3311
           latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::B_d,0@BSZ2015' :
+          central: +5.540
+          min:     +5.540
+          max:     +5.540
+          latex:   '$m_{B_{d,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::B_s,0@BSZ2015' :
           central: +5.630
           min:     +5.630
           max:     +5.630
           latex:   '$m_{B_{s,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::B_c,0@BSZ2015' :
+          central: +6.420
+          min:     +6.420
+          max:     +6.420
+          latex:   '$m_{B_{c,0}}^\mathrm{BSZ}$'
           unit:     'GeV'
       'mass::B_d,1@BSZ2015' :
           central: +5.724
@@ -179,7 +221,7 @@ groups:
           max:     +6.7671
           latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
           unit:     'GeV'
-
+  # }}}
 
   # Parameters in B -> P Form Factor Parametrizations
   # {{{
