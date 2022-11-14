@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010-2022 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,23 +21,54 @@
 #define EOS_GUARD_EOS_UTILS_EXCEPTION_HH 1
 
 #include <exception>
+#include <memory>
 #include <string>
+#ifdef __clang__
+#  include <experimental/source_location>
+#else
+#  include <source_location>
+#endif
 
 namespace eos
 {
+#ifdef __clang__
+    using source_location = std::experimental::source_location;
+#else
+    using source_location = std::source_location;
+#endif
+
+    class Context
+    {
+        private:
+            Context(const Context &);
+            Context & operator= (const Context &);
+
+        public:
+            Context(const std::string & entry, const source_location = source_location::current());
+            ~Context() noexcept(false);
+
+            std::string backtrace(const std::string & delimiter) const;
+    };
+
     class Exception :
         public std::exception
     {
         private:
+            class ContextData;
+
             std::string _message;
+            const std::unique_ptr<ContextData> _context_data;
 
         protected:
-            Exception(const std::string & message) throw ();
+            Exception(const std::string & message) noexcept;
+            Exception(const Exception &);
 
         public:
-            ~Exception() throw ();
+            ~Exception() noexcept;
 
-            virtual const char * what() const throw ();
+            std::string backtrace(const std::string & delimiter) const;
+
+            virtual const char * what() const noexcept override;
     };
 
     class InternalError :
