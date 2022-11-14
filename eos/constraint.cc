@@ -2255,6 +2255,8 @@ namespace eos
     std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>
     load_constraint_entries()
     {
+        Context context("When loading constraint entries:");
+
         using ValueType = std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>::value_type;
 
         std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> result;
@@ -2298,7 +2300,17 @@ namespace eos
             std::string file = file_path.string();
             try
             {
-                YAML::Node node = YAML::LoadFile(file);
+                Context context("When parsing file '" + file_path.string() + "':");
+
+                YAML::Node node;
+                try
+                {
+                    node = YAML::LoadFile(file);
+                }
+                catch (YAML::ParserException & e)
+                {
+                    throw ConstraintInputFileParseError(file, e.what());
+                }
 
                 for (auto && p : node)
                 {
@@ -2306,6 +2318,8 @@ namespace eos
 
                     if ("@metadata@" == keyname)
                         continue;
+
+                    Context context("When parsing constraint '" + keyname + "':");
 
                     QualifiedName name(keyname);
                     std::shared_ptr<const ConstraintEntry> entry{ ConstraintEntry::FromYAML(name, p.second) };
@@ -2315,10 +2329,6 @@ namespace eos
                         throw ConstraintInputFileParseError(file, "encountered duplicate constraint '" + keyname + "'");
                     }
                 }
-            }
-            catch (YAML::ParserException & e)
-            {
-                throw ConstraintInputFileParseError(file, e.what());
             }
             catch (ConstraintDeserializationError & e)
             {
