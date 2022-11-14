@@ -2316,6 +2316,10 @@ namespace eos
                     }
                 }
             }
+            catch (YAML::ParserException & e)
+            {
+                throw ConstraintInputFileParseError(file, e.what());
+            }
             catch (ConstraintDeserializationError & e)
             {
                 throw ConstraintInputFileParseError(file, e.what());
