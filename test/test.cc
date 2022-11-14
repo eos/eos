@@ -133,9 +133,9 @@ int main(int, char ** argv)
 
             continue;
         }
-        catch (std::exception & e)
+        catch (eos::Exception & e)
         {
-            std::cout << "Test case threw exception: " << e.what() << std::endl;
+            std::cout << "Test case threw exception: " << std::endl << e.backtrace("\n") << e.what() << std::endl;
             result = EXIT_FAILURE;
 
             continue;
