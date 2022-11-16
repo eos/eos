@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2019-2021 Danny van Dyk
+ * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +20,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
+#include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
@@ -357,6 +359,31 @@ namespace eos
 
     // Semileptonic B -> V(pseudoscalar) decays
     // {{{
+
+    // B -> gamma l nu
+    // {{{
+    ObservableGroup
+    make_b_to_gamma_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_u \to \gamma \ell \nu_{\ell}$ decays)",
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                make_observable("B_u->gammalnu::BR(E_gamma_min)", R"(\mathcal{B}(B^- \to \gamma \ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToGammaLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("E_gamma_min")),
+
+                make_observable("B_u->gammalnu::A_FB(E_gamma_min)", R"(A_{\mathrm{FB}}(B^- \to \gamma \ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToGammaLeptonNeutrino::forward_backward_asymmetry,
+                        std::make_tuple("E_gamma_min")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
 
     // B -> omega l nu
     // {{{
@@ -2028,6 +2055,9 @@ namespace eos
                 make_b_to_omega_l_nu_group(),
                 make_b_to_rho_l_nu_group(),
                 make_b_to_dstar_l_nu_group(),
+
+                // B_u -> gamma l nu
+                make_b_to_gamma_l_nu_group(),
 
                 // B_s -> V l^- nubar
                 make_bs_to_kstar_l_nu_group(),
