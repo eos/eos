@@ -1125,6 +1125,13 @@ IKMvD:2014A:
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
   title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
+KKMO:2009A:
+  authors: Khodjamirian, A. and Klein, Ch. and Mannel, Th. and Offen, N.
+  eprint:
+    arxive: arXiv
+    id: oai:arxiv.org:0907.2842
+  inspire-id: Khodjamirian:2009ys
+  title: Semileptonic charm decays $D\!\to\! \pi  \ell \nu_\ell$ and $D\!\to\! K \ell \nu_\ell$ from QCD Light-Cone Sum Rules
 KM:2005A:
   authors: Kruger, F. and Matias, J.
   eprint:
