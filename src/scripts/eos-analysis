@@ -422,7 +422,7 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
 
 
     # corner-plot
-    parser_corner_plot = subparsers.add_parser('corner_plot',
+    parser_corner_plot = subparsers.add_parser('corner-plot',
         parents = [common_subparser],
         description =
 '''
