@@ -455,7 +455,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     """
     analysis = analysis_file.analysis(posterior)
     results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter)
-    samples = np.array(list(map(analysis._x_to_par, results.samples)))
+    samples = results.samples
     weights = _np.exp(results.logwt - results.logz[-1])
     eos.data.DynestyResults.create(os.path.join(base_directory, posterior, 'dynesty_results'), analysis.varied_parameters, results)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
