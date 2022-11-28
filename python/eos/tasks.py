@@ -477,25 +477,25 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     """
+    import matplotlib.pyplot as _plt
     analysis = analysis_file.analysis(posterior)
     p = analysis.varied_parameters
     f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
     size = f.samples.shape[-1]
-    fig, axes = plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
+    fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
 
     for i in range(size):
         # diagonal
         ax = axes[i, i]
         samples = f.samples[:, i]
-        xmin = np.min(samples)
-        xmax = np.max(samples)
-        ax.set_xlim((xmin, xmax))
-
-        ax.set_xlabel(p[i].latex())
-        ax.set_ylabel(p[i].latex())
 
         ax.hist(samples, weights=f.weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
-        ax.set_aspect(np.diff((xmin, xmax))[0] / np.diff(ax.get_ylim())[0])
+        xmin = _np.min(samples)
+        xmax = _np.max(samples)
+        ax.set_xlim((xmin, xmax))
+        ax.set_xlabel(p[i].latex())
+        ax.set_ylabel(p[i].latex())
+        ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff(ax.get_ylim())[0])
 
         for j in range(0, size):
             if j < i:
@@ -507,14 +507,14 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
             ax = axes[i, j]
             xsamples = f.samples[:, j]
             ysamples = f.samples[:, i]
-            xmin = np.min(xsamples)
-            xmax = np.max(xsamples)
-            ymin = np.min(ysamples)
-            ymax = np.max(ysamples)
+            xmin = _np.min(xsamples)
+            xmax = _np.max(xsamples)
+            ymin = _np.min(ysamples)
+            ymax = _np.max(ysamples)
+            ax.hist2d(xsamples, ysamples, weights=f.weights, alpha=1.0, bins=100, cmap='Greys')
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
-            ax.set_aspect(np.diff((xmin, xmax))[0] / np.diff((ymin, ymax))[0])
-            ax.hist2d(xsamples, ysamples, weights=weights, alpha=1.0, bins=100, cmap='Greys')
+            ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff((ymin, ymax))[0])
 
     fig.tight_layout()
     fig.savefig(os.path.join(base_directory, posterior, 'plots', 'corner-plot.pdf'))
