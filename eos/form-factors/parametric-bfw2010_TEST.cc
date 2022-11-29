@@ -84,7 +84,6 @@ class BToKBFW2010FormFactorsTest :
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
                 // Test end-point relations
-
                 TEST_CHECK_NEARLY_EQUAL( ff.f_0(0.0),           ff.f_p(0.0), eps);
 
                 // Test against Nico's implementation

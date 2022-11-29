@@ -167,6 +167,24 @@ namespace eos
 
             Diagnostics diagnostics() const;
 
+
+            // Auxilliary functions: series and derivative of the series
+            double v_series(const double & s) const;
+            double a_0_series(const double & s) const;
+            double a_1_series(const double & s) const;
+            double a_12_series(const double & s) const;
+            double t_1_series(const double & s) const;
+            double t_2_series(const double & s) const;
+            double t_23_series(const double & s) const;
+
+            double v_series_prime(const double & s) const;
+            double a_0_series_prime(const double & s) const;
+            double a_1_series_prime(const double & s) const;
+            double a_12_series_prime(const double & s) const;
+            double t_1_series_prime(const double & s) const;
+            double t_2_series_prime(const double & s) const;
+            double t_23_series_prime(const double & s) const;
+
             /*!
              * References used in the computation of our observables.
              */
@@ -238,6 +256,22 @@ namespace eos
 
                 return polynomials_set(z);
             }
+
+            std::array<complex<double>, 6> orthonormal_polynomials(const complex<double> & z) const
+            {
+                // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(2 * M_PI));
+
+                return polynomials_set(z);
+            }
+
+            std::array<complex<double>, 6> orthonormal_polynomials_derivatives(const complex<double> & z) const
+            {
+                // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(2 * M_PI));
+
+                return polynomials_set.derivatives(z);
+            }
     };
 
     template <typename Process_> class BFW2010FormFactors<Process_, PToP> :
@@ -287,6 +321,15 @@ namespace eos
             double saturation_1p_t5() const;
 
             Diagnostics diagnostics() const;
+
+            // Auxilliary functions: series and derivative of the series
+            double f_p_series(const double & s) const;
+            double f_0_series(const double & s) const;
+            double f_t_series(const double & s) const;
+
+            double f_p_series_prime(const double & s) const;
+            double f_0_series_prime(const double & s) const;
+            double f_t_series_prime(const double & s) const;
 
             /*!
              * References used in the computation of our observables.
