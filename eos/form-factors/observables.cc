@@ -227,7 +227,26 @@ namespace eos
                         &BFW2010FormFactors<BToK, PToP>::saturation_1m_t),
 
                 make_observable("B->K::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
-                        &BFW2010FormFactors<BToK, PToP>::saturation_1p_t5)
+                        &BFW2010FormFactors<BToK, PToP>::saturation_1p_t5),
+
+                // Auxiliary functions for [BFW:2010A]
+                make_observable("B->K::f_+_series(q2)@BFW2010", R"(\hat{f}_+^{B\to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::f_p_series, std::make_tuple("q2")),
+
+                make_observable("B->K::f_+_series_prime(q2)@BFW2010", R"(\hat{f}_+^{\prime B\to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::f_p_series_prime, std::make_tuple("q2")),
+
+                make_observable("B->K::f_0_series(q2)@BFW2010", R"(\hat{f}_0^{B\to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::f_0_series, std::make_tuple("q2")),
+
+                make_observable("B->K::f_0_series_prime(q2)@BFW2010", R"(\hat{f}_0^{\prime B\to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::f_0_series_prime, std::make_tuple("q2")),
+
+                make_observable("B->K::f_T_series(q2)@BFW2010", R"(\hat{f}_T^{B\to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::f_t_series, std::make_tuple("q2")),
+
+                make_observable("B->K::f_T_series_prime(q2)@BFW2010", R"(\hat{f}_T^{\prime B\to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::f_t_series_prime, std::make_tuple("q2"))
             }
         );
 

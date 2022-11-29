@@ -752,6 +752,84 @@ namespace eos
 
     template <typename Process_>
     double
+    BFW2010FormFactors<Process_, PToP>::f_p_series(const double & q2) const
+    {
+        std::array<complex<double>, 5> coefficients;
+        std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
+        const complex<double> z      = this->_traits.calc_z(complex<double>(q2, 0.0), complex<double>(_traits.tp(), 0.0), complex<double>(_traits.t0, 0.0));
+        const auto polynomials       = _traits.orthonormal_polynomials(z);
+        const complex<double> series = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), complex<double>(0.0, 0.0));
+
+        return abs(series);
+    }
+
+    template <typename Process_>
+    double
+    BFW2010FormFactors<Process_, PToP>::f_p_series_prime(const double & q2) const
+    {
+        std::array<complex<double>, 5> coefficients;
+        std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
+        const complex<double> z      = this->_traits.calc_z(complex<double>(q2, 0.0), complex<double>(_traits.tp(), 0.0), complex<double>(_traits.t0, 0.0));
+        const auto polynomials_prime = _traits.orthonormal_polynomials_derivatives(z);
+        const complex<double> series_prime = std::inner_product(coefficients.begin(), coefficients.end(), polynomials_prime.begin(), complex<double>(0.0, 0.0));
+
+        return abs(series_prime);
+    }
+
+    template <typename Process_>
+    double
+    BFW2010FormFactors<Process_, PToP>::f_0_series(const double & q2) const
+    {
+        std::array<complex<double>, 5> coefficients;
+        std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
+        const complex<double> z      = this->_traits.calc_z(complex<double>(q2, 0.0), complex<double>(_traits.tp(), 0.0), complex<double>(_traits.t0, 0.0));
+        const auto polynomials       = _traits.orthonormal_polynomials(z);
+        const complex<double> series = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), complex<double>(0.0, 0.0));
+
+        return abs(series);
+    }
+
+    template <typename Process_>
+    double
+    BFW2010FormFactors<Process_, PToP>::f_0_series_prime(const double & q2) const
+    {
+        std::array<complex<double>, 5> coefficients;
+        std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
+        const complex<double> z      = this->_traits.calc_z(complex<double>(q2, 0.0), complex<double>(_traits.tp(), 0.0), complex<double>(_traits.t0, 0.0));
+        const auto polynomials_prime = _traits.orthonormal_polynomials_derivatives(z);
+        const complex<double> series_prime = std::inner_product(coefficients.begin(), coefficients.end(), polynomials_prime.begin(), complex<double>(0.0, 0.0));
+
+        return abs(series_prime);
+    }
+
+    template <typename Process_>
+    double
+    BFW2010FormFactors<Process_, PToP>::f_t_series(const double & q2) const
+    {
+        std::array<complex<double>, 5> coefficients;
+        std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
+        const complex<double> z      = this->_traits.calc_z(complex<double>(q2, 0.0), complex<double>(_traits.tp(), 0.0), complex<double>(_traits.t0, 0.0));
+        const auto polynomials       = _traits.orthonormal_polynomials(z);
+        const complex<double> series = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), complex<double>(0.0, 0.0));
+
+        return abs(series);
+    }
+
+    template <typename Process_>
+    double
+    BFW2010FormFactors<Process_, PToP>::f_t_series_prime(const double & q2) const
+    {
+        std::array<complex<double>, 5> coefficients;
+        std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
+        const complex<double> z      = this->_traits.calc_z(complex<double>(q2, 0.0), complex<double>(_traits.tp(), 0.0), complex<double>(_traits.t0, 0.0));
+        const auto polynomials_prime = _traits.orthonormal_polynomials_derivatives(z);
+        const complex<double> series_prime = std::inner_product(coefficients.begin(), coefficients.end(), polynomials_prime.begin(), complex<double>(0.0, 0.0));
+
+        return abs(series_prime);
+    }
+
+    template <typename Process_>
+    double
     BFW2010FormFactors<Process_, PToP>::f_plus_T(const double & q2) const
     {
         return f_t(q2) * q2 / _mB / (_mB + _mP);
