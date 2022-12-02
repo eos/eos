@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016, 2019, 2020 Danny van Dyk
+ * Copyright (c) 2016-2022 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -353,6 +353,13 @@ BOOST_PYTHON_MODULE(_eos)
             Set the value of a parameter.
 
             :param value: The value to set the parameter to.
+            :type value: float
+            )")
+        .def("set_generator", &Parameter::set_generator,
+            R"(
+            Set the generator value of a parameter.
+
+            :param value: The value to set the parameter's generator to.
             :type value: float
             )")
         .def("set_max", &Parameter::set_max)
