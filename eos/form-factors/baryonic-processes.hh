@@ -30,6 +30,9 @@ namespace eos
 
     struct LambdaBToLambda {
         static constexpr const char * label = "Lambda_b->Lambda";
+        static constexpr const char * name_1 = "mass::Lambda_b";
+        static constexpr const char * name_2 = "mass::Lambda";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange);
         // initial state mass
         static constexpr double m1 = 5.61951;
         // final state mass
@@ -52,8 +55,6 @@ namespace eos
         static constexpr double chi_1p = 1.13e-2 / (4.2 * 4.2);
         static constexpr double chi_t  = 3.21e-2 / 4.0 / (4.2 * 4.2); // factor 4 by convention
         static constexpr double chi_t5 = 2.99e-2 / 4.0 / (4.2 * 4.2); // factor 4 by convention
-
-        static const SzegoPolynomial<5> orthonormal_polynomials;
     };
 
     struct LambdaBToLambdaC {
