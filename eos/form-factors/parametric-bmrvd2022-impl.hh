@@ -505,7 +505,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::bound_0p() const
+    BMRvD2022FormFactors<Process_>::saturation_0p_v() const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time_v_0();
@@ -516,7 +516,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::bound_1m() const
+    BMRvD2022FormFactors<Process_>::saturation_1m_v() const
     {
         std::array<double, 5> coefficients_long;
         std::copy(_a_long_v.begin(), _a_long_v.end(), coefficients_long.begin());
@@ -530,7 +530,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::bound_0m() const
+    BMRvD2022FormFactors<Process_>::saturation_0m_a() const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time_a_0();
@@ -541,7 +541,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::bound_1p() const
+    BMRvD2022FormFactors<Process_>::saturation_1p_a() const
     {
         std::array<double, 5> coefficients_long;
         std::copy(_a_long_a.begin(), _a_long_a.end(), coefficients_long.begin());
@@ -556,7 +556,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::bound_T() const
+    BMRvD2022FormFactors<Process_>::saturation_1m_t() const
     {
         std::array<double, 5> coefficients_long;
         std::copy(_a_long_t.begin(), _a_long_t.end(), coefficients_long.begin());
@@ -571,7 +571,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::bound_T5() const
+    BMRvD2022FormFactors<Process_>::saturation_1p_t5() const
     {
         std::array<double, 5> coefficients_long;
         coefficients_long[0] = _a_long_t5_0();
@@ -582,138 +582,6 @@ namespace eos
 
         return std::inner_product(coefficients_long.begin(), coefficients_long.end(), coefficients_long.begin(), 0.0)
                 + std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
-    }
-
-    template <typename Process_>
-    double
-    BMRvD2022FormFactors<Process_>::bound_0p_prior() const
-    {
-        const double value = bound_0p();
-
-        if (value < 0.0)
-        {
-            throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
-        }
-        else if ((0.0 <= value) && (value < 1.0))
-        {
-            return 0.0;
-        }
-        else
-        {
-            // add an r-fit like penalty
-            static const double sigma = 0.01; // 10% uncertainty
-            return -power_of<2>((value - 1.0) / sigma) / 2.0;
-        }
-    }
-
-    template <typename Process_>
-    double
-    BMRvD2022FormFactors<Process_>::bound_1m_prior() const
-    {
-        const double value = bound_1m();
-
-        if (value < 0.0)
-        {
-            throw InternalError("Contribution to 1^- unitarity bound must be positive; found to be negative!");
-        }
-        else if ((0.0 <= value) && (value < 1.0))
-        {
-            return 0.0;
-        }
-        else
-        {
-            // add an r-fit like penalty
-            static const double sigma = 0.01; // 10% uncertainty
-            return -power_of<2>((value - 1.0) / sigma) / 2.0;
-        }
-    }
-
-    template <typename Process_>
-    double
-    BMRvD2022FormFactors<Process_>::bound_0m_prior() const
-    {
-        const double value = bound_0m();
-
-        if (value < 0.0)
-        {
-            throw InternalError("Contribution to 0^- unitarity bound must be positive; found to be negative!");
-        }
-        else if ((0.0 <= value) && (value < 1.0))
-        {
-            return 0.0;
-        }
-        else
-        {
-            // add an r-fit like penalty
-            static const double sigma = 0.01; // 10% uncertainty
-            return -power_of<2>((value - 1.0) / sigma) / 2.0;
-        }
-    }
-
-    template <typename Process_>
-    double
-    BMRvD2022FormFactors<Process_>::bound_1p_prior() const
-    {
-        const double value = bound_1p();
-
-        if (value < 0.0)
-        {
-            throw InternalError("Contribution to 1^+ unitarity bound must be positive; found to be negative!");
-        }
-        else if ((0.0 <= value) && (value < 1.0))
-        {
-            return 0.0;
-        }
-        else
-        {
-            // add an r-fit like penalty
-            static const double sigma = 0.01; // 10% uncertainty
-            return -power_of<2>((value - 1.0) / sigma) / 2.0;
-        }
-    }
-
-    template <typename Process_>
-    double
-    BMRvD2022FormFactors<Process_>::bound_T_prior() const
-    {
-        const double value = bound_T();
-
-        if (value < 0.0)
-        {
-            throw InternalError("Contribution to T unitarity bound must be positive; found to be negative!");
-        }
-        else if ((0.0 <= value) && (value < 1.0))
-        {
-            return 0.0;
-        }
-        else
-        {
-            // add an r-fit like penalty
-            static const double sigma = 0.01; // 10% uncertainty
-            return -power_of<2>((value - 1.0) / sigma) / 2.0;
-        }
-    }
-
-    template <typename Process_>
-    double
-    BMRvD2022FormFactors<Process_>::bound_T5_prior() const
-    {
-        const double value = bound_T5();
-
-        if (value < 0.0)
-        {
-            throw InternalError("Contribution to T5 unitarity bound must be positive; found to be negative!");
-        }
-        else if ((0.0 <= value) && (value < 1.0))
-        {
-            return 0.0;
-        }
-        else
-        {
-            // add an r-fit like penalty
-            static const double sigma = 0.01; // 10% uncertainty
-            return -power_of<2>((value - 1.0) / sigma) / 2.0;
-        }
     }
 
     template <typename Process_>

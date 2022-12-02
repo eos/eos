@@ -159,19 +159,12 @@ namespace eos
             virtual double f_long_t5(const double & s) const;
             virtual double f_perp_t5(const double & s) const;
 
-            double bound_0p() const;
-            double bound_1m() const;
-            double bound_0m() const;
-            double bound_1p() const;
-            double bound_T() const;
-            double bound_T5() const;
-
-            double bound_0p_prior() const;
-            double bound_1m_prior() const;
-            double bound_0m_prior() const;
-            double bound_1p_prior() const;
-            double bound_T_prior() const;
-            double bound_T5_prior() const;
+            double saturation_0p_v() const;
+            double saturation_1m_v() const;
+            double saturation_0m_a() const;
+            double saturation_1p_a() const;
+            double saturation_1m_t() const;
+            double saturation_1p_t5() const;
 
             Diagnostics diagnostics() const;
 
