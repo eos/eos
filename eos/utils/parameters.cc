@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010-2022 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  *
@@ -188,13 +188,14 @@ namespace eos
     struct Parameter::Data :
         Parameter::Template
     {
-        double value;
+        double value, generator_value;
 
         Parameter::Id id;
 
         Data(const Parameter::Template & t, const Parameter::Id & i) :
             Parameter::Template(t),
             value(t.central),
+            generator_value(0.0),
             id(i)
         {
         }
@@ -761,6 +762,12 @@ namespace eos
         return _parameters_data->data[_index].value;
     }
 
+    double
+    Parameter::evaluate_generator() const
+    {
+        return _parameters_data->data[_index].generator_value;
+    }
+
     const Parameter &
     Parameter::operator= (const double & value)
     {
@@ -773,6 +780,12 @@ namespace eos
     Parameter::set(const double & value)
     {
         _parameters_data->data[_index].value = value;
+    }
+
+    void
+    Parameter::set_generator(const double & value)
+    {
+        _parameters_data->data[_index].generator_value = value;
     }
 
     const double &

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2019 Danny van Dyk
+ * Copyright (c) 2010-2022 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -253,11 +253,17 @@ namespace eos
             /// Retrieve a Parameter's numeric value.
             virtual double evaluate() const;
 
+            /// Retrieve a Parameter's generator value, used for prior sampling.
+            virtual double evaluate_generator() const;
+
             /// Set a Parameter's numeric value.
             virtual const Parameter & operator= (const double &);
 
             /// Set a Parameter's numeric value.
             virtual void set(const double &);
+
+            /// Set a Parameter's generator value, used for prior sampling.
+            virtual void set_generator(const double &);
             ///@}
 
             ///@name Access to Meta Data
