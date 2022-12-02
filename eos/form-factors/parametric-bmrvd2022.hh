@@ -33,13 +33,75 @@
 namespace eos
 {
     template <typename Process_>
+    class BMRvD2022FormFactorTraits :
+        public virtual ParameterUser
+    {
+        public:
+            // The following parameters are part of the parameterization and should match the
+            // the ones used for the extraction of the coefficients of the z-expension
+            UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            UsedParameter m_R_0m, m_R_0p, m_R_1m, m_R_1p;
+            UsedParameter t0; // z(t_0) = 0, t_m is the endpoint of the semileptonic process
+            UsedParameter tp_a, tp_v; // pair production thresholds
+
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_0m_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_0p_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
+
+            BMRvD2022FormFactorTraits(const Parameters & p) :
+                m_1(UsedParameter(p[std::string(Process_::name_1) + "@BMRvD2022"], *this)),
+                m_2(UsedParameter(p[std::string(Process_::name_2) + "@BMRvD2022"], *this)),
+                m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
+                m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
+                m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
+                m_R_1p(UsedParameter(p[resonance_1p_names.at(Process_::partonic_transition)], *this)),
+                t0(UsedParameter(p[std::string(Process_::label) + "::t0@BMRvD2022"], *this)),
+                tp_a(UsedParameter(p[std::string(Process_::label) + "::tp_a@BMRvD2022"], *this)),
+                tp_v(UsedParameter(p[std::string(Process_::label) + "::tp_v@BMRvD2022"], *this))
+            {
+            }
+
+            double tm() const
+            {
+                return power_of<2>(m_1 - m_2);
+            }
+
+            complex<double> calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
+            {
+                return (std::sqrt(sp - s) - std::sqrt(sp - s0)) / (std::sqrt(sp - s) + std::sqrt(sp - s0));
+            }
+
+            double calc_z(const double & s, const double & sp, const double & s0) const
+            {
+                if (s > sp)
+                    throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
+
+                return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
+            }
+
+            std::array<double, 6> orthonormal_polynomials_v(const double & z) const
+            {
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_1 + m_2)), complex<double>(tp_v), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
+
+                return polynomials_set(z);
+            }
+
+            std::array<double, 6> orthonormal_polynomials_a(const double & z) const
+            {
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_1 + m_2)), complex<double>(tp_a), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
+
+                return polynomials_set(z);
+            }
+    };
+
+    template <typename Process_>
     class BMRvD2022FormFactors :
         public FormFactors<OneHalfPlusToOneHalfPlus>
     {
         private:
-            const double _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
-            const double _t_0, _t_m, _t_p; // z(t_0) = 0, t_m is the endpoint of the semileptonic process, and t_p is the pair production threshold,
-
             const std::array<UsedParameter, 4> _a_time_v;  // a_0^(time,V)  is obtained from the EoM f_t^V(q2 = 0) = f_0^V(q2 = 0)
             const std::array<UsedParameter, 5> _a_long_v;
             const std::array<UsedParameter, 5> _a_perp_v;
@@ -52,9 +114,12 @@ namespace eos
             const std::array<UsedParameter, 4> _a_long_t5; // a_0^(long,T5) is obtained from the EoM f_long^T5(q2 = t_-) = f_perp^T5(q2 = t_-)
             const std::array<UsedParameter, 5> _a_perp_t5;
 
+            const BMRvD2022FormFactorTraits<Process_> _traits;
+
+            const UsedParameter & _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+
             QualifiedName _par_name(const std::string & pol, const std::string & current, unsigned idx) const;
-            double _z(const double & t, const double & t_0) const;
-            double _phi(const double & s, const double & chi, const double & a, const double & b, const double & c,
+            double _phi(const double & s, const double & chi, const double & s_p, const double & a, const double & b, const double & c,
                     const double & d, const double & e, const double & f, const double & g) const;
 
             inline double _phi_time_v(const double & q2) const;

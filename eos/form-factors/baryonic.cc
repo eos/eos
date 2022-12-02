@@ -39,20 +39,8 @@ namespace eos
     const constexpr double LambdaBToLambda::mR2_0p;
     const constexpr double LambdaBToLambda::mR2_1m;
     const constexpr double LambdaBToLambda::mR2_1p;
-    const eos::SzegoPolynomial<5> LambdaBToLambda::orthonormal_polynomials(SzegoPolynomial<5>::FlatMeasure(3.221984414));
 
     /* Lambda_b -> Lambda_c */
-
-    const constexpr char * LambdaBToLambdaC::label;
-    const constexpr double LambdaBToLambdaC::tm;
-    const constexpr double LambdaBToLambdaC::tp_0m;
-    const constexpr double LambdaBToLambdaC::tp_0p;
-    const constexpr double LambdaBToLambdaC::tp_1m;
-    const constexpr double LambdaBToLambdaC::tp_1p;
-    const constexpr double LambdaBToLambdaC::mR2_0m;
-    const constexpr double LambdaBToLambdaC::mR2_0p;
-    const constexpr double LambdaBToLambdaC::mR2_1m;
-    const constexpr double LambdaBToLambdaC::mR2_1p;
 
     /* Form Factors according to [BFvD2014] */
     class BFvD2014FormFactors :
@@ -180,13 +168,6 @@ namespace eos
 
     /* Lambda_b -> Lambda_c(2595) */
 
-    const constexpr double LambdaBToLambdaC2595::tm;
-    const constexpr double LambdaBToLambdaC2595::tp;
-    const constexpr double LambdaBToLambdaC2595::mR2_0m;
-    const constexpr double LambdaBToLambdaC2595::mR2_0p;
-    const constexpr double LambdaBToLambdaC2595::mR2_1m;
-    const constexpr double LambdaBToLambdaC2595::mR2_1p;
-
     FormFactors<OneHalfPlusToOneHalfMinus>::~FormFactors()
     {
     }
@@ -234,22 +215,8 @@ namespace eos
 
     /* Lambda_b -> Lambda_c(2625) */
 
-    const constexpr double LambdaBToLambdaC2625::tm;
-    const constexpr double LambdaBToLambdaC2625::tp;
-    const constexpr double LambdaBToLambdaC2625::mR2_0m;
-    const constexpr double LambdaBToLambdaC2625::mR2_0p;
-    const constexpr double LambdaBToLambdaC2625::mR2_1m;
-    const constexpr double LambdaBToLambdaC2625::mR2_1p;
-
     /* Lambda_b -> Lambda(1520) */
 
-    const constexpr double LambdaBToLambda1520::tm;
-    const constexpr double LambdaBToLambda1520::tp;
-    // const constexpr double LambdaBToLambda1520::tpv;
-    const constexpr double LambdaBToLambda1520::mR2_0m;
-    const constexpr double LambdaBToLambda1520::mR2_0p;
-    const constexpr double LambdaBToLambda1520::mR2_1m;
-    const constexpr double LambdaBToLambda1520::mR2_1p;
     const SzegoPolynomial<5> LambdaBToLambda1520::orthonormal_polynomials(SzegoPolynomial<5>::FlatMeasure(3.42519));
 
 

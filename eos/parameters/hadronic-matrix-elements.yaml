@@ -221,6 +221,18 @@ groups:
           max:     +6.7671
           latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::Lambda@BMRvD2022' :
+          central: +1.115683
+          min:     +1.115683
+          max:     +1.115683
+          latex:   '$m_{\Lambda}^\mathrm{BMRvD}$'
+          unit:     'GeV'
+      'mass::Lambda_b@BMRvD2022' :
+          central: +5.61951
+          min:     +5.61951
+          max:     +5.61951
+          latex:   '$m_{\Lambda_b}^\mathrm{BMRvD}$'
+          unit:     'GeV'
   # }}}
 
   # Parameters in B -> P Form Factor Parametrizations
@@ -3841,6 +3853,26 @@ groups:
           comments: ''
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [BMRvD:2022A]
+      'Lambda_b->Lambda::tp_a@BMRvD2022' :
+          central:  33.327529
+          min:      33.327529
+          max:      33.327529
+          latex:    '$t_+^{A, \Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comment:  'For simplicity (mB + mK)^2 was used in BMRvD:2022A'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda::tp_v@BMRvD2022' :
+          central:  33.327529
+          min:      33.327529
+          max:      33.327529
+          latex:    '$t_+^{V, \Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda::t0@BMRvD2022' :
+          central:  20.284457646
+          min:      20.284457646
+          max:      20.284457646
+          latex:    '$t_0^{\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          unit:     'GeV^2'
       'Lambda_b->Lambda::a^(t,V)_1@BMRvD2022' :
           central:  0.4896605330254244
           min:     -1.0

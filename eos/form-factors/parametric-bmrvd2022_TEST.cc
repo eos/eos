@@ -103,6 +103,14 @@ class BMRvD2022FormFactorsTest :
                 p["Lambda_b->Lambda::a^(perp,T5)_2@BMRvD2022"] = +0.3;
                 p["Lambda_b->Lambda::a^(perp,T5)_3@BMRvD2022"] = -0.4;
                 p["Lambda_b->Lambda::a^(perp,T5)_4@BMRvD2022"] = +0.5;
+                // Resonance masses
+                p["mass::B_s@BSZ2015"]   = 5.367;
+                p["mass::B_s,0@BSZ2015"] = 5.711;
+                p["mass::B_s^*@BSZ2015"] = 5.416;
+                p["mass::B_s,1@BSZ2015"] = 5.750;
+                // Fix tp_a to tp_v to match the initial publication [BMRvD:2022A]
+                p["Lambda_b->Lambda::tp_a@BMRvD2022"] = p["Lambda_b->Lambda::tp_v@BMRvD2022"].evaluate();
+
 
                 BMRvD2022FormFactors<LambdaBToLambda> ff(p, Options{ });
 
