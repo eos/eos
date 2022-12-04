@@ -84,6 +84,36 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 dnl }}}
 CXXFLAGS="$CXXFLAGS -std=c++20"
+dnl {{{ check for <source_location>
+AC_MSG_CHECKING([for <source_location>])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -std=c++20"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+	#ifdef __clang__
+	#  include <experimental/source_location>
+	#else
+	#  include <source_location>
+	#endif
+
+	#ifdef __clang__
+		using source_location = std::experimental::source_location;
+	#else
+		using source_location = std::source_location;
+	#endif
+
+	int main(int, char **)
+	{
+		auto loc = source_location::current();
+		return 0;
+	}
+])],
+	[AC_MSG_RESULT([yes])],
+	[AC_MSG_RESULT([no])
+	 AC_MSG_ERROR([your compiler does not support <source_location>])
+	]
+)
+CXXFLAGS=$save_CXXFLAGS
+dnl }}}
 dnl }}}
 
 dnl {{{ determine which pieces of EOS to build
