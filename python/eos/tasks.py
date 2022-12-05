@@ -25,6 +25,7 @@ import os
 import pypmc
 import scipy
 import sys
+import copy as _copy
 
 from .ipython import __ipython__
 
@@ -463,7 +464,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf'):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -476,6 +477,8 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
     :type posterior: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
+    :param format: The file extension of the data files. Can also be a list of file extensions.
+    :type format: str or list of str, optional
     """
     import matplotlib.pyplot as _plt
     analysis = analysis_file.analysis(posterior)
@@ -517,7 +520,12 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./'):
             ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff((ymin, ymax))[0])
 
     fig.tight_layout()
-    fig.savefig(os.path.join(base_directory, posterior, 'plots', 'corner-plot.pdf'))
+
+    _format = _copy.copy(format)
+    if isinstance(_format, str):
+        _format = [ _format ]
+    for f in _format:
+        fig.savefig(os.path.join(base_directory, posterior, 'plots', f'corner-plot.{f}'))
 
 
 class Executor:
