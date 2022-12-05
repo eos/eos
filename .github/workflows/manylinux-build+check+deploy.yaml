@@ -49,6 +49,7 @@ jobs:
               env:
                 PYTHON_PATH:       /opt/python/${{ matrix.cfg.pypath }}/bin
                 PYTHON:            /opt/python/${{ matrix.cfg.pypath }}/bin/python
+                CXX:               /opt/rh/devtoolset-11/root/bin/g++
                 CXXFLAGS:          "-O2 -g -march=x86-64"
                 BOOST_PYTHON_SKIP: yes
               run: |
@@ -114,6 +115,7 @@ jobs:
               env:
                 PYTHON_PATH:       /opt/python/${{ matrix.cfg.pypath }}/bin
                 PYTHON:            /opt/python/${{ matrix.cfg.pypath }}/bin/python
+                CXX:               /opt/rh/devtoolset-11/root/bin/g++
                 CXXFLAGS:          "-O2 -g -march=x86-64"
                 BOOST_PYTHON_SKIP: yes
               run: |
