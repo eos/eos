@@ -100,7 +100,36 @@ class SzegoPolynomialTest :
 
                 TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 0, 0),  0.6351351032391984,  1.0e-5);
                 TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 1, 2), -2.24105,  1.0e-5);
-                TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 3, 4), -75.8351,  1.0e-5);
+                TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 1, 5),  24.1447,  1.0e-5);
+                TEST_CHECK_RELATIVE_ERROR(gsl_matrix_get(coefficient_matrix, 3, 4), -12.6392,  1.0e-5);
+            }
+
+            // Test the derivatives
+            {
+                SzegoPolynomial<5u> p(2.47895); // norm of the measure
+
+                {
+                    const auto [p0, p1, p2, p3, p4, p5] = p.derivatives(-0.1);
+
+                    TEST_CHECK_NEARLY_EQUAL(p0,    0.0,                1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p1, +0.982422,           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p2, -2.56765,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p3, +6.48297,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p4, -15.2203,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p5, +34.0797,            1.0e-5);
+                }
+
+                {
+                    const auto [p0, p1, p2, p3, p4, p5] = p.derivatives(complex<double>(0.4, 0.916515139));
+
+                    TEST_CHECK_NEARLY_EQUAL(p0,                      0.0,                  1.0e-5);
+                    TEST_CHECK_NEARLY_EQUAL(p1.imag(),               0.0,                  1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p1.real(),             0.982422,             1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(p2, complex<double>(-0.934628,  2.99338),  1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(p3, complex<double>(-4.83802,  -4.15038),  1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(p4, complex<double>( 9.43519,  -4.10475),  1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.881409,  14.1859),  1.0e-5);
+                }
             }
 
         }
