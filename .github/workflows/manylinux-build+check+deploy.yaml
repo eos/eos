@@ -25,7 +25,7 @@ jobs:
                     - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
                     - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
         container:
-            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}
+            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}:43e9ffe718d46bee23d99838d17ebb0e22757b90
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v2
@@ -94,7 +94,7 @@ jobs:
                     - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
                     - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
         container:
-            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}
+            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}:43e9ffe718d46bee23d99838d17ebb0e22757b90
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
@@ -133,7 +133,7 @@ jobs:
                     - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
                     - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
         container:
-            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}
+            image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}:43e9ffe718d46bee23d99838d17ebb0e22757b90
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
