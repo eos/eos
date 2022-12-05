@@ -22,6 +22,10 @@
 #include <eos/maths/power-of.hh>
 
 #include <array>
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_complex.h>
+#include <gsl/gsl_complex_math.h>
+#include <gsl/gsl_linalg.h>
 #include <gsl/gsl_matrix.h>
 
 namespace eos
@@ -132,14 +136,16 @@ namespace eos
                 return result;
             }
 
-            // Table of coefficients of the Szego polynomials. It can be used e.g. to decompose a polynomial on the orthonormal basis.
-            // The coefficients are computed by induction as derivative evaluated at zero. The result is an upper triangle matrix.
+            // Table A of the coefficients of the Szego polynomials P_j = A_{i,j} z^i.
+            // It can be used e.g. to decompose a polynomial on the orthonormal basis.
+            // The coefficients are computed by induction as derivative evaluated at zero.
+            // The result is an upper triangle matrix.
             gsl_matrix * coefficient_matrix() const
             {
                 gsl_matrix * coefficients(gsl_matrix_calloc(order_ + 1, order_ + 1));
                 gsl_matrix * coefficients_star(gsl_matrix_calloc(order_ + 1, order_ + 1));
 
-                // Fill first line
+                // Fill first column
                 gsl_matrix_set(coefficients,      0, 0, 1.);
                 gsl_matrix_set(coefficients_star, 0, 0, 1.);
 
@@ -149,14 +155,14 @@ namespace eos
                     gsl_matrix_set(coefficients_star, i, 0, 0.);
                 }
 
-                // Fill first column, cf. [S:2004B], eq. (1.4), p.2
+                // Fill first row, cf. [S:2004B], eq. (1.4), p.2
                 for (unsigned k = 1 ; k <= order_ ; ++k)
                 {
                     gsl_matrix_set(coefficients,      0, k, - _verblunsky_coefficients[k - 1]);
                     gsl_matrix_set(coefficients_star, 0, k,                                1.);
                 }
 
-                // Fill coefficient matrix. We use real-valued Verblunsky coefficients only.
+                // Fill the matrix of derivatives. We use real-valued Verblunsky coefficients only.
                 // The relation is derived from [S:2004B], eq. (1.4-5), p.2
                 for (unsigned k = 1 ; k <= order_ ; ++k)
                 {
@@ -172,13 +178,48 @@ namespace eos
                 // Normalize all coefficients
                 for (unsigned k = 0 ; k <= order_ ; ++k)
                 {
+                    unsigned factorial_i = 1;
                     for (unsigned i = 0 ; i <= order_ ; ++i)
                     {
-                        gsl_matrix_set(coefficients, i, k, gsl_matrix_get(coefficients, i, k) / _norms[k]);
+                        gsl_matrix_set(coefficients, i, k, gsl_matrix_get(coefficients, i, k) / _norms[k] / factorial_i);
+                        factorial_i *= (i + 1);
                     }
                 }
 
                 return coefficients;
+            }
+
+            std::array<complex<double>, order_ + 1> derivatives(const complex<double> & z) const
+            {
+                gsl_matrix * coefficient_matrix = this->coefficient_matrix();
+
+                // Vector of monomial derivatives: V = [0, 1, 2 z, 3 z^2, ...]
+                // Store real and imaginary part separately for simplicity
+                gsl_vector * monomial_derivatives_real(gsl_vector_calloc(order_ + 1));
+                gsl_vector * monomial_derivatives_imag(gsl_vector_calloc(order_ + 1));
+                complex<double> power_of_z(1.0 , 0.0);
+                gsl_vector_set(monomial_derivatives_real, 0, 0.0);
+                gsl_vector_set(monomial_derivatives_imag, 0, 0.0);
+
+                for (unsigned i = 1 ; i <= order_ ; ++i)
+                    {
+                        gsl_vector_set(monomial_derivatives_real, i, i * real(power_of_z));
+                        gsl_vector_set(monomial_derivatives_imag, i, i * imag(power_of_z));
+                        power_of_z *= z;
+                    }
+
+                // Matrix product result = coefficient_matrix.T * monomial_derivatives
+                // coefficient_matrix is an upper triangular matrix
+                gsl_blas_dtrmv(CblasUpper, CblasTrans, CblasNonUnit, coefficient_matrix, monomial_derivatives_real);
+                gsl_blas_dtrmv(CblasUpper, CblasTrans, CblasNonUnit, coefficient_matrix, monomial_derivatives_imag);
+                std::array<complex<double>, order_ + 1>  result;
+
+                for (unsigned i = 0 ; i <= order_ ; ++i)
+                    {
+                        result[i] = complex<double>(gsl_vector_get(monomial_derivatives_real, i), gsl_vector_get(monomial_derivatives_imag, i));
+                    }
+
+                return result;
             }
     };
 }
