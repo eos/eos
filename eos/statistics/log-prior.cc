@@ -70,6 +70,8 @@ namespace eos
             public LogPrior
         {
             private:
+                Parameter _parameter;
+
                 std::string _name;
 
                 ParameterRange _range;
@@ -80,6 +82,7 @@ namespace eos
             public:
                 Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range) :
                     LogPrior(parameters),
+                    _parameter(parameters[name]),
                     _name(name),
                     _range(range),
                     _value(std::log(1.0 / (range.max - range.min)))
@@ -112,9 +115,9 @@ namespace eos
                     return LogPriorPtr(new priors::Flat(parameters, _name, _range));
                 }
 
-                virtual double inverse_cdf(const double & p) const
+                virtual void sample()
                 {
-                    return p * (_range.max - _range.min) + _range.min;
+                    _parameter.set(_parameter.evaluate_generator() * (_range.max - _range.min) + _range.min);
                 }
 
                 virtual double mean() const
@@ -140,6 +143,8 @@ namespace eos
             public LogPrior
         {
             private:
+                Parameter _parameter;
+
                 const std::string _name;
 
                 const ParameterRange _range;
@@ -168,6 +173,7 @@ namespace eos
                 Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                         const double & lower, const double & central, const double & upper) :
                     LogPrior(parameters),
+                    _parameter(parameters[name]),
                     _name(name),
                     _range(range),
                     _lower(lower),
@@ -235,15 +241,17 @@ namespace eos
                     return LogPriorPtr(new priors::Gauss(parameters, _name, _range, _lower, _central, _upper));
                 }
 
-                virtual double inverse_cdf(const double & p) const
+                virtual void sample()
                 {
                     // CDF = c \Phi(x - x_{central} / \sigma) + b
 
                     // find out if sample in upper or lower part
+                    const auto p = _parameter.evaluate_generator();
+
                     if (p < _prob_lower)
-                       return gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_b + 0.5, _sigma_lower) + _central;
+                       _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_b + 0.5,  _sigma_lower) + _central);
                     else
-                       return gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central;
+                       _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central);
                 }
 
                 virtual double mean() const
@@ -270,6 +278,8 @@ namespace eos
             public LogPrior
         {
             private:
+                Parameter _parameter;
+
                 const std::string _name;
 
                 const ParameterRange _range;
@@ -283,6 +293,7 @@ namespace eos
             public:
                 Scale(const Parameters & parameters, const std::string & name, const ParameterRange & range, const double & mu_0, const double & lambda) :
                     LogPrior(parameters),
+                    _parameter(parameters[name]),
                     _name(name),
                     _range(range),
                     _mu_0(mu_0),
@@ -322,12 +333,12 @@ namespace eos
                     return LogPriorPtr(new priors::Scale(parameters, _name, _range, _mu_0, _lambda));
                 }
 
-                virtual double inverse_cdf(const double & p) const
+                virtual void sample()
                 {
                     // CDF: p = [\ln x - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
                     // inverse CDF: x = \mu_0 * \lambda^(2 p - 1)
 
-                    return _mu_0 * std::pow(_lambda, 2.0 * p - 1.0);
+                    _parameter.set(_mu_0 * std::pow(_lambda, 2.0 * _parameter.evaluate_generator() - 1.0));
                 }
 
                 virtual double mean() const

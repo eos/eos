@@ -52,17 +52,25 @@ class LogPriorTest :
                 TEST_CHECK_EQUAL(range.max, +1.0);
             }
 
+            const auto inverse_cdf = [](const LogPriorPtr & prior, Parameter & param, const double & p)
+            {
+                param.set_generator(p);
+                prior->sample();
+                return param.evaluate();
+            };
+
             // flat prior
             {
                 // use factory
                 LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 4.2, 4.5 });
-                TEST_CHECK_NEARLY_EQUAL((*flat_prior)(),              1.2039728043259361, eps);
-                TEST_CHECK_NEARLY_EQUAL(flat_prior->inverse_cdf(0.0), 4.2,                eps);
-                TEST_CHECK_NEARLY_EQUAL(flat_prior->inverse_cdf(0.5), 4.35,               eps);
-                TEST_CHECK_NEARLY_EQUAL(flat_prior->inverse_cdf(1.0), 4.5,                eps);
+                Parameter param        = parameters["mass::b(MSbar)"];
+                TEST_CHECK_NEARLY_EQUAL((*flat_prior)(),                     1.2039728043259361, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.0), 4.2,                eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.5), 4.35,               eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 1.0), 4.5,                eps);
 
                 // a continuous parameter of interest
-                TEST_CHECK( ! flat_prior->begin()->nuisance);
+                TEST_CHECK(! flat_prior->begin()->nuisance);
                 TEST_CHECK_EQUAL(flat_prior->begin()->parameter->name(), "mass::b(MSbar)");
             }
 
@@ -143,21 +151,23 @@ class LogPriorTest :
                 LogPriorPtr scale_prior = LogPrior::Scale(parameters, "mass::b(MSbar)", ParameterRange{ 2.0, 10.0 },
                     mu_0, lambda);
 
-                parameters["mass::b(MSbar)"] = 3.0;
+                Parameter param = parameters["mass::b(MSbar)"];
+
+                param = 3.0;
                 TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.2404491734814939, eps);
 
-                parameters["mass::b(MSbar)"] = 4.0;
+                param = 4.0;
                 TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.1803368801111204, eps);
 
-                parameters["mass::b(MSbar)"] = 7.0;
+                param = 7.0;
                 TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.1030496457777831, eps);
 
                 // central value at p = 0.5
-                TEST_CHECK_NEARLY_EQUAL(scale_prior->inverse_cdf(0.5), mu_0,          eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.5), mu_0,          eps);
                 // lower boundary at p = 0.0
-                TEST_CHECK_NEARLY_EQUAL(scale_prior->inverse_cdf(0.0), mu_0 / lambda, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.0), mu_0 / lambda, eps);
                 // upper boundary at p = 1.0
-                TEST_CHECK_NEARLY_EQUAL(scale_prior->inverse_cdf(1.0), mu_0 * lambda, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 1.0), mu_0 * lambda, eps);
             }
 
             //Make

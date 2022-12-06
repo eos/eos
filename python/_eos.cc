@@ -664,12 +664,10 @@ BOOST_PYTHON_MODULE(_eos)
             :type lambda: float, strictly positive
         )", args("parameters", "name", "range", "mu_0", "scale"))
         .staticmethod("Scale")
-        .def("inverse_cdf", &LogPrior::inverse_cdf, R"(
-            Returns the parameter value corresponding to the cumulative propability :math:`p`.
-
-            :param p: The cumulative propability.
-            :type p: float, [0.0, 1.0]
-        )", args("p"))
+        .def("sample", &LogPrior::sample, R"(
+            Sets its parameters' values corresponding to the cumulative propability :math:`p` assigned to
+            each parameter via its :meth:`Parameter.set_generator` method.
+        )")
         ;
 
     // LogPosterior
