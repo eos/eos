@@ -92,11 +92,12 @@ namespace eos
             virtual double operator() () const = 0;
 
             /*!
-             * Evaluate the inverse cumulative density function of the prior.
+             * Generate a prior sample from the inverse CDF and a set of generator values.
              *
-             * @param p The cumulative probability for which we seek the parameter value.
+             * The generator values must have been passed to all Parameter objects via their respective
+             * set_generator() method.
              */
-            virtual double inverse_cdf(const double & p) const = 0;
+            virtual void sample() = 0;
 
             /*!
              * Return the mean of the distribution.

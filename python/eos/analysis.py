@@ -243,10 +243,20 @@ class Analysis:
         :param \**kwargs: Are passed to `scipy.optimize.minimize`
 
         """
-        if start_point is None:
-            start_point = [float(p) for p in self.varied_parameters]
-        elif start_point == "random":
-            start_point = [p.inverse_cdf(rng.uniform()) for p in self._log_posterior.log_priors()]
+        if str(start_point) == "random":
+            # generate random uniform probabilities and store them in the generator values
+            for param in self.varied_parameters:
+                param.set_generator(rng.uniform())
+            # sample the priors by using an inverse transform sampling based on the previously provided generator values
+            for prior in self._log_posterior.log_priors():
+                prior.sample()
+            # use the sampled parameter point
+            _start_point = [float(p) for p in self.varied_parameters]
+        elif start_point is None:
+            # use the current parameter point
+            _start_point = [float(p) for p in self.varied_parameters]
+        else:
+            _start_point = np.array(start_point)
 
         scipy_opt_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
         # Update default values. If no keyword arguments are passed, kwargs is an empty dict
@@ -600,7 +610,14 @@ class Analysis:
         :param u: The input probability point on the hypercube [0, 1)**D
         :type u: iterable
         """
-        return np.array([prior.inverse_cdf(p) for prior, p in zip(self._log_posterior.log_priors(), u)])
+        # Use the input probability point to sample from the prior
+        for param, p in zip(self.varied_parameters, u):
+            param.set_generator(u)
+        for prior in self._log_posterior.log_priors():
+            prior.sample()
+
+        # Return the parameter point
+        return [p.evaluate() for p in self.varied_parameters]
 
 
     def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10):
