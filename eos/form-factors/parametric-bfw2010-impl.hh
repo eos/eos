@@ -202,7 +202,7 @@ namespace eos
         {
             a[i] = x_A12 * this->_a_A0[i] - x_A0 * this->_a_A12[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
+        const auto polynomials = _traits.orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_A0);
     }
 
@@ -212,8 +212,8 @@ namespace eos
     {
         const double x_T2 = this->_traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) * this->_phi_t_2(0.0);
         const double x_T1 = this->_traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) * this->_phi_t_1(0.0);
-        const auto polynomials_T2 = Process_::orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
-        const auto polynomials_T1 = Process_::orthonormal_polynomials_v(_traits.calc_z(0.0, _traits.tp_v, _traits.t0));
+        const auto polynomials_T2 = _traits.orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
+        const auto polynomials_T1 = _traits.orthonormal_polynomials_v(_traits.calc_z(0.0, _traits.tp_v, _traits.t0));
 
         double a_T2_0 = x_T2 * this->_a_T1[0] * polynomials_T1[0];
         for (unsigned i = 1 ; i < _a_T1.size() ; ++i)
@@ -234,7 +234,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
         const double phi          = _phi_v(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -250,7 +250,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_0m));
         const double phi          = _phi_a_0(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_a(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -266,7 +266,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
         const double phi          = _phi_a_1(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_a(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -283,7 +283,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
         const double phi          = _phi_a_12(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_a(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -299,7 +299,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
         const double phi          = _phi_t_1(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -316,7 +316,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
         const double phi          = _phi_t_2(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_a(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -332,7 +332,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
         const double phi          = _phi_t_23(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials_a(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -474,7 +474,7 @@ namespace eos
         results.add({ _traits.calc_z(10.0, _traits.tp_v, _traits.t0), "z_v(q2 = 10)" });
 
         {
-            const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials_v(0.0);
+            const auto & [p0, p1, p2, p3, p4, p5] = _traits.orthonormal_polynomials_v(0.0);
             results.add({ p0,              "p_0(z = 0.0)" });
             results.add({ p1,              "p_1(z = 0.0)" });
             results.add({ p2,              "p_2(z = 0.0)" });
@@ -484,7 +484,7 @@ namespace eos
         }
 
         {
-            const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials_v(_traits.calc_z(10.0, _traits.tp_v, _traits.t0));
+            const auto & [p0, p1, p2, p3, p4, p5] = _traits.orthonormal_polynomials_v(_traits.calc_z(10.0, _traits.tp_v, _traits.t0));
             results.add({ p0,              "p_0(z = z(q2 = 10))" });
             results.add({ p1,              "p_1(z = z(q2 = 10))" });
             results.add({ p2,              "p_2(z = z(q2 = 10))" });
@@ -666,7 +666,7 @@ namespace eos
         {
             a[i] = x_f0 * this->_a_fp[i] - x_fp * this->_a_f0[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_traits.calc_z(0.0, _traits.tp(), _traits.t0));
+        const auto polynomials = _traits.orthonormal_polynomials(_traits.calc_z(0.0, _traits.tp(), _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_fp);
     }
 
@@ -680,7 +680,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp(), power_of<2>(_traits.m_R_1m));
         const double phi          = _phi_f_p(q2);
         const double z            = _traits.calc_z(q2, _traits.tp(), _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -697,7 +697,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp(), power_of<2>(_traits.m_R_0p));
         const double phi          = _phi_f_0(q2);
         const double z            = _traits.calc_z(q2, _traits.tp(), _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -713,7 +713,7 @@ namespace eos
         const double blaschke     = _traits.calc_z(q2, _traits.tp(), power_of<2>(_traits.m_R_1m));
         const double phi          = _phi_f_t(q2);
         const double z            = _traits.calc_z(q2, _traits.tp(), _traits.t0);
-        const auto   polynomials  = Process_::orthonormal_polynomials(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -782,13 +782,13 @@ namespace eos
         results.add({ _traits.calc_z(10.0, _traits.tp(), _traits.t0), "z(q2 = 10)" });
 
         {
-            const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials(0.0);
+            const auto & [p0, p1, p2, p3, p4, p5] = _traits.orthonormal_polynomials(0.0);
             results.add({ p0,              "p_0(z = 0.0)" });
             results.add({ p1,              "p_1(z = 0.0)" });
         }
 
         {
-            const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials(_traits.calc_z(10.0, _traits.tp(),_traits.t0));
+            const auto & [p0, p1, p2, p3, p4, p5] = _traits.orthonormal_polynomials(_traits.calc_z(10.0, _traits.tp(),_traits.t0));
             results.add({ p0,              "p_0(z = z(q2 = 10))" });
             results.add({ p1,              "p_1(z = z(q2 = 10))" });
         }

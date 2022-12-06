@@ -39,10 +39,7 @@ namespace eos
     const constexpr double LambdaBToLambda::mR2_0p;
     const constexpr double LambdaBToLambda::mR2_1m;
     const constexpr double LambdaBToLambda::mR2_1p;
-    const SzegoPolynomial<5> LambdaBToLambda::orthonormal_polynomials
-    {
-        3.221984414, { +0.6202340707, -0.6657045152, +0.6807193104, -0.6863087689, +0.6887736474 }
-    };
+    const eos::SzegoPolynomial<5> LambdaBToLambda::orthonormal_polynomials(SzegoPolynomial<5>::FlatMeasure(3.221984414));
 
     /* Lambda_b -> Lambda_c */
 
@@ -253,10 +250,7 @@ namespace eos
     const constexpr double LambdaBToLambda1520::mR2_0p;
     const constexpr double LambdaBToLambda1520::mR2_1m;
     const constexpr double LambdaBToLambda1520::mR2_1p;
-    const SzegoPolynomial<5> LambdaBToLambda1520::orthonormal_polynomials
-    {
-        3.42519, { 0.578049, -0.624505, 0.641153, -0.647652, 0.650567 }
-    };
+    const SzegoPolynomial<5> LambdaBToLambda1520::orthonormal_polynomials(SzegoPolynomial<5>::FlatMeasure(3.42519));
 
 
     FormFactors<OneHalfPlusToThreeHalfMinus>::~FormFactors()

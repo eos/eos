@@ -39,10 +39,7 @@ class SzegoPolynomialTest :
         {
             // Test the evaluation
             {
-                SzegoPolynomial<5u> p{
-                    2.47895, // norm of the measure
-                    { 0.762914, -0.7988, 0.807686, -0.81062, 0.811894 }
-                };
+                const auto p = SzegoPolynomial<5u>::FlatMeasure(2.47895); // norm of the measure
 
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p(-0.1);
@@ -85,16 +82,13 @@ class SzegoPolynomialTest :
                     TEST_CHECK_RELATIVE_ERROR_C(p2, complex<double>(-0.70241504, -0.85660005),  1.0e-5);
                     TEST_CHECK_RELATIVE_ERROR_C(p3, complex<double>( 1.06106731, -0.16955667),  1.0e-5);
                     TEST_CHECK_RELATIVE_ERROR_C(p4, complex<double>(-0.31896585,  0.83869890),  1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.40550250, -0.45614032),  1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.40550250, -0.45614671),  1.0e-5);
                 }
             }
 
             // Test the coefficients
             {
-                SzegoPolynomial<5u> p{
-                    2.47895, // norm of the measure
-                    { 0.762914, -0.7988, 0.807686, -0.81062, 0.811894 }
-                };
+                const auto p = SzegoPolynomial<5u>::FlatMeasure(2.47895); // norm of the measure
 
                 gsl_matrix * coefficient_matrix = p.coefficient_matrix();
 
@@ -106,7 +100,7 @@ class SzegoPolynomialTest :
 
             // Test the derivatives
             {
-                SzegoPolynomial<5u> p(2.47895); // norm of the measure
+                const auto p = SzegoPolynomial<5u>::FlatMeasure(2.47895); // norm of the measure
 
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p.derivatives(-0.1);
@@ -128,7 +122,7 @@ class SzegoPolynomialTest :
                     TEST_CHECK_RELATIVE_ERROR_C(p2, complex<double>(-0.934628,  2.99338),  1.0e-5);
                     TEST_CHECK_RELATIVE_ERROR_C(p3, complex<double>(-4.83802,  -4.15038),  1.0e-5);
                     TEST_CHECK_RELATIVE_ERROR_C(p4, complex<double>( 9.43519,  -4.10475),  1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.881409,  14.1859),  1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.881431,  14.1859),  1.0e-5);
                 }
             }
 
