@@ -2860,7 +2860,7 @@ namespace eos
                 make_expression_observable("Lambda_b->Lambda(1520)ll::S_1cc(q2)", R"(S_{1cc}(\Lambda_b\to\Lambda(1520)\ell^+\ell^-)(q^2))",
                         Unit::None(),
                         R"(
-                            (<<Lambda_b->Lambda(1520)ll::L_1cc(q2);cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::L_1cc(q2);cp-conjugate=true>>)
+                        0.5 * (<<Lambda_b->Lambda(1520)ll::L_1cc(q2);cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::L_1cc(q2);cp-conjugate=true>>)
                             / <<Lambda_b->Lambda(1520)ll::Gamma(q2)>>
                         )"),
 
@@ -2893,7 +2893,7 @@ namespace eos
                 make_expression_observable("Lambda_b->Lambda(1520)ll::S_1cc", R"(S_{1cc}(\Lambda_b\to\Lambda(1520)\ell^+\ell^-))",
                         Unit::None(),
                         R"(
-                            (<<Lambda_b->Lambda(1520)ll::L_1cc;cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::L_1cc;cp-conjugate=true>>)
+                        0.5 * (<<Lambda_b->Lambda(1520)ll::L_1cc;cp-conjugate=false>> + <<Lambda_b->Lambda(1520)ll::L_1cc;cp-conjugate=true>>)
                             / <<Lambda_b->Lambda(1520)ll::Gamma>>
                         )"),
 
