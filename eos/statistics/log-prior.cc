@@ -120,16 +120,6 @@ namespace eos
                     _parameter.set(_parameter.evaluate_generator() * (_range.max - _range.min) + _range.min);
                 }
 
-                virtual double mean() const
-                {
-                    return (_range.max - _range.min) / 2.0;
-                }
-
-                virtual double variance() const
-                {
-                    return power_of<2>(_range.max - _range.min) / 12.0;
-                }
-
                 virtual bool informative() const
                 {
                     return false;
@@ -254,17 +244,6 @@ namespace eos
                        _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central);
                 }
 
-                virtual double mean() const
-                {
-                    return _central;
-                }
-
-                ///Only true if parameter range is the whole real line
-                virtual double variance() const
-                {
-                    return (power_of<2>(_sigma_upper) + power_of<2>(_sigma_lower)) / 2.0;
-                }
-
                 virtual bool informative() const
                 {
                     return true;
@@ -339,18 +318,6 @@ namespace eos
                     // inverse CDF: x = \mu_0 * \lambda^(2 p - 1)
 
                     _parameter.set(_mu_0 * std::pow(_lambda, 2.0 * _parameter.evaluate_generator() - 1.0));
-                }
-
-                virtual double mean() const
-                {
-                    return _mu_0 * (_lambda * _lambda - 1.0) / (2.0 * _lambda * _ln_lambda);
-                }
-
-                ///Only true if parameter range is the whole real line
-                virtual double variance() const
-                {
-                    return _mu_0 * _mu_0 * (_lambda * _lambda - 1.0) * (1.0 - _lambda * _lambda + (1.0 + _lambda * _lambda) * _ln_lambda)
-                        / (4.0 * _lambda * _lambda * _ln_lambda * _ln_lambda);
                 }
 
                 virtual bool informative() const

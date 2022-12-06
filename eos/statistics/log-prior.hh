@@ -100,16 +100,6 @@ namespace eos
             virtual void sample() = 0;
 
             /*!
-             * Return the mean of the distribution.
-             */
-            virtual double mean() const = 0;
-
-            /*!
-             * Return the variance of this distribution.
-             */
-            virtual double variance() const = 0;
-
-            /*!
              * Return whether or not this prior is informative.
              */
             virtual bool informative() const = 0;
