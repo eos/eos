@@ -173,28 +173,7 @@ namespace eos
 
     /* B_{u,d} -> K^* */
 
-    const SzegoPolynomial<5> BToKstar::orthonormal_polynomials_v
-    {
-        4.52421, {0.340573, -0.376829, 0.397115, -0.408269, 0.414493}
-    };
-
-    const SzegoPolynomial<5> BToKstar::orthonormal_polynomials_a
-    {
-        4.85576, {0.269637, -0.298214, 0.31642, -0.327735, 0.334743}
-    };
-
     /* B_s -> phi */
-
-    const SzegoPolynomial<5> BsToPhi::orthonormal_polynomials_v
-    {
-        4.16422, {0.418855, -0.461331, 0.481891, -0.491865, 0.496926}
-    };
-
-    const SzegoPolynomial<5> BsToPhi::orthonormal_polynomials_a
-    {
-        4.4211, {0.362916, -0.40121, 0.421771, -0.432668, 0.438572}
-    };
-
 
     /* P -> gamma Processes */
 
@@ -401,12 +380,6 @@ namespace eos
         OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
-
-    // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
-    const SzegoPolynomial<5> BToK::orthonormal_polynomials
-    {
-        2 * M_PI, { 0.0, 0.0, 0.0, 0.0, 0.0 }
-    };
 
     /* B_{u,d} -> pi */
 

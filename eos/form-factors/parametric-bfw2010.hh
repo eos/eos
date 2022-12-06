@@ -22,6 +22,8 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/maths/power-of.hh>
+#include <eos/maths/szego-polynomial.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
@@ -81,6 +83,22 @@ namespace eos
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
 
                 return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
+            }
+
+            std::array<double, 6> orthonormal_polynomials_v(const double & z) const
+            {
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_V)), complex<double>(tp_v), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
+
+                return polynomials_set(z);
+            }
+
+            std::array<double, 6> orthonormal_polynomials_a(const double & z) const
+            {
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_V)), complex<double>(tp_a), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
+
+                return polynomials_set(z);
             }
     };
 
@@ -209,6 +227,14 @@ namespace eos
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
 
                 return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
+            }
+
+            std::array<double, 6> orthonormal_polynomials(const double & z) const
+            {
+                // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(2 * M_PI));
+
+                return polynomials_set(z);
             }
     };
 

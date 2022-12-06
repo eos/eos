@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2022 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -77,6 +78,48 @@ namespace eos
             ~SzegoPolynomial() = default;
             SzegoPolynomial & operator= (SzegoPolynomial &&) = default;
             SzegoPolynomial & operator= (const SzegoPolynomial &) = default;
+
+            static SzegoPolynomial<order_>
+            FlatMeasure(const double & norm_measure)
+            {
+                // The Verblunsky coefficients are completely fixed by the measure,
+                // and can be computed recursively by imposing orthogonality of the polynomials.
+                // We use two temporary matrices I and J defined as I[n][i] = Integral[z^i phi_n]
+                // and J[n][i] = Integral[z^i phi_n^*], where the integral is performed over the arc of the unit circle.
+                std::array<std::array<double, order_ + 1>, order_> I;
+                std::array<std::array<double, order_ + 1>, order_> J;
+                std::array<double, order_> verblunsky;
+
+                // Initialization
+                I[0][0] = norm_measure;
+                J[0][0] = norm_measure;
+                for (unsigned n = 1; n <= order_; ++n)
+                {
+                    I[n][0] = 0.0; // Orthogonality between phi[n] and phi[0] = 1
+                    I[0][n] = 2.0 / n * sin(0.5 * n * norm_measure); // Integral[z^n] on the arc of the unit circle
+                    J[0][n] = 2.0 / n * sin(0.5 * n * norm_measure); // Integral[z^n] on the arc of the unit circle
+                }
+                verblunsky[0] = I[0][1] / J[0][0]; // Orthogonality between phi[0] and phi[0] = 1
+
+                // Fill I and J recursively and compute Verblunsky coefficients
+                for (unsigned n = 1; n < order_; ++n)
+                {
+                    for (unsigned i = 0; i <= order_; ++i)
+                    {
+                        // cf. [S:2004B], eq. (1.4), p.2, integrated over the arc of the unit circle
+                        I[n][i] = I[n - 1][i + 1] - verblunsky[n - 1] * J[n - 1][i    ];
+                        J[n][i] = J[n - 1][i]     - verblunsky[n - 1] * I[n - 1][i + 1];
+                    }
+                    verblunsky[n] = I[n][1] / J[n][0]; // Orthogonality between phi[n] and phi[0] = 1
+                }
+
+                return SzegoPolynomial(norm_measure, std::move(verblunsky));
+            }
+
+            std::array<double, order_> get_verblunsky()
+            {
+                return _verblunsky_coefficients;
+            }
 
             // Evaluate the normalized polynomials at on the real z axis, in the interval [-1, +1].
             // Note that, contrary to the literature [S:2004B], we use an integral measure dmu, which

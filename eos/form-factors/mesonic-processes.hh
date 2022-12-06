@@ -20,8 +20,6 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH 1
 
-#include <eos/maths/szego-polynomial.hh>
-
 namespace eos
 {
     /* P -> P Processes */
@@ -52,8 +50,6 @@ namespace eos
         static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
 
         static constexpr const bool uses_tensor_form_factors = true;
-
-        static const SzegoPolynomial<5> orthonormal_polynomials;
     };
 
     struct BToPi {
@@ -228,9 +224,6 @@ namespace eos
         static constexpr double chi_1p_a  = 1.13e-2 / (4.2 * 4.2);
         static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
         static constexpr double chi_1p_t5 = 0.748e-2 / (4.2 * 4.2);
-
-        static const SzegoPolynomial<5> orthonormal_polynomials_v;
-        static const SzegoPolynomial<5> orthonormal_polynomials_a;
     };
 
     struct BToOmega {
@@ -290,9 +283,6 @@ namespace eos
         static constexpr double chi_1p_a  = 1.13e-2 / (4.2 * 4.2);
         static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
         static constexpr double chi_1p_t5 = 0.748e-2 / (4.2 * 4.2);
-
-        static const SzegoPolynomial<5> orthonormal_polynomials_v;
-        static const SzegoPolynomial<5> orthonormal_polynomials_a;
     };
 
     struct BsToKstar {

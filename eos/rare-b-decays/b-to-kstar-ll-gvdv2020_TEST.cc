@@ -116,8 +116,8 @@ class BToKstarDileptonGvDV2020Test :
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.37556e-10,  eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.97866e-11,  eps);
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.31528e-12,  eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.90684e-12,  eps);
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   5.95711e-12,  eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.90687e-12,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   5.95718e-12,  eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   7.3417e-11,   eps);
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.07997e-10,  eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  9.3054e-11,   eps);

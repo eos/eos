@@ -214,8 +214,7 @@ namespace eos
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    polynomials(2.48247,
-                                {0.762292, -0.798241, 0.807153, -0.810097, 0.811376, -0.812046})
+                    polynomials(SzegoPolynomial<6u>::FlatMeasure(2.48247))
                 {
                     this->uses(*form_factors);
                 }
@@ -489,10 +488,7 @@ namespace eos
                     const auto z1 = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
                     const std::array<complex<double>, 6> alpha = {2.0, 3.0, 4.0, 5.0, 0.0};
 
-                    SzegoPolynomial<5u> p{
-                        1.854590436,
-                        {0.8627241729, -0.8863992518, 0.8911183885, -0.8926229103, 0.8932870967}
-                    };
+                    auto p(SzegoPolynomial<5u>::FlatMeasure(1.854590436));
 
                     const auto & polynomials_at_z = p(z1);
 
@@ -598,8 +594,7 @@ namespace eos
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    orthonormal_polynomials(2.48247,
-                                            {0.762292, -0.798241, 0.807153, -0.810097, 0.811376})
+                    orthonormal_polynomials(SzegoPolynomial<interpolation_order>::FlatMeasure(2.48247))
                 {
                     this->uses(*form_factors);
                 }
@@ -1016,8 +1011,7 @@ namespace eos
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
-                    orthonormal_polynomials(2.48247,
-                                {0.762292, -0.798241, 0.807153, -0.810097, 0.811376, -0.812046})
+                    orthonormal_polynomials(SzegoPolynomial<interpolation_order>::FlatMeasure(2.48247))
                 {
                     this->uses(*form_factors);
                 }
