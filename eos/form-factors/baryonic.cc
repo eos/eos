@@ -24,6 +24,7 @@
 #include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/parametric-dkmr2017.hh>
+#include <eos/form-factors/parametric-dm2016.hh>
 #include <eos/utils/destringify.hh>
 
 #include <map>
