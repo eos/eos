@@ -67,6 +67,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-bgl1997.hh \
 	parametric-bgjvd2019.hh \
 	parametric-bsz2015.hh \
+	parametric-fvdv2018.hh \
 	parametric-kmpw2010.hh \
 	pi-lcdas.hh
 
@@ -93,6 +94,7 @@ TESTS = \
 	parametric-bgjvd2019_TEST \
 	parametric-bmrvd2022_TEST \
 	parametric-bsz2015_TEST \
+	parametric-fvdv2018_TEST \
 	parametric-kkvdz2022_TEST \
 	parametric-kmpw2010_TEST \
 	pi-lcdas_TEST \
@@ -145,6 +147,8 @@ parametric_bgjvd2019_TEST_SOURCES = parametric-bgjvd2019_TEST.cc
 parametric_bsz2015_TEST_SOURCES = parametric-bsz2015_TEST.cc
 
 parametric_bmrvd2022_TEST_SOURCES = parametric-bmrvd2022_TEST.cc
+
+parametric_fvdv2018_TEST_SOURCES = parametric-fvdv2018_TEST.cc
 
 parametric_kkvdz2022_TEST_SOURCES = parametric-kkvdz2022_TEST.cc
 
