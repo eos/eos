@@ -215,6 +215,12 @@ namespace eos
             return Constraint(name, { observable }, { block });
         }
 
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            throw InternalError("GaussianConstraintEntry::make_prior: not yet implemented");
+            return nullptr;
+        }
+
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
@@ -412,6 +418,12 @@ namespace eos
             return Constraint(name, { observable }, { block });
         }
 
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            throw InternalError("LogGammaConstraintEntry::make_prior: not yet implemented");
+            return nullptr;
+        }
+
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
@@ -603,6 +615,12 @@ namespace eos
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::Amoroso(cache, observable, physical_limit, theta, alpha, beta);
 
             return Constraint(name, { observable }, { block });
+        }
+
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            throw InternalError("AmorosoConstraintEntry::make_prior: not yet implemented");
+            return nullptr;
         }
 
         virtual std::ostream & insert(std::ostream & os) const
@@ -878,6 +896,53 @@ namespace eos
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
+        }
+
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            // If specified, these options allow to specify a subset of the measurements
+            unsigned begin = destringify<unsigned>(options.get("begin", "0"));
+            unsigned end = destringify<unsigned>(options.get("end", stringify(dim)));
+
+            if (end > dim)
+                throw InvalidOptionValueError("End of the measurements sub-sample: end", options.get("end", stringify(dim)) , "Cannot use a value of 'end' pointing beyond the number of measurements.");
+
+            if (begin >= end)
+                throw InvalidOptionValueError("First measurement of the sub-sample: begin", options.get("begin", "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+
+            unsigned subdim = end - begin;
+
+            // create GSL vector for the mean
+            gsl_vector * means = gsl_vector_alloc(subdim);
+            for (auto i = begin ; i < end ; ++i)
+            {
+                gsl_vector_set(means, i - begin, this->means[i]);
+            }
+
+            std::vector<double> variances(subdim, 0.0);
+            if ("symmetric+quadratic" == options.get("uncertainty", "symmetric+quadratic"))
+            {
+                for (auto i = begin ; i < end ; ++i)
+                {
+                    double combined_lo = power_of<2>(sigma_stat_lo[i]) + power_of<2>(sigma_sys[i]);
+                    double combined_hi = power_of<2>(sigma_stat_hi[i]) + power_of<2>(sigma_sys[i]);
+
+                    variances[i - begin] = std::max(combined_lo, combined_hi);
+                }
+            }
+
+            // create GSL matrix for the covariance
+            gsl_matrix * covariance = gsl_matrix_alloc(subdim, subdim);
+            for (auto i = begin ; i < end ; ++i)
+            {
+                for (auto j = begin ; j < end ; ++j)
+                {
+                    double value = std::sqrt(variances[i - begin] * variances[j - begin]) * correlation[i][j];
+                    gsl_matrix_set(covariance, i - begin, j - begin, value);
+                }
+            }
+
+            return LogPrior::MultivariateGaussian(parameters, observable_names, means, covariance);
         }
 
         virtual std::ostream & insert(std::ostream & os) const
@@ -1246,6 +1311,33 @@ namespace eos
             }
         }
 
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            // If specified, these options allow to specify a subset of the measurements
+            unsigned begin = destringify<unsigned>(options.get("begin", "0"));
+            unsigned end = destringify<unsigned>(options.get("end", stringify(dim_meas)));
+
+            if (end > dim_meas)
+                throw InvalidOptionValueError("End of the measurements sub-sample: end", options.get("end", stringify(dim_meas)) , "Cannot use a value of 'end' pointing beyond the number of measurements.");
+
+            if (begin >= end)
+                throw InvalidOptionValueError("First measurement of the sub-sample: begin", options.get("begin", "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+
+            unsigned subdim_meas = end - begin;
+
+            // create GSL vector for the mean
+            gsl_vector * means = gsl_vector_alloc(subdim_meas);
+            gsl_vector_view means_subset = gsl_vector_subvector(this->means.get(), begin, subdim_meas);
+            gsl_vector_memcpy(means, &(means_subset.vector));
+
+            // create GSL matrix for the covariance
+            gsl_matrix * covariance = gsl_matrix_alloc(subdim_meas, subdim_meas);
+            gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance.get(), begin, begin, subdim_meas, subdim_meas);
+            gsl_matrix_memcpy(covariance, &(covariance_subset.matrix));
+
+            return LogPrior::MultivariateGaussian(parameters, observables, means, covariance);
+        }
+
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
@@ -1571,6 +1663,12 @@ namespace eos
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
 
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            throw InternalError("UniformBoundConstraintEntry::make_prior: not yet implemented");
+            return nullptr;
+        }
+
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
@@ -1853,6 +1951,12 @@ namespace eos
             auto block = LogLikelihoodBlock::Mixture(components, weights, test_stat);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
+        }
+
+        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        {
+            throw InternalError("MixtureConstraintEntry::make_prior: not yet implemented");
+            return nullptr;
         }
 
         virtual std::ostream & insert(std::ostream & os) const
