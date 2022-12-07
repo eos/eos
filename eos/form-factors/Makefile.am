@@ -31,6 +31,7 @@ libeosformfactors_la_SOURCES = \
 	observables.cc observables.hh \
 	parametric-abr2022.hh parametric-abr2022-impl.hh parametric-abr2022.cc \
 	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
+	parametric-bfvd2014.hh parametric-bfvd2014.cc \
 	parametric-bfw2010.hh parametric-bfw2010-impl.hh parametric-bfw2010.cc \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
 	parametric-bgjvd2019.hh parametric-bgjvd2019-impl.hh parametric-bgjvd2019.cc \
@@ -65,6 +66,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-abr2022.hh \
 	parametric-bcl2008.hh \
 	parametric-bfw2010.hh \
+	parametric-bfvd2014.hh \
 	parametric-bgl1997.hh \
 	parametric-bgjvd2019.hh \
 	parametric-bsz2015.hh \
@@ -91,6 +93,7 @@ TESTS = \
 	lcda_TEST \
 	parametric-abr2022_TEST \
 	parametric-bcl2008_TEST \
+	parametric-bfvd2014_TEST \
 	parametric-bfw2010_TEST \
 	parametric-bgl1997_TEST \
 	parametric-bgjvd2019_TEST \
@@ -140,6 +143,8 @@ lcda_TEST_SOURCES = lcda_TEST.cc
 parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
 
 parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
+
+parametric_bfvd2014_TEST_SOURCES = parametric-bfvd2014_TEST.cc
 
 parametric_bfw2010_TEST_SOURCES = parametric-bfw2010_TEST.cc
 

@@ -21,6 +21,7 @@
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/baryonic-processes.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
+#include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/parametric-dkmr2017.hh>
 #include <eos/utils/destringify.hh>
@@ -42,88 +43,6 @@ namespace eos
     const constexpr double LambdaBToLambda::mR2_1p;
 
     /* Lambda_b -> Lambda_c */
-
-    /* Form Factors according to [BFvD2014] */
-    class BFvD2014FormFactors :
-        public FormFactors<OneHalfPlusToOneHalfPlus>
-    {
-        private:
-            UsedParameter _f_long_v, _b_1_long_v;
-            UsedParameter _f_long_a, _b_1_long_a;
-            UsedParameter _f_perp_v, _b_1_perp_v;
-            UsedParameter _f_perp_a, _b_1_perp_a;
-
-            UsedParameter _m_lambda_b, _m_lambda;
-
-            // Squares of the masses for the vector and axialvector Bbar_s resonances
-            static constexpr double mv2 = 5.415 * 5.415;
-            static constexpr double ma2 = 5.829 * 5.829;
-
-            static double _z(const double & t, const double & tp, const double & t0)
-            {
-                return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
-            }
-
-        public:
-            BFvD2014FormFactors(const Parameters & p, const Options &) :
-                _f_long_v(p["Lambda_b->Lambda::f_0^V(0)@BFvD2014"], *this),
-                _b_1_long_v(p["Lambda_b->Lambda::b_1_0^V@BFvD2014"], *this),
-                _f_long_a(p["Lambda_b->Lambda::f_0^A(0)@BFvD2014"], *this),
-                _b_1_long_a(p["Lambda_b->Lambda::b_1_0^A@BFvD2014"], *this),
-                _f_perp_v(p["Lambda_b->Lambda::f_perp^V(0)@BFvD2014"], *this),
-                _b_1_perp_v(p["Lambda_b->Lambda::b_1_perp^V@BFvD2014"], *this),
-                _f_perp_a(p["Lambda_b->Lambda::f_perp^A(0)@BFvD2014"], *this),
-                _b_1_perp_a(p["Lambda_b->Lambda::b_1_perp^A@BFvD2014"], *this),
-                _m_lambda_b(p["mass::Lambda_b"], *this),
-                _m_lambda(p["mass::Lambda"], *this)
-            {
-            }
-
-            static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, const Options & options)
-            {
-                return new BFvD2014FormFactors(parameters, options);
-            }
-
-            virtual double f_long_v(const double & s) const
-            {
-                const double tp = power_of<2>(_m_lambda_b + _m_lambda);
-                const double zt = _z(s, tp, 12.0), z0 = _z(0.0, tp, 12.0);
-
-                return _f_long_v() / (1.0 - s / mv2) * (1.0 + _b_1_long_v() * (zt - z0));
-            }
-
-            virtual double f_perp_v(const double & s) const
-            {
-                const double tp = power_of<2>(_m_lambda_b + _m_lambda);
-                const double zt = _z(s, tp, 12.0), z0 = _z(0, tp, 12.0);
-
-                return _f_perp_v() / (1.0 - s / mv2) * (1.0 + _b_1_perp_v() * (zt - z0));
-            }
-
-            virtual double f_long_a(const double & s) const
-            {
-                const double tp = power_of<2>(_m_lambda_b + _m_lambda);
-                const double zt = _z(s, tp, 12.0), z0 = _z(0, tp, 12.0);
-
-                return _f_long_a() / (1.0 - s / ma2) * (1.0 + _b_1_long_a() * (zt - z0));
-            }
-
-            virtual double f_perp_a(const double & s) const
-            {
-                const double tp = power_of<2>(_m_lambda_b + _m_lambda);
-                const double zt = _z(s, tp, 12.0), z0 = _z(0, tp, 12.0);
-
-                return _f_perp_a() / (1.0 - s / ma2) * (1.0 + _b_1_perp_a() * (zt - z0));
-            }
-
-            // Not yet implemented:
-            virtual double f_time_v(const double &) const { throw InternalError("BFvD2014FormFactors::f_time_v(): not implemented"); }
-            virtual double f_time_a(const double &) const { throw InternalError("BFvD2014FormFactors::f_time_a(): not implemented"); }
-            virtual double f_perp_t(const double &) const { throw InternalError("BFvD2014FormFactors::f_perp_t(): not implemented"); }
-            virtual double f_perp_t5(const double &) const { throw InternalError("BFvD2014FormFactors::f_perp_t5(): not implemented"); }
-            virtual double f_long_t(const double &) const { throw InternalError("BFvD2014FormFactors::f_long_t(): not implemented"); }
-            virtual double f_long_t5(const double &) const { throw InternalError("BFvD2014FormFactors::f_long_t5(): not implemented"); }
-    };
 
     FormFactors<OneHalfPlusToOneHalfPlus>::~FormFactors()
     {
