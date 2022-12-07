@@ -22,6 +22,7 @@
 #include <eos/form-factors/baryonic-processes.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-dkmr2017.hh>
 #include <eos/utils/destringify.hh>
 
 #include <map>
