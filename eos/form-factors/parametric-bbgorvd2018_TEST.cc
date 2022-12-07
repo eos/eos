@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2014 Danny van Dyk
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2017 Elena Graverini
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
