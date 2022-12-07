@@ -23,6 +23,7 @@
 
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood-fwd.hh>
+#include <eos/statistics/log-prior.hh>
 #include <eos/utils/iterator-range.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -107,6 +108,9 @@ namespace eos
 
             /// Make a new constraint based on this entry.
             virtual Constraint make(const QualifiedName &, const Options &) const = 0;
+
+            /// Make a new log(prior) based on this entry.
+            virtual LogPriorPtr make_prior(const Parameters &, const Options &) const = 0;
 
             /// Return the entry's name
             virtual const QualifiedName & name() const = 0;
