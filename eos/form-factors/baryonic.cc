@@ -18,10 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/baryonic-processes.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bfvd2014.hh>
+#include <eos/form-factors/parametric-bbgorvd2018.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/parametric-dkmr2017.hh>
 #include <eos/form-factors/parametric-dm2016.hh>

@@ -15,7 +15,7 @@ libeosformfactors_la_SOURCES = \
 	analytic-b-to-v-lcsr.hh analytic-b-to-v-lcsr-impl.hh \
 	analytic-bs-to-kstar-lcsr.cc analytic-bs-to-dsstar-lcsr.cc analytic-bs-to-phi-lcsr.cc \
 	analytic-b-to-rho-lcsr.cc analytic-b-to-kstar-lcsr.cc analytic-b-to-dstar-lcsr.cc \
-	baryonic.cc baryonic.hh baryonic-impl.hh \
+	baryonic.cc baryonic.hh \
 	baryonic-processes.hh \
 	b-lcdas.cc b-lcdas.hh \
 	b-lcdas-exponential.cc b-lcdas-exponential.hh \
@@ -30,6 +30,7 @@ libeosformfactors_la_SOURCES = \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
 	parametric-abr2022.hh parametric-abr2022-impl.hh parametric-abr2022.cc \
+	parametric-bbgorvd2018.hh parametric-bbgorvd2018-impl.hh parametric-bbgorvd2018.cc \
 	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
 	parametric-bfvd2014.hh parametric-bfvd2014.cc \
 	parametric-bfw2010.hh parametric-bfw2010-impl.hh parametric-bfw2010.cc \
@@ -65,6 +66,7 @@ include_eos_rarebdecays_HEADERS = \
 	form-factors.hh \
 	observables.hh \
 	parametric-abr2022.hh \
+	parametric-bbgorvd2018.hh \
 	parametric-bcl2008.hh \
 	parametric-bfw2010.hh \
 	parametric-bfvd2014.hh \
@@ -86,7 +88,6 @@ TESTS = \
 	analytic-b-to-pi-pi_TEST \
 	analytic-b-to-p-lcsr_TEST \
 	analytic-b-to-v-lcsr_TEST \
-	baryonic_TEST \
 	b-lcdas-exponential_TEST \
 	b-lcdas-flvd2022_TEST \
 	hqet-b-to-c_TEST \
@@ -94,6 +95,7 @@ TESTS = \
 	kstar-lcdas_TEST \
 	lcda_TEST \
 	parametric-abr2022_TEST \
+	parametric-bbgorvd2018_TEST \
 	parametric-bcl2008_TEST \
 	parametric-bfvd2014_TEST \
 	parametric-bfw2010_TEST \
@@ -129,8 +131,6 @@ analytic_b_to_p_lcsr_TEST_SOURCES = analytic-b-to-p-lcsr_TEST.cc
 
 analytic_b_to_v_lcsr_TEST_SOURCES = analytic-b-to-v-lcsr_TEST.cc
 
-baryonic_TEST_SOURCES = baryonic_TEST.cc
-
 b_lcdas_exponential_TEST_SOURCES = b-lcdas-exponential_TEST.cc
 
 b_lcdas_flvd2022_TEST_SOURCES = b-lcdas-flvd2022_TEST.cc
@@ -144,6 +144,8 @@ kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 lcda_TEST_SOURCES = lcda_TEST.cc
 
 parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
+
+parametric_bbgorvd2018_TEST_SOURCES = parametric-bbgorvd2018_TEST.cc
 
 parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
 
