@@ -377,6 +377,22 @@ groups:
           max:     -0.2580355775883392
           latex:    '$\alpha_{T,2}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      # form factor parameters for B->K for [BFW:2010A] parametrization
+      'B->K::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,B \to K,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'B->K::t0@BFW2010' :
+          central:  14.7
+          min:      14.7
+          max:      14.7
+          latex:   '$t_0^{B\to K}$'
+          unit:     'GeV'
       # form factor parameters for B->K for [BCL:2008A] parametrization
       'B->K::f_+(0)@BCL2008' :
           central: +0.0
@@ -1345,7 +1361,37 @@ groups:
           max:     +1.8831160249369858
           latex:    '$\alpha_{T_{23},2}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
-      # form factor parameters for B_s->phi inspired by [BSZ:2015A]
+      # form factor parameters for B_s->phi for [BFW:2010A] parametrization
+      'B->K^*::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,B \to K^*,\mathrm{BFW2010}}$'
+          matrix:
+            - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
+            - [0, 1, 2, 3, 4]
+      'B->K^*::tp_a@BFW2010' :
+          central:  34.880836
+          min:      34.880836
+          max:      34.880836
+          latex:    '$t_+^{A, B\to K^*}$'
+          comment:  '(mB + mK + mpi)^2'
+          unit:     'GeV'
+      'B->K^*::tp_v@BFW2010' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{V, B\to K^*}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV'
+      'B->K^*::t0@BFW2010' :
+          central:  11.5
+          min:      11.5
+          max:      11.5
+          latex:    '$t_0^{B\to K^*}$'
+          unit:     'GeV'
+       # form factor parameters for B_s->phi inspired by [BSZ:2015A]
       'B_s->phi::alpha^A0_0@BSZ2015' :
           central:  0.388675
           min:      0.388675
@@ -1459,6 +1505,36 @@ groups:
           min:      4.93525
           max:      4.93525
           latex:    '$\alpha_{T_{23},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+      # form factor parameters for B_s->phi for [BFW:2010A] parametrization
+      'B_s->phi::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,B_s \to \phi,\mathrm{BFW2010}}$'
+          matrix:
+            - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
+            - [0, 1, 2, 3, 4]
+      'B_s->phi::tp_a@BFW2010' :
+          central:  34.880836
+          min:      34.880836
+          max:      34.880836
+          latex:    '$t_+^{A, B_s\to\phi}$'
+          comment:  '(mB + mK + mpi)^2'
+          unit:     'GeV'
+      'B_s->phi::tp_v@BFW2010' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{V, B_s\to\phi}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV'
+      'B_s->phi::t0@BFW2010' :
+          central:  11.5
+          min:      11.5
+          max:      11.5
+          latex:    '$t_0^{B_s\to\phi}$'
+          unit:     'GeV'
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->D^*::alpha^A0_0@BSZ2015' :

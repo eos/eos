@@ -17,8 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ISSUE239_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH
-#define ISSUE239_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH 1
+
+#include <eos/maths/szego-polynomial.hh>
 
 namespace eos
 {
@@ -32,11 +34,26 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange);
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 0.492;
-        static constexpr const double mR2_1m = 5.415 * 5.415; // B_s^*
-        static constexpr const double mR2_0p = 5.630 * 5.630; // B_s scalar
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
+        // first resonances sorted by spin/parity
+        static constexpr double mR2_0p = 5.630 * 5.630; // B_s scalar
+        static constexpr double mR2_1m = 5.415 * 5.415; // B_s^*
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m_B - m_P) * (m_B - m_P);
+        // scalar pair production threshold: B + K
+        static constexpr double tp = (m_B + m_P) * (m_B + m_P);
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) = - z(tm, t0)
+        static constexpr double t0 = 14.7;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 2.0;
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0p_v  = 1.42e-2;
+        static constexpr double chi_1m_v  = 1.20e-2 / (4.2 * 4.2);
+        static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
+
         static constexpr const bool uses_tensor_form_factors = true;
+
+        static const SzegoPolynomial<5> orthonormal_polynomials;
     };
 
     struct BToPi {
@@ -188,9 +205,32 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange);
         static constexpr double m_B = 5.279;
         static constexpr double m_V = 0.896;
-        static constexpr double mR2_0m = 5.366 * 5.366;
-        static constexpr double mR2_1m = 5.415 * 5.415;
-        static constexpr double mR2_1p = 5.829 * 5.829;
+        // // first resonances sorted by spin/parity
+        static constexpr double mR2_0m = 5.366 * 5.366; // B_s
+        static constexpr double mR2_0p = 5.630 * 5.630; // B_s scalar
+        static constexpr double mR2_1m = 5.415 * 5.415; // B_s^*
+        static constexpr double mR2_1p = 5.829 * 5.829; // B_s,1
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m_B - m_V) * (m_B - m_V);
+        // scalar pair production threshold: B + K
+        static constexpr double tp_v = (5.279 + 0.492) * (5.279 + 0.492);
+        // vector pair production threshold: B + K + pi
+        static constexpr double tp_a = (5.279 + 0.492 + 0.135) * (5.279 + 0.492 + 0.135);
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) ~ - z(tm, t0)
+        static constexpr double t0 = 11.5;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 2.0;
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0m_a  = 1.57e-2;
+        static constexpr double chi_0p_v  = 1.42e-2;
+        static constexpr double chi_1m_v  = 1.20e-2 / (4.2 * 4.2);
+        static constexpr double chi_1p_a  = 1.13e-2 / (4.2 * 4.2);
+        static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
+        static constexpr double chi_1p_t5 = 0.748e-2 / (4.2 * 4.2);
+
+        static const SzegoPolynomial<5> orthonormal_polynomials_v;
+        static const SzegoPolynomial<5> orthonormal_polynomials_a;
     };
 
     struct BToOmega {
@@ -227,9 +267,32 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange);
         static constexpr double m_B = 5.366;
         static constexpr double m_V = 1.020;
-        static constexpr double mR2_0m = 5.366 * 5.366;
-        static constexpr double mR2_1m = 5.415 * 5.415;
-        static constexpr double mR2_1p = 5.829 * 5.829;
+        // // first resonances sorted by spin/parity
+        static constexpr double mR2_0m = 5.366 * 5.366; // B_s
+        static constexpr double mR2_0p = 5.630 * 5.630; // B_s scalar
+        static constexpr double mR2_1m = 5.415 * 5.415; // B_s^*
+        static constexpr double mR2_1p = 5.829 * 5.829; // B_s,1
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m_B - m_V) * (m_B - m_V);
+        // scalar pair production threshold: B + K
+        static constexpr double tp_v = (5.279 + 0.492) * (5.279 + 0.492);
+        // vector pair production threshold: B + K + pi
+        static constexpr double tp_a = (5.279 + 0.492 + 0.135) * (5.279 + 0.492 + 0.135);
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) ~ - z(tm, t0)
+        static constexpr double t0 = 11.5;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0m_a  = 1.57e-2;
+        static constexpr double chi_0p_v  = 1.42e-2;
+        static constexpr double chi_1m_v  = 1.20e-2 / (4.2 * 4.2);
+        static constexpr double chi_1p_a  = 1.13e-2 / (4.2 * 4.2);
+        static constexpr double chi_1m_t  = 0.803e-2 / (4.2 * 4.2);
+        static constexpr double chi_1p_t5 = 0.748e-2 / (4.2 * 4.2);
+
+        static const SzegoPolynomial<5> orthonormal_polynomials_v;
+        static const SzegoPolynomial<5> orthonormal_polynomials_a;
     };
 
     struct BsToKstar {
