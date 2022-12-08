@@ -28,7 +28,9 @@
 #include <vector>
 #include <memory>
 
-#include  <gsl/gsl_rng.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_vector.h>
 
 namespace eos
 {
@@ -112,6 +114,12 @@ namespace eos
                     const double & lower, const double & central, const double & upper);
             static LogPriorPtr Scale(const Parameters & parameter, const std::string & name, const ParameterRange & range,
                     const double & mu_0, const double & lambda);
+            ///@}
+
+            ///@name Named constructors for prior distributions with infinite support
+            ///@{
+            static LogPriorPtr MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names,
+                    gsl_vector * mean, gsl_matrix * covariance);
             ///@}
 
             /*!

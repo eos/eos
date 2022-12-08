@@ -18,6 +18,7 @@
  */
 
 #include <test/test.hh>
+#include <eos/constraint.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/maths/power-of.hh>
 
@@ -168,6 +169,56 @@ class LogPriorTest :
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.0), mu_0 / lambda, eps);
                 // upper boundary at p = 1.0
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 1.0), mu_0 * lambda, eps);
+            }
+
+            // Multivariate Gaussian
+            {
+                // look up constraint entry
+                auto entry = Constraints()["B->K::FormFactors[parametric,LCSR]@GKvD:2018A"];
+                // create prior
+                auto prior = entry->make_prior(parameters, Options());
+
+                // set generator values to 0.5 and sample
+                parameters["B->K::alpha^f+_0@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^f+_1@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^f+_2@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^f0_1@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^f0_2@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^fT_0@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^fT_1@BSZ2015"].set_generator(0.5);
+                parameters["B->K::alpha^fT_2@BSZ2015"].set_generator(0.5);
+                prior->sample();
+
+                // check that the parameters are at the median
+                TEST_CHECK_NEARLY_EQUAL(+0.2655528728950212, parameters["B->K::alpha^f+_0@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.6466140804171657, parameters["B->K::alpha^f+_1@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1337677825631754, parameters["B->K::alpha^f+_2@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.3841222758978433, parameters["B->K::alpha^f0_1@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.6628825163091753, parameters["B->K::alpha^f0_2@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.2510192324158927, parameters["B->K::alpha^fT_0@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.6508680050905388, parameters["B->K::alpha^fT_1@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0999901466869552, parameters["B->K::alpha^fT_2@BSZ2015"], eps);
+
+                // set generator values to 0.5 and sample
+                parameters["B->K::alpha^f+_0@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^f+_1@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^f+_2@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^f0_1@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^f0_2@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^fT_0@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^fT_1@BSZ2015"].set_generator(0.15865525393145702);
+                parameters["B->K::alpha^fT_2@BSZ2015"].set_generator(0.15865525393145702);
+                prior->sample();
+
+                // check that the parameters match the reference implementation
+                TEST_CHECK_NEARLY_EQUAL(+0.185453816796, parameters["B->K::alpha^f+_0@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.802422750729, parameters["B->K::alpha^f+_1@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+2.133896762012, parameters["B->K::alpha^f+_2@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.013676201228, parameters["B->K::alpha^f0_1@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.697392274325, parameters["B->K::alpha^f0_2@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.162651391807, parameters["B->K::alpha^fT_0@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.790991231378, parameters["B->K::alpha^fT_1@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(+4.223260161888, parameters["B->K::alpha^fT_2@BSZ2015"], eps);
             }
 
             //Make
