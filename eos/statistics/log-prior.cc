@@ -28,12 +28,26 @@
 #include <limits>
 #include <numeric>
 
+#include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
+#include <gsl/gsl_linalg.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_result.h>
 #include <gsl/gsl_sf_psi.h>
 #include <gsl/gsl_spline.h>
+
+#include <config.h>
+
+#ifdef EOS_USE_GSL_LINALG_CHOLESKY_DECOMP
+#  if (EOS_USE_GSL_LINALG_CHOLESKY_DECOMP == 1)
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp
+#  else
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp1
+#  endif
+#else
+#  error EOS_USE_GSL_LINALG_CHOLESKY_DECOMP not defined.
+#endif
 
 namespace eos
 {
@@ -325,6 +339,212 @@ namespace eos
                     return true;
                 }
         };
+
+        /*!
+         * Multivariate Gaussian prior distribution
+         */
+        class MultivariateGaussian :
+            public LogPrior
+        {
+            private:
+                std::vector<Parameter> _parameters;
+
+                std::vector<QualifiedName> _names;
+
+                const unsigned _dim;
+
+                // inputs
+                gsl_vector * const _mean;
+                gsl_matrix * const _covariance;
+
+                // the normalization constant of the density
+                const double _norm;
+
+                // cholesky matrix of covariance, and inverse of covariance
+                gsl_matrix * _chol;
+                gsl_matrix * _covariance_inv;
+
+                // temporary storage for evaluation
+                gsl_vector * _observables;
+                gsl_vector * _measurements;
+                gsl_vector * _measurements_2;
+
+            public:
+                MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names, gsl_vector * mean, gsl_matrix * covariance) :
+                    LogPrior(parameters),
+                    _names(names),
+                    _dim(names.size()),
+                    _mean(mean),
+                    _covariance(covariance),
+                    _norm(compute_norm()),
+                    _chol(gsl_matrix_alloc(covariance->size1, covariance->size2)),
+                    _covariance_inv(gsl_matrix_alloc(covariance->size1, covariance->size2)),
+                    _observables(gsl_vector_alloc(_dim)),
+                    _measurements(gsl_vector_alloc(_dim)),
+                    _measurements_2(gsl_vector_alloc(_dim))
+                {
+                    if (_covariance->size1 != _covariance->size2)
+                        throw InternalError("priors::MultivariateGaussian: covariance matrix is not a square matrix");
+
+                    if (_covariance->size1 != _mean->size)
+                        throw InternalError("priors::MultivariateGaussian: number of parameters and dimension of covariance matrix are not identical");
+
+                    if (_dim != _mean->size)
+                        throw InternalError("priors::MultivariateGaussian: number of parameters and dimension of mean vector are not identical");
+
+                    const double inf = std::numeric_limits<double>::max();
+
+                    for (auto & n : names)
+                    {
+                        const auto & param = parameters[n];
+                        _parameters.push_back(param);
+                        _parameter_descriptions.push_back(ParameterDescription{ param.clone(), -inf, +inf, false });
+                    }
+
+                    // cholesky decomposition (informally: the sqrt of the covariance matrix)
+                    // the GSL matrix contains both the cholesky and its transpose, see GSL reference, ch. 14.5
+                    cholesky();
+                    invert_covariance();
+
+                    // keep only the lower and diagonal parts, set upper parts to zero
+                    for (unsigned i = 0; i < _dim ; ++i)
+                    {
+                        for (unsigned j = i + 1 ; j < _dim ; ++j)
+                        {
+                            gsl_matrix_set(_chol, i, j, 0.0);
+                        }
+                    }
+                }
+
+                virtual ~MultivariateGaussian()
+                {
+                    gsl_matrix_free(_covariance_inv);
+                    gsl_matrix_free(_chol);
+                    gsl_matrix_free(_covariance);
+
+                    gsl_vector_free(_measurements_2);
+                    gsl_vector_free(_measurements);
+                    gsl_vector_free(_observables);
+                    gsl_vector_free(_mean);
+                }
+
+                virtual std::string as_string() const
+                {
+                    throw InternalError("priors::MultivariateGaussian::as_string() not implemented");
+
+                    return "";
+                }
+
+                // compute the normalization constant on log scale
+                // -k/2 * log 2 Pi - 1/2 log(abs(det(V^{-1})))
+                double compute_norm()
+                {
+                    // copy covariance matrix
+                    gsl_matrix * M = gsl_matrix_alloc(_dim, _dim);
+                    gsl_matrix_memcpy(M, _covariance);
+
+                    // find LU decomposition
+                    int signum = 0;
+                    gsl_permutation * p = gsl_permutation_alloc(_dim);
+                    gsl_linalg_LU_decomp(M, p, &signum);
+
+                    // calculate determinant
+                    const double log_det = gsl_linalg_LU_lndet(M);
+
+                    gsl_permutation_free(p);
+                    gsl_matrix_free(M);
+
+                    return -0.5 * _dim * std::log(2 * M_PI) - 0.5 * log_det;
+                }
+
+                // compute cholesky decomposition of covariance matrix
+                void cholesky()
+                {
+                    // copy covariance matrix
+                    gsl_matrix_memcpy(_chol, _covariance);
+                    if (GSL_SUCCESS != GSL_LINALG_CHOLESKY_DECOMP(_chol))
+                    {
+                        throw InternalError("priors::MultivariateGaussian: Cholesky decomposition failed");
+                    }
+                }
+
+                // invert covariance matrix based on previously obtained Cholesky decomposition
+                void invert_covariance()
+                {
+                    // copy cholesky matrix
+                    gsl_matrix_memcpy(_covariance_inv, _chol);
+
+                    // compute inverse matrix from cholesky
+                    if (GSL_SUCCESS != gsl_linalg_cholesky_invert(_covariance_inv))
+                    {
+                        throw InternalError("priors::MultivariateGaussian: Cholesky inversion failed");
+                    }
+                }
+
+                virtual double operator()() const
+                {
+                    // read parameters
+                    for (auto i = 0u ; i < _dim ; ++i)
+                    {
+                        gsl_vector_set(_observables, i, _parameters[i].evaluate());
+                    }
+
+                    // prepare for centering
+                    //   measurements <- mean
+                    gsl_vector_memcpy(_measurements, _mean);
+
+                    // center the gaussian:
+                    //   measurements <- measurements - observables
+                    gsl_blas_daxpy(-1.0, _observables, _measurements);
+
+                    // measurements_2 <- inv(covariance) * measurements
+                    gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _measurements, 0.0, _measurements_2);
+
+                    double chi_square = 0.0;
+                    gsl_blas_ddot(_measurements, _measurements_2, &chi_square);
+
+                    return _norm - 0.5 * chi_square;
+                }
+
+                virtual LogPriorPtr clone(const Parameters & parameters) const
+                {
+                    gsl_vector * mean = gsl_vector_alloc(_dim);
+                    gsl_vector_memcpy(mean, _mean);
+
+                    gsl_matrix * covariance = gsl_matrix_alloc(_dim, _dim);
+                    gsl_matrix_memcpy(covariance, _covariance);
+
+                    return LogPriorPtr(new priors::MultivariateGaussian(parameters, _names, mean, covariance));
+                }
+
+                virtual void sample()
+                {
+                    // generate standard normals in observables
+                    for (auto i = 0u ; i < _dim ; ++i)
+                    {
+                        const double u = _parameters[i].evaluate_generator();
+                        const double z = gsl_cdf_ugaussian_Pinv(u);
+                        gsl_vector_set(_measurements, i, z);
+                    }
+
+                    // transform: measurements_2 <- _chol * measurements
+                    gsl_blas_dgemv(CblasNoTrans, 1.0, _chol, _measurements, 0.0, _measurements_2);
+
+                    // transform: measurements_2 <- measurements_2 + _mean
+                    gsl_vector_add(_measurements_2, _mean);
+
+                    // set parameters
+                    for (auto i = 0u ; i < _dim ; ++i)
+                    {
+                        _parameters[i].set(gsl_vector_get(_measurements_2, i));
+                    }
+                }
+
+                virtual bool informative() const
+                {
+                    return true;
+                }
+        };
     }
 
     LogPrior::LogPrior(const Parameters & parameters) :
@@ -380,6 +600,15 @@ namespace eos
             throw InternalError("LogPrior::Scale: scale factor lambda must be strictly larger than 1");
 
         LogPriorPtr prior = std::make_shared<eos::priors::Scale>(parameters, name, range, mu_0, lambda);
+
+        return prior;
+    }
+
+    LogPriorPtr
+    LogPrior::MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names,
+            gsl_vector * mean, gsl_matrix * covariance)
+    {
+        LogPriorPtr prior = std::make_shared<eos::priors::MultivariateGaussian>(parameters, names, mean, covariance);
 
         return prior;
     }

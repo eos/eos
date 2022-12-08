@@ -25,6 +25,7 @@ include_eos_statistics_HEADERS = \
 	test-statistic.hh
 
 AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
