@@ -105,13 +105,14 @@ namespace eos
             virtual bool informative() const = 0;
             ///@}
 
-            ///@name Named constructors for 1D prior distributions
+            ///@name Named constructors for 1D prior distributions with finite support
             ///@{
             static LogPriorPtr Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range);
-            static LogPriorPtr Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+            static LogPriorPtr CurtailedGauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                     const double & lower, const double & central, const double & upper);
             static LogPriorPtr Scale(const Parameters & parameter, const std::string & name, const ParameterRange & range,
                     const double & mu_0, const double & lambda);
+            ///@}
 
             /*!
              * Construct a prior from its string representation.
@@ -121,7 +122,6 @@ namespace eos
              * @return Pointer to the ready made prior.
              */
             static LogPriorPtr Make(const Parameters & parameters, const std::string & serialization);
-            ///@}
     };
 
     extern template class WrappedForwardIterator<LogPrior::IteratorTag, ParameterDescription>;

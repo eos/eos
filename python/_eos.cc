@@ -622,11 +622,11 @@ BOOST_PYTHON_MODULE(_eos)
         .def("Flat", &LogPrior::Flat, return_value_policy<return_by_value>(), "Alias for :meth:`LogPrior.Uniform`.",
             args("parameters", "name", "range"))
         .staticmethod("Flat")
-        .def("Gauss", &LogPrior::Gauss, return_value_policy<return_by_value>(), R"(
-            Returns a new Gaussian prior as a LogPrior.
+        .def("CurtailedGauss", &LogPrior::CurtailedGauss, return_value_policy<return_by_value>(), R"(
+            Returns a new (curtailed) Gaussian prior as a LogPrior.
 
             The prior's support is provided by the `range` parameter, with the
-            68% probability interval [`lower`, `upper`] and the mode provided
+            approximate 68% probability interval [`lower`, `upper`] and the mode provided
             by the parameter `central`.
 
             :param parameters: The parameters to which this LogPrior is bound.
@@ -642,7 +642,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param upper: The upper boundary of the 68% probability interval.
             :type upper: float
         )", args("parameters", "name", "range", "lower", "central", "upper"))
-        .staticmethod("Gauss")
+        .staticmethod("CurtailedGauss")
         .def("Scale", &LogPrior::Scale, return_value_policy<return_by_value>(), R"(
             Returns a new Scale prior as a LogPrior.
 

@@ -141,7 +141,7 @@ namespace eos
 
         LogPriorPtr prior = flat ?
             LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9} ) :
-            LogPrior::Gauss(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9}, 4.3, 4.4, 4.5);
+            LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9}, 4.3, 4.4, 4.5);
 
         LogPosterior result(llh);
         result.add(prior);

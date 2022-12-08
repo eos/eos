@@ -127,9 +127,9 @@ namespace eos
         };
 
         /*!
-         * [asymmetric] Gaussian or Normal prior distribution
+         * [asymmetric] Gaussian or Normal prior distribution with finite support
          */
-        class Gauss :
+        class CurtailedGauss :
             public LogPrior
         {
             private:
@@ -160,7 +160,7 @@ namespace eos
                 const double _norm_lower, _norm_upper;
 
             public:
-                Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+                CurtailedGauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                         const double & lower, const double & central, const double & upper) :
                     LogPrior(parameters),
                     _parameter(parameters[name]),
@@ -186,7 +186,7 @@ namespace eos
                     _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
                 }
 
-                virtual ~Gauss()
+                virtual ~CurtailedGauss()
                 {
                 }
 
@@ -228,7 +228,7 @@ namespace eos
 
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
-                    return LogPriorPtr(new priors::Gauss(parameters, _name, _range, _lower, _central, _upper));
+                    return LogPriorPtr(new priors::CurtailedGauss(parameters, _name, _range, _lower, _central, _upper));
                 }
 
                 virtual void sample()
@@ -353,7 +353,7 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+    LogPrior::CurtailedGauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
             const double & lower, const double & central, const double & upper)
     {
         // check input
@@ -363,7 +363,7 @@ namespace eos
         if (upper <= central)
             throw InternalError("LogPrior::Gauss: upper value (" + stringify(upper) + ") <= central value (" + stringify(central) + ")");
 
-        LogPriorPtr prior = std::make_shared<eos::priors::Gauss>(parameters, name, range, lower, central, upper);
+        LogPriorPtr prior = std::make_shared<eos::priors::CurtailedGauss>(parameters, name, range, lower, central, upper);
 
         return prior;
     }
@@ -454,7 +454,7 @@ namespace eos
             }
 
             if (prior_type == "Gaussian")
-                return Gauss(parameters, par_name, range, central - sigma_lower, central, central + sigma_upper);
+                return CurtailedGauss(parameters, par_name, range, central - sigma_lower, central, central + sigma_upper);
         }
 
         throw priors::UnknownPriorError("Cannot construct prior from '" + s + "'");

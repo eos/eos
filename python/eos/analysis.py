@@ -119,7 +119,7 @@ class Analysis:
                     sigma_lo = sigma
                     sigma_hi = sigma
                 self._log_posterior.add(
-                    eos.LogPrior.Gauss(
+                    eos.LogPrior.CurtailedGauss(
                         self.parameters, parameter, eos.ParameterRange(minv, maxv),
                         central - sigma_lo, central, central + sigma_hi
                     ),
