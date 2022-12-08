@@ -26,6 +26,7 @@
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
+#include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
@@ -54,6 +55,7 @@ namespace eos
         { "B->rho::BSZ2015",      &BSZ2015FormFactors<BToRho,     PToV>::make         },
         { "B->K^*::KMPW2010",     &KMPW2010FormFactors<PToV>::make                    },
         { "B->K^*::BSZ2015",      &BSZ2015FormFactors<BToKstar,   PToV>::make         },
+        { "B->K^*::BFW2010",      &BFW2010FormFactors<BToKstar,   PToV>::make         },
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
         { "B->D^*::BGJvD2019",    &HQETFormFactors<BToDstar,      PToV>::make         },
         { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar>::make                 },
@@ -61,6 +63,7 @@ namespace eos
         { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
         { "B_s->D_s^*::BGJvD2019",&HQETFormFactors<BsToDsstar,    PToV>::make         },
         { "B_s->phi::BSZ2015",    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
+        { "B_s->phi::BFW2010",    &BFW2010FormFactors<BsToPhi,    PToV>::make         },
         // analytic computations
         { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
         { "B->D^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make   },
@@ -170,6 +173,28 @@ namespace eos
 
     /* B_{u,d} -> K^* */
 
+    const SzegoPolynomial<5> BToKstar::orthonormal_polynomials_v
+    {
+        4.52421, {0.340573, -0.376829, 0.397115, -0.408269, 0.414493}
+    };
+
+    const SzegoPolynomial<5> BToKstar::orthonormal_polynomials_a
+    {
+        4.85576, {0.269637, -0.298214, 0.31642, -0.327735, 0.334743}
+    };
+
+    /* B_s -> phi */
+
+    const SzegoPolynomial<5> BsToPhi::orthonormal_polynomials_v
+    {
+        4.16422, {0.418855, -0.461331, 0.481891, -0.491865, 0.496926}
+    };
+
+    const SzegoPolynomial<5> BsToPhi::orthonormal_polynomials_a
+    {
+        4.4211, {0.362916, -0.40121, 0.421771, -0.432668, 0.438572}
+    };
+
 
     /* P -> gamma Processes */
 
@@ -251,8 +276,6 @@ namespace eos
 
     /* P -> P Processes */
 
-    /* B_{u,d} -> K */
-
     /* B_{u,d} -> pi */
 
     /* B_{u,d} -> D */
@@ -290,6 +313,7 @@ namespace eos
         { "B->K::BCL2008",       &BCL2008FormFactors<BToK, 3u>::make              },
         { "B->K::KMPW2010",      &KMPW2010FormFactors<PToP>::make                 },
         { "B->K::BSZ2015",       &BSZ2015FormFactors<BToK,   PToP>::make          },
+        { "B->K::BFW2010",       &BFW2010FormFactors<BToK,   PToP>::make          },
         // b -> u
         { "B->pi::BCL2008",      &BCL2008FormFactors<BToPi, 3u>::make             },
         { "B->pi::BCL2008-4",    &BCL2008FormFactors<BToPi, 4u>::make             },
@@ -377,6 +401,14 @@ namespace eos
         OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
+
+    // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
+    const SzegoPolynomial<5> BToK::orthonormal_polynomials
+    {
+        2 * M_PI, { 0.0, 0.0, 0.0, 0.0, 0.0 }
+    };
+
+    /* B_{u,d} -> pi */
 
     /* P -> PP Processes */
 

@@ -28,6 +28,7 @@
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
+#include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
@@ -201,6 +202,24 @@ namespace eos
                 make_expression_observable("B->K::F_plus_T(q2)/F_plus(q2)", R"(F_{+,T}(q^2)/F_+(q^2))",
                         Unit::None(),
                         R"( <<B->K::F_plus_T(q2)>> / <<B->K::F_plus(q2)>> )"),
+
+                make_observable("B->K::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::saturation_0p_v),
+
+                make_observable("B->K::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::saturation_1m_v),
+
+                make_observable("B->K::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::saturation_0m_a),
+
+                make_observable("B->K::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::saturation_1p_a),
+
+                make_observable("B->K::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::saturation_1m_t),
+
+                make_observable("B->K::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
+                        &BFW2010FormFactors<BToK, PToP>::saturation_1p_t5)
             }
         );
 
@@ -736,6 +755,24 @@ namespace eos
                 make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)", R"(\mathcal{F}_{0,T}(q^2)/\mathcal{F}_0(q^2))",
                         Unit::None(),
                         R"( <<B->K^*::F_long_T(q2)>> / <<B->K^*::F_long(q2)>> )"),
+
+                make_observable("B->K^*::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<BToKstar, PToV>::saturation_0p_v),
+
+                make_observable("B->K^*::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<BToKstar, PToV>::saturation_1m_v),
+
+                make_observable("B->K^*::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<BToKstar, PToV>::saturation_0m_a),
+
+                make_observable("B->K^*::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<BToKstar, PToV>::saturation_1p_a),
+
+                make_observable("B->K^*::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<BToKstar, PToV>::saturation_1m_t),
+
+                make_observable("B->K^*::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
+                        &BFW2010FormFactors<BToKstar, PToV>::saturation_1p_t5)
             }
         );
 
@@ -1165,6 +1202,25 @@ namespace eos
                 make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)", R"(\mathcal{F}_{0,T}(q^2)/\mathcal{F}_0(q^2))",
                         Unit::None(),
                         R"( <<B_s->phi::F_long_T(q2)>> / <<B_s->phi::F_long(q2)>> )"),
+
+
+                make_observable("B_s->phi::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<BsToPhi, PToV>::saturation_0p_v),
+
+                make_observable("B_s->phi::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<BsToPhi, PToV>::saturation_1m_v),
+
+                make_observable("B_s->phi::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<BsToPhi, PToV>::saturation_0m_a),
+
+                make_observable("B_s->phi::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<BsToPhi, PToV>::saturation_1p_a),
+
+                make_observable("B_s->phi::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<BsToPhi, PToV>::saturation_1m_t),
+
+                make_observable("B_s->phi::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
+                        &BFW2010FormFactors<BsToPhi, PToV>::saturation_1p_t5)
             }
         );
 
