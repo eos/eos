@@ -309,6 +309,20 @@ namespace eos
         complex<double> f19e(const CharmLoopsParameters & clp);
         complex<double> f27e(const CharmLoopsParameters & );
         complex<double> f29e(const CharmLoopsParameters & clp);
+
+        complex<double> F17_Qc(const CharmLoopsParameters & clp);
+        complex<double> F19_Qc(const CharmLoopsParameters & clp);
+        complex<double> F27_Qc(const CharmLoopsParameters & clp);
+        complex<double> F29_Qc(const CharmLoopsParameters & clp);
+        complex<double> F17_Qsb(const CharmLoopsParameters & clp);
+        complex<double> F19_Qsb(const CharmLoopsParameters & clp);
+        complex<double> F27_Qsb(const CharmLoopsParameters & clp);
+        complex<double> F29_Qsb(const CharmLoopsParameters & clp);
+
+        complex<double> delta_c7_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
+        complex<double> delta_c7(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
+        complex<double> delta_c9_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
+        complex<double> delta_c9(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
     }
 }
 

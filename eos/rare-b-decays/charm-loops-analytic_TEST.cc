@@ -175,7 +175,7 @@ class TwoLoopTest :
                 const complex<double> weight4_ref[45] = {-19.943420811418328+69.12220075921215*1.0i,-19.416443825764926+61.44724076199987*1.0i,-17.984247025545407+51.31949556440109*1.0i,-13.777863810921685+2.733071662104102*1.0i,8.674632363281113+19.542554412182277*1.0i,30.07316975834337+19.542554456149478*1.0i,63.6707962441056+38.33290778438321*1.0i,55.85473719298716+58.28664153474111*1.0i,50.59673164867681+64.65080087804398*1.0i,-14.111520882997851+52.742811453410425*1.0i,-13.64355405351835+46.19062797386781*1.0i,-12.313747867972491-8.363570364325646*1.0i,-8.231462396319344+4.263599579897788*1.0i,10.045531919479885+14.61047900343665*1.0i,24.199606613103537+14.61047902261622*1.0i,43.32220638388199+10.053515836533045*1.0i,52.112918509506244+38.11746664591408*1.0i,47.63463065732847+46.04664983323184*1.0i,-10.949530350509928+42.892826885112825*1.0i,-10.506343564100487+37.07697858601813*1.0i,-9.225342467632995-6.374641319575888*1.0i,-5.171235437378367+4.73670584517861*1.0i,10.220766158584777+11.54533957725176*1.0i,20.808273263431772+11.545339587931041*1.0i,31.358041265731465+11.545339600173271*1.0i,48.49447980896905+24.05487143714152*1.0i,44.93020246591302+34.23123868770222*1.0i,-8.978763604506938+36.19307599339755*1.0i,-8.547588424121663-12.080904732324846*1.0i,-7.294800435494734-5.189794855432012*1.0i,-3.224482270673864+4.83276111583443*1.0i,10.022034006640979+9.416050201902173*1.0i,18.487991466320267+9.416050208698277*1.0i,26.557089960840663+9.416050216357085*1.0i,43.73252756441579+9.964783641489575*1.0i,42.51684699294689+25.570152629372146*1.0i,-7.646273276764368-15.619145116421054*1.0i,-7.221608252046043-10.753312955346782*1.0i,-5.987487396834586-4.416920363980466*1.0i,-1.8712748698202644+4.773981287308398*1.0i,9.68865087707498+7.837272221559653*1.0i,16.747772443711817+7.837272226263501*1.0i,23.25903826271488+7.837272231208386*1.0i,30.89186482276262+7.837272238464681*1.0i,40.29674647809264+18.441714179671777*1.0i};
 
                 /*
-                    The tests checks, whether the two-loop functions equals the reference values up to an absolute error epsilon. For s -> -1 this
+                    The tests checks, whether the two-loop functions equals the reference values up to an absolute error epsilon. For s -> 1 this
                     is not the best way to go since the functions become large and a check for relative error would be better suited. The method
                     might need to be adapted in the future to the specific value of s.
                 */
@@ -236,3 +236,55 @@ class TwoLoopTest :
             }
         }
 } two_loop_test ;
+
+class deltaC79Test :
+    public TestCase
+{
+    public:
+        deltaC79Test() :
+            TestCase("delta_C79_test")
+        {
+        }
+
+
+        virtual void run() const
+        {
+            static const double eps = 1e-10;
+            static const double m_b = 4.18;
+            static const double m_c = 1.47;
+            static const double mu = m_b;
+            static const double alpha_s = 0.6;
+            static const complex<double> s = -4.0 + 1.5i;
+
+            Parameters p = Parameters::Defaults();
+            p["b->s::c1"] = -0.5;
+            p["b->s::c2"] = 2.0;
+
+            auto m = Model::make("WET", p, Options());
+            const auto wc = m->wilson_coefficients_b_to_s(mu, "mu", false);
+
+            const complex<double> deltaC7_ref = -0.080829295482612 - 0.047566420817994316 * 1.0i;
+            const complex<double> deltaC9_ref = -0.7022411014307881 + 0.1880322661854362 * 1.0i;
+            const complex<double> deltaC7_Qc_ref = -0.04771664722865329 - 0.04728788790918982 * 1.0i;
+            const complex<double> deltaC9_Qc_ref = -0.7827669035741187 + 0.1870105731065536 * 1.0i;
+
+            const complex<double> deltaC7_res = agv_2019a::delta_c7(s, mu, alpha_s, m_c, m_b, wc);
+            const complex<double> deltaC9_res = agv_2019a::delta_c9(s, mu, alpha_s, m_c, m_b, wc);
+            const complex<double> deltaC7_Qc_res = agv_2019a::delta_c7_Qc(s, mu, alpha_s, m_c, m_b, wc);
+            const complex<double> deltaC9_Qc_res = agv_2019a::delta_c9_Qc(s, mu, alpha_s, m_c, m_b, wc);
+
+            TEST_CHECK_NEARLY_EQUAL(deltaC7_ref.real(), deltaC7_res.real(), eps);
+            TEST_CHECK_NEARLY_EQUAL(deltaC7_ref.imag(), deltaC7_res.imag(), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(deltaC9_ref.real(), deltaC9_res.real(), eps);
+            TEST_CHECK_NEARLY_EQUAL(deltaC9_ref.imag(), deltaC9_res.imag(), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(deltaC7_Qc_ref.real(), deltaC7_Qc_res.real(), eps);
+            TEST_CHECK_NEARLY_EQUAL(deltaC7_Qc_ref.imag(), deltaC7_Qc_res.imag(), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(deltaC9_Qc_ref.real(), deltaC9_Qc_res.real(), eps);
+            TEST_CHECK_NEARLY_EQUAL(deltaC9_Qc_ref.imag(), deltaC9_Qc_res.imag(), eps);
+
+        }
+} delta_C79_test ;
+
