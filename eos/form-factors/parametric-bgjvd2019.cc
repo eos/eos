@@ -84,14 +84,14 @@ namespace eos
 
         if (_opt_lp_model.value() == "exponential")
         {
-            _xi = [=](const double & q2) -> double
+            _xi = [=, this](const double & q2) -> double
             {
                 return _xi_exponential(q2);
             };
         }
         else
         {
-            _xi = [=](const double & q2) -> double
+            _xi = [=, this](const double & q2) -> double
             {
                 return _xi_power_series(q2);
             };
