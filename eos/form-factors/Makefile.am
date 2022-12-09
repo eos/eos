@@ -36,6 +36,7 @@ libeosformfactors_la_SOURCES = \
 	parametric-bmrvd2022.hh parametric-bmrvd2022-impl.hh parametric-bmrvd2022.cc \
 	parametric-bsz2015.hh parametric-bsz2015-impl.hh parametric-bsz2015.cc \
 	parametric-fvdv2018.hh parametric-fvdv2018-impl.hh parametric-fvdv2018.cc \
+	parametric-kkvdz2022.hh parametric-kkvdz2022.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
@@ -89,6 +90,7 @@ TESTS = \
 	parametric-bgjvd2019_TEST \
 	parametric-bmrvd2022_TEST \
 	parametric-bsz2015_TEST \
+	parametric-kkvdz2022_TEST \
 	parametric-kmpw2010_TEST \
 	pi-lcdas_TEST \
 	unitarity-bounds_TEST
@@ -138,6 +140,8 @@ parametric_bgjvd2019_TEST_SOURCES = parametric-bgjvd2019_TEST.cc
 parametric_bsz2015_TEST_SOURCES = parametric-bsz2015_TEST.cc
 
 parametric_bmrvd2022_TEST_SOURCES = parametric-bmrvd2022_TEST.cc
+
+parametric_kkvdz2022_TEST_SOURCES = parametric-kkvdz2022_TEST.cc
 
 parametric_kmpw2010_TEST_SOURCES = parametric-kmpw2010_TEST.cc
 

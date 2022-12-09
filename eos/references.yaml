@@ -1146,6 +1146,13 @@ IKMvD:2014A:
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
   title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
+KKVDZ:2022A:
+  authors: Kürten, Stephan and Zanke, Marvin and Kubis, Bastian and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2210.09832
+  inspire-id: Kurten:2022zuy
+  title: 'Dispersion relations for $B^- \to \ell^- \bar{\nu}_\ell \ell^{\prime-} \ell^{\prime+}$ form factors'
 KM:2005A:
   authors: Kruger, F. and Matias, J.
   eprint:

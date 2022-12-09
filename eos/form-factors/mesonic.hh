@@ -1,6 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
+ * Copyright (c) 2022 Stephan Kuerten
  * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
@@ -46,6 +47,8 @@ namespace eos
     struct PToV { };
 
     struct PToGamma { };
+
+    struct PToGammaOffShell { };
 
     struct PToP { };
 
@@ -134,6 +137,48 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<PToGamma>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static OptionSpecification option_specification(const qnp::Prefix & process);
+    };
+
+    template <>
+    class FormFactors<PToGammaOffShell> :
+        public virtual ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            // axial current, superposition of transverse and longitudinal polarizations of both currents
+            virtual complex<double> F_1(const double & q2, const double & k2) const = 0;
+
+            // axial current, superposition of transverse and longitudinal polarizations of both currents
+            virtual complex<double> F_2(const double & q2, const double & k2) const = 0;
+
+            // axial current, pseudoscalar form factor, time-like polarization of the weak current and longitudinal polarization of the em current
+            virtual complex<double> F_3(const double & q2, const double & k2) const = 0;
+
+            // vector current, transverse polarization of the weak current and the off-shell photon
+            virtual complex<double> F_4(const double & q2, const double & k2) const = 0;
+
+            inline double arg_F_1(const double & q2, const double & k2) const { return std::arg(F_1(q2, k2)); }
+            inline double arg_F_2(const double & q2, const double & k2) const { return std::arg(F_2(q2, k2)); }
+            inline double arg_F_3(const double & q2, const double & k2) const { return std::arg(F_3(q2, k2)); }
+            inline double arg_F_4(const double & q2, const double & k2) const { return std::arg(F_4(q2, k2)); }
+            inline double abs_F_1(const double & q2, const double & k2) const { return std::abs(F_1(q2, k2)); }
+            inline double abs_F_2(const double & q2, const double & k2) const { return std::abs(F_2(q2, k2)); }
+            inline double abs_F_3(const double & q2, const double & k2) const { return std::abs(F_3(q2, k2)); }
+            inline double abs_F_4(const double & q2, const double & k2) const { return std::abs(F_4(q2, k2)); }
+    };
+
+    template <>
+    class FormFactorFactory<PToGammaOffShell>
+    {
+        public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<PToGammaOffShell> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
+            static std::shared_ptr<FormFactors<PToGammaOffShell>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
             static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
