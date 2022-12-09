@@ -30,6 +30,7 @@
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
@@ -236,6 +237,43 @@ namespace eos
         return result;
     }
 
+    /* P -> gamma^* Processes */
+
+    FormFactors<PToGammaOffShell>::~FormFactors() = default;
+
+    const std::map<FormFactorFactory<PToGammaOffShell>::KeyType, FormFactorFactory<PToGammaOffShell>::ValueType>
+    FormFactorFactory<PToGammaOffShell>::form_factors
+    {
+        { KeyType("B->gamma^*::KKvDZ2022"), &KKvDZ2022FormFactors::make }
+    };
+
+    std::shared_ptr<FormFactors<PToGammaOffShell>>
+    FormFactorFactory<PToGammaOffShell>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<PToGammaOffShell>> result;
+
+        auto & form_factors = FormFactorFactory<PToGammaOffShell>::form_factors;
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToGammaOffShell>::option_specification(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<PToGammaOffShell>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return result;
+    }
 
     /* P -> P Processes */
 

@@ -29,6 +29,7 @@
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -415,6 +416,46 @@ namespace eos
     }
     // }}}
 
+    // }}}
+
+    // B -> gamma^*
+    // {{{
+    ObservableGroup
+    make_b_to_gammastar_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $B \to \gamma^*$ transitions)",
+            R"(Pseudo observables representing the $B \to \gamma^*$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("B->gamma^*::Arg{F_1}(q2,k2)", R"(\text{Arg}\,F_1^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::arg_F_1, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Arg{F_2}(q2,k2)", R"(\text{Arg}\,F_2^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::arg_F_2, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Arg{F_3}(q2,k2)", R"(\text{Arg}\,F_3^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::arg_F_3, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Arg{F_4}(q2,k2)", R"(\text{Arg}\,F_4^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::arg_F_4, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Abs{F_1}(q2,k2)", R"(\text{Abs}\,F_1^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::abs_F_1, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Abs{F_2}(q2,k2)", R"(\text{Abs}\,F_2^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::abs_F_2, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Abs{F_3}(q2,k2)", R"(\text{Abs}\,F_3^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::abs_F_3, std::make_tuple("q2", "k2")),
+
+                make_form_factor_adapter("B->gamma^*::Abs{F_4}(q2,k2)", R"(\text{Abs}\,F_4^{B\to \gamma^*}(q^2,k^2))",
+                        &FormFactors<PToGammaOffShell>::abs_F_4, std::make_tuple("q2", "k2")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
     // }}}
 
     // B -> V(ector)
@@ -1634,6 +1675,9 @@ namespace eos
                 // B_s -> P
                 make_bs_to_k_form_factors_group(),
                 make_bs_to_ds_form_factors_group(),
+
+                // B -> gamma
+                make_b_to_gammastar_form_factors_group(),
 
                 // B -> V
                 make_b_to_gamma_form_factors_group(),
