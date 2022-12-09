@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef BSTOKSTARLNU_GUARD_EOS_B_DECAYS_B_TO_L_NU_HH
-#define BSTOKSTARLNU_GUARD_EOS_B_DECAYS_B_TO_L_NU_HH 1
+#ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_L_NU_HH
+#define EOS_GUARD_EOS_B_DECAYS_B_TO_L_NU_HH 1
 
 #include <eos/rare-b-decays/decays.hh>
 #include <eos/maths/complex.hh>
