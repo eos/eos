@@ -21,6 +21,7 @@
 #include <eos/signal-pdf.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
+#include <eos/b-decays/b-to-3l-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
@@ -162,6 +163,44 @@ namespace eos
             /* Exclusive Decays */
 
             /* Exclusive B Decays */
+
+            make_signal_pdf("B_u->enumumu::d^5Gamma",
+                    Options{ { "l", "e" }, { "lprime", "mu" } },
+                    &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0447, 27.8714, BToThreeLeptonsNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "k2", 0.00051, 25.6849, BToThreeLeptonsNeutrino::kinematics_description_k2 },
+                        KinematicRange{ "z_gamma", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_gamma },
+                        KinematicRange{ "z_w", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_w },
+                        KinematicRange{ "phi", -M_PI, +M_PI, BToThreeLeptonsNeutrino::kinematics_description_phi }
+                    ),
+                    &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max",
+                        "k2_min",
+                        "k2_max"
+                    )
+                ),
+
+            make_signal_pdf("B_u->munuee::d^5Gamma",
+                    Options{ { "l", "mu" }, { "lprime", "e" } },
+                    &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 1.0e-6, 26.767, BToThreeLeptonsNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "k2", 0.011, 27.8606, BToThreeLeptonsNeutrino::kinematics_description_k2 },
+                        KinematicRange{ "z_gamma", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_gamma },
+                        KinematicRange{ "z_w", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_w },
+                        KinematicRange{ "phi", -M_PI, +M_PI, BToThreeLeptonsNeutrino::kinematics_description_phi }
+                    ),
+                    &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max",
+                        "k2_min",
+                        "k2_max"
+                    )
+                ),
 
             make_signal_pdf("B->pipimunu::d^3Gamma@QCDF",
                     Options{ },

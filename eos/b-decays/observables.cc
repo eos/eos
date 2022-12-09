@@ -22,6 +22,7 @@
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
+#include <eos/b-decays/b-to-3l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-psd-nu-nu.hh>
@@ -53,6 +54,55 @@ namespace eos
                         &BToLeptonNeutrino::branching_ratio,
                         std::make_tuple(),
                         Options{ { "q", "u" } }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+
+    ObservableGroup
+    make_b_to_3l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B^-\to \ell^-\bar\nu\ell_\prime^+\ell_\prime^-$ decays)",
+            R"(The option "l" selects the charged lepton flavour coming out of the 
+            weak current, "lprime" selects the lepton flavour coming out of the photon.)",
+            {
+                make_observable("B_u->enumumu::d2BR/dq2/dk2", R"(\frac{d\mathcal{B}(B^- \to e^-\bar\nu\mu^+\mu^-)}{dq^2/dk^2})",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::double_differential_branching_ratio,
+                        std::make_tuple("q2", "k2"),
+                        Options{ { "l", "e" }, { "lprime", "mu" } }),
+
+                make_observable("B_u->munuee::d2BR/dq2/dk2", R"(\frac{d\mathcal{B}(B^- \to \mu^-\bar\nue^+e^-)}{dq^2/dk^2})",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::double_differential_branching_ratio,
+                        std::make_tuple("q2", "k2"),
+                        Options{ { "l", "mu" }, { "lprime", "e" } }),
+
+                make_observable("B_u->enumumu::BR", R"(\mathcal{B}(B^- \to e^-\bar\nu\mu^+\mu^-))",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l", "e" }, { "lprime", "mu" } }),
+
+                make_observable("B_u->munuee::BR", R"(\mathcal{B}(B^- \to \mu^-\bar\nue^+e^-))",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l", "mu" }, { "lprime", "e" } }),
+
+                make_observable("B_u->enumumu::A_FB", R"(A_{\mathrm{FB}}(B^- \to e^-\bar\nu\mu^+\mu^-))",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_forward_backward_asymmetry,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l", "e" }, { "lprime", "mu" } }),
+
+                make_observable("B_u->munuee::A_FB", R"(A_{\mathrm{FB}}(B^- \to \mu^-\bar\nue^+e^-))",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_forward_backward_asymmetry,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l", "mu" }, { "lprime", "e" } }),
             }
         );
 
@@ -2043,6 +2093,9 @@ namespace eos
             {
                 // B^- -> l^- nubar
                 make_b_to_l_nu_group(),
+
+                // B^- -> l^- nubar lprime^+ lprime^-
+                make_b_to_3l_nu_group(),
 
                 // B_{u,d} -> P l^- nubar
                 make_b_to_pi_l_nu_group(),

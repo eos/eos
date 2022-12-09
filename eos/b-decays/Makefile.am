@@ -10,6 +10,7 @@ libeosbdecays_la_SOURCES = \
 	b-to-d-l-x-nu.cc b-to-d-l-x-nu.hh \
 	b-to-gamma-l-nu.cc b-to-gamma-l-nu.hh \
 	b-to-l-nu.cc b-to-l-nu.hh \
+	b-to-3l-nu.cc b-to-3l-nu.hh \
 	b-to-pi-pi-l-nu.cc b-to-pi-pi-l-nu.hh \
 	b-to-pi-l-x-nu.cc b-to-pi-l-x-nu.hh \
 	b-to-psd-l-nu.cc b-to-psd-l-nu.hh \
@@ -40,6 +41,7 @@ include_eos_bdecays_HEADERS = \
 	b-to-d-l-x-nu.hh \
 	b-to-gamma-l-nu.hh \
 	b-to-l-nu.hh \
+	b-to-3l-nu.hh \
 	b-to-pi-pi-l-nu.hh \
 	b-to-pi-l-x-nu.hh \
 	b-to-psd-l-nu.hh \
@@ -59,6 +61,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	b-to-l-nu_TEST \
+	b-to-3l-nu_TEST \
 	b-to-d-l-nu_TEST \
 	b-to-dstar-l-nu_TEST \
 	b-to-d-pi-l-nu_TEST \
@@ -84,6 +87,8 @@ LDADD = \
 
 check_PROGRAMS = $(TESTS)
 b_to_l_nu_TEST_SOURCES = b-to-l-nu_TEST.cc
+
+b_to_3l_nu_TEST_SOURCES = b-to-3l-nu_TEST.cc
 
 b_to_d_l_nu_TEST_SOURCES = b-to-d-l-nu_TEST.cc
 
