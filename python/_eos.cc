@@ -608,6 +608,10 @@ BOOST_PYTHON_MODULE(_eos)
         .def("insert", &Constraints::insert)
         ;
 
+    class_<ParameterDescription>("ParameterDescription")
+        .def_readonly("parameter", &ParameterDescription::parameter)
+        ;
+
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
     class_<LogPrior, boost::noncopyable>("LogPrior", R"(
@@ -678,6 +682,7 @@ BOOST_PYTHON_MODULE(_eos)
             Sets its parameters' values corresponding to the cumulative propability :math:`p` assigned to
             each parameter via its :meth:`Parameter.set_generator` method.
         )")
+        .def("parameter_descriptions", range(&LogPrior::begin, &LogPrior::end))
         ;
 
     // LogPosterior
