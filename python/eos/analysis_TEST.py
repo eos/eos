@@ -1,6 +1,7 @@
 import unittest
 
 from numpy import random
+import dynesty
 import eos
 import numpy as np
 import yaml
@@ -110,6 +111,121 @@ class ClassMethodTests(unittest.TestCase):
                 yaml.dump(case['clean'])
             )
 
+
+    def test_multivariate_priors_1(self):
+
+        import yaml, numpy as np
+        analysis_args = {
+            'global_options': { },
+            'manual_constraints': {
+                'test::test': {
+                    'type': 'MultivariateGaussian(Covariance)',
+                    'observables': ['mass::c', 'mass::b(MSbar)'],
+                    'kinematics': [{}, {}],
+                    'options': [{}, {}],
+                    'means': [1.27, 4.18],
+                    'covariance': [[0.03**2, 0.0], [0.0, 0.02**2]],
+                }
+            },
+            'priors': [
+                { 'constraint': 'B->K::FormFactors[parametric,LCSR]@GKvD:2018A' },
+                { 'parameter': 'mass::c', 'min': 1.18, 'max': 1.36, 'type': 'uniform' },
+                { 'parameter': 'mass::b(MSbar)', 'min': 4.12, 'max': 4.24, 'type': 'uniform' },
+            ],
+            'likelihood': [
+                # no entry; ``test::test`` is automatically selected as a manual constraint
+            ]
+        }
+
+        # Test analysis definition
+        analysis = eos.Analysis(**analysis_args)
+
+        # Sample from the prior
+        results_list = []
+        for i in range(0, 2):
+            results_list.append(analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i, print_progress=False))
+        results  = dynesty.utils.merge_runs(results_list)
+
+        # Test samples against constraint
+        entry = eos.Constraints()['B->K::FormFactors[parametric,LCSR]@GKvD:2018A']
+        entry_data = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+        means  = np.array(entry_data['means'])
+        cov    = np.array(entry_data['covariance'])
+        sigmas = np.diag(cov)
+
+        means  = np.append(means,  [1.27, 4.18])
+        sigmas = np.append(sigmas, [0.03, 0.02])
+
+        avg    = np.median(results.samples_equal(), axis=0)
+        delta  = avg - means
+        chi2_1 = np.dot(delta[0:8], np.dot(np.linalg.inv(cov), delta[0:8]))
+        chi2_2 = (avg[8] - means[8])**2 / sigmas[8]**2
+        chi2_3 = (avg[9] - means[9])**2 / sigmas[9]**2
+        self.assertLess(chi2_1, 2.0325e-0, 'chi^2 for BSZ parameters exceeds 2% integrated probability for 8 degrees of freedom')
+        self.assertLess(chi2_2, 1.5791e-2, 'chi^2 for mass::c exceeds 10% integrated probability for 1 degree of freedom')
+        self.assertLess(chi2_3, 1.5791e-2, 'chi^2 for mass::b(MSbar) exceeds 10% integrated probability for 1 degree of freedom')
+
+        # Result for log(Z) obtained by numerically integrating the posterior in Mathematica: 3.82966
+        logz_analytic = 3.82966
+        chi2_4 = (results['logz'][-1] - logz_analytic)**2 / (0.02 * logz_analytic)**2 # Assuming 2% error on the log(Z) value
+        self.assertLess(chi2_4, 4.5494e-1, 'chi^2 for log(Z) exceeds 50% integrated probability for 1 degree of freedom')
+
+
+    def test_multivariate_priors_2(self):
+
+        import yaml, numpy as np
+        # inject new constraint
+        eos.Constraints().insert('test::test2', '''
+        'type': 'MultivariateGaussian(Covariance)'
+        'observables': ['mass::c', 'mass::b(MSbar)']
+        'kinematics': [{}, {}]
+        'options': [{}, {}]
+        'means': [1.25, 4.19]
+        'covariance': [[0.0009, 0.0003], [0.0003, 0.0004]]
+        ''')
+        analysis_args = {
+            'global_options': { },
+            'manual_constraints': {
+                'test::test': {
+                    'type': 'MultivariateGaussian(Covariance)',
+                    'observables': ['mass::c', 'mass::b(MSbar)'],
+                    'kinematics': [{}, {}],
+                    'options': [{}, {}],
+                    'means': [1.28, 4.17],
+                    'covariance': [[0.03**2, 0.0], [0.0, 0.02**2]],
+                }
+            },
+            'priors': [
+                { 'constraint': 'test::test2' },
+            ],
+            'likelihood': [
+                # no entry; ``test::test`` is automatically selected as a manual constraint
+            ]
+        }
+
+        # Test analysis definition
+        analysis = eos.Analysis(**analysis_args)
+
+        # Sample from the prior
+        results_list = []
+        for i in range(0, 2):
+            results_list.append(analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i, print_progress=False))
+        results  = dynesty.utils.merge_runs(results_list)
+
+        # Test samples against analytic results:
+        means  = [1.26000, 4.18333]
+        sigmas = [0.02049, 0.01366]
+        avg    = np.median(results.samples_equal(), axis=0)
+
+        chi2_0 = (avg[0] - means[0])**2 / sigmas[0]**2
+        chi2_1 = (avg[1] - means[1])**2 / sigmas[1]**2
+        self.assertLess(chi2_0, 3.9321e-3, 'chi^2 for mass::c exceeds 5% integrated probability for 1 degree of freedom')
+        self.assertLess(chi2_1, 3.9921e-3, 'chi^2 for mass::b(MSbar) exceeds 5% integrated probability for 1 degree of freedom')
+
+        # Result for log(Z) obtained by numerically integrating the posterior in Mathematica: 4.2532
+        logz_analytic = 4.2532
+        chi2_2 = (results['logz'][-1] - logz_analytic)**2 / (0.02 * logz_analytic)**2 # Assuming 2% error on the log(Z) value
+        self.assertLess(chi2_2, 4.5494e-1, 'chi^2 for log(Z) exceeds 50% integrated probability for 1 degree of freedom')
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)

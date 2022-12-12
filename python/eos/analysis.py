@@ -80,7 +80,10 @@ class Analysis:
             nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints), nparams=len(fixed_parameters)))
         eos.debug('priors:')
         for p in priors:
-            eos.debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
+            if 'parameter' in p:
+                eos.debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
+            elif 'constraint' in p:
+                eos.debug(' - {name} (constraint)'.format(name=p['constraint']))
         eos.debug('constraints:')
         for cn in likelihood:
             eos.debug(' - {name}'.format(name=cn))
@@ -101,39 +104,52 @@ class Analysis:
 
         # create the priors
         for prior in priors:
-            parameter = prior['parameter']
-            minv = float(prior['min'])
-            maxv = float(prior['max'])
-            prior_type = prior['type'] if 'type' in prior else 'uniform'
-            if 'uniform' == prior_type or 'flat' == prior_type:
-                self._log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
-            elif 'gauss' == prior_type or 'gaussian' == prior_type:
-                central = prior['central']
-                sigma = prior['sigma']
-                if type(sigma) is list or type(sigma) is tuple:
-                    sigma_lo = sigma[0]
-                    sigma_hi = sigma[1]
-                else:
-                    sigma_lo = sigma
-                    sigma_hi = sigma
-                self._log_posterior.add(
-                    eos.LogPrior.CurtailedGauss(
-                        self.parameters, parameter, eos.ParameterRange(minv, maxv),
-                        central - sigma_lo, central, central + sigma_hi
-                    ),
-                    False)
-            elif 'scale' == prior_type:
-                mu_0 = prior['mu_0']
-                lambda_scale = prior['lambda']
-                self._log_posterior.add(eos.LogPrior.Scale(self.parameters,
-                    parameter, eos.ParameterRange(minv, maxv), mu_0, lambda_scale), False)
-            else:
-                raise ValueError('Unknown prior type \'{}\''.format(prior_type))
+            if 'parameter' in prior and 'constraint' in prior:
+                raise ValueError('Prior specification must not contain both a parameter and a constraint')
 
-            p = self.parameters[parameter]
-            p.set_min(minv)
-            p.set_max(maxv)
-            self.varied_parameters.append(p)
+            if 'parameter' in prior:
+                parameter = prior['parameter']
+                minv = float(prior['min'])
+                maxv = float(prior['max'])
+                prior_type = prior['type'] if 'type' in prior else 'uniform'
+                if 'uniform' == prior_type or 'flat' == prior_type:
+                    self._log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
+                elif 'gauss' == prior_type or 'gaussian' == prior_type:
+                    central = prior['central']
+                    sigma = prior['sigma']
+                    if type(sigma) is list or type(sigma) is tuple:
+                        sigma_lo = sigma[0]
+                        sigma_hi = sigma[1]
+                    else:
+                        sigma_lo = sigma
+                        sigma_hi = sigma
+                    self._log_posterior.add(
+                        eos.LogPrior.CurtailedGauss(
+                            self.parameters, parameter, eos.ParameterRange(minv, maxv),
+                            central - sigma_lo, central, central + sigma_hi
+                        ),
+                        False)
+                elif 'scale' == prior_type:
+                    mu_0 = prior['mu_0']
+                    lambda_scale = prior['lambda']
+                    self._log_posterior.add(eos.LogPrior.Scale(self.parameters,
+                        parameter, eos.ParameterRange(minv, maxv), mu_0, lambda_scale), False)
+                else:
+                    raise ValueError('Unknown prior type \'{}\''.format(prior_type))
+
+                p = self.parameters[parameter]
+                p.set_min(minv)
+                p.set_max(maxv)
+                self.varied_parameters.append(p)
+            elif 'constraint' in prior:
+                constraint_name = eos.QualifiedName(prior['constraint'])
+                constraint_entry = eos.Constraints()[constraint_name]
+                log_prior = constraint_entry.make_prior(self.parameters, constraint_name.options_part())
+                self._log_posterior.add(log_prior, False)
+                for p in log_prior.varied_parameters():
+                    self.varied_parameters.append(p)
+            else:
+                raise ValueError('Prior specification must contains either a parameter or a constraint')
 
         # record all constraints that comprise the likelihood
         self._constraint_names = list(likelihood) + list(manual_constraints.keys())
@@ -580,7 +596,7 @@ class Analysis:
         return self._u_to_par(u)
 
 
-    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10):
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10, print_progress=True):
         """
         Return samples of the parameters.
 
@@ -602,7 +618,7 @@ class Analysis:
         """
         import dynesty
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)))
-        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter)
+        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress)
         return sampler.results
 
 
