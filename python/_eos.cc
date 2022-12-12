@@ -288,6 +288,9 @@ BOOST_PYTHON_MODULE(_eos)
         .def("suffix_part", &QualifiedName::suffix_part, return_value_policy<copy_const_reference>(), R"(
             Returns the optional suffix part of the name, i.e., the part following the optional '@'.
         )")
+        .def("options_part", &QualifiedName::options, return_value_policy<copy_const_reference>(), R"(
+            Returns the optional options part of the name, i.e., the part following the optional ';'.
+        )")
         ;
     implicitly_convertible<std::string, QualifiedName>();
 
