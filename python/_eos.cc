@@ -331,6 +331,12 @@ BOOST_PYTHON_MODULE(_eos)
         .def("override_from_file", &Parameters::override_from_file)
         ;
 
+    // Mutable
+    register_ptr_to_python<std::shared_ptr<Mutable>>();
+    class_<Mutable, boost::noncopyable>("Mutable", no_init)
+        .def("name", &Mutable::name, return_value_policy<copy_const_reference>())
+        ;
+
     // Parameter
     class_<Parameter>("Parameter", R"(
             Represents a single real-valued scalar parameter in EOS.
