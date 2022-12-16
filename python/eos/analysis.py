@@ -238,7 +238,7 @@ class Analysis:
         :param \**kwargs: Are passed to `scipy.optimize.minimize`
 
         """
-        if start_point == None:
+        if start_point is None:
             start_point = [float(p) for p in self.varied_parameters]
         elif start_point == "random":
             start_point = [p.inverse_cdf(rng.uniform()) for p in self._log_posterior.log_priors()]
