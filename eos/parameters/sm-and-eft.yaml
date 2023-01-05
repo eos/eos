@@ -1322,7 +1322,7 @@ groups:
         The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients in the effective Hamiltonian
         \begin{equation}
           \mathcal{H}^{\bar{s}b\bar{\nu}\nu}_\mathrm{eff}
-          = \frac{4 G_F}{\sqrt{2}} V_{tb}^* V_{ts} \sum_i \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_i \mathcal{O}^{\bar{s}b\bar{\nu}\nu}_i\,.
+          = \frac{4 G_F}{\sqrt{2}} \frac{\alpha_e}{2 \pi} V_{tb}^* V_{ts} \sum_i \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_i \mathcal{O}^{\bar{s}b\bar{\nu}\nu}_i\,.
         \end{equation}
         The operators read:
         \begin{align}
