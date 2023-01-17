@@ -30,22 +30,6 @@
 
 using namespace test;
 using namespace eos;
-
-Parameters
-reference_parameters()
-{
-    Parameters result = Parameters::Defaults();
-    result["QCD::alpha_s(MZ)"] = 0.117620;
-    result["QCD::mu_t"] = 170.0;
-    result["QCD::mu_b"] = 4.2;
-    result["QCD::mu_c"] = 1.2;
-    result["mass::W"] = 80.398;
-    result["mass::Z"] = 91.1876;
-    result["mass::t(pole)"] = 173.3;
-
-    return result;
-}
-
 class MakeTest :
     public TestCase
 {
@@ -62,7 +46,7 @@ class MakeTest :
             {
                 try
                 {
-                    std::shared_ptr<Model> m = Model::make(name, reference_parameters(), Options());
+                    std::shared_ptr<Model> m = Model::make(name, Parameters::Defaults(), Options());
                 }
                 catch (NoSuchModelError &)
                 {
@@ -283,7 +267,7 @@ class WilsonCoefficientsSBNuNuTest :
             {
                 static const double eps = 1e-8;
 
-                Parameters p = reference_parameters();  
+                Parameters p = Parameters::Defaults();  
 
                 Options o{}; 
 
