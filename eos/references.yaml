@@ -829,6 +829,13 @@ DLMW:2012A:
     id: oai:arXiv.org:1212.4827
   inspire-id: Detmold:2012vy
   title: '$\Lambda_b\to\Lambda \ell^+\ell^-$ form factors and differential branching fraction from lattice QCD'
+DM:2008A:
+  authors: Duplancic, G. and Melic, B.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0805.4170
+  inspire-id: Duplancic:2008tk
+  title: '$B, B_s \to K$ form factors: An update of light-cone sum rule results'
 DM:2016A:
   authors: Detmold, William and Meinel, Stefan
   eprint:
