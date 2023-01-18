@@ -64,9 +64,9 @@ namespace eos
     make_b_to_3l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B^-\to \ell^-\bar\nu\ell_\prime^+\ell_\prime^-$ decays)",
-            R"(The option "l" selects the charged lepton flavour coming out of the 
-            weak current, "lprime" selects the lepton flavour coming out of the photon.)",
+            R"(Observables in $B^-\to \ell^-\bar\nu\ell'^+\ell'^-$ decays)",
+            R"(The option "l" selects the charged lepton flavour coming out of the )"
+            R"(weak current, "lprime" selects the lepton flavour coming out of the photon.)",
             {
                 make_observable("B_u->enumumu::d2BR/dq2/dk2", R"(\frac{d\mathcal{B}(B^- \to e^-\bar\nu\mu^+\mu^-)}{dq^2/dk^2})",
                         Unit::None(),
@@ -74,7 +74,7 @@ namespace eos
                         std::make_tuple("q2", "k2"),
                         Options{ { "l", "e" }, { "lprime", "mu" } }),
 
-                make_observable("B_u->munuee::d2BR/dq2/dk2", R"(\frac{d\mathcal{B}(B^- \to \mu^-\bar\nue^+e^-)}{dq^2/dk^2})",
+                make_observable("B_u->munuee::d2BR/dq2/dk2", R"(\frac{d\mathcal{B}(B^- \to \mu^-\bar\nu e^+e^-)}{dq^2/dk^2})",
                         Unit::None(),
                         &BToThreeLeptonsNeutrino::double_differential_branching_ratio,
                         std::make_tuple("q2", "k2"),
@@ -86,7 +86,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
                         Options{ { "l", "e" }, { "lprime", "mu" } }),
 
-                make_observable("B_u->munuee::BR", R"(\mathcal{B}(B^- \to \mu^-\bar\nue^+e^-))",
+                make_observable("B_u->munuee::BR", R"(\mathcal{B}(B^- \to \mu^-\bar\nu e^+e^-))",
                         Unit::None(),
                         &BToThreeLeptonsNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
@@ -98,7 +98,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
                         Options{ { "l", "e" }, { "lprime", "mu" } }),
 
-                make_observable("B_u->munuee::A_FB", R"(A_{\mathrm{FB}}(B^- \to \mu^-\bar\nue^+e^-))",
+                make_observable("B_u->munuee::A_FB", R"(A_{\mathrm{FB}}(B^- \to \mu^-\bar\nu e^+e^-))",
                         Unit::None(),
                         &BToThreeLeptonsNeutrino::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
