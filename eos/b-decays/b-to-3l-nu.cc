@@ -712,7 +712,7 @@ namespace eos
         double quintuple_differential_branching_ratio(const double & q2, const double & k2,
                 const double & z_gamma, const double & z_w, const double & phi) const
         {
-            return abs(quintuple_differential_decay_width(q2, k2, z_gamma, z_w, phi)) * tau_B / hbar;
+            return quintuple_differential_decay_width(q2, k2, z_gamma, z_w, phi) * tau_B / hbar;
         }
 
         /*!
