@@ -133,31 +133,31 @@ namespace eos
             const double f15 = (256 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
             * (2 * k2 - m_B_sq + m_l_sq + q2) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
             - 2 * k2 * (m_B_sq + q2))) + 2 * k2 * (k2 - m_B_sq) * (k2 - m_B_sq + 2 * m_l_sq + q2)
-            * atan2(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
-            * (m_B_sq + q2))),(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2
+            * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
+            * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2
             * (m_B_sq - m_l_sq + q2))))) / (3. * m_B * (k2 - m_l_sq) * sqrt(power_of<2>(k2)
             + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)));
             const double f25 = (- 256 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2)
             * (3 * (k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
             * (m_B_sq + q2)) + (- 4 * power_of<2>(k2) + 6 * k2 * m_B_sq - 4 * k2 * m_l_sq
-            + 2 * m_l_4) * atan2(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
-            - 2 * k2 * (m_B_sq + q2))),(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2 * (m_B_sq
+            + 2 * m_l_4) * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
+            - 2 * k2 * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2 * (m_B_sq
             - m_l_sq + q2))))) / (3. * m_B * (k2 - m_l_sq) * sqrt(power_of<2>(k2)
             + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)));
             const double f35 = (- 128 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2)
             * (- ((k2 - m_l_sq) * (power_of<2>(k2) + k2 * (3 * m_B_sq - 3 * m_l_sq - q2)
             + m_l_sq * (- m_B_sq + q2)) * sqrt(power_of<2>(k2)
             + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2))) + 4 * k2 * (k2 - m_B_sq)
-            * (k2 * m_B_sq - m_l_4) * atan2(((k2 - m_l_sq) * sqrt(power_of<2>(k2)
-            + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2))),(power_of<2>(k2) + m_l_sq
+            * (k2 * m_B_sq - m_l_4) * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2)
+            + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq
             * (- m_B_sq + q2) - k2 * (m_B_sq - m_l_sq + q2))))) / (3. * k2 * m_B * (k2 - m_B_sq)
             * (k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
             - 2 * k2 * (m_B_sq + q2)));
             const double f45 = (- 256 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
             * (k2 - m_B_sq + q2) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
             * (m_B_sq + q2))) + 2 * k2 * (power_of<2>(k2) + m_B_4 - m_B_sq * q2 + 2 * m_l_sq
-            * q2 - k2 * (2 * m_B_sq + q2)) * atan2(((k2 - m_l_sq) * sqrt(power_of<2>(k2)
-            + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2))),(power_of<2>(k2) + m_l_sq
+            * q2 - k2 * (2 * m_B_sq + q2)) * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2)
+            + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq
             * (- m_B_sq + q2) - k2 * (m_B_sq - m_l_sq + q2))))) / (3. * m_B * (k2 - m_l_sq)
             * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)));
             const double f55 = (128 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
@@ -176,8 +176,8 @@ namespace eos
             * (4 * m_l_6 - 2 * m_l_4 * q2) + m_B_4 * (- 6 * m_l_4 - 2 * m_l_sq * q2
             + power_of<2>(q2))) + m_l_sq * (m_B_8 + 2 * m_B_6 * m_l_sq - 2 * m_l_6 * q2 + m_B_sq
             * m_l_sq * q2 * (4 * m_l_sq + q2) - m_B_4 * (2 * m_l_4 + m_l_sq * q2
-            + power_of<2>(q2)))) * atan2(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq
-            - q2) - 2 * k2 * (m_B_sq + q2))),(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2
+            + power_of<2>(q2)))) * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq
+            - q2) - 2 * k2 * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2
             * (m_B_sq - m_l_sq + q2))))) / (3. * power_of<2>(k2 - m_B_sq) * (k2 - m_l_sq)
             * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2))
             * (power_of<2>(k2) * m_l_sq - k2 * m_l_sq * q2 + k2 * m_B_sq * (- 2 * m_l_sq + q2)
