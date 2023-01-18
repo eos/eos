@@ -88,7 +88,7 @@ namespace eos
             }
             if (opt_l.str() == opt_lprime.str())
             {
-                throw InvalidOptionValueError("opt_lprime", opt_l.str(), "e, mu if it is not the value of l_prime");
+                throw InvalidOptionValueError("opt_lprime", opt_l.str(), "e, mu, tau if it is not the value of l_prime");
             }
         }
 
@@ -886,7 +886,7 @@ namespace eos
 
     const std::string
     BToThreeLeptonsNeutrino::description = "\
-The decayB^- -> l^- nubar l_prime^+ l_prime^-, where l is either e or mu and l_prime the other flavor";
+The decayB^- -> l^- nubar l_prime^+ l_prime^-, where l is either e, mu or tau and l_prime is either e or mu";
 
     const std::string
     BToThreeLeptonsNeutrino::kinematics_description_q2 = "\
