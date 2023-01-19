@@ -130,21 +130,21 @@ namespace eos
             / (9. * k2 * m_B_sq);
             const double f12 = (128 * (2 * power_of<2>(k2) - k2 * m_l_sq - m_l_4) * M_PI * q2
             * (k2 - m_B_sq + q2) * (2 * m_lprime_sq + q2)) / (3. * k2 * m_B_sq);
-            const double f15 = (256 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
+            const double f15 = -(256 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
             * (2 * k2 - m_B_sq + m_l_sq + q2) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
             - 2 * k2 * (m_B_sq + q2))) + 2 * k2 * (k2 - m_B_sq) * (k2 - m_B_sq + 2 * m_l_sq + q2)
             * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
             * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2
             * (m_B_sq - m_l_sq + q2))))) / (3. * m_B * (k2 - m_l_sq) * sqrt(power_of<2>(k2)
             + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)));
-            const double f25 = (- 256 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2)
+            const double f25 = -(- 256 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2)
             * (3 * (k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
             * (m_B_sq + q2)) + (- 4 * power_of<2>(k2) + 6 * k2 * m_B_sq - 4 * k2 * m_l_sq
             + 2 * m_l_4) * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
             - 2 * k2 * (m_B_sq + q2)))/(power_of<2>(k2) + m_l_sq * (- m_B_sq + q2) - k2 * (m_B_sq
             - m_l_sq + q2))))) / (3. * m_B * (k2 - m_l_sq) * sqrt(power_of<2>(k2)
             + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2)));
-            const double f35 = (- 128 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2)
+            const double f35 = -(- 128 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2)
             * (- ((k2 - m_l_sq) * (power_of<2>(k2) + k2 * (3 * m_B_sq - 3 * m_l_sq - q2)
             + m_l_sq * (- m_B_sq + q2)) * sqrt(power_of<2>(k2)
             + power_of<2>(m_B_sq - q2) - 2 * k2 * (m_B_sq + q2))) + 4 * k2 * (k2 - m_B_sq)
@@ -153,7 +153,7 @@ namespace eos
             * (- m_B_sq + q2) - k2 * (m_B_sq - m_l_sq + q2))))) / (3. * k2 * m_B * (k2 - m_B_sq)
             * (k2 - m_l_sq) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2)
             - 2 * k2 * (m_B_sq + q2)));
-            const double f45 = (- 256 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
+            const double f45 = -(- 256 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (- ((k2 - m_l_sq)
             * (k2 - m_B_sq + q2) * sqrt(power_of<2>(k2) + power_of<2>(m_B_sq - q2) - 2 * k2
             * (m_B_sq + q2))) + 2 * k2 * (power_of<2>(k2) + m_B_4 - m_B_sq * q2 + 2 * m_l_sq
             * q2 - k2 * (2 * m_B_sq + q2)) * std::atanh(((k2 - m_l_sq) * sqrt(power_of<2>(k2)
@@ -317,25 +317,25 @@ namespace eos
             + k2 * (4 * m_lprime_sq * (1 + z_w_sq + z_gamma_sq * (1 - 3 * z_w_sq)) + q2 * (3
             - z_w_sq + z_gamma_sq * (- 1 + 3 * z_w_sq))) - (k2 - m_l_sq) * (4 * m_lprime_sq - q2)
             * (- 1 + z_gamma_sq) * (- 1 + z_w_sq) * cos(2 * phi)))) / (std::pow(k2,1.5) * m_B_sq);
-            const double f3c1Re =(- 4 * m_l_sq * (k2 - m_l_sq) * sqrt(q2) * sqrt(k4
+            const double f3c1Re =(4 * m_l_sq * (k2 - m_l_sq) * sqrt(q2) * sqrt(k4
             + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * (2 * sqrt(k2) * sqrt(q2)
             * (- 4 * m_lprime_sq * z_gamma_sq + q2 * (- 1 + z_gamma_sq)) * z_w - (4 * m_lprime_sq
             - q2) * (k2 - m_B_sq + q2) * z_gamma * sqrt(1 - z_gamma_sq)
             * sqrt(1 - z_w_sq) * cos(phi))) / (std::pow(k2,1.5) * m_B_sq);
-            const double f4c1Re = (- 4 * (k2 - m_l_sq) * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            const double f4c1Re = (4 * (k2 - m_l_sq) * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
             * (m_B_sq + q2)) * ((k2 - m_B_sq + q2) * (- 4 * m_lprime_sq * (- 1 + z_gamma_sq) + q2
             * (1 + z_gamma_sq)) * z_w + 2 * sqrt(k2) * sqrt(q2) * (- 4 * m_lprime_sq + q2) * z_gamma
             * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi))) / m_B_sq;
-            const double f3c2Re = (- 4 * m_l_sq * (k2 - m_l_sq) * q2 * sqrt(k4 + m_B_sq_q2_diff2
+            const double f3c2Re = (4 * m_l_sq * (k2 - m_l_sq) * q2 * sqrt(k4 + m_B_sq_q2_diff2
             - 2 * k2 * (m_B_sq + q2)) * ((k2 - m_B_sq + q2) * (- 4 * m_lprime_sq * z_gamma_sq + q2
             * (- 1 + z_gamma_sq)) * z_w + 2 * sqrt(k2) * sqrt(q2) * (- 4 * m_lprime_sq + q2)
             * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi))) / (k4 * m_B_sq);
-            const double f4c2Re = (- 4 * (k2 - m_l_sq) * sqrt(q2) * sqrt(k4 + m_B_sq_q2_diff2
+            const double f4c2Re = (4 * (k2 - m_l_sq) * sqrt(q2) * sqrt(k4 + m_B_sq_q2_diff2
             - 2 * k2 * (m_B_sq + q2)) * (2 * sqrt(k2) * sqrt(q2) * (- 4 * m_lprime_sq
             * (- 1 + z_gamma_sq) + q2 * (1 + z_gamma_sq)) * z_w - (4 * m_lprime_sq - q2) * (k2
             - m_B_sq + q2) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi)))
             / (sqrt(k2) * m_B_sq);
-            const double f2c1Im = (- 4.0 * (k2 - m_l_sq) * sqrt(q2) * (- 4 * m_lprime_sq + q2) * (k4
+            const double f2c1Im = (4.0 * (k2 - m_l_sq) * sqrt(q2) * (- 4 * m_lprime_sq + q2) * (k4
             + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq)
             * sqrt(1 - z_w_sq) * sin(phi)) / (sqrt(k2) * m_B_sq);
             const double f4c1Im = (- 4.0 * m_l_sq_k2_diff2 * (- 4 * m_lprime_sq + q2) * sqrt(k4
@@ -347,161 +347,155 @@ namespace eos
             * sqrt(1 - z_w_sq) * ((k2 - m_B_sq + q2) * z_gamma * z_w + 2 * sqrt(k2) * sqrt(q2)
             * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi)) * sin(phi)) / (std::pow(k2,1.5)
             * m_B_sq);
-            const double f4c3Im =(- 4.0 * m_l_sq * (- k2 + m_l_sq) * sqrt(q2) * (- 4 * m_lprime_sq
+            const double f4c3Im =(4.0 * m_l_sq * (- k2 + m_l_sq) * sqrt(q2) * (- 4 * m_lprime_sq
             + q2) * (k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq)
             * sqrt(1 - z_w_sq) * sin(phi)) / (std::pow(k2,1.5) * m_B_sq);
-            const double f51Re = (- 8 * m_l_sq * (- k2 + m_l_sq) * (sqrt(q2) * (- 4 * m_lprime_sq
-            + q2) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * (7 * k6 * z_w - m_l_sq
-            * (m_B_sq - q2) * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - m_B_sq * z_w
-            + q2 * z_w) + k4 * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 6 * m_B_sq
-            * z_w - 7 * m_l_sq * z_w + 2 * q2 * z_w) - k2 * (- (m_l_sq * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2))) + q2 * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) + m_B_4 * z_w + 2 * m_l_sq * q2 * z_w +
-            q4 * z_w + m_B_sq * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 6 * m_l_sq
-            * z_w - 2 * q2 * z_w))) * cos(phi) + sqrt(k2) * (- 4 * m_B_6 * m_lprime_sq + 4 * m_B_4
-            * m_l_sq * m_lprime_sq - m_B_6 * q2 + m_B_4 * m_l_sq * q2 + 8 * m_B_4 * m_lprime_sq * q2
-             - 4 * m_B_sq * m_l_sq * m_lprime_sq * q2 + 2 * m_B_4 * q4 - m_B_sq * m_l_sq * q4 - 4
-             * m_B_sq * m_lprime_sq * q4 - m_B_sq * q6 + 4 * m_B_6 * m_lprime_sq * z_gamma_sq
-            - 4 * m_B_4 * m_l_sq * m_lprime_sq * z_gamma_sq - m_B_6 * q2 * z_gamma_sq + m_B_4
-            * m_l_sq * q2 * z_gamma_sq - 8 * m_B_4 * m_lprime_sq * q2 * z_gamma_sq + 4 * m_B_sq
-            * m_l_sq * m_lprime_sq * q2 * z_gamma_sq + 2 * m_B_4 * q4 * z_gamma_sq -  m_B_sq
-            * m_l_sq * q4 * z_gamma_sq + 4 * m_B_sq * m_lprime_sq * q4 * z_gamma_sq - m_B_sq * q6
-            * z_gamma_sq + 4 * m_B_4 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w + m_B_4 * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w - 4 * m_B_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) * z_w - m_B_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w - 2 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w - 4 * m_B_4 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_gamma_sq * z_w + m_B_4 * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_gamma_sq * z_w + 4 * m_B_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 8 * m_l_sq * m_lprime_sq * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - m_B_sq * q4
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * m_l_sq
-            * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 4
-            * m_B_4 * m_l_sq * m_lprime_sq * z_w_sq - m_B_4 * m_l_sq * q2 * z_w_sq + 4 * m_B_sq
-            * m_l_sq * m_lprime_sq * q2 * z_w_sq + 3 * m_B_sq * m_l_sq * q4 * z_w_sq - 2 * m_l_sq
-            * q6 * z_w_sq + 4 * m_B_4 * m_l_sq * m_lprime_sq * z_gamma_sq * z_w_sq - m_B_4 * m_l_sq
-            * q2 * z_gamma_sq * z_w_sq + 4 * m_B_sq * m_l_sq * m_lprime_sq * q2 * z_gamma_sq
-            * z_w_sq - m_B_sq * m_l_sq * q4 * z_gamma_sq * z_w_sq - 8 * m_l_sq * m_lprime_sq * q4
-            * z_gamma_sq * z_w_sq + 2 * m_l_sq * q6 * z_gamma_sq * z_w_sq + k6 * (- 4 * m_lprime_sq
-            * (- 1 + z_gamma_sq) + q2 * (1 + z_gamma_sq)) * z_w_sq + k4 * (4 * m_lprime_sq * q2 + 5
-            * q4 + 12 * m_lprime_sq * q2 * z_gamma_sq - 3 * q4 * z_gamma_sq + 4 * m_lprime_sq
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 4 * m_lprime_sq * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + q2
+            const double f51Re = (8 * m_l_sq * (-k2 + m_l_sq) * (-(sqrt(q2) * (-4 * m_lprime_sq
+            + q2) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * (-7 * k6 * z_w + k4
+            * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 6 * m_B_sq * z_w + 7 * m_l_sq
+            * z_w - 2 * q2 * z_w) - m_l_sq * (m_B_sq - q2) * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) + m_B_sq * z_w - q2 * z_w) + k2 * (m_l_sq * sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) - q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            + m_B_4 * z_w + 2 * m_l_sq * q2 * z_w + q4 * z_w - m_B_sq * (sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) + 6 * m_l_sq * z_w + 2 * q2 * z_w))) * cos(phi)) + sqrt(k2)
+            * (-4 * m_B_6 * m_lprime_sq + 4 * m_B_4 * m_l_sq * m_lprime_sq - m_B_6 * q2 + m_B_4
+            * m_l_sq * q2 + 8 * m_B_4 * m_lprime_sq * q2 - 4 * m_B_sq * m_l_sq * m_lprime_sq * q2
+            + 2 * m_B_4 * q4 - m_B_sq * m_l_sq * q4 - 4 * m_B_sq * m_lprime_sq * q4 - m_B_sq * q6 +
+            4 * m_B_6 * m_lprime_sq * z_gamma_sq - 4 * m_B_4 * m_l_sq * m_lprime_sq * z_gamma_sq
+            - m_B_6 * q2 * z_gamma_sq + m_B_4 * m_l_sq * q2 * z_gamma_sq - 8 * m_B_4 * m_lprime_sq
+            * q2 * z_gamma_sq + 4 * m_B_sq * m_l_sq * m_lprime_sq * q2 * z_gamma_sq + 2 * m_B_4
+            * q4 * z_gamma_sq - m_B_sq * m_l_sq * q4 * z_gamma_sq + 4 * m_B_sq * m_lprime_sq * q4
+            * z_gamma_sq - m_B_sq * q6 * z_gamma_sq - 4 * m_B_4 * m_lprime_sq
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - m_B_4 * q2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 4 * m_B_sq * m_lprime_sq * q2
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + m_B_sq * q4
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 2 * m_l_sq * q4
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 4 * m_B_4 * m_lprime_sq
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - m_B_4 * q2
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 4 * m_B_sq
+            * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq
+            * z_w + 8 * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w + m_B_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w - 2 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w - 4 * m_B_4 * m_l_sq * m_lprime_sq * z_w_sq - m_B_4
+            * m_l_sq * q2 * z_w_sq + 4 * m_B_sq * m_l_sq * m_lprime_sq * q2 * z_w_sq + 3 * m_B_sq
+            * m_l_sq * q4 * z_w_sq - 2 * m_l_sq * q6 * z_w_sq + 4 * m_B_4 * m_l_sq * m_lprime_sq
+            * z_gamma_sq * z_w_sq - m_B_4 * m_l_sq * q2 * z_gamma_sq * z_w_sq + 4 * m_B_sq * m_l_sq
+            * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - m_B_sq * m_l_sq * q4 * z_gamma_sq * z_w_sq -
+            8 * m_l_sq * m_lprime_sq * q4 * z_gamma_sq * z_w_sq + 2 * m_l_sq * q6 * z_gamma_sq
+            * z_w_sq + k6 * (-4 * m_lprime_sq * (-1 + z_gamma_sq) + q2 * (1 + z_gamma_sq)) * z_w_sq
+            + k4 * (4 * m_lprime_sq * q2 + 5 * q4 + 12 * m_lprime_sq * q2 * z_gamma_sq - 3 * q4
+            * z_gamma_sq - 4 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w - q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 4 * m_lprime_sq
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - q2
             * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 4
             * m_lprime_sq * q2 * z_w_sq - 5 * q4 * z_w_sq - 28 * m_lprime_sq * q2 * z_gamma_sq
-            * z_w_sq + 7 * q4 * z_gamma_sq * z_w_sq + m_l_sq * (4 * m_lprime_sq * (- 1 + z_gamma_sq)
-            - q2 * (1 + z_gamma_sq)) * (- 1 + z_w_sq) + m_B_sq * (4 * m_lprime_sq * (- 1
-            + z_gamma_sq) - q2 * (1 + z_gamma_sq)) * (1 + 2 * z_w_sq)) + k2 * (- (m_B_4 * (4
-            * m_lprime_sq * (- 1 + z_gamma_sq) - q2 * (1 + z_gamma_sq)) * (2 + z_w_sq)) - m_B_sq
-            * (12 * m_lprime_sq * q2 + 7 * q4 + 4 * m_lprime_sq * q2 * z_gamma_sq - q4 * z_gamma_sq
-            + 8 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 2 * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 8 * m_lprime_sq * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 4 * m_lprime_sq * q2
-            * z_w_sq + 3 * q4 * z_w_sq + 4 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - q4
-            * z_gamma_sq * z_w_sq + 2 * m_l_sq * (4 * m_lprime_sq * (- 1 + z_gamma_sq) - q2
-            * (1 + z_gamma_sq)) * (- 1 + z_w_sq)) + q2 * (4 * m_lprime_sq * q2 + q4 - 4
-            * m_lprime_sq * q2 * z_gamma_sq + q4 * z_gamma_sq + 4 * m_lprime_sq
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 3 * q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 4 * m_lprime_sq * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * q4 * z_w_sq + 8
-            * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 2 * q4 * z_gamma_sq * z_w_sq + m_l_sq
-            * (q2 * (1 + 5 * z_w_sq + z_gamma_sq * (1 - 7 * z_w_sq)) + 4 * m_lprime_sq
-            * (1 - z_w_sq + z_gamma_sq * (- 1 + 7 * z_w_sq))))) - (k2 - m_B_sq) * (k2 - m_l_sq)
-            * (4 * m_lprime_sq - q2) * (k2 - m_B_sq + q2) * (- 1 + z_gamma_sq) * (- 1 + z_w_sq)
-            * cos(2 * phi)))) / (sqrt(k2) * m_B * (k2 - m_B_sq) * (k4 + m_l_sq * (- m_B_sq + q2
-            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) - k2 * (m_B_sq - m_l_sq
-            + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
-            const double f52Re = (8 * m_l_sq * (- k2 + m_l_sq) * sqrt(q2) * (sqrt(k2)
-            * (4 * m_lprime_sq - q2) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * (m_B_4
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - m_B_sq * q2 * sqrt(k4
+            * z_w_sq + 7 * q4 * z_gamma_sq * z_w_sq + m_l_sq * (4 * m_lprime_sq * (-1 + z_gamma_sq)
+            - q2 * (1 + z_gamma_sq)) * (-1 + z_w_sq) + m_B_sq * (4 * m_lprime_sq * (-1 + z_gamma_sq)
+            - q2 * (1 + z_gamma_sq)) * (1 + 2 * z_w_sq)) + k2 * (-(m_B_4 * (4 * m_lprime_sq
+            * (-1 + z_gamma_sq) - q2 * (1 + z_gamma_sq)) * (2 + z_w_sq)) + m_B_sq * (-2 * m_l_sq
+            * (4 * m_lprime_sq * (-1 + z_gamma_sq) - q2 * (1 + z_gamma_sq)) * (-1 + z_w_sq) +
+            q2 * (2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * (1 + z_gamma_sq) * z_w
+            + q2 * (-7 - 3 * z_w_sq + z_gamma_sq * (1 + z_w_sq))) - 4 * m_lprime_sq * (2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * (-1 + z_gamma_sq) * z_w + q2 * (3 + z_w_sq
+            + z_gamma_sq * (1 + z_w_sq)))) + q2 * (4 * m_lprime_sq * q2 + q4 - 4 * m_lprime_sq * q2
+            * z_gamma_sq + q4 * z_gamma_sq - 4 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_w - 3 * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w - 4 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma_sq * z_w + q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma_sq * z_w + 2 * q4 * z_w_sq + 8 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 2
+            * q4 * z_gamma_sq * z_w_sq + m_l_sq * (q2 * (1 + 5 * z_w_sq + z_gamma_sq * (1 - 7
+            * z_w_sq)) + 4 * m_lprime_sq * (1 - z_w_sq + z_gamma_sq * (-1 + 7 * z_w_sq))))) - (k2
+            - m_B_sq) * (k2 - m_l_sq) * (4 * m_lprime_sq - q2) * (k2 - m_B_sq + q2) * (-1
+            + z_gamma_sq) * (-1 + z_w_sq) * cos(2 * phi))))/(sqrt(k2) * m_B * (k2 - m_B_sq)
+            * (k4 - m_l_sq * (m_B_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w) + k2 * (-m_B_sq + m_l_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_w)));
+            const double f52Re = (-8 * m_l_sq * (-k2 + m_l_sq) * sqrt(q2) * (sqrt(k2) * (-4
+            * m_lprime_sq + q2) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) *
+            (m_B_4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - m_B_sq * q2 * sqrt(k4
             + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 2 * m_l_sq * q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 2 * k6 * z_w - 2 * m_B_4 * m_l_sq * z_w
-            + 2 * m_l_sq * q4 * z_w + k4 * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            - 4 * m_B_sq * z_w - 2 * m_l_sq * z_w + 8 * q2 * z_w) - k2 * (- 2 * m_B_4 * z_w + 2
-            * m_B_sq * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 2 * m_l_sq * z_w) + q2
-            * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 8 * m_l_sq * z_w + 2 * q2
-            * z_w))) * cos(phi) + sqrt(q2) * (m_l_sq * (m_B_sq - q2) * (- 4 * m_lprime_sq
-            * z_gamma_sq + q2 * (- 1 + z_gamma_sq)) * z_w * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) - m_B_sq * z_w + q2 * z_w) + k6 * (q2 * (- 2 + z_w_sq + z_gamma_sq
-            * (2 - 5 * z_w_sq)) + 4 * m_lprime_sq * (- 2 * z_w_sq + z_gamma_sq * (- 2 + 5
-            * z_w_sq))) - k4 * (8 * m_l_sq * m_lprime_sq + 2 * m_l_sq * q2 + 8 * m_lprime_sq * q2
-            + 4 * q4 - 8 * m_l_sq * m_lprime_sq * z_gamma_sq + 2 * m_l_sq * q2 * z_gamma_sq + 8
-            * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 3 * q2
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 2 * k6 * z_w + 2 * m_B_4 * m_l_sq * z_w
+            - 2 * m_l_sq * q4 * z_w + k4 * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            + 4 * m_B_sq * z_w + 2 * m_l_sq * z_w - 8 * q2 * z_w) - k2 * (2 * m_B_4 * z_w + 2
+            * m_B_sq * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 2 * m_l_sq * z_w) +
+            q2 * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 8 * m_l_sq * z_w - 2 * q2
+            * z_w))) * cos(phi) + sqrt(q2) * (-(m_l_sq * (m_B_sq - q2) * (-4 * m_lprime_sq
+            * z_gamma_sq + q2 * (-1 + z_gamma_sq)) * z_w * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) + m_B_sq * z_w - q2 * z_w)) + k6 * (q2 * (-2 + z_w_sq + z_gamma_sq
+            * (2 - 5 * z_w_sq)) + 4 * m_lprime_sq * (-2 * z_w_sq + z_gamma_sq * (-2 + 5 * z_w_sq)))
+            + k4 * (-8 * m_l_sq * m_lprime_sq - 2 * m_l_sq * q2 - 8 * m_lprime_sq * q2 - 4 * q4 + 8
+            * m_l_sq * m_lprime_sq * z_gamma_sq - 2 * m_l_sq * q2 * z_gamma_sq +
+            8 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 3 * q2
             * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 4 * m_lprime_sq * sqrt(k4
             + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 8 * m_l_sq
-            * m_lprime_sq * z_w_sq + m_l_sq * q2 * z_w_sq - 2 * q4 * z_w_sq
-            + 20 * m_l_sq * m_lprime_sq * z_gamma_sq * z_w_sq - 5 * m_l_sq * q2 * z_gamma_sq
-            * z_w_sq - 8 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + 2 * q4 * z_gamma_sq * z_w_sq
-            + 2 * m_B_sq * (q2 * (- 3 + z_gamma_sq * (1 - 2 * z_w_sq)) + m_lprime_sq * (- 4 * (1
-            + z_w_sq) + z_gamma_sq * (- 4 + 8 * z_w_sq)))) + k2 * ((- 4 * m_lprime_sq * z_gamma_sq
-            + q2 * (- 1 + z_gamma_sq)) * z_w * (- (m_l_sq * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) - 2 * q2 * z_w)) + q2 * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) + q2 * z_w)) - m_B_4 * (4 * m_lprime_sq * (2 + z_gamma_sq * z_w_sq) + q2 * (4
-            - (- 1 + z_gamma_sq) * z_w_sq)) + m_B_sq * (8 * m_lprime_sq * q2 + 4 * q4 + 8
-            * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 3 * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 4 * m_lprime_sq * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * q4 * z_w_sq + 8
-            * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 2 * q4 * z_gamma_sq * z_w_sq + 2 * m_l_sq
-            * (q2 + q2 * z_gamma_sq * (1 - 2 * z_w_sq) + m_lprime_sq * (4 - 4 * z_w_sq + z_gamma_sq
-            * (- 4 + 8 * z_w_sq))))) + 2 * k2 * (k2 - m_B_sq) * (k2 - m_l_sq) * (4 * m_lprime_sq
-            - q2) * (- 1 + z_gamma_sq) * (- 1 + z_w_sq) * cos(2 * phi)))) / (k2 * m_B * (k2
-            - m_B_sq) * (k4 + m_l_sq * (- m_B_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w) - k2 * (m_B_sq - m_l_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2
-            * k2 * (m_B_sq + q2)) * z_w)));
-            const double f53Re = (- 8 * m_l_sq * (- k2 + m_l_sq) * sqrt(q2) * (- (sqrt(q2)
-            * (- 4 * m_lprime_sq * z_gamma_sq + q2 * (- 1 + z_gamma_sq)) * (k6 - m_l_sq
-            * (m_B_sq - q2) * (m_B_sq - q2 - sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_w) - k4 * (2 * m_B_sq + m_l_sq + 2 * q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w) + k2 * (m_B_4 + 2 * m_l_sq * q2 + q4 + 3 * m_l_sq * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + m_B_sq * (2 * m_l_sq - 2 * q2 - 3
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)))) + sqrt(k2) * (k2
-            - m_B_sq) * (k2 + m_B_sq - 2 * m_l_sq - q2) * (- 4 * m_lprime_sq + q2) * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1
-            - z_w_sq) * cos(phi))) / (k2 * m_B * (k2 - m_B_sq) * (k4 + m_l_sq * (- m_B_sq + q2
-            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) - k2 * (m_B_sq - m_l_sq
-            + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
-            const double f54Re = (8 * m_l_sq * (- k2 + m_l_sq) * ((4 * m_lprime_sq * (- 1
-            + z_gamma_sq) - q2 * (1 + z_gamma_sq)) * (k4 + (m_B_sq - q2) * (m_B_sq - q2 - sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) + k2 * (- 2 * m_B_sq - 2 * q2
-            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)) - 2 * sqrt(k2) * sqrt(q2)
-            * (- 4 * m_lprime_sq + q2) * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi))) / (m_B * (- k4 + m_l_sq
-            * (m_B_sq - q2 - sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)
-            + k2 * (m_B_sq - m_l_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 8 * m_l_sq
+            * m_lprime_sq * z_w_sq - m_l_sq * q2 * z_w_sq + 2 * q4 * z_w_sq - 20 * m_l_sq
+            * m_lprime_sq * z_gamma_sq * z_w_sq + 5 * m_l_sq * q2 * z_gamma_sq * z_w_sq + 8
+            * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 2 * q4 * z_gamma_sq * z_w_sq + m_B_sq * (8
+            * m_lprime_sq * (1 + z_w_sq + z_gamma_sq * (1 - 2 * z_w_sq)) + 2 * q2 * (3 + z_gamma_sq
+            * (-1 + 2 * z_w_sq)))) - k2 * (-((-4 * m_lprime_sq * z_gamma_sq + q2 * (-1
+            + z_gamma_sq)) * z_w * (q2 * (-sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + q2
+            * z_w) + m_l_sq * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 2 * q2 * z_w)))
+            + m_B_4 * (4 * m_lprime_sq * (2 + z_gamma_sq * z_w_sq) + q2 * (4 - (-1 + z_gamma_sq)
+            * z_w_sq)) + m_B_sq * (-8 * m_lprime_sq * q2 - 4 * q4 + 8 * m_lprime_sq * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 3 * q2 * sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) * z_w - 4 * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w + q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w - 2 * q4 * z_w_sq - 8 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq
+            + 2 * q4 * z_gamma_sq * z_w_sq - 2 * m_l_sq * (q2 + q2 * z_gamma_sq * (1 - 2 * z_w_sq)
+            + m_lprime_sq * (4 - 4 * z_w_sq + z_gamma_sq * (-4 + 8 * z_w_sq))))) + 2 * k2 * (k2
+            - m_B_sq) * (k2 - m_l_sq) * (4 * m_lprime_sq - q2) * (-1 + z_gamma_sq) * (-1 + z_w_sq)
+            * cos(2 * phi))))/(k2 * m_B * (k2 - m_B_sq) * (k4 - m_l_sq * (m_B_sq - q2 + sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) + k2 * (-m_B_sq + m_l_sq - q2
+            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
+            const double f53Re = (8 * m_l_sq * (-k2 + m_l_sq) * sqrt(q2) * (-(sqrt(q2) * (-4
+            * m_lprime_sq * z_gamma_sq + q2 * (-1 + z_gamma_sq)) * (k6 - k4 * (2 * m_B_sq + m_l_sq
+            + 2 * q2 - sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) -
+            m_l_sq * (m_B_sq - q2) * (m_B_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_w) + k2 * (m_B_4 + 2 * m_l_sq * q2 + q4 - 3 * m_l_sq * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2
+            * k2 * (m_B_sq + q2)) * z_w + m_B_sq * (2 * m_l_sq - 2 * q2 + 3 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)))) - sqrt(k2) * (k2 - m_B_sq)
+            * (k2 + m_B_sq - 2 * m_l_sq - q2) * (-4 * m_lprime_sq + q2) * sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq)
+            * cos(phi)))/(k2 * m_B * (k2 - m_B_sq) * (k4 - m_l_sq * (m_B_sq - q2 + sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) + k2 * (-m_B_sq + m_l_sq - q2
+            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
+            const double f54Re = (-8 * m_l_sq * (-k2 + m_l_sq) * ((4 * m_lprime_sq * (-1
+            + z_gamma_sq) - q2 * (1 + z_gamma_sq)) * (k4 + (m_B_sq - q2) * (m_B_sq - q2 + sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) - k2 * (2 * m_B_sq + 2 * q2
+            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)) + 2 * sqrt(k2) * sqrt(q2)
+            * (-4 * m_lprime_sq + q2) * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi)))/(m_B * (-k4 + k2
+            * (m_B_sq - m_l_sq + q2 - sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) +
+            m_l_sq * (m_B_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
+            const double f52Im = (-8.0 * m_l_sq * (k2 - m_l_sq) * sqrt(q2) * (-4 * m_lprime_sq + q2)
+            * (k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq)
+            * sqrt(1 - z_w_sq) * sin(phi))/(sqrt(k2) * m_B * (k4 - m_l_sq * (m_B_sq - q2 + sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) + k2 * (-m_B_sq + m_l_sq - q2
+            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
+            const double f53Im = (-8.0 * m_l_sq * (-k2 + m_l_sq) * sqrt(q2) * (-4
+            * m_lprime_sq + q2) * (k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma
+            * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * sin(phi))/(sqrt(k2) * m_B * (k4 - m_l_sq
+            * (m_B_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) + k2
+            * (-m_B_sq + m_l_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
+            const double f54Im = (8.0 * m_l_sq * m_l_sq_k2_diff2 * (-4 * m_lprime_sq + q2) * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) *
+            (sqrt(q2) * z_gamma * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 3 * k2
+            * z_w + m_B_sq * z_w - q2 * z_w) + 2 * sqrt(k2) * (k2 - m_B_sq) * sqrt(1 - z_gamma_sq)
+            * sqrt(1 - z_w_sq) * cos(phi)) * sin(phi))/(sqrt(k2) * m_B * (k2 - m_B_sq) * (k4
+            - m_l_sq * (m_B_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)
+            + k2 * (-m_B_sq + m_l_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
             * z_w)));
-            const double f52Im  = (- 8.0 * m_l_sq * (k2 - m_l_sq) * sqrt(q2) * (- 4 * m_lprime_sq
-            + q2) * (k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq)
-            * sqrt(1 - z_w_sq) * sin(phi)) / (sqrt(k2) * m_B * (k4 + m_l_sq * (- m_B_sq + q2
-            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) - k2 * (m_B_sq - m_l_sq
-            + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
-            const double f53Im = (- 8.0 * m_l_sq * (- k2 + m_l_sq) * sqrt(q2) * (- 4 * m_lprime_sq
-            + q2) * (k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma * sqrt(1 - z_gamma_sq)
-            * sqrt(1 - z_w_sq) * sin(phi)) / (sqrt(k2) * m_B * (k4 + m_l_sq * (- m_B_sq + q2
-            + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w) - k2 * (m_B_sq - m_l_sq
-            + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
-            const double f54Im = (8.0 * m_l_sq * m_l_sq_k2_diff2 * (- 4 * m_lprime_sq + q2)
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * sqrt(1 - z_gamma_sq)
-            * sqrt(1 - z_w_sq) * (sqrt(q2) * z_gamma * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) - 3 * k2 * z_w - m_B_sq * z_w + q2 * z_w) - 2 * sqrt(k2) * (k2 - m_B_sq)
-            * sqrt(1 - z_gamma_sq) * sqrt(1 - z_w_sq) * cos(phi)) * sin(phi)) / (sqrt(k2) * m_B
-            * (k2 - m_B_sq) * (k4 + m_l_sq * (- m_B_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w) - k2 * (m_B_sq - m_l_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2
-            * k2 * (m_B_sq + q2)) * z_w)));
             const double f55 = (8 * m_l_sq * (k2 - m_l_sq) * (4 * k10 * m_lprime_sq - 8 * k8
-            * m_B_sq * m_lprime_sq + 8 * k6 * m_B_4 * m_lprime_sq - 8 * k4 * m_B_6 * m_lprime_sq + 4
-            * k2 * m_B_8 * m_lprime_sq - 4 * k8 * m_l_sq * m_lprime_sq - 8 * k6 * m_B_sq * m_l_sq
+            * m_B_sq * m_lprime_sq + 8 * k6 * m_B_4 * m_lprime_sq - 8 * k4 * m_B_6 * m_lprime_sq +
+            4 * k2 * m_B_8 * m_lprime_sq - 4 * k8 * m_l_sq * m_lprime_sq - 8 * k6 * m_B_sq * m_l_sq
             * m_lprime_sq + 32 * k4 * m_B_4 * m_l_sq * m_lprime_sq - 24 * k2 * m_B_6 * m_l_sq
-            * m_lprime_sq + 4 * m_B_8 * m_l_sq * m_lprime_sq + 8 * k6 * m_l_4 * m_lprime_sq
-            - 16 * k4 * m_B_sq * m_l_4 * m_lprime_sq + 8 * k2 * m_B_4 * m_l_4 * m_lprime_sq + k10
-            * q2 - 2 * k8 * m_B_sq * q2 + 2 * k6 * m_B_4 * q2 - 2 * k4 * m_B_6 * q2 + k2 * m_B_8
-            * q2 - k8 * m_l_sq * q2 - 2 * k6 * m_B_sq * m_l_sq * q2 + 8 * k4 * m_B_4 * m_l_sq * q2
+            * m_lprime_sq + 4 * m_B_8 * m_l_sq * m_lprime_sq + 8 * k6 * m_l_4 * m_lprime_sq - 16
+            * k4 * m_B_sq * m_l_4 * m_lprime_sq + 8 * k2 * m_B_4 * m_l_4 * m_lprime_sq + k10 * q2
+            - 2 * k8 * m_B_sq * q2 + 2 * k6 * m_B_4 * q2 - 2 * k4 * m_B_6 * q2 + k2 * m_B_8 * q2
+            - k8 * m_l_sq * q2 - 2 * k6 * m_B_sq * m_l_sq * q2 + 8 * k4 * m_B_4 * m_l_sq * q2
             - 6 * k2 * m_B_6 * m_l_sq * q2 + m_B_8 * m_l_sq * q2 + 2 * k6 * m_l_4 * q2 - 4 * k4
             * m_B_sq * m_l_4 * q2 + 2 * k2 * m_B_4 * m_l_4 * q2 - 8 * k8 * m_lprime_sq * q2 + 8 * k6
             * m_B_sq * m_lprime_sq * q2 + 8 * k4 * m_B_4 * m_lprime_sq * q2 - 8 * k2 * m_B_6
@@ -514,182 +508,184 @@ namespace eos
             * m_lprime_sq * q4 + 4 * k4 * m_l_sq * m_lprime_sq * q4 - 8 * k2 * m_B_sq * m_l_sq
             * m_lprime_sq * q4 + 4 * m_B_4 * m_l_sq * m_lprime_sq * q4 - k6 * q6 - 4 * k4 * m_B_sq
             * q6 + k2 * m_B_4 * q6 + 5 * k4 * m_l_sq * q6 + 2 * k2 * m_B_sq * m_l_sq * q6 + m_B_4
-            * m_l_sq * q6 - 2 * k2 * m_l_4 * q6 - 2 * m_B_sq * m_l_4 * q6 + k4 * q8
-            - 2 * k2 * m_l_sq * q8 + m_l_4 * q8 - 4 * k10 * m_lprime_sq * z_gamma_sq + 8 * k8
-            * m_B_sq * m_lprime_sq * z_gamma_sq - 8 * k6 * m_B_4 * m_lprime_sq * z_gamma_sq + 8 * k4
-            * m_B_6 * m_lprime_sq * z_gamma_sq - 4 * k2 * m_B_8 * m_lprime_sq * z_gamma_sq + 4 * k8
-            * m_l_sq * m_lprime_sq * z_gamma_sq + 8 * k6 * m_B_sq * m_l_sq * m_lprime_sq
+            * m_l_sq * q6 - 2 * k2 * m_l_4 * q6 - 2 * m_B_sq * m_l_4 * q6 + k4 * q8 - 2 * k2
+            * m_l_sq * q8 + m_l_4 * q8 - 4 * k10 * m_lprime_sq * z_gamma_sq + 8 * k8 * m_B_sq
+            * m_lprime_sq * z_gamma_sq - 8 * k6 * m_B_4 * m_lprime_sq * z_gamma_sq +
+            8 * k4 * m_B_6 * m_lprime_sq * z_gamma_sq - 4 * k2 * m_B_8 * m_lprime_sq * z_gamma_sq
+            + 4 * k8 * m_l_sq * m_lprime_sq * z_gamma_sq + 8 * k6 * m_B_sq * m_l_sq * m_lprime_sq
             * z_gamma_sq - 32 * k4 * m_B_4 * m_l_sq * m_lprime_sq * z_gamma_sq + 24 * k2 * m_B_6
             * m_l_sq * m_lprime_sq * z_gamma_sq - 4 * m_B_8 * m_l_sq * m_lprime_sq * z_gamma_sq
             - 8 * k6 * m_l_4 * m_lprime_sq * z_gamma_sq + 16 * k4 * m_B_sq * m_l_4 * m_lprime_sq
             * z_gamma_sq - 8 * k2 * m_B_4 * m_l_4 * m_lprime_sq * z_gamma_sq + k10 * q2 * z_gamma_sq
             - 2 * k8 * m_B_sq * q2 * z_gamma_sq + 2 * k6 * m_B_4 * q2 * z_gamma_sq - 2 * k4 * m_B_6
             * q2 * z_gamma_sq + k2 * m_B_8 * q2 * z_gamma_sq - k8 * m_l_sq * q2 * z_gamma_sq - 2
-            * k6 * m_B_sq * m_l_sq * q2 * z_gamma_sq + 8 * k4 * m_B_4 * m_l_sq * q2 * z_gamma_sq - 6
-            * k2 * m_B_6 * m_l_sq * q2 * z_gamma_sq + m_B_8 * m_l_sq * q2 * z_gamma_sq + 2 * k6
-            * m_l_4 * q2 * z_gamma_sq - 4 * k4 * m_B_sq * m_l_4 * q2 * z_gamma_sq + 2 * k2 * m_B_4
-            * m_l_4 * q2 * z_gamma_sq + 12 * k8 * m_lprime_sq * q2 * z_gamma_sq - 16 * k6 * m_B_sq
-            * m_lprime_sq * q2 * z_gamma_sq - 4 * k4 * m_B_4 * m_lprime_sq * q2 * z_gamma_sq + 8
-            * k2 * m_B_6 * m_lprime_sq * q2 * z_gamma_sq + 8 * k4 * m_B_sq * m_l_sq * m_lprime_sq
-            * q2 * z_gamma_sq - 16 * k2 * m_B_4 * m_l_sq * m_lprime_sq * q2 * z_gamma_sq + 8 * m_B_6
-            * m_l_sq * m_lprime_sq * q2 * z_gamma_sq + 4 * k4 * m_l_4 * m_lprime_sq * q2
-            * z_gamma_sq - 8 * k2 * m_B_sq * m_l_4 * m_lprime_sq * q2 * z_gamma_sq + 4 * m_B_4
-            * m_l_4 * m_lprime_sq * q2 * z_gamma_sq - 3 * k8 * q4 * z_gamma_sq + 4 * k6 * m_B_sq
-            * q4 * z_gamma_sq + k4 * m_B_4 * q4 * z_gamma_sq - 2 * k2 * m_B_6 * q4 * z_gamma_sq - 2
-            * k4 * m_B_sq * m_l_sq * q4 * z_gamma_sq + 4 * k2 * m_B_4 * m_l_sq * q4 * z_gamma_sq - 2
-            * m_B_6 * m_l_sq * q4 * z_gamma_sq - k4 * m_l_4 * q4 * z_gamma_sq + 2 * k2 * m_B_sq
-            * m_l_4 * q4 * z_gamma_sq - m_B_4 * m_l_4 * q4 * z_gamma_sq - 12 * k6 * m_lprime_sq * q4
-            * z_gamma_sq - 4 * k2 * m_B_4 * m_lprime_sq * q4 * z_gamma_sq + 12 * k4 * m_l_sq
-            * m_lprime_sq * q4 * z_gamma_sq + 24 * k2 * m_B_sq * m_l_sq * m_lprime_sq * q4
-            * z_gamma_sq - 4 * m_B_4 * m_l_sq * m_lprime_sq * q4 * z_gamma_sq - 8 * k2 * m_l_4
-            * m_lprime_sq * q4 * z_gamma_sq - 8 * m_B_sq * m_l_4 * m_lprime_sq * q4 * z_gamma_sq + 3
-            * k6 * q6 * z_gamma_sq + k2 * m_B_4 * q6 * z_gamma_sq - 3 * k4 * m_l_sq * q6
-            * z_gamma_sq - 6 * k2 * m_B_sq * m_l_sq * q6 * z_gamma_sq + m_B_4 * m_l_sq * q6
-            * z_gamma_sq + 2 * k2 * m_l_4 * q6 * z_gamma_sq + 2 * m_B_sq * m_l_4 * q6 * z_gamma_sq
-            + 4 * k4 * m_lprime_sq * q6 * z_gamma_sq - 8 * k2 * m_l_sq * m_lprime_sq * q6
-            * z_gamma_sq + 4 * m_l_4 * m_lprime_sq * q6 * z_gamma_sq - k4 * q8 * z_gamma_sq
-            + 2 * k2 * m_l_sq * q8 * z_gamma_sq - m_l_4 * q8 * z_gamma_sq + 8 * k6 * m_l_sq
-            * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 24 * k4
-            * m_B_sq * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_w + 24 * k2 * m_B_4 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w - 8 * m_B_6 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) * z_w + 2 * k6 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) * z_w - 6 * k4 * m_B_sq * m_l_sq * q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 6 * k2 * m_B_4 * m_l_sq * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 2 * m_B_6 * m_l_sq * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 8 * k4 * m_l_sq
-            * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 16 * k2
-            * m_B_sq * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w + 8 * m_B_4 * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2
-            * k2 * (m_B_sq + q2)) * z_w - 2 * k6 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w - 6 * k4 * m_B_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w + 10 * k4 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w + 4 * k2 * m_B_sq * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w + 2 * m_B_4 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w - 6 * k2 * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w - 2 * m_B_sq * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_w + 2 * k4 * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w - 4 * k2 * m_l_sq * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_w + 2 * m_l_4 * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_w - 8 * k6 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2)) * z_gamma_sq * z_w + 24 * k4 * m_B_sq * m_l_sq * m_lprime_sq * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 24 * k2 * m_B_4
-            * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_gamma_sq * z_w + 8 * m_B_6 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2
-            * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * k6 * m_l_sq * q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 6 * k4 * m_B_sq
-            * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w
-            + 6 * k2 * m_B_4 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_gamma_sq * z_w - 2 * m_B_6 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_gamma_sq * z_w - 8 * k6 * m_lprime_sq * q2 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 24 * k4 * m_B_sq
+            * k6 * m_B_sq * m_l_sq * q2 * z_gamma_sq + 8 * k4 * m_B_4 * m_l_sq * q2 * z_gamma_sq -
+            6 * k2 * m_B_6 * m_l_sq * q2 * z_gamma_sq + m_B_8 * m_l_sq * q2 * z_gamma_sq + 2 * k6
+            * m_l_4 * q2 * z_gamma_sq - 4 * k4 * m_B_sq * m_l_4 * q2 * z_gamma_sq +
+            2 * k2 * m_B_4 * m_l_4 * q2 * z_gamma_sq + 12 * k8 * m_lprime_sq * q2 * z_gamma_sq - 16
+            * k6 * m_B_sq * m_lprime_sq * q2 * z_gamma_sq - 4 * k4 * m_B_4 * m_lprime_sq * q2
+            * z_gamma_sq + 8 * k2 * m_B_6 * m_lprime_sq * q2 * z_gamma_sq + 8 * k4 * m_B_sq * m_l_sq
+            * m_lprime_sq * q2 * z_gamma_sq - 16 * k2 * m_B_4 * m_l_sq * m_lprime_sq * q2
+            * z_gamma_sq + 8 * m_B_6 * m_l_sq * m_lprime_sq * q2 * z_gamma_sq + 4 * k4 * m_l_4
+            * m_lprime_sq * q2 * z_gamma_sq - 8 * k2 * m_B_sq * m_l_4 * m_lprime_sq * q2
+            * z_gamma_sq + 4 * m_B_4 * m_l_4 * m_lprime_sq * q2 * z_gamma_sq - 3 * k8 * q4
+            * z_gamma_sq + 4 * k6 * m_B_sq * q4 * z_gamma_sq + k4 * m_B_4 * q4 * z_gamma_sq -
+            2 * k2 * m_B_6 * q4 * z_gamma_sq - 2 * k4 * m_B_sq * m_l_sq * q4 * z_gamma_sq + 4 * k2
+            * m_B_4 * m_l_sq * q4 * z_gamma_sq - 2 * m_B_6 * m_l_sq * q4 * z_gamma_sq -
+            k4 * m_l_4 * q4 * z_gamma_sq + 2 * k2 * m_B_sq * m_l_4 * q4 * z_gamma_sq - m_B_4 * m_l_4
+            * q4 * z_gamma_sq - 12 * k6 * m_lprime_sq * q4 * z_gamma_sq - 4 * k2 * m_B_4
+            * m_lprime_sq * q4 * z_gamma_sq + 12 * k4 * m_l_sq * m_lprime_sq * q4 * z_gamma_sq + 24
+            * k2 * m_B_sq * m_l_sq * m_lprime_sq * q4 * z_gamma_sq - 4 * m_B_4 * m_l_sq
+            * m_lprime_sq * q4 * z_gamma_sq - 8 * k2 * m_l_4 * m_lprime_sq * q4 * z_gamma_sq - 8
+            * m_B_sq * m_l_4 * m_lprime_sq * q4 * z_gamma_sq + 3 * k6 * q6 * z_gamma_sq + k2 * m_B_4
+            * q6 * z_gamma_sq - 3 * k4 * m_l_sq * q6 * z_gamma_sq - 6 * k2 * m_B_sq * m_l_sq * q6
+            * z_gamma_sq + m_B_4 * m_l_sq * q6 * z_gamma_sq + 2 * k2 * m_l_4 * q6 * z_gamma_sq + 2
+            * m_B_sq * m_l_4 * q6 * z_gamma_sq + 4 * k4 * m_lprime_sq * q6 * z_gamma_sq - 8 * k2
+            * m_l_sq * m_lprime_sq * q6 * z_gamma_sq + 4 * m_l_4 * m_lprime_sq * q6 * z_gamma_sq
+            - k4 * q8 * z_gamma_sq + 2 * k2 * m_l_sq * q8 * z_gamma_sq - m_l_4 * q8 * z_gamma_sq
+            - 8 * k6 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w + 24 * k4 * m_B_sq * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_w - 24 * k2 * m_B_4 * m_l_sq * m_lprime_sq * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 8 * m_B_6 * m_l_sq * m_lprime_sq
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w -
+            2 * k6 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w +
+            6 * k4 * m_B_sq * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w - 6 * k2 * m_B_4 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_w + 2 * m_B_6 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_w - 8 * k4 * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_w + 16 * k2 * m_B_sq * m_l_sq * m_lprime_sq * q2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w - 8 * m_B_4 * m_l_sq * m_lprime_sq
+            * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w +
+            2 * k6 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w +
+            6 * k4 * m_B_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w -
+            10 * k4 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w -
+            4 * k2 * m_B_sq * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w - 2 * m_B_4 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_w + 6 * k2 * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w
+            + 2 * m_B_sq * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w -
+            2 * k4 * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w + 4 * k2
+            * m_l_sq * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w -
+            2 * m_l_4 * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w +
+            8 * k6 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma_sq * z_w - 24 * k4 * m_B_sq * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 24 * k2 * m_B_4 * m_l_sq * m_lprime_sq
+            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w -
+            8 * m_B_6 * m_l_sq * m_lprime_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma_sq * z_w - 2 * k6 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w + 6 * k4 * m_B_sq * m_l_sq * q2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w -
+            6 * k2 * m_B_4 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma_sq * z_w + 2 * m_B_6 * m_l_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w + 8 * k6 * m_lprime_sq * q2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w +
+            24 * k4 * m_B_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w - 24 * k4 * m_l_sq * m_lprime_sq * q2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w -
+            48 * k2 * m_B_sq * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w + 8 * m_B_4 * m_l_sq * m_lprime_sq * q2 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 24 * k2 * m_l_4
             * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq
-            * z_w + 24 * k4 * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_gamma_sq * z_w + 48 * k2 * m_B_sq * m_l_sq * m_lprime_sq * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 8 * m_B_4
-            * m_l_sq * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_gamma_sq * z_w - 24 * k2 * m_l_4 * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2
-            * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 8 * m_B_sq * m_l_4 * m_lprime_sq * q2
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * k6 * q4
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 6 * k4
-            * m_B_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w
-            - 6 * k4 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_gamma_sq * z_w - 12 * k2 * m_B_sq * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
-            * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * m_B_4 * m_l_sq * q4 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 6 * k2 * m_l_4 * q4
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * m_B_sq
-            * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w
-            + 8 * k4 * m_lprime_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_gamma_sq * z_w - 16 * k2 * m_l_sq * m_lprime_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 8 * m_l_4 * m_lprime_sq * q4 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 2 * k4 * q6 * sqrt(k4
-            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 4 * k2 * m_l_sq * q6
-            * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 2 * m_l_4
-            * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 4 * k10
-            * m_lprime_sq * z_w_sq + 8 * k8 * m_B_sq * m_lprime_sq * z_w_sq - 8 * k6 * m_B_4
-            * m_lprime_sq * z_w_sq + 8 * k4 * m_B_6 * m_lprime_sq * z_w_sq - 4 * k2 * m_B_8
-            * m_lprime_sq * z_w_sq + 12 * k8 * m_l_sq * m_lprime_sq * z_w_sq - 24 * k6 * m_B_sq
-            * m_l_sq * m_lprime_sq * z_w_sq + 16 * k4 * m_B_4 * m_l_sq * m_lprime_sq * z_w_sq - 8
-            * k2 * m_B_6 * m_l_sq * m_lprime_sq * z_w_sq + 4 * m_B_8 * m_l_sq * m_lprime_sq * z_w_sq
-            - 8 * k6 * m_l_4 * m_lprime_sq * z_w_sq + 16 * k4 * m_B_sq * m_l_4 * m_lprime_sq
-            * z_w_sq - 8 * k2 * m_B_4 * m_l_4 * m_lprime_sq * z_w_sq - k10 * q2 * z_w_sq + 2 * k8
-            * m_B_sq * q2 * z_w_sq - 2 * k6 * m_B_4 * q2 * z_w_sq + 2 * k4 * m_B_6 * q2 * z_w_sq
-            - k2 * m_B_8 * q2 * z_w_sq + 3 * k8 * m_l_sq * q2 * z_w_sq - 6 * k6 * m_B_sq * m_l_sq
-            * q2 * z_w_sq + 4 * k4 * m_B_4 * m_l_sq * q2 * z_w_sq - 2 * k2 * m_B_6 * m_l_sq * q2
-            * z_w_sq + m_B_8 * m_l_sq * q2 * z_w_sq - 2 * k6 * m_l_4 * q2 * z_w_sq + 4 * k4 * m_B_sq
-            * m_l_4 * q2 * z_w_sq - 2 * k2 * m_B_4 * m_l_4 * q2 * z_w_sq + 8 * k8 * m_lprime_sq
-            * q2 * z_w_sq - 8 * k6 * m_B_sq * m_lprime_sq * q2 * z_w_sq - 8 * k4 * m_B_4
-            * m_lprime_sq * q2 * z_w_sq + 8 * k2 * m_B_6 * m_lprime_sq * q2 * z_w_sq - 8 * k6
-            * m_l_sq * m_lprime_sq * q2 * z_w_sq + 8 * k4 * m_B_sq * m_l_sq * m_lprime_sq * q2
-            * z_w_sq + 8 * k2 * m_B_4 * m_l_sq * m_lprime_sq * q2 * z_w_sq - 8 * m_B_6 * m_l_sq
-            * m_lprime_sq * q2 * z_w_sq + 3 * k8 * q4 * z_w_sq + 4 * k6 * m_B_sq * q4 * z_w_sq + 7
-            * k4 * m_B_4 * q4 * z_w_sq + 2 * k2 * m_B_6 * q4 * z_w_sq - 12 * k6 * m_l_sq * q4
-            * z_w_sq - 10 * k4 * m_B_sq * m_l_sq * q4 * z_w_sq - 8 * k2 * m_B_4 * m_l_sq * q4
-            * z_w_sq - 2 * m_B_6 * m_l_sq * q4 * z_w_sq + 9 * k4 * m_l_4 * q4 * z_w_sq + 6 * k2
-            * m_B_sq * m_l_4 * q4 * z_w_sq + m_B_4 * m_l_4 * q4 * z_w_sq - 4 * k6 * m_lprime_sq * q4
-            * z_w_sq + 8 * k4 * m_B_sq * m_lprime_sq * q4 * z_w_sq - 4 * k2 * m_B_4 * m_lprime_sq
-            * q4 * z_w_sq + 4 * k4 * m_l_sq * m_lprime_sq * q4 * z_w_sq - 8 * k2 * m_B_sq * m_l_sq
-            * m_lprime_sq * q4 * z_w_sq + 4 * m_B_4 * m_l_sq * m_lprime_sq * q4 * z_w_sq - 3 * k6
-            * q6 * z_w_sq - 4 * k4 * m_B_sq * q6 * z_w_sq - k2 * m_B_4 * q6 * z_w_sq + 9 * k4
-            * m_l_sq * q6 * z_w_sq + 6 * k2 * m_B_sq * m_l_sq * q6 * z_w_sq + m_B_4 * m_l_sq * q6
-            * z_w_sq - 6 * k2 * m_l_4 * q6 * z_w_sq - 2 * m_B_sq * m_l_4 * q6 * z_w_sq + k4 * q8
-            * z_w_sq - 2 * k2 * m_l_sq * q8 * z_w_sq + m_l_4 * q8 * z_w_sq + 4 * k10 * m_lprime_sq
-            * z_gamma_sq * z_w_sq - 8 * k8 * m_B_sq * m_lprime_sq * z_gamma_sq * z_w_sq + 8 * k6
-            * m_B_4 * m_lprime_sq * z_gamma_sq * z_w_sq - 8 * k4 * m_B_6 * m_lprime_sq * z_gamma_sq
-            * z_w_sq + 4 * k2 * m_B_8 * m_lprime_sq * z_gamma_sq * z_w_sq - 12 * k8 * m_l_sq
-            * m_lprime_sq * z_gamma_sq * z_w_sq + 24 * k6 * m_B_sq * m_l_sq * m_lprime_sq
-            * z_gamma_sq * z_w_sq - 16 * k4 * m_B_4 * m_l_sq * m_lprime_sq * z_gamma_sq * z_w_sq + 8
-            * k2 * m_B_6 * m_l_sq * m_lprime_sq * z_gamma_sq * z_w_sq - 4 * m_B_8 * m_l_sq
-            * m_lprime_sq * z_gamma_sq * z_w_sq + 8 * k6 * m_l_4 * m_lprime_sq * z_gamma_sq * z_w_sq
-            - 16 * k4 * m_B_sq * m_l_4 * m_lprime_sq * z_gamma_sq * z_w_sq + 8 * k2 * m_B_4 * m_l_4
-            * m_lprime_sq * z_gamma_sq * z_w_sq - k10 * q2 * z_gamma_sq * z_w_sq + 2 * k8 * m_B_sq
-            * q2 * z_gamma_sq * z_w_sq - 2 * k6 * m_B_4 * q2 * z_gamma_sq * z_w_sq + 2 * k4 * m_B_6
-            * q2 * z_gamma_sq * z_w_sq - k2 * m_B_8 * q2 * z_gamma_sq * z_w_sq + 3 * k8 * m_l_sq
-            * q2 * z_gamma_sq * z_w_sq - 6 * k6 * m_B_sq * m_l_sq * q2 * z_gamma_sq * z_w_sq + 4
-            * k4 * m_B_4 * m_l_sq * q2 * z_gamma_sq * z_w_sq - 2 * k2 * m_B_6 * m_l_sq * q2
-            * z_gamma_sq * z_w_sq + m_B_8 * m_l_sq * q2 * z_gamma_sq * z_w_sq - 2 * k6 * m_l_4 * q2
-            * z_gamma_sq * z_w_sq + 4 * k4 * m_B_sq * m_l_4 * q2 * z_gamma_sq * z_w_sq - 2 * k2
-            * m_B_4 * m_l_4 * q2 * z_gamma_sq * z_w_sq - 4 * k8 * m_lprime_sq * q2 * z_gamma_sq
-            * z_w_sq + 32 * k6 * m_B_sq * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + 44 * k4 * m_B_4
+            * z_w + 8 * m_B_sq * m_l_4 * m_lprime_sq * q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w - 2 * k6 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w - 6 * k4 * m_B_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 6 * k4 * m_l_sq * q4 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 12 * k2 * m_B_sq
+            * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w -
+            2 * m_B_4 * m_l_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            * z_gamma_sq * z_w - 6 * k2 * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w - 2 * m_B_sq * m_l_4 * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w - 8 * k4 * m_lprime_sq * q4 * sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w + 16 * k2 * m_l_sq
+            * m_lprime_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_gamma_sq
+            * z_w - 8 * m_l_4 * m_lprime_sq * q4 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w + 2 * k4 * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
+            + q2)) * z_gamma_sq * z_w - 4 * k2 * m_l_sq * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) * z_gamma_sq * z_w + 2 * m_l_4 * q6 * sqrt(k4 + m_B_sq_q2_diff2 - 2
+            * k2 * (m_B_sq + q2)) * z_gamma_sq * z_w - 4 * k10 * m_lprime_sq * z_w_sq + 8 * k8
+            * m_B_sq * m_lprime_sq * z_w_sq - 8 * k6 * m_B_4 * m_lprime_sq * z_w_sq + 8 * k4 * m_B_6
+            * m_lprime_sq * z_w_sq - 4 * k2 * m_B_8 * m_lprime_sq * z_w_sq + 12 * k8 * m_l_sq
+            * m_lprime_sq * z_w_sq - 24 * k6 * m_B_sq * m_l_sq * m_lprime_sq * z_w_sq + 16 * k4
+            * m_B_4 * m_l_sq * m_lprime_sq * z_w_sq - 8 * k2 * m_B_6 * m_l_sq * m_lprime_sq * z_w_sq
+            + 4 * m_B_8 * m_l_sq * m_lprime_sq * z_w_sq - 8 * k6 * m_l_4 * m_lprime_sq * z_w_sq + 16
+            * k4 * m_B_sq * m_l_4 * m_lprime_sq * z_w_sq - 8 * k2 * m_B_4 * m_l_4 * m_lprime_sq
+            * z_w_sq - k10 * q2 * z_w_sq + 2 * k8 * m_B_sq * q2 * z_w_sq - 2 * k6 * m_B_4 * q2
+            * z_w_sq + 2 * k4 * m_B_6 * q2 * z_w_sq - k2 * m_B_8 * q2 * z_w_sq + 3 * k8 * m_l_sq
+            * q2 * z_w_sq - 6 * k6 * m_B_sq * m_l_sq * q2 * z_w_sq + 4 * k4 * m_B_4 * m_l_sq * q2
+            * z_w_sq - 2 * k2 * m_B_6 * m_l_sq * q2 * z_w_sq + m_B_8 * m_l_sq * q2 * z_w_sq - 2 * k6
+            * m_l_4 * q2 * z_w_sq + 4 * k4 * m_B_sq * m_l_4 * q2 * z_w_sq - 2 * k2 * m_B_4 * m_l_4
+            * q2 * z_w_sq + 8 * k8 * m_lprime_sq * q2 * z_w_sq - 8 * k6 * m_B_sq * m_lprime_sq * q2
+            * z_w_sq - 8 * k4 * m_B_4 * m_lprime_sq * q2 * z_w_sq + 8 * k2 * m_B_6 * m_lprime_sq
+            * q2 * z_w_sq - 8 * k6 * m_l_sq * m_lprime_sq * q2 * z_w_sq + 8 * k4 * m_B_sq * m_l_sq
+            * m_lprime_sq * q2 * z_w_sq + 8 * k2 * m_B_4 * m_l_sq * m_lprime_sq * q2 * z_w_sq - 8
+            * m_B_6 * m_l_sq * m_lprime_sq * q2 * z_w_sq + 3 * k8 * q4 * z_w_sq + 4 * k6 * m_B_sq
+            * q4 * z_w_sq + 7 * k4 * m_B_4 * q4 * z_w_sq + 2 * k2 * m_B_6 * q4 * z_w_sq - 12 * k6
+            * m_l_sq * q4 * z_w_sq - 10 * k4 * m_B_sq * m_l_sq * q4 * z_w_sq -
+            8 * k2 * m_B_4 * m_l_sq * q4 * z_w_sq - 2 * m_B_6 * m_l_sq * q4 * z_w_sq + 9 * k4
+            * m_l_4 * q4 * z_w_sq + 6 * k2 * m_B_sq * m_l_4 * q4 * z_w_sq + m_B_4 * m_l_4 * q4
+            * z_w_sq - 4 * k6 * m_lprime_sq * q4 * z_w_sq + 8 * k4 * m_B_sq * m_lprime_sq * q4
+            * z_w_sq - 4 * k2 * m_B_4 * m_lprime_sq * q4 * z_w_sq + 4 * k4 * m_l_sq * m_lprime_sq
+            * q4 * z_w_sq - 8 * k2 * m_B_sq * m_l_sq * m_lprime_sq * q4 * z_w_sq +
+            4 * m_B_4 * m_l_sq * m_lprime_sq * q4 * z_w_sq - 3 * k6 * q6 * z_w_sq - 4 * k4 * m_B_sq
+            * q6 * z_w_sq - k2 * m_B_4 * q6 * z_w_sq + 9 * k4 * m_l_sq * q6 * z_w_sq + 6 * k2
+            * m_B_sq * m_l_sq * q6 * z_w_sq + m_B_4 * m_l_sq * q6 * z_w_sq - 6 * k2 * m_l_4 * q6
+            * z_w_sq - 2 * m_B_sq * m_l_4 * q6 * z_w_sq + k4 * q8 * z_w_sq - 2 * k2 * m_l_sq * q8
+            * z_w_sq + m_l_4 * q8 * z_w_sq + 4 * k10 * m_lprime_sq * z_gamma_sq * z_w_sq - 8 * k8
+            * m_B_sq * m_lprime_sq * z_gamma_sq * z_w_sq + 8 * k6 * m_B_4 * m_lprime_sq * z_gamma_sq
+            * z_w_sq - 8 * k4 * m_B_6 * m_lprime_sq * z_gamma_sq * z_w_sq + 4 * k2 * m_B_8
+            * m_lprime_sq * z_gamma_sq * z_w_sq - 12 * k8 * m_l_sq * m_lprime_sq * z_gamma_sq
+            * z_w_sq + 24 * k6 * m_B_sq * m_l_sq * m_lprime_sq * z_gamma_sq * z_w_sq - 16 * k4
+            * m_B_4 * m_l_sq * m_lprime_sq * z_gamma_sq * z_w_sq + 8 * k2 * m_B_6 * m_l_sq
+            * m_lprime_sq * z_gamma_sq * z_w_sq - 4 * m_B_8 * m_l_sq * m_lprime_sq * z_gamma_sq
+            * z_w_sq + 8 * k6 * m_l_4 * m_lprime_sq * z_gamma_sq * z_w_sq - 16 * k4 * m_B_sq
+            * m_l_4 * m_lprime_sq * z_gamma_sq * z_w_sq + 8 * k2 * m_B_4 * m_l_4 * m_lprime_sq
+            * z_gamma_sq * z_w_sq - k10 * q2 * z_gamma_sq * z_w_sq + 2 * k8 * m_B_sq * q2
+            * z_gamma_sq * z_w_sq - 2 * k6 * m_B_4 * q2 * z_gamma_sq * z_w_sq + 2 * k4 * m_B_6 * q2
+            * z_gamma_sq * z_w_sq - k2 * m_B_8 * q2 * z_gamma_sq * z_w_sq + 3 * k8 * m_l_sq * q2
+            * z_gamma_sq * z_w_sq - 6 * k6 * m_B_sq * m_l_sq * q2 * z_gamma_sq * z_w_sq + 4 * k4
+            * m_B_4 * m_l_sq * q2 * z_gamma_sq * z_w_sq - 2 * k2 * m_B_6 * m_l_sq * q2 * z_gamma_sq
+            * z_w_sq + m_B_8 * m_l_sq * q2 * z_gamma_sq * z_w_sq - 2 * k6 * m_l_4 * q2 * z_gamma_sq
+            * z_w_sq + 4 * k4 * m_B_sq * m_l_4 * q2 * z_gamma_sq * z_w_sq - 2 * k2 * m_B_4 * m_l_4
+            * q2 * z_gamma_sq * z_w_sq - 4 * k8 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq +
+            32 * k6 * m_B_sq * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + 44 * k4 * m_B_4
             * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 8 * k2 * m_B_6 * m_lprime_sq * q2
             * z_gamma_sq * z_w_sq - 32 * k6 * m_l_sq * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 56
             * k4 * m_B_sq * m_l_sq * m_lprime_sq * q2 * z_gamma_sq * z_w_sq - 48 * k2 * m_B_4
             * m_l_sq * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + 8 * m_B_6 * m_l_sq * m_lprime_sq
-            * q2 * z_gamma_sq * z_w_sq + 36 * k4 * m_l_4 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq
-            + 24 * k2 * m_B_sq * m_l_4 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + 4 * m_B_4 * m_l_4
-            * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + k8 * q4 * z_gamma_sq * z_w_sq - 8 * k6
-            * m_B_sq * q4 * z_gamma_sq * z_w_sq - 11 * k4 * m_B_4 * q4 * z_gamma_sq * z_w_sq + 2
-            * k2 * m_B_6 * q4 * z_gamma_sq * z_w_sq + 8 * k6 * m_l_sq * q4 * z_gamma_sq * z_w_sq
+            * q2 * z_gamma_sq * z_w_sq + 36 * k4 * m_l_4 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq +
+            24 * k2 * m_B_sq * m_l_4 * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + 4 * m_B_4 * m_l_4
+            * m_lprime_sq * q2 * z_gamma_sq * z_w_sq + k8 * q4 * z_gamma_sq * z_w_sq -
+            8 * k6 * m_B_sq * q4 * z_gamma_sq * z_w_sq - 11 * k4 * m_B_4 * q4 * z_gamma_sq * z_w_sq
+            + 2 * k2 * m_B_6 * q4 * z_gamma_sq * z_w_sq + 8 * k6 * m_l_sq * q4 * z_gamma_sq * z_w_sq
             + 14 * k4 * m_B_sq * m_l_sq * q4 * z_gamma_sq * z_w_sq + 12 * k2 * m_B_4 * m_l_sq * q4
             * z_gamma_sq * z_w_sq - 2 * m_B_6 * m_l_sq * q4 * z_gamma_sq * z_w_sq - 9 * k4 * m_l_4
-            * q4 * z_gamma_sq * z_w_sq - 6 * k2 * m_B_sq * m_l_4 * q4 * z_gamma_sq * z_w_sq - m_B_4
-            * m_l_4 * q4 * z_gamma_sq * z_w_sq - 4 * k6 * m_lprime_sq * q4 * z_gamma_sq * z_w_sq
-            - 32 * k4 * m_B_sq * m_lprime_sq * q4 * z_gamma_sq * z_w_sq + 4 * k2 * m_B_4
+            * q4 * z_gamma_sq * z_w_sq - 6 * k2 * m_B_sq * m_l_4 * q4 * z_gamma_sq * z_w_sq -
+            m_B_4 * m_l_4 * q4 * z_gamma_sq * z_w_sq - 4 * k6 * m_lprime_sq * q4 * z_gamma_sq
+            * z_w_sq - 32 * k4 * m_B_sq * m_lprime_sq * q4 * z_gamma_sq * z_w_sq + 4 * k2 * m_B_4
             * m_lprime_sq * q4 * z_gamma_sq * z_w_sq + 28 * k4 * m_l_sq * m_lprime_sq * q4
             * z_gamma_sq * z_w_sq + 40 * k2 * m_B_sq * m_l_sq * m_lprime_sq * q4 * z_gamma_sq
-            * z_w_sq - 4 * m_B_4 * m_l_sq * m_lprime_sq * q4 * z_gamma_sq * z_w_sq - 24 * k2
-            * m_l_4 * m_lprime_sq * q4 * z_gamma_sq * z_w_sq - 8 * m_B_sq * m_l_4 * m_lprime_sq * q4
+            * z_w_sq - 4 * m_B_4 * m_l_sq * m_lprime_sq * q4 * z_gamma_sq * z_w_sq - 24 * k2 * m_l_4
+            * m_lprime_sq * q4 * z_gamma_sq * z_w_sq - 8 * m_B_sq * m_l_4 * m_lprime_sq * q4
             * z_gamma_sq * z_w_sq + k6 * q6 * z_gamma_sq * z_w_sq + 8 * k4 * m_B_sq * q6
             * z_gamma_sq * z_w_sq - k2 * m_B_4 * q6 * z_gamma_sq * z_w_sq - 7 * k4 * m_l_sq * q6
             * z_gamma_sq * z_w_sq - 10 * k2 * m_B_sq * m_l_sq * q6 * z_gamma_sq * z_w_sq + m_B_4
-            * m_l_sq * q6 * z_gamma_sq * z_w_sq + 6 * k2 * m_l_4 * q6 * z_gamma_sq * z_w_sq + 2
-            * m_B_sq * m_l_4 * q6 * z_gamma_sq * z_w_sq + 4 * k4 * m_lprime_sq * q6 * z_gamma_sq
+            * m_l_sq * q6 * z_gamma_sq * z_w_sq + 6 * k2 * m_l_4 * q6 * z_gamma_sq * z_w_sq +
+            2 * m_B_sq * m_l_4 * q6 * z_gamma_sq * z_w_sq + 4 * k4 * m_lprime_sq * q6 * z_gamma_sq
             * z_w_sq - 8 * k2 * m_l_sq * m_lprime_sq * q6 * z_gamma_sq * z_w_sq + 4 * m_l_4
             * m_lprime_sq * q6 * z_gamma_sq * z_w_sq - k4 * q8 * z_gamma_sq * z_w_sq + 2 * k2
-            * m_l_sq * q8 * z_gamma_sq * z_w_sq - m_l_4 * q8 * z_gamma_sq * z_w_sq + 2 * sqrt(k2)
-            * (k2 - m_B_sq) * sqrt(q2) * (- 4 * m_lprime_sq + q2) * z_gamma * sqrt(1 - z_gamma_sq)
-            * sqrt(1 - z_w_sq) * (- (k6 * z_w) - m_l_sq * (- 3 * m_B_sq + 2 * m_l_sq + q2)
-            * (- sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + m_B_sq * z_w - q2 * z_w) + k4
-            * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 4 * m_B_sq * z_w + 7 * m_l_sq
-            * z_w + 2 * q2 * z_w) + k2 * (- (m_l_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq
-            + q2))) - q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 3 * m_B_4 * z_w - 6
-            * m_l_4 * z_w - 4 * m_l_sq * q2 * z_w - q4 * z_w + m_B_sq * (sqrt(k4 + m_B_sq_q2_diff2
-            - 2 * k2 * (m_B_sq + q2)) + 6 * m_l_sq * z_w + 4 * q2 * z_w))) * cos(phi) + 2 * k2
-            * m_B_sq_k2_diff2 * (k2 - m_l_sq) * (m_B_sq - m_l_sq) * (4 * m_lprime_sq - q2) * (- 1
-            + z_gamma_sq) * (- 1 + z_w_sq) * cos(2 * phi))) / (m_B_sq_k2_diff2 * power_of<2>(k4
-            + m_l_sq * (- m_B_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)
-            - k2 * (m_B_sq - m_l_sq + q2 + sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
-            * z_w)));
+            * m_l_sq * q8 * z_gamma_sq * z_w_sq - m_l_4 * q8 * z_gamma_sq * z_w_sq - 2 * sqrt(k2)
+            * (k2 - m_B_sq) * sqrt(q2) * (-4 * m_lprime_sq + q2) * z_gamma * sqrt(1 - z_gamma_sq)
+            * sqrt(1 - z_w_sq) * (k6 * z_w + k4 * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2)) + 4 * m_B_sq * z_w - 7 * m_l_sq * z_w - 2 * q2 * z_w) + m_l_sq * (-3
+            * m_B_sq + 2 * m_l_sq + q2) * (sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2))
+            + m_B_sq * z_w - q2 * z_w) + k2 * (-(m_l_sq * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2
+            * (m_B_sq + q2))) - q2 * sqrt(k4 + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) + 3
+            * m_B_4 * z_w + 6 * m_l_4 * z_w + 4 * m_l_sq * q2 * z_w + q4 * z_w + m_B_sq * (sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) - 6 * m_l_sq * z_w - 4 * q2 * z_w)))
+            * cos(phi) + 2 * k2 * m_B_sq_k2_diff2 * (k2 - m_l_sq) * (m_B_sq - m_l_sq) * (4
+            * m_lprime_sq - q2) * (-1 + z_gamma_sq) * (-1 + z_w_sq) * cos(2 * phi)))
+            /(m_B_sq_k2_diff2 * power_of<2>(k4 - m_l_sq * (m_B_sq - q2 + sqrt(k4 + m_B_sq_q2_diff2
+            - 2 * k2 * (m_B_sq + q2)) * z_w) + k2 * (-m_B_sq + m_l_sq - q2 + sqrt(k4
+            + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
 
             return prefactor * (f11 * norm(F_1) + f22 * norm(F_2) + f33 * norm(F_3)
                 + f44 * norm(F_4) + f2c1Re * real(conj(F_2) * F_1) + f3c1Re * real(conj(F_3) * F_1)
@@ -771,26 +767,26 @@ namespace eos
             * q2 + q4)) / (3. * k4 * m_B_sq);
             const double g24 = (- 128 * (k2 - m_l_sq) * M_PI * q2 * (2 * m_lprime_sq + q2) * sqrt(k4
             - 2 * k2 * m_B_sq + m_B_4 - 2 * k2 * q2 - 2 * m_B_sq * q2 + q4)) / (3. * m_B_sq);
-            const double g15 = (64 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (2 * m_l_sq_k2_diff2
+            const double g15 = -(64 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * (2 * m_l_sq_k2_diff2
             * sqrt(k4 - 2 * k2 * m_B_sq + m_B_4 - 2 * k2 * q2 - 2 * m_B_sq * q2 + q4) - (4 * k2
             * power_of<2>(- k2 + m_B_sq) * (- k2 + m_B_sq - 2 * m_l_sq - q2) * log((4 * k2
             * power_of<2>(- k2 + m_B_sq) * m_l_sq + 4 * k2 * (k2 - m_l_sq) * (m_B_sq - m_l_sq) * q2)
             / power_of<2>((k2 + m_l_sq) * (- k2 + m_B_sq - q2) + 2 * k2 * q2))) / sqrt(k4 - 2 * k2
             * m_B_sq + m_B_4 - 2 * k2 * q2 - 2 * m_B_sq * q2 + q4))) / (3. * m_B * (- k2 + m_B_sq)
             * (k2 - m_l_sq));
-            const double g25 = (64 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2) * (m_l_sq_k2_diff2
+            const double g25 = -(64 * m_l_sq * M_PI * q2 * (2 * m_lprime_sq + q2) * (m_l_sq_k2_diff2
             * sqrt(k4 - 2 * k2 * m_B_sq + m_B_4 - 2 * k2 * q2 - 2 * m_B_sq * q2 + q4) + (4 * k2
             * (- k2 + m_B_sq) * (3 * k2 * (- k2 + m_B_sq) + m_l_sq_k2_diff2) * log((4 * k2
             * power_of<2>(- k2 + m_B_sq) * m_l_sq + 4 * k2 * (k2 - m_l_sq) * (m_B_sq - m_l_sq) * q2)
             / power_of<2>((k2 + m_l_sq) * (- k2 + m_B_sq - q2) + 2 * k2 * q2))) / sqrt(k4 - 2 * k2
             * m_B_sq + m_B_4 - 2 * k2 * q2 - 2 * m_B_sq * q2 + q4))) / (3. * k2 * m_B
             * (- k2 + m_B_sq) * (k2 - m_l_sq));
-            const double g35 = (256 * m_l_sq * (k2 * (- k2 + m_B_sq) + (k2 - m_l_sq)
+            const double g35 = -(256 * m_l_sq * (k2 * (- k2 + m_B_sq) + (k2 - m_l_sq)
             * (k2 + m_l_sq)) * M_PI * q2 * (2 * m_lprime_sq + q2) * log((4 * k2 * power_of<2>(- k2
             + m_B_sq) * m_l_sq + 4 * k2 * (k2 - m_l_sq) * (m_B_sq - m_l_sq) * q2) / power_of<2>((k2
             + m_l_sq) * (- k2 + m_B_sq - q2) + 2 * k2 * q2))) / (3. * m_B * (k2 - m_l_sq) * sqrt(k4
             - 2 * k2 * m_B_sq + m_B_4 - 2 * k2 * q2 - 2 * m_B_sq * q2 + q4));
-            const double g45 = (256 * k2 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * ((- k2 + m_B_sq)
+            const double g45 = -(256 * k2 * m_l_sq * M_PI * (2 * m_lprime_sq + q2) * ((- k2 + m_B_sq)
             * (- k2 + m_B_sq - q2) - 2 * (k2 - m_l_sq) * q2) * log((4 * k2 * power_of<2>(- k2
             + m_B_sq) * m_l_sq + 4 * k2 * (k2 - m_l_sq) * (m_B_sq - m_l_sq) * q2) / power_of<2>((k2
             + m_l_sq) * (- k2 + m_B_sq - q2) + 2 * k2 * q2))) / (3. * m_B * (k2 - m_l_sq) * sqrt(k4
@@ -833,7 +829,7 @@ namespace eos
             std::array<double, 2> x_max{ q2_max, k2_max };
 
             return integrate(integrand, x_min, x_max, config_cubature)
-                / ((hbar/tau_B)* integrated_branching_ratio(q2_min, q2_max, k2_min, k2_max));
+                / ((hbar/tau_B) * integrated_branching_ratio(q2_min, q2_max, k2_min, k2_max));
         }
     };
 
@@ -887,7 +883,6 @@ namespace eos
     {
         return _imp->integrated_forward_backward_asymmetry(q2_min, q2_max, k2_min, k2_max);
     }
-
 
     const std::string
     BToThreeLeptonsNeutrino::description = "\
