@@ -56,7 +56,7 @@ class ClassMethodTests(unittest.TestCase):
         values = np.array([4.123, 3.141])
 
         input_output_cases = [
-            {'dirty': np.float64(1.61), 'clean': float(1.61)},
+            {'dirty': np.double(1.61), 'clean': float(1.61)},
             {'dirty': np.str_('Gaussian'), 'clean': str("Gaussian")},
             {
              'dirty': {'type': types[0], 'mean': values[0]}, # Simplified manual contraint with numpy types
