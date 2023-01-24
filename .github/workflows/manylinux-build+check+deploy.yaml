@@ -29,7 +29,7 @@ jobs:
             image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}:d2985227627dda5f91c9e0588cbd42caa17611a4
         steps:
             - name: Checkout git repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
               with:
                 path: _src/
 
@@ -73,13 +73,13 @@ jobs:
                 popd
 
             - name: Upload configured source as artifact
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v3
               with:
                 name: eos-source-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _src
 
             - name: Upload build as artifact
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v3
               with:
                 name: eos-build-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _build
@@ -99,13 +99,13 @@ jobs:
             image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}:d2985227627dda5f91c9e0588cbd42caa17611a4
         steps:
             - name: Download configured source as artifact
-              uses: actions/download-artifact@v1
+              uses: actions/download-artifact@v3
               with:
                 name: eos-source-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _src
 
             - name: Download build as artifact
-              uses: actions/download-artifact@v1
+              uses: actions/download-artifact@v3
               with:
                 name: eos-build-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _build
@@ -139,13 +139,13 @@ jobs:
             image: eoshep/manylinux2014-${{ matrix.cfg.pysuffix }}:d2985227627dda5f91c9e0588cbd42caa17611a4
         steps:
             - name: Download configured source as artifact
-              uses: actions/download-artifact@v1
+              uses: actions/download-artifact@v3
               with:
                 name: eos-source-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _src
 
             - name: Download build as artifact
-              uses: actions/download-artifact@v1
+              uses: actions/download-artifact@v3
               with:
                 name: eos-build-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _build
@@ -210,7 +210,7 @@ jobs:
                 popd
 
             - name: Upload wheel as artifact
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v3
               with:
                 name: eos-wheels-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
                 path: _pypi/dist
