@@ -601,11 +601,18 @@ class Plotter:
 
             if 'area' in self.band:
                 self.plotter.ax.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
-            if 'outer' in self.band:
-                self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
+                if 'outer' in self.band:
+                    self.plotter.ax.plot(xvalues, ovalues_lower,                     alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
+                    self.plotter.ax.plot(xvalues, ovalues_higher,                    alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
+                if 'median' in self.band:
+                    self.plotter.ax.plot(xvalues, ovalues_central,                   alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
+            elif 'outer' in self.band:
+                self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color, ls=self.style, label=self.label, lw=self.lw)
                 self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
-            if 'median' in self.band:
-                self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
+                if 'median' in self.band:
+                    self.plotter.ax.plot(xvalues, ovalues_central,                   alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
+            elif 'median' in self.band:
+                self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color, ls=self.style, label=self.label, lw=self.lw)
 
 
     class UncertaintyBinned(BasePlot):
