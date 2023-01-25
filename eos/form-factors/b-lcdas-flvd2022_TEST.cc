@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2022 Danny van Dyk
- * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
 
 #include <test/test.hh>
 #include <eos/form-factors/b-lcdas-flvd2022.hh>
+#include <eos/observable.hh>
 
 #include <numeric>
 
@@ -84,6 +85,31 @@ class FLvD2022Test :
                 {
                     TEST_CHECK_NEARLY_EQUAL(*it, res_evolved[std::distance(c, it)], 1e-7);
                 }
+            }
+
+            // pseudo-observables tildephi and the derivative
+            {
+                Parameters p = Parameters::Defaults();
+                std::array<double, 9> parameters = { 1.0, -2.0, 3.0, -4.0, 5.0, -6.0, 7.0, -8.0, 9.0 };
+
+                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::omega_0@FLvD2022"] = 0.3;
+                for (size_t k = 0; k < parameters.size(); k++)
+                {
+                    p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = parameters[k];
+                }
+
+                Kinematics k = Kinematics({ { "tau", 0.4 }, {"mu", p["B_u::mu_0@FLvD2022"]} });
+                Options o { };
+
+                auto phitilde = Observable::make("B::phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(phitilde->evaluate(), 11.558610659381285, 1e-12);
+
+                auto t_d_dt_phitilde = Observable::make("B::tau*d_dtau_phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(t_d_dt_phitilde->evaluate(), -13.812451430614884, 1e-12);
+
+                auto t2_d2_d2t_phitilde = Observable::make("B::tau^2*d2_d2tau_phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(t2_d2_d2t_phitilde->evaluate(), 20.320360292444562, 1e-12);
             }
         }
 } b_lcdas_flvd2022_test;

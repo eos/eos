@@ -28,6 +28,7 @@
 
 #include <cmath>
 #include <limits>
+#include <numeric>
 
 #include <gsl/gsl_sf_gamma.h>
 
@@ -220,6 +221,89 @@ namespace eos
             throw InternalError("Function not yet implemented");
         }
 
+        double
+        FLvD2022::phitilde_plus(const double & tau, const double & mu) const
+        {
+            const double x = tau * omega_0;
+
+            const double p1 = (x - 1.0) / (x + 1.0);
+            const double p2 = p1 * p1;
+            const double p3 = p2 * p1;
+            const double p4 = p3 * p1;
+            const double p5 = p4 * p1;
+            const double p6 = p5 * p1;
+            const double p7 = p6 * p1;
+            const double p8 = p7 * p1;
+
+            const Weights c = {
+                1.0, p1, p2, p3, p4, p5, p6, p7, p8
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            return 1.0 / power_of<2>(1.0 + x) * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
+
+        double
+        FLvD2022::t_d_dt_phitilde_plus(const double & tau, const double & mu) const
+        {
+            const double x = tau * omega_0;
+
+            const double p1 = (x - 1.0) / (x + 1.0);
+            const double p2 = p1 * p1;
+            const double p3 = p2 * p1;
+            const double p4 = p3 * p1;
+            const double p5 = p4 * p1;
+            const double p6 = p5 * p1;
+            const double p7 = p6 * p1;
+            const double p8 = p7 * p1;
+
+            const Weights c = {
+                1.0 - x,
+                (2.0 - x) * p1,
+                (3.0 - x) * p2,
+                (4.0 - x) * p3,
+                (5.0 - x) * p4,
+                (6.0 - x) * p5,
+                (7.0 - x) * p6,
+                (8.0 - x) * p7,
+                (9.0 - x) * p8
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            return 2.0 * x / power_of<3>(x + 1.0) / (x - 1.0) * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
+
+        double
+        FLvD2022::t2_d2_d2t_phitilde_plus(const double & tau, const double & mu) const
+        {
+            const double x = tau * omega_0;
+
+            const double p1 = (x - 1.0) / (x + 1.0);
+            const double p2 = p1 * p1;
+            const double p3 = p2 * p1;
+            const double p4 = p3 * p1;
+            const double p5 = p4 * p1;
+            const double p6 = p5 * p1;
+            const double p7 = p6 * p1;
+            const double p8 = p7 * p1;
+
+            const double xminus2 = (1.0 - x) * (1.0 - x);
+
+            const Weights c = {
+                3 * xminus2,
+                p1 * (6 - 6 * x + 3 * xminus2),
+                p2 * (8 + 2 * (4 - 6 * x) + 3 * xminus2),
+                p3 * (18 + 3 * (4 - 6 * x) + 3 * xminus2),
+                p4 * (32 + 4 * (4 - 6 * x) + 3 * xminus2),
+                p5 * (50 + 5 * (4 - 6 * x) + 3 * xminus2),
+                p6 * (72 + 6 * (4 - 6 * x) + 3 * xminus2),
+                p7 * (98 + 7 * (4 - 6 * x) + 3 * xminus2),
+                p8 * (128 + 8 * (4 - 6 * x) + 3 * xminus2)
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            return 2.0 * power_of<2>(x) / power_of<2>(x - 1.0) / power_of<4>(x + 1.0) * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
 
         /* Next-to-leading twist two-particle LCDAs */
 
@@ -411,14 +495,14 @@ namespace eos
         const std::set<ReferenceName>
         FLvD2022::references
         {
-            "DBG:2013A"_rn
+            "FLvD:2022A"_rn
         };
 
         const std::vector<OptionSpecification>
         FLvD2022::options
         {
             { "q",       { "u", "s" },           "u"        },
-            { "g-minus", { "zero", "WW-limit" }, "WW-limit" }
+            { "gminus", { "zero", "WW-limit" }, "WW-limit" }
         };
 
         std::vector<OptionSpecification>::const_iterator
