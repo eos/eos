@@ -36,8 +36,8 @@ namespace eos
     namespace b_lcdas
     {
         FLvD2022::FLvD2022(const Parameters & p, const Options & o) :
-            opt_q(o, "q", { "u", "s" }, "u"),
-            opt_gminus(o, "gminus", { "zero", "WW-limit" }, "WW-limit"),
+            opt_q(o, options, "q"),
+            opt_gminus(o, options, "gminus"),
             switch_gminus(1.0),
             mu_0(p[parameter("mu_0")], *this),
             omega_0(p[parameter("omega_0")], *this),
@@ -399,6 +399,31 @@ namespace eos
             Diagnostics results;
             // add diagnostic results here
             return results;
+        }
+
+        const std::set<ReferenceName>
+        FLvD2022::references
+        {
+            "DBG:2013A"_rn
+        };
+
+        const std::vector<OptionSpecification>
+        FLvD2022::options
+        {
+            { "q",       { "u", "s" },           "u"        },
+            { "g-minus", { "zero", "WW-limit" }, "WW-limit" }
+        };
+
+        std::vector<OptionSpecification>::const_iterator
+        FLvD2022::begin_options()
+        {
+            return options.cbegin();
+        }
+
+        std::vector<OptionSpecification>::const_iterator
+        FLvD2022::end_options()
+        {
+            return options.cend();
         }
     }
 
