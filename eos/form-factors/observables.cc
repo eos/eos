@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019, 2020 Danny van Dyk
+ * Copyright (c) 2019-2022 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +24,7 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/b-lcdas-flvd2022.hh>
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
@@ -1739,6 +1740,34 @@ namespace eos
     }
     // }}}
 
+    // B-meson LCDAs
+    // {{{
+
+    ObservableGroup
+    make_b_meson_lcdas_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"($B$-meson LCDAs)",
+            R"(Pseudo observables arising in the description of $B$-meson Light-Cone Distribution Amplitudes (LCDAs).)",
+            {
+                make_observable("B::phitilde_+(-i*tau,mu)@FLvD2022", R"(\tilde\phi_{B,+}(-i \tau, \mu))",
+                        Unit::None(),
+                        &b_lcdas::FLvD2022::phitilde_plus,
+                        std::make_tuple("tau", "mu")),
+                make_observable("B::tau*d_dtau_phitilde_+(-i*tau,mu)@FLvD2022", R"(-i \tau \, \tilde\phi^{\prime}_{B,+}(-i \tau, \mu))",
+                        Unit::None(),
+                        &b_lcdas::FLvD2022::t_d_dt_phitilde_plus,
+                        std::make_tuple("tau", "mu")),
+                make_observable("B::tau^2*d2_d2tau_phitilde_+(-i*tau,mu)@FLvD2022", R"(-\tau^2 \, \tilde\phi^{\prime\prime}_{B,+}(-i \tau, \mu))",
+                        Unit::None(),
+                        &b_lcdas::FLvD2022::t2_d2_d2t_phitilde_plus,
+                        std::make_tuple("tau", "mu")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
     ObservableSection
     make_form_factors_section()
     {
@@ -1782,6 +1811,9 @@ namespace eos
 
                 // unitarity bounds
                 make_unitarity_bounds_group(),
+
+                // B-meson LCDAs
+                make_b_meson_lcdas_group(),
             }
         );
 
