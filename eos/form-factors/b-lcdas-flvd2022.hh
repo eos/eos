@@ -26,6 +26,7 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/reference-name.hh>
 
 #include <array>
 #include <string>
@@ -42,8 +43,8 @@ namespace eos
             public BMesonLCDAs
         {
             private:
-                SwitchOption opt_q;
-                SwitchOption opt_gminus;
+                SpecifiedOption opt_q;
+                SpecifiedOption opt_gminus;
                 double switch_gminus;
 
                 UsedParameter mu_0;
@@ -51,6 +52,8 @@ namespace eos
                 std::array<UsedParameter, 9> a; // at the scale mu_0
 
                 std::string parameter(const char * _name) const;
+
+                static const std::vector<OptionSpecification> options;
 
             public:
                 FLvD2022(const Parameters & parameters, const Options & options);
@@ -142,6 +145,17 @@ namespace eos
 
                 /* Internal diagnostics */
                 virtual Diagnostics diagnostics() const final override;
+
+                /*!
+                * References used in the computation of our (pseudo)observables.
+                */
+                static const std::set<ReferenceName> references;
+
+                /*!
+                * Options used in the computation of our (pseudo)observables.
+                */
+                static std::vector<OptionSpecification>::const_iterator begin_options();
+                static std::vector<OptionSpecification>::const_iterator end_options();
         };
     }
 }
