@@ -158,11 +158,26 @@ namespace eos
             virtual double f_para_T(const double & s) const;
             virtual double f_long_T(const double & s) const;
 
+            // Saturations of the dispersive bounds
+            // J = 0
             double saturation_0p_v() const;
-            double saturation_1m_v() const;
             double saturation_0m_a() const;
+            // J = 1
+            double saturation_1m_v_0() const;
+            double saturation_1m_v_perp() const;
+            double saturation_1m_v_para() const;
+            double saturation_1m_v() const;
+            double saturation_1p_a_0() const;
+            double saturation_1p_a_perp() const;
+            double saturation_1p_a_para() const;
             double saturation_1p_a() const;
+            double saturation_1m_t_0() const;
+            double saturation_1m_t_perp() const;
+            double saturation_1m_t_para() const;
             double saturation_1m_t() const;
+            double saturation_1p_t5_0() const;
+            double saturation_1p_t5_perp() const;
+            double saturation_1p_t5_para() const;
             double saturation_1p_t5() const;
 
             Diagnostics diagnostics() const;
@@ -212,7 +227,7 @@ namespace eos
             // the ones used for the extraction of the coefficients of the z-expension
             UsedParameter m_B, m_P;
             UsedParameter m_R_0p, m_R_1m;
-            UsedParameter t0;
+            UsedParameter tp, t0;
 
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_0p_names;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
@@ -222,13 +237,9 @@ namespace eos
                 m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
                 m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
+                tp(UsedParameter(p[std::string(Process_::label) + "::tp@BFW2010"], *this)),
                 t0(UsedParameter(p[std::string(Process_::label) + "::t0@BFW2010"], *this))
             {
-            }
-
-            double tp() const
-            {
-                return power_of<2>(m_B + m_P);
             }
 
             double tm() const
@@ -259,16 +270,16 @@ namespace eos
 
             std::array<complex<double>, 6> orthonormal_polynomials(const complex<double> & z) const
             {
-                // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
-                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(2 * M_PI));
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
 
             std::array<complex<double>, 6> orthonormal_polynomials_derivatives(const complex<double> & z) const
             {
-                // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
-                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(2 * M_PI));
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set.derivatives(z);
             }
@@ -313,11 +324,26 @@ namespace eos
 
             virtual double f_plus_T(const double & s) const;
 
+            // Saturations of the dispersive bounds
+            // J = 0
             double saturation_0p_v() const;
-            double saturation_1m_v() const;
             double saturation_0m_a() const;
+            // J = 1
+            double saturation_1m_v_0() const;
+            double saturation_1m_v_perp() const;
+            double saturation_1m_v_para() const;
+            double saturation_1m_v() const;
+            double saturation_1p_a_0() const;
+            double saturation_1p_a_perp() const;
+            double saturation_1p_a_para() const;
             double saturation_1p_a() const;
+            double saturation_1m_t_0() const;
+            double saturation_1m_t_perp() const;
+            double saturation_1m_t_para() const;
             double saturation_1m_t() const;
+            double saturation_1p_t5_0() const;
+            double saturation_1p_t5_perp() const;
+            double saturation_1p_t5_para() const;
             double saturation_1p_t5() const;
 
             Diagnostics diagnostics() const;
