@@ -399,6 +399,13 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3, 4]
+      'B->K::tp@BFW2010' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{B\to K^*}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV'
       'B->K::t0@BFW2010' :
           central:  14.7
           min:      14.7
@@ -1373,7 +1380,7 @@ groups:
           max:     +1.8831160249369858
           latex:    '$\alpha_{T_{23},2}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
-      # form factor parameters for B_s->phi for [BFW:2010A] parametrization
+      # form factor parameters for B->K^* for [BFW:2010A] parametrization
       'B->K^*::a^%1%_%2%@BFW2010' :
           central:  0.
           min:     -1.0
