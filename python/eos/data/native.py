@@ -47,8 +47,8 @@ class Mode:
         self.pvalue = description['pvalue']
 
     @staticmethod
-    def create(path, parameters, mode, pvalue):
-        """ Write a new MarkovChain object to disk.
+    def create(path, parameters, mode, pvalue=None, gof=None):
+        """ Write a posterior's (local) mode to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
@@ -56,6 +56,10 @@ class Mode:
         :type parameters: list or iterable of eos.Parameter
         :param mode: The mode to be stored.
         :type mode: numpy.ndarray
+        :param pvalue: The global p-value of the mode (if available), or None.
+        :type pvalue: float or None
+        :param gof: The goodness-of-fit diagnostics of the mode (if available), or None.
+        :param gof: :class:`eos.GoodnessOfFit` or None
         """
         description = {}
         description['version'] = eos.__version__
@@ -66,7 +70,11 @@ class Mode:
             'max': p.max()
         } for p in parameters]
         description['mode'] = mode.tolist()
-        description['pvalue'] = pvalue
+        description['pvalue'] = float(pvalue) if pvalue is not None else None
+        description['gof'] = {
+            str(qn): { 'chi2': float(entry.chi2), 'dof': int(entry.dof) }
+            for (qn, entry) in gof
+        } if gof is not None else None
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
