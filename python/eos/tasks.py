@@ -177,7 +177,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     for n, e in gof:
         eos.info('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
 
-    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue)
+    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue=pvalue, gof=gof)
 
     return (bfp, gof)
 
