@@ -63,12 +63,6 @@ namespace eos
                 UsedParameter(p[_par_name("A0", 3)],  *this),
                 UsedParameter(p[_par_name("A0", 4)],  *this)
         },
-        _a_A1{  UsedParameter(p[_par_name("A1", 0)],  *this),
-                UsedParameter(p[_par_name("A1", 1)],  *this),
-                UsedParameter(p[_par_name("A1", 2)],  *this),
-                UsedParameter(p[_par_name("A1", 3)],  *this),
-                UsedParameter(p[_par_name("A1", 4)],  *this)
-        },
         _a_V{   UsedParameter(p[_par_name("V", 0)],   *this),
                 UsedParameter(p[_par_name("V", 1)],   *this),
                 UsedParameter(p[_par_name("V", 2)],   *this),
@@ -81,12 +75,6 @@ namespace eos
                 UsedParameter(p[_par_name("T1", 3)],  *this),
                 UsedParameter(p[_par_name("T1", 4)],  *this)
         },
-        _a_T23{ UsedParameter(p[_par_name("T23", 0)], *this),
-                UsedParameter(p[_par_name("T23", 1)], *this),
-                UsedParameter(p[_par_name("T23", 2)], *this),
-                UsedParameter(p[_par_name("T23", 3)], *this),
-                UsedParameter(p[_par_name("T23", 4)], *this)
-        },
         _a_A12{ UsedParameter(p[_par_name("A12", 1)], *this),
                 UsedParameter(p[_par_name("A12", 2)], *this),
                 UsedParameter(p[_par_name("A12", 3)], *this),
@@ -96,6 +84,16 @@ namespace eos
                 UsedParameter(p[_par_name("T2", 2)],  *this),
                 UsedParameter(p[_par_name("T2", 3)],  *this),
                 UsedParameter(p[_par_name("T2", 4)],  *this)
+        },
+        _a_A1{  UsedParameter(p[_par_name("A1", 1)],  *this),
+                UsedParameter(p[_par_name("A1", 2)],  *this),
+                UsedParameter(p[_par_name("A1", 3)],  *this),
+                UsedParameter(p[_par_name("A1", 4)],  *this)
+        },
+        _a_T23{ UsedParameter(p[_par_name("T23", 1)], *this),
+                UsedParameter(p[_par_name("T23", 2)], *this),
+                UsedParameter(p[_par_name("T23", 3)], *this),
+                UsedParameter(p[_par_name("T23", 4)], *this)
         },
         _traits(BFW2010FormFactorTraits<Process_, PToV>(p)),
         _mB(_traits.m_B),
@@ -134,7 +132,7 @@ namespace eos
 
         // set Q^2 to 0
         const double invt = 1 / ( 2.0 * (std::sqrt(threshold_tp) * std::sqrt(threshold_tp - t) + threshold_tp) - t); // simplification of -_traits.calc_z(t, threshold_tp, 0) / t
-        const double lambda_term = lambda(t, power_of<2>(_mB), power_of<2>(_mV)) / _traits.calc_z(t, threshold_tp, _traits.tm());
+        const double lambda_term = (kinematic_tp - t) * power_of<2>(std::sqrt(threshold_tp - t) + std::sqrt(threshold_tp - _traits.tm())); // simplification of lambda / z(t, threshold_tp, tm);
         const double sqrtjac = std::sqrt(4 * (1 + z) * (_traits.t0 - threshold_tp) / power_of<3>(z - 1)); // Abs[jacobian] = - jacobian
 
         return norm * sqrtjac * pow(lambda_term, 0.25 * m) * pow(invt, 0.5 * (p + n + 1.0));
@@ -226,6 +224,38 @@ namespace eos
 
     template <typename Process_>
     double
+    BFW2010FormFactors<Process_, PToV>::_a_A1_0() const
+    {
+        const double x_A1  = this->_phi_a_1( _traits.tm()) * 16.0 * _mB * _mV * _mV / (_mB + _mV) / (_mB * _mB - _mV * _mV - _traits.tm());
+        const double x_A12 = this->_phi_a_12(_traits.tm());
+        std::array<double, 5> a;
+        a[0] = x_A1 * this->_a_A12_0();
+        for (unsigned i = 1 ; i < a.size() ; ++i)
+        {
+            a[i] = x_A1 * this->_a_A12[i - 1] - x_A12 * this->_a_A1[i - 1];
+        }
+        const auto polynomials = _traits.orthonormal_polynomials_a(_traits.calc_z(_traits.tm(), _traits.tp_a, _traits.t0));
+        return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_A12);
+    }
+
+    template <typename Process_>
+    double
+    BFW2010FormFactors<Process_, PToV>::_a_T23_0() const
+    {
+        const double x_T23 = this->_phi_t_23(_traits.tm()) * (_mB + _mV) * (_mB * _mB + 3 * _mV * _mV - _traits.tm()) / 8.0 / _mB / _mV / _mV;
+        const double x_T2  = this->_phi_t_2( _traits.tm());
+        std::array<double, 5> a;
+        a[0] = x_T23 * this->_a_T2_0();
+        for (unsigned i = 1 ; i < a.size() ; ++i)
+        {
+            a[i] = x_T23 * this->_a_T2[i - 1] - x_T2 * this->_a_T23[i - 1];
+        }
+        const auto polynomials = _traits.orthonormal_polynomials_a(_traits.calc_z(_traits.tm(), _traits.tp_a, _traits.t0));
+        return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_T2);
+    }
+
+    template <typename Process_>
+    double
     BFW2010FormFactors<Process_, PToV>::v(const double & q2) const
     {
         std::array<double, 5> coefficients;
@@ -261,7 +291,8 @@ namespace eos
     BFW2010FormFactors<Process_, PToV>::a_1(const double & q2) const
     {
         std::array<double, 5> coefficients;
-        std::copy(_a_A1.begin(), _a_A1.end(), coefficients.begin());
+        coefficients[0] = _a_A1_0();
+        std::copy(_a_A1.begin(), _a_A1.end(), coefficients.begin() + 1);
         // resonances for 1^p
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
         const double phi          = _phi_a_1(q2);
@@ -327,7 +358,8 @@ namespace eos
     BFW2010FormFactors<Process_, PToV>::t_23(const double & q2) const
     {
         std::array<double, 5> coefficients;
-        std::copy(_a_T23.begin(), _a_T23.end(), coefficients.begin());
+        coefficients[0] = _a_T23_0();
+        std::copy(_a_T23.begin(), _a_T23.end(), coefficients.begin() + 1);
         // resonances for T (1^p state)
         const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
         const double phi          = _phi_t_23(q2);
@@ -521,7 +553,6 @@ namespace eos
             results.add({ _phi_t_23(-2.0),  "phi_t_23(z = z(q2 = -2.0))" });
             results.add({ _phi_t_23( 1.0),  "phi_t_23(z = z(q2 =  1.0))" });
             results.add({ _phi_t_23( 4.0),  "phi_t_23(z = z(q2 =  4.0))" });
-
         }
 
         return results;

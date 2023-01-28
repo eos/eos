@@ -107,9 +107,9 @@ namespace eos
     {
         private:
             // fit parametrization for P -> V according to [BFW:2010A]
-            std::array<UsedParameter, 5> _a_A0, _a_A1, _a_V, _a_T1, _a_T23;
-            // use constraint (B.6) in [BFW:2010A] to remove A_12(0)
-            std::array<UsedParameter, 4> _a_A12, _a_T2;
+            std::array<UsedParameter, 5> _a_A0, _a_V, _a_T1;
+            // use endpoint relations (see eq. (3.2) in [HLMW:2015A]) to remove parameters
+            std::array<UsedParameter, 4> _a_A12, _a_T2, _a_A1, _a_T23;
 
             const BFW2010FormFactorTraits<Process_, PToV> _traits;
 
@@ -131,6 +131,8 @@ namespace eos
             // End-point relations
             double _a_A12_0() const;
             double _a_T2_0() const;
+            double _a_A1_0() const;
+            double _a_T23_0() const;
 
         public:
             BFW2010FormFactors(const Parameters & p, const Options &);

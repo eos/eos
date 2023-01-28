@@ -3633,7 +3633,7 @@ groups:
   - title: 'Dispersive bounds in the OPE for b -> s currents'
     description: ''
     parameters:
-      # [BFW:2010A] using a reference masse mb = 4.2 GeV
+      # [BFW:2010A] using a reference mass mb = 4.2 GeV
       'b->s::chiOPE[0^+_V]' :
           central:  1.42e-02
           min:      1.42e-02
