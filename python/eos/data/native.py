@@ -18,6 +18,7 @@ import os
 import numpy as _np
 import pypmc
 import yaml
+import dynesty
 from scipy.special import erf
 from scipy.linalg import block_diag
 
@@ -526,7 +527,8 @@ class DynestyResults:
         f = os.path.join(path, 'dynesty_results.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Dynesty results file {} does not exist or is not a file'.format(f))
-        self.results = _np.load(f)
+        
+        self.results = dynesty.results.Results(_np.load(f, allow_pickle=True).item())
         self.samples = self.results.samples
         self.weights = _np.exp(self.results.logwt - self.results.logz[-1])
 
@@ -539,8 +541,8 @@ class DynestyResults:
         :type path: str
         :param parameters: Parameter descriptions as a 1D array of shape (N, ).
         :type parameters: list or iterable of eos.Parameter
-        :param mode: The results of a nested sampling run.
-        :type mode: dynesty.results.Results
+        :param results: The results of a nested sampling run.
+        :type results: dynesty.results.Results
         """
         description = {}
         description['version'] = eos.__version__
