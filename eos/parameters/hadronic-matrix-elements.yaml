@@ -4804,103 +4804,202 @@ groups:
           max:     +0.1
           latex:    '$\delta\mathcal{B}(b\to sc\bar{c})$'
           comments: 'Uncertainty of the normalized dispersive bound'
-      'B->K^*ccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
+      'B->K^*ccbar::%1%{alpha_%2%^perp}@GvDV2020' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to K^*c\bar{c}}$'
+          latex:   '$\mathrm{%1%}\, \alpha_{\perp,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
               - [ "0", "1", "2", "3", "4", "5" ]
-              - [ "perp", "para", "long"]
-      'B->K^*ccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->K^*ccbar::%1%{alpha_%2%^para}@GvDV2020' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B\to K^*c\bar{c}}(%2%)$'
-          matrix:
-              - [ "Re", "Im" ]
-              - [ "m7", "m5", "m3", "m1", "t0" ]
-              - [ "perp", "para", "long"]
-      'B->K^*ccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
-          central: 0
-          min:     0
-          max:     0
-          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B\to K^*c\bar{c}}(%2%)$'
-          matrix:
-              - [ "bs", "rg" ]
-              - [ "Jpsi", "psi2S" ]
-              - [ "perp", "para", "long"]
-      'B->K^*ccbar::Arg_Hhat_at_%1%_%2%@GRvDV2022' :
-          central: 0
-          min:     0
-          max:     0
-          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_\%2%^{B\to K^*c\bar{c}}(%1%)$'
-          matrix:
-              - [ "Jpsi", "psi2S" ]
-              - [ "perp_minus_long", "para_minus_long" ]
-      'B_s->phiccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
-          central: 0
-          min:     0
-          max:     0
-          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B_s\to \phi c\bar{c}}$'
+          latex:   '$\mathrm{%1%}\, \alpha_{\parallel,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
               - [ "0", "1", "2", "3", "4", "5" ]
-              - [ "perp", "para", "long"]
-      'B_s->phiccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->K^*ccbar::%1%{alpha_%2%^long}@GvDV2020' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B_s\to \phi c\bar{c}}(%2%)$'
+          latex:   '$\mathrm{%1%}\, \alpha_{0,%2%}^{B\to K^*c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
+      'B->K^*ccbar::%1%_Hhat_at_%2%_perp@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\perp^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
               - [ "m7", "m5", "m3", "m1", "t0" ]
-              - [ "perp", "para", "long"]
-      'B_s->phiccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->K^*ccbar::%1%_Hhat_at_%2%_para@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B_s\to \phi c\bar{c}}(%2%)$'
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\parallel^{B\to K^*c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+      'B->K^*ccbar::%1%_Hhat_at_%2%_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_0^{B\to K^*c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+      'B->K^*ccbar::A%1%_Hhat_at_%2%_perp@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\perp^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
-              - [ "perp", "para", "long"]
-      'B_s->phiccbar::Arg_Hhat_at_%1%_%2%@GRvDV2022' :
+      'B->K^*ccbar::A%1%_Hhat_at_%2%_para@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_\%2%^{B_s\to phic\bar{c}}(%1%)$'
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\parallel^{B\to K^*c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+      'B->K^*ccbar::A%1%_Hhat_at_%2%_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_0^{B\to K^*c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+      'B->K^*ccbar::Arg_Hhat_at_%1%_perp_minus_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\perp 0}^{B\to K^*c\bar{c}}(%1%)$'
           matrix:
               - [ "Jpsi", "psi2S" ]
-              - [ "perp_minus_long", "para_minus_long" ]
-      'B->Kccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
+      'B->K^*ccbar::Arg_Hhat_at_%1%_para_minus_long@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to Kc\bar{c}}$'
+          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\parallel 0}^{B\to K^*c\bar{c}}(%1%)$'
+          matrix:
+              - [ "Jpsi", "psi2S" ]
+      'B_s->phiccbar::%1%{alpha_%2%^perp}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\perp,%2%}^{B_s\to \phi c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
+      'B_s->phiccbar::%1%{alpha_%2%^para}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\parallel,%2%}^{B_s\to \phi c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
+      'B_s->phiccbar::%1%{alpha_%2%^long}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{0,%2%}^{B_s\to \phi c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
+      'B_s->phiccbar::%1%_Hhat_at_%2%_perp@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\perp^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+      'B_s->phiccbar::%1%_Hhat_at_%2%_para@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\parallel^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+      'B_s->phiccbar::%1%_Hhat_at_%2%_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_0^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "m7", "m5", "m3", "m1", "t0" ]
+      'B_s->phiccbar::A%1%_Hhat_at_%2%_perp@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\perp^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+      'B_s->phiccbar::A%1%_Hhat_at_%2%_para@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\parallel^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+      'B_s->phiccbar::A%1%_Hhat_at_%2%_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_0^{B_s\to \phi c\bar{c}}(%2%)$'
+          matrix:
+              - [ "bs", "rg" ]
+              - [ "Jpsi", "psi2S" ]
+      'B_s->phiccbar::Arg_Hhat_at_%1%_perp_minus_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\perp 0}^{B_s\to phic\bar{c}}(%1%)$'
+          matrix:
+              - [ "Jpsi", "psi2S" ]
+      'B_s->phiccbar::Arg_Hhat_at_%1%_para_minus_long@GRvDV2022' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\parallel 0}^{B_s\to phic\bar{c}}(%1%)$'
+          matrix:
+              - [ "Jpsi", "psi2S" ]
+      'B->Kccbar::%1%{alpha_%2%^plus}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{+,%2%}^{B\to Kc\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
               - [ "0", "1", "2", "3", "4", "5", "6" ]
-              - [ "plus" ]
-      'B->Kccbar::%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->Kccbar::%1%_Hhat_at_%2%_plus@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\%3%^{B\to Kc\bar{c}}(%2%)$'
+          latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_+^{B\to Kc\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
               - [ "m7", "m5", "m3", "m1", "t0" ]
-              - [ "plus" ]
-      'B->Kccbar::A%1%_Hhat_at_%2%_%3%@GRvDV2022' :
+      'B->Kccbar::A%1%_Hhat_at_%2%_plus@GRvDV2022' :
           central: 0
           min:     0
           max:     0
-          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\%3%^{B\to Kc\bar{c}}(%2%)$'
+          latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_+^{B\to Kc\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
-              - [ "plus" ]
   # }}}
 
   # Miscellaneous Form Factor Parameters
