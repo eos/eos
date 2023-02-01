@@ -112,6 +112,7 @@ jobs:
                 tar fx _build.tar
                 pushd _build
                 make install
+                make -C ../_src/doc/ doc-check
                 make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
                 if [[ -n ${EOS_RELEASE} ]] ; then
                     mv $(pwd)/doc/html $(pwd)/doc/${EOS_RELEASE}
