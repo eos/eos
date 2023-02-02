@@ -23,7 +23,7 @@ jobs:
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-20.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:ae4ca8649bf120510f83ff13b95ef2c0abc49e70
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:c3b826a70d729805258243fb5d95dbe5ae2fbd2f
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v3
@@ -89,7 +89,7 @@ jobs:
         name: Documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-20.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:ae4ca8649bf120510f83ff13b95ef2c0abc49e70
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:c3b826a70d729805258243fb5d95dbe5ae2fbd2f
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v3
@@ -138,7 +138,7 @@ jobs:
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-20.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:ae4ca8649bf120510f83ff13b95ef2c0abc49e70
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:c3b826a70d729805258243fb5d95dbe5ae2fbd2f
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v3
@@ -169,7 +169,7 @@ jobs:
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-20.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:ae4ca8649bf120510f83ff13b95ef2c0abc49e70
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:c3b826a70d729805258243fb5d95dbe5ae2fbd2f
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v3
@@ -210,7 +210,7 @@ jobs:
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-20.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:ae4ca8649bf120510f83ff13b95ef2c0abc49e70
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:c3b826a70d729805258243fb5d95dbe5ae2fbd2f
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v3
@@ -291,7 +291,7 @@ jobs:
         name: Deploy documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-20.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:ae4ca8649bf120510f83ff13b95ef2c0abc49e70
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:c3b826a70d729805258243fb5d95dbe5ae2fbd2f
         steps:
             - name: Create repository
               shell: bash
