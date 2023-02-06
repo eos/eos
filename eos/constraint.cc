@@ -860,6 +860,9 @@ namespace eos
             gsl_matrix * response = gsl_matrix_calloc(dim, dim);
             gsl_matrix_set_identity(response);
 
+            if (subdim_meas != response->size2)
+                throw InternalError("Constraint " + name.full() + ": number of predictions and number of columns in response matrix are not identical");
+
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
@@ -1175,17 +1178,24 @@ namespace eos
                     throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
             }
 
-            //If specified, these options allow to specify a subset of the measurements
+            // If specified, these options allow to specify a subset of the measurements
             unsigned begin = destringify<unsigned>(options.get("begin", "0"));
             unsigned end = destringify<unsigned>(options.get("end", stringify(dim_meas)));
 
             if (end > dim_meas)
-                throw InvalidOptionValueError("End of the measurements sub-sample: end", options.get("end", stringify(dim_meas)) , "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                throw InvalidOptionValueError("End of the measurements sub-sample: end", options.get("end", stringify(dim_meas)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
 
             if (begin >= end)
                 throw InvalidOptionValueError("First measurement of the sub-sample: begin", options.get("begin", "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
 
+            if ((nullptr != this->response) && (end != dim_meas))
+                throw InternalError("Response matrices and begin and end options are mutually incompatible.");
+
+            if ((nullptr != this->response) && (begin != 0))
+                throw InternalError("Response matrices and begin and end options are mutually incompatible.");
+
             unsigned subdim_meas = end - begin;
+
 
             // create GSL vector for the mean
             gsl_vector * means = gsl_vector_alloc(subdim_meas);
@@ -1197,21 +1207,32 @@ namespace eos
             gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance.get(), begin, begin, subdim_meas, subdim_meas);
             gsl_matrix_memcpy(covariance, &(covariance_subset.matrix));
 
-            // create GSL matrix for the response
-            gsl_matrix * response = gsl_matrix_calloc(subdim_meas, dim_pred);
             if (this->response)
             {
+                // create GSL matrix for the response
+                gsl_matrix * response = gsl_matrix_calloc(subdim_meas, dim_pred);
                 gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->response.get(), begin, 0, subdim_meas, dim_pred);
                 gsl_matrix_memcpy(response, &(covariance_subset.matrix));
+
+                auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
+
+                return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
             }
             else
             {
+                // extract the observables
+                std::vector<ObservablePtr>::const_iterator first_obs = observables.begin() + begin;
+                std::vector<ObservablePtr>::const_iterator last_obs  = observables.begin() + end;
+                std::vector<ObservablePtr> restricted_observables(first_obs, last_obs);
+
+                // create GSL matrix for the response
+                gsl_matrix * response = gsl_matrix_calloc(subdim_meas, subdim_meas);
                 gsl_matrix_set_identity(response);
+
+                auto block = LogLikelihoodBlock::MultivariateGaussian(cache, restricted_observables, means, covariance, response, number_of_observations);
+
+                return Constraint(name, std::vector<ObservablePtr>(restricted_observables.begin(), restricted_observables.end()), { block });
             }
-
-            auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, subdim_meas);
-
-            return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
 
         virtual std::ostream & insert(std::ostream & os) const
