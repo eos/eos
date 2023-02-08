@@ -107,11 +107,15 @@ class AnalysisFile:
             raise RuntimeError('Cannot create observables for unknown set of predictions: \'{}\''.format(_prediction))
 
         prediction = self.predictions[_prediction]
-        
+
         if 'global_options' in prediction:
             options = eos.Options(**prediction['global_options'])
         else:
             options = eos.Options()
+
+        if 'fixed_parameters' in prediction:
+            for (p, v) in prediction['fixed_parameters']:
+                parameters.set(p, v)
 
         observables = [eos.Observable.make(
             o['name'],
