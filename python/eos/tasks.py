@@ -374,7 +374,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :param end: The index beyond the last sample to use for the predictions. Defaults to -1.
     :type begin: int
     '''
-    _parameters = eos.Parameters()
+    _parameters = analysis_file.analysis(posterior).parameters
     observables = analysis_file.observables(prediction, _parameters)
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
