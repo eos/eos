@@ -527,8 +527,11 @@ class DynestyResults:
         f = os.path.join(path, 'dynesty_results.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Dynesty results file {} does not exist or is not a file'.format(f))
-        
-        self.results = dynesty.results.Results(_np.load(f, allow_pickle=True).item())
+
+        res_dict = _np.load(f, allow_pickle=True).item()
+        if "blob" in res_dict:
+            res_dict.pop('blob')
+        self.results = dynesty.results.Results(res_dict)
         self.samples = self.results.samples
         self.weights = _np.exp(self.results.logwt - self.results.logz[-1])
 
