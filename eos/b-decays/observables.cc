@@ -485,13 +485,13 @@ namespace eos
                         Unit::InverseGeV2(),
                         &BToVectorLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
-                        Options{ { "U", "u" }, {"I", "0"} }),
+                        Options{ { "U", "u" }, { "q", "u" }, {"I", "0"} }),
 
                 make_observable("B->omegalnu::BR", R"(\mathcal{B}(B\to\omega\ell^-\bar\nu))",
                         Unit::None(),
                         &BToVectorLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "U", "u" }, {"I", "0"}  }),
+                        Options{ { "U", "u" }, { "q", "u" }, {"I", "0"}  }),
             }
         );
 
