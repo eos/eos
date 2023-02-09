@@ -367,7 +367,17 @@ namespace eos
     {
         return 0.0;  //  TODO
     }
+    std::vector<OptionSpecification>::const_iterator
+    BGL1997FormFactors<BToDstar>::begin_options()
+    {
+        return _options.cbegin();
+    }
 
+    std::vector<OptionSpecification>::const_iterator
+    BGL1997FormFactors<BToDstar>::end_options()
+    {
+        return _options.cend();
+    }
 
     std::string
     BGL1997FormFactors<BToD>::_par_name(const std::string & ff_name)
@@ -446,6 +456,18 @@ namespace eos
     BGL1997FormFactors<BToD>::f_plus_T(const double & /*s*/) const
     {
         return 0.0; //  TODO
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BGL1997FormFactors<BToD>::begin_options()
+    {
+        return _options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BGL1997FormFactors<BToD>::end_options()
+    {
+        return _options.cend();
     }
 }
 
