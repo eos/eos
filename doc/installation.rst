@@ -65,7 +65,7 @@ You might need to install the ``curl`` program first, if not already installed. 
 
 ::
 
-  pip3 install --user --upgrade h5py matplotlib networkx numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade dynesty h5py matplotlib networkx numpy pypmc pyyaml scipy
 
 
 *******
@@ -96,7 +96,7 @@ We recommend installing the most up-to-date Python package from the Python Packa
 
 ::
 
-  pip3 install --user --upgrade h5py matplotlib numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade dynesty h5py matplotlib numpy pypmc pyyaml scipy
 
 
 .. _installation-from-source:
@@ -148,6 +148,9 @@ python3
 BOOST
   the BOOST C++ library ``boost-python`` for interfacing Python and C++;
 
+dynesty
+  The Python Dynamic Nested Sampling package for estimating Bayesian posteriors and evidences (needed for some functionality);
+
 h5py
   the Python interface to HDF5;
 
@@ -193,13 +196,13 @@ by running the following commands:
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 
-We recommend that you install ``pypmc`` and ``wilson``, and upgrade ``matplotlib`` to the latest available version, by running the following command:
+We recommend that you install ``dynesty``, ``pypmc`` and ``wilson``, and upgrade ``matplotlib`` to the latest available version, by running the following command:
 
 ::
 
   # for the 'pip3' command
   apt-get install python3-pip
-  pip3 install --user pypmc wilson
+  pip3 install --user dynesty pypmc wilson
   pip3 install --user --upgrade matplotlib
 
 
