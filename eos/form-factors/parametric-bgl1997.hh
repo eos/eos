@@ -26,6 +26,7 @@
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
 #include <eos/models/model.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -63,6 +64,8 @@ namespace eos
 
             static std::string _par_name(const std::string & ff_name);
 
+            static const std::vector<OptionSpecification> _options;
+
         public:
             BGL1997FormFactors(const Parameters &, const Options &);
             ~BGL1997FormFactors();
@@ -96,6 +99,17 @@ namespace eos
             virtual double f_perp_T(const double & s) const;
             virtual double f_para_T(const double & s) const;
             virtual double f_long_T(const double & s) const;
+
+            /*!
+             * References used in the computation of our (pseudo)observables.
+             */
+            static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our (pseudo)observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
 
@@ -113,6 +127,8 @@ namespace eos
 
             static std::string _par_name(const std::string & ff_name);
 
+            static const std::vector<OptionSpecification> _options;
+
         public:
             BGL1997FormFactors(const Parameters &, const Options &);
             ~BGL1997FormFactors();
@@ -124,6 +140,17 @@ namespace eos
             virtual double f_t(const double & s) const;
 
             virtual double f_plus_T(const double & s) const;
+
+            /*!
+             * References used in the computation of our (pseudo)observables.
+             */
+            static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our (pseudo)observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 }
 
