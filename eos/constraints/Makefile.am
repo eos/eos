@@ -24,7 +24,8 @@ CONSTRAINTS_FILES = \
 	dispersive-bounds.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
-	miscellaneous.yaml
+	miscellaneous.yaml \
+	wet-constraints.yaml
 
 EXTRA_DIST = $(CONSTRAINTS_FILES)
 
