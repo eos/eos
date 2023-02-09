@@ -27,6 +27,7 @@
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
+#include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
@@ -978,6 +979,22 @@ namespace eos
                         /
                         <<B->D^*::a_0[V_4]@HQE>>
                         )"),
+
+                make_observable("B->D^*::a_0[F_1]@BGL", R"(a_0^{F_1})",
+                        Unit::None(),
+                        &BGL1997FormFactors<BToDstar>::a_F1_0),
+
+                make_observable("B->D^*::a_0[F_2]@BGL", R"(a_0^{F_2})",
+                        Unit::None(),
+                        &BGL1997FormFactors<BToDstar>::a_F2_0),
+
+                make_observable("B->D^*::a_0[T_2]@BGL", R"(a_0^{T_2})",
+                        Unit::None(),
+                        &BGL1997FormFactors<BToDstar>::a_T2_0),
+
+                make_observable("B->D^*::a_0[T_23]@BGL", R"(a_0^{T_{23}})",
+                        Unit::None(),
+                        &BGL1997FormFactors<BToDstar>::a_T23_0),
             }
         );
 
