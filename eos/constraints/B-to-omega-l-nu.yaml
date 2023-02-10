@@ -22,11 +22,11 @@ B^+->omegalnu::BR@BPR:2021A:
       - {q2_min: 10, q2_max: 12}
       - {q2_min: 12, q2_max: 21}
     options:
-      - {q: u, l: e}
-      - {q: u, l: e}
-      - {q: u, l: e}
-      - {q: u, l: e}
-      - {q: u, l: e}
+      - {l: e}
+      - {l: e}
+      - {l: e}
+      - {l: e}
+      - {l: e}
     means: [1.506e-5, 1.815e-5, 1.471e-5, 1.715e-5, 4.981e-5]
     sigma-stat-hi: [0, 0, 0, 0, 0]
     sigma-stat-lo: [0, 0, 0, 0, 0]
