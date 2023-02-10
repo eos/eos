@@ -192,7 +192,7 @@ class LoggingTests(unittest.TestCase):
         "Computation of specific observable should log error"
         import eos
 
-        with self.assertLogs('EOS', level='ERROR') as cm:
+        with self.assertLogs('EOS', level='WARNING') as cm:
             eos.Observable.make(
                     "B->pilnu::BR",
                     eos.Parameters.Defaults(),
@@ -200,7 +200,7 @@ class LoggingTests(unittest.TestCase):
                     eos.Options(**{'U': 'c'})) # will  be overwritten by the
                                                # implementation of the observable
             self.assertEqual(cm.output,
-                    [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'U' to value 'u', overriding user-provided value 'c'"""])
+                    [r"""WARNING:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'U' to value 'u', overriding user-provided value 'c'"""])
 
 
 # Run legacy test cases
