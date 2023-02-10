@@ -329,7 +329,7 @@ namespace eos
                     const auto & key = std::get<0>(fo);
                     if (options.has(key))
                     {
-                        Log::instance()->message("[ConcreteCacheableObservableEntry.make]", ll_error)
+                        Log::instance()->message("[ConcreteCacheableObservableEntry.make]", ll_warning)
                             << "Observable '" << _name << "' forces option key '" << key << "' to value '" << _forced_options[key] << "', overriding user-provided value '" << options[key] << "'";
                     }
                 }
