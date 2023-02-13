@@ -340,6 +340,61 @@ class Plotter:
                 return ([], [])
 
 
+    class Graph(BasePlot):
+        """Plots the graph of a function"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting a Function Graph
+        -------------------------
+
+        The graph of a function can be easily plotted by providing the coordinates (x, f(x)) of the function.
+        The coordinates are provided using a ``data`` object containing:
+
+         * ``xvalues`` (array-like of *float*) -- The values on the x axis at which the function has been evaluated.
+         * ``yvalues`` (array-like of *float*) -- The values oof the function at the points provided by ``xvalues``.
+
+        Example:
+
+        .. code-block::
+
+           xvalues = np.linspace(0, 5, 20)
+           plot_args = {
+               'plot': {
+                   'x': { 'label': r'$q^2$' },
+                   'y': { 'label': r'$q^4$' }
+               },
+               'contents': [
+                   {
+                       'label': r'$\\ell=\\mu$',
+                       'type': 'graph',
+                       'data': { 'yvalues': xvalues**2, 'xvalues': xvalues },
+                       'range': [0, 5],
+                   },
+               ]
+           }
+        """)
+
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if 'data' not in item:
+                raise KeyError('No data was provided')
+
+            self.xvalues = np.array(item['data']['xvalues'])
+            self.yvalues = np.array(item['data']['yvalues'])
+            self.xrange = item['range'] if 'range' in item else None
+
+        def plot(self):
+            if self.xrange:
+                xvalues = np.ma.masked_outside(self.xvalues, float(self.xrange[0]), float(self.xrange[1]))
+                yvalues = np.ma.masked_array(self.yvalues, mask=xvalues.mask)
+            else:
+                xvalues = self.xvalues
+                yvalues = self.yvalues
+
+            self.plotter.ax.plot(xvalues, yvalues, alpha=self.alpha, color=self.color, ls=self.style, label=self.label, lw=self.lw)
+
+
     class Observable(BasePlot):
         """Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter"""
 
@@ -1884,6 +1939,7 @@ class Plotter:
         'constraint2D':          Constraint2D,
         'constraint-overview':   ConstraintOverview,
         #'contours2D':            Contours2D,
+        'graph':                 Graph,
         'expression':            Expression,
         'errorbar':              ErrorBar,
         'histogram':             Histogram1D,
