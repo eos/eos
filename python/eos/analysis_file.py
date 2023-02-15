@@ -114,7 +114,7 @@ class AnalysisFile:
             options = eos.Options()
 
         if 'fixed_parameters' in prediction:
-            for (p, v) in prediction['fixed_parameters']:
+            for (p, v) in prediction['fixed_parameters'].items():
                 parameters.set(p, v)
 
         observables = [eos.Observable.make(
