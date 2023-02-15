@@ -224,6 +224,18 @@ namespace eos
         return _imp->diagnostics();
     }
 
+    const std::string
+    BToGammaLeptonNeutrino::description = "\
+The decay B_u -> gamma l nu, where l=e, mu, tau is a lepton.";
+
+    const std::string
+    BToGammaLeptonNeutrino::kinematics_description_Egamma = "\
+The energy of the photon in the B meson rest frame. The approach of Ref. [BBJW:2018A] is valid in the region Egamma > 1.5 GeV.";
+
+    const std::string
+    BToGammaLeptonNeutrino::kinematics_description_c_theta_l = "\
+The cosine of the polar angle theta_l between the charged lepton and the direction opposite to the photon in the l-nubar rest frame.";
+
     const std::set<ReferenceName>
     BToGammaLeptonNeutrino::references
     {
