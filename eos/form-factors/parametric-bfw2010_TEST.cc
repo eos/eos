@@ -58,10 +58,6 @@ class BToKBFW2010FormFactorsTest :
                 BFW2010FormFactors<BToK, PToP> ff(p, Options{ });
 
                 Diagnostics diagnostics = ff.diagnostics();
-                for (const auto & d : diagnostics)
-                {
-                    std::cout << d.description << ": " << d.value << std::endl;
-                }
                 static const std::vector<std::pair<double, double>> reference
                 {
                     std::make_pair(  0.144596,  eps), // z(q2 =  0)
@@ -197,14 +193,12 @@ class BToKstarBFW2010FormFactorsTest :
 
                 // Optimized t0 = (mB + mK*) * (sqrt(mB) - sqrt(mK*))^2
                 p["B->K^*::t0@BFW2010"]       =  11.271194912;
+                p["B->K^*::tp_v@BFW2010"]     =  30.261001;
+                p["B->K^*::tp_a@BFW2010"]     =  31.764496;
 
                 BFW2010FormFactors<BToKstar, PToV> ff(p, Options{ });
 
                 Diagnostics diagnostics = ff.diagnostics();
-                for (const auto & d : diagnostics)
-                {
-                    std::cout << d.description << ": " << d.value << std::endl;
-                }
                 static const std::vector<std::pair<double, double>> reference
                 {
                     std::make_pair(  0.109126,  eps), // z_a(q2 =  0)

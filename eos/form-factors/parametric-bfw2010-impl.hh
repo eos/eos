@@ -191,9 +191,9 @@ namespace eos
     double
     BFW2010FormFactors<Process_, PToV>::_a_A12_0() const
     {
-        const double x_A12 = this->_traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) * this->_phi_a_12(0.0)
+        const double x_A12 = _phi_a_12(0.0) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0)
                              * (power_of<2>(_mB) - power_of<2>(_mV)) / 8.0 / _mB / _mV;
-        const double x_A0  = this->_traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_0m)) * this->_phi_a_0(0.0);
+        const double x_A0  = _phi_a_0(0.0) * (power_of<2>(_traits.m_R_0m) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_0m)) : 1.0);
         std::array<double, 5> a;
         a[0] = x_A12 * this->_a_A0[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
@@ -208,8 +208,8 @@ namespace eos
     double
     BFW2010FormFactors<Process_, PToV>::_a_T2_0() const
     {
-        const double x_T2 = this->_traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) * this->_phi_t_2(0.0);
-        const double x_T1 = this->_traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) * this->_phi_t_1(0.0);
+        const double x_T2 = _phi_t_2(0.0) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
+        const double x_T1 = _phi_t_1(0.0) * (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const auto polynomials_T2 = _traits.orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
         const auto polynomials_T1 = _traits.orthonormal_polynomials_v(_traits.calc_z(0.0, _traits.tp_v, _traits.t0));
 
@@ -226,8 +226,8 @@ namespace eos
     double
     BFW2010FormFactors<Process_, PToV>::_a_A1_0() const
     {
-        const double x_A1  = this->_phi_a_1( _traits.tm()) * 16.0 * _mB * _mV * _mV / (_mB + _mV) / (_mB * _mB - _mV * _mV - _traits.tm());
-        const double x_A12 = this->_phi_a_12(_traits.tm());
+        const double x_A1  = _phi_a_1( _traits.tm()) * 16.0 * _mB * _mV * _mV / (_mB + _mV) / (_mB * _mB - _mV * _mV - _traits.tm());
+        const double x_A12 = _phi_a_12(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_A1 * this->_a_A12_0();
         for (unsigned i = 1 ; i < a.size() ; ++i)
@@ -242,8 +242,8 @@ namespace eos
     double
     BFW2010FormFactors<Process_, PToV>::_a_T23_0() const
     {
-        const double x_T23 = this->_phi_t_23(_traits.tm()) * (_mB + _mV) * (_mB * _mB + 3 * _mV * _mV - _traits.tm()) / 8.0 / _mB / _mV / _mV;
-        const double x_T2  = this->_phi_t_2( _traits.tm());
+        const double x_T23 = _phi_t_23(_traits.tm()) * (_mB + _mV) * (_mB * _mB + 3 * _mV * _mV - _traits.tm()) / 8.0 / _mB / _mV / _mV;
+        const double x_T2  = _phi_t_2( _traits.tm());
         std::array<double, 5> a;
         a[0] = x_T23 * this->_a_T2_0();
         for (unsigned i = 1 ; i < a.size() ; ++i)
@@ -261,7 +261,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_V.begin(), _a_V.end(), coefficients.begin());
         // resonances for 1^m
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
+        const double blaschke     = (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_v(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -277,7 +277,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_A0.begin(), _a_A0.end(), coefficients.begin());
         // resonances for 0^m
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_0m));
+        const double blaschke     = (power_of<2>(_traits.m_R_0m) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_0m)) : 1.0);
         const double phi          = _phi_a_0(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
@@ -294,7 +294,7 @@ namespace eos
         coefficients[0] = _a_A1_0();
         std::copy(_a_A1.begin(), _a_A1.end(), coefficients.begin() + 1);
         // resonances for 1^p
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_a_1(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
@@ -311,7 +311,7 @@ namespace eos
         coefficients[0] = _a_A12_0();
         std::copy(_a_A12.begin(), _a_A12.end(), coefficients.begin() + 1);
         // resonances for 1^p
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_a_12(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
@@ -327,7 +327,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_T1.begin(), _a_T1.end(), coefficients.begin());
         // resonances for T (1^m state)
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
+        const double blaschke     = (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_t_1(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -344,7 +344,7 @@ namespace eos
         coefficients[0] = _a_T2_0();
         std::copy(_a_T2.begin(), _a_T2.end(), coefficients.begin() + 1);
         // resonances for T5 (1^p state)
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_t_2(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
@@ -361,7 +361,7 @@ namespace eos
         coefficients[0] = _a_T23_0();
         std::copy(_a_T23.begin(), _a_T23.end(), coefficients.begin() + 1);
         // resonances for T (1^p state)
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_t_23(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
@@ -776,8 +776,8 @@ namespace eos
     double
     BFW2010FormFactors<Process_, PToP>::_a_f0_0() const
     {
-        const double x_f0 = this->_traits.calc_z(0.0, _traits.tp, power_of<2>(_traits.m_R_0p)) * this->_phi_f_0(0.0);
-        const double x_fp = this->_traits.calc_z(0.0, _traits.tp, power_of<2>(_traits.m_R_1m)) * this->_phi_f_p(0.0);
+        const double x_f0 = _phi_f_0(0.0) * (power_of<2>(_traits.m_R_0p) < _traits.tp ? _traits.calc_z(0.0, _traits.tp, power_of<2>(_traits.m_R_0p)) : 1.0);
+        const double x_fp = _phi_f_p(0.0) * (power_of<2>(_traits.m_R_1m) < _traits.tp ? _traits.calc_z(0.0, _traits.tp, power_of<2>(_traits.m_R_1m)) : 1.0);
         std::array<double, 5> a;
         a[0] = x_f0 * this->_a_fp[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
@@ -795,7 +795,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_fp.begin(), _a_fp.end(), coefficients.begin());
         // resonances for 1^m
-        const double blaschke     = _traits.calc_z(q2, _traits.tp, power_of<2>(_traits.m_R_1m));
+        const double blaschke = (power_of<2>(_traits.m_R_1m) < _traits.tp ? _traits.calc_z(q2, _traits.tp, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_f_p(q2);
         const double z            = _traits.calc_z(q2, _traits.tp, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials(z);
@@ -812,7 +812,7 @@ namespace eos
         coefficients[0] = _a_f0_0();
         std::copy(_a_f0.begin(), _a_f0.end(), coefficients.begin() + 1);
         // resonances for 0^p
-        const double blaschke     = _traits.calc_z(q2, _traits.tp, power_of<2>(_traits.m_R_0p));
+        const double blaschke = (power_of<2>(_traits.m_R_0p) < _traits.tp ? _traits.calc_z(q2, _traits.tp, power_of<2>(_traits.m_R_0p)) : 1.0);
         const double phi          = _phi_f_0(q2);
         const double z            = _traits.calc_z(q2, _traits.tp, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials(z);
@@ -828,7 +828,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_ft.begin(), _a_ft.end(), coefficients.begin());
         // resonances for 1^m
-        const double blaschke     = _traits.calc_z(q2, _traits.tp, power_of<2>(_traits.m_R_1m));
+        const double blaschke = (power_of<2>(_traits.m_R_1m) < _traits.tp ? _traits.calc_z(q2, _traits.tp, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_f_t(q2);
         const double z            = _traits.calc_z(q2, _traits.tp, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials(z);
