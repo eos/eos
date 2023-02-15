@@ -21,11 +21,12 @@
 #include <eos/signal-pdf.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
-#include <eos/b-decays/b-to-3l-nu.hh>
+#include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
+#include <eos/b-decays/b-to-3l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
@@ -245,6 +246,19 @@ namespace eos
                     std::make_tuple(
                         "q2_min",
                         "q2_max"
+                    )
+                ),
+
+            make_signal_pdf("B->gammalnu::d^2Gamma/dEgamma/dcos(theta_l)",
+                    Options{ },
+                    &BToGammaLeptonNeutrino::fully_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "Egamma", 0.1, 2.64, BToGammaLeptonNeutrino::kinematics_description_Egamma },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToGammaLeptonNeutrino::kinematics_description_c_theta_l}
+                    ),
+                    &BToGammaLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "E_gamma_min"
                     )
                 ),
 

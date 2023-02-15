@@ -44,6 +44,13 @@ namespace eos
             double integrated_decay_width(const double & E_gamma_min) const;
 
             /*!
+             * Descriptions of the process and its kinematics.
+             */
+            static const std::string description;
+            static const std::string kinematics_description_Egamma;
+            static const std::string kinematics_description_c_theta_l;
+
+            /*!
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
