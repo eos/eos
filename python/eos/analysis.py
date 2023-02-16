@@ -596,7 +596,7 @@ class Analysis:
         return np.array([prior.inverse_cdf(p) for prior, p in zip(self._log_posterior.log_priors(), u)])
 
 
-    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None):
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10):
         """
         Return samples of the parameters.
 
@@ -610,12 +610,14 @@ class Analysis:
         :type dlogz: float, optional
         :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
         :type maxiter: int, optional
+        :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
+        :type seed: {None, int, array_like[ints], SeedSequence}, optional
 
         .. note::
            This method requires the dynesty python module, which can be installed from PyPI.
         """
         import dynesty
-        sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive)
+        sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)))
         sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter)
         return sampler.results
 
