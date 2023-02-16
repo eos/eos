@@ -635,6 +635,53 @@ class ConstraintDeserializationTest :
             }
             // }}}
 
+            // {{{ MultivariateGaussian (begin and end options)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian\n"
+                    "observables:\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "  - mass::u\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "means: [4.3, 1.1, 0.002]\n"
+                    "sigma-stat-hi: [0.1, 0.05, 0.001]\n"
+                    "sigma-stat-lo: [0.1, 0.05, 0.001]\n"
+                    "sigma-sys: [0, 0, 0]\n"
+                    "correlations:\n"
+                    "  - [ 1.0,  0.6,  -0.1 ]\n"
+                    "  - [ 0.6,  1.0,   0.01]\n"
+                    "  - [-0.1,  0.01,  1.0 ]\n"
+                    "dof: 3"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::MultivariateGaussian", Options{{"begin","0"}, {"end","2"}});
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation at mode
+                p["mass::b(MSbar)"] = 4.6;
+                p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
+            }
+            // }}}
+
             // {{{ MultivariateGaussian(Covariance) (correct order)
             {
                 static const std::string input(
