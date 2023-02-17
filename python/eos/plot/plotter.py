@@ -461,7 +461,7 @@ class Plotter:
     class Uncertainty(BasePlot):
         """Plots an uncertainty band as a function of one kinematic variable
 
-        This routine expects the uncertainty propagation to have produced an HDF5 file"""
+        This routine expects the uncertainty propagation to have produced an EOS data file"""
 
         _api_doc = inspect.cleandoc("""\
         Plotting Uncertainty Bands
@@ -523,11 +523,11 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data, data-file nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item:
+                raise KeyError('neither data nor data-file specified')
 
-            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
-                eos.warn('   both data and one of data-file or hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and 'data-file' in item:
+                eos.warn('   both data and data-file specified; assuming interactive use is intended')
 
             self.xvalues = None
             self.samples = None
@@ -537,7 +537,7 @@ class Plotter:
                 self.samples = item['data']['samples']
                 if 'weights' in item['data']:
                     self.weights = item['data']['weights']
-            elif 'data-file' in item:
+            else:
                 dfname = item['data-file']
                 eos.info('   plotting uncertainty propagation from "{}"'.format(dfname))
                 df = eos.data.Prediction(dfname)
@@ -550,23 +550,6 @@ class Plotter:
                 self.xvalues = np.array(_xvalues)
                 self.samples = df.samples
                 self.weights = df.weights
-            else:
-                h5fname = item['hdf5-file']
-                eos.info('   plotting uncertainty propagation from HDF5 file "{}"'.format(h5fname))
-                uncfile = eos.data.UncertaintyDataFile(h5fname)
-
-                _xvalues = []
-                for o in uncfile.parameters:
-                    kin = o[1].split(b',')
-                    if len(kin) > 1:
-                        raise ValueError('more than one kinematic variable specified')
-
-                    name, value = kin[0].split(b'=')
-                    value = float(value)
-                    _xvalues.append(value)
-
-                self.xvalues = np.array(_xvalues)
-                self.samples = uncfile.data()
 
             self.band   = item['band']  if 'band'  in item else ['area', 'outer', 'median']
             self.xrange = item['range'] if 'range' in item else None
@@ -618,12 +601,12 @@ class Plotter:
     class UncertaintyBinned(BasePlot):
         """Plots one or more uncertainty band integrated over one kinematic variable
 
-        This routine expects the uncertainty propagation to have produces an HDF5 file"""
+        This routine expects the uncertainty propagation to have produced an data file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'hdf5-file' not in item and 'data' not in item:
-                raise KeyError('neither hdf5-file nor data specified')
+            if 'data-file' not in item and 'data' not in item:
+                raise KeyError('neither data nor data-file specified')
 
 
             self.weights = None
@@ -633,41 +616,7 @@ class Plotter:
                 if 'weights' in item['data']:
                     self.weights = item['data']['weights']
             else:
-                h5fname = item['hdf5-file']
-                eos.info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
-
-                uncfile = eos.data.UncertaintyDataFile(h5fname)
-
-                if 'kinematic' not in item:
-                    raise KeyError('kinematic not found; do not know how to map x to a kinematic variable')
-
-                xname = item['kinematic']
-
-                self.xvalues = []
-                for o in uncfile.parameters:
-                    kin = o[1].decode('ascii').split(',')
-                    if len(kin) != 2:
-                        raise ValueError('expected exactly two kinematic variables, got {}'.format(len(kin)))
-
-                    name,value = kin[0].strip().split('=')
-                    if name == xname + '_min':
-                        xmin = float(value)
-                    elif name == xname + '_max':
-                        xmax = float(value)
-                    else:
-                        raise ValueError('unexpected kinematic variable \'{}\''.format(name))
-
-                    name,value = kin[1].strip().split('=')
-                    if name == xname + '_min':
-                        xmin = float(value)
-                    elif name == xname + '_max':
-                        xmax = float(value)
-                    else:
-                        raise ValueError('unexpected kinematic variable \'{}\''.format(name))
-
-                    self.xvalues.append([xmin, xmax])
-
-                self.samples = uncfile.data()
+                raise NotImplementedError('data-file not yet implemented')
 
             self.xvalues = np.array(self.xvalues)
 
@@ -1306,11 +1255,11 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor data-file nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item:
+                raise KeyError('neither data nor data-file specified')
 
-            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
-                eos.warn('   both data and one of data-file, hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and 'data-file' in item:
+                eos.warn('   both data and data-file specified; assuming interactive use is intended')
 
             self.samples = None
             self.weights = None
@@ -1325,7 +1274,7 @@ class Plotter:
                     self.weights = np.exp(item['data']['log_weights'])
                 else:
                     self.weights = None
-            elif 'data-file' in item:
+            else:
                 if 'variable' not in item:
                     raise KeyError('no variable specificed')
 
@@ -1350,22 +1299,6 @@ class Plotter:
                     self.weights = df.weights
                 else:
                     raise ValueError(f'Do not recognize data-file prefix: {dfname}')
-            else:
-                h5fname = item['hdf5-file']
-                eos.info('   plotting histogram from file "{}"'.format(h5fname))
-                datafile = eos.data.load_data_file(h5fname)
-
-                if 'variable' not in item:
-                    raise KeyError('no variable specificed')
-                variable = item['variable']
-
-                if variable not in datafile.variable_indices:
-                    raise ValueError('variable {} not contained in data file'.format(variable))
-
-                index        = datafile.variable_indices[variable]
-                self.samples = datafile.data()[:, index]
-                # TODO: use weights from data file
-                self.weights = None
 
             self.bw       = item['bandwidth'] if 'bandwidth' in item else None
             self.level    = item['level']     if 'level'     in item else 68.27
@@ -1450,11 +1383,11 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item:
+                raise KeyError('neither data nor data-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
-                eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item:
+                eos.warn('   both data and data-file specified; assuming interactive use is intended')
 
             self.samples = None
             self.weights = None
@@ -1469,33 +1402,6 @@ class Plotter:
                     self.weights = np.exp(item['data']['log_weights'])
                 else:
                     self.weights = None
-
-            else:
-                h5fname = item['hdf5-file']
-                eos.info('   plotting 2D KDE from file "{}"'.format(h5fname))
-                datafile = eos.data.load_data_file(h5fname)
-
-                if 'variables' not in item:
-                    raise KeyError('no variables specificed')
-
-                xvariable, yvariable = item['variables']
-
-                if xvariable not in datafile.variable_indices:
-                    raise ValueError('x-axis variable {} not contained in data file'.format(variable))
-
-                if yvariable not in datafile.variable_indices:
-                    raise ValueError('y-axis variable {} not contained in data file'.format(variable))
-
-                stride = item['stride'] if 'stride' in item else 1
-                data   = datafile.data()
-                xindex = datafile.variable_indices[xvariable]
-                xdata  = data[::stride, xindex]
-                yindex = datafile.variable_indices[yvariable]
-                ydata  = data[::stride, yindex]
-
-                self.samples = np.vstack([xdata, ydata])
-                # TODO: use weights from data file
-                self.weights = None
 
             self.bw       = item['bandwidth'] if 'bandwidth' in item else None
             self.levels   = item['levels']    if 'levels'    in item else [0, 68, 95, 99]
@@ -1691,11 +1597,11 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
+            if 'data' not in item and 'data-file' not in item:
                 raise KeyError('neither data nor hdf5-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
-                eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and 'data-file' in item:
+                eos.warn('   both data and data-file specified; assuming interactive use is intended')
 
             self.samples = None
             self.weights = None
@@ -1710,7 +1616,7 @@ class Plotter:
                     self.weights = np.exp(item['data']['log_weights'])
                 else:
                     self.weights = None
-            elif 'data-file' in item:
+            else:
                 if 'variable' not in item:
                     raise KeyError('no variable specificed')
 
@@ -1735,22 +1641,6 @@ class Plotter:
                     self.weights = df.weights
                 else:
                     raise ValueError(f'Do not recognize data-file prefix: {dfname}')
-            else:
-                h5fname = item['hdf5-file']
-                eos.info('   plotting histogram from file "{}"'.format(h5fname))
-                datafile = eos.data.load_data_file(h5fname)
-
-                if 'variable' not in item:
-                    raise KeyError('no variable specificed')
-                variable = item['variable']
-
-                if variable not in datafile.variable_indices:
-                    raise ValueError('variable {} not contained in data file'.format(variable))
-
-                index        = datafile.variable_indices[variable]
-                self.samples = datafile.data()[:, index]
-                # TODO: use weights from data file
-                self.weights = None
 
             self.bins     = item['bins']      if 'bins'      in item     else 100
             self.histtype = item['histtype']  if 'histtype'  in item     else 'bar'
@@ -1816,10 +1706,10 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item:
+                raise KeyError('neither data not data-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
+            if 'data' in item and 'data-file' in item:
                 eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
 
             self.samples = None
@@ -1835,31 +1725,6 @@ class Plotter:
                     self.weights = np.exp(item['data']['log_weights'])
                 else:
                     self.weights = None
-
-            else:
-                h5fname = item['hdf5-file']
-                eos.info('   plotting histogram from file "{}"'.format(h5fname))
-                datafile = eos.data.load_data_file(h5fname)
-
-                if 'variables' not in item:
-                    raise KeyError('no variables specificed')
-
-                xvariable, yvariable = item['variables']
-
-                if xvariable not in datafile.variable_indices:
-                    raise ValueError('variable {} not contained in data file'.format(xvariable))
-
-                xindex = datafile.variable_indices[xvariable]
-
-                if xvariable not in datafile.variable_indices:
-                    raise ValueError('variable {} not contained in data file'.format(yvariable))
-
-                yindex = datafile.variable_indices[yvariable]
-
-                data = datafile.data()
-                self.samples = datafile.data()[:, (xindex, yindex)]
-                # TODO: use weights from data file
-                self.weights = None
 
             self.bins  = item['bins']    if 'bins'    in item else 100
 
@@ -2002,7 +1867,7 @@ class Plotter:
         'constraint':            Constraint,
         'constraint2D':          Constraint2D,
         'constraint-overview':   ConstraintOverview,
-        'contours2D':            Contours2D,
+        #'contours2D':            Contours2D,
         'expression':            Expression,
         'errorbar':              ErrorBar,
         'histogram':             Histogram1D,
@@ -2015,7 +1880,7 @@ class Plotter:
         'signal-pdf':            SignalPDF,
         'uncertainty':           Uncertainty,
         'uncertainty-binned':    UncertaintyBinned,
-        'uncertainty-overview':  UncertaintyOverview,
+        #'uncertainty-overview':  UncertaintyOverview,
         'watermark':             Watermark,
     }
 
