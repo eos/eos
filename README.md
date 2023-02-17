@@ -50,7 +50,7 @@ Contact
 -------
 
 If you want to report an error or file a request, please file an issue [here](https://github.com/eos/eos/issues).
-For additional information, please contact any of the main authors, e.g. via our [Discord server](https://discord.com/hyPu7f7K6W).
+For additional information, please contact any of the main authors, e.g. via our [Discord server](https://discord.gg/hyPu7f7K6W).
 
 Authors and Contributors
 ------------------------
