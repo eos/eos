@@ -13,7 +13,6 @@ EXTRA_DIST = \
 	eos/signal_pdf.py \
 	eos/tasks.py \
 	eos/data/__init__.py \
-	eos/data/hdf5.py \
 	eos/data/native.py \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
@@ -48,7 +47,6 @@ eos_SCRIPTS = \
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
 	eos/data/__init__.py \
-	eos/data/hdf5.py \
 	eos/data/native.py
 
 eosplotdir = $(pkgpythondir)/plot
