@@ -36,6 +36,7 @@ namespace eos
     namespace bern
     {
         struct ClassII {};  // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
+        struct ClassIII {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
     }
 
     using ChargedCurrent = bern::ClassII;
@@ -57,6 +58,36 @@ namespace eos
         inline complex<double> csl() const { return _coefficients[2]; }
         inline complex<double> csr() const { return _coefficients[3]; }
         inline complex<double> ct()  const { return _coefficients[4]; }
+    };
+
+    template <> struct WilsonCoefficients<bern::ClassIII>
+    {
+        /*
+         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.6).
+        */
+        std::array<complex<double>, 10> _unprimed, _primed;
+
+        inline complex<double> c1()   const { return _unprimed[0]; }
+        inline complex<double> c2()   const { return _unprimed[1]; }
+        inline complex<double> c3()   const { return _unprimed[2]; }
+        inline complex<double> c4()   const { return _unprimed[3]; }
+        inline complex<double> c5()   const { return _unprimed[4]; }
+        inline complex<double> c6()   const { return _unprimed[5]; }
+        inline complex<double> c7()   const { return _unprimed[6]; }
+        inline complex<double> c8()   const { return _unprimed[7]; }
+        inline complex<double> c9()   const { return _unprimed[8]; }
+        inline complex<double> c10()  const { return _unprimed[9]; }
+
+        inline complex<double> c1p()  const { return _primed[0]; }
+        inline complex<double> c2p()  const { return _primed[1]; }
+        inline complex<double> c3p()  const { return _primed[2]; }
+        inline complex<double> c4p()  const { return _primed[3]; }
+        inline complex<double> c5p()  const { return _primed[4]; }
+        inline complex<double> c6p()  const { return _primed[5]; }
+        inline complex<double> c7p()  const { return _primed[6]; }
+        inline complex<double> c8p()  const { return _primed[7]; }
+        inline complex<double> c9p()  const { return _primed[8]; }
+        inline complex<double> c10p() const { return _primed[9]; }
     };
 
     struct BToS {};
@@ -132,8 +163,10 @@ namespace eos
 
     namespace wc
     {
+        struct DBCU {};
         struct SBSB {};
         struct SBNuNu {};
+        struct SBCU {};
     }
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
@@ -222,6 +255,25 @@ namespace eos
         inline complex<double> cSL()   const { return _coefficients[2]; }
         inline complex<double> cSR()   const { return _coefficients[3]; }
         inline complex<double> cTL()   const { return _coefficients[4]; }
-    };}
+    };
+
+    template <> struct WilsonCoefficients<wc::SBCU> :
+        public WilsonCoefficients<bern::ClassIII>
+    {
+        /*
+         * Normalisation:
+         * H^eff = 4 G_F / sqrt(2) V_cb V_us^* \sum C_i O_i
+         */
+    };
+
+    template <> struct WilsonCoefficients<wc::DBCU> :
+        public WilsonCoefficients<bern::ClassIII>
+    {
+        /*
+         * Normalisation:
+         * H^eff = 4 G_F / sqrt(2) V_cb V_ud^* \sum C_i O_i
+         */
+    };
+}
 
 #endif
