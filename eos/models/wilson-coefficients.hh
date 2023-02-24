@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2015, 2021 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -33,18 +33,25 @@ namespace eos
 {
     template <typename Tag_> struct WilsonCoefficients;
 
-    struct ChargedCurrent {};
+    namespace bern
+    {
+        struct ClassII {};  // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
+    }
+
+    using ChargedCurrent = bern::ClassII;
 
     template <> struct WilsonCoefficients<ChargedCurrent>
     {
         /*
-         * For the definition, cf. [FMvD2013].
+         * We follow the definition of [FMvD2013], eqs. (1) and (2), p. 2.
+         * This coincides with the Bern basis of class II operators in Ref.
+         * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_qb.
          */
 
-        /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T */
+        /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T, or equivalently: 1, 1', 5, 5', 7'. */
         std::array<complex<double>, 5> _coefficients;
 
-        // cf. [FMvD2015], Eqs. (1) and (2)
+        // cf. [FMvD2015], eqs. (1) and (2)
         inline complex<double> cvl() const { return _coefficients[0]; }
         inline complex<double> cvr() const { return _coefficients[1]; }
         inline complex<double> csl() const { return _coefficients[2]; }
