@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2011-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 
 using namespace test;
 using namespace eos;
+
 class MakeTest :
     public TestCase
 {
@@ -250,7 +251,289 @@ class WilsonCoefficientsSBSBTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.678901, imag(wc.c5()),  eps);
             }
         }
-} wilson_coefficients_sbsbs_test;
+} wilson_coefficients_sbsb_test;
+
+class WilsonCoefficientsDBCUTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsDBCUTest() :
+            TestCase("wilson_coefficients_dbcu_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test default values against the SM */
+            {
+                static const double eps = 1e-6;
+
+                Parameters p = Parameters::Defaults();
+                Options o{};
+                StandardModel sm(p);
+                WilsonScanModel wet(p, o);
+
+                const auto wc_sm  = sm.wet_dbcu(false);
+                const auto wc_wet = wet.wet_dbcu(false);
+
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c1()),   real(wc_sm.c1()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c2()),   real(wc_sm.c2()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c3()),   real(wc_sm.c3()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c4()),   real(wc_sm.c4()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c5()),   real(wc_sm.c5()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c6()),   real(wc_sm.c6()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c7()),   real(wc_sm.c7()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c8()),   real(wc_sm.c8()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c9()),   real(wc_sm.c9()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c10()),  real(wc_sm.c10()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c1p()),  real(wc_sm.c1p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c2p()),  real(wc_sm.c2p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c3p()),  real(wc_sm.c3p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c4p()),  real(wc_sm.c4p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c5p()),  real(wc_sm.c5p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c6p()),  real(wc_sm.c6p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c7p()),  real(wc_sm.c7p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c8p()),  real(wc_sm.c8p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c9p()),  real(wc_sm.c9p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c10p()), real(wc_sm.c10p()), eps);
+            }
+
+            /* Test passing of WC via cartesian parametrisations */
+            {
+                static const double eps = 1e-6;
+
+                Parameters p = Parameters::Defaults();
+                p["dbcu::Re{c1}"  ] =  0.123456;
+                p["dbcu::Im{c1}"  ] = -0.234567;
+                p["dbcu::Re{c1'}" ] = -0.345678;
+                p["dbcu::Im{c1'}" ] =  0.456789;
+                p["dbcu::Re{c2}"  ] =  0.567890;
+                p["dbcu::Im{c2}"  ] = -0.678901;
+                p["dbcu::Re{c2'}" ] = -0.789012;
+                p["dbcu::Im{c2'}" ] =  0.890123;
+                p["dbcu::Re{c3}"  ] =  0.901234;
+                p["dbcu::Im{c3}"  ] = -0.012345;
+                p["dbcu::Re{c3'}" ] = -0.123456;
+                p["dbcu::Im{c3'}" ] =  0.234567;
+                p["dbcu::Re{c4}"  ] =  0.345678;
+                p["dbcu::Im{c4}"  ] = -0.456789;
+                p["dbcu::Re{c4'}" ] = -0.567890;
+                p["dbcu::Im{c4'}" ] =  0.678901;
+                p["dbcu::Re{c5}"  ] =  0.789012;
+                p["dbcu::Im{c5}"  ] = -0.890123;
+                p["dbcu::Re{c5'}" ] = -0.901234;
+                p["dbcu::Im{c5'}" ] =  0.012345;
+                p["dbcu::Re{c6}"  ] =  0.123456;
+                p["dbcu::Im{c6}"  ] = -0.234567;
+                p["dbcu::Re{c6'}" ] = -0.345678;
+                p["dbcu::Im{c6'}" ] =  0.456789;
+                p["dbcu::Re{c7}"  ] =  0.901234;
+                p["dbcu::Im{c7}"  ] = -0.012345;
+                p["dbcu::Re{c7'}" ] = -0.123456;
+                p["dbcu::Im{c7'}" ] =  0.234567;
+                p["dbcu::Re{c8}"  ] =  0.345678;
+                p["dbcu::Im{c8}"  ] = -0.456789;
+                p["dbcu::Re{c8'}" ] = -0.567890;
+                p["dbcu::Im{c8'}" ] =  0.678901;
+                p["dbcu::Re{c9}"  ] =  0.901234;
+                p["dbcu::Im{c9}"  ] = -0.012345;
+                p["dbcu::Re{c9'}" ] = -0.123456;
+                p["dbcu::Im{c9'}" ] =  0.234567;
+                p["dbcu::Re{c10}" ] =  0.345678;
+                p["dbcu::Im{c10}" ] = -0.456789;
+                p["dbcu::Re{c10'}"] = -0.567890;
+                p["dbcu::Im{c10'}"] =  0.678901;
+                p["dbcu::mu"]      = 4.2;
+
+                Options o{};
+
+                WilsonScanModel model(p, o);
+
+                const auto wc = model.wet_dbcu(false);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),    0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()),   -0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1p()),  -0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1p()),   0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),    0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()),   -0.678901, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2p()),  -0.789012, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2p()),   0.890123, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()),    0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()),   -0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3p()),  -0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3p()),   0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()),    0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()),   -0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4p()),  -0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4p()),   0.678901, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()),    0.789012, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()),   -0.890123, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5p()),  -0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5p()),   0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()),    0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()),   -0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6p()),  -0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6p()),   0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()),    0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()),   -0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7p()),  -0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7p()),   0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()),    0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()),   -0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8p()),  -0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8p()),   0.678901, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()),    0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()),   -0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9p()),  -0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9p()),   0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()),   0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()),  -0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10p()), -0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10p()),  0.678901, eps);
+            }
+        }
+} wilson_coefficients_dbcu_test;
+
+class WilsonCoefficientsSBCUTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsSBCUTest() :
+            TestCase("wilson_coefficients_sbcu_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test default values against the SM */
+            {
+                static const double eps = 1e-6;
+
+                Parameters p = Parameters::Defaults();
+                Options o{};
+                StandardModel sm(p);
+                WilsonScanModel wet(p, o);
+
+                const auto wc_sm  = sm.wet_sbcu(false);
+                const auto wc_wet = wet.wet_sbcu(false);
+
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c1()),   real(wc_sm.c1()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c2()),   real(wc_sm.c2()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c3()),   real(wc_sm.c3()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c4()),   real(wc_sm.c4()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c5()),   real(wc_sm.c5()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c6()),   real(wc_sm.c6()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c7()),   real(wc_sm.c7()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c8()),   real(wc_sm.c8()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c9()),   real(wc_sm.c9()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c10()),  real(wc_sm.c10()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c1p()),  real(wc_sm.c1p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c2p()),  real(wc_sm.c2p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c3p()),  real(wc_sm.c3p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c4p()),  real(wc_sm.c4p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c5p()),  real(wc_sm.c5p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c6p()),  real(wc_sm.c6p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c7p()),  real(wc_sm.c7p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c8p()),  real(wc_sm.c8p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c9p()),  real(wc_sm.c9p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc_wet.c10p()), real(wc_sm.c10p()), eps);
+            }
+
+            /* Test passing of WC via cartesian parametrisations */
+            {
+                static const double eps = 1e-6;
+
+                Parameters p = Parameters::Defaults();
+                p["sbcu::Re{c1}"  ] =  0.123456;
+                p["sbcu::Im{c1}"  ] = -0.234567;
+                p["sbcu::Re{c1'}" ] = -0.345678;
+                p["sbcu::Im{c1'}" ] =  0.456789;
+                p["sbcu::Re{c2}"  ] =  0.567890;
+                p["sbcu::Im{c2}"  ] = -0.678901;
+                p["sbcu::Re{c2'}" ] = -0.789012;
+                p["sbcu::Im{c2'}" ] =  0.890123;
+                p["sbcu::Re{c3}"  ] =  0.901234;
+                p["sbcu::Im{c3}"  ] = -0.012345;
+                p["sbcu::Re{c3'}" ] = -0.123456;
+                p["sbcu::Im{c3'}" ] =  0.234567;
+                p["sbcu::Re{c4}"  ] =  0.345678;
+                p["sbcu::Im{c4}"  ] = -0.456789;
+                p["sbcu::Re{c4'}" ] = -0.567890;
+                p["sbcu::Im{c4'}" ] =  0.678901;
+                p["sbcu::Re{c5}"  ] =  0.789012;
+                p["sbcu::Im{c5}"  ] = -0.890123;
+                p["sbcu::Re{c5'}" ] = -0.901234;
+                p["sbcu::Im{c5'}" ] =  0.012345;
+                p["sbcu::Re{c6}"  ] =  0.123456;
+                p["sbcu::Im{c6}"  ] = -0.234567;
+                p["sbcu::Re{c6'}" ] = -0.345678;
+                p["sbcu::Im{c6'}" ] =  0.456789;
+                p["sbcu::Re{c7}"  ] =  0.901234;
+                p["sbcu::Im{c7}"  ] = -0.012345;
+                p["sbcu::Re{c7'}" ] = -0.123456;
+                p["sbcu::Im{c7'}" ] =  0.234567;
+                p["sbcu::Re{c8}"  ] =  0.345678;
+                p["sbcu::Im{c8}"  ] = -0.456789;
+                p["sbcu::Re{c8'}" ] = -0.567890;
+                p["sbcu::Im{c8'}" ] =  0.678901;
+                p["sbcu::Re{c9}"  ] =  0.901234;
+                p["sbcu::Im{c9}"  ] = -0.012345;
+                p["sbcu::Re{c9'}" ] = -0.123456;
+                p["sbcu::Im{c9'}" ] =  0.234567;
+                p["sbcu::Re{c10}" ] =  0.345678;
+                p["sbcu::Im{c10}" ] = -0.456789;
+                p["sbcu::Re{c10'}"] = -0.567890;
+                p["sbcu::Im{c10'}"] =  0.678901;
+                p["sbcu::mu"]      = 4.2;
+
+                Options o{};
+
+                WilsonScanModel model(p, o);
+
+                const auto wc = model.wet_sbcu(false);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),    0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()),   -0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1p()),  -0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1p()),   0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),    0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()),   -0.678901, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2p()),  -0.789012, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2p()),   0.890123, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()),    0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()),   -0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3p()),  -0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3p()),   0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()),    0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()),   -0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4p()),  -0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4p()),   0.678901, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()),    0.789012, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()),   -0.890123, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5p()),  -0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5p()),   0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()),    0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()),   -0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6p()),  -0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6p()),   0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()),    0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()),   -0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7p()),  -0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7p()),   0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()),    0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()),   -0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8p()),  -0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8p()),   0.678901, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()),    0.901234, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()),   -0.012345, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9p()),  -0.123456, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9p()),   0.234567, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()),   0.345678, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()),  -0.456789, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10p()), -0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10p()),  0.678901, eps);
+            }
+        }
+} wilson_coefficients_sbcu_test;
 
 class WilsonCoefficientsSBNuNuTest :
     public TestCase

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2017 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018, 2021 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
@@ -22,12 +22,13 @@
 
 #include <eos/models/top-loops.hh>
 #include <eos/models/standard-model.hh>
-#include <eos/utils/log.hh>
-#include <eos/utils/stringify.hh>
 #include <eos/maths/matrix.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
+#include <eos/utils/rge-impl.hh>
+#include <eos/utils/stringify.hh>
 
 #include <array>
 #include <cmath>
@@ -946,6 +947,164 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::WET::SBCU>::SMComponent(const Parameters & p , ParameterUser & u) :
+        _alpha_s_Z__sbcu(p["QCD::alpha_s(MZ)"], u),
+        _m_Z__sbcu(p["mass::Z"], u),
+        _m_W__sbcu(p["mass::W"], u),
+        _mu_0__sbcu(p["sbcu::mu_0"], u),
+        _mu__sbcu(p["sbcu::mu"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBCU>
+    SMComponent<components::WET::SBCU>::wet_sbcu(const bool & /* cp_conjugate */) const
+    {
+        // SM Wilson coefficients are real so cp conjugation has no effect
+
+        // RGE
+        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge
+        {
+            // gamma_0: eigenvalues
+            (2.0 / 3.0) * std::array<double, 10u>{{
+                -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0))
+            }},
+            // gamma_0: V
+            {{
+                {{  -8.0 / 3.0, +4.0 / 3.0,  -8.0 / 3.0, +64.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{ -16.0,       -4.0,        -4.0,       -16.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{  +1.0 / 6.0, -1.0 / 3.0,  +2.0 / 3.0,  -4.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{  +1.0,       +1.0,        +1.0,        +1.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{   0.0,        0.0,         0.0,         0.0,       -53.0 / 3.0 - sqrt(241.0),               -64.0,  86.0 / 15.0 - 2.0 / 5.0 * sqrt(241.0),   2.0 / 15.0 * (43.0 + 3.0 * sqrt(241.0)),   0.0, -53.0 / 3.0 + sqrt(241.0)               }},
+                {{   0.0,        0.0,         0.0,         0.0,       -16.0,                                     0.0, -16.0,                                  -16.0,                                     -64.0, -16.0                                   }},
+                {{   0.0,        0.0,         0.0,         0.0,       +79.0 / 4.0 + 11.0 / 12.0 * sqrt(241.0), +16.0, (-207.0 + 7.0 * sqrt(241.0)) / 30.0,    (-207.0 - 7.0 * sqrt(241.0)) / 30.0,         0.0, +79.0 / 4.0 - 11.0 / 12.0 * sqrt(241.0) }},
+                {{   0.0,        0.0,         0.0,         0.0,       +27.0 + sqrt(241.0),                       0.0,  2.0 * (51.0 - sqrt(241.0)) / 5.0,      2.0 * (51.0 + sqrt(241.0)) / 5.0,          +16.0, +27.0 - sqrt(241.0)                     }},
+                {{   0.0,        0.0,         0.0,         0.0,       (53.0 + 3.0 * sqrt(241.0)) / 48.0,        +1.0, (-43.0 + 3.0 * sqrt(241.0)) / 120.0,    (-43.0 - 3.0 * sqrt(241.0)) / 120.0,         0.0,  (53.0 - 3.0 * sqrt(241.0)) / 48.0      }},
+                {{   0.0,        0.0,         0.0,         0.0,       +1.0,                                      0.0,  +1.0,                                   +1.0,                                      +1.0,  +1.0                                   }}
+            }},
+            // gamma_1
+            {{
+                {{    44.0 /  9.0,  -899.0 / 3.0,  -32.0 /  9.0,  245.0 / 12.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{  -646.0 / 27.0, -2072.0 / 9.0, -115.0 / 54.0,  739.0 / 72.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{ -6848.0 /  9.0, -1344.0,        524.0 /  9.0,  178.0,             0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{     0.0,        -8468.0 / 9.0, -172.0 /  9.0,  367.0 / 18.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{     0.0,            0.0,          0.0,           0.0,         -1832.0 /  9.0,     -64.0 / 3.0,   -104.0 /  9.0,  -296.0 /   9.0,     -7.0 /  18.0,   11.0 /  48.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,          -128.0 / 27.0,     608.0 / 9.0,    -52.0 / 81.0, -1783.0 / 108.0,     11.0 / 216.0,   59.0 / 144.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,         -9488.0 / 27.0,    7108.0 / 9.0,   3052.0 /  9.0,   -31.0 /   9.0,    521.0 /  27.0, -217.0 /  36.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,        -25528.0 / 81.0,     896.0 / 3.0,  -6974.0 / 81.0, -4727.0 /  27.0,    863.0 / 162.0,   38.0 /   9.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,        -26368.0 / 27.0, -249088.0 / 9.0, -91456.0 /  9.0, 68192.0 /   9.0,  -8912.0 /  27.0, 8143.0 /   9.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,        510976.0 / 81.0,  -14080.0 / 9.0,   1600.0 / 81.0, 46960.0 /  27.0, -11794.0 /  81.0,  -41.0 /   6.0 }},
+            }}
+        };
+
+        WilsonCoefficients<wc::SBCU> wc;
+        wc._unprimed.fill(complex<double>(0.0));
+        wc._primed.fill(complex<double>(0.0));
+
+        // only unprimed WCs are non-zero in the SM
+        // leading order in alpha_s
+        const std::array<double, 10u> lo_unprimed = {
+            -1.0 / 9.0, -2.0 / 3.0, +1.0 / 36.0, +1.0 / 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        };
+        // next-to-leading order in alpha_s
+        const double L = 2.0 * std::log(_mu_0__sbcu / _m_W__sbcu);
+        const std::array<double, 10u> nlo_unprimed = {
+            +52.0 / 27.0 - 8.0 / 9.0 * L,
+            -85.0 /  9.0 + 2.0 / 3.0 * L,
+             -1.0 / 27.0 + 2.0 / 9.0 * L,
+            +19.0 / 36.0 - 1.0 / 6.0 * L,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        };
+
+        static const auto & beta5 = QCD::beta_function_nf_5;
+        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__sbcu, _alpha_s_Z__sbcu, _m_Z__sbcu, beta5);
+        const double alpha_s_mu   = QCD::alpha_s(_mu__sbcu,   _alpha_s_Z__sbcu, _m_Z__sbcu, beta5);
+
+        const auto _unprimed = rge.evolve(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+
+        std::copy(_unprimed.begin(), _unprimed.end(), wc._unprimed.begin());
+
+        return wc;
+    }
+
+    SMComponent<components::WET::DBCU>::SMComponent(const Parameters & p , ParameterUser & u) :
+        _alpha_s_Z__dbcu(p["QCD::alpha_s(MZ)"], u),
+        _m_Z__dbcu(p["mass::Z"], u),
+        _m_W__dbcu(p["mass::W"], u),
+        _mu_0__dbcu(p["dbcu::mu_0"], u),
+        _mu__dbcu(p["dbcu::mu"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::DBCU>
+    SMComponent<components::WET::DBCU>::wet_dbcu(const bool & /* cp_conjugate */) const
+    {
+        // SM Wilson coefficients are real so cp conjugation has no effect
+
+        // RGE
+        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge
+        {
+            // gamma_0: eigenvalues
+            (2.0 / 3.0) * std::array<double, 10u>{{
+                -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0))
+            }},
+            // gamma_0: V
+            {{
+                {{  -8.0 / 3.0, +4.0 / 3.0,  -8.0 / 3.0, +64.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{ -16.0,       -4.0,        -4.0,       -16.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{  +1.0 / 6.0, -1.0 / 3.0,  +2.0 / 3.0,  -4.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{  +1.0,       +1.0,        +1.0,        +1.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
+                {{   0.0,        0.0,         0.0,         0.0,       -53.0 / 3.0 - sqrt(241.0),               -64.0,  86.0 / 15.0 - 2.0 / 5.0 * sqrt(241.0),   2.0 / 15.0 * (43.0 + 3.0 * sqrt(241.0)),   0.0, -53.0 / 3.0 + sqrt(241.0)               }},
+                {{   0.0,        0.0,         0.0,         0.0,       -16.0,                                     0.0, -16.0,                                  -16.0,                                     -64.0, -16.0                                   }},
+                {{   0.0,        0.0,         0.0,         0.0,       +79.0 / 4.0 + 11.0 / 12.0 * sqrt(241.0), +16.0, (-207.0 + 7.0 * sqrt(241.0)) / 30.0,    (-207.0 - 7.0 * sqrt(241.0)) / 30.0,         0.0, +79.0 / 4.0 - 11.0 / 12.0 * sqrt(241.0) }},
+                {{   0.0,        0.0,         0.0,         0.0,       +27.0 + sqrt(241.0),                       0.0,  2.0 * (51.0 - sqrt(241.0)) / 5.0,      2.0 * (51.0 + sqrt(241.0)) / 5.0,          +16.0, +27.0 - sqrt(241.0)                     }},
+                {{   0.0,        0.0,         0.0,         0.0,       (53.0 + 3.0 * sqrt(241.0)) / 48.0,        +1.0, (-43.0 + 3.0 * sqrt(241.0)) / 120.0,    (-43.0 - 3.0 * sqrt(241.0)) / 120.0,         0.0,  (53.0 - 3.0 * sqrt(241.0)) / 48.0      }},
+                {{   0.0,        0.0,         0.0,         0.0,       +1.0,                                      0.0,  +1.0,                                   +1.0,                                      +1.0,  +1.0                                   }}
+            }},
+            // gamma_1
+            {{
+                {{    44.0 /  9.0,  -899.0 / 3.0,  -32.0 /  9.0,  245.0 / 12.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{  -646.0 / 27.0, -2072.0 / 9.0, -115.0 / 54.0,  739.0 / 72.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{ -6848.0 /  9.0, -1344.0,        524.0 /  9.0,  178.0,             0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{     0.0,        -8468.0 / 9.0, -172.0 /  9.0,  367.0 / 18.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
+                {{     0.0,            0.0,          0.0,           0.0,         -1832.0 /  9.0,     -64.0 / 3.0,   -104.0 /  9.0,  -296.0 /   9.0,     -7.0 /  18.0,   11.0 /  48.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,          -128.0 / 27.0,     608.0 / 9.0,    -52.0 / 81.0, -1783.0 / 108.0,     11.0 / 216.0,   59.0 / 144.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,         -9488.0 / 27.0,    7108.0 / 9.0,   3052.0 /  9.0,   -31.0 /   9.0,    521.0 /  27.0, -217.0 /  36.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,        -25528.0 / 81.0,     896.0 / 3.0,  -6974.0 / 81.0, -4727.0 /  27.0,    863.0 / 162.0,   38.0 /   9.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,        -26368.0 / 27.0, -249088.0 / 9.0, -91456.0 /  9.0, 68192.0 /   9.0,  -8912.0 /  27.0, 8143.0 /   9.0 }},
+                {{     0.0,            0.0,          0.0,           0.0,        510976.0 / 81.0,  -14080.0 / 9.0,   1600.0 / 81.0, 46960.0 /  27.0, -11794.0 /  81.0,  -41.0 /   6.0 }},
+            }}
+        };
+
+        WilsonCoefficients<wc::DBCU> wc;
+        wc._unprimed.fill(complex<double>(0.0));
+        wc._primed.fill(complex<double>(0.0));
+
+        // only unprimed WCs are non-zero in the SM
+        // leading order in alpha_s
+        const std::array<double, 10u> lo_unprimed = {
+            -1.0 / 9.0, -2.0 / 3.0, +1.0 / 36.0, +1.0 / 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        };
+        // next-to-leading order in alpha_s
+        const double L = 2.0 * std::log(_mu_0__dbcu / _m_W__dbcu);
+        const std::array<double, 10u> nlo_unprimed = {
+            +52.0 / 27.0 - 8.0 / 9.0 * L,
+            -85.0 /  9.0 + 2.0 / 3.0 * L,
+             -1.0 / 27.0 + 2.0 / 9.0 * L,
+            +19.0 / 36.0 - 1.0 / 6.0 * L,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        };
+
+        static const auto & beta5 = QCD::beta_function_nf_5;
+        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__dbcu, _alpha_s_Z__dbcu, _m_Z__dbcu, beta5);
+        const double alpha_s_mu   = QCD::alpha_s(_mu__dbcu,   _alpha_s_Z__dbcu, _m_Z__dbcu, beta5);
+
+        const auto _unprimed = rge.evolve(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+
+        std::copy(_unprimed.begin(), _unprimed.end(), wc._unprimed.begin());
+
+        return wc;
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
@@ -953,7 +1112,9 @@ namespace implementation
         SMComponent<components::DeltaBS1>(p, *this),
         SMComponent<components::WET::CBLNu>(p, *this),
         SMComponent<components::WET::UBLNu>(p, *this),
-        SMComponent<components::WET::SBNuNu>(p, *this)
+        SMComponent<components::WET::SBNuNu>(p, *this),
+        SMComponent<components::WET::SBCU>(p, *this),
+        SMComponent<components::WET::DBCU>(p, *this)
     {
     }
 
