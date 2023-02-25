@@ -48,7 +48,11 @@ reference_parameters()
     result["CKM::rhobar"] = 0.144;
     result["CKM::etabar"] = 0.342;
     // WET sectors
-    result["sbsb::mu"] = 4.2;
+    result["sbsb::mu"]   =  4.2;
+    result["sbcu::mu_0"] = 80.0;
+    result["sbcu::mu"  ] =  4.2;
+    result["dbcu::mu_0"] = 80.0;
+    result["dbcu::mu"  ] =  4.2;
 
     return result;
 }
@@ -514,3 +518,135 @@ class WilsonCoefficientsSBNuNuTest :
             }
         }
 } wilson_coefficients_sbnunu_test;
+
+class WilsonCoefficientsSBCUTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsSBCUTest() :
+            TestCase("wilson_coefficients_sbcu_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test for 5 active flavors, evolving from mu_0 = 80 GeV to mu = 4.2 GeV */
+            {
+                static const double eps = 1e-8;
+
+                Parameters parameters = reference_parameters(); // set scale sbcu::mu
+                StandardModel model(parameters);
+
+                TEST_CHECK_NEARLY_EQUAL( model.alpha_s(80.0), 0.12001051, 1e-6);
+                TEST_CHECK_NEARLY_EQUAL( model.alpha_s( 4.2), 0.22334194, 1e-6);
+
+                WilsonCoefficients<wc::SBCU> wc = model.wet_sbcu(false);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),   -0.041858794, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),   -0.896743838, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()),    0.011274504, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()),    0.194524251, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10p()),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10p()),  0.0,         eps);
+            }
+        }
+} wilson_coefficients_sbcu_test;
+
+class WilsonCoefficientsDBCUTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsDBCUTest() :
+            TestCase("wilson_coefficients_dbcu_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test for 5 active flavors, evolving from mu_0 = 80 GeV to mu = 4.2 GeV */
+            {
+                static const double eps = 1e-8;
+
+                Parameters parameters = reference_parameters(); // set scale sbcu::mu
+                StandardModel model(parameters);
+
+                TEST_CHECK_NEARLY_EQUAL( model.alpha_s(80.0), 0.12001051, 1e-6);
+                TEST_CHECK_NEARLY_EQUAL( model.alpha_s( 4.2), 0.22334194, 1e-6);
+
+                WilsonCoefficients<wc::DBCU> wc = model.wet_dbcu(false);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),   -0.041858794, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),   -0.896743838, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()),    0.011274504, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()),    0.194524251, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()),    0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9p()),   0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10p()),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10p()),  0.0,         eps);
+            }
+        }
+} wilson_coefficients_dbcu_test;

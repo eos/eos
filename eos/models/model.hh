@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2015, 2021 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -49,6 +49,8 @@ namespace eos
             struct CBLNu;
             struct UBLNu;
             struct SBNuNu;
+            struct DBCU;
+            struct SBCU;
         }
         struct DeltaBS1;
         ///@}
@@ -151,6 +153,26 @@ namespace eos
     };
 
     /*!
+     * Base class for the sbcu component of models.
+     */
+    template <> class ModelComponent<components::WET::SBCU>
+    {
+        public:
+            /* sbcu Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjguate = false) const = 0;
+    };
+
+    /*!
+     * Base class for the dbcu component of models.
+     */
+    template <> class ModelComponent<components::WET::DBCU>
+    {
+        public:
+            /* dbcu Wilson coefficients */
+            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjguate = false) const = 0;
+    };
+
+    /*!
      * Base class for all models.
      */
     class Model :
@@ -161,7 +183,9 @@ namespace eos
         public virtual ModelComponent<components::DeltaBS1>,
         public virtual ModelComponent<components::WET::UBLNu>,
         public virtual ModelComponent<components::WET::CBLNu>,
-        public virtual ModelComponent<components::WET::SBNuNu>
+        public virtual ModelComponent<components::WET::SBNuNu>,
+        public virtual ModelComponent<components::WET::SBCU>,
+        public virtual ModelComponent<components::WET::DBCU>
     {
         public:
             virtual ~Model() = 0;

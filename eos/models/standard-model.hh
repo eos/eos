@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2015, 2021 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -202,6 +202,46 @@ namespace eos
             virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::WET::SBCU> :
+    public virtual ModelComponent<components::WET::SBCU>
+    {
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__sbcu;
+            UsedParameter _m_Z__sbcu;
+
+            /* Matching scale */
+            UsedParameter _m_W__sbcu;
+            UsedParameter _mu_0__sbcu;
+
+            /* Low scale */
+            UsedParameter _mu__sbcu;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
+    };
+
+    template <> class SMComponent<components::WET::DBCU> :
+    public virtual ModelComponent<components::WET::DBCU>
+    {
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__dbcu;
+            UsedParameter _m_Z__dbcu;
+
+            /* Matching scale */
+            UsedParameter _m_W__dbcu;
+            UsedParameter _mu_0__dbcu;
+
+            /* Low scale */
+            UsedParameter _mu__dbcu;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
+    };
+
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
@@ -210,7 +250,9 @@ namespace eos
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::WET::UBLNu>,
         public SMComponent<components::WET::CBLNu>,
-        public SMComponent<components::WET::SBNuNu>
+        public SMComponent<components::WET::SBNuNu>,
+        public SMComponent<components::WET::SBCU>,
+        public SMComponent<components::WET::DBCU>
     {
         public:
             StandardModel(const Parameters &);

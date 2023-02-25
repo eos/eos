@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2011-2023 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
@@ -271,6 +271,37 @@ namespace eos
             virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
     };
 
+    template <>
+    class WilsonScanComponent<components::WET::SBCU> :
+    public virtual ModelComponent<components::WET::SBCU>
+    {
+        private:
+            /* sbcu Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcu_parameters;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
+    };
+
+    template <>
+    class WilsonScanComponent<components::WET::DBCU> :
+    public virtual ModelComponent<components::WET::DBCU>
+    {
+        private:
+            /* dbcu Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _dbcu_parameters;
+
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
+    };
+
     /*!
      * A model with all possible operators; their Wilson coefficients
      * are allowed to have arbitrary values.
@@ -283,7 +314,9 @@ namespace eos
         public WilsonScanComponent<components::DeltaBS1>,
         public WilsonScanComponent<components::WET::UBLNu>,
         public WilsonScanComponent<components::WET::CBLNu>,
-        public WilsonScanComponent<components::WET::SBNuNu>
+        public WilsonScanComponent<components::WET::SBNuNu>,
+        public WilsonScanComponent<components::WET::SBCU>,
+        public WilsonScanComponent<components::WET::DBCU>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -314,7 +347,9 @@ namespace eos
         public ConstrainedWilsonScanComponent,
         public WilsonScanComponent<components::WET::UBLNu>,
         public WilsonScanComponent<components::WET::CBLNu>,
-        public WilsonScanComponent<components::WET::SBNuNu>
+        public WilsonScanComponent<components::WET::SBNuNu>,
+        public WilsonScanComponent<components::WET::SBCU>,
+        public WilsonScanComponent<components::WET::DBCU>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

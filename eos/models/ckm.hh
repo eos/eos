@@ -80,7 +80,9 @@ namespace eos
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::WET::UBLNu>,
         public SMComponent<components::WET::CBLNu>,
-        public SMComponent<components::WET::SBNuNu>
+        public SMComponent<components::WET::SBNuNu>,
+        public SMComponent<components::WET::SBCU>,
+        public SMComponent<components::WET::DBCU>
     {
         public:
             CKMScanModel(const Parameters &, const Options &);

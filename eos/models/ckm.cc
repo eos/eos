@@ -115,7 +115,9 @@ namespace eos
         SMComponent<components::DeltaBS1>(parameters, *this),
         SMComponent<components::WET::CBLNu>(parameters, *this),
         SMComponent<components::WET::UBLNu>(parameters, *this),
-        SMComponent<components::WET::SBNuNu>(parameters, *this)
+        SMComponent<components::WET::SBNuNu>(parameters, *this),
+        SMComponent<components::WET::SBCU>(parameters, *this),
+        SMComponent<components::WET::DBCU>(parameters, *this)
     {
     }
 
