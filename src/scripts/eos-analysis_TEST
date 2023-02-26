@@ -106,4 +106,3 @@ echo running test for list-predictions command ... >&2
     $PYTHON ${SOURCE_DIR}/eos-analysis list-predictions \
         -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
-

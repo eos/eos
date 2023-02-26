@@ -101,7 +101,7 @@ def main():
 
     input_files = None
     if args.input_file_list is not None:
-        f = open(args.input_file_list, 'r')
+        f = open(args.input_file_list)
         #remove trailing newline
         input_files = [name[:-1] for name in f.readlines()]
         args.input_files.extend(input_files)
