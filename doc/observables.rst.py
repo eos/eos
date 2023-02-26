@@ -63,4 +63,3 @@ if __name__ == '__main__':
         sections = make_doc_sections(),
         len = len,
     )
-

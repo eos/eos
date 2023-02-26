@@ -88,5 +88,3 @@ Example
            max:     +2.000
            latex:    '\rho(X\to Y)'
            comment:  'relevant only in certain corner cases.'
-
-

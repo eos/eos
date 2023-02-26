@@ -43,4 +43,3 @@ def print_template(rst_py__file__, **kwargs):
 
     template = get_template(os.path.abspath(rst_py__file__))
     print(template.render(**kwargs))
-

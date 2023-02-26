@@ -33,9 +33,9 @@ for qn, entry in constraints:
     }
     unique_observables = ''
     if 'observable' in data:
-        unique_observables = set([str(data['observable'])])
+        unique_observables = {str(data['observable'])}
     elif 'observables' in data:
-        unique_observables = set([str(o) for o in data['observables']])
+        unique_observables = {str(o) for o in data['observables']}
 
     entries = ['`{qn} <observables.html#{anchor}>`_'.format(qn=qn, anchor=qn.translate(translation).lower()) for qn in unique_observables]
     observables = ', '.join(entries)
