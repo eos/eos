@@ -255,4 +255,3 @@ The cosine of the polar angle theta_l between the charged lepton and the directi
         return Implementation<BToGammaLeptonNeutrino>::options.cend();
     }
 }
-

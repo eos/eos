@@ -136,4 +136,3 @@ class BToGammaLeptonNeutrinoTest :
             }
         }
 } b_to_gamma_l_nu_test;
-
