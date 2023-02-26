@@ -87,7 +87,7 @@ namespace eos
     }
 
     double
-    TopLoops::C1(const double & x_t, const double & log_t) 
+    TopLoops::C1(const double & x_t, const double & log_t)
     {
         return (-power_of<3>(x_t) - 4 * x_t)/power_of<2>(x_t - 1.0) * gsl_sf_dilog(1.0 - 1.0 / x_t)
             + (-3 * power_of<3>(x_t) - 14 * x_t * x_t - 23 * x_t) / (3 * power_of<3>(x_t - 1.0)) * log(x_t)
@@ -97,7 +97,7 @@ namespace eos
     }
 
     double
-    TopLoops::D1(const double & x_t, const double & log_t) 
+    TopLoops::D1(const double & x_t, const double & log_t)
     {
         return (380 * power_of<4>(x_t) - 1352 * power_of<3>(x_t) + 1656 * x_t * x_t - 784 * x_t + 256) / (81 * power_of<4>(x_t - 1.0)) * gsl_sf_dilog(1.0 - 1.0 / x_t)
             + (-304 * power_of<4>(x_t) - 1716 * power_of<3>(x_t) + 4644 * x_t * x_t - 2768 * x_t + 720) / (81 * power_of<5>(x_t - 1.0)) * log(x_t)

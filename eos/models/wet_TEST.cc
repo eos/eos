@@ -267,9 +267,9 @@ class WilsonCoefficientsSBNuNuTest :
             {
                 static const double eps = 1e-8;
 
-                Parameters p = Parameters::Defaults();  
+                Parameters p = Parameters::Defaults();
 
-                Options o{}; 
+                Options o{};
 
                 StandardModel sm(p);
 

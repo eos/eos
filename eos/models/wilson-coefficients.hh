@@ -168,35 +168,35 @@ namespace eos
          * These two operators are defined via
          *
          * H^eff_vec = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) (
-         *             C_VL [sbar gamma^mu P_L b][nubar gamma_mu P_L nu] 
-         *             C_VR [sbar gamma^mu P_R b][nubar gamma_mu P_L nu] 
+         *             C_VL [sbar gamma^mu P_L b][nubar gamma_mu P_L nu]
+         *             C_VR [sbar gamma^mu P_R b][nubar gamma_mu P_L nu]
          *         )
          *       = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_VL O_VL + C_VR O_VR )
-         * 
+         *
          * O_VR extends the SM to include coupling to RH fermions.
-         * 
+         *
          * Furthermore, we can add the scalar and tensor operators according to [FLS:2021A], eq. (2).
-         * These operators go beyond the SM, by including Majorana neutrinos. 
-         * 
-         * The scalar operator contributions are 
-         * 
+         * These operators go beyond the SM, by including Majorana neutrinos.
+         *
+         * The scalar operator contributions are
+         *
          * H^eff_sca = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_SL O_SL + C_SR O_SR )
-         * 
+         *
          * where
          * O_SL = [sbar P_L b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
          * O_SR = [sbar P_R b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
-         * 
+         *
          * The tensor operator contribution is
-         * 
+         *
          * H^eff_ten = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) C_TL O_TL
-         * 
+         *
          * where
          * O_TL = [sbar sigma_{mu nu} P_L b][bar(nu_L^c) sigma^{mu nu} P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
-         * 
-         * 
+         *
+         *
          * In total we then have
          * H^eff = H^eff_vec + H^eff_sca + H^eff_ten
-         * 
+         *
          *
          * C++ idx -> operator
          * 0       -> O_VL
