@@ -271,4 +271,3 @@ namespace eos
         _message.append(s);
     }
 }
-

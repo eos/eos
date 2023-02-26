@@ -213,4 +213,3 @@ namespace eos
         return _imp->number_of_threads;
     }
 }
-
