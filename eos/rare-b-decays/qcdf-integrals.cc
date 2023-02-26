@@ -28,4 +28,3 @@ namespace eos
         const std::string Numerical::name  = "numerical";
     }
 }
-
