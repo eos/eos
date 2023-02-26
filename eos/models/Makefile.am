@@ -57,4 +57,3 @@ wet_TEST_SOURCES = wet_TEST.cc
 wilson_coefficients_TEST_SOURCES = wilson-coefficients_TEST.cc
 wilson_coefficients_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 wilson_coefficients_TEST_LDFLAGS = $(GSL_LDFLAGS)
-
