@@ -108,10 +108,9 @@ class PlotterObservableVariableTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError,
             "Kinematic quantity 'q3' does not match known ones for observable " +
-            "'B->Dlnu::dBR/dq2;l=e,q=d': \['q2'\]"):
+            r"'B->Dlnu::dBR/dq2;l=e,q=d': \['q2'\]"):
             eos.plot.Plotter(self.plot_args).plot()
 
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
-
