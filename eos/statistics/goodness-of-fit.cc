@@ -119,4 +119,3 @@ namespace eos
         return _imp->chi_squares.end();
     }
 }
-
