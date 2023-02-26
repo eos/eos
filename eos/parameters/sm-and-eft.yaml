@@ -1028,7 +1028,6 @@ groups:
           central: +4.2
           min:     +4.2
           max:     +4.2
-          unit:     '1'
           latex:    '$\mu^{\bar{c}b\bar{\tau}\nu_\tau}$'
           unit:     'GeV'
       'cbtaunutau::Re{cVL}' :
