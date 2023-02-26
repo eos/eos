@@ -106,4 +106,3 @@ namespace eos
             -8.0 / 9.0 * log(m_c / m_b) - 4.0 / 9.0;
     }
 }
-

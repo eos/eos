@@ -408,7 +408,7 @@ namespace eos
             double a_s = alpha_s / (4.0 * pi);
 
             // Partonic contribution, cf. [CMM1996], Eq. (31), p. 7
-            // use chirality flipped Wilson coefficient only and 
+            // use chirality flipped Wilson coefficient only and
             // keep c1 to c6 at their SM values (i.e. 0).
             complex<double> Dprime = wc.c7prime();
             Dprime += a_s * wc.c7prime() * (r[7 - 1] + gamma7[7 - 1] * lnmu);

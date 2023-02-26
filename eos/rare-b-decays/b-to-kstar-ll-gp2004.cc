@@ -200,4 +200,3 @@ namespace eos
         return result;
     }
 }
-
