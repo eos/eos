@@ -69,4 +69,3 @@ class BToPiPiLeptonNeutrinoTest :
             }
         }
 } b_to_pi_pi_l_nu_test;
-

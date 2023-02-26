@@ -375,10 +375,10 @@ namespace eos
 
             const double m_l2         = m_l() * m_l();
 
-            const double a_long       = this->a_long(q2); 
-            const double a_para       = this->a_para(q2); 
-            const double a_perp       = this->a_perp(q2); 
-            const double a_time       = this->a_time(q2); 
+            const double a_long       = this->a_long(q2);
+            const double a_para       = this->a_para(q2);
+            const double a_perp       = this->a_perp(q2);
+            const double a_time       = this->a_time(q2);
 
             const double a_long2      = norm(a_long);
             const double a_para2      = norm(a_para);

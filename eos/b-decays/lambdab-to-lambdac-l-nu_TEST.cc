@@ -138,7 +138,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                     obs_Rlambda->evaluate(),
                     1e-5
                 );
-                
+
             }
 
             // tests for NP observables (no tensors)

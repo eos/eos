@@ -93,7 +93,7 @@ namespace eos
                             );
 
                     _vv[5] = NF * 4.0 * std::real(
-                              - a.a_para * std::conj(a.a_perp) 
+                              - a.a_para * std::conj(a.a_perp)
                               - 16.0 * mlH2 * a.a_para_T * std::conj(a.a_perp_T)
                               + 4.0 * mlH * (a.a_perp_T * std::conj(a.a_para) + a.a_para_T * std::conj(a.a_perp))
                             );
@@ -112,17 +112,17 @@ namespace eos
 
                     _vv[9] = NF * 2.0 * std::sqrt(2.0) * std::real(
                               - a.a_perp * std::conj(a.a_0)
-                              + a.a_para * mlH * std::conj(mlH * a.a_t + a.a_P) 
+                              + a.a_para * mlH * std::conj(mlH * a.a_t + a.a_P)
                               - 16.0 * mlH2 * a.a_perp_T * std::conj(a.a_0_T)
                               + 4.0 * mlH * (a.a_0_T * std::conj(a.a_perp) + a.a_perp_T * std::conj(a.a_0))
                               - 4.0 * a.a_para_T * std::conj(mlH * a.a_t + a.a_P)
                             );
 
                     _vv[10] = NF * 2.0 * std::sqrt(2.0) * std::imag(
-                              - a.a_para * std::conj(a.a_0) 
+                              - a.a_para * std::conj(a.a_0)
                               + mlH * a.a_perp * std::conj(mlH * a.a_t + a.a_P)
                               + 4.0 * mlH * ( a.a_0_T * std::conj(a.a_para) - a.a_para_T * std::conj(a.a_0))
-                              + 4.0 * a.a_perp_T * std::conj(mlH * a.a_t + a.a_P) 
+                              + 4.0 * a.a_perp_T * std::conj(mlH * a.a_t + a.a_P)
                             );
 
                     _vv[11] = NF * std::sqrt(2.0) * (1.0 - mlH2) * std::imag( a.a_perp * std::conj(a.a_0));
