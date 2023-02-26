@@ -1376,7 +1376,3 @@ class LCSRFormFactorsTest :
             }
         }
 } kmo2006_form_factors_test;
-
-
-
-

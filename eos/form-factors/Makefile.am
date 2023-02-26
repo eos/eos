@@ -174,4 +174,3 @@ parametric_kmpw2010_TEST_SOURCES = parametric-kmpw2010_TEST.cc
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 
 unitarity_bounds_TEST_SOURCES = unitarity-bounds_TEST.cc
-

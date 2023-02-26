@@ -981,7 +981,7 @@ namespace eos
                 const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r14 * r1, r16 = r13 * r13;
                 const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r24 * r2;
 
-                const double ca0 = -r1 + 2.0 * r12 - r13 
+                const double ca0 = -r1 + 2.0 * r12 - r13
                     + r2 * (1.0 - r1 - r12 + r13)
                     + r22 * (-1.0 + 2.0 * r1 - r12);
                 const double ca2 = -15.0 + 40.0 * r1 - 36.0 * r12 + 12.0 * r13 - r14
@@ -1188,7 +1188,7 @@ namespace eos
                 const double dl1 = (- 17.0 * r1 - r12 + (1.0 - r1 + 2.0 * r12) * r2) / r1;
                 const double dl2 = 2.0 * (2.0 * r1 + r2 - 3.0) / 3.0;
                 const double dl3 = -4.0 * (-2.0 + r1 + r2) * (-1.0 + r2 * (2.0 * lr2m1 - lr2)) * lr2m1;
-                const double dl4 = (4.0 * r12 - 2.0 * r13 + (-r13 - 4.0 * r12 + r1) * r2 + (3.0 * r12 - 2.0 * r1 + 1.0) * r22 
+                const double dl4 = (4.0 * r12 - 2.0 * r13 + (-r13 - 4.0 * r12 + r1) * r2 + (3.0 * r12 - 2.0 * r1 + 1.0) * r22
                         + 2.0 * r12 * r2 * (-2.0 + r1 + r2) * (2.0 * lr2m1 - lr2)) * l1mr1 / r12;
                 const double dl5 = -4.0 * (r2 - 1.0) * l1mr1 * l1mr1 + 4.0 * (r1 + 2.0 * r2 - 3.0) * lr2m1 * lr2m1;
                 const double dl6 = 2.0 * (5.0 + r2 - (l1mr1 - lr2m1) * (r2 - r1));
@@ -1324,7 +1324,7 @@ namespace eos
                     const double u2 = u * u;
 
                     const double tw4phi1 = (pi.phi4_d1(u, mu) - 2 * u * mpi2 * pi.phi4(u, mu) / (mb2 - q2 + u2 * mpi2)) / 4.0;
-                    const double tw4phi2 = - mb2 * u * (pi.phi4_d2(u, mu) - 6.0 * u * mpi2 * pi.phi4_d1(u, mu) / (mb2 - q2 + u2 * mpi2) + 12.0 * u * mpi4 * pi.phi4(u, mu) / power_of<2>(mb2 - q2 + u2 * mpi2)) 
+                    const double tw4phi2 = - mb2 * u * (pi.phi4_d2(u, mu) - 6.0 * u * mpi2 * pi.phi4_d1(u, mu) / (mb2 - q2 + u2 * mpi2) + 12.0 * u * mpi4 * pi.phi4(u, mu) / power_of<2>(mb2 - q2 + u2 * mpi2))
                         / (4.0 * (mb2 - q2 + u2 * mpi2));
                     const double tw4I4T = - (I4T_d1(u) - 2.0 * u * mpi2 * I4T(u) / (mb2 - q2 + u2 * mpi2));
 
@@ -1371,7 +1371,7 @@ namespace eos
                         + r25 * 15.0 * (1.0 + r1);
 
                 const double cb0 = power_of<4>(r1 - r2) * (-1.0 - r1 + 2.0 * r2);
-                const double cb2 = power_of<2>(r1 - r2) * (-15.0 - r1 * 85.0 + r12 * 119.0 - r13 * 31.0 
+                const double cb2 = power_of<2>(r1 - r2) * (-15.0 - r1 * 85.0 + r12 * 119.0 - r13 * 31.0
                         + r2 * 2.0 * (65.0 - r1 * 34.0 - r12 * 13.0)
                         + r22 * 12.0 * (-8.0 + r1 * 5.0)
                         + r23 * 12.0);
@@ -1654,7 +1654,7 @@ namespace eos
                 }
                 return - 3.0 * (4.0 - 9.0 * r2 + 5.0 * r22
                     - lr2 * r2 * (- 3.0 + 2.0 * r2 - r1 * (2 * r2 - 3.0)) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - lmu * r2 * (r2 - 1.0)
-                    - r2 * (r1 - r2) * (6.0 * lr2 * (lr2mr1 - lr2m1 + lr2 / 2.0) + 12.0 * lr2m1 * (l1mr1 - lr2mr1) 
+                    - r2 * (r1 - r2) * (6.0 * lr2 * (lr2mr1 - lr2m1 + lr2 / 2.0) + 12.0 * lr2m1 * (l1mr1 - lr2mr1)
                     + 2.0 * lr2mr1 * (1.0 - 3.0 * lmu) + 2.0 * l1mr1 * (-1.0 + 3.0 * lmu) + 3.0 * pi2) / 2.0
                     + dl);
             };
@@ -1688,7 +1688,7 @@ namespace eos
 
                     return (
                             2.0 / power_of<2>(r2 - r1) * (T1Ttw3pthetarhom1(r1, r2) + T1Ttw3ptheta1mrho(r1, r2) + T1Ttw3pdeltarhom1(r1, r2))
-                            + 2.0 / (3.0 * r2 * power_of<3>(r2 - r1)) * (T1Ttw3sigmatheta1mrho(r1, r2) + T1Ttw3sigmathetarhom1(r1, r2) + T1Ttw3sigmadeltarhom1(r1, r2)) 
+                            + 2.0 / (3.0 * r2 * power_of<3>(r2 - r1)) * (T1Ttw3sigmatheta1mrho(r1, r2) + T1Ttw3sigmathetarhom1(r1, r2) + T1Ttw3sigmadeltarhom1(r1, r2))
                         ) * weight * std::exp(-mb2 * r2 / _M2);
                 }
             );
@@ -2038,7 +2038,7 @@ namespace eos
     {
         return _imp->F_nlo_tw3(q2, _imp->M2() * _imp->rescale_factor_p(q2));
     }
-    
+
     double
     AnalyticFormFactorBToPiDKMMO2008::Ftil_lo_tw3(const double & q2) const
     {

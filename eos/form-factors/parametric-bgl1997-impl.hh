@@ -109,7 +109,7 @@ namespace eos
                  UsedParameter(p[_par_name("T1_1")], *this),
                  UsedParameter(p[_par_name("T1_2")], *this),
                  UsedParameter(p[_par_name("T1_3")], *this) }},
-        _a_T2{{ /* T2_0 parameter determined by identity T1(0) = T2(0) */ 
+        _a_T2{{ /* T2_0 parameter determined by identity T1(0) = T2(0) */
                  UsedParameter(p[_par_name("T2_1")], *this),
                  UsedParameter(p[_par_name("T2_2")], *this),
                  UsedParameter(p[_par_name("T2_3")], *this) }},

@@ -275,7 +275,7 @@ namespace eos
 
         return _l2one + _l2pone * wm11 + _l2ppone / 2.0 * wm12;
     }
-    
+
     double
     HQETFormFactorBase::_l3(const double & w) const
     {
@@ -311,7 +311,7 @@ namespace eos
 
         return _l4one + _l4pone * wm11 + _l4ppone / 2.0 * wm12;
     }
-    
+
     double
     HQETFormFactorBase::_l5(const double & w) const
     {

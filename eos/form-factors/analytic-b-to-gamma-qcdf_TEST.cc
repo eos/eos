@@ -115,4 +115,3 @@ class AnalyticFormFactorBToGammaQCDFTest :
             }
         }
 } analytic_b_to_gamma_qcdf_test;
-
