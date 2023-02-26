@@ -413,9 +413,6 @@ AC_CONFIG_FILES([Makefile
 	eos/rare-b-decays/Makefile
 	eos/statistics/Makefile
 	eos/utils/Makefile
-	manual/Makefile
-	manual/appendices/Makefile
-	manual/figures/Makefile
 	src/Makefile
 	src/clients/Makefile
 	src/scripts/Makefile
