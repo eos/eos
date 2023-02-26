@@ -226,4 +226,3 @@ class Observables(_Observables):
             raise ValueError("Observable with name '" + name + "' is not known")
         else:
             return obs
-

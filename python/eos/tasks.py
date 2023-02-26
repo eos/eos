@@ -562,5 +562,3 @@ class SerialExecutor(Executor):
                 _tasks[task](**arguments)
 
 Executor.register('serial', SerialExecutor)
-
-

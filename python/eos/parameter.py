@@ -240,4 +240,3 @@ class Parameters(_Parameters):
                 pi.set(pi.central() + value.imag)
 
         return parameters
-
