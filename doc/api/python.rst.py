@@ -16,4 +16,3 @@ for key, PlotterClass in eos.plot.Plotter.plot_types.items():
 print_template(__file__,
     plot_types = plot_types
 )
-
