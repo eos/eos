@@ -19,7 +19,7 @@
 import eos
 
 project = 'EOS'
-copyright = '2019-2022, The EOS Authors'
+copyright = '2019-2023, The EOS Authors'
 author = 'The EOS Authors'
 master_doc = 'index'
 
