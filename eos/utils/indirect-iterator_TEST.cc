@@ -134,4 +134,3 @@ class IndirectIteratorTest :
             }
         }
 } indirect_iterator_test;
-

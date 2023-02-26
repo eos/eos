@@ -39,4 +39,3 @@ class StringifyTest :
             TEST_CHECK("-1" == stringify(-1));
         }
 } stringify_test;
-
