@@ -148,7 +148,7 @@ class Analysis:
             self._log_likelihood.add(constraint)
 
         # perform some sanity checks
-        varied_parameter_names = set([p.name() for p in self.varied_parameters])
+        varied_parameter_names = {p.name() for p in self.varied_parameters}
         used_parameter_names = set()
         fixed_parameter_names = set(fixed_parameters.keys())
         for observable in self._log_likelihood.observable_cache():
@@ -227,7 +227,7 @@ class Analysis:
 
 
     def optimize(self, start_point=None, rng=np.random.mtrand, **kwargs):
-        """
+        r"""
         Optimize the log(posterior) and returns a best-fit-point summary.
 
         :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters.
