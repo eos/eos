@@ -67,4 +67,3 @@ class InterpolationTest :
             }
         }
 } interpolation_test;
-
