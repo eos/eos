@@ -36,7 +36,7 @@ class Mode:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'Mode':
@@ -88,7 +88,7 @@ class MarkovChain:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'MarkovChain':
@@ -164,7 +164,7 @@ class MixtureDensity:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'MixtureDensity':
@@ -269,7 +269,7 @@ class PMCSampler:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'PMCSampler':
@@ -375,7 +375,7 @@ class ImportanceSamples:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'ImportanceSamples':
@@ -445,7 +445,7 @@ class Prediction:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'Prediction':
@@ -514,7 +514,7 @@ class DynestyResults:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
 
-        with open(f, 'r') as df:
+        with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'DynestyResults':

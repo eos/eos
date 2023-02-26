@@ -365,7 +365,7 @@ class Plotter:
                'plot': { ... },
                'contents': [
                    {
-                       'label': r'$\ell=\mu$',
+                       'label': r'$\\ell=\\mu$',
                        'type': 'observable',
                        'observable': 'B->Dlnu::dBR/dq2;l=mu',
                        'variable': 'q2',
@@ -507,11 +507,11 @@ class Plotter:
            plot_args = {
                'plot': {
                    'x': { 'label': r'$q^2$' },
-                   'y': { 'label': r'$d\mathcal{B}/dq^2$' }
+                   'y': { 'label': r'$d\\mathcal{B}/dq^2$' }
                },
                'contents': [
                    {
-                       'label': r'$\ell=\mu$',
+                       'label': r'$\\ell=\\mu$',
                        'type': 'uncertainty',
                        'data': { 'samples': mu_samples, 'xvalues': mu_q2values },
                        'range': [0.02, 11.60],
@@ -723,7 +723,7 @@ class Plotter:
                'plot': { ... },
                'contents': [
                    {
-                       'label': r'Belle 2015 $\ell=e,\, q=d$',
+                       'label': r'Belle 2015 $\\ell=e,\\, q=d$',
                        'type': 'constraint',
                        'color': 'C0',
                        'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',
@@ -1582,7 +1582,7 @@ class Plotter:
            plot_args = {
                'plot': {
                    'x': { 'label': r'$|V_{cb}|$' },
-                   'y': { 'label': r'$d\mathcal{B}/dq^2$' }
+                   'y': { 'label': r'$d\\mathcal{B}/dq^2$' }
                },
                'contents': [
                    {
@@ -1686,11 +1686,11 @@ class Plotter:
            plot_args = {
                'plot': {
                    'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [ 0.0, 10.50] },
-                   'y': { 'label': r'$cos(\theta_\ell)$',                     'range': [-1.0,  +1.0] },
+                   'y': { 'label': r'$cos(\theta_\\ell)$',                     'range': [-1.0,  +1.0] },
                },
                'contents': [
                    {
-                       'label': r'samples ($\ell=\mu$)',
+                       'label': r'samples ($\\ell=\\mu$)',
                        'type': 'histogram2D',
                        'data': {
                            'samples': dstarlnu_samples[:, (0, 1)]
