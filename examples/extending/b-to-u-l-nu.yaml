@@ -1,0 +1,246 @@
+likelihoods:
+  - name: TH-pi
+    constraints:
+      - 'B->pi::form-factors[f_+,f_0,f_T]@LMvD:2021A;form-factors=BCL2008-4'
+      - 'B->pi::f_++f_0+f_T@FNAL+MILC:2015C;form-factors=BCL2008-4'
+      - 'B->pi::f_++f_0@RBC+UKQCD:2015A;form-factors=BCL2008-4'
+
+  - name: EXP-pi
+    constraints:
+      - 'B^0->pi^-l^+nu::BR@HFLAV:2019A;form-factors=BCL2008-4'
+
+  - name: TH-rho
+    constraints:
+      - 'B->rho::FormFactors[parametric,LCSR]@BSZ:2015A'
+
+  - name: EXP-rho
+    constraints:
+      - 'B^+->rho^0lnu::BR@BPR:2021A;form-factors=BSZ2015'
+
+  - name: TH-omega
+    constraints:
+      - 'B->omega::FormFactors[parametric,LCSR]@BSZ:2015A'
+
+  - name: EXP-omega
+    constraints:
+      - 'B^+->omegalnu::BR@BPR:2021A;form-factors=BSZ2015'
+
+priors:
+  - name: CKM
+    parameters:
+     - { 'parameter': 'CKM::abs(V_ub)', 'min': 3.0e-3, 'max': 4.0e-3, 'type': 'uniform' }
+
+  - name: WET
+    parameters:
+      - { 'parameter': 'ubenue::Re{cVL}', 'min':  0.0, 'max': +1.0, 'type': 'uniform' }
+      - { 'parameter': 'ubenue::Re{cVR}', 'min':  0.0, 'max': +1.0, 'type': 'uniform' }
+      - { 'parameter': 'ubenue::Re{cSL}', 'min':  0.0, 'max': +0.55, 'type': 'uniform' }
+      - { 'parameter': 'ubenue::Re{cSR}', 'min': -0.5, 'max': +0.3, 'type': 'uniform' }
+      - { 'parameter': 'ubenue::Re{cT}',  'min': -0.25, 'max': +0.25, 'type': 'uniform' }
+
+  - name: FF-pi
+    parameters:
+      - { 'parameter':  B->pi::f_+(0)@BCL2008 , 'min':   0.21 , 'max':   0.32 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_+^1@BCL2008  , 'min':  -2.96 , 'max':  -0.60 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_+^2@BCL2008  , 'min':  -3.98 , 'max':   4.38 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_+^3@BCL2008  , 'min': -18.30 , 'max':   9.27 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_0^1@BCL2008  , 'min':  -0.10 , 'max':   1.35 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_0^2@BCL2008  , 'min':  -2.08 , 'max':   4.65 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_0^3@BCL2008  , 'min':  -4.73 , 'max':   9.07 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_0^4@BCL2008  , 'min': -60.00 , 'max':  38.00 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::f_T(0)@BCL2008 , 'min':   0.18 , 'max':   0.32 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_T^1@BCL2008  , 'min':  -3.91 , 'max':  -0.33 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_T^2@BCL2008  , 'min':  -4.32 , 'max':   2.00 , 'type': 'uniform' }
+      - { 'parameter':  B->pi::b_T^3@BCL2008  , 'min':  -7.39 , 'max':  10.60 , 'type': 'uniform' }
+
+  - name: FF-rho
+    parameters:
+      - { 'parameter':  B->rho::alpha^A0_0@BSZ2015  , 'min':   0.16 , 'max':   0.54  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A0_1@BSZ2015  , 'min':  -1.70 , 'max':   0.00  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A0_2@BSZ2015  , 'min':  -3.76 , 'max':   6.18  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A1_0@BSZ2015  , 'min':   0.11 , 'max':   0.50  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A1_1@BSZ2015  , 'min':  -0.22 , 'max':   1.00  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A1_2@BSZ2015  , 'min':  -1.70 , 'max':   2.21  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A12_1@BSZ2015 , 'min':   0.00 , 'max':   1.67  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^A12_2@BSZ2015 , 'min':  -2.46 , 'max':   4.19  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^V_0@BSZ2015   , 'min':   0.15 , 'max':   0.50  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^V_1@BSZ2015   , 'min':  -1.65 , 'max':   0.00  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^V_2@BSZ2015   , 'min':  -2.50 , 'max':   6.25  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T1_0@BSZ2015  , 'min':   0.13 , 'max':   0.36  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T1_1@BSZ2015  , 'min':  -1.35 , 'max':  -0.08  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T1_2@BSZ2015  , 'min':  -2.00 , 'max':   5.00  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T2_1@BSZ2015  , 'min':  -0.11 , 'max':   1.08  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T2_2@BSZ2015  , 'min':  -1.54 , 'max':   3.00  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T23_0@BSZ2015 , 'min':   0.34 , 'max':   1.08  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T23_1@BSZ2015 , 'min':   0.00 , 'max':   3.92  , 'type': 'uniform' }
+      - { 'parameter':  B->rho::alpha^T23_2@BSZ2015 , 'min':  -5.65 , 'max':  11.77  , 'type': 'uniform' }
+
+  - name: FF-omega
+    parameters:
+      - { 'parameter':  B->omega::alpha^A0_0@BSZ2015  , 'min':   0.09  , 'max':   0.52  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A0_1@BSZ2015  , 'min':  -2.33  , 'max':   0.45  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A0_2@BSZ2015  , 'min':  -3.92  , 'max':   7.63  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A1_0@BSZ2015  , 'min':   0.08  , 'max':   0.35  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A1_1@BSZ2015  , 'min':  -0.69  , 'max':   1.24  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A1_2@BSZ2015  , 'min':  -2.62  , 'max':   2.54  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A12_1@BSZ2015 , 'min':  -0.67  , 'max':   1.77  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^A12_2@BSZ2015 , 'min':  -4.73  , 'max':   4.58  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^V_0@BSZ2015   , 'min':   0.11  , 'max':   0.47  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^V_1@BSZ2015   , 'min':  -2.07  , 'max':   0.00  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^V_2@BSZ2015   , 'min':  -3.30  , 'max':   7.36  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T1_0@BSZ2015  , 'min':   0.09  , 'max':   0.40  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T1_1@BSZ2015  , 'min':  -1.68  , 'max':   0.13  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T1_2@BSZ2015  , 'min':  -2.67  , 'max':   6.00  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T2_1@BSZ2015  , 'min':  -0.57  , 'max':   1.27  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T2_2@BSZ2015  , 'min':  -2.22  , 'max':   2.97  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T23_0@BSZ2015 , 'min':   0.19  , 'max':   1.05  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T23_1@BSZ2015 , 'min':  -1.54  , 'max':   4.27  , 'type': 'uniform' }
+      - { 'parameter':  B->omega::alpha^T23_2@BSZ2015 , 'min':  -9.03  , 'max':  12.00  , 'type': 'uniform' }
+
+posteriors:
+  - name: CKM-all
+    global_options:
+      l: e
+      model: CKM
+    prior:
+      - CKM
+      - FF-pi
+      - FF-rho
+      - FF-omega
+    likelihood:
+      - TH-pi
+      - TH-rho
+      - TH-omega
+      - EXP-pi
+      - EXP-rho
+      - EXP-omega
+
+  - name: WET-all
+    global_options:
+      l: e
+      model: WET
+    fixed_parameters:
+      CKM::abs(V_ub): 3.67e-3
+    prior:
+      - WET
+      - FF-pi
+      - FF-rho
+      - FF-omega
+    likelihood:
+      - TH-pi
+      - TH-rho
+      - TH-omega
+      - EXP-pi
+      - EXP-rho
+      - EXP-omega
+
+predictions:
+  - name: leptonic-BR-CKM
+    global_options:
+      model: CKM
+    observables:
+      - name: B_u->lnu::BR;l=e
+      - name: B_u->lnu::BR;l=mu
+      - name: B_u->lnu::BR;l=tau
+
+  - name: pi-dBR-CKM
+    global_options:
+      l: e
+      q: d
+      model: CKM
+      form-factors: BCL2008
+    observables:
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  0.05 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  1.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  2.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  3.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  3.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  4.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  4.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  5.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  5.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  6.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  6.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  7.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  7.25 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  7.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  7.75 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  8.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  8.25 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  8.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  8.75 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  9.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  9.25 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  9.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  9.75 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  10.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  10.25 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  10.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  10.75 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  11.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  11.25 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  11.5 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  11.75 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  12.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  13.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  14.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  15.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  16.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  17.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  18.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  19.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  20.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  21.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  22.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  23.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  24.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  25.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  26.0 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  27.0 }
