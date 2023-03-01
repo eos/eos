@@ -249,6 +249,10 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/nested.
         help = 'The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.',
         dest = 'maxiter', action = 'store', type = int, default = None
     )
+    parser_sample_nested.add_argument('-s', '--use-random-seed',
+        help = 'The seed used to initialize the Mersenne Twister pseudo-random number generator.',
+        dest = 'seed', action = 'store', type = int, default = 10
+    )
     parser_sample_nested.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
