@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020 Danny van Dyk
-# Copytight (c) 2023 Philip LÃghausen
+# Copyright (c) 2020-2023 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -356,15 +355,48 @@ class AnalysisFile:
             </colgroup>
             <thead>
                 <tr>
-                    <th>posteriors</th>
+                    <th style="text-align: center">priors</th>
                 </tr>
             </thead>
             <tbody>
         '''
+        for p in self._priors:
+            result += fr'''
+                <tr>
+                    <td style="text-align: left">{p}</td>
+                </tr>
+            '''
+
+        result += r'''
+            </tbody>
+            <thead>
+                <tr>
+                    <th style="text-align: center">likelihoods</th>
+                </tr>
+            </thead>
+            <tbody>
+        '''
+        for l in self._likelihoods:
+            result += fr'''
+                <tr>
+                    <td style="text-align: left">{l}</td>
+                </tr>
+            '''
+
+        result += r'''
+            </tbody>
+            <thead>
+                <tr>
+                    <th style="text-align: center">posteriors</th>
+                </tr>
+            </thead>
+            <tbody>
+        '''
+
         for p in self._posteriors:
             result += fr'''
                 <tr>
-                    <td>{p}</td>
+                    <td style="text-align: left">{p}</td>
                 </tr>
             '''
 
