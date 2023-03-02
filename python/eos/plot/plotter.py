@@ -141,6 +141,7 @@ class Plotter:
 
             if 'scale' in myx:
                 myxscale = myx['scale']
+                self.ax.xaxis.set_scale(myxscale)
 
             if 'scaling_factor' in myx:
 
@@ -177,6 +178,7 @@ class Plotter:
 
             if 'scale' in myy:
                 myyscale = myy['scale']
+                self.ax.yaxis.set_scale(myyscale)
 
             if 'scaling_factor' in myy:
 
@@ -197,7 +199,7 @@ class Plotter:
         if 'grid' in myplot:
             self.ax.grid(b=True, which=myplot['grid'])
 
-        self.ax.set(xlabel=myxlabel, ylabel=myylabel, xscale=myxscale, yscale=myyscale, title=mytitle)
+        self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
 
     class BasePlot:
         """Base class for any of the plots supported by Plotter"""
