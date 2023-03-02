@@ -283,9 +283,9 @@ class Analysis:
         try:
             return(self._log_posterior.evaluate())
         except RuntimeError as e:
-            error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
+            eos.error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
             for p in self.varied_parameters:
-                error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+                eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
             return(-np.inf)
 
 
