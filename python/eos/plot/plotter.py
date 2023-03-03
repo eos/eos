@@ -714,6 +714,7 @@ class Plotter:
          * ``constraints`` (:class:`QualifiedName <eos.QualifiedName>` or iterable thereof) -- The name or the list of names of the constraints
            that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../constraints.html>`_.
          * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
+         * ``xrange`` (list of int, optional) -- The interval in which the observable is plotted in the case of a multivariate constraint.
 
         When plotting multivariate constraints, the following key is also mandatory:
 
@@ -756,6 +757,7 @@ class Plotter:
             self.observable       = item['observable']       if 'observable'       in item else None
             self.rescale_by_width = item['rescale-by-width'] if 'rescale-by-width' in item else False
             self.variable         = item['variable']
+            self.xrange           = item['xrange']           if 'xrange'           in item else None
 
             if type(self.names) == str:
                 self.names = [self.names]
@@ -860,13 +862,21 @@ class Plotter:
                     raise ValueError('type of constraint presently not supported')
 
                 xvalues = np.array(xvalues)
-                if xerrors:
-                    xerrors = np.array(xerrors)
                 yvalues = np.array(yvalues)
                 yerrors = np.array(yerrors)
 
-                self.plotter.ax.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
-                    color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
+                if self.xrange:
+                    mask = np.logical_and(xvalues > min(self.xrange), xvalues < max(self.xrange))
+                else:
+                    mask = np.array([True] * len(xvalues))
+
+                if xerrors:
+                    xerrors = np.array(xerrors)
+                    self.plotter.ax.errorbar(x=xvalues[mask], y=yvalues[mask], xerr=xerrors[mask], yerr=yerrors[mask].T,
+                        color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
+                else:
+                    self.plotter.ax.errorbar(x=xvalues[mask], y=yvalues[mask], yerr=yerrors[mask].T,
+                        color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
                 # disable the label for subsequent plots
                 self.label = None
 
