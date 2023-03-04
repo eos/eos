@@ -75,8 +75,6 @@ class Analysis:
         self._log_likelihood = eos.LogLikelihood(self.parameters)
         self._log_posterior = eos.LogPosterior(self._log_likelihood)
         self.varied_parameters = []
-        """The set of parameters that are varied in this analysis."""
-        self.bounds = []
 
         eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, {nmanual} manually-entered constraints and {nparams} fixed parameters.'.format(
             nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints), nparams=len(fixed_parameters)))
@@ -132,7 +130,6 @@ class Analysis:
             else:
                 raise ValueError('Unknown prior type \'{}\''.format(prior_type))
 
-            self.bounds.append((minv, maxv))
             p = self.parameters[parameter]
             p.set_min(minv)
             p.set_max(maxv)
@@ -169,14 +166,22 @@ class Analysis:
             eos.warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
 
 
-    def _x_to_par(self, x):
-        """Internal function that rescales back from [-1, 1] to the parameter space"""
-        return np.array([(b[1] - b[0]) * v / 2 + (b[0] + b[1]) / 2 for v, b in zip(x, self.bounds)])
+    def _u_to_par(self, u):
+        """Internal function that uses the inverse prior transform to translate from u ∈ [0, 1)^D to the parameter space"""
+        for p, uv in zip(self.varied_parameters, u):
+            p.set_generator(uv)
+        for prior in self._log_posterior.log_priors():
+            prior.sample()
+        return np.array([p.evaluate() for p in self.varied_parameters])
 
 
-    def _par_to_x(self, par):
-        """Internal function that rescales the parameters par to [-1, 1]"""
-        return np.array([(2 * v - b[0] - b[1]) / (b[1] - b[0]) for v, b in zip(par, self.bounds)])
+    def _par_to_u(self, par):
+        """Internal function that used the CDF to translate from parameter space to u ∈ [0, 1)^D."""
+        for p, pv in zip(self.varied_parameters, par):
+            p.set(pv)
+        for prior in self._log_posterior.log_priors():
+            prior.compute_cdf()
+        return np.array([p.evaluate_generator() for p in self.varied_parameters])
 
 
     @staticmethod
@@ -264,9 +269,9 @@ class Analysis:
 
         res = scipy.optimize.minimize(
             self.negative_log_pdf,
-            self._par_to_x(start_point),
+            self._par_to_u(_start_point),
             args=None,
-            bounds=[(-1.0, 1.0) for b in self.bounds],
+            bounds=[(0.0, 1.0) for _ in self.varied_parameters],
             **scipy_opt_kwargs)
 
         if not res.success:
@@ -275,7 +280,7 @@ class Analysis:
         else:
             eos.info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
 
-        bfp = self._x_to_par(res.x)
+        bfp = self._u_to_par(res.x)
 
         for p, v in zip(self.varied_parameters, bfp):
             p.set(v)
@@ -283,17 +288,16 @@ class Analysis:
         return eos.BestFitPoint(self, bfp)
 
 
-    def log_pdf(self, x, *args):
+    def log_pdf(self, u, *args):
         """
         Adapter for use with external optimization software (e.g. pypmc) to aid when optimizing the log(posterior).
 
-        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
-        :type x: iterable
+        :param u: Parameter point in u space, with the elements in the same order as in eos.Analysis.varied_parameters.
+        :type u: iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
-        for p, v in zip(self.varied_parameters, self._x_to_par(x)):
-            p.set(v)
+        self._u_to_par(u)
 
         try:
             return(self._log_posterior.evaluate())
@@ -304,19 +308,20 @@ class Analysis:
             return(-np.inf)
 
 
-    def negative_log_pdf(self, x, *args):
+    def negative_log_pdf(self, u, *args):
         """
         Adapter for use with external optimization software (e.g. scipy.optimize.minimize) to aid when optimizing the log(posterior).
 
-        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
-        :type x: iterable
+        :param u: Parameter point in u space, with the elements in the same order as in eos.Analysis.varied_parameters.
+        :type u: iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
-        return -self.log_pdf(x, *args)
+        return -self.log_pdf(u, *args)
 
 
-    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand):
+    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand,
+               return_uspace=False):
         """
         Return samples of the parameters, log(weights), and optionally posterior-predictive samples for a sequence of observables.
 
@@ -345,21 +350,21 @@ class Analysis:
         except ImportError:
             progressbar = lambda x, **kw: x
 
-        ind_lower = np.array([-1.0 for bound in self.bounds])
-        ind_upper = np.array([+1.0 for bound in self.bounds])
+        ind_lower = np.array([ 0.0 for _ in self.varied_parameters])
+        ind_upper = np.array([+1.0 for _ in self.varied_parameters])
         ind = pypmc.tools.indicator.hyperrectangle(ind_lower, ind_upper)
 
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
 
-        # create initial covariance, assuming that each (rescaled) parameter is uniformly distributed on [-1, +1].
-        sigma = np.diag([1.0 / 3.0 * cov_scale for bound in self.bounds])   # 1 / 3 is the covariance on the interval [-1, +1]
+        # create initial covariance, assuming that each parameter's u-space value is uniformly distributed on [0, 1)
+        sigma = np.diag([1.0 / 12.0 * cov_scale for _ in self.varied_parameters])   # 1 / 12 is the vairance U(0, 1)
         log_proposal = pypmc.density.gauss.LocalGauss(sigma)
 
-        # create start point, if not provided or rescale a provided start point to [-1, 1]
+        # create start point, if not provided or transform a provided start point to u space
         if start_point is None:
-            start_point = np.array([rng.uniform(-1.0, 1.0) for bound in self.bounds])
+            start_point = np.array([rng.uniform(0.0, 1.0) for _ in self.varied_parameters])
         else:
-            start_point = self._par_to_x(start_point)
+            start_point = self._par_to_u(start_point)
 
         # create MC sampler
         sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True, rng=rng)
@@ -384,12 +389,16 @@ class Analysis:
         accept_rate  = accept_count / (N * stride) * 100
         eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
 
-        # Rescale the parameters back to their original bounds
-        parameter_samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:][::stride])
+        # Transform from generator values in u space to the parameter values
+        u_samples = sampler.samples[:][::stride]
+        parameter_samples = np.apply_along_axis(self._u_to_par, 1, u_samples)
         weights = sampler.target_values[:][::stride, 0]
 
         if not observables:
-            return(parameter_samples, weights)
+            if return_uspace:
+                return(parameter_samples, u_samples, weights)
+            else:
+                return(parameter_samples, weights)
         else:
             observable_samples = []
             for parameters in parameter_samples:
@@ -462,32 +471,11 @@ class Analysis:
             progressbar = lambda x, **kw: x
 
         # create log_target
-        ind_lower = np.array([-1.0 for bound in self.bounds])
-        ind_upper = np.array([+1.0 for bound in self.bounds])
+        ind_lower = np.array([ 0.0 for _ in self.varied_parameters])
+        ind_upper = np.array([+1.0 for _ in self.varied_parameters])
         ind = pypmc.tools.indicator.hyperrectangle(ind_lower, ind_upper)
 
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
-
-        # rescale log_proposal arguments to [-1, 1]
-        for n, component in enumerate(log_proposal.components):
-            rescaled_mu = self._par_to_x(component.mu)
-            rescaled_sigma = np.array([[
-                4 * component.sigma[i, j] / (bj[1] - bj[0]) / (bi[1] - bi[0]) for j, bj in enumerate(self.bounds)
-                ] for i, bi in enumerate(self.bounds)])
-            try:
-                component.update(rescaled_mu, rescaled_sigma)
-            except np.linalg.LinAlgError:
-                # The failure is probably due to a non positive definite matrix. We add the problematic smallest eigenvalue
-                # to the diagonal to ensure that all eigenvalues are now strictly positive
-                smallest_eigenvalue = np.abs(np.min(np.linalg.eigvalsh(rescaled_sigma)))
-                rescaled_sigma += (1.0 + np.finfo(float).eps) * np.diag(smallest_eigenvalue * np.ones(len(rescaled_mu)))
-                try:
-                    component.update(rescaled_mu, rescaled_sigma)
-                    eos.warn(f"Components {n} was singular, {-smallest_eigenvalue} is manually added to the diagonal.")
-                except np.linalg.LinAlgError:
-                    log_proposal.weights[n] = 0
-                    eos.warn(f"Components {n} could not be rescaled, the corresponding weight was {log_proposal.weights[n]} "
-                            f"and is now set to zero.")
 
         # create PMC sampler
         sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True, rng=rng)
@@ -543,36 +531,15 @@ class Analysis:
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
 
-        # rescale proposal components back to their physical bounds
-        for n, component in enumerate(sampler.proposal.components):
-            rescaled_mu = self._x_to_par(component.mu)
-            rescaled_sigma = np.array([[
-                component.sigma[i, j] * (bj[1] - bj[0]) * (bi[1] - bi[0]) / 4 for j, bj in enumerate(self.bounds)
-                ] for i, bi in enumerate(self.bounds)])
-            try:
-                component.update(rescaled_mu, rescaled_sigma)
-            except np.linalg.LinAlgError:
-                # The failure is probably due to a non positive definite matrix. We add the problematic smallest eigenvalue
-                # to the diagonal to ensure that all eigenvalues are now strictly positive
-                smallest_eigenvalue = np.abs(np.min(np.linalg.eigvalsh(rescaled_sigma)))
-                rescaled_sigma += (1.0 + np.finfo(float).eps) * np.diag(smallest_eigenvalue * np.ones(len(rescaled_mu)))
-                try:
-                    component.update(rescaled_mu, rescaled_sigma)
-                    eos.warn(f"Components {n} was singular, {-smallest_eigenvalue} is manually added to the diagonal.")
-                except np.linalg.LinAlgError:
-                    log_proposal.weights[n] = 0
-                    eos.warn(f"Components {n} could not be rescaled, the corresponding weight was {log_proposal.weights[n]} "
-                            f"and is now set to zero.")
-
-        # rescale the samples back to their physical bounds
+        # transform the samples back from u space to parameter space
         if return_final_only:
             # only returns the final_N final samples
-            samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:][-final_N:])
+            samples = np.apply_along_axis(self._u_to_par, 1, sampler.samples[:][-final_N:])
             weights = sampler.weights[:][-final_N:, 0]
             posterior_values = sampler.target_values[:][-final_N:]
         else:
             # returns all samples
-            samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])
+            samples = np.apply_along_axis(self._u_to_par, 1, sampler.samples[:])
             weights = sampler.weights[:][:, 0]
             posterior_values = sampler.target_values[:]
         perplexity = self._perplexity(np.copy(weights))
@@ -582,17 +549,17 @@ class Analysis:
         return samples, weights, posterior_values, sampler.proposal
 
 
-    def log_likelihood(self, x, *args):
+    def log_likelihood(self, p, *args):
         """
         Adapter for use with external sampling software (e.g. dynesty) to aid when sampling from the log(likelihood).
 
-        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
-        :type x: iterable
+        :param p: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters.
+        :type p: iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
-        for p, v in zip(self.varied_parameters, x):
-            p.set(v)
+        for p, pv in zip(self.varied_parameters, p):
+            p.set(pv)
 
         try:
             return(self._log_likelihood.evaluate())
@@ -607,17 +574,10 @@ class Analysis:
         """
         Adapter for use with external sampling software to aid when sampling from the log(prior).
 
-        :param u: The input probability point on the hypercube [0, 1)**D
+        :param u: The input probability point on the hypercube [0, 1)^D
         :type u: iterable
         """
-        # Use the input probability point to sample from the prior
-        for param, p in zip(self.varied_parameters, u):
-            param.set_generator(u)
-        for prior in self._log_posterior.log_priors():
-            prior.sample()
-
-        # Return the parameter point
-        return [p.evaluate() for p in self.varied_parameters]
+        return self._u_to_par(u)
 
 
     def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10):

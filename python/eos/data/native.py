@@ -105,6 +105,11 @@ class MarkovChain:
             raise RuntimeError('Samples file {} does not exist or is not a file'.format(f))
         self.samples = _np.load(f)
 
+        f = os.path.join(path, 'usamples.npy')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError('U-space samples file {} does not exist or is not a file'.format(f))
+        self.usamples = _np.load(f)
+
         if description['has-weights']:
             f = os.path.join(path, 'weights.npy')
             if not os.path.exists(f) or not os.path.isfile(f):
@@ -115,15 +120,17 @@ class MarkovChain:
 
 
     @staticmethod
-    def create(path, parameters, samples, weights=None):
+    def create(path, parameters, samples, usamples, weights=None):
         """ Write a new MarkovChain object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param parameters: Parameter descriptions as a 1D array of shape (N, ).
         :type parameters: list or iterable of eos.Parameter
-        :param samples: Samples as a 2D array of shape (N, P).
+        :param samples: Samples in parameter space as a 2D array of shape (N, P).
         :type samples: 2D numpy array
+        :param usamples: Samples in u space as a 2D array of shape (N, P).
+        :type usamples: 2D numpy array
         :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
         :type weights: 2D numpy array, optional
         """
@@ -140,6 +147,9 @@ class MarkovChain:
         if not samples.shape[1] == len(parameters):
             raise RuntimeError('Shape of samples {} incompatible with number of parameters {}'.format(samples.shape, len(parameters)))
 
+        if not usamples.shape[1] == len(parameters):
+            raise RuntimeError('Shape of usamples {} incompatible with number of parameters {}'.format(usamples.shape, len(parameters)))
+
         if not weights is None and not samples.shape[0] == weights.shape[0]:
             raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
 
@@ -147,6 +157,7 @@ class MarkovChain:
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
             yaml.dump(description, description_file, default_flow_style=False)
         _np.save(os.path.join(path, 'samples.npy'), samples)
+        _np.save(os.path.join(path, 'usamples.npy'), usamples)
 
         if not weights is None:
             _np.save(os.path.join(path, 'weights.npy'), weights)
