@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2017-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -134,6 +135,11 @@ namespace eos
                     _parameter.set(_parameter.evaluate_generator() * (_range.max - _range.min) + _range.min);
                 }
 
+                virtual void compute_cdf()
+                {
+                    _parameter.set_generator((_parameter.evaluate() - _range.min) / (_range.max - _range.min));
+                }
+
                 virtual bool informative() const
                 {
                     return false;
@@ -258,6 +264,19 @@ namespace eos
                        _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central);
                 }
 
+                virtual void compute_cdf()
+                {
+                    // CDF = c \Phi(x - x_{central} / \sigma) + b
+
+                    // find out if sample in upper or lower part
+                    const auto x = _parameter.evaluate();
+
+                    if (x < _central)
+                        _parameter.set_generator(_c_b * gsl_cdf_gaussian_P((x - _central) / _sigma_lower, 1.0) + _prob_lower);
+                    else
+                        _parameter.set_generator(_c_a * gsl_cdf_gaussian_P((x - _central) / _sigma_upper, 1.0) + _prob_lower);
+                }
+
                 virtual bool informative() const
                 {
                     return true;
@@ -334,6 +353,14 @@ namespace eos
                     _parameter.set(_mu_0 * std::pow(_lambda, 2.0 * _parameter.evaluate_generator() - 1.0));
                 }
 
+                virtual void compute_cdf()
+                {
+                    // CDF: p = [\ln x - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
+                    // inverse CDF: x = \mu_0 * \lambda^(2 p - 1)
+
+                    _parameter.set_generator((std::log(_parameter.evaluate() / _mu_0) + _ln_lambda) / (2.0 * _ln_lambda));
+                }
+
                 virtual bool informative() const
                 {
                     return true;
@@ -360,8 +387,9 @@ namespace eos
                 // the normalization constant of the density
                 const double _norm;
 
-                // cholesky matrix of covariance, and inverse of covariance
+                // cholesky matrix of covariance, inverse of the cholesky matrix, and inverse of covariance
                 gsl_matrix * _chol;
+                gsl_matrix * _chol_inv;
                 gsl_matrix * _covariance_inv;
 
                 // temporary storage for evaluation
@@ -378,6 +406,7 @@ namespace eos
                     _covariance(covariance),
                     _norm(compute_norm()),
                     _chol(gsl_matrix_alloc(covariance->size1, covariance->size2)),
+                    _chol_inv(gsl_matrix_alloc(covariance->size1, covariance->size2)),
                     _covariance_inv(gsl_matrix_alloc(covariance->size1, covariance->size2)),
                     _observables(gsl_vector_alloc(_dim)),
                     _measurements(gsl_vector_alloc(_dim)),
@@ -479,6 +508,29 @@ namespace eos
                     {
                         throw InternalError("priors::MultivariateGaussian: Cholesky inversion failed");
                     }
+
+                    // delete upper part of _chol, which contains the elements of the original covariance matrix
+                    for (unsigned i = 0u; i < _dim ; ++i)
+                    {
+                        for (unsigned j = i + 1u ; j < _dim ; ++j)
+                        {
+                            gsl_matrix_set(_chol, i, j, 0.0);
+                        }
+                    }
+
+                    // copy cholesky matrix to _chol_inv and invert in place
+                    // inverse will be stored in upper triangle of _chol_inv
+                    gsl_matrix_memcpy(_chol_inv, _chol);
+                    gsl_linalg_tri_invert(CblasUpper, CblasNonUnit, _chol_inv);
+
+                    // delete lower part of _chol_inv, which contains the elements of the original cholesky matrix
+                    for (unsigned i = 0u; i < _dim ; ++i)
+                    {
+                        for (unsigned j = 0u ; j < i ; ++j)
+                        {
+                            gsl_matrix_set(_chol_inv, i, j, 0.0);
+                        }
+                    }
                 }
 
                 virtual double operator()() const
@@ -519,7 +571,7 @@ namespace eos
 
                 virtual void sample()
                 {
-                    // generate standard normals in observables
+                    // generate standard normals in _measurements
                     for (auto i = 0u ; i < _dim ; ++i)
                     {
                         const double u = _parameters[i].evaluate_generator();
@@ -537,6 +589,29 @@ namespace eos
                     for (auto i = 0u ; i < _dim ; ++i)
                     {
                         _parameters[i].set(gsl_vector_get(_measurements_2, i));
+                    }
+                }
+
+                virtual void compute_cdf()
+                {
+                    // get parameters
+                    for (auto i = 0u ; i < _dim ; ++i)
+                    {
+                        gsl_vector_set(_measurements_2, i, _parameters[i].evaluate());
+                    }
+
+                    // transform: measurements_2 <- measurements_2 - _mean
+                    gsl_vector_sub(_measurements_2, _mean);
+
+                    // transform: measurements <- _chol_inv * measurements_2
+                    gsl_blas_dgemv(CblasNoTrans, 1.0, _chol_inv, _measurements_2, 0.0, _measurements);
+
+                    // compute cdfs for standard normals in _measurements
+                    for (auto i = 0u ; i < _dim ; ++i)
+                    {
+                        const double z = gsl_vector_get(_measurements, i);
+                        const double u = gsl_cdf_ugaussian_P(z);
+                        _parameters[i].set_generator(u);
                     }
                 }
 

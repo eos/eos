@@ -102,6 +102,13 @@ namespace eos
             virtual void sample() = 0;
 
             /*!
+             * Compute the vector of cummulative probabilities.
+             *
+             * The results are stored it in the generator values of the Parameter objects.
+             */
+            virtual void compute_cdf() = 0;
+
+            /*!
              * Return whether or not this prior is informative.
              */
             virtual bool informative() const = 0;
