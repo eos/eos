@@ -377,6 +377,10 @@ BOOST_PYTHON_MODULE(_eos)
             R"(
             Return the current value of a parameter.
             )")
+        .def("evaluate_generator", &Parameter::evaluate_generator,
+            R"(
+            Return the current generator value of a parameter.
+            )")
         ;
 
     // ParameterUser
