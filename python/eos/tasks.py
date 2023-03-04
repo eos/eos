@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020-2021 Danny van Dyk
+# Copyright (c) 2020-2023 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -234,8 +234,8 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
-        samples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point)
-        eos.data.MarkovChain.create(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, weights)
+        samples, usamples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point, return_uspace=True)
+        eos.data.MarkovChain.create(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, usamples, weights)
     except RuntimeError as e:
         eos.error('encountered run time error ({e}) in parameter point:'.format(e=e))
         for p in analysis.varied_parameters:
@@ -263,7 +263,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
 
     import pathlib
     input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, posterior)).glob('mcmc-*')]
-    chains    = [eos.data.MarkovChain(path).samples for path in input_paths]
+    chains    = [eos.data.MarkovChain(path).usamples for path in input_paths]
     n = len(chains[0])
     for chain in chains:
         assert len(chain) == n, 'Every chains must contain the same number of samples'

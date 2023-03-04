@@ -62,13 +62,13 @@ class ClassMethodTests(unittest.TestCase):
         point = bfp.point
 
         self.assertTrue(
-            np.max(analysis._par_to_x(point)) < 1.0
+            np.max(analysis._par_to_u(point)) < 1.0
             )
         self.assertTrue(
-            np.min(analysis._par_to_x(point)) > -1.0
+            np.min(analysis._par_to_u(point)) >= 0.0
             )
         self.assertTrue(
-            np.max(analysis._x_to_par(analysis._par_to_x(point)) - point) < 1e-10
+            np.max(analysis._u_to_par(analysis._par_to_u(point)) - point) < 1e-10
             )
 
 
