@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2022 Danny van Dyk
+ * Copyright (c) 2016-2023 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -681,6 +681,10 @@ BOOST_PYTHON_MODULE(_eos)
         .def("sample", &LogPrior::sample, R"(
             Sets its parameters' values corresponding to the cumulative propability :math:`p` assigned to
             each parameter via its :meth:`Parameter.set_generator` method.
+        )")
+        .def("compute_cdf", &LogPrior::compute_cdf, R"(
+            Returns the cumulative probabilities :math:`p` assigned to each parameter via its
+            :meth:`Parameter.evaluate_generator` method.
         )")
         .def("parameter_descriptions", range(&LogPrior::begin, &LogPrior::end))
         ;
