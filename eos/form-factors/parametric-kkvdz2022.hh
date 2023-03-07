@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2022 Danny van Dyk
- * Copyright (c) 2022 Stephan Kuerten
+ * Copyright (c) 2022 Stephan Kürten
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/reference-name.hh>
@@ -38,17 +39,24 @@ namespace eos
         public FormFactors<PToGammaOffShell>
     {
         private:
+            SwitchOption opt_subtracted;
+            double switch_subtracted;
             static std::string _par_name(const std::string & ff_name);
             double _width_omega(const double & q2) const;
             double _width_rho(const double & q2) const;
             double _z_omega(const double & k2) const;
             double _z_rho(const double & k2) const;
+            double _subtraction_polynomial(const double & k2, const std::array<UsedParameter, 3> & c) const;
             complex<double> _calc_ff_contribution_omega(const double & q2, const double & k2,
-                const double & m_r_sq, const std::array<UsedParameter, 3> & a) const;
+                const double & m_r_sq, const std::array<UsedParameter, 3> & a,
+                const UsedParameter & s_0) const;
             complex<double> _calc_ff_contribution_rho(const double & q2, const double & k2,
-                const double & m_r_sq, const std::array<UsedParameter, 3> & a) const;
+                const double & m_r_sq, const std::array<UsedParameter, 3> & a,
+                const UsedParameter & s_0) const;
             std::array<std::array<UsedParameter, 3>, 4> _a_omega;
             std::array<std::array<UsedParameter, 3>, 4> _a_rho;
+            std::array<std::array<UsedParameter, 3>, 4> _c_subtraction;
+            UsedParameter _s_0;
 
         public:
             KKvDZ2022FormFactors(const Parameters &, const Options &);

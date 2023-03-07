@@ -2100,6 +2100,86 @@ groups:
           max:     -0.21
           latex:    '$N_{\rho,4,2}^{B \to \gamma^*,\mathrm{KKvDZ2022}}$'
           unit:     '1'
+      # subtraction polynomial parameters for B->gamma*
+      'B->gamma^*::c_1_0@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{1,0}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_1_1@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{1,1}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_1_2@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{1,2}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_2_0@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{2,0}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_2_1@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{2,1}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_2_2@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{2,2}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_3_0@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{3,0}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_3_1@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{3,1}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_3_2@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{3,2}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_4_0@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{4,0}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_4_1@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{4,1}^{B \to \gamma^*}$'
+          unit:     '1'
+      'B->gamma^*::c_4_2@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$c_{4,2}^{B \to \gamma^*}$'
+          unit:     '1'
+      # subtraction point for B->gamma*
+      'B->gamma^*::s_0@KKvDZ2022' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$s_0^{B \to \gamma^*}$'
+          unit:     '1'
   # }}}
 
   # Parameters in B -> gamma Form Factor Parametrizations
