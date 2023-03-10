@@ -16,7 +16,7 @@ concurrency:
 jobs:
     pypi-build:
         name: Build on manylinux2014
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         strategy:
             matrix:
                 cfg:
@@ -87,7 +87,7 @@ jobs:
     pypi-check:
         needs: pypi-build
         name: Check on manylinux2014
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         strategy:
             matrix:
                 cfg:
@@ -127,7 +127,7 @@ jobs:
     pypi-deploy:
         needs: [ pypi-build, pypi-check ]
         name: Deploy on PyPI
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         strategy:
             matrix:
                 cfg:
