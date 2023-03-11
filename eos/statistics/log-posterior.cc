@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2015-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,44 +51,42 @@ namespace eos
     }
 
     bool
-    LogPosterior::add(const LogPriorPtr & prior, bool nuisance)
+    LogPosterior::add(const LogPriorPtr & prior, bool /*nuisance*/)
     {
         // clone has correct Parameters object selected
         LogPriorPtr prior_clone = prior->clone(_parameters);
         _informative_priors += 1 ? prior->informative() : 0;
 
-        // check if param exists already
-        // read out parameters from prior
-        for (auto d = prior->begin(), d_end = prior->end() ; d != d_end ; ++d)
+        // extract parameters, and record their names to check for duplicates
+        std::set<QualifiedName> prior_parameter_names;
+        for (auto p = prior_clone->begin(), p_end = prior_clone->end() ; p != p_end ; ++p)
         {
-            auto result = _parameter_names.insert(d->parameter->name());
-            if (! result.second)
-                return false;
-
-            d->nuisance = nuisance;
-            _parameter_descriptions.push_back(*d);
+            prior_parameter_names.insert(p->name());
         }
 
-        // then add to prior container
+        // check if param exists already
+        std::set<QualifiedName> intersection;
+        std::set_intersection(_parameter_names.begin(), _parameter_names.end(),
+                              prior_parameter_names.begin(), prior_parameter_names.end(),
+                              std::inserter(intersection, intersection.begin()));
+
+        if (intersection.size() > 0)
+        {
+            return false;
+        }
+
+        // if not, add to prior container and register parameter objects
         _priors.push_back(prior_clone);
+        for (auto p = prior_clone->begin(), p_end = prior_clone->end() ; p != p_end ; ++p)
+        {
+            _varied_parameters.push_back(*p);
+        }
 
         return true;
     }
 
-    DensityPtr
-    LogPosterior::clone() const
-    {
-        return DensityPtr(private_clone());
-    }
-
     LogPosteriorPtr
-    LogPosterior::old_clone() const
-    {
-        return LogPosteriorPtr(private_clone());
-    }
-
-    LogPosterior *
-    LogPosterior::private_clone() const
+    LogPosterior::clone() const
     {
         // clone log_likelihood
         LogLikelihood llh = _log_likelihood.clone();
@@ -99,16 +98,7 @@ namespace eos
             result->add(_prior->clone(result->parameters()));
         }
 
-        // copy proper range for subspace sampling
-        auto j = result->_parameter_descriptions.begin();
-        for (auto i = _parameter_descriptions.begin(), i_end = _parameter_descriptions.end() ; i != i_end ; ++i, ++j)
-        {
-            j->min = i->min;
-            j->max = i->max;
-            j->nuisance = i->nuisance;
-        }
-
-        return result;
+        return LogPosteriorPtr(result);
     }
 
     double
@@ -117,36 +107,10 @@ namespace eos
         return log_posterior();
     }
 
-    Density::Iterator
-    LogPosterior::begin() const
-    {
-        return Density::Iterator(_parameter_descriptions.cbegin());
-    }
-
-    Density::Iterator
-    LogPosterior::end() const
-    {
-        return Density::Iterator(_parameter_descriptions.cend());
-    }
-
     Parameters
     LogPosterior::parameters() const
     {
         return _parameters;
-    }
-
-    unsigned
-    LogPosterior::index(const std::string & name) const
-    {
-        unsigned result = 0;
-
-        for (auto d = _parameter_descriptions.cbegin(), d_end = _parameter_descriptions.cend() ; d != d_end ; ++d, ++result)
-        {
-            if (name == d->parameter->name())
-                return result;
-        }
-
-        throw InternalError("Implementation<Analysis>::definition: no such parameter '" + name + "'");
     }
 
     LogLikelihood
@@ -179,24 +143,6 @@ namespace eos
         return result;
     }
 
-    LogPriorPtr
-    LogPosterior::log_prior(const std::string & name) const
-    {
-        LogPriorPtr prior;
-
-        // loop over all descriptions of the prior pointers
-        for (const auto & _prior : _priors)
-        {
-            for (auto i = _prior->begin(), i_end = _prior->end() ; i != i_end ; ++i)
-            {
-                if (i->parameter->name() == name)
-                    prior = _prior;
-            }
-        }
-
-        return prior;
-    }
-
     template <>
     struct WrappedForwardIteratorTraits<LogPosterior::PriorIteratorTag>
     {
@@ -216,36 +162,21 @@ namespace eos
         return _priors.end();
     }
 
-    bool
-    LogPosterior::nuisance(const std::string& par_name) const
-    {
-        unsigned index = this->index(par_name);
-
-        if (index >= _parameter_descriptions.size())
-        {
-            return false;
-        }
-        else
-        {
-            return _parameter_descriptions[index].nuisance;
-        }
-    }
-
     unsigned
     LogPosterior::informative_priors() const
     {
         return _informative_priors;
     }
 
-    MutablePtr
+    Parameter
     LogPosterior::operator[] (const unsigned & index) const
     {
-        return _parameter_descriptions[index].parameter;
+        return _varied_parameters[index];
     }
 
-    const std::vector<ParameterDescription> &
-    LogPosterior::parameter_descriptions() const
+    const std::vector<Parameter> &
+    LogPosterior::varied_parameters() const
     {
-        return _parameter_descriptions;
+        return _varied_parameters;
     }
 }

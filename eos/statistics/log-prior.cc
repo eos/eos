@@ -55,7 +55,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<LogPrior::IteratorTag>
     {
-        using UnderlyingIterator = std::vector<ParameterDescription>::iterator;
+        using UnderlyingIterator = std::vector<Parameter>::iterator;
     };
 
     namespace priors
@@ -107,7 +107,7 @@ namespace eos
                         throw RangeError("LogPrior::Flat(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
+                    _varied_parameters.push_back(_parameter);
                 }
 
                 virtual ~Flat()
@@ -203,7 +203,7 @@ namespace eos
                         throw RangeError("LogPrior::Gauss(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
+                    _varied_parameters.push_back(_parameter);
                 }
 
                 virtual ~CurtailedGauss()
@@ -231,7 +231,7 @@ namespace eos
                     double sigma = 0.0, norm = 0.0;
 
                     // read parameter's current value
-                    double x = _parameter_descriptions.front().parameter->evaluate();
+                    double x = _parameter.evaluate();
 
                     if (x < _central)
                     {
@@ -314,7 +314,7 @@ namespace eos
                     _max(mu_0 * lambda),
                     _ln_lambda(std::log(lambda))
                 {
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), mu_0 / lambda, mu_0 * lambda, false });
+                    _varied_parameters.push_back(_parameter);
                 }
 
                 virtual ~Scale()
@@ -332,7 +332,7 @@ namespace eos
                 virtual double operator()() const
                 {
                     // read parameter's current value
-                    double x = _parameter_descriptions.front().parameter->evaluate();
+                    double x = _parameter.evaluate();
 
                     if ((x < _min) || (_max < x))
                         return -std::numeric_limits<double>::infinity();
@@ -427,7 +427,7 @@ namespace eos
                     {
                         const auto & param = parameters[n];
                         _parameters.push_back(param);
-                        _parameter_descriptions.push_back(ParameterDescription{ param.clone(), -inf, +inf, false });
+                        _varied_parameters.push_back(param);
                     }
 
                     // cholesky decomposition (informally: the sqrt of the covariance matrix)
@@ -630,13 +630,13 @@ namespace eos
     LogPrior::Iterator
     LogPrior::begin()
     {
-        return LogPrior::Iterator(_parameter_descriptions.begin());
+        return LogPrior::Iterator(_varied_parameters.begin());
     }
 
     LogPrior::Iterator
     LogPrior::end()
     {
-        return LogPrior::Iterator(_parameter_descriptions.end());
+        return LogPrior::Iterator(_varied_parameters.end());
     }
 
     LogPriorPtr
@@ -764,5 +764,5 @@ namespace eos
         throw priors::UnknownPriorError("Cannot construct prior from '" + s + "'");
     }
 
-    template class WrappedForwardIterator<LogPrior::IteratorTag, ParameterDescription>;
+    template class WrappedForwardIterator<LogPrior::IteratorTag, Parameter>;
 }

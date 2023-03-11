@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -71,8 +72,7 @@ class LogPriorTest :
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 1.0), 4.5,                eps);
 
                 // a continuous parameter of interest
-                TEST_CHECK(! flat_prior->begin()->nuisance);
-                TEST_CHECK_EQUAL(flat_prior->begin()->parameter->name(), "mass::b(MSbar)");
+                TEST_CHECK_EQUAL(flat_prior->begin()->name(), "mass::b(MSbar)");
             }
 
 

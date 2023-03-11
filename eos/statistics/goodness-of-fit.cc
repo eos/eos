@@ -42,7 +42,7 @@ namespace eos
         Implementation(const LogPosterior & log_posterior) :
             log_posterior(log_posterior),
             total_chi_square(0.0),
-            total_degrees_of_freedom(log_posterior.informative_priors() - log_posterior.parameter_descriptions().size()),
+            total_degrees_of_freedom(log_posterior.informative_priors() - log_posterior.varied_parameters().size()),
             current_constraint(nullptr)
         {
             compute_test_statistics();

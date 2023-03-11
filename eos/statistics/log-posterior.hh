@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2015-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,8 +36,7 @@
 
 namespace eos
 {
-    class LogPosterior :
-        public Density
+    class LogPosterior
     {
         public:
             friend struct Implementation<LogPosterior>;
@@ -59,32 +59,24 @@ namespace eos
             virtual ~LogPosterior();
 
             /// Clone this LogPosterior
-            // todo remove
-            LogPosteriorPtr old_clone() const;
+            LogPosteriorPtr clone() const;
 
-            virtual DensityPtr clone() const;
-
+            /// Evaluate the Log(posterior) density at the current parameter values.
             virtual double evaluate() const;
-
-            virtual Iterator begin() const;
-            virtual Iterator end() const;
             ///@}
 
             ///@name Accessors
             ///@{
-            // todo remove
-            /// Retrieve a set of all parameters, including ranges
-            const std::vector<ParameterDescription> & parameter_descriptions() const;
+            /// Retrieve a set of all varied parameters
+            const std::vector<Parameter> & varied_parameters() const;
 
-            // todo remove as functionality available from begin(), end()
             /*!
              * Retrieve a parameter by index.
              *
              * @param index The index of the parameter.
              */
-            MutablePtr operator[] (const unsigned & index) const;
+            Parameter operator[] (const unsigned & index) const;
 
-            // todo remove
             /// Retrieve our associated Parameters object
             Parameters parameters() const;
 
@@ -102,13 +94,7 @@ namespace eos
             /// Retrieve the overall Log(prior).
             double log_prior() const;
 
-            /*!
-             * Find the prior for a given parameter
-             */
-            LogPriorPtr log_prior(const std::string & name) const;
-
             /// Retrieve the overall Log(posterior)
-            /// Incorporate normalization constant, the evidence here in getter if available.
             double log_posterior() const;
 
             /*!
@@ -119,13 +105,6 @@ namespace eos
 
             PriorIterator begin_priors() const;
             PriorIterator end_priors() const;
-
-            /*!
-             * Check if a given parameter is a nuisance parameter for this LogPosterior.
-             *
-             * @param name The name of the parameter we are interested in.
-             */
-            bool nuisance(const std::string & name) const;
 
             /*!
              * Returns the number of informative priors.
@@ -148,17 +127,17 @@ namespace eos
 
             Parameters _parameters;
 
+            /// names of all parameters. prevent using a parameter twice
+            std::set<QualifiedName> _parameter_names;
+
             /// prior in N dimensions can decouple
             /// at most into N 1D priors
             std::vector<LogPriorPtr> _priors;
 
             unsigned _informative_priors;
 
-            /// Parameter, minimum, maximum, nuisance
-            std::vector<ParameterDescription> _parameter_descriptions;
-
-            /// names of all parameters. prevent using a parameter twice
-            std::set<std::string> _parameter_names;
+            /// Parameters with priors
+            std::vector<Parameter> _varied_parameters;
     };
 
     extern template class WrappedForwardIterator<LogPosterior::PriorIteratorTag, const LogPriorPtr>;

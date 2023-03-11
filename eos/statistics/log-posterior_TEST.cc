@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Frederik Beaujean
- * Copyright (c) 2011, 2012, 2013, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2011-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -42,14 +42,14 @@ class LogPosteriorTest :
             {
                 LogPosterior log_posterior = make_log_posterior(false);
 
-                auto clone1 = log_posterior.old_clone();
-                auto clone2 = log_posterior.old_clone();
+                auto clone1 = log_posterior.clone();
+                auto clone2 = log_posterior.clone();
 
                 // make sure observable's value is not equal to central value
-                MutablePtr p = (*clone1)[0];
-                p->set(4.3); //posterior mode
+                Parameter p = (*clone1)[0];
+                p.set(4.3); //posterior mode
                 p = (*clone2)[0];
-                p->set(4.4); //log_prior mode
+                p.set(4.4); //log_prior mode
 
                 // for comparison used ipython's log(scipy.stats.norm.pdf(4.3, loc=4.4, scale=0.1))
                 // value at center of both Gaussian distributions. so pdf the same
@@ -67,7 +67,7 @@ class LogPosteriorTest :
                 // now change a parameter which is not scanned
                 TEST_CHECK(log_posterior.parameters()["b->s::Re{c7}"] != 2.599);
                 log_posterior.parameters()["b->s::Re{c7}"] = 2.599;
-                LogPosteriorPtr clone3 = log_posterior.old_clone();
+                LogPosteriorPtr clone3 = log_posterior.clone();
 
                 TEST_CHECK_EQUAL(double(log_posterior.parameters()["b->s::Re{c7}"] ),
                                  double( clone3->parameters()["b->s::Re{c7}"] ));
@@ -83,7 +83,7 @@ class LogPosteriorTest :
                 LogPosterior log_posterior(llh);
 
                 // store a clone with no parameters
-                auto clone_bare = log_posterior.old_clone();
+                auto clone_bare = log_posterior.clone();
 
 
                 // 4.4 +- 0.1
@@ -93,8 +93,8 @@ class LogPosteriorTest :
 
 
 
-                MutablePtr p = log_posterior[0];
-                p->set(4.3); //posterior mode
+                Parameter p = log_posterior[0];
+                p.set(4.3); //posterior mode
 
 
                 TEST_CHECK_NEARLY_EQUAL(log_posterior.log_likelihood()(), +0.88364655978936768, eps);
@@ -104,33 +104,22 @@ class LogPosteriorTest :
 
                 // now check cloning
 
-                auto clone = log_posterior.old_clone();
-                MutablePtr p2 = (*clone)[0];
+                auto clone = log_posterior.clone();
+                Parameter p2 = (*clone)[0];
 
-                TEST_CHECK_EQUAL(p->evaluate(), p2->evaluate());
+                TEST_CHECK_EQUAL(p.evaluate(), p2.evaluate());
 
 
                 // change clone only
-                p2->set(4.112);
+                p2.set(4.112);
                 TEST_CHECK(log_posterior.log_likelihood()() != clone->log_likelihood()());
                 TEST_CHECK(log_posterior.log_prior() != clone->log_prior());
 
                 // same value for clone and original
-                p2->set(4.3);
+                p2.set(4.3);
 
                 TEST_CHECK_EQUAL(log_posterior.log_likelihood()(), clone->log_likelihood()());
                 TEST_CHECK_EQUAL(log_posterior.log_prior(), clone->log_prior());
-            }
-
-            // nuisance properties.nuisance())
-            {
-                LogPosterior log_posterior = make_log_posterior(false);
-
-                TEST_CHECK(!log_posterior.nuisance("mass::b(MSbar)"));
-
-                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::c", ParameterRange{ 1.4, 2.2}), true);
-
-                TEST_CHECK(log_posterior.nuisance("mass::c"));
             }
 
             // stop if prior undefined

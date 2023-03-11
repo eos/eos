@@ -690,7 +690,7 @@ BOOST_PYTHON_MODULE(_eos)
             Returns the cumulative probabilities :math:`p` assigned to each parameter via its
             :meth:`Parameter.evaluate_generator` method.
         )")
-        .def("parameter_descriptions", range(&LogPrior::begin, &LogPrior::end))
+        .def("varied_parameters", range(&LogPrior::begin, &LogPrior::end))
         ;
 
     // LogPosterior
