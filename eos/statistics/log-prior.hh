@@ -48,7 +48,7 @@ namespace eos
             Parameters _parameters;
 
             /// All parameters for which this prior provides information.
-            std::vector<ParameterDescription> _parameter_descriptions;
+            std::vector<Parameter> _varied_parameters;
 
         public:
             ///@name Basic Functions
@@ -79,7 +79,7 @@ namespace eos
             ///@name Iteration over descriptions
             ///@{
             struct IteratorTag;
-            using Iterator = WrappedForwardIterator<IteratorTag, ParameterDescription>;
+            using Iterator = WrappedForwardIterator<IteratorTag, Parameter>;
 
             Iterator begin();
             Iterator end();
@@ -139,7 +139,7 @@ namespace eos
             static LogPriorPtr Make(const Parameters & parameters, const std::string & serialization);
     };
 
-    extern template class WrappedForwardIterator<LogPrior::IteratorTag, ParameterDescription>;
+    extern template class WrappedForwardIterator<LogPrior::IteratorTag, Parameter>;
 }
 
 #endif
