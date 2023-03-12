@@ -682,6 +682,9 @@ BOOST_PYTHON_MODULE(_eos)
             :type lambda: float, strictly positive
         )", args("parameters", "name", "range", "mu_0", "scale"))
         .staticmethod("Scale")
+        .def("evaluate", &LogPrior::operator(), R"(
+            Returns the logarithm of the prior's probability density at the current parameter values.
+        )")
         .def("sample", &LogPrior::sample, R"(
             Sets its parameters' values corresponding to the cumulative propability :math:`p` assigned to
             each parameter via its :meth:`Parameter.set_generator` method.
