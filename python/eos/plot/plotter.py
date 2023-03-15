@@ -99,15 +99,19 @@ class Plotter:
         if not 'plot' in self.instructions:
             raise KeyError('no plot metadata specified')
 
-        myplot = self.instructions['plot']
+        if 'axis' in self.instructions:
+            self.ax = self.instructions['axis']
+        else:
+            self.fig, self.ax = plt.subplots()
 
-        self.fig, self.ax = plt.subplots()
+        myplot = self.instructions['plot']
 
         mytitle = ''
         myylabel = ''
         myxlabel = ''
         myyscale = 'linear'
         myxscale = 'linear'
+
         if 'title' in myplot:
             mytitle = myplot['title']
 
@@ -279,7 +283,7 @@ class Plotter:
             self.markersize = item['markersize'] if 'markersize' in item else None
 
         def plot(self):
-            plt.plot(self.x, self.y,
+            self.plotter.ax.plot(self.x, self.y,
                 alpha=self.alpha, color=self.color,
                 label=self.label, linestyle='None',
                 marker=self.marker, markeredgecolor=self.color, markerfacecolor='None',
@@ -304,7 +308,7 @@ class Plotter:
             self.elinewidth = item['elinewidth'] if 'elinewidth' in item else 1.0
 
         def plot(self):
-            plt.errorbar(x=self.x, y=self.y, xerr=self.xerr, yerr=self.yerr,
+            self.plotter.ax.errorbar(x=self.x, y=self.y, xerr=self.xerr, yerr=self.yerr,
                 color=self.color, elinewidth=self.elinewidth, fmt='_', linestyle='none', label=self.label)
 
 
@@ -458,7 +462,7 @@ class Plotter:
                 var.set(xvalue)
                 ovalues = np.append(ovalues, observable.evaluate())
 
-            plt.plot(xvalues, ovalues, alpha=self.alpha, color=self.color, label=self.label, ls=self.style, lw=self.lw)
+            self.plotter.ax.plot(xvalues, ovalues, alpha=self.alpha, color=self.color, label=self.label, ls=self.style, lw=self.lw)
 
     class Uncertainty(BasePlot):
         """Plots an uncertainty band as a function of one kinematic variable
@@ -650,11 +654,11 @@ class Plotter:
                 ocentral /= width
                 ohi      /= width
                 print("{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}".format(xmin=xmin, xmax=xmax, olo=olo, ocentral=ocentral, ohi=ohi))
-                plt.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=self.label)
+                self.plotter.ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=self.label)
                 label = None
-                plt.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha)
-                plt.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha)
-                plt.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha)
+                self.plotter.ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha)
+                self.plotter.ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha)
+                self.plotter.ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha)
                 self.label = None
 
 
@@ -861,7 +865,7 @@ class Plotter:
                 yvalues = np.array(yvalues)
                 yerrors = np.array(yerrors)
 
-                plt.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
+                self.plotter.ax.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
                     color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
                 # disable the label for subsequent plots
                 self.label = None
@@ -1137,12 +1141,12 @@ class Plotter:
             yerrors = np.array(yerrors)
 
             self.plotter.ax.tick_params(axis='x', which='minor', bottom=False)
-            plt.xticks(xvalues, xticklabels, rotation=self.rotation)
-            plt.errorbar(x=xvalues, y=yvalues, xerr=None, yerr=yerrors.T,
+            self.plotter.ax.xticks(xvalues, xticklabels, rotation=self.rotation)
+            self.plotter.ax.errorbar(x=xvalues, y=yvalues, xerr=None, yerr=yerrors.T,
                 color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
-            plt.margins(0.2)
+            self.plotter.ax.margins(0.2)
             # Tweak spacing to prevent clipping of tick-labels
-            plt.subplots_adjust(bottom=0.15)
+            self.plotter.ax.subplots_adjust(bottom=0.15)
 
 
     class Contours2D(BasePlot):
@@ -1194,7 +1198,7 @@ class Plotter:
             levels = [pone_sigma, ptwo_sigma, pthree_sigma]
             labels = ['68%', '95%', '99%']
 
-            CS = plt.contour(pdf.transpose(),
+            CS = self.plotter.ax.contour(pdf.transpose(),
                              colors='OrangeRed',
                              extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]],
                              levels=levels[::-1])
@@ -1203,7 +1207,7 @@ class Plotter:
             for level, label in zip(CS.levels, labels[::-1]):
                 fmt[level] = label
 
-            plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+            self.plotter.ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
 
     class KernelDensityEstimate1D(BasePlot):
@@ -1324,7 +1328,7 @@ class Plotter:
                                              np.ma.masked_array(pdf, mask=pdf < plevel * pdf_norm, fill_value=np.nan),
                                              facecolor=self.color, alpha=self.alpha)
 
-            plt.plot(x, pdf, color=self.color, label=self.label)
+            self.plotter.ax.plot(x, pdf, color=self.color, label=self.label)
 
 
     class KernelDensityEstimate2D(BasePlot):
@@ -1436,12 +1440,12 @@ class Plotter:
 
             if 'areas' in self.contours:
                 colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
-                plt.contourf(pdf.transpose(),
+                self.plotter.ax.contourf(pdf.transpose(),
                              colors=colors,
                              extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                              levels=plevels[::-1])
 
-            CS = plt.contour(pdf.transpose(),
+            CS = self.plotter.ax.contour(pdf.transpose(),
                              colors=self.color,
                              extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                              levels=plevels[::-1],
@@ -1452,7 +1456,7 @@ class Plotter:
                 for level, label in zip(CS.levels, labels[::-1]):
                     fmt[level] = label
 
-                plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+                self.plotter.ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
         def handles_labels(self):
             if self.label:
@@ -1526,12 +1530,12 @@ class Plotter:
 
             if 'areas' in self.contours:
                 colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
-                plt.contourf(pdf.transpose(),
+                self.plotter.ax.contourf(pdf.transpose(),
                              colors=colors,
                              extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                              levels=plevels[::-1])
 
-            CS = plt.contour(pdf.transpose(),
+            CS = self.plotter.ax.contour(pdf.transpose(),
                              colors=self.color,
                              extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                              levels=plevels[::-1],
@@ -1542,7 +1546,7 @@ class Plotter:
                 for level, label in zip(CS.levels, labels[::-1]):
                     fmt[level] = label
 
-                plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+                self.plotter.ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
         def handles_labels(self):
             if self.label:
@@ -1649,7 +1653,7 @@ class Plotter:
             self.lw       = 3                 if self.histtype == 'step' else 1
 
         def plot(self):
-            plt.hist(self.samples, weights=self.weights, density=True,
+            self.plotter.ax.hist(self.samples, weights=self.weights, density=True,
                     alpha=self.alpha, bins=self.bins, color=self.color,
                     histtype=self.histtype, label=self.label, lw=self.lw)
 
@@ -1734,7 +1738,7 @@ class Plotter:
             #cmap = plt.get_cmap('viridis')
             #cmap.set_under('w', 1)
 
-            plt.hist2d(self.samples[:, 0], self.samples[:, 1], bins=self.bins, cmin=1, cmap=plt.get_cmap('viridis'),
+            self.plotter.ax.hist2d(self.samples[:, 0], self.samples[:, 1], bins=self.bins, cmin=1, cmap=plt.get_cmap('viridis'),
                        label=self.label)
 
 
@@ -1790,7 +1794,7 @@ class Plotter:
                 var.set(xvalue)
                 pvalues = np.append(pvalues, pdf.evaluate())
 
-            plt.plot(xvalues, np.exp(pvalues - norm), alpha=self.alpha, color=self.color, label=self.label, ls=self.style)
+            self.plotter.ax.plot(xvalues, np.exp(pvalues - norm), alpha=self.alpha, color=self.color, label=self.label, ls=self.style)
 
 
     class Expression(BasePlot):
@@ -1809,14 +1813,14 @@ class Plotter:
             samples = item['samples'] if 'samples' in item else 100
             label  = item['label']   if 'label'   in item else None
 
-            xmin, xmax = plt.xlim()
+            xmin, xmax = self.plotter.ax.get_xlim()
             x = np.linspace(xmin, xmax, samples)
             y = []
 
             for xvalue in x:
                 y.append(eval(f, {}, {'x': xvalue}))
 
-            plt.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
+            self.plotter.ax.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
 
 
     class Watermark(BasePlot):
@@ -1849,7 +1853,7 @@ class Plotter:
             else:
                 raise ValueError('invalid vertical position \'{}\''.format(hpos))
 
-            ax = plt.gca()
+            ax = self.plotter.ax
             color = 'OrangeRed'
             version = 'v{version}'.format(version=eos.__version__)
             if 'preliminary' in item and item['preliminary']:
