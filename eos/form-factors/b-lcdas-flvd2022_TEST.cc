@@ -43,6 +43,7 @@ class FLvD2022Test :
                 Parameters p = Parameters::Defaults();
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::omega_0@FLvD2022"] = 1.0;
 
                 std::array<double, 9> ref = { 1.0, -2.0, 3.0, -4.0, 5.0, -6.0, 7.0, -8.0, 9.0 };
                 for (size_t k = 0; k < ref.size(); k++)
@@ -53,9 +54,35 @@ class FLvD2022Test :
                 FLvD2022 blcdas(p, Options());
 
                 auto [c, c_end] = blcdas.coefficient_range(1.0);
-                for (auto it = c; it != c_end; ++it)
+                for (auto it = c ; it != c_end ; ++it)
                 {
                     TEST_CHECK_NEARLY_EQUAL(*it, ref[std::distance(c, it)], 1e-15);
+                }
+            }
+
+            // RG evolution
+            {
+                Parameters p = Parameters::Defaults();
+
+                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::omega_0@FLvD2022"] = 0.55;
+                const double mu = 1.5;
+
+                // Evolved coefficients below are obtained using numerical evaluation of the exact 1-loop evolution
+                // The test checks the implemented fast *approximation*
+                std::array<double, 9> ref = { 1.6, 0.8, 0.3, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0 };
+                std::array<double, 9> res_evolved = { 1.4134123399029324, 0.5565559530817631, 0.2504760836874369, 0.12325426840513773, 0.09162847424850495, -0.019314494689795878, 0.015306298689121587, -0.013140355927689062, 0.011614395045637823 };
+                for (size_t k = 0; k < ref.size(); k++)
+                {
+                    p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = ref[k];
+                }
+
+                FLvD2022 blcdas(p, Options());
+
+                auto [c, c_end] = blcdas.coefficient_range(mu);
+                for (auto it = c ; it != c_end ; ++it)
+                {
+                    TEST_CHECK_NEARLY_EQUAL(*it, res_evolved[std::distance(c, it)], 1e-7);
                 }
             }
         }
