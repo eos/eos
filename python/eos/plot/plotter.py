@@ -1388,7 +1388,7 @@ class Plotter:
             if 'data' not in item and 'data-file' not in item:
                 raise KeyError('neither data nor data-file specified')
 
-            if 'data' in item:
+            if 'data' in item and 'data-file' in item:
                 eos.warn('   both data and data-file specified; assuming interactive use is intended')
 
             self.samples = None
