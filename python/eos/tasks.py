@@ -374,8 +374,10 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :param end: The index beyond the last sample to use for the predictions. Defaults to -1.
     :type begin: int
     '''
-    _parameters = analysis_file.analysis(posterior).parameters
-    observables = analysis_file.observables(posterior, prediction, _parameters)
+    _parameters    = analysis_file.analysis(posterior).parameters
+    cache          = eos.ObservableCache(_parameters)
+    observables    = analysis_file.observables(posterior, prediction, _parameters)
+    observable_ids = [cache.add(o) for o in observables]
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -391,10 +393,11 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         for p, v in zip(parameters, sample):
             p.set(v)
         try:
-            observable_samples.append([o.evaluate() for o in observables])
+            cache.update()
+            observable_samples.append([cache[id] for id in observable_ids])
         except RuntimeError as e:
             eos.error('skipping prediction for sample {i} due to runtime error ({e}): {s}'.format(i=i, e=e, s=sample))
-            observable_samples.append([_np.nan for o in observables])
+            observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
 
     output_path = os.path.join(base_directory, posterior, 'pred-{}'.format(prediction))
