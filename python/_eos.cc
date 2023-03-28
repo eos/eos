@@ -498,11 +498,28 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // ObservableCache
-    class_<ObservableCache>("ObservableCache", no_init)
+    class_<ObservableCache>("ObservableCache", R"(
+        Provides a cache for the efficient evaluation of observables.
+    )", init<const Parameters &>())
         .def("__iter__", range(&ObservableCache::begin, &ObservableCache::end))
-        .def("__getitem__", &ObservableCache::operator[])
-        .def("add", &ObservableCache::add)
-        .def("update", &ObservableCache::update)
+        .def("__getitem__", &ObservableCache::operator[], R"(
+            Access the cached value of an observable.
+
+            :param handle: The handle of the observable.
+            :type handle: int
+        )", args("handle"))
+        .def("add", &ObservableCache::add, R"(
+            Add an existing observable to the cache.
+
+            :param observable: The observable to add to the cache.
+            :type observable: eos.Observable
+
+            :returns: An internal handle to the cached observable. The observable's value can be retrieved using ``cache[handle]``.
+            :rtype: int
+        )", args("observable"))
+        .def("update", &ObservableCache::update, R"(
+            Update the cache for the current parameter point.
+        )")
         ;
 
     // ReferenceName
