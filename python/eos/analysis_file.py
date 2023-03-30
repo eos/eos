@@ -2,6 +2,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 # Copyright (c) 2020 Danny van Dyk
+# Copytight (c) 2023 Philip LÃghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -67,6 +68,25 @@ class AnalysisFile:
         else:
             self._steps = input_data['steps']
 
+        # Optional: insert custom observables using the expression parser
+        if 'observables' in input_data:
+            for name in input_data['observables']:
+
+                required_keys = ['latex', 'unit', 'options', 'expression']
+                provided_keys = input_data['observables'][name].keys()
+
+                missing_keys  = [key for key in required_keys if key not in provided_keys]
+                if missing_keys:
+                    raise KeyError(f'Missing keys for observable { name }: { missing_keys }')
+
+                ignored_keys = [key for key in provided_keys if key not in required_keys]
+                if ignored_keys:
+                    eos.warn(f'Ignoring unknown keys for observable { name }: { ignored_keys }')
+
+                obs = input_data['observables'][name]
+                options = eos.Options(**obs['options'])
+                eos.Observables().insert(name, obs['latex'], eos.Unit(obs['unit']), options, obs['expression'])
+                eos.info(f'Successfully inserted observable: { name }')
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
