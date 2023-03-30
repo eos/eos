@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2016, 2019, 2020 Danny van Dyk
- * Copyright (c) 2021 Philip Lüghausen
+ * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -449,7 +449,7 @@ BOOST_PYTHON_MODULE(_eos)
             - InverseGeV2
             - InverseGeV4
             - InversePicoSecond
-        )", no_init)
+        )", init<std::string>())
         .def("Undefined", &Unit::Undefined)
         .staticmethod("Undefined")
         .def("Unity", &Unit::None)
