@@ -57,7 +57,7 @@ namespace eos
             a4pi_0(p["pi::a4@1GeV"], u),
             f3pi_0(p["pi::f3@1GeV"], u),
             omega3_0(p["pi::omega3@1GeV"], u),
-            delta4_0(p["pi::delta^2@1GeV"], u),
+            delta4_0(p["pi::delta4@1GeV"], u),
             omega4_0(p["pi::omega4@1GeV"], u),
             m_pi(p["mass::pi^+"], u),
             f_pi(p["decay-constant::pi"], u),

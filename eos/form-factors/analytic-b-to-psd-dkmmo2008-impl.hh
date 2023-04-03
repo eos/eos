@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2014-2023 Danny van Dyk
  * Copyright (c) 2019, 2020 Domagoj Leljak
+ * Copyright (c) 2023 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -418,11 +419,7 @@ namespace eos
             const double Mprime4 = Mprime2 * Mprime2;
             const double mq = this->m_q_msbar(mu);
 
-            //const double cond_qq_mu = -fP * fP * this->lcdas->mu3(mu) / 2.0; // <qq>@mu
-            //const double cond_qq_1 = -fP * fP * this->lcdas->mu3(1.0) / 2.0; // <qq>@1GeV
-
             const double alpha_s_mu = model->alpha_s(mu());
-            const double alpha_s_1 = model->alpha_s(1.0); // alpha_s@1GeV
 
             using namespace std::placeholders;
 
@@ -444,24 +441,13 @@ namespace eos
             double numerator = 3.0 * mb2 / (8.0 * pi2) * integral_numerator
                 + mb4 * std::exp(-mb2 / Mprime2) * (
                     this->decay_constant_power_correction()
-                    //- mb * cond_qq_mu * (1.0 + 4.0 * alpha_s_mu / (3.0 * pi) * dkmmo2008::delta_1(mb, mu, Mprime2))
-                    //- mb * cond_qq_1  * m02 / (2.0 * Mprime2) * (1.0 - mb2 / (2 * Mprime2))
-                    //+ cond_GG / 12.0
-                    //- 16.0 * pi * alpha_s_1 * cond_qq_1 * cond_qq_1 / (27.0 * Mprime2) * (1.0 - mb2 / (4.0 * Mprime2) - mb4 / (12.0 * Mprime4))
                 )
                 + mb2 * std::exp(-mb2 / Mprime2) * (
                     this->decay_constant_power_correction_Mprime2_deriv()
-                    //- mb * cond_qq_mu * 4.0 * alpha_s_mu / (3.0 * pi) * dkmmo2008::delta_1(mb, mu, Mprime2)
-                    //- mb * cond_qq_1  * m02 / (2.0 * Mprime2) * (mb2 - Mprime2)
-                    //+ 16.0 * pi * alpha_s_1 * cond_qq_1 * cond_qq_1 / (27.0 * 4.0 * Mprime4) * (4.0 * Mprime4 - 2.0 * Mprime2 * mb2 - mb4)
-                );
+               );
             double denominator = 3.0 * mb2 / (8.0 * pi2) * integral_denominator
                 + mb2 * std::exp(-mb2 / Mprime2) * (
                     this->decay_constant_power_correction()
-                    //- mb * cond_qq_mu * (1.0 + 4.0 * alpha_s_mu / (3.0 * pi) * dkmmo2008::delta_1(mb, mu, Mprime2))
-                    //- mb * cond_qq_1  * m02 / (2.0 * Mprime2) * (1.0 - mb2 / (2 * Mprime2))
-                    //+ cond_GG / 12.0
-                    //- 16.0 * pi * alpha_s_1 * cond_qq_1 * cond_qq_1 / (27.0 * Mprime2) * (1.0 - mb2 / (4.0 * Mprime2) - mb4 / (12.0 * Mprime4))
                 );
 
             return std::sqrt(numerator / denominator);

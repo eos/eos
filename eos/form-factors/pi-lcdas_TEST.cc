@@ -50,7 +50,7 @@ class PionLCDAsTest :
             p["pi::a4@1GeV"] = 0.06;
             p["pi::f3@1GeV"] = 0.0045;
             p["pi::omega3@1GeV"] = -1.5;
-            p["pi::delta^2@1GeV"] = 0.18;
+            p["pi::delta4@1GeV"] = 0.18;
             p["pi::omega4@1GeV"] = 0.2;
             p["decay-constant::pi"] = 0.1302;
             p["mass::pi^+"] = 0.13957;
