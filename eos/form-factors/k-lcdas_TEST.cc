@@ -53,7 +53,7 @@ class AntiKaonLCDAsTest :
             p["K::f3@1GeV"]          =  0.0045;
             p["K::omega3@1GeV"]      = -1.5;
             p["K::lambda3@1GeV"]     =  1.6;
-            p["K::delta^2@1GeV"]     =  0.18;
+            p["K::delta4@1GeV"]     =  0.18;
             p["K::kappa4@1GeV"]      = -0.09;
             p["K::omega4@1GeV"]      =  0.2;
             p["mass::K_u"]           =  0.49368;
@@ -249,7 +249,7 @@ class KaonLCDAsTest :
             p["K::f3@1GeV"]          =  0.0045;
             p["K::omega3@1GeV"]      = -1.5;
             p["K::lambda3@1GeV"]     = -1.6;
-            p["K::delta^2@1GeV"]     =  0.18;
+            p["K::delta4@1GeV"]     =  0.18;
             p["K::kappa4@1GeV"]      =  0.09;
             p["K::omega4@1GeV"]      =  0.2;
             p["mass::K_u"]           =  0.49368;

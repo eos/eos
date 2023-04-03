@@ -658,7 +658,7 @@ groups:
           latex:    '$\omega^{\pi}_4(1\,\mathrm{GeV})$'
           unit:     '1'
           comments: 'cf. [DKMMO:2008A]'
-      'pi::delta^2@1GeV' :
+      'pi::delta4@1GeV' :
           central: +0.18
           min:     +0.12
           max:     +0.24
@@ -718,7 +718,7 @@ groups:
           latex:    '$\omega^{K}_4(1\,\mathrm{GeV})$'
           unit:     '1'
           comments: 'cf. [DKMMO:2008A]'
-      'K::delta^2@1GeV' :
+      'K::delta4@1GeV' :
           central: +0.18
           min:     +0.12
           max:     +0.24

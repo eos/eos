@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General

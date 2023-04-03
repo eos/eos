@@ -115,7 +115,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["pi::f3@1GeV"] = 0.0045;
                 p["pi::omega3@1GeV"] = -1.5;
                 p["pi::omega4@1GeV"] = 0.2;
-                p["pi::delta^2@1GeV"] = 0.18;
+                p["pi::delta4@1GeV"] = 0.18;
                 p["B->pi::M^2@DKMMO2008"] = 12.0;
                 p["B->pi::Mp^2@DKMMO2008"] = 4.5;
                 p["B->pi::mu@DKMMO2008"] = 3.0;
@@ -282,7 +282,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["pi::f3@1GeV"] = 0.0045;
                 p["pi::omega3@1GeV"] = -1.5;
                 p["pi::omega4@1GeV"] = 0.2;
-                p["pi::delta^2@1GeV"] = 0.18;
+                p["pi::delta4@1GeV"] = 0.18;
                 p["B->pi::M^2@DKMMO2008"] = 18.0;
                 p["B->pi::Mp^2@DKMMO2008"] = 5.;
                 p["B->pi::mu@DKMMO2008"] = 3.0;
