@@ -53,6 +53,13 @@ namespace eos
                 UsedParameter(p[parameter("a^phi+_8")], *this)
             })
         {
+            // Verify the size of Weights used internally
+            Weights weights;
+            if (weights.size() < a.size())
+            {
+                throw InternalError("The number of weights implemented is smaller than the number of coefficients of phi_+");
+            }
+
             if (opt_gminus.value() == "zero")
             {
                 switch_gminus = 0.0;
@@ -80,7 +87,7 @@ namespace eos
         FLvD2022::coefficient_range(const double & mu) const
         {
             // copy values to array of doubles
-            static thread_local std::array<double, 9> values;
+            static thread_local std::array<double, number_of_parameters> values;
             for (size_t i = 0; i < values.size(); i++)
             {
                 values[i] = a[i]; // evaluates UsedParameter

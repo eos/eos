@@ -43,13 +43,16 @@ namespace eos
             public BMesonLCDAs
         {
             private:
+                const static unsigned int number_of_parameters = 9u;
+                using Weights = std::array<double, number_of_parameters>; // We implement the weights as fixed-size arrays
+
                 SpecifiedOption opt_q;
                 SpecifiedOption opt_gminus;
                 double switch_gminus;
 
                 UsedParameter mu_0;
                 UsedParameter omega_0;
-                std::array<UsedParameter, 9> a; // at the scale mu_0
+                std::array<UsedParameter, number_of_parameters> a; // at the scale mu_0
 
                 std::string parameter(const char * _name) const;
 
