@@ -121,21 +121,28 @@ class AnalysisFile:
                             fixed_parameters=fixed_parameters)
 
 
-    def observables(self, _prediction, parameters):
-        """Creates a list of eos.Observable objects for the named set of predictions."""
+    def observables(self, _posterior, _prediction, parameters):
+        """Creates a list of eos.Observable objects for the named set of posterior and predictions."""
+        if _posterior not in self._posteriors:
+            raise RuntimeError('Cannot create observables for unknown posterior: \'{}\''.format(_prediction))
         if _prediction not in self.predictions:
             raise RuntimeError('Cannot create observables for unknown set of predictions: \'{}\''.format(_prediction))
 
+        posterior = self._posteriors[_posterior]
         prediction = self.predictions[_prediction]
 
+        global_options = posterior['global_options'] if 'global_options' in posterior else {}
+        fixed_parameters = posterior['fixed_parameters'] if 'fixed_parameters' in posterior else {}
+
         if 'global_options' in prediction:
-            options = eos.Options(**prediction['global_options'])
-        else:
-            options = eos.Options()
+            global_options.update(prediction['global_options'])
 
         if 'fixed_parameters' in prediction:
-            for (p, v) in prediction['fixed_parameters'].items():
-                parameters.set(p, v)
+            fixed_parameters.update(prediction['fixed_parameters'])
+
+        options = eos.Options(**global_options)
+        for (p, v) in fixed_parameters.items():
+            parameters.set(p, v)
 
         observables = [eos.Observable.make(
             o['name'],

@@ -375,7 +375,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type begin: int
     '''
     _parameters = analysis_file.analysis(posterior).parameters
-    observables = analysis_file.observables(prediction, _parameters)
+    observables = analysis_file.observables(posterior, prediction, _parameters)
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
