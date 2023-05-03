@@ -111,5 +111,30 @@ class FLvD2022Test :
                 auto t2_d2_d2t_phitilde = Observable::make("B::tau^2*d2_d2tau_phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
                 TEST_CHECK_NEARLY_EQUAL(t2_d2_d2t_phitilde->evaluate(), 20.320360292444562, 1e-12);
             }
+
+            // inverse moment and first and second logarithmic moments
+            {
+                Parameters p = Parameters::Defaults();
+                std::array<double, 9> parameters = { 1.0, -2.0, 3.0, -4.0, 5.0, -6.0, 7.0, -8.0, 9.0 };
+
+                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::omega_0@FLvD2022"] = 0.3;
+                for (size_t k = 0; k < parameters.size(); k++)
+                {
+                    p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = parameters[k];
+                }
+
+                Kinematics k = Kinematics({ {"mu", 1.0} });
+                Options o { };
+
+                auto L0 = Observable::make("B::L0@FLvD2022", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(L0->evaluate(), 16.66666666667032, 1e-10);
+
+                auto L1 = Observable::make("B::L1@FLvD2022", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(L1->evaluate(), 36.95238095239132, 1e-10);
+
+                auto L2 = Observable::make("B::L2@FLvD2022", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(L2->evaluate(), 126.63249899776702, 1e-10);
+            }
         }
 } b_lcdas_flvd2022_test;

@@ -1889,6 +1889,18 @@ namespace eos
                         Unit::None(),
                         &b_lcdas::FLvD2022::t2_d2_d2t_phitilde_plus,
                         std::make_tuple("tau", "mu")),
+                make_observable("B::L0@FLvD2022", R"(L_0)",
+                        Unit::InverseGeV(),
+                        &b_lcdas::FLvD2022::inverse_moment,
+                        std::make_tuple("mu")),
+                make_observable("B::L1@FLvD2022", R"(L_1)",
+                        Unit::InverseGeV(),
+                        &b_lcdas::FLvD2022::logarithmic_moment_1,
+                        std::make_tuple("mu")),
+                make_observable("B::L2@FLvD2022", R"(L_2)",
+                        Unit::InverseGeV(),
+                        &b_lcdas::FLvD2022::logarithmic_moment_2,
+                        std::make_tuple("mu")),
             }
         );
 
