@@ -131,10 +131,16 @@ namespace eos
 
                 virtual double psi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
                 virtual double chi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
+
                 /*!
                 * Pseudo observables for the two-particle LCDAs
+                *
+                * The logarithmic moments are defined in [FLvD:2022A], Eq. (14) with mu_m_hat = omega_0 * exp(euler_gamma)
                 */
                 virtual double inverse_lambda_plus() const final override;
+                double inverse_moment(const double & mu) const;
+                double logarithmic_moment_1(const double & mu) const;
+                double logarithmic_moment_2(const double & mu) const;
 
                 /*!
                  * Leading power three-particle LCDAs

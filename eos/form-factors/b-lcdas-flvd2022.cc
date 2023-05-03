@@ -449,6 +449,42 @@ namespace eos
         }
 
         double
+        FLvD2022::inverse_moment(const double & mu) const
+        {
+            // Cp. [FLvD:2022A], Eq. (43)
+            const Weights c = {
+                1.0, 0.0, 1.0 / 3.0, 0.0, 1.0 / 5.0, 0.0, 1.0 / 7.0, 0.0, 1.0 / 9.0
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            return 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
+
+        double
+        FLvD2022::logarithmic_moment_1(const double & mu) const
+        {
+            // Cp. [FLvD:2022A], Eq. (44)
+            const Weights c = {
+                0, -1.0, 0, -2.0 / 3.0, 0.0, -23.0 / 45.0, 0.0, -44.0 / 105.0, 0.0
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            return 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
+
+        double
+        FLvD2022::logarithmic_moment_2(const double & mu) const
+        {
+            // Cp. [FLvD:2022A], Eq. (45)
+            const Weights c = {
+                0.0, 0.0, 4.0 / 3.0, 0.0, 4.0 / 3.0, 0.0, 56.0 / 45.0, 0.0, 3272.0 / 2835.0
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            return power_of<2>(M_PI) / 6.0 * inverse_moment(mu) + 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
+
+        double
         FLvD2022::psi_A(const double & omega, const double & xi) const
         {
             throw InternalError("Function not yet implemented");
