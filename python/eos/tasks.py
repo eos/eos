@@ -494,7 +494,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf'):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', begin:int=0, end:int=None):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -514,15 +514,17 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     analysis = analysis_file.analysis(posterior)
     p = analysis.varied_parameters
     f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
-    size = f.samples.shape[-1]
+    _samples = f.samples[:, begin:end]
+    _weights = f.weights[:]
+    size = _samples.shape[-1]
     fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
 
     for i in range(size):
         # diagonal
         ax = axes[i, i]
-        samples = f.samples[:, i]
+        samples = _samples[:, i]
 
-        ax.hist(samples, weights=f.weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
+        ax.hist(samples, weights=_weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
         xmin = _np.min(samples)
         xmax = _np.max(samples)
         ax.set_xlim((xmin, xmax))
@@ -538,13 +540,13 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
                 continue
 
             ax = axes[i, j]
-            xsamples = f.samples[:, j]
-            ysamples = f.samples[:, i]
+            xsamples = _samples[:, j]
+            ysamples = _samples[:, i]
             xmin = _np.min(xsamples)
             xmax = _np.max(xsamples)
             ymin = _np.min(ysamples)
             ymax = _np.max(ysamples)
-            ax.hist2d(xsamples, ysamples, weights=f.weights, alpha=1.0, bins=100, cmap='Greys')
+            ax.hist2d(xsamples, ysamples, weights=_weights, alpha=1.0, bins=100, cmap='Greys')
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
             ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff((ymin, ymax))[0])
