@@ -7,6 +7,28 @@ import yaml
 
 class ClassMethodTests(unittest.TestCase):
 
+    def test_priors(self):
+
+        # Note: the cases are not physically meaningful
+        prior_cases = [
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0, 'max': 1.0, 'type': 'uniform'},
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0, 'max': 1.0, 'central': 0.0, 'sigma': 1.0 , 'type': 'gaussian'},
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0, 'max': 1.0, 'central': 0.0, 'sigma': (0.3, 0.5) , 'type': 'gaussian'},
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0, 'max': 1.0, 'mu_0': 1.0, 'lambda' :2.0, 'type': 'scale'},
+        ]
+
+        for prior in prior_cases:
+            analysis_args = {
+                'priors': [ prior ],
+                'likelihood': [ ]
+            }
+
+            try:
+                analysis = eos.Analysis(**analysis_args)
+            except Exception as e:
+                self.fail(f"Can not construct analysis with prior '{ prior }'")
+
+
     def test_parameter_scaling(self):
 
         analysis_args = {

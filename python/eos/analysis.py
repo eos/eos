@@ -124,6 +124,11 @@ class Analysis:
                         central - sigma_lo, central, central + sigma_hi
                     ),
                     False)
+            elif 'scale' == prior_type:
+                mu_0 = prior['mu_0']
+                lambda_scale = prior['lambda']
+                self._log_posterior.add(eos.LogPrior.Scale(self.parameters,
+                    parameter, eos.ParameterRange(minv, maxv), mu_0, lambda_scale), False)
             else:
                 raise ValueError('Unknown prior type \'{}\''.format(prior_type))
 
