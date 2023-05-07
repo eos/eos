@@ -169,15 +169,19 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
 
     eos.info(f'Minimization finished, best point is:')
     for p, v in zip(analysis.varied_parameters, _bfp.point):
-        eos.info('  - {} -> {}'.format(p.name(), v))
-    eos.info('total chi^2 = {}'.format(min_chi2))
+        eos.info(f'  - {p.name()} -> {v}')
+    eos.info(f'total chi^2 = {min_chi2:.2f}')
+    eos.info(f'total dof   = {gof.total_degrees_of_freedom()}')
     pvalue = (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))
-    eos.info('p value = {:.1f}%'.format(100 * pvalue))
+    eos.info(f'p value     = {100 * pvalue:.2f}%')
     eos.info('individual test statistics:')
+    local_pvalues = {}
     for n, e in gof:
-        eos.info('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
+        local_pvalue = (1.0 - scipy.stats.chi2(e.dof).cdf(e.chi2))
+        local_pvalues[f'{n}'] = float(local_pvalue)
+        eos.info(f'  - {n}: chi^2 / dof = {e.chi2:.2f} / {e.dof}, local_pvalue = {100 * local_pvalue:.2f}%')
 
-    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue)
+    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue, local_pvalues)
 
     return (bfp, gof)
 
