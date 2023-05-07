@@ -67,7 +67,7 @@ class Mode:
             'max': p.max()
         } for p in parameters]
         description['mode'] = mode.tolist()
-        description['pvalue'] = pvalue
+        description['pvalue'] = float(pvalue) if pvalue is not None else None
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
