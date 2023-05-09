@@ -548,16 +548,16 @@ B_s->D_s^*::A_1[s_max]@HPQCD:2019A:
 B_s->D_s^(*)::FormFactors[f_+,f_0,f_T,A_0,A_1,A_2,V,T_1,T_2,T_23]@BGJvD:2019A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->D_s::f_+(q2),    B_s->D_s::f_+(q2),    B_s->D_s::f_+(q2),    B_s->D_s::f_+(q2),
-      B_s->D_s::f_0(q2),    B_s->D_s::f_0(q2),    B_s->D_s::f_0(q2),
-      B_s->D_s::f_T(q2),    B_s->D_s::f_T(q2),    B_s->D_s::f_T(q2),    B_s->D_s::f_T(q2),
-      B_s->D_s^*::A_0(q2),  B_s->D_s^*::A_0(q2),  B_s->D_s^*::A_0(q2),
-      B_s->D_s^*::A_1(q2),  B_s->D_s^*::A_1(q2),  B_s->D_s^*::A_1(q2),  B_s->D_s^*::A_1(q2),
-      B_s->D_s^*::A_2(q2),  B_s->D_s^*::A_2(q2),  B_s->D_s^*::A_2(q2),  B_s->D_s^*::A_2(q2),
-      B_s->D_s^*::V(q2),    B_s->D_s^*::V(q2),    B_s->D_s^*::V(q2),    B_s->D_s^*::V(q2),
-      B_s->D_s^*::T_1(q2),  B_s->D_s^*::T_1(q2),  B_s->D_s^*::T_1(q2),  B_s->D_s^*::T_1(q2),
-      B_s->D_s^*::T_2(q2),  B_s->D_s^*::T_2(q2),  B_s->D_s^*::T_2(q2),
-      B_s->D_s^*::T_23(q2), B_s->D_s^*::T_23(q2), B_s->D_s^*::T_23(q2), B_s->D_s^*::T_23(q2) ]
+    [ 'B_s->D_s::f_+(q2)',    'B_s->D_s::f_+(q2)',    'B_s->D_s::f_+(q2)',    'B_s->D_s::f_+(q2)',
+      'B_s->D_s::f_0(q2)',    'B_s->D_s::f_0(q2)',    'B_s->D_s::f_0(q2)',
+      'B_s->D_s::f_T(q2)',    'B_s->D_s::f_T(q2)',    'B_s->D_s::f_T(q2)',    'B_s->D_s::f_T(q2)',
+      'B_s->D_s^*::A_0(q2)',  'B_s->D_s^*::A_0(q2)',  'B_s->D_s^*::A_0(q2)',
+      'B_s->D_s^*::A_1(q2)',  'B_s->D_s^*::A_1(q2)',  'B_s->D_s^*::A_1(q2)',  'B_s->D_s^*::A_1(q2)',
+      'B_s->D_s^*::A_2(q2)',  'B_s->D_s^*::A_2(q2)',  'B_s->D_s^*::A_2(q2)',  'B_s->D_s^*::A_2(q2)',
+      'B_s->D_s^*::V(q2)',    'B_s->D_s^*::V(q2)',    'B_s->D_s^*::V(q2)',    'B_s->D_s^*::V(q2)',
+      'B_s->D_s^*::T_1(q2)',  'B_s->D_s^*::T_1(q2)',  'B_s->D_s^*::T_1(q2)',  'B_s->D_s^*::T_1(q2)',
+      'B_s->D_s^*::T_2(q2)',  'B_s->D_s^*::T_2(q2)',  'B_s->D_s^*::T_2(q2)',
+      'B_s->D_s^*::T_23(q2)', 'B_s->D_s^*::T_23(q2)', 'B_s->D_s^*::T_23(q2)', 'B_s->D_s^*::T_23(q2)' ]
   kinematics:
     [ q2: -15.0, q2: -10.0, q2: -5.0, q2: 0.0,
       q2: -15.0, q2: -10.0, q2: -5.0,
@@ -632,15 +632,15 @@ B_s->D_s^(*)::FormFactors[f_+,f_0,f_T,A_0,A_1,A_2,V,T_1,T_2,T_23]@BGJvD:2019A:
 B_s->D_s^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@BGJvD:2019A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->D_s::f_+(q2),    B_s->D_s::f_+(q2),    B_s->D_s::f_+(q2),    B_s->D_s::f_+(q2),
-      B_s->D_s::f_0(q2),    B_s->D_s::f_0(q2),    B_s->D_s::f_0(q2),
-      B_s->D_s^*::A_0(q2),  B_s->D_s^*::A_0(q2),  B_s->D_s^*::A_0(q2),
-      B_s->D_s^*::A_1(q2),  B_s->D_s^*::A_1(q2),  B_s->D_s^*::A_1(q2),  B_s->D_s^*::A_1(q2),
-      B_s->D_s^*::A_2(q2),  B_s->D_s^*::A_2(q2),  B_s->D_s^*::A_2(q2),  B_s->D_s^*::A_2(q2),
-      B_s->D_s^*::V(q2),    B_s->D_s^*::V(q2),    B_s->D_s^*::V(q2),    B_s->D_s^*::V(q2),
-      B_s->D_s^*::T_1(q2),  B_s->D_s^*::T_1(q2),  B_s->D_s^*::T_1(q2),  B_s->D_s^*::T_1(q2),
-      B_s->D_s^*::T_2(q2),  B_s->D_s^*::T_2(q2),  B_s->D_s^*::T_2(q2),
-      B_s->D_s^*::T_23(q2), B_s->D_s^*::T_23(q2), B_s->D_s^*::T_23(q2), B_s->D_s^*::T_23(q2) ]
+    [ 'B_s->D_s::f_+(q2)',    'B_s->D_s::f_+(q2)',    'B_s->D_s::f_+(q2)',    'B_s->D_s::f_+(q2)',
+      'B_s->D_s::f_0(q2)',    'B_s->D_s::f_0(q2)',    'B_s->D_s::f_0(q2)',
+      'B_s->D_s^*::A_0(q2)',  'B_s->D_s^*::A_0(q2)',  'B_s->D_s^*::A_0(q2)',
+      'B_s->D_s^*::A_1(q2)',  'B_s->D_s^*::A_1(q2)',  'B_s->D_s^*::A_1(q2)',  'B_s->D_s^*::A_1(q2)',
+      'B_s->D_s^*::A_2(q2)',  'B_s->D_s^*::A_2(q2)',  'B_s->D_s^*::A_2(q2)',  'B_s->D_s^*::A_2(q2)',
+      'B_s->D_s^*::V(q2)',    'B_s->D_s^*::V(q2)',    'B_s->D_s^*::V(q2)',    'B_s->D_s^*::V(q2)',
+      'B_s->D_s^*::T_1(q2)',  'B_s->D_s^*::T_1(q2)',  'B_s->D_s^*::T_1(q2)',  'B_s->D_s^*::T_1(q2)',
+      'B_s->D_s^*::T_2(q2)',  'B_s->D_s^*::T_2(q2)',  'B_s->D_s^*::T_2(q2)',
+      'B_s->D_s^*::T_23(q2)', 'B_s->D_s^*::T_23(q2)', 'B_s->D_s^*::T_23(q2)', 'B_s->D_s^*::T_23(q2)' ]
   kinematics:
     [ q2: -15.0, q2: -10.0, q2: -5.0, q2: 0.0,
       q2: -15.0, q2: -10.0, q2: -5.0,
@@ -708,16 +708,16 @@ B_s->D_s^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@BGJvD:2019A:
 B_s->D_s^(*)::FormFactors[parametric,LCSR]@BGJvD:2019A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->D_s::alpha^f+_0@BSZ2015, B_s->D_s::alpha^f+_1@BSZ2015, B_s->D_s::alpha^f+_2@BSZ2015,
-      B_s->D_s::alpha^f0_1@BSZ2015, B_s->D_s::alpha^f0_2@BSZ2015,
-      B_s->D_s::alpha^fT_0@BSZ2015, B_s->D_s::alpha^fT_1@BSZ2015, B_s->D_s::alpha^fT_2@BSZ2015,
-      B_s->D_s^*::alpha^A0_0@BSZ2015, B_s->D_s^*::alpha^A0_1@BSZ2015, B_s->D_s^*::alpha^A0_2@BSZ2015,
-      B_s->D_s^*::alpha^A1_0@BSZ2015, B_s->D_s^*::alpha^A1_1@BSZ2015, B_s->D_s^*::alpha^A1_2@BSZ2015,
-      B_s->D_s^*::alpha^A12_1@BSZ2015, B_s->D_s^*::alpha^A12_2@BSZ2015,
-      B_s->D_s^*::alpha^V_0@BSZ2015, B_s->D_s^*::alpha^V_1@BSZ2015, B_s->D_s^*::alpha^V_2@BSZ2015,
-      B_s->D_s^*::alpha^T1_0@BSZ2015, B_s->D_s^*::alpha^T1_1@BSZ2015, B_s->D_s^*::alpha^T1_2@BSZ2015,
-      B_s->D_s^*::alpha^T2_1@BSZ2015, B_s->D_s^*::alpha^T2_2@BSZ2015,
-      B_s->D_s^*::alpha^T23_0@BSZ2015, B_s->D_s^*::alpha^T23_1@BSZ2015, B_s->D_s^*::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->D_s::alpha^f+_0@BSZ2015', 'B_s->D_s::alpha^f+_1@BSZ2015', 'B_s->D_s::alpha^f+_2@BSZ2015',
+      'B_s->D_s::alpha^f0_1@BSZ2015', 'B_s->D_s::alpha^f0_2@BSZ2015',
+      'B_s->D_s::alpha^fT_0@BSZ2015', 'B_s->D_s::alpha^fT_1@BSZ2015', 'B_s->D_s::alpha^fT_2@BSZ2015',
+      'B_s->D_s^*::alpha^A0_0@BSZ2015', 'B_s->D_s^*::alpha^A0_1@BSZ2015', 'B_s->D_s^*::alpha^A0_2@BSZ2015',
+      'B_s->D_s^*::alpha^A1_0@BSZ2015', 'B_s->D_s^*::alpha^A1_1@BSZ2015', 'B_s->D_s^*::alpha^A1_2@BSZ2015',
+      'B_s->D_s^*::alpha^A12_1@BSZ2015', 'B_s->D_s^*::alpha^A12_2@BSZ2015',
+      'B_s->D_s^*::alpha^V_0@BSZ2015', 'B_s->D_s^*::alpha^V_1@BSZ2015', 'B_s->D_s^*::alpha^V_2@BSZ2015',
+      'B_s->D_s^*::alpha^T1_0@BSZ2015', 'B_s->D_s^*::alpha^T1_1@BSZ2015', 'B_s->D_s^*::alpha^T1_2@BSZ2015',
+      'B_s->D_s^*::alpha^T2_1@BSZ2015', 'B_s->D_s^*::alpha^T2_2@BSZ2015',
+      'B_s->D_s^*::alpha^T23_0@BSZ2015', 'B_s->D_s^*::alpha^T23_1@BSZ2015', 'B_s->D_s^*::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -764,16 +764,16 @@ B_s->D_s^(*)::FormFactors[parametric,LCSR]@BGJvD:2019A:
 B_s->D_s^(*)::FormFactors[parametric,LCSRLattice]@BGJvD:2019A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->D_s::alpha^f+_0@BSZ2015, B_s->D_s::alpha^f+_1@BSZ2015, B_s->D_s::alpha^f+_2@BSZ2015,
-      B_s->D_s::alpha^f0_1@BSZ2015, B_s->D_s::alpha^f0_2@BSZ2015,
-      B_s->D_s::alpha^fT_0@BSZ2015, B_s->D_s::alpha^fT_1@BSZ2015, B_s->D_s::alpha^fT_2@BSZ2015,
-      B_s->D_s^*::alpha^A0_0@BSZ2015, B_s->D_s^*::alpha^A0_1@BSZ2015, B_s->D_s^*::alpha^A0_2@BSZ2015,
-      B_s->D_s^*::alpha^A1_0@BSZ2015, B_s->D_s^*::alpha^A1_1@BSZ2015, B_s->D_s^*::alpha^A1_2@BSZ2015,
-      B_s->D_s^*::alpha^A12_1@BSZ2015, B_s->D_s^*::alpha^A12_2@BSZ2015,
-      B_s->D_s^*::alpha^V_0@BSZ2015, B_s->D_s^*::alpha^V_1@BSZ2015, B_s->D_s^*::alpha^V_2@BSZ2015,
-      B_s->D_s^*::alpha^T1_0@BSZ2015, B_s->D_s^*::alpha^T1_1@BSZ2015, B_s->D_s^*::alpha^T1_2@BSZ2015,
-      B_s->D_s^*::alpha^T2_1@BSZ2015, B_s->D_s^*::alpha^T2_2@BSZ2015,
-      B_s->D_s^*::alpha^T23_0@BSZ2015, B_s->D_s^*::alpha^T23_1@BSZ2015, B_s->D_s^*::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->D_s::alpha^f+_0@BSZ2015', 'B_s->D_s::alpha^f+_1@BSZ2015', 'B_s->D_s::alpha^f+_2@BSZ2015',
+      'B_s->D_s::alpha^f0_1@BSZ2015', 'B_s->D_s::alpha^f0_2@BSZ2015',
+      'B_s->D_s::alpha^fT_0@BSZ2015', 'B_s->D_s::alpha^fT_1@BSZ2015', 'B_s->D_s::alpha^fT_2@BSZ2015',
+      'B_s->D_s^*::alpha^A0_0@BSZ2015', 'B_s->D_s^*::alpha^A0_1@BSZ2015', 'B_s->D_s^*::alpha^A0_2@BSZ2015',
+      'B_s->D_s^*::alpha^A1_0@BSZ2015', 'B_s->D_s^*::alpha^A1_1@BSZ2015', 'B_s->D_s^*::alpha^A1_2@BSZ2015',
+      'B_s->D_s^*::alpha^A12_1@BSZ2015', 'B_s->D_s^*::alpha^A12_2@BSZ2015',
+      'B_s->D_s^*::alpha^V_0@BSZ2015', 'B_s->D_s^*::alpha^V_1@BSZ2015', 'B_s->D_s^*::alpha^V_2@BSZ2015',
+      'B_s->D_s^*::alpha^T1_0@BSZ2015', 'B_s->D_s^*::alpha^T1_1@BSZ2015', 'B_s->D_s^*::alpha^T1_2@BSZ2015',
+      'B_s->D_s^*::alpha^T2_1@BSZ2015', 'B_s->D_s^*::alpha^T2_2@BSZ2015',
+      'B_s->D_s^*::alpha^T23_0@BSZ2015', 'B_s->D_s^*::alpha^T23_1@BSZ2015', 'B_s->D_s^*::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -912,18 +912,18 @@ B->K^*::V@FNAL+MILC:2013A:
 B->K^*::V+A_0+A_1+A_12@HLMW:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B->K^*::V(q2), B->K^*::V(q2), B->K^*::V(q2), B->K^*::V(q2),
-      B->K^*::V(q2), B->K^*::V(q2), B->K^*::V(q2), B->K^*::V(q2),
-      B->K^*::V(q2), B->K^*::V(q2), B->K^*::V(q2), B->K^*::V(q2),
-      B->K^*::A_1(q2), B->K^*::A_1(q2), B->K^*::A_1(q2), B->K^*::A_1(q2),
-      B->K^*::A_1(q2), B->K^*::A_1(q2), B->K^*::A_1(q2), B->K^*::A_1(q2),
-      B->K^*::A_1(q2), B->K^*::A_1(q2), B->K^*::A_1(q2), B->K^*::A_1(q2),
-      B->K^*::A_12(q2), B->K^*::A_12(q2), B->K^*::A_12(q2), B->K^*::A_12(q2),
-      B->K^*::A_12(q2), B->K^*::A_12(q2), B->K^*::A_12(q2), B->K^*::A_12(q2),
-      B->K^*::A_12(q2), B->K^*::A_12(q2), B->K^*::A_12(q2), B->K^*::A_12(q2),
-      B->K^*::A_0(q2), B->K^*::A_0(q2), B->K^*::A_0(q2), B->K^*::A_0(q2),
-      B->K^*::A_0(q2), B->K^*::A_0(q2), B->K^*::A_0(q2), B->K^*::A_0(q2),
-      B->K^*::A_0(q2), B->K^*::A_0(q2), B->K^*::A_0(q2), B->K^*::A_0(q2) ]
+    [ 'B->K^*::V(q2)', 'B->K^*::V(q2)', 'B->K^*::V(q2)', 'B->K^*::V(q2)',
+      'B->K^*::V(q2)', 'B->K^*::V(q2)', 'B->K^*::V(q2)', 'B->K^*::V(q2)',
+      'B->K^*::V(q2)', 'B->K^*::V(q2)', 'B->K^*::V(q2)', 'B->K^*::V(q2)',
+      'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)',
+      'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)',
+      'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)', 'B->K^*::A_1(q2)',
+      'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)',
+      'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)',
+      'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)', 'B->K^*::A_12(q2)',
+      'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)',
+      'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)',
+      'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)', 'B->K^*::A_0(q2)' ]
   kinematics:
     [ {q2: 16.5179098782}, {q2: 14.9296311557}, {q2: 13.9898947981}, {q2: 12.9663104802},
       {q2: 16.2551930084}, {q2: 14.9875855712}, {q2: 13.9849812172}, {q2: 12.8588109331},
@@ -1004,15 +1004,15 @@ B->K^*::V+A_0+A_1+A_12@HLMW:2015A:
 B->K^*::T_1+T_2+T_23@HLMW:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B->K^*::T_1(q2), B->K^*::T_1(q2), B->K^*::T_1(q2), B->K^*::T_1(q2),
-      B->K^*::T_1(q2), B->K^*::T_1(q2), B->K^*::T_1(q2), B->K^*::T_1(q2),
-      B->K^*::T_1(q2), B->K^*::T_1(q2), B->K^*::T_1(q2), B->K^*::T_1(q2),
-      B->K^*::T_2(q2), B->K^*::T_2(q2), B->K^*::T_2(q2), B->K^*::T_2(q2),
-      B->K^*::T_2(q2), B->K^*::T_2(q2), B->K^*::T_2(q2), B->K^*::T_2(q2),
-      B->K^*::T_2(q2), B->K^*::T_2(q2), B->K^*::T_2(q2), B->K^*::T_2(q2),
-      B->K^*::T_23(q2), B->K^*::T_23(q2), B->K^*::T_23(q2), B->K^*::T_23(q2),
-      B->K^*::T_23(q2), B->K^*::T_23(q2), B->K^*::T_23(q2), B->K^*::T_23(q2),
-      B->K^*::T_23(q2), B->K^*::T_23(q2), B->K^*::T_23(q2), B->K^*::T_23(q2) ]
+    [ 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)',
+      'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)',
+      'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)', 'B->K^*::T_1(q2)',
+      'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)',
+      'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)',
+      'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)', 'B->K^*::T_2(q2)',
+      'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)',
+      'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)',
+      'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)', 'B->K^*::T_23(q2)' ]
   kinematics:
     [ {q2: 16.5179098782}, {q2: 14.9296311557}, {q2: 13.9898947981}, {q2: 12.9663104802},
       {q2: 16.2551930084}, {q2: 14.9875855712}, {q2: 13.9849812172}, {q2: 12.8588109331},
@@ -1075,10 +1075,10 @@ B->K^*::T_1+T_2+T_23@HLMW:2015A:
 B->K^*::V+A_0+A_1+A_2[LCSR+Lattice]@BSZ:2015A:
   type: MultivariateGaussian
   observables:
-    [ B->K^*::alpha^A0_0@BSZ2015,  B->K^*::alpha^A0_1@BSZ2015,  B->K^*::alpha^A0_2@BSZ2015,
-      B->K^*::alpha^A1_0@BSZ2015,  B->K^*::alpha^A1_1@BSZ2015,  B->K^*::alpha^A1_2@BSZ2015,
-      B->K^*::alpha^A12_1@BSZ2015, B->K^*::alpha^A12_2@BSZ2015,
-      B->K^*::alpha^V_0@BSZ2015,   B->K^*::alpha^V_1@BSZ2015,   B->K^*::alpha^V_2@BSZ2015 ]
+    [ 'B->K^*::alpha^A0_0@BSZ2015',  'B->K^*::alpha^A0_1@BSZ2015',  'B->K^*::alpha^A0_2@BSZ2015',
+      'B->K^*::alpha^A1_0@BSZ2015',  'B->K^*::alpha^A1_1@BSZ2015',  'B->K^*::alpha^A1_2@BSZ2015',
+      'B->K^*::alpha^A12_1@BSZ2015', 'B->K^*::alpha^A12_2@BSZ2015',
+      'B->K^*::alpha^V_0@BSZ2015',   'B->K^*::alpha^V_1@BSZ2015',   'B->K^*::alpha^V_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -1102,10 +1102,10 @@ B->K^*::V+A_0+A_1+A_2[LCSR+Lattice]@BSZ:2015A:
 B->K^*::V+A_0+A_1+A_2[LCSR]@BSZ:2015A:
   type: MultivariateGaussian
   observables:
-    [ B->K^*::alpha^A0_0@BSZ2015,  B->K^*::alpha^A0_1@BSZ2015,  B->K^*::alpha^A0_2@BSZ2015,
-      B->K^*::alpha^A1_0@BSZ2015,  B->K^*::alpha^A1_1@BSZ2015,  B->K^*::alpha^A1_2@BSZ2015,
-      B->K^*::alpha^A12_1@BSZ2015, B->K^*::alpha^A12_2@BSZ2015,
-      B->K^*::alpha^V_0@BSZ2015,   B->K^*::alpha^V_1@BSZ2015,   B->K^*::alpha^V_2@BSZ2015 ]
+    [ 'B->K^*::alpha^A0_0@BSZ2015',  'B->K^*::alpha^A0_1@BSZ2015',  'B->K^*::alpha^A0_2@BSZ2015',
+      'B->K^*::alpha^A1_0@BSZ2015',  'B->K^*::alpha^A1_1@BSZ2015',  'B->K^*::alpha^A1_2@BSZ2015',
+      'B->K^*::alpha^A12_1@BSZ2015', 'B->K^*::alpha^A12_2@BSZ2015',
+      'B->K^*::alpha^V_0@BSZ2015',   'B->K^*::alpha^V_1@BSZ2015',   'B->K^*::alpha^V_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -1465,13 +1465,13 @@ B_s->K^*::V@FNAL+MILC:2013A:
 B_s->K^*::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->K^*::A_0(q2),  B_s->K^*::A_0(q2),  B_s->K^*::A_0(q2),  B_s->K^*::A_0(q2),
-      B_s->K^*::A_1(q2),  B_s->K^*::A_1(q2),  B_s->K^*::A_1(q2),  B_s->K^*::A_1(q2),  B_s->K^*::A_1(q2),
-      B_s->K^*::A_2(q2),  B_s->K^*::A_2(q2),  B_s->K^*::A_2(q2),  B_s->K^*::A_2(q2),  B_s->K^*::A_2(q2),
-      B_s->K^*::V(q2),    B_s->K^*::V(q2),    B_s->K^*::V(q2),    B_s->K^*::V(q2),    B_s->K^*::V(q2),
-      B_s->K^*::T_1(q2),  B_s->K^*::T_1(q2),  B_s->K^*::T_1(q2),  B_s->K^*::T_1(q2),  B_s->K^*::T_1(q2),
-      B_s->K^*::T_2(q2),  B_s->K^*::T_2(q2),  B_s->K^*::T_2(q2),  B_s->K^*::T_2(q2),
-      B_s->K^*::T_23(q2), B_s->K^*::T_23(q2), B_s->K^*::T_23(q2), B_s->K^*::T_23(q2), B_s->K^*::T_23(q2) ]
+    [ 'B_s->K^*::A_0(q2)',  'B_s->K^*::A_0(q2)',  'B_s->K^*::A_0(q2)',  'B_s->K^*::A_0(q2)',
+      'B_s->K^*::A_1(q2)',  'B_s->K^*::A_1(q2)',  'B_s->K^*::A_1(q2)',  'B_s->K^*::A_1(q2)',  'B_s->K^*::A_1(q2)',
+      'B_s->K^*::A_2(q2)',  'B_s->K^*::A_2(q2)',  'B_s->K^*::A_2(q2)',  'B_s->K^*::A_2(q2)',  'B_s->K^*::A_2(q2)',
+      'B_s->K^*::V(q2)',    'B_s->K^*::V(q2)',    'B_s->K^*::V(q2)',    'B_s->K^*::V(q2)',    'B_s->K^*::V(q2)',
+      'B_s->K^*::T_1(q2)',  'B_s->K^*::T_1(q2)',  'B_s->K^*::T_1(q2)',  'B_s->K^*::T_1(q2)',  'B_s->K^*::T_1(q2)',
+      'B_s->K^*::T_2(q2)',  'B_s->K^*::T_2(q2)',  'B_s->K^*::T_2(q2)',  'B_s->K^*::T_2(q2)',
+      'B_s->K^*::T_23(q2)', 'B_s->K^*::T_23(q2)', 'B_s->K^*::T_23(q2)', 'B_s->K^*::T_23(q2)', 'B_s->K^*::T_23(q2)' ]
   kinematics:
     [ q2: -15.0, q2: -10.0, q2: -5.0, q2: 5.0,
       q2: -15.0, q2: -10.0, q2: -5.0, q2: 0.0, q2: 5.0,
@@ -1533,10 +1533,10 @@ B_s->K^*::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GvDV:2020A:
 B_s->K^*::V+A_0+A_1+A_12@HLMW:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->K^*::V(q2),    B_s->K^*::V(q2),
-      B_s->K^*::A_0(q2),  B_s->K^*::A_0(q2),
-      B_s->K^*::A_1(q2),  B_s->K^*::A_1(q2),
-      B_s->K^*::A_12(q2), B_s->K^*::A_12(q2) ]
+    [ 'B_s->K^*::V(q2)',    'B_s->K^*::V(q2)',
+      'B_s->K^*::A_0(q2)',  'B_s->K^*::A_0(q2)',
+      'B_s->K^*::A_1(q2)',  'B_s->K^*::A_1(q2)',
+      'B_s->K^*::A_12(q2)', 'B_s->K^*::A_12(q2)' ]
   kinematics:
     [ q2: 16.0, q2: 20.0,
       q2: 16.0, q2: 20.0,
@@ -1564,9 +1564,9 @@ B_s->K^*::V+A_0+A_1+A_12@HLMW:2015A:
 B_s->K^*::T_1+T_2+T_23@HLMW:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->K^*::T_1(q2),  B_s->K^*::T_1(q2),
-      B_s->K^*::T_2(q2),  B_s->K^*::T_2(q2),
-      B_s->K^*::T_23(q2), B_s->K^*::T_23(q2) ]
+    [ 'B_s->K^*::T_1(q2)',  'B_s->K^*::T_1(q2)',
+      'B_s->K^*::T_2(q2)',  'B_s->K^*::T_2(q2)',
+      'B_s->K^*::T_23(q2)', 'B_s->K^*::T_23(q2)' ]
   kinematics:
     [ q2: 16.0, q2: 20.0,
       q2: 16.0, q2: 20.0,
@@ -1589,13 +1589,13 @@ B_s->K^*::T_1+T_2+T_23@HLMW:2015A:
 B_s->K^*::FormFactors[parametric,LCSR]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->K^*::alpha^A0_0@BSZ2015,  B_s->K^*::alpha^A0_1@BSZ2015,  B_s->K^*::alpha^A0_2@BSZ2015,
-      B_s->K^*::alpha^A1_0@BSZ2015,  B_s->K^*::alpha^A1_1@BSZ2015,  B_s->K^*::alpha^A1_2@BSZ2015,
-      B_s->K^*::alpha^A12_1@BSZ2015, B_s->K^*::alpha^A12_2@BSZ2015,
-      B_s->K^*::alpha^V_0@BSZ2015,   B_s->K^*::alpha^V_1@BSZ2015,   B_s->K^*::alpha^V_2@BSZ2015,
-      B_s->K^*::alpha^T1_0@BSZ2015,  B_s->K^*::alpha^T1_1@BSZ2015,  B_s->K^*::alpha^T1_2@BSZ2015,
-      B_s->K^*::alpha^T2_1@BSZ2015,  B_s->K^*::alpha^T2_2@BSZ2015,
-      B_s->K^*::alpha^T23_0@BSZ2015, B_s->K^*::alpha^T23_1@BSZ2015, B_s->K^*::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->K^*::alpha^A0_0@BSZ2015',  'B_s->K^*::alpha^A0_1@BSZ2015',  'B_s->K^*::alpha^A0_2@BSZ2015',
+      'B_s->K^*::alpha^A1_0@BSZ2015',  'B_s->K^*::alpha^A1_1@BSZ2015',  'B_s->K^*::alpha^A1_2@BSZ2015',
+      'B_s->K^*::alpha^A12_1@BSZ2015', 'B_s->K^*::alpha^A12_2@BSZ2015',
+      'B_s->K^*::alpha^V_0@BSZ2015',   'B_s->K^*::alpha^V_1@BSZ2015',   'B_s->K^*::alpha^V_2@BSZ2015',
+      'B_s->K^*::alpha^T1_0@BSZ2015',  'B_s->K^*::alpha^T1_1@BSZ2015',  'B_s->K^*::alpha^T1_2@BSZ2015',
+      'B_s->K^*::alpha^T2_1@BSZ2015',  'B_s->K^*::alpha^T2_2@BSZ2015',
+      'B_s->K^*::alpha^T23_0@BSZ2015', 'B_s->K^*::alpha^T23_1@BSZ2015', 'B_s->K^*::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -1631,13 +1631,13 @@ B_s->K^*::FormFactors[parametric,LCSR]@GvDV:2020A:
 B_s->K^*::FormFactors[parametric,LCSRLattice]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->K^*::alpha^A0_0@BSZ2015,  B_s->K^*::alpha^A0_1@BSZ2015,  B_s->K^*::alpha^A0_2@BSZ2015,
-      B_s->K^*::alpha^A1_0@BSZ2015,  B_s->K^*::alpha^A1_1@BSZ2015,  B_s->K^*::alpha^A1_2@BSZ2015,
-      B_s->K^*::alpha^A12_1@BSZ2015, B_s->K^*::alpha^A12_2@BSZ2015,
-      B_s->K^*::alpha^V_0@BSZ2015,   B_s->K^*::alpha^V_1@BSZ2015,   B_s->K^*::alpha^V_2@BSZ2015,
-      B_s->K^*::alpha^T1_0@BSZ2015,  B_s->K^*::alpha^T1_1@BSZ2015,  B_s->K^*::alpha^T1_2@BSZ2015,
-      B_s->K^*::alpha^T2_1@BSZ2015,  B_s->K^*::alpha^T2_2@BSZ2015,
-      B_s->K^*::alpha^T23_0@BSZ2015, B_s->K^*::alpha^T23_1@BSZ2015, B_s->K^*::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->K^*::alpha^A0_0@BSZ2015',  'B_s->K^*::alpha^A0_1@BSZ2015',  'B_s->K^*::alpha^A0_2@BSZ2015',
+      'B_s->K^*::alpha^A1_0@BSZ2015',  'B_s->K^*::alpha^A1_1@BSZ2015',  'B_s->K^*::alpha^A1_2@BSZ2015',
+      'B_s->K^*::alpha^A12_1@BSZ2015', 'B_s->K^*::alpha^A12_2@BSZ2015',
+      'B_s->K^*::alpha^V_0@BSZ2015',   'B_s->K^*::alpha^V_1@BSZ2015',   'B_s->K^*::alpha^V_2@BSZ2015',
+      'B_s->K^*::alpha^T1_0@BSZ2015',  'B_s->K^*::alpha^T1_1@BSZ2015',  'B_s->K^*::alpha^T1_2@BSZ2015',
+      'B_s->K^*::alpha^T2_1@BSZ2015',  'B_s->K^*::alpha^T2_2@BSZ2015',
+      'B_s->K^*::alpha^T23_0@BSZ2015', 'B_s->K^*::alpha^T23_1@BSZ2015', 'B_s->K^*::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -1955,13 +1955,13 @@ B_s->phi::T_23@BSZ:2015A:
 B_s->phi::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->phi::A_0(q2),  B_s->phi::A_0(q2),  B_s->phi::A_0(q2),  B_s->phi::A_0(q2),
-      B_s->phi::A_1(q2),  B_s->phi::A_1(q2),  B_s->phi::A_1(q2),  B_s->phi::A_1(q2),  B_s->phi::A_1(q2),
-      B_s->phi::A_2(q2),  B_s->phi::A_2(q2),  B_s->phi::A_2(q2),  B_s->phi::A_2(q2),  B_s->phi::A_2(q2),
-      B_s->phi::V(q2),    B_s->phi::V(q2),    B_s->phi::V(q2),    B_s->phi::V(q2),    B_s->phi::V(q2),
-      B_s->phi::T_1(q2),  B_s->phi::T_1(q2),  B_s->phi::T_1(q2),  B_s->phi::T_1(q2),  B_s->phi::T_1(q2),
-      B_s->phi::T_2(q2),  B_s->phi::T_2(q2),  B_s->phi::T_2(q2),  B_s->phi::T_2(q2),
-      B_s->phi::T_23(q2), B_s->phi::T_23(q2), B_s->phi::T_23(q2), B_s->phi::T_23(q2), B_s->phi::T_23(q2) ]
+    [ 'B_s->phi::A_0(q2)',  'B_s->phi::A_0(q2)',  'B_s->phi::A_0(q2)',  'B_s->phi::A_0(q2)',
+      'B_s->phi::A_1(q2)',  'B_s->phi::A_1(q2)',  'B_s->phi::A_1(q2)',  'B_s->phi::A_1(q2)',  'B_s->phi::A_1(q2)',
+      'B_s->phi::A_2(q2)',  'B_s->phi::A_2(q2)',  'B_s->phi::A_2(q2)',  'B_s->phi::A_2(q2)',  'B_s->phi::A_2(q2)',
+      'B_s->phi::V(q2)',    'B_s->phi::V(q2)',    'B_s->phi::V(q2)',    'B_s->phi::V(q2)',    'B_s->phi::V(q2)',
+      'B_s->phi::T_1(q2)',  'B_s->phi::T_1(q2)',  'B_s->phi::T_1(q2)',  'B_s->phi::T_1(q2)',  'B_s->phi::T_1(q2)',
+      'B_s->phi::T_2(q2)',  'B_s->phi::T_2(q2)',  'B_s->phi::T_2(q2)',  'B_s->phi::T_2(q2)',
+      'B_s->phi::T_23(q2)', 'B_s->phi::T_23(q2)', 'B_s->phi::T_23(q2)', 'B_s->phi::T_23(q2)', 'B_s->phi::T_23(q2)' ]
   kinematics:
     [ q2: -15.0, q2: -10.0, q2: -5.0, q2: 5.0,
       q2: -15.0, q2: -10.0, q2: -5.0, q2: 0.0, q2: 5.0,
@@ -2023,10 +2023,10 @@ B_s->phi::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GvDV:2020A:
 B_s->phi::V+A_0+A_1+A_12@HLMW:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->phi::V(q2),    B_s->phi::V(q2),
-      B_s->phi::A_0(q2),  B_s->phi::A_0(q2),
-      B_s->phi::A_1(q2),  B_s->phi::A_1(q2),
-      B_s->phi::A_12(q2), B_s->phi::A_12(q2) ]
+    [ 'B_s->phi::V(q2)',    'B_s->phi::V(q2)',
+      'B_s->phi::A_0(q2)',  'B_s->phi::A_0(q2)',
+      'B_s->phi::A_1(q2)',  'B_s->phi::A_1(q2)',
+      'B_s->phi::A_12(q2)', 'B_s->phi::A_12(q2)' ]
   kinematics:
     [ q2: 16.0, q2: 18.9001,
       q2: 16.0, q2: 18.9001,
@@ -2054,9 +2054,9 @@ B_s->phi::V+A_0+A_1+A_12@HLMW:2015A:
 B_s->phi::T_1+T_2+T_23@HLMW:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->phi::T_1(q2),  B_s->phi::T_1(q2),
-      B_s->phi::T_2(q2),  B_s->phi::T_2(q2),
-      B_s->phi::T_23(q2), B_s->phi::T_23(q2) ]
+    [ 'B_s->phi::T_1(q2)',  'B_s->phi::T_1(q2)',
+      'B_s->phi::T_2(q2)',  'B_s->phi::T_2(q2)',
+      'B_s->phi::T_23(q2)', 'B_s->phi::T_23(q2)' ]
   kinematics:
     [ q2: 16.0, q2: 18.9001,
       q2: 16.0, q2: 18.9001,
@@ -2079,13 +2079,13 @@ B_s->phi::T_1+T_2+T_23@HLMW:2015A:
 B_s->phi::FormFactors[parametric,LCSR]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->phi::alpha^A0_0@BSZ2015,  B_s->phi::alpha^A0_1@BSZ2015,  B_s->phi::alpha^A0_2@BSZ2015,
-      B_s->phi::alpha^A1_0@BSZ2015,  B_s->phi::alpha^A1_1@BSZ2015,  B_s->phi::alpha^A1_2@BSZ2015,
-      B_s->phi::alpha^A12_1@BSZ2015, B_s->phi::alpha^A12_2@BSZ2015,
-      B_s->phi::alpha^V_0@BSZ2015,   B_s->phi::alpha^V_1@BSZ2015,   B_s->phi::alpha^V_2@BSZ2015,
-      B_s->phi::alpha^T1_0@BSZ2015,  B_s->phi::alpha^T1_1@BSZ2015,  B_s->phi::alpha^T1_2@BSZ2015,
-      B_s->phi::alpha^T2_1@BSZ2015,  B_s->phi::alpha^T2_2@BSZ2015,
-      B_s->phi::alpha^T23_0@BSZ2015, B_s->phi::alpha^T23_1@BSZ2015, B_s->phi::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->phi::alpha^A0_0@BSZ2015',  'B_s->phi::alpha^A0_1@BSZ2015',  'B_s->phi::alpha^A0_2@BSZ2015',
+      'B_s->phi::alpha^A1_0@BSZ2015',  'B_s->phi::alpha^A1_1@BSZ2015',  'B_s->phi::alpha^A1_2@BSZ2015',
+      'B_s->phi::alpha^A12_1@BSZ2015', 'B_s->phi::alpha^A12_2@BSZ2015',
+      'B_s->phi::alpha^V_0@BSZ2015',   'B_s->phi::alpha^V_1@BSZ2015',   'B_s->phi::alpha^V_2@BSZ2015',
+      'B_s->phi::alpha^T1_0@BSZ2015',  'B_s->phi::alpha^T1_1@BSZ2015',  'B_s->phi::alpha^T1_2@BSZ2015',
+      'B_s->phi::alpha^T2_1@BSZ2015',  'B_s->phi::alpha^T2_2@BSZ2015',
+      'B_s->phi::alpha^T23_0@BSZ2015', 'B_s->phi::alpha^T23_1@BSZ2015', 'B_s->phi::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -2121,13 +2121,13 @@ B_s->phi::FormFactors[parametric,LCSR]@GvDV:2020A:
 B_s->phi::FormFactors[parametric,LCSRLattice]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->phi::alpha^A0_0@BSZ2015,  B_s->phi::alpha^A0_1@BSZ2015,  B_s->phi::alpha^A0_2@BSZ2015,
-      B_s->phi::alpha^A1_0@BSZ2015,  B_s->phi::alpha^A1_1@BSZ2015,  B_s->phi::alpha^A1_2@BSZ2015,
-      B_s->phi::alpha^A12_1@BSZ2015, B_s->phi::alpha^A12_2@BSZ2015,
-      B_s->phi::alpha^V_0@BSZ2015,   B_s->phi::alpha^V_1@BSZ2015,   B_s->phi::alpha^V_2@BSZ2015,
-      B_s->phi::alpha^T1_0@BSZ2015,  B_s->phi::alpha^T1_1@BSZ2015,  B_s->phi::alpha^T1_2@BSZ2015,
-      B_s->phi::alpha^T2_1@BSZ2015,  B_s->phi::alpha^T2_2@BSZ2015,
-      B_s->phi::alpha^T23_0@BSZ2015, B_s->phi::alpha^T23_1@BSZ2015, B_s->phi::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->phi::alpha^A0_0@BSZ2015',  'B_s->phi::alpha^A0_1@BSZ2015',  'B_s->phi::alpha^A0_2@BSZ2015',
+      'B_s->phi::alpha^A1_0@BSZ2015',  'B_s->phi::alpha^A1_1@BSZ2015',  'B_s->phi::alpha^A1_2@BSZ2015',
+      'B_s->phi::alpha^A12_1@BSZ2015', 'B_s->phi::alpha^A12_2@BSZ2015',
+      'B_s->phi::alpha^V_0@BSZ2015',   'B_s->phi::alpha^V_1@BSZ2015',   'B_s->phi::alpha^V_2@BSZ2015',
+      'B_s->phi::alpha^T1_0@BSZ2015',  'B_s->phi::alpha^T1_1@BSZ2015',  'B_s->phi::alpha^T1_2@BSZ2015',
+      'B_s->phi::alpha^T2_1@BSZ2015',  'B_s->phi::alpha^T2_2@BSZ2015',
+      'B_s->phi::alpha^T23_0@BSZ2015', 'B_s->phi::alpha^T23_1@BSZ2015', 'B_s->phi::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
@@ -2163,13 +2163,13 @@ B_s->phi::FormFactors[parametric,LCSRLattice]@GvDV:2020A:
 B_s->phi::FormFactors[parametric,LCSR]@BSZ:2015A:
   type: MultivariateGaussian(Covariance)
   observables:
-    [ B_s->phi::alpha^A0_0@BSZ2015, B_s->phi::alpha^A0_1@BSZ2015, B_s->phi::alpha^A0_2@BSZ2015,
-      B_s->phi::alpha^A1_0@BSZ2015, B_s->phi::alpha^A1_1@BSZ2015, B_s->phi::alpha^A1_2@BSZ2015,
-      B_s->phi::alpha^A12_1@BSZ2015, B_s->phi::alpha^A12_2@BSZ2015,
-      B_s->phi::alpha^V_0@BSZ2015, B_s->phi::alpha^V_1@BSZ2015, B_s->phi::alpha^V_2@BSZ2015,
-      B_s->phi::alpha^T1_0@BSZ2015, B_s->phi::alpha^T1_1@BSZ2015, B_s->phi::alpha^T1_2@BSZ2015,
-      B_s->phi::alpha^T2_1@BSZ2015, B_s->phi::alpha^T2_2@BSZ2015,
-      B_s->phi::alpha^T23_0@BSZ2015, B_s->phi::alpha^T23_1@BSZ2015, B_s->phi::alpha^T23_2@BSZ2015 ]
+    [ 'B_s->phi::alpha^A0_0@BSZ2015', 'B_s->phi::alpha^A0_1@BSZ2015', 'B_s->phi::alpha^A0_2@BSZ2015',
+      'B_s->phi::alpha^A1_0@BSZ2015', 'B_s->phi::alpha^A1_1@BSZ2015', 'B_s->phi::alpha^A1_2@BSZ2015',
+      'B_s->phi::alpha^A12_1@BSZ2015', 'B_s->phi::alpha^A12_2@BSZ2015',
+      'B_s->phi::alpha^V_0@BSZ2015', 'B_s->phi::alpha^V_1@BSZ2015', 'B_s->phi::alpha^V_2@BSZ2015',
+      'B_s->phi::alpha^T1_0@BSZ2015', 'B_s->phi::alpha^T1_1@BSZ2015', 'B_s->phi::alpha^T1_2@BSZ2015',
+      'B_s->phi::alpha^T2_1@BSZ2015', 'B_s->phi::alpha^T2_2@BSZ2015',
+      'B_s->phi::alpha^T23_0@BSZ2015', 'B_s->phi::alpha^T23_1@BSZ2015', 'B_s->phi::alpha^T23_2@BSZ2015' ]
   kinematics:
     [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
   options:
