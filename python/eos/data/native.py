@@ -46,9 +46,10 @@ class Mode:
         self.varied_parameters = description['parameters']
         self.mode = description['mode']
         self.pvalue = description['pvalue']
+        self.local_pvalues = description['local_pvalues']
 
     @staticmethod
-    def create(path, parameters, mode, pvalue):
+    def create(path, parameters, mode, pvalue, local_pvalues):
         """ Write a new MarkovChain object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
@@ -67,7 +68,8 @@ class Mode:
             'max': p.max()
         } for p in parameters]
         description['mode'] = mode.tolist()
-        description['pvalue'] = pvalue
+        description['pvalue'] = float(pvalue) if pvalue is not None else None
+        description['local_pvalues'] = local_pvalues
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
