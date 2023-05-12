@@ -864,14 +864,23 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
         ;
 
-    // }}}
+    // Analytic Charm Loops
+    def("F17_Qc",  (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F17_Qc);
+    def("F19_Qc",  (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F19_Qc);
+    def("F27_Qc",  (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F27_Qc);
+    def("F29_Qc",  (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F29_Qc);
+    def("F17_Qsb", (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F17_Qsb);
+    def("F19_Qsb", (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F19_Qsb);
+    def("F27_Qsb", (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F27_Qsb);
+    def("F29_Qsb", (complex<double>(*)(const complex<double> &, const double &, const double &, const double &)) &agv_2019a::F29_Qsb);
 
-    // EOS version
-    scope().attr("__version__") = PACKAGE_VERSION;
-
-    // Analytic modification of C_7 and C_9 at NLO
     def("delta_c7", &agv_2019a::delta_c7);
     def("delta_c7_Qc", &agv_2019a::delta_c7_Qc);
     def("delta_c9", &agv_2019a::delta_c9);
     def("delta_c9_Qc", &agv_2019a::delta_c9_Qc);
+
+    // }}}
+
+    // EOS version
+    scope().attr("__version__") = PACKAGE_VERSION;
 }

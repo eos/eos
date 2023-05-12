@@ -1533,6 +1533,62 @@ namespace eos
 
             return result;
         }
-    }
 
+        // Helper Functions
+        complex<double> F17_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F17_Qc(clp);
+        }
+
+        complex<double> F19_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F19_Qc(clp);
+        }
+
+        complex<double> F27_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F27_Qc(clp);
+        }
+
+        complex<double> F29_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F29_Qc(clp);
+        }
+
+        complex<double> F17_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F17_Qsb(clp);
+        }
+
+        complex<double> F19_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F19_Qsb(clp);
+        }
+
+        complex<double> F27_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F27_Qsb(clp);
+        }
+
+        complex<double> F29_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
+        {
+            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+            return F29_Qsb(clp);
+        }
+    }
 }

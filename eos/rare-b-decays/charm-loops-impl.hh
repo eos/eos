@@ -260,12 +260,10 @@ namespace eos
         }
 
         // LO functions
-
         complex<double> f190(const CharmLoopsParameters & clp);
         complex<double> f290(const CharmLoopsParameters & clp);
 
         // Counterterms
-
         complex<double> f17ctQs(const CharmLoopsParameters & );
         complex<double> f17ctQc(const CharmLoopsParameters & );
         complex<double> f17ctQb(const CharmLoopsParameters & clp);
@@ -280,7 +278,6 @@ namespace eos
         complex<double> f29ctQb(const CharmLoopsParameters & clp);
 
         // Two-loop functions
-
         complex<double> f17a(const CharmLoopsParameters & clp);
         complex<double> f19a(const CharmLoopsParameters & clp);
         complex<double> f27a(const CharmLoopsParameters & clp);
@@ -318,6 +315,16 @@ namespace eos
         complex<double> F19_Qsb(const CharmLoopsParameters & clp);
         complex<double> F27_Qsb(const CharmLoopsParameters & clp);
         complex<double> F29_Qsb(const CharmLoopsParameters & clp);
+
+        // Helper functions
+        complex<double> F17_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F19_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F27_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F29_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F17_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F19_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F27_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> F29_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
 
         complex<double> delta_c7_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
         complex<double> delta_c7(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
