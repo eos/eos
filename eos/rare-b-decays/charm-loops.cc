@@ -22,6 +22,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/rare-b-decays/charm-loops-impl.hh>
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
@@ -1380,4 +1381,158 @@ namespace eos
         }
         else return F29_massive_Qsb_Interpolation(s);
     }
+
+    complex<double>
+    agv_2019a::delta_c7_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo)
+    {
+        const agv_2019a::CharmLoopsParameters clp = {/*muhat =*/ mu / m_b, /*s =*/ s, /*z =*/ (m_c * m_c) / (m_b * m_b), /*feynepsilonhat*/ 1e-12};
+
+        // cf. [AGV:2019A] Eq. (2.11), p. 6, and Eq. (2.21), p. 7
+        complex<double> result;
+
+        // LO contribution
+        result += 0.0;
+
+        if (use_nlo)
+        {
+            // NLO contribution
+            complex<double> nlo = -1.0 * (
+                wc.c1() * agv_2019a::F17_Qc(clp)
+                + wc.c2() * agv_2019a::F27_Qc(clp));
+
+            result += (alpha_s / (4.0 * M_PI)) * nlo;
+        }
+
+        return result;
+    }
+
+    complex<double>
+    agv_2019a::delta_c7(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo)
+    {
+        const agv_2019a::CharmLoopsParameters clp = {/*muhat =*/ mu / m_b, /*s =*/ s, /*z =*/ (m_c * m_c) / (m_b * m_b), /*feynepsilonhat*/ 1e-12};
+
+        // cf. [AGV:2019A] Eq. (2.11), p. 6, and Eq. (2.21), p. 7
+        complex<double> result;
+
+        // LO contribution
+        result += 0.0;
+
+        if (use_nlo)
+        {
+            // NLO contribution
+            complex<double> nlo = -1.0 * (
+                wc.c1() * (agv_2019a::F17_Qc(clp) + agv_2019a::F17_Qsb(clp))
+                + wc.c2() * (agv_2019a::F27_Qc(clp) + agv_2019a::F27_Qsb(clp)));
+
+            result += (alpha_s / (4.0 * M_PI)) * nlo;
+        }
+
+        return result;
+    }
+
+    complex<double>
+    agv_2019a::delta_c9_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo)
+    {
+        const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+        // cf. [AGV:2019A] Eq. (2.11), p. 6, and Eq. (2.21), p. 7
+        complex<double> result;
+
+        // LO contribution cf. [AGV:2019A] p. 31
+        result += wc.c1() * agv_2019a::f190(clp) + wc.c2() * agv_2019a::f290(clp);
+
+        if (use_nlo)
+        {
+            complex<double> nlo = -1.0 * (
+                wc.c1() * agv_2019a::F19_Qc(clp)
+                + wc.c2() * agv_2019a::F29_Qc(clp));
+
+            result += (alpha_s / (4.0 * M_PI)) * nlo;
+        }
+
+        return result;
+    }
+
+    complex<double>
+    agv_2019a::delta_c9(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo)
+    {
+        const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
+
+        // cf. [AGV:2019A] Eq. (2.11), p. 6, and Eq. (2.21), p. 7
+        complex<double> result;
+
+        // LO contribution cf. [AGV:2019A] p. 31
+        result += wc.c1() * agv_2019a::f190(clp) + wc.c2() * agv_2019a::f290(clp);
+
+        if (use_nlo)
+        {
+            complex<double> nlo = -1.0 * (
+                wc.c1() * (agv_2019a::F19_Qc(clp) + agv_2019a::F19_Qsb(clp))
+                + wc.c2() * (agv_2019a::F29_Qc(clp) + agv_2019a::F29_Qsb(clp)));
+
+            result += (alpha_s / (4.0 * M_PI)) * nlo;
+        }
+
+        return result;
+    }
+
+    namespace agv_2019a
+    {
+        complex<double> F17_Qc(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f17c(clp) + f17d(clp) + f17e(clp) + f17ctQc(clp);
+
+            return result;
+        }
+
+        complex<double> F27_Qc(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f27c(clp) + f27d(clp) + f27e(clp) + f27ctQc(clp);
+
+            return result;
+        }
+
+        complex<double> F19_Qc(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f19c(clp) + f19d(clp) + f19e(clp) + f19ctQc(clp);
+
+            return result;
+        }
+
+        complex<double> F29_Qc(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f29c(clp) + f29d(clp) + f29e(clp) + f29ctQc(clp);
+
+            return result;
+        }
+
+        complex<double> F17_Qsb(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f17a(clp) + f17b(clp) + f17ctQs(clp) + f17ctQb(clp);
+
+            return result;
+        }
+
+        complex<double> F27_Qsb(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f27a(clp) + f27b(clp) + f27ctQs(clp) + f27ctQb(clp);
+
+            return result;
+        }
+
+        complex<double> F19_Qsb(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f19a(clp) + f19b(clp) + f19ctQs(clp) + f19ctQb(clp);
+
+            return result;
+        }
+
+        complex<double> F29_Qsb(const CharmLoopsParameters & clp)
+        {
+            const complex<double> result = f29a(clp) + f29b(clp) + f29ctQs(clp) + f29ctQb(clp);
+
+            return result;
+        }
+    }
+
 }

@@ -169,15 +169,19 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
 
     eos.info(f'Minimization finished, best point is:')
     for p, v in zip(analysis.varied_parameters, _bfp.point):
-        eos.info('  - {} -> {}'.format(p.name(), v))
-    eos.info('total chi^2 = {}'.format(min_chi2))
+        eos.info(f'  - {p.name()} -> {v}')
+    eos.info(f'total chi^2 = {min_chi2:.2f}')
+    eos.info(f'total dof   = {gof.total_degrees_of_freedom()}')
     pvalue = (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))
-    eos.info('p value = {:.1f}%'.format(100 * pvalue))
+    eos.info(f'p value     = {100 * pvalue:.2f}%')
     eos.info('individual test statistics:')
+    local_pvalues = {}
     for n, e in gof:
-        eos.info('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
+        local_pvalue = (1.0 - scipy.stats.chi2(e.dof).cdf(e.chi2))
+        local_pvalues[f'{n}'] = float(local_pvalue)
+        eos.info(f'  - {n}: chi^2 / dof = {e.chi2:.2f} / {e.dof}, local_pvalue = {100 * local_pvalue:.2f}%')
 
-    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue)
+    eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue, local_pvalues)
 
     return (bfp, gof)
 
@@ -374,8 +378,10 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :param end: The index beyond the last sample to use for the predictions. Defaults to -1.
     :type begin: int
     '''
-    _parameters = analysis_file.analysis(posterior).parameters
-    observables = analysis_file.observables(posterior, prediction, _parameters)
+    _parameters    = analysis_file.analysis(posterior).parameters
+    cache          = eos.ObservableCache(_parameters)
+    observables    = analysis_file.observables(posterior, prediction, _parameters)
+    observable_ids = [cache.add(o) for o in observables]
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -391,10 +397,11 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         for p, v in zip(parameters, sample):
             p.set(v)
         try:
-            observable_samples.append([o.evaluate() for o in observables])
+            cache.update()
+            observable_samples.append([cache[id] for id in observable_ids])
         except RuntimeError as e:
             eos.error('skipping prediction for sample {i} due to runtime error ({e}): {s}'.format(i=i, e=e, s=sample))
-            observable_samples.append([_np.nan for o in observables])
+            observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
 
     output_path = os.path.join(base_directory, posterior, 'pred-{}'.format(prediction))
