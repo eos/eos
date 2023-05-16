@@ -22,6 +22,8 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-kstar-ll-gp2004.cc b-to-kstar-ll-gp2004.hh \
 	b-to-kstar-ll-gvdv2020.cc b-to-kstar-ll-gvdv2020.hh \
 	b-to-ll.cc b-to-ll.hh \
+	b-to-psd-nu-nu.cc b-to-psd-nu-nu.hh \
+	b-to-vec-nu-nu.cc b-to-vec-nu-nu.hh \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	bs-to-phi-charmonium.cc bs-to-phi-charmonium.hh \
 	bs-to-phi-ll.cc bs-to-phi-ll.hh \
@@ -74,6 +76,8 @@ libeosrarebdecays_la_LIBADD = \
 
 include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays
 include_eos_rarebdecays_HEADERS = \
+	b-to-psd-nu-nu.hh \
+	b-to-vec-nu-nu.hh \
 	bremsstrahlung.hh \
 	charm-loops.hh \
 	decays.hh \
@@ -97,11 +101,13 @@ TESTS = \
 	b-to-k-ll-bfs2004_TEST \
 	b-to-k-ll-gp2004_TEST \
 	b-to-k-ll-gvdv2020_TEST \
+	b-to-k-nu-nu_TEST \
 	b-to-kstar-charmonium_TEST \
 	b-to-kstar-gamma-bfs2004_TEST \
 	b-to-kstar-ll-bfs2004_TEST \
 	b-to-kstar-ll-gp2004_TEST \
 	b-to-kstar-ll-gvdv2020_TEST \
+	b-to-kstar-nu-nu_TEST \
 	b-to-ll_TEST \
 	bs-to-phi-charmonium_TEST \
 	bs-to-phi-ll-bfs2004_TEST \
@@ -138,6 +144,8 @@ b_to_k_ll_gp2004_TEST_SOURCES = b-to-k-ll-gp2004_TEST.cc
 
 b_to_k_ll_gvdv2020_TEST_SOURCES = b-to-k-ll-gvdv2020_TEST.cc
 
+b_to_k_nu_nu_TEST_SOURCES = b-to-k-nu-nu_TEST.cc
+
 b_to_kstar_charmonium_TEST_SOURCES = b-to-kstar-charmonium_TEST.cc
 
 b_to_kstar_gamma_bfs2004_TEST_SOURCES = b-to-kstar-gamma-bfs2004_TEST.cc
@@ -147,6 +155,8 @@ b_to_kstar_ll_bfs2004_TEST_SOURCES = b-to-kstar-ll-bfs2004_TEST.cc
 b_to_kstar_ll_gp2004_TEST_SOURCES = b-to-kstar-ll-gp2004_TEST.cc
 
 b_to_kstar_ll_gvdv2020_TEST_SOURCES = b-to-kstar-ll-gvdv2020_TEST.cc
+
+b_to_kstar_nu_nu_TEST_SOURCES = b-to-kstar-nu-nu_TEST.cc
 
 b_to_ll_TEST_SOURCES = b-to-ll_TEST.cc
 

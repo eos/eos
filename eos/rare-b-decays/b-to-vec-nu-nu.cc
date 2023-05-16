@@ -17,9 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/b-decays/b-to-vec-nu-nu.hh>
+#include <eos/rare-b-decays/b-to-vec-nu-nu.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/destringify.hh>
