@@ -35,6 +35,8 @@
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda-nu-nu.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda-nu-nu-impl.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-ll.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-gamma.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
@@ -3077,7 +3079,7 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "D", "s" }, { "I", "1/2" } }),
                 make_observable("B->Knunu::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}\nu\bar\nu))",
-                        Unit::InverseGeV2(),
+                        Unit::None(),
                         &BToPseudoscalarDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "D", "s" }, { "I", "1/2" } })
@@ -3103,7 +3105,7 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "D", "s" }, { "I", "1/2" } }),
                 make_observable("B->K^*nunu::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\nu\bar\nu))",
-                        Unit::InverseGeV2(),
+                        Unit::None(),
                         &BToVectorDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "D", "s" }, { "I", "1/2" } })
@@ -3129,10 +3131,44 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } }),
                 make_observable("B_s->phinunu::BR", R"(\mathcal{B}(\bar{B}_s\to\phi\nu\bar\nu))",
-                        Unit::InverseGeV2(),
+                        Unit::None(),
                         &BToVectorDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } })
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // Lambda_b -> Lambda nu nu
+    // {{{
+    ObservableGroup
+    make_lambda_b_to_lambda_nu_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\Lambda_b\to\Lambda\nu\bar\nu$ decays)",
+            R"()",
+            {
+                make_observable("Lambda_b->Lambdanunu::dBR/dq2", R"(d\mathcal{B}(\bar{Lambda}_b\to\Lambda\nu\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &LambdaBToLambdaDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2")),
+                make_observable("Lambda_b->Lambdanunu::F_L(q^2)", R"(F_L(\bar{Lambda}_b\to\Lambda\nu\bar\nu)(q^2))",
+                        Unit::InverseGeV2(),
+                        &LambdaBToLambdaDineutrino::differential_longitudinal_polarisation,
+                        std::make_tuple("q2")),
+                make_cacheable_observable("Lambda_b->Lambdanunu::BR", R"(\mathcal{B}(\bar{Lambda}_b\to\Lambda\nu\bar\nu))",
+                        Unit::None(),
+                        &LambdaBToLambdaDineutrino::prepare,
+                        &LambdaBToLambdaDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max")),
+                make_cacheable_observable("Lambda_b->Lambdanunu::F_L", R"(F_L(\bar{Lambda}_b\to\Lambda\nu\bar\nu))",
+                        Unit::None(),
+                        &LambdaBToLambdaDineutrino::prepare,
+                        &LambdaBToLambdaDineutrino::integrated_longitudinal_polarisation,
+                        std::make_tuple("q2_min", "q2_max"))
             }
         );
 
@@ -3187,6 +3223,9 @@ namespace eos
                 // B_{u,d} -> V nu nubar
                 make_b_to_kstar_nu_nu_group(),
                 make_bs_to_phi_nu_nu_group(),
+
+                // Lambda_b -> Lambda nu nubar
+                make_lambda_b_to_lambda_nu_nu_group()
             }
         );
 

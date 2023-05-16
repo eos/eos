@@ -20,6 +20,8 @@
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA_NU_NU_HH
 #define EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA_NU_NU_HH 1
 
+#include <eos/observable.hh>
+
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -38,11 +40,19 @@ namespace eos
             LambdaBToLambdaDineutrino(const Parameters & parameters, const Options & options);
             ~LambdaBToLambdaDineutrino();
 
+            struct AngularCoefficients;
+
             // Single-differential Observables
+            double differential_decay_width(const double & q2) const;
             double differential_branching_ratio(const double & q2) const;
+            double differential_longitudinal_polarisation(const double & q2) const;
 
             // Integrated Observables
-            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            class IntermediateResult;
+            const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
+            double integrated_decay_width(const IntermediateResult * ir) const;
+            double integrated_branching_ratio(const IntermediateResult * ir) const;
+            double integrated_longitudinal_polarisation(const IntermediateResult * ir) const;
 
             /*!
              * Descriptions of the process and its kinematics.
