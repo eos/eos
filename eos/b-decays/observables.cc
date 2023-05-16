@@ -1852,6 +1852,32 @@ namespace eos
     }
     // }}}
 
+    // B_s -> phi nu nu
+    // {{{
+    ObservableGroup
+    make_bs_to_phi_nu_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_s\to\phi\nu\bar\nu$ decays)",
+            R"()",
+            {
+                make_observable("B_s->phinunu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to\phi\nu\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToVectorDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } }),
+                make_observable("B_s->phinunu::BR", R"(\mathcal{B}(\bar{B}_s\to\phi\nu\bar\nu))",
+                        Unit::InverseGeV2(),
+                        &BToVectorDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } })
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // }}}
 
     // Semileptonic B -> P(seudoscalar) P(seudoscalar) decays
@@ -2201,6 +2227,7 @@ namespace eos
 
                 // B_{u,d} -> V nu nubar
                 make_b_to_kstar_nu_nu_group(),
+                make_bs_to_phi_nu_nu_group(),
 
                 // Lambda_b
                 make_lambdab_to_lambdac_l_nu_group(),
