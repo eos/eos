@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_VEC_NU_NU_HH
-#define EOS_GUARD_EOS_B_DECAYS_B_TO_VEC_NU_NU_HH 1
+#ifndef EOS_GUARD_EOS_RARE_B_DECAYS_B_TO_PSD_NU_NU_HH
+#define EOS_GUARD_EOS_RARE_B_DECAYS_B_TO_PSD_NU_NU_HH 1
 
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -28,15 +28,15 @@
 namespace eos
 {
     /*
-     * Decay: B -> V(ector) nu nu
+     * Decay: B -> P(seudoscalar) nu nu
      */
-    class BToVectorDineutrino :
+    class BToPseudoscalarDineutrino :
         public ParameterUser,
-        public PrivateImplementationPattern<BToVectorDineutrino>
+        public PrivateImplementationPattern<BToPseudoscalarDineutrino>
     {
         public:
-            BToVectorDineutrino(const Parameters & parameters, const Options & options);
-            ~BToVectorDineutrino();
+            BToPseudoscalarDineutrino(const Parameters & parameters, const Options & options);
+            ~BToPseudoscalarDineutrino();
 
             // Single-differential Observables
             double differential_branching_ratio(const double & q2) const;
