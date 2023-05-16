@@ -50,6 +50,7 @@ libeosrarebdecays_la_SOURCES = \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh \
 	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
+	lambda-b-to-lambda-nu-nu.cc lambda-b-to-lambda-nu-nu.hh \
 	lambda-b-to-lambda1520-gamma.cc lambda-b-to-lambda1520-gamma.hh \
 	lambda-b-to-lambda1520-gamma-base.cc lambda-b-to-lambda1520-gamma-base.hh \
 	lambda-b-to-lambda1520-gamma-naive.cc lambda-b-to-lambda1520-gamma-naive.hh \
@@ -84,6 +85,7 @@ include_eos_rarebdecays_HEADERS = \
 	em-contributions.hh \
 	hard-scattering.hh \
 	lambda-b-to-lambda-dilepton.hh \
+	lambda-b-to-lambda-nu-nu.hh \
 	long-distance.hh \
 	qcdf-integrals.hh
 
