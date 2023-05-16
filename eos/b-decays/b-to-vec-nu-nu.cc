@@ -205,8 +205,9 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor, std::string>, std::tuple<std::string, std::string, std::string, double>>
     Implementation<BToVectorDineutrino>::Implementation::process_map
     {
-        { { QuarkFlavor::strange, QuarkFlavor::up,   "1/2" }, { "B->K^*",     "B_u", "K_u^*",  1.0                  } },
-        { { QuarkFlavor::strange, QuarkFlavor::down, "1/2" }, { "B->K^*",     "B_d", "K_d^*",  1.0                  } }
+        { { QuarkFlavor::strange, QuarkFlavor::up,      "1/2" }, { "B->K^*",     "B_u", "K_u^*",  1.0                  } },
+        { { QuarkFlavor::strange, QuarkFlavor::down,    "1/2" }, { "B->K^*",     "B_d", "K_d^*",  1.0                  } },
+        { { QuarkFlavor::strange, QuarkFlavor::strange, "0"   }, { "B_s->phi",   "B_s", "phi",    1.0                  } }
     };
 
     const std::vector<OptionSpecification>
@@ -215,7 +216,7 @@ namespace eos
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
         { "D", { "s" },             "s" },
-        { "q", { "u", "d" },        "u" },
+        { "q", { "u", "d", "s" },   "u" },
         { "I", { "1", "0", "1/2" }, ""  },
     };
 
