@@ -237,16 +237,16 @@ namespace eos
             if ((q2 >= power_of<2>(m_l)) && (q2 <= power_of<2>(m_B - m_V))) {
                 result.a_0          = isospin * gV_mi * 8.0 * m_B * m_V / sqrtq2 * aff12;
                 result.a_0_T        = isospin * TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
-                result.a_plus       = isospin * (m_B + m_V) * aff1 * gV_mi - sqrt_lam * vff * gV_pl / (m_B + m_V);
-                result.a_minus      = isospin * (m_B + m_V) * aff1 * gV_mi + sqrt_lam * vff * gV_pl / (m_B + m_V);
+                result.a_plus       = isospin * ( (m_B + m_V) * aff1 * gV_mi - sqrt_lam * vff * gV_pl / (m_B + m_V) );
+                result.a_minus      = isospin * ( (m_B + m_V) * aff1 * gV_mi + sqrt_lam * vff * gV_pl / (m_B + m_V) );
                 result.a_plus_T     = isospin * TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 + sqrt_lam * tff1 );
                 result.a_minus_T    = isospin * TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 - sqrt_lam * tff1 );
-                result.a_t          =  isospin * sqrt_lam * aff0 * gV_mi / sqrtq2;
-                result.a_P          =  isospin * sqrt_lam * aff0 * gP / (mbatmu + mUatmu);
-                result.a_para       =  (result.a_plus + result.a_minus) / std::sqrt(2.0);
-                result.a_para_T     =  (result.a_plus_T + result.a_minus_T) / std::sqrt(2.0);
-                result.a_perp       =  (result.a_plus - result.a_minus) / std::sqrt(2.0);
-                result.a_perp_T     =  (result.a_plus_T - result.a_minus_T) / std::sqrt(2.0);
+                result.a_t          = isospin * sqrt_lam * aff0 * gV_mi / sqrtq2;
+                result.a_P          = isospin * sqrt_lam * aff0 * gP / (mbatmu + mUatmu);
+                result.a_para       = (result.a_plus + result.a_minus) / std::sqrt(2.0);
+                result.a_para_T     = (result.a_plus_T + result.a_minus_T) / std::sqrt(2.0);
+                result.a_perp       = (result.a_plus - result.a_minus) / std::sqrt(2.0);
+                result.a_perp_T     = (result.a_plus_T - result.a_minus_T) / std::sqrt(2.0);
 
                 result.mlH = (m_l > 0.0) ? std::sqrt(m_l * m_l / q2) : 0.0;
                 result.NF = norm(q2);
