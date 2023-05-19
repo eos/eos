@@ -70,6 +70,7 @@ TESTS = \
 	b-to-kstar-nu-nu_TEST \
 	b-to-pi-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
+	b-to-rho-l-nu_TEST \
 	bs-to-kstar-l-nu_TEST \
 	lambdab-to-lambdac-l-nu_TEST \
 	lambdab-to-lambdac2595-l-nu_TEST \
@@ -105,6 +106,8 @@ b_to_kstar_nu_nu_TEST_SOURCES = b-to-kstar-nu-nu_TEST.cc
 b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
 
 b_to_pi_pi_l_nu_TEST_SOURCES = b-to-pi-pi-l-nu_TEST.cc
+
+b_to_rho_l_nu_TEST_SOURCES = b-to-rho-l-nu_TEST.cc
 
 bs_to_kstar_l_nu_TEST_SOURCES = bs-to-kstar-l-nu_TEST.cc
 
