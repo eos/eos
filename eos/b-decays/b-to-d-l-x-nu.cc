@@ -58,6 +58,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            form_factors(FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors", "BCL2008"), p, o)),
             opt_q(o, "q", { "u", "d" }, "d"),
             m_B(p["mass::B_" + opt_q.value()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
@@ -69,11 +70,6 @@ namespace eos
             opt_model(o, "model", {"SM"}, "SM"),
             model(Model::make(opt_model.value(), p, o))
         {
-            form_factors = FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors", "BCL2008"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*form_factors);
         }
 

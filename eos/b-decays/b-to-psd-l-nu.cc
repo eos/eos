@@ -56,8 +56,6 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        std::shared_ptr<FormFactors<PToP>> form_factors;
-
         Parameters parameters;
 
         SwitchOption opt_U;
@@ -91,6 +89,8 @@ namespace eos
         GSL::QAGS::Config int_config;
 
         bool cp_conjugate;
+
+        std::shared_ptr<FormFactors<PToP>> form_factors;
 
         // { U, q, I } -> { process, m_B, m_V, c_I }
         // U: u, c; the quark flavor in the weak transition
@@ -171,13 +171,9 @@ namespace eos
             isospin_factor(_isospin_factor()),
             mu(p[opt_U.value() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
-            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
         {
-            form_factors = FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             using std::placeholders::_1;
             using std::placeholders::_2;
             if ('u' == opt_U.value()[0])

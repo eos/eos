@@ -358,14 +358,18 @@ namespace eos
     std::shared_ptr<FormFactors<PToP>>
     FormFactorFactory<PToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When creating a P->P form factor");
+
         std::shared_ptr<FormFactors<PToP>> result;
 
         auto i = FormFactorFactory<PToP>::form_factors.find(name);
         if (FormFactorFactory<PToP>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
+            return result;
         }
 
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
         return result;
     }
 
