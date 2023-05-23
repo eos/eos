@@ -70,8 +70,6 @@ namespace eos
                 throw InternalError("BToGammaLeptonNeutrino: construction of model failed");
             u.uses(*model);
 
-            if(form_factors == nullptr)
-                throw InternalError("BToGammaLeptonNeutrino: construction of form_factors failed");
             u.uses(*form_factors);
         }
 
