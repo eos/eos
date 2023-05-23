@@ -31,6 +31,8 @@ namespace eos
     std::shared_ptr<BMesonLCDAs>
     BMesonLCDAs::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When making an object for pseudoscalar LCDAs");
+
         std::shared_ptr<BMesonLCDAs> result;
 
         using type = std::function<BMesonLCDAs * (const Parameters &, const Options &)>;
@@ -43,12 +45,10 @@ namespace eos
         if (i != models.end())
         {
             result.reset( i->second(parameters, options) );
-        }
-        else
-        {
-            throw InternalError("Unknown value for 'name' for BMesonLCDAs::make");
+            return result;
         }
 
+        throw InternalError("Unknown B-meson LCDA model: " + name);
         return result;
     }
 }
