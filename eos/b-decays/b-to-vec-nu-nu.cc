@@ -213,7 +213,7 @@ namespace eos
     Implementation<BToVectorDineutrino>::options
     {
         Model::option_specification(),
-        FormFactorFactory<PToP>::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
         { "D", { "s" },             "s" },
         { "q", { "u", "d" },        "u" },
         { "I", { "1", "0", "1/2" }, ""  },
