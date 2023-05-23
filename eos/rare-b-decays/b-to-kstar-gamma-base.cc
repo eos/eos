@@ -19,9 +19,6 @@ namespace eos
         m_l(p["mass::" + l.value()], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
     {
-        if (! form_factors.get())
-            throw InternalError("Form factors not found!");
-
         std::string spectator_quark = o.get("q", "d");
         if (spectator_quark.size() != 1)
             throw InternalError("Option q should only be one character!");

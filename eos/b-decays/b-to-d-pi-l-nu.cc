@@ -43,9 +43,6 @@ namespace eos
             m_l(p["mass::" + opt_l.value()], u),
             ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "BGJvD2019"), p, o))
         {
-            if (! ff.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*ff);
         }
 
