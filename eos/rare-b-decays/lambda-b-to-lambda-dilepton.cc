@@ -338,13 +338,9 @@ namespace eos
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu")
+            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o))
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*form_factors);
             u.uses(*model);
         }
@@ -885,13 +881,9 @@ namespace eos
             r_perp_0(p["Lambda_b->Lambdall::r_perp_0@MvD2016"], u),
             r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
-            r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u)
+            r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u),
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o))
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*form_factors);
             u.uses(*model);
         }

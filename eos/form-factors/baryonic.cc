@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/baryonic-processes.hh>
+#include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-bbgorvd2018.hh>
@@ -61,14 +62,18 @@ namespace eos
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
     FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When creating a 1/2^+->1/2^+ form factor");
+
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> result;
 
         auto i = FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors.find(name);
         if (FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
+            return result;
         }
 
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
         return result;
     }
 
