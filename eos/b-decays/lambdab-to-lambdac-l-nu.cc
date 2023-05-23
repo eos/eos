@@ -289,13 +289,9 @@ namespace eos
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda_c(p["mass::Lambda_c"], u),
             alpha(p["Lambda_c::alpha"], u),
-            mu(p["cb" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
+            mu(p["cb" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors", "DKMR2017"), p, o))
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors", "DKMR2017"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*form_factors);
             u.uses(*model);
         }
