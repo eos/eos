@@ -58,6 +58,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            form_factors(FormFactorFactory<PToPP>::create("B->pipi::" + o.get("form-factors", "BFvD2016"), p, o)),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             m_pi(p["mass::pi^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
@@ -77,11 +78,6 @@ namespace eos
                 // only B_{d,u} mesons can decay in this channel
                 throw InternalError("BToPiPiLeptonNeutrino: q = '" + o["q"] + "' is not a valid option for this decay channel");
             }
-
-            form_factors = FormFactorFactory<PToPP>::create("B->pipi::" + o.get("form-factors", "BFvD2016"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
 
             u.uses(*form_factors);
             u.uses(*model);
