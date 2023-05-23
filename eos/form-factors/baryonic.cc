@@ -113,14 +113,18 @@ namespace eos
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>
     FormFactorFactory<OneHalfPlusToOneHalfMinus>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When creating a 1/2^+->1/2^- form factor");
+
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> result;
 
         auto i = FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors.find(name);
         if (FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
+            return result;
         }
 
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
         return result;
     }
 
