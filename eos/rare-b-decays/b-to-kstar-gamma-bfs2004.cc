@@ -56,7 +56,7 @@ namespace eos
         a_2_perp(p["K^*::a_2_perp@1GeV"], *this),
         uncertainty_para(p["B->K^*ll::A_para_uncertainty@LargeRecoil"], *this),
         uncertainty_perp(p["B->K^*ll::A_perp_uncertainty@LargeRecoil"], *this),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "KMPW2010"), p)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
         mu(p["sb::mu"], *this)
     {
         this->uses(*model);

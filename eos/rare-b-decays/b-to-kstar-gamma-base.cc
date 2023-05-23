@@ -7,7 +7,7 @@ namespace eos
 {
     BToKstarGamma::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model", "SM"), p, o)),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "KMPW2010"), p)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
         hbar(p["QM::hbar"], *this),
         mu(p["sb::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
