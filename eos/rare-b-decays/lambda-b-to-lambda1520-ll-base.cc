@@ -37,9 +37,6 @@ namespace eos
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
         lepton_flavor(opt_l.value())
     {
-        if (! form_factors.get())
-            throw InternalError("Form factors not found!");
-
         this->uses(*form_factors);
         this->uses(*model);
     }
