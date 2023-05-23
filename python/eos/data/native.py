@@ -397,9 +397,14 @@ class ImportanceSamples:
             raise RuntimeError('Weights file {} does not exist or is not a file'.format(f))
         self.weights = _np.load(f)
 
+        f = os.path.join(path, 'posterior_values.npy')
+        if not os.path.exists(f) and not os.path.isfile(f):
+            raise RuntimeError('Posterior values file {} does not exist or is not a file'.format(f))
+        self.posterior_values = _np.load(f)
+
 
     @staticmethod
-    def create(path, parameters, samples, weights):
+    def create(path, parameters, samples, weights, posterior_values=None):
         """ Write a new ImportanceSamples object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
@@ -426,11 +431,16 @@ class ImportanceSamples:
         if not weights is None and not samples.shape[0] == weights.shape[0]:
             raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
 
+        if not posterior_values is None and not samples.shape[0] == posterior_values.shape[0]:
+            raise RuntimeError(f'Shape of posterior values {posterior_values.shape} incompatible with shape of samples {samples.shape}')
+
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
             yaml.dump(description, description_file, default_flow_style=False)
         _np.save(os.path.join(path, 'samples.npy'), samples)
         _np.save(os.path.join(path, 'weights.npy'), weights)
+        if not posterior_values is None:
+            _np.save(os.path.join(path, 'posterior_values.npy'), posterior_values)
 
 
 class Prediction:
