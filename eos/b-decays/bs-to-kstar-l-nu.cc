@@ -82,13 +82,9 @@ namespace eos
             m_l(p["mass::" + opt_l.str()], u),
             mu(p["ub" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            tau(p["life_time::B_s"], u)
+            tau(p["life_time::B_s"], u),
+            form_factors(FormFactorFactory<PToV>::create("B_s->K^*::" + o.get("form-factors", "FMvD2015"), p, o))
         {
-            form_factors = FormFactorFactory<PToV>::create("B_s->K^*::" + o.get("form-factors", "FMvD2015"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*form_factors);
             u.uses(*model);
         }

@@ -48,8 +48,6 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        std::shared_ptr<FormFactors<PToV>> form_factors;
-
         Parameters parameters;
 
         SwitchOption opt_U;
@@ -85,6 +83,8 @@ namespace eos
         SwitchOption opt_int_points;
 
         int int_points;
+
+        std::shared_ptr<FormFactors<PToV>> form_factors;
 
         using IntermediateResult = BToVectorLeptonNeutrino::IntermediateResult;
 
@@ -164,13 +164,9 @@ namespace eos
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             mu(p[opt_U.value() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             opt_int_points(o, "integration-points", {"256", "4096"}, "256"),
-            int_points(destringify<int>(opt_int_points.value()))
+            int_points(destringify<int>(opt_int_points.value())),
+            form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
         {
-            form_factors = FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             using std::placeholders::_1;
             using std::placeholders::_2;
             if ('u' == opt_U.value()[0])

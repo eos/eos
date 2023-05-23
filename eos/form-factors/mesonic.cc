@@ -25,6 +25,7 @@
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
+#include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
@@ -132,14 +133,18 @@ namespace eos
     std::shared_ptr<FormFactors<PToV>>
     FormFactorFactory<PToV>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When creating a P->V form factor");
+
         std::shared_ptr<FormFactors<PToV>> result;
 
         auto i = form_factors.find(name);
         if (form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
+            return result;
         }
 
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
         return result;
     }
 
