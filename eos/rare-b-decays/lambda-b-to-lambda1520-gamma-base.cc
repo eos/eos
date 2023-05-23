@@ -33,9 +33,6 @@ namespace eos
         m_Lstar(p["mass::Lambda(1520)"], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
     {
-        if (! form_factors.get())
-            throw InternalError("Form factors not found!");
-
         this->uses(*form_factors);
         this->uses(*model);
     }

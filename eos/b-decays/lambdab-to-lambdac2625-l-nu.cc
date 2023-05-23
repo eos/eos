@@ -55,6 +55,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)::" + o.get("form-factors", "HQET"), p)),
             parameters(p),
             m_LambdaB(p["mass::Lambda_b"], u),
             tau_LambdaB(p["life_time::Lambda_b"], u),
@@ -63,11 +64,6 @@ namespace eos
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
-            form_factors = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)::" + o.get("form-factors", "HQET"), p);
-
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
-
             u.uses(*form_factors);
             u.uses(*model);
         }
