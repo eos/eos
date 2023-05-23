@@ -40,9 +40,6 @@ namespace eos
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
         lepton_flavor(opt_l.value())
     {
-        if (! form_factors.get())
-            throw InternalError("Form factors not found!");
-
         if (0.0 == m_l())
         {
             throw InternalError("Zero lepton mass leads to NaNs in timelike amplitudes. Use tiny lepton mass > 0!");
