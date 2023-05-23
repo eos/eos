@@ -510,14 +510,18 @@ namespace eos
     std::shared_ptr<FormFactors<VToV>>
     FormFactorFactory<VToV>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When creating a V->V form factor");
+
         std::shared_ptr<FormFactors<VToV>> result;
 
         auto i = FormFactorFactory<VToV>::form_factors.find(name);
         if (FormFactorFactory<VToV>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
+            return result;
         }
 
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
         return result;
     }
 
