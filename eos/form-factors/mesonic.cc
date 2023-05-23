@@ -237,6 +237,8 @@ namespace eos
     std::shared_ptr<FormFactors<PToGammaOffShell>>
     FormFactorFactory<PToGammaOffShell>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When creating a P->gamma^* form factor");
+
         std::shared_ptr<FormFactors<PToGammaOffShell>> result;
 
         auto & form_factors = FormFactorFactory<PToGammaOffShell>::form_factors;
@@ -244,8 +246,10 @@ namespace eos
         if (form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
+            return result;
         }
 
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
         return result;
     }
 

@@ -82,10 +82,6 @@ namespace eos
             u.uses(*model);
             u.uses(*form_factors);
 
-            if (! form_factors)
-            {
-                throw InternalError("No such form factors for b to 3l nu decays");
-            }
             if (opt_l.str() == opt_lprime.str())
             {
                 throw InvalidOptionValueError("opt_lprime", opt_l.str(), "e, mu, tau if it is not the value of l_prime");
