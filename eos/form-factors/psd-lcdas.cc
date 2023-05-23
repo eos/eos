@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/psd-lcdas.hh>
 #include <eos/form-factors/pi-lcdas.hh>
 #include <eos/form-factors/k-lcdas.hh>
@@ -32,6 +33,8 @@ namespace eos
     std::shared_ptr<PseudoscalarLCDAs>
     PseudoscalarLCDAs::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
+        Context ctx("When making an object for pseudoscalar LCDAs");
+
         using KeyType = std::string;
         using ValueType = std::function<PseudoscalarLCDAs * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> lcdas
@@ -46,8 +49,10 @@ namespace eos
         if (lcdas.cend() != i)
         {
             result.reset(i->second(parameters, options));
+            return result;
         }
 
+        throw InternalError("Unknown pseudoscalar LCDAs for state: " + name);
         return result;
     }
 }
