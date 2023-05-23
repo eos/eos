@@ -419,7 +419,7 @@ class Analysis:
             The parameter determines the number of update steps to "look back".
             The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
 
-        :return: A tuple of the parameters as array of length N = step_N * steps + final_N, the (linear) weights as array of length N, and the
+        :return: A tuple of the parameters as array of length N = step_N * steps + final_N, the (linear) weights as array of length N, the posterior values as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
 
         This method should be called after obtaining approximate samples of the
@@ -559,15 +559,17 @@ class Analysis:
             # only returns the final_N final samples
             samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:][-final_N:])
             weights = sampler.weights[:][-final_N:, 0]
+            posterior_values = sampler.target_values[:][-final_N:]
         else:
             # returns all samples
             samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])
             weights = sampler.weights[:][:, 0]
+            posterior_values = sampler.target_values[:]
         perplexity = self._perplexity(np.copy(weights))
         ess = self._ess(np.copy(weights))
         eos.info(f'Convergence diagnostics after final samples: perplexity = {perplexity}, ESS = {ess}')
 
-        return samples, weights, sampler.proposal
+        return samples, weights, posterior_values, sampler.proposal
 
 
     def log_likelihood(self, x, *args):

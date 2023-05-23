@@ -342,7 +342,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     else:
         eos.error("Could not initialize proposal in sample_pmc: argument {} is not supported.".format(initial_proposal))
 
-    samples, weights, proposal = analysis.sample_pmc(initial_density, step_N=step_N, steps=steps, final_N=final_N,
+    samples, weights, posterior_values, proposal = analysis.sample_pmc(initial_density, step_N=step_N, steps=steps, final_N=final_N,
                                                      rng=rng, final_perplexity_threshold=perplexity_threshold,
                                                      weight_threshold=weight_threshold, pmc_iterations=pmc_iterations,
                                                      pmc_rel_tol=pmc_rel_tol, pmc_abs_tol=pmc_abs_tol, pmc_lookback=pmc_lookback)
@@ -353,7 +353,8 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
     eos.data.PMCSampler.create(os.path.join(base_directory, posterior, 'pmc'), analysis.varied_parameters, proposal,
                                sigma_test_stat=sigma_test_stat, samples=samples, weights=weights)
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
+                                      samples, weights, posterior_values=posterior_values)
 
 
 # Predict observables
