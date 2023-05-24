@@ -88,13 +88,14 @@ def task(name, output, mode=lambda **kwargs: 'w'):
 
 
 @task('find-mode', '{posterior}/mode-{label}')
-def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None, seed:int=None, label:str='default'):
+def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
+              importance_samples:bool=None, seed:int=None, label:str='default'):
     '''
     Finds the mode of the named posterior.
 
     The optimization process can be initialized either with a random point,
     a provided parameter point, or by extracting the point with the largest posterior
-    from among previously obtained MCMC samples. The optimization can be iterated to
+    from among previously obtained MCMC or importance samples. The optimization can be iterated to
     increase the accuracy of the result.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
@@ -110,6 +111,8 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     :param chain: If provided, the optimization will start at the point with the largest posterior of previously computed MCMC samples.
         The samples are expected to be stored in the `mcmc-XXXX` subdirectories of the `base_directory`, where 'XXXX' is the provided int.
     :type chain: int, optional
+    :param importance_samples: If set to True, the optimization will start at the point with the largest posterior of previously computed importance samples.
+    :type importance_samples: bool, optional
     :param seed: If provided, the optimization will start from a random point and the random number generator will be seeded with this value.
     :type seed: int, optional
     '''
@@ -124,6 +127,9 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
 
     if not chain is None and not start_point is None:
         raise ValueError('The arguments chain and start_point are mutually exclusive')
+
+    if not importance_samples is None and not start_point is None:
+        raise ValueError('The arguments importance_samples and start_point are mutually exclusive')
 
     analysis = analysis_file.analysis(posterior)
     min_chi2 = sys.float_info.max
@@ -144,6 +150,16 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _chain = eos.data.MarkovChain(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'))
         idx_mode = _np.argmax(_chain.weights)
         for p, v in zip(analysis.varied_parameters, _chain.samples[idx_mode]):
+            p.set(v)
+
+        _bfp = analysis.optimize()
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
+        _chi2 = _gof.total_chi_square()
+    elif importance_samples:
+        eos.info('Initializing starting point from importance samples')
+        _file = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+        idx_mode = _np.argmax(_file.posterior_values)
+        for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
             p.set(v)
 
         _bfp = analysis.optimize()
