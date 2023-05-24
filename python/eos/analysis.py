@@ -151,8 +151,19 @@ class Analysis:
             else:
                 raise ValueError('Prior specification must contains either a parameter or a constraint')
 
+        # check for duplicate entries in the likelihood
+        set_likelihood = set(likelihood)
+        if len(set_likelihood) != len(likelihood):
+            raise ValueError(f'The likelihood contains duplicate entries')
+        set_manual_constraints = set(manual_constraints.keys())
+        if len(set_manual_constraints) != len(manual_constraints):
+            raise ValueError(f'The manual constraints contain duplicate entries')
+        set_intersection = set_likelihood.intersection(set_manual_constraints)
+        if len(set_intersection) > 0:
+            raise ValueError(f'The likelihood contains constraint names also present in the manual_constraints: {set_intersection}')
+
         # record all constraints that comprise the likelihood
-        self._constraint_names = list(likelihood) + list(manual_constraints.keys())
+        self._constraint_names = list(set_likelihood.union(set_manual_constraints))
 
         # create the likelihood
         for constraint_name in self._constraint_names:
