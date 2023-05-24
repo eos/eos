@@ -467,9 +467,11 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     analysis = analysis_file.analysis(posterior)
     results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, seed=seed)
     samples = results.samples
-    weights = _np.exp(results.logwt - results.logz[-1])
+    posterior_values = results.logwt - results.logz[-1]
+    weights = _np.exp(posterior_values)
     eos.data.DynestyResults.create(os.path.join(base_directory, posterior, 'dynesty_results'), analysis.varied_parameters, results)
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
+                                      samples, weights, posterior_values=posterior_values)
 
 
 # Corner plot
