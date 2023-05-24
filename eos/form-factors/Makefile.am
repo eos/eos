@@ -92,12 +92,15 @@ TESTS = \
 	analytic-b-to-pi-pi_TEST \
 	analytic-b-to-p-lcsr_TEST \
 	analytic-b-to-v-lcsr_TEST \
+	baryonic_TEST \
+	b-lcdas_TEST \
 	b-lcdas-exponential_TEST \
 	b-lcdas-flvd2022_TEST \
 	hqet-b-to-c_TEST \
 	k-lcdas_TEST \
 	kstar-lcdas_TEST \
 	lcda_TEST \
+	mesonic_TEST \
 	parametric-abr2022_TEST \
 	parametric-bbgorvd2018_TEST \
 	parametric-bcl2008_TEST \
@@ -113,6 +116,7 @@ TESTS = \
 	parametric-kkvdz2022_TEST \
 	parametric-kmpw2010_TEST \
 	pi-lcdas_TEST \
+	psd-lcdas_TEST \
 	unitarity-bounds_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -137,6 +141,10 @@ analytic_b_to_p_lcsr_TEST_SOURCES = analytic-b-to-p-lcsr_TEST.cc
 
 analytic_b_to_v_lcsr_TEST_SOURCES = analytic-b-to-v-lcsr_TEST.cc
 
+baryonic_TEST_SOURCES = baryonic_TEST.cc
+
+b_lcdas_TEST_SOURCES = b-lcdas_TEST.cc
+
 b_lcdas_exponential_TEST_SOURCES = b-lcdas-exponential_TEST.cc
 
 b_lcdas_flvd2022_TEST_SOURCES = b-lcdas-flvd2022_TEST.cc
@@ -148,6 +156,8 @@ k_lcdas_TEST_SOURCES = k-lcdas_TEST.cc
 kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 
 lcda_TEST_SOURCES = lcda_TEST.cc
+
+mesonic_TEST_SOURCES = mesonic_TEST.cc
 
 parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
 
@@ -178,5 +188,7 @@ parametric_kkvdz2022_TEST_SOURCES = parametric-kkvdz2022_TEST.cc
 parametric_kmpw2010_TEST_SOURCES = parametric-kmpw2010_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
+
+psd_lcdas_TEST_SOURCES = psd-lcdas_TEST.cc
 
 unitarity_bounds_TEST_SOURCES = unitarity-bounds_TEST.cc
