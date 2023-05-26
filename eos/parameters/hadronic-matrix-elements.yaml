@@ -767,6 +767,12 @@ groups:
           min: 2.0
           max: 2.0
           latex: '$n_f$'
+      'B->D::t_0@BGL1997' :
+          central:  6.1848725
+          min:     0.0
+          max:     11.621
+          latex:    '$t_0^{B\to D,\mathrm{BGL97}}$'
+          unit:     'GeV^2'
       'B->D::a^f+_0@BGL1997' :
           central: 0.0
           min:     0.0
@@ -1735,6 +1741,12 @@ groups:
           latex:    '$\alpha_{T_{23},2}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       # form factor parameters for B->D^* for [BGL:1997A]
+      'B->D^*::t_0@BGL1997' :
+          central:  5.6417164
+          min:      0.0
+          max:     10.684
+          latex:    '$t_0^{B\to D^*,\mathrm{BGL97}}$'
+          unit:     'GeV^2'
       'B->D^*::a^g_0@BGL1997' :
           central: 0.0
           min:     0.0
