@@ -121,8 +121,8 @@ namespace eos
         _mB2(power_of<2>(_mB)),
         _mV(BToDstar::m_V),
         _mV2(power_of<2>(_mV)),
-        // here optimal t_0 = sqrt(t_p) (sqrt(m_B) - sqrt(m_M))^2
-        _t_0((_mB + _mV)* power_of<2>(std::sqrt(_mB) - std::sqrt(_mV)))
+        // default t_0 = sqrt(t_p) (sqrt(m_B) - sqrt(m_M))^2 (optimal value)
+        _t_0(p["B->D^*::t_0@BGL1997"], *this)
     {
     }
 
@@ -404,7 +404,7 @@ namespace eos
         _mP(BToD::m_P),
         _mP2(power_of<2>(_mP)),
         // here optimal t_0 = sqrt(t_p) (sqrt(m_B) - sqrt(m_M))^2
-        _t_0((_mB + _mP)* power_of<2>(std::sqrt(_mB) - std::sqrt(_mP)))
+        _t_0(p["B->D::t_0@BGL1997"], *this)
     {
     }
 

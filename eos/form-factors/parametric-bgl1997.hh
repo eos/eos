@@ -60,7 +60,7 @@ namespace eos
             std::array<UsedParameter, 3> _a_T2, _a_T23;
 
             const double _mB, _mB2, _mV, _mV2;
-            const double _t_0;
+            UsedParameter _t_0;
 
             static std::string _par_name(const std::string & ff_name);
 
@@ -123,7 +123,7 @@ namespace eos
             std::array<UsedParameter, 4> _a_f_p, _a_f_0, _a_f_t;
 
             const double _mB, _mB2, _mP, _mP2;
-            const double _t_0;
+            UsedParameter _t_0;
 
             static std::string _par_name(const std::string & ff_name);
 
