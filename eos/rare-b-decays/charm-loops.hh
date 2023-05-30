@@ -23,6 +23,8 @@
 #include <eos/maths/complex.hh>
 #include <eos/maths/interpolation.hh>
 #include <eos/models/model.hh>
+#include <eos/utils/diagnostics.hh>
+#include <eos/utils/reference-name.hh>
 
 #include <vector>
 
@@ -134,6 +136,36 @@ namespace eos
         static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
                 bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
                 const WilsonCoefficients<BToS> & wc);
+    };
+
+    class CharmLoopsAdapter :
+        public ParameterUser,
+        public PrivateImplementationPattern<CharmLoopsAdapter>
+    {
+        public:
+            CharmLoopsAdapter(const Parameters & parameters, const Options & options);
+            ~CharmLoopsAdapter();
+
+            // Observables
+            double real_F17(const double & re_q2, const double & im_q2) const;
+            double imag_F17(const double & re_q2, const double & im_q2) const;
+            double real_F19(const double & re_q2, const double & im_q2) const;
+            double imag_F19(const double & re_q2, const double & im_q2) const;
+            double real_F27(const double & re_q2, const double & im_q2) const;
+            double imag_F27(const double & re_q2, const double & im_q2) const;
+            double real_F29(const double & re_q2, const double & im_q2) const;
+            double imag_F29(const double & re_q2, const double & im_q2) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 }
 

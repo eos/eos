@@ -326,6 +326,27 @@ namespace eos
         complex<double> F27_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
         complex<double> F29_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
 
+        complex<double> f17a(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f17b(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f17c(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f17d(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f17e(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f27a(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f27b(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f27c(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f27d(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f27e(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f19a(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f19b(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f19c(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f19d(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f19e(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f29a(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f29b(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f29c(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f29d(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+        complex<double> f29e(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
+
         complex<double> delta_c7_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
         complex<double> delta_c7(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
         complex<double> delta_c9_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
