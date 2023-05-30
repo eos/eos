@@ -20,6 +20,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/rare-b-decays/decays.hh>
+#include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/b-to-ll.hh>
 #include <eos/rare-b-decays/b-to-k-charmonium.hh>
 #include <eos/rare-b-decays/b-to-k-ll.hh>
@@ -2983,6 +2984,32 @@ namespace eos
             "Pseudo-observables for Non-local Matrix Elements",
             "",
             {
+                // Charm Loops
+                make_observable("b->s::re_F17(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::real_F17,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::im_F17(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::imag_F17,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::re_F19(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::real_F19,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::im_F19(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::imag_F19,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::re_F27(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::real_F27,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::im_F27(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::imag_F27,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::re_F29(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::real_F29,
+                        std::make_tuple("q2_real", "q2_imag")),
+                make_observable("b->s::im_F29(Re(q2),Im(q2))", Unit::None(),
+                        &CharmLoopsAdapter::imag_F29,
+                        std::make_tuple("q2_real", "q2_imag")),
+
                 // B->K
                 make_observable("B->Kgamma^*::Re{H_+}(q2)",
                         Unit::None(),

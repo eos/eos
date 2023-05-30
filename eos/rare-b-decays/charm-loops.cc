@@ -1,9 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
+ * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010, 2011, 2014, 2017 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
- * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -26,6 +27,8 @@
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
+#include <eos/utils/options-impl.hh>
+#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>
@@ -1476,6 +1479,201 @@ namespace eos
         return result;
     }
 
+
+    /*
+     * Adapter that exports the charn loops function as observables
+     */
+    template <>
+    struct Implementation<CharmLoopsAdapter>
+    {
+        SpecifiedOption opt_contribution;
+
+        UsedParameter m_b;
+        UsedParameter m_c;
+        UsedParameter mu;
+
+        static const std::vector<OptionSpecification> options;
+
+        static const std::map<std::string, std::tuple<double, double, double, double, double, double, double, double, double>> contribution_map;
+
+        double flag_0 = 0.0,
+               flag_a = 0.0,
+               flag_b = 0.0,
+               flag_c = 0.0,
+               flag_d = 0.0,
+               flag_e = 0.0,
+               flag_ctQc = 0.0,
+               flag_ctQs = 0.0,
+               flag_ctQb = 0.0;
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            opt_contribution(o, options, "contribution"),
+            m_b(p["mass::b(MSbar)"], u),
+            m_c(p["mass::c"], u),
+            mu(p["sb::mu"], u)
+        {
+            auto i = contribution_map.find(opt_contribution.value());
+            if (i == contribution_map.end())
+                throw InternalError("Unknown charm loops option: " + opt_contribution.value());
+
+            std::tie(flag_0, flag_a, flag_b, flag_c, flag_d, flag_e, flag_ctQc, flag_ctQs, flag_ctQb) = i->second;
+        }
+
+        inline agv_2019a::CharmLoopsParameters clp(const complex<double> & s) const
+        {
+            return agv_2019a::CharmLoopsParameters(mu / m_b, s / m_b() / m_b(), (m_c * m_c) / (m_b * m_b), 1e-12);
+        }
+
+        complex<double> F17(const complex<double> & s) const
+        {
+            auto params = clp(s);
+            return flag_a * agv_2019a::f17a(params)
+                 + flag_b * agv_2019a::f17b(params)
+                 + flag_c * agv_2019a::f17c(params)
+                 + flag_d * agv_2019a::f17d(params)
+                 + flag_e * agv_2019a::f17e(params)
+                 + flag_ctQc * agv_2019a::f17ctQc(params)
+                 + flag_ctQs * agv_2019a::f17ctQs(params)
+                 + flag_ctQb * agv_2019a::f17ctQb(params);
+        }
+        complex<double> F19(const complex<double> & s) const
+        {
+            auto params = clp(s);
+            return flag_0 * agv_2019a::f190(params)
+                 + flag_a * agv_2019a::f19a(params)
+                 + flag_b * agv_2019a::f19b(params)
+                 + flag_c * agv_2019a::f19c(params)
+                 + flag_d * agv_2019a::f19d(params)
+                 + flag_e * agv_2019a::f19e(params)
+                 + flag_ctQc * agv_2019a::f19ctQc(params)
+                 + flag_ctQs * agv_2019a::f19ctQs(params)
+                 + flag_ctQb * agv_2019a::f19ctQb(params);
+        }
+        complex<double> F27(const complex<double> & s) const
+        {
+            auto params = clp(s);
+            return flag_a * agv_2019a::f27a(params)
+                 + flag_b * agv_2019a::f27b(params)
+                 + flag_c * agv_2019a::f27c(params)
+                 + flag_d * agv_2019a::f27d(params)
+                 + flag_e * agv_2019a::f27e(params)
+                 + flag_ctQc * agv_2019a::f27ctQc(params)
+                 + flag_ctQs * agv_2019a::f27ctQs(params)
+                 + flag_ctQb * agv_2019a::f27ctQb(params);
+        }
+        complex<double> F29(const complex<double> & s) const
+        {
+            auto params = clp(s);
+            return flag_0 * agv_2019a::f290(params)
+                 + flag_a * agv_2019a::f29a(params)
+                 + flag_b * agv_2019a::f29b(params)
+                 + flag_c * agv_2019a::f29c(params)
+                 + flag_d * agv_2019a::f29d(params)
+                 + flag_e * agv_2019a::f29e(params)
+                 + flag_ctQc * agv_2019a::f29ctQc(params)
+                 + flag_ctQs * agv_2019a::f29ctQs(params)
+                 + flag_ctQb * agv_2019a::f29ctQb(params);
+        }
+    };
+
+    const std::vector<OptionSpecification>
+    Implementation<CharmLoopsAdapter>::options
+    {
+        { "contribution", { "0", "Qc", "Qsb", "a", "b", "c", "d", "e", "ctQc", "ctQs", "ctQb", "all" }, "all" },
+    };
+
+    const std::map<std::string, std::tuple<double, double, double, double, double, double, double, double, double>>
+    Implementation<CharmLoopsAdapter>::Implementation::contribution_map
+    {
+        std::make_pair("0",     std::make_tuple(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)),
+        std::make_pair("Qc",    std::make_tuple(0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0)),
+        std::make_pair("Qsb",   std::make_tuple(0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0)),
+        std::make_pair("a",     std::make_tuple(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)),
+        std::make_pair("b",     std::make_tuple(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)),
+        std::make_pair("c",     std::make_tuple(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0)),
+        std::make_pair("d",     std::make_tuple(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0)),
+        std::make_pair("e",     std::make_tuple(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0)),
+        std::make_pair("ctQc",  std::make_tuple(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0)),
+        std::make_pair("ctQs",  std::make_tuple(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)),
+        std::make_pair("ctQsb", std::make_tuple(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)),
+        std::make_pair("all",   std::make_tuple(0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0))
+    };
+
+    CharmLoopsAdapter::CharmLoopsAdapter(const Parameters & parameters, const Options & options) :
+        PrivateImplementationPattern<CharmLoopsAdapter>(new Implementation<CharmLoopsAdapter>(parameters, options, *this))
+    {
+    }
+
+    CharmLoopsAdapter::~CharmLoopsAdapter()
+    {
+    }
+
+    double
+    CharmLoopsAdapter::real_F17(const double & re_q2, const double & im_q2) const
+    {
+        return real(_imp->F17(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::imag_F17(const double & re_q2, const double & im_q2) const
+    {
+        return imag(_imp->F17(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::real_F27(const double & re_q2, const double & im_q2) const
+    {
+        return real(_imp->F27(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::imag_F27(const double & re_q2, const double & im_q2) const
+    {
+        return imag(_imp->F27(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::real_F19(const double & re_q2, const double & im_q2) const
+    {
+        return real(_imp->F19(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::imag_F19(const double & re_q2, const double & im_q2) const
+    {
+        return imag(_imp->F19(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::real_F29(const double & re_q2, const double & im_q2) const
+    {
+        return real(_imp->F29(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    CharmLoopsAdapter::imag_F29(const double & re_q2, const double & im_q2) const
+    {
+        return imag(_imp->F29(complex<double>(re_q2, im_q2)));
+    }
+
+    const std::set<ReferenceName>
+    CharmLoopsAdapter::references
+    {
+        "AGV:2019A"_rn
+    };
+
+    std::vector<OptionSpecification>::const_iterator
+    CharmLoopsAdapter::begin_options()
+    {
+        return Implementation<CharmLoopsAdapter>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    CharmLoopsAdapter::end_options()
+    {
+        return Implementation<CharmLoopsAdapter>::options.cend();
+    }
+
     namespace agv_2019a
     {
         complex<double> F17_Qc(const CharmLoopsParameters & clp)
@@ -1532,63 +1730,6 @@ namespace eos
             const complex<double> result = f29a(clp) + f29b(clp) + f29ctQs(clp) + f29ctQb(clp);
 
             return result;
-        }
-
-        // Helper Functions
-        complex<double> F17_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F17_Qc(clp);
-        }
-
-        complex<double> F19_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F19_Qc(clp);
-        }
-
-        complex<double> F27_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F27_Qc(clp);
-        }
-
-        complex<double> F29_Qc(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F29_Qc(clp);
-        }
-
-        complex<double> F17_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F17_Qsb(clp);
-        }
-
-        complex<double> F19_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F19_Qsb(clp);
-        }
-
-        complex<double> F27_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F27_Qsb(clp);
-        }
-
-        complex<double> F29_Qsb(const complex<double> & s, const double & mu, const double & m_c, const double & m_b)
-        {
-            const agv_2019a::CharmLoopsParameters clp(mu / m_b, s, (m_c * m_c) / (m_b * m_b), 1e-12);
-
-            return F29_Qsb(clp);
         }
     }
 }
