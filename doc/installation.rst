@@ -12,18 +12,30 @@ Linux
 Installation with `pip3`
 ========================
 
-This is the recommended installation method using the 'package installer for Python' `pip3`:
+This is the recommended installation method using the 'package installer for Python' `pip3`.
+We distribute a release version and a development version.
+The changelog of the curated release versions is available `here <https://eos.github.io>`_.
+The development version is automatically up-to-date with the master branch in the Github EOS repository.
+Here we summarize the most common commands using `pip3`:
 
-::
+.. list-table::
+   :widths: 1 1
+   :header-rows: 1
 
-  pip3 install --user eoshep
+   * -
+     - Command
+   * - Install latest release version
+     - ``pip3 install --user eoshep``
+   * - Install latest development version
+     - ``pip3 install --user --pre eoshep``
+   * - Update to latest release version
+     - ``pip3 install --user --upgrade eoshep``
+   * - Update to latest development version
+     - ``pip3 install --user --upgrade --pre eoshep``
 
-You can now use the EOS Python module via ``import eos``. In addition, some command-line scripts have become available.
 
-| To **update** EOS, add the flag ``--upgrade`` to the above command.
-| To install the **development version**, add the flag ``--pre``.
-  This version is automatically up-to-date with the master branch in the Github EOS repository.
-| You can **test** and debug the installation of the python module as described :ref:`here <faq-check-installation>`.
+You can use the EOS Python module via ``import eos`` after installation. In addition, some command-line scripts have become available.
+You can test and debug the installation of the python module as described :ref:`here <faq-check-installation>`.
 
 
 Installation with `apt` (Ubuntu, Debian and Siblings)
