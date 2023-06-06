@@ -257,14 +257,10 @@ jobs:
                 make -j2 all
                 popd
 
-            - name: Build .deb file and deploy to Packagecloud.io
+            - name: Build .deb file
               shell: bash
-              env:
-                PACKAGECLOUD_TOKEN: "${{ secrets.PACKAGECLOUD_TOKEN }}"
               run: |
                 pushd _src
-                # check if this is not a tagged commit
-                if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then export EOS_IS_TAGGED=1 ; fi
                 export EOS_VERSION=$(git describe --abbrev=0 --tags)
                 export EOS_VERSION=${EOS_VERSION#v}
                 popd
@@ -273,8 +269,19 @@ jobs:
                 export DESTDIR=/tmp/eos-${EOS_VERSION}
                 make deb DESTDIR=${DESTDIR} OS=${{ matrix.cfg.os }}
                 dpkg -i /tmp/eos-${EOS_VERSION}.deb
-                if [[ -n $EOS_IS_TAGGED ]] ; then package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb ; fi
                 popd
+
+            - name: Deploy .deb file to Packagecloud.io
+              if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/v')
+              shell: bash
+              env:
+                PACKAGECLOUD_TOKEN: "${{ secrets.PACKAGECLOUD_TOKEN }}"
+              run: |
+                pushd _src
+                export EOS_VERSION=$(git describe --abbrev=0 --tags)
+                export EOS_VERSION=${EOS_VERSION#v}
+                popd
+                package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
 
             - name: Upload .deb file as artifact
               uses: actions/upload-artifact@v3
