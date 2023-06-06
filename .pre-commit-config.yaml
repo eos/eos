@@ -23,3 +23,8 @@ repos:
     - id: rst-backticks
     - id: rst-directive-colons
     - id: rst-inline-touching-normal
+
+ - repo: https://github.com/eos/pre-commit-hooks
+   rev: v1.0.1
+   hooks:
+    - id: eos-test-check-argument-order
