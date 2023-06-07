@@ -14,6 +14,7 @@ EXTRA_DIST = \
 	eos/tasks.py \
 	eos/data/__init__.py \
 	eos/data/native.py \
+    eos/data/native_TEST.d \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
 	eos/plot/plotter.py
@@ -21,7 +22,8 @@ EXTRA_DIST = \
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
 			 export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
-			 export PYTHONPATH="$(top_builddir)/python/.libs/:$(top_srcdir)/python";
+			 export PYTHONPATH="$(top_builddir)/python/.libs/:$(top_srcdir)/python"; \
+			 export SOURCE_DIR="$(abs_srcdir)";
 
 TEST_EXTENSIONS = .py
 PY_LOG_COMPILER = $(PYTHON)

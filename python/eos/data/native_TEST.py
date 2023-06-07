@@ -1,6 +1,7 @@
 import unittest
 
 import eos
+import os
 import pypmc
 import numpy as np
 
@@ -29,6 +30,11 @@ class PMCSamplerTests(unittest.TestCase):
             0.26256727,
             delta=1e-5
         )
+
+    def test_importing_samples(self):
+        "Test the import of importance samples."
+
+        file = eos.data.ImportanceSamples(os.path.join(os.environ['SOURCE_DIR'], "eos/data/native_TEST.d/samples"))
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)

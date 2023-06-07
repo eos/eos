@@ -1,0 +1,21 @@
+parameters:
+- max: 0.005
+  min: 0.003
+  name: CKM::abs(V_ub)
+- max: 0.3
+  min: 0.15
+  name: B->pi::f_+(0)@BCL2008
+- max: 4.0
+  min: -4.0
+  name: B->pi::b_+^1@BCL2008
+- max: 4.0
+  min: -4.0
+  name: B->pi::b_+^2@BCL2008
+- max: 4.0
+  min: -4.0
+  name: B->pi::b_0^1@BCL2008
+- max: 4.0
+  min: -4.0
+  name: B->pi::b_0^2@BCL2008
+type: ImportanceSamples
+version: 1.0.6
