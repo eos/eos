@@ -410,8 +410,9 @@ class ImportanceSamples:
 
         f = os.path.join(path, 'posterior_values.npy')
         if not os.path.exists(f) and not os.path.isfile(f):
-            raise RuntimeError('Posterior values file {} does not exist or is not a file'.format(f))
-        self.posterior_values = _np.load(f)
+            self.posterior_values = None
+        else:
+            self.posterior_values = _np.load(f)
 
 
     @staticmethod

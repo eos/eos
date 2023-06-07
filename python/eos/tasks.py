@@ -158,6 +158,8 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     elif importance_samples:
         eos.info('Initializing starting point from importance samples')
         _file = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+        if _file.posterior_values is None:
+            FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
         idx_mode = _np.argmax(_file.posterior_values)
         for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
             p.set(v)
