@@ -63,6 +63,16 @@ echo running PMC tests ... >&2
         -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
+#####################
+## Nested Sampling ##
+#####################
+echo running NS tests ... >&2
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        sample-nested \
+        CKM+FF \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+echo ... success >&2
+
 ###############################
 ## Plotting MCMC+PMC samples ##
 ###############################
