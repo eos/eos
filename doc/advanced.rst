@@ -7,4 +7,5 @@ Advanced Usage
 
    defining-observables
    analysis-organisation
+   tasks
    command-line-interface
