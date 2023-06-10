@@ -6,4 +6,5 @@ Advanced Usage
    :maxdepth: 2
 
    defining-observables
+   analysis-organisation
    command-line-interface
