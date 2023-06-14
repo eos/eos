@@ -56,9 +56,18 @@ For example, the observable defined by the expression ``1.0 / <<B->pilnu::dBR/dq
 ``q2``, since the reference observable ``B->pilnu::dBR/dq2`` does.
 When more than one observable appears in the expression, it is sometimes useful or even essential to rename kinematic variables,
 i.e., create an alias for the name of the kinematic variable.
-For example, wenn defining a lepton-flavour universality observable such as the ratio of branching fractions ``<<B->Dlnu::BR;l=tau>> / <<B->Dlnu::BR;l=mu>>``,
-the kinematic variable ``q2`` should be renamed t     rather than two kinematic variables.
-    two only expects a specification for ``q2_max``.evaluation of the denominator.
+For example, when defining a lepton-flavour universality observable such as the ratio of branching fractions ``<<B->Dlnu::BR;l=tau>> / <<B->Dlnu::BR;l=mu>>``,
+the kinematic variable ``q2`` should be renamed to ``q2_tau`` and ``q2_mu`` for the two observables, respectively, to avoid any ambiguity.
+Moreover, phenomenological application sometimes involve the evaluation of an observable at a fixed value of a kinematic variable.
+Both types of modification to the kinematic variables of a referenced observable are supported.
+They are achieved by appending a kinematic specification to the reference of an EOS observable: ``<<...>>[...]``.
+
+Two types of kinematics specification are supported
+
+  * the ``=>`` operator renames the kinematic variable on its left-hand side to the name on its right-hand side.
+    For example, the expression ``<<B_u->lnu::BR@l=mu>>[q2=>q2_mu] / <<B_u->lnu::BR@l=e>>[q2=>q2_e]`` expects
+    two kinematic variable: ``q2_mu`` and ``q2_e``. The value of the former is only used in the evaluation of the numerator;
+    the value of the latter is only used in the evaluation of the denominator.
 
   * the ``=`` operator fixes a kinematic variable to a given value.
     For example, the expression ``<<B->pilnu::BR>>[q2_min=0.1]`` expects only one kinematic variable ``q2_max``.
