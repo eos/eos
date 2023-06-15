@@ -377,7 +377,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
-def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=-1):
+def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
@@ -394,7 +394,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type base_directory: str, optional
     :param begin: The index of the first sample to use for the predictions. Defaults to 0.
     :type begin: int
-    :param end: The index beyond the last sample to use for the predictions. Defaults to -1.
+    :param end: The index beyond the last sample to use for the predictions. Defaults to None.
     :type begin: int
     '''
     _parameters    = analysis_file.analysis(posterior).parameters
