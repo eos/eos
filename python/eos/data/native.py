@@ -507,7 +507,7 @@ class Prediction:
         description['version'] = eos.__version__
         description['type'] = 'Prediction'
         description['observables'] = [{
-            'name': str(o.name()),
+            'name': o.name().full(),
             'kinematics': { k.name(): float(k) for k in o.kinematics() }
         } for o in observables]
 
