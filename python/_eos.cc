@@ -291,6 +291,9 @@ BOOST_PYTHON_MODULE(_eos)
         .def("options_part", &QualifiedName::options, return_value_policy<copy_const_reference>(), R"(
             Returns the optional options part of the name, i.e., the part following the optional ';'.
         )")
+        .def("full", &QualifiedName::full, return_value_policy<copy_const_reference>(), R"(
+            Returns the full name, i.e., the concatenation of all parts.
+        )")
         ;
     implicitly_convertible<std::string, QualifiedName>();
 
