@@ -893,7 +893,10 @@ namespace eos
             if (subdim_meas != response->size2)
                 throw InternalError("Constraint " + name.full() + ": number of predictions and number of columns in response matrix are not identical");
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
+            // create the block for number_of_observations = subdim_meas
+            //   - if we sliced the measurements, we need to adjust the number of observations
+            //   - if we did not slice, we made sure that number_of_observations == dim == subdim_meas
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, subdim_meas);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
@@ -1290,7 +1293,10 @@ namespace eos
                 gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->response.get(), begin, 0, subdim_meas, dim_pred);
                 gsl_matrix_memcpy(response, &(covariance_subset.matrix));
 
-                auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
+                // create the block for number_of_observations = subdim_meas
+                //   - if we sliced the measurements, we need to adjust the number of observations
+                //   - if we did not slice, we made sure that number_of_observations == dim == subdim_meas
+                auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, subdim_meas);
 
                 return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
             }
@@ -1305,7 +1311,10 @@ namespace eos
                 gsl_matrix * response = gsl_matrix_calloc(subdim_meas, subdim_meas);
                 gsl_matrix_set_identity(response);
 
-                auto block = LogLikelihoodBlock::MultivariateGaussian(cache, restricted_observables, means, covariance, response, number_of_observations);
+                // create the block for number_of_observations = subdim_meas
+                //   - if we sliced the measurements, we need to adjust the number of observations
+                //   - if we did not slice, we made sure that number_of_observations == dim == subdim_meas
+                auto block = LogLikelihoodBlock::MultivariateGaussian(cache, restricted_observables, means, covariance, response, subdim_meas);
 
                 return Constraint(name, std::vector<ObservablePtr>(restricted_observables.begin(), restricted_observables.end()), { block });
             }
