@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018-2022 Danny van Dyk
+ * Copyright (c) 2018-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -386,6 +386,20 @@ namespace eos
     }
 
     template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    HQETFormFactors<Process_, PToP>::begin_options()
+    {
+        return option_specifications.cbegin();
+    }
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    HQETFormFactors<Process_, PToP>::end_options()
+    {
+        return option_specifications.cend();
+    }
+
+    template <typename Process_>
     double
     HQETFormFactors<Process_, PToV>::_w(const double & q2) const
     {
@@ -638,6 +652,21 @@ namespace eos
 
     template <typename Process_>
     HQETFormFactors<Process_, PToV>::~HQETFormFactors() = default;
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    HQETFormFactors<Process_, PToV>::begin_options()
+    {
+        return option_specifications.cbegin();
+    }
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    HQETFormFactors<Process_, PToV>::end_options()
+    {
+        return option_specifications.cend();
+    }
+
 
     template <typename Process_>
     FormFactors<PToV> *

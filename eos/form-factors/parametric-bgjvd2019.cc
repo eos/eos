@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,6 +18,7 @@
  */
 
 #include <eos/form-factors/parametric-bgjvd2019-impl.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -99,6 +100,20 @@ namespace eos
     }
 
     HQETFormFactorBase::~HQETFormFactorBase() = default;
+
+    const std::set<ReferenceName>
+    HQETFormFactorBase::references
+    {
+        "BLPR:2017A"_rn,
+        "JS:2018A"_rn,
+        "BJvD:2019A"_rn,
+        "BGJvD:2019A"_rn
+    };
+
+    const std::vector<OptionSpecification>
+    HQETFormFactorBase::option_specifications
+    {
+    };
 
     // uses a power series ansatz
     double
