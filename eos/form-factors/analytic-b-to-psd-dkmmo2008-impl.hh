@@ -96,6 +96,7 @@ namespace eos
 
         // hadronic parameters
         UsedParameter MB;
+        UsedParameter fB;
         UsedParameter mP;
         UsedParameter fP;
 
@@ -117,6 +118,7 @@ namespace eos
             lcdas(PseudoscalarLCDAs::make("pi", p, o)),
             prefix("B->pi"),
             MB(p["mass::B_u"], u),
+            fB(p["decay-constant::B_u"], u),
             mP(p["mass::pi^0"], u),
             fP(p["decay-constant::pi"], u),
             m02(p["QCD::m_0^2"], u),
@@ -197,6 +199,7 @@ namespace eos
 
         // hadronic parameters
         UsedParameter MB;
+        UsedParameter fB;
         UsedParameter mP;
         UsedParameter fP;
 
@@ -219,6 +222,7 @@ namespace eos
             lcdas(PseudoscalarLCDAs::make("K", p, o)),
             prefix("B_s->K"),
             MB(p["mass::B_s"], u),
+            fB(p["decay-constant::B_s"], u),
             mP(p["mass::K_u"], u),
             fP(p["decay-constant::K_u"], u),
             m02(p["QCD::m_0^2"], u),
@@ -303,6 +307,7 @@ namespace eos
         using DKMMO2008Base<q1_, q2_, qs_>::lcdas;
         using DKMMO2008Base<q1_, q2_, qs_>::prefix;
         using DKMMO2008Base<q1_, q2_, qs_>::MB;
+        using DKMMO2008Base<q1_, q2_, qs_>::fB;
         using DKMMO2008Base<q1_, q2_, qs_>::mP;
         using DKMMO2008Base<q1_, q2_, qs_>::fP;
         using DKMMO2008Base<q1_, q2_, qs_>::Mprime2;
@@ -325,6 +330,9 @@ namespace eos
         UsedParameter _s0_plus, _s0_plus_p, _s0_plus_pp;
         UsedParameter _s0_zero, _s0_zero_p, _s0_zero_pp;
         UsedParameter _s0_T,    _s0_T_p,    _s0_T_pp;
+        // Decays constant: option govens whether to use the QCDSR or a parameter for the decay constant
+        SpecifiedOption opt_decay_constant;
+        std::function<double ()> decay_constant;
 
         // Parameter for the estimation of NNLO corrections
         UsedParameter zeta_nnlo;
@@ -342,6 +350,7 @@ namespace eos
             _s0_T(p[prefix + "::s_0^T(0)@DKMMO2008"], u),
             _s0_T_p(p[prefix + "::s_0^T'(0)@DKMMO2008"], u),
             _s0_T_pp(p[prefix + "::s_0^T''(0)@DKMMO2008"], u),
+            opt_decay_constant(o, options, "decay-constant"),
             zeta_nnlo(p[prefix + "::zeta(NNLO)@DKMMO2008"], u)
         {
             using namespace std::placeholders;
@@ -359,6 +368,19 @@ namespace eos
                 rescale_factor_0 = std::bind(&Implementation::_no_rescale_factor, this, _1);
                 rescale_factor_T = std::bind(&Implementation::_no_rescale_factor, this, _1);
 
+            }
+
+            if ("parameter" == opt_decay_constant.value())
+            {
+                decay_constant = [this]() -> double { return fB; };
+            }
+            else if ("sum-rule" == opt_decay_constant.value())
+            {
+                decay_constant = [this]() -> double { return this->_decay_constant_sum_rule(); };
+            }
+            else
+            {
+                throw InternalError("Invalid value for option 'decay-constant'");
             }
 
             u.uses(*model);
@@ -384,7 +406,7 @@ namespace eos
             return _s0_T() + _s0_T_p() * q2 + _s0_T_pp() * 0.5 * q2 * q2;
         }
 
-        double decay_constant() const
+        double _decay_constant_sum_rule() const
         {
             static const double pi = M_PI, pi2 = pi * pi;
             static const double eps = 1.0e-10;
@@ -2205,7 +2227,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>::options
     {
-        { "rescale-borel", { "1", "0" }, "1" }
+        { "rescale-borel",  { "1", "0" },                "1"         },
+        { "decay-constant", { "parameter", "sum-rule" }, "parameter" }
     };
 
     template <QuarkFlavor q1_, QuarkFlavor q2_, QuarkFlavor qs_>
