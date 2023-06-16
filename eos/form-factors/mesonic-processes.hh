@@ -72,13 +72,22 @@ namespace eos
         static constexpr const char * label = "B_s->K";
         static constexpr const char * name_B = "mass::B_s";
         static constexpr const char * name_P = "mass::K_d";
-        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down);
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up);
         static constexpr const double m_B = 5.366;
         static constexpr const double m_P = 0.494;
         static constexpr const double mR2_1m = 5.325 * 5.325; // B_{u,d}^*
         static constexpr const double mR2_0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
         static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) = - z(tm, t0)
+        static constexpr double t0 = 14.7;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+        // OPE results for the unitarity bounds --> isospin symmetry, using results for d quarks
+        static constexpr double chi_0p_v  = 1.50e-2;
+        static constexpr double chi_1m_v  = 1.16e-2 / (4.2 * 4.2);
+        static constexpr double chi_1m_t  = 7.75e-3 / (4.2 * 4.2); // already divided by 4 due to different convention in [BFW:2010A]
         static constexpr const bool uses_tensor_form_factors = true;
     };
 

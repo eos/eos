@@ -32,6 +32,7 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     BFW2010FormFactorTraits<Process_, PToV>::resonance_0m_names
     {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@BSZ2015" }
@@ -41,6 +42,7 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     BFW2010FormFactorTraits<Process_, PToV>::resonance_1m_names
     {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" }
@@ -50,6 +52,7 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     BFW2010FormFactorTraits<Process_, PToV>::resonance_1p_names
     {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,1@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@BSZ2015" }
@@ -675,6 +678,7 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     BFW2010FormFactorTraits<Process_, PToP>::resonance_0p_names
     {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,0@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,0@BSZ2015" }
@@ -684,6 +688,7 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     BFW2010FormFactorTraits<Process_, PToP>::resonance_1m_names
     {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" }

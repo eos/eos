@@ -311,6 +311,7 @@ namespace eos
         { "B->pi::BCL2008-4",    &BCL2008FormFactors<BToPi, 4u>::make                                                                                         },
         { "B->pi::BCL2008-5",    &BCL2008FormFactors<BToPi, 5u>::make                                                                                         },
         { "B->pi::BSZ2015",      &BSZ2015FormFactors<BToPi,  PToP>::make                                                                                      },
+        { "B_s->K::BFW2010",     &BFW2010FormFactors<BsToK,  PToP>::make                                                                                      },
         { "B_s->K::BSZ2015",     &BSZ2015FormFactors<BsToK,  PToP>::make                                                                                      },
         // b -> c
         { "B->D::BCL2008",       &BCL2008FormFactors<BToD, 3u>::make                                                                                          },

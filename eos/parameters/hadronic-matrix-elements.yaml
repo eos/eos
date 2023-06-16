@@ -173,6 +173,12 @@ groups:
           max:     +5.325
           latex:   '$m_{B^*}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::B_u^*@BSZ2015' :
+          central: +5.325
+          min:     +5.325
+          max:     +5.325
+          latex:   '$m_{B^*}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::B_s^*@BSZ2015' :
           central: +5.415
           min:     +5.415
@@ -191,6 +197,12 @@ groups:
           max:     +5.540
           latex:   '$m_{B_{d,0}}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::B_u,0@BSZ2015' :
+          central: +5.540
+          min:     +5.540
+          max:     +5.540
+          latex:   '$m_{B_{u,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::B_s,0@BSZ2015' :
           central: +5.630
           min:     +5.630
@@ -208,6 +220,12 @@ groups:
           min:     +5.724
           max:     +5.724
           latex:   '$m_{B_{d,1}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::B_u,1@BSZ2015' :
+          central: +5.724
+          min:     +5.724
+          max:     +5.724
+          latex:   '$m_{B_{u,1}}^\mathrm{BSZ}$'
           unit:     'GeV'
       'mass::B_s,1@BSZ2015' :
           central: +5.829
@@ -597,6 +615,29 @@ groups:
           max:      0.0
           latex:    '$\alpha_{T,2}^{B_s \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      # form factor parameters for B_s->K for [BFW:2010A] parametrization
+      'B_s->K::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,B_s \to K,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'B_s->K::t0@BFW2010' :
+          central:  14.7
+          min:      14.7
+          max:      14.7
+          latex:   '$t_0^{B_s\to K}$'
+          unit:     'GeV'
+      'B_s->K::tp@BFW2010' :
+          central:  34.346398
+          min:      34.346398
+          max:      34.346398
+          latex:    '$t_+^{B_s\to K^*}$'
+          comment:  '(mBs + mK)^2'
+          unit:     'GeV^2'
       # form factor parameters for B->D from [BIvD2016] for [BCL:2008A] parametrization
       'B->D::f_+(0)@BCL2008' :
           central: +0.66

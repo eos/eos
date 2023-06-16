@@ -474,7 +474,25 @@ namespace eos
                         Unit::GeV(),
                         &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::decay_constant,
                         std::make_tuple(),
-                        Options{ })
+                        Options{ }),
+
+                make_observable("B_s->K::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<BsToK, PToP>::saturation_0p_v),
+
+                make_observable("B_s->K::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<BsToK, PToP>::saturation_1m_v),
+
+                make_observable("B_s->K::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<BsToK, PToP>::saturation_0m_a),
+
+                make_observable("B_s->K::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<BsToK, PToP>::saturation_1p_a),
+
+                make_observable("B_s->K::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<BsToK, PToP>::saturation_1m_t),
+
+                make_observable("B_s->K::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T_5}])", Unit::None(),
+                        &BFW2010FormFactors<BsToK, PToP>::saturation_1p_t5)
             }
         );
 
