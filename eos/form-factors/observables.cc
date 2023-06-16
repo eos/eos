@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2022 Danny van Dyk
+ * Copyright (c) 2019-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -375,6 +375,26 @@ namespace eos
                 make_expression_observable("B->D::f_T(q2)/f_+(q2)", R"(f_T(q^2)/f_+(q^2))",
                         Unit::None(),
                         R"( <<B->D::f_T(q2)>> / <<B->D::f_+(q2)>> )"),
+
+                make_observable("B->D::h_+(q2)", R"(h_+^{B\to \bar{D}}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToD, PToP>::h_p,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D::h_-(q2)", R"(h_-^{B\to \bar{D}}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToD, PToP>::h_m,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D::h_S(q2)", R"(h_S^{B\to \bar{D}}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToD, PToP>::h_S,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D::h_T(q2)", R"(h_T^{B\to \bar{D}}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToD, PToP>::h_T,
+                        std::make_tuple("q2")),
             }
         );
 
@@ -1102,6 +1122,41 @@ namespace eos
                 make_observable("B->D^*::a_0[T_23]@BGL", R"(a_0^{T_{23}})",
                         Unit::None(),
                         &BGL1997FormFactors<BToDstar>::a_T23_0),
+
+                make_observable("B->D^*::h_A1(q2)", R"(h_{A_1}^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_a1,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D^*::h_A2(q2)", R"(h_{A_2}^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_a2,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D^*::h_A3(q2)", R"(h_{A_3}^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_a3,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D^*::h_V(q2)", R"(h_V^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_v,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D^*::h_T1(q2)", R"(h_{T_1}^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_t1,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D^*::h_T2(q2)", R"(h_{T_2}^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_t2,
+                        std::make_tuple("q2")),
+
+                make_observable("B->D^*::h_T3(q2)", R"(h_{T_3}^{\bar{B}\to D^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BToDstar, PToV>::h_t3,
+                        std::make_tuple("q2")),
             }
         );
 
