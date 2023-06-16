@@ -262,6 +262,12 @@ namespace eos
             virtual double f_plus_T(const double & q2) const override;
             double f_m(const double & q2) const;
 
+            /* HQET form factors h_i */
+            inline double h_p(const double & q2) const { return _h_p(q2); };
+            inline double h_m(const double & q2) const { return _h_m(q2); };
+            inline double h_S(const double & q2) const { return _h_S(q2); };
+            inline double h_T(const double & q2) const { return _h_T(q2); };
+
             Diagnostics diagnostics() const;
 
             using HQETFormFactorBase::references;
@@ -318,6 +324,16 @@ namespace eos
             virtual double t_23(const double & q2) const override;
 
             double a_3(const double & q2) const;
+
+            /* HQET form factors h_i */
+            inline double h_a1(const double & q2) const { return _h_a1(q2); };
+            inline double h_a2(const double & q2) const { return _h_a2(q2); };
+            inline double h_a3(const double & q2) const { return _h_a3(q2); };
+            inline double h_v(const double & q2)  const { return _h_v(q2);  };
+            inline double h_t1(const double & q2) const { return _h_t1(q2); };
+            inline double h_t2(const double & q2) const { return _h_t2(q2); };
+            inline double h_t3(const double & q2) const { return _h_t3(q2); };
+
 
             virtual double f_perp(const double &) const override;
             virtual double f_para(const double &) const override;
