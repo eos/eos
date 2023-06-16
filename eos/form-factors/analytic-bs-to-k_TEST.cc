@@ -18,7 +18,6 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define EOS_GENERATE_TESTS 1
 #include <test/test.hh>
 #include <eos/form-factors/analytic-b-to-psd-dkmmo2008.hh>
 #include <eos/form-factors/mesonic.hh>
@@ -136,7 +135,7 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
                 p["QCD::r_vac"] = 1.0;
                 p["QCD::alpha_s(MZ)"] = 0.1184;
 
-                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ });
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ { "decay-constant", "sum-rule" } });
 
                 // LO, tw2
                 TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2(-5.0), 0.1167663129, eps);
@@ -174,13 +173,17 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw3(10.0), -2.727613208, nlo_eps);
 
                 // fp form factor @ mu = 3.0
-                std::cerr << "f_+" << std::endl;
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 0.2835562036, 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p( 1.0), 0.2992200556, 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p( 5.0), 0.3780079263, 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(10.0), 0.5345373344, 10 * eps);
 
-                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, Options{{"rescale-borel", "0"}});
+                Options o
+                {
+                    { "rescale-borel",  "0"        },
+                    { "decay-constant", "sum-rule" }
+                };
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
                 // Ftil LO, tw3
                 TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3(-10.0), 0.02832490463, 1. * eps);
@@ -304,7 +307,11 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
                 p["QCD::r_vac"] = 1.0;
                 p["QCD::alpha_s(MZ)"] = 0.1176;
 
-                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, Options{{"rescale-borel", "0"}});
+                Options o{
+                    { "rescale-borel",  "0"        },
+                    { "decay-constant", "sum-rule" }
+                };
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
                 TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_p( 0.0), 0.264200304, 2 * eps);
                 TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_p( 10.0), 0.4975396448, 15 * eps);
