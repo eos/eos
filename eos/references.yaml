@@ -294,6 +294,13 @@ BIvD:2016A:
   inspire-id: Bordone:2016tex
   title: Impact of leptonic $\tau $ decays on the distribution of $B\rightarrow P\mu
     \bar{\nu }$ decays
+BLPR:2017A:
+  authors: Bernlochner, Florian U. and Ligeti, Zoltan and Papucci, Michele and Robinson, Dean J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1703.05330
+  inspire-id: Bernlochner:2017jka
+  title: 'Combined analysis of semileptonic $B$ decays to $D$ and $D^*$: $R(D^{(*)})$, $|V_{cb}|$, and new physics'
 BM:1995A:
   authors: Buras, Andrzej J. and Munz, Manfred
   eprint:
