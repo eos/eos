@@ -1160,6 +1160,13 @@ IKMvD:2014A:
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
   title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
+JS:2018A:
+  authors: Jung, Martin and Straub, David M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1801.01112
+  inspire-id: Jung:2018lfu
+  title: Constraining new physics in $b\to c\ell\nu$ transitions
 KKVDZ:2022A:
   authors: Kürten, Stephan and Zanke, Marvin and Kubis, Bastian and van Dyk, Danny
   eprint:
