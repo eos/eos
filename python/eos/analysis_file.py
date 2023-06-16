@@ -143,6 +143,12 @@ class AnalysisFile:
         for (p, v) in fixed_parameters.items():
             parameters.set(p, v)
 
+        for o in prediction['observables']:
+            options_part = eos.QualifiedName(o['name']).options_part()
+            for key, value in options_part:
+                if key in global_options and global_options[key] != value:
+                    eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o["name"]} in prediction {_prediction}.')
+
         observables = [eos.Observable.make(
             o['name'],
             parameters,
