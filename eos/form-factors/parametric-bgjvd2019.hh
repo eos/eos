@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018-2022 Danny van Dyk
+ * Copyright (c) 2018-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -28,6 +28,7 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/reference-name.hh>
 #include <eos/maths/polylog.hh>
 #include <eos/maths/power-of.hh>
 
@@ -102,6 +103,16 @@ namespace eos
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o, const std::string & prefix);
             ~HQETFormFactorBase();
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
+
+            /*!
+             * Options specifications for the HQETFormFactorBase class.
+             */
+            static const std::vector<OptionSpecification> option_specifications;
 
         protected:
             /*
@@ -252,6 +263,14 @@ namespace eos
             double f_m(const double & q2) const;
 
             Diagnostics diagnostics() const;
+
+            using HQETFormFactorBase::references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     extern template class HQETFormFactors<BToD,   PToP>;
@@ -308,6 +327,14 @@ namespace eos
             virtual double f_long_T(const double &) const override;
 
             Diagnostics diagnostics() const;
+
+            using HQETFormFactorBase::references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     template <typename Process_> class HQETFormFactors<Process_, VToP> :
@@ -337,6 +364,14 @@ namespace eos
             virtual double h_vbar(const double & q2) const override;
 
             Diagnostics diagnostics() const;
+
+            using HQETFormFactorBase::references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     template <typename Process_> class HQETFormFactors<Process_, VToV> :
@@ -373,6 +408,14 @@ namespace eos
             virtual double h_10(const double & q2) const override;
 
             Diagnostics diagnostics() const;
+
+            using HQETFormFactorBase::references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 }
 
