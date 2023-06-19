@@ -283,6 +283,8 @@ namespace eos
         complex<double> f27a(const CharmLoopsParameters & clp);
         complex<double> f29a(const CharmLoopsParameters & clp);
 
+        complex<double> f279b_helper(const CharmLoopsParameters & clp);
+
         complex<double> f17b(const CharmLoopsParameters & clp);
         complex<double> f19b(const CharmLoopsParameters & clp);
         complex<double> f27b(const CharmLoopsParameters & clp);
@@ -293,6 +295,9 @@ namespace eos
         complex<double> f27c(const CharmLoopsParameters & clp);
         complex<double> f29c(const CharmLoopsParameters & clp);
 
+        complex<double> f279d_log2_terms(const CharmLoopsParameters & clp);
+        complex<double> f27d_part22(const CharmLoopsParameters & clp);
+        complex<double> f29d_part6(const CharmLoopsParameters & clp);
         complex<double> weight4_wx3_wx4(const CharmLoopsParameters & clp, const complex<double> & wx);
         complex<double> weight4_w4_w5_w7(const CharmLoopsParameters & clp, const complex<double> & w);
         complex<double> GPLweight4Parts(const CharmLoopsParameters & clp);
