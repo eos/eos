@@ -43,29 +43,25 @@ class AnalysisFile:
             input_data = yaml.load(input_file, Loader=yaml.SafeLoader)
 
         if 'priors' not in input_data:
-            raise RuntimeError('Cannot load analysis file: need at least one prior')
+            raise RuntimeError('Cannot load analysis file: need at least one prior component')
 
         self._priors = { prior['name'] : dict(prior) for prior in input_data['priors'] }
 
         if 'likelihoods' not in input_data:
-            self._likelihoods = []
-        else:
-            self._likelihoods = { lh['name'] : dict(lh) for lh in input_data['likelihoods'] }
+            raise RuntimeError('Cannot load analysis file: need at least one likelihood component')
+
+        self._likelihoods = { lh['name'] : dict(lh) for lh in input_data['likelihoods'] }
 
         if 'posteriors' not in input_data:
             raise RuntimeError('Cannot load analysis file: need at least one posterior')
 
         self._posteriors = { posterior['name'] : dict(posterior) for posterior in input_data['posteriors'] }
 
+        # Optional: provide a list of observables for posterior prediction
         if 'predictions' not in input_data:
             self._predictions = []
         else:
             self._predictions = { pred['name'] : dict(pred) for pred in input_data['predictions'] }
-
-        if 'steps' not in input_data:
-            self._steps = []
-        else:
-            self._steps = input_data['steps']
 
         # Optional: insert custom observables using the expression parser
         if 'observables' in input_data:
@@ -87,6 +83,12 @@ class AnalysisFile:
                 eos.Observables().insert(name, obs['latex'], eos.Unit(obs['unit']), options, obs['expression'])
                 eos.info(f'Successfully inserted observable: { name }')
 
+        if 'steps' not in input_data:
+            self._steps = []
+        else:
+            self._steps = input_data['steps']
+
+
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
         if _posterior not in self._posteriors:
@@ -96,7 +98,20 @@ class AnalysisFile:
 
         prior = []
         for p in posterior['prior']:
-            prior.extend(self._priors[p]['parameters'])
+            descriptions = []
+
+            if 'descriptions' in self._priors[p]:
+                if 'parameters' in self._priors[p]:
+                    eos.error(f'Both \'descriptions\' and \'parameters\' are provided for prior component \'{p}\', ignoring legacy support for \'parameters\'')
+
+                descriptions = self._priors[p]['descriptions']
+            elif 'parameters' in self._priors[p]:
+                eos.warn(f'\'parameters\' is in the description of prior component \'{p}\', use \'descriptions\' instead')
+                descriptions = self._priors[p]['parameters']
+            else:
+                raise KeyError(f'Missing entry in prior component \'{p}\': \'descriptions\' is not provided')
+
+            prior.extend(descriptions)
 
         likelihood = []
         manual_constraints = {}
