@@ -106,6 +106,7 @@ include_eos_utils_HEADERS = \
 	qualified-name.hh \
 	quantum-numbers.hh \
 	reference-name.hh \
+	rge.hh rge-impl.hh \
 	stringify.hh \
 	thread.hh \
 	thread_pool.hh \
@@ -140,6 +141,7 @@ TESTS = \
 	qualified-name_TEST \
 	quantum-numbers_TEST \
 	reference-name_TEST \
+	rge_TEST \
 	stringify_TEST \
 	verify_TEST \
 	wilson-polynomial_TEST
@@ -193,6 +195,8 @@ qualified_name_TEST_SOURCES = qualified-name_TEST.cc
 quantum_numbers_TEST_SOURCES = quantum-numbers_TEST.cc
 
 reference_name_TEST_SOURCES = reference-name_TEST.cc
+
+rge_TEST_SOURCES = rge_TEST.cc
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 
