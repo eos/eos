@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2015-2023 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -33,14 +33,16 @@ namespace eos
     using std::norm;
 
     /*
-     * Decay: B_q -> l nubar, cf. [FMvD2015]
+     * Decay: B_q -> l nubar, cf. [DBG:2013A]
      */
     template <>
     struct Implementation<BToLeptonNeutrino>
     {
+        SpecifiedOption opt_model;
+
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_q;
+        QuarkFlavorOption opt_q;
 
         UsedParameter hbar;
 
@@ -56,6 +58,8 @@ namespace eos
 
         UsedParameter m_l;
 
+        SpecifiedOption opt_cp_conjugate;
+
         bool cp_conjugate;
 
         UsedParameter mu;
@@ -67,31 +71,38 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_q(o, "q", { "c", "u" }),
+            opt_model(o, options, "model"),
+            model(Model::make(opt_model.value(), p, o)),
+            opt_q(o, options, "q"),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            m_B(p["mass::B_" + opt_q.value()], u),
-            f_B(p["decay-constant::B_" + opt_q.value()], u),
-            tau_B(p["life_time::B_" + opt_q.value()], u),
+            m_B(p["mass::B_" + opt_q.str()], u),
+            f_B(p["decay-constant::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
             opt_l(o, options, "l"),
             m_l(p["mass::" + opt_l.str()], u),
-            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-            mu(p[opt_q.value() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
+            opt_cp_conjugate(o, options, "cp-conjugate"),
+            cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
+            mu(p[opt_q.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
         {
+            Context ctx("When constructing B_q->lnu observable");
+
             using std::placeholders::_1;
             using std::placeholders::_2;
-            if ('u' == opt_q.value()[0])
+            switch (opt_q.value())
             {
-                m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
-                v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
-                wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, _2);
-            }
-            else
-            {
-                m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
-                v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
-                wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, _2);
+                case QuarkFlavor::up:
+                    m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
+                    v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
+                    wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, _2);
+                    break;
+                case QuarkFlavor::charm:
+                    m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
+                    v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
+                    wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, _2);
+                    break;
+                default:
+                    throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
             }
             u.uses(*model);
         }
@@ -129,8 +140,10 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToLeptonNeutrino>::options
     {
-        { "l", { "e", "mu", "tau" }, "mu" },
-	    { "q", { "c", "u" }, "c"}
+        Model::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
+        { "l",            { "e", "mu", "tau" }, "mu"    },
+        { "q",            { "c", "u" },         "c"     }
     };
 
     BToLeptonNeutrino::BToLeptonNeutrino(const Parameters & parameters, const Options & options) :
