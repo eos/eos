@@ -9,14 +9,14 @@ We distribute EOS as packaged software for end-users and also as source code for
 Linux
 *****
 
-Installation with `pip3`
-========================
+Installation with ``pip3``
+==========================
 
-This is the recommended installation method using the 'package installer for Python' `pip3`.
+This is the recommended installation method using the 'package installer for Python' ``pip3``.
 We distribute a release version and a development version.
 The changelog of the curated release versions is available `here <https://eos.github.io>`_.
 The development version is automatically up-to-date with the master branch in the Github EOS repository.
-Here we summarize the most common commands using `pip3`:
+Here we summarize the most common commands using ``pip3``:
 
 .. list-table::
    :widths: 1 1
@@ -38,8 +38,8 @@ You can use the EOS Python module via ``import eos`` after installation. In addi
 You can test and debug the installation of the python module as described :ref:`here <faq-check-installation>`.
 
 
-Installation with `apt` (Ubuntu, Debian and Siblings)
-=====================================================
+Installation with ``apt`` (Ubuntu, Debian, and Siblings)
+========================================================
 
 EOS is available through the Packagecloud web service.
 The installation requires several steps:
@@ -94,8 +94,8 @@ After WSL2 has been setup, you can follow the instructions for installing EOS un
 macOS
 *****
 
-Installation with `brew`
-========================
+Installation with ``brew``
+==========================
 
 EOS (and all of its dependencies) can be installed automatically using `Homebrew <https://brew.sh/>`_:
 
@@ -290,7 +290,7 @@ The recommended configuration is achieved by running the following command:
 If the ``configure`` script finds any problems with your system, it will complain loudly.
 
 The flag ``with-boost-python-suffix`` might be necessary, depending on the installation of Python and BOOST.
-For example, when `boost-python3` is installed on macOS via `brew`, you can find the suffix by inspecting the installed libraries:
+For example, when ``boost-python3`` is installed on macOS via ``brew``, you can find the suffix by inspecting the installed libraries:
 ``ls /usr/local/lib/libboost_python*``
 might yield
 ``/usr/local/lib/libboost_python39.a``.
