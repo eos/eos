@@ -131,25 +131,25 @@ The dependencies can be roughly categorized as either system software, Python-re
 EOS requires the following system software:
 
 g++
-  the GNU C++ compiler, in version 4.8.1 or higher;
+  the GNU C++ compiler, in version 10.1 or higher;
 
 autoconf
   the GNU tool for creating configure scripts, in version 2.69 or higher;
 
 automake
-  the GNU tool for creating makefiles, in version 1.14.1 or higher;
+  the GNU tool for creating makefiles, in version 1.16.2 or higher;
 
 libtool
-  the GNU tool for generic library support, in version 2.4.2 or higher;
+  the GNU tool for generic library support, in version 2.4.6 or higher;
 
 pkg-config
-  the freedesktop.org library helper, in version 0.28 or higher;
+  the freedesktop.org library helper, in version 0.27.1 or higher;
 
 BOOST
   the BOOST C++ libraries (sub-libraries ``boost-filesystem`` and ``boost-system``);
 
 yaml-cpp
-  a C++ YAML parser and interpreter library.
+  a C++ YAML parser and interpreter library, in version 0.5.1 or higher.
 
 
 The Python interface to EOS requires the additional software:
@@ -187,7 +187,7 @@ We recommend you install the above packages via your system's software managemen
 EOS requires the following scientific software:
 
 GSL
-  the GNU Scientific Library \cite{GSL}, in version 1.16 or higher;
+  the GNU Scientific Library \cite{GSL}, in version 1.15 or higher;
 
 
 If you have administrator access to the computers on which you use EOS,
