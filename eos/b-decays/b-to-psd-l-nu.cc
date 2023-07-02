@@ -88,6 +88,8 @@ namespace eos
 
         GSL::QAGS::Config int_config;
 
+        SpecifiedOption opt_cp_conjugate;
+
         bool cp_conjugate;
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -158,9 +160,9 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
-            opt_U(o, "U", { "c", "u" }),
-            opt_q(o, "q", { "u", "d", "s" }, "d"),
-            opt_I(o, "I", { "1", "0", "1/2" }),
+            opt_U(o, "U", { "c", "u" }), // non-public option: do not list
+            opt_q(o, "q", { "u", "d", "s" }, "d"), // non-public option: do not list
+            opt_I(o, "I", { "1", "0", "1/2" }), // non-public option: do not list
             m_B(p["mass::" + _B()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             m_P(p["mass::" + _P()], u),
@@ -171,9 +173,12 @@ namespace eos
             isospin_factor(_isospin_factor()),
             mu(p[opt_U.value() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
+            opt_cp_conjugate(o, options, "cp-conjugate"),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
         {
+            Context ctx("When constructing B->Plnu observable");
+
             using std::placeholders::_1;
             using std::placeholders::_2;
             if ('u' == opt_U.value()[0])
@@ -426,10 +431,11 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "l", { "e", "mu", "tau" }, "mu" },
-        { "U", { "c", "u" }, "c" },
-        { "q", { "u", "d", "s" }, "d" },
-    	{ "I", { "1", "0", "1/2" }, "1" },
+        { "cp-conjugate", { "true", "false" },  "false" },
+        { "l",            { "e", "mu", "tau" }, "mu"    },
+        //{ "U",          { "c", "u" },         "c"     },
+        //{ "q",          { "u", "d", "s" },    "d"     },
+        //{ "I",          { "1", "0", "1/2" },  "1"     },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
