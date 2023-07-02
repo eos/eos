@@ -160,7 +160,7 @@ namespace eos
         public SpecifiedOption
     {
         public:
-            QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "l");
+            QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "q");
             ~QuarkFlavorOption();
 
             QuarkFlavor value() const;
