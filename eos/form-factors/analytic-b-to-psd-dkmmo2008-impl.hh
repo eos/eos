@@ -127,6 +127,8 @@ namespace eos
             mu(p[prefix + "::mu@DKMMO2008"], u),
             config(GSL::QAGS::Config().epsrel(1e-3))
         {
+            u.uses(*model);
+            u.uses(*lcdas);
         }
 
         double m_q_msbar(const double & mu) const
@@ -228,6 +230,8 @@ namespace eos
             mu(p[prefix + "::mu@DKMMO2008"], u),
             config(GSL::QAGS::Config().epsrel(1e-3))
         {
+            u.uses(*model);
+            u.uses(*lcdas);
         }
 
         double m_q_msbar(const double & mu) const
