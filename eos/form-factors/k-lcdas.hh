@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2023 Danny van Dyk
  * Copyright (c) 2022 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -29,7 +29,6 @@
 namespace eos
 {
     class AntiKaonLCDAs :
-        public ParameterUser,
         public PseudoscalarLCDAs,
         public PrivateImplementationPattern<AntiKaonLCDAs>
     {
@@ -77,7 +76,6 @@ namespace eos
     };
 
     class KaonLCDAs :
-        public ParameterUser,
         public PseudoscalarLCDAs,
         public PrivateImplementationPattern<KaonLCDAs>
     {

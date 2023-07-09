@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2022 Danny van Dyk
+ * Copyright (c) 2014-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,7 +25,8 @@
 
 namespace eos
 {
-    class PseudoscalarLCDAs
+    class PseudoscalarLCDAs :
+        public ParameterUser
     {
         public:
             virtual ~PseudoscalarLCDAs() = 0;
