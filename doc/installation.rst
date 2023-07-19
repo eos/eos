@@ -325,9 +325,9 @@ For ``BASH``, which is the default Debian/Ubuntu shell, add the following lines 
 ::
 
   export PATH+=":$PREFIX/bin"
-  export PYTHONPATH+=":$PREFIX/lib/python3.7/site-packages"
+  export PYTHONPATH+=":$PREFIX/lib/python3.8/site-packages"
 
-Note that in the above the ``python3.7`` piece must be replaced by the appropriate Python version with which EOS was built.
+Note that in the above the ``python3.8`` piece must be replaced by the appropriate Python version with which EOS was built.
 You can determine the correct value by running the following command:
 
 ::
