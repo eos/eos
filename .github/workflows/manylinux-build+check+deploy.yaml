@@ -20,7 +20,6 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { pypath: cp37-cp37m,  pysuffix: cp37,  pyboostsuffix: 37  }
                     - { pypath: cp38-cp38,   pysuffix: cp38,  pyboostsuffix: 38  }
                     - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
                     - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
@@ -91,7 +90,6 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { pypath: cp37-cp37m,  pysuffix: cp37,  pyboostsuffix: 37  }
                     - { pypath: cp38-cp38,   pysuffix: cp38,  pyboostsuffix: 38  }
                     - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
                     - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
@@ -131,7 +129,6 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { pypath: cp37-cp37m,  pysuffix: cp37,  pyboostsuffix: 37  }
                     - { pypath: cp38-cp38,   pysuffix: cp38,  pyboostsuffix: 38  }
                     - { pypath: cp39-cp39,   pysuffix: cp39,  pyboostsuffix: 39  }
                     - { pypath: cp310-cp310, pysuffix: cp310, pyboostsuffix: 310 }
