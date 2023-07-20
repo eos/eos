@@ -494,7 +494,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf'):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior'):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -509,11 +509,34 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     :type base_directory: str, optional
     :param format: The file extension of the data files. Can also be a list of file extensions.
     :type format: str or list of str, optional
+    :param distribution: The distribution to plot. Can be either 'posterior' or the name of a prediction.
+    :type distribution: str, optional
     """
     import matplotlib.pyplot as _plt
+
     analysis = analysis_file.analysis(posterior)
-    p = analysis.varied_parameters
-    f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+    # Provide file with distribution samples and LaTeX labels for either parameters or observables
+    if distribution == 'posterior':
+        f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+        labels = [p.latex() for p in analysis.varied_parameters]
+
+    elif isinstance(distribution, str):
+        try:
+            prediction = analysis_file.predictions[distribution]
+        except KeyError:
+            raise RuntimeError(f"No prediction with name '{distribution}' exists in the analysis file")
+
+        f = eos.data.Prediction(os.path.join(base_directory, posterior, f'pred-{distribution}'))
+
+        observables = eos.Observables()
+        qualified_names = [obs['name'] for obs in prediction['observables']]
+        labels = [f'${observables[qn].latex()}$' for qn in qualified_names]
+
+    else:
+        raise RuntimeError(f"Argument 'distribution' must be one of {['posterior',] + list(analysis_file.predictions.keys())}")
+
     size = f.samples.shape[-1]
     fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
 
@@ -526,8 +549,8 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
         xmin = _np.min(samples)
         xmax = _np.max(samples)
         ax.set_xlim((xmin, xmax))
-        ax.set_xlabel(p[i].latex())
-        ax.set_ylabel(p[i].latex())
+        ax.set_xlabel(labels[i])
+        ax.set_ylabel(labels[i])
         ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff(ax.get_ylim())[0])
 
         for j in range(0, size):
