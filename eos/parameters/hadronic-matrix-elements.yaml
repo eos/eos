@@ -703,6 +703,11 @@ groups:
           latex:    '$\alpha_{T,2}^{B \to D,\mathrm{BSZ2015}}$'
           unit:     '1'
       # form factor parameters for B->D for [BGL:1997A]
+      'B(*)->D(*)::n_f@BGL1997' :
+          central: 2.0
+          min: 2.0
+          max: 2.0
+          latex: '$n_f$'
       'B->D::a^f+_0@BGL1997' :
           central: 0.0
           min:     0.0
