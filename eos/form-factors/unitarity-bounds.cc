@@ -2070,7 +2070,6 @@ namespace eos
 
         // number of light flavor multiplets
         UsedParameter nf;
-        UsedParameter ns;
 
         static const std::vector<OptionSpecification> options;
 
@@ -2117,8 +2116,7 @@ namespace eos
                      UsedParameter(p[_par_name_d("fT_3")], u) }},
             // further parameters
             opt_zorder_bound(o, "z-order-bound", { "1", "2" }, "2"),
-            nf(p["B(*)->D(*)::n_f@BGL"], u),
-            ns(p["B_s(*)->D_s(*)::n_s@BGL"], u)
+            nf(p["B(*)->D(*)::n_f@BGL1997"], u)
         {
             if ("1" == opt_zorder_bound.value())
             {
