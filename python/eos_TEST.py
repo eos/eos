@@ -200,7 +200,7 @@ class LoggingTests(unittest.TestCase):
                     eos.Options(**{'U': 'c'})) # will  be overwritten by the
                                                # implementation of the observable
             self.assertEqual(cm.output,
-                    [r"""WARNING:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'U' to value 'u', overriding user-provided value 'c'"""])
+                    [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'U' to value 'u', overriding user-provided value 'c'"""])
 
 
 # Run legacy test cases
