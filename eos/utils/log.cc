@@ -132,13 +132,22 @@ namespace eos
 
         Implementation() :
             log_level(ll_error),
-            stream(&std::cerr)
+            stream(nullptr)
         {
         }
 
         void message(const std::string & id, const LogLevel & l, const std::string & m)
         {
             if (l > log_level)
+                return;
+
+            // forward message to all callbacks
+            for (auto & c : callbacks)
+            {
+                c(id, l, m);
+            }
+
+            if (! stream)
                 return;
 
             *stream << program_name << '@' << ::time(0) << ": ";
@@ -173,12 +182,6 @@ namespace eos
                 throw InternalError("Implementation<Log>::message: Bad value for log_level");
             }
             while (false);
-
-            // forward message to all callbacks
-            for (auto & c : callbacks)
-            {
-                c(id, l, m);
-            }
 
             *stream << m << std::endl;
         }
