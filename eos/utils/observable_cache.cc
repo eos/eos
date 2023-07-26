@@ -102,7 +102,7 @@ namespace eos
         ObservableCache::Id add(const ObservablePtr & observable, const ObservableCache & cache)
         {
             if (observable->parameters() != parameters)
-                throw InternalError("ObservableSet::add(): Mismatch of Parameters between different observables detected.");
+                throw InternalError("ObservableCache::add(): Mismatch of Parameters between different observables detected.");
 
             // compare each observable for options, kinematics and name
             unsigned index = 0;
