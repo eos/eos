@@ -191,13 +191,12 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
-                for (const auto & fo : _forced_options)
+                for (const auto & [key, forced_value] : _forced_options)
                 {
-                    const auto & key = std::get<0>(fo);
-                    if (options.has(key))
+                    if (options.has(key) && (options[key] != forced_value))
                     {
-                        Log::instance()->message("[ConcreteObservableEntry.make]", ll_warning)
-                            << "Observable '" << _name << "' forces option key '" << key << "' to value '" << _forced_options[key] << "', overriding user-provided value '" << options[key] << "'";
+                        Log::instance()->message("[ConcreteObservableEntry.make]", ll_error)
+                            << "Observable '" << _name << "' forces option key '" << key << "' to value '" << forced_value << "', overriding user-provided value '" << options[key] << "'";
                     }
                 }
                 return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options + _forced_options, _function, _kinematics_names));
