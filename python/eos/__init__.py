@@ -86,11 +86,12 @@ def _log_callback(id, level, msg):
 
 _register_log_callback(_log_callback)
 
-# log to stderr by default
-import logging
-logger = logging.getLogger('EOS')
-logger.setLevel(logging.INFO)
-logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+# log to stderr by default in non-interactive Python code
+if not __ipython__:
+    import logging
+    logger = logging.getLogger('EOS')
+    logger.setLevel(logging.INFO)
+    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 import time as _time
 import os as _os
