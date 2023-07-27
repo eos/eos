@@ -50,7 +50,7 @@ class Mode:
 
     @staticmethod
     def create(path, parameters, mode, pvalue, local_pvalues):
-        """ Write a new MarkovChain object to disk.
+        """ Write a new Mode object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str

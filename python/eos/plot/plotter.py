@@ -461,9 +461,18 @@ class Plotter:
             if 'parameters' in item and 'parameters-from-file' in item:
                 eos.warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
 
+            if 'parameters' in item and 'parameters-from-mode' in item:
+                eos.warn('    overriding values read from \'parameters-from-mode\' with explicit values in \'parameters\'')
+
             if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
                 eos.warn('    overriding parameters from file')
                 parameters.override_from_file(item['parameters-from-file'])
+
+            if 'parameters-from-mode' in item and type(item['parameters-from-mode']) is str:
+                eos.warn('    overriding parameters from mode')
+                mode = eos.Mode(item['parameters-from-mode'])
+                for p, v in zip(mode.varied_parameters, mode.mode):
+                    parameters.set(p['name'], v)
 
             if 'parameters' in item and type(item['parameters']) is dict:
                 for key, value in item['parameters'].items():
