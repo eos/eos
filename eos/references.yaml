@@ -151,6 +151,13 @@ BBMU:2003A:
   inspire-id: Benson:2003kp
   title: 'Imprecated, yet impeccable: On the theoretical evaluation of $\Gamma(B \to
     X_c \ell \nu)$'
+BBNS:2000A:
+  authors: Beneke, M. and Buchalla, G. and Neubert, M. and Sachrajda, Christopher T.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0006124
+  inspire-id: Beneke:2000ry
+  title: 'QCD factorization for exclusive, nonleptonic B meson decays: General arguments and the case of heavy light final states'
 BCL:2008A:
   authors: Bourrely, Claude and Caprini, Irinel and Lellouch, Laurent
   eprint:
