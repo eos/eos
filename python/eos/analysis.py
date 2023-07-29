@@ -20,7 +20,6 @@ import eos
 import copy as _cp
 import numpy as np
 import scipy
-import pypmc
 
 class BestFitPoint:
     """
@@ -251,6 +250,7 @@ class Analysis:
     @staticmethod
     def _ess(weights):
         """Helper function that computes the effective sample size of an array of weights"""
+        import pypmc
         return pypmc.tools.convergence.ess(weights)
 
     def clone(self):
@@ -371,6 +371,7 @@ class Analysis:
         .. note::
            This method requiries the PyPMC python module, which can be installed from PyPI.
         """
+        import pypmc
         try:
             from tqdm.auto import tqdm
             progressbar = tqdm
@@ -491,6 +492,7 @@ class Analysis:
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
         """
+        import pypmc
         try:
             from tqdm.auto import tqdm
             progressbar = tqdm

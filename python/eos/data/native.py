@@ -16,7 +16,6 @@
 import eos
 import os
 import numpy as _np
-import pypmc
 import yaml
 import dynesty
 from scipy.special import erf
@@ -190,6 +189,7 @@ class MixtureDensity:
 
     def density(self):
         """ Return a pypmc.density.MixtureDensity. """
+        import pypmc
         components = [pypmc.density.gauss.Gauss(c['mu'], c['sigma']) for c in self.components]
         return pypmc.density.mixture.MixtureDensity(components, self.weights)
 
@@ -203,6 +203,7 @@ class MixtureDensity:
         :param density: Mixture density.
         :type density: pypmc.density.MixtureDensity
         """
+        import pypmc
         description = {}
         description['version'] = eos.__version__
         description['type'] = 'MixtureDensity'
@@ -234,6 +235,7 @@ class MixtureDensity:
         :param densityB: Second mixture density.
         :type densityB: pypmc.density.MixtureDensity
         """
+        import pypmc
         components = []
         weights = []
         for cA, wA in zip(densityA.components, densityA.weights):
@@ -275,6 +277,7 @@ class PMCSampler:
         :param path: Path to the storage location.
         :type path: str
         """
+        import pypmc
         if not os.path.exists(path) or not os.path.isdir(path):
             raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
 
@@ -297,6 +300,7 @@ class PMCSampler:
 
     def density(self):
         """ Return a pypmc.density.MixtureDensity. """
+        import pypmc
         return pypmc.density.mixture.MixtureDensity(self.components, self.component_weights)
 
 
@@ -334,6 +338,7 @@ class PMCSampler:
         :param weights: Weights on a linear scale as a 2D array of shape (N, 1). Needed to generate the test statistic.
         :type weights: 1D numpy array, optional
         """
+        import pypmc
         description = {}
         description['version'] = eos.__version__
         description['type'] = 'PMCSampler'

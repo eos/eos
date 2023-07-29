@@ -22,7 +22,6 @@ import inspect
 import logging
 import numpy as _np
 import os
-import pypmc
 import scipy
 import sys
 import copy as _copy
@@ -264,6 +263,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     """
 
     import pathlib
+    import pypmc
     input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, posterior)).glob('mcmc-*')]
     chains    = [eos.data.MarkovChain(path).usamples for path in input_paths]
     n = len(chains[0])
