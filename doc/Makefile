@@ -23,7 +23,17 @@ html: source Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@test xhtml = x$@ && touch $(BUILDDIR)/html/.nojekyll
 
-%.rst: %.rst.py
+# For gradual migration from python scripts to jinja templates:
+# explicitly specify here the files that are still scripted.
+# The already templated targets are covered automatically further below.
+constraints.rst: constraints.rst.py
+	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
+parameters.rst: parameters.rst.py
+	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
+references.rst: references.rst.py
+	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
+
+%.rst: %.rst.py %.rst.jinja
 	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
 
 .PHONY: source
