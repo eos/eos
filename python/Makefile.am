@@ -15,6 +15,11 @@ EXTRA_DIST = \
 	eos/data/__init__.py \
 	eos/data/native.py \
     eos/data/native_TEST.d \
+	eos/figure/__init__.py \
+	eos/figure/config.py \
+	eos/figure/figure.py \
+	eos/figure/item.py \
+	eos/figure/plot.py \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
 	eos/plot/plotter.py
@@ -56,6 +61,14 @@ eosplot_SCRIPTS = \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
 	eos/plot/plotter.py
+
+eosfiguredir = $(pkgpythondir)/figure
+eosfigure_SCRIPTS = \
+	eos/figure/__init__.py \
+	eos/figure/config.py \
+	eos/figure/figure.py \
+	eos/figure/item.py \
+	eos/figure/plot.py
 
 _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la

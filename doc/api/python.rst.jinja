@@ -288,3 +288,80 @@ All item types recognize the following optional keys:
 
 {% endif %}
 {% endfor %}
+
+
+*********************
+Module ``eos.figure``
+*********************
+
+EOS also provides a new plotting framework with a different interface, which will replace
+the existing framework as soon as it is feature complete.
+
+.. note::
+
+   Import :py:mod:`eos.figure` before you do something like ``import matplotlib.pyplot as plt``,
+   because the :py:mod:`eos.figure` module modified the default plot style and the matplotlib backend.
+   All options (except the backend) can be overwritten by updating ``matplotlib.rcParams[...]``;
+   see also the `matplotlib <https://matplotlib.org/>`_ documentation.
+   Note that the default settings use LaTeX to create labels and math expressions,
+   so for this to work latex needs to be available on your system.
+
+
+Figures
+=======
+
+.. automodule:: eos.figure
+   :members:
+
+
+Plot types
+----------
+
+Below we list the available plot types.
+Each key ``plot_type`` corresponds to a class which is instantiated in the background.
+The user can supply keyword arguments which are documented under :py:mod:`eos.figure.plot`.
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - ``plot_type``
+     - class
+     - description
+   {% for key, class, description in figure_plot_types %}
+   * - ``{{ key }}``
+     - :py:class:`{{ class }}`
+     - {{ description }}
+   {% endfor %}
+
+The classes including the arguments the user can pass are documented in detail below.
+
+.. automodule:: eos.figure.plot
+   :members:
+
+
+Item types
+----------
+
+Below we list the available item types.
+Each key ``item_type`` corresponds to a class which is instantiated in the background.
+The user can supply keyword arguments which are documented under :py:mod:`eos.figure.item`.
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - ``item_type``
+     - class
+     - description
+   {% for key, class, description in figure_item_types %}
+   * - ``{{ key }}``
+     - :py:class:`{{ class }}`
+     - {{ description }}
+   {% endfor %}
+
+The classes including the arguments the user can pass are documented in detail below.
+
+.. automodule:: eos.figure.item
+   :exclude-members: Item
+   :members:
