@@ -830,14 +830,39 @@ class Plotter:
             self.rescale_by_width = item['rescale-by-width'] if 'rescale-by-width' in item else False
             self.variable         = item['variable']
             self.xrange           = item['xrange']           if 'xrange'           in item else None
+            self.plot_residues    = item['plot_residues']    if 'plot_residues'    in item else False
 
             if type(self.names) == str:
                 self.names = [self.names]
+
+            if self.plot_residues:
+                # create parameters
+                self.parameters = eos.Parameters.Defaults()
+                if 'parameters' in item and 'parameters-from-mode' in item:
+                    eos.warn('    overriding values read from \'parameters-from-mode\' with explicit values in \'parameters\'')
+
+                if 'parameters-from-mode' in item and type(item['parameters-from-mode']) is str:
+                    eos.warn('    overriding parameters from mode')
+                    mode = eos.Mode(item['parameters-from-mode'])
+                    for p, v in zip(mode.varied_parameters, mode.mode):
+                        self.parameters.set(p['name'], v)
+
+                if 'parameters' in item and type(item['parameters']) is dict:
+                    for key, value in item['parameters'].items():
+                        self.parameters.set(key, value)
+
+                # create options
+                self.options = eos.Options()
+                if 'options' in item and type(item['options']) is dict:
+                    for key, value in item['options'].items():
+                        self.options.declare(key, value)
+
 
         def plot(self):
             import yaml
 
             constraints = eos.Constraints()
+            obs_kinematics = eos.Kinematics()
 
             for name in self.names:
                 entry = constraints[name]
@@ -857,11 +882,23 @@ class Plotter:
                     if self.variable in kinematics:
                         xvalues = [kinematics[self.variable]]
                         xerrors = None
+                        if self.plot_residues:
+                            obs_values = []
+                            for x in xvalues:
+                                obs_kinematics.declare(self.variable, x)
+                                obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate())
+
                     elif (self.variable + '_min' in kinematics) and (self.variable + '_max' in kinematics):
                         xvalues = [(kinematics[self.variable + '_max'] + kinematics[self.variable + '_min']) / 2]
                         xerrors = [(kinematics[self.variable + '_max'] - kinematics[self.variable + '_min']) / 2]
                         if self.rescale_by_width:
                             width = (kinematics[self.variable + '_max'] - kinematics[self.variable + '_min'])
+                        if self.plot_residues:
+                            obs_values = []
+                            for xmax, xmin in zip(kinematics[self.variable + '_max'], kinematics[self.variable + '_min']):
+                                obs_kinematics.declare(self.variable + '_max', xmax)
+                                obs_kinematics.declare(self.variable + '_min', xmin)
+                                obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate() / width)
 
                     yvalues = [float(constraint['mean']) / width]
                     sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
@@ -880,6 +917,7 @@ class Plotter:
                     xerrors = []
                     yvalues = []
                     yerrors = []
+                    obs_values = []
                     for i in range(0, dim):
                         width = 1
 
@@ -889,11 +927,19 @@ class Plotter:
                         if self.variable in _kinematics:
                             xvalues.append(_kinematics[self.variable])
                             xerrors = None
+                            if self.plot_residues:
+                                obs_kinematics.declare(self.variable, _kinematics[self.variable])
+                                obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate())
+
                         elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
                             xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
                             xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
                             if self.rescale_by_width:
                                 width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
+                            if self.plot_residues:
+                                obs_kinematics.declare(self.variable + '_max', _kinematics[self.variable + '_max'])
+                                obs_kinematics.declare(self.variable + '_min', _kinematics[self.variable + '_min'])
+                                obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate() / width)
 
                         yvalues.append(np.double(means[i]) / width)
                         yerrors.append(np.sqrt(np.double(covariance[i, i])) / width)
@@ -922,11 +968,23 @@ class Plotter:
                         if self.variable in _kinematics:
                             xvalues.append(_kinematics[self.variable])
                             xerrors = None
+                            if self.plot_residues:
+                                obs_values = []
+                                for x in xvalues:
+                                    obs_kinematics.declare(self.variable, x)
+                                    obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate())
+
                         elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
                             xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
                             xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
                             if self.rescale_by_width:
                                 width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
+                            if self.plot_residues:
+                                obs_values = []
+                                for xmax, xmin in zip(kinematics[self.variable + '_max'], kinematics[self.variable + '_min']):
+                                    obs_kinematics.declare(self.variable + '_max', xmax)
+                                    obs_kinematics.declare(self.variable + '_min', xmin)
+                                    obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate() / width)
 
                         yvalues.append(means[i] / width)
                         yerrors.append(sigma[i] / width)
@@ -936,6 +994,9 @@ class Plotter:
                 xvalues = np.array(xvalues)
                 yvalues = np.array(yvalues)
                 yerrors = np.array(yerrors)
+
+                if self.plot_residues:
+                    yvalues -= obs_values
 
                 if self.xrange:
                     mask = np.logical_and(xvalues > min(self.xrange), xvalues < max(self.xrange))
