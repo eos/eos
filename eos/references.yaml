@@ -1108,6 +1108,14 @@ HLMW:2015A:
     id: oai:arXiv.org:1501.00367
   inspire-id: Horgan:2015vla
   title: Rare $B$ decays using lattice QCD form factors
+HPQCD:2014A:
+  authors: Bouchard, C. M. and Lepage, G. Peter and Monahan, Christopher and Na, Heechang and Shigemitsu, Junko
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1406.2279
+  inspire-id: Bouchard:2014ypa
+  title: $B_s \to K \ell \nu$ form factors from lattice QCD
 HPQCD:2015A:
   authors: Na, Heechang and Bouchard, Chris M. and Lepage, G. Peter and Monahan, Chris
     and Shigemitsu, Junko
