@@ -1599,6 +1599,15 @@ RBC+UKQCD:2015A:
     archive: arXiv
     id: oai:arXiv.org:1501.05373
   journal: Phys. Rev. D 91 074510 (2015)
+RBC+UKQCD:2023A:
+  authors: Flynn, J. M. and Hill, R. C. and J\"uttner, A. and Soni, A. and Tsang, J. T. and Witzel, O.
+  title: Exclusive semileptonic $\bar{B}_s\to K\ell\bar\nu$ decays on the lattice
+  collaboration: RBC/UKQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2303.11280
+  inspire-id: Flynn:2023nhi
+  journal: Phys. Rev. D 107 114512 (2023)
 S:1982A:
   authors: Sirlin, A.
   journal: Nucl.Phys. B196 (1982) 83-92
