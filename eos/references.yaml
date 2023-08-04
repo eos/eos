@@ -1006,6 +1006,14 @@ FNAL+MILC:2017A:
     id: oai:arXiv.org:1712.09262
   inspire-id: Bazavov:2017lyh
   title: $B$- and $D$-meson leptonic decay constants from four-flavor lattice QCD
+FNAL+MILC:2019A:
+  authors: Bazavov, A. et al.
+  collaboration: Fermilab Lattice, MILC
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1901.02561
+  inspire-id: FermilabLattice:2019ikx
+  title: $\bar{B}_s \to K\ell\nu$ decay from lattice QCD
 FTW:2016A:
   authors: Frellesvig, Hjalte and Tommasini, Damiano and Wever, Christopher
   eprint:
