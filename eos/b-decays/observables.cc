@@ -355,6 +355,46 @@ namespace eos
     }
     // }}}
 
+    // B_s -> K l nu
+    // {{{
+    ObservableGroup
+    make_bs_to_k_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_s\to \bar{K} \ell^-\bar\nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor.)"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                make_observable("B_s->Klnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to K\ell^-\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } }),
+
+                make_observable("B_s->Klnu::BR", R"(\mathcal{B}(\bar{B}_s\to K\ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } }),
+
+                make_observable("B_s->Klnu::normdBR/ds",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } }),
+
+                make_observable("B_s->Klnu::normBR",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // B_s -> D_s l nu
     // {{{
     ObservableGroup
@@ -2138,6 +2178,7 @@ namespace eos
                 make_b_to_d_l_nu_group(),
 
                 // B_s -> P l^- nubar
+                make_bs_to_k_l_nu_group(),
                 make_bs_to_ds_l_nu_group(),
 
                 // B_{u,d} -> V l^- nubar
