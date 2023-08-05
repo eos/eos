@@ -164,12 +164,22 @@ class AnalysisFile:
                 if key in global_options and global_options[key] != value:
                     eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o["name"]} in prediction {_prediction}.')
 
-        observables = [eos.Observable.make(
-            o['name'],
-            parameters,
-            eos.Kinematics(**(o['kinematics'] if 'kinematics' in o else {})),
-            options
-        ) for o in prediction['observables']]
+        observables = []
+        for o in prediction['observables']:
+            if 'kinematics' not in o:
+                kinematics = [{}]
+            elif type(o['kinematics']) == dict:
+                kinematics = [o['kinematics']]
+            else:
+                kinematics = [k for k in o['kinematics']]
+
+            for k in kinematics:
+                observables.append(eos.Observable.make(
+                    o['name'],
+                    parameters,
+                    eos.Kinematics(k),
+                    options
+                ))
 
         if None in observables:
             unknown_observables = set()
