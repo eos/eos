@@ -319,9 +319,9 @@ namespace eos
         UsedParameter polarisation;
 
         UsedParameter alpha_e;
-        UsedParameter mu;
 
         SwitchOption opt_l;
+        UsedParameter mu;
 
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
@@ -337,8 +337,8 @@ namespace eos
             alpha(p["Lambda::alpha"], u),
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
+            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
             form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o))
         {
             u.uses(*form_factors);
