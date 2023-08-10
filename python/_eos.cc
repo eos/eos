@@ -567,6 +567,9 @@ BOOST_PYTHON_MODULE(_eos)
         .def("update", &ObservableCache::update, R"(
             Update the cache for the current parameter point.
         )")
+        .def("parameters", &ObservableCache::parameters, R"(
+            Retrieve the set of parameters bound to this cache.
+        )")
         ;
 
     // ReferenceName
