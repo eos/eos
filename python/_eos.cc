@@ -588,6 +588,12 @@ BOOST_PYTHON_MODULE(_eos)
     register_ptr_to_python<std::shared_ptr<LogLikelihoodBlock>>();
     class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", no_init)
         .def("__str__", &LogLikelihoodBlock::as_string)
+        .def("evaluate", &LogLikelihoodBlock::evaluate, R"(
+            Evaluate the log-likelihood block at the current parameter point.
+        )")
+        .def("number_of_observations", &LogLikelihoodBlock::number_of_observations, R"(
+            Retrieve the number of observations in this block.
+        )")
         ;
 
     // LogLikelihood
