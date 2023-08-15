@@ -40,6 +40,7 @@ from _eos import *
 from _eos import __version__
 from .data import *
 from .plot import *
+from .datasets import DataSets
 from .analysis import Analysis, BestFitPoint
 from .analysis_file import AnalysisFile
 from .constraint import Constraints

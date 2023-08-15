@@ -10,6 +10,8 @@ EXTRA_DIST = \
 	eos/analysis_file_description.py \
 	eos/config.py \
 	eos/constraint.py \
+	eos/datasets.py \
+	eos/datasets_file_description.py \
 	eos/deserializable.py \
 	eos/ipython.py \
 	eos/observable.py \
@@ -51,6 +53,8 @@ eos_SCRIPTS = \
 	eos/analysis_file_description.py \
 	eos/config.py \
 	eos/constraint.py \
+	eos/datasets.py \
+	eos/datasets_file_description.py \
 	eos/deserializable.py \
 	eos/ipython.py \
 	eos/observable.py \
