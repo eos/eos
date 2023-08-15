@@ -440,6 +440,14 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
     parser_corner_plot.add_argument('posterior', metavar = 'POSTERIOR',
         help = 'The name of the posterior PDF from which the samples were drawn.'
     )
+    parser_corner_plot.add_argument('-B', '--begin-parameter',
+        help = 'The index of the first parameter to plot.',
+        dest = 'begin', action = 'store', type = int, default = 0
+    )
+    parser_corner_plot.add_argument('-E', '--end-parameter',
+        help = 'The index beyond the last parameter to plot.',
+        dest = 'end', action = 'store', type = int, default = None
+    )
     parser_corner_plot.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')

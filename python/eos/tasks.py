@@ -1,6 +1,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 # Copyright (c) 2020-2023 Danny van Dyk
+# Copyright (c) 2023 Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -494,7 +495,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior'):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior', begin:int=0, end:int=None):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -511,6 +512,10 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     :type format: str or list of str, optional
     :param distribution: The distribution to plot. Can be either 'posterior' or the name of a prediction.
     :type distribution: str, optional
+    :param begin: The index of the first parameter to plot. Defaults to 0.
+    :type begin: int, optional
+    :param end: The index beyond the last parameter to plot. Defaults to ``None``.
+    :type end: int or NoneType, optional
     """
     import matplotlib.pyplot as _plt
 
@@ -537,23 +542,29 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     else:
         raise RuntimeError(f"Argument 'distribution' must be one of {['posterior',] + list(analysis_file.predictions.keys())}")
 
-    size = f.samples.shape[-1]
+    # Apply slicing according to begin and end for samples and labels
+    samples = f.samples[:, begin:end]
+    weights = f.weights[:]
+    labels = labels[begin:end]
+    size = samples.shape[-1]
+
     fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
 
     for i in range(size):
         # diagonal
         ax = axes[i, i]
-        samples = f.samples[:, i]
+        variable_samples = samples[:, i] # For a single variable
 
-        ax.hist(samples, weights=f.weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
-        xmin = _np.min(samples)
-        xmax = _np.max(samples)
+        ax.hist(variable_samples, weights=weights, alpha=0.5, bins=100, density=True, stacked=True, color='C1')
+        xmin = _np.min(variable_samples)
+        xmax = _np.max(variable_samples)
         ax.set_xlim((xmin, xmax))
         ax.set_xlabel(labels[i])
         ax.set_ylabel(labels[i])
         ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff(ax.get_ylim())[0])
 
         for j in range(0, size):
+            # off-diagonal
             if j < i:
                 axes[i, j].set_axis_off()
 
@@ -561,13 +572,16 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
                 continue
 
             ax = axes[i, j]
-            xsamples = f.samples[:, j]
-            ysamples = f.samples[:, i]
+
+            # Samples for two single variables as x and y data
+            xsamples = samples[:, j]
+            ysamples = samples[:, i]
+
             xmin = _np.min(xsamples)
             xmax = _np.max(xsamples)
             ymin = _np.min(ysamples)
             ymax = _np.max(ysamples)
-            ax.hist2d(xsamples, ysamples, weights=f.weights, alpha=1.0, bins=100, cmap='Greys')
+            ax.hist2d(xsamples, ysamples, weights=weights, alpha=1.0, bins=100, cmap='Greys')
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
             ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff((ymin, ymax))[0])
