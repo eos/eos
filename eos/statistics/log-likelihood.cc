@@ -1314,6 +1314,9 @@ namespace eos
         // Container for all named constraints
         std::vector<Constraint> constraints;
 
+        // Container for all external likelihood blocks
+        std::vector<LogLikelihoodBlockPtr> external_blocks;
+
         Implementation(const Parameters & parameters) :
             parameters(parameters),
             cache(parameters)
@@ -1399,7 +1402,7 @@ namespace eos
         {
             double result = 0.0;
 
-            // loop over all likelihood blocks
+            // loop over all constraint-based likelihood blocks
             for (const auto & constraint : constraints)
             {
                 for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks() ; b != b_end ; ++b)
@@ -1410,6 +1413,16 @@ namespace eos
 
                     result += llh;
                 }
+            }
+
+            // loop over all external likelihood blocks
+            for (const auto & block : external_blocks)
+            {
+                double llh = block->evaluate();
+                if (! std::isfinite(llh))
+                    return -std::numeric_limits<double>::infinity();
+
+                result += llh;
             }
 
             return result;
@@ -1452,6 +1465,12 @@ namespace eos
         _imp->constraints.push_back(Constraint(constraint.name(), observables, blocks));
     }
 
+    void
+    LogLikelihood::add(const LogLikelihoodBlockPtr & block)
+    {
+        _imp->external_blocks.push_back(block->clone(_imp->cache));
+    }
+
     LogLikelihood::ConstraintIterator
     LogLikelihood::begin() const
     {
@@ -1479,6 +1498,11 @@ namespace eos
         for (const auto & constraint : _imp->constraints)
         {
             result.add(constraint);
+        }
+
+        for (const auto & block : _imp->external_blocks)
+        {
+            result.add(block);
         }
 
         return result;

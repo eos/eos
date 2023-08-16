@@ -348,6 +348,13 @@ namespace eos
              */
             void add(const Constraint & constraint);
 
+            /*!
+             * Add an externally-defined log likelihood block.
+             *
+             * @param block The log likelihood block.
+             */
+            void add(const LogLikelihoodBlockPtr & block);
+
             ///@name Iteration and Access
             ///@{
             struct ConstraintIteratorTag;
