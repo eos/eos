@@ -685,6 +685,7 @@ BOOST_PYTHON_MODULE(_eos)
             Represents the log(likelihood) of a Bayesian analysis undertaken with the :class:`Analysis <eos.Analysis>` class.
         )", init<Parameters>())
         .def("add", (void (LogLikelihood::*)(const Constraint &)) &LogLikelihood::add)
+        .def("add", (void (LogLikelihood::*)(const LogLikelihoodBlockPtr &)) &LogLikelihood::add)
         .def("__iter__", range(&LogLikelihood::begin, &LogLikelihood::end))
         .def("observable_cache", &LogLikelihood::observable_cache)
         .def("evaluate", &LogLikelihood::operator())
