@@ -150,8 +150,8 @@ class PlotFactory:
 
 
     @staticmethod
-    def make(ax, contents:list, type:str='2D-plot', **kwargs):
-        if type not in PlotFactory.registry:
-            raise ValueError(f'Unknown plot type: { type }')
+    def make(ax, contents:list, plot_type:str='2D-plot', **kwargs):
+        if plot_type not in PlotFactory.registry:
+            raise ValueError(f'Unknown plot type: { plot_type }')
 
-        return PlotFactory.registry[type](ax, contents, **kwargs)
+        return PlotFactory.registry[plot_type](ax, contents, **kwargs)
