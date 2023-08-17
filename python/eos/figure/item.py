@@ -17,6 +17,7 @@
 import eos
 
 import numpy as np
+import os
 
 class Item:
     "Can display itself using a Matplotlib ax object"
@@ -164,9 +165,60 @@ class Observable(Item):
         ax.plot(self.x_values, self.y_values, label=self.label, **self.kwargs)
 
 
+class Histogram1D(Item):
+    r"""Represents a 1D histogram of random variates for an :py:class:`eos.Parameter` or an :py:class:`eos.Observable`.
+
+    :param data_file: Path to an :py:mod:`eos.data` file
+    :type data_file: str
+    :param variable: Name of a parameter or an observable
+    :type variable: str
+    :param bins: Number of bins
+    :type bins: int
+    """
+
+    def __init__(self,
+                 data_file:str,
+                 variable:str,
+                 bins:int=50,
+        ):
+        super().__init__()
+
+        self.variable = variable
+        self.bins     = bins
+
+        base_name = os.path.split(data_file)[-1]
+        if base_name.startswith('mcmc-'):
+            df  = eos.data.MarkovChain(data_file)
+            idx = df.lookup_table[variable]
+            self.samples = df.samples[:, idx]
+            self.weights = None
+        elif base_name.startswith('samples'):
+            df = eos.data.ImportanceSamples(data_file)
+            idx = df.lookup_table[variable]
+            self.samples = df.samples[:, idx]
+            self.weights = df.weights
+        elif base_name.startswith('pred-'):
+            df = eos.data.Prediction(data_file)
+            idx = df.lookup_table[variable]
+            self.samples = df.samples[:, idx]
+            self.weights = df.weights
+        else:
+            raise ValueError(f'Do not recognize data-file basename: {dfname}')
+
+
+    def prepare(self):
+        pass
+
+
+    def draw(self, ax):
+        super().draw(ax)
+        ax.hist(self.samples, bins=self.bins, density=True, weights=self.weights)
+
+
 class ItemFactory:
     registry = {
         'observable': Observable,
+        'histogram':  Histogram1D,
     }
 
 
