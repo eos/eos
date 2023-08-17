@@ -21,32 +21,39 @@ import numpy as np
 
 
 class Figure:
-    def __init__(self, figure, axes, descriptions:list):
-        self.figure = figure
-        self.axes = axes
-        self.plots = []
+    def __init__(self,
+                 figure,
+                 axes:list,
+                 plots:list,
+                 title:str=None):
+        self._figure = figure
+        self._axes   = axes
+        self._plots  = []
 
-        if not descriptions:
-            raise ValueError(f"Argument 'descriptions' is empty list")
+        if len(plots) == 0:
+            raise ValueError(f"Argument 'plots' is empty list")
 
-        for ax, plot_description in zip(axes, descriptions):
-            if plot_description is None:
-                self.plots.append(PlotFactory.make(ax, [], plot_type='empty'))
+        for ax, p in zip(axes, plots):
+            if p == {} or p is None:
+                self._plots.append(PlotFactory.make(ax, [], plot_type='empty'))
                 continue
 
-            if 'description' not in plot_description:
+            if 'description' not in p:
                 raise ValueError(f"Plot does not contain element 'description'")
-            if 'items' not in plot_description:
+            if 'items' not in p:
                 raise ValueError(f"Plot does not contain element 'items'")
 
-            contents = plot_description['items']
-            plot_description = PlotFactory.sanitize(plot_description['description'])
+            items = p['items']
+            description = PlotFactory.sanitize(p['description'])
 
-            self.plots.append(PlotFactory.make(ax, contents, **plot_description))
+            self._plots.append(PlotFactory.make(ax, items, **description))
+
+        if title is not None:
+            self._figure.suptitle(title)
 
 
     def draw(self):
-        for plot in self.plots:
+        for plot in self._plots:
             plot.draw()
 
 
@@ -57,31 +64,56 @@ class SingleFigure(Figure):
 
     :param plot: The plot's data, as a dictionary containing the 'description' and the 'contents'.
     :type plot: dict
+    :param title: The title of the figure. (optional)
+    :type title: str
     """
 
-    def __init__(self, description):
+    def __init__(self,
+                 plot=None,
+                 title:str=None):
         figure, axes = plt.subplots()
-        super().__init__(figure, [axes,], [description,])
+        if title is not None:
+            axes.set_title(title)
+
+        super().__init__(figure, [axes], [plot], title=title)
+
+    @property
+    def plot(self):
+        return self._plots[0]
+
+
+    @plot.setter
+    def plot(self, value):
+        self._plots[0] = value
 
 
 class GridFigure(Figure):
-    """Represent a figure with several axes arranged in a grid.
+    """Represent a figure with multiple sets of axes arranged in a grid.
 
-    :param plots: The list of plots' data, as a list of dictionaries each containing the 'description' and the 'contents' for a single plot.
+    :param plots: The list of plot data sets, as a list of dictionaries each containing the ``description`` and the ``contents`` for a single plot.
     :type plots: list[dict] or iterable[dict]
     :param nrows: The number of rows in the grid.
     :type nrows: int
     :param ncols: The number of columns in the grid.
     :type ncols: int
+    :param title: The title of the figure. (optional)
+    :type title: str
     """
 
-    def __init__(self, descriptions, nrows, ncols, **kwargs):
-        figure, axes = plt.subplots(nrows, ncols, **kwargs)
+    def __init__(self,
+                 plots:list,
+                 nrows:int,
+                 ncols:int,
+                 title:str=None):
+        if len(plots) != nrows * ncols:
+            raise ValueError(f"Number of plots ({len(plots)}) does not match number of axes ({nrows*ncols})")
+
+        figure, axes = plt.subplots(nrows, ncols)
         axes = axes.flatten('C') # row-major style
-        super().__init__(figure, np.array(axes), np.array(descriptions))
+        super().__init__(figure, [ax for ax in axes], [p for p in plots], title=title)
 
 
-def make(description:dict) -> Figure:
+def make(**kwargs) -> Figure:
     """
     This function takes a figure description and handles the contruction of a publication-grade
     figure in a convenient way.
@@ -126,13 +158,9 @@ def make(description:dict) -> Figure:
     :rtype: eos.figure.Figure
     """
 
-    if type(description) == dict:
-        # Make figure with a single plot
-        return SingleFigure(description)
-
-    elif type(description) == list:
-        # Mad grid figure with several plots arranged on a grid
-        raise RuntimeError("Making a grid figure is not yet implemented")
-
+    if 'items' in kwargs:
+        return SingleFigure(**kwargs)
+    elif 'plots' in kwargs:
+        return GridFigure(**kwargs)
     else:
-        raise RuntimeError("Argument 'description' must be either of type dict or list of dict")
+        raise RuntimeError("Figure description does not match any known format")
