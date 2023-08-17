@@ -64,7 +64,8 @@ class Plot:
         for item in self.content_items:
             item.draw(self.ax)
 
-        self.ax.legend(**self.legend_kwargs)
+        if self.legend_kwargs is not None:
+            self.ax.legend(**self.legend_kwargs)
 
 
 class TwoDimPlot(Plot):
