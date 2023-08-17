@@ -39,4 +39,4 @@ except AttributeError:
     pass
 
 from . import config
-from .figure import make
+from .figure import make, SingleFigure, GridFigure
