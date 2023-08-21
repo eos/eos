@@ -2001,6 +2001,111 @@ namespace eos
         return ObservableGroup(imp);
     }
     // }}}
+    // D -> P(seudoscalar)
+    // {{{
+
+    // D -> K
+    // {{{
+    ObservableGroup
+    make_d_to_k_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $D \to K$ transitions)",
+            R"(Pseudo observables representing the full basis of $D \to K$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("D->K::f_+(q2)", R"(f_+^{D \to K}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->K::f_0(q2)", R"(f_0^{D \to K}(q^2))",
+                        &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->K::f_T(q2)", R"(f_T^{D \to K}(q^2))",
+                        &FormFactors<PToP>::f_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->K::f_-(q2)", R"(f_-^{D \to K}(q^2))",
+                        &FormFactors<PToP>::f_m, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->K::F_plus(q2)", R"(F_+^{D \to K}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->K::F_plus_T(q2)", R"(F_T^{D \to K}(q^2))",
+                        &FormFactors<PToP>::f_plus_T, std::make_tuple("q2")),
+
+                make_expression_observable("D->K::F_T(q2)/F_plus(q2)", R"(F_T(q^2)/F_+(q^2))",
+                        Unit::None(),
+                        R"( <<D->K::f_T(q2)>> / <<D->K::F_plus(q2)>> )"),
+
+                make_expression_observable("D->K::F_plus_T(q2)/F_plus(q2)", R"(F_{+,T}(q^2)/F_+(q^2))",
+                        Unit::None(),
+                        R"( <<D->K::F_plus_T(q2)>> / <<D->K::F_plus(q2)>> )"),
+
+                make_observable("D->K::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_0p_v),
+
+                make_observable("D->K::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_0m_a),
+
+                make_observable("D->K::Saturation[1^-_V,0]", R"(\textrm{Saturation}[1^-_{V,0}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_v_0),
+                make_observable("D->K::Saturation[1^-_V,perp]", R"(\textrm{Saturation}[1^-_{V,\perp}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_v_perp),
+                make_observable("D->K::Saturation[1^-_V,para]", R"(\textrm{Saturation}[1^-_{V,\parallel}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_v_para),
+                make_observable("D->K::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_v),
+
+                make_observable("D->K::Saturation[1^+_A,0]", R"(\textrm{Saturation}[1^+_{A,0}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_a_0),
+                make_observable("D->K::Saturation[1^+_A,perp]", R"(\textrm{Saturation}[1^+_{A,\perp}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_a_perp),
+                make_observable("D->K::Saturation[1^+_A,para]", R"(\textrm{Saturation}[1^+_{A,\parallel}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_a_para),
+                make_observable("D->K::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_a),
+
+                make_observable("D->K::Saturation[1^-_T,0]", R"(\textrm{Saturation}[1^-_{T,0}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_t_0),
+                make_observable("D->K::Saturation[1^-_T,perp]", R"(\textrm{Saturation}[1^-_{T,\perp}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_t_perp),
+                make_observable("D->K::Saturation[1^-_T,para]", R"(\textrm{Saturation}[1^-_{T,\parallel}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_t_para),
+                make_observable("D->K::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1m_t),
+
+                make_observable("D->K::Saturation[1^+_T5,0]", R"(\textrm{Saturation}[1^+_{T5,0}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_t5_0),
+                make_observable("D->K::Saturation[1^+_T5,perp]", R"(\textrm{Saturation}[1^+_{T5,\perp}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_t5_perp),
+                make_observable("D->K::Saturation[1^+_T5,para]", R"(\textrm{Saturation}[1^+_{T5,\parallel}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_t5_para),
+                make_observable("D->K::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T5}])", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::saturation_1p_t5),
+
+                // Auxiliary functions for [BFW:2010A]
+                make_observable("D->K::f_+_series(q2)@BFW2010", R"(\hat{f}_+^{D \to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::f_p_series, std::make_tuple("q2")),
+
+                make_observable("D->K::f_+_series_prime(q2)@BFW2010", R"(\hat{f}_+^{\prime D \to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::f_p_series_prime, std::make_tuple("q2")),
+
+                make_observable("D->K::f_0_series(q2)@BFW2010", R"(\hat{f}_0^{D \to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::f_0_series, std::make_tuple("q2")),
+
+                make_observable("D->K::f_0_series_prime(q2)@BFW2010", R"(\hat{f}_0^{\prime D \to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::f_0_series_prime, std::make_tuple("q2")),
+
+                make_observable("D->K::f_T_series(q2)@BFW2010", R"(\hat{f}_T^{D \to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::f_t_series, std::make_tuple("q2")),
+
+                make_observable("D->K::f_T_series_prime(q2)@BFW2010", R"(\hat{f}_T^{\prime D \to K}(q^2))", Unit::None(),
+                        &BFW2010FormFactors<DToK, PToP>::f_t_series_prime, std::make_tuple("q2"))
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+
     ObservableSection
     make_form_factors_section()
     {
@@ -2047,9 +2152,15 @@ namespace eos
 
                 // B-meson LCDAs
                 make_b_meson_lcdas_group(),
+
+                // D -> P
+                make_d_to_k_form_factors_group(),
             }
         );
 
         return ObservableSection(imp);
     }
+
+
+
 }

@@ -3888,6 +3888,29 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
+      # form factor parameters for D->K for [BFW:2010A] parametrization
+      'D->K::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,D \to K,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'D->K::tp@BFW2010' :
+          central:  5.56488
+          min:      5.56488
+          max:      5.56488
+          latex:    '$t_+^{D\to K^*}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV'
+      'D->K::t0@BFW2010' :
+          central:  1.04
+          min:      1.04
+          max:      1.04
+          latex:   '$t_0^{D\to K}$'
+          unit:     'GeV'
       # form factor parameters for D->K inspired by [BSZ:2015A]
       'D->K::alpha^%1%_%2%@BSZ2015' :
           central:  0.0

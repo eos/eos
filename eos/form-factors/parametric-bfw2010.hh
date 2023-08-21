@@ -370,6 +370,7 @@ namespace eos
             static const std::vector<OptionSpecification> options;
     };
 
+    extern template class BFW2010FormFactors<DToK,  PToP>;
     extern template class BFW2010FormFactors<BToK,  PToP>;
     extern template class BFW2010FormFactors<BsToK, PToP>;
 }
