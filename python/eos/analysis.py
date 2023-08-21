@@ -2,6 +2,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 # Copyright (c) 2018, 2019, 2020 Danny van Dyk
+# Copyright (c) 2023 Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,7 +18,6 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
-import copy as _cp
 import numpy as np
 import scipy
 import pypmc
@@ -44,7 +44,6 @@ class BestFitPoint:
         return(result)
 
 
-
 class Analysis:
     """Represents a statistical analysis.
 
@@ -57,6 +56,8 @@ class Analysis:
     :type priors: iterable
     :param likelihood: The likelihood as a list of individual constraints from the internal data base of experimental and theoretical constraints; cf. `the complete list of constraints <../constraints.html>`_.
     :type likelihood: iterable
+    :param external_likelihood: The external likelihood blocks as a list or iterable of objects returned by :py:meth:`eos.LogLikelihoodBlock.External`.
+    :type external_likelihood: list or iterable of :py:class:`eos.LogLikelihoodBlock`.
     :param manual_constraints: Additional manually-specified constraints that shall be added to the log(likelihood).
     :type manual_constraints: dict, optional
     :param fixed_parameters: Values of parameters that are set when the analysis is defined.
@@ -65,9 +66,9 @@ class Analysis:
     :type parameters: :class:`eos.Parameters` or None, optional
     """
 
-    def __init__(self, priors, likelihood, global_options={}, manual_constraints={}, fixed_parameters={}, parameters=None):
+    def __init__(self, priors, likelihood, external_likelihood=[], global_options={}, manual_constraints={}, fixed_parameters={}, parameters=None):
         """Constructor."""
-        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
+        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'external_likelihood': external_likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = parameters if parameters else eos.Parameters.Defaults()
         """The set of parameters used for this analysis."""
         self.global_options = eos.Options()
@@ -175,6 +176,12 @@ class Analysis:
             else:
                 constraint = eos.Constraint.make(constraint_name, self.global_options)
             self._log_likelihood.add(constraint)
+
+        # add external likelihood
+        for likelihood in external_likelihood:
+            if not isinstance(likelihood, eos.LogLikelihoodBlock):
+                raise ValueError('`external_likelihood` must be a list of eos.LogLikelihoodBlock')
+            self._log_likelihood.add(likelihood)
 
         # perform some sanity checks
         varied_parameter_names = {p.name() for p in self.varied_parameters}
