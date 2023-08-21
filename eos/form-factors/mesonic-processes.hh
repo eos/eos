@@ -132,6 +132,15 @@ namespace eos
         static constexpr const double mR2_1m = 2.714 * 2.714; // Ds1
         static constexpr const double mR2_0p = 2.317 * 2.317; // Ds0
         static constexpr const bool uses_tensor_form_factors = true;
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) = - z(tm, t0)
+        static constexpr double t0 = 1.04;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 2.0;
+        // OPE results for the unitarity bounds (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
     };
 
     struct DsToK {

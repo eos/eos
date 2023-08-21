@@ -351,6 +351,7 @@ namespace eos
         { "D_s->K::BSZ2015",     &BSZ2015FormFactors<DsToK,  PToP>::make                                                                                      },
         // c -> s
         { "D->K::BSZ2015",       &BSZ2015FormFactors<DToK,   PToP>::make                                                                                      },
+        { "D->K::BFW2010",       &BFW2010FormFactors<DToK,   PToP>::make                                                                                      },
         // analytic computations
         { "B->pi::DKMMO2008",    &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
         { "B_s->K::DKMMO2008",   &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
