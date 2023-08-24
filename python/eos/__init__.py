@@ -49,6 +49,7 @@ from .parameter import Parameters
 from .reference import References
 from .signal_pdf import SignalPDF, SignalPDFs
 from .tasks import *
+from .pyhf_likelihood import PyhfLogLikelihood
 
 import logging
 logger = logging.getLogger('EOS')
