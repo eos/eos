@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	eos/reference.py \
 	eos/signal_pdf.py \
 	eos/tasks.py \
+	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
 	eos/data/native.py \
     eos/data/native_TEST.d \
@@ -49,7 +50,8 @@ eos_SCRIPTS = \
 	eos/parameter.py \
 	eos/reference.py \
 	eos/signal_pdf.py \
-	eos/tasks.py
+	eos/tasks.py \
+	eos/pyhf_likelihood.py
 
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
