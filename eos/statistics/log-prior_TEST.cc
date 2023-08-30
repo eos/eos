@@ -46,14 +46,6 @@ class LogPriorTest :
             static const double mu_0 = 4.18;
             static const double lambda = 2.0;
 
-            // parameter range
-            {
-                ParameterRange range{ -1.0, 1.0 };
-
-                TEST_CHECK_EQUAL(range.min, -1.0);
-                TEST_CHECK_EQUAL(range.max, +1.0);
-            }
-
             const auto inverse_cdf = [](const LogPriorPtr & prior, Parameter & param, const double & p)
             {
                 param.set_generator(p);
@@ -64,7 +56,7 @@ class LogPriorTest :
             // flat prior
             {
                 // use factory
-                LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 4.2, 4.5 });
+                LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5 );
                 Parameter param        = parameters["mass::b(MSbar)"];
                 TEST_CHECK_NEARLY_EQUAL((*flat_prior)(),                     1.2039728043259361, eps);
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.0), 4.2,                eps);
@@ -87,7 +79,7 @@ class LogPriorTest :
              */
             {
                 // use factory
-                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", ParameterRange{ 4.15, 4.57 },
+                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57,
                         central - sig_lower, central, central + sig_upper);
 
                 parameters["mass::b(MSbar)"] = 4.2;
@@ -112,7 +104,7 @@ class LogPriorTest :
             // cloning
             {
                 Parameters independent = Parameters::Defaults();
-                LogPriorPtr gauss_prior1 = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", ParameterRange{ 4.15, 4.57 },
+                LogPriorPtr gauss_prior1 = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57,
                         central - sig_lower, central, central+sig_upper);
                 LogPriorPtr gauss_prior2 = gauss_prior1->clone(independent);
 
@@ -124,7 +116,7 @@ class LogPriorTest :
 
             // vary one sigma interval
             {
-                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 },
+                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9,
                         4.3, 4.4, 4.5);
 
                 parameters["mass::b(MSbar)"] = 4.2;
@@ -136,7 +128,7 @@ class LogPriorTest :
 
             // asymmetric
             {
-                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", ParameterRange{ 0.2, 0.55 },
+                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 0.2, 0.55,
                             0.319, 0.369, 0.485);
 
                 parameters["mass::b(MSbar)"] = 0.32;
@@ -149,7 +141,7 @@ class LogPriorTest :
             // Scale prior
             {
                 // use factory
-                LogPriorPtr scale_prior = LogPrior::Scale(parameters, "mass::b(MSbar)", ParameterRange{ 2.0, 10.0 },
+                LogPriorPtr scale_prior = LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0,
                     mu_0, lambda);
 
                 Parameter param = parameters["mass::b(MSbar)"];

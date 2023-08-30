@@ -87,9 +87,7 @@ class LogPosteriorTest :
 
 
                 // 4.4 +- 0.1
-                log_posterior.add(LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)",
-                        ParameterRange
-                            { 3.7, 4.9 }, 4.3, 4.4, 4.5));
+                log_posterior.add(LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9, 4.3, 4.4, 4.5));
 
 
 

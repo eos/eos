@@ -140,8 +140,8 @@ namespace eos
         llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
         LogPriorPtr prior = flat ?
-            LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9} ) :
-            LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9}, 4.3, 4.4, 4.5);
+            LogPrior::Flat(parameters, "mass::b(MSbar)", 3.7, 4.9) :
+            LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9, 4.3, 4.4, 4.5);
 
         LogPosterior result(llh);
         result.add(prior);
