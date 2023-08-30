@@ -430,17 +430,6 @@ namespace eos
     };
 
     bool operator== (const ParameterDescription & lhs, const ParameterDescription & rhs);
-
-    struct ParameterRange
-    {
-        double min, max;
-
-        ParameterRange(const double & min, const double & max) :
-            min(min),
-            max(max)
-        {
-        }
-    };
 }
 
 #endif

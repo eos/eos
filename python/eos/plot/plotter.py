@@ -512,7 +512,10 @@ class Plotter:
                 # is the variable name a QualifiedName?
                 try:
                     qn = eos.QualifiedName(item['variable'])
-                    var = parameters.declare(qn, np.nan)
+                    if not parameters.has(qn):
+                        var = parameters.declare(qn, '', eos.Unit.Undefined(), np.nan, -np.max, np.max)
+                    else:
+                        var = parameters[qn]
                 except RuntimeError:
                     raise ValueError("Value of 'variable' for observable '" + oname +
                         "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")

@@ -89,23 +89,24 @@ namespace eos
 
                 std::string _name;
 
-                ParameterRange _range;
+                const double _min, _max;
 
                 // The flat prior always returns this value
                 double _value;
 
             public:
-                Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range) :
+                Flat(const Parameters & parameters, const std::string & name, const double & min, const double & max) :
                     LogPrior(parameters),
                     _parameter(parameters[name]),
                     _name(name),
-                    _range(range),
-                    _value(std::log(1.0 / (range.max - range.min)))
+                    _min(min),
+                    _max(max),
+                    _value(std::log(1.0 / (_max - _min)))
                 {
-                    if (range.min >= range.max)
+                    if (_min >= _max)
                     {
-                        throw RangeError("LogPrior::Flat(" + _name +"): minimum (" + stringify(range.min)
-                                          + ") must be smaller than maximum (" + stringify(range.max) + ")");
+                        throw RangeError("LogPrior::Flat(" + _name +"): minimum (" + stringify(_min)
+                                          + ") must be smaller than maximum (" + stringify(_max) + ")");
                     }
                     _varied_parameters.push_back(_parameter);
                 }
@@ -116,7 +117,7 @@ namespace eos
 
                 virtual std::string as_string() const
                 {
-                    std::string result = "Parameter: " + _name + ", prior type: flat, range: [" + stringify(_range.min) + "," + stringify(_range.max) + "]";
+                    std::string result = "Parameter: " + _name + ", prior type: flat, range: [" + stringify(_min) + "," + stringify(_max) + "]";
                     return result;
                 }
 
@@ -127,17 +128,17 @@ namespace eos
 
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
-                    return LogPriorPtr(new priors::Flat(parameters, _name, _range));
+                    return LogPriorPtr(new priors::Flat(parameters, _name, _min, _max));
                 }
 
                 virtual void sample()
                 {
-                    _parameter.set(_parameter.evaluate_generator() * (_range.max - _range.min) + _range.min);
+                    _parameter.set(_parameter.evaluate_generator() * (_max - _min) + _min);
                 }
 
                 virtual void compute_cdf()
                 {
-                    _parameter.set_generator((_parameter.evaluate() - _range.min) / (_range.max - _range.min));
+                    _parameter.set_generator((_parameter.evaluate() - _min) / (_max - _min));
                 }
 
                 virtual bool informative() const
@@ -157,7 +158,7 @@ namespace eos
 
                 const std::string _name;
 
-                const ParameterRange _range;
+                const double _min, _max;
 
                 const double _lower, _central, _upper;
 
@@ -180,28 +181,29 @@ namespace eos
                 const double _norm_lower, _norm_upper;
 
             public:
-                CurtailedGauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+                CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max,
                         const double & lower, const double & central, const double & upper) :
                     LogPrior(parameters),
                     _parameter(parameters[name]),
                     _name(name),
-                    _range(range),
+                    _min(min),
+                    _max(max),
                     _lower(lower),
                     _central(central),
                     _upper(upper),
                     _sigma_lower(central - lower),
                     _sigma_upper(upper - central),
-                    _c_a(1.0 / ((_sigma_lower / _sigma_upper) * (0.5 - gsl_cdf_gaussian_P(range.min - central, _sigma_lower))
-                                 + gsl_cdf_gaussian_P(range.max - central, _sigma_upper) - 0.5)),
+                    _c_a(1.0 / ((_sigma_lower / _sigma_upper) * (0.5 - gsl_cdf_gaussian_P(min - central, _sigma_lower))
+                                 + gsl_cdf_gaussian_P(max - central, _sigma_upper) - 0.5)),
                     _c_b(_sigma_lower/ _sigma_upper * _c_a),
-                    _prob_lower(_c_b * (0.5 - gsl_cdf_gaussian_P(range.min - central, _sigma_lower))),
+                    _prob_lower(_c_b * (0.5 - gsl_cdf_gaussian_P(min - central, _sigma_lower))),
                     _norm_lower(std::log(_c_b / std::sqrt(2 * M_PI) / _sigma_lower)),
                     _norm_upper(std::log(_c_a / std::sqrt(2 * M_PI) / _sigma_upper))
                 {
-                    if (range.min >= range.max)
+                    if (min >= max)
                     {
-                        throw RangeError("LogPrior::Gauss(" + _name +"): minimum (" + stringify(range.min)
-                                          + ") must be smaller than maximum (" + stringify(range.max) + ")");
+                        throw RangeError("LogPrior::Gauss(" + _name +"): minimum (" + stringify(_min)
+                                          + ") must be smaller than maximum (" + stringify(_max) + ")");
                     }
                     _varied_parameters.push_back(_parameter);
                 }
@@ -212,7 +214,7 @@ namespace eos
 
                 virtual std::string as_string() const
                 {
-                    std::string result = "Parameter: " + _name + ", prior type: Gaussian, range: [" + stringify(_range.min) + "," + stringify(_range.max) + "]";
+                    std::string result = "Parameter: " + _name + ", prior type: Gaussian, range: [" + stringify(_min) + "," + stringify(_max) + "]";
 
                     result += ", x = " + stringify(_central);
                     if (std::abs(_sigma_upper - _sigma_lower) < 1e-15)
@@ -248,7 +250,7 @@ namespace eos
 
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
-                    return LogPriorPtr(new priors::CurtailedGauss(parameters, _name, _range, _lower, _central, _upper));
+                    return LogPriorPtr(new priors::CurtailedGauss(parameters, _name, _min, _max, _lower, _central, _upper));
                 }
 
                 virtual void sample()
@@ -294,8 +296,6 @@ namespace eos
 
                 const std::string _name;
 
-                const ParameterRange _range;
-
                 const double _mu_0, _lambda;
 
                 const double _min, _max;
@@ -303,15 +303,14 @@ namespace eos
                 const double _ln_lambda;
 
             public:
-                Scale(const Parameters & parameters, const std::string & name, const ParameterRange & range, const double & mu_0, const double & lambda) :
+                Scale(const Parameters & parameters, const std::string & name, const double & min, const double & max, const double & mu_0, const double & lambda) :
                     LogPrior(parameters),
                     _parameter(parameters[name]),
                     _name(name),
-                    _range(range),
                     _mu_0(mu_0),
                     _lambda(lambda),
-                    _min(mu_0 / lambda),
-                    _max(mu_0 * lambda),
+                    _min(std::max(min, mu_0 / lambda)),
+                    _max(std::min(max, mu_0 * lambda)),
                     _ln_lambda(std::log(lambda))
                 {
                     _varied_parameters.push_back(_parameter);
@@ -342,7 +341,7 @@ namespace eos
 
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
-                    return LogPriorPtr(new priors::Scale(parameters, _name, _range, _mu_0, _lambda));
+                    return LogPriorPtr(new priors::Scale(parameters, _name, _min, _max, _mu_0, _lambda));
                 }
 
                 virtual void sample()
@@ -640,15 +639,15 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range)
+    LogPrior::Flat(const Parameters & parameters, const std::string & name, const double & min, const double & max)
     {
-        LogPriorPtr prior = std::make_shared<eos::priors::Flat>(parameters, name, range);
+        LogPriorPtr prior = std::make_shared<eos::priors::Flat>(parameters, name, min, max);
 
         return prior;
     }
 
     LogPriorPtr
-    LogPrior::CurtailedGauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+    LogPrior::CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max,
             const double & lower, const double & central, const double & upper)
     {
         // check input
@@ -658,13 +657,13 @@ namespace eos
         if (upper <= central)
             throw InternalError("LogPrior::Gauss: upper value (" + stringify(upper) + ") <= central value (" + stringify(central) + ")");
 
-        LogPriorPtr prior = std::make_shared<eos::priors::CurtailedGauss>(parameters, name, range, lower, central, upper);
+        LogPriorPtr prior = std::make_shared<eos::priors::CurtailedGauss>(parameters, name, min, max, lower, central, upper);
 
         return prior;
     }
 
     LogPriorPtr
-    LogPrior::Scale(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+    LogPrior::Scale(const Parameters & parameters, const std::string & name, const double & min, const double & max,
             const double & mu_0, const double & lambda)
     {
         // check input
@@ -674,7 +673,7 @@ namespace eos
         if (lambda <= 1.0)
             throw InternalError("LogPrior::Scale: scale factor lambda must be strictly larger than 1");
 
-        LogPriorPtr prior = std::make_shared<eos::priors::Scale>(parameters, name, range, mu_0, lambda);
+        LogPriorPtr prior = std::make_shared<eos::priors::Scale>(parameters, name, min, max, mu_0, lambda);
 
         return prior;
     }
@@ -712,11 +711,11 @@ namespace eos
         loc2 = s.find_first_of(']', loc1 + 1);
         std::string range_max = s.substr(loc1 + 1, loc2 - loc1 - 1);
 
-        ParameterRange range { destringify<double>(range_min), destringify<double>(range_max) };
+        const auto & [min, max] = std::tuple(destringify<double>(range_min), destringify<double>(range_max));
 
         if (prior_type == "flat")
         {
-            return Flat(parameters, par_name, range);
+            return Flat(parameters, par_name, min, max);
         }
         if (prior_type == "Gaussian")
         {
@@ -758,7 +757,7 @@ namespace eos
             }
 
             if (prior_type == "Gaussian")
-                return CurtailedGauss(parameters, par_name, range, central - sigma_lower, central, central + sigma_upper);
+                return CurtailedGauss(parameters, par_name, min, max, central - sigma_lower, central, central + sigma_upper);
         }
 
         throw priors::UnknownPriorError("Cannot construct prior from '" + s + "'");

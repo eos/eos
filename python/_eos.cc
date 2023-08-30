@@ -391,10 +391,6 @@ BOOST_PYTHON_MODULE(_eos)
         .def("used_parameter_ids", range(&ParameterUser::begin, &ParameterUser::end))
         ;
 
-    // ParameterRange
-    class_<ParameterRange>("ParameterRange", init<double, double>())
-        ;
-
     // Kinematics
     class_<Kinematics>("Kinematics", R"(
             Represents the set of kinematic variables relevant to an :class:`observable <eos.Obserable>`.
@@ -636,26 +632,30 @@ BOOST_PYTHON_MODULE(_eos)
             :type parameters: eos.Parameters
             :param name: The name of the parameter for which the LogPrior is defined.
             :type name: str
-            :param range: The range [min, max] for the values that the parameter is allowed to take.
-            :type range: tuple of two floating point numbers
-        )", args("parameters", "name", "range"))
+            :param min: The minimum value that the parameter is allowed to take.
+            :type min: float
+            :param max: The maximum value that the parameter is allowed to take.
+            :type max: float
+        )", args("parameters", "name", "min", "max"))
         .staticmethod("Uniform")
         .def("Flat", &LogPrior::Flat, return_value_policy<return_by_value>(), "Alias for :meth:`LogPrior.Uniform`.",
-            args("parameters", "name", "range"))
+            args("parameters", "name", "min", "max"))
         .staticmethod("Flat")
         .def("CurtailedGauss", &LogPrior::CurtailedGauss, return_value_policy<return_by_value>(), R"(
             Returns a new (curtailed) Gaussian prior as a LogPrior.
 
-            The prior's support is provided by the `range` parameter, with the
-            approximate 68% probability interval [`lower`, `upper`] and the mode provided
-            by the parameter `central`.
+            The prior's support is provided by the pair of ``min`` and ``max`` parameters, with the
+            approximate 68% probability interval [``lower``, ``upper``] and the mode provided
+            by the parameter ``central``.
 
             :param parameters: The parameters to which this LogPrior is bound.
             :type parameters: eos.Parameters
             :param name: The name of the parameter for which the LogPrior is defined.
             :type name: str
-            :param range: The range [min, max] for the values that the parameter is allowed to take.
-            :type range: tuple of two floating point numbers
+            :param min: The minimum value that the parameter is allowed to take.
+            :type min: float
+            :param max: The maximum value that the parameter is allowed to take.
+            :type max: float
             :param lower: The lower boundary of the 68% probability interval.
             :type lower: float
             :param central: The mode and median of the prior.
@@ -667,9 +667,9 @@ BOOST_PYTHON_MODULE(_eos)
         .def("Scale", &LogPrior::Scale, return_value_policy<return_by_value>(), R"(
             Returns a new Scale prior as a LogPrior.
 
-            The prior's support is provided by the `range` parameter, which should
-            coincide with [`mu_0 / lambda`, `mu_0 * lambda`]. The PDF is chosen
-            such that a renormalization scale is varied in this range and with
+            The prior's support is provided by the pair of ``min`` and ``max`` parameters,
+            which should coincide with [``mu_0 / lambda``, ``mu_0 * lambda``]. The PDF is
+            chosen such that a renormalization scale is varied in this range and with
             central value `mu_0` such that :math:`\ln x / \mu_0` is uniformly
             distributed in the interval :math:`[-\ln \lambda, +\ln \lambda]`.
 
@@ -677,13 +677,15 @@ BOOST_PYTHON_MODULE(_eos)
             :type parameters: eos.Parameters
             :param name: The name of the parameter for which the LogPrior is defined.
             :type name: str
-            :param range: The range [min, max] for the values that the parameter is allowed to take.
-            :type range: tuple of two floating point numbers
+            :param min: The minimum value that the parameter is allowed to take.
+            :type min: float
+            :param max: The maximum value that the parameter is allowed to take.
+            :type max: float
             :param mu_0: The central value of the parameter.
             :type mu_0: float, strictly positive
             :param lambda: The scale factor.
             :type lambda: float, strictly positive
-        )", args("parameters", "name", "range", "mu_0", "scale"))
+        )", args("parameters", "name", "min", "max", "mu_0", "scale"))
         .staticmethod("Scale")
         .def("evaluate", &LogPrior::operator(), R"(
             Returns the logarithm of the prior's probability density at the current parameter values.
