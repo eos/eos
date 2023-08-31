@@ -30,6 +30,7 @@
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <set>
+#include <limits>
 
 namespace eos
 {
@@ -149,7 +150,10 @@ namespace eos
              * @param name  Name of the new parameter to be declared.
              * @param value (Optional) value for the new parameter.
              */
-            Parameter declare(const QualifiedName & name, double value = 0.0);
+            Parameter declare(const QualifiedName & name, const std::string & latex, Unit unit,
+                const double & value = 0.0,
+                const double & min = -std::numeric_limits<double>::max(),
+                const double & max = +std::numeric_limits<double>::max());
 
             /*!
              * Set a parameter's numeric value.

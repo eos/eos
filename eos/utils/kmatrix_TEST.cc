@@ -195,9 +195,9 @@ class KMatrixTest :
 
             Parameters p = Parameters::Defaults();
 
-            p.declare("test::g0_1", 1.0);
-            p.declare("test::c_1", 0.0);
-            p.declare("test::m_1", 15.0);
+            p.declare("test::g0_1", "g_0^1", Unit::None(),  1.0);
+            p.declare("test::c_1",  "c_1",   Unit::None(),  0.0);
+            p.declare("test::m_1",  "m_1",   Unit::GeV(),  15.0);
 
 
             // One channel, one resonnance:
@@ -235,8 +235,8 @@ class KMatrixTest :
             p["test::g0_1"] = 1.1;
             p["test::m_1"] = 1.0;
 
-            p.declare("test::g0_2", 2.2);
-            p.declare("test::m_2", 2.0);
+            p.declare("test::g0_2", "g_0^2", Unit::None(), 2.2);
+            p.declare("test::m_2",  "m_2",   Unit::GeV(),  2.0);
 
             // One channel, two resonances
             {

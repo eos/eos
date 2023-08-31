@@ -641,7 +641,7 @@ namespace eos
     }
 
     Parameter
-    Parameters::declare(const QualifiedName & name, double value)
+    Parameters::declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
         // return existing parameter
         auto i(_imp->parameters_map.find(name));
@@ -650,7 +650,7 @@ namespace eos
 
         // create new parameter
         unsigned idx = _imp->parameters.size();
-        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, value, value, value, "LaTeX display not supported for run-time declared parameters", Unit::Undefined() }, idx));
+        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, value, max, latex, unit }, idx));
         _imp->parameters_map[name] = idx;
         _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
 
