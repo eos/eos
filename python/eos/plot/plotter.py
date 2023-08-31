@@ -445,7 +445,7 @@ class Plotter:
 
             obs_entry = eos.Observables._get_obs_entry(oname)
             valid_kin_vars = [kv for kv in obs_entry.kinematic_variables()]
-            eos.info('   plotting EOS observable "{}"'.format(oname))
+            eos.info(f'   plotting EOS observable "{oname}"')
 
             # create kinematics
             kinematics = eos.Kinematics()
@@ -612,7 +612,7 @@ class Plotter:
                     self.weights = item['data']['weights']
             else:
                 dfname = item['data-file']
-                eos.info('   plotting uncertainty propagation from "{}"'.format(dfname))
+                eos.info(f'   plotting uncertainty propagation from "{dfname}"')
                 df = eos.data.Prediction(dfname)
                 _xvalues = []
                 for vp in df.varied_parameters:
@@ -720,7 +720,7 @@ class Plotter:
                 olo      /= width
                 ocentral /= width
                 ohi      /= width
-                print("{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}".format(xmin=xmin, xmax=xmax, olo=olo, ocentral=ocentral, ohi=ohi))
+                print(f"{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}")
                 self.plotter.ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=self.label)
                 label = None
                 self.plotter.ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha)
@@ -743,7 +743,7 @@ class Plotter:
                 raise KeyError('observables not specified')
 
             h5fname = item['hdf5-file']
-            eos.info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+            eos.info(f'   plotting uncertainty propagation from file "{h5fname}"')
             uncfile = eos.data.UncertaintyDataFile(h5fname)
 
             self.observables    = item['observables']
@@ -754,7 +754,7 @@ class Plotter:
 
             for observable in self.observables:
                 if observable not in self.observable_map:
-                    raise ValueError('observable \'{}\' not contained in HDF5 file'.format(observable))
+                    raise ValueError(f'observable \'{observable}\' not contained in HDF5 file')
 
             self.samples = uncfile.data()
 
@@ -837,7 +837,7 @@ class Plotter:
             for name in self.names:
                 entry = constraints[name]
                 if not entry:
-                    raise ValueError('unknown constraint {}'.format(name))
+                    raise ValueError(f'unknown constraint {name}')
 
                 constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
 
@@ -969,7 +969,7 @@ class Plotter:
             constraints = eos.Constraints()
             entry = constraints[self.constraint]
             if not entry:
-                raise ValueError('unknown constraint {}'.format(constraint))
+                raise ValueError(f'unknown constraint {constraint}')
 
             constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
             if constraint['type'] not in ['Gaussian', 'MultivariateGaussian', 'MultivariateGaussian(Covariance)']:
@@ -1009,10 +1009,10 @@ class Plotter:
                     yobservable = (self.yobservable, self.ykinematics, self.yoptions)
 
                     if xobservable not in observables:
-                        raise ValueError('x-axis observable {} not contained in constraint {}'.format(self.xobservable, self.constraint))
+                        raise ValueError(f'x-axis observable {self.xobservable} not contained in constraint {self.constraint}')
 
                     if yobservable not in observables:
-                        raise ValueError('y-axis observable {} not contained in constraint {}'.format(self.yobservable, self.constraint))
+                        raise ValueError(f'y-axis observable {self.yobservable} not contained in constraint {self.constraint}')
 
                     xidx = observables.index(xobservable)
                     yidx = observables.index(yobservable)
@@ -1032,10 +1032,10 @@ class Plotter:
                     yobservable = (self.yobservable, self.ykinematics, self.yoptions)
 
                     if xobservable not in observables:
-                        raise ValueError('x-axis observable {} not contained in constraint {}'.format(self.xobservable, self.constraint))
+                        raise ValueError(f'x-axis observable {self.xobservable} not contained in constraint {self.constraint}')
 
                     if yobservable not in observables:
-                        raise ValueError('y-axis observable {} not contained in constraint {}'.format(self.yobservable, self.constraint))
+                        raise ValueError(f'y-axis observable {self.yobservable} not contained in constraint {self.constraint}')
 
                     xidx = observables.index(xobservable)
                     yidx = observables.index(yobservable)
@@ -1083,7 +1083,7 @@ class Plotter:
                     xobservable = (self.xobservable, self.xkinematics, self.xoptions)
 
                     if xobservable != observable:
-                        raise ValueError('x-axis observable {} not contained in constraint {}'.format(self.xobservable, self.constraint))
+                        raise ValueError(f'x-axis observable {self.xobservable} not contained in constraint {self.constraint}')
 
                     mean     = float(constraint['mean'])
                     sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2)
@@ -1110,7 +1110,7 @@ class Plotter:
                     yobservable = (self.yobservable, self.ykinematics, self.yoptions)
 
                     if yobservable != observable:
-                        raise ValueError('y-axis observable {} not contained in constraint {}'.format(self.yobservable, self.constraint))
+                        raise ValueError(f'y-axis observable {self.yobservable} not contained in constraint {self.constraint}')
 
                     mean     = float(constraint['mean'])
                     sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2)
@@ -1157,7 +1157,7 @@ class Plotter:
             for name in self.names:
                 entry = constraints[name]
                 if not entry:
-                    raise ValueError('unknown constraint {}'.format(name))
+                    raise ValueError(f'unknown constraint {name}')
 
                 constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
                 self.constraints.append(constraint)
@@ -1237,7 +1237,7 @@ class Plotter:
                 raise KeyError('no hdf5-file specified')
 
             h5fname = item['hdf5-file']
-            eos.info('   plotting 2D contours from file "{}"'.format(h5fname))
+            eos.info(f'   plotting 2D contours from file "{h5fname}"')
             datafile = eos.data.load_data_file(h5fname)
 
             if 'variables' not in item:
@@ -1362,7 +1362,7 @@ class Plotter:
                     raise KeyError('no variable specificed')
 
                 dfname = item['data-file']
-                eos.info('   plotting KDE for "{}"'.format(dfname))
+                eos.info(f'   plotting KDE for "{dfname}"')
                 prefix = os.path.split(dfname)[-1]
                 eos.info(f'   prefix = {prefix}')
                 if prefix.startswith('mcmc-'):
@@ -1513,7 +1513,7 @@ class Plotter:
             labels = []
             for level in self.levels:
                 plevels.append(scipy.optimize.brentq(plevel, 0., 1., args=(pdf, level / 100.0)))
-                labels.append('{}%'.format(level))
+                labels.append(f'{level}%')
 
             if 'areas' in self.contours:
                 colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
@@ -1603,7 +1603,7 @@ class Plotter:
             labels = []
             for level in self.levels:
                 plevels.append(scipy.optimize.brentq(plevel, 0., 1., args=(pdf, level / 100.0)))
-                labels.append('{}%'.format(level))
+                labels.append(f'{level}%')
 
             if 'areas' in self.contours:
                 colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
@@ -1704,7 +1704,7 @@ class Plotter:
                     raise KeyError('no variable specificed')
 
                 dfname = item['data-file']
-                eos.info('   plotting histogram from "{}"'.format(dfname))
+                eos.info(f'   plotting histogram from "{dfname}"')
                 prefix = os.path.split(dfname)[-1]
                 eos.info(f'   prefix = {prefix}')
                 if prefix.startswith('mcmc-'):
@@ -1827,7 +1827,7 @@ class Plotter:
         def plot(self):
             item = self.item
             pname = item['pdf']
-            eos.info('   plotting EOS PDF "{}"'.format(pname))
+            eos.info(f'   plotting EOS PDF "{pname}"')
 
             # create parameters
             parameters = eos.Parameters.Defaults()
@@ -1919,7 +1919,7 @@ class Plotter:
             elif hpos == 'center':
                 x = 0.5
             else:
-                raise ValueError('invalid horizontal position \'{}\''.format(hpos))
+                raise ValueError(f'invalid horizontal position \'{hpos}\'')
 
             if vpos == 'bottom':
                 y = 0 + ydelta
@@ -1928,15 +1928,15 @@ class Plotter:
             elif vpos == 'center':
                 y = 0.5
             else:
-                raise ValueError('invalid vertical position \'{}\''.format(hpos))
+                raise ValueError(f'invalid vertical position \'{hpos}\'')
 
             ax = self.plotter.ax
             color = 'OrangeRed'
-            version = 'v{version}'.format(version=eos.__version__)
+            version = f'v{eos.__version__}'
             if 'preliminary' in item and item['preliminary']:
                 color = 'red'
                 version = 'Preliminary'
-            ax.text(x, y, r'\textsf{{\textbf{{EOS {version}}}}}'.format(version=version),
+            ax.text(x, y, fr'\textsf{{\textbf{{EOS {version}}}}}',
                     transform=ax.transAxes,
                     color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
                     horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
@@ -1979,22 +1979,22 @@ class Plotter:
         plots = []
         for item in contents:
             if not type(item) is dict:
-                TypeError('wrong data type for content item {}'.format(str(item)))
+                TypeError(f'wrong data type for content item {str(item)}')
 
             name = item['name'] if 'name' in item else 'unnamed'
             if not 'type' in item:
-                raise KeyError('plot content "{}" has no type'.format(name))
+                raise KeyError(f'plot content "{name}" has no type')
             item_type = item['type']
 
             if 'name' not in item:
                 name = None
-                eos.debug('plotting anonymous contents of type \'{}\''.format(item_type))
+                eos.debug(f'plotting anonymous contents of type \'{item_type}\'')
             else:
                 name = item['name']
-                eos.info('plotting "{}"'.format(name))
+                eos.info(f'plotting "{name}"')
 
             if item_type not in self.plot_types:
-                KeyError('unknown content type: "{}"'.format(item_type))
+                KeyError(f'unknown content type: "{item_type}"')
 
             plots.append(self.plot_types[item_type](self, item))
 
