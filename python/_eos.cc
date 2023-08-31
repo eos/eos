@@ -319,7 +319,23 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__getitem__", (Parameter (Parameters::*)(const QualifiedName &) const) &Parameters::operator[])
         .def("by_id", (Parameter (Parameters::*)(const Parameter::Id &) const) &Parameters::operator[])
         .def("__iter__", range(&Parameters::begin, &Parameters::end))
-        .def("declare", &Parameters::declare, return_value_policy<return_by_value>())
+        .def("declare", &Parameters::declare, return_value_policy<return_by_value>(),
+            R"(
+            Declare a new parameter.
+
+            :param name: The name of the parameter to declare.
+            :type name: eos.QualifiedName
+            :param latex: The LaTeX representation for the parameter.
+            :type latex: str
+            :param unit: The unit in which the parameter is expressed.
+            :type unit: eos.Unit
+            :param value: The initial value for the parameter.
+            :type value: float
+            :param min: The minimum value that the parameter can attain.
+            :type min: float
+            :param max: The maximum value that the parameter can attain.
+            :type max: float
+            )", args("name", "latex", "unit", "value", "min", "max"))
         .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
         .def("set", &Parameters::set,
             R"(

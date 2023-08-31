@@ -49,6 +49,19 @@ class ParametersTest :
                 TEST_CHECK_EQUAL(m_c(), m_c.central());
             }
 
+            // Declaring a new parameter
+            {
+                Parameters original = Parameters::Defaults();
+                Parameter new_parameter = original.declare("mass::boeing747", R"(\text{Boeing 747})", Unit::Undefined(), 100000.0, 90000.0, 110000.0);
+
+                TEST_CHECK_EQUAL(new_parameter.name(),      "mass::boeing747");
+                TEST_CHECK_EQUAL(new_parameter.latex(),     R"(\text{Boeing 747})");
+                TEST_CHECK_EQUAL(new_parameter.unit(),      Unit::Undefined());
+                TEST_CHECK_EQUAL(new_parameter.evaluate(),  100000.0);
+                TEST_CHECK_EQUAL(new_parameter.min(),        90000.0);
+                TEST_CHECK_EQUAL(new_parameter.max(),       110000.0);
+            }
+
             // Cloning
             {
                 Parameters original = Parameters::Defaults();
