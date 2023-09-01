@@ -1,78 +1,56 @@
-#!/usr/bin/python3
-# vim: set sw=4 sts=4 et tw=120 :
-
 import eos
-import functools
 import re
-
-parameters = eos.Parameters.Defaults()
-
-replacements = [
-    (re.compile(r'(\\GeV)'),      r'\\text{GeV}'),
-    (re.compile(r'\$([^\$]*)\$'), r':math:`\1`'),
-]
+from jinja_util import print_template
 
 def latex_to_rst(s):
-    result = s
-    for regexp, repl in replacements:
-        result = regexp.sub(repl, result)
+    s = re.sub(r'\$([^\$]*)\$', r':math:`\1`', s) # inline math
+    s = re.sub(r'(\\begin{equation})([^\$]*?)(\\end{equation})', r'\n.. math::\n\2', s) # equation
+    s = re.sub(r'(\\begin{align})([^\$]*?)(\\end{align})', r'\n.. math::\n\2', s) # align
 
-    return(result)
+    return(s)
 
-def key(x):
-    if type(x[0]) is eos.QualifiedName:
-        return (str(x[0].prefix_part()), str(x[0].suffix_part()), str(x[0].name_part()))
-    elif type(x[0]) is str:
-        return ('', '', x[0])
-    else:
-        raise ValueError('x[0] is of unexpected type {}'.format(str(type(x[0]))))
+qn_to_link_map = {
+    ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
+    ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
+    ord('>'): 'to'
+}
 
-page_title = 'List of Parameters'
-print('#' * len(page_title))
-print(page_title)
-print('#' * len(page_title))
-print('\n')
-print('The following is the full list of parameters and their values used in EOS v{}.\n\n'.format(eos.__version__))
-for section in parameters.sections():
-    section_title = latex_to_rst(section.name())
-    print('*' * len(section_title))
-    print(section_title)
-    print('*' * len(section_title))
+# Mirror the EOS parameters hierarchy as structured string data: arrays of
+# dicts. Parameters are organised in groups, which are organised in sections.
 
-    for group in section:
-        group_title = latex_to_rst(group.name())
-        print(group_title)
-        print('=' * len(group_title))
+def make_doc_sections():
+    return [{
+        'name'  : latex_to_rst(section.name()),
+        'groups': make_doc_groups(section)
+        } for section in eos.Parameters().sections()]
 
-        print('\n')
-        print('.. list-table::')
-        print('   :widths: 25, 25, 25')
-        print('   :header-rows: 1')
-        print('')
-        print('   * - Qualified Name')
-        print('     - Representation')
-        print('     - Default Value')
+def make_doc_groups(section):
+    return [{
+        'name'       : latex_to_rst(group.name()),
+        'description': latex_to_rst(group.description()),
+        'parameters' : make_doc_parameters(group),
+        } for group in section]
 
-        group_parameters = []
-        for p in group:
-            name = None
-            try:
-                name = eos.QualifiedName(p.name())
-            except RuntimeError:
-                name = p.name()
+def make_doc_parameters(group):
+    parameters = []
+    for param in group:
+        qn = str(param.name())
 
-            latex = latex_to_rst(p.latex())
-            value = p.evaluate()
+        parameters.append({
+            'qualified_name': qn,
+            'latex'         : latex_to_rst(f'{param.latex()}'),
+            'unit'          : latex_to_rst(f'${param.unit().latex()}$'),
+            'value'         : param.evaluate(),
+            'link_key'      : qn.translate(qn_to_link_map).lower(),
+        })
 
-            group_parameters.append((name, latex, value))
+    return parameters
 
-        group_parameters.sort(key=key)
 
-        for qn, latex, value in group_parameters:
-            print('   * - ``{qn}``'.format(qn=qn))
-            if len(latex) > 0:
-                print('     - {latex}'.format(latex=latex))
-            else:
-                print('     - ---')
-            print('     - {value}'.format(value=value))
-        print('\n\n')
+if __name__ == '__main__':
+
+    print_template(__file__,
+        version = eos.__version__,
+        sections = make_doc_sections(),
+        len = len,
+    )
