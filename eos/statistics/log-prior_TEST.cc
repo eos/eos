@@ -46,6 +46,13 @@ class LogPriorTest :
             static const double mu_0 = 4.18;
             static const double lambda = 2.0;
 
+            const auto cdf = [](const LogPriorPtr & prior, Parameter & param, const double & x)
+            {
+                param.set(x);
+                prior->compute_cdf();
+                return param.evaluate_generator();
+            };
+
             const auto inverse_cdf = [](const LogPriorPtr & prior, Parameter & param, const double & p)
             {
                 param.set_generator(p);
@@ -211,6 +218,40 @@ class LogPriorTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.162651391807, parameters["B->K::alpha^fT_0@BSZ2015"], eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.790991231378, parameters["B->K::alpha^fT_1@BSZ2015"], eps);
                 TEST_CHECK_NEARLY_EQUAL(+4.223260161888, parameters["B->K::alpha^fT_2@BSZ2015"], eps);
+            }
+
+            // Poisson prior: k = 10.0
+            {
+                // use factory
+                static const double k = 10.0;
+
+                LogPriorPtr poisson_prior = LogPrior::Poisson(parameters, "mass::b(MSbar)", k);
+
+                Parameter param = parameters["mass::b(MSbar)"];
+
+                param = 3.0 / k;
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -4.815704593400,  eps);
+
+                param = 7.0 / k;
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -0.3427259895280, eps);
+
+                param = 10.0 / k;
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(),  0.2240234498590, eps);
+
+                param = 20.0 / k;
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -2.844504744542,  eps);
+
+                // CDF
+                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param,  5 / k), 0.013695268598, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param,  9 / k), 0.294011679659, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param, 11 / k), 0.540111297306, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param, 20 / k), 0.989188281173, eps);
+
+                // inverse CDF
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.05) * k,  6.169007289395323, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.25) * k,  8.619809702379529, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.90) * k, 15.40664117197652,  eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.95) * k, 16.9622192357219,   eps);
             }
 
             //Make

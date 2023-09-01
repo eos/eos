@@ -619,6 +619,74 @@ namespace eos
                     return true;
                 }
         };
+
+        /*!
+         * Poisson prior distribution
+         */
+        class Poisson :
+            public LogPrior
+        {
+            private:
+                Parameter _parameter;
+
+                std::string _name;
+
+                const double _k;
+
+                const double _ln_norm;
+
+            public:
+                Poisson(const Parameters & parameters, const std::string & name, const double & k) :
+                    LogPrior(parameters),
+                    _parameter(parameters[name]),
+                    _name(name),
+                    _k(k),
+                    _ln_norm(-1.0 * std::log(gsl_sf_gamma(_k + 1.0)) + std::log(_k))
+                    {
+                        _varied_parameters.push_back(_parameter);
+                    }
+
+                virtual ~Poisson()
+                {
+                }
+
+                virtual std::string as_string() const
+                {
+                    std::string result = "Parameter: " + _name + ", prior type: poisson";
+                    return result;
+                }
+
+                virtual double operator()() const
+                {
+                    double lambda = _parameter.evaluate() * _k;
+
+                    return _ln_norm - lambda + _k * std::log(lambda);
+                }
+
+                virtual LogPriorPtr clone(const Parameters & parameters) const
+                {
+                    return LogPriorPtr(new priors::Poisson(parameters, _name, _k));
+                }
+
+                virtual void sample()
+                {
+                    const double u = _parameter.evaluate_generator();
+                    const double lambda = gsl_cdf_gamma_Pinv(u, _k + 1.0, 1.0);
+                    _parameter.set(lambda / _k);
+                }
+
+                virtual void compute_cdf()
+                {
+                    const double lambda = _parameter.evaluate() * _k;
+                    const double u = gsl_cdf_gamma_P(lambda, _k + 1.0, 1.0);
+                    _parameter.set_generator(u);
+                }
+
+                virtual bool informative() const
+                {
+                    return true;
+                }
+        };
     }
 
     LogPrior::LogPrior(const Parameters & parameters) :
@@ -683,6 +751,14 @@ namespace eos
             gsl_vector * mean, gsl_matrix * covariance)
     {
         LogPriorPtr prior = std::make_shared<eos::priors::MultivariateGaussian>(parameters, names, mean, covariance);
+
+        return prior;
+    }
+
+    LogPriorPtr
+    LogPrior::Poisson(const Parameters & parameters, const std::string & name, const double & k)
+    {
+        LogPriorPtr prior = std::make_shared<eos::priors::Poisson>(parameters, name, k);
 
         return prior;
     }
