@@ -1,43 +1,43 @@
-#!/usr/bin/python3
-# vim: set sw=4 sts=4 et tw=120 :
-
 import eos
 import re
 import yaml
-
-constraints = eos.Constraints()
+from jinja_util import print_template
 
 def latex_to_rst(s):
     return(re.sub(r'\$([^\$]*)\$', r':math:`\1`', s))
 
-page_title = 'List of Constraints'
-print('#' * len(page_title))
-print(page_title)
-print('#' * len(page_title))
-print('\n')
-print('The following is the full list of likelihood constraints (both experimental and theoretical) included in EOS v{}.\n\n'.format(eos.__version__))
-print('\n')
-print('.. list-table::')
-print('   :widths: 50,50')
-print('   :header-rows: 1')
-print('')
-print('   * - Qualified Name')
-print('     - Observables')
-for qn, entry in constraints:
-    print('   * - ``{qn}``'.format(qn=qn))
-    data = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
-    translation = {
-        ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
-        ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
-        ord('>'): 'to'
-    }
-    unique_observables = ''
-    if 'observable' in data:
-        unique_observables = {str(data['observable'])}
-    elif 'observables' in data:
-        unique_observables = {str(o) for o in data['observables']}
+qn_to_link_map = {
+    ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
+    ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
+    ord('>'): 'to'
+}
 
-    entries = ['`{qn} <observables.html#{anchor}>`_'.format(qn=qn, anchor=qn.translate(translation).lower()) for qn in unique_observables]
-    observables = ', '.join(entries)
-    print('     - {}'.format(observables))
-print('\n\n')
+def make_constraints():
+    result = []
+    for qn, entry in eos.Constraints():
+        data = yaml.safe_load(entry.serialize())
+
+        if 'observable' in data:
+            unique_observables = { str(data['observable']) }
+        elif 'observables' in data:
+            unique_observables = { str(o) for o in data['observables'] }
+
+        observable_entries = []
+        for oqn in unique_observables:
+            anchor = oqn.translate(qn_to_link_map).lower()
+            observable_entries.append(f'`{ oqn } <observables.html#{ anchor }>`_')
+
+        constraint = {
+            'observables': ', '.join(observable_entries)
+        }
+        result.append((qn, constraint))
+
+    return result
+
+if __name__ == '__main__':
+
+    print_template(__file__,
+        version = eos.__version__,
+        constraints = make_constraints(),
+        len = len,
+    )
