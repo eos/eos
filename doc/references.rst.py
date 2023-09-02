@@ -2,8 +2,8 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 import eos
-import functools
 import re
+from jinja_util import print_template
 
 replacements = [
     (re.compile(r'(\\GeV)'),      r'\\text{GeV}'),
@@ -25,19 +25,25 @@ def id_to_eprint_url(eprint_id):
     return None, None
 
 
-page_title = 'List of References'
-print('#' * len(page_title))
-print(page_title)
-print('#' * len(page_title))
-print('\n')
-print('''
-The following is the full list of references that were used to implement theory codes and provide likelihood constraints
-or parameter values within EOS v{}.\n\n'''.format(eos.__version__))
-for handle, reference in eos.References():
-    title = latex_to_rst(reference.title())
-    eprint, url = id_to_eprint_url(reference.eprint_id())
-    print('.. [{handle}] {authors} {delim}'.format(handle=handle, authors=reference.authors(), delim='--' if title else ''))
-    print('   {title} {delim}'.format(title=title, delim='--' if eprint else ''))
-    if eprint:
-        print('   `{eprint} <{url}>`_'.format(eprint=eprint,url=url))
-    print()
+def make_references():
+    result = []
+    for handle, reference in eos.References():
+        title = latex_to_rst(reference.title())
+        eprint, url = id_to_eprint_url(reference.eprint_id())
+        data = {
+            'authors': reference.authors(),
+            'title':   title,
+            'eprint':  eprint,
+            'url':     url
+        }
+        result.append((handle, data))
+    return result
+
+
+if __name__ == '__main__':
+
+    print_template(__file__,
+        version = eos.__version__,
+        references = make_references(),
+        len = len,
+    )

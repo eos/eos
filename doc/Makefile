@@ -28,8 +28,6 @@ html: source Makefile
 # The already templated targets are covered automatically further below.
 constraints.rst: constraints.rst.py
 	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
-references.rst: references.rst.py
-	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
 
 %.rst: %.rst.py %.rst.jinja
 	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
