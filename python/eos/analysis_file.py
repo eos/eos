@@ -2,6 +2,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 # Copyright (c) 2020-2023 Danny van Dyk
+# Copyright (c) 2023 Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -115,24 +116,53 @@ class AnalysisFile:
 
         likelihood = []
         manual_constraints = {}
+        external_likelihood = []
         for lh in posterior['likelihood']:
-            LH_ALLOWED_KEYS = { 'name', 'constraints', 'manual_constraints' }
+            LH_ALLOWED_KEYS = { 'name', 'constraints', 'manual_constraints', 'pyhf'}
             for key in self._likelihoods[lh]:
                 if key not in LH_ALLOWED_KEYS:
                     raise KeyError(f"Unsupported key in 'likelihoods['{lh}']': {key}")
 
-            if 'constraints' not in self._likelihoods[lh] and 'manual_constraints' not in self._likelihoods[lh]:
-                raise KeyError(f'Missing entry in \'likelihoods[\'{lh}\']\': neither \'constraints\' nor \'manual_constraints\' is provided')
+            if 'constraints' not in self._likelihoods[lh] and 'manual_constraints' not in self._likelihoods[lh] and 'pyhf' not in self._likelihoods[lh]:
+                raise KeyError(f'Missing entry in \'likelihoods[\'{lh}\']\': need exactly one of: \'constraints\', \'manual_constraints\' or \'pyhf\'')
 
             likelihood.extend(self._likelihoods[lh]['constraints'] if 'constraints' in self._likelihoods[lh] else [])
             manual_constraints.update(self._likelihoods[lh]['manual_constraints'] if 'manual_constraints' in self._likelihoods[lh] else {})
 
+            # create a pyhf likelihood
+            parameters = None
+            if 'pyhf' in self._likelihoods[lh]:
+                workspace = self._likelihoods[lh]['pyhf']['file']
+                parameter_map = self._likelihoods[lh]['pyhf']['parameter_map'] if 'parameter_map' in self._likelihoods[lh]['pyhf'] else []
+                parameters = eos.Parameters()
+                cache = eos.ObservableCache(parameters)
+
+                # extend prior
+                pyhf_priors = eos.PyhfLogLikelihood.factory(cache, workspace, parameter_map).priors()
+                existing_priors = [prior['parameter'] for prior in prior]
+                # only add missing pyhf priors
+                for pyhf_prior in pyhf_priors:
+                    if pyhf_prior['parameter'] not in existing_priors:
+                        eos.info(f'pyhf workspace parameter {pyhf_prior["parameter"]} added to prior; manually specify this prior to overwrite settings')
+                        prior.append(pyhf_prior)
+
+                # create likelihood block
+                llh_block = eos.LogLikelihoodBlock.External(
+                                cache,
+                                lambda cache: eos.PyhfLogLikelihood.factory(cache, workspace, parameter_map)
+                                )
+
+                external_likelihood.extend([llh_block])
+
         global_options = posterior['global_options'] if 'global_options' in posterior else {}
         fixed_parameters = posterior['fixed_parameters'] if 'fixed_parameters' in posterior else {}
 
-        return eos.Analysis(prior, likelihood, global_options,
+        return eos.Analysis(prior, likelihood,
+                            external_likelihood=external_likelihood,
+                            global_options=global_options,
                             manual_constraints=manual_constraints,
-                            fixed_parameters=fixed_parameters)
+                            fixed_parameters=fixed_parameters,
+                            parameters=parameters)
 
 
     def observables(self, _posterior, _prediction, parameters):
