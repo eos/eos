@@ -546,6 +546,24 @@ groups:
     description: ''
     parameters:
       # Mean life times
+      'life_time::D_d' :
+          central: +1.033e-12
+          min:     +1.028e-12
+          max:     +1.038e-12
+          unit:     's'
+          latex:    '$\tau_{D^+}$'
+      'life_time::D_u' :
+          central: +4.103e-13
+          min:     +4.093e-13
+          max:     +4.113e-13
+          unit:     's'
+          latex:    '$\tau_{D^0}$'
+      'life_time::D_s' :
+          central: +5.04e-13
+          min:     +5.00e-13
+          max:     +5.08e-13
+          unit:     's'
+          latex:    '$\tau_{D_s}$'
       'life_time::B_d' :
           central: +1.519e-12
           min:     +1.512e-12
