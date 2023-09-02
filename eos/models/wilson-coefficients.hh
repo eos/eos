@@ -46,7 +46,11 @@ namespace eos
         /*
          * We follow the definition of [FMvD2013], eqs. (1) and (2), p. 2.
          * This coincides with the Bern basis of class II operators in Ref.
-         * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_qb.
+         * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_Ub, where U=u,c.
+         *
+         * We also use this class for semileptonic operators of type Dcnul,
+         * i.e., scnul or dcnul. In this case, the normalization uses V_cD,
+         * where D=d,s.
          */
 
         /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T, or equivalently: 1, 1', 5, 5', 7'. */
