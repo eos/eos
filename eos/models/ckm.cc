@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015 Danny van Dyk
+ * Copyright (c) 2014-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -117,7 +117,8 @@ namespace eos
         SMComponent<components::WET::UBLNu>(parameters, *this),
         SMComponent<components::WET::SBNuNu>(parameters, *this),
         SMComponent<components::WET::SBCU>(parameters, *this),
-        SMComponent<components::WET::DBCU>(parameters, *this)
+        SMComponent<components::WET::DBCU>(parameters, *this),
+        SMComponent<components::WET::SCNuL>(parameters, *this)
     {
     }
 

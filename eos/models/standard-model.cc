@@ -1105,6 +1105,29 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::WET::SCNuL>::SMComponent(const Parameters & p, ParameterUser & u) :
+        _alpha_e__scnul(p["QED::alpha_e(m_c)"], u),
+        _m_Z__scnul(p["mass::Z"], u),
+        _mu__scnul{ UsedParameter(p["scnuee::mu"], u), UsedParameter(p["scnumumu::mu"], u), UsedParameter(p["scnutautau::mu"], u) }
+    {
+    }
+
+    WilsonCoefficients<bern::ClassII>
+    SMComponent<components::WET::SCNuL>::wet_scnul(LeptonFlavor lepton_flavor, const bool & /* cp_conjugate */) const
+    {
+        // determine renormalization scale
+        const double mu = _mu__scnul[static_cast<size_t>(lepton_flavor)];
+
+        // compute universal electroweak correction, cf. [S:1982A], eq. (1) with Qbar = 1 / 6.
+        const double etaEW = 1.0 + _alpha_e__scnul / M_PI * std::log(_m_Z__scnul / mu);
+
+        WilsonCoefficients<bern::ClassII> wc;
+        wc._coefficients.fill(complex<double>(0.0));
+        wc._coefficients[0] = complex<double>(etaEW);
+
+        return wc;
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
@@ -1114,7 +1137,8 @@ namespace implementation
         SMComponent<components::WET::UBLNu>(p, *this),
         SMComponent<components::WET::SBNuNu>(p, *this),
         SMComponent<components::WET::SBCU>(p, *this),
-        SMComponent<components::WET::DBCU>(p, *this)
+        SMComponent<components::WET::DBCU>(p, *this),
+        SMComponent<components::WET::SCNuL>(p, *this)
     {
     }
 

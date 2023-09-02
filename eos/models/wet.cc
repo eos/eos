@@ -579,6 +579,111 @@ namespace eos
         return result;
     }
 
+    /* c->s l nu Wilson coefficients */
+    WilsonScanComponent<components::WET::SCNuL>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _e_re_csl(p["scnuee::Re{cSL}"], u),
+        _e_im_csl(p["scnuee::Im{cSL}"], u),
+        _e_re_csr(p["scnuee::Re{cSR}"], u),
+        _e_im_csr(p["scnuee::Im{cSR}"], u),
+        _e_re_cvl(p["scnuee::Re{cVL}"], u),
+        _e_im_cvl(p["scnuee::Im{cVL}"], u),
+        _e_re_cvr(p["scnuee::Re{cVR}"], u),
+        _e_im_cvr(p["scnuee::Im{cVR}"], u),
+        _e_re_ct(p["scnuee::Re{cT}"], u),
+        _e_im_ct(p["scnuee::Im{cT}"], u),
+
+        _mu_re_csl(p["scnumumu::Re{cSL}"], u),
+        _mu_im_csl(p["scnumumu::Im{cSL}"], u),
+        _mu_re_csr(p["scnumumu::Re{cSR}"], u),
+        _mu_im_csr(p["scnumumu::Im{cSR}"], u),
+        _mu_re_cvl(p["scnumumu::Re{cVL}"], u),
+        _mu_im_cvl(p["scnumumu::Im{cVL}"], u),
+        _mu_re_cvr(p["scnumumu::Re{cVR}"], u),
+        _mu_im_cvr(p["scnumumu::Im{cVR}"], u),
+        _mu_re_ct(p["scnumumu::Re{cT}"], u),
+        _mu_im_ct(p["scnumumu::Im{cT}"], u),
+
+        _tau_re_csl(p["scnutautau::Re{cSL}"], u),
+        _tau_im_csl(p["scnutautau::Im{cSL}"], u),
+        _tau_re_csr(p["scnutautau::Re{cSR}"], u),
+        _tau_im_csr(p["scnutautau::Im{cSR}"], u),
+        _tau_re_cvl(p["scnutautau::Re{cVL}"], u),
+        _tau_im_cvl(p["scnutautau::Im{cVL}"], u),
+        _tau_re_cvr(p["scnutautau::Re{cVR}"], u),
+        _tau_im_cvr(p["scnutautau::Im{cVR}"], u),
+        _tau_re_ct(p["scnutautau::Re{cT}"], u),
+        _tau_im_ct(p["scnutautau::Im{cT}"], u),
+
+        _e_csl(std::bind(&wcimplementation::cartesian, _e_re_csl, _e_im_csl)),
+        _e_csr(std::bind(&wcimplementation::cartesian, _e_re_csr, _e_im_csr)),
+        _e_cvl(std::bind(&wcimplementation::cartesian, _e_re_cvl, _e_im_cvl)),
+        _e_cvr(std::bind(&wcimplementation::cartesian, _e_re_cvr, _e_im_cvr)),
+        _e_ct(std::bind(&wcimplementation::cartesian, _e_re_ct, _e_im_ct)),
+
+        _mu_csl(std::bind(&wcimplementation::cartesian, _mu_re_csl, _mu_im_csl)),
+        _mu_csr(std::bind(&wcimplementation::cartesian, _mu_re_csr, _mu_im_csr)),
+        _mu_cvl(std::bind(&wcimplementation::cartesian, _mu_re_cvl, _mu_im_cvl)),
+        _mu_cvr(std::bind(&wcimplementation::cartesian, _mu_re_cvr, _mu_im_cvr)),
+        _mu_ct(std::bind(&wcimplementation::cartesian, _mu_re_ct, _mu_im_ct)),
+
+        _tau_csl(std::bind(&wcimplementation::cartesian, _tau_re_csl, _tau_im_csl)),
+        _tau_csr(std::bind(&wcimplementation::cartesian, _tau_re_csr, _tau_im_csr)),
+        _tau_cvl(std::bind(&wcimplementation::cartesian, _tau_re_cvl, _tau_im_cvl)),
+        _tau_cvr(std::bind(&wcimplementation::cartesian, _tau_re_cvr, _tau_im_cvr)),
+        _tau_ct(std::bind(&wcimplementation::cartesian, _tau_re_ct, _tau_im_ct))
+    {
+    }
+
+    WilsonCoefficients<bern::ClassII>
+    WilsonScanComponent<components::WET::SCNuL>::wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
+    {
+        std::function<complex<double> ()> cvl;
+        std::function<complex<double> ()> cvr;
+        std::function<complex<double> ()> csl;
+        std::function<complex<double> ()> csr;
+        std::function<complex<double> ()> ct;
+
+        if (LeptonFlavor::electron == lepton_flavor)
+        {
+            cvl = _e_cvl;   cvr = _e_cvr;
+            csl = _e_csl;   csr = _e_csr;
+            ct = _e_ct;
+        }
+        else if (LeptonFlavor::muon == lepton_flavor)
+        {
+            cvl = _mu_cvl;   cvr = _mu_cvr;
+            csl = _mu_csl;   csr = _mu_csr;
+            ct = _mu_ct;
+        }
+        else if (LeptonFlavor::tauon == lepton_flavor)
+        {
+            cvl = _tau_cvl;   cvr = _tau_cvr;
+            csl = _tau_csl;   csr = _tau_csr;
+            ct = _tau_ct;
+        }
+        else
+        {
+            throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavors");
+        }
+
+        WilsonCoefficients<ChargedCurrent> result
+        {
+            {{
+                cvl(), cvr(), csl(), csr(), ct()
+            }},
+        };
+
+        if (cp_conjugate)
+        {
+            for (auto & _coefficient : result._coefficients)
+            {
+                _coefficient = conj(_coefficient);
+            }
+        }
+
+        return result;
+    }
+
     ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
@@ -614,7 +719,8 @@ namespace eos
         WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::DBCU>(parameters, options, *this)
+        WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this)
     {
     }
 
@@ -637,7 +743,8 @@ namespace eos
         WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::DBCU>(parameters, options, *this)
+        WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this)
     {
     }
 
