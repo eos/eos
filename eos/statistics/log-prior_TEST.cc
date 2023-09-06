@@ -76,7 +76,7 @@ class LogPriorTest :
 
 
             /*
-             * gaussian prior
+             * curtailed gaussian prior
              * compare with
              *   import scipy.stats
              *   a = scipy.stats.norm.cdf(4.57, loc=4.3, scale=0.2) - 0.5
@@ -168,6 +168,36 @@ class LogPriorTest :
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.0), mu_0 / lambda, eps);
                 // upper boundary at p = 1.0
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 1.0), mu_0 * lambda, eps);
+            }
+
+            // Gaussian prior (w/ infinite support)
+            {
+                // use factory
+                static const double mu    = 0.5;
+                static const double sigma = 0.25;
+                LogPriorPtr gaussian_prior = LogPrior::Gaussian(parameters, "mass::b(MSbar)", mu, sigma);
+
+                Parameter param = parameters["mass::b(MSbar)"];
+
+                param = -0.5;
+                TEST_CHECK_NEARLY_EQUAL((*gaussian_prior)(), -7.532644172085, eps);
+
+                param =  0.5;
+                TEST_CHECK_NEARLY_EQUAL((*gaussian_prior)(), +0.467355827915, eps);
+
+                param = +1.5;
+                TEST_CHECK_NEARLY_EQUAL((*gaussian_prior)(), -7.532644172085, eps);
+
+                // CDF
+                TEST_CHECK_NEARLY_EQUAL(cdf(gaussian_prior, param, -0.5), 0.000031671242, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(gaussian_prior, param, +0.5), 0.500000000000, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(gaussian_prior, param, +1.5), 0.999968328758, eps);
+
+                // inverse CDF
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.005), -0.1439573258872, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.250),  0.3313775624510, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.900),  0.8203878913862, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.950),  0.9112134067379, eps);
             }
 
             // Multivariate Gaussian
