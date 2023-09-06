@@ -125,6 +125,7 @@ namespace eos
 
             ///@name Named constructors for prior distributions with infinite support
             ///@{
+            static LogPriorPtr Gaussian(const Parameters & parameters, const QualifiedName & name, const double & mu, const double & sigma);
             static LogPriorPtr MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names,
                     gsl_vector * mean, gsl_matrix * covariance);
             static LogPriorPtr Poisson(const Parameters & parameters, const std::string & name, const double & k);

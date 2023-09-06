@@ -367,6 +367,74 @@ namespace eos
         };
 
         /*!
+         * Gaussian prior distribution
+         */
+        class Gaussian :
+            public LogPrior
+        {
+            private:
+                Parameter _parameter;
+
+                QualifiedName _name;
+
+                const double _mu;
+
+                const double _sigma;
+
+                const double _ln_norm;
+
+            public:
+                Gaussian(const Parameters & parameters, const QualifiedName & name, const double & mu, const double & sigma) :
+                    LogPrior(parameters),
+                    _parameter(parameters[name]),
+                    _name(name),
+                    _mu(mu),
+                    _sigma(sigma),
+                    _ln_norm(-0.5 * std::log(2 * M_PI) - std::log(sigma))
+                {
+                }
+
+                ~Gaussian() = default;
+
+                virtual std::string as_string() const
+                {
+                    std::string result = "Parameter: " + _name.full() + ", prior type: gaussian";
+                    return result;
+                }
+
+                virtual double operator()() const
+                {
+                    double x = _parameter.evaluate();
+
+                    return _ln_norm - 0.5 * power_of<2>((x - _mu) / _sigma);
+                }
+
+                virtual LogPriorPtr clone(const Parameters & parameters) const
+                {
+                    return LogPriorPtr(new priors::Gaussian(parameters, _name, _mu, _sigma));
+                }
+
+                virtual void sample()
+                {
+                    const double u = _parameter.evaluate_generator();
+                    const double x = gsl_cdf_gaussian_Pinv(u, _sigma) + _mu;
+                    _parameter.set(x);
+                }
+
+                virtual void compute_cdf()
+                {
+                    const double x = _parameter.evaluate();
+                    const double u = gsl_cdf_gaussian_P(x - _mu, _sigma);
+                    _parameter.set_generator(u);
+                }
+
+                virtual bool informative() const
+                {
+                    return true;
+                }
+        };
+
+        /*!
          * Multivariate Gaussian prior distribution
          */
         class MultivariateGaussian :
@@ -742,6 +810,14 @@ namespace eos
             throw InternalError("LogPrior::Scale: scale factor lambda must be strictly larger than 1");
 
         LogPriorPtr prior = std::make_shared<eos::priors::Scale>(parameters, name, min, max, mu_0, lambda);
+
+        return prior;
+    }
+
+    LogPriorPtr
+    LogPrior::Gaussian(const Parameters & parameters, const QualifiedName & name, const double & mu, const double & sigma)
+    {
+        LogPriorPtr prior = std::make_shared<eos::priors::Gaussian>(parameters, name, mu, sigma);
 
         return prior;
     }
