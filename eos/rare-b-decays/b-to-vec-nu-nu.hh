@@ -40,9 +40,11 @@ namespace eos
 
             // Single-differential Observables
             double differential_branching_ratio(const double & q2) const;
+            double differential_longitudinal_polarisation(const double & q2) const;
 
             // Integrated Observables
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
