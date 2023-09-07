@@ -3108,6 +3108,16 @@ namespace eos
                         Unit::None(),
                         &BToVectorDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "D", "s" }, { "I", "1/2" } }),
+                make_observable("B->K^*nunu::F_L(q2)", R"(F_L(\bar{B}\to \bar{K}^*\nu\bar\nu)(q^2))",
+                        Unit::None(),
+                        &BToVectorDineutrino::differential_longitudinal_polarisation,
+                        std::make_tuple("q2"),
+                        Options{ { "D", "s" }, { "I", "1/2" } }),
+                make_observable("B->K^*nunu::F_L", R"(F_L(\bar{B}\to \bar{K}^*\nu\bar\nu))",
+                        Unit::None(),
+                        &BToVectorDineutrino::integrated_longitudinal_polarisation,
+                        std::make_tuple("q2_min", "q2_max"),
                         Options{ { "D", "s" }, { "I", "1/2" } })
             }
         );
@@ -3133,6 +3143,16 @@ namespace eos
                 make_observable("B_s->phinunu::BR", R"(\mathcal{B}(\bar{B}_s\to\phi\nu\bar\nu))",
                         Unit::None(),
                         &BToVectorDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } }),
+                make_observable("B_s->phinunu::F_L(q2)", R"(F_L(\bar{B}_s\to\phi\nu\bar\nu)(q^2))",
+                        Unit::None(),
+                        &BToVectorDineutrino::differential_longitudinal_polarisation,
+                        std::make_tuple("q2"),
+                        Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } }),
+                make_observable("B_s->phinunu::F_L", R"(F_L(\bar{B}_s\to\phi\nu\bar\nu))",
+                        Unit::None(),
+                        &BToVectorDineutrino::integrated_longitudinal_polarisation,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "D", "s" }, { "q", "s" }, { "I", "0" } })
             }

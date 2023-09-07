@@ -196,6 +196,30 @@ namespace eos
             return 3.0 * norm * (contr_vector + contr_axial);
         }
 
+        // differential longitudinal width
+        double differential_longitudinal_width(const double & q2) const
+        {
+            const double m_B = this->m_B(), m_B2 = m_B * m_B;
+            const double m_V = this->m_V(), m_V2 = m_V * m_V;
+            const double lambda = eos::lambda(m_B2, m_V2, q2), sqrt_lambda = std::sqrt(lambda);
+
+            const auto wc = this->wc();
+
+            const double A12 = form_factors->a_12(q2);
+
+            // using different normalization than [FLS:2021A], eq. (1)
+            // note that eq. (1) is a Lagrangian, while we use the Hamiltonian definition
+            const double norm = power_of<2>(4.0 * g_fermi() * alpha_e / (2.0 * M_PI)) / 2.0 * std::norm(lambda_t())
+                // remainder as in [FLS:2021A], eq. (13), except for moving the q2 factor into the square brackets
+                * sqrt_lambda / (power_of<3>(4.0 * M_PI * m_B));
+
+            // first term in square brackets in [FLS:2021A], eq. (13)
+            const double contr_longitudinal  = 8.0 * m_B2 * m_V2 / 3.0 * A12 * A12 * std::norm(wc.cVL() - wc.cVR());
+
+            // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
+            return 3.0 * norm * contr_longitudinal;
+        }
+
         // differential branching_ratio
         double differential_branching_ratio(const double & s) const
         {
@@ -237,12 +261,30 @@ namespace eos
     }
 
     double
+    BToVectorDineutrino::differential_longitudinal_polarisation(const double & q2) const
+    {
+        return _imp->differential_longitudinal_width(q2) / _imp->differential_decay_width(q2);
+    }
+
+    double
     BToVectorDineutrino::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<BToVectorDineutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
 
         return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
+    }
+
+    double
+    BToVectorDineutrino::integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const
+    {
+        std::function<double (const double &)> longitudinal_width = std::bind(&Implementation<BToVectorDineutrino>::differential_longitudinal_width,
+                _imp.get(), std::placeholders::_1);
+        std::function<double (const double &)> decay_width = std::bind(&Implementation<BToVectorDineutrino>::differential_decay_width,
+                _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(longitudinal_width, q2_min, q2_max, _imp->int_config) /
+            integrate<GSL::QAGS>(decay_width, q2_min, q2_max, _imp->int_config);
     }
 
     const std::string
