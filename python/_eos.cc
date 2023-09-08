@@ -797,6 +797,34 @@ BOOST_PYTHON_MODULE(_eos)
             :type lambda: float, strictly positive
         )", args("parameters", "name", "min", "max", "mu_0", "scale"))
         .staticmethod("Scale")
+        .def("Gaussian", &LogPrior::Gaussian, return_value_policy<return_by_value>(), R"(
+            Returns a new Gaussian prior as a LogPrior.
+
+            The priors support is infinite. The mode is provided by the parameter ``mu`` and
+            the standard deviation by the parameter ``sigma``.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: str
+            :param mu: The mode of the prior.
+            :type mu: float
+            :param sigma: The standard deviation of the prior.
+            :type sigma: float, strictly positive
+        )", args("parameters", "name", "mu", "sigma"))
+        .staticmethod("Gaussian")
+        .def("Poisson", &LogPrior::Poisson, return_value_policy<return_by_value>(), R"(
+            Returns a new Poisson prior as a LogPrior.
+
+            The priors support is infinite. The mode is provided by the parameter ``k``.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: str
+            :param k: The mode of the prior.
+            :type k: float, strictly positive
+        )", args("parameters", "name", "k"))
         .def("evaluate", &LogPrior::operator(), R"(
             Returns the logarithm of the prior's probability density at the current parameter values.
         )")
