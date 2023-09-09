@@ -52,6 +52,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 todo_include_todos = True
 
+# Suppress 'WARNING: Citation [...] is not referenced.' messages.
+# Implemented references need to be listed as documentation itself and should
+# also be available for citation in other parts of the documentation.
+# Many references, however, remain intentionally uncited.
+suppress_warnings = ['ref.citation']
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
