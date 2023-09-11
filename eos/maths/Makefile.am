@@ -9,6 +9,7 @@ lib_LTLIBRARIES = libeosmaths.la
 libeosmaths_la_SOURCES = \
 	complex.hh \
 	derivative.cc derivative.hh \
+	gegenbauer-polynomial.cc gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	integrate-cubature.cc integrate-cubature.hh \
@@ -38,6 +39,7 @@ include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
 	complex.hh \
 	derivative.hh \
+	gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.hh \
 	integrate-cubature.hh \
@@ -55,6 +57,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	derivative_TEST \
+	gegenbauer-polynomial_TEST \
 	gsl-interface_TEST \
 	integrate_TEST \
 	interpolation_TEST \
@@ -74,6 +77,8 @@ LDADD = \
 check_PROGRAMS = $(TESTS)
 
 derivative_TEST_SOURCES = derivative_TEST.cc
+
+gegenbauer_polynomial_TEST_SOURCES = gegenbauer-polynomial_TEST.cc
 
 gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
 
