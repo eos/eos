@@ -878,7 +878,7 @@ groups:
   # cblnu WET Parameters
   # {{{
   - title: '$\bar{c}b\bar{\ell}\nu$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the Wilson coefficients of $\bar{c}b\bar{\ell}\nu$ operators in the effective Lagrangian
         \begin{equation}
           \mathcal{H}^{\bar{c}b\bar{\ell}\nu}_\mathrm{eff}
@@ -1101,7 +1101,7 @@ groups:
   # ublnu WET Parameters
   # {{{
   - title: '$\bar{u}b\bar{\ell}\nu$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the Wilson coefficients of $\bar{u}b\bar{\ell}\nu$ operators in the effective Lagrangian
         \begin{equation}
           \mathcal{H}^{\bar{u}b\bar{\ell}\nu}_\mathrm{eff}
@@ -1323,16 +1323,16 @@ groups:
   # sbnunu WET Parameters
   # {{{
   - title: '$\bar{s}b\bar{\nu}\nu$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients in the effective Hamiltonian
         \begin{equation}
           \mathcal{H}^{\bar{s}b\bar{\nu}\nu}_\mathrm{eff}
           = \frac{4 G_F}{\sqrt{2}} \frac{\alpha_e}{2 \pi} V_{tb}^* V_{ts} \sum_i \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_i \mathcal{O}^{\bar{s}b\bar{\nu}\nu}_i\,.
         \end{equation}
         The operators read:
-        \begin{align}
-          \mathcal{O}_{L(R)} & = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{\ell} \gamma_\mu P_L \nu_\ell]
-        \end{align}
+        \begin{equation}
+          \mathcal{O}_{L(R)} = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{\ell} \gamma_\mu P_L \nu_\ell]
+        \end{equation}
 
     wcxf-relevant: true
     parameters:
@@ -1404,16 +1404,16 @@ groups:
   # sbcu WET Parameters
   # {{{
   - title: '$\bar{s}b\bar{c}u$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the $\bar{s}b\bar{c}u$ Wilson coefficients in the effective Hamiltonian
         \begin{equation}
           \mathcal{H}^{\bar{s}b\bar{c}u}_\mathrm{eff}
           = \frac{4 G_F}{\sqrt{2}} V_{cb} V_{us}^* \sum_i \mathcal{C}^{\bar{s}b\bar{c}u}_i \mathcal{O}^{\bar{s}b\bar{c}u}_i\,.
         \end{equation}
         The operators read:
-        \begin{align}
-          \mathcal{O}_{1(')} & = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{c} \gamma_\mu u]
-        \end{align}
+        \begin{equation}
+          \mathcal{O}_{1(')} = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{c} \gamma_\mu u]
+        \end{equation}
 
     wcxf-relevant: true
     parameters:
@@ -1634,16 +1634,16 @@ groups:
   # dbcu WET Parameters
   # {{{
   - title: '$\bar{d}b\bar{c}u$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the $\bar{d}b\bar{c}u$ Wilson coefficients in the effective Hamiltonian
         \begin{equation}
           \mathcal{H}^{\bar{d}b\bar{c}u}_\mathrm{eff}
           = \frac{4 G_F}{\sqrt{2}} V_{cb} V_{ud}^* \sum_i \mathcal{C}^{\bar{d}b\bar{c}u}_i \mathcal{O}^{\bar{d}b\bar{c}u}_i\,.
         \end{equation}
         The operators read:
-        \begin{align}
-          \mathcal{O}_{1(')} & = [\bar{d} \gamma^\mu P_{L(R)} b]\, [\bar{c} \gamma_\mu u]
-        \end{align}
+        \begin{equation}
+          \mathcal{O}_{1(')} = [\bar{d} \gamma^\mu P_{L(R)} b]\, [\bar{c} \gamma_\mu u]
+        \end{equation}
 
     wcxf-relevant: true
     parameters:
