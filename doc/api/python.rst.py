@@ -36,9 +36,14 @@ for plot_key, plot_class in reg.items():
         # Do not show in docs when no doc string is present
         pass
 
+# Document eos.tasks automatically
+excluded_tasks = ['run']
+task_names = [task.__name__ for task in eos.tasks._tasks.values() if task.__name__ not in excluded_tasks]
+task_names = sorted(task_names)
 
 print_template(__file__,
     plot_types = plot_types,
     figure_item_types = figure_item_types,
-    figure_plot_types = figure_plot_types
+    figure_plot_types = figure_plot_types,
+    task_names = task_names
 )
