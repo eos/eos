@@ -45,22 +45,22 @@ class LoopParameterTest :
                 /* Check, that the square root in C++ of complex arguments is handled correctly */
 
                 static const complex<double> m1(-1.0, 0.0);
-                TEST_CHECK_NEARLY_EQUAL(0.0, std::sqrt(m1).real(), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.0, std::sqrt(m1).imag(), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::sqrt(m1).real(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::sqrt(m1).imag(), 1.0, eps);
 
                 /* Comparison with Mathematica results */
 
-                TEST_CHECK_NEARLY_EQUAL(1.5811388300841895,     testclp.xa.real(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.7745966689726898,     testclp.xb.real(), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.5811388300841895,     testclp.xc.real(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.7745966689726898,     testclp.xd.real(), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.5811388300841895,     testclp.xe.real(), eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xa.real(), 1.5811388300841895,     eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xb.real(), 0.7745966689726898,     eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xc.real(), 1.5811388300841895,     eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xd.real(), 0.7745966689726898,     eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xe.real(), 1.5811388300841895,     eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-6.719840027857805e-10, testclp.xa.imag(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.6324555318142068,     testclp.xb.imag(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-6.719840027857805e-10, testclp.xc.imag(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.6324555318142068,     testclp.xd.imag(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-6.719840027857805e-10, testclp.xe.imag(), eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xa.imag(), -6.719840027857805e-10, eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xb.imag(), 0.6324555318142068,     eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xc.imag(), -6.719840027857805e-10, eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xd.imag(), 0.6324555318142068,     eps);
+                TEST_CHECK_NEARLY_EQUAL(testclp.xe.imag(), -6.719840027857805e-10, eps);
 
                 /* Check, that the logarithm of complex numbers with negative real part is consistent with Mathematica */
 
@@ -287,4 +287,3 @@ class deltaC79Test :
 
         }
 } delta_C79_test ;
-
