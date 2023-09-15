@@ -45,39 +45,39 @@ class HardScatteringTest :
                 {
                     static const double s = -4.0, eps = 1.0e-5;
 
-                    TEST_CHECK_NEARLY_EQUAL(+0.582643,  real(HardScattering::I1(s, 0.1, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.209591,  real(HardScattering::I1(s, 0.5, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(+0.161063,  real(HardScattering::I1(s, 0.9, m_c, m_B)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.1, m_c, m_B)), +0.582643,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.5, m_c, m_B)), -0.209591,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.9, m_c, m_B)), +0.161063,  eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(-1.00951,   imag(HardScattering::I1(s, 0.1, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(-1.03736,   imag(HardScattering::I1(s, 0.5, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(+0.0000000, imag(HardScattering::I1(s, 0.9, m_c, m_B)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.1, m_c, m_B)), -1.00951,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.5, m_c, m_B)), -1.03736,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.9, m_c, m_B)), +0.0000000, eps);
                 }
 
                 /* s = +1.0 */
                 {
                     static const double s = +1.0, eps = 1.0e-7;
 
-                    TEST_CHECK_NEARLY_EQUAL(+0.7005873, real(HardScattering::I1(s, 0.1, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(+0.0317353, real(HardScattering::I1(s, 0.5, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(-0.2769282, real(HardScattering::I1(s, 0.9, m_c, m_B)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.1, m_c, m_B)), +0.7005873, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.5, m_c, m_B)), +0.0317353, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.9, m_c, m_B)), -0.2769282, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(-1.2097160, imag(HardScattering::I1(s, 0.1, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(-1.5061933, imag(HardScattering::I1(s, 0.5, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(+0.0000000, imag(HardScattering::I1(s, 0.9, m_c, m_B)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.1, m_c, m_B)), -1.2097160, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.5, m_c, m_B)), -1.5061933, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.9, m_c, m_B)), +0.0000000, eps);
                 }
 
                 /* s = +8.0 */
                 {
                     static const double s = +8.0, eps = 1.0e-4;
 
-                    TEST_CHECK_NEARLY_EQUAL(+1.62683,   real(HardScattering::I1(s, 0.1, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(+1.73189,   real(HardScattering::I1(s, 0.5, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(+1.91415,   real(HardScattering::I1(s, 0.9, m_c, m_B)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.1, m_c, m_B)), +1.62683,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.5, m_c, m_B)), +1.73189,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(HardScattering::I1(s, 0.9, m_c, m_B)), +1.91415,   eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(-1.46251,   imag(HardScattering::I1(s, 0.1, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(-2.06062,   imag(HardScattering::I1(s, 0.5, m_c, m_B)), eps);
-                    TEST_CHECK_NEARLY_EQUAL(-4.45749,   imag(HardScattering::I1(s, 0.9, m_c, m_B)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.1, m_c, m_B)), -1.46251,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.5, m_c, m_B)), -2.06062,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(HardScattering::I1(s, 0.9, m_c, m_B)), -4.45749,   eps);
                 }
             }
         }
