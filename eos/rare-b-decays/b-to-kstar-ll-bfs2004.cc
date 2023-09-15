@@ -22,9 +22,9 @@
 
 #include <eos/rare-b-decays/b-to-kstar-ll-bfs2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
-#include <eos/rare-b-decays/hard-scattering.hh>
-#include <eos/rare-b-decays/long-distance.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
+#include <eos/nonlocal-form-factors/hard-scattering.hh>
+#include <eos/nonlocal-form-factors/long-distance.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>

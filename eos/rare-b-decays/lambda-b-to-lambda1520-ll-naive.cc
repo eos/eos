@@ -18,7 +18,7 @@
  */
 
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-ll-naive.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/memoise.hh>
 

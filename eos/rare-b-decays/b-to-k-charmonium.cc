@@ -21,7 +21,7 @@
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-k-charmonium.hh>
-#include <eos/rare-b-decays/nonlocal-formfactors.hh>
+#include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>

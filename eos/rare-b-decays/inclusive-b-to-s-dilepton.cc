@@ -24,7 +24,7 @@
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/bremsstrahlung.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/rare-b-decays/em-contributions.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/utils/destringify.hh>

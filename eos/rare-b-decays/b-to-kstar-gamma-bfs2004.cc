@@ -23,8 +23,8 @@
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-bfs2004.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
-#include <eos/rare-b-decays/hard-scattering.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
+#include <eos/nonlocal-form-factors/hard-scattering.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/memoise.hh>
