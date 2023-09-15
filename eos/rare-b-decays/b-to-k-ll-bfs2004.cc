@@ -22,7 +22,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-k-ll-bfs2004.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/memoise.hh>
 

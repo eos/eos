@@ -17,7 +17,7 @@
 
 #include <test/test.hh>
 #include <eos/rare-b-decays/b-to-k-ll.hh>
-#include <eos/rare-b-decays/nonlocal-formfactors.hh>
+#include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
 
 using namespace test;
 using namespace eos;

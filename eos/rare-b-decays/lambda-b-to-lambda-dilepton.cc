@@ -23,7 +23,7 @@
 #include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>

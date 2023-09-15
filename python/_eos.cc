@@ -38,7 +38,7 @@
 #include "eos/statistics/log-prior.hh"
 #include "eos/statistics/test-statistic-impl.hh"
 
-#include "eos/rare-b-decays/charm-loops-impl.hh"
+#include "eos/nonlocal-form-factors/charm-loops-impl.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>

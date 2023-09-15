@@ -409,6 +409,7 @@ AC_CONFIG_FILES([Makefile
 	eos/maths/Makefile
 	eos/meson-mixing/Makefile
 	eos/models/Makefile
+	eos/nonlocal-form-factors/Makefile
 	eos/parameters/Makefile
 	eos/rare-b-decays/Makefile
 	eos/statistics/Makefile

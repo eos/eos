@@ -19,7 +19,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-gamma-naive.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/utils/memoise.hh>
 
 #include <gsl/gsl_sf.h>

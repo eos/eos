@@ -23,7 +23,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-k-ll-gp2004.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/utils/destringify.hh>
 
 #include <gsl/gsl_sf.h>

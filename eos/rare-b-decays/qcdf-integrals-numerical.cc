@@ -19,7 +19,7 @@
 
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
-#include <eos/rare-b-decays/hard-scattering.hh>
+#include <eos/nonlocal-form-factors/hard-scattering.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/rare-b-decays/qcdf-integrals-impl.hh>
 #include <eos/utils/exception.hh>

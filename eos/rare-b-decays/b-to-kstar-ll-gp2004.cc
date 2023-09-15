@@ -24,9 +24,9 @@
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
-#include <eos/rare-b-decays/hard-scattering.hh>
-#include <eos/rare-b-decays/long-distance.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
+#include <eos/nonlocal-form-factors/hard-scattering.hh>
+#include <eos/nonlocal-form-factors/long-distance.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>
 

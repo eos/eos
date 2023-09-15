@@ -30,25 +30,10 @@ libeosrarebdecays_la_SOURCES = \
 	bs-to-phi-ll-base.cc bs-to-phi-ll-base.hh \
 	bs-to-phi-ll-bfs2004.cc bs-to-phi-ll-bfs2004.hh \
 	bs-to-phi-ll-gvdv2020.cc bs-to-phi-ll-gvdv2020.hh \
-	charm-loops.cc charm-loops.hh \
-	charm-loops-analytic.cc charm-loops-impl.hh \
-	charm-loops-analytic-F279b-helper.cc \
-	charm-loops-analytic-F27b.cc \
-	charm-loops-analytic-F29b.cc \
-	charm-loops-analytic-F27d-helper.cc \
-	charm-loops-analytic-F29d-helper.cc \
-	charm-loops-analytic-weight4.cc \
-	charm-loops-analytic-weight4wx3wx4.cc \
-	charm-loops-analytic-weight4w4w5w7.cc \
-	charm-loops-analytic-F279d-helper.cc \
-	charm-loops-analytic-F27d.cc \
-	charm-loops-analytic-F29d.cc \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
-	hard-scattering.cc hard-scattering.hh \
-	long-distance.cc long-distance.hh \
 	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
 	lambda-b-to-lambda-nu-nu.cc lambda-b-to-lambda-nu-nu.hh lambda-b-to-lambda-nu-nu-impl.hh\
 	lambda-b-to-lambda1520-gamma.cc lambda-b-to-lambda1520-gamma.hh \
@@ -57,9 +42,6 @@ libeosrarebdecays_la_SOURCES = \
 	lambda-b-to-lambda1520-ll.cc lambda-b-to-lambda1520-ll.hh \
 	lambda-b-to-lambda1520-ll-base.cc lambda-b-to-lambda1520-ll-base.hh \
 	lambda-b-to-lambda1520-ll-naive.cc lambda-b-to-lambda1520-ll-naive.hh \
-	nonlocal-formfactors.hh nonlocal-formfactors.cc nonlocal-formfactors-fwd.hh \
-	nonlocal-formfactors-p-to-p.cc \
-	nonlocal-formfactors-p-to-v.cc \
 	observables.cc observables.hh \
 	qcdf-integrals.cc qcdf-integrals.hh qcdf-integrals-impl.hh\
 	qcdf-integrals-analytical.cc \
@@ -71,6 +53,7 @@ libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
+	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	-lboost_filesystem -lboost_system \
 	-lgsl -lgslcblas -lm
@@ -80,13 +63,10 @@ include_eos_rarebdecays_HEADERS = \
 	b-to-psd-nu-nu.hh \
 	b-to-vec-nu-nu.hh \
 	bremsstrahlung.hh \
-	charm-loops.hh \
 	decays.hh \
 	em-contributions.hh \
-	hard-scattering.hh \
 	lambda-b-to-lambda-dilepton.hh \
 	lambda-b-to-lambda-nu-nu.hh \
-	long-distance.hh \
 	qcdf-integrals.hh
 
 EXTRA_DIST = \
@@ -114,24 +94,19 @@ TESTS = \
 	bs-to-phi-charmonium_TEST \
 	bs-to-phi-ll-bfs2004_TEST \
 	bs-to-phi-ll-gvdv2020_TEST \
-	charm-loops_TEST \
-	charm-loops-analytic_TEST \
 	em-contributions_TEST \
-	hard-scattering_TEST \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
 	lambda-b-to-lambda-dilepton_TEST \
 	lambda-b-to-lambda1520-gamma-naive_TEST \
 	lambda-b-to-lambda1520-ll-naive_TEST \
-	long-distance_TEST \
-	nonlocal-formfactors-p-to-p_TEST \
-	nonlocal-formfactors-p-to-v_TEST \
 	qcdf-integrals_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
 	libeosrarebdecays.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
+	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/libeos.la
 
@@ -168,13 +143,7 @@ bs_to_phi_ll_bfs2004_TEST_SOURCES = bs-to-phi-ll-bfs2004_TEST.cc
 
 bs_to_phi_ll_gvdv2020_TEST_SOURCES = bs-to-phi-ll-gvdv2020_TEST.cc
 
-charm_loops_TEST_SOURCES = charm-loops_TEST.cc
-
-charm_loops_analytic_TEST_SOURCES = charm-loops-analytic_TEST.cc
-
 em_contributions_TEST_SOURCES = em-contributions_TEST.cc
-
-hard_scattering_TEST_SOURCES = hard-scattering_TEST.cc
 
 inclusive_b_to_s_dilepton_TEST_SOURCES = inclusive-b-to-s-dilepton_TEST.cc
 
@@ -185,11 +154,5 @@ lambda_b_to_lambda_dilepton_TEST_SOURCES = lambda-b-to-lambda-dilepton_TEST.cc
 lambda_b_to_lambda1520_gamma_naive_TEST_SOURCES = lambda-b-to-lambda1520-gamma-naive_TEST.cc
 
 lambda_b_to_lambda1520_ll_naive_TEST_SOURCES = lambda-b-to-lambda1520-ll-naive_TEST.cc
-
-long_distance_TEST_SOURCES = long-distance_TEST.cc
-
-nonlocal_formfactors_p_to_p_TEST_SOURCES = nonlocal-formfactors-p-to-p_TEST.cc
-
-nonlocal_formfactors_p_to_v_TEST_SOURCES = nonlocal-formfactors-p-to-v_TEST.cc
 
 qcdf_integrals_TEST_SOURCES = qcdf-integrals_TEST.cc

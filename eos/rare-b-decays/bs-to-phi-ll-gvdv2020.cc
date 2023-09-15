@@ -19,7 +19,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-gvdv2020.hh>
-#include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/memoise.hh>
 
