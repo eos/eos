@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013-2016, 2018 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,7 +31,7 @@ namespace eos
     {
         static const double m_B = Process_::m_B;
         static const double m_P = Process_::m_P;
-        static const double tau_p = Process_::tp;
+        static const double tau_p = (m_B + m_P) * (m_B + m_P);
         static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
 
         return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
@@ -98,7 +98,7 @@ namespace eos
     {
         static const double m_B = Process_::m_B;
         static const double m_P = Process_::m_P;
-        static const double tau_p = Process_::tp;
+        static const double tau_p = (m_B + m_P) * (m_B + m_P);
         static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
 
         return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
@@ -167,7 +167,7 @@ namespace eos
     {
         static const double m_B = Process_::m_B;
         static const double m_P = Process_::m_P;
-        static const double tau_p = Process_::tp;
+        static const double tau_p = (m_B + m_P) * (m_B + m_P);
         static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
 
         return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
