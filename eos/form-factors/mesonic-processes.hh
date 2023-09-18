@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020 Danny van Dyk
+ * Copyright (c) 2020-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,13 +35,6 @@ namespace eos
         // first resonances sorted by spin/parity
         static constexpr double mR2_0p = 5.630 * 5.630; // B_s scalar
         static constexpr double mR2_1m = 5.415 * 5.415; // B_s^*
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m_B - m_P) * (m_B - m_P);
-        // scalar pair production threshold: B + K
-        static constexpr double tp = (m_B + m_P) * (m_B + m_P);
-        // zero of the conformal mapping: z(t0, t0) = 0.0
-        // This optimal value follows from z(0, t0) = - z(tm, t0)
-        static constexpr double t0 = 14.7;
         // Isospin-degeneracy factor
         static constexpr double eta  = 2.0;
         // OPE results for the unitarity bounds
@@ -62,8 +55,6 @@ namespace eos
         static constexpr const double m_P = 0.135;
         static constexpr const double mR2_1m = 5.325 * 5.325; // B_{u,d}^*
         static constexpr const double mR2_0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
     };
 
@@ -77,11 +68,6 @@ namespace eos
         static constexpr const double m_P = 0.494;
         static constexpr const double mR2_1m = 5.325 * 5.325; // B_{u,d}^*
         static constexpr const double mR2_0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
-        // zero of the conformal mapping: z(t0, t0) = 0.0
-        // This optimal value follows from z(0, t0) = - z(tm, t0)
-        static constexpr double t0 = 14.7;
         // Isospin-degeneracy factor
         static constexpr double eta  = 1.0;
         // OPE results for the unitarity bounds --> isospin symmetry, using results for d quarks
@@ -102,8 +88,6 @@ namespace eos
         // resonance masses from [HPQCD2015A]
         static constexpr const double mR2_1m = 6.330 * 6.330; // B_c^*
         static constexpr const double mR2_0p = 6.420 * 6.420; // B_c scalar
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
         static constexpr const char * hqe_prefix = "B(*)->D(*)";
     };
@@ -120,7 +104,6 @@ namespace eos
         static constexpr const double mR2_1m = 6.330 * 6.330; // B_c^*
         static constexpr const double mR2_0p = 6.420 * 6.420; // B_c scalar
         static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
         static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
@@ -135,8 +118,6 @@ namespace eos
         static constexpr const double m_P = 0.135;
         static constexpr const double mR2_1m = 2.007 * 2.007; // D^*0
         static constexpr const double mR2_0p = 2.300 * 2.300; // D^*0 scalar
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
     };
 
@@ -150,8 +131,6 @@ namespace eos
         static constexpr const double m_P = 0.492;
         static constexpr const double mR2_1m = 2.714 * 2.714; // Ds1
         static constexpr const double mR2_0p = 2.317 * 2.317; // Ds0
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
     };
 
@@ -165,8 +144,6 @@ namespace eos
         static constexpr const double m_P = 0.492;
         static constexpr const double mR2_1m = 2.007 * 2.007; // D^*0
         static constexpr const double mR2_0p = 2.300 * 2.300; // D^*0 scalar
-        static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tm = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
     };
 
@@ -215,15 +192,10 @@ namespace eos
         static constexpr double mR2_0p = 5.630 * 5.630; // B_s scalar
         static constexpr double mR2_1m = 5.415 * 5.415; // B_s^*
         static constexpr double mR2_1p = 5.829 * 5.829; // B_s,1
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m_B - m_V) * (m_B - m_V);
         // scalar pair production threshold: B + K
         static constexpr double tp_v = (5.279 + 0.492) * (5.279 + 0.492);
         // vector pair production threshold: B + K + pi
         static constexpr double tp_a = (5.279 + 0.492 + 0.135) * (5.279 + 0.492 + 0.135);
-        // zero of the conformal mapping: z(t0, t0) = 0.0
-        // This optimal value follows from z(0, t0) ~ - z(tm, t0)
-        static constexpr double t0 = 11.5;
         // Isospin-degeneracy factor
         static constexpr double eta  = 2.0;
         // OPE results for the unitarity bounds
@@ -274,15 +246,10 @@ namespace eos
         static constexpr double mR2_0p = 5.630 * 5.630; // B_s scalar
         static constexpr double mR2_1m = 5.415 * 5.415; // B_s^*
         static constexpr double mR2_1p = 5.829 * 5.829; // B_s,1
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m_B - m_V) * (m_B - m_V);
         // scalar pair production threshold: B + K
         static constexpr double tp_v = (5.279 + 0.492) * (5.279 + 0.492);
         // vector pair production threshold: B + K + pi
         static constexpr double tp_a = (5.279 + 0.492 + 0.135) * (5.279 + 0.492 + 0.135);
-        // zero of the conformal mapping: z(t0, t0) = 0.0
-        // This optimal value follows from z(0, t0) ~ - z(tm, t0)
-        static constexpr double t0 = 11.5;
         // Isospin-degeneracy factor
         static constexpr double eta  = 1.0;
         // OPE results for the unitarity bounds
