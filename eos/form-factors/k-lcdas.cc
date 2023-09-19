@@ -191,7 +191,15 @@ namespace eos
     };
 
     AntiKaonLCDAs::AntiKaonLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<AntiKaonLCDAs>(new Implementation<AntiKaonLCDAs>(p, o, *this))
+        PrivateImplementationPattern<AntiKaonLCDAs>(new Implementation<AntiKaonLCDAs>(p, o, *this)),
+        gp_1_1o2(1, 1.0 / 2.0),
+        gp_1_3o2(1, 3.0 / 2.0),
+        gp_2_1o2(2, 1.0 / 2.0),
+        gp_2_3o2(2, 3.0 / 2.0),
+        gp_3_1o2(3, 1.0 / 2.0),
+        gp_3_3o2(3, 3.0 / 2.0),
+        gp_4_1o2(4, 1.0 / 2.0),
+        gp_4_3o2(4, 3.0 / 2.0)
     {
     }
 
@@ -269,9 +277,9 @@ namespace eos
     AntiKaonLCDAs::phi(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(3/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x;
-        const double c1 = 3.0 * x;
-        const double c2 = (15.0 * x2 - 3.0) / 2.0;
+        const double x = 2.0 * u - 1.0;
+        const double c1 = gp_1_3o2.evaluate(x);
+        const double c2 = gp_2_3o2.evaluate(x);
 
         return 6.0 * u * (1.0 - u) * (1.0 + _imp->a1K(mu) * c1 + _imp->a2K(mu) * c2);
     }
@@ -295,11 +303,11 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(1/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
-        const double c1 = x;
-        const double c2 = (3.0 * x2 - 1.0) / 2.0;
-        const double c3 = (5.0 * x3 - 3.0 * x) / 2.0;
-        const double c4 = (35.0 * x4 - 30.0 * x2 + 3.0) / 8.0;
+        const double x = 2.0 * u - 1.0;
+        const double c1 = gp_1_1o2.evaluate(x);
+        const double c2 = gp_2_1o2.evaluate(x);
+        const double c3 = gp_3_1o2.evaluate(x);
+        const double c4 = gp_4_1o2.evaluate(x);
 
         return 1.0 + 3.0 * rhopK * (1.0 + 6.0 * a2K) - 9.0 * rhomK * a1K
             + c1 * (27.0 / 2.0 * rhopK * a1K - rhomK * (3.0 / 2.0 + 27.0 * a2K))
@@ -329,10 +337,10 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x;
-        const double c1 = 3.0 * x;
-        const double c2 = (15.0 * x2 - 3.0) / 2.0;
-        const double c3 = (35.0 * x3 - 15.0 * x) / 2.0;
+        const double x = 2.0 * u - 1.0;
+        const double c1 = gp_1_3o2.evaluate(x);
+        const double c2 = gp_2_3o2.evaluate(x);
+        const double c3 = gp_3_3o2.evaluate(x);
 
         const double ubar = 1.0 - u;
 
@@ -555,12 +563,12 @@ namespace eos
         const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Gegenbauer polynomials C_n^(1/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
+        const double x = 2.0 * u - 1.0;
         const double c0 = 1.0;
-        const double c1 = x;
-        const double c2 = (3.0 * x2 - 1.0) / 2.0;
-        const double c3 = (5.0 * x3 - 3.0 * x) / 2.0;
-        const double c4 = (35.0 * x4 - 30.0 * x2 + 3.0) / 8.0;
+        const double c1 = gp_1_1o2.evaluate(x);
+        const double c2 = gp_2_1o2.evaluate(x);
+        const double c3 = gp_3_1o2.evaluate(x);
+        const double c4 = gp_4_1o2.evaluate(x);
 
         // Twist 4 contributions
         const double psi4T4 = 20.0 / 3.0 * delta4K * c2 + 5.0 * (5.0 * theta1K - theta2K) * c3;
@@ -802,7 +810,15 @@ namespace eos
     };
 
     KaonLCDAs::KaonLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<KaonLCDAs>(new Implementation<KaonLCDAs>(p, o, *this))
+        PrivateImplementationPattern<KaonLCDAs>(new Implementation<KaonLCDAs>(p, o, *this)),
+        gp_1_1o2(1, 1.0 / 2.0),
+        gp_1_3o2(1, 3.0 / 2.0),
+        gp_2_1o2(2, 1.0 / 2.0),
+        gp_2_3o2(2, 3.0 / 2.0),
+        gp_3_1o2(3, 1.0 / 2.0),
+        gp_3_3o2(3, 3.0 / 2.0),
+        gp_4_1o2(4, 1.0 / 2.0),
+        gp_4_3o2(4, 3.0 / 2.0)
     {
     }
 
@@ -880,9 +896,9 @@ namespace eos
     KaonLCDAs::phi(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(3/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x;
-        const double c1 = 3.0 * x;
-        const double c2 = (15.0 * x2 - 3.0) / 2.0;
+        const double x = 2.0 * u - 1.0;
+        const double c1 = gp_1_3o2.evaluate(x);
+        const double c2 = gp_2_3o2.evaluate(x);
 
         return 6.0 * u * (1.0 - u) * (1.0 + _imp->a1K(mu) * c1 + _imp->a2K(mu) * c2);
     }
@@ -906,11 +922,11 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(1/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
-        const double c1 = x;
-        const double c2 = (3.0 * x2 - 1.0) / 2.0;
-        const double c3 = (5.0 * x3 - 3.0 * x) / 2.0;
-        const double c4 = (35.0 * x4 - 30.0 * x2 + 3.0) / 8.0;
+        const double x = 2.0 * u - 1.0;
+        const double c1 = gp_1_1o2.evaluate(x);
+        const double c2 = gp_2_1o2.evaluate(x);
+        const double c3 = gp_3_1o2.evaluate(x);
+        const double c4 = gp_4_1o2.evaluate(x);
 
         return 1.0 + 3.0 * rhopK * (1.0 + 6.0 * a2K) - 9.0 * rhomK * a1K
             + c1 * (27.0 / 2.0 * rhopK * a1K - rhomK * (3.0 / 2.0 + 27.0 * a2K))
@@ -940,10 +956,10 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x;
-        const double c1 = 3.0 * x;
-        const double c2 = (15.0 * x2 - 3.0) / 2.0;
-        const double c3 = (35.0 * x3 - 15.0 * x) / 2.0;
+        const double x = 2.0 * u - 1.0;
+        const double c1 = gp_1_3o2.evaluate(x);
+        const double c2 = gp_2_3o2.evaluate(x);
+        const double c3 = gp_3_3o2.evaluate(x);
 
         const double ubar = 1.0 - u;
 
@@ -1166,12 +1182,12 @@ namespace eos
         const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Gegenbauer polynomials C_n^(1/2)
-        const double x = 2.0 * u - 1.0, x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
+        const double x = 2.0 * u - 1.0;
         const double c0 = 1.0;
-        const double c1 = x;
-        const double c2 = (3.0 * x2 - 1.0) / 2.0;
-        const double c3 = (5.0 * x3 - 3.0 * x) / 2.0;
-        const double c4 = (35.0 * x4 - 30.0 * x2 + 3.0) / 8.0;
+        const double c1 = gp_1_1o2.evaluate(x);
+        const double c2 = gp_2_1o2.evaluate(x);
+        const double c3 = gp_3_1o2.evaluate(x);
+        const double c4 = gp_4_1o2.evaluate(x);
 
         // Twist 4 contributions
         const double psi4T4 = 20.0 / 3.0 * delta4K * c2 + 5.0 * (5.0 * theta1K - theta2K) * c3;
