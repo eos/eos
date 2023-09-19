@@ -26,6 +26,9 @@ ABGW:2003A:
     standard model
 ABHH:1999A:
   authors: Ali, Ahmed and Ball, Patricia and Handoko, L.T. and Hiller, G.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9910221
   inspire-id: Ali:1999mm
   title: A Comparative study of the decays $B \to K^{(*)} \ell^+ \ell^-$ in
     standard model and supersymmetric theories
