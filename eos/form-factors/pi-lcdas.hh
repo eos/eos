@@ -21,6 +21,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PI_LCDAS_HH 1
 
 #include <eos/form-factors/psd-lcdas.hh>
+#include <eos/maths/gegenbauer-polynomial.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -36,6 +37,12 @@ namespace eos
             ~PionLCDAs();
 
             static PseudoscalarLCDAs * make(const Parameters &, const Options &);
+
+            /* Gegenbauer polynomials */
+            const GegenbauerPolynomial gp_2_1o2;
+            const GegenbauerPolynomial gp_2_3o2;
+            const GegenbauerPolynomial gp_4_1o2;
+            const GegenbauerPolynomial gp_4_3o2;
 
             /* Twist 2 LCDA (even) Gegenbauer coefficients */
             double a1(const double & /*mu*/) const override { return 0.0; }
