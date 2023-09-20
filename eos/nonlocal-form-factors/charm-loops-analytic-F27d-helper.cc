@@ -91,7 +91,7 @@ namespace eos
 
             const complex<double> denom3 = 9.0 * power_of<3>(yd2 + xd4 * yd2 - 2.0 * xd2 * (-2.0 + yd2));
 
-            const complex<double> result = ((-16.0 * num16 + 2.0 * num17 + 2.0 * num18 - num19 - num20) * li3half + (-num17 - num18) * trilog(1.0 / (1.0 - w4)) + (-num17 - num18) * trilog(-w4inv) + (num17 + num18) * trilog((-1.0 + w4) / (2.0 * w4))
+            const complex<double> part1 = (-16.0 * num16 + 2.0 * num17 + 2.0 * num18 - num19 - num20) * li3half + (-num17 - num18) * trilog(1.0 / (1.0 - w4)) + (-num17 - num18) * trilog(-w4inv) + (num17 + num18) * trilog((-1.0 + w4) / (2.0 * w4))
                 + (-num17 - num18) * trilog((-1.0 + w4) / w4) + (num17 + num18) * trilog(-w4) + (-num17 - num18) * trilog(w4) + (num17 + num18) * trilog((1.0 - w4) / (1.0 + w4)) + (-num17 - num18) * trilog(1.0 + w5inv)
                 + (-num17 - num18) * trilog(w5inv) + (-num17 - num18) * trilog(-w5) + (num17 + num18) * trilog(w5) + (-num17 - num18) * trilog(1.0 / (1.0 + w5)) + (num17 + num18) * trilog((1.0 + w5) / (1.0 - w5))
                 + (num17 + num18) * trilog((1.0 + w5) / (2.0 * w5)) + (num19 + num20) * trilog(1.0 / (1.0 - w7)) + (num19 + num20) * trilog(-w7inv) + (-num19 - num20) * trilog((-1.0 + w7) / (2.0 * w7)) + (num19 + num20) * trilog((-1.0 + w7) / w7)
@@ -194,7 +194,9 @@ namespace eos
                 + dilog(1.0 / (1.0 - w7)) * (-4.0 * num19 * ln2 - 4.0 * num20 * ln2 + (2.0 * num19 + 2.0 * num20) * log(1.0 - 1.0i * xd) + (2.0 * num19 + 2.0 * num20) * log(1.0 + 1.0i * xd) + (-2.0 * num19 - 2.0 * num20) * log(xd))
                 + dilog((-1.0 + yd) / (-1.0 + w7)) * (4.0 * num20 * ln2 - 2.0 * num20 * log(1.0 - 1.0i * xd) - 2.0 * num20 * log(1.0 + 1.0i * xd) + 2.0 * num20 * log(xd))
                 + dilog(1.0 / (1.0 + w7)) * (-(num19 * lnhalf) - num20 * lnhalf + 4.0 * num19 * ln2 + 4.0 * num20 * ln2 + (-2.0 * num19 - 2.0 * num20) * log(1.0 - 1.0i * xd) + (-2.0 * num19 - 2.0 * num20) * log(1.0 + 1.0i * xd)
-                + (2.0 * num19 + 2.0 * num20) * log(xd)) - (num16 * pisqu * log(wx3 / (-1.0i + xd))) / 6.0 - (num16 * power_of<3>(log(wx3 / (-1.0i + xd)))) / 6.0 + (num16 * pisqu * log((2.0 - (2.0 * 1.0i) * wx3) / ((-1.0i + wx3) * (-1.0i + xd)))) / 3.0
+                + (2.0 * num19 + 2.0 * num20) * log(xd));
+
+            const complex<double> part2 = - (num16 * pisqu * log(wx3 / (-1.0i + xd))) / 6.0 - (num16 * power_of<3>(log(wx3 / (-1.0i + xd)))) / 6.0 + (num16 * pisqu * log((2.0 - (2.0 * 1.0i) * wx3) / ((-1.0i + wx3) * (-1.0i + xd)))) / 3.0
                 + (num16 * power_of<3>(log((2.0 - (2.0 * 1.0i) * wx3) / ((-1.0i + wx3) * (-1.0i + xd))))) / 3.0 + (num16 * pisqu * log((-2.0 - (2.0 * 1.0i) * wx3) / ((1.0i + wx3) * (-1.0i + xd)))) / 3.0 + (num16 * power_of<3>(log((-2.0 - (2.0 * 1.0i) * wx3) / ((1.0i + wx3) * (-1.0i + xd))))) / 3.0
                 - (num16 * pisqu * log(wx4 / (-1.0i + xd))) / 6.0 - (num16 * power_of<3>(log(wx4 / (-1.0i + xd)))) / 6.0 + (num16 * pisqu * log((2.0 - (2.0 * 1.0i) * wx4) / ((-1.0i + wx4) * (-1.0i + xd)))) / 3.0 + (num16 * power_of<3>(log((2.0 - (2.0 * 1.0i) * wx4) / ((-1.0i + wx4) * (-1.0i + xd))))) / 3.0
                 + (num16 * pisqu * log((-2.0 - (2.0 * 1.0i) * wx4) / ((1.0i + wx4) * (-1.0i + xd)))) / 3.0 + (num16 * power_of<3>(log((-2.0 - (2.0 * 1.0i) * wx4) / ((1.0i + wx4) * (-1.0i + xd))))) / 3.0 - (num16 * pisqu * log(-(wx3 / (1.0i + xd)))) / 6.0 - (num16 * power_of<3>(log(-(wx3 / (1.0i + xd))))) / 6.0
@@ -289,7 +291,9 @@ namespace eos
                 + (num18 * log(((-1.0 + w5) * (1.0 + yd)) / (2.0 * (w5 - yd)))) / 2.0 - (num18 * log((1.0 + w4) / (w4 + yd))) / 2.0 + (num18 * log(((1.0 + w4) * (1.0 + yd)) / (2.0 * (w4 + yd)))) / 2.0 - (num18 * log((w4 + yd) / (1.0 + w4))) / 2.0
                 + (num18 * log((2.0 * (w4 + yd)) / ((1.0 + w4) * (1.0 + yd)))) / 2.0 + (num19 * log((1.0 + w7) / (w7 + yd))) / 2.0 - (num19 * log(((1.0 + w7) * (1.0 + yd)) / (2.0 * (w7 + yd)))) / 2.0 + (num19 * log((w7 + yd) / (1.0 + w7))) / 2.0
                 - (num19 * log((2.0 * (w7 + yd)) / ((1.0 + w7) * (1.0 + yd)))) / 2.0) + dilog(w4) * (-(num18 * log((w4 + yd) / w4)) - num17 * log(1.0 - yd / w4)) + dilog(-w4) * (num18 * log((w4 + yd) / w4) + num17 * log(1.0 - yd / w4))
-                + dilog(-w5) * (-(num17 * log((w5 + yd) / w5)) - num18 * log(1.0 - yd / w5)) + dilog(w5) * (num17 * log((w5 + yd) / w5) + num18 * log(1.0 - yd / w5))
+                + dilog(-w5) * (-(num17 * log((w5 + yd) / w5)) - num18 * log(1.0 - yd / w5));
+
+            const complex<double> part3 = + dilog(w5) * (num17 * log((w5 + yd) / w5) + num18 * log(1.0 - yd / w5))
                 + dilog(-1.0i / (-1.0i + wx3)) * (-4.0 * num16 * lnhalf + 2.0 * num16 * log(1.0 - 1.0i * xd) + 2.0 * num16 * log(1.0 + 1.0i * xd) - 2.0 * num15 * ln1myd - 2.0 * num14 * ln1pyd + num18 * log((w4 + yd) / w4) + num17 * log((w5 + yd) / w5)
                 - 4.0 * num19 * log((w7 + yd) / w7) + num17 * log(1.0 - yd / w4) + num18 * log(1.0 - yd / w5) - 4.0 * num20 * log(1.0 - yd / w7))
                 + dilog(1.0i / (1.0i + wx3)) * (-4.0 * num16 * lnhalf + 2.0 * num16 * log(1.0 - 1.0i * xd) + 2.0 * num16 * log(1.0 + 1.0i * xd) - 2.0 * num15 * ln1myd - 2.0 * num14 * ln1pyd + num18 * log((w4 + yd) / w4) + num17 * log((w5 + yd) / w5)
@@ -393,8 +397,9 @@ namespace eos
                 + 2.0 * num17 * ln2 * log((wx4 + xd) / wx4) + log(xd) * (num17 * log((wx3 + xd) / wx3) + num17 * log((wx4 + xd) / wx4)) + log(1.0 - 1.0i * xd) * (-(num17 * ln2) - num17 * log(xd) - num17 * log((wx3 + xd) / (-1.0i + wx3))
                     - num17 * log((wx4 + xd) / (-1.0i + wx4))) + log(1.0 + 1.0i * xd) * (-(num17 * ln2) - num17 * log(xd) - num17 * log((wx3 + xd) / (1.0i + wx3)) - num17 * log((wx4 + xd) / (1.0i + wx4)))
                 - (2.0 * 1.0i) * num17 * M_PI * log(1.0 + 1.0i * wx3) * my_sign(real(wx3inv)) * T(1.0, 1.0 - 1.0i * xd, 1.0 + 1.0i * wx3) - (2.0 * 1.0i) * num17 * M_PI * log(1.0 + 1.0i * wx4) * my_sign(real(wx4inv)) * T(1.0, 1.0 - 1.0i * xd, 1.0 + 1.0i * wx4)
-                - (2.0 * 1.0i) * num17 * M_PI * log(1.0 - 1.0i * wx3) * my_sign(-real(wx3inv)) * T(1.0, 1.0 + 1.0i * xd, 1.0 - 1.0i * wx3) - (2.0 * 1.0i) * num17 * M_PI * log(1.0 - 1.0i * wx4) * my_sign(-real(wx4inv)) * T(1.0, 1.0 + 1.0i * xd, 1.0 - 1.0i * wx4))
-                + log(1.0 - yd / w5) * ((num18 * power_of<2>(log(1.0 - 1.0i * xd))) / 2.0 + (num18 * power_of<2>(log(1.0 + 1.0i * xd))) / 2.0 + 2.0 * num18 * ln2 * log((wx3 + xd) / wx3) + 2.0 * num18 * ln2 * log((wx4 + xd) / wx4)
+                - (2.0 * 1.0i) * num17 * M_PI * log(1.0 - 1.0i * wx3) * my_sign(-real(wx3inv)) * T(1.0, 1.0 + 1.0i * xd, 1.0 - 1.0i * wx3) - (2.0 * 1.0i) * num17 * M_PI * log(1.0 - 1.0i * wx4) * my_sign(-real(wx4inv)) * T(1.0, 1.0 + 1.0i * xd, 1.0 - 1.0i * wx4));
+
+            const complex<double> part4 = + log(1.0 - yd / w5) * ((num18 * power_of<2>(log(1.0 - 1.0i * xd))) / 2.0 + (num18 * power_of<2>(log(1.0 + 1.0i * xd))) / 2.0 + 2.0 * num18 * ln2 * log((wx3 + xd) / wx3) + 2.0 * num18 * ln2 * log((wx4 + xd) / wx4)
                 + log(xd) * (num18 * log((wx3 + xd) / wx3) + num18 * log((wx4 + xd) / wx4)) + log(1.0 - 1.0i * xd) * (-(num18 * ln2) - num18 * log(xd) - num18 * log((wx3 + xd) / (-1.0i + wx3)) - num18 * log((wx4 + xd) / (-1.0i + wx4)))
                 + log(1.0 + 1.0i * xd) * (-(num18 * ln2) - num18 * log(xd) - num18 * log((wx3 + xd) / (1.0i + wx3)) - num18 * log((wx4 + xd) / (1.0i + wx4))) - (2.0 * 1.0i) * num18 * M_PI * log(1.0 + 1.0i * wx3) * my_sign(real(wx3inv)) *
                     T(1.0, 1.0 - 1.0i * xd, 1.0 + 1.0i * wx3) - (2.0 * 1.0i) * num18 * M_PI * log(1.0 + 1.0i * wx4) * my_sign(real(wx4inv)) * T(1.0, 1.0 - 1.0i * xd, 1.0 + 1.0i * wx4) - (2.0 * 1.0i) * num18 * M_PI * log(1.0 - 1.0i * wx3) * my_sign(-real(wx3inv)) * T(1.0, 1.0 + 1.0i * xd, 1.0 - 1.0i * wx3)
@@ -443,8 +448,9 @@ namespace eos
                 + 1.0i * num16 * M_PI * my_sign(real(xd)) * T(1.0, 1.0 - xd / wx3, 1.0 - 1.0i * xd) + 1.0i * num16 * M_PI * my_sign(real(xd)) * T(1.0, 1.0 - xd / wx4, 1.0 - 1.0i * xd))
                 + power_of<2>(log(1.0 + 1.0i * xd)) * (-2.0 * num16 * log(1.0i / xd) + (num16 * log((1.0i * (wx3 - xd)) / ((-1.0i + wx3) * xd))) / 2.0 + (num16 * log((1.0i * (wx4 - xd)) / ((-1.0i + wx4) * xd))) / 2.0 - (num16 * log((wx3 + xd) / (1.0i + wx3))) / 2.0
                 + (num16 * log((1.0i * (wx3 + xd)) / ((1.0i + wx3) * xd))) / 2.0 - (num16 * log((wx4 + xd) / (1.0i + wx4))) / 2.0 + (num16 * log((1.0i * (wx4 + xd)) / ((1.0i + wx4) * xd))) / 2.0 + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, (wx3 + xd) / wx3, 1.0 + 1.0i * xd)
-                + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, (wx4 + xd) / wx4, 1.0 + 1.0i * xd) + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, 1.0 - xd / wx3, 1.0 + 1.0i * xd) + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, 1.0 - xd / wx4, 1.0 + 1.0i * xd))
-                + 1.0i * num18 * M_PI * power_of<2>(log((1.0 + w4) / 2.0)) * my_sign((-0.5) * imag(w4)) * T(1.0, (1.0 - yd) / 2.0, (1.0 + w4) / 2.0) + 1.0i * num18 * M_PI * power_of<2>(log((1.0 - w5) / 2.0)) * my_sign(imag(w5) / 2.0) * T(1.0, (1.0 - yd) / 2.0, (1.0 - w5) / 2.0)
+                + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, (wx4 + xd) / wx4, 1.0 + 1.0i * xd) + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, 1.0 - xd / wx3, 1.0 + 1.0i * xd) + 1.0i * num16 * M_PI * my_sign(-real(xd)) * T(1.0, 1.0 - xd / wx4, 1.0 + 1.0i * xd));
+
+            const complex<double> part5 = + 1.0i * num18 * M_PI * power_of<2>(log((1.0 + w4) / 2.0)) * my_sign((-0.5) * imag(w4)) * T(1.0, (1.0 - yd) / 2.0, (1.0 + w4) / 2.0) + 1.0i * num18 * M_PI * power_of<2>(log((1.0 - w5) / 2.0)) * my_sign(imag(w5) / 2.0) * T(1.0, (1.0 - yd) / 2.0, (1.0 - w5) / 2.0)
                 - 1.0i * num19 * M_PI * power_of<2>(log((1.0 + w7) / 2.0)) * my_sign((-0.5) * imag(w7)) * T(1.0, (1.0 - yd) / 2.0, (1.0 + w7) / 2.0) + ln1pyd * (-(num14 * power_of<2>(log(1.0 - 1.0i * xd))) - num14 * power_of<2>(log(1.0 + 1.0i * xd)) - 2.0 * num14 * ln2 * log((wx3 + xd) / wx3)
                 - 2.0 * num14 * ln2 * log((wx4 + xd) / wx4) + log(1.0 - 1.0i * xd) * (-2.0 * num14 * ln2 + num14 * log((wx3 - xd) / (1.0i + wx3)) + num14 * log((wx4 - xd) / (1.0i + wx4)) + 2.0 * num14 * log(xd)
                     + num14 * log((wx3 + xd) / (-1.0i + wx3)) + num14 * log((wx4 + xd) / (-1.0i + wx4))) + log(1.0 + 1.0i * xd) * (-2.0 * num14 * ln2 + num14 * log((wx3 - xd) / (-1.0i + wx3)) + num14 * log((wx4 - xd) / (-1.0i + wx4))
@@ -491,8 +497,9 @@ namespace eos
                 + dilog((1.0 + w5) / 2.0) * (num17 * log(w5 / (1.0 + w5)) + num18 * log(w5 / (1.0 + w5)) - num18 * log((w5 - yd) / (1.0 + w5)) - num17 * log((w5 + yd) / (1.0 + w5)) + (2.0 * 1.0i) * num17 * M_PI * my_sign(-imag(w5)) * T(1.0, 1.0 - yd, 1.0 + w5)
                 + (2.0 * 1.0i) * num18 * M_PI * my_sign(-imag(w5)) * T(1.0, 1.0 + yd, 1.0 + w5)) + (8.0 * 1.0i) * num19 * M_PI * ln2 * log(1.0 - w7) * my_sign(imag(w7inv)) * T(1.0, 1.0 + yd, 1.0 - w7)
                 - (2.0 * 1.0i) * num19 * M_PI * log(1.0 - w7) * log((1.0 + w7) / 2.0) * my_sign(imag(w7)) * T(1.0, 1.0 + yd, 1.0 - w7) + dilog((1.0 - w7) / 2.0) * (-(num19 * log(w7 / (-1.0 + w7))) - num20 * log(w7 / (-1.0 + w7)) + num20 * log((w7 - yd) / (-1.0 + w7))
-                + num19 * log((w7 + yd) / (-1.0 + w7)) - (2.0 * 1.0i) * num20 * M_PI * my_sign(imag(w7)) * T(1.0, 1.0 - yd, 1.0 - w7) - (2.0 * 1.0i) * num19 * M_PI * my_sign(imag(w7)) * T(1.0, 1.0 + yd, 1.0 - w7))
-                + li2half * (-(num17 * log(w4 / (-1.0 + w4))) - num18 * log(w4 / (-1.0 + w4)) - num17 * log(w5 / (1.0 + w5)) - num18 * log(w5 / (1.0 + w5)) + num19 * log(w7 / (-1.0 + w7)) + num20 * log(w7 / (-1.0 + w7))
+                + num19 * log((w7 + yd) / (-1.0 + w7)) - (2.0 * 1.0i) * num20 * M_PI * my_sign(imag(w7)) * T(1.0, 1.0 - yd, 1.0 - w7) - (2.0 * 1.0i) * num19 * M_PI * my_sign(imag(w7)) * T(1.0, 1.0 + yd, 1.0 - w7));
+
+            const complex<double> part6 = + li2half * (-(num17 * log(w4 / (-1.0 + w4))) - num18 * log(w4 / (-1.0 + w4)) - num17 * log(w5 / (1.0 + w5)) - num18 * log(w5 / (1.0 + w5)) + num19 * log(w7 / (-1.0 + w7)) + num20 * log(w7 / (-1.0 + w7))
                 + 4.0 * num16 * log(wx3 / (-1.0i + wx3)) + 4.0 * num16 * log(wx3 / (1.0i + wx3)) + 4.0 * num16 * log(wx4 / (-1.0i + wx4)) + 4.0 * num16 * log(wx4 / (1.0i + wx4)) - 2.0 * num16 * log((wx3 - xd) / (-1.0i + wx3)) - 2.0 * num16 * log((wx3 - xd) / (1.0i + wx3))
                 - 2.0 * num16 * log((wx4 - xd) / (-1.0i + wx4)) - 2.0 * num16 * log((wx4 - xd) / (1.0i + wx4)) - 2.0 * num16 * log((wx3 + xd) / (-1.0i + wx3)) - 2.0 * num16 * log((wx3 + xd) / (1.0i + wx3)) - 2.0 * num16 * log((wx4 + xd) / (-1.0i + wx4))
                 - 2.0 * num16 * log((wx4 + xd) / (1.0i + wx4)) - 4.0 * num15 * ln1myd + num17 * log((w4 - yd) / (-1.0 + w4)) + num18 * log((w5 - yd) / (1.0 + w5)) - num20 * log((w7 - yd) / (-1.0 + w7)) - 4.0 * num14 * ln1pyd
@@ -546,9 +553,9 @@ namespace eos
                 + power_of<2>(log((w7 + yd) / w7)) * ((-1.0i) * num19 * M_PI * my_sign(-imag(yd / w7)) * T(1.0, 1.0 - yd, (w7 + yd) / w7) + 1.0i * num19 * M_PI * my_sign(-imag(yd / w7)) * T(1.0, 1.0 + yd, (w7 + yd) / w7))
                 + power_of<2>(log(1.0 - yd / w4)) * ((-1.0i) * num17 * M_PI * my_sign(imag(yd / w4)) * T(1.0, 1.0 - yd, 1.0 - yd / w4) + 1.0i * num17 * M_PI * my_sign(imag(yd / w4)) * T(1.0, 1.0 + yd, 1.0 - yd / w4))
                 + power_of<2>(log(1.0 - yd / w5)) * (1.0i * num18 * M_PI * my_sign(imag(yd / w5)) * T(1.0, 1.0 - yd, 1.0 - yd / w5) - 1.0i * num18 * M_PI * my_sign(imag(yd / w5)) * T(1.0, 1.0 + yd, 1.0 - yd / w5))
-                + power_of<2>(log(1.0 - yd / w7)) * (1.0i * num20 * M_PI * my_sign(imag(yd / w7)) * T(1.0, 1.0 - yd, 1.0 - yd / w7) - 1.0i * num20 * M_PI * my_sign(imag(yd / w7)) * T(1.0, 1.0 + yd, 1.0 - yd / w7))) / denom3;
+                + power_of<2>(log(1.0 - yd / w7)) * (1.0i * num20 * M_PI * my_sign(imag(yd / w7)) * T(1.0, 1.0 - yd, 1.0 - yd / w7) - 1.0i * num20 * M_PI * my_sign(imag(yd / w7)) * T(1.0, 1.0 + yd, 1.0 - yd / w7));
 
-            return result;
+            return (part1 + part2 + part3 + part4 + part5 + part6) / denom3;
         }
     }
 }
