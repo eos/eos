@@ -114,6 +114,26 @@ class ClassMethodTests(unittest.TestCase):
             )
 
 
+    def test_univariate_priors_with_infinite_support(self):
+
+        # Note: the cases are not physically meaningful
+        prior_cases = [
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'central': 0.0, 'sigma': 1.0 , 'type': 'gaussian'},
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'k':       5.0,                'type': 'poisson'},
+        ]
+
+        for prior in prior_cases:
+            analysis_args = {
+                'priors': [ prior ],
+                'likelihood': [ ]
+            }
+
+            try:
+                analysis = eos.Analysis(**analysis_args)
+            except Exception as e:
+                self.fail(f"Can not construct analysis with prior '{ prior }'")
+
+
     def test_multivariate_priors_1(self):
 
         import yaml, numpy as np
