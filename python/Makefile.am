@@ -3,6 +3,8 @@ CLEANFILES = *~
 EXTRA_DIST = \
 	eos/__init__.py \
 	eos/analysis.py \
+	eos/analysis_TEST.d \
+	eos/analysis_TEST.py \
 	eos/analysis_file.py \
 	eos/config.py \
 	eos/constraint.py \
