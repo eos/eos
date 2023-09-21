@@ -1,0 +1,116 @@
+{
+  "channels": [
+    {
+      "name": "single_channel",
+      "samples": [
+        {
+          "name": "signal",
+          "data": [
+            5.0,
+            10.0
+          ],
+          "modifiers": [
+            {
+              "name": "mu",
+              "type": "normfactor",
+              "data": null
+            },
+            {
+              "name": "stat_unc",
+              "type": "staterror",
+              "data": [
+                1.0,
+                2.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "background",
+          "data": [
+            50.0,
+            60.0
+          ],
+          "modifiers": [
+            {
+              "name": "correlated_bkg_uncertainty",
+              "type": "histosys",
+              "data": {
+                "hi_data": [
+                  45.0,
+                  54.0
+                ],
+                "lo_data": [
+                  55.0,
+                  66.0
+                ]
+              }
+            },
+            {
+              "name": "stat_unc",
+              "type": "staterror",
+              "data": [
+                10.0,
+                12.0
+              ]
+            },
+            {
+              "name": "shape_unc",
+              "type": "shapesys",
+              "data": [
+                10.0,
+                12.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "version": "1.0.0",
+  "measurements": [
+    {
+      "name": "measurement",
+      "config": {
+        "poi": "mu",
+        "parameters": [
+          {
+            "bounds": [
+              [
+                -5.0,
+                5.0
+              ]
+            ],
+            "inits": [
+              0.0
+            ],
+            "fixed": false,
+            "name": "correlated_bkg_uncertainty"
+          },
+          {
+            "bounds": [
+              [
+                0,
+                10
+              ]
+            ],
+            "inits": [
+              1.0
+            ],
+            "fixed": false,
+            "name": "mu"
+          }
+        ]
+      }
+    }
+  ],
+  "observations": [
+    {
+      "name": "single_channel",
+      "data": [
+        60.0,
+        80.0
+      ]
+    }
+  ]
+}

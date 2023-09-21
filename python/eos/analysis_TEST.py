@@ -5,6 +5,8 @@ import dynesty
 import eos
 import numpy as np
 import yaml
+import json
+from pathlib import Path
 
 class ClassMethodTests(unittest.TestCase):
 
@@ -226,6 +228,52 @@ class ClassMethodTests(unittest.TestCase):
         logz_analytic = 4.2532
         chi2_2 = (results['logz'][-1] - logz_analytic)**2 / (0.02 * logz_analytic)**2 # Assuming 2% error on the log(Z) value
         self.assertLess(chi2_2, 4.5494e-1, 'chi^2 for log(Z) exceeds 50% integrated probability for 1 degree of freedom')
+
+    def test_pyhf_likelihood(self):
+
+        try:
+            import pyhf
+        except ModuleNotFoundError:
+            raise RuntimeError('Attempting to use a PyHF likelihood without the `pyhf` module installed')
+
+        with open(Path(__file__).parent / 'analysis_TEST.d/workspace.json') as serialized:
+            spec = json.load(serialized)
+
+        workspace = pyhf.Workspace(spec)
+        model = workspace.model()
+        data = np.array(workspace.data(model, include_auxdata=False))
+        pars = np.array(model.config.suggested_init())
+
+        p = eos.Parameters()
+        cache = eos.ObservableCache(p)
+        llh_block = eos.LogLikelihoodBlock.External(
+            cache,
+            lambda cache: eos.PyhfLogLikelihood.factory(cache, workspace)
+            )
+
+        pyhf_priors = eos.PyhfLogLikelihood.factory(cache, workspace).priors()
+
+        analysis_args = {
+            'priors': pyhf_priors,
+            'likelihood': [],
+            'external_likelihood': [llh_block],
+            'parameters': p
+        }
+
+        analysis = eos.Analysis(**analysis_args)
+
+        # Compare log likelihood values for the main term
+        eos_likelihood = analysis.log_likelihood([])
+        pyhf_likelihood = model.mainlogpdf(data, pars).item()
+        self.assertAlmostEqual(eos_likelihood, pyhf_likelihood)
+
+        # Check if the best fit point is close to pyhf fit results
+        best_fit_point = analysis.optimize().point
+        expected_best_fit_point = [0., 2., 1., 1., 1., 1.]
+        eps = 5
+
+        for expected, obtained in zip(expected_best_fit_point, best_fit_point):
+            self.assertAlmostEqual(expected, obtained, eps)
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
