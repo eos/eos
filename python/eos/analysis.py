@@ -82,7 +82,7 @@ class Analysis:
         eos.debug('priors:')
         for p in priors:
             if 'parameter' in p:
-                eos.debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
+                eos.debug(' - {name} ({type})'.format(name=p['parameter'], type=p['type']))
             elif 'constraint' in p:
                 eos.debug(' - {name} (constraint)'.format(name=p['constraint']))
         eos.debug('constraints:')
@@ -109,38 +109,61 @@ class Analysis:
                 raise ValueError('Prior specification must not contain both a parameter and a constraint')
 
             if 'parameter' in prior:
-                parameter = prior['parameter']
-                minv = float(prior['min'])
-                maxv = float(prior['max'])
                 prior_type = prior['type'] if 'type' in prior else 'uniform'
-                if 'uniform' == prior_type or 'flat' == prior_type:
-                    self._log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, minv, maxv), False)
-                elif 'gauss' == prior_type or 'gaussian' == prior_type:
+                parameter = prior['parameter']
+
+                if prior_type in ['uniform', 'flat', 'scale']: # min / max is mandatory
+                    minv = float(prior['min'])
+                    maxv = float(prior['max'])
+
+                    if 'uniform' == prior_type or 'flat' == prior_type:
+                        self._log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, minv, maxv), False)
+                    elif 'scale' == prior_type:
+                        mu_0 = prior['mu_0']
+                        lambda_scale = prior['lambda']
+                        self._log_posterior.add(eos.LogPrior.Scale(self.parameters,
+                            parameter, minv, maxv, mu_0, lambda_scale), False)
+                elif prior_type in ['gauss', 'gaussian']: # min / max is optional
+                    if ('min' in prior) != ('max' in prior):
+                        raise ValueError('Prior specification must contain both min and max or neither')
+
+                    curtailed = 'min' in prior
+
                     central = prior['central']
                     sigma = prior['sigma']
-                    if type(sigma) is list or type(sigma) is tuple:
-                        sigma_lo = sigma[0]
-                        sigma_hi = sigma[1]
+
+                    if curtailed:
+                        minv = float(prior['min'])
+                        maxv = float(prior['max'])
+                        if type(sigma) is list or type(sigma) is tuple:
+                            sigma_lo = sigma[0]
+                            sigma_hi = sigma[1]
+                        else:
+                            sigma_lo = sigma
+                            sigma_hi = sigma
+                        self._log_posterior.add(
+                            eos.LogPrior.CurtailedGauss(
+                                self.parameters, parameter, minv, maxv,
+                                central - sigma_lo, central, central + sigma_hi
+                            ),
+                            False)
                     else:
-                        sigma_lo = sigma
-                        sigma_hi = sigma
+                        if type(sigma) is list or type(sigma) is tuple:
+                            raise ValueError('Prior specification must contain a scalar sigma value for a gaussian prior with infinite support')
+                        self._log_posterior.add(
+                            eos.LogPrior.Gaussian(
+                                self.parameters, parameter, central, sigma
+                            ),
+                            False)
+                elif prior_type == 'poisson':
+                    k = float(prior['k'])
                     self._log_posterior.add(
-                        eos.LogPrior.CurtailedGauss(
-                            self.parameters, parameter, minv, maxv,
-                            central - sigma_lo, central, central + sigma_hi
-                        ),
+                        eos.LogPrior.Poisson(self.parameters, parameter, k),
                         False)
-                elif 'scale' == prior_type:
-                    mu_0 = prior['mu_0']
-                    lambda_scale = prior['lambda']
-                    self._log_posterior.add(eos.LogPrior.Scale(self.parameters,
-                        parameter, minv, maxv, mu_0, lambda_scale), False)
                 else:
                     raise ValueError('Unknown prior type \'{}\''.format(prior_type))
 
                 p = self.parameters[parameter]
-                p.set_min(minv)
-                p.set_max(maxv)
                 self.varied_parameters.append(p)
             elif 'constraint' in prior:
                 constraint_name = eos.QualifiedName(prior['constraint'])
@@ -666,8 +689,8 @@ class Analysis:
             result += fr'''
                 <tr>
                     <td><tt>{p['parameter']}</tt></td>
-                    <td>{p['min']}</td>
-                    <td>{p['max']}</td>
+                    <td>{p['min'] if 'min' in p else None}</td>
+                    <td>{p['max'] if 'min' in p else None}</td>
                     <td>{p['type']}</td>
                 </tr>
             '''
