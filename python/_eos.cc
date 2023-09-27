@@ -39,6 +39,7 @@
 #include "eos/statistics/test-statistic-impl.hh"
 #include "eos/nonlocal-form-factors/charm-loops-impl.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
+#include "python/_eos/log.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
@@ -190,27 +191,6 @@ namespace impl
     void translate_exception(const Exception & e)
     {
         PyErr_SetString(PyExc_RuntimeError, e.what());
-    }
-
-    void logging_callback(PyObject * c, const std::string & id, const LogLevel & l, const std::string & m)
-    {
-        call<void>(c, id, l, m);
-    }
-
-    void register_log_callback(PyObject * c)
-    {
-        Log::instance()->register_callback(std::bind(&logging_callback, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-    }
-
-    void set_native_log_level(const LogLevel & log_level)
-    {
-        Log::instance()->set_log_level(log_level);
-    }
-
-    // for testing
-    void emit_native_log(const std::string & id, const LogLevel & log_level, const std::string & m)
-    {
-        Log::instance()->message(id, log_level) << m;
     }
 
     // wrapper to avoid issues with virtual inheritance and overloading
