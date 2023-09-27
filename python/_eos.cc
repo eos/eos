@@ -37,86 +37,14 @@
 #include "eos/statistics/log-posterior.hh"
 #include "eos/statistics/log-prior.hh"
 #include "eos/statistics/test-statistic-impl.hh"
-
 #include "eos/nonlocal-form-factors/charm-loops-impl.hh"
+#include "python/_eos/external-log-likelihood-block.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
 
 using namespace boost::python;
 using namespace eos;
-
-namespace eos
-{
-    class ExternalLogLikelihoodBlock :
-        public LogLikelihoodBlock
-    {
-        private:
-            ObservableCache _cache;
-            object _factory;
-            object _python_llh_block;
-            object _evaluate;
-            unsigned _number_of_observations;
-
-        public:
-            ExternalLogLikelihoodBlock(const ObservableCache & cache, object factory) :
-                _cache(cache),
-                _factory(factory),
-                _python_llh_block(_factory(_cache)),
-                _evaluate(_python_llh_block.attr("evaluate")),
-                _number_of_observations(extract<unsigned>(_python_llh_block.attr("number_of_observations")))
-            {
-                if (! PyCallable_Check(_evaluate.ptr()))
-                {
-                    throw InternalError("ExternalLogLikelihoodBlock encountered a factory that does not yield a callable 'evaluate()' attribute");
-                }
-            }
-
-            ~ExternalLogLikelihoodBlock() = default;
-
-            static LogLikelihoodBlockPtr make(const ObservableCache & cache, object factory)
-            {
-                return LogLikelihoodBlockPtr(new ExternalLogLikelihoodBlock(cache, factory));
-            }
-
-            virtual std::string as_string() const override
-            {
-                return "ExternalLikelihoodBlock";
-            }
-
-            virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const override
-            {
-                return LogLikelihoodBlockPtr(new ExternalLogLikelihoodBlock(cache, this->_factory));
-            }
-
-            virtual double evaluate() const override
-            {
-                return extract<double>(_evaluate());
-            }
-
-            virtual unsigned int number_of_observations() const override
-            {
-                return _number_of_observations;
-            }
-
-            virtual double sample(gsl_rng *) const override
-            {
-                throw InternalError("Not implemented");
-                return 0.0;
-            }
-
-            virtual double significance() const override
-            {
-                throw InternalError("Not implemented");
-                return 0.0;
-            }
-
-            virtual TestStatistic primary_test_statistic() const override
-            {
-                return test_statistics::Empty();
-            }
-    };
-}
 
 namespace impl
 {
