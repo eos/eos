@@ -18,8 +18,6 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "config.h"
-
 #include "eos/constraint.hh"
 #include "eos/observable.hh"
 #include "eos/reference.hh"
@@ -40,6 +38,7 @@
 #include "eos/nonlocal-form-factors/charm-loops-impl.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
 #include "python/_eos/log.hh"
+#include "python/_eos/version.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
@@ -185,8 +184,6 @@ namespace impl
               >();
         }
     };
-
-    static const char version[] = PACKAGE_VERSION;
 
     void translate_exception(const Exception & e)
     {
