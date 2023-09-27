@@ -79,7 +79,8 @@ _eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = \
 	_eos.cc \
 	_eos/external-log-likelihood-block.cc _eos/external-log-likelihood-block.hh \
-	_eos/log.cc _eos/log.hh
+	_eos/log.cc _eos/log.hh \
+	_eos/version.cc _eos/version.hh
 _eos_la_CXXFLAGS = @BOOST_PYTHON_CXXFLAGS@ @PYTHON_CXXFLAGS@ @AM_CXXFLAGS@ @GSL_CXXFLAGS@
 _eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex PyInit__eos @BOOST_PYTHON_LDFLAGS@
 _eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la -lboost_python$(BOOST_PYTHON_SUFFIX)
