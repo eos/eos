@@ -39,6 +39,7 @@
 #include "python/_eos/external-log-likelihood-block.hh"
 #include "python/_eos/log.hh"
 #include "python/_eos/version.hh"
+#include "python/_eos/wrappers.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
@@ -48,84 +49,6 @@ using namespace eos;
 
 namespace impl
 {
-    // raw constructor for class Kinematics
-    object
-    Kinematics_ctor(tuple args, dict kwargs)
-    {
-        // strip off self
-        object self = args[0];
-        args = tuple(args.slice(1,_));
-
-        self.attr("__init__")();
-
-        if (1 < len(args))
-        {
-            PyErr_SetString(PyExc_TypeError, "eos.Kinematics expects exactly one argument, or keyword arguments, but not both");
-            return object();
-        }
-
-        dict kinematics;
-
-        if (1 == len(args))
-        {
-            kinematics = dict(args[0]);
-            args = tuple(args.slice(1,_));
-        }
-        else
-        {
-            kinematics = kwargs;
-        }
-
-        list items = kinematics.items();
-        for (unsigned i = 0 ; i < len(items) ; ++i)
-        {
-            object name = items[i][0];
-            object value = items[i][1];
-            self.attr("declare")(name, value);
-        }
-
-        return object();
-    }
-
-    // raw constructor for class Options
-    object
-    Options_ctor(tuple args, dict kwargs)
-    {
-        // strip off self
-        object self = args[0];
-        args = tuple(args.slice(1,_));
-
-        self.attr("__init__")();
-
-        if (1 < len(args))
-        {
-            PyErr_SetString(PyExc_TypeError, "eos.Options expects exactly one argument, or keyword arguments, but not both");
-            return object();
-        }
-
-        dict options;
-
-        if (1 == len(args))
-        {
-            options = dict(args[0]);
-            args = tuple(args.slice(1,_));
-        }
-        else
-        {
-            options = kwargs;
-        }
-
-        list items = options.items();
-        for (unsigned i = 0 ; i < len(items) ; ++i)
-        {
-            object name = items[i][0];
-            object value = items[i][1];
-            self.attr("declare")(name, value);
-        }
-
-        return object();
-    }
-
     // converter for std::pair
     // converts a std::pair instance to a Python tuple, from Boost Python example
     template <typename T1, typename T2>
@@ -184,14 +107,6 @@ namespace impl
               >();
         }
     };
-
-    void translate_exception(const Exception & e)
-    {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-    }
-
-    // wrapper to avoid issues with virtual inheritance and overloading
-    double m_b_pole_wrapper_noargs(Model& m) { return m.m_b_pole(); }
 }
 
 BOOST_PYTHON_MODULE(_eos)
