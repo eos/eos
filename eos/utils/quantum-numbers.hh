@@ -22,6 +22,7 @@
 
 #include <eos/utils/stringify.hh>
 
+#include <cstdint>
 #include <ostream>
 #include <string>
 
