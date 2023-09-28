@@ -68,6 +68,8 @@ namespace eos
         {
             throw InternalError("The number of weights implemented is smaller than the number of coefficients of phi_+");
         }
+
+        this->uses(*blcdas);
     }
 
     FormFactors<PToGamma> *
