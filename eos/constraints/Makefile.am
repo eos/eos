@@ -22,6 +22,7 @@ CONSTRAINTS_FILES = \
 	Bs-to-phi-charmonium.yaml \
 	Bs-to-phi-ll.yaml \
 	D-to-K-l-nu.yaml \
+	D-to-P-form-factors.yaml \
 	Dq-to-dilepton.yaml \
 	dispersive-bounds.yaml \
 	ee-to-ccbar.yaml \
