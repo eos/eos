@@ -87,8 +87,6 @@ namespace eos
         {
             Context ctx("When constructing D_q^+->l^+nu observable");
 
-            using std::placeholders::_1;
-            using std::placeholders::_2;
             switch (opt_q.value())
             {
                 case QuarkFlavor::strange:

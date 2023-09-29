@@ -19,7 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/b-decays/b-to-l-nu.hh>
+#include <eos/c-decays/dq-to-l-nu.hh>
 #include <eos/maths/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -35,12 +35,12 @@
 using namespace test;
 using namespace eos;
 
-class BToLeptonNeutrinoTest :
+class DqToLeptonNeutrinoTest :
     public TestCase
 {
     public:
-        BToLeptonNeutrinoTest() :
-            TestCase("b_to_l_nu_test")
+        DqToLeptonNeutrinoTest() :
+            TestCase("dq_to_l_nu_test")
         {
         }
 
@@ -49,99 +49,29 @@ class BToLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["WET::G_Fermi"]        = 1.000;
-                p["CKM::abs(V_ub)"]      = 1.000;
-                p["CKM::abs(V_cb)"]      = 2.000;
-                p["mass::B_u"]           = 2.000;
-                p["mass::B_c"]           = 3.000;
-                p["decay-constant::B_u"] = 1.000;
-                p["decay-constant::B_c"] = 1.500;
+                p["CKM::abs(V_cs)"]      = 1.000;
+                p["mass::D_s"]           = 2.000;
+                p["decay-constant::D_s"] = 1.000;
                 p["mass::e"]             = 1.000;
                 p["QM::hbar"]            = 1.000;
-                p["life_time::B_u"]      = 1.000;
-                p["life_time::B_c"]      = 0.100;
-                p["ubenue::Re{cVL}"]     = 1.000;
+                p["life_time::D_s"]      = 1.000;
+                p["scnuee::Re{cVL}"]     = 1.000;
 
                 Options oo
                 {
                     { "model", "CKM" },
-                    { "l",     "e"       },
-                    { "q",     "u"       }
+                    { "l",     "e"   },
+                    { "q",     "s"   }
                 };
 
-                BToLeptonNeutrino d(p, oo);
+                DqToLeptonNeutrino d(p, oo);
 
                 const double eps = 1e-6;
 
                 TEST_CHECK_NEARLY_EQUAL(
-                        std::pow(1.0066 * 1., 2) * std::pow((1.-std::pow(1./2., 2)), 2) * 2. / (8. * M_PI),
                         d.branching_ratio(),
-                        eps);
-            }
-
-            {
-                Parameters p = Parameters::Defaults();
-                p["WET::G_Fermi"]        = 1.000;
-                p["CKM::abs(V_ub)"]      = 1.000;
-                p["CKM::abs(V_cb)"]      = 2.000;
-                p["mass::B_u"]           = 2.000;
-                p["mass::B_c"]           = 3.000;
-                p["decay-constant::B_u"] = 1.000;
-                p["decay-constant::B_c"] = 1.500;
-                p["mass::e"]             = 1.000;
-                p["QM::hbar"]            = 1.000;
-                p["life_time::B_u"]      = 1.000;
-                p["life_time::B_c"]      = 0.100;
-                p["ubenue::Re{cVL}"]     = 1.000;
-
-                Options oo
-                {
-                    { "model", "CKM" },
-                    { "l",     "e"       },
-                    { "q",     "c"       }
-                };
-
-                BToLeptonNeutrino d(p, oo);
-
-                const double eps = 1e-12;
-
-                TEST_CHECK_NEARLY_EQUAL(
-                        std::pow(1.0066 * 1., 2) * 3. / (8. * M_PI) * 0.1
-                        * std::pow(1.5 * 2. * (1.-std::pow(1./3., 2)), 2),
-                        d.branching_ratio(),
-                        eps);
-            }
-
-            {
-                Parameters p = Parameters::Defaults();
-                p["WET::G_Fermi"]        = 1.000;
-                p["CKM::abs(V_ub)"]      = 1.000;
-                p["mass::B_u"]           = 2.000;
-                p["decay-constant::B_u"] = 1.000;
-                p["mass::e"]             = 1.000;
-                p["QM::hbar"]            = 1.000;
-                p["life_time::B_u"]      = 1.000;
-                p["ubenue::Re{cVL}"]     = 1.000;
-                p["ubenue::Re{cVR}"]     = 0.500;
-                p["ubenue::Re{cSL}"]     = 0.000;
-                p["ubenue::Re{cSR}"]     = 0.000;
-
-
-                Options oo
-                {
-                    { "model", "WET" },
-                    { "l",     "e"          },
-                    { "q",     "u"          }
-                };
-
-                BToLeptonNeutrino d(p, oo);
-
-                const double eps = 1e-12;
-
-                // eta factor corrections not yet implemented
-                TEST_CHECK_NEARLY_EQUAL(
-                        std::pow(0.5, 2) * std::pow((1.-std::pow(1./2., 2)), 2) * 2. / (8. * M_PI),
-                        d.branching_ratio(),
+                        std::pow(1.01033 * 1., 2) * std::pow((1.-std::pow(1./2., 2)), 2) * 2. / (8. * M_PI),
                         eps);
             }
         }
-} b_to_l_nu_test;
+} dq_to_l_nu_test;
