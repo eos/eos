@@ -21,6 +21,7 @@ CONSTRAINTS_FILES = \
 	Bs-to-Ds-gamma-l-nu.yaml \
 	Bs-to-phi-charmonium.yaml \
 	Bs-to-phi-ll.yaml \
+	D-to-K-l-nu.yaml \
 	dispersive-bounds.yaml \
 	ee-to-ccbar.yaml \
 	Lb-to-L-ll.yaml \
