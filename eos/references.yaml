@@ -1041,6 +1041,14 @@ ETM:2017B:
     id: oai:arXiv.org:1706.03017
   inspire-id: Lubicz:2017syv
   title: Scalar and vector form factors of $D \to \pi(K) \ell \nu$ decays with $N_f=2+1+1$ twisted fermions
+ETM:2018A:
+  authors: Lubicz, V. and Riggio, L. and Salerno, G. and Simula, S. and Tarantino, C.
+  collaboration: ETM
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1803.04807
+  inspire-id: Lubicz:2018rfs
+  title: Tensor form factor of $D \to \pi(K) \ell \nu$ and $D \to \pi(K) \ell \ell$ decays with $N_f=2+1+1$ twisted-mass fermions
 F:2012A:
   authors: Fleischer, Robert
   eprint:
