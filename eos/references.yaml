@@ -1033,6 +1033,14 @@ ETM:2017A:
     id: oai:arXiv.org:1707.04529
   inspire-id: Lubicz:2017asp
   title: Masses and decay constants of $D^*_{(s)}$ and $B^*_{(s)}$ mesons with $N_f = 2 + 1 + 1$ twisted mass fermions
+ETM:2017B:
+  authors: Lubicz, V. and Riggio, L. and Salerno, G. and Simula, S. and Tarantino, C.
+  collaboration: ETM
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1706.03017
+  inspire-id: Lubicz:2017syv
+  title: Scalar and vector form factors of $D \to \pi(K) \ell \nu$ decays with $N_f=2+1+1$ twisted fermions
 F:2012A:
   authors: Fleischer, Robert
   eprint:
