@@ -1319,6 +1319,14 @@ HPQCD:2017A:
   inspire-id: Harrison:2017fmw
   title: Lattice QCD calculation of the ${{B}_{(s)}\to D_{(s)}^{*}\ell{\nu}}$ form
     factors at zero recoil and implications for ${|V_{cb}|}$
+HPQCD:2021A:
+  authors: Chakraborty, Bipasha and Parrott, W. G. and Bouchard, C. and Davies, C. T. H. and Koponen, J. and Lepage, G. P.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2104.09883
+  inspire-id: Chakraborty:2021qav
+  title: Improved $V_{cs}$ determination using precise lattice QCD form factors for $D \to K \ell \nu$
 HPQCD:2022A:
   authors: Parrott, W. G. and Bouchard, C. and Davies, C. T. H.
   collaboration: HPQCD
