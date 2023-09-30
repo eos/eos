@@ -1,0 +1,165 @@
+﻿---
+AccessModifierOffset: '-2'
+AlignAfterOpenBracket: 'Align'
+AlignArrayOfStructures: 'Right'
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AlignCaseColons: false
+AlignEscapedNewlines: 'Left'
+AlignOperands: true
+AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowBreakBeforeNoexceptSpecifier: 'Never'
+AllowShortBlocksOnASingleLine: 'Never'
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortCompoundRequirementOnASingleLine: true
+AllowShortFunctionsOnASingleLine: 'Inline'
+AllowShortIfStatementsOnASingleLine: 'Never'
+AllowShortLambdasOnASingleLine: 'All'
+BinPackArguments: false
+# the following requires BreakBeforeBreaces to be set to 'Custom'
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: 'Always'
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BracedInitializerIndentWidth: '4'
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: 'Leave'
+BreakAfterReturnType: 'AllDefinitions'
+BreakBeforeBinaryOperators: 'NonAssignment'
+BreakBeforeBraces: 'Custom'   # See BraceWrapping
+BreakBeforeConceptDeclarations: 'Always'
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: 'AfterColon'
+BreakFunctionDefinitionParameters: false
+BreakInheritanceList: 'AfterColon'
+BreakStringLiterals: false
+BreakTemplateDeclarations: 'MultiLine'
+ColumnLimit: '180'
+CompactNamespaces: false
+ConstructorInitializerIndentWidth: '4'
+ContinuationIndentWidth: '8'
+Cpp11BracedListStyle: false
+EmptyLineAfterAccessModifier: 'Never'
+EmptyLineBeforeAccessModifier: 'LogicalBlock'
+FixNamespaceComments: true
+IncludeBlocks: 'Regroup'
+IncludeCategories:
+  - Regex: '^(<eos|"eos)/'
+    Priority: 1
+  - Regex: '^<test/'
+    Priority: 2
+  - Regex: '^(<python/_eos|"python/_eos)/'
+    Priority: 3
+  - Regex: '^<boost/'
+    Priority: 4
+  - Regex: '^<gsl/'
+    Priority: 5
+IndentAccessModifiers: true
+IndentCaseBlocks: true
+IndentCaseLabels: true
+IndentExternBlock: 'AfterExternBlock'
+IndentGotoLabels: true
+IndentPPDirectives: 'AfterHash'
+IndentRequiresClause: false
+IndentWidth: '4'
+IndentWrappedFunctionNames: false
+InsertBraces: true
+InsertNewlineAtEOF: true
+InsertTrailingCommas: 'Wrapped'
+KeepEmptyLinesAtEOF: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+LambdaBodyIndentation: 'OuterScope'
+Language: Cpp
+LineEnding: 'LF'
+MaxEmptyLinesToKeep: '2'
+NamespaceIndentation: All
+NamespaceMacros: [ 'BOOST_PYTHON_MODULE' ]
+PPIndentWidth: 2
+PackConstructorInitializers: 'Never'
+PointerAlignment: 'Middle'
+QualifierAlignment: 'Custom'
+QualifierOrder:
+  - 'friend'
+  - 'inline'
+  - 'static'
+  - 'const'
+  - 'constexpr'
+  - 'volatile'
+  - 'type'
+ReferenceAlignment: 'Middle'
+ReflowComments: true
+RemoveParentheses: 'Leave'
+RemoveSemicolon: true
+RequiresClausePosition: 'WithPreceding'
+RequiresExpressionIndentation: 'OuterScope'
+SeparateDefinitionBlocks: 'Always'
+SortIncludes: 'CaseInsensitive'
+SortUsingDeclarations: 'Lexicographic'
+SpaceAfterCStyleCast: true
+SpaceAfterLogicalNot: true
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: 'Both'
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: 'Custom'
+SpaceBeforeParensOptions:
+  AfterControlStatements: true
+  AfterFunctionDeclarationName: false
+  AfterFunctionDefinitionName: false
+  AfterOverloadedOperator: true
+  AfterPlacementOperator: true
+  AfterRequiresInClause: true
+  AfterRequiresInExpression: true
+  BeforeNonEmptyParentheses: false
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: 'Never'
+SpacesInContainerLiterals: true
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: -1
+SpacesInParens: 'Custom'
+SpacesInParensOptions:
+  InConditionalStatements: false
+  InCStyleCasts: false
+  InEmptyParentheses: false
+  Other: false
+SpacesInSquareBrackets: false
+Standard: 'c++20'
+TabWidth: '4'
+UseTab: 'Never'
