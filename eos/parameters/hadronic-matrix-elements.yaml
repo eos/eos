@@ -191,6 +191,12 @@ groups:
           max:     +6.3311
           latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::D_s,0@BSZ2015' :
+          central: +2.318
+          min:     +2.318
+          max:     +2.318
+          latex:   '$m_{D_{s,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::B_d,0@BSZ2015' :
           central: +5.540
           min:     +5.540
@@ -214,6 +220,12 @@ groups:
           min:     +6.420
           max:     +6.420
           latex:   '$m_{B_{c,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::D_s,1@BSZ2015' :
+          central: +2.460
+          min:     +2.460
+          max:     +2.460
+          latex:   '$m_{D_{s,1}}^\mathrm{BSZ}$'
           unit:     'GeV'
       'mass::B_d,1@BSZ2015' :
           central: +5.724
