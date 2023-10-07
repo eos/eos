@@ -640,6 +640,13 @@ groups:
           unit:     's'
           latex:    '$\tau_{\Lambda_b}$'
           comments: 'cf. PDG2019 update by [HFLAV]'
+      'life_time::Lambda_c' :
+          central: +2.015e-13
+          min:     +2.042e-13
+          max:     +1.988e-13
+          unit:     's'
+          latex:    '$\tau_{\Lambda_c}$'
+          comments: 'cf. PDG2019'
   # }}}
 
   # Parameters for Miscellaneous Baryon Properties
