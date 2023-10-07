@@ -19,6 +19,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/c-decays/dq-to-l-nu.hh>
+#include <eos/c-decays/lambdac-to-lambda-l-nu.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -33,11 +34,32 @@ namespace eos
             R"(Observables in $D_q^+\to \ell^+\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor.)",
             {
-                make_observable("D_s^+->l^+nu::BR", R"(\mathcal{B}(D_s^+ \to \ell^+\nu))",
+                make_observable("D_s->lnu::BR", R"(\mathcal{B}(D_s^+ \to \ell^+\nu))",
                         Unit::None(),
                         &DqToLeptonNeutrino::branching_ratio,
                         std::make_tuple(),
                         Options{ { "q", "s" } }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // Lambda_c decays
+    // {{{
+    ObservableGroup
+    make_lambdac_to_lambda_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\Lambda_c \to \Lambda \ell^+ \nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor.)",
+            {
+                make_observable("Lambda_c->Lambdalnu::BR", R"(\mathcal{B}(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
+                        Unit::None(),
+                        &LambdaCToLambdaLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{}),
             }
         );
 
@@ -54,6 +76,9 @@ namespace eos
             {
                 // D_q^+ -> l^+ nu
                 make_dq_to_l_nu_group(),
+
+                // Lc -> L l^+ nu
+                make_lambdac_to_lambda_l_nu_group()
             }
         );
 

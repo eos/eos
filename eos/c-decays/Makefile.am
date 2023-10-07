@@ -8,6 +8,7 @@ lib_LTLIBRARIES = libeoscdecays.la
 libeoscdecays_la_SOURCES = \
 	dq-to-l-nu.cc dq-to-l-nu.hh \
 	d-to-psd-l-nu.cc d-to-psd-l-nu.hh \
+	lambdac-to-lambda-l-nu.cc lambdac-to-lambda-l-nu.hh \
 	observables.cc observables.hh
 libeoscdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeoscdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
@@ -23,6 +24,7 @@ include_eos_cdecaysdir = $(includedir)/eos/c-decays
 include_eos_cdecays_HEADERS = \
 	dq-to-l-nu.hh \
 	d-to-psd-l-nu.hh \
+	lambdac-to-lambda-l-nu.hh \
 	observables.hh
 
 EXTRA_DIST =
@@ -32,7 +34,8 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	dq-to-l-nu_TEST \
-	d-to-k-l-nu_TEST
+	d-to-k-l-nu_TEST \
+	lambdac-to-lambda-l-nu_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -47,3 +50,5 @@ check_PROGRAMS = $(TESTS)
 dq_to_l_nu_TEST_SOURCES = dq-to-l-nu_TEST.cc
 
 d_to_k_l_nu_TEST_SOURCES = d-to-k-l-nu_TEST.cc
+
+lambdac_to_lambda_l_nu_TEST_SOURCES = lambdac-to-lambda-l-nu_TEST.cc
