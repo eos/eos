@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,11 +43,6 @@ namespace eos
         static constexpr double tp = (5.279 + 0.494) * (5.279 + 0.494);
         // zero of the conformal mapping: z(t0, t0) = 0.0
         static constexpr double t0 = tm;
-        // first resonances sorted by spin/parity
-        static constexpr double mR2_0m = 5.367 * 5.367;
-        static constexpr double mR2_0p = 5.711 * 5.711;
-        static constexpr double mR2_1m = 5.416 * 5.416;
-        static constexpr double mR2_1p = 5.750 * 5.750;
         // OPE results for the unitarity bounds
         static constexpr double chi_0m = 1.57e-2;
         static constexpr double chi_0p = 1.42e-2;
