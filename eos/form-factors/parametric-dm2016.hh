@@ -31,6 +31,9 @@
 namespace eos
 {
     template <typename Process_>
+    class DM2016FormFactorTraits;
+
+    template <typename Process_>
     class DM2016FormFactors :
         public FormFactors<OneHalfPlusToOneHalfPlus>
     {
@@ -48,10 +51,7 @@ namespace eos
             UsedParameter _alpha_0_perp_t,  _alpha_1_perp_t,  _alpha_2_perp_t;
             UsedParameter                   _alpha_1_perp_t5, _alpha_2_perp_t5;
 
-            static constexpr double _z(const double & t, const double & tp, const double & t0)
-            {
-                return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
-            }
+            std::unique_ptr<const DM2016FormFactorTraits<Process_>> _traits;
 
         public:
             DM2016FormFactors(const Parameters & parameters, const Options & options);

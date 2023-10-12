@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2014-2023 Danny van Dyk
  * Copyright (c) 2022 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -25,6 +25,93 @@
 
 namespace eos
 {
+    template <typename Process_>
+    class DM2016FormFactorTraits :
+        public virtual ParameterUser
+    {
+        public:
+            // The following parameters are part of the parameterization and must match the
+            // the ones used for the extraction of the coefficients of the z-expension
+            const double m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            const double m_R_0m, m_R_0p, m_R_1m, m_R_1p;
+            const double tp; // pair production thresholds
+            const double tm; // kinematic endpoint
+            const double t0; // z(t_0) = 0, t_m is the endpoint of the semileptonic process
+
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0m_masses;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0p_masses;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_1m_masses;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_1p_masses;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> threshold_tp_values;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> config_t0_values;
+
+            DM2016FormFactorTraits(const Parameters & p) :
+                m_1(Process_::m1),
+                m_2(Process_::m2),
+                m_R_0m(resonance_0m_masses.at(Process_::partonic_transition)),
+                m_R_0p(resonance_0p_masses.at(Process_::partonic_transition)),
+                m_R_1m(resonance_1m_masses.at(Process_::partonic_transition)),
+                m_R_1p(resonance_1p_masses.at(Process_::partonic_transition)),
+                tp(threshold_tp_values.at(Process_::partonic_transition)),
+                tm((m_1 - m_2) * (m_1 - m_2)),
+                t0(tm)
+            {
+            }
+
+            complex<double> calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
+            {
+                return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
+            }
+
+            double calc_z(const double & t, const double & tp, const double & t0) const
+            {
+                if (t > tp)
+                    throw InternalError("The real conformal mapping is used above threshold: " + stringify(t) + " > " + stringify(tp));
+
+                return real(calc_z(complex<double>(t, 0.0), complex<double>(tp, 0.0), complex<double>(t0, 0.0)));
+            }
+
+            double calc_z(const double & t) const
+            {
+                return calc_z(t, this->tp, this->tm);
+            }
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
+    DM2016FormFactorTraits<Process_>::resonance_0m_masses
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.367 },
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
+    DM2016FormFactorTraits<Process_>::resonance_0p_masses
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.711 },
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
+    DM2016FormFactorTraits<Process_>::resonance_1m_masses
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.416 },
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
+    DM2016FormFactorTraits<Process_>::resonance_1p_masses
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.750 },
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
+    DM2016FormFactorTraits<Process_>::threshold_tp_values
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), (5.279 + 0.494) * (5.279 + 0.494) },
+    };
+
     template <typename Process_>
     DM2016FormFactors<Process_>::DM2016FormFactors(const Parameters & p, const Options &) :
         // time, V
@@ -66,7 +153,9 @@ namespace eos
         _alpha_2_perp_t(p[stringify(Process_::label) + "::a_2_perp^T@DM2016"], *this),
         // perp, T5
         _alpha_1_perp_t5(p[stringify(Process_::label) + "::a_1_perp^T5@DM2016"], *this),
-        _alpha_2_perp_t5(p[stringify(Process_::label) + "::a_2_perp^T5@DM2016"], *this)
+        _alpha_2_perp_t5(p[stringify(Process_::label) + "::a_2_perp^T5@DM2016"], *this),
+        // traits
+        _traits(new DM2016FormFactorTraits<Process_>(p))
     {
     }
 
@@ -82,9 +171,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_time_v(const double & s) const
     {
-        static const double mR2 = Process_::mR2_0p;
+        static const double mR2 = power_of<2>(_traits->m_R_0p);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_v() + _alpha_1_time_v() * z + _alpha_2_time_v() * z2);
     }
@@ -93,9 +182,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_long_v(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1m;
+        static const double mR2 = power_of<2>(_traits->m_R_1m);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_v() + _alpha_1_long_v() * z + _alpha_2_long_v() * z2);
     }
@@ -104,9 +193,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_perp_v(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1m;
+        static const double mR2 = power_of<2>(_traits->m_R_1m);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_v() + _alpha_1_perp_v() * z + _alpha_2_perp_v() * z2);
     }
@@ -116,9 +205,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_time_a(const double & s) const
     {
-        static const double mR2 = Process_::mR2_0m;
+        static const double mR2 = power_of<2>(_traits->m_R_0m);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_a() + _alpha_1_time_a() * z + _alpha_2_time_a() * z2);
     }
@@ -127,9 +216,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_long_a(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1p;
+        static const double mR2 = power_of<2>(_traits->m_R_1p);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_a() + _alpha_1_long_a() * z + _alpha_2_long_a() * z2);
     }
@@ -138,9 +227,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_perp_a(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1p;
+        static const double mR2 = power_of<2>(_traits->m_R_1p);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         // Using alpha_0_long_a instead of alpha_0_perp_a, in order to
         // fulfill relation eq. (7), [DM2016], p. 3.
@@ -152,9 +241,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_long_t(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1m;
+        static const double mR2 = power_of<2>(_traits->m_R_1m);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t() + _alpha_1_long_t() * z + _alpha_2_long_t() * z2);
     }
@@ -163,9 +252,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_perp_t(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1m;
+        static const double mR2 = power_of<2>(_traits->m_R_1m);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_t() + _alpha_1_perp_t() * z + _alpha_2_perp_t() * z2);
     }
@@ -175,9 +264,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_long_t5(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1p;
+        static const double mR2 = power_of<2>(_traits->m_R_1p);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_long_t5() * z + _alpha_2_long_t5() * z2);
     }
@@ -186,9 +275,9 @@ namespace eos
     double
     DM2016FormFactors<Process_>::f_perp_t5(const double & s) const
     {
-        static const double mR2 = Process_::mR2_1p;
+        static const double mR2 = power_of<2>(_traits->m_R_1p);
 
-        const double z = _z(s, Process_::tp, Process_::tm), z2 = z * z;
+        const double z = _traits->calc_z(s), z2 = z * z;
 
         // Using alpha_0_long_t5 instead of alpha_0_perp_t5, in order to
         // fulfill relation eq. (8), [DM2016], p. 3.
