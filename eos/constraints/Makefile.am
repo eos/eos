@@ -28,6 +28,7 @@ CONSTRAINTS_FILES = \
 	ee-to-ccbar.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
+	Lc-to-L-form-factors.yaml \
 	Lc-to-L-l-nu.yaml \
 	miscellaneous.yaml \
 	wet-constraints.yaml
