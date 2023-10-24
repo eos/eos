@@ -227,7 +227,8 @@ class ClassMethodTests(unittest.TestCase):
         analysis = eos.Analysis(**analysis_args)
 
         # Sample from the prior
-        results = analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10, print_progress=False)
+        results = [r for r in analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10, print_progress=False)]
+        results = results[-1]
 
         # Test samples against constraint
         entry = eos.Constraints()['B->K::FormFactors[parametric,LCSR]@GKvD:2018A']
@@ -290,7 +291,8 @@ class ClassMethodTests(unittest.TestCase):
         analysis = eos.Analysis(**analysis_args)
 
         # Sample from the prior
-        results = analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10, print_progress=False)
+        results = [r for r in analysis.sample_nested(bound='multi', nlive=300, dlogz=0.01, seed=10, print_progress=False, sample='rwalk')]
+        results = results[-1]
 
         # Test samples against analytic results:
         means  = [1.26000, 4.18333]
