@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -67,6 +68,11 @@ namespace eos
             return eos::exp::Expression(eos::exp::ObservableNameExpression(name, spec));
         };
 
+        auto make_parameter = [] (const std::string & name)
+        {
+            return eos::exp::Expression(eos::exp::ParameterNameExpression(name));
+        };
+
         auto make_kinematic_variable = [] (const std::string & name)
         {
             return eos::exp::Expression(eos::exp::KinematicVariableNameExpression(name));
@@ -77,6 +83,7 @@ namespace eos
             | constant                                     [ _val = _1 ]
             | (observable_name >> kinematics)              [ _val = phx::bind(make_observable, _1, _2) ]
             | observable_name                              [ _val = phx::bind(make_observable, _1, KinematicsSpecification()) ]
+            | parameter_name                               [ _val = phx::bind(make_parameter, _1)]
             | kinematic_variable_name                      [ _val = phx::bind(make_kinematic_variable, _1) ]
             ;
 
@@ -92,6 +99,12 @@ namespace eos
               "<<"
             >> as_string [ lexeme [ *(char_ - ">>")  ] ] [ _val = _1 ]
             >> ">>"
+            ;
+
+        parameter_name =
+              "[["
+            >> as_string [ lexeme [ *(char_ - "]]")  ] ] [ _val = _1 ]
+            >> "]]"
             ;
 
         kinematics =

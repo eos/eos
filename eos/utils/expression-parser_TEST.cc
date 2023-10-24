@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -183,9 +184,38 @@ class ExpressionParserTest :
                 TEST_CHECK_EQUAL(intersection.size(), kinematic_reader.kinematics.size() + kinematic_reader.aliases.size());
             }
 
+            // testing parsing and evaluation of observables
+            {
+                ExpressionTest test("[[mass::c]] / [[mass::b(MSbar)]]");
+
+                std::stringstream out;
+                ExpressionPrinter printer(out);
+                test.e.accept(printer);
+
+                ExpressionEvaluator evaluator;
+
+                TEST_CHECK(test.completed);
+                TEST_CHECK_EQUAL_STR(
+                    "BinaryExpression(ParameterNameExpression(mass::c)"
+                    " / "
+                    "ParameterNameExpression(mass::b(MSbar)))",
+                    out.str()
+                );
+
+                // Cannot evaluate expression with ObservableNameExpression objects
+                TEST_CHECK_THROWS(InternalError, test.e.accept_returning<double>(evaluator));
+
+                // Extract kinematic variables from an expression
+                ExpressionKinematicReader kinematic_reader;
+                test.e.accept(kinematic_reader);
+
+                std::set<std::string> expected_kinematic{};
+                TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
+            }
+
             // Test numerical evaluation
             {
-                ExpressionTest test("<<test::obs1;multiplier=2>>[q2_min=>q2_min_num] / <<test::obs1>>[q2_min=>q2_min_denom]");
+                ExpressionTest test("<<test::obs1;multiplier=2>>[q2_min=>q2_min_num] / <<test::obs1>>[q2_min=>q2_min_denom] * [[mass::c]] / 1.2");
 
                 Parameters p = Parameters::Defaults();
                 p["mass::c"] = 1.2;
@@ -213,7 +243,7 @@ class ExpressionParserTest :
 
 
                 // Observable with exponentiation
-                ExpressionTest test2("<<mass::tau>>^2 - <<mass::mu>>^2");
+                ExpressionTest test2("[[mass::tau]]^2 - <<mass::mu>>^2");
                 Expression assessable_test2 = test2.e.accept_returning<Expression>(maker);
 
                 TEST_CHECK(test2.completed);
@@ -222,7 +252,7 @@ class ExpressionParserTest :
 
             // testing cloning and usage of parameters
             {
-                ExpressionTest test("{q2} - 4 * <<mass::mu>> * <<mass::tau>>");
+                ExpressionTest test("{q2} - 4 * [[mass::mu]] * <<mass::tau>>");
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
@@ -233,7 +263,7 @@ class ExpressionParserTest :
                     "BinaryExpression("
                         "KinematicVariableNameExpression(q2) - "
                         "BinaryExpression("
-                            "BinaryExpression(ConstantExpression(4) * ObservableNameExpression(mass::mu))"
+                            "BinaryExpression(ConstantExpression(4) * ParameterNameExpression(mass::mu))"
                             " * ObservableNameExpression(mass::tau)"
                         ")"
                     ")",
@@ -326,6 +356,29 @@ class ExpressionParserTest :
                     std::inserter(intersection, intersection.begin())
                 );
                 TEST_CHECK(! intersection.empty());
+            }
+
+            // testing that the parser accepts parameters outside the default set of parameters
+            {
+                ExpressionTest test("[[undeclared::parameter]]");
+
+                std::stringstream out;
+                ExpressionPrinter printer(out);
+
+                test.e.accept(printer);
+                TEST_CHECK_EQUAL(out.str(), "ParameterNameExpression(undeclared::parameter)");
+
+                Parameters p = Parameters::Defaults();
+                ExpressionMaker maker(p, Kinematics(), Options());
+
+                TEST_CHECK_THROWS(UnknownParameterError, test.e.accept_returning<Expression>(maker));
+
+                Expression e;
+                p.declare("undeclared::parameter", "", Unit::Undefined(), 1.0, 0.0, 2.0);
+                TEST_CHECK_NO_THROW(e = test.e.accept_returning<Expression>(maker));
+
+                ExpressionEvaluator evaluator;
+                TEST_CHECK_NEARLY_EQUAL(e.accept_returning<double>(evaluator), 1.0, 1e-10);
             }
         }
 } expression_parser_test;

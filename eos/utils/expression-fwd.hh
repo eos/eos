@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,6 +30,8 @@ namespace eos::exp
     class KinematicVariableNameExpression;
     class KinematicVariableExpression;
     class CachedObservableExpression;
+    class ParameterNameExpression;
+    class ParameterExpression;
 
     using Expression = OneOf<
         BinaryExpression,
@@ -37,7 +40,9 @@ namespace eos::exp
         ObservableExpression,
         KinematicVariableNameExpression,
         KinematicVariableExpression,
-        CachedObservableExpression
+        CachedObservableExpression,
+        ParameterNameExpression,
+        ParameterExpression
     >;
 }
 
