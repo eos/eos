@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +22,7 @@
 #include <eos/observable-fwd.hh>
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/observable_cache.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
 #include <cassert>
@@ -134,6 +136,28 @@ namespace eos::exp
                 cache(cache),
                 id(id),
                 kinematics_specification(kinematics_specification)
+            {
+            }
+    };
+
+    class ParameterNameExpression
+    {
+        public:
+            QualifiedName parameter_name;
+
+            ParameterNameExpression(const QualifiedName & parameter_name) :
+                parameter_name(parameter_name)
+            {
+            }
+    };
+
+    class ParameterExpression
+    {
+        public:
+            Parameter parameter;
+
+            ParameterExpression(const Parameter & parameter) :
+                parameter(parameter)
             {
             }
     };

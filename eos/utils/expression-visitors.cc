@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -115,6 +116,16 @@ namespace eos::exp
         _os << ")";
     }
 
+    void ExpressionPrinter::visit(ParameterNameExpression & e)
+    {
+        _os << "ParameterNameExpression(" << e.parameter_name.full() << ")";
+    }
+
+    void ExpressionPrinter::visit(ParameterExpression & e)
+    {
+        _os << "ParameterExpression(" << e.parameter.name() << ")";
+    }
+
     void ExpressionPrinter::visit(KinematicVariableNameExpression & e)
     {
         _os << "KinematicVariableNameExpression(" << e.variable_name << ")";
@@ -162,6 +173,20 @@ namespace eos::exp
     ExpressionEvaluator::visit(ObservableExpression & e)
     {
         return e.observable->evaluate();
+    }
+
+    double
+    ExpressionEvaluator::visit(ParameterNameExpression &)
+    {
+        throw InternalError("Encountered ParameterNameExpression in ExpressionEvaluator::visit");
+
+        return 0.0;
+    }
+
+    double
+    ExpressionEvaluator::visit(ParameterExpression & e)
+    {
+        return e.parameter.evaluate();
     }
 
     double
@@ -240,6 +265,18 @@ namespace eos::exp
         _kinematics.clear_aliases();
 
         return ObservableExpression(observable, e.kinematics_specification);
+    }
+
+    Expression
+    ExpressionCloner::visit(const ParameterNameExpression & e)
+    {
+        return ParameterNameExpression(e);
+    }
+
+    Expression
+    ExpressionCloner::visit(const ParameterExpression & e)
+    {
+        return ParameterExpression(this->_parameters[e.parameter.name()]);
     }
 
     Expression
@@ -390,6 +427,35 @@ namespace eos::exp
     }
 
     Expression
+    ExpressionMaker::visit(const ParameterNameExpression & e)
+    {
+        Parameter parameter = this->_parameters[e.parameter_name];
+
+        // Record the used parameters
+        if (_parameter_user)
+        {
+            _parameter_user->uses(parameter.id());
+        }
+
+        return ParameterExpression(parameter);
+    }
+
+    Expression
+    ExpressionMaker::visit(const ParameterExpression & e)
+    {
+        // Rebuild the parameter expression with the local set of parameters
+        Parameter parameter = this->_parameters[e.parameter.name()];
+
+        // Record the used parameters
+        if (_parameter_user)
+        {
+            _parameter_user->uses(parameter.id());
+        }
+
+        return ParameterExpression(parameter);
+    }
+
+    Expression
     ExpressionMaker::visit(const KinematicVariableNameExpression & e)
     {
         KinematicVariable kinematic_variable = this->_kinematics[e.variable_name];
@@ -514,6 +580,16 @@ namespace eos::exp
     }
 
     void
+    ExpressionKinematicReader::visit(const ParameterNameExpression &)
+    {
+    }
+
+    void
+    ExpressionKinematicReader::visit(const ParameterExpression &)
+    {
+    }
+
+    void
     ExpressionKinematicReader::visit(const KinematicVariableNameExpression & e)
     {
         this->kinematics.insert(e.variable_name);
@@ -586,6 +662,20 @@ namespace eos::exp
         auto id = _cache.add(e.observable);
 
         return CachedObservableExpression(_cache, id, e.kinematics_specification);
+    }
+
+    Expression
+    ExpressionCacher::visit(const ParameterNameExpression & e)
+    {
+        throw InternalError("Encountered ParameterNameExpression in ExpressionCacher::visit()");
+
+        return e;
+    }
+
+    Expression
+    ExpressionCacher::visit(const ParameterExpression & e)
+    {
+        return ParameterExpression(e);
     }
 
     Expression

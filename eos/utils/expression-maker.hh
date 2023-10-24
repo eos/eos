@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,6 +44,10 @@ namespace eos::exp
             Expression visit(const ObservableNameExpression & e);
 
             Expression visit(const ObservableExpression & e);
+
+            Expression visit(const ParameterNameExpression & e);
+
+            Expression visit(const ParameterExpression & e);
 
             Expression visit(const KinematicVariableNameExpression & e);
 
