@@ -21,6 +21,8 @@
 #include <test/test.hh>
 #include <eos/utils/rge-impl.hh>
 
+#include <array>
+
 using namespace test;
 using namespace eos;
 
