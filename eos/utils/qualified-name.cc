@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2023 Danny van Dyk
  * Copyright (c) 2016 Rafael Silva Coutinho
  *
  * This file is part of the EOS project. EOS is free software;
@@ -76,6 +76,14 @@ namespace eos
             if (std::string::npos != pos)
             {
                 throw QualifiedNameSyntaxError("'" + name + "' is not a valid name part: Character '" + name[pos] + "' may not be used");
+            }
+
+            auto pos_opened = name.find("[[");
+            auto pos_closed = name.find("]]");
+
+            if ((std::string::npos != pos_opened) || (std::string::npos != pos_closed))
+            {
+                throw QualifiedNameSyntaxError("'" + name + "' is not a valid prefix part: Neither '[[' nor ']]' may be used");
             }
         }
 
