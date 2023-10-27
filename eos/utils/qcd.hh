@@ -43,7 +43,7 @@ namespace eos
              * @param mu_0        initial scale mu_0
              * @param beta        parameters of QCD beta function that control the running
              */
-            static double alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const BetaFunction & beta);
+            static double alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const BetaFunction & beta, unsigned int loop_order = 4);
 
             /*!
              * Calculate RGE running of quark mass m_q in the MSbar scheme.
@@ -56,7 +56,7 @@ namespace eos
              * @param beta        parameters of QCD beta function that control the running
              * @param gamma_m     parameters of QCD anomalous mass dimension that control the running
              */
-            static double m_q_msbar(const double & m_q, const double & alpha_s_0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m);
+            static double m_q_msbar(const double & m_q, const double & alpha_s_0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m, unsigned int loop_order = 4);
 
             /*!
              * Calculate the shift from pole mass scheme to MSbar.

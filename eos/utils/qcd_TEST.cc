@@ -38,6 +38,26 @@ class QCDMassesTest :
 
         virtual void run() const
         {
+            // alpha_s running from m_Z to m_b
+            {
+                static const double eps = 1e-15;
+
+                TEST_CHECK_NEARLY_EQUAL(QCD::alpha_s(4.18, 0.12, 91.2, QCD::beta_function_nf_5, 1), 0.2187319006947108, eps);
+                TEST_CHECK_NEARLY_EQUAL(QCD::alpha_s(4.18, 0.12, 91.2, QCD::beta_function_nf_5, 2), 0.231689606286231, eps);
+                TEST_CHECK_NEARLY_EQUAL(QCD::alpha_s(4.18, 0.12, 91.2, QCD::beta_function_nf_5, 3), 0.232060563128784, eps);
+                TEST_CHECK_NEARLY_EQUAL(QCD::alpha_s(4.18, 0.12, 91.2, QCD::beta_function_nf_5, 4), 0.2329548830209454, eps);
+            }
+
+            // mass running from m_b(m_b) to m_b(m_Z)
+            {
+                static const double eps = 1e-10;
+
+                TEST_CHECK_NEARLY_EQUAL(QCD::m_q_msbar(4.18, 0.2187319006947108, 0.12, QCD::beta_function_nf_5, QCD::gamma_m_nf_5, 1), 3.055925614959463, eps);
+                TEST_CHECK_NEARLY_EQUAL(QCD::m_q_msbar(4.18,  0.231689606286231, 0.12, QCD::beta_function_nf_5, QCD::gamma_m_nf_5, 2), 2.851980190583699, eps);
+                TEST_CHECK_NEARLY_EQUAL(QCD::m_q_msbar(4.18,  0.232060563128784, 0.12, QCD::beta_function_nf_5, QCD::gamma_m_nf_5, 3), 2.833395418373546, eps);
+                TEST_CHECK_NEARLY_EQUAL(QCD::m_q_msbar(4.18, 0.2329548830209454, 0.12, QCD::beta_function_nf_5, QCD::gamma_m_nf_5, 4), 2.826500455559605, eps);
+            }
+
             // m_q_msbar(m_q_pole) at 3-loop
             {
                 static const double eps = 1e-7;
@@ -72,8 +92,13 @@ class QCDMassesTest :
 
             // Safety check: higher-than-implemented loop order throws error
             {
+                const constexpr unsigned int zero_loop_order = 0;
                 const constexpr unsigned int higher_loop_order = 4;
+                const constexpr unsigned int even_higher_loop_order = 5;
+                
                 TEST_CHECK_THROWS(InternalError, QCD::m_q_pole(4.0, 0.22, 5.0, higher_loop_order));
+                TEST_CHECK_THROWS(InternalError, QCD::alpha_s(4.0, 0.22, 2.0, QCD::beta_function_nf_4, zero_loop_order));
+                TEST_CHECK_THROWS(InternalError, QCD::alpha_s(4.0, 0.22, 2.0, QCD::beta_function_nf_4, even_higher_loop_order));
             }
         }
 } qcd_masses_test;
