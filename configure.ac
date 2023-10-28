@@ -356,6 +356,23 @@ fi
 dnl }}}
 dnl }}}
 
+dnl {{{
+AC_ARG_ENABLE([prerelease],
+	[AS_HELP_STRING([--enable-prerelease], [enable prerelease and adjust version information])],
+	[
+		AC_MSG_CHECKING([for PYPI_VERSION])
+		if test "x$enableval" == "xno" ; then
+			PYPI_VERSION=$PACKAGE_VERSION
+		else
+			pypi_version_main=`python3 -c "v = [[int(n) for n in '${PACKAGE_VERSION}'.split('.')]] ; v += [[0]] * (3 - [len(v)]) ; v[[-1]] += 1 ; v = [[str(n) for n in v]] ; print('.'.join(v))"`
+			PYPI_VERSION=$pypi_version_main.dev$enableval
+		fi
+		AC_MSG_RESULT([$PYPI_VERSION])
+	],
+	[PYPI_VERSION=$PACKAGE_VERSION]
+	)
+dnl }}}
+
 dnl {{{ check for git HEAD
 if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then
 	GITHEAD=`git describe 2> /dev/null`
@@ -398,6 +415,7 @@ AC_CONFIG_HEADERS(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
+AC_SUBST([PYPI_VERSION])
 AC_CONFIG_FILES([Makefile
 	debian/control-focal
 	debian/control-jammy
