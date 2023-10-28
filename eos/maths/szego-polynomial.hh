@@ -86,20 +86,20 @@ namespace eos
                 // and can be computed recursively by imposing orthogonality of the polynomials.
                 // We use two temporary matrices I and J defined as I[n][i] = Integral[z^i phi_n]
                 // and J[n][i] = Integral[z^i phi_n^*], where the integral is performed over the arc of the unit circle.
-                std::array<std::array<double, order_ + 1>, order_> I;
-                std::array<std::array<double, order_ + 1>, order_> J;
+                std::array<std::array<double, order_ + 1>, order_ + 1> I;
+                std::array<std::array<double, order_ + 1>, order_ + 1> J;
                 std::array<double, order_> verblunsky;
 
                 // Initialization
                 I[0][0] = norm_measure;
                 J[0][0] = norm_measure;
-                for (unsigned n = 1; n <= order_; ++n)
+                for (unsigned n = 1; n < order_ + 1; ++n)
                 {
                     I[n][0] = 0.0; // Orthogonality between phi[n] and phi[0] = 1
                     I[0][n] = 2.0 / n * sin(0.5 * n * norm_measure); // Integral[z^n] on the arc of the unit circle
                     J[0][n] = 2.0 / n * sin(0.5 * n * norm_measure); // Integral[z^n] on the arc of the unit circle
                 }
-                verblunsky[0] = I[0][1] / J[0][0]; // Orthogonality between phi[0] and phi[0] = 1
+                verblunsky[0] = I[0][1] / J[0][0]; // Orthogonality between phi[n] and phi[0] = 1
 
                 // Fill I and J recursively and compute Verblunsky coefficients
                 for (unsigned n = 1; n < order_; ++n)
