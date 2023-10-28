@@ -13,7 +13,7 @@ except ImportError:
 
 setup(
     name='eoshep',
-    version='@VERSION@',
+    version='@PYPI_VERSION@',
     description='EOS -- A HEP program for Flavor Observables',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
