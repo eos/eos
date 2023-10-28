@@ -4,7 +4,7 @@ AC_INIT([EOS],[1.0.10])
 AC_PREREQ([2.69])
 AC_CONFIG_SRCDIR([])
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(1.9)
+AM_INIT_AUTOMAKE([1.9 subdir-objects])
 AC_LANG([C++])
 
 dnl {{{ check for required programs
