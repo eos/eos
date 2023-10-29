@@ -1,0 +1,95 @@
+on:
+    push:
+        branches: [ master, testing ]
+
+    pull_request:
+
+    release:
+        types: [ published ]
+
+name: Build/Check/Deploy for PyPI
+
+concurrency:
+  group: pypi, ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+    build_wheels:
+        runs-on: ubuntu-20.04
+        strategy:
+            matrix:
+                include:
+                  - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 38,  version: cp38  }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 39,  version: cp39  }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 310, version: cp310 }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 311, version: cp311 }
+        name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v3
+
+            - name: Install QEMU and emulation on the Ubuntu runner
+              if: runner.os == 'Linux'
+              run: sudo apt install qemu-user-static
+
+            - name: Create a package directory to make cibuildwheel happy
+              run: |
+                mkdir eoshep
+                touch eoshep/setup.py
+
+            - name: Determine if this is a prerelease build
+              id: prerelease
+              run: |
+                if [[ ${GITHUB_EVENT_NAME} != "release" ]] ; then
+                    echo "option=--enable-prerelease=${{ github.run_number }}" >> $GITHUB_OUTPUT
+                fi
+
+            - name: Build EOS, run tests, and create wheels
+              uses: pypa/cibuildwheel@v2.15.0
+              with:
+                package-dir: eoshep
+              env:
+                CIBW_BUILD: ${{ matrix.version}}-*
+                CIBW_SKIP: \*-musllinux_*
+                CIBW_ARCHS: ${{ matrix.arch}}
+                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_28@sha256:e7714aa1b2779bda5d45455b20b3a9932025fc3fadd09931473e3fa0f80b5378
+                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_28@sha256:e9e753144874023991e08cb94f2ad840820c021f9e4431aab78e38ee22785811
+                CIBW_BEFORE_BUILD_LINUX: |
+                  pushd {project}
+                  ./autogen.bash
+                  export BOOST_PYTHON_SKIP=yes
+                  export CXXFLAGS="-O2 -g ${{ matrix.cxxflags }}"
+                  ./configure \
+                    --disable-cli \
+                    ${{ steps.prerelease.outputs.option }} \
+                    --with-boost-python-suffix=${{ matrix.boost_python_suffix }} \
+                    --enable-lto
+                  make -j2 all
+                  make -j2 check VERBOSE=1
+                  make -C python eoshep-before DESTDIR={package}
+                  popd
+                CIBW_TEST_COMMAND: |
+                  cd /
+                  python3 -c 'import eos ; print(eos.__version__)'
+
+            - name: Upload wheels as artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                path: ./wheelhouse/*.whl
+
+    upload_pypi:
+        needs: [ build_wheels ]
+        if: ${{ github.event_name == 'release' }}
+        runs-on: ubuntu-latest
+        name: Deploy EOS wheels to PyPI
+        steps:
+            - uses: actions/download-artifact@v2
+              with:
+                name: artifact
+                path: dist
+
+            - uses: pypa/gh-action-pypi-publish@v1.4.2
+              with:
+                user:     ${{ secrets.TWINE_USERNAME }}
+                password: ${{ secrets.TWINE_PASSWORD }}
+                skip_existing: true
