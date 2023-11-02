@@ -58,7 +58,7 @@ class BsMixingTest :
 
                 const double eps = 1.0e-5;
 
-                TEST_CHECK_RELATIVE_ERROR(17.26529, process.delta_m(), eps); // in units of ps^-1
+                TEST_CHECK_RELATIVE_ERROR(17.26561, process.delta_m(), eps); // in units of ps^-1
             }
         }
 } b_s_mixing_test;

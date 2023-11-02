@@ -160,7 +160,7 @@ namespace eos
                 + a_mu0 * (c1 - b1 * c0)
                 + a_mu0 * a_mu0 * 0.5 * (pow(c1 - b1 * c0, 2) + c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
                 + a_mu0 * a_mu0 * a_mu0 * (pow(c1 - b1 * c0, 3) / 6.0 + (c1 - b1 * c0) / 2.0 * (c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
-                    + (c3 - b1 * c2 + b1 * b1 * c1 - b2 * c1 - b1 * b1 * b1 * c0 + 2.0 * b1 * b2 * c0 - b3 * c0)));
+                    + (c3 - b1 * c2 + b1 * b1 * c1 - b2 * c1 - b1 * b1 * b1 * c0 + 2.0 * b1 * b2 * c0 - b3 * c0) / 3.0));
 
         // cf. [CKS2000], Eq. (10), p. 6
         double c_mu = pow(a_mu, c0) * (
@@ -168,7 +168,7 @@ namespace eos
                 + a_mu * (c1 - b1 * c0)
                 + a_mu * a_mu * 0.5 * (pow(c1 - b1 * c0, 2) + c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
                 + a_mu * a_mu * a_mu * (pow(c1 - b1 * c0, 3) / 6.0 + (c1 - b1 * c0) / 2.0 * (c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
-                    + (c3 - b1 * c2 + b1 * b1 * c1 - b2 * c1 - b1 * b1 * b1 * c0 + 2.0 * b1 * b2 * c0 - b3 * c0)));
+                    + (c3 - b1 * c2 + b1 * b1 * c1 - b2 * c1 - b1 * b1 * b1 * c0 + 2.0 * b1 * b2 * c0 - b3 * c0) / 3.0));
 
         // cf. [CKS2000], Eq. (9), p. 6
         return m_q_0 * c_mu / c_mu0;

@@ -91,8 +91,8 @@ class LifetimeTest :
 
                     // compare to known decay width of
                     // (1.519 +/- 0.004 ps)^-1 = (0.6583 +/- 0.0017) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.0138916, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.0,       eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.013893676, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.0,         eps);
                 }
                 // SM test for the B_s
                 {
@@ -219,8 +219,8 @@ class LifetimeTest :
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 3683.55940755512,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu(), 187.1438250703431, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 3683.4330826090,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu(), 187.1374071112458, eps);
                 }
                 // BSM test for the B_d
                 {
@@ -234,7 +234,7 @@ class LifetimeTest :
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 49570.26112482211, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 49567.43050502043, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(),   0.0,               eps);
                 }
                 // BSM test for the B_s
@@ -250,7 +250,7 @@ class LifetimeTest :
                     Lifetime d(p, oo);
 
                     TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(),   0.0,                eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu(), 170.47008899539506, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu(), 170.4603546103313,  eps);
                 }
             }
         }
