@@ -121,7 +121,7 @@ class BToKDileptonLowRecoilTest :
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007311610961,  eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
-                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  2.256013988e-05, eps);
+                    TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  2.256388664e-05, eps);
                 }
             }
 

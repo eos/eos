@@ -98,8 +98,8 @@ class BToXsDileptonLargeRecoilTest :
 
                 static const double eps = 1e-11;
 
-                TEST_CHECK_NEARLY_EQUAL(1.40811e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.46519e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.40781e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.46487e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
 
             // Benchmark Point (C_7,9,10 = 0, C_7',9',10' = C_7,9,10^SM)
@@ -160,8 +160,8 @@ class BToXsDileptonLargeRecoilTest :
                     TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
                 }
 
-                TEST_CHECK_NEARLY_EQUAL(1.35179e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.39908e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.35152e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.39879e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;
