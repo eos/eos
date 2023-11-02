@@ -140,8 +140,8 @@ class TMassesTest :
 
             StandardModel model(reference_parameters());
 
-            TEST_CHECK_RELATIVE_ERROR(model.m_t_msbar(120.0), 167.794, eps);
-            TEST_CHECK_RELATIVE_ERROR(model.m_t_msbar( 80.0), 173.647, eps);
+            TEST_CHECK_RELATIVE_ERROR(model.m_t_msbar(120.0), 167.796, eps);
+            TEST_CHECK_RELATIVE_ERROR(model.m_t_msbar( 80.0), 173.652, eps);
         }
 } sm_t_masses_test;
 
@@ -161,10 +161,10 @@ class BMassesTest :
             Parameters p = reference_parameters();
             StandardModel model(p);
 
-            TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(9.6), 3.67956, eps);
-            TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(4.8), 4.10051, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(9.6), 3.67835, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(4.8), 4.10020, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(4.2), 4.20000, eps);
-            TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(2.4), 4.75221, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_b_msbar(2.4), 4.75213, eps);
 
             TEST_CHECK_NEARLY_EQUAL(model.m_b_pole(),     4.74167, 1e-3); // Precision is hard-limited in fixed-point routine
 
@@ -195,11 +195,11 @@ class CMassesTest :
             Parameters p = reference_parameters();
             StandardModel model(p);
 
-            TEST_CHECK_NEARLY_EQUAL(model.m_c_msbar(4.8),  0.891000, eps);
-            TEST_CHECK_NEARLY_EQUAL(model.m_c_msbar(4.2),  0.912618, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_c_msbar(4.8),  0.891003, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_c_msbar(4.2),  0.912688, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_c_msbar(1.27), 1.270000, eps);
 
-            TEST_CHECK_NEARLY_EQUAL(model.m_c_pole(),      1.595301, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_c_pole(),      1.595352, eps);
 
             TEST_CHECK_NEARLY_EQUAL(model.m_c_kin(0.75),   1.203723, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_c_kin(1.00),   1.060682, eps);
@@ -224,11 +224,11 @@ class SMassesTest :
             Parameters p = reference_parameters();
             StandardModel model(p);
 
-            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(1.0), 0.136682, eps);
-            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(1.7), 0.106128, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(1.0), 0.136322, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(1.7), 0.106126, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(2.0), 0.101000, eps);
-            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(4.2), 0.084980, eps);
-            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(4.8), 0.082967, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(4.2), 0.084982, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_s_msbar(4.8), 0.082963, eps);
         }
 } sm_s_masses_test;
 
@@ -248,7 +248,7 @@ class UDMassesTest :
             Parameters p = reference_parameters();
             StandardModel model(p);
 
-            TEST_CHECK_NEARLY_EQUAL(model.m_ud_msbar(1.0), 0.010826, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.m_ud_msbar(1.0), 0.010797, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_ud_msbar(2.0), 0.008000, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_ud_msbar(3.0), 0.007223, eps);
             TEST_CHECK_NEARLY_EQUAL(model.m_ud_msbar(4.0), 0.006803, eps);
@@ -466,7 +466,7 @@ class WilsonCoefficientsSBSBTest :
                 StandardModel model(parameters);
 
                 WilsonCoefficients<wc::SBSB> wc = model.wet_sbsb();
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),  +0.001313228, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),  +0.001313251, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()),   0.000000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),   0.000000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()),   0.000000000, eps);
@@ -505,7 +505,7 @@ class WilsonCoefficientsSBNuNuTest :
                 StandardModel model(parameters);
 
                 WilsonCoefficients<wc::SBNuNu> wc = model.wet_sbnunu(false);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.cVL()),  6.605426281, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.cVL()),  6.605517007, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.cVL()),  0.000000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.cVR()),  0.000000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.cVR()),  0.000000000, eps);

@@ -1354,9 +1354,9 @@ groups:
           unit:    'GeV'
         # Vector coefficients
       'sbnunu::Re{cVL}' :
-          central: 6.613021606543314
-          min:     6.613021606543314
-          max:     6.613021606543314
+          central: 6.613114906357177
+          min:     6.613114906357177
+          max:     6.613114906357177
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
       'sbnunu::Im{cVL}' :
           central: 0.0
