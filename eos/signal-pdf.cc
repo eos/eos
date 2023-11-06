@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2015-2023 Danny van Dyk
  * Copyright (c) 2019 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
@@ -32,6 +32,7 @@
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/rare-b-decays/b-to-k-ll.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
+#include <eos/rare-b-decays/b-to-psd-nu-nu.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -377,6 +378,19 @@ namespace eos
                     std::make_tuple(
                         "s_min",
                         "s_max"
+                    )
+                ),
+
+            make_signal_pdf("B^-->K^-nunu::dGamma/dq2",
+                    Options{ { "q", "u" }, { "I", "1/2" }, { "D", "s" } },
+                    &BToPseudoscalarDineutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0, 22.90, BToPseudoscalarDineutrino::kinematics_description_q2 }
+                    ),
+                    &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
                     )
                 ),
 
