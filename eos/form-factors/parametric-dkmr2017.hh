@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,6 +32,9 @@
 namespace eos
 {
     template <typename Process_>
+    class DKMR2017FormFactorTraits;
+
+    template <typename Process_>
     class DKMR2017FormFactors :
         public FormFactors<OneHalfPlusToOneHalfPlus>
     {
@@ -48,10 +52,7 @@ namespace eos
             UsedParameter _alpha_0_perp_t,  _alpha_1_perp_t,  _alpha_2_perp_t;
             UsedParameter                   _alpha_1_perp_t5, _alpha_2_perp_t5;
 
-        static constexpr double _z(const double & t, const double & tp, const double & t0)
-        {
-            return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
-        }
+            std::unique_ptr<const DKMR2017FormFactorTraits<Process_>> _traits;
 
         public:
             DKMR2017FormFactors(const Parameters & parameters, const Options & options);
