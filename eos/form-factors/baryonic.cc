@@ -34,18 +34,6 @@ namespace eos
 {
     /* J=1/2^+ -> J=1/2^+ Processes */
 
-    /* Lambda_b -> Lambda */
-
-    const constexpr char * LambdaBToLambda::label;
-    const constexpr double LambdaBToLambda::tm;
-    const constexpr double LambdaBToLambda::tp;
-    const constexpr double LambdaBToLambda::mR2_0m;
-    const constexpr double LambdaBToLambda::mR2_0p;
-    const constexpr double LambdaBToLambda::mR2_1m;
-    const constexpr double LambdaBToLambda::mR2_1p;
-
-    /* Lambda_b -> Lambda_c */
-
     FormFactors<OneHalfPlusToOneHalfPlus>::~FormFactors()
     {
     }
