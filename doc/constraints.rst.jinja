@@ -3,14 +3,14 @@ List of Constraints
 ###################
 
 
-The following is the full list of statistical constraints (both experimental and theoretical) included in EOS v{{ version }}.
+The following is the full list of statistical constraints (both experimental and theoretical) included in EOS v{{ version }} and the observables/parameters to which they apply.
 
 .. list-table::
    :widths: 50, 50
    :header-rows: 1
 
    * - Qualified Name
-     - Description
+     - Constrained observables / parameters
 {% for qn, constraint in constraints %}
    * - ``{{ qn }}``
      - {{ constraint.observables }}
