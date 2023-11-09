@@ -181,7 +181,7 @@ class BMRvD2022FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL( 27.11308541, ff.f_long_t5(10.0), eps);
                 TEST_CHECK_NEARLY_EQUAL( 27.65566599, ff.f_perp_t5(10.0), eps);
 
-                const auto tm = LambdaBToLambda::tm;
+                const auto tm = power_of<2>(LambdaBToLambda::m1 - LambdaBToLambda::m2);
                 TEST_CHECK_NEARLY_EQUAL( 59.87052714, ff.f_time_v (tm),   eps);
                 TEST_CHECK_NEARLY_EQUAL( 88.45600970, ff.f_long_v (tm),   eps);
                 TEST_CHECK_NEARLY_EQUAL( 44.89007817, ff.f_perp_v (tm),   eps);
