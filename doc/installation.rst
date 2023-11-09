@@ -13,6 +13,7 @@ Installation with ``pip3``
 ==========================
 
 This is the recommended installation method using the 'package installer for Python' ``pip3``.
+We recommend that EOS be installed within a virtual Python enviroment -- see :ref:`this FAQ answer <faq-virtualenv>` if you do not know how to do this.
 We distribute a release version and a development version.
 The changelog of the curated release versions is available `here <https://eos.github.io>`_.
 The development version is automatically up-to-date with the master branch in the Github EOS repository.
