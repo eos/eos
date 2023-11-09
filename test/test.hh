@@ -235,6 +235,7 @@ namespace test
         } \
         catch (eos::Exception & e) \
         { \
+            std::cerr << e.backtrace("\n") << std::endl; \
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "Caught unexpected eos::Exception in '" #expression "': " + std::string(e.what())); \
         } \
