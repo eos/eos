@@ -789,6 +789,10 @@ class Plotter:
            Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
            This is only mandatory in multivariate constraints, since these can constrain more than one observable simultaneously.
 
+        The following keys are optional:
+
+         * ``rescale-by-width`` (*bool*) -- Rescales binned constraints by the bin width. Defaults to false.
+
         Example:
 
         .. code-block::
