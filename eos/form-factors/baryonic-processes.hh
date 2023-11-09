@@ -37,12 +37,6 @@ namespace eos
         static constexpr double m1 = 5.61951;
         // final state mass
         static constexpr double m2 = 1.115683;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // pair production threshold: B + K
-        static constexpr double tp = (5.279 + 0.494) * (5.279 + 0.494);
-        // zero of the conformal mapping: z(t0, t0) = 0.0
-        static constexpr double t0 = tm;
         // OPE results for the unitarity bounds
         static constexpr double chi_0m = 1.57e-2;
         static constexpr double chi_0p = 1.42e-2;
@@ -58,19 +52,7 @@ namespace eos
         static constexpr double m1 = 5.61951;
         // final state mass
         static constexpr double m2 = 2.2865;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // first resonances sorted by spin/parity (from DLM2015 table VII)
-        static constexpr double mBc = 6.276;
-        static constexpr double mR2_0m = mBc * mBc;
-        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
-        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        // see cf. DKMR2017 for the def. of t_+'s; FF specific
-        static constexpr double tp_0m  = mR2_0m;
-        static constexpr double tp_0p  = mR2_0p;
-        static constexpr double tp_1m  = mR2_1m;
-        static constexpr double tp_1p  = mR2_1p;
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
     };
 
     /*
