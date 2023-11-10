@@ -23,7 +23,7 @@ need to install the ``virtualenv`` package, and then create a new virtual enviro
 
 
 The new virtual environment will now be **activated**.
-That means, the `python` (and `pip`) command will now execute the local binary instead of a system-wide one.
+That means, the ``python`` (and ``pip``) command will now execute the local binary instead of a system-wide one.
 At any later point, you can (re-)activate the virtual environment by running the following command:
 
 ::
@@ -119,7 +119,7 @@ If you built and installed from the source code
 and the import fails, i.e. you see ``ModuleNotFoundError: No module named 'eos'``,
 the module was either not installed with ``make install`` or the ``PYTHONPATH`` is not configured correctly.
 
-If you installed via `pip`
+If you installed via ``pip``
 and the output description is incorrect or ``None``,
-you have another module installed that is also named `eos`.
+you have another module installed that is also named ``eos``.
 Mind that the package name for the ``pip3 install`` command is ``eoshep``.
