@@ -1832,7 +1832,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Unitarity Bounds)",
-            R"(Pseudo observables arising in the various unitarity bounds for $b\to c$ semileptonic form factors.)",
+            R"(Pseudo observables arising in the various unitarity bounds of semileptonic form factors.)",
             {
                 make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\to c}_{0^+})",
                         Unit::None(),
@@ -1883,6 +1883,7 @@ namespace eos
                         &BGLUnitarityBounds::bound_1m),
 
                 // cf. [BMRvD:2021A] eq. (31-33)
+                // sb states
                 make_expression_observable("B_s0::Saturation[0^+_V]", R"(\textrm{Saturation}_{B_{s,0}}[0^+_V])",
                         Unit::None(),
                         R"(<<decay-constant::B_s,0>>^2 / <<mass::B_s,0>>^2 / <<b->s::chiOPE[0^+_V]>>)"),
@@ -1954,6 +1955,80 @@ namespace eos
                 make_expression_observable("B_s1::Saturation[1^+_T5]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5}])",
                         Unit::None(),
                         R"(<<decay-constant::B_s,1^T>>^2 / <<mass::B_s,1>>^4 / <<b->s::chiOPE[1^+_T5]>>)"),
+
+                // cs states
+                make_expression_observable("D_s0::Saturation[0^+_V]", R"(\textrm{Saturation}_{B_{s,0}}[0^+_V])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,0>>^2 / <<mass::D_s,0>>^2 / <<c->s::chiOPE[0^+_V]>>)"),
+
+                make_expression_observable("D_s::Saturation[0^-_A]", R"(\textrm{Saturation}_{D_s^0}[0^-_A])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s>>^2 / <<mass::D_s>>^2 / <<c->s::chiOPE[0^-_A]>>)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_V,0]", R"(\textrm{Saturation}_{D_s^*}[1^-_{V,0}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_V]>> / 3.0)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_V,perp]", R"(\textrm{Saturation}_{D_s^*}[1^-_{V,\perp}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_V]>> / 3.0)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_V.para]", R"(\textrm{Saturation}_{D_s^*}[1^-_{V,\parallel}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_V]>> / 3.0)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_V]", R"(\textrm{Saturation}_{D_s^*}[1^-_V])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_V]>>)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_A,0]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{A,0}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_A]>> / 3.0)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_A,perp]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{A,\perp}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_A]>> / 3.0)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_A,para]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{A,\parallel}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_A]>> / 3.0)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_A]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_A])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_A]>>)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_T,0]", R"(\textrm{Saturation}_{D_s^*}[1^-_{T,0}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*,T>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_T]>> / 3.0)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_T,perp]", R"(\textrm{Saturation}_{D_s^*}[1^-_{T,\perp}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*,T>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_T]>> / 3.0)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_T,para]", R"(\textrm{Saturation}_{D_s^*}[1^-_{T,\parallel}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*,T>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_T]>> / 3.0)"),
+
+                make_expression_observable("D_s^*::Saturation[1^-_T]", R"(\textrm{Saturation}_{D_s^*}[1^-_T])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s^*,T>>^2 / <<mass::D_s^*>>^4 / <<c->s::chiOPE[1^-_T]>>)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_T5,0]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5,0}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1^T>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_T5]>> / 3.0)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_T5,perp]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5,\perp}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1^T>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_T5]>> / 3.0)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_T5,para]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5,\parallel}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1^T>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_T5]>> / 3.0)"),
+
+                make_expression_observable("D_s1::Saturation[1^+_T5]", R"(\textrm{Saturation}_{B_{s,1}}[1^+_{T_5}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_s,1^T>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_T5]>>)"),
+
             }
         );
 

@@ -73,6 +73,13 @@ groups:
           latex:   '$m_{D_s}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::D_s,0' :
+          central: +2.318
+          min:     +2.318
+          max:     +2.318
+          latex:   '$m_{D_{s,0}}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2022'
       # B meson masses
       'mass::B_d' :
           central: +5.27965
@@ -102,33 +109,11 @@ groups:
           latex:   '$m_{B_c^\pm}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], October 2021'
-      # B^* meson masses
-      'mass::B_d^*' :
-          central: +5.32470
-          min:     +5.32449
-          max:     +5.32491
-          latex:   '$m_{B^*}$'
-          unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
-      'mass::B_s^*' :
-          central: +5.4154
-          min:     +5.4139
-          max:     +5.4172
-          latex:   '$m_{B_s^*}$'
-          unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
       'mass::B_s,0' :
           central: +5.711
           min:     +5.688
           max:     +5.734
           latex:   '$m_{B_{s,0}}$'
-          unit:     'GeV'
-          comments: 'cf. [LMPW:2015A]'
-      'mass::B_s,1' :
-          central: +5.750
-          min:     +5.775
-          max:     +5.725
-          latex:   '$m_{B_{s,1}}$'
           unit:     'GeV'
           comments: 'cf. [LMPW:2015A]'
   # }}}
@@ -204,6 +189,35 @@ groups:
           latex:   '$m_{D_s^*}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::D_s,1' :
+          central: +2.460
+          min:     +2.460
+          max:     +2.460
+          latex:   '$m_{D_{s,1}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2022'
+      # B^* meson masses
+      'mass::B_d^*' :
+          central: +5.32470
+          min:     +5.32449
+          max:     +5.32491
+          latex:   '$m_{B^*}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::B_s^*' :
+          central: +5.4154
+          min:     +5.4139
+          max:     +5.4172
+          latex:   '$m_{B_s^*}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::B_s,1' :
+          central: +5.750
+          min:     +5.775
+          max:     +5.725
+          latex:   '$m_{B_{s,1}}$'
+          unit:     'GeV'
+          comments: 'cf. [LMPW:2015A]'
       # Charmonium masses
       'mass::J/psi' :
           central: +3.096900
@@ -488,6 +502,35 @@ groups:
           latex:    '$f_{D_s^{*0}}$'
           unit:     'GeV'
           comments: 'cf. [GKPR2013], symmetrized errors'
+      'decay-constant::D_s^*,T' :
+          central: +0.25
+          min:     +0.2
+          max:     +0.3
+          latex:    '$f_{\bar{D}_s^{*,T}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::D_s,0' :
+          central: +0.25
+          min:     +0.2
+          max:     +0.3
+          latex:    '$f_{\bar{D}_{s,0}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::D_s,1' :
+          central: +0.25
+          min:     +0.2
+          max:     +0.3
+          latex:    '$f_{\bar{D}_{s,1}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::D_s,1^T' :
+          central: +0.25
+          min:     +0.2
+          max:     +0.3
+          latex:    '$f_{\bar{D}_{s,1}^T}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+
       # 3-particle couplings
       'decay-constant::g_{B^*Bpi}' :
           central: +30.0
