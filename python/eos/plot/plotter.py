@@ -781,7 +781,6 @@ class Plotter:
          * ``constraints`` (:class:`QualifiedName <eos.QualifiedName>` or iterable thereof) -- The name or the list of names of the constraints
            that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../constraints.html>`_.
          * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
-         * ``xrange`` (list of int, optional) -- The interval in which the observable is plotted in the case of a multivariate constraint.
 
         When plotting multivariate constraints, the following key is also mandatory:
 
@@ -791,6 +790,7 @@ class Plotter:
 
         The following keys are optional:
 
+         * ``xrange`` (list of int) -- The interval in which the observable is plotted in the case of a multivariate constraint.
          * ``rescale-by-width`` (*bool*) -- Rescales binned constraints by the bin width. Defaults to false.
 
         Example:
