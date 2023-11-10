@@ -123,3 +123,43 @@ If you installed via ``pip``
 and the output description is incorrect or ``None``,
 you have another module installed that is also named ``eos``.
 Mind that the package name for the ``pip3 install`` command is ``eoshep``.
+
+.. _faq-tags:
+
+... choose which ``tag`` to use for :math:`b \to s \ell \ell` observables
+=========================================================================
+
+The contributions from non-local operators in :math:`b \to s \ell \ell` observables
+can be estimated with different theoretical approaches, usually not valid in the same energy range,
+based on different input parameters and different theoretical assumptions.
+Depending on the analysis under consideration, the user can choose between these approaches by specifying an option called ``tag``.
+As different ``tags`` hide completely different assumptions, we have made this option mandatory.
+
+We collect here the different ``tags`` used in EOS and the corresponding references.
+
+.. list-table::
+   :widths: 15 55 30
+   :header-rows: 1
+
+   * - ``tag``
+     - Description
+     - Reference
+
+   * - ``Naive``
+     - Absence of any non-local contributions.
+     -
+
+   * - ``BFS2004``
+     - Calculation of the non-local contribution based on the framework of QCD factorization
+       and a perturbative treatment of the intermediate quark states.
+       This approach is expected to yield sensible results only for :math:`q^2 \ll 4 m_c^2`.
+     - [BFS:2001A], [BFS:2004A]
+
+   * - ``GP2004``
+     - Calculation of the non-local contributions in a local OPE. This approach is expected
+       to yield sensible results only for :math:`q^2`-integrated observables above the open-charm threshold.
+     - [GP:2004A]
+
+   * - ``GvDV2020``
+     - Parametrization based on unitarity and analyticity valid for small dilepton masses below the :math:`\psi(2S)` state.
+     - [GvDV:2020A], [GRvDV:2022A]
