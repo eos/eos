@@ -59,7 +59,8 @@ The main authors are:
 
  * Danny van Dyk <danny.van.dyk@gmail.com>,
  * Frederik Beaujean,
- * Christoph Bobeth <christoph.bobeth@gmail.com>,
+ * Christoph Bobeth,
+ * Carolina Bolognani <carolinabolognani@gmail.com>,
  * Nico Gubernari <nicogubernari@gmail.com>,
  * Meril Reboud <merilreboud@gmail.com>,
 
