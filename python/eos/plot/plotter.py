@@ -791,7 +791,8 @@ class Plotter:
         The following keys are optional:
 
          * ``xrange`` (list of int) -- The interval in which the observable is plotted in the case of a multivariate constraint.
-         * ``rescale-by-width`` (*bool*) -- Rescales binned constraints by the bin width. Defaults to false.
+         * ``rescale-by-width`` (*bool*) -- Rescales binned constraints by the inverse of the bin width. This is often required 
+           to compare theory (integrated) predictions and experimental (averaged) measurements. Defaults to false.
 
         Example:
 
