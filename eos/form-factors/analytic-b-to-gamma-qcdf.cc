@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2023 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -58,7 +58,10 @@ namespace eos
         M2(p["B->gamma::M^2@FLvD2022QCDF"], *this),
         s_0(p["B->gamma::s_0@FLvD2022QCDF"], *this),
         mu_h1(p["B->gamma::mu_h1@FLvD2022QCDF"], *this),
-        mu_h2(p["B->gamma::mu_h2@FLvD2022QCDF"], *this)
+        mu_h2(p["B->gamma::mu_h2@FLvD2022QCDF"], *this),
+        opt_contributions(o, "contributions", { "all", "ht", "soft", "none"}, "all"),
+        switch_ht(0.0),
+        switch_soft(0.0)
     {
         // Verify once that BMesonLCDAs is compatible with this implementation
         Weights weights;
@@ -67,6 +70,15 @@ namespace eos
         if (weights.size() - std::distance(coeff_begin, coeff_end) > 0)
         {
             throw InternalError("The number of weights implemented is smaller than the number of coefficients of phi_+");
+        }
+
+        if ((opt_contributions.value() == "all") || (opt_contributions.value() == "ht"))
+        {
+            switch_ht = 1.0;
+        }
+        if ((opt_contributions.value() == "all") || (opt_contributions.value() == "soft"))
+        {
+            switch_soft = 1.0;
         }
 
         this->uses(*blcdas);
@@ -214,7 +226,7 @@ namespace eos
                     - (L0_incomplete(omega_cut) + C_NLO * L0_incomplete_effective(Egamma, omega_cut))
             );
 
-        return term_ht + term_soft_nlo;
+        return switch_ht * term_ht + switch_soft * term_soft_nlo;
     }
 
     double
@@ -239,7 +251,7 @@ namespace eos
                 - norm_incomplete(omega_cut)
             );
 
-        return term_ht + term_soft_nlo + term_soft_tw_3_4;
+        return switch_ht * term_ht + switch_soft * term_soft_nlo + switch_soft * term_soft_tw_3_4;
     }
 
     double

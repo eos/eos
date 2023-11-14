@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2023 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -26,6 +26,7 @@
 #include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -80,6 +81,10 @@ namespace eos
             UsedParameter s_0;
             UsedParameter mu_h1;
             UsedParameter mu_h2;
+
+            SwitchOption opt_contributions;
+            double switch_ht;
+            double switch_soft;
 
             static const constexpr double e_u = +2.0 / 3.0;
             static const constexpr double e_b = -1.0 / 3.0;
