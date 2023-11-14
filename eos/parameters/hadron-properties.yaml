@@ -921,16 +921,16 @@ groups:
           comments: 'cf. [NT:2011A]'
       'B_u::omega_0@FLvD2022' :
           central:  0.5
-          min:      0.0
-          max:      0.0
+          min:      0.2
+          max:      0.7
           latex:    '$\omega_0$'
           unit:     'GeV'
           comments: ''
       'B_u::mu_0@FLvD2022' :
-          central:  0.5
-          min:      0.0
-          max:      0.0
-          latex:    '$\omega_0$'
+          central:  1.0
+          min:      1.0
+          max:      1.0
+          latex:    '$\mu_0$'
           unit:     'GeV'
           comments: ''
       'B_u::a^phi+_0@FLvD2022' :
