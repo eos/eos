@@ -79,11 +79,11 @@ class LCSRFormFactorsTest :
 
                 static const std::vector<std::pair<double, double>> reference
                 {
-                    std::make_pair(0.1268577,  1.0e-7), // m_v(mu) in the MSbar scheme, strange quark for these tests
+                    std::make_pair(0.126841,   1.0e-7), // m_v(mu) in the MSbar scheme, strange quark for these tests
                     std::make_pair(0.896,      1.0e-7), // m_V, the K^* mass
                     std::make_pair(0.217,      1.0e-7), // f_V, the K^* decay constant
 
-                    std::make_pair(0.07488769, 1.0e-7), // sigma_0 value for q^2 = 5.0
+                    std::make_pair(0.0748879,  1.0e-7), // sigma_0 value for q^2 = 5.0
                     std::make_pair(1.7,        1.0e-7), // s_0 value for V
 
                     /* A_1 */
@@ -91,13 +91,13 @@ class LCSRFormFactorsTest :
                     /* 2 particle */
 
                     /* I_1 phi_+ */
-                    std::make_pair(-0.785313,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-0.662569,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-0.539825,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-0.785308,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-0.662564,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-0.539820,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-1.007976,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-0.839081,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-0.670185,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-1.007970,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-0.839074,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-0.670179,  1.0e-6), // I1_A1_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_1 phi_bar */
                     std::make_pair(1.984386e-3,  1.0e-6), // I1_A1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -109,22 +109,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(2.504278e-3,  1.0e-6), // I1_A1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 phi_bar */
-                    std::make_pair(6.612526e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(5.578992e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(4.545457e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(6.611618e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(5.578220e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.544822e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(8.122634e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(6.761613e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(5.400593e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(8.121517e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(6.760676e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(5.399835e-2,  1.0e-6), // I2_A1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2d1 phi_bar */
-                    std::make_pair( 8.504824e-1,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair( 6.998295e-1,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair( 5.491766e-1,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair( 8.503654e-1,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair( 6.997323e-1,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair( 5.490993e-1,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair( 2.125109e-2,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair( 2.124788e-2,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
                     std::make_pair(-6.312584e-3,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-3.387626e-2,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-3.387221e-2,  1.0e-6), // I2d1_A1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_1 g_+ */
                     std::make_pair(-4.450784e-3,  1.0e-6), // I1_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
@@ -145,40 +145,40 @@ class LCSRFormFactorsTest :
                     std::make_pair(-2.538004e-1,  1.0e-6), // I2_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2d1 g_+ */
-                    std::make_pair(-5.794951,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-5.794952,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
                     std::make_pair(-4.809833,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
                     std::make_pair(-3.824715,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-6.049257,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-6.049258,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
                     std::make_pair(-4.868187,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-3.687116,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-3.687118,  1.0e-6), // I2d1_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_+ */
-                    std::make_pair(4.972448e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(4.195257e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.971110e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(4.194124e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
                     std::make_pair(3.418066e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.426346e-2,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.187349e-2,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(9.483517e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.425962e-2,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.187028e-2,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(9.480936e-3,  1.0e-6), // I3_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(2.079645e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.741271e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.402896e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(2.079085e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.740800e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.402515e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(2.369436e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.930266e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.491096e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(2.368797e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.929743e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.490689e-1,  1.0e-6), // I3d1_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d2 g_+ */
-                    std::make_pair(2.425945,  1.0e-6),     // I3d2_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.932077,  1.0e-6),     // I3d2_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.438210,  1.0e-6),     // I3d2_A1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(2.425291,  1.0e-6),     // I3d2_A1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.931553,  1.0e-6),     // I3d2_A1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.437815,  1.0e-6),     // I3d2_A1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-5.453318e-1,  1.0e-6), // I3d2_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-6.043950e-1,  1.0e-6), // I3d2_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-6.634583e-1,  1.0e-6), // I3d2_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-5.451867e-1,  1.0e-6), // I3d2_A1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-6.042344e-1,  1.0e-6), // I3d2_A1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-6.632821e-1,  1.0e-6), // I3d2_A1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_bar */
                     std::make_pair(-3.685383e-3,  1.0e-6), // I2_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -208,22 +208,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(8.563666e-4,  1.0e-6), // I3_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_bar */
-                    std::make_pair(9.036255e-3,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(9.036255e-3,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(9.036255e-3,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(9.033828e-3,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(9.033828e-3,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(9.033828e-3,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(2.830266e-2,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(2.830266e-2,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(2.830266e-2,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(2.829506e-2,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(2.829506e-2,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(2.829506e-2,  1.0e-6), // I3d1_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d2 g_bar */
-                    std::make_pair(3.961103e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(3.961103e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(3.961103e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(3.960039e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(3.960039e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(3.960039e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(5.380327e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(5.380327e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(5.380327e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(5.378878e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(5.378878e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(5.378878e-1,  1.0e-6), // I3d2_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4 g_bar */
                     std::make_pair(1.545825e-4,  1.0e-6), // I4_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -235,31 +235,31 @@ class LCSRFormFactorsTest :
                     std::make_pair(6.962364e-4,  1.0e-6), // I4_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d1 g_bar */
-                    std::make_pair(1.094715e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(9.194681e-3,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(7.442217e-3,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.094275e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(9.190984e-3,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(7.439213e-3,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(3.499502e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(2.882185e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(2.264868e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(3.498098e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(2.881025e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(2.263952e-2,  1.0e-6), // I4d1_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar */
-                    std::make_pair(4.849987e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(4.032256e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(3.214524e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(4.848042e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(4.030634e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(3.213225e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(6.846914e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(5.485191e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(4.123467e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(6.844165e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(5.482980e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(4.121795e-1,  1.0e-6), // I4d2_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d3 g_bar ATTENTION:here I have to low the precision to e-5 to pass the test*/
-                    std::make_pair(7.795264,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(6.165359,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(4.535454,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(7.792133,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(6.162872,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.533612,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(2.860036,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.694950,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(0.5298649, 1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(2.858880,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.694256,  1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(0.5296311, 1.0e-5), // I4d3_A1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -301,66 +301,66 @@ class LCSRFormFactorsTest :
 
                     /* I_3d1B phi_bar_3 NOTE: this values are very high. This is not a problem,
                        since the IB integrands are only integrated over w1 between 0 and sigma mB = 0.3937...*/
-                    std::make_pair(-9.4239e1,  1.0e-3),   // I3d1B_A1_3pt_phi_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-9.4237e1,  1.0e-3),   // I3d1B_A1_3pt_phi_bar_3(sigma_0, 1.0, 5.0)
                     std::make_pair(-4.8570e4,  1.0e-0),   // I3d1B_A1_3pt_phi_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_3 */
-                    std::make_pair(-6.9108e-2, 1.0e-6),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(-1.4483e-1, 1.0e-5),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(-6.9099e-2, 1.0e-6),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(-1.4480e-1, 1.0e-5),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_3 phi_bar_bar_3 */
                     std::make_pair( 5.3970e-4,  1.0e-6),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 8.2773e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.3461e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 4.9182e-2,  1.0e-6),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 8.2762e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.3462e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 4.9176e-2,  1.0e-6),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A phi_bar_bar_3 */
                     std::make_pair(-2.1902e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-4.3474e-2,  1.0e-6),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 4.3502e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 6.6390e-2,  1.0e-5),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-4.3468e-2,  1.0e-6),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 4.3497e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 6.6372e-2,  1.0e-5),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_bar_3 */
-                    std::make_pair( 6.8295e-1,  1.0e-5),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 7.6769e+2,  1.0e-2),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 6.8285e-1,  1.0e-5),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 7.6758e+2,  1.0e-2),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair(-2.2440e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-7.6934e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-6.0896e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-1.7367e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-2.2434e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-7.6913e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-6.0880e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-1.7362e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair( 3.1806e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 9.5327e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 8.2112e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.1271e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 3.1798e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 9.5302e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 8.2090e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.1264e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair( 1.9033e-1,  1.0e-5),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 2.1394e+2,  1.0e-2),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 1.9027e-1,  1.0e-5),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 2.1388e+2,  1.0e-2),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair(-1.3490e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.9555e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 3.0104e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 8.3562e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.3486e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.9547e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 3.0095e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 8.3539e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair(-8.7833,    1.0e-4),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(-3.0906e3,  1.0e-1),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-8.7809,    1.0e-4),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-3.0897e3,  1.0e-1),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair( 2.4701e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair( 6.5805e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair( 2.4694e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair( 6.5788e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair( 0.0,  1.0e-4),        // I4d2D_A1_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -402,8 +402,8 @@ class LCSRFormFactorsTest :
                     std::make_pair( 1.7843e+1,  1.0e-3),  // I3d1A_A1_3pt_phi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_4 */
-                    std::make_pair(-7.1522  ,  1.0e-4),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-2.6837e3,  1.0e-1),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-7.1511  ,  1.0e-4),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-2.6832e3,  1.0e-1),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_4 */
                     std::make_pair(-4.9002  ,  1.0e-4),   // I3d1C_A1_3pt_phi_bar_4(sigma_0, 0.1, 5.0)
@@ -436,19 +436,19 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_4 */
-                    std::make_pair( 6.8881e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.4306e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-4.3872e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 4.8841e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 6.8878e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.4304e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-4.3852e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 4.8838e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_4 */
-                    std::make_pair(-1.9774e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-1.0224   ,  1.0e-4),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 7.8325e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-4.3936e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.9780e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-1.0222   ,  1.0e-4),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 7.8296e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-4.3934e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_4 */
-                    std::make_pair( 1.2959e+1,  1.0e-3),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 1.2957e+1,  1.0e-3),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
                     std::make_pair( 1.0605e+4,  1.0e-0),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_4 */
@@ -456,18 +456,18 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_4 */
-                    std::make_pair(-5.3697e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-3.6822   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 2.0417e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-2.6222   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-5.3685e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-3.6816   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.0407e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-2.6220   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_4 */
-                    std::make_pair(-4.3716e2,  1.0e-2),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-1.5046e5,  1.0e+1),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-4.3710e2,  1.0e-2),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-1.5043e5,  1.0e+1),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_4 */
-                    std::make_pair(-3.5102,     1.0e-4),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair(-9.3513,     1.0e-4),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair(-3.5097,     1.0e-4),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair(-9.3501,     1.0e-4),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A1_3pt_phi_bar_bar_4(sigma_0, 5.0)
@@ -531,38 +531,38 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_psi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4 psi_bar_bar_4 */
-                    std::make_pair(-2.4480e-2,  1.0e-6),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-7.0848e-2,  1.0e-6),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-1.6320e-1,  1.0e-5),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-4.7231e-1,  1.0e-5),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-2.4476e-2,  1.0e-6),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-7.0838e-2,  1.0e-6),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-1.6317e-1,  1.0e-5),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-4.7225e-1,  1.0e-5),  // I4_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A psi_bar_bar_4 */
-                    std::make_pair( 1.8914e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 5.4738e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.6668e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 4.8238e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 1.8911e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 5.4730e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.6665e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 4.8231e-1,  1.0e-5),  // I4d1A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B psi_bar_bar_4 */
-                    std::make_pair( 3.7487   ,  1.0e-4),  // I4d1B_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 8.3315e+2,  1.0e-2),  // I4d1B_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 3.7481   ,  1.0e-4),  // I4d1B_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 8.3304e+2,  1.0e-2),  // I4d1B_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C psi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_psi_bar_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_psi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A psi_bar_bar_4 */
-                    std::make_pair( 4.5644e-1,  1.0e-5),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.3210   ,  1.0e-4),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 8.4214e-1,  1.0e-5),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.4372   ,  1.0e-4),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 4.5638e-1,  1.0e-5),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.3208   ,  1.0e-4),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 8.4202e-1,  1.0e-5),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.4369   ,  1.0e-4),  // I4d2A_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B psi_bar_bar_4 */
-                    std::make_pair(-8.9454e1,  1.0e-3),   // I4d2B_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-9.9289e3,  1.0e-1),   // I4d2B_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-8.9442e1,  1.0e-3),   // I4d2B_A1_3pt_psi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-9.9275e3,  1.0e-1),   // I4d2B_A1_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C psi_bar_bar_4 */
-                    std::make_pair( 3.7569,     1.0e-4),  // I4d2C_A1_3pt_psi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair( 2.1746,     1.0e-4),  // I4d2C_A1_3pt_psi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair( 3.7564,     1.0e-4),  // I4d2C_A1_3pt_psi_bar_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair( 2.1742,     1.0e-4),  // I4d2C_A1_3pt_psi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D psi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A1_3pt_psi_bar_bar_4(sigma_0, 5.0)
@@ -586,10 +586,10 @@ class LCSRFormFactorsTest :
                     std::make_pair( 2.4748   ,  1.0e-4),  // I3_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A chi_bar_4 */
-                    std::make_pair( 1.2678e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 8.9456e-2,  1.0e-6),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-1.2170e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 5.1963e-3,  1.0e-7),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 1.2674e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 8.9425e-2,  1.0e-6),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-1.2167e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 5.1849e-3,  1.0e-7),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B chi_bar_4 */
                     std::make_pair(-1.9119e2,  1.0e-2),   // I3d1B_A1_3pt_chi_bar_4(sigma_0, 1.0, 5.0)
@@ -626,38 +626,38 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_chi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4 chi_bar_bar_4 */
-                    std::make_pair(-1.3793e-2,  1.0e-6),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.2073e-1,  1.0e-5),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.6301   ,  1.0e-4),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-4.7471e-1,  1.0e-5),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.3802e-2,  1.0e-6),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.2070e-1,  1.0e-5),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.6296   ,  1.0e-4),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-4.7483e-1,  1.0e-5),  // I4_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A chi_bar_bar_4 */
-                    std::make_pair(-4.3585e-1,  1.0e-5),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.4131   ,  1.0e-4),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-2.4116   ,  1.0e-4),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.9701e-1,  1.0e-5),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-4.3562e-1,  1.0e-5),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.4129   ,  1.0e-4),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-2.4108   ,  1.0e-4),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.9721e-1,  1.0e-5),  // I4d1A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B chi_bar_bar_4 */
-                    std::make_pair( 1.6049e+1,  1.0e-3),  // I4d1B_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 3.5668e+3,  1.0e-1),  // I4d1B_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 1.6046e+1,  1.0e-3),  // I4d1B_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 3.5663e+3,  1.0e-1),  // I4d1B_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C chi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_chi_bar_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_chi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A chi_bar_bar_4 */
-                    std::make_pair( 6.8829   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 7.6913   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-7.9169   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.9427   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 6.8813   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 7.6899   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-7.9144   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.9432   ,  1.0e-4),  // I4d2A_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B chi_bar_bar_4 */
-                    std::make_pair(-3.9651e2,  1.0e-2),   // I4d2B_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-4.2570e4,  1.0e+0),   // I4d2B_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-3.9644e2,  1.0e-2),   // I4d2B_A1_3pt_chi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-4.2563e4,  1.0e+0),   // I4d2B_A1_3pt_chi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C chi_bar_bar_4 */
-                    std::make_pair( 14.102,     1.0e-3),  // I4d2C_A1_3pt_chi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair( 8.1623,     1.0e-4),  // I4d2C_A1_3pt_chi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair( 14.099,     1.0e-3),  // I4d2C_A1_3pt_chi_bar_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair( 8.1613,     1.0e-4),  // I4d2C_A1_3pt_chi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D chi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A1_3pt_chi_bar_bar_4(sigma_0, 5.0)
@@ -676,22 +676,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(-7.276134e-1,  1.0e-6), // I1_A2_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 phi_bar */
-                    std::make_pair(-1.214754e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-1.214754e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-1.214754e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-1.214827e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-1.214827e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-1.214827e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-3.578119e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-3.578119e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-3.578119e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-3.578211e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-3.578211e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-3.578211e-1,  1.0e-6), // I2_A2_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2d1 phi_bar */
-                    std::make_pair(-5.879654,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-5.879654,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-5.879654,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-5.879753,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-5.879753,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-5.879753,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-5.216099,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-5.216099,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-5.216099,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-5.216107,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-5.216107,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-5.216107,  1.0e-6), // I2d1_A2_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_+ */
                     std::make_pair(-1.141327e-1,  1.0e-6), // I2_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
@@ -712,31 +712,31 @@ class LCSRFormFactorsTest :
                     std::make_pair(-4.067506,  1.0e-6), // I2d1_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_+ */
-                    std::make_pair(3.826506e-3,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(3.826506e-3,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(3.826506e-3,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(3.825497e-3,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(3.825497e-3,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(3.825497e-3,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.029616e-2,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.029616e-2,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.029616e-2,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.029345e-2,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.029345e-2,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.029345e-2,  1.0e-6), // I3_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(1.542946e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.542946e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.542946e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.542539e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.542539e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.542539e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.534912e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.534912e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.534912e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.534507e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.534507e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.534507e-1,  1.0e-6), // I3d1_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d2 g_+ */
-                    std::make_pair(1.377467,  1.0e-6),    // I3d2_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.377467,  1.0e-6),    // I3d2_A2_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.377467,  1.0e-6),    // I3d2_A2_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.377104,  1.0e-6),    // I3d2_A2_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.377104,  1.0e-6),    // I3d2_A2_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.377104,  1.0e-6),    // I3d2_A2_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-1.004497,  1.0e-6),   // I3d2_A2_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-1.004497,  1.0e-6),   // I3d2_A2_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-1.004497,  1.0e-6),   // I3d2_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-1.004232,  1.0e-6),   // I3d2_A2_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-1.004232,  1.0e-6),   // I3d2_A2_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-1.004232,  1.0e-6),   // I3d2_A2_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_bar */
                     std::make_pair(8.217850e-3,  1.0e-6), // I3_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -770,36 +770,36 @@ class LCSRFormFactorsTest :
                     std::make_pair(-2.839758e-4,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
                     std::make_pair(-2.839758e-4,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-4.612858e-3,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-4.612858e-3,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-4.612858e-3,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-4.611760e-3,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-4.611760e-3,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-4.611760e-3,  1.0e-6), // I4_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d1 g_bar */
-                    std::make_pair(-3.020304e-2,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-3.020304e-2,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-3.020304e-2,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-3.019630e-2,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-3.019630e-2,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-3.019630e-2,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-2.201956e-1,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-2.201956e-1,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-2.201956e-1,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-2.201416e-1,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-2.201416e-1,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-2.201416e-1,  1.0e-6), // I4d1_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar ATTENTION:here I have to low the precision to e-5 to pass the test*/
-                    std::make_pair(-2.312397,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-2.312397,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-2.312397,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-2.311842,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-2.311842,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-2.311842,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-7.367758,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-7.367758,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-7.367758,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-7.365898,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-7.365898,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-7.365898,  1.0e-5), // I4d2_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d3 g_bar ATTENTION:this term is huge!!!*/
-                    std::make_pair(-1.075823e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-1.075823e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-1.075823e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-1.075549e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-1.075549e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-1.075549e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-1.356839e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-1.356839e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-1.356839e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-1.356486e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-1.356486e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-1.356486e2,  1.0e-4), // I4d3_A2_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -832,42 +832,42 @@ class LCSRFormFactorsTest :
                     std::make_pair(-8.3291e4,  1.0e-0),   // I3d1B_A2_3pt_phi_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_3 */
-                    std::make_pair(-1.6058e-1, 1.0e-5),   // I3d1C_A2_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(-3.3652e-1, 1.0e-5),   // I3d1C_A2_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(-1.6055e-1, 1.0e-5),   // I3d1C_A2_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(-3.3647e-1, 1.0e-5),   // I3d1C_A2_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair(-6.2581e-3,  1.0e-7),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-4.8484e-2,  1.0e-6),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-1.1389e-1,  1.0e-5),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-5.1549e-1,  1.0e-5),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-6.2567e-3,  1.0e-7),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-4.8476e-2,  1.0e-6),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-1.1386e-1,  1.0e-5),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-5.1538e-1,  1.0e-5),  // I4_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair( 1.6683e-2,  1.0e-6),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.6675e-2,  1.0e-6),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
                     std::make_pair(-1.7536e-1,  1.0e-5),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-4.5981e-1,  1.0e-5),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-4.1123   ,  1.0e-4),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-4.5971e-1,  1.0e-5),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-4.1116   ,  1.0e-4),  // I4d1A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair(-2.5340   ,  1.0e-4),  // I4d1B_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(-2.8484e+3,  1.0e-1),  // I4d1B_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-2.5336   ,  1.0e-4),  // I4d1B_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-2.8480e+3,  1.0e-1),  // I4d1B_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A2_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A2_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair( 6.0020e-1,  1.0e-5),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 7.2669   ,  1.0e-4),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-3.9052e-1,  1.0e-5),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-7.7375   ,  1.0e-4),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 6.0010e-1,  1.0e-5),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 7.2658   ,  1.0e-4),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-3.9049e-1,  1.0e-5),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-7.7364   ,  1.0e-4),  // I4d2A_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair(-5.4493,    1.0e-4),   // I4d2B_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(-5.6355e4,  1.0e-0),   // I4d2B_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-5.4467,    1.0e-4),   // I4d2B_A2_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-5.6347e4,  1.0e-0),   // I4d2B_A2_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair( 4.5815e-1,  1.0e-5),  // I4d2C_A2_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair( 1.2206   ,  1.0e-4),  // I4d2C_A2_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair( 4.5808e-1,  1.0e-5),  // I4d2C_A2_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair( 1.2203   ,  1.0e-4),  // I4d2C_A2_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair( 0.0,  1.0e-4),        // I4d2D_A2_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -897,7 +897,7 @@ class LCSRFormFactorsTest :
                     std::make_pair( 2.2655e+1,  1.0e-3),  // I3d1A_A2_3pt_phi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_4 */
-                    std::make_pair(-5.9307e1,  1.0e-3),   // I3d1B_A2_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-5.9305e1,  1.0e-3),   // I3d1B_A2_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
                     std::make_pair(-2.2253e4,  1.0e-0),   // I3d1B_A2_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_4 */
@@ -913,7 +913,7 @@ class LCSRFormFactorsTest :
                     /* I_3d1A phi_bar_bar_4 */
                     std::make_pair( 3.7096   ,  1.0e-4),  // I3d1A_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
                     std::make_pair( 1.1027e+1,  1.0e-3),  // I3d1A_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-9.3046e-1,  1.0e-5),  // I3d1A_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-9.3044e-1,  1.0e-5),  // I3d1A_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair(-5.1932   ,  1.0e-4),  // I3d1A_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_bar_4 */
@@ -932,13 +932,13 @@ class LCSRFormFactorsTest :
 
                     /* I_4d1A phi_bar_bar_4 */
                     std::make_pair( 2.4486   ,  1.0e-4),  // I4d1A_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-1.1719   ,  1.0e-4),  // I4d1A_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-1.1715   ,  1.0e-4),  // I4d1A_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair(-2.6923e+2,  1.0e-2),  // I4d1A_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair(-7.8427e+2,  1.0e-2),  // I4d1A_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_4 */
                     std::make_pair( 1.1266e+2,  1.0e-2),  // I4d1B_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 9.2199e+4,  1.0e-0),  // I4d1B_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 9.2197e+4,  1.0e-0),  // I4d1B_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A2_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
@@ -952,11 +952,11 @@ class LCSRFormFactorsTest :
 
                     /* I_4d2B phi_bar_bar_4 */
                     std::make_pair(-2.8370e3,  1.0e-1),   // I4d2B_A2_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 5.4599e5,  1.0e+1),   // I4d2B_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 5.4601e5,  1.0e+1),   // I4d2B_A2_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_4 */
                     std::make_pair( 2.5661e1,   1.0e-3),  // I4d2C_A2_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair( 6.8362e1,   1.0e-3),  // I4d2C_A2_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair( 6.8363e1,   1.0e-3),  // I4d2C_A2_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A2_3pt_phi_bar_bar_4(sigma_0, 5.0)
@@ -980,8 +980,8 @@ class LCSRFormFactorsTest :
                     std::make_pair(-2.0841e+1,  1.0e-3),  // I3d1A_A2_3pt_psi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B psi_bar_4 */
-                    std::make_pair( 5.5940e1,  1.0e-3),   // I3d1B_A2_3pt_psi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 6.6928e3,  1.0e-1),   // I3d1B_A2_3pt_psi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 5.5938e1,  1.0e-3),   // I3d1B_A2_3pt_psi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 6.6926e3,  1.0e-1),   // I3d1B_A2_3pt_psi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C psi_bar_4 */
                     std::make_pair( 3.4460   ,  1.0e-4),  // I3d1C_A2_3pt_psi_bar_4(sigma_0, 0.1, 5.0)
@@ -1014,14 +1014,14 @@ class LCSRFormFactorsTest :
                     std::make_pair( 4.2395e+1,  1.0e-3),  // I4_A2_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A psi_bar_bar_4 */
-                    std::make_pair(-4.8859   ,  1.0e-4),  // I4d1A_A2_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 3.3762e-1,  1.0e-5),  // I4d1A_A2_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-4.8860   ,  1.0e-4),  // I4d1A_A2_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 3.3750e-1,  1.0e-5),  // I4d1A_A2_3pt_psi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 7.4756e+2,  1.0e-2),  // I4d1A_A2_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 4.7031e+2,  1.0e-2),  // I4d1A_A2_3pt_psi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B psi_bar_bar_4 */
                     std::make_pair( 3.5488e+1,  1.0e-3),  // I4d1B_A2_3pt_psi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 7.8874e+3,  1.0e-1),  // I4d1B_A2_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 7.8871e+3,  1.0e-1),  // I4d1B_A2_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C psi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A2_3pt_psi_bar_bar_4(sigma_0, 0.1, 5.0)
@@ -1038,7 +1038,7 @@ class LCSRFormFactorsTest :
                     std::make_pair( 6.9941e4,  1.0e+0),   // I4d2B_A2_3pt_psi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C psi_bar_bar_4 */
-                    std::make_pair(-2.4471e1,   1.0e-3),  // I4d2C_A2_3pt_psi_bar_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair(-2.4472e1,   1.0e-3),  // I4d2C_A2_3pt_psi_bar_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(-1.4164e1,   1.0e-3),  // I4d2C_A2_3pt_psi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D psi_bar_bar_4 */
@@ -1068,7 +1068,7 @@ class LCSRFormFactorsTest :
 
                     /* I_3d1C chi_bar_4 */
                     std::make_pair( 16.912,  1.0e-3),     // I3d1C_A2_3pt_chi_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair( 7.0885,  1.0e-4),     // I3d1C_A2_3pt_chi_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair( 7.0883,  1.0e-4),     // I3d1C_A2_3pt_chi_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_3 chi_bar_bar_4 */
                     std::make_pair( 2.3913   ,  1.0e-4),  // I3_A2_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
@@ -1098,7 +1098,7 @@ class LCSRFormFactorsTest :
 
                     /* I_4d1A chi_bar_bar_4 */
                     std::make_pair(-2.0169e+1,  1.0e-3),  // I4d1A_A2_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 2.7789   ,  1.0e-4),  // I4d1A_A2_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.7782   ,  1.0e-4),  // I4d1A_A2_3pt_chi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 3.0075e+3,  1.0e-1),  // I4d1A_A2_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 1.9147e+3,  1.0e-1),  // I4d1A_A2_3pt_chi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
@@ -1118,11 +1118,11 @@ class LCSRFormFactorsTest :
 
                     /* I_4d2B chi_bar_bar_4 */
                     std::make_pair(-2.2061e3,  1.0e-1),   // I4d2B_A2_3pt_chi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 2.1102e5,  1.0e+1),   // I4d2B_A2_3pt_chi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 2.1103e5,  1.0e+1),   // I4d2B_A2_3pt_chi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C chi_bar_bar_4 */
                     std::make_pair(-1.1506e2,   1.0e-2),  // I4d2C_A2_3pt_chi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair(-6.6599e1,   1.0e-3),  // I4d2C_A2_3pt_chi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair(-6.6600e1,   1.0e-3),  // I4d2C_A2_3pt_chi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D chi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A2_3pt_chi_bar_bar_4(sigma_0, 5.0)
@@ -1141,22 +1141,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(1.004800,  1.0e-6),    // I1_A30_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 phi_bar */
-                    std::make_pair(1.362076e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.362076e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.362076e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.362149e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.362149e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.362149e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(4.321795e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(4.321795e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(4.321795e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(4.321887e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(4.321887e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(4.321887e-1,  1.0e-6), // I2_A30_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2d1 phi_bar */
-                    std::make_pair(6.815662,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(6.815662,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(6.815662,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(6.815761,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(6.815761,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(6.815761,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(7.145066,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(7.145066,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(7.145066,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(7.145075,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(7.145075,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(7.145075,  1.0e-6), // I2d1_A30_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_+ */
                     std::make_pair(1.339818e-1,  1.0e-6), // I2_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
@@ -1177,31 +1177,31 @@ class LCSRFormFactorsTest :
                     std::make_pair(7.285435,  1.0e-6), // I2d1_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_+ */
-                    std::make_pair(-4.491985e-3,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-4.491985e-3,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-4.491985e-3,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-4.490801e-3,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-4.490801e-3,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-4.490801e-3,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-1.421851e-2,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-1.421851e-2,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-1.421851e-2,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-1.421476e-2,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-1.421476e-2,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-1.421476e-2,  1.0e-6), // I3_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(-1.992121e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-1.992121e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-1.992121e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-1.991596e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-1.991596e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-1.991596e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-2.703323e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-2.703323e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-2.703323e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-2.702610e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-2.702610e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-2.702610e-1,  1.0e-6), // I3d1_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d2 g_+ */
-                    std::make_pair(-3.154013,  1.0e-6),      // I3d2_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-3.154013,  1.0e-6),      // I3d2_A30_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-3.154013,  1.0e-6),      // I3d2_A30_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-3.153181,  1.0e-6),      // I3d2_A30_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-3.153181,  1.0e-6),      // I3d2_A30_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-3.153181,  1.0e-6),      // I3d2_A30_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-6.310445e-1,  1.0e-6),   // I3d2_A30_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-6.310445e-1,  1.0e-6),   // I3d2_A30_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-6.310445e-1,  1.0e-6),   // I3d2_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-6.308782e-1,  1.0e-6),   // I3d2_A30_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-6.308782e-1,  1.0e-6),   // I3d2_A30_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-6.308782e-1,  1.0e-6),   // I3d2_A30_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_bar */
                     std::make_pair(-8.902671e-3,  1.0e-6), // I3_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -1235,36 +1235,36 @@ class LCSRFormFactorsTest :
                     std::make_pair(3.184156e-4,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
                     std::make_pair(3.184156e-4,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(5.571594e-3,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(5.571594e-3,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(5.571594e-3,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(5.570244e-3,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(5.570244e-3,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(5.570244e-3,  1.0e-6), // I4_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d1 g_bar */
-                    std::make_pair(3.438716e-2,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(3.438716e-2,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(3.438716e-2,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(3.437931e-2,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(3.437931e-2,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(3.437931e-2,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(2.768528e-1,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(2.768528e-1,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(2.768528e-1,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(2.767839e-1,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(2.767839e-1,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(2.767839e-1,  1.0e-6), // I4d1_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar ATTENTION:here I have to low the precision to e-5 to pass the test*/
-                    std::make_pair(2.713015,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(2.713015,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(2.713015,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(2.712355,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(2.712355,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(2.712355,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(9.972535,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(9.972535,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(9.972535,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(9.969988,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(9.969988,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(9.969988,  1.0e-5), // I4d2_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d3 g_bar ATTENTION:this term is huge!!!*/
-                    std::make_pair(1.354778e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.354778e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.354778e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.354431e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.354431e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.354431e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(2.205744e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(2.205744e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(2.205744e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(2.205167e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(2.205167e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(2.205167e2,  1.0e-4), // I4d3_A30_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -1288,7 +1288,7 @@ class LCSRFormFactorsTest :
 
                     /* I_3d1A phi_bar_3 */
                     std::make_pair( 1.2282,     1.0e-4),  // I3d1A_A30_3pt_phi_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 3.0900,     1.0e-4),  // I3d1A_A30_3pt_phi_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 3.0898,     1.0e-4),  // I3d1A_A30_3pt_phi_bar_3(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair(-2.7350e+1,  1.0e-3),  // I3d1A_A30_3pt_phi_bar_3(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair(-5.6519e+1,  1.0e-3),  // I3d1A_A30_3pt_phi_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
@@ -1297,42 +1297,42 @@ class LCSRFormFactorsTest :
                     std::make_pair( 1.0861e5,  1.0e+1),   // I3d1B_A30_3pt_phi_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_3 */
-                    std::make_pair( 2.1715e-1, 1.0e-5),   // I3d1C_A30_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair( 4.5508e-1, 1.0e-5),   // I3d1C_A30_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair( 2.1712e-1, 1.0e-5),   // I3d1C_A30_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair( 4.5501e-1, 1.0e-5),   // I3d1C_A30_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair( 5.7744e-3,  1.0e-7),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 5.1128e-2,  1.0e-6),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 9.1863e-2,  1.0e-6),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 4.8303e-1,  1.0e-5),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 5.7732e-3,  1.0e-7),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 5.1120e-2,  1.0e-6),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 9.1841e-2,  1.0e-6),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 4.8293e-1,  1.0e-5),  // I4_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair(-7.6954e-3,  1.0e-7),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 2.9702e-1,  1.0e-5),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-7.6893e-3,  1.0e-7),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 2.9699e-1,  1.0e-5),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 2.0384e-1,  1.0e-5),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 4.2576   ,  1.0e-4),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 4.2570   ,  1.0e-4),  // I4d1A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair( 3.0627   ,  1.0e-4),  // I4d1B_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 3.4428e+3,  1.0e-1),  // I4d1B_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 3.0623   ,  1.0e-4),  // I4d1B_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 3.4423e+3,  1.0e-1),  // I4d1B_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A30_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A30_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair(-2.7985e-1,  1.0e-5),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-5.9625   ,  1.0e-4),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.6889   ,  1.0e-4),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.6008e+1,  1.0e-3),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-2.7983e-1,  1.0e-5),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-5.9617   ,  1.0e-4),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.6887   ,  1.0e-4),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.6004e+1,  1.0e-3),  // I4d2A_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair( 1.6366e1,  1.0e-3),   // I4d2B_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 8.1093e4,  1.0e-0),   // I4d2B_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 1.6362e1,  1.0e-3),   // I4d2B_A30_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 8.1081e4,  1.0e-0),   // I4d2B_A30_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair(-5.1478e-1,  1.0e-5),  // I4d2C_A30_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(-1.3714   ,  1.0e-4),  // I4d2C_A30_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(-5.1471e-1,  1.0e-5),  // I4d2C_A30_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(-1.3712   ,  1.0e-4),  // I4d2C_A30_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair( 0.0,  1.0e-4),        // I4d2D_A30_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -1357,12 +1357,12 @@ class LCSRFormFactorsTest :
 
                     /* I_3d1A phi_bar_4 */
                     std::make_pair(-5.6152   ,  1.0e-4),  // I3d1A_A30_3pt_phi_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 8.5968e-1,  1.0e-5),  // I3d1A_A30_3pt_phi_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 8.5960e-1,  1.0e-5),  // I3d1A_A30_3pt_phi_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 1.0036e+1,  1.0e-3),  // I3d1A_A30_3pt_phi_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 3.5259e+1,  1.0e-3),  // I3d1A_A30_3pt_phi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_4 */
-                    std::make_pair( 7.3363e1,  1.0e-3),   // I3d1B_A30_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 7.3361e1,  1.0e-3),   // I3d1B_A30_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
                     std::make_pair( 2.7527e4,  1.0e-0),   // I3d1B_A30_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_4 */
@@ -1396,7 +1396,7 @@ class LCSRFormFactorsTest :
                     std::make_pair( 8.1832e+1,  1.0e-3),  // I4_A30_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_4 */
-                    std::make_pair( 2.9822e-2,  1.0e-6),  // I4d1A_A30_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 2.9786e-2,  1.0e-6),  // I4d1A_A30_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
                     std::make_pair( 1.0427e+1,  1.0e-3),  // I4d1A_A30_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 3.7024e+2,  1.0e-2),  // I4d1A_A30_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 1.0682e+3,  1.0e-1),  // I4d1A_A30_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
@@ -1421,7 +1421,7 @@ class LCSRFormFactorsTest :
 
                     /* I_4d2C phi_bar_bar_4 */
                     std::make_pair(-2.7341e1,   1.0e-3),  // I4d2C_A30_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair(-7.2838e1,   1.0e-3),  // I4d2C_A30_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair(-7.2839e1,   1.0e-3),  // I4d2C_A30_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A30_3pt_phi_bar_bar_4(sigma_0, 5.0)
@@ -1462,21 +1462,21 @@ class LCSRFormFactorsTest :
                     std::make_pair( 1.3612   ,  1.0e-4),  // I3_A30_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
                     std::make_pair(-1.6236   ,  1.0e-4),  // I3_A30_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 1.5774e+1,  1.0e-3),  // I3_A30_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 3.2159   ,  1.0e-4),  // I3_A30_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 3.2160   ,  1.0e-4),  // I3_A30_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A chi_bar_4 */
                     std::make_pair( 1.8873e+1,  1.0e-3),  // I3d1A_A30_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.8371e-1,  1.0e-5),  // I3d1A_A30_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.8387e-1,  1.0e-5),  // I3d1A_A30_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 2.6875e+2,  1.0e-2),  // I3d1A_A30_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 1.0068e+2,  1.0e-2),  // I3d1A_A30_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B chi_bar_4 */
                     std::make_pair( 4.2752e2,  1.0e-2),   // I3d1B_A30_3pt_chi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 5.1150e4,  1.0e-0),   // I3d1B_A30_3pt_chi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 5.1149e4,  1.0e-0),   // I3d1B_A30_3pt_chi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C chi_bar_4 */
                     std::make_pair(-23.002,  1.0e-3),     // I3d1C_A30_3pt_chi_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair(-9.6408,  1.0e-4),     // I3d1C_A30_3pt_chi_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair(-9.6406,  1.0e-4),     // I3d1C_A30_3pt_chi_bar_4(sigma_0, 0.5, 5.0)
 
                     /* V */
 
@@ -1492,22 +1492,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(-1.640698e-1,  1.0e-6), // I1_V_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 phi_bar */
-                    std::make_pair(1.047657e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.047657e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.047657e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.047518e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.047518e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.047518e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.322133e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.322133e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.322133e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.321959e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.321959e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.321959e-2,  1.0e-6), // I2_V_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2d1 phi_bar */
-                    std::make_pair(1.417983e-1,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.417983e-1,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.417983e-1,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.417796e-1,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.417796e-1,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.417796e-1,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.240511e-2,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.240511e-2,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.240511e-2,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.240348e-2,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.240348e-2,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.240348e-2,  1.0e-6), // I2d1_V_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_+ */
                     std::make_pair(-2.349792e-2,  1.0e-6), // I2_V_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
@@ -1537,22 +1537,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(2.321685e-3,  1.0e-6), // I3_V_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(3.347918e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(3.347918e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(3.347918e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(3.347036e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(3.347036e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(3.347036e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(4.013860e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(4.013860e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(4.013860e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(4.012802e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(4.012802e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(4.012802e-2,  1.0e-6), // I3d1_V_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d2 g_+ */
-                    std::make_pair(4.291581e-1,  1.0e-6),      // I3d2_V_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(4.291581e-1,  1.0e-6),      // I3d2_V_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(4.291581e-1,  1.0e-6),      // I3d2_V_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(4.290449e-1,  1.0e-6),      // I3d2_V_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(4.290449e-1,  1.0e-6),      // I3d2_V_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.290449e-1,  1.0e-6),      // I3d2_V_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-3.536817e-2,  1.0e-6),   // I3d2_V_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-3.536817e-2,  1.0e-6),   // I3d2_V_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-3.536817e-2,  1.0e-6),   // I3d2_V_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-3.535883e-2,  1.0e-6),   // I3d2_V_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-3.535883e-2,  1.0e-6),   // I3d2_V_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-3.535883e-2,  1.0e-6),   // I3d2_V_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4 g_bar */
                     std::make_pair(2.449130e-5,  1.0e-6), // I4_V_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -1568,27 +1568,27 @@ class LCSRFormFactorsTest :
                     std::make_pair(1.750898e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
                     std::make_pair(1.750898e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(5.811524e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(5.811524e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(5.811524e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(5.809225e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(5.809225e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(5.809225e-3,  1.0e-6), // I4d1_V_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar */
-                    std::make_pair(7.918965e-2,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(7.918965e-2,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(7.918965e-2,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(7.915833e-2,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(7.915833e-2,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(7.915833e-2,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.192451e-1,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.192451e-1,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.192451e-1,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.191980e-1,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.191980e-1,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.191980e-1,  1.0e-6), // I4d2_V_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d3 g_bar */
-                    std::make_pair(1.393143,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.393143,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.393143,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.392592,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.392592,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.392592,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(7.004433e-1,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(7.004433e-1,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(7.004433e-1,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(7.001663e-1,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(7.001663e-1,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(7.001663e-1,  1.0e-4), // I4d3_V_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -1626,38 +1626,38 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),        // I3d1C_V_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair(-5.8373e-4,  1.0e-8), // I4_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.0302e-3,  1.0e-7), // I4_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-1.5781e-2,  1.0e-6), // I4_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-4.5208e-2,  1.0e-6), // I4_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-5.8357e-4,  1.0e-8), // I4_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.0296e-3,  1.0e-7), // I4_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-1.5776e-2,  1.0e-6), // I4_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-4.5196e-2,  1.0e-6), // I4_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair( 7.2808e-3,  1.0e-7), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 2.1491e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-4.8611e-3,  1.0e-7), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-2.0225e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 7.2788e-3,  1.0e-7), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 2.1485e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-4.8598e-3,  1.0e-7), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-2.0219e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair(4.6225e-2,  1.0e-6),  // I4d1B_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(5.1961e+1,  1.0e-3),  // I4d1B_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(4.6212e-2,  1.0e-6),  // I4d1B_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(5.1946e+1,  1.0e-3),  // I4d1B_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),        // I4d1C_V_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),        // I4d1C_V_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair(-1.1067e-2,  1.0e-6), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-4.7120e-3,  1.0e-7), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 5.2000e-2,  1.0e-6), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.2003e-1,  1.0e-5), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.1064e-2,  1.0e-6), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-4.7109e-3,  1.0e-7), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 5.1986e-2,  1.0e-6), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.2000e-1,  1.0e-5), // I4d2A_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair(-2.0396,    1.0e-4),  // I4d2B_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(-6.0250e2,  1.0e-2),  // I4d2B_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-2.0391,    1.0e-4),  // I4d2B_V_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-6.0234e2,  1.0e-2),  // I4d2B_V_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair(6.8423e-3,  1.0e-7),  // I4d2C_V_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(1.8228e-2,  1.0e-6),  // I4d2C_V_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(6.8405e-3,  1.0e-7),  // I4d2C_V_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(1.8223e-2,  1.0e-6),  // I4d2C_V_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),        // I4d2D_V_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -1687,66 +1687,66 @@ class LCSRFormFactorsTest :
                     std::make_pair(2.4277e-1,  1.0e-5),  // I3d1A_V_3pt_phi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_4 */
-                    std::make_pair(-1.7371  ,  1.0e-4),  // I3d1B_V_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-6.5178e2,  1.0e-2),  // I3d1B_V_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-1.7368  ,  1.0e-4),  // I3d1B_V_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-6.5169e2,  1.0e-2),  // I3d1B_V_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_4 */
                     std::make_pair(-1.2709,  1.0e-4),    // I3d1C_V_3pt_phi_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(-2.6634,  1.0e-4),    // I3d1C_V_3pt_phi_bar_4(sigma_0, 0.5, 5.0)
 
                      /* I_3 phi_bar_bar_4 */
-                    std::make_pair(1.5388e-4,  1.0e-8),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(2.0497e-3,  1.0e-7),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(7.4683e-4,  1.0e-8),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(9.9481e-3,  1.0e-7),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(1.5385e-4,  1.0e-8),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(2.0494e-3,  1.0e-7),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(7.4673e-4,  1.0e-8),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(9.9467e-3,  1.0e-7),  // I3_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A phi_bar_bar_4 */
-                    std::make_pair(-6.7828e-4,  1.0e-8), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-9.0350e-3,  1.0e-7), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.7153e-3,  1.0e-7), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.2849e-2,  1.0e-6), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-6.7819e-4,  1.0e-8), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-9.0338e-3,  1.0e-7), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.7151e-3,  1.0e-7), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.2846e-2,  1.0e-6), // I3d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_bar_4 */
-                    std::make_pair(1.5954e-1,  1.0e-5),  // I3d1B_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(1.3056e+2,  1.0e-2),  // I3d1B_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(1.5951e-1,  1.0e-5),  // I3d1B_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(1.3054e+2,  1.0e-2),  // I3d1B_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),        // I3d1C_V_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),        // I3d1C_V_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_4 */
-                    std::make_pair(4.4881e-3,  1.0e-7),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(4.6503e-2,  1.0e-6),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(4.1790e-2,  1.0e-6),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(2.7900e-1,  1.0e-5),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(4.4873e-3,  1.0e-7),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(4.6496e-2,  1.0e-6),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(4.1781e-2,  1.0e-6),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(2.7895e-1,  1.0e-5),  // I4_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_4 */
-                    std::make_pair(-3.5851e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-3.0304e-1,  1.0e-5), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.8005e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.6490e-1,  1.0e-5), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-3.5843e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-3.0299e-1,  1.0e-5), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.8001e-2,  1.0e-6), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.6487e-1,  1.0e-5), // I4d1A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_4 */
-                    std::make_pair(3.1475   ,  1.0e-4),  // I4d1B_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(2.5758e+3,  1.0e-1),  // I4d1B_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(3.1470   ,  1.0e-4),  // I4d1B_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(2.5754e+3,  1.0e-1),  // I4d1B_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),        // I4d1C_V_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),        // I4d1C_V_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_4 */
-                    std::make_pair(-9.4302e-2,  1.0e-6), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-1.5860   ,  1.0e-4), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-1.2354e-1,  1.0e-5), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-6.8189e-1,  1.0e-5), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-9.4292e-2,  1.0e-6), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-1.5857   ,  1.0e-4), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-1.2350e-1,  1.0e-5), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-6.8178e-1,  1.0e-5), // I4d2A_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_4 */
-                    std::make_pair(-9.2800e1,  1.0e-3),  // I4d2B_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-2.7869e4,  1.0e+0),  // I4d2B_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-9.2787e1,  1.0e-3),  // I4d2B_V_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-2.7865e4,  1.0e+0),  // I4d2B_V_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_4 */
-                    std::make_pair(-9.7235e-1,  1.0e-5), // I4d2C_V_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair(-2.5904,     1.0e-4), // I4d2C_V_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair(-9.7221e-1,  1.0e-5), // I4d2C_V_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair(-2.5900,     1.0e-4), // I4d2C_V_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),        // I4d2D_V_3pt_phi_bar_bar_4(sigma_0, 5.0)
@@ -1808,22 +1808,22 @@ class LCSRFormFactorsTest :
                     /* 2 particle */
 
                     /* I_1 phi_+ */
-                    std::make_pair(-0.646389,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-0.646389,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-0.646389,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-0.646387,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-0.646387,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-0.646387,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-0.817723,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-0.817723,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-0.817723,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-0.817720,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-0.817720,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-0.817720,  1.0e-6), // I1_T1_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 phi_bar */
-                    std::make_pair(5.442762e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(5.442762e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(5.442762e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(5.442027e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(5.442027e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(5.442027e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(6.589510e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(6.589510e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(6.589510e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(6.588619e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(6.588619e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(6.588619e-2,  1.0e-6), // I2_T1_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_+ */
                     std::make_pair(-1.190950e-1,  1.0e-6), // I2_T1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
@@ -1835,22 +1835,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(-3.223354e-1,  1.0e-6), // I2_T1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_+ */
-                    std::make_pair(4.092816e-3,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(4.092816e-3,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(4.092816e-3,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(4.091723e-3,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(4.091723e-3,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.091723e-3,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.157127e-2,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.157127e-2,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.157127e-2,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.156818e-2,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.156818e-2,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.156818e-2,  1.0e-6), // I3_T1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(1.697711e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.697711e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.697711e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.697257e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.697257e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.697257e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.877934e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.877934e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.877934e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.877432e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.877432e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.877432e-1,  1.0e-6), // I3d1_T1_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_bar */
                     std::make_pair(-1.842692e-3,  1.0e-6), // I2_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -1871,13 +1871,13 @@ class LCSRFormFactorsTest :
                     std::make_pair(4.120409e-4,  1.0e-6), // I3_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_bar */
-                    std::make_pair(4.352307e-3,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(4.352307e-3,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(4.352307e-3,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(4.351159e-3,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(4.351159e-3,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.351159e-3,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.360095e-2,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.360095e-2,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.360095e-2,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.359736e-2,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.359736e-2,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.359736e-2,  1.0e-6), // I3d1_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4 g_bar */
                     std::make_pair(1.272367e-4,  1.0e-6), // I4_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -1889,22 +1889,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(8.495098e-4,  1.0e-6), // I4_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d1 g_bar */
-                    std::make_pair(8.966925e-3,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(8.966925e-3,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(8.966925e-3,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(8.963349e-3,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(8.963349e-3,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(8.963349e-3,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(2.806474e-2,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(2.806474e-2,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(2.806474e-2,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(2.805355e-2,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(2.805355e-2,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(2.805355e-2,  1.0e-6), // I4d1_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar */
-                    std::make_pair(3.929166e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(3.929166e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(3.929166e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(3.927598e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(3.927598e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(3.927598e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(5.329536e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(5.329536e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(5.329536e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(5.327408e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(5.327408e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(5.327408e-1,  1.0e-6), // I4d2_T1_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -1937,62 +1937,62 @@ class LCSRFormFactorsTest :
                     std::make_pair(-5.9111e4,  1.0e-0),   // I3d1B_A1_3pt_phi_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_3 */
-                    std::make_pair(-3.4554e-2, 1.0e-6),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(-7.2414e-2, 1.0e-6),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(-3.4549e-2, 1.0e-6),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(-7.2404e-2, 1.0e-6),   // I3d1C_A1_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_3 phi_bar_bar_3 */
                     std::make_pair( 3.2513e-4,  1.0e-6),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 4.3309e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 2.1675e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.8873e-2,  1.0e-6),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 4.3303e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.1672e-3,  1.0e-7),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.8868e-2,  1.0e-6),  // I3_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A phi_bar_bar_3 */
-                    std::make_pair(-1.7846e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.3772e-2,  1.0e-6),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 2.6355e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-1.7844e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.3768e-2,  1.0e-6),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.6351e-3,  1.0e-7),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 3.5106e-2,  1.0e-5),  // I3d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_bar_3 */
-                    std::make_pair( 3.3710e-1,  1.0e-5),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 3.7893e+2,  1.0e-2),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 3.3705e-1,  1.0e-5),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 3.7887e+2,  1.0e-2),  // I3d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair(-2.8454e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-9.8404e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-7.7037e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-2.2030e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-2.8445e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-9.8378e-3,  1.0e-7),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-7.7016e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-2.2024e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair( 3.8617e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.1535e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 5.9658e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.4105e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 3.8606e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.1531e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 5.9642e-2,  1.0e-6),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.4101e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair( 2.3163e-1,  1.0e-5),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 2.6037e+2,  1.0e-2),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 2.3156e-1,  1.0e-5),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 2.6030e+2,  1.0e-2),  // I4d1B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair(-1.3123e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.5386e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 3.0552e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 8.0275e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.3119e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.5379e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 3.0544e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 8.0253e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair(-1.0606e1,  1.0e-3),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(-3.5411e3,  1.0e-1),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-1.0603e1,  1.0e-3),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-3.5401e3,  1.0e-1),   // I4d2B_A1_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair( 3.2551e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair( 8.6718e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair( 3.2542e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair( 8.6695e-2,  1.0e-6),  // I4d2C_A1_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair( 0.0,  1.0e-4),        // I4d2D_A1_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -2022,8 +2022,8 @@ class LCSRFormFactorsTest :
                     std::make_pair( 1.5151e+1,  1.0e-3),  // I3d1A_A1_3pt_phi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_4 */
-                    std::make_pair(-8.7044  ,  1.0e-4),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-3.2661e3,  1.0e-1),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-8.7031  ,  1.0e-4),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-3.2656e3,  1.0e-1),   // I3d1B_A1_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_4 */
                     std::make_pair(-6.2022  ,  1.0e-4),   // I3d1C_A1_3pt_phi_bar_4(sigma_0, 0.1, 5.0)
@@ -2056,38 +2056,38 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),         // I3d1C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_4 */
-                    std::make_pair( 1.6694e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 2.0882e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.0144e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.0679   ,  1.0e-4),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 1.6691e-2,  1.0e-6),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 2.0879e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.0142e-1,  1.0e-5),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.0677   ,  1.0e-4),  // I4_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_4 */
-                    std::make_pair(-1.2510e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-1.5030   ,  1.0e-4),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 5.0504e-3,  1.0e-7),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-3.1546e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.2508e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-1.5027   ,  1.0e-4),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 5.0447e-3,  1.0e-7),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-3.1543e-1,  1.0e-5),  // I4d1A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_4 */
-                    std::make_pair( 1.5772e+1,  1.0e-3),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 1.2907e+4,  1.0e-0),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 1.5769e+1,  1.0e-3),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 1.2905e+4,  1.0e-0),  // I4d1B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_4 */
-                    std::make_pair(-3.9181e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-5.2024   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-2.8799e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-3.6803   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-3.9175e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-5.2016   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-2.8795e-1,  1.0e-5),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-3.6798   ,  1.0e-4),  // I4d2A_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_4 */
-                    std::make_pair(-5.0570e2,  1.0e-2),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-1.6826e5,  1.0e+1),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-5.0562e2,  1.0e-2),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-1.6824e5,  1.0e+1),   // I4d2B_A1_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_4 */
-                    std::make_pair(-4.6257,     1.0e-4),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair(-12.323,     1.0e-3),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair(-4.6251,     1.0e-4),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair(-12.321,     1.0e-3),  // I4d2C_A1_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_A1_3pt_phi_bar_bar_4(sigma_0, 5.0)
@@ -2131,9 +2131,9 @@ class LCSRFormFactorsTest :
                     std::make_pair( 3.0576   ,  1.0e-4),  // I3_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A chi_bar_4 */
-                    std::make_pair( 5.5930e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 5.5928e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
                     std::make_pair( 1.0840   ,  1.0e-4),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 7.0661e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 7.0662e-1,  1.0e-5),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 1.6109   ,  1.0e-4),  // I3d1A_A1_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B chi_bar_4 */
@@ -2149,22 +2149,22 @@ class LCSRFormFactorsTest :
                     /* 2 particle */
 
                     /* I_1 phi_+ */
-                    std::make_pair(-0.646389,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-0.646389,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-0.646389,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-0.646387,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-0.646387,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-0.646387,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-0.817723,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-0.817723,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-0.817723,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-0.817720,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-0.817720,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-0.817720,  1.0e-6), // I1_T23A_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 phi_bar */
-                    std::make_pair(8.746169e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(5.442762e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(2.139355e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(8.745434e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(5.442027e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(2.138620e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair( 1.492725e-1,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair( 6.589510e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-1.748232e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair( 1.492636e-1,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair( 6.588619e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-1.749123e-2,  1.0e-6), // I2_T23A_2pt_phi_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_+ */
                     std::make_pair(-1.190950e-1,  1.0e-6), // I2_T23A_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
@@ -2176,22 +2176,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(-3.223354e-1,  1.0e-6), // I2_T23A_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3 g_+ */
-                    std::make_pair(4.092816e-3,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(4.092816e-3,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(4.092816e-3,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(4.091723e-3,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(4.091723e-3,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(4.091723e-3,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.157127e-2,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.157127e-2,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.157127e-2,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.156818e-2,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.156818e-2,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.156818e-2,  1.0e-6), // I3_T23A_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(1.697711e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.697711e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.697711e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.697257e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.697257e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.697257e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.877934e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.877934e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.877934e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.877432e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.877432e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.877432e-1,  1.0e-6), // I3d1_T23A_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_bar */
                     std::make_pair(-1.842692e-3,  1.0e-6), // I2_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -2212,13 +2212,13 @@ class LCSRFormFactorsTest :
                     std::make_pair( 2.089519e-2,  1.0e-6), // I3_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_bar */
-                    std::make_pair(-1.422168e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair( 4.352307e-3,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair( 1.509214e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-1.422180e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair( 4.351159e-3,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair( 1.509203e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-9.185610e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair( 1.360095e-2,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair( 9.457629e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-9.185646e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair( 1.359736e-2,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair( 9.457593e-1,  1.0e-6), // I3d1_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4 g_bar */
                     std::make_pair( 2.044612e-4,  1.0e-6), // I4_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -2230,22 +2230,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(-2.253794e-4,  1.0e-6), // I4_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d1 g_bar */
-                    std::make_pair( 1.641836e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair( 8.966925e-3,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair( 1.515487e-3,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair( 1.641282e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair( 8.963349e-3,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair( 1.513876e-3,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair( 7.814995e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair( 2.806474e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-2.202046e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair( 7.812554e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair( 2.805355e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-2.201845e-2,  1.0e-6), // I4d1_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar */
-                    std::make_pair( 9.186539e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair( 3.929166e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-1.328207e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair( 9.183585e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair( 3.927598e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-1.328388e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair( 2.201174   ,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair( 5.329536e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-1.135267   ,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair( 2.200521   ,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair( 5.327408e-1,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-1.135040   ,  1.0e-6), // I4d2_T23A_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -2278,43 +2278,43 @@ class LCSRFormFactorsTest :
                     std::make_pair(-6.5151e4,  1.0e+0),   // I3d1B_T23A_3pt_phi_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_3 */
-                    std::make_pair(-6.8433e-2, 1.0e-6),   // I3d1C_T23A_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(-1.4341e-1, 1.0e-5),   // I3d1C_T23A_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(-6.8424e-2, 1.0e-6),   // I3d1C_T23A_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(-1.4339e-1, 1.0e-5),   // I3d1C_T23A_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_3 phi_bar_bar_3 */
-                    std::make_pair( 3.2513e-4,  1.0e-8),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 4.3309e-3,  1.0e-7),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 2.1675e-3,  1.0e-7),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.8873e-2,  1.0e-6),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 3.2509e-4,  1.0e-8),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 4.3303e-3,  1.0e-7),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.1672e-3,  1.0e-7),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.8868e-2,  1.0e-6),  // I3_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A phi_bar_bar_3 */
-                    std::make_pair(-1.7846e-3,  1.0e-7),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.3772e-2,  1.0e-6),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 2.6355e-3,  1.0e-7),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 3.5106e-2,  1.0e-6),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-1.7844e-3,  1.0e-7),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.3768e-2,  1.0e-6),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.6351e-3,  1.0e-7),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 3.5100e-2,  1.0e-6),  // I3d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_bar_3 */
-                    std::make_pair( 3.3710e-1, 1.0e-5),   // I3d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 3.7893e+2, 1.0e-2),   // I3d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 3.3705e-1, 1.0e-5),   // I3d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 3.7887e+2, 1.0e-2),   // I3d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_bar_3 */
                     std::make_pair(       0.0, 1.0e-4),   // I3d1C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(       0.0, 1.0e-4),   // I3d1C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair(-3.3717e-3,  1.0e-7),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-1.6852e-2,  1.0e-6),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-8.0546e-2,  1.0e-6),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-2.6704e-1,  1.0e-5),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-3.3709e-3,  1.0e-7),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-1.6848e-2,  1.0e-6),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-8.0525e-2,  1.0e-6),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-2.6698e-1,  1.0e-5),  // I4_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair( 3.3908e-2,  1.0e-6),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 5.2628e-2,  1.0e-6),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 4.7378e-3,  1.0e-7),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-5.9051e-1,  1.0e-5),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 3.3898e-2,  1.0e-6),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 5.2605e-2,  1.0e-6),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 4.7293e-3,  1.0e-7),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-5.9045e-1,  1.0e-5),  // I4d1A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair(-3.1413e-1,  1.0e-5),  // I4d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-3.1411e-1,  1.0e-5),  // I4d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
                     std::make_pair(-3.5310e+2,  1.0e-2),  // I4d1B_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
@@ -2322,18 +2322,18 @@ class LCSRFormFactorsTest :
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair(-4.1812e-2,  1.0e-6),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 9.3717e-1,  1.0e-5),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 6.9767e-2,  1.0e-6),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-2.3376   ,  1.0e-4),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-4.1789e-2,  1.0e-6),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 9.3707e-1,  1.0e-5),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 6.9717e-2,  1.0e-6),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-2.3374   ,  1.0e-4),  // I4d2A_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair(-1.0631e1,  1.0e-3),   // I4d2B_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair(-1.5299e4,  1.0e-0),   // I4d2B_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-1.0628e1,  1.0e-3),   // I4d2B_T23A_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair(-1.5295e4,  1.0e-0),   // I4d2B_T23A_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair( 1.1334e-1,  1.0e-5),  // I4d2C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair( 3.0193e-1,  1.0e-5),  // I4d2C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair( 1.1331e-1,  1.0e-5),  // I4d2C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair( 3.0188e-1,  1.0e-5),  // I4d2C_T23A_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair( 0.0,  1.0e-4),        // I4d2D_T23A_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -2363,8 +2363,8 @@ class LCSRFormFactorsTest :
                     std::make_pair( 1.3790e+1,  1.0e-3),  // I3d1A_T23A_3pt_phi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_4 */
-                    std::make_pair(-1.8959e1,  1.0e-3),   // I3d1B_T23A_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-7.1137e3,  1.0e-1),   // I3d1B_T23A_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-1.8957e1,  1.0e-3),   // I3d1B_T23A_3pt_phi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-7.1132e3,  1.0e-1),   // I3d1B_T23A_3pt_phi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_4 */
                     std::make_pair(-6.4407  ,  1.0e-4),   // I3d1C_T23A_3pt_phi_bar_4(sigma_0, 0.1, 5.0)
@@ -2398,19 +2398,19 @@ class LCSRFormFactorsTest :
 
                     /* I_4 phi_bar_bar_4 */
                     std::make_pair(-2.3102e-1,  1.0e-5),  // I4_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-6.5271e-1,  1.0e-5),  // I4_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-6.5273e-1,  1.0e-5),  // I4_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair(-4.7739   ,  1.0e-4),  // I4_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair(-1.2899e+1,  1.0e-3),  // I4_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_4 */
-                    std::make_pair( 1.2580e-1,  1.0e-5),  // I4d1A_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.2563   ,  1.0e-4),  // I4d1A_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.2581e-1,  1.0e-5),  // I4d1A_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-2.2561   ,  1.0e-4),  // I4d1A_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair(-5.7368e+1,  1.0e-3),  // I4d1A_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair(-1.6662e+2,  1.0e-2),  // I4d1A_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_4 */
-                    std::make_pair( 3.5388e+1,  1.0e-3),  // I4d1B_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 2.8960e+4,  1.0e+0),  // I4d1B_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair( 3.5385e+1,  1.0e-3),  // I4d1B_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 2.8958e+4,  1.0e+0),  // I4d1B_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_T23A_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
@@ -2423,12 +2423,12 @@ class LCSRFormFactorsTest :
                     std::make_pair( 5.0209e+2,  1.0e-2),  // I4d2A_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_4 */
-                    std::make_pair(-9.2164e2,  1.0e-2),   // I4d2B_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair( 1.3527e4,  1.0e+0),   // I4d2B_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-9.2157e2,  1.0e-2),   // I4d2B_T23A_3pt_phi_bar_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair( 1.3549e4,  1.0e+0),   // I4d2B_T23A_3pt_phi_bar_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_4 */
                     std::make_pair( 1.0489  ,   1.0e-3),  // I4d2C_T23A_3pt_phi_bar_bar_4(sigma_0, 0.1, 5.0)
-                    std::make_pair( 2.7945  ,   1.0e-3),  // I4d2C_T23A_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
+                    std::make_pair( 2.7960  ,   1.0e-3),  // I4d2C_T23A_3pt_phi_bar_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_4 */
                     std::make_pair(0.0,  1.0e-4),         // I4d2D_T23A_3pt_phi_bar_bar_4(sigma_0, 5.0)
@@ -2473,7 +2473,7 @@ class LCSRFormFactorsTest :
 
                     /* I_3d1A chi_bar_4 */
                     std::make_pair(-2.8682   ,  1.0e-4),  // I3d1A_T23A_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.2403e-1,  1.0e-5),  // I3d1A_T23A_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-2.2405e-1,  1.0e-5),  // I3d1A_T23A_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair(-4.2452e+1,  1.0e-3),  // I3d1A_T23A_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair(-1.6279e+1,  1.0e-3),  // I3d1A_T23A_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
@@ -2490,13 +2490,13 @@ class LCSRFormFactorsTest :
                     /* 2 particle */
 
                     /* I_1 phi_+ */
-                    std::make_pair(1.049148e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.049148e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.049148e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.049356e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.049356e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.049356e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(4.848300e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(4.848300e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(4.848300e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(4.848575e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(4.848575e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(4.848575e-2,  1.0e-6), // I1_T23B_2pt_phi_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_1 phi_bar */
                     std::make_pair(-3.303407e-3,  1.0e-6), // I1_T23B_2pt_phi_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -2535,13 +2535,13 @@ class LCSRFormFactorsTest :
                     std::make_pair(-6.860632e-4,  1.0e-6), // I3_T23B_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_+ */
-                    std::make_pair(-6.982288e-3,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(-6.982288e-3,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-6.982288e-3,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-6.981006e-3,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-6.981006e-3,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(-6.981006e-3,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-2.411838e-2,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-2.411838e-2,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-2.411838e-2,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-2.411269e-2,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-2.411269e-2,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-2.411269e-2,  1.0e-6), // I3d1_T23B_2pt_g_p(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_2 g_bar */
                     std::make_pair(-1.689134e-3,  1.0e-6), // I2_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -2562,13 +2562,13 @@ class LCSRFormFactorsTest :
                     std::make_pair(-4.283410e-2,  1.0e-6), // I3_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_3d1 g_bar */
-                    std::make_pair(-4.534548e-1,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(-4.534558e-1,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
                     std::make_pair(-3.840569e-1,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(-3.146589e-1,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(-3.146599e-1,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(-2.736465   ,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(-2.323013   ,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(-1.909561   ,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(-2.736468   ,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(-2.323016   ,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(-1.909564   ,  1.0e-6), // I3d1_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4 g_bar */
                     std::make_pair(2.414476e-4,  1.0e-6), // I4_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
@@ -2580,22 +2580,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(2.213409e-3,  1.0e-6), // I4_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d1 g_bar */
-                    std::make_pair(2.296247e-2,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.943389e-2,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.590530e-2,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(2.295643e-2,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.942877e-2,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.590112e-2,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(1.449620e-1,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(1.227319e-1,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(1.005019e-1,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(1.449240e-1,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(1.226998e-1,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(1.004757e-1,  1.0e-6), // I4d1_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* I_4d2 g_bar */
-                    std::make_pair(1.582910   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
-                    std::make_pair(1.339166   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
-                    std::make_pair(1.095423   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
+                    std::make_pair(1.582494   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.04, q2 = -5 GeV^2)
+                    std::make_pair(1.338815   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.04, q2 =  0 GeV^2)
+                    std::make_pair(1.095137   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.04, q2 = +5 GeV^2)
 
-                    std::make_pair(4.599967   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
-                    std::make_pair(3.898943   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
-                    std::make_pair(3.197918   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
+                    std::make_pair(4.598765   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.08, q2 = -5 GeV^2)
+                    std::make_pair(3.897925   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.08, q2 =  0 GeV^2)
+                    std::make_pair(3.197086   ,  1.0e-6), // I4d2_T23B_2pt_g_bar(sigma = 0.08, q2 = +5 GeV^2)
 
                     /* 3 particle */
 
@@ -2634,62 +2634,62 @@ class LCSRFormFactorsTest :
                     std::make_pair( 1.5956e4,  1.0e+0),   // I3d1B_T23B_3pt_phi_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_3 */
-                    std::make_pair( 3.7179e-2, 1.0e-6),   // I3d1C_T23B_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair( 7.7914e-2, 1.0e-6),   // I3d1C_T23B_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair( 3.7174e-2, 1.0e-6),   // I3d1C_T23B_3pt_phi_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair( 7.7904e-2, 1.0e-6),   // I3d1C_T23B_3pt_phi_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_3 phi_bar_bar_3 */
-                    std::make_pair( 2.7250e-4,  1.0e-8),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 3.6297e-3,  1.0e-7),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.8166e-3,  1.0e-7),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 2.4198e-2,  1.0e-6),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 2.7245e-4,  1.0e-8),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 3.6292e-3,  1.0e-7),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.8163e-3,  1.0e-7),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 2.4194e-2,  1.0e-6),  // I3_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1A phi_bar_bar_3 */
-                    std::make_pair(-2.2555e-3,  1.0e-7),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-3.0044e-2,  1.0e-6),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair(-2.8566e-3,  1.0e-7),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair(-3.8050e-2,  1.0e-6),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-2.2552e-3,  1.0e-7),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-3.0040e-2,  1.0e-6),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-2.8561e-3,  1.0e-7),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair(-3.8045e-2,  1.0e-6),  // I3d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B phi_bar_bar_3 */
-                    std::make_pair( 2.8252e-1, 1.0e-5),   // I3d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 3.1758e+2, 1.0e-2),   // I3d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 2.8248e-1, 1.0e-5),   // I3d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 3.1753e+2, 1.0e-2),   // I3d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C phi_bar_bar_3 */
                     std::make_pair(       0.0, 1.0e-4),   // I3d1C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(       0.0, 1.0e-4),   // I3d1C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4 phi_bar_bar_3 */
-                    std::make_pair( 1.3510e-3,  1.0e-7),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.5724e-2,  1.0e-6),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.3707e-2,  1.0e-6),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.1735e-1,  1.0e-5),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 1.3507e-3,  1.0e-7),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.5721e-2,  1.0e-6),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.3704e-2,  1.0e-6),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.1733e-1,  1.0e-5),  // I4_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1A phi_bar_bar_3 */
-                    std::make_pair( 8.9875e-3,  1.0e-7),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.1923e-1,  1.0e-5),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 1.9387e-1,  1.0e-5),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 1.6937   ,  1.0e-4),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair( 8.9862e-3,  1.0e-7),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair( 1.1921e-1,  1.0e-5),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.9383e-1,  1.0e-5),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 1.6934   ,  1.0e-4),  // I4d1A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d1B phi_bar_bar_3 */
-                    std::make_pair( 1.1431   ,  1.0e-4),  // I4d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 1.2850e+3,  1.0e-1),  // I4d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair( 1.1429   ,  1.0e-4),  // I4d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 1.2848e+3,  1.0e-1),  // I4d1B_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d1C phi_bar_bar_3 */
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
                     std::make_pair(0.0,  1.0e-4),         // I4d1C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2A phi_bar_bar_3 */
-                    std::make_pair(-2.8222e-1,  1.0e-5),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-3.0185   ,  1.0e-4),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
-                    std::make_pair( 2.9238e-1,  1.0e-5),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
-                    std::make_pair( 3.6509   ,  1.0e-4),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
+                    std::make_pair(-2.8217e-1,  1.0e-5),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.1, 5.0)
+                    std::make_pair(-3.0181   ,  1.0e-4),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 2.9233e-1,  1.0e-5),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.1, 5.0)
+                    std::make_pair( 3.6503   ,  1.0e-4),  // I4d2A_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_4d2B phi_bar_bar_3 */
-                    std::make_pair(-2.1918  ,  1.0e-4),   // I4d2B_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
-                    std::make_pair( 2.1829e4,  1.0e-0),   // I4d2B_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
+                    std::make_pair(-2.1915  ,  1.0e-4),   // I4d2B_T23B_3pt_phi_bar_bar_3(sigma_0, 1.0, 5.0)
+                    std::make_pair( 2.1825e4,  1.0e-0),   // I4d2B_T23B_3pt_phi_bar_bar_3(sigma_0, 3.0, 5.0)
 
                     /* I_4d2C phi_bar_bar_3 */
-                    std::make_pair(-1.7462e-1,  1.0e-5),  // I4d2C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
-                    std::make_pair(-4.6520e-1,  1.0e-5),  // I4d2C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
+                    std::make_pair(-1.7459e-1,  1.0e-5),  // I4d2C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.1, 5.0)
+                    std::make_pair(-4.6513e-1,  1.0e-5),  // I4d2C_T23B_3pt_phi_bar_bar_3(sigma_0, 0.5, 5.0)
 
                     /* I_4d2D phi_bar_bar_3 */
                     std::make_pair( 0.0,  1.0e-4),        // I4d2D_T23B_3pt_phi_bar_bar_3(sigma_0, 5.0)
@@ -2760,7 +2760,7 @@ class LCSRFormFactorsTest :
 
                     /* I_4d1A phi_bar_bar_4 */
                     std::make_pair(-1.0133   ,  1.0e-4),  // I4d1A_T23B_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair(-2.0759e-1,  1.0e-5),  // I4d1A_T23B_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair(-2.0762e-1,  1.0e-5),  // I4d1A_T23B_3pt_phi_bar_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 1.1064e+2,  1.0e-2),  // I4d1A_T23B_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 3.2014e+2,  1.0e-2),  // I4d1A_T23B_3pt_phi_bar_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
@@ -2808,22 +2808,22 @@ class LCSRFormFactorsTest :
                     std::make_pair(-9.1407   ,  1.0e-4),  // I3d1A_T23B_3pt_psi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3d1B psi_bar_4 */
-                    std::make_pair(-5.9695  ,  1.0e-4),   // I3d1B_T23B_3pt_psi_bar_4(sigma_0, 1.0, 5.0)
-                    std::make_pair(-7.1421e2,  1.0e-2),   // I3d1B_T23B_3pt_psi_bar_4(sigma_0, 3.0, 5.0)
+                    std::make_pair(-5.9693  ,  1.0e-4),   // I3d1B_T23B_3pt_psi_bar_4(sigma_0, 1.0, 5.0)
+                    std::make_pair(-7.1418e2,  1.0e-2),   // I3d1B_T23B_3pt_psi_bar_4(sigma_0, 3.0, 5.0)
 
                     /* I_3d1C psi_bar_4 */
-                    std::make_pair(-2.4489e-1,  1.0e-5),  // I3d1C_T23B_3pt_psi_bar_4(sigma_0, 0.1, 5.0)
+                    std::make_pair(-2.4490e-1,  1.0e-5),  // I3d1C_T23B_3pt_psi_bar_4(sigma_0, 0.1, 5.0)
                     std::make_pair(-1.0264e-1,  1.0e-5),  // I3d1C_T23B_3pt_psi_bar_4(sigma_0, 0.5, 5.0)
 
                     /* I_2 chi_bar_4 */
                     std::make_pair( 2.0776e-1,  1.0e-5),  // I2_T23B_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 4.8693e-2,  1.0e-6),  // I2_T23B_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 4.8691e-2,  1.0e-6),  // I2_T23B_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 1.5023   ,  1.0e-4),  // I2_T23B_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 5.7025e-1,  1.0e-5),  // I2_T23B_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 
                     /* I_3 chi_bar_4 */
                     std::make_pair( 8.3115e-1,  1.0e-5),  // I3_T23B_3pt_chi_bar_4(sigma_0, 1.0, 0.1, 5.0)
-                    std::make_pair( 1.7619e-1,  1.0e-5),  // I3_T23B_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
+                    std::make_pair( 1.7620e-1,  1.0e-5),  // I3_T23B_3pt_chi_bar_4(sigma_0, 1.0, 0.5, 5.0)
                     std::make_pair( 6.0667   ,  1.0e-4),  // I3_T23B_3pt_chi_bar_4(sigma_0, 3.0, 0.1, 5.0)
                     std::make_pair( 2.2763   ,  1.0e-4),  // I3_T23B_3pt_chi_bar_4(sigma_0, 3.0, 0.5, 5.0)
 

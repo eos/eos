@@ -153,7 +153,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL( 0.1746, ff.F_lo_tw3( 0.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.1876, ff.F_lo_tw3( 1.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2580, ff.F_lo_tw3( 5.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4213, ff.F_lo_tw3(10.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4214, ff.F_lo_tw3(10.0),  eps);
 
                 // LO, tw4
                 TEST_CHECK_NEARLY_EQUAL(-0.0013, ff.F_lo_tw4( 0.0),  eps);
@@ -314,7 +314,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
-                TEST_CHECK_NEARLY_EQUAL( 0.2644, ff_no_rescale.f_p(  0.0),   2 * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2641, ff_no_rescale.f_p(  0.0),   2 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.4964, ff_no_rescale.f_p( 10.0),  15 * eps);
                 // f_0(0) = f_+(0)
                 TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_0( 10.0),   7 * eps);

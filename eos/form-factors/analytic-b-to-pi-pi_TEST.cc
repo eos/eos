@@ -88,26 +88,26 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
                     std::make_pair(+3.244530, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
                     std::make_pair(+3.120950, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
                     // LO, tw3, I_{sigma,1}: integral over f_{sigma,1}
-                    std::make_pair(-0.431341, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
-                    std::make_pair(-0.476510, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
-                    std::make_pair(-0.534131, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
-                    std::make_pair(-0.447116, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
-                    std::make_pair(-0.480545, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
-                    std::make_pair(-0.520268, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
+                    std::make_pair(-0.431354, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
+                    std::make_pair(-0.476524, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
+                    std::make_pair(-0.534146, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
+                    std::make_pair(-0.447129, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
+                    std::make_pair(-0.480559, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
+                    std::make_pair(-0.520284, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
                     // LO, tw3, I_{sigma,2}: integral over f_{sigma,2}
-                    std::make_pair(-0.427645, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
-                    std::make_pair(-0.449097, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
-                    std::make_pair(-0.474248, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
-                    std::make_pair(-0.437847, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
-                    std::make_pair(-0.453596, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
-                    std::make_pair(-0.471227, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
+                    std::make_pair(-0.427658, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
+                    std::make_pair(-0.449110, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
+                    std::make_pair(-0.474262, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
+                    std::make_pair(-0.437860, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
+                    std::make_pair(-0.453609, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
+                    std::make_pair(-0.471241, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
                     // LO, tw3, I_{finite}: integral over f_{finite} @ tw3
-                    std::make_pair(+1.274020, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
-                    std::make_pair(+1.372830, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
-                    std::make_pair(+1.495590, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
-                    std::make_pair(+1.297650, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
-                    std::make_pair(+1.369760, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
-                    std::make_pair(+1.453860, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
+                    std::make_pair(+1.274055, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
+                    std::make_pair(+1.372867, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
+                    std::make_pair(+1.495634, eps), // q2 = 0.0112245 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
+                    std::make_pair(+1.297684, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = -1)
+                    std::make_pair(+1.369796, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z =  0)
+                    std::make_pair(+1.453899, eps), // q2 = 0.0224490 M_B^2, k2 = 0.6666667 M_B^2, z = +1)
                 };
 
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
@@ -248,7 +248,7 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
                 TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.058008400, std::imag(ff.f_long(0.30, 20.00, -0.25)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.057997292, std::imag(ff.f_long(0.30, 20.00, -0.25)), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60, +0.50)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.032167500, std::imag(ff.f_long(0.60, 18.60, +0.50)), eps);
             }

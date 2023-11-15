@@ -113,9 +113,9 @@ class PionLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.0045,         pi.f3(1.0),        eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.003257533016, pi.f3(2.0),        eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.002864248153, pi.f3(3.0),        eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.846675085,    pi.mu3(1.0),       eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.846891546,    pi.mu3(1.0),       eps);
                 TEST_CHECK_NEARLY_EQUAL( 2.434973113,    pi.mu3(2.0),       eps);
-                TEST_CHECK_NEARLY_EQUAL( 2.697094626,    pi.mu3(3.0),       eps);
+                TEST_CHECK_NEARLY_EQUAL( 2.697044518,    pi.mu3(3.0),       eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.01868720856,  pi.eta3(1.0),      eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0102592843,   pi.eta3(2.0),      eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.008143983155, pi.eta3(3.0),      eps);
@@ -124,9 +124,9 @@ class PionLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(-1.002982205,    pi.omega3(3.0),    eps);
 
                 // phi3p, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL( 1.23828994,   pi.phi3p(0.1, 1.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.23826201,   pi.phi3p(0.1, 1.0),    eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.9881149354, pi.phi3p(0.2, 1.0),    eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.8447373277, pi.phi3p(0.3, 1.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.8447555249, pi.phi3p(0.3, 1.0),    eps);
 
                 // phi3p, scale mu = 2.0 GeV
                 TEST_CHECK_NEARLY_EQUAL( 1.133511907,  pi.phi3p(0.1, 2.0),    eps);
@@ -134,8 +134,8 @@ class PionLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.9160656408, pi.phi3p(0.3, 2.0),    eps);
 
                 // phi3s, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL( 0.7314784825, pi.phi3s(0.1, 1.0),    eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.083784069,  pi.phi3s(0.2, 1.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.7314560406, pi.phi3s(0.1, 1.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.083769561,  pi.phi3s(0.2, 1.0),    eps);
                 TEST_CHECK_NEARLY_EQUAL( 1.219383352,  pi.phi3s(0.3, 1.0),    eps);
 
                 // phi3s, scale mu = 2.0 GeV
@@ -144,9 +144,9 @@ class PionLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL( 1.238428959,  pi.phi3s(0.3, 2.0),    eps);
 
                 // phi3s first derivative, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL( 5.109460174,  pi.phi3s_d1(0.1, 1.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 2.207429218,  pi.phi3s_d1(0.2, 1.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.6979690447, pi.phi3s_d1(0.3, 1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 5.109423904,  pi.phi3s_d1(0.1, 1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 2.207592431,  pi.phi3s_d1(0.2, 1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.6981685276, pi.phi3s_d1(0.3, 1.0), eps);
 
                 // phi3s first derivative, scale mu = 2.0 GeV
                 TEST_CHECK_NEARLY_EQUAL( 4.964350791,  pi.phi3s_d1(0.1, 2.0), eps);
