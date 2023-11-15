@@ -304,13 +304,13 @@ After successful configuration, build EOS by running the following command:
   make -j all
 
 The ``-j`` option instructs the ``make`` program to use all available processors to parallelize the build process.
-#We strongly recommend testing the build by running the command
+We strongly recommend testing the build by running the command
 
 ::
 
   make -j check VERBOSE=1
 
-#within the build directory.
+within the build directory.
 Please contact the authors if any test fails by opening an issue in the official `EOS Github repository <https://github.com/eos/eos>`_.
 If all tests pass, install EOS by running the command
 
