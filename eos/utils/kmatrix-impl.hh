@@ -280,5 +280,24 @@ namespace eos
 
         return result;
     }
+
+    template <unsigned nchannels_, unsigned nresonances_>
+    double
+    KMatrix<nchannels_, nresonances_>::spectral_function(unsigned resonance, const double & s) const
+    {
+        double mres = this->_resonances[resonance]->_m;
+
+        complex<double> denom = s - power_of<2>(mres);
+
+        for (unsigned channel = 0 ; channel < nchannels_ ; channel++)
+        {
+            complex<double> chew_mandelstam = this->_channels[channel]->chew_mandelstam(s);
+
+            denom += power_of<2>((double)this->_channels[channel]->_g0s[resonance]) * chew_mandelstam;
+        }
+
+        return -1.0 / M_PI * imag(1.0 / denom);
+    }
 }
+
 #endif
