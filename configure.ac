@@ -430,6 +430,7 @@ AC_CONFIG_FILES([Makefile
 	eos/nonlocal-form-factors/Makefile
 	eos/parameters/Makefile
 	eos/rare-b-decays/Makefile
+	eos/scattering/Makefile
 	eos/statistics/Makefile
 	eos/utils/Makefile
 	src/Makefile

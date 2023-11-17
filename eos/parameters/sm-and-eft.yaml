@@ -30,6 +30,10 @@ groups:
           unit:     '1'
           latex:    '$\alpha_e(m_b)$'
           comments: 'alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128'
+      'QED::alpha_e(0)' :
+          central: +0.0072973525693
+          min:     +0.0072973525682
+          max:     +0.0072973525704
       # G_Fermi
       'WET::G_Fermi' :
           central: +1.1663787e-5

@@ -1084,3 +1084,82 @@ groups:
           latex:   '$\rho_D^3(1\,\mathrm{GeV})$'
           unit:    'GeV^2'
           comment: 'cf. [MvD:2016A]'
+
+
+  # Parameters of the ee -> ccbar scattering processes
+  # {{{
+  - title: 'Parameters of the ee -> ccbar scattering processes'
+    description: ''
+    parameters:
+      # Non-ccbar component of R
+      'ee->ccbar::Rconstant' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$R_{uds}$'
+          comment: ''
+      # Normalization of R
+      'ee->ccbar::exclusive_norm' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          latex:   '$N_\textrm{excl}$'
+          comment: ''
+      # Mass of the effective channels
+      'ee->ccbar::effective_mass' :
+          central: 0.1
+          min:     1.0e-10
+          max:     5.0
+          latex:   '$m_\textrm{eff}$'
+          comment: ''
+
+      # K matrix barrier factor constant
+      'ee->ccbar::q_0' :
+          central: 0.1
+          min:     1.0e-10
+          max:     5.0
+          latex:   '$q_0(e^+e^-\to c\bar{c})$'
+          comment: 'Temporary parameter'
+    #   'ee->ccbar::q_0(%1%)' :
+    #       central: 0.2
+    #       min:     0.2
+    #       max:     0.2
+    #       latex:   '$q_0(%1%)$'
+    #       matrix:
+    #           - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
+
+      # channels background constants
+      'ee->ccbar::c(%1%,%2%)' :
+          central: 0
+          min:     0
+          max:     0
+          latex:
+            template: '$c(%1%, %2%)$'
+            map:
+              'eff(Jpsi)': '\mathrm{eff}_{J/\psi}'
+              'eff(2S)': '\mathrm{eff}_{\psi(2S)}'
+              'eff(3770)': '\mathrm{eff}_{\psi(3770)}'
+              'D^0Dbar^0': 'D^0\bar{D}^0'
+          matrix:
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
+
+      # e^+ e^- channel
+      'ee->ccbar::g0(%1%,%2%)' :
+          central: 0
+          min:     0
+          max:     0
+          latex:
+            template: '$g^0(%1%,%2%)$'
+            map:
+              'J/psi': 'J/\psi'
+              'psi(2S)': '\psi(2S)'
+              'psi(3770)': '\psi(3770)'
+              'eff(Jpsi)': '\mathrm{eff}_{J/\psi}'
+              'eff(2S)': '\mathrm{eff}_{\psi(2S)}'
+              'eff(3770)': '\mathrm{eff}_{\psi(3770)}'
+              'D^0Dbar^0': 'D^0\bar{D}^0'
+          matrix:
+              - ["J/psi",  "psi(2S)", "psi(3770)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
+  # }}}

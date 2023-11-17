@@ -26,6 +26,7 @@
 #include <eos/form-factors/observables.hh>
 #include <eos/nonlocal-form-factors/observables.hh>
 #include <eos/meson-mixing/observables.hh>
+#include <eos/scattering/observables.hh>
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser-impl.hh>
@@ -55,6 +56,7 @@ namespace eos
             make_b_decays_section,
             make_rare_b_decays_section,
             make_meson_mixing_section,
+            make_scattering_section
         };
 
         for (const auto & section_maker : section_makers)
@@ -126,6 +128,7 @@ namespace eos
                     make_meson_mixing_section(),
                     make_nonlocal_form_factors_section(),
                     make_form_factors_section(),
+                    make_scattering_section()
                 });
             }
 
