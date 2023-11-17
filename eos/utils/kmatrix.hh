@@ -86,6 +86,9 @@ namespace eos
             double partial_width(unsigned resonance, unsigned channel) const;
 
             double width(unsigned resonance) const;
+
+            // Spectral function of a resonance.
+            double spectral_function(unsigned resonance, const double & s) const;
     };
 
 
