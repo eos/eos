@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2019 Stephan Kürten
  * Copyright (c) 2019 Danny van Dyk
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2021-2023 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
 #ifndef EOS_GUARD_EOS_UTILS_KMATRIX_HH
 #define EOS_GUARD_EOS_UTILS_KMATRIX_HH 1
 
-
 #include <eos/maths/complex.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/parameters.hh>
@@ -36,7 +35,6 @@
 #include <vector>
 
 namespace eos
-
 {
     template <unsigned nchannels_, unsigned nresonances_>
     class KMatrix
@@ -46,9 +44,10 @@ namespace eos
             struct Channel;
             struct Resonance;
 
-            std::vector<std::shared_ptr<KMatrix::Channel>> _channels;
-            std::vector<std::shared_ptr<KMatrix::Resonance>> _resonances;
-            std::vector<std::vector<Parameter>> _bkgcst;
+            std::array<std::shared_ptr<KMatrix::Channel>, nchannels_> _channels;
+            std::array<std::shared_ptr<KMatrix::Resonance>, nresonances_> _resonances;
+            // The non-resonant contribution is described with a set of constants
+            std::array<std::array<Parameter, nchannels_>, nchannels_> _bkgcst;
 
             const std::string & _prefix;
 
@@ -61,23 +60,25 @@ namespace eos
             // Two temporary matrices and a permutation are needed to evaluate That
             gsl_matrix_complex * _tmp_1;
             gsl_matrix_complex * _tmp_2;
+            gsl_matrix_complex * _tmp_3;
             gsl_permutation * _perm;
 
             // Constructor
-            KMatrix(std::initializer_list<std::shared_ptr<KMatrix::Channel>> channels,
-                std::initializer_list<std::shared_ptr<KMatrix::Resonance>> resonances,
-                std::vector<std::vector<Parameter>> bkgcst,
+            KMatrix(std::array<std::shared_ptr<KMatrix::Channel>, nchannels_> channels,
+                std::array<std::shared_ptr<KMatrix::Resonance>, nresonances_> resonances,
+                std::array<std::array<Parameter, nchannels_>, nchannels_> bkgcst,
                 const std::string & prefix);
 
-            // Destuctor
+            // Destructor
             ~KMatrix();
 
             // Adapt s to avoid resonnances masses
-            double adapt_s(const double s) const;
+            complex<double> adapt_s(const complex<double> s) const;
 
-            // Return rowindex^th row of the T matrix defined as T = (1-i*rho*K)^(-1)*K
+            // Return the rowindex^th row of the T matrix on the first Riemann sheet, i.e. defined as T = n * (1 - i * K * rho * n * n)^(-1) * K * n
             // rowindex corresponds to the initial channel
-            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const double s) const;
+            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s) const;
+
 
             // Return the K matrix partial and total widths of a resonance.
             // Note that these widths do not necessarily correspond to the experimental ones.
@@ -92,30 +93,34 @@ namespace eos
     {
         std::string _name;
         //Masses of the two final state particles
-        double _m1;
-        double _m2;
+        Parameter _m1;
+        Parameter _m2;
 
-        unsigned _N_orbital;
+        // Properties of the centrifugal barrier factors, cf (50.26)
+        unsigned _l_orbital;
+        Parameter _q0;
 
-        std::vector<Parameter> _g0s;
+        std::array<Parameter, nresonances_> _g0s;
 
-        Channel(std::string name, double m1, double m2, unsigned N_orbital, std::vector<Parameter> g0s) :
+        Channel(std::string name, Parameter m1, Parameter m2, unsigned l_orbital, Parameter q0, std::array<Parameter, nresonances_> g0s) :
             _name(name),
             _m1(m1),
             _m2(m2),
-            _N_orbital(N_orbital),
+            _l_orbital(l_orbital),
+            _q0(q0),
             _g0s(g0s)
         {
-            if (m1 < 0 || m2 < 0)
+            if (m1.evaluate() < 0 || m2.evaluate() < 0)
                 throw InternalError("Masses of channel '" + _name + "' must be positive");
+            if (q0.evaluate() < 0)
+                throw InternalError("Scale parameter of the channel'" + _name + "' must be positive");
         };
 
-
         // Phase space factor
-        virtual double beta(const double & s) = 0;
+        virtual complex<double> rho(const complex<double> & s) = 0;
 
         // Analytic continuation of the phase space factor
-        virtual complex<double> rho(const double & s) = 0;
+        virtual complex<double> chew_mandelstam(const complex<double> & s) = 0;
     };
 
 
@@ -131,10 +136,16 @@ namespace eos
             _name(name),
             _m(m)
         {
-            if (m < 0)
+            if (m.evaluate() < 0)
                 throw InternalError("Mass of resonance '" + _name + "' must be positive");
         };
     };
+
+    namespace kmatrix_utils
+    {
+        // We follow the notation of the PDG's resonance review, i.e. z = (q / q0)
+        complex<double> blatt_weisskopf_factor(const unsigned & l, const complex<double> & z);
+    }
 }
 
 #endif
