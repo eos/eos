@@ -77,7 +77,8 @@ namespace eos
 
             // Return the rowindex^th row of the T matrix on the first Riemann sheet, i.e. defined as T = n * (1 - i * K * rho * n * n)^(-1) * K * n
             // rowindex corresponds to the initial channel
-            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s) const;
+            // If second_sheet is set to true, the value is calculated on the second Riemann sheet
+            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, bool second_sheet = false) const;
 
 
             // Return the K matrix partial and total widths of a resonance.

@@ -135,9 +135,10 @@ namespace eos
 
 
     // Return the row corresponding to the index rowindex of the T matrix defined as T = n * (1 - i * K * rho * n * n)^(-1) * K * n
+    // If second_sheet is set to true, the calculation is performed on the second Riemann sheet
     template <unsigned nchannels_, unsigned nresonances_>
     std::array<complex<double>, nchannels_>
-    KMatrix<nchannels_, nresonances_>::tmatrix_row(unsigned rowindex, complex<double> _s) const
+    KMatrix<nchannels_, nresonances_>::tmatrix_row(unsigned rowindex, complex<double> _s, bool second_sheet) const
     {
         std::array<complex<double>, nchannels_> tmatrixrow;
         std::array<complex<double>, nchannels_> nfactors;
@@ -172,6 +173,11 @@ namespace eos
         for (size_t i = 0 ; i < nchannels_ ; ++i)
         {
             complex<double> entry = channels[i]->chew_mandelstam(s);
+
+            if (second_sheet && (real(s) > power_of<2>(channels[i]->_m1.evaluate() + channels[i]->_m2.evaluate())))
+            {
+                entry += complex<double>(0.0, 2.0) * channels[i]->rho(s) * nfactors[i] * nfactors[i];
+            }
 
             gsl_matrix_complex_set(_tmp_1,  i,  i, gsl_complex_rect(entry.real(), entry.imag()));
         }
