@@ -17,6 +17,7 @@
 
 #include <test/test.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/kmatrix-impl.hh>
 #include <eos/utils/parameters.hh>
 
@@ -26,159 +27,99 @@
 using namespace test;
 using namespace eos;
 
-///////////////////////
-/// Simplest K matrix, 1 channel, 1 resonance
-///////////////////////
-struct PPchan11 :
-    public KMatrix<1,1>::Channel
+//////////////////////////////////////////
+/// Generic channel with two Pseudoscalars
+//////////////////////////////////////////
+template <typename T, T... indices>
+auto _parameter_names(const Parameters & p, std::integer_sequence<T, indices...>)
+    -> std::array<eos::Parameter, sizeof...(indices)>
 {
-    PPchan11(std::string name, double m1, double m2, unsigned N_orbital, const Parameters & p) :
-        Channel(name, m1, m2, N_orbital, {{ p["test::g0_1"] }})
+    return std::array<eos::Parameter, sizeof...(indices)>
+    {{
+        p["test::g0_" + std::to_string(indices + 1) + ""]...
+    }};
+}
+
+template <unsigned nchannels_, unsigned nresonances_>
+struct PPchannel:
+    public KMatrix<nchannels_, nresonances_>::Channel
+{
+    PPchannel(std::string name, Parameter m1, Parameter m2, unsigned l_orbital, const Parameters & p) :
+        KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, l_orbital, p["test::q0"], _parameter_names(p, std::make_index_sequence<nresonances_>()))
     {
     };
 
-    // Useful definitions for beta and rho
     double mm = this->_m1 - this->_m2;
     double mp = this->_m1 + this->_m2;
     // sqrt of the Källen factor, defined with an absolute value
-    double sqlk(const double & s)
+    double sqlk(const complex<double> & s)
     {
         return std::sqrt(std::abs((s - mp * mp) * (s - mm * mm)));
     }
     const double pi = M_PI;
     const complex<double> i = complex<double>(0.0, 1.0);
 
-    double beta(const double & s)
+    complex<double> rho(const complex<double> & s)
     {
-        if (s < mp * mp)
+        if (real(s) < mp * mp)
             return 0.;
         else
-            return sqlk(s) / s;
+            return sqlk(s) / abs(s) / 16.0 / pi;
     }
 
-    complex<double> rho(const double & s)
+    complex<double> chew_mandelstam(const complex<double> & S)
     {
+        double s = real(S);
+
         complex<double> result = 0.0;
         if (s < mm * mm)
         {
             result += mm * (mp * mp - s) * std::log((mm + mp) / (mp - mm));
             result += mp * sqlk(s) * std::log((mm * mm + mp * mp - 2 * s - 2 * sqlk(s)) / (mp * mp - mm * mm));
-            result *= i / (mp * pi * s);
+            result *= -1.0 / (mp * pi * s);
 
-            return result;
+            return result / 16.0 / pi;
         }
         else if (s < mp * mp)
         {
             result += mm * (mp * mp - s) * std::log((mm + mp) / (mp - mm));
             result += 2 * mp * sqlk(s) * std::atan(std::sqrt((s - mm * mm) / (mp * mp - s)));
-            result *= i / (mp * pi * s);
+            result *= -1.0 / (mp * pi * s);
 
-            return result;
+            return result / 16.0 / pi;
         }
         else
         {
             result += mm * (mp * mp - s) * std::log((mm + mp) / (mp - mm));
             result += mp * sqlk(s) * std::log((2 * s + 2 * sqlk(s) - mm * mm - mp * mp) / (mp * mp - mm * mm));
-            result *= i / (mp * pi * s);
-            result += sqlk(s) / s;
+            result *= -1.0 / (mp * pi * s);
+            result += i * sqlk(s) / s;
 
-            return result;
+            return result / 16.0 / pi;
         }
     }
 
 };
 
-struct res11 :
-    public KMatrix<1,1>::Resonance
+template <unsigned nchannels_, unsigned nresonances_>
+struct resonance :
+    public KMatrix<nchannels_, nresonances_>::Resonance
 {
-    res11(std::string name, Parameter m) :
-        Resonance(name, m)
+    resonance(std::string name, Parameter m) :
+        KMatrix<nchannels_, nresonances_>::Resonance(name, m)
     {
     };
 };
 
-double BreitWigner(double const s, double const M, double const Ga)
+complex<double> BreitWigner(complex<double> const s, complex<double> const M, complex<double> const Ga)
 {
-    return M * M * Ga * Ga / (pow(s - M * M, 2) + M * M * Ga * Ga);
+    return M * M * Ga * Ga / (power_of<2>(s - M * M) + M * M * Ga * Ga);
 }
 
 
-///////////////////////
-/// 1 channel, 2 resonances
-///////////////////////
-struct PPchan12 :
-    public KMatrix<1,2>::Channel
-{
-
-    PPchan12(std::string name, double m1, double m2, unsigned N_orbital, const Parameters & p) :
-        Channel(name, m1, m2, N_orbital, {{ p["test::g0_1"], p["test::g0_2"] }})
-    {
-    };
-
-    // Useful definitions for beta and rho
-    double mm = this->_m1 - this->_m2;
-    double mp = this->_m1 + this->_m2;
-    // sqrt of the Källen factor, defined with an absolute value
-    double sqlk(const double & s)
-    {
-        return std::sqrt(std::abs((s - mp * mp) * (s - mm * mm)));
-    }
-    const double pi = M_PI;
-    const complex<double> i = complex<double>(0.0, 1.0);
-
-    double beta(const double & s)
-    {
-        if (s < mp * mp)
-            return 0.;
-        else
-            return sqlk(s) / s;
-    }
-
-    complex<double> rho(const double & s)
-    {
-        complex<double> result = 0.0;
-        if (s < mm * mm)
-        {
-            result += mm * (mp * mp - s) * std::log((mm + mp) / (mp - mm));
-            result += mp * sqlk(s) * std::log((mm * mm + mp * mp - 2 * s - 2 * sqlk(s)) / (mp * mp - mm * mm));
-            result *= i / (mp * pi * s);
-
-            return result;
-        }
-        else if (s < mp * mp)
-        {
-            result += mm * (mp * mp - s) * std::log((mm + mp) / (mp - mm));
-            result += 2 * mp * sqlk(s) * std::atan(std::sqrt((s - mm * mm) / (mp * mp - s)));
-            result *= i / (mp * pi * s);
-
-            return result;
-        }
-        else
-        {
-            result += mm * (mp * mp - s) * std::log((mm + mp) / (mp - mm));
-            result += mp * sqlk(s) * std::log((2 * s + 2 * sqlk(s) - mm * mm - mp * mp)/(mp * mp - mm * mm));
-            result *= i / (mp * pi * s);
-            result += sqlk(s) / s;
-
-            return result;
-        }
-    }
-};
-
-struct res12 :
-    public KMatrix<1,2>::Resonance
-{
-    res12(std::string name, Parameter m) :
-        Resonance(name, m)
-    {
-    };
-};
-
-
-///////////////////////
+/////////
 /// TESTS
-///////////////////////
-
+/////////
 class KMatrixTest :
     public TestCase
 {
@@ -194,10 +135,13 @@ class KMatrixTest :
             constexpr double eps = 1e-4;
 
             Parameters::declare("test::g0_1", "g_0^1", Unit::None(),  1.0);
-            Parameters::declare("test::c_1",  "c_1",   Unit::None(),  0.0);
-            Parameters::declare("test::m_1",  "m_1",   Unit::GeV(),  15.0);
             Parameters::declare("test::g0_2", "g_0^2", Unit::None(),  2.2);
+            Parameters::declare("test::c_1",  "c_1",   Unit::None(),  0.0);
+            Parameters::declare("test::m_1",  "m_1",   Unit::GeV(),  20.0);
             Parameters::declare("test::m_2",  "m_2",   Unit::GeV(),   2.0);
+            Parameters::declare("test::m_a",  "m_a",   Unit::GeV(),   0.7);
+            Parameters::declare("test::m_b",  "m_b",   Unit::GeV(),   0.8);
+            Parameters::declare("test::q0",   "q0",    Unit::GeV(),   0.2);
 
             Parameters p = Parameters::Defaults();
 
@@ -205,32 +149,42 @@ class KMatrixTest :
             // In the limit where the resonance mass is much larger
             // than the channel masses, one recover a simple Breit-Wigner distribution
             {
-                auto res = std::make_shared<res11>("res", p["test::m_1"]);
-                auto chan = std::make_shared<PPchan11>("chan", 0.7, 0.8, 3, p);
+                auto res = std::make_shared<resonance<1, 1>>("res", p["test::m_1"]);
+                auto chan = std::make_shared<PPchannel<1, 1>>("chan", p["test::m_a"], p["test::m_b"], 1, p);
 
                 KMatrix<1,1> simplest_kmatrix({chan}, {res}, {{p["test::c_1"]}}, "simplest_kmatrix");
 
+                TEST_CHECK_EQUAL(res->_m, 20.0);
+
+                auto qres = 0.5 * std::sqrt(std::abs(eos::lambda(power_of<2>((double)res->_m), power_of<2>((double)chan->_m1), power_of<2>((double)chan->_m2)) / power_of<2>((double)res->_m)));
+                auto q300 = 0.5 * std::sqrt(std::abs(eos::lambda(300., power_of<2>((double)chan->_m1), power_of<2>((double)chan->_m2)) / 300.));
+
+                const complex<double> BWfactorat300  = kmatrix_utils::blatt_weisskopf_factor(chan->_l_orbital, q300/chan->_q0);
+                const complex<double> BWfactoratmres = kmatrix_utils::blatt_weisskopf_factor(chan->_l_orbital, qres/chan->_q0);
+
+                // Check that the barrier factors are 1 at large q^2 = 300 GeV^2
+                TEST_CHECK_NEARLY_EQUAL( std::abs(pow(q300 / qres, chan->_l_orbital) * BWfactorat300 / BWfactoratmres), 1., eps);
+
                 // Check |T-Matrix|^2 against Breit-Wigner
                 // The mass of the BW gets correction from the channels loop
-
-                double m = res->_m;
-                double M = std::sqrt(m*m + chan->rho(m*m).imag());
+                const double m = res->_m;
+                const complex<double> M = m * (1.0 - 0.5 * chan->chew_mandelstam(m*m) / m / m);
 
                 // s = 100. (everybody is ~zero there)
                 double Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 100.)[0]);
-                TEST_CHECK_NEARLY_EQUAL(BreitWigner(100., M, 1./M),        Trowsq,        eps);
+                TEST_CHECK_NEARLY_EQUAL(std::abs(BreitWigner(100., M, 1./M)),        Trowsq,        eps);
 
-                // s = 222. (resonance region)
-                Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 222.)[0]);
-                TEST_CHECK_NEARLY_EQUAL(BreitWigner(222., M, 1./M),        Trowsq,        eps);
+                // s = 380. (resonance region)
+                Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 380.)[0]);
+                TEST_CHECK_NEARLY_EQUAL(std::abs(BreitWigner(380., M, 1./M)),        Trowsq,        eps);
 
-                // s = 235. (resonance region)
-                Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 235.)[0]);
-                TEST_CHECK_NEARLY_EQUAL(BreitWigner(235., M, 1./M),        Trowsq,        eps);
+                // s = 420. (resonance region)
+                Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 420.)[0]);
+                TEST_CHECK_NEARLY_EQUAL(std::abs(BreitWigner(420., M, 1./M)),        Trowsq,        eps);
 
-                // s = 300. (everybody is ~zero there)
-                Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 300.)[0]);
-                TEST_CHECK_NEARLY_EQUAL(BreitWigner(300., M, 1./M),        Trowsq,        eps);
+                // s = 800. (everybody is ~zero there)
+                Trowsq = std::norm(simplest_kmatrix.tmatrix_row(0, 800.)[0]);
+                TEST_CHECK_NEARLY_EQUAL(std::abs(BreitWigner(800., M, 1./M)),        Trowsq,        eps);
             }
 
             p["test::g0_1"] = 1.1;
@@ -238,41 +192,41 @@ class KMatrixTest :
 
             // One channel, two resonances
             {
-                auto res1 = std::make_shared<res12>("res1", p["test::m_1"]);
-                auto res2 = std::make_shared<res12>("res2", p["test::m_2"]);
+                auto res1 = std::make_shared<resonance<1, 2>>("res1", p["test::m_1"]);
+                auto res2 = std::make_shared<resonance<1, 2>>("res2", p["test::m_2"]);
 
-                auto chan_12 = std::make_shared<PPchan12>("chan_12", 0.7, 0.8, 3, p);
+                auto chan_12 = std::make_shared<PPchannel<1, 2>>("chan_12", p["test::m_a"], p["test::m_b"], 1, p);
 
-                // Test beta and rho for a PP channel
-                TEST_CHECK_NEARLY_EQUAL(chan_12->beta(9.0),          0.865544,  eps);
-                TEST_CHECK_NEARLY_EQUAL(chan_12->beta(1.5),          0.,        eps);
+                // Test the phase space and Chew-Mandelstam functions for a PP channel
+                TEST_CHECK_NEARLY_EQUAL(std::abs(chan_12->rho(9.0)),          0.0172195,  eps);
+                TEST_CHECK_NEARLY_EQUAL(std::abs(chan_12->rho(1.5)),          0.,         eps);
 
-                TEST_CHECK_NEARLY_EQUAL(chan_12->rho(9.0).real(),    0.865544,  eps);
-                TEST_CHECK_NEARLY_EQUAL(chan_12->rho(9.0).imag(),    0.724611,  eps);
-                TEST_CHECK_NEARLY_EQUAL(chan_12->rho(1.5).real(),    0.,        eps);
-                TEST_CHECK_NEARLY_EQUAL(chan_12->rho(1.5).imag(),    0.429317,  eps);
-                TEST_CHECK_NEARLY_EQUAL(chan_12->rho(0.001).real(),  0.,        eps);
-                TEST_CHECK_NEARLY_EQUAL(chan_12->rho(0.001).imag(),  0.635582,  eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(9.0).real(),   -0.0144157,  eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(9.0).imag(),    0.0172195,  eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(1.5).real(),   -0.00854099, eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(1.5).imag(),    0.,         eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(0.001).real(), -0.0126445,  eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(0.001).imag(),  0.,         eps);
 
-                // Test KMatrix inversion into TMatrix
+                // Test K matrix inversion into T matrix
                 KMatrix<1,2> kmatrix_12({chan_12}, {res1, res2}, {{p["test::c_1"]}}, "kmatrix_12");
 
                 auto kmatrix_12_ats0 = kmatrix_12.tmatrix_row(0, 9.0);
                 auto kmatrix_12_ats1 = kmatrix_12.tmatrix_row(0, 1.5);
-                 // At the resonance mass
+                // At the resonance mass
                 auto kmatrix_12_ats2 = kmatrix_12.tmatrix_row(0, 1.0);
                 auto kmatrix_12_ats3 = kmatrix_12.tmatrix_row(0, 0.001);
 
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats0[0].real(),  -0.217114,   eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats0[0].imag(),   1.11299,    eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats1[0].real(),  -0.610949,   eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats1[0].imag(),   0.,         eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats2[0].real(),   1.928403,   eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats2[0].imag(),   0.,         eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats3[0].real(),   0.953701,   eps);
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats3[0].imag(),   0.,         eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats0[0].real(), -1.11080,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats0[0].imag(),  0.0217595, eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats1[0].real(), -0.618935,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats1[0].imag(),  0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats2[0].real(),  111.325,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats2[0].imag(),  0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats3[0].real(),  2.33115,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12_ats3[0].imag(),  0,         eps);
 
-                TEST_CHECK_NEARLY_EQUAL(kmatrix_12.width(1),        1.598678,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kmatrix_12.width(1),        0.0318047, eps);
             }
     }
 } kmatrix_test;

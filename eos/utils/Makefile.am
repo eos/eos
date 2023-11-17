@@ -32,7 +32,7 @@ libeosutils_la_SOURCES = \
 	iterator-range.hh \
 	join.hh \
 	kinematic.cc kinematic.hh \
-	kmatrix.hh kmatrix-impl.hh\
+	kmatrix.cc kmatrix.hh kmatrix-impl.hh\
 	lock.cc lock.hh \
 	log.cc log.hh \
 	memoise.cc memoise.hh \
