@@ -54,8 +54,8 @@ class BToThreeLeptonsNeutrinoTest :
                 /*
                  * differential decay width of 5 kinematic variables
                  * quintuple_differential_decay_width(q2, k2, z_gamma, z_w, phi)
-                 * q2 is the invariant mass of the off-shell photon in the range 4 m_l'^2 <= q2 <= (m_B - k2)^2
-                 * k2 is the invariant mass of the W-meson in the range m_l^2 <= k2 <= (m_B -q2)^2
+                 * q2 is the invariant mass of the off-shell photon in the range 4 m_l'^2 <= q2 <= (m_B - m_l )^2
+                 * k2 is the invariant mass of the W-meson in the range m_l^2 <= k2 <= (m_B - sqrt(q2) )^2
                  * z_gamma is the angle between the negatively charged lepton l' and the negative z-axis
                  * z_w is the angle between the charged lepton l and the positive z-axis
                  * phi is the angle between the q2 plane and the k2 plane
