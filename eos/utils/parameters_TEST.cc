@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011-2023 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -51,8 +51,9 @@ class ParametersTest :
 
             // Declaring a new parameter
             {
-                Parameters original = Parameters::Defaults();
-                Parameter new_parameter = original.declare("mass::boeing747", R"(\text{Boeing 747})", Unit::Undefined(), 100000.0, 90000.0, 110000.0);
+                Parameters::declare("mass::boeing747", R"(\text{Boeing 747})", Unit::Undefined(), 100000.0, 90000.0, 110000.0);
+                Parameters parameters = Parameters::Defaults();
+                Parameter new_parameter = parameters["mass::boeing747"];
 
                 TEST_CHECK_EQUAL(new_parameter.name(),      "mass::boeing747");
                 TEST_CHECK_EQUAL(new_parameter.latex(),     R"(\text{Boeing 747})");

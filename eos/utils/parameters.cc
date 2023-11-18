@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2022 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  *
@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <eos/utils/cartesian-product.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -220,6 +221,282 @@ namespace eos
     };
     template class WrappedForwardIterator<Parameters::SectionIteratorTag, const ParameterSection &>;
 
+    class ParameterDefaults :
+        public InstantiationPolicy<ParameterDefaults, Singleton>
+    {
+        private:
+            std::shared_ptr<Parameters::Data> _data;
+
+            std::map<QualifiedName, unsigned> _map;
+
+            std::vector<ParameterSection> _sections;
+
+            ParameterDefaults() :
+                _data(new Parameters::Data)
+            {
+                _load_defaults();
+            }
+
+            ~ParameterDefaults() = default;
+
+            void
+            _load_defaults()
+            {
+                Context ctx("When loading parameter defaults");
+
+                fs::path base;
+                if (std::getenv("EOS_TESTS_PARAMETERS"))
+                {
+                    std::string envvar = std::string(std::getenv("EOS_TESTS_PARAMETERS"));
+                    base = fs::system_complete(envvar);
+                }
+                else if (std::getenv("EOS_HOME"))
+                {
+                    std::string envvar = std::string(std::getenv("EOS_HOME"));
+                    base = fs::system_complete(envvar) / "parameters";
+                }
+                else
+                {
+                    base = fs::system_complete(EOS_DATADIR "/eos/parameters/");
+                }
+
+                if (! fs::exists(base))
+                {
+                    throw InternalError("Could not find the parameter input files, '" + base.string() + "' does not exist");
+                }
+
+                if (! fs::is_directory(base))
+                {
+                    throw InternalError("Expect '" + base.string() + " to be a directory");
+                }
+
+                unsigned idx = _data->data.size();
+                for (fs::directory_iterator f(base), f_end ; f != f_end ; ++f)
+                {
+                    auto file_path = f->path();
+
+                    if (! fs::is_regular_file(status(file_path)))
+                        continue;
+
+                    if (".yaml" != file_path.extension().string())
+                        continue;
+
+                    std::string file = file_path.string();
+                    Context ctx("When parsing parameter file '" + file + "'");
+
+                    try
+                    {
+                        YAML::Node root_node = YAML::LoadFile(file);
+                        std::vector<ParameterGroup> section_groups;
+
+                        // parse the section metadata
+                        auto section_title_node = root_node["title"];
+                        if (! section_title_node)
+                            throw ParameterInputFileNodeError(file, "/", "has no entry named 'title'");
+
+                        if (YAML::NodeType::Scalar != section_title_node.Type())
+                            throw ParameterInputFileNodeError(file, "title", "is not a scalar");
+                        std::string section_title = section_title_node.as<std::string>();
+
+                        Context ctx("When parsing metadata for section '" + section_title + "'");
+
+                        auto section_desc_node = root_node["description"];
+                        if (! section_desc_node)
+                            throw ParameterInputFileNodeError(file, "/", "has no entry named 'description'");
+                        if (YAML::NodeType::Scalar != section_desc_node.Type())
+                            throw ParameterInputFileNodeError(file, "description", "is not a scalar");
+                        std::string section_desc = section_desc_node.as<std::string>();
+
+                        auto section_groups_node = root_node["groups"];
+                        if (! section_groups_node)
+                            throw ParameterInputFileNodeError(file, "/", "has no entry named 'group'");
+                        if (YAML::NodeType::Sequence != section_groups_node.Type())
+                            throw ParameterInputFileNodeError(file, "groups", "is not a sequence");
+
+                        // parse the section's groups
+                        for (auto && group_node : section_groups_node)
+                        {
+                            std::vector<Parameter> group_parameters;
+
+                            auto group_title_node = group_node["title"];
+                            if (! group_title_node)
+                                throw ParameterInputFileNodeError(file, "", "has no entry named 'title'");
+                            if (YAML::NodeType::Scalar != group_title_node.Type())
+                                throw ParameterInputFileNodeError(file, "title", "is not a scalar");
+                            std::string group_title = group_title_node.as<std::string>();
+
+                            Context ctx("When parsing metadata for group '" + group_title + "'");
+
+                            auto group_desc_node = group_node["description"];
+                            if (! group_desc_node)
+                                throw ParameterInputFileNodeError(file, group_title, "has no entry named 'description'");
+                            if (YAML::NodeType::Scalar != group_desc_node.Type())
+                                throw ParameterInputFileNodeError(file, "'" + group_title + "'.description", "is not a scalar");
+                            std::string group_desc = group_desc_node.as<std::string>();
+
+                            auto group_parameters_node = group_node["parameters"];
+                            if (! group_parameters_node)
+                                throw ParameterInputFileNodeError(file, group_title, "has no entry named 'parameters'");
+                            if (YAML::NodeType::Map != group_parameters_node.Type())
+                                throw ParameterInputFileNodeError(file, "'" + group_title + "'.parameters", "is not a map");
+
+                            // parse the group's parameters
+                            for (auto && p : group_parameters_node)
+                            {
+                                std::string name = p.first.Scalar();
+                                Context ctx("When parsing metadata for parameter '" + name + "'");
+
+                                double central, min, max;
+
+                                std::string latex;
+
+                                auto central_node = p.second["central"];
+                                if (! central_node)
+                                    throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
+                                if (YAML::NodeType::Scalar != central_node.Type())
+                                    throw ParameterInputFileNodeError(file, name + ".central", "is not a scalar");
+                                central = central_node.as<double>();
+
+                                auto min_node = p.second["min"];
+                                if (! min_node)
+                                    throw ParameterInputFileNodeError(file, name, "has no entry named 'min'");
+                                if (YAML::NodeType::Scalar != min_node.Type())
+                                    throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
+                                min = min_node.as<double>();
+
+                                auto max_node = p.second["max"];
+                                if (! max_node)
+                                    throw ParameterInputFileNodeError(file, name, "has no entry named 'max'");
+                                if (YAML::NodeType::Scalar != max_node.Type())
+                                    throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
+                                max = max_node.as<double>();
+
+                                auto latex_node = p.second["latex"];
+                                if (latex_node)
+                                {
+                                    if (YAML::NodeType::Scalar != latex_node.Type())
+                                        throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
+
+                                    latex = latex_node.as<std::string>();
+                                }
+
+                                Unit unit = Unit::Undefined();
+                                auto unit_node = p.second["unit"];
+                                if (unit_node)
+                                {
+                                    if (YAML::NodeType::Scalar != unit_node.Type())
+                                        throw ParameterInputFileNodeError(file, name + ".unit", "is not a scalar");
+
+                                    unit = Unit(unit_node.as<std::string>());
+                                }
+
+                                if (name.find("%") == std::string::npos) // The parameter is not templated
+                                {
+                                    if (_map.end() != _map.find(name))
+                                    {
+                                        throw ParameterInputDuplicateError(file, name);
+                                    }
+
+                                    _data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex, unit }, idx));
+                                    _map[name] = idx;
+                                    group_parameters.push_back(Parameter(_data, idx));
+
+                                    ++idx;
+                                }
+                                else // The parameter is templated
+                                {
+                                    Context ctx("When parsing metadata for a templated parameter");
+
+                                    auto matrix_node = p.second["matrix"];
+                                    if (! matrix_node)
+                                    {
+                                        throw ParameterInputFileNodeError(file, name, "is templated but doesn't have substitutions");
+                                    }
+                                    else
+                                    {
+                                        if (YAML::NodeType::Sequence != matrix_node.Type())
+                                            throw ParameterInputFileNodeError(file, name + ".matrix", "is not a sequence");
+
+                                        CartesianProduct<std::vector<std::string>> cp;
+
+                                        // Parse the parameter substitutions and add them to the cartesian product
+                                        for (auto && substitution : matrix_node)
+                                        {
+                                            std::vector<std::string> instances;
+
+                                            for (auto && instance : substitution)
+                                            {
+                                                instances.push_back(instance.as<std::string>());
+                                            }
+
+                                            cp.over(instances);
+                                        }
+
+                                        for (auto cp_it = cp.begin() ; cp.end() != cp_it ; ++cp_it)
+                                        {
+                                            boost::format templated_name(name);
+                                            boost::format templated_latex(latex);
+
+                                            for (auto && i : *cp_it)
+                                            {
+                                                templated_name  = templated_name  % i;
+                                                templated_latex = templated_latex % i;
+                                            }
+
+                                            QualifiedName qn(templated_name.str());
+
+                                            if (_map.end() != _map.find(qn))
+                                            {
+                                                throw ParameterInputDuplicateError(file, qn.str());
+                                            }
+
+                                            _data->data.push_back(Parameter::Data(Parameter::Template { qn, min, central, max, templated_latex.str(), unit }, idx));
+                                            _map[templated_name.str()] = idx;
+                                            group_parameters.push_back(Parameter(_data, idx));
+
+                                            ++idx;
+                                        }
+                                    }
+                                }
+                            }
+
+                            section_groups.push_back(ParameterGroup(new Implementation<ParameterGroup>(group_title, group_desc, std::move(group_parameters))));
+                        }
+                        _sections.push_back(ParameterSection(new Implementation<ParameterSection>(section_title, section_desc, std::move(section_groups))));
+                    }
+                    catch (std::exception & e)
+                    {
+                        throw ParameterInputFileParseError(file, e.what());
+                    }
+                }
+            }
+
+        public:
+            friend class InstantiationPolicy<ParameterDefaults, Singleton>;
+
+            const Parameters::Data & data() const
+            {
+                return *_data;
+            }
+
+            const std::map<QualifiedName, unsigned> & map() const
+            {
+                return _map;
+            }
+
+            const std::vector<ParameterSection> & sections() const
+            {
+                return _sections;
+            }
+
+            void insert(const QualifiedName & key, const Parameter::Template & value)
+            {
+                unsigned idx = _data->data.size();
+                _data->data.push_back(Parameter::Data{ value, idx });
+                _map[key] = idx;
+            }
+    };
+
     template <>
     struct Implementation<Parameters>
     {
@@ -229,17 +506,13 @@ namespace eos
 
         std::vector<Parameter> parameters;
 
-        std::vector<ParameterSection> sections;
-
-        Implementation(const std::initializer_list<Parameter::Template> & list) :
-            parameters_data(new Parameters::Data)
+        Implementation() :
+            parameters_data(new Parameters::Data(ParameterDefaults::instance()->data())),
+            parameters_map(ParameterDefaults::instance()->map())
         {
-            unsigned idx(0);
-            for (auto i(list.begin()), i_end(list.end()) ; i != i_end ; ++i, ++idx)
+            for (auto i = parameters_data->data.begin(), i_end = parameters_data->data.end() ; i != i_end ; ++i)
             {
-                parameters_data->data.push_back(Parameter::Data(*i, idx));
-                parameters_map[i->name] = idx;
-                parameters.push_back(Parameter(parameters_data, idx));
+                parameters.push_back(Parameter(parameters_data, i->id));
             }
         }
 
@@ -275,7 +548,7 @@ namespace eos
                     if ("@metadata@" == name)
                         continue;
 
-                    double central, min, max;
+                    double central, min = -std::numeric_limits<double>::max(), max = +std::numeric_limits<double>::max();
 
                     std::string latex;
 
@@ -381,228 +654,6 @@ namespace eos
                 throw ParameterInputFileParseError(file, e.what());
             }
         }
-
-        void
-        load_defaults()
-        {
-            fs::path base;
-            if (std::getenv("EOS_TESTS_PARAMETERS"))
-            {
-                std::string envvar = std::string(std::getenv("EOS_TESTS_PARAMETERS"));
-                base = fs::system_complete(envvar);
-            }
-            else if (std::getenv("EOS_HOME"))
-            {
-                std::string envvar = std::string(std::getenv("EOS_HOME"));
-                base = fs::system_complete(envvar) / "parameters";
-            }
-            else
-            {
-                base = fs::system_complete(EOS_DATADIR "/eos/parameters/");
-            }
-
-            if (! fs::exists(base))
-            {
-                throw InternalError("Could not find the parameter input files, '" + base.string() + "' does not exist");
-            }
-
-            if (! fs::is_directory(base))
-            {
-                throw InternalError("Expect '" + base.string() + " to be a directory");
-            }
-
-            unsigned idx = parameters.size();
-            for (fs::directory_iterator f(base), f_end ; f != f_end ; ++f)
-            {
-                auto file_path = f->path();
-
-                if (! fs::is_regular_file(status(file_path)))
-                    continue;
-
-                if (".yaml" != file_path.extension().string())
-                    continue;
-
-                std::string file = file_path.string();
-                try
-                {
-                    YAML::Node root_node = YAML::LoadFile(file);
-                    std::vector<ParameterGroup> section_groups;
-
-                    // parse the section metadata
-                    auto section_title_node = root_node["title"];
-                    if (! section_title_node)
-                        throw ParameterInputFileNodeError(file, "/", "has no entry named 'title'");
-                    if (YAML::NodeType::Scalar != section_title_node.Type())
-                        throw ParameterInputFileNodeError(file, "title", "is not a scalar");
-                    std::string section_title = section_title_node.as<std::string>();
-
-                    auto section_desc_node = root_node["description"];
-                    if (! section_desc_node)
-                        throw ParameterInputFileNodeError(file, "/", "has no entry named 'description'");
-                    if (YAML::NodeType::Scalar != section_desc_node.Type())
-                        throw ParameterInputFileNodeError(file, "description", "is not a scalar");
-                    std::string section_desc = section_desc_node.as<std::string>();
-
-                    auto section_groups_node = root_node["groups"];
-                    if (! section_groups_node)
-                        throw ParameterInputFileNodeError(file, "/", "has no entry named 'group'");
-                    if (YAML::NodeType::Sequence != section_groups_node.Type())
-                        throw ParameterInputFileNodeError(file, "groups", "is not a sequence");
-
-                    // parse the section's groups
-                    for (auto && group_node : section_groups_node)
-                    {
-                        std::vector<Parameter> group_parameters;
-
-                        auto group_title_node = group_node["title"];
-                        if (! group_title_node)
-                            throw ParameterInputFileNodeError(file, "", "has no entry named 'title'");
-                        if (YAML::NodeType::Scalar != group_title_node.Type())
-                            throw ParameterInputFileNodeError(file, "title", "is not a scalar");
-                        std::string group_title = group_title_node.as<std::string>();
-
-                        auto group_desc_node = group_node["description"];
-                        if (! group_desc_node)
-                            throw ParameterInputFileNodeError(file, group_title, "has no entry named 'description'");
-                        if (YAML::NodeType::Scalar != group_desc_node.Type())
-                            throw ParameterInputFileNodeError(file, "'" + group_title + "'.description", "is not a scalar");
-                        std::string group_desc = group_desc_node.as<std::string>();
-
-                        auto group_parameters_node = group_node["parameters"];
-                        if (! group_parameters_node)
-                            throw ParameterInputFileNodeError(file, group_title, "has no entry named 'parameters'");
-                        if (YAML::NodeType::Map != group_parameters_node.Type())
-                            throw ParameterInputFileNodeError(file, "'" + group_title + "'.parameters", "is not a map");
-
-                        // parse the group's parameters
-                        for (auto && p : group_parameters_node)
-                        {
-                            std::string name = p.first.Scalar();
-
-                            double central, min, max;
-
-                            std::string latex;
-
-                            auto central_node = p.second["central"];
-                            if (! central_node)
-                                throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
-                            if (YAML::NodeType::Scalar != central_node.Type())
-                                throw ParameterInputFileNodeError(file, name + ".central", "is not a scalar");
-                            central = central_node.as<double>();
-
-                            auto min_node = p.second["min"];
-                            if (! min_node)
-                                throw ParameterInputFileNodeError(file, name, "has no entry named 'min'");
-                            if (YAML::NodeType::Scalar != min_node.Type())
-                                throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
-                            min = min_node.as<double>();
-
-                            auto max_node = p.second["max"];
-                            if (! max_node)
-                                throw ParameterInputFileNodeError(file, name, "has no entry named 'max'");
-                            if (YAML::NodeType::Scalar != max_node.Type())
-                                throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
-                            max = max_node.as<double>();
-
-                            auto latex_node = p.second["latex"];
-                            if (latex_node)
-                            {
-                                if (YAML::NodeType::Scalar != latex_node.Type())
-                                    throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
-
-                                latex = latex_node.as<std::string>();
-                            }
-
-                            Unit unit = Unit::Undefined();
-                            auto unit_node = p.second["unit"];
-                            if (unit_node)
-                            {
-                                if (YAML::NodeType::Scalar != unit_node.Type())
-                                    throw ParameterInputFileNodeError(file, name + ".unit", "is not a scalar");
-
-                                unit = Unit(unit_node.as<std::string>());
-                            }
-
-                            if (name.find("%") == std::string::npos) // The parameter is not templated
-                            {
-                                if (parameters_map.end() != parameters_map.find(name))
-                                {
-                                    throw ParameterInputDuplicateError(file, name);
-                                }
-
-                                parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex, unit }, idx));
-                                parameters_map[name] = idx;
-                                parameters.push_back(Parameter(parameters_data, idx));
-                                group_parameters.push_back(Parameter(parameters_data, idx));
-
-                                ++idx;
-                            }
-                            else // The parameter is templated
-                            {
-                                auto matrix_node = p.second["matrix"];
-                                if (! matrix_node)
-                                {
-                                    throw ParameterInputFileNodeError(file, name, "is templated but doesn't have substitutions");
-                                }
-                                else
-                                {
-                                    if (YAML::NodeType::Sequence != matrix_node.Type())
-                                        throw ParameterInputFileNodeError(file, name + ".matrix", "is not a sequence");
-
-                                    CartesianProduct<std::vector<std::string>> cp;
-
-                                    // Parse the parameter substitutions and add them to the cartesian product
-                                    for (auto && substitution : matrix_node)
-                                    {
-                                        std::vector<std::string> instances;
-
-                                        for (auto && instance : substitution)
-                                        {
-                                            instances.push_back(instance.as<std::string>());
-                                        }
-
-                                        cp.over(instances);
-                                    }
-
-                                    for (auto cp_it = cp.begin() ; cp.end() != cp_it ; ++cp_it)
-                                    {
-                                        boost::format templated_name(name);
-                                        boost::format templated_latex(latex);
-
-                                        for (auto && i : *cp_it)
-                                        {
-                                            templated_name  = templated_name  % i;
-                                            templated_latex = templated_latex % i;
-                                        }
-
-                                        QualifiedName qn(templated_name.str());
-
-                                        if (parameters_map.end() != parameters_map.find(qn))
-                                        {
-                                            throw ParameterInputDuplicateError(file, qn.str());
-                                        }
-
-                                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { qn, min, central, max, templated_latex.str(), unit }, idx));
-                                        parameters_map[templated_name.str()] = idx;
-                                        parameters.push_back(Parameter(parameters_data, idx));
-                                        group_parameters.push_back(Parameter(parameters_data, idx));
-
-                                        ++idx;
-                                    }
-                                }
-                            }
-                        }
-
-                        section_groups.push_back(ParameterGroup(new Implementation<ParameterGroup>(group_title, group_desc, std::move(group_parameters))));
-                    }
-                    sections.push_back(ParameterSection(new Implementation<ParameterSection>(section_title, section_desc, std::move(section_groups))));
-                }
-                catch (std::exception & e)
-                {
-                    throw ParameterInputFileParseError(file, e.what());
-                }
-            }
-        }
     };
 
     Parameters::Parameters(Implementation<Parameters> * imp) :
@@ -640,23 +691,37 @@ namespace eos
         return _imp->parameters[id];
     }
 
-    Parameter
+    void
     Parameters::declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
-        // return existing parameter
+        ParameterDefaults::instance()->insert(name, Parameter::Template { name, min, value, max, latex, unit });
+    }
+
+    Parameter
+    Parameters::declare_and_insert(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
+    {
+        // is the parameter already available?
         auto i(_imp->parameters_map.find(name));
         if (_imp->parameters_map.end() != i)
-            return Parameter(_imp->parameters_data, i->second);
+        {
+            Log::instance()->message("[parameters.declare_and_insert]", ll_error)
+                << "Parameter '" << name << "' is already declared, returning existing instance; check your code for conflicting duplicate declarations";
 
-        // create new parameter
+            return Parameter(_imp->parameters_data, i->second);
+        }
+
+        // declare the new parameter ...
+        ParameterDefaults::instance()->insert(name, Parameter::Template { name, min, value, max, latex, unit });
+
+        // ... and insert it into this parameter set ...
         unsigned idx = _imp->parameters.size();
         _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, value, max, latex, unit }, idx));
         _imp->parameters_map[name] = idx;
         _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
 
+        // ... before returning it
         return _imp->parameters.back();
     }
-
     void
     Parameters::set(const QualifiedName & name, const double & value)
     {
@@ -693,13 +758,13 @@ namespace eos
     Parameters::SectionIterator
     Parameters::begin_sections() const
     {
-        return _imp->sections.begin();
+        return ParameterDefaults::instance()->sections().begin();
     }
 
     Parameters::SectionIterator
     Parameters::end_sections() const
     {
-        return _imp->sections.end();
+        return ParameterDefaults::instance()->sections().end();
     }
 
     bool
@@ -711,8 +776,7 @@ namespace eos
     Parameters
     Parameters::Defaults()
     {
-        auto imp = new Implementation<Parameters>{};
-        imp->load_defaults();
+        auto imp = new Implementation<Parameters>();
 
         return Parameters(imp);
     }

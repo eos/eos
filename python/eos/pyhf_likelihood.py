@@ -57,7 +57,7 @@ class PyhfLogLikelihood:
             if self.parameters.has(qn):
                 p = self.parameters[qn]
             else:
-                p = self.parameters.declare(qn, pn, eos.Unit.Undefined(), v, bounds[0], bounds[1])
+                p = self.parameters.declare_and_insert(qn, pn, eos.Unit.Undefined(), v, bounds[0], bounds[1])
 
             p.set(v)
             self.varied_parameters.append(p)

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2022 Danny van Dyk
+ * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -34,6 +34,9 @@
 
 namespace eos
 {
+    // Forward declarations
+    class ParameterDefaults;
+
     /*!
      * UnknownParameterError is thrown when no parameter of a given
      * name could be found.
@@ -105,6 +108,7 @@ namespace eos
 
         public:
             friend class Parameter;
+            friend class ParameterDefaults;
             friend struct Implementation<Parameter>;
             friend struct Implementation<Parameters>;
 
@@ -142,15 +146,38 @@ namespace eos
             SectionIterator end_sections() const;
             ///@}
 
+            ///@name Access to default parameters
+            ///@{
+            /*!
+             * Declare a new default parameter.
+             *
+             * @param name  Name of the new parameter to be declared.
+             * @param latex LaTeX representation of the new parameter.
+             * @param unit  Unit of the new parameter.
+             * @param value (Optional) value for the new parameter.
+             * @param min   (Optional) minimal value for the new parameter.
+             * @param max   (Optional) maximal value for the new parameter.
+             */
+            static void declare(const QualifiedName & name, const std::string & latex, Unit unit,
+                const double & value = 0.0,
+                const double & min = -std::numeric_limits<double>::max(),
+                const double & max = +std::numeric_limits<double>::max());
+            ///@}
+
             ///@name Parameter access
             ///@{
             /*!
-             * Declare a new parameter.
+             * Declare a previously undeclared parameter in the default set of parameters and insert it
+             * into this parameter set.
              *
              * @param name  Name of the new parameter to be declared.
+             * @param latex LaTeX representation of the new parameter.
+             * @param unit  Unit of the new parameter.
              * @param value (Optional) value for the new parameter.
+             * @param min   (Optional) minimal value for the new parameter.
+             * @param max   (Optional) maximal value for the new parameter.
              */
-            Parameter declare(const QualifiedName & name, const std::string & latex, Unit unit,
+            Parameter declare_and_insert(const QualifiedName & name, const std::string & latex, Unit unit,
                 const double & value = 0.0,
                 const double & min = -std::numeric_limits<double>::max(),
                 const double & max = +std::numeric_limits<double>::max());
@@ -227,6 +254,7 @@ namespace eos
 
         public:
             friend class Parameters;
+            friend class ParameterDefaults;
             friend struct Implementation<Parameters>;
 
             /*!
