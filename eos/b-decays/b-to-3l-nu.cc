@@ -184,7 +184,13 @@ namespace eos
             + f25 * f_B * real(F_2) + f35 * f_B * real(F_3) + f45 * f_B * real(F_4)
             + f55 * power_of<2>(f_B);
 
-        return prefactor * amp;
+            if ( power_of<2>(m_B - m_l) < q2 || q2 < 4 * m_lprime_sq
+                || power_of<2>(m_B - sqrt(q2)) < k2 || k2 < m_l_sq )
+            {
+                return 0.0;
+            }
+
+            return prefactor * amp;
         }
 
         /*!
@@ -683,6 +689,12 @@ namespace eos
             - 2 * k2 * (m_B_sq + q2)) * z_w) + k2 * (-m_B_sq + m_l_sq - q2 + sqrt(k4
             + m_B_sq_q2_diff2 - 2 * k2 * (m_B_sq + q2)) * z_w)));
 
+            if ( power_of<2>(m_B - m_l) < q2 || q2 < 4 * m_lprime_sq
+                || power_of<2>(m_B - sqrt(q2)) < k2 || k2 < m_l_sq )
+            {
+                return 0.0;
+            }
+
             return prefactor * (f11 * norm(F_1) + f22 * norm(F_2) + f33 * norm(F_3)
                 + f44 * norm(F_4) + f2c1Re * real(conj(F_2) * F_1) + f3c1Re * real(conj(F_3) * F_1)
                 + f4c1Re * real(conj(F_4) * F_1) + f3c2Re * real(conj(F_3) * F_2)
@@ -799,6 +811,12 @@ namespace eos
             / (3. * (- k2 + m_B_sq) * (k2 - m_l_sq) * ((k2 + m_l_sq) * (- k2 + m_B_sq - q2) + 2 * k2
             * q2) * (power_of<2>(- k2 + m_B_sq) * m_l_sq + (k2 - m_l_sq) * (m_B_sq - m_l_sq) * q2));
 
+            if ( power_of<2>(m_B - m_l) < q2 || q2 < 4 * m_lprime_sq
+                || power_of<2>(m_B - sqrt(q2)) < k2 || k2 < m_l_sq )
+            {
+                return 0.0;
+            }
+
             return prefactor * (g13 * real(conj(F_3) * F_1) + g14 * real(conj(F_4) * F_1)
                 + g23 * real(conj(F_3) * F_2) + g24 * real(conj(F_4) * F_2)
                 + g15 * real(F_1) * f_B + g25 * real(F_2) * f_B + g35 * real(F_3) * f_B
@@ -807,6 +825,14 @@ namespace eos
 
         double double_differential_forward_backward_asymmetry(const double & q2,const double & k2) const
         {
+            const double m_l_sq = m_l * m_l, m_lprime_sq = m_lprime * m_lprime;
+
+            if ( power_of<2>(m_B - m_l) < q2 || q2 < 4 * m_lprime_sq
+                || power_of<2>(m_B - sqrt(q2)) < k2 || k2 < m_l_sq )
+            {
+                return 0.0;
+            }
+
             return _asymmetry_numerator(q2, k2) / double_differential_decay_width(q2, k2);
         }
 
