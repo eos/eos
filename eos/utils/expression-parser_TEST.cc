@@ -368,17 +368,26 @@ class ExpressionParserTest :
                 test.e.accept(printer);
                 TEST_CHECK_EQUAL(out.str(), "ParameterNameExpression(undeclared::parameter)");
 
-                Parameters p = Parameters::Defaults();
-                ExpressionMaker maker(p, Kinematics(), Options());
+                // test with default parameters as stored on disk
+                {
+                    Parameters p = Parameters::Defaults();
+                    ExpressionMaker maker(p, Kinematics(), Options());
 
-                TEST_CHECK_THROWS(UnknownParameterError, test.e.accept_returning<Expression>(maker));
+                    TEST_CHECK_THROWS(UnknownParameterError, test.e.accept_returning<Expression>(maker));
+                }
 
-                Expression e;
-                p.declare("undeclared::parameter", "", Unit::Undefined(), 1.0, 0.0, 2.0);
-                TEST_CHECK_NO_THROW(e = test.e.accept_returning<Expression>(maker));
+                // test after declaring "undeclared::parameter"
+                {
+                    Parameters::declare("undeclared::parameter", "", Unit::Undefined(), 1.0, 0.0, 2.0);
+                    Parameters p = Parameters::Defaults();
+                    ExpressionMaker maker(p, Kinematics(), Options());
 
-                ExpressionEvaluator evaluator;
-                TEST_CHECK_NEARLY_EQUAL(e.accept_returning<double>(evaluator), 1.0, 1e-10);
+                    Expression e;
+                    TEST_CHECK_NO_THROW(e = test.e.accept_returning<Expression>(maker));
+
+                    ExpressionEvaluator evaluator;
+                    TEST_CHECK_NEARLY_EQUAL(e.accept_returning<double>(evaluator), 1.0, 1e-10);
+                }
             }
         }
 } expression_parser_test;
