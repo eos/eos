@@ -396,7 +396,7 @@ class Plotter:
 
 
     class Observable(BasePlot):
-        """Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter"""
+        """Plots a single EOS observable w/o uncertainties as a function of one kinematic variable or one parameter"""
 
         _api_doc = inspect.cleandoc("""\
         Plotting Observables
