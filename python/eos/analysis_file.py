@@ -34,10 +34,10 @@ class AnalysisFile:
         self.analysis_file = analysis_file
 
         if not os.path.exists(analysis_file):
-            raise RuntimeError('Cannot load analysis file: \'{}\' does not exist'.format(analysis_file))
+            raise RuntimeError(f'Cannot load analysis file: \'{analysis_file}\' does not exist')
 
         if not os.path.isfile(analysis_file):
-            raise RuntimeError('Cannot load analysis file: \'{}\' is not a file'.format(analysis_file))
+            raise RuntimeError(f'Cannot load analysis file: \'{analysis_file}\' is not a file')
 
         instructions = None
         with open(analysis_file) as input_file:
@@ -93,7 +93,7 @@ class AnalysisFile:
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
         if _posterior not in self._posteriors:
-            raise RuntimeError('Cannot create analysis for unknown posterior: \'{}\''.format(_posterior))
+            raise RuntimeError(f'Cannot create analysis for unknown posterior: \'{_posterior}\'')
 
         posterior = self._posteriors[_posterior]
 
@@ -168,9 +168,9 @@ class AnalysisFile:
     def observables(self, _posterior, _prediction, parameters):
         """Creates a list of eos.Observable objects for the named set of posterior and predictions."""
         if _posterior not in self._posteriors:
-            raise RuntimeError('Cannot create observables for unknown posterior: \'{}\''.format(_prediction))
+            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_prediction}\'')
         if _prediction not in self.predictions:
-            raise RuntimeError('Cannot create observables for unknown set of predictions: \'{}\''.format(_prediction))
+            raise RuntimeError(f'Cannot create observables for unknown set of predictions: \'{_prediction}\'')
 
         posterior = self._posteriors[_posterior]
         prediction = self.predictions[_prediction]
@@ -216,7 +216,7 @@ class AnalysisFile:
             for p, o in zip(prediction['observables'], observables):
                 if o is None:
                     unknown_observables.add(p['name'])
-            raise RuntimeError('Prediction \'{}\' contains unknown observable names: {}'.format(_prediction, unknown_observables))
+            raise RuntimeError(f'Prediction \'{_prediction}\' contains unknown observable names: {unknown_observables}')
 
         return observables
 
