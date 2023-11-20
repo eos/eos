@@ -84,6 +84,31 @@ class AnalysisFile:
                 eos.Observables().insert(name, obs['latex'], eos.Unit(obs['unit']), options, obs['expression'])
                 eos.info(f'Successfully inserted observable: { name }')
 
+        # Optional: declare custom parameters before creating an analysis
+        if 'parameters' in input_data:
+            for name in input_data['parameters']:
+
+                required_keys = ['latex', 'unit', 'central', 'min', 'max']
+                provided_keys = input_data['parameters'][name].keys()
+
+                missing_keys  = [key for key in required_keys if key not in provided_keys]
+                if missing_keys:
+                    raise KeyError(f'Missing keys for parameter { name }: { missing_keys }')
+
+                ignored_keys = [key for key in provided_keys if key not in required_keys]
+                if ignored_keys:
+                    eos.warn(f'Ignoring unknown keys for parameter { name }: { ignored_keys }')
+
+                param = input_data['parameters'][name]
+                try:
+                    qn = eos.QualifiedName(name)
+                    unit = eos.Unit(param['unit'])
+                    central, min, max = float(param['central']), float(param['min']), float(param['max'])
+                    eos.Parameters.declare(qn, param['latex'], unit, central, min, max)
+                    eos.info(f'Successfully declared parameter: {qn}')
+                except eos.Exception as e:
+                    raise ValueError(f'Unexpected value encountered in description of parameter \'{name}\': {e}')
+
         if 'steps' not in input_data:
             self._steps = []
         else:
@@ -114,6 +139,8 @@ class AnalysisFile:
 
             prior.extend(descriptions)
 
+        parameters = eos.Parameters()
+
         likelihood = []
         manual_constraints = {}
         external_likelihood = []
@@ -130,11 +157,9 @@ class AnalysisFile:
             manual_constraints.update(self._likelihoods[lh]['manual_constraints'] if 'manual_constraints' in self._likelihoods[lh] else {})
 
             # create a pyhf likelihood
-            parameters = None
             if 'pyhf' in self._likelihoods[lh]:
                 workspace = self._likelihoods[lh]['pyhf']['file']
                 parameter_map = self._likelihoods[lh]['pyhf']['parameter_map'] if 'parameter_map' in self._likelihoods[lh]['pyhf'] else []
-                parameters = eos.Parameters()
                 cache = eos.ObservableCache(parameters)
 
                 # extend prior
