@@ -9,7 +9,7 @@ def latex_to_rst(s):
 qn_to_link_map = {
     ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
     ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
-    ord('>'): 'to'
+    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as'
 }
 
 def make_constraints():
