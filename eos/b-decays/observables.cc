@@ -163,6 +163,12 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "U", "u" }, { "I", "1" } }),
 
+                make_observable("B->pilnu::d^2BR/dq2/dcos(theta_l)", R"(d^2\mathcal{B}(B\to\pi\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::two_differential_branching_ratio,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "U", "u" }, { "I", "1" } }),
+
                 make_observable("B->pilnu::BR", R"(\mathcal{B}(B\to\pi\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
@@ -281,6 +287,12 @@ namespace eos
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
+                        Options{ { "U", "c" }, { "I", "1/2" } }),
+
+                make_observable("B->Dlnu::d^2BR/dq2/dcos(theta_l)", R"(d^2\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::two_differential_branching_ratio,
+                        std::make_tuple("q2", "cos(theta_l)"),
                         Options{ { "U", "c" }, { "I", "1/2" } }),
 
                 make_observable("B->Dlnu::BR", R"(\mathcal{B}(B\to \bar{D}\ell^-\bar\nu))",

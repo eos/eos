@@ -40,6 +40,9 @@ namespace eos
             BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options);
             ~BToPseudoscalarLeptonNeutrino();
 
+            // Two-fold differential observables
+            double two_differential_branching_ratio(const double & q2, const double & c_theta_l) const;
+
             // Two-fold differential observables - normalized(|V{c,u}b|=1)
             double normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const;
 
