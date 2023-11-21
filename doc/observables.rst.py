@@ -35,7 +35,7 @@ def make_doc_observables(group):
         if entry.unit() == eos.Unit.Unity():
             unit_string = ''
         else:
-            unit_string = r'\, \left[ {unit_string} \right]'.format(unit_string=entry.unit().latex())
+            unit_string = fr'\, \left[ {entry.unit().latex()} \right]'
 
         latex = entry.latex()
         if len(latex) > 0:
