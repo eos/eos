@@ -359,10 +359,20 @@ namespace eos
             return normalized_differential_decay_width(s) * std::norm(v_Ub());
         }
 
+        double two_differential_decay_width(const double & s, const double & c_theta_l) const
+        {
+            return normalized_two_differential_decay_width(s, c_theta_l) * std::norm(v_Ub());
+        }
+
         // differential branching_ratio
         double differential_branching_ratio(const double & s) const
         {
             return differential_decay_width(s) * tau_B / hbar;
+        }
+
+        double two_differential_branching_ratio(const double & s, const double & c_theta_l) const
+        {
+            return two_differential_decay_width(s, c_theta_l) * tau_B / hbar;
         }
 
         // "normalized" (|V_Ub|=1) differential branching_ratio
@@ -452,6 +462,13 @@ namespace eos
     BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
     {
         return _imp->normalized_two_differential_decay_width(s, c_theta_l);
+    }
+
+    // two-fold-distribution, cf. [DDS:2014A], eq. (13), p. 6
+    double
+    BToPseudoscalarLeptonNeutrino::two_differential_branching_ratio(const double & s, const double & c_theta_l) const
+    {
+        return _imp->two_differential_branching_ratio(s, c_theta_l);
     }
 
     double
