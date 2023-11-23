@@ -372,13 +372,6 @@ namespace eos
                                 max = max_node.as<double>();
 
                                 auto latex_node = p.second["latex"];
-                                if (latex_node)
-                                {
-                                    if (YAML::NodeType::Scalar != latex_node.Type())
-                                        throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
-
-                                    latex = latex_node.as<std::string>();
-                                }
 
                                 Unit unit = Unit::Undefined();
                                 auto unit_node = p.second["unit"];
@@ -395,6 +388,14 @@ namespace eos
                                     if (_map.end() != _map.find(name))
                                     {
                                         throw ParameterInputDuplicateError(file, name);
+                                    }
+
+                                    if (latex_node)
+                                    {
+                                        if (YAML::NodeType::Scalar != latex_node.Type())
+                                            throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
+
+                                        latex = latex_node.as<std::string>();
                                     }
 
                                     _data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex, unit }, idx));
@@ -414,8 +415,28 @@ namespace eos
                                     }
                                     else
                                     {
-                                        if (YAML::NodeType::Sequence != matrix_node.Type())
-                                            throw ParameterInputFileNodeError(file, name + ".matrix", "is not a sequence");
+                                        std::map<std::string, std::string> latex_map;
+                                        if (latex_node)
+                                        {
+                                            if (YAML::NodeType::Scalar == latex_node.Type())
+                                            {
+                                                latex = latex_node.as<std::string>();
+                                            }
+                                            else if (YAML::NodeType::Sequence == matrix_node.Type())
+                                            {
+                                                    if (YAML::NodeType::Map != latex_node.Type())
+                                                        throw ParameterInputFileNodeError(file, name + ".latex", "is not a map");
+
+                                                    if ((! latex_node["template"]) || (! latex_node["map"]))
+                                                    {
+                                                        throw ParameterInputFileNodeError(file, name + ".latex", "is incomplete, needs 'template' and 'map' subkeys");
+                                                    }
+                                                    latex = latex_node["template"].as<std::string>();
+                                                    latex_map = latex_node["map"].as<std::map<std::string, std::string>>();
+                                            }
+                                            else
+                                                throw ParameterInputFileNodeError(file, name + ".matrix", "is not a scalar nor a sequence");
+                                        }
 
                                         CartesianProduct<std::vector<std::string>> cp;
 
@@ -440,7 +461,18 @@ namespace eos
                                             for (auto && i : *cp_it)
                                             {
                                                 templated_name  = templated_name  % i;
-                                                templated_latex = templated_latex % i;
+
+                                                std::string mapped_i;
+                                                auto latex_map_it = latex_map.find(i);
+                                                if (latex_map.end() != latex_map_it)
+                                                {
+                                                    mapped_i = latex_map_it->second;
+                                                }
+                                                else
+                                                {
+                                                    mapped_i = i;
+                                                }
+                                                templated_latex = templated_latex % mapped_i;
                                             }
 
                                             QualifiedName qn(templated_name.str());
