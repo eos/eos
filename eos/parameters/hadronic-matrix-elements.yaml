@@ -60,6 +60,18 @@ groups:
           max:     +0.135
           latex:    '$m_{\pi^\pm}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::eta@BSZ2015' :
+          central: +0.548
+          min:     +0.548
+          max:     +0.548
+          latex:   '$m_{\eta}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::eta_prime@BSZ2015' :
+          central: +0.958
+          min:     +0.958
+          max:     +0.958
+          latex:   '$m_{\eta^\prime}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::K_d@BSZ2015' :
           central: +0.492
           min:     +0.492
