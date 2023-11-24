@@ -5,6 +5,7 @@
  * Copyright (c) 2015 Marzia Bordone
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2021 Christoph Bobeth
+ * Copyright (c) 2025 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -93,7 +94,7 @@ namespace eos
 
         // { q, P } -> { process, U, B_name, P_name, c_I }
         // q: u, d, s: the spectar quark flavor
-        // P: D, K, pi: the type of daughter meson
+        // P: D, K, pi, eta, eta_prime: the type of daughter meson
         // process: string that can be used to obtain the form factor
         // U: the quark flavor in the weak transition
         // B_name: name of the B meson
@@ -434,12 +435,19 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>>
     Implementation<BToPseudoscalarLeptonNeutrino>::Implementation::process_map
     {
-        { { QuarkFlavor::up,      "D"         }, { "B->D",         QuarkFlavor::charm, "B_u", "D_u",       1.0                  } },
-        { { QuarkFlavor::down,    "D"         }, { "B->D",         QuarkFlavor::charm, "B_d", "D_d",       1.0                  } },
-        { { QuarkFlavor::strange, "D"         }, { "B_s->D_s",     QuarkFlavor::charm, "B_s", "D_s",       1.0                  } },
-        { { QuarkFlavor::up,      "pi"        }, { "B->pi",        QuarkFlavor::up,    "B_u", "pi^0",      1.0 / std::sqrt(2.0) } },
-        { { QuarkFlavor::down,    "pi"        }, { "B->pi",        QuarkFlavor::up,    "B_d", "pi^+",      1.0                  } },
-        { { QuarkFlavor::strange, "K"         }, { "B_s->K",       QuarkFlavor::up,    "B_s", "K_u",       1.0                  } },
+        { { QuarkFlavor::up,      "D"         }, { "B->D",           QuarkFlavor::charm,   "B_u", "D_u",       1.0                  } },
+        { { QuarkFlavor::down,    "D"         }, { "B->D",           QuarkFlavor::charm,   "B_d", "D_d",       1.0                  } },
+        { { QuarkFlavor::strange, "D"         }, { "B_s->D_s",       QuarkFlavor::charm,   "B_s", "D_s",       1.0                  } },
+        { { QuarkFlavor::up,      "pi"        }, { "B->pi",          QuarkFlavor::up,      "B_u", "pi^0",      1.0 / std::sqrt(2.0) } },
+        { { QuarkFlavor::down,    "pi"        }, { "B->pi",          QuarkFlavor::up,      "B_d", "pi^+",      1.0                  } },
+        { { QuarkFlavor::strange, "K"         }, { "B_s->K",         QuarkFlavor::up,      "B_s", "K_u",       1.0                  } },
+        // We work here in the flavour eta basis. The conversion to the eta - eta' basis is done at the level of the form factors.
+        { { QuarkFlavor::up,      "eta"       }, { "B->eta",         QuarkFlavor::up,      "B_u", "eta",       1.0                  } },
+        { { QuarkFlavor::up,      "eta_prime" }, { "B->eta_prime",   QuarkFlavor::up,      "B_u", "eta_prime", 1.0                  } },
+        { { QuarkFlavor::down,    "eta"       }, { "B->eta",         QuarkFlavor::down,    "B_d", "eta",       1.0                  } },
+        { { QuarkFlavor::down,    "eta_prime" }, { "B->eta_prime",   QuarkFlavor::down,    "B_d", "eta_prime", 1.0                  } },
+        { { QuarkFlavor::strange, "eta"       }, { "B_s->eta",       QuarkFlavor::strange, "B_s", "eta",       1.0                  } },
+        { { QuarkFlavor::strange, "eta_prime" }, { "B_s->eta_prime", QuarkFlavor::strange, "B_s", "eta_prime", 1.0                  } },
     };
 
     const std::vector<OptionSpecification>
@@ -447,10 +455,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "P",            { "D", "pi", "K"},     ""      },
-        { "cp-conjugate", { "true", "false" },   "false" },
-        { "l",            { "e", "mu", "tau" },  "mu"    },
-        { "q",            { "u", "d", "s" },     "d"     },
+        { "P",            { "D", "pi", "K", "eta", "eta_prime" },  ""      },
+        { "cp-conjugate", { "true", "false" },                     "false" },
+        { "l",            { "e", "mu", "tau" },                    "mu"    },
+        { "q",            { "u", "d", "s" },                       "d"     },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
