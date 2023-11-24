@@ -72,6 +72,7 @@ TESTS = \
 	b-to-d-l-nu_TEST \
 	b-to-dstar-l-nu_TEST \
 	b-to-d-pi-l-nu_TEST \
+	b-to-eta-l-nu_TEST \
 	b-to-gamma-l-nu_TEST \
 	b-to-pi-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
@@ -106,6 +107,8 @@ b_to_d_l_nu_TEST_SOURCES = b-to-d-l-nu_TEST.cc
 b_to_dstar_l_nu_TEST_SOURCES = b-to-dstar-l-nu_TEST.cc
 
 b_to_d_pi_l_nu_TEST_SOURCES = b-to-d-pi-l-nu_TEST.cc
+
+b_to_eta_l_nu_TEST_SOURCES = b-to-eta-l-nu_TEST.cc
 
 b_to_gamma_l_nu_TEST_SOURCES = b-to-gamma-l-nu_TEST.cc
 

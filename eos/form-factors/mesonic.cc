@@ -330,38 +330,46 @@ namespace eos
     {
         // parametrizations
         // b -> s
-        { "B->K::BCL2008",       &BCL2008FormFactors<BToK, 3u>::make                                                                                          },
-        { "B->K::KMPW2010",      &KMPW2010FormFactors<PToP>::make                                                                                             },
-        { "B->K::BSZ2015",       &BSZ2015FormFactors<BToK,   PToP>::make                                                                                      },
-        { "B->K::BFW2010",       &BFW2010FormFactors<BToK,   PToP>::make                                                                                      },
+        { "B->K::BCL2008",           &BCL2008FormFactors<BToK, 3u>::make                                                                                          },
+        { "B->K::KMPW2010",          &KMPW2010FormFactors<PToP>::make                                                                                             },
+        { "B->K::BSZ2015",           &BSZ2015FormFactors<BToK,    PToP>::make                                                                                     },
+        { "B->K::BFW2010",           &BFW2010FormFactors<BToK,    PToP>::make                                                                                     },
+        { "B_s->eta::BSZ2015",       &BSZ2015FormFactors<BsToEta, PToP>::make                                                                                     },
+        { "B_s->eta::BFW2010",       &BFW2010FormFactors<BsToEta, PToP>::make                                                                                     },
+        { "B_s->eta_prime::BSZ2015", &BSZ2015FormFactors<BsToEtaPrime, PToP>::make                                                                                },
+        { "B_s->eta_prime::BFW2010", &BFW2010FormFactors<BsToEtaPrime, PToP>::make                                                                                },
         // b -> u
-        { "B->pi::BCL2008",      &BCL2008FormFactors<BToPi, 3u>::make                                                                                         },
-        { "B->pi::BCL2008-4",    &BCL2008FormFactors<BToPi, 4u>::make                                                                                         },
-        { "B->pi::BCL2008-5",    &BCL2008FormFactors<BToPi, 5u>::make                                                                                         },
-        { "B->pi::BSZ2015",      &BSZ2015FormFactors<BToPi,  PToP>::make                                                                                      },
-        { "B_s->K::BFW2010",     &BFW2010FormFactors<BsToK,  PToP>::make                                                                                      },
-        { "B_s->K::BSZ2015",     &BSZ2015FormFactors<BsToK,  PToP>::make                                                                                      },
+        { "B->pi::BCL2008",          &BCL2008FormFactors<BToPi, 3u>::make                                                                                         },
+        { "B->pi::BCL2008-4",        &BCL2008FormFactors<BToPi, 4u>::make                                                                                         },
+        { "B->pi::BCL2008-5",        &BCL2008FormFactors<BToPi, 5u>::make                                                                                         },
+        { "B->pi::BSZ2015",          &BSZ2015FormFactors<BToPi,  PToP>::make                                                                                      },
+        { "B->eta::BSZ2015",         &BSZ2015FormFactors<BToEta, PToP>::make                                                                                      },
+        { "B->eta::BFW2010",         &BFW2010FormFactors<BToEta, PToP>::make                                                                                      },
+        { "B->eta_prime::BSZ2015",   &BSZ2015FormFactors<BToEtaPrime, PToP>::make                                                                                 },
+        { "B->eta_prime::BFW2010",   &BFW2010FormFactors<BToEtaPrime, PToP>::make                                                                                 },
+        { "B_s->K::BFW2010",         &BFW2010FormFactors<BsToK,  PToP>::make                                                                                      },
+        { "B_s->K::BSZ2015",         &BSZ2015FormFactors<BsToK,  PToP>::make                                                                                      },
         // b -> c
-        { "B->D::BCL2008",       &BCL2008FormFactors<BToD, 3u>::make                                                                                          },
-        { "B->D::BSZ2015",       &BSZ2015FormFactors<BToD,   PToP>::make                                                                                      },
-        { "B->D::BGJvD2019",     &HQETFormFactors<BToD,      PToP>::make                                                                                      },
-        { "B->D::BGL1997",       &BGL1997FormFactors<BToD,   PToP>::make                                                                                              },
-        { "B_s->D_s::BSZ2015",   &BSZ2015FormFactors<BsToDs, PToP>::make                                                                                      },
-        { "B_s->D_s::BGJvD2019", &HQETFormFactors<BsToDs,    PToP>::make                                                                                      },
+        { "B->D::BCL2008",           &BCL2008FormFactors<BToD, 3u>::make                                                                                          },
+        { "B->D::BSZ2015",           &BSZ2015FormFactors<BToD,   PToP>::make                                                                                      },
+        { "B->D::BGJvD2019",         &HQETFormFactors<BToD,      PToP>::make                                                                                      },
+        { "B->D::BGL1997",           &BGL1997FormFactors<BToD,   PToP>::make                                                                                      },
+        { "B_s->D_s::BSZ2015",       &BSZ2015FormFactors<BsToDs, PToP>::make                                                                                      },
+        { "B_s->D_s::BGJvD2019",     &HQETFormFactors<BsToDs,    PToP>::make                                                                                      },
         // c -> d
-        { "D->pi::BSZ2015",      &BSZ2015FormFactors<DToPi,  PToP>::make                                                                                      },
-        { "D_s->K::BSZ2015",     &BSZ2015FormFactors<DsToK,  PToP>::make                                                                                      },
+        { "D->pi::BSZ2015",          &BSZ2015FormFactors<DToPi,  PToP>::make                                                                                      },
+        { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,  PToP>::make                                                                                      },
         // c -> s
-        { "D->K::BSZ2015",       &BSZ2015FormFactors<DToK,   PToP>::make                                                                                      },
-        { "D->K::BFW2010",       &BFW2010FormFactors<DToK,   PToP>::make                                                                                      },
+        { "D->K::BSZ2015",           &BSZ2015FormFactors<DToK,   PToP>::make                                                                                      },
+        { "D->K::BFW2010",           &BFW2010FormFactors<DToK,   PToP>::make                                                                                      },
         // analytic computations
-        { "B->pi::DKMMO2008",    &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
-        { "B_s->K::DKMMO2008",   &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
-        { "B->pi::B-LCSR",       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make                                                                               },
-        { "B->K::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make                                                                                },
-        { "B->D::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make                                                                                },
-        { "B_s->K::B-LCSR",      &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make                                                                               },
-        { "B_s->D_s::B-LCSR",    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make                                                                              }
+        { "B->pi::DKMMO2008",        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
+        { "B_s->K::DKMMO2008",       &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
+        { "B->pi::B-LCSR",           &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make                                                                               },
+        { "B->K::B-LCSR",            &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make                                                                                },
+        { "B->D::B-LCSR",            &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make                                                                                },
+        { "B_s->K::B-LCSR",          &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make                                                                               },
+        { "B_s->D_s::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make                                                                              }
     };
 
     complex<double>
