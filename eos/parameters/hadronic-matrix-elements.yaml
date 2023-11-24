@@ -540,6 +540,82 @@ groups:
           latex:    '$f_+^{B_s\to \eta^\prime}(0)$'
           unit:     '1'
           comments: 'from 1508.05287'
+      # form factor parameters for B->eta for [BSZ:2015A] parametrization
+      'B->eta::alpha^%1%_%2%@BSZ2015' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\alpha_{%2%, %1%}^{B \to \eta,\mathrm{BSZ2015}}$'
+            map:
+                "f+": "+"
+                "f0": "0"
+                "fT": "T"
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3]
+      # form factor parameters for B->eta' for [BSZ:2015A] parametrization
+      'B->eta_prime::alpha^%1%_%2%@BSZ2015' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\alpha_{%2%, %1%}^{B \to \eta^\prime,\mathrm{BSZ2015}}$'
+            map:
+                "f+": "+"
+                "f0": "0"
+                "fT": "T"
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3]
+      # form factor parameters for B->eta for [BFW:2010A] parametrization
+      'B->eta::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,B \to \eta,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'B->eta::tp@BFW2010' :
+          central:  33.956283
+          min:      33.956283
+          max:      33.956283
+          latex:    '$t_+^{B\to\eta}$'
+          comment:  '(mB + meta)^2'
+          unit:     'GeV'
+      'B->eta::t0@BFW2010' :
+          central:  10.0
+          min:      10.0
+          max:      10.0
+          latex:   '$t_0^{B\to\eta}$'
+          unit:     'GeV'
+      # form factor parameters for B->eta' for [BFW:2010A] parametrization
+      'B->eta_prime::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,B \to \eta^\prime,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3]
+      'B->eta_prime::tp@BFW2010' :
+          central:  38.901666
+          min:      38.901666
+          max:      38.901666
+          latex:    '$t_+^{B\to\eta^\prime}$'
+          comment:  '(mB + meta)^2'
+          unit:     'GeV'
+      'B->eta_prime::t0@BFW2010' :
+          central:  10.0
+          min:      10.0
+          max:      10.0
+          latex:   '$t_0^{B\to\eta^\prime}$'
+          unit:     'GeV'
       # form factor parameters for B->K for [BFW:2010A] parametrization
       'B->K::a^%1%_%2%@BFW2010' :
           central:  0.
