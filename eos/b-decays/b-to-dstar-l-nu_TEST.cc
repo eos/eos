@@ -108,9 +108,9 @@ class BToVectorLeptonNeutrinoTest :
                 // Christoph Bobeth: Adjusted test case because increased number of integration points
                 //                   in numerical integration from 256 -> 4096
                 BToVectorLeptonNeutrino d(p, o);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689), 33.3247, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689),  33.3247, eps);
                 auto ir = d.prepare(0.001, 10.689);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir), 0.546, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir),  0.546, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(),  0.409302220, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(),  0.255523335, eps);
@@ -184,9 +184,9 @@ class BToVectorLeptonNeutrinoTest :
                 const double eps = 1e-3;
 
                 BToVectorLeptonNeutrino d(p, o);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(3.157, 10.689), 8.213, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(3.157, 10.689),  8.213, eps);
                 auto ir = d.prepare(3.157, 10.689);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir), 0.475, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir),  0.475, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(),  0.4325856250, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(),  0.2779590234, eps);
@@ -351,7 +351,7 @@ class BToVectorLeptonNeutrinoTest :
                     { "q2_tau_min",  4.00 }, { "q2_tau_max", 10.68 },
                 };
                 auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p1, k, oo);
-                TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(), 0.379092, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(),  0.379092, eps);
             }
 
             // NP tests cf. [DSD2014]
@@ -450,7 +450,7 @@ class BToVectorLeptonNeutrinoTest :
                     { "q2_tau_min",  4.00 }, { "q2_tau_max", 10.68 },
                 };
                 auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p3, k, oo);
-                TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(), 1.20331, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(),  1.20331, eps);
             }
 
             // Check of consistency
