@@ -409,14 +409,8 @@ class Plotter:
            Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
          * ``range`` (*list* or *tuple* of two *float*) --The tuple of [minimal, maximal] values of the specified kinematic variable
            for which the observable will be evaluated.
-
-        Exactly one of the following keys is mandatory, to specify either a kinematic variable or a parameter to which the x coordinate
-        will be mapped:
-
-         * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
-         * ``kinematic`` (*str*) -- Alias for ``variable``.
-         * ``parameter`` (*str*) -- The name of the parameter to which the x axis will be mapped;
-           see `the complete list of parameters <../parameters.html>`_.
+         * ``variable`` (*str*) -- The name of the kinematic or parameter variable to which the x axis will be mapped; see
+           `the complete list of parameters <../parameters.html>`_.
 
         Example:
 
@@ -791,7 +785,7 @@ class Plotter:
         The following keys are optional:
 
          * ``xrange`` (list of int) -- The interval in which the observable is plotted in the case of a multivariate constraint.
-         * ``rescale-by-width`` (*bool*) -- Rescales binned constraints by the inverse of the bin width. This is often required 
+         * ``rescale-by-width`` (*bool*) -- Rescales binned constraints by the inverse of the bin width. This is often required
            to compare theory (integrated) predictions and experimental (averaged) measurements. Defaults to false.
 
         Example:
