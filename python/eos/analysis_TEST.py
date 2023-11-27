@@ -165,7 +165,9 @@ class ClassMethodTests(unittest.TestCase):
         # Sample from the prior
         results_list = []
         for i in range(0, 2):
-            results_list.append(analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i, print_progress=False))
+            for results in analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i):
+                last_result = results
+            results_list.append(last_result)
         results  = dynesty.utils.merge_runs(results_list)
 
         # Test samples against constraint
@@ -231,7 +233,9 @@ class ClassMethodTests(unittest.TestCase):
         # Sample from the prior
         results_list = []
         for i in range(0, 2):
-            results_list.append(analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i, print_progress=False))
+            for results in analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i):
+                last_result = results
+            results_list.append(last_result)
         results  = dynesty.utils.merge_runs(results_list)
 
         # Test samples against analytic results:
