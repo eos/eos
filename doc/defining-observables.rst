@@ -80,7 +80,7 @@ Making a new Observable known
 =============================
 
 To make a new observable known to EOS, it must be added to the list of observables.
-This can be done using the :method:`eos.Observables.insert` method.
+This can be done using the :meth:`eos.Observables.insert` method.
 
 .. code:: ipython3
 
