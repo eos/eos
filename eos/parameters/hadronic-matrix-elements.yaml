@@ -421,7 +421,7 @@ groups:
           central:  33.304441
           min:      33.304441
           max:      33.304441
-          latex:    '$t_+^{B\to K^*}$'
+          latex:    '$t_+^{B\to K}$'
           comment:  '(mB + mK)^2'
           unit:     'GeV'
       'B->K::t0@BFW2010' :
