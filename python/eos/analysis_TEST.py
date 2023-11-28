@@ -163,10 +163,7 @@ class ClassMethodTests(unittest.TestCase):
         analysis = eos.Analysis(**analysis_args)
 
         # Sample from the prior
-        results_list = []
-        for i in range(0, 2):
-            results_list.append(analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i, print_progress=False))
-        results  = dynesty.utils.merge_runs(results_list)
+        results = analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10, print_progress=False)
 
         # Test samples against constraint
         entry = eos.Constraints()['B->K::FormFactors[parametric,LCSR]@GKvD:2018A']
@@ -189,8 +186,8 @@ class ClassMethodTests(unittest.TestCase):
 
         # Result for log(Z) obtained by numerically integrating the posterior in Mathematica: 3.82966
         logz_analytic = 3.82966
-        chi2_4 = (results['logz'][-1] - logz_analytic)**2 / (0.02 * logz_analytic)**2 # Assuming 2% error on the log(Z) value
-        self.assertLess(chi2_4, 4.5494e-1, 'chi^2 for log(Z) exceeds 50% integrated probability for 1 degree of freedom')
+        chi2_4 = (results['logz'][-1] - logz_analytic)**2 / results['logzerr'][-1]**2
+        self.assertLess(chi2_2, 4.5494e-1, 'chi^2 for log(Z) exceeds 50% integrated probability for 1 degree of freedom')
 
 
     def test_multivariate_priors_2(self):
@@ -229,10 +226,7 @@ class ClassMethodTests(unittest.TestCase):
         analysis = eos.Analysis(**analysis_args)
 
         # Sample from the prior
-        results_list = []
-        for i in range(0, 2):
-            results_list.append(analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10 + i, print_progress=False))
-        results  = dynesty.utils.merge_runs(results_list)
+        results = analysis.sample_nested(bound='multi', nlive=250, dlogz=0.01, seed=10, print_progress=False)
 
         # Test samples against analytic results:
         means  = [1.26000, 4.18333]
@@ -246,7 +240,7 @@ class ClassMethodTests(unittest.TestCase):
 
         # Result for log(Z) obtained by numerically integrating the posterior in Mathematica: 4.2532
         logz_analytic = 4.2532
-        chi2_2 = (results['logz'][-1] - logz_analytic)**2 / (0.02 * logz_analytic)**2 # Assuming 2% error on the log(Z) value
+        chi2_2 = (results['logz'][-1] - logz_analytic)**2 / results['logzerr'][-1]**2 # Assuming 2% error on the log(Z) value
         self.assertLess(chi2_2, 4.5494e-1, 'chi^2 for log(Z) exceeds 50% integrated probability for 1 degree of freedom')
 
     def test_pyhf_likelihood(self):
