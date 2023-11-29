@@ -33,6 +33,7 @@
 #include <eos/rare-b-decays/b-to-k-ll.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/rare-b-decays/b-to-psd-nu-nu.hh>
+#include <eos/rare-b-decays/b-to-vec-nu-nu.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -388,6 +389,19 @@ namespace eos
                         KinematicRange{ "q2", 0.0, 22.90, BToPseudoscalarDineutrino::kinematics_description_q2 }
                     ),
                     &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
+
+            make_signal_pdf("B^-->K^*-nunu::dGamma/dq2",
+                    Options{ { "q", "u" }, { "I", "1/2" }, { "D", "s" } },
+                    &BToVectorDineutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0, 19.25, BToVectorDineutrino::kinematics_description_q2 }
+                    ),
+                    &BToVectorDineutrino::integrated_branching_ratio,
                     std::make_tuple(
                         "q2_min",
                         "q2_max"
