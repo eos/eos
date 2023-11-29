@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2023 Lorenz Gaertner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -65,6 +66,7 @@ namespace eos
 
         std::function<complex<double> ()> lambda_t;
         std::function<WilsonCoefficients<wc::SBNuNu> ()> wc;
+        std::function<double ()> m_D;
 
         GSL::QAGS::Config int_config;
 
@@ -158,6 +160,7 @@ namespace eos
                 case QuarkFlavor::strange:
                     lambda_t  = [*this] () { return model->ckm_tb() * std::conj(model->ckm_ts()); };
                     wc        = [*this] () { return model->wet_sbnunu(cp_conjugate); };
+                    m_D       = [*this] () { return model->m_s_msbar(mu); };
                     break;
 
                 default:
@@ -173,6 +176,8 @@ namespace eos
         {
             const double m_B = this->m_B(), m_B2 = m_B * m_B;
             const double m_V = this->m_V(), m_V2 = m_V * m_V;
+            const double m_b = model->m_b_msbar(mu);
+            const double m_D = this->m_D();
             const double lambda = eos::lambda(m_B2, m_V2, q2), sqrt_lambda = std::sqrt(lambda);
 
             const auto wc = this->wc();
@@ -180,6 +185,11 @@ namespace eos
             const double V   = form_factors->v(q2);
             const double A1  = form_factors->a_1(q2);
             const double A12 = form_factors->a_12(q2);
+            const double A0  = form_factors->a_0(q2);
+            const double T1  = form_factors->t_1(q2);
+            const double T2  = form_factors->t_2(q2);
+            const double T23 = form_factors->t_23(q2);
+
 
             // using different normalization than [FLS:2021A], eq. (1)
             // note that eq. (1) is a Lagrangian, while we use the Hamiltonian definition
@@ -187,13 +197,22 @@ namespace eos
                 // remainder as in [FLS:2021A], eq. (13), except for moving the q2 factor into the square brackets
                 * sqrt_lambda / (power_of<3>(4.0 * M_PI * m_B));
 
-            // first term in square brackets in [FLS:2021A], eq. (13)
+            // first and second term in square brackets in [FLS:2021A], eq. (13)
             const double contr_vector = q2 * lambda / (12.0 * (m_B + m_V) * (m_B + m_V)) * V * V * std::norm(wc.cVL() + wc.cVR());
             const double contr_axial  = 8.0 * m_B2 * m_V2 / 3.0 * A12 * A12                      * std::norm(wc.cVL() - wc.cVR())
                                       + q2 * (m_B + m_V) * (m_B + m_V) / (12.0) * A1 * A1        * std::norm(wc.cVL() - wc.cVR());
 
+            // third term in square brackets in [FLS:2021A], eq. (13)
+            const double contr_scalar = q2 * lambda / (8.0 * (m_b + m_D) * (m_b + m_D)) * A0 * A0
+                                      * 2 * std::norm(wc.cSR() - wc.cSL());
+
+            // fourth term in square brackets in [FLS:2021A], eq. (13)
+            const double contr_tensor = q2 * (32 * m_B2 * m_V2 / (3 * (m_B + m_V) * (m_B + m_V)) * T23 * T23
+                                      + (4 * lambda * T1 * T1 + 4 * (m_B2 - m_V2) * (m_B2 - m_V2) * T2 * T2) / (3 * q2) )
+                                      * 2 * std::norm(wc.cTL());
+
             // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
-            return 3.0 * norm * (contr_vector + contr_axial);
+            return 3.0 * norm * (contr_vector + contr_axial + contr_scalar + contr_tensor);
         }
 
         // differential longitudinal width
