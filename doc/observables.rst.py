@@ -1,15 +1,9 @@
 import eos
 import re
-from jinja_util import print_template
+from jinja_util import print_template, qn_to_link_map
 
 def latex_to_rst(s):
     return(re.sub(r'\$([^\$]*)\$', r':math:`\1`', s))
-
-qn_to_link_map = {
-    ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
-    ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
-    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as'
-}
 
 # Mirror the EOS observables hierarchy as structured string data: arrays of
 # dicts. Observables are organised in groups, which are organised in sections.

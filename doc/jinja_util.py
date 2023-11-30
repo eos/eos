@@ -43,3 +43,12 @@ def print_template(rst_py__file__, **kwargs):
 
     template = get_template(os.path.abspath(rst_py__file__))
     print(template.render(**kwargs))
+
+
+# Define the string mapping to convert an EOS QualifiedName to something suitable
+# for reStructuredText and HTML
+qn_to_link_map = {
+    ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
+    ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
+    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as'
+}

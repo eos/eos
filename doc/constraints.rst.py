@@ -1,16 +1,10 @@
 import eos
 import re
 import yaml
-from jinja_util import print_template
+from jinja_util import print_template, qn_to_link_map
 
 def latex_to_rst(s):
     return(re.sub(r'\$([^\$]*)\$', r':math:`\1`', s))
-
-qn_to_link_map = {
-    ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
-    ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
-    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as'
-}
 
 def make_constraints():
     # All observables (pseudo or otherwise), to be used to see if a constraint is an observable or a parameter

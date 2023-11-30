@@ -1,6 +1,6 @@
 import eos
 import re
-from jinja_util import print_template
+from jinja_util import print_template, qn_to_link_map
 
 def latex_to_rst(s):
     s = re.sub(r'\$([^\$]*)\$', r':math:`\1`', s) # inline math
@@ -8,12 +8,6 @@ def latex_to_rst(s):
     s = re.sub(r'(\\begin{align})([^\$]*?)(\\end{align})', r'\n.. math::\n\2', s) # align
 
     return(s)
-
-qn_to_link_map = {
-    ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
-    ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
-    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as'
-}
 
 # Mirror the EOS parameters hierarchy as structured string data: arrays of
 # dicts. Parameters are organised in groups, which are organised in sections.
