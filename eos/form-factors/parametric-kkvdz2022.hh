@@ -41,6 +41,7 @@ namespace eos
         private:
             SwitchOption opt_subtracted;
             double switch_subtracted;
+            UsedParameter _s_0;
             static std::string _par_name(const std::string & ff_name);
             double _width_omega(const double & q2) const;
             double _width_rho(const double & q2) const;
@@ -56,7 +57,6 @@ namespace eos
             std::array<std::array<UsedParameter, 3>, 4> _a_omega;
             std::array<std::array<UsedParameter, 3>, 4> _a_rho;
             std::array<std::array<UsedParameter, 3>, 4> _c_subtraction;
-            UsedParameter _s_0;
 
         public:
             KKvDZ2022FormFactors(const Parameters &, const Options &);
