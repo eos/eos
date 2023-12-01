@@ -665,6 +665,49 @@ groups:
           latex:    '$(\delta^{\pi})^2(1\,\mathrm{GeV})$'
           unit:     'GeV^2'
           comments: 'cf. [DKMMO:2008A]'
+      # Rho LCDA parameters (preliminiary, values have to be adapted)
+      'rho::a2para@1GeV' :
+          central: +0.17
+          min:     +0.10
+          max:     +0.24
+          latex:    '$a^{\rho}_{2, \parallel}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'rho::a4para@1GeV' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:    '$a^{\rho}_{4, \parallel}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'rho::fpara' :
+          central: +0.213
+          min:     +0.208
+          max:     +0.218
+          latex:    '$f^{\rho}_{\parallel}$'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'rho::a2perp@1GeV' :
+          central: +0.14
+          min:     +0.08
+          max:     +0.20
+          latex:    '$a^{\rho}_{2, \perp}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'rho::a4perp@1GeV' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:    '$a^{\rho}_{4, \perp}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'rho::fperp@1GeV' :
+          central: +0.16
+          min:     +0.153
+          max:     +0.167
+          latex:    '$f^{\rho}_{\perp}(1\,\mathrm{GeV})$'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A], table 1'
       # Kaon LCDA parameters
       'K::a1@1GeV' :
           central: -0.07
