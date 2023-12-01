@@ -2,7 +2,7 @@
 A helper to avoid (boilerplate) code duplication.
 
 Usage: Create *.rst.py and *.rst.jinja file in the same directory.
-The python file renderes the jinja template.
+The python file renders the jinja template.
 
 In *.rst.py:
 ```
