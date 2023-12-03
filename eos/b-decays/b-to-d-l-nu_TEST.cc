@@ -87,9 +87,8 @@ class BToDLeptonNeutrinoTest :
                 Options o{
                     { "l",             "e"         },
                     { "model",         "CKM"       },
-                    { "U",             "c"         },
+                    { "P",             "D"         },
                     { "q",             "d"         },
-                    { "I",             "1/2"       },
                     { "z-order-lp",    "3"         },
                     { "z-order-slp",   "2"         },
                     { "z-order-sslp",  "1"         },
@@ -141,9 +140,8 @@ class BToDLeptonNeutrinoTest :
                 Options o{
                     { "l",             "tau"       },
                     { "model",         "CKM"       },
-                    { "U",             "c"         },
+                    { "P",             "D"         },
                     { "q",             "d"         },
-                    { "I",             "1/2"       },
                     { "z-order-lp",    "3"         },
                     { "z-order-slp",   "2"         },
                     { "z-order-sslp",  "1"         },
@@ -176,11 +174,10 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
+                    { "model",        "WET"        },
                     { "form-factors", "BCL2008"    },
-                    { "U",            "c"          },
+                    { "P",            "D"          },
                     { "q",            "d"          },
-                    { "I",            "1/2"        },
                     { "l",            "mu"         }
                 };
 
@@ -199,7 +196,7 @@ class BToDLeptonNeutrinoTest :
                     };
                     auto obs_BRtau = Observable::make("B->Dlnu::BR", p, k_tau, oo);
                     TEST_CHECK(obs_BRtau.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(0.0069634, obs_BRtau->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_BRtau->evaluate(),  0.0069634, eps);
 
                     oo.declare("l", "mu");
                     auto k_mu = Kinematics{
@@ -208,15 +205,14 @@ class BToDLeptonNeutrinoTest :
                     };
                     auto obs_BRmu = Observable::make("B->Dlnu::BR", p, k_mu, oo);
                     TEST_CHECK(obs_BRmu.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(0.0232794, obs_BRmu->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_BRmu->evaluate(),  0.0232794, eps);
 
                     oo =
                     {
-                        { "model",        "WET" },
+                        { "model",        "WET"        },
                         { "form-factors", "BCL2008"    },
-                        { "U",            "c"          },
-                        { "q",            "d"          },
-                        { "I",            "1/2"        }
+                        { "P",            "D"          },
+                        { "q",            "d"          }
                     };
                     auto k = Kinematics{
                         { "q2_mu_min",   0.011164 },
@@ -226,7 +222,7 @@ class BToDLeptonNeutrinoTest :
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
                     TEST_CHECK(obs_RD.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(0.299132, obs_RD->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_RD->evaluate(),  0.299132, eps);
                 }
             }
 
@@ -277,11 +273,10 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
+                    { "model",        "WET"        },
                     { "form-factors", "BCL2008"    },
-                    { "U",            "c"          },
+                    { "P",            "D"          },
                     { "q",            "d"          },
-                    { "I",            "1/2"        },
                     { "l",            "mu"         }
                 };
 
@@ -300,16 +295,15 @@ class BToDLeptonNeutrinoTest :
                     };
                     oo =
                     {
-                        { "model",        "WET" },
+                        { "model",        "WET"        },
                         { "form-factors", "BCL2008"    },
-                        { "U",            "c"          },
-                        { "q",            "d"          },
-                        { "I",            "1/2"        }
+                        { "P",            "D"          },
+                        { "q",            "d"          }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 
                     TEST_CHECK(obs_RD.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(1.43554, obs_RD->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_RD->evaluate(),  1.43554, eps);
                 }
             }
         }

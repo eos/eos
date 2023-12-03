@@ -22,6 +22,20 @@ groups:
           latex:   '$m_{\pi^\pm}$'
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
+      'mass::eta' :
+          central: +0.547862
+          min:     +0.547845
+          max:     +0.547879
+          latex:   '$m_{\eta}$'
+          unit:     'GeV'
+          comments: "cf. [PDG-Live], December 2020"
+      "mass::eta_prime" :
+          central: +0.95778
+          min:     +0.95772
+          max:     +0.95784
+          latex:   '$m_{\eta^\prime}$'
+          unit:     'GeV'
+          comments: "cf. [PDG-Live], December 2020"
       # K meson masses
       'mass::K_d' :
           central: +0.497611
