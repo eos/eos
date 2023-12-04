@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016 Danny van Dyk
+ * Copyright (c) 2015-2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,9 +27,11 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
+#include <eos/signal-pdf-fwd.hh>
 
-#include <string>
+#include <map>
 #include <memory>
+#include <string>
 
 namespace eos
 {
@@ -47,10 +49,6 @@ namespace eos
                 return name;
             }
     };
-
-    class SignalPDF;
-
-    using SignalPDFPtr = std::shared_ptr<SignalPDF>;
 
     class SignalPDF :
         public Density
@@ -74,6 +72,66 @@ namespace eos
 
             static SignalPDFPtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
+
+    /**
+     * SignalPDFSection is used to keep track of one or more SignalPDFGroup objects, and groups
+     * them together under a common name. Examples of observable sections include semileptonic B decays
+     * or ee->hadrons.
+     */
+    class SignalPDFSection :
+        public PrivateImplementationPattern<SignalPDFSection>
+    {
+        public:
+            SignalPDFSection(Implementation<SignalPDFSection> *);
+
+            ~SignalPDFSection();
+
+            ///@name Iteration over groups
+            ///@{
+            struct GroupIteratorTag;
+            using GroupIterator = WrappedForwardIterator<GroupIteratorTag, const SignalPDFGroup &>;
+
+            GroupIterator begin() const;
+            GroupIterator end() const;
+            ///@}
+
+            ///@name Meta data
+            ///@{
+            const std::string & name() const;
+            const std::string & description() const;
+            ///@}
+    };
+
+    extern template class WrappedForwardIterator<SignalPDFSection::GroupIteratorTag, const SignalPDFGroup &>;
+
+    /**
+     * SignalPDFGroup is used to keep track of one or more ObservableEntry objects, and groups
+     * them together under a common name and description. Examples of Observables Groups include B->pilnu observables and B->D form factors.
+     */
+    class SignalPDFGroup :
+        public PrivateImplementationPattern<SignalPDFGroup>
+    {
+        public:
+            SignalPDFGroup(Implementation<SignalPDFGroup> *);
+
+            ~SignalPDFGroup();
+
+            ///@name Iteration over observables
+            ///@{
+            struct SignalPDFIteratorTag;
+            using SignalPDFIterator = WrappedForwardIterator<SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
+
+            SignalPDFIterator begin() const;
+            SignalPDFIterator end() const;
+            ///@}
+
+            ///@name Meta data
+            ///@{
+            const std::string & name() const;
+            const std::string & description() const;
+            ///@}
+    };
+    extern template class WrappedForwardIterator<SignalPDFGroup::SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
 
     /*!
      * SignalPDFEntry is internally used to keep track of the SignalPDFDescription and the SignalPDFFactory
@@ -138,14 +196,47 @@ namespace eos
             /// Destructor.
             ~SignalPDFs();
 
-            ///@name Iteration over known constraints
+            ///@name Access of individual ObserableEntry instances
+            ///@{
+            SignalPDFEntryPtr operator[] (const QualifiedName &) const;
+            ///@}
+
+            ///@name Iteration over observables
             ///@{
             struct SignalPDFIteratorTag;
-            using SignalPDFIterator = WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const QualifiedName, std::shared_ptr<SignalPDFEntry>>>;
+            using SignalPDFIterator = WrappedForwardIterator<SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
 
             SignalPDFIterator begin() const;
             SignalPDFIterator end() const;
             ///@}
+
+            ///@name Iteration over groups of observables
+            ///@{
+            struct SectionIteratorTag;
+            using SectionIterator = WrappedForwardIterator<SectionIteratorTag, const SignalPDFSection &>;
+
+            SectionIterator begin_sections() const;
+            SectionIterator end_sections() const;
+            ///@}
+    };
+
+    extern template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
+    extern template class WrappedForwardIterator<SignalPDFs::SectionIteratorTag, const SignalPDFSection &>;
+
+    class SignalPDFEntries :
+        public InstantiationPolicy<SignalPDFEntries, Singleton>
+    {
+        private:
+            std::map<QualifiedName, std::shared_ptr<const SignalPDFEntry>> * _entries;
+
+            SignalPDFEntries();
+
+            ~SignalPDFEntries();
+
+        public:
+            friend class InstantiationPolicy<SignalPDFEntries, Singleton>;
+
+            inline const std::map<QualifiedName, std::shared_ptr<const SignalPDFEntry>> & entries() const { return *_entries; }
     };
 
     /*!
