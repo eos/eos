@@ -872,8 +872,9 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // SignalPDFs
-    ::impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<SignalPDFEntry>> converter_signalpdfs_iter;
+    ::impl::std_pair_to_python_converter<const QualifiedName, SignalPDFEntryPtr> converter_signalpdfs_iter;
     class_<SignalPDFs>("_SignalPDFs")
+        .def("__getitem__", &SignalPDFs::operator[])
         .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
         ;
 

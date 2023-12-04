@@ -26,7 +26,7 @@ libeos_la_SOURCES = \
 	constraint.cc constraint.hh \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	reference.cc reference.hh \
-	signal-pdf.cc signal-pdf.hh
+	signal-pdf.cc signal-pdf.hh signal-pdf-fwd.hh signal-pdf-impl.hh
 libeos_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	-DEOS_DATADIR='"$(datadir)"' \
 	$(GSL_CXXFLAGS) \
@@ -57,7 +57,8 @@ AM_TESTS_ENVIRONMENT = \
 TESTS = \
 	constraint_TEST \
 	observable_TEST \
-	reference_TEST
+	reference_TEST \
+	signal-pdf_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -73,7 +74,8 @@ LDADD = \
 check_PROGRAMS = \
 	constraint_TEST \
 	observable_TEST \
-	reference_TEST
+	reference_TEST \
+	signal-pdf_TEST
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
@@ -86,6 +88,10 @@ observable_TEST_LDADD = $(LDADD) -lyaml-cpp
 reference_TEST_SOURCES = reference_TEST.cc
 reference_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 reference_TEST_LDADD = $(LDADD) -lyaml-cpp
+
+signal_pdf_TEST_SOURCES = signal-pdf_TEST.cc
+signal_pdf_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+signal_pdf_TEST_LDADD = $(LDADD) -lyaml-cpp
 
 pkgdata_DATA = references.yaml
 EXTRA_DIST = \

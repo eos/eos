@@ -46,7 +46,8 @@ libeosrarebdecays_la_SOURCES = \
 	qcdf-integrals.cc qcdf-integrals.hh qcdf-integrals-impl.hh\
 	qcdf-integrals-analytical.cc \
 	qcdf-integrals-mixed.cc \
-	qcdf-integrals-numerical.cc
+	qcdf-integrals-numerical.cc \
+	signal-pdfs.cc signal-pdfs.hh
 libeosrarebdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosrarebdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosrarebdecays_la_LIBADD = \
