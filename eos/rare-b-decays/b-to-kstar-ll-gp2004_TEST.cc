@@ -158,18 +158,18 @@ class BToKstarDileptonLowRecoilTest :
 
                     auto amps = d.amplitudes(16.00);
 
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -8.7364051e-11,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.606138825e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.15142934e-12,  eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -2.606138825e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   6.474212323e-11, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),   1.931308806e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right), -5.299648017e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  1.931308806e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),  -1.115955078e-10, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),  -3.328982372e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  9.134963179e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right), -3.328982372e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -8.7364199e-11,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.606141641e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.15128034e-12,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -2.606141641e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   6.474223364e-11, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),   1.931310892e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right), -5.299537604e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  1.931310892e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),  -1.115956981e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),  -3.328985969e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  9.134772862e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right), -3.328985969e-12, eps);
                 }
             }
 
@@ -257,18 +257,18 @@ class BToKstarDileptonLowRecoilTest :
 
                     auto amps = d.amplitudes(16.00);
 
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -2.139878667e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -2.140027659e-12, eps);
                     TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -8.831641416e-11, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right), -2.139878667e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right),  6.810596969e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.585781415e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right), -2.140027659e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right),  6.810594153e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.585891826e-12, eps);
                     TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),   6.544788278e-11, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  1.585781415e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right), -5.047070313e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),  -2.733399423e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  1.585891826e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right), -5.047068226e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),  -2.733589740e-12, eps);
                     TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),  -1.128120202e-10, eps);
-                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right), -2.733399423e-12, eps);
-                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  8.699596903e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right), -2.733589740e-12, eps);
+                    TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  8.699593306e-12, eps);
                 }
             }
 

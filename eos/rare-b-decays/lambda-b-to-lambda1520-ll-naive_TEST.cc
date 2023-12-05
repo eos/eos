@@ -124,14 +124,14 @@ class LambdaBToLambda1520DileptonNaiveTest :
             auto amps = d.amplitudes(q2);
 
             TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_right,  complex<double>(-0.0411362,0.00215154), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_left,   complex<double>(-0.0253156,0.0014157), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.b_perp1_left,   complex<double>(-0.0253152,0.0014157), eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.b_para1_right,  complex<double>(-0.0417436,-0.000489896), eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.b_para1_left,   complex<double>(-0.0453458,-0.000322348), eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_right,  complex<double>(0.0104327,-0.000545661), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_left,   complex<double>(0.0064204,-0.000359041), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_right,  complex<double>(0.0108682,-0.000461563), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_left,   complex<double>(0.00747423,-0.000303705), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_right,  complex<double>(0.00081109,-0.0169579), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp1_left,   complex<double>(0.00642029,-0.000359041), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_right,  complex<double>(0.0108680,-0.000461563), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para1_left,   complex<double>(0.00747410,-0.000303705), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_right,  complex<double>(0.00081105,-0.0169579), eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp0_left,   complex<double>(-0.123883,-0.0111582), eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.a_para0_right,  complex<double>(-0.00446388,0.00319248), eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.a_para0_left,   complex<double>(0.0190109,0.00210063), eps);

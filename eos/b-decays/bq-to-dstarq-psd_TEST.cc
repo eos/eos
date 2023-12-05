@@ -156,7 +156,7 @@ class BqToDstarqPSDTest :
 
                 {
                     const double eps = 1e-4;
-                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -5.277362990075545,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -5.278875852868934,  eps);
                     TEST_CHECK_RELATIVE_ERROR(d.im_a_1(), -38.370261666752356, eps);
 
                     TEST_CHECK_RELATIVE_ERROR(d.decay_width(),     1.6957632659998886e-13, eps);

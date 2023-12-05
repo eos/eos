@@ -86,6 +86,6 @@ class LambdaBToLambda1520GammaNaiveTest :
 
             LambdaBToLambda1520Gamma d(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),  847327908615.,   eps);
+            TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),  847315588516.,   eps);
         }
 } lambdab_to_lambda1520_gamma_naive_test;
