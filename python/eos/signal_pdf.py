@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2021 Danny van Dyk
+# Copyright (c) 2021-2023 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -225,7 +225,7 @@ class SignalPDFs(_SignalPDFs):
                             </th>
                         </tr>
                     </tbody>
-                '''#.format(group=group.name(), id=group_id)
+                '''
                 group_result += fr'''
                     <tbody style="visibility:collapse" id="grp{group_id}">
                     <tr>

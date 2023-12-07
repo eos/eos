@@ -1,0 +1,33 @@
+###################
+List of Signal PDFs
+###################
+
+
+The following is a list of signal PDFs that is available in EOS v{{ version }}.
+
+{% for section in sections %}
+
+{{ "*" * len(section.name) }}
+{{ section.name }}
+{{ "*" * len(section.name) }}
+
+{% for group in section.groups %}
+{{ group.name }}
+{{ "=" * len(group.name) }}
+
+{% for obs in group.signal_pdfs %}
+{% endfor %}
+.. list-table::
+   :widths: 100
+   :header-rows: 1
+
+   * - Qualified Name
+
+   {% for pdf in group.signal_pdfs %}
+   * - ``{{ pdf.qualified_name }}``
+   {% endfor %}
+
+{{ group.description }}
+
+{% endfor %}
+{% endfor %}

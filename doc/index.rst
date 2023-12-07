@@ -35,3 +35,4 @@ Installation instructions can be found `here <installation.html>`_.
    observables
    parameters
    references
+   signal-pdfs
