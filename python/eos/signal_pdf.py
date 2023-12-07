@@ -122,6 +122,9 @@ class SignalPDF(_SignalPDF):
         :rtype: eos.SignalPDF
         """
         pdf = _SignalPDF.make(name, parameters, kinematics, options)
+        if pdf is None:
+            return None
+
         pdf.__class__ = SignalPDF
         pdf.variables = list(map(
             lambda n: kinematics[n],
