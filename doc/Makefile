@@ -30,4 +30,4 @@ html: source Makefile
 	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
 
 .PHONY: source
-source: constraints.rst observables.rst parameters.rst references.rst api/python.rst
+source: constraints.rst observables.rst parameters.rst references.rst signal-pdfs.rst api/python.rst
