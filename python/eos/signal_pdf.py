@@ -81,10 +81,10 @@ class SignalPDF(_SignalPDF):
 
         # pre run to adapt markov chains
         for i in progressbar(range(0, preruns), desc="Pre-runs", leave=False):
-            eos.info('Prerun {} out of {}'.format(i, preruns))
+            eos.info(f'Prerun {i} out of {preruns}')
             accept_count = sampler.run(pre_N)
             accept_rate  = accept_count / pre_N * 100
-            eos.info('Prerun {}: acceptance rate is {:3.0f}%'.format(i, accept_rate))
+            eos.info(f'Prerun {i}: acceptance rate is {accept_rate:3.0f}%')
             sampler.adapt()
         sampler.clear()
 
@@ -97,7 +97,7 @@ class SignalPDF(_SignalPDF):
         for current_chunk in progressbar(sample_chunks, desc="Main run", leave=False):
             accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
-        eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
+        eos.info(f'Main run: acceptance rate is {accept_rate:3.0f}%')
 
         parameter_samples = sampler.samples[:][::stride]
         weights = sampler.target_values[:][::stride, 0]
