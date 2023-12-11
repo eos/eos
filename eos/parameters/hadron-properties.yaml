@@ -817,6 +817,73 @@ groups:
           latex:    '$f^{K^*}_{\perp}(1\,\mathrm{GeV})$'
           unit:     'GeV'
           comments: 'cf. [BSZ:2015A], table 1'
+      # new K^* LCDA parameters
+      'K^*::a1para@1GeV' :
+          central: +0.06
+          min:     +0.00
+          max:     +0.10
+          latex:    '$a^{K^*}_{1,\parallel}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'K^*::a2para@1GeV' :
+          central: +0.16
+          min:     +0.07
+          max:     +0.23
+          latex:    '$a^{K^*}_{2,\parallel}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'K^*::a3para@1GeV' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:    '$a^{K^*}_{3,\parallel}(1\,\mathrm{GeV})$'
+          unit:     '1'
+      'K^*::a4para@1GeV' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:    '$a^{K^*}_{4,\parallel}(1\,\mathrm{GeV})$'
+          unit:     '1'
+      'K^*::fpara' :
+          central: +0.204
+          min:     +0.197
+          max:     +0.211
+          latex:    '$f^{K^*}_{\parallel}(1\,\mathrm{GeV})$'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'K^*::a1perp@1GeV' :
+          central: +0.04
+          min:     +0.01
+          max:     +0.07
+          latex:    '$a^{K^*}_{1,\perp}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'K^*::a2perp@1GeV' :
+          central: +0.10
+          min:     +0.02
+          max:     +0.18
+          latex:    '$a^{K^*}_{2,\perp}(1\,\mathrm{GeV})$'
+          unit:     '1'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'K^*::a3perp@1GeV' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:    '$a^{K^*}_{3,\perp}(1\,\mathrm{GeV})$'
+          unit:     '1'
+      'K^*::a4perp@1GeV' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:    '$a^{K^*}_{4,\perp}(1\,\mathrm{GeV})$'
+          unit:     '1'
+      'K^*::fperp@1GeV' :
+          central: +0.159
+          min:     +0.153
+          max:     +0.165
+          latex:    '$f^{K^*}_{\perp}(1\,\mathrm{GeV})$'
+          unit:     'GeV'
+          comments: 'cf. [BSZ:2015A], table 1'
       # phi LCDA parameters
       'phi::a_1_para@1GeV' :
           central: +0.00
