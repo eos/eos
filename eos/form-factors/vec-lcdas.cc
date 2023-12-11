@@ -20,6 +20,7 @@
 #include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/vec-lcdas.hh>
 #include <eos/form-factors/rho-lcdas.hh>
+#include <eos/form-factors/k-star-lcdas.hh>
 
 #include <map>
 
@@ -38,7 +39,9 @@ namespace eos
         using ValueType = std::function<VectorLCDAs * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> lcdas
         {
-            { "rho",      &RhoLCDAs::make          }
+            { "rho",      &RhoLCDAs::make       },
+            { "Kstar",    &KStarLCDAs::make     },
+            { "Kstarbar", &AntiKStarLCDAs::make }
         };
 
         std::shared_ptr<VectorLCDAs> result;

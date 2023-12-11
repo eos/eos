@@ -26,7 +26,7 @@ libeosformfactors_la_SOURCES = \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
 	k-lcdas.cc k-lcdas.hh \
-	kstar-lcdas.cc kstar-lcdas.hh \
+	k-star-lcdas.cc k-star-lcdas.hh \
 	lcda.cc lcda.hh \
 	mesonic.cc mesonic.hh \
 	mesonic-processes.hh \
