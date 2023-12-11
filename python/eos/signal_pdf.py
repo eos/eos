@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2021 Danny van Dyk
+# Copyright (c) 2021-2023 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -81,10 +81,10 @@ class SignalPDF(_SignalPDF):
 
         # pre run to adapt markov chains
         for i in progressbar(range(0, preruns), desc="Pre-runs", leave=False):
-            eos.info('Prerun {} out of {}'.format(i, preruns))
+            eos.info(f'Prerun {i} out of {preruns}')
             accept_count = sampler.run(pre_N)
             accept_rate  = accept_count / pre_N * 100
-            eos.info('Prerun {}: acceptance rate is {:3.0f}%'.format(i, accept_rate))
+            eos.info(f'Prerun {i}: acceptance rate is {accept_rate:3.0f}%')
             sampler.adapt()
         sampler.clear()
 
@@ -97,7 +97,7 @@ class SignalPDF(_SignalPDF):
         for current_chunk in progressbar(sample_chunks, desc="Main run", leave=False):
             accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
-        eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
+        eos.info(f'Main run: acceptance rate is {accept_rate:3.0f}%')
 
         parameter_samples = sampler.samples[:][::stride]
         weights = sampler.target_values[:][::stride, 0]
@@ -122,6 +122,9 @@ class SignalPDF(_SignalPDF):
         :rtype: eos.SignalPDF
         """
         pdf = _SignalPDF.make(name, parameters, kinematics, options)
+        if pdf is None:
+            return None
+
         pdf.__class__ = SignalPDF
         pdf.variables = list(map(
             lambda n: kinematics[n],
@@ -167,11 +170,88 @@ class SignalPDFs(_SignalPDFs):
         return True
 
     def _repr_html_(self):
-        result = '<table>'
-        for qn, entry in self:
-            if not self.filter_entry(qn):
-                continue
-            result += r'      <tr><th><tt style="color:grey">{qn}</tt></th><td style="text-align:left">{desc}</td></tr>'.format(qn=qn,desc=entry.description())
-        result += '</table>'
+        result = r'''
+        <script>
+            function toggle_group(group_title, id) {
+                var table = group_title.parentNode.parentNode.parentNode.parentNode
+                var query = 'tbody[id="' + id + '"]'
+                var group = table.querySelector(query)
+                if (group.style.visibility == "collapse") {
+                    group.style.visibility = "visible"
+                } else {
+                    group.style.visibility = "collapse"
+                }
+            }
+            function toggle_av(opt_anchor, id) {
+                var query_dots   = 'span.dots[id="' + id + '"]'
+                var query_values = 'span.values[id="' + id + '"]'
+                var dots   = opt_anchor.querySelector(query_dots)
+                var values = opt_anchor.querySelector(query_values)
+                if (dots.style.display == "none") {
+                    dots.style.display   = "inline"
+                    values.style.display = "none"
+                } else {
+                    dots.style.display   = "none"
+                    values.style.display = "inline"
+                }
+            }
+        </script>
+        <style>
+            td.qn     { text-align: left;   }
+            td.sym    { text-align: center; }
+        </style>
+        <table>
+            <colgroup>
+                <col width="100%" id="qn"         style="min-width: 300px; text-align: left">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>qualified name</th>
+                </tr>
+            </thead>
+        '''
+        group_id = 0
+        observable_id = 0
+        for section in self.sections():
+            section_entries = 0
+            section_result = fr'''
+                <tr>
+                    <th style="text-align:left" colspan=1><big>{section.name()}</big></th>
+                </tr>'''
+            for group in section:
+                group_entries = 0
+                group_result  = fr'''
+                    <tbody>
+                        <tr>
+                            <th style="text-align:left" colspan=1>
+                                <a style="text-decoration: none" onclick="toggle_group(this, 'grp{group_id}')">{group.name()}</a>
+                            </th>
+                        </tr>
+                    </tbody>
+                '''
+                group_result += fr'''
+                    <tbody style="visibility:collapse" id="grp{group_id}">
+                    <tr>
+                        <td style="text-align:left" colspan=1>{group.description()}</td>
+                    </tr>
+                '''
+                for qn, entry in group:
+                    group_result += fr'''
+                        <tr>
+                            <th class="qn"     rowspan="1"><tt>{qn}</tt></th>
+                        </tr>
+                    '''
 
-        return result
+                    group_entries += 1
+                    observable_id += 1
+
+                group_result += '    </tbody>'
+                group_id += 1
+                section_entries += group_entries
+                if group_entries > 0:
+                    section_result += group_result
+            if section_entries > 0:
+                result += section_result
+        result += r'</table>'
+
+        return(result)

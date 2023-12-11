@@ -865,16 +865,34 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // SignalPDFEntry
-    register_ptr_to_python<std::shared_ptr<SignalPDFEntry>>();
+    register_ptr_to_python<std::shared_ptr<const SignalPDFEntry>>();
     class_<SignalPDFEntry, boost::noncopyable>("SignalPDFEntry", no_init)
         .def("name", &SignalPDFEntry::name, return_value_policy<copy_const_reference>())
         .def("description", &SignalPDFEntry::description, return_value_policy<copy_const_reference>())
         ;
 
+    // SignalPDFGroup
+    register_ptr_to_python<std::shared_ptr<SignalPDFGroup>>();
+    class_<SignalPDFGroup>("SignalPDFGroup", no_init)
+        .def("__iter__", range(&SignalPDFGroup::begin, &SignalPDFGroup::end))
+        .def("name", &SignalPDFGroup::name, return_value_policy<copy_const_reference>())
+        .def("description", &SignalPDFGroup::description, return_value_policy<copy_const_reference>())
+        ;
+
+    // SignalPDFSection
+    register_ptr_to_python<std::shared_ptr<SignalPDFSection>>();
+    class_<SignalPDFSection>("SignalPDFSection", no_init)
+        .def("__iter__", range(&SignalPDFSection::begin, &SignalPDFSection::end))
+        .def("name", &SignalPDFSection::name, return_value_policy<copy_const_reference>())
+        .def("description", &SignalPDFSection::description, return_value_policy<copy_const_reference>())
+        ;
+
     // SignalPDFs
-    ::impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<SignalPDFEntry>> converter_signalpdfs_iter;
+    ::impl::std_pair_to_python_converter<const QualifiedName, SignalPDFEntryPtr> converter_signalpdfs_iter;
     class_<SignalPDFs>("_SignalPDFs")
+        .def("__getitem__", &SignalPDFs::operator[])
         .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
+        .def("sections", range(&SignalPDFs::begin_sections, &SignalPDFs::end_sections))
         ;
 
     // Analytic Charm Loops

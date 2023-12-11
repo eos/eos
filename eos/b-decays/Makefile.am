@@ -24,7 +24,8 @@ libeosbdecays_la_SOURCES = \
 	lambdab-to-lambdac2625-l-nu.cc lambdab-to-lambdac2625-l-nu.hh \
 	inclusive-b-to-u.cc inclusive-b-to-u.hh \
 	observables.cc observables.hh \
-	properties.cc properties.hh
+	properties.cc properties.hh \
+	signal-pdfs.cc signal-pdfs.hh
 libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosbdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosbdecays_la_LIBADD = \
