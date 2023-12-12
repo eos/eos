@@ -1,5 +1,38 @@
 # vim: set fdm=marker :
 
+#######################
+# D_s decay constants #
+#######################
+# {{{
+D_s^*::decay-constants@PZ:2021A:
+    type: MultivariateGaussian
+    observables: [ "decay-constant::D_s", "decay-constant::D_s^*" ]
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    means: [ 0.2257, 0.279]
+    sigma-stat-hi: [ 0.0171, 0.019]
+    sigma-stat-lo: [ 0.0174, 0.019]
+    sigma-sys: [ 0., 0.]
+    # Correlation estimated via error propagation
+    correlations:
+      - [1., 0.5]
+      - [0.5, 1.]
+D_s^*_T::decay-constants@PZ:2021A:
+    type: MultivariateGaussian
+    observables: [ "decay-constant::D_s", "decay-constant::D_s^*,T" ]
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    means: [ 0.2257, 0.256]
+    sigma-stat-hi: [ 0.0171, 0.016]
+    sigma-stat-lo: [ 0.0174, 0.017]
+    sigma-sys: [ 0., 0. ]
+    # Correlation estimated via error propagation
+    correlations:
+      - [1., 0.64]
+      - [0.64, 1.]
+#}}}
+
+
 ########################
 # D -> K form factors #
 ########################
@@ -77,3 +110,4 @@ D->K::f_0+f_++f_T@HPQCD:2022A:
       - [ 3.27916e-06, 2.8009e-06, 3.20838e-06, 4.14624e-06, 3.726e-06, 0.000385491, 0.000419111, 0.00047013]
       - [ 3.37667e-06, 3.88057e-06, 5.46605e-06, 6.40217e-06, 0.0000103044, 0.000419111, 0.000515073, 0.000667127]
       - [ 3.89284e-06, 5.95483e-06, 9.9974e-06, 0.0000109883, 0.0000268513, 0.00047013, 0.000667127, 0.00106943]
+# }}}
