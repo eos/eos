@@ -4168,6 +4168,23 @@ groups:
           unit:     '1'
           latex:    '$a_{\perp,2}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
           comments: ''
+      # form factor parameters for Lambda_c -> Lambda decays in the DM2016 parametrization
+      'Lambda_c->Lambda::a_%3%_%1%^%2%@DM2016':
+          central: -0.0
+          min:     -2.0
+          max:     +2.0
+          unit:     '1'
+          latex:
+            template: '$a_{%1%,%3%}^{%2%,\Lambda_c \to \Lambda ,\mathrm{DM2016}}$'
+            map:
+                'time': 't'
+                'perp': '\perp'
+                'long': '0'
+          matrix:
+            - ["time", "long", "perp"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3]
+          comments: ''
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [BMRvD:2022A]
       'Lambda_b->Lambda::tp_a@BMRvD2022' :
