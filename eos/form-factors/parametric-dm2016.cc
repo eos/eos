@@ -23,4 +23,5 @@
 namespace eos
 {
     template class DM2016FormFactors<LambdaBToLambda>;
+    template class DM2016FormFactors<LambdaCToLambda>;
 }

@@ -88,6 +88,7 @@ namespace eos
     };
 
     extern template class DM2016FormFactors<LambdaBToLambda>;
+    extern template class DM2016FormFactors<LambdaCToLambda>;
 }
 
 #endif
