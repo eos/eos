@@ -1677,6 +1677,94 @@ namespace eos
     }
     // }}}
 
+    // Lambda_c -> Lambda
+    // {{{
+    ObservableGroup
+    make_lambdac_to_lambda_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $\Lambda_c \to \Lambda$ transitions)",
+            R"(Pseudo observables representing the full basis of $\Lambda_c \to \Lambda$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("Lambda_c->Lambda::f_time^V(q2)", R"(f_t^{V,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_long^V(q2)", R"(f_0^{V,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_perp^V(q2)", R"(f_\perp^{V,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_time^A(q2)", R"(f_t^{A,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_long^A(q2)", R"(f_0^{A,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_perp^A(q2)", R"(f_\perp^{A,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_long^T(q2)", R"(f_0^{T,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_perp^T(q2)", R"(f_\perp^{T,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_long^T5(q2)", R"(f_0^{T5,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->Lambda::f_perp^T5(q2)", R"(f_\perp^{T5,\Lambda_c\to\Lambda}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5, std::make_tuple("q2")),
+
+                make_observable("Lambda_c->Lambda::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_0p_v),
+
+                make_observable("Lambda_c->Lambda::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_0m_a),
+
+                make_observable("Lambda_c->Lambda::Saturation[1^-_V,0]", R"(\textrm{Saturation}[1^-_{V,0}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_v_0),
+                make_observable("Lambda_c->Lambda::Saturation[1^-_V,perp]", R"(\textrm{Saturation}[1^-_{V,\perp}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_v_perp),
+                make_observable("Lambda_c->Lambda::Saturation[1^-_V,para]", R"(\textrm{Saturation}[1^-_{V,\parallel}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_v_para),
+                make_observable("Lambda_c->Lambda::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_v),
+
+                make_observable("Lambda_c->Lambda::Saturation[1^+_A,0]", R"(\textrm{Saturation}[1^+_{A,0}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_a_0),
+                make_observable("Lambda_c->Lambda::Saturation[1^+_A,perp]", R"(\textrm{Saturation}[1^+_{A,\perp}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_a_perp),
+                make_observable("Lambda_c->Lambda::Saturation[1^+_A,para]", R"(\textrm{Saturation}[1^+_{A,\parallel}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_a_para),
+                make_observable("Lambda_c->Lambda::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_a),
+
+                make_observable("Lambda_c->Lambda::Saturation[1^-_T,0]", R"(\textrm{Saturation}[1^-_{T,0}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_t_0),
+                make_observable("Lambda_c->Lambda::Saturation[1^-_T,perp]", R"(\textrm{Saturation}[1^-_{T,\perp}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_t_perp),
+                make_observable("Lambda_c->Lambda::Saturation[1^-_T,para]", R"(\textrm{Saturation}[1^-_{T,\parallel}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_t_para),
+                make_observable("Lambda_c->Lambda::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1m_t),
+
+                make_observable("Lambda_c->Lambda::Saturation[1^+_T5,0]", R"(\textrm{Saturation}[1^+_{T5,0}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_t5_0),
+                make_observable("Lambda_c->Lambda::Saturation[1^+_T5,perp]", R"(\textrm{Saturation}[1^+_{T5,\perp}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_t5_perp),
+                make_observable("Lambda_c->Lambda::Saturation[1^+_T5,para]", R"(\textrm{Saturation}[1^+_{T5,\parallel}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_t5_para),
+                make_observable("Lambda_c->Lambda::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T5}])", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaCToLambda>::saturation_1p_t5)
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // Lambda_b -> Lambda_c
     // {{{
     ObservableGroup
@@ -2218,6 +2306,7 @@ namespace eos
                 // Lb -> 1/2^+
                 make_lambdab_to_lambda_form_factors_group(),
                 make_lambdab_to_lambdac_form_factors_group(),
+                make_lambdac_to_lambda_form_factors_group(),
 
                 // Lb -> 3/2^-
                 make_lambdab_to_threehalf_form_factors_group(),
