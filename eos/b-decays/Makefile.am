@@ -25,7 +25,8 @@ libeosbdecays_la_SOURCES = \
 	inclusive-b-to-u.cc inclusive-b-to-u.hh \
 	observables.cc observables.hh \
 	properties.cc properties.hh \
-	signal-pdfs.cc signal-pdfs.hh
+	signal-pdfs.cc signal-pdfs.hh \
+	lifetime.cc lifetime.hh
 libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosbdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosbdecays_la_LIBADD = \
@@ -54,7 +55,8 @@ include_eos_bdecays_HEADERS = \
 	inclusive-b-to-u.hh \
 	lambdab-to-lambdac-l-nu.hh \
 	observables.hh \
-	properties.hh
+	properties.hh \
+	lifetime.hh
 
 EXTRA_DIST =
 
@@ -74,6 +76,7 @@ TESTS = \
 	bq-to-dq-psd_TEST \
 	bq-to-dstarq-psd_TEST \
 	bs-to-kstar-l-nu_TEST \
+	lifetime_TEST \
 	lambdab-to-lambdac-l-nu_TEST \
 	lambdab-to-lambdac2595-l-nu_TEST \
 	lambdab-to-lambdac2625-l-nu_TEST \
@@ -112,6 +115,8 @@ bq_to_dq_psd_TEST_SOURCES = bq-to-dq-psd_TEST.cc
 bq_to_dstarq_psd_TEST_SOURCES = bq-to-dstarq-psd_TEST.cc
 
 bs_to_kstar_l_nu_TEST_SOURCES = bs-to-kstar-l-nu_TEST.cc
+
+lifetime_TEST_SOURCES = lifetime_TEST.cc
 
 lambdab_to_lambdac_l_nu_TEST_SOURCES = lambdab-to-lambdac-l-nu_TEST.cc
 
