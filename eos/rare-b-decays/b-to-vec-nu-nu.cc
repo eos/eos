@@ -204,12 +204,12 @@ namespace eos
 
             // third term in square brackets in [FLS:2021A], eq. (13)
             const double contr_scalar = q2 * lambda / (8.0 * (m_b + m_D) * (m_b + m_D)) * A0 * A0
-                                      * 2 * std::norm(wc.cSR() - wc.cSL());
+                                      * std::norm(wc.cSR() - wc.cSL());
 
             // fourth term in square brackets in [FLS:2021A], eq. (13)
-            const double contr_tensor = q2 * (32 * m_B2 * m_V2 / (3 * (m_B + m_V) * (m_B + m_V)) * T23 * T23
-                                      + (4 * lambda * T1 * T1 + 4 * (m_B2 - m_V2) * (m_B2 - m_V2) * T2 * T2) / (3 * q2) )
-                                      * 2 * std::norm(wc.cTL());
+            const double contr_tensor = q2 * (32.0 * m_B2 * m_V2 / (3.0 * (m_B + m_V) * (m_B + m_V)) * T23 * T23
+                                      + (4.0 * lambda * T1 * T1 + 4.0 * (m_B2 - m_V2) * (m_B2 - m_V2) * T2 * T2) / (3.0 * q2) )
+                                      * std::norm(wc.cTL());
 
             // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
             return 3.0 * norm * (contr_vector + contr_axial + contr_scalar + contr_tensor);
