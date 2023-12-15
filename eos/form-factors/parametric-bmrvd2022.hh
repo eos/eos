@@ -197,6 +197,7 @@ namespace eos
     };
 
     extern template class BMRvD2022FormFactors<LambdaBToLambda>;
+    extern template class BMRvD2022FormFactors<LambdaCToLambda>;
 }
 
 #endif

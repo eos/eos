@@ -257,6 +257,12 @@ groups:
           max:     +1.115683
           latex:   '$m_{\Lambda}^\mathrm{BMRvD}$'
           unit:     'GeV'
+      'mass::Lambda_c@BMRvD2022' :
+          central: +2.2865
+          min:     +2.2865
+          max:     +2.2865
+          latex:   '$m_{\Lambda_c}^\mathrm{BMRvD}$'
+          unit:     'GeV'
       'mass::Lambda_b@BMRvD2022' :
           central: +5.61951
           min:     +5.61951
@@ -4498,6 +4504,39 @@ groups:
           max:     +1.0
           unit:     '1'
           latex:    '$a_4^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      # form factor parameters for Lambda_c -> Lambda decays according to
+      # [BMRvD:2022A]
+      'Lambda_c->Lambda::tp_a@BMRvD2022' :
+          central:  6.26
+          min:      6.26
+          max:      6.26
+          latex:    '$t_+^{A, \Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comment:  '(mD + mK + mpi)^2'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::tp_v@BMRvD2022' :
+          central:  5.6027
+          min:      5.6027
+          max:      5.6027
+          latex:    '$t_+^{V, \Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comment:  '(mD + mK)^2'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::t0@BMRvD2022' :
+          central:  3.
+          min:      3.
+          max:      3.
+          latex:    '$t_0^{\Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::a^(%1%,%2%)_%3%@BMRvD2022':
+          central: -0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to\Lambda, \mathrm{BMRvD2022}}$'
+          matrix:
+            - ["t", "0", "perp"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3, 4]
           comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
       # [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
