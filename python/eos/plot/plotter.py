@@ -1798,7 +1798,15 @@ class Plotter:
                 else:
                     raise ValueError(f'Do not recognize data-file prefix: {dfname}')
 
-            self.bins     = item['bins']      if 'bins'      in item     else 100
+            if 'bins' in item and type(item['bins']) is list:
+                self.bins = item['bins']
+            else:
+                nbins = int(item['bins']) if 'bins' in item else 100
+                xmin, xmax = self.xlo, self.xhi
+                if xmin >= xmax:
+                    eos.error(f'1D histogram expects the xrange to be non-zero; using empirical xrange instead')
+                    xmin, xmax = np.min(self.samples), np.max(self.samples)
+                self.bins = np.linspace(xmin, xmax, nbins)
             self.histtype = item['histtype']  if 'histtype'  in item     else 'bar'
             self.lw       = 3                 if self.histtype == 'step' else 1
 
