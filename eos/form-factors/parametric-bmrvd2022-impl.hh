@@ -262,8 +262,8 @@ namespace eos
     double
     BMRvD2022FormFactors<Process_>::_a_time_v_0() const
     {
-        const double x_time = _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_0p)) * _phi_time_v(0.0);
-        const double x_long = _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) * _phi_long_v(0.0);
+        const double x_time = _phi_time_v(0.0) * (power_of<2>(_traits.m_R_0p) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_0p)) : 1.0);
+        const double x_long = _phi_long_v(0.0) * (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         std::array<double, 5> a;
         a[0] = x_time * _a_long_v[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
@@ -278,15 +278,15 @@ namespace eos
     double
     BMRvD2022FormFactors<Process_>::_a_time_a_0() const
     {
-        const double x_time = _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_0m)) * _phi_time_a(0.0);
-        const double x_long = _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) * _phi_long_a(0.0);
+        const double x_time = _phi_time_a(0.0) * (power_of<2>(_traits.m_R_0m) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_0m)) : 1.0);
+        const double x_long = _phi_long_a(0.0) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         std::array<double, 5> a;
         a[0] = x_time * _a_long_a[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_time * _a_long_a[i] - x_long * _a_time_a[i - 1];
         }
-        const auto polynomials = _traits.orthonormal_polynomials_v(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
+        const auto polynomials = _traits.orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_long);
     }
 
@@ -294,15 +294,15 @@ namespace eos
     double
     BMRvD2022FormFactors<Process_>::_a_perp_a_0() const
     {
-        const double x_perp = _traits.calc_z(_traits.tm(), _traits.tp_a, power_of<2>(_traits.m_R_1p)) * _phi_perp_a(_traits.tm());
-        const double x_long = _traits.calc_z(_traits.tm(), _traits.tp_a, power_of<2>(_traits.m_R_1p)) * _phi_long_a(_traits.tm());
+        const double x_perp = _phi_perp_a(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
+        const double x_long = _phi_long_a(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         std::array<double, 5> a;
         a[0] = x_perp * _a_long_a[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_perp * _a_long_a[i] - x_long * _a_perp_a[i - 1];
         }
-        const auto polynomials = _traits.orthonormal_polynomials_v(_traits.calc_z(_traits.tm(), _traits.tp_a, _traits.t0));
+        const auto polynomials = _traits.orthonormal_polynomials_a(_traits.calc_z(_traits.tm(), _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_long);
     }
 
@@ -310,31 +310,33 @@ namespace eos
     double
     BMRvD2022FormFactors<Process_>::_a_perp_t_0() const
     {
-        const double x_perp_t  = _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) * _phi_perp_t (0.0);
-        const double x_perp_t5 = _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1p)) * _phi_perp_t5(0.0);
-        std::array<double, 5> a;
-        a[0] = x_perp_t * _a_perp_t5[0];
-        for (unsigned i = 1 ; i < a.size() ; ++i)
+        const double x_perp_t  = _phi_perp_t (0.0) * (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
+        const double x_perp_t5 = _phi_perp_t5(0.0) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
+        const auto polynomials_perp_t  = _traits.orthonormal_polynomials_v(_traits.calc_z(0.0, _traits.tp_v, _traits.t0));
+        const auto polynomials_perp_t5 = _traits.orthonormal_polynomials_a(_traits.calc_z(0.0, _traits.tp_a, _traits.t0));
+
+        double a_perp_t_0 = x_perp_t * _a_perp_t5[0] * polynomials_perp_t5[0];
+        for (unsigned i = 1 ; i < _a_perp_t5.size() ; ++i)
         {
-            a[i] = x_perp_t * _a_perp_t5[i] - x_perp_t5 * _a_perp_t[i - 1];
+            a_perp_t_0 += x_perp_t * _a_perp_t5[i] * polynomials_perp_t5[i] - x_perp_t5 * _a_perp_t[i - 1] * polynomials_perp_t[i];
         }
-        const auto polynomials = _traits.orthonormal_polynomials_v(_traits.calc_z(0.0, _traits.tp_v, _traits.t0));
-        return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp_t5);
+
+        return a_perp_t_0 / (polynomials_perp_t[0] * x_perp_t5);
     }
 
     template <typename Process_>
     double
     BMRvD2022FormFactors<Process_>::_a_long_t5_0() const
     {
-        const double x_long_t5 = _traits.calc_z(_traits.tm(), _traits.tp_a, power_of<2>(_traits.m_R_1p)) * _phi_long_t5(_traits.tm());
-        const double x_perp_t5 = _traits.calc_z(_traits.tm(), _traits.tp_a, power_of<2>(_traits.m_R_1p)) * _phi_perp_t5(_traits.tm());
+        const double x_long_t5 = _phi_long_t5(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
+        const double x_perp_t5 = _phi_perp_t5(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         std::array<double, 5> a;
         a[0] = x_long_t5 * _a_perp_t5[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_long_t5 * _a_perp_t5[i] - x_perp_t5 * _a_long_t5[i - 1];
         }
-        const auto polynomials = _traits.orthonormal_polynomials_v(_traits.calc_z(_traits.tm(), _traits.tp_a, _traits.t0));
+        const auto polynomials = _traits.orthonormal_polynomials_a(_traits.calc_z(_traits.tm(), _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp_t5);
     }
 
@@ -346,7 +348,7 @@ namespace eos
         coefficients[0] = _a_time_v_0();
         std::copy(_a_time_v.begin(), _a_time_v.end(), coefficients.begin() + 1);
         // resonances for 0^+
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_0p));
+        const double blaschke     = (power_of<2>(_traits.m_R_0p) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_0p)) : 1.0);
         const double phi          = _phi_time_v(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -362,7 +364,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_long_v.begin(), _a_long_v.end(), coefficients.begin());
         // resonances for 1^-
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
+        const double blaschke     = (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_long_v(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -378,7 +380,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_perp_v.begin(), _a_perp_v.end(), coefficients.begin());
         // resonances for 1^-
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
+        const double blaschke     = (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_perp_v(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -395,10 +397,10 @@ namespace eos
         coefficients[0] = _a_time_a_0();
         std::copy(_a_time_a.begin(), _a_time_a.end(), coefficients.begin() + 1);
         // resonances for 0^-
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_0m));
+        const double blaschke     = (power_of<2>(_traits.m_R_0m) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_0m)) : 1.0);
         const double phi          = _phi_time_a(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -411,10 +413,10 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_long_a.begin(), _a_long_a.end(), coefficients.begin());
         // resonances for 1^+
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_long_a(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -428,10 +430,10 @@ namespace eos
         coefficients[0] = _a_perp_a_0();
         std::copy(_a_perp_a.begin(), _a_perp_a.end(), coefficients.begin() + 1);
         // resonances for 1^+
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_perp_a(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -444,7 +446,7 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_long_t.begin(), _a_long_t.end(), coefficients.begin());
         // resonances for T (1^- state)
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
+        const double blaschke     = (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_long_t(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -461,7 +463,7 @@ namespace eos
         coefficients[0] = _a_perp_t_0();
         std::copy(_a_perp_t.begin(), _a_perp_t.end(), coefficients.begin() + 1);
         // resonances for T (1^- state)
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m));
+        const double blaschke     = (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(q2, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double phi          = _phi_perp_t(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
@@ -477,11 +479,11 @@ namespace eos
         std::array<double, 5> coefficients;
         coefficients[0] = _a_long_t5_0();
         std::copy(_a_long_t5.begin(), _a_long_t5.end(), coefficients.begin() + 1);
-        // no resonances for T5
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        // resonances for T5 (1^p state)
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_long_t5(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -493,11 +495,11 @@ namespace eos
     {
         std::array<double, 5> coefficients;
         std::copy(_a_perp_t5.begin(), _a_perp_t5.end(), coefficients.begin());
-        // no resonances for T5
-        const double blaschke     = _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p));
+        // resonances for T5 (1^p state)
+        const double blaschke     = (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(q2, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double phi          = _phi_perp_t5(q2);
         const double z            = _traits.calc_z(q2, _traits.tp_a, _traits.t0);
-        const auto   polynomials  = _traits.orthonormal_polynomials_v(z);
+        const auto   polynomials  = _traits.orthonormal_polynomials_a(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
         return series / phi / blaschke;
@@ -516,20 +518,6 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_v() const
-    {
-        std::array<double, 5> coefficients_long;
-        std::copy(_a_long_v.begin(), _a_long_v.end(), coefficients_long.begin());
-
-        std::array<double, 5> coefficients_perp;
-        std::copy(_a_perp_v.begin(), _a_perp_v.end(), coefficients_perp.begin());
-
-        return std::inner_product(coefficients_long.begin(), coefficients_long.end(), coefficients_long.begin(), 0.0)
-                + std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
-    }
-
-    template <typename Process_>
-    double
     BMRvD2022FormFactors<Process_>::saturation_0m_a() const
     {
         std::array<double, 5> coefficients;
@@ -539,49 +527,160 @@ namespace eos
         return std::inner_product(coefficients.begin(), coefficients.end(), coefficients.begin(), 0.0);
     }
 
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1m_v_0() const
+    {
+        return std::inner_product(_a_long_v.begin(), _a_long_v.end(), _a_long_v.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1m_v_perp() const
+    {
+        // The perp_v form factor contribute equally to 1m_perp and 1m_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+        return 0.5 * std::inner_product(_a_perp_v.begin(), _a_perp_v.end(), _a_perp_v.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1m_v_para() const
+    {
+        // The perp_v form factor contribute equally to 1m_perp and 1m_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+        return 0.5 * std::inner_product(_a_perp_v.begin(), _a_perp_v.end(), _a_perp_v.begin(), 0.0);
+    }
+
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_a() const
+    BMRvD2022FormFactors<Process_>::saturation_1m_v() const
     {
-        std::array<double, 5> coefficients_long;
-        std::copy(_a_long_a.begin(), _a_long_a.end(), coefficients_long.begin());
+        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
+        return (saturation_1m_v_0() + saturation_1m_v_perp() + saturation_1m_v_para()) / 3.0;
+    }
 
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_a_0() const
+    {
+        return std::inner_product(_a_long_a.begin(), _a_long_a.end(), _a_long_a.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_a_perp() const
+    {
+        // The perp_a form factor contribute equally to 1p_perp and 1p_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
         std::array<double, 5> coefficients_perp;
         coefficients_perp[0] = _a_perp_a_0();
         std::copy(_a_perp_a.begin(), _a_perp_a.end(), coefficients_perp.begin() + 1);
 
-        return std::inner_product(coefficients_long.begin(), coefficients_long.end(), coefficients_long.begin(), 0.0)
-                + std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
+        return 0.5 * std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_a_para() const
+    {
+        // The perp_a form factor contribute equally to 1p_perp and 1p_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+        std::array<double, 5> coefficients_perp;
+        coefficients_perp[0] = _a_perp_a_0();
+        std::copy(_a_perp_a.begin(), _a_perp_a.end(), coefficients_perp.begin() + 1);
+
+        return 0.5 * std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
+    }
+
+    template <typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_a() const
+    {
+        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
+        return (saturation_1p_a_0() + saturation_1p_a_perp() + saturation_1p_a_para()) / 3.0;
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1m_t_0() const
+    {
+        return std::inner_product(_a_long_t.begin(), _a_long_t.end(), _a_long_t.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1m_t_perp() const
+    {
+        // The perp_t form factor contribute equally to 1m_perp and 1m_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+        std::array<double, 5> coefficients_perp;
+        coefficients_perp[0] = _a_perp_t_0();
+        std::copy(_a_perp_t.begin(), _a_perp_t.end(), coefficients_perp.begin() + 1);
+
+        return 0.5 * std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1m_t_para() const
+    {
+        // The perp_t form factor contribute equally to 1m_perp and 1m_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+        std::array<double, 5> coefficients_perp;
+        coefficients_perp[0] = _a_perp_t_0();
+        std::copy(_a_perp_t.begin(), _a_perp_t.end(), coefficients_perp.begin() + 1);
+
+        return 0.5 * std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
     }
 
     template <typename Process_>
     double
     BMRvD2022FormFactors<Process_>::saturation_1m_t() const
     {
+        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
+        return (saturation_1m_t_0() + saturation_1m_t_perp() + saturation_1m_t_para()) / 3.0;
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_t5_0() const
+    {
         std::array<double, 5> coefficients_long;
-        std::copy(_a_long_t.begin(), _a_long_t.end(), coefficients_long.begin());
+        coefficients_long[0] = _a_long_t5_0();
+        std::copy(_a_long_t5.begin(), _a_long_t5.end(), coefficients_long.begin() + 1);
 
-        std::array<double, 5> coefficients_perp;
-        coefficients_perp[0] = _a_perp_t_0();
-        std::copy(_a_perp_t.begin(), _a_perp_t.end(), coefficients_perp.begin() + 1);
+        return std::inner_product(coefficients_long.begin(), coefficients_long.end(), coefficients_long.begin(), 0.0);
+    }
 
-        return std::inner_product(coefficients_long.begin(), coefficients_long.end(), coefficients_long.begin(), 0.0)
-                + std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_t5_perp() const
+    {
+        // The perp_t5 form factor contribute equally to 1p_perp and 1p_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+
+        return 0.5 * std::inner_product(_a_perp_t5.begin(), _a_perp_t5.end(), _a_perp_t5.begin(), 0.0);
+
+    }
+
+    template<typename Process_>
+    double
+    BMRvD2022FormFactors<Process_>::saturation_1p_t5_para() const
+    {
+        // The perp_t5 form factor contribute equally to 1p_perp and 1p_para.
+        // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
+
+        return 0.5 * std::inner_product(_a_perp_t5.begin(), _a_perp_t5.end(), _a_perp_t5.begin(), 0.0);
+
     }
 
     template <typename Process_>
     double
     BMRvD2022FormFactors<Process_>::saturation_1p_t5() const
     {
-        std::array<double, 5> coefficients_long;
-        coefficients_long[0] = _a_long_t5_0();
-        std::copy(_a_long_t5.begin(), _a_long_t5.end(), coefficients_long.begin() + 1);
-
-        std::array<double, 5> coefficients_perp;
-        std::copy(_a_perp_t5.begin(), _a_perp_t5.end(), coefficients_perp.begin());
-
-        return std::inner_product(coefficients_long.begin(), coefficients_long.end(), coefficients_long.begin(), 0.0)
-                + std::inner_product(coefficients_perp.begin(), coefficients_perp.end(), coefficients_perp.begin(), 0.0);
+        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
+        return (saturation_1p_t5_0() + saturation_1p_t5_perp() + saturation_1p_t5_para()) / 3.0;
     }
 
     template <typename Process_>
