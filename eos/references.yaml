@@ -1588,6 +1588,13 @@ LHCb:2021D:
     id: oai:arXiv.org:2107.13428
   inspire-id: LHCb:2021xxq
   title: Angular analysis of the rare decay $B_s^0\to\phi\mu^+\mu^-$
+LMPR:2022A:
+  authors: Lenz, A. and Müller, J. and Piscopo, M.L. and Rusov, A.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2211.02724
+  inspire-id: Lenz:2022pgw
+  title: Taming new physics in $b \to c\bar{u} d(s)$ with $\tau(B^{+})/\tau(B_{d})$ and ${a}_{sl}^d$
 LMPW:2015A:
   authors: Lang, C. B. and Mohler, Daniel and Prelovsek, Sasa and Woloshyn, R. M.
   eprint:
