@@ -86,6 +86,7 @@ namespace eos
             SwitchOption opt_contributions;
             double switch_ht;
             double switch_soft;
+            double switch_soft_tw_3_4;
 
             static const constexpr double e_u = +2.0 / 3.0;
             static const constexpr double e_b = -1.0 / 3.0;
