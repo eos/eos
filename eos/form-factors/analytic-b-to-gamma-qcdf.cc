@@ -59,9 +59,10 @@ namespace eos
         s_0(p["B->gamma::s_0@FLvD2022QCDF"], *this),
         mu_h1(p["B->gamma::mu_h1@FLvD2022QCDF"], *this),
         mu_h2(p["B->gamma::mu_h2@FLvD2022QCDF"], *this),
-        opt_contributions(o, "contributions", { "all", "ht", "soft", "none"}, "all"),
+        opt_contributions(o, "contributions", { "all", "ht", "soft", "partial-soft-tw-3,4", "none"}, "all"),
         switch_ht(0.0),
-        switch_soft(0.0)
+        switch_soft(0.0),
+        switch_soft_tw_3_4(0.0)
     {
         // Verify once that BMesonLCDAs is compatible with this implementation
         Weights weights;
@@ -79,6 +80,18 @@ namespace eos
         if ((opt_contributions.value() == "all") || (opt_contributions.value() == "soft"))
         {
             switch_soft = 1.0;
+        }
+        if (opt_contributions.value() == "partial-soft-tw-3,4")
+        {
+            // Exclude this contribution from "all" intentionally because it is incomplete.
+            //
+            // The tw-3,4 contribution is implemented for delta_xi, where it only depends on phi_+,
+            // but not for xi, where higher-twist LCDAs enter (see [BBJW:1018A], Eqs. (4.13) and (4.14)).
+            // We still make the partial implementation accessible as an option.
+            //
+            // To complete the implementation just with phi_+, one should use the ''profile function''
+            // approximation layed out in [BBJW:2018A], allowing to consistently estimate higher-twist contributions.
+            switch_soft_tw_3_4 = 1.0;
         }
 
         this->uses(*blcdas);
@@ -251,7 +264,7 @@ namespace eos
                 - norm_incomplete(omega_cut)
             );
 
-        return switch_ht * term_ht + switch_soft * term_soft_nlo + switch_soft * term_soft_tw_3_4;
+        return switch_ht * term_ht + switch_soft * term_soft_nlo + switch_soft_tw_3_4 * term_soft_tw_3_4;
     }
 
     double

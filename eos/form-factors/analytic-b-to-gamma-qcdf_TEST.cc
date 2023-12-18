@@ -84,7 +84,7 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     std::make_pair(0.882916019547774,   1e-8), // U at Egamma=2.16
                     std::make_pair(0.259702593614045,   1e-8), // F_leading_power(2.16)
                     std::make_pair(-0.0465690290256039 + 0.00392626152208998, 1e-5), // xi(2.16)
-                    std::make_pair(0.0133804021454904 + 0.0 + 0.00162953756297304, 1e-6), // delta_xi(2.16)
+                    std::make_pair(0.0133804021454904 + 0.0, 1e-6), // delta_xi(2.16)
                 };
 
                 Diagnostics diagnostics = ff.diagnostics();
@@ -98,20 +98,20 @@ class AnalyticFormFactorBToGammaQCDFTest :
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.232069764080307,     1e-6 );
-                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.232069764080307,     1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.2304407795932786,    1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.2304407795932786,    1e-6 );
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.20204988466338,      1e-6 );
-                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.20204988466338,      1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.2036799753022978,    1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.2036799753022978,    1e-6 );
 
 
                 // Math integrity test: cross-check complete form factors against Mathematica implementation
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(4.0),               0.112285519817157,     1e-6 );
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(12.0),              0.026168708836855,     1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(4.0),               0.112072723642743,     1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(12.0),              0.02616508026545115,   1e-6 );
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(4.0),               0.1094950020475,       1e-6 );
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(12.0),              0.0285261581243447,    1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(4.0),               0.1097080416635773,    1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(12.0),              0.0285297622446178,    1e-6 );
             }
         }
 } analytic_b_to_gamma_qcdf_test;
