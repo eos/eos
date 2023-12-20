@@ -315,6 +315,10 @@ in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
         help = 'The chain index of an MCMC data file from which the maximization is started.',
         dest = 'chain', action = 'store', type = int, default = None
     )
+    parser_find_mode.add_argument('-S', '--from-samples',
+        help = 'If specified, the optimization will start from the importance samples stored in posterior/samples.',
+        dest = 'importance_samples', action = 'store_true', default = False
+    )
     parser_find_mode.add_argument('-p', '--from-point',
         help = 'The point from which the minimization is started.',
         dest = 'start_point', action = 'store', type = str, default = None
