@@ -48,10 +48,22 @@ class LogfileHandler:
 
 _tasks = {}
 
-def task(name, output, mode=lambda **kwargs: 'w'):
+def task(name, output, mode=lambda **kwargs: 'w', modules=[]):
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
+            # import task-specific optional modules
+            try:
+                import importlib as _importlib
+                for module in modules:
+                    _importlib.import_module(module)
+            except ModuleNotFoundError as e:
+                eos.error(f'failed to import missing module \'{module}\': {e}')
+                raise e
+            except ImportError as e:
+                eos.error(f'failed to import module \'{module}\': {e}')
+                raise e
+
             # extract default arguments
             _args = {
                 k: v.default
@@ -429,7 +441,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
 
 
 # Run analysis steps
-@task('run', '')
+@task('run', '', modules=['networkx'])
 def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor:str='serial'):
     """
     Runs a list of predefined steps recorded in the analysis file.
