@@ -474,6 +474,18 @@ Runs a list of subcommands based on the pre-recorded steps defined within an ana
     )
     parser_run.set_defaults(cmd = cmd_run)
 
+
+    # init
+    parser_init = subparsers.add_parser('init',
+        parents = [common_subparser],
+        description =
+'''
+Initializes a new analysis directory based on the EOS analysis template.
+''',
+        help = 'Initializes a new analysis directory.'
+    )
+    parser_init.set_defaults(cmd = cmd_init)
+
     ## end of commands
 
     return parser
@@ -661,6 +673,35 @@ def cmd_list_posteriors(args):
     analysis_file = make_analysis_file(args)
     for name, lh in analysis_file.posteriors.items():
         print(name)
+
+
+# Initialize analysis directory
+def cmd_init(args):
+    import io, requests, zipfile
+
+    def download_template_zip():
+        try:
+            response = requests.get('https://github.com/eos/analysis-template/archive/main.zip')
+        except OSError as e:
+            eos.error(f'Failed to download analysis template: error = {e}')
+            sys.exit(1)
+
+        # validate response
+        if not response.status_code == 200:
+            eos.error(f'Failed to download analysis template: status code = {response.status_code}')
+            sys.exit(2)
+
+        return response.content
+
+    def strip_leading_directory(zip):
+        for name in zip.namelist():
+            path = '/'.join(name.split('/')[1:])
+            yield path
+
+    with zipfile.ZipFile(io.BytesIO(download_template_zip())) as zip:
+        for member in zip.namelist():
+            path = '/'.join(member.split('/')[1:])
+            zip.extract(member, path)
 
 
 if __name__ == '__main__':
