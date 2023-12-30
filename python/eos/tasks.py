@@ -240,9 +240,9 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
         samples, usamples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point, return_uspace=True)
         eos.data.MarkovChain.create(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, usamples, weights)
     except RuntimeError as e:
-        eos.error('encountered run time error ({e}) in parameter point:'.format(e=e))
+        eos.error(f'encountered run time error ({e}) in parameter point:')
         for p in analysis.varied_parameters:
-            eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+            eos.error(f' - {p.name()}: {p.evaluate()}')
 
 
 @task('find-clusters', '{posterior}/clusters')
@@ -274,7 +274,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     groups = pypmc.mix_adapt.r_value.r_group([_np.mean(chain.T, axis=1) for chain in chains],
                            [_np.var (chain.T, axis=1, ddof=1) for chain in chains],
                            n, threshold)
-    eos.info('Found {} groups using an R value threshold of {}'.format(len(groups), threshold))
+    eos.info(f'Found {len(groups)} groups using an R value threshold of {threshold}')
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
     eos.info(f'Created mixture density with {len(density.components)} components')
     eos.data.MixtureDensity.create(os.path.join(base_directory, posterior, 'clusters'), density)
@@ -359,7 +359,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     elif initial_proposal == 'product':
         initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'product')).density()
     else:
-        eos.error("Could not initialize proposal in sample_pmc: argument {} is not supported.".format(initial_proposal))
+        eos.error(f"Could not initialize proposal in sample_pmc: argument {initial_proposal} is not supported.")
 
     samples, weights, posterior_values, proposal = analysis.sample_pmc(initial_density, step_N=step_N, steps=steps, final_N=final_N,
                                                      rng=rng, final_perplexity_threshold=perplexity_threshold,
@@ -420,11 +420,11 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
             cache.update()
             observable_samples.append([cache[id] for id in observable_ids])
         except RuntimeError as e:
-            eos.error('skipping prediction for sample {i} due to runtime error ({e}): {s}'.format(i=i, e=e, s=sample))
+            eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
 
-    output_path = os.path.join(base_directory, posterior, 'pred-{}'.format(prediction))
+    output_path = os.path.join(base_directory, posterior, f'pred-{prediction}')
     eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[begin:end])
 
 
