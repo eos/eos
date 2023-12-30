@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (c) 2020-2022 Danny van Dyk
+# Copyright (c) 2020-2023 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -44,8 +44,8 @@ def _parser():
         dest = 'verbose', action = 'count', default = 0
     )
     common_subparser.add_argument('-f', '--analysis-file',
-        help = 'The analysis file. Defaults to \'.analysis.yaml\'.',
-        dest = 'analysis_file', action = 'store', default = '.analysis.yaml'
+        help = 'The analysis file. Defaults to \'analysis.yaml\'.',
+        dest = 'analysis_file', action = 'store', default = 'analysis.yaml'
     )
     subparsers = parser.add_subparsers(title = 'commands')
 
