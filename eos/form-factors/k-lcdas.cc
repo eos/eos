@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2024 Danny van Dyk
  * Copyright (c) 2022 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -191,15 +191,7 @@ namespace eos
     };
 
     AntiKaonLCDAs::AntiKaonLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<AntiKaonLCDAs>(new Implementation<AntiKaonLCDAs>(p, o, *this)),
-        gp_1_1o2(1, 1.0 / 2.0),
-        gp_1_3o2(1, 3.0 / 2.0),
-        gp_2_1o2(2, 1.0 / 2.0),
-        gp_2_3o2(2, 3.0 / 2.0),
-        gp_3_1o2(3, 1.0 / 2.0),
-        gp_3_3o2(3, 3.0 / 2.0),
-        gp_4_1o2(4, 1.0 / 2.0),
-        gp_4_3o2(4, 3.0 / 2.0)
+        PrivateImplementationPattern<AntiKaonLCDAs>(new Implementation<AntiKaonLCDAs>(p, o, *this))
     {
     }
 
@@ -277,6 +269,8 @@ namespace eos
     AntiKaonLCDAs::phi(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_1_3o2(1.0, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_3o2(2.0, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c1 = gp_1_3o2.evaluate(x);
         const double c2 = gp_2_3o2.evaluate(x);
@@ -303,6 +297,10 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(1/2)
+        static const GegenbauerPolynomial gp_1_1o2(1.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_1o2(2.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_3_1o2(3.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_4_1o2(4.0, 1.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c1 = gp_1_1o2.evaluate(x);
         const double c2 = gp_2_1o2.evaluate(x);
@@ -337,6 +335,9 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_1_3o2(1.0, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_3o2(2.0, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_3_3o2(3.0, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c1 = gp_1_3o2.evaluate(x);
         const double c2 = gp_2_3o2.evaluate(x);
@@ -563,6 +564,10 @@ namespace eos
         const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Gegenbauer polynomials C_n^(1/2)
+        static const GegenbauerPolynomial gp_1_1o2(1.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_1o2(2.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_3_1o2(3.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_4_1o2(4.0, 1.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c0 = 1.0;
         const double c1 = gp_1_1o2.evaluate(x);
@@ -810,15 +815,7 @@ namespace eos
     };
 
     KaonLCDAs::KaonLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<KaonLCDAs>(new Implementation<KaonLCDAs>(p, o, *this)),
-        gp_1_1o2(1, 1.0 / 2.0),
-        gp_1_3o2(1, 3.0 / 2.0),
-        gp_2_1o2(2, 1.0 / 2.0),
-        gp_2_3o2(2, 3.0 / 2.0),
-        gp_3_1o2(3, 1.0 / 2.0),
-        gp_3_3o2(3, 3.0 / 2.0),
-        gp_4_1o2(4, 1.0 / 2.0),
-        gp_4_3o2(4, 3.0 / 2.0)
+        PrivateImplementationPattern<KaonLCDAs>(new Implementation<KaonLCDAs>(p, o, *this))
     {
     }
 
@@ -896,6 +893,8 @@ namespace eos
     KaonLCDAs::phi(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_1_3o2(1.0, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_3o2(2.0, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c1 = gp_1_3o2.evaluate(x);
         const double c2 = gp_2_3o2.evaluate(x);
@@ -922,6 +921,10 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(1/2)
+        static const GegenbauerPolynomial gp_1_1o2(1.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_1o2(2.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_3_1o2(3.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_4_1o2(4.0, 1.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c1 = gp_1_1o2.evaluate(x);
         const double c2 = gp_2_1o2.evaluate(x);
@@ -956,6 +959,9 @@ namespace eos
         const double lambda3K = _imp->lambda3K(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_1_3o2(1.0, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_3o2(2.0, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_3_3o2(3.0, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c1 = gp_1_3o2.evaluate(x);
         const double c2 = gp_2_3o2.evaluate(x);
@@ -1182,6 +1188,10 @@ namespace eos
         const double ubar = 1.0 - u, lnubar = std::log(ubar);
 
         // Gegenbauer polynomials C_n^(1/2)
+        static const GegenbauerPolynomial gp_1_1o2(1.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_2_1o2(2.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_3_1o2(3.0, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_4_1o2(4.0, 1.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c0 = 1.0;
         const double c1 = gp_1_1o2.evaluate(x);
