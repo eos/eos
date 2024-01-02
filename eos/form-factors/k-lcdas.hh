@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2023 Danny van Dyk
+ * Copyright (c) 2021-2024 Danny van Dyk
  * Copyright (c) 2022 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -38,16 +38,6 @@ namespace eos
             ~AntiKaonLCDAs();
 
             static PseudoscalarLCDAs * make(const Parameters &, const Options &);
-
-            /* Gegenbauer polynomials */
-            const GegenbauerPolynomial gp_1_1o2;
-            const GegenbauerPolynomial gp_1_3o2;
-            const GegenbauerPolynomial gp_2_1o2;
-            const GegenbauerPolynomial gp_2_3o2;
-            const GegenbauerPolynomial gp_3_1o2;
-            const GegenbauerPolynomial gp_3_3o2;
-            const GegenbauerPolynomial gp_4_1o2;
-            const GegenbauerPolynomial gp_4_3o2;
 
             /* Twist 2 LCDA Gegenbauer coefficients */
             double a1(const double & mu) const override;
@@ -95,16 +85,6 @@ namespace eos
             ~KaonLCDAs();
 
             static PseudoscalarLCDAs * make(const Parameters &, const Options &);
-
-            /* Gegenbauer polynomials */
-            const GegenbauerPolynomial gp_1_1o2;
-            const GegenbauerPolynomial gp_1_3o2;
-            const GegenbauerPolynomial gp_2_1o2;
-            const GegenbauerPolynomial gp_2_3o2;
-            const GegenbauerPolynomial gp_3_1o2;
-            const GegenbauerPolynomial gp_3_3o2;
-            const GegenbauerPolynomial gp_4_1o2;
-            const GegenbauerPolynomial gp_4_3o2;
 
             /* Twist 2 LCDA Gegenbauer coefficients */
             double a1(const double & mu) const override;
