@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -145,11 +145,7 @@ namespace eos
     };
 
     PionLCDAs::PionLCDAs(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<PionLCDAs>(new Implementation<PionLCDAs>(p, o, *this)),
-        gp_2_1o2(2, 1.0 / 2.0),
-        gp_2_3o2(2, 3.0 / 2.0),
-        gp_4_1o2(4, 1.0 / 2.0),
-        gp_4_3o2(4, 3.0 / 2.0)
+        PrivateImplementationPattern<PionLCDAs>(new Implementation<PionLCDAs>(p, o, *this))
     {
     }
 
@@ -215,6 +211,8 @@ namespace eos
     PionLCDAs::phi(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_2_3o2(2, 3.0 / 2.0);
+        static const GegenbauerPolynomial gp_4_3o2(4, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_3o2.evaluate(x);
         const double c4 = gp_4_3o2.evaluate(x);
@@ -230,6 +228,8 @@ namespace eos
         const double omega3 = _imp->omega3(mu);
 
         // Gegenbauer polynomials C_n^(1/2)
+        static const GegenbauerPolynomial gp_2_1o2(2, 1.0 / 2.0);
+        static const GegenbauerPolynomial gp_4_1o2(4, 1.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_1o2.evaluate(x);
         const double c4 = gp_4_1o2.evaluate(x);
@@ -245,6 +245,7 @@ namespace eos
         const double omega3 = _imp->omega3(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_2_3o2(2, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_3o2.evaluate(x);
 
@@ -259,6 +260,7 @@ namespace eos
         const double omega3 = _imp->omega3(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
+        static const GegenbauerPolynomial gp_2_3o2(2, 3.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_3o2.evaluate(x);
 
@@ -311,6 +313,7 @@ namespace eos
     PionLCDAs::psi4(const double & u, const double & mu) const
     {
         // Gegenbauer polynomials C_n^(1/2)
+        static const GegenbauerPolynomial gp_2_1o2(2, 1.0 / 2.0);
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_1o2.evaluate(x);
 
