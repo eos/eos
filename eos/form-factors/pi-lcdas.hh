@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2023 Danny van Dyk
+ * Copyright (c) 2014-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,12 +37,6 @@ namespace eos
             ~PionLCDAs();
 
             static PseudoscalarLCDAs * make(const Parameters &, const Options &);
-
-            /* Gegenbauer polynomials */
-            const GegenbauerPolynomial gp_2_1o2;
-            const GegenbauerPolynomial gp_2_3o2;
-            const GegenbauerPolynomial gp_4_1o2;
-            const GegenbauerPolynomial gp_4_3o2;
 
             /* Twist 2 LCDA (even) Gegenbauer coefficients */
             double a1(const double & /*mu*/) const override { return 0.0; }
