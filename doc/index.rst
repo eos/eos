@@ -22,17 +22,10 @@ Installation instructions can be found `here <installation.html>`_.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    installation
-   basics
-   use-cases
-   advanced
+   user-guide/index
    faq
-   api/python
-   constraints
-   observables
-   parameters
-   references
-   signal-pdfs
+   reference/index
