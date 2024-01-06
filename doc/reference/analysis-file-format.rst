@@ -1,19 +1,14 @@
-=====================
-Analysis Organisation
-=====================
+====================
+Analysis File Format
+====================
 
-.. _analysis_organisation:
-
-The examples illustrating the various use cases cover relatively simple phenomenological analyses.
+The `user guide <../user-guide/index.html>`_ illustrates various use cases for EOS that mostly cover relatively simple phenomenological analyses.
 The number of observables, parameters, and statistical constraints is rather small.
-Typical analyses carried out using EOS require a high degree of organisation.
-To this end EOS provides the means to store one or more analysis within an external file, a so-called analysis file.
-This is beneficial in particular when the stored analyses share common elements.
-
-The Analysis Description Format
-===============================
-
-Every EOS analysis file is a YAML file that describe the individual steps of one or more Bayesina analysis.
+Typical analyses carried out using EOS require a high degree of organisation,
+as discussed in the `example on analysis organisation <../user-guide/analysis-organisation.html>`_.
+This example highlights that EOS provides the means to store one or more analysis within an external text file file,
+a so-called analysis file. Using this feature is beneficial in particular when the several analyses share common elements.
+Every EOS analysis file is a YAML file that define the individual steps of one or more Bayesina analysis.
 At the top level, the format includes the following YAML keys:
 
  - ``priors`` (**mandatory**) --- The list of priors within the analysis.
@@ -31,7 +26,7 @@ The following example illustrates the analysis file format at the hand of a real
 .. toggle-header::
    :header: Example `examples/b-to-u-l-nu.yaml <https://github.com/eos/eos/tree/master/examples/b-to-u-l-nu.yaml>`_
 
-   .. literalinclude:: ../examples/b-to-u-l-nu.yaml
+   .. literalinclude:: ../../examples/b-to-u-l-nu.yaml
       :language: YAML
 
 

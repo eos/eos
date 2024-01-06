@@ -19,7 +19,7 @@
 import eos
 
 project = 'EOS'
-copyright = '2019-2023, The EOS Authors'
+copyright = '2019-2024, The EOS Authors'
 author = 'The EOS Authors'
 master_doc = 'index'
 
@@ -64,6 +64,9 @@ suppress_warnings = ['ref.citation']
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+html_theme_options = {
+    'collapse_navigation': True,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
