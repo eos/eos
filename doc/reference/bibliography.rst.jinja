@@ -1,0 +1,39 @@
+############
+Bibliography
+############
+
+
+The following is the full list of references that were used to implement theory codes and provide likelihood constraints
+or parameter values within EOS v{{ version }}.
+
+.. list-table::
+   :widths: 15, 60, 25
+   :header-rows: 1
+
+   * - Id
+     - Title
+     - Links
+
+   {% for handle, reference in references %}
+       .. _{{ handle }}:
+   * - [{{ handle }}]
+     - {{ reference.title }}
+     - {%- if reference.eprint %} |badge-{{ reference.eprint.id }}| |br|{% endif %}
+
+
+   {% endfor %}
+
+
+{% for handle, reference in references %}
+{%- if reference.eprint %}
+.. |badge-{{ reference.eprint.id }}| image:: {{ reference.eprint.badge }}
+   :target: {{ reference.eprint.url }}
+   :alt: {{ reference.eprint.alt }}
+
+{% endif %}
+{% endfor %}
+
+
+.. |br| raw:: html
+
+   <br>
