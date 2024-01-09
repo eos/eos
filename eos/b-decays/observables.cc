@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2019-2023 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2024 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,7 +30,9 @@
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/bq-to-dq-psd.hh>
+#include <eos/b-decays/bq-to-dq-vec.hh>
 #include <eos/b-decays/bq-to-dstarq-psd.hh>
+#include <eos/b-decays/bq-to-dstarq-vec.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
@@ -2145,6 +2148,34 @@ namespace eos
                 make_observable("B^0->D^*+K^-::BR", R"(\mathcal{B}(\bar{B}^0\to D^{*+}K^-))",
                         Unit::None(),
                         &BqToDstarqPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d"} }),
+
+                /* B_s -> D_s rho */
+                make_observable("B_s^0->D_s^+rho^-::BR", R"(\mathcal{B}(\bar{B}_s^0\to D_s^+\rho^-))",
+                        Unit::None(),
+                        &BqToDqVector::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s"} }),
+
+                /* B -> D K^* */
+                make_observable("B^0->D^+K^*::BR", R"(\mathcal{B}(\bar{B}^0\to D^+K^{*-}))",
+                        Unit::None(),
+                        &BqToDqVector::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d"} }),
+
+                /* B_s -> D_s^* rho */
+                make_observable("B_s^0->D_s^*+rho^-::BR", R"(\mathcal{B}(\bar{B}_s^0\to D_s^{*+}\rho^-))",
+                        Unit::None(),
+                        &BqToDstarqVector::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s"} }),
+
+                /* B -> D^* K^* */
+                make_observable("B^0->D^*+K^*-::BR", R"(\mathcal{B}(\bar{B}^0\to D^{*+}K^{*-}))",
+                        Unit::None(),
+                        &BqToDstarqVector::branching_ratio,
                         std::make_tuple(),
                         { { "q", "d"} }),
             }

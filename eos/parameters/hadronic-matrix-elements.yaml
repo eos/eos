@@ -5231,6 +5231,37 @@ groups:
           matrix:
               - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
+
+  # }}}
+  # Parameters for form factor values appearing in non-leptonic class-I B decays with light vector meson in final state
+  # {{{
+  - title: 'Parameters for form factor values appearing in non-leptonic class-I B decays'
+    description: ''
+    parameters:
+      # B->DK^* (random value)
+      'B->DK^*::f_p(MKstar2)' :
+          central: 0.685068
+          min:     0.685068
+          max:     0.685068
+          latex:   '$f_+^{B->D}(q^2 = M_K^{*2})$'
+      # B->D^* K^* (random value)
+      'B->D^*K^*::a_0(MKstar2)' :
+          central: 0.70023
+          min:     0.70023
+          max:     0.70023
+          latex:   '$a_0^{B->D^*}(q^2 = M_K^{*2})$'
+      # B_s->D_srho (random value)
+      'B_s->D_srho::f_p(Mrho2)' :
+          central: 0.685068
+          min:     0.685068
+          max:     0.685068
+          latex:   '$f_+^{B_s->D_s}(q^2 = M_\rho^2)$'
+      # B_s->D_s^* rho (random value)
+      'B_s->D_s^*rho::a_0(Mrho2)' :
+          central: 0.70023
+          min:     0.70023
+          max:     0.70023
+          latex:   '$a_0^{B_s->D_s^*}(q^2 = M_\rho^2)$'
   # }}}
 
   # Parameters for form factor values appearing in non-leptonic class-I B decays
