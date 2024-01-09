@@ -28,6 +28,7 @@
 
 #include <cmath>
 #include <limits>
+#include <map>
 #include <numeric>
 
 #include <gsl/gsl_sf_gamma.h>
@@ -37,10 +38,12 @@ namespace eos
     namespace heavy_meson_lcdas
     {
         FLvD2022::FLvD2022(const Parameters & p, const Options & o) :
+            model(Model::make("SM", p, o)),
             opt_Q(o, options, "Q"),
             opt_q(o, options, "q"),
             opt_gminus(o, options, "gminus"),
             switch_gminus(1.0),
+            opt_alpha_s(o, options, "alpha_s"),
             mu_0(p[parameter("mu_0")], *this),
             omega_0(p[parameter("omega_0")], *this),
             a({
@@ -65,6 +68,30 @@ namespace eos
             if (opt_gminus.value() == "zero")
             {
                 switch_gminus = 0.0;
+            }
+
+            if (opt_alpha_s.value() == "full")
+            {
+                alpha_s = [this](const double & mu) -> double
+                {
+                    return model->alpha_s(mu);
+                };
+            }
+            else
+            {
+                alpha_s = [](const double & mu)
+                {
+                    // This hardcodes the RGE for single-heavy hadrons containing a b quark
+                    const double C_A = 3.0;
+                    const double C_F = 4.0 / 3.0;
+                    const double T_F = 1.0 / 2.0;
+                    const double n_f = 5.0;
+                    const double LambdaQCD = 0.213;
+
+                    const double L = 2.0 * log(mu / LambdaQCD);
+                    const double beta_0 = (11.0 / 3.0 * C_A - 4.0 / 3.0 * T_F * n_f);
+                    return 4.0 * M_PI / beta_0 * 1.0 / L;
+                };
             }
         }
 
@@ -111,13 +138,6 @@ namespace eos
                 const double n_f = 5.0;
                 const double LambdaQCD = 0.213;
 
-                auto alpha_s = [&](const double & mu)
-                {
-                    const double L = 2.0 * log(mu / LambdaQCD);
-                    const double beta_0 = (11.0 / 3.0 * C_A - 4.0 / 3.0 * T_F * n_f);
-                    return 4.0 * M_PI / beta_0 * 1.0 / L;
-                };
-
                 auto gamma_cusp = [&](const double & alpha_s)
                 {
                     const double a = alpha_s / (4.0 * M_PI);
@@ -142,8 +162,8 @@ namespace eos
                     return -2.0 * alpha_s * C_F / (4.0 * M_PI);
                 };
 
-                const double alpha_s_0 = alpha_s(mu_0);
-                const double alpha_s_h = alpha_s(mu);
+                const double alpha_s_0 = this->alpha_s(mu_0);
+                const double alpha_s_h = this->alpha_s(mu);
 
                 auto g_integrand = [&] (const double alpha_s)
                 {
@@ -532,7 +552,8 @@ namespace eos
         {
             { "Q",       { "b" },                "b"        },
             { "q",       { "u", "s" },           "u"        },
-            { "gminus", { "zero", "WW-limit" }, "WW-limit" }
+            { "gminus",  { "zero", "WW-limit" }, "WW-limit" },
+            { "alpha_s", { "naive", "full"  },   "full"     },
         };
 
         std::vector<OptionSpecification>::const_iterator
