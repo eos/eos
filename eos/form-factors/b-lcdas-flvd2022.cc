@@ -248,6 +248,29 @@ namespace eos
         }
 
         double
+        FLvD2022::phi_plus(const double & omega, const double & mu) const
+        {
+            const double x = omega / omega_0;
+
+            const double p1 = (x - 1.0) / (x + 1.0);
+            const double p2 = p1 * p1;
+            const double p3 = p2 * p1;
+            const double p4 = p3 * p1;
+            const double p5 = p4 * p1;
+            const double p6 = p5 * p1;
+            const double p7 = p6 * p1;
+            const double p8 = p7 * p1;
+
+            const Weights c = {
+                1.0, p1, p2, p3, p4, p5, p6, p7, p8
+            };
+
+            auto [a_begin, a_end] = this->coefficient_range(mu);
+            // cf. [FLvD:2022A], eq. (46), p. 11
+            return 1.0 / power_of<2>(1.0 + x) * std::inner_product(a_begin, a_end, c.begin(), 0.0);
+        }
+
+        double
         FLvD2022::phitilde_plus(const double & tau, const double & mu) const
         {
             const double x = tau * omega_0;

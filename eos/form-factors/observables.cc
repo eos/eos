@@ -1971,6 +1971,10 @@ namespace eos
             R"($B$-meson LCDAs)",
             R"(Pseudo observables arising in the description of $B$-meson Light-Cone Distribution Amplitudes (LCDAs).)",
             {
+                make_observable("B::phi_+(omega,mu)@FLvD2022", R"(\phi_{B,+}(\omega, \mu))",
+                        Unit::None(),
+                        (double (b_lcdas::FLvD2022::*)(const double &, const double &) const) &b_lcdas::FLvD2022::phi_plus,
+                        std::make_tuple("omega", "mu")),
                 make_observable("B::phitilde_+(-i*tau,mu)@FLvD2022", R"(\tilde\phi_{B,+}(-i \tau, \mu))",
                         Unit::None(),
                         &b_lcdas::FLvD2022::phitilde_plus,

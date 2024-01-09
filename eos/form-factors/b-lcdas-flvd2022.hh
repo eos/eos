@@ -88,7 +88,14 @@ namespace eos
                 virtual double phi_bar_d1(const double & omega) const final override;
 
                 /*!
-                 * Leading twist two-particle LCDAs in position space
+                 * Leading twist two-particle LCDAs in momentum space as a observable
+                 *
+                 * omega: plus-component of the spectator momentum
+                 */
+                double phi_plus(const double & omega, const double & mu) const;
+
+                /*!
+                 * Leading twist two-particle LCDAs in position space as a observable
                  *
                  * tau: minus-component of the spectator position on the negative imaginary axis: tau = -i*t
                  */
