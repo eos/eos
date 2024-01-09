@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -42,6 +42,10 @@ class FLvD2022Test :
             // basic test
             {
                 Parameters p = Parameters::Defaults();
+                Options o
+                {
+                    { "alpha_s", "naive" }
+                };
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
                 p["B_u::omega_0@FLvD2022"] = 1.0;
@@ -52,7 +56,7 @@ class FLvD2022Test :
                     p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = ref[k];
                 }
 
-                FLvD2022 blcdas(p, Options());
+                FLvD2022 blcdas(p, o);
 
                 auto [c, c_end] = blcdas.coefficient_range(1.0);
                 for (auto it = c ; it != c_end ; ++it)
@@ -64,6 +68,10 @@ class FLvD2022Test :
             // RG evolution
             {
                 Parameters p = Parameters::Defaults();
+                Options o
+                {
+                    { "alpha_s", "naive" }
+                };
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
                 p["B_u::omega_0@FLvD2022"] = 0.55;
@@ -78,7 +86,7 @@ class FLvD2022Test :
                     p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = ref[k];
                 }
 
-                FLvD2022 blcdas(p, Options());
+                FLvD2022 blcdas(p, o);
 
                 auto [c, c_end] = blcdas.coefficient_range(mu);
                 for (auto it = c ; it != c_end ; ++it)
@@ -100,7 +108,10 @@ class FLvD2022Test :
                 }
 
                 Kinematics k = Kinematics({ { "tau", 0.4 }, {"mu", p["B_u::mu_0@FLvD2022"]} });
-                Options o { };
+                Options o
+                {
+                    { "alpha_s", "naive" }
+                };
 
                 auto phitilde = Observable::make("B::phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
                 TEST_CHECK_NEARLY_EQUAL(phitilde->evaluate(), 11.558610659381285, 1e-12);
@@ -125,7 +136,10 @@ class FLvD2022Test :
                 }
 
                 Kinematics k = Kinematics({ {"mu", 1.0} });
-                Options o { };
+                Options o
+                {
+                    { "alpha_s", "naive" }
+                };
 
                 auto L0 = Observable::make("B::L0@FLvD2022", p, k, o);
                 TEST_CHECK_NEARLY_EQUAL(L0->evaluate(), 16.66666666667032, 1e-10);
