@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_FLVD2022_HH 1
 
 #include <eos/form-factors/b-lcdas.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -46,9 +47,14 @@ namespace eos
                 const static unsigned int number_of_parameters = 9u;
                 using Weights = std::array<double, number_of_parameters>; // We implement the weights as fixed-size arrays
 
+                std::shared_ptr<Model> model;
+
                 SpecifiedOption opt_q;
                 SpecifiedOption opt_gminus;
                 double switch_gminus;
+
+                SpecifiedOption opt_alpha_s;
+                std::function<double(const double &)> alpha_s;
 
                 UsedParameter mu_0;
                 UsedParameter omega_0;
