@@ -959,7 +959,7 @@ namespace eos
                 make_form_factor_adapter("B->D^*::V(q2)", R"(V^{B\to D^*}(q^2))",
                         &FormFactors<PToV>::v, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->D^*::A_0(q2)", R"(V^{B\to D^*}(q^2))",
+                make_form_factor_adapter("B->D^*::A_0(q2)", R"(A_0^{B\to D^*}(q^2))",
                         &FormFactors<PToV>::a_0, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->D^*::A_1(q2)", R"(A_1^{B\to D^*}(q^2))",
