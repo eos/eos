@@ -31,7 +31,9 @@ jobs:
 
             - name: Install QEMU and emulation on the Ubuntu runner
               if: runner.os == 'Linux'
-              run: sudo apt install qemu-user-static
+              run: |
+                sudo apt update
+                sudo apt install qemu-user-static
 
             - name: Create a package directory to make cibuildwheel happy
               run: |
