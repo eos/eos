@@ -1773,6 +1773,13 @@ PDG:2020A:
 PS:1997A:
   authors: Peskin, M. and Schroeder, D.
   title: An Introduction to Quantum Field Theory
+PS:2023A:
+  authors: Plakias, I. and Sumensari, O.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2312.14070
+  inspire-id: Plakias:2023esq
+  title: Lepton Flavor Violation in Semileptonic Observables
 PZ:2021A:
   authors: Pullin, B. and Zwicky, R.
   journal: JHEP 09 (2021) 023
