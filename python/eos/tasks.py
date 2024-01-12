@@ -404,7 +404,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
-    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
+    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
@@ -492,7 +492,6 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
-    The results of the find-cluster command are expected in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
     The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/nested.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.

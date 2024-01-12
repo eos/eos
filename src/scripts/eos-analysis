@@ -396,12 +396,12 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
         parents = [common_subparser],
         description =
 '''
-Predicts a set of observables based on previously obtained PMC samples.
+Predicts a set of observables based on previously obtained importance samples.
 
-The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
+The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
 The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
 ''',
-        help = 'Predicts observables based on PMC samples.'
+        help = 'Predicts observables based on importance samples.'
     )
     parser_predict_observables.add_argument('posterior', metavar = 'POSTERIOR',
         help = 'The name of the posterior PDF from which to draw the samples.'
