@@ -2141,7 +2141,7 @@ namespace eos
                         { { "q", "s"} }),
 
                 /* B -> D^* K */
-                make_observable("B^0->D^*+pi^-::BR", R"(\mathcal{B}(\bar{B}^0\to D^{*+}K^-))",
+                make_observable("B^0->D^*+K^-::BR", R"(\mathcal{B}(\bar{B}^0\to D^{*+}K^-))",
                         Unit::None(),
                         &BqToDstarqPseudoscalar::branching_ratio,
                         std::make_tuple(),
