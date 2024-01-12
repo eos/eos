@@ -162,6 +162,11 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         eos.info('Initializing starting point from MCMC data file')
         _chain = eos.data.MarkovChain(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'))
         idx_mode = _np.argmax(_chain.weights)
+        # Check the parameters varied in the analysis file match those of the loaded MCMC sample
+        analysis_varied_params = [p.name() for p in analysis.varied_parameters]
+        samples_varied_params = [p["name"] for p in _chain.varied_parameters]
+        if analysis_varied_params != samples_varied_params:
+            raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
         for p, v in zip(analysis.varied_parameters, _chain.samples[idx_mode]):
             p.set(v)
 
@@ -174,6 +179,11 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         if _file.posterior_values is None:
             FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
         idx_mode = _np.argmax(_file.posterior_values)
+        # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
+        analysis_varied_params = [p.name() for p in analysis.varied_parameters]
+        samples_varied_params = [p["name"] for p in _file.varied_parameters]
+        if analysis_varied_params != samples_varied_params:
+            raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
         for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
             p.set(v)
 
@@ -410,12 +420,19 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :param end: The index beyond the last sample to use for the predictions. Defaults to None.
     :type begin: int
     '''
-    _parameters    = analysis_file.analysis(posterior).parameters
+    _analysis      = analysis_file.analysis(posterior)
+    _parameters    = _analysis.parameters
     cache          = eos.ObservableCache(_parameters)
     observables    = analysis_file.observables(posterior, prediction, _parameters)
     observable_ids = [cache.add(o) for o in observables]
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+    # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
+    analysis_varied_params = [p.name() for p in _analysis.varied_parameters]
+    samples_varied_params = [p["name"] for p in data.varied_parameters]
+    if analysis_varied_params != samples_varied_params:
+        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
 
     try:
         from tqdm.auto import tqdm
@@ -536,6 +553,12 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     # Provide file with distribution samples and LaTeX labels for either parameters or observables
     if distribution == 'posterior':
         f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+        # Check the parameters varied in the analysis file match those of the loaded sample
+        analysis_varied_params = [p.name() for p in analysis.varied_parameters]
+        samples_varied_params = [p["name"] for p in f.varied_parameters]
+        if analysis_varied_params != samples_varied_params:
+            raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
 
         labels = [p.latex() for p in analysis.varied_parameters]
 
