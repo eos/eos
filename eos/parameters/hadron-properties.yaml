@@ -564,6 +564,13 @@ groups:
           max:     +5.08e-13
           unit:     's'
           latex:    '$\tau_{D_s}$'
+      'life_time::D_s^*' :
+          central: +0.94e-17
+          min:     +0.56e-17
+          max:     +1.32e-17
+          unit:     's'
+          latex:    '$\tau_{D_s^*}$'
+          comments: 'cf. [DDKL:2013A]'
       'life_time::B_d' :
           central: +1.519e-12
           min:     +1.512e-12
