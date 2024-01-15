@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2022-2023 Danny van Dyk
- * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,7 +64,8 @@ namespace eos
              *
              * We implement the weights as fixed-size arrays.
              */
-            using Weights = std::array<double, 9>;
+            static const unsigned int number_of_parameters = 9u;
+            using Weights = std::array<double, number_of_parameters>;
 
             std::shared_ptr<BMesonLCDAs> blcdas;
             std::shared_ptr<Model> model;
@@ -171,7 +172,7 @@ namespace eos
              * The effective incomplete Laplace transform
              * int[w,0,omega_cut] exp(-sigma w) Delta phi_+^eff(w)
              */
-            double lapltr_incomplete_effective(const double & Egamma, const double & omega_cut, const double & sigma) const;
+            double lapltr_incomplete_effective(const double & Egamma, const double & omega_cut, const double & sigma, bool use_approxmiation = true) const;
             ///@}
 
         public:
