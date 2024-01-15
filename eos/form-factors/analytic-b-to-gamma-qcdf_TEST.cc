@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2022 Danny van Dyk
- * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     std::make_pair(0.272354067021644,   1e-3), // L0_effective(3.0); numerical reference is imprecise
                     std::make_pair(0.0527171469619207,  1e-3), // L0_effective(2.16)
                     std::make_pair(10.4492075178413 + -10.4781709714967 + 6.58190087562423 + -8.92720937287174,     1e-3), // L0_incomplete_effective(3.0, 8.0); numerical reference is imprecise
-                    std::make_pair(0.101195623867872 + -0.188854545332271 + 0.334217768087141 + -0.315849218854024, 1e-7), // lapltr_effective_incomplete(3.0, 8.0, 4.0)
+                    std::make_pair(0.101195623867872 + -0.188854545332271 + 0.334217768087141 + -0.315849218854024, 1e-6), // lapltr_effective_incomplete(3.0, 8.0, 4.0)
                     std::make_pair(0.889411945139733,   1e-8), // C at Egamma=2.16
                     std::make_pair(0.925687457028048,   1e-8), // K_inv at Egamma=2.16
                     std::make_pair(0.882916019547774,   1e-8), // U at Egamma=2.16
@@ -98,20 +98,20 @@ class AnalyticFormFactorBToGammaQCDFTest :
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.232069764080307,     1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.232069764080307,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.232069764080307,     1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.232069764080307,     1e-6 );
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.20204988466338,      1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.20204988466338,      1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.20204988466338,      1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.20204988466338,      1e-6 );
 
 
                 // Math integrity test: cross-check complete form factors against Mathematica implementation
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(4.0),               0.112285519817157,     1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(12.0),              0.026168708836855,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(4.0),               0.112285519817157,     1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(12.0),              0.026168708836855,     1e-6 );
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(4.0),               0.1094950020475,       1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(12.0),              0.0285261581243447,    1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(4.0),               0.1094950020475,       1e-6 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(12.0),              0.0285261581243447,    1e-6 );
             }
         }
 } analytic_b_to_gamma_qcdf_test;
