@@ -934,6 +934,14 @@ DDHLMSW:2019A:
     id: oai:arXiv.org:1907.01025
   inspire-id: Dowdall:2019bea
   title: Neutral B-meson mixing from full lattice QCD at the physical point
+DDKL:2013A:
+  authors: Donald, G.C. and Davies, C.T.H. and Koponen, J. and Lepage, G.P.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1312.5264
+  inspire-id: Donald:2013sra
+  title: Prediction of the $D_s^*$ width from a calculation of its radiative decay in full lattice QCD
 DDS:2014A:
   authors: Datta, A. and Duraisamy, M. and Sharma, P
   eprint:
