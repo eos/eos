@@ -7,6 +7,7 @@ AM_LDLAGS = @AM_LDFLAGS@
 lib_LTLIBRARIES = libeoscdecays.la
 libeoscdecays_la_SOURCES = \
 	dq-to-l-nu.cc dq-to-l-nu.hh \
+	dstarq-to-l-nu.cc dstarq-to-l-nu.hh \
 	d-to-psd-l-nu.cc d-to-psd-l-nu.hh \
 	lambdac-to-lambda-l-nu.cc lambdac-to-lambda-l-nu.hh \
 	observables.cc observables.hh

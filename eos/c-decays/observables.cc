@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +19,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/c-decays/dq-to-l-nu.hh>
+#include <eos/c-decays/dstarq-to-l-nu.hh>
 #include <eos/c-decays/d-to-psd-l-nu.hh>
 #include <eos/c-decays/lambdac-to-lambda-l-nu.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
@@ -32,12 +33,18 @@ namespace eos
     make_dq_to_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $D_q^+\to \ell^+\nu$ decays)",
+            R"(Observables in $D_q^{(*)+}\to \ell^+\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor.)",
             {
                 make_observable("D_s->lnu::BR", R"(\mathcal{B}(D_s^+ \to \ell^+\nu))",
                         Unit::None(),
                         &DqToLeptonNeutrino::branching_ratio,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
+
+                make_observable("D_s^*->lnu::BR", R"(\mathcal{B}(D_s^{*+} \to \ell^+\nu))",
+                        Unit::None(),
+                        &DstarqToLeptonNeutrino::branching_ratio,
                         std::make_tuple(),
                         Options{ { "q", "s" } }),
             }
