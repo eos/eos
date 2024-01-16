@@ -325,6 +325,22 @@ namespace eos
         static constexpr double mR2_0m = 5.27932;
     };
 
+    struct BToKPi {
+        using Transition = PToPP;
+        static constexpr const char * label = "B->Kpi";
+        static constexpr double m_B  = 5.2795;
+        static constexpr double m_P1 = 0.494;
+        static constexpr double m_P2 = 0.13957;
+
+        // for pole and t_0 calculation in zhat
+        static constexpr double m_Bst = 5.32465;
+
+        // for pole calculation in z, depending on the current at hand
+        static constexpr double mR2_1m = 5.32465;
+        static constexpr double mR2_1p = 5.72590;
+        static constexpr double mR2_0m = 5.27932;
+    };
+
     /* V -> P Processes */
 
     struct BstarToD {

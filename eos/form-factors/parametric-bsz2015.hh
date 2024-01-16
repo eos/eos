@@ -331,7 +331,7 @@ namespace eos
             template <typename Parameter_>
             complex<double> _calc_ff_p(const double & q2, const double & k2, const double & m2_R, const std::array<std::array<Parameter_, 2>, 3> & a) const;
 
-            static std::string _par_name(const std::string & ff_name);
+            static std::string _par_name(const std::string & ff_name, const std::string & index);
 
         public:
             BSZ2015FormFactors(const Parameters & p, const Options &);

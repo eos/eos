@@ -490,8 +490,10 @@ namespace eos
 
         const complex<double> diff_z = _traits.calc_z(q2) - _traits.calc_z(0.0);
 
-        const double mass  = _BW_mass_p;
-        const double width = _BW_width_p;
+        // const double mass  = _BW_mass_p;
+        // const double width = _BW_width_p;
+        const double mass  = 0.892;
+        const double width = 0.1;
         const complex<double> bw = mass * width / (k2 - mass * mass + 1.0i * mass * width); // TODO: update to full expression with running width etc
 
         return bw / (1.0 - q2 / power_of<2>(m_R)) * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
@@ -506,7 +508,7 @@ namespace eos
 
     template <typename Process_>
     BSZ2015FormFactors<Process_, PToPP>::BSZ2015FormFactors(const Parameters & p, const Options &) :
-        _a_Fperp{{
+        _a_perp{{
             {{
                 UsedParameter(p[_par_name("Fperp", "0,0")],  *this), // z^0 k2^0
                 UsedParameter(p[_par_name("Fperp", "0,1")],  *this), // z^0 k2^1
@@ -520,7 +522,7 @@ namespace eos
                 UsedParameter(p[_par_name("Fperp", "2,1")],  *this), // z^2 k2^1
             }},
         }},
-        _a_Fpara{{
+        _a_para{{
             {{
                 UsedParameter(p[_par_name("Fpara", "0,0")],  *this), // z^0 k2^0
                 UsedParameter(p[_par_name("Fpara", "0,1")],  *this), // z^0 k2^1
@@ -534,7 +536,7 @@ namespace eos
                 UsedParameter(p[_par_name("Fpara", "2,1")],  *this), // z^2 k2^1
             }},
         }},
-        _a_Flong{{
+        _a_long{{
             {{
                 UsedParameter(p[_par_name("Flong", "0,0")],  *this), // z^0 k2^0
                 UsedParameter(p[_par_name("Flong", "0,1")],  *this), // z^0 k2^1
@@ -548,7 +550,7 @@ namespace eos
                 UsedParameter(p[_par_name("Flong", "2,1")],  *this), // z^2 k2^1
             }},
         }},
-        _a_Ftime{{
+        _a_time{{
             {{
                 UsedParameter(p[_par_name("Ftime", "0,0")],  *this), // z^0 k2^0
                 UsedParameter(p[_par_name("Ftime", "0,1")],  *this), // z^0 k2^1
@@ -583,28 +585,28 @@ namespace eos
 
     template <typename Process_>
     complex<double>
-    BSZ2015FormFactors<Process_, PToPP>::Fperp(const double & q2, const double & k2, const double & z) const
+    BSZ2015FormFactors<Process_, PToPP>::f_perp(const double & q2, const double & k2, const double & z) const
     {
         return 0.0;
     }
 
     template <typename Process_>
     complex<double>
-    BSZ2015FormFactors<Process_, PToPP>::Fpara(const double & q2, const double & k2, const double & z) const
+    BSZ2015FormFactors<Process_, PToPP>::f_para(const double & q2, const double & k2, const double & z) const
     {
         return 0.0;
     }
 
     template <typename Process_>
     complex<double>
-    BSZ2015FormFactors<Process_, PToPP>::Flong(const double & q2, const double & k2, const double & z) const
+    BSZ2015FormFactors<Process_, PToPP>::f_long(const double & q2, const double & k2, const double & z) const
     {
         return 0.0;
     }
 
     template <typename Process_>
     complex<double>
-    BSZ2015FormFactors<Process_, PToPP>::Ftime(const double & q2, const double & k2, const double & z) const
+    BSZ2015FormFactors<Process_, PToPP>::f_time(const double & q2, const double & k2, const double & z) const
     {
         return 0.0;
     }
