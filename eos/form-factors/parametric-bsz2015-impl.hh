@@ -437,6 +437,209 @@ namespace eos
     {
         return real(f_plus_T(complex<double>(s)));
     }
+
+    // P -> P P
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToPP>::resonance_0m_names
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@BSZ2015" }
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToPP>::resonance_1m_names
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" }
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToPP>::resonance_1p_names
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@BSZ2015" }
+    };
+
+    template <typename Process_>
+    template <typename Parameter_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::_calc_coeff(const double & k2, const std::array<Parameter_, 2> & a) const
+    {
+        // since we move the known phase below the inelastic threshold into an overall factor,
+        // we only parametrize the remaining mild & analytic k2 dependence of the form factor
+        return a[0] + k2 / power_of<2>(_mP1() + _mP2()) * a[1];
+    }
+
+    template <typename Process_>
+    template <typename Parameter_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::_calc_ff_p(const double & q2, const double & k2, const double & m_R, const std::array<std::array<Parameter_, 2>, 3> & a) const
+    {
+        const double a_0(_calc_coeff(k2, a[0]));
+        const double a_1(_calc_coeff(k2, a[1]));
+        const double a_2(_calc_coeff(k2, a[2]));
+
+        const complex<double> diff_z = _traits.calc_z(q2) - _traits.calc_z(0.0);
+
+        const double mass  = _BW_mass_p;
+        const double width = _BW_width_p;
+        const complex<double> bw = mass * width / (k2 - mass * mass + 1.0i * mass * width); // TODO: update to full expression with running width etc
+
+        return bw / (1.0 - q2 / power_of<2>(m_R)) * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
+    }
+
+    template <typename Process_>
+    std::string
+    BSZ2015FormFactors<Process_, PToPP>::_par_name(const std::string & ff_name, const std::string & index)
+    {
+        return std::string(Process_::label) + std::string("::alpha(") + ff_name + "," + index + ")" + std::string("@BSZ2015");
+    }
+
+    template <typename Process_>
+    BSZ2015FormFactors<Process_, PToPP>::BSZ2015FormFactors(const Parameters & p, const Options &) :
+        _a_Fperp{{
+            {{
+                UsedParameter(p[_par_name("Fperp", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Fperp", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fperp", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Fperp", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fperp", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Fperp", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _a_Fpara{{
+            {{
+                UsedParameter(p[_par_name("Fpara", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Fpara", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fpara", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Fpara", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fpara", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Fpara", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _a_Flong{{
+            {{
+                UsedParameter(p[_par_name("Flong", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Flong", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Flong", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Flong", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Flong", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Flong", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _a_Ftime{{
+            {{
+                UsedParameter(p[_par_name("Ftime", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Ftime", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Ftime", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Ftime", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Ftime", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Ftime", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _traits(p),
+        _mB(_traits.m_B),
+        _mP1(_traits.m_P1),
+        _mP2(_traits.m_P2)
+    {
+    }
+
+    template <typename Process_>
+    BSZ2015FormFactors<Process_, PToPP>::~BSZ2015FormFactors()
+    {
+    }
+
+    template <typename Process_>
+    FormFactors<PToPP> *
+    BSZ2015FormFactors<Process_, PToPP>::make(const Parameters & parameters, const Options & options)
+    {
+        return new BSZ2015FormFactors(parameters, options);
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::Fperp(const double & q2, const double & k2, const double & z) const
+    {
+        return 0.0;
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::Fpara(const double & q2, const double & k2, const double & z) const
+    {
+        return 0.0;
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::Flong(const double & q2, const double & k2, const double & z) const
+    {
+        return 0.0;
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::Ftime(const double & q2, const double & k2, const double & z) const
+    {
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_perp_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_para_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_long_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_time_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
 }
 
 #endif
