@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -19,7 +19,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/analytic-b-to-gamma-qcdf.hh>
+#include <eos/form-factors/analytic-p-to-gamma-qcdf.hh>
 #include <eos/observable.hh>
 #include <eos/utils/diagnostics.hh>
 
@@ -67,7 +67,7 @@ class AnalyticFormFactorBToGammaQCDFTest :
 
                 // Diagnostics: check pieces against Mathematica implementation
 
-                AnalyticFormFactorBToGammaQCDF ff(p, Options());
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, Options());
 
                 static const std::vector<std::pair<double, double>> reference = {
                     std::make_pair(3.39713985820215,    1e-9), // L0()

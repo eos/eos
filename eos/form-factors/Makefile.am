@@ -6,7 +6,6 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosformfactors.la
 libeosformfactors_la_SOURCES = \
-	analytic-b-to-gamma-qcdf.cc analytic-b-to-gamma-qcdf.hh \
 	analytic-b-to-psd-dkmmo2008.hh analytic-b-to-psd-dkmmo2008-impl.hh \
 	analytic-b-to-pi-dkmmo2008.cc \
 	analytic-bs-to-k-dkmmo2008.cc \
@@ -17,6 +16,7 @@ libeosformfactors_la_SOURCES = \
 	analytic-b-to-v-lcsr.hh analytic-b-to-v-lcsr-impl.hh \
 	analytic-bs-to-kstar-lcsr.cc analytic-bs-to-dsstar-lcsr.cc analytic-bs-to-phi-lcsr.cc \
 	analytic-b-to-rho-lcsr.cc analytic-b-to-kstar-lcsr.cc analytic-b-to-dstar-lcsr.cc \
+	analytic-p-to-gamma-qcdf.cc analytic-p-to-gamma-qcdf-impl.hh analytic-p-to-gamma-qcdf.hh \
 	baryonic.cc baryonic.hh \
 	baryonic-processes.hh \
 	form-factor-adapter.hh \

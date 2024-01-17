@@ -301,6 +301,11 @@ namespace eos
         static constexpr double mR2_0m = 5.27932;
     };
 
+    /* P -> gamma Processes */
+    struct BToGamma
+    {
+    };
+
     /* V -> P Processes */
 
     struct BstarToD {

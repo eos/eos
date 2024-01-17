@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2023 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -18,7 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/analytic-b-to-gamma-qcdf.hh>
+#ifndef EOS_GUARD_SRC_FORM_FACTORS_ANALYTIC_B_TO_GAMMA_QCDF_IMPL_HH
+#define EOS_GUARD_SRC_FORM_FACTORS_ANALYTIC_B_TO_GAMMA_QCDF_IMPL_HH 1
+
+#include <eos/form-factors/analytic-p-to-gamma-qcdf.hh>
 #include <eos/maths/integrate-impl.hh>
 #include <eos/maths/interpolation.hh>
 #include <eos/maths/matrix.hh>
@@ -38,27 +41,52 @@ namespace eos
     static const constexpr double eulergamma2 = eulergamma * eulergamma;
     static const constexpr double zeta_3 = 1.20205690315959;
 
-    std::string
-    AnalyticFormFactorBToGammaQCDF::par_qname(const std::string & _name) const
+    /* B^- -> gamma */
+
+    AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o) :
+        blcdas(HeavyMesonLCDAs::make("FLvD2022", p, o)),
+        model(Model::make("SM", p, o))
     {
-        return QualifiedName(qnp::Prefix("B_u"), _name, qnp::Suffix("FLvD2022")).str();
     }
 
-    AnalyticFormFactorBToGammaQCDF::AnalyticFormFactorBToGammaQCDF(const Parameters & p, const Options & o):
-        blcdas(HeavyMesonLCDAs::make("FLvD2022", p, o)),
+    inline
+    double
+    AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::m_heavy_pole(unsigned int loop_order) const
+    {
+        return model->m_b_pole(loop_order);
+    }
+
+    const qnp::Prefix AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::prefix("B_u");
+    const qnp::Prefix AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::hadronic_prefix("B");
+    const qnp::Prefix AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::process("B->gamma");
+    const QualifiedName AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::decay_constant("decay-constant::B_u");
+    const QualifiedName AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::mass("mass::B_u");
+
+    /* P -> gamma */
+
+    template <typename Process_>
+    std::string
+    AnalyticFormFactorPToGammaQCDF<Process_>::par_qname(const std::string & _name) const
+    {
+        return QualifiedName(AnalyticFormFactorPToGammaQCDFTraits<Process_>::prefix, _name, qnp::Suffix("FLvD2022")).str();
+    }
+
+    template <typename Process_>
+    AnalyticFormFactorPToGammaQCDF<Process_>::AnalyticFormFactorPToGammaQCDF(const Parameters & p, const Options & o):
+        traits(p, o),
         model(Model::make("SM", p, o)),
-        mu(p["B->gamma::mu@FLvD2022QCDF"], *this),
-        omega_0(p[par_qname("omega_0")], *this),
-        f_B(p["decay-constant::B_u"], *this),
-        m_B(p["mass::B_u"], *this),
+        mu(p[QualifiedName(Traits::process, qnp::Name("mu"), qnp::Suffix("FLvD2022QCDF"))], *this),
+        omega_0(p[QualifiedName(Traits::prefix, qnp::Name("omega_0"), qnp::Suffix("FLvD2022"))], *this),
+        f_B(p[Traits::decay_constant], *this),
+        m_B(p[Traits::mass], *this),
         m_rho(p["mass::rho^+"], *this),
-        lambda_bar(p["B::LambdaBar"], *this),
-        lambda_E2(p["B::lambda_E^2"], *this),
-        lambda_H2(p["B::lambda_H^2"], *this),
-        M2(p["B->gamma::M^2@FLvD2022QCDF"], *this),
-        s_0(p["B->gamma::s_0@FLvD2022QCDF"], *this),
-        mu_h1(p["B->gamma::mu_h1@FLvD2022QCDF"], *this),
-        mu_h2(p["B->gamma::mu_h2@FLvD2022QCDF"], *this),
+        lambda_bar(p[QualifiedName(Traits::hadronic_prefix, qnp::Name("LambdaBar"))], *this),
+        lambda_E2(p[QualifiedName(Traits::hadronic_prefix, qnp::Name("lambda_E^2"))], *this),
+        lambda_H2(p[QualifiedName(Traits::hadronic_prefix, qnp::Name("lambda_H^2"))], *this),
+        M2(p[QualifiedName(Traits::process, qnp::Name("M^2"), qnp::Suffix("FLvD2022QCDF"))], *this),
+        s_0(p[QualifiedName(Traits::process, qnp::Name("s_0"), qnp::Suffix("FLvD2022QCDF"))], *this),
+        mu_h1(p[QualifiedName(Traits::process, qnp::Name("mu_h1"), qnp::Suffix("FLvD2022QCDF"))], *this),
+        mu_h2(p[QualifiedName(Traits::process, qnp::Name("mu_h2"), qnp::Suffix("FLvD2022QCDF"))], *this),
         opt_contributions(o, "contributions", { "all", "ht", "soft", "partial-soft-tw-3,4", "none"}, "all"),
         switch_ht(0.0),
         switch_soft(0.0),
@@ -66,7 +94,7 @@ namespace eos
     {
         // Verify once that BMesonLCDAs is compatible with this implementation
         Weights weights;
-        auto [coeff_begin, coeff_end] = blcdas->coefficient_range(mu);
+        auto [coeff_begin, coeff_end] = traits.blcdas->coefficient_range(mu);
 
         if (weights.size() - std::distance(coeff_begin, coeff_end) > 0)
         {
@@ -94,24 +122,26 @@ namespace eos
             switch_soft_tw_3_4 = 1.0;
         }
 
-        this->uses(*blcdas);
+        this->uses(*traits.blcdas);
     }
 
+    template <typename Process_>
     FormFactors<PToGamma> *
-    AnalyticFormFactorBToGammaQCDF::make(const Parameters & p, const Options & o)
+    AnalyticFormFactorPToGammaQCDF<Process_>::make(const Parameters & p, const Options & o)
     {
-        return new AnalyticFormFactorBToGammaQCDF(p, o);
+        return new AnalyticFormFactorPToGammaQCDF(p, o);
     }
 
+    template <typename Process_>
     std::tuple<double, double, double>
-    AnalyticFormFactorBToGammaQCDF::C_K_inv_U(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::C_K_inv_U(const double & Egamma) const
     {
         // cf. the factor in [BR:2011A], Eq. (2.10)
 
         const double alpha_s_mu = model->alpha_s(mu);
-        const double m_bquark = model->m_b_pole(1);
+        const double m_heavy = traits.m_heavy_pole(1);
 
-        const double x = 2.0 * Egamma / m_bquark;
+        const double x = 2.0 * Egamma / m_heavy;
         const double log_x = std::log(x);
         const double log_x_prime = std::log(2.0 * Egamma / mu);
         const double li2_1_m_x = dilog(1.0 - x).real(); // result is always real as x > 0
@@ -186,13 +216,14 @@ namespace eos
                 ) * (1.0 - r2)
             );
 
-        const double K = 1 + alpha_s_mu * C_F / (4.0 * pi) * (3.0 * std::log(m_bquark / mu) - 2.0);
+        const double K = 1 + alpha_s_mu * C_F / (4.0 * pi) * (3.0 * std::log(m_heavy / mu) - 2.0);
 
         return { C, 1.0 / K, U1 / U2 };
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::F_leading_power(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::F_leading_power(const double & Egamma) const
     {
         // cf. [BR:2011A], Eq. (2.10)
         const auto [C, K_inv, U] = C_K_inv_U(Egamma);
@@ -200,15 +231,16 @@ namespace eos
         // cf. [BBJW:2018A], Eq. (2.7), first term,
         // cf. [BBJW:2018A], Eq. (4.12)
         const double C_NLO = model->alpha_s(mu) * C_F / (4.0 * pi);
-        return e_u * f_B * m_B / (2.0 * Egamma) * C * K_inv * U *
+        return e_spectator * f_B * m_B / (2.0 * Egamma) * C * K_inv * U *
             (L0() + C_NLO * L0_effective(Egamma));
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::xi(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::xi(const double & Egamma) const
     {
-        const double prefactor = e_u * f_B * m_B / (2.0 * Egamma);
-        const double m_bquark = model->m_b_pole(1);
+        const double prefactor = e_spectator * f_B * m_B / (2.0 * Egamma);
+        const double m_heavy = traits.m_heavy_pole(1);
 
         // Higher twist contribution
         // cf. [BBJW:2018A], Eq. (5.9)
@@ -219,7 +251,7 @@ namespace eos
                     / (6.0 * lambda_bar * lambda_bar + 2.0 * lambda_E2 + lambda_H2)
                 + 1.0 / 2.0
             )
-            + prefactor / (2.0 * m_bquark) * (
+            + prefactor / (2.0 * m_heavy) * (
                 + lambda_bar * L0()
                 - 2.0
                 + 4.0 * (lambda_E2 - lambda_H2)
@@ -242,14 +274,15 @@ namespace eos
         return switch_ht * term_ht + switch_soft * term_soft_nlo;
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::delta_xi(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::delta_xi(const double & Egamma) const
     {
         // See second line of Eq. (5.1), p. 14 in Ref. [BBJW:2018A]
 
         // cf. [BBJW:2018A], Eq. (3.11)
-        const double m_bquark = model->m_b_pole(1);
-        const double term_ht = f_B * m_B / (2.0 * Egamma) * (e_b / m_bquark + e_u / (2.0 * Egamma));
+        const double m_heavy = traits.m_heavy_pole(1);
+        const double term_ht = f_B * m_B / (2.0 * Egamma) * (e_heavy / m_heavy + e_spectator / (2.0 * Egamma));
 
         // cf. [BBJW:2018A], Eq. (4.10)
         const double term_soft_nlo = 0.0;
@@ -258,7 +291,7 @@ namespace eos
         const double omega_cut = s_0 / (2.0 * Egamma);
         const double sigma = 2.0 * Egamma / M2;
 
-        const double term_soft_tw_3_4 = e_u * m_B * f_B / (4.0 * Egamma * Egamma) * (
+        const double term_soft_tw_3_4 = e_spectator * m_B * f_B / (4.0 * Egamma * Egamma) * (
                 2.0 * Egamma / (m_rho * m_rho) * std::exp(m_rho * m_rho / M2)
                     * lapltr_incomplete_dsigma(omega_cut, sigma) / (-sigma)
                 - norm_incomplete(omega_cut)
@@ -267,17 +300,19 @@ namespace eos
         return switch_ht * term_ht + switch_soft * term_soft_nlo + switch_soft_tw_3_4 * term_soft_tw_3_4;
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::L0() const
+    AnalyticFormFactorPToGammaQCDF<Process_>::L0() const
     {
         const Weights c = { 1.0, 0.0, 1.0 / 3.0, 0.0, 1.0 / 5.0, 0.0, 1.0 / 7.0, 0.0, 1.0 / 9.0 };
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::L0_incomplete(const double & omega_cut) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::L0_incomplete(const double & omega_cut) const
     {
         const double xom = omega_cut / omega_0;
         const double xom2 = xom  * xom;
@@ -302,12 +337,13 @@ namespace eos
             0.1111111111111111 + (exp_xom * (-315 + 2520 * xom - 10080 * xom2 + 14280 * xom3 - 9660 * xom4 + 3360 * xom5 - 616 * xom6 + 56 * xom7 - 2 * xom8)) / 2835.
         };
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::norm_incomplete(const double & omega_cut) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::norm_incomplete(const double & omega_cut) const
     {
         const double xom = omega_cut / omega_0;
         const double xom2 = xom  * xom;
@@ -333,12 +369,13 @@ namespace eos
             1 + (exp_xom * (-2835 - 2835 * xom - 7560 * xom3 + 11340 * xom4 - 8316 * xom5 + 3024 * xom6 - 576 * xom7 + 54 * xom8 - 2 * xom9)) / 2835.
         };
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::lapltr_incomplete(const double & omega_cut, const double & sigma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::lapltr_incomplete(const double & omega_cut, const double & sigma) const
     {
         const double xom = omega_cut / omega_0;
         const double xom2 = xom  * xom;
@@ -386,12 +423,13 @@ namespace eos
             ((2835 - 22680 * xsg + 79380 * xsg2 - 158760 * xsg3 + 198450 * xsg4 - 158760 * xsg5 + 79380 * xsg6 - 22680 * xsg7 + 2835 * xsg8) / 2835. + (exp_xom_xsgplus * (-2835 - 2835 * xom + 22680 * xsg + 19845 * xom * xsg + 22680 * xsg * xom2 - 7560 * xom3 - 68040 * xsg * xom3 + 11340 * xom4 + 113400 * xsg * xom4 - 8316 * xom5 - 80892 * xsg * xom5 + 3024 * xom6 + 29232 * xsg * xom6 - 576 * xom7 - 5472 * xsg * xom7 + 54 * xom8 + 504 * xsg * xom8 - 2 * xom9 - 18 * xsg * xom9 - 79380 * xsg2 - 56700 * xom * xsg2 + 45360 * xom2 * xsg2 - 317520 * xom3 * xsg2 + 498960 * xom4 * xsg2 - 353808 * xom5 * xsg2 + 126000 * xom6 * xsg2 - 23184 * xom7 * xsg2 + 2088 * xom8 * xsg2 - 72 * xom9 * xsg2 + 158760 * xsg3 + 79380 * xom * xsg3 + 181440 * xom2 * xsg3 - 831600 * xom3 * xsg3 + 1300320 * xom4 * xsg3 - 910224 * xom5 * xsg3 + 318528 * xom6 * xsg3 - 57456 * xom7 * xsg3 + 5040 * xom8 * xsg3 - 168 * xom9 * xsg3 - 198450 * xsg4 - 39690 * xom * xsg4 + 317520 * xom2 * xsg4 - 1421280 * xom3 * xsg4 + 2215080 * xom4 * xsg4 - 1519560 * xom5 * xsg4 + 521136 * xom6 * xsg4 - 91728 * xom7 * xsg4 + 7812 * xom8 * xsg4 - 252 * xom9 * xsg4 + 158760 * xsg5 - 39690 * xom * xsg5 + 317520 * xom2 * xsg5 - 1693440 * xom3 * xsg5 + 2555280 * xom4 * xsg5 - 1713096 * xom5 * xsg5 + 572544 * xom6 * xsg5 - 97776 * xom7 * xsg5 + 8064 * xom8 * xsg5 - 252 * xom9 * xsg5 - 79380 * xsg6 + 79380 * xom * xsg6 + 317520 * xom2 * xsg6 - 1375920 * xom3 * xsg6 + 2010960 * xom4 * xsg6 - 1309392 * xom5 * xsg6 + 422352 * xom6 * xsg6 - 69552 * xom7 * xsg6 + 5544 * xom8 * xsg6 - 168 * xom9 * xsg6 + 22680 * xsg7 - 56700 * xom * xsg7 + 181440 * xom2 * xsg7 - 740880 * xom3 * xsg7 + 1058400 * xom4 * xsg7 - 656208 * xom5 * xsg7 + 201600 * xom6 * xsg7 - 31824 * xom7 * xsg7 + 2448 * xom8 * xsg7 - 72 * xom9 * xsg7 - 2835 * xsg8 + 19845 * xom * xsg8 + 45360 * xom2 * xsg8 - 264600 * xom3 * xsg8 + 343980 * xom4 * xsg8 - 195804 * xom5 * xsg8 + 56448 * xom6 * xsg8 - 8496 * xom7 * xsg8 + 630 * xom8 * xsg8 - 18 * xom9 * xsg8 - 2835 * xom * xsg9 + 22680 * xom2 * xsg9 - 52920 * xom3 * xsg9 + 52920 * xom4 * xsg9 - 26460 * xom5 * xsg9 + 7056 * xom6 * xsg9 - 1008 * xom7 * xsg9 + 72 * xom8 * xsg9 - 2 * xom9 * xsg9)) / 2835.) * xsgplus_m10
         };
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::lapltr_incomplete_dsigma(const double & omega_cut, const double & sigma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::lapltr_incomplete_dsigma(const double & omega_cut, const double & sigma) const
     {
         const double xom = omega_cut / omega_0;
         const double xom2 = xom  * xom;
@@ -442,12 +480,13 @@ namespace eos
             ((xsg * (-51030 + 362880 * xsg - 1111320 * xsg2 + 1905120 * xsg3 - 1984500 * xsg4 + 1270080 * xsg5 - 476280 * xsg6 + 90720 * xsg7 - 5670 * xsg8)) / 2835. + (xsg * exp_xom_xsgplus * (51030 + 51030 * xom - 362880 * xsg - 311850 * xom * xsg + 2 * xom10 + 20 * xsg * xom10 + 25515 * xom2 - 130410 * xsg * xom2 + 7560 * xom3 - 45360 * xsg * xom3 + 7560 * xom4 + 52920 * xsg * xom4 - 9072 * xom5 - 104328 * xsg * xom5 + 7308 * xom6 + 78120 * xsg * xom6 - 2736 * xom7 - 29376 * xsg * xom7 + 540 * xom8 + 5688 * xsg * xom8 - 52 * xom9 - 540 * xsg * xom9 + 2 * xom10 * xsg10 + 2835 * xom2 * xsg10 - 22680 * xom3 * xsg10 + 52920 * xom4 * xsg10 - 52920 * xom5 * xsg10 + 26460 * xom6 * xsg10 - 7056 * xom7 * xsg10 + 1008 * xom8 * xsg10 - 72 * xom9 * xsg10 + 1111320 * xsg2 + 748440 * xom * xsg2 + 90 * xom10 * xsg2 + 218295 * xom2 * xsg2 - 22680 * xom3 * xsg2 + 294840 * xom4 * xsg2 - 512568 * xom5 * xsg2 + 382284 * xom6 * xsg2 - 142128 * xom7 * xsg2 + 27072 * xom8 * xsg2 - 2520 * xom9 * xsg2 - 1905120 * xsg3 - 793800 * xom * xsg3 + 240 * xom10 * xsg3 - 22680 * xom2 * xsg3 - 90720 * xom3 * xsg3 + 907200 * xom4 * xsg3 - 1505952 * xom5 * xsg3 + 1118880 * xom6 * xsg3 - 409248 * xom7 * xsg3 + 76608 * xom8 * xsg3 - 6960 * xom9 * xsg3 + 1984500 * xsg4 + 79380 * xom * xsg4 + 420 * xom10 * xsg4 - 357210 * xom2 * xsg4 - 438480 * xom3 * xsg4 + 1738800 * xom4 * xsg4 - 2963520 * xom5 * xsg4 + 2165688 * xom6 * xsg4 - 778176 * xom7 * xsg4 + 142632 * xom8 * xsg4 - 12600 * xom9 * xsg4 - 1270080 * xsg5 + 714420 * xom * xsg5 + 504 * xom10 * xsg5 + 396900 * xom2 * xsg5 - 423360 * xom3 * xsg5 + 2404080 * xom4 * xsg5 - 4061232 * xom5 * xsg5 + 2904048 * xom6 * xsg5 - 1022112 * xom7 * xsg5 + 182448 * xom8 * xsg5 - 15624 * xom9 * xsg5 + 476280 * xsg6 - 793800 * xom * xsg6 + 420 * xom10 * xsg6 - 39690 * xom2 * xsg6 - 317520 * xom3 * xsg6 + 2434320 * xom4 * xsg6 - 3922128 * xom5 * xsg6 + 2744280 * xom6 * xsg6 - 939456 * xom7 * xsg6 + 162288 * xom8 * xsg6 - 13440 * xom9 * xsg6 - 90720 * xsg7 + 385560 * xom * xsg7 + 240 * xom10 * xsg7 - 204120 * xom2 * xsg7 - 393120 * xom3 * xsg7 + 1693440 * xom4 * xsg7 - 2667168 * xom5 * xsg7 + 1812384 * xom6 * xsg7 - 596448 * xom7 * xsg7 + 99072 * xom8 * xsg7 - 7920 * xom9 * xsg7 + 5670 * xsg8 - 85050 * xom * xsg8 + 90 * xom10 * xsg8 + 150255 * xom2 * xsg8 - 173880 * xom3 * xsg8 + 793800 * xom4 * xsg8 - 1248912 * xom5 * xsg8 + 802620 * xom6 * xsg8 - 250128 * xom7 * xsg8 + 39708 * xom8 * xsg8 - 3060 * xom9 * xsg8 + 5670 * xom * xsg9 + 20 * xom10 * xsg9 - 39690 * xom2 * xsg9 - 15120 * xom3 * xsg9 + 264600 * xom4 * xsg9 - 370440 * xom5 * xsg9 + 215208 * xom6 * xsg9 - 62496 * xom7 * xsg9 + 9432 * xom8 * xsg9 - 700 * xom9 * xsg9)) / 2835.) * xsgplus_m11
         };
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::L0_effective(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::L0_effective(const double & Egamma) const
     {
         const double L_hat = eulergamma + std::log(mu*mu/(2.0 * Egamma*omega_0));
         const double L_hat2 = L_hat * L_hat;
@@ -464,12 +503,13 @@ namespace eos
             (9.387301587301588 + L_hat2) / 9.
         };
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::L0_incomplete_effective(const double & Egamma, const double & omega_cut) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::L0_incomplete_effective(const double & Egamma, const double & omega_cut) const
     {
         const double L = std::log(mu * mu / (2.0 * Egamma * omega_0));
         const double L2 = L * L;
@@ -671,12 +711,13 @@ namespace eos
         };
         c = c + c_d;
 
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
         return 1.0 / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::lapltr_incomplete_effective(const double & Egamma, const double & omega_cut, const double & sigma, bool use_approximation) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::lapltr_incomplete_effective(const double & Egamma, const double & omega_cut, const double & sigma, bool use_approximation) const
     {
         const double L = std::log(mu*mu / (2.*Egamma * omega_0));
         const double L2 = L * L;
@@ -791,7 +832,7 @@ namespace eos
         //  - or use numerical integration of the exact integrand
 
         double result = 0.0;
-        auto [a_begin, a_end] = blcdas->coefficient_range(mu);
+        auto [a_begin, a_end] = traits.blcdas->coefficient_range(mu);
 
         if (use_approximation)
         {
@@ -898,20 +939,23 @@ namespace eos
         return result;
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::F_V(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::F_V(const double & Egamma) const
     {
         return F_leading_power(Egamma) + xi(Egamma) + delta_xi(Egamma);
     }
 
+    template <typename Process_>
     double
-    AnalyticFormFactorBToGammaQCDF::F_A(const double & Egamma) const
+    AnalyticFormFactorPToGammaQCDF<Process_>::F_A(const double & Egamma) const
     {
         return F_leading_power(Egamma) + xi(Egamma) - delta_xi(Egamma);
     }
 
+    template <typename Process_>
     Diagnostics
-    AnalyticFormFactorBToGammaQCDF::diagnostics() const
+    AnalyticFormFactorPToGammaQCDF<Process_>::diagnostics() const
     {
         Diagnostics results;
 
@@ -940,3 +984,5 @@ namespace eos
         return results;
     }
 }
+
+#endif
