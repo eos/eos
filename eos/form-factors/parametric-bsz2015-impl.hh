@@ -586,29 +586,33 @@ namespace eos
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_perp(const double & q2, const double & k2, const double & z) const
-    {
-        return 0.0;
+    {   
+        //TODO: what should _traits.m_R_0m be?
+        return (std::sqrt(3)/std::sqrt(2)) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_perp); //https://arxiv.org/pdf/1310.6660.pdf eqn II.15
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_para(const double & q2, const double & k2, const double & z) const
-    {
-        return 0.0;
+    {   
+        //TODO: what should _traits.m_R_0m be?
+        return (std::sqrt(3)/std::sqrt(2)) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_para);
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_long(const double & q2, const double & k2, const double & z) const
-    {
-        return 0.0;
+    {   
+        //TODO: what should _traits.m_R_0m be?
+        return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_long) * z; //https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_time(const double & q2, const double & k2, const double & z) const
-    {
-        return 0.0;
+    {   
+        //TODO: what should _traits.m_R_0m be?
+        return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_time) * z; //https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
     }
 
     template <typename Process_>
