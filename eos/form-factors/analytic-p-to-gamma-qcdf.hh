@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2023 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -23,6 +23,7 @@
 
 #include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/form-factors/mesonic.hh>
+#include <eos/form-factors/mesonic-processes.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
@@ -36,19 +37,46 @@
 
 namespace eos
 {
+    template <typename Process_>
+    struct AnalyticFormFactorPToGammaQCDFTraits;
+
+    template <>
+    struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
+    {
+        std::shared_ptr<HeavyMesonLCDAs> blcdas;
+        std::shared_ptr<Model> model;
+
+        static const qnp::Prefix prefix;
+        static const qnp::Prefix hadronic_prefix;
+        static const qnp::Prefix process;
+        static const QualifiedName decay_constant;
+        static const QualifiedName mass;
+
+        static const constexpr double e_spectator =  2.0 / 3.0;
+        static const constexpr double e_heavy     = -1.0 / 3.0;
+
+        AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o);
+
+        double m_heavy_pole(unsigned int loop_order) const;
+
+    };
+
     /*!
-     * B->gamma form factors
+     * P->gamma form factors, for P = B^-, D^+, D_s^+ a heavy-light pseudoscalar meson
      *
      * We use the results obtained in QCD factorization with subleading
      * power corrections according to Ref. [BBJW:2018A].
      *
-     * We further parametrize the leading B-LCDA phi_+ as described in
+     * We further parametrize the leading LCDA phi_+ as described in
      * Ref. [FLvD:2022A] and presently omit higher-twist contributions.
      */
-    class AnalyticFormFactorBToGammaQCDF:
+    template <typename Process_>
+    class AnalyticFormFactorPToGammaQCDF:
         public FormFactors<PToGamma>
     {
         private:
+            using Traits = AnalyticFormFactorPToGammaQCDFTraits<Process_>;
+
             /*
              * The form factors receive contributions in terms of integral
              * convolutions of the B-meson LCDAs.
@@ -67,7 +95,7 @@ namespace eos
             static const unsigned int number_of_parameters = 9u;
             using Weights = std::array<double, number_of_parameters>;
 
-            std::shared_ptr<HeavyMesonLCDAs> blcdas;
+            Traits traits;
             std::shared_ptr<Model> model;
 
             UsedParameter mu;
@@ -88,10 +116,10 @@ namespace eos
             double switch_soft;
             double switch_soft_tw_3_4;
 
-            static const constexpr double e_u = +2.0 / 3.0;
-            static const constexpr double e_b = -1.0 / 3.0;
-            static const constexpr double C_F = 4.0 / 3.0;
-            static const constexpr double n_l = 4.0;
+            static const constexpr double e_spectator = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_spectator;
+            static const constexpr double e_heavy     = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_heavy;
+            static const constexpr double C_F         =  4.0 / 3.0;
+            static const constexpr double n_l         =  4.0;
 
             std::string par_qname(const std::string & _name) const;
 
@@ -177,7 +205,7 @@ namespace eos
             ///@}
 
         public:
-            AnalyticFormFactorBToGammaQCDF(const Parameters &, const Options &);
+            AnalyticFormFactorPToGammaQCDF(const Parameters &, const Options &);
 
             static FormFactors<PToGamma> * make(const Parameters &, const Options &);
 
@@ -187,6 +215,8 @@ namespace eos
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
     };
+
+    extern template class AnalyticFormFactorPToGammaQCDF<BToGamma>;
 }
 
 #endif

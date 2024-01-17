@@ -21,11 +21,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/analytic-b-to-gamma-qcdf.hh>
 #include <eos/form-factors/analytic-b-to-psd-dkmmo2008.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
+#include <eos/form-factors/analytic-p-to-gamma-qcdf.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
 #include <eos/form-factors/parametric-bfw2010.hh>
@@ -191,7 +191,7 @@ namespace eos
     const std::map<FormFactorFactory<PToGamma>::KeyType, FormFactorFactory<PToGamma>::ValueType>
     FormFactorFactory<PToGamma>::form_factors
     {
-        { KeyType("B->gamma::FLvD2022QCDF"), &AnalyticFormFactorBToGammaQCDF::make }
+        { KeyType("B->gamma::FLvD2022QCDF"), &AnalyticFormFactorPToGammaQCDF<BToGamma>::make }
     };
 
     std::shared_ptr<FormFactors<PToGamma>>
