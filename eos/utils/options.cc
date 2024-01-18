@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/destringify.hh>
 #include <eos/utils/join.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -236,6 +237,26 @@ namespace eos
 
     const std::string &
     SpecifiedOption::value() const
+    {
+        return _value;
+    }
+
+    BooleanOption::BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key),
+        boolean_value(destringify<bool>(_value))
+    {
+    }
+
+    BooleanOption::~BooleanOption() = default;
+
+    bool
+    BooleanOption::value() const
+    {
+        return boolean_value;
+    }
+
+    const std::string &
+    BooleanOption::str() const
     {
         return _value;
     }

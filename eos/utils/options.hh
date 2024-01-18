@@ -145,6 +145,20 @@ namespace eos
             const std::string & value() const;
     };
 
+    class BooleanOption :
+        public SpecifiedOption
+    {
+        private:
+            bool boolean_value;
+
+        public:
+            BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "true");
+            ~BooleanOption();
+
+            bool value() const;
+            const std::string & str() const;
+    };
+
     class LeptonFlavorOption :
         public SpecifiedOption
     {
