@@ -137,6 +137,7 @@ namespace eos
 
             static std::shared_ptr<FormFactors<PToGamma>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
             static OptionSpecification option_specification(const qnp::Prefix & process);
+            static OptionSpecification option_specification();
     };
 
     template <>
@@ -179,6 +180,7 @@ namespace eos
 
             static std::shared_ptr<FormFactors<PToGammaOffShell>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
             static OptionSpecification option_specification(const qnp::Prefix & process);
+            static OptionSpecification option_specification();
     };
 
     template <>
@@ -256,6 +258,7 @@ namespace eos
 
             static std::shared_ptr<FormFactors<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
             static OptionSpecification option_specification(const qnp::Prefix & process);
+            static OptionSpecification option_specification();
     };
 
     template <>

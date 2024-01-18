@@ -224,6 +224,19 @@ namespace eos
         return result;
     }
 
+    OptionSpecification
+    FormFactorFactory<PToGamma>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<PToGamma>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        return result;
+    }
+
     /* P -> gamma^* Processes */
 
     FormFactors<PToGammaOffShell>::~FormFactors() = default;
@@ -263,6 +276,19 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToGammaOffShell>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<PToGammaOffShell>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
 
@@ -445,6 +471,19 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToPP>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<PToPP>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
 
