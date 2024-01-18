@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +24,7 @@
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser.hh>
+#include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/log.hh>
 
 #include <set>
@@ -48,6 +50,14 @@ namespace eos
 
         exp::ExpressionMaker maker(parameters, kinematics, options, this);
         _expression = expression.accept_returning<Expression>(maker);
+
+        exp::ExpressionUsedParameterReader reader;
+        _expression.accept(reader);
+
+        for (Parameter::Id id : reader.parameter_ids)
+        {
+            this->uses(id);
+        }
     }
 
     ExpressionObservable::ExpressionObservable(const QualifiedName & name,
@@ -68,6 +78,14 @@ namespace eos
 
         exp::ExpressionCacher cacher(cache);
         _expression = expression.accept_returning<Expression>(cacher);
+
+        exp::ExpressionUsedParameterReader reader;
+        _expression.accept(reader);
+
+        for (Parameter::Id id : reader.parameter_ids)
+        {
+            this->uses(id);
+        }
     }
 
     double
