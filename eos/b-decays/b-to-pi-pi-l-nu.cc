@@ -37,6 +37,9 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToPP>> form_factors;
 
+        LeptonFlavorOption opt_l;
+        QuarkFlavorOption opt_q;
+
         UsedParameter m_B;
 
         UsedParameter tau_B;
@@ -59,25 +62,18 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             form_factors(FormFactorFactory<PToPP>::create("B->pipi::" + o.get("form-factors", "BFvD2016"), p, o)),
-            m_B(p["mass::B_" + o.get("q", "d")], u),
-            tau_B(p["life_time::B_" + o.get("q", "d")], u),
-            m_pi(p["mass::pi^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            opt_l(o, options, "l"),
+            opt_q(o, options, "q"),
+            m_B(p["mass::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
+            m_pi(p["mass::pi^" + std::string(opt_q.value() == QuarkFlavor::down ? "+" : "0")], u),
+            m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             rng(gsl_rng_alloc(gsl_rng_mt19937)),
             state(gsl_monte_miser_alloc(3u))
         {
-            if (o.get("l", "mu") == "tau")
-            {
-                throw InternalError("BToPiPiLeptonNeutrino: l == 'tau' is not a valid option for this decay channel");
-            }
-
-            if ((o.get("q", "d") != "d") && (o.get("q", "d") != "u")) // q = d is the default
-            {
-                // only B_{d,u} mesons can decay in this channel
-                throw InternalError("BToPiPiLeptonNeutrino: q = '" + o["q"] + "' is not a valid option for this decay channel");
-            }
+            Context ctx("When constructing B->pipilnu observable");
 
             u.uses(*form_factors);
             u.uses(*model);
@@ -187,7 +183,10 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToPiPiLeptonNeutrino>::options
     {
-        { "l", { "e", "mu" }, "mu" }
+        Model::option_specification(),
+        FormFactorFactory<PToPP>::option_specification(),
+        { "l", { "e", "mu" }, "mu" },
+        { "q", { "d", "u" }, "d" }
     };
 
     BToPiPiLeptonNeutrino::BToPiPiLeptonNeutrino(const Parameters & parameters, const Options & options) :

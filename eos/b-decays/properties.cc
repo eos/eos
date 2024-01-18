@@ -36,20 +36,16 @@ namespace eos
         // HQE non-perturbative matrix elements
         UsedParameter mu2_g;
 
+        QuarkFlavorOption opt_q;
+
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            opt_q(o, options, "q"),
             mu2_g(p["B->B::mu_G^2@1GeV"], u)
         {
-            static const std::array<char, 4> valid_specatators{{ 'd', 'u', 's', 'c' }};
-
-            std::string q(o.get("q", "d"));
-            if ((q.size() != 1) || (valid_specatators.cend() == std::find(valid_specatators.cbegin(), valid_specatators.cend(), q[0])))
-            {
-                // only B_{d,u,s,c} mesons
-                throw InternalError("BMesonProperties: q = '" + q + "' is not a valid option for this class");
-            }
+            Context ctx("When constructing the B meson properties");
 
             u.uses(*model);
         }
@@ -75,6 +71,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BMesonProperties>::options
     {
+        Model::option_specification(),
+        { "q", { "u", "d", "s", "c"}, "d" }
     };
 
     BMesonProperties::BMesonProperties(const Parameters & parameters, const Options & options) :

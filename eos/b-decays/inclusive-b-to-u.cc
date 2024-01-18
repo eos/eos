@@ -40,6 +40,8 @@ namespace eos
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_l(o, options, "l")
         {
+            Context ctx("When constructing B->X_ulnu observable");
+
             u.uses(*model);
         }
 
@@ -61,6 +63,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToXuLeptonNeutrino<Naive>>::options
     {
+        Model::option_specification(),
         { "l", { "e", "mu", "tau" }, "mu" }
     };
 

@@ -292,6 +292,8 @@ namespace eos
             mu(p["cb" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors", "DKMR2017"), p, o))
         {
+            Context ctx("When constructing L_b->L_c lnu observable");
+
             u.uses(*form_factors);
             u.uses(*model);
         }
@@ -395,6 +397,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<LambdaBToLambdaCLeptonNeutrino>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
         { "l", { "e", "mu", "tau" }, "mu" }
     };
 

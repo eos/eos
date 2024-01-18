@@ -79,6 +79,8 @@ namespace eos
             opt_l(o, options, "l"),
             m_l(p["mass::" + opt_l.str()], u)
         {
+            Context ctx("When constructing B->l'l'lnu observable");
+
             u.uses(*model);
             u.uses(*form_factors);
 
@@ -858,6 +860,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToThreeLeptonsNeutrino>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<PToGammaOffShell>::option_specification(),
         { "lprime", { "e", "mu", "tau" }, "mu" },
         { "l", { "e", "mu", "tau" }, "e" },
     };

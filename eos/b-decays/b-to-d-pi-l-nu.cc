@@ -4,6 +4,7 @@
 #include <eos/b-decays/b-to-v-l-nu.hh>
 #include <eos/form-factors/mesonic.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/maths/power-of.hh>
@@ -22,12 +23,13 @@ namespace eos
     {
         // model
         SwitchOption opt_model;
+        std::shared_ptr<Model> model;
 
         // meson masses
         UsedParameter m_B, m_Dstar;
 
         // lepton mass
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
         UsedParameter m_l;
 
         // form factors
@@ -37,12 +39,15 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_model(o, "model", { "SM", "CKMScan" }, "SM"),
+            model(Model::make(opt_model.value(), p, o)),
             m_B(p["mass::B_d"], u),
             m_Dstar(p["mass::D_d^*"], u),
-            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
-            m_l(p["mass::" + opt_l.value()], u),
+            opt_l(o, options, "l"),
+            m_l(p["mass::" + opt_l.str()], u),
             ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "BGJvD2019"), p, o))
         {
+            Context ctx("When constructing B->Dpilnu observable");
+
             u.uses(*ff);
         }
 
@@ -441,6 +446,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToDPiLeptonNeutrino>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
         { "l", { "e", "mu", "tau" }, "mu" }
     };
 

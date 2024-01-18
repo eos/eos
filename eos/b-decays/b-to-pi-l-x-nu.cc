@@ -32,6 +32,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
+        QuarkFlavorOption opt_q;
+
         UsedParameter m_B;
 
         UsedParameter tau_B;
@@ -50,19 +52,16 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors", "BCL2008"), p, o)),
-            m_B(p["mass::B_" + o.get("q", "d")], u),
-            tau_B(p["life_time::B_" + o.get("q", "d")], u),
-            m_pi(p["mass::pi^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
+            opt_q(o, options, "q"),
+            m_B(p["mass::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
+            m_pi(p["mass::pi^" + std::string(opt_q.value() == QuarkFlavor::down ? "+" : "0")], u),
             m_mu(p["mass::mu"], u),
             m_tau(p["mass::tau"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
-            if ((o.get("q", "d") != "d") && (o.get("q", "d") != "u")) // q = d is the default
-            {
-                // only B_{d,u} mesons can decay in this channel
-                throw InternalError("BToPiLeptonInclusiveNeutrinos: q = '" + o["q"] + "' is not a valid option for this decay channel");
-            }
+            Context ctx("When constructing B->pilXnu observable");
 
             u.uses(*form_factors);
         }
@@ -143,6 +142,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToPiLeptonInclusiveNeutrinos>::options
     {
+        FormFactorFactory<PToP>::option_specification(),
+        { "q", { "d", "u" }, "d" }
     };
 
     BToPiLeptonInclusiveNeutrinos::BToPiLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :

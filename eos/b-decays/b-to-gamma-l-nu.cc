@@ -66,10 +66,9 @@ namespace eos
             f_B(p["decay-constant::B_u"], u),
             tau_B(p["life_time::B_u"], u)
         {
-            if(model == nullptr)
-                throw InternalError("BToGammaLeptonNeutrino: construction of model failed");
-            u.uses(*model);
+            Context ctx("When constructing B->gammalnu observable");
 
+            u.uses(*model);
             u.uses(*form_factors);
         }
 
@@ -174,7 +173,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToGammaLeptonNeutrino>::options
     {
-        { "form-factors", { "FLvD2022QCDF" }, "FLvD2022QCDF" }
+        Model::option_specification(),
+        FormFactorFactory<PToGamma>::option_specification()
     };
 
     BToGammaLeptonNeutrino::BToGammaLeptonNeutrino(const Parameters & parameters, const Options & options) :

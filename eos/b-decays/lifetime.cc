@@ -278,7 +278,7 @@ namespace eos
     Implementation<Lifetime>::options
     {
         Model::option_specification(),
-        { "q",            { "u", "d", "s" }, "" }
+        { "q", { "u", "d", "s" }, "" }
     };
 
     Lifetime::Lifetime(const Parameters & parameters, const Options & options) :
