@@ -78,6 +78,19 @@ namespace eos
         return result;
     }
 
+    OptionSpecification
+    FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        return result;
+    }
+
     /* J=1/2^+ -> J=1/2^- Processes */
 
     /* Lambda_b -> Lambda_c(2595) */
@@ -126,6 +139,19 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
 
@@ -183,6 +209,19 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
 }
