@@ -29,24 +29,27 @@ Basic rules are used to parse the input string
 
     Parentheses are recognized in expressions, and the usual precedence rules of arithmetics apply.
 
-  * Expression typically reference one or more EOS objects (either observables or a parameters) by name, it must be encapsulated by two chevrons: ``<<...>>``.
-    Names must be fulfill the requirements of :code:`eos.QualifiedName`. All features of a qualified name are supported,
-    including specifying option.
-    Names are assumed to point to an observable by default. If no observable of that name exists, a parameter of the same name is used.
-    If neither an observable nor a parameter of that name exists, an exception is raised.
-    Examples for a reference include ``<<mass::mu>>`` or ``<<B_u->lnu::BR>>``.
+  * Expressions can refer to existing EOS objects
 
-  * Expressions can reference a kinematic variable. Its name must be encapsulated by curly braces: ``{...}``.
-    The kinematic variable can already be used by an observable within the expression. If no observable uses the kinematic variable,
-    a new kinematic variable is automatically created. Examples for a kinematic variable include ``{q2}`` or ``{E_gamma}``.
+     - Observables are referenced by their :code:`eos.QualifiedName` and must be encapsulated by two chevrons: ``<<...>>``.
+       All features of a qualified name are supported, including specifying option.
+       Examples for a reference to an observable are ``<<B_u->lnu::BR>>`` and ``<<B->Kll::dBR/dq2;q=u>>``.
+     - Parameters are also referenced by their :code:`eos.QualifiedName`, but these must be enclosed in square brackets: ``[[...]]``.
+       For example, ``[[mass::mu]]`` is a valid expression.
+
+  * Expressions usually depend on kinematic variables.
+    These variables are implicitly inherited from the called observables (see the following section for details),
+    but inherited and new kinematic variables can also be explicitly used in the expression.
+    In this case, the name of the variable must be enclosed in braces: ``{...}``.
+    Examples of a kinematic variable are ``{q2}`` or ``{E_gamma}``.
 
 The following strings are valid observable expressions
 
-  * ``(<<mass::B_d>>^2 - 4 * <<mass::mu>>^2) ^ 0.5``
+  * ``([[mass::B_d]]^2 - 4 * [[mass::mu]]^2) ^ 0.5``
 
   * ``1.0 / <<B_u->lnu::BR;l=mu>>``
 
-  * ``<<B->K::f_+(q2)>> * (1 - {q2} / <<mass::B_d^*>>^2)``
+  * ``<<B->K::f_+(q2)>> * (1 - {q2} / [[mass::B_d^*]]^2)``
 
 Dealing with Kinematic Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
