@@ -24,8 +24,7 @@ At the top level, the format includes the following YAML keys:
 
  - ``predictions`` (**optional**) --- The list of theory predictions within the analysis.
 
- - ``observables`` (**optional**) --- The list of custom observables defined for the scope of the analysis;
-   see :ref:`the corresponding section <defining_observables>` for an introduction on how to define a custom observable.
+ - ``observables`` (**optional**) --- The list of custom observables defined for the scope of the analysis.
 
 The following example illustrates the analysis file format at the hand of a real-world example.
 
@@ -126,3 +125,20 @@ The following example illustrates the organisation of a posterior.
        likelihood:
          - TH-pi
          - EXP-pi
+
+Observables
+~~~~~~~~~~~
+
+New observables can be defined and used in the analysis description by following the syntax described in :ref:`the corresponding section <defining_observables>`.
+
+For example, the following code defines the ratio of two :math:`B \to \pi` form-factors as a new observable.
+
+.. code-block:: yaml
+
+  observables:
+    'B->pi::f_+(q2)/f_0(q2)':
+      latex: '$\frac{f_+}{f_0}$'
+      unit: '1'
+      options: {}
+      expression:
+        '<<B->pi::f_+(q2)>> / <<B->pi::f_0(q2)>>'
