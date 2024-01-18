@@ -64,6 +64,8 @@ namespace eos
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
+            Context ctx("When constructing L_b->L_c(2625) lnu observable");
+
             u.uses(*form_factors);
             u.uses(*model);
         }
@@ -204,6 +206,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<LambdaBToLambdaC2625LeptonNeutrino>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
         { "l", { "e", "mu", "tau" }, "mu" }
     };
 

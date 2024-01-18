@@ -85,6 +85,8 @@ namespace eos
             tau(p["life_time::B_s"], u),
             form_factors(FormFactorFactory<PToV>::create("B_s->K^*::" + o.get("form-factors", "FMvD2015"), p, o))
         {
+            Context ctx("When constructing B_s->K*lnu observable");
+
             u.uses(*form_factors);
             u.uses(*model);
         }
@@ -174,6 +176,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BsToKstarLeptonNeutrino>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
         { "l", { "e", "mu", "tau" }, "mu" }
     };
 

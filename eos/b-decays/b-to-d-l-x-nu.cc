@@ -35,7 +35,7 @@ namespace eos
     {
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
-        SwitchOption opt_q;
+        QuarkFlavorOption opt_q;
 
         UsedParameter m_B;
 
@@ -59,10 +59,10 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             form_factors(FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors", "BCL2008"), p, o)),
-            opt_q(o, "q", { "u", "d" }, "d"),
-            m_B(p["mass::B_" + opt_q.value()], u),
-            tau_B(p["life_time::B_" + opt_q.value()], u),
-            m_D(p["mass::D_" + opt_q.value()], u),
+            opt_q(o, options, "q"),
+            m_B(p["mass::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
+            m_D(p["mass::D_" + opt_q.str()], u),
             m_mu(p["mass::mu"], u),
             m_tau(p["mass::tau"], u),
             g_fermi(p["WET::G_Fermi"], u),
@@ -70,6 +70,8 @@ namespace eos
             opt_model(o, "model", {"SM"}, "SM"),
             model(Model::make(opt_model.value(), p, o))
         {
+            Context ctx("When constructing B->DlX observable");
+
             u.uses(*form_factors);
         }
 
@@ -150,6 +152,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToDLeptonInclusiveNeutrinos>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<PToP>::option_specification(),
+        { "q", { "d", "u" }, "d" }
     };
 
     BToDLeptonInclusiveNeutrinos::BToDLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :
