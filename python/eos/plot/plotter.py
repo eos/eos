@@ -989,6 +989,10 @@ class Plotter:
                 yvalues = np.array(yvalues)
                 yerrors = np.array(yerrors)
 
+                if len(xvalues) == 0:
+                    eos.info(f'   skipping plot for constraint {name} since it does not contain the requested observable')
+                    return
+
                 if self.plot_residues:
                     yvalues -= obs_values
 
