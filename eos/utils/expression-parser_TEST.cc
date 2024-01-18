@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-parser-impl.hh>
 #include <eos/utils/expression-printer.hh>
+#include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -211,6 +212,22 @@ class ExpressionParserTest :
 
                 std::set<std::string> expected_kinematic{};
                 TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
+
+                // Create a usable expression
+                Parameters p = Parameters::Defaults();
+                ExpressionMaker maker(p, Kinematics(), Options());
+                Expression e = test.e.accept_returning<Expression>(maker);
+
+                // Extract used parameters from an expression
+                ExpressionUsedParameterReader used_parameter_reader;
+                e.accept(used_parameter_reader);
+
+                std::set<Parameter::Id> expected_used_parameters
+                {
+                    p["mass::c"].id(),
+                    p["mass::b(MSbar)"].id()
+                };
+                TEST_CHECK_EQUAL(expected_used_parameters, used_parameter_reader.parameter_ids);
             }
 
             // Test numerical evaluation
