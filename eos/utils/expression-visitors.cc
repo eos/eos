@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-printer.hh>
+#include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/join.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -698,5 +699,66 @@ namespace eos::exp
         throw InternalError("Encountered CachedObservableExpression in ExpressionCacher::visit");
 
         return e;
+    }
+
+    /*
+     * ExpressionUsedParameterReader
+     */
+    void
+    ExpressionUsedParameterReader::visit(const BinaryExpression & e)
+    {
+        e.lhs.accept(*this);
+        e.rhs.accept(*this);
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const ConstantExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const ObservableNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const ObservableExpression & e)
+    {
+        const ParameterUser & parameter_user = static_cast<const ParameterUser &>(*e.observable);
+        for (const auto & parameter_id : parameter_user)
+        {
+            this->parameter_ids.insert(parameter_id);
+        }
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const ParameterNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const ParameterExpression & e)
+    {
+        this->parameter_ids.insert(e.parameter.id());
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const KinematicVariableNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const KinematicVariableExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const CachedObservableExpression & e)
+    {
+        const ParameterUser & parameter_user = static_cast<const ParameterUser &>(*e.cache.observable(e.id));
+        for (const auto & parameter_id : parameter_user)
+        {
+            this->parameter_ids.insert(parameter_id);
+        }
     }
 }
