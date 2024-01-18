@@ -327,6 +327,13 @@ namespace eos
             const UsedParameter & _BW_mass_p, _BR_width_p;
 
             template <typename Parameter_>
+            double CalculateMomentum(const double & m, const double & m1, const double & m2) const;
+            template <typename Parameter_>
+            double BlattWeisskopfFormFactor(const double & q, const double & q_J, const double & r, const unsigned int & J) const;
+            template <typename Parameter_>
+            complex<double> RelativisticSpinBreitWigner(const double & m, const double & mass_J, const double & width_J, const double & r, const unsigned int & J, const double & q, const double & q_J) const;
+
+            template <typename Parameter_>
             double _calc_coeff(const double & k2, const std::array<Parameter_, 2> & a) const;
             template <typename Parameter_>
             complex<double> _calc_ff_p(const double & q2, const double & k2, const double & m2_R, const std::array<std::array<Parameter_, 2>, 3> & a) const;

@@ -481,6 +481,63 @@ namespace eos
 
     template <typename Process_>
     template <typename Parameter_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::CalculateMomentum(const double & m, const double & m1, const double & m2) const
+    {
+        if(m1+m2 > m ) return 0.;
+        double add_12 = m1 + m2;
+        double sub_12 = m1 - m2;
+
+        return std::sqrt((m*m - add_12*add_12)*(m*m - sub_12*sub_12))/(2.0*m);
+    }
+
+    template <typename Process_>
+    template <typename Parameter_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::BlattWeisskopfFormFactor(const double & q, const double & q_J, const double & r, const unsigned int & J) const
+    {
+        double r2 = r*r;
+        double q2 = q*q;
+        double q_J2 = q_J*q_J;
+
+        if(J == 0) {
+            // calc Blatt-Weisskopf form factor for Spin J == 0
+            return 1.0;
+        } else if (J == 1) {
+            // calc Blatt-Weisskopf form factor for Spin J == 1
+            return std::sqrt((1 + r2*q_J2) / (1 + r2*q2));
+        } else if(J == 2) {
+            // calc Blatt-Weisskopf form factor for Spin J == 2
+            return std::sqrt((9 + 3*r2*q_J2 + r2*r2*q_J2*q_J2) / (9 + 3*r2*q2 + r2*r2*q2*q2));
+        } else if(J == 3) {
+            // calc Blatt-Weisskopf form factor for Spin J == 3
+            return std::sqrt((225 + 45*r2*q_J2 + 6*r2*r2*q_J2*q_J2 + r2*r2*r2*q_J2*q_J2*q_J2) / (225 + 45*r2*q2 + 6*r2*r2*q2*q2 + r2*r2*r2*q2*q2*q2));
+        }
+    }
+
+
+
+    template <typename Process_>
+    template <typename Parameter_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::RelativisticSpinBreitWigner(const double & m, const double & mass_J, const double & width_J, const double & r, const unsigned int & J, const double & q, const double & q_J) const
+    {
+        // calculate some helpers
+        double q_ratio = q / q_J;
+        double m_ratio = mass_J / m;
+        double width;
+        width = width_J*pow(q_ratio, 2*J + 1)*m_ratio*BlattWeisskopfFormFactor(q,q_J,r,J)*BlattWeisskopfFormFactor(q,q_J,r,J);
+        double tanPhi = (mass_J * width)/(mass_J*mass_J - m*m);
+        double phi = atan(tanPhi);
+        complex<double> myAmp = std::polar(sin(phi), phi);
+        return myAmp;
+    }
+
+
+
+
+    template <typename Process_>
+    template <typename Parameter_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::_calc_ff_p(const double & q2, const double & k2, const double & m_R, const std::array<std::array<Parameter_, 2>, 3> & a) const
     {
@@ -492,11 +549,27 @@ namespace eos
 
         // const double mass  = _BW_mass_p;
         // const double width = _BW_width_p;
-        const double mass  = 0.892;
-        const double width = 0.1;
-        const complex<double> bw = mass * width / (k2 - mass * mass + 1.0i * mass * width); // TODO: update to full expression with running width etc
+        const double mass_J  = 0.892;
+        const double width_J = 0.046;
 
-        return bw / (1.0 - q2 / power_of<2>(m_R)) * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
+        int J = 1;
+        double r=1.9676;
+
+        double q = CalculateMomentum(std::sqrt(k2), 0.493677, 0.139570);
+		double q_J = CalculateMomentum(mass_J, 0.493677, 0.139570);
+
+        double q_ratio = q / q_J;
+        double m_ratio = mass_J / std::sqrt(k2);
+        double width = width_J*pow(q_ratio, 2*J + 1)*m_ratio*BlattWeisskopfFormFactor(q,q_J,r,J)*BlattWeisskopfFormFactor(q,q_J,r,J);
+        complex<double> bwamp = RelativisticSpinBreitWigner(std::sqrt(k2), mass_J, width_J, r, J, q, q_J)*(1./(mass_J*width));
+
+        double p = CalculateMomentum(5.27958, std::sqrt(q2), std::sqrt(k2));
+        double p0 = CalculateMomentum(5.27958, std::sqrt(q2), mass_J);
+
+        return bwamp*sqrt(p*q)*(q/q_J)*BlattWeisskopfFormFactor(q,q_J,r,J)*BlattWeisskopfFormFactor(p,p0,r,0);
+
+        // const complex<double> bw = mass_J * width_J / (k2 - mass_J * mass_J + 1.0i * mass_J * width_J); // TODO: update to full expression with running width etc
+        // return bw / (1.0 - q2 / power_of<2>(m_R)) * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
     }
 
     template <typename Process_>
@@ -586,7 +659,7 @@ namespace eos
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_perp(const double & q2, const double & k2, const double & z) const
-    {   
+    {
         //TODO: what should _traits.m_R_0m be?
         return (std::sqrt(3)/std::sqrt(2)) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_perp); //https://arxiv.org/pdf/1310.6660.pdf eqn II.15
     }
@@ -594,7 +667,7 @@ namespace eos
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_para(const double & q2, const double & k2, const double & z) const
-    {   
+    {
         //TODO: what should _traits.m_R_0m be?
         return (std::sqrt(3)/std::sqrt(2)) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_para);
     }
@@ -602,15 +675,15 @@ namespace eos
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_long(const double & q2, const double & k2, const double & z) const
-    {   
+    {
         //TODO: what should _traits.m_R_0m be?
-        return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_long) * z; //https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
+        return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_long) * z; ////https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
     }
 
     template <typename Process_>
     complex<double>
     BSZ2015FormFactors<Process_, PToPP>::f_time(const double & q2, const double & k2, const double & z) const
-    {   
+    {
         //TODO: what should _traits.m_R_0m be?
         return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_time) * z; //https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
     }
