@@ -33,7 +33,7 @@ namespace eos
         public:
             std::shared_ptr<Model> model;
             std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> form_factors;
-            SwitchOption opt_l;
+            LeptonFlavorOption opt_l;
 
             UsedParameter mu;
             UsedParameter alpha_e;
@@ -45,7 +45,9 @@ namespace eos
             UsedParameter m_Lstar;
 
             bool cp_conjugate;
-            std::string lepton_flavor;
+            LeptonFlavor lepton_flavor;
+
+            static const std::vector<OptionSpecification> options;
 
             AmplitudeGenerator(const Parameters &, const Options &);
 

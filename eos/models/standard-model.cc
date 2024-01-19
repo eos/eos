@@ -642,7 +642,7 @@ namespace implementation
 }
 
     WilsonCoefficients<BToS>
-    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const std::string & /*lepton_flavor*/, const bool & /*cp_conjugate*/) const
+    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & /*lepton_flavor*/, const bool & /*cp_conjugate*/) const
     {
         /*
          * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.

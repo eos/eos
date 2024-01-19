@@ -444,7 +444,7 @@ class LowRecoilTest :
                 const double        alpha_s = m->alpha_s(mu);
                 const double        m_b_PS = m->m_b_ps(2.0);
                 const auto          m_c = m->m_c_msbar(mu);
-                const auto          wc = m->wilson_coefficients_b_to_s(mu, "mu", false);
+                const auto          wc = m->wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
 
                 TEST_CHECK_NEARLY_EQUAL(m_b_PS,          4.46, eps);
 

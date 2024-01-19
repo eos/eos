@@ -88,7 +88,7 @@ namespace eos
             double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * power_of<2>(1.0 - m_c_hat));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu" /* fake lepton flavor */);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), LeptonFlavor::muon /* fake lepton flavor */);
             complex<double> c7np = wc.c7() - c7sm;
 
             double result = (sm + sm_delta * uncertainty)
@@ -459,7 +459,7 @@ namespace eos
             double m_b_pole = 4.8;                  // ToDo: check whether hardcoded numerical value could be removed
             double lnmu = std::log(m_b_pole / mu);
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu, "mu" /* fake lepton flavor */);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu, LeptonFlavor::muon /* fake lepton flavor */);
 
             // Perturbative contributions
             complex<double> D = perturbative_bsgamma(z, wc, alpha_s, lnmu);
@@ -513,7 +513,7 @@ namespace eos
             // Strong coupling
             double alpha_s = model->alpha_s(mu()), a_s = alpha_s / (4.0 * pi);
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu" /* fake lepton flavor */);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), LeptonFlavor::muon /* fake lepton flavor */);
 
             // Perturbative contributions
             complex<double> D = perturbative_bsgamma(z, wc, alpha_s, lnmu);

@@ -15,8 +15,8 @@ namespace eos
         tau(p["life_time::B_" + o.get("q", "d")], *this),
         m_B(p["mass::B_" + o.get("q", "d")], *this),
         m_Kstar(p["mass::K_d^*"], *this),
-        l(o, "l", { "e", "mu" }, "mu"),
-        m_l(p["mass::" + l.value()], *this),
+        l(o, options, "l"),
+        m_l(p["mass::" + l.str()], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
     {
         std::string spectator_quark = o.get("q", "d");
@@ -42,4 +42,11 @@ namespace eos
     }
 
     BToKstarGamma::AmplitudeGenerator::~AmplitudeGenerator() = default;
+
+    const std::vector<OptionSpecification>
+    BToKstarGamma::AmplitudeGenerator::options
+    {
+        Model::option_specification(),
+        { "l", { "e", "mu" }, "mu" },
+    };
 }

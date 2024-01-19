@@ -360,7 +360,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.2209967815, eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.279801085, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.009683640, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c3()), -0.005775920, eps);
@@ -393,7 +393,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.2233419372, eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.28768333, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.01013250, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c3()), -0.00600697, eps);
@@ -428,7 +428,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.2263282172, eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
                 TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c1"],           real(wc.c1()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c2"],           real(wc.c2()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c3"],           real(wc.c3()),  eps);

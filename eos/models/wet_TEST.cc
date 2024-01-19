@@ -95,7 +95,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.2233419372, eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
                 TEST_CHECK_NEARLY_EQUAL(wc._alpha_s,    +0.2233419372, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),  -0.29063621,   eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),  +1.01029623,   eps);
@@ -153,7 +153,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.2233419372, eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
                 TEST_CHECK_NEARLY_EQUAL(wc._alpha_s,    +0.2233419372, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),  -0.29063621,   eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),  +1.01029623,   eps);
@@ -184,7 +184,7 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c9prime()),  +0.0,     eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c10prime()), -M_PI,    eps);
 
-                wc = model.wilson_coefficients_b_to_s(mu, "e", false);
+                wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::electron, false);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c9()),       +3.27,       eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c9prime()),  +0.007,      eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c10prime()), +0.006,      eps);
@@ -604,7 +604,7 @@ class ConstrainedWilsonScanModelTest:
                 p["b->smumu::Re{cT}"] = 2.0;
                 p["b->smumu::Re{cT5}"] = -43.0;
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
 
                 TEST_CHECK_RELATIVE_ERROR(std::real(wc.c7()),  1.008, eps);
 
@@ -660,7 +660,7 @@ class ConstrainedWilsonScanModelTest:
                 p["b->smumu::Re{cT5}"] = -43.0;
                 p["b->smumu::Im{cT5}"] = M_PI;
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
 
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c7()),      1.008, eps);
 
@@ -717,8 +717,8 @@ class ConstrainedWilsonScanModelTest:
                 ConstrainedWilsonScanModel constrained_model(p, o);
                 WilsonScanModel unconstrained_model(p, o);
 
-                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, "mu", false);
-                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
+                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
 
                 auto ux = unconstrained_wc._sm_like_coefficients.begin();
                 for (auto & x : constrained_wc._sm_like_coefficients)

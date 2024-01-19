@@ -320,7 +320,7 @@ namespace eos
 
         UsedParameter alpha_e;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
         UsedParameter mu;
 
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
@@ -337,8 +337,8 @@ namespace eos
             alpha(p["Lambda::alpha"], u),
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
+            opt_l(o, options, "l"),
+            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o))
         {
             u.uses(*form_factors);
@@ -844,7 +844,7 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter hbar;
         UsedParameter tau_Lambda_b;
@@ -868,7 +868,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
+            opt_l(o, options, "l"),
             hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["WET::G_Fermi"], u),
@@ -877,7 +877,7 @@ namespace eos
             alpha(p["Lambda::alpha"], u),
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
+            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             r_perp_0(p["Lambda_b->Lambdall::r_perp_0@MvD2016"], u),
             r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
