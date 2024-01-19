@@ -27,12 +27,14 @@ namespace eos
             UsedParameter m_B;
             UsedParameter m_Kstar;
 
-            SwitchOption l;
+            LeptonFlavorOption l;
             UsedParameter m_l;
 
             bool cp_conjugate;
             char q;
             double e_q;
+
+            static const std::vector<OptionSpecification> options;
 
             AmplitudeGenerator(const Parameters &, const Options &);
 

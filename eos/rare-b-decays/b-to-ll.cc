@@ -35,7 +35,7 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter f_B;
 
@@ -67,16 +67,16 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
+            opt_l(o, options, "l"),
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             delta_gamma_B(p["life_time::Delta_B_" + o.get("q", "d")], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
+            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            m_l(p["mass::" + opt_l.value()], u),
+            m_l(p["mass::" + opt_l.str()], u),
             m_b(p["mass::b(MSbar)"], u),
             m_q(p["mass::" + o.get("q", "d") + "(2GeV)"], u)
         {

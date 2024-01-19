@@ -261,7 +261,7 @@ class deltaC79Test :
             p["b->s::c2"] = 2.0;
 
             auto m = Model::make("WET", p, Options());
-            const auto wc = m->wilson_coefficients_b_to_s(mu, "mu", false);
+            const auto wc = m->wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
 
             const complex<double> deltaC7_ref = -0.080829295482612 - 0.047566420817994316 * 1.0i;
             const complex<double> deltaC9_ref = -0.7022411014307881 + 0.1880322661854362 * 1.0i;

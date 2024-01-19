@@ -53,7 +53,7 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter gfermi;
 
@@ -83,18 +83,18 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
+            opt_l(o, options, "l"),
             gfermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_tau(p["mass::tau"], u),
-            m_l(p["mass::" + opt_l.value()], u),
+            m_l(p["mass::" + opt_l.str()], u),
             m_Z(p["mass::Z"], u),
             mu2_g(p["B->B::mu_G^2@1GeV"], u),
             mu2_pi(p["B->B::mu_pi^2@1GeV"], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
+            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u)
         {
             u.uses(*model);
@@ -305,7 +305,7 @@ namespace eos
             //double u2 = 27.1 + 23.0 / 3.0 * u1 * log(mu / m_b);
             //double uem = 12.0 / 23.0 * (model->alpha_s(m_Z) / alpha_s - 1.0);
 
-            WilsonCoefficients<BToS> w = model->wilson_coefficients_b_to_s(mu(), "mu" /* fake lepton flavor */);
+            WilsonCoefficients<BToS> w = model->wilson_coefficients_b_to_s(mu(), LeptonFlavor::muon /* fake lepton flavor */);
 
             // cf. [HLMW2005], Eq. (69), p. 16
             complex<double> c7eff = w.c7() - w.c3() / 3.0 - 4.0 * w.c4() / 9.0 - 20.0 * w.c5() / 3.0 - 80.0 * w.c6() / 9.0;

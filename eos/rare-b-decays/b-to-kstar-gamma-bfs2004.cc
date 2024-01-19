@@ -135,7 +135,7 @@ namespace eos
         complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
         if (cp_conjugate)
             lambda_hat_u = std::conj(lambda_hat_u);
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu" /*fake lepton flavor*/, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), LeptonFlavor::muon /*fake lepton flavor*/, cp_conjugate);
 
         // Compute the QCDF Integrals
         double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp

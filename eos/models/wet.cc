@@ -177,7 +177,7 @@ namespace eos
     }
 
     WilsonCoefficients<BToS>
-    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavor, const bool & cp_conjugate) const
+    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const
     {
         std::function<complex<double> ()> c9,  c9prime;
         std::function<complex<double> ()> c10, c10prime;
@@ -185,7 +185,7 @@ namespace eos
         std::function<complex<double> ()> cP,  cPprime;
         std::function<complex<double> ()> cT,  cT5;
 
-        if ("e" == lepton_flavor)
+        if (LeptonFlavor::electron == lepton_flavor)
         {
             c9 = _e_c9;     c9prime = _e_c9prime;
             c10 = _e_c10;   c10prime = _e_c10prime;
@@ -193,7 +193,7 @@ namespace eos
             cP = _e_cP;     cPprime = _e_cPprime;
             cT = _e_cT;     cT5 = _e_cT5;
         }
-        else if ("mu" == lepton_flavor)
+        else if (LeptonFlavor::muon == lepton_flavor)
         {
             c9 = _mu_c9;    c9prime = _mu_c9prime;
             c10 = _mu_c10;  c10prime = _mu_c10prime;

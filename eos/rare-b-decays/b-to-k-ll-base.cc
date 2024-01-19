@@ -28,15 +28,15 @@ namespace eos
     BToKDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model", "SM"), p, o)),
         form_factors(FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors", "KMPW2010"), p)),
-        opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
-        mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], *this),
+        opt_l(o, options, "l"),
+        mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         hbar(p["QM::hbar"], *this),
         tau(p["life_time::B_" + o.get("q", "d")], *this),
         m_B(p["mass::B_" + o.get("q", "d")], *this),
         m_K(p["mass::K_" + o.get("q", "d")], *this),
-        m_l(p["mass::" + opt_l.value()], *this),
+        m_l(p["mass::" + opt_l.str()], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
         lepton_flavor(opt_l.value())
     {
@@ -52,6 +52,13 @@ namespace eos
     BToKDilepton::AmplitudeGenerator::~AmplitudeGenerator()
     {
     }
+
+    const std::vector<OptionSpecification>
+    BToKDilepton::AmplitudeGenerator::options
+    {
+        Model::option_specification(),
+        { "l", { "e", "mu", "tau" }, "mu" },
+    };
 
     double
     BToKDilepton::AmplitudeGenerator::beta_l(const double & s) const

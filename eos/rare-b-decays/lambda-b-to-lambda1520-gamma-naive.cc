@@ -52,7 +52,7 @@ namespace eos
         LambdaBToLambda1520Gamma::Amplitudes result;
 
         // Import WC with a fake lepton flavor
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu", cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), LeptonFlavor::muon, cp_conjugate);
 
         const double alpha_s_mu = model->alpha_s(mu()); // alpha_s at the hard scale
         const double m_b_msbar = model->m_b_msbar(mu());

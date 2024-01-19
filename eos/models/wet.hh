@@ -112,7 +112,7 @@ namespace eos
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
             /*! b->s Wilson coefficients */
-            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavor, const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const;
     };
 
     template <>

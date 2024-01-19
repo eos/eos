@@ -26,15 +26,15 @@ namespace eos
     BsToPhiDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model", "SM"), p, o)),
         form_factors(FormFactorFactory<PToV>::create("B_s->phi::" + o.get("form-factors", "BSZ2015"), p)),
-        opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
-        mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], *this),
+        opt_l(o, options, "l"),
+        mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         hbar(p["QM::hbar"], *this),
         tau(p["life_time::B_s"], *this),
         m_B(p["mass::B_s"], *this),
         m_V(p["mass::phi"], *this),
-        m_l(p["mass::" + opt_l.value()], *this),
+        m_l(p["mass::" + opt_l.str()], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
         lepton_flavor(opt_l.value())
     {
@@ -50,6 +50,13 @@ namespace eos
     BsToPhiDilepton::AmplitudeGenerator::~AmplitudeGenerator()
     {
     }
+
+    const std::vector<OptionSpecification>
+    BsToPhiDilepton::AmplitudeGenerator::options
+    {
+        Model::option_specification(),
+        { "l", { "e", "mu", "tau" }, "mu" },
+    };
 
     double
     BsToPhiDilepton::AmplitudeGenerator::beta_l(const double & s) const
