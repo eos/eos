@@ -56,6 +56,8 @@ namespace eos
             tau(p["life_time::Lambda_b"], u),
             mu(p["sb::mu"], u)
         {
+            Context ctx("When constructing Lb->L(1520)gamma observables");
+
             std::string tag = o.get("tag", "");
 
             if ("Naive" == tag)

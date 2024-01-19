@@ -59,6 +59,8 @@ namespace eos
             uncertainty(p["B->X_sgamma::uncertainty"], u),
             mu(p["sb::mu"], u)
         {
+            Context ctx("When constructing B->X_sgamma observables");
+
             if ("SM" != o.get("model", "SM"))
             {
                 Log::instance()->message("B->X_sgamma.model", ll_error)

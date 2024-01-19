@@ -42,10 +42,12 @@ namespace eos
             UsedParameter f_K;
             UsedParameter lambda_B_p_inv;
 
-            SwitchOption q;
+            QuarkFlavorOption q;
 
             SwitchOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<nff::PToP> nonlocal_formfactor;
+
+            static const std::vector<OptionSpecification> options;
 
             BToKDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BToKDileptonAmplitudes();

@@ -44,7 +44,7 @@ namespace eos
 
         UsedParameter hbar;
 
-        SwitchOption q;
+        QuarkFlavorOption q;
 
         UsedParameter tau;
 
@@ -57,10 +57,12 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["QM::hbar"], u),
-            q(o, "q", { "d", "u" }, "d"),
-            tau(p["life_time::B_" + q.value()], u),
+            q(o, options, "q"),
+            tau(p["life_time::B_" + q.str()], u),
             tag(o, "tag", { "BFS2004"})
         {
+            Context ctx("When constructing B->K^*gamma observables");
+
             if ("BFS2004" == tag.value())
             {
                 amplitude_generator.reset(new BToKstarGammaAmplitudes<tag::BFS2004>(p, o));
@@ -110,6 +112,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToKstarGamma>::options
     {
+        Model::option_specification(),
         {"q", { "d", "u" }, "d"}
     };
 

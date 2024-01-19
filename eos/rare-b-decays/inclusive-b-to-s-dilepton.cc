@@ -97,6 +97,8 @@ namespace eos
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u)
         {
+            Context ctx("When constructing B->X_sll observables");
+
             u.uses(*model);
         }
 

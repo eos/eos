@@ -28,6 +28,7 @@ namespace eos
         model(Model::make(o.get("model", "SM"), p, o)),
         form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
         opt_l(o, options, "l"),
+        opt_cp_conjugate(o, options, "cp-conjugate"),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
@@ -36,11 +37,10 @@ namespace eos
         m_B(p["mass::B_" + o.get("q", "d")], *this),
         m_Kstar(p["mass::K_d^*"], *this),
         m_l(p["mass::" + opt_l.str()], *this),
-        cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+        cp_conjugate(opt_cp_conjugate.value()),
         lepton_flavor(opt_l.value())
     {
-        if (! form_factors.get())
-            throw InternalError("Form factors not found!");
+        Context ctx("When constructing B->K^*ll amplitudes");
 
         if (0.0 == m_l())
         {
@@ -59,6 +59,8 @@ namespace eos
     BToKstarDilepton::AmplitudeGenerator::options
     {
         Model::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
         { "l", { "e", "mu", "tau" }, "mu" },
     };
 

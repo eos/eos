@@ -43,7 +43,14 @@ namespace eos
         opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
         nonlocal_formfactor(NonlocalFormFactor<nff::PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o))
     {
+        Context ctx("When constructing Bs->Phill GVdV2020 amplitudes");
     }
+
+    const std::vector<OptionSpecification>
+    BsToPhiDileptonAmplitudes<tag::GvDV2020>::options
+    {
+        { "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020" }
+    };
 
 
     BsToPhiDilepton::FormFactorCorrections

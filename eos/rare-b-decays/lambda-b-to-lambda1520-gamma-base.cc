@@ -31,11 +31,22 @@ namespace eos
         g_fermi(p["WET::G_Fermi"], *this),
         m_Lb(p["mass::Lambda_b"], *this),
         m_Lstar(p["mass::Lambda(1520)"], *this),
-        cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
+        opt_cp_conjugate(o, options, "cp-conjugate"),
+        cp_conjugate(opt_cp_conjugate.value())
     {
+        Context ctx("When constructing Lb->L(1520)gamma amplitudes");
+
         this->uses(*form_factors);
         this->uses(*model);
     }
 
     LambdaBToLambda1520Gamma::AmplitudeGenerator::~AmplitudeGenerator() = default;
+
+    const std::vector<OptionSpecification>
+    LambdaBToLambda1520Gamma::AmplitudeGenerator::options
+    {
+        Model::option_specification(),
+        FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
+    };
 }

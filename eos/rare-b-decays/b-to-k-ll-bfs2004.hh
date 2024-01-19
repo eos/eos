@@ -48,7 +48,9 @@ namespace eos
 
             double e_q;
 
-            char q;
+            QuarkFlavorOption q;
+
+            static const std::vector<OptionSpecification> options;
 
             std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
                     const double &, const double &, const double &, const double &,

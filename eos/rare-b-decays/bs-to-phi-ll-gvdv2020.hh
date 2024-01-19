@@ -41,6 +41,8 @@ namespace eos
             SwitchOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<nff::PToV> nonlocal_formfactor;
 
+            static const std::vector<OptionSpecification> options;
+
             BsToPhiDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BsToPhiDileptonAmplitudes() = default;
 

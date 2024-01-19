@@ -57,6 +57,8 @@ namespace eos
         std::function<complex<double> ()> lambda_t;
         std::function<WilsonCoefficients<wc::SBNuNu> ()> wc;
 
+        BooleanOption opt_cp_conjugate;
+
         bool cp_conjugate;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -68,12 +70,12 @@ namespace eos
             alpha_e(p["QED::alpha_e(m_b)"], u),
             hbar(p["QM::hbar"], u),
             mu(p["sbnunu::mu"], u),
-            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
+            opt_cp_conjugate(o, options, "cp-conjugate"),
+            cp_conjugate(opt_cp_conjugate.value())
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
+            Context ctx("When constructing Lb->Lnunu observables");
 
-            if (! form_factors.get())
-                throw InternalError("Form factors not found!");
+            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
 
             lambda_t  = [*this] () { return model->ckm_tb() * std::conj(model->ckm_ts()); };
             wc        = [*this] () { return model->wet_sbnunu(cp_conjugate); };
@@ -149,6 +151,8 @@ namespace eos
     Implementation<LambdaBToLambdaDineutrino>::options
     {
         Model::option_specification(),
+        FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" }
     };
 
 

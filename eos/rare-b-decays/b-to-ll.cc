@@ -36,6 +36,7 @@ namespace eos
         std::shared_ptr<Model> model;
 
         LeptonFlavorOption opt_l;
+        QuarkFlavorOption opt_q;
 
         UsedParameter f_B;
 
@@ -68,30 +69,32 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_l(o, options, "l"),
-            f_B(p["decay-constant::B_" + o.get("q", "d")], u),
-            m_B(p["mass::B_" + o.get("q", "d")], u),
-            tau_B(p["life_time::B_" + o.get("q", "d")], u),
-            delta_gamma_B(p["life_time::Delta_B_" + o.get("q", "d")], u),
+            opt_q(o, options, "q"),
+            f_B(p["decay-constant::B_" + opt_q.str()], u),
+            m_B(p["mass::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
+            delta_gamma_B(p["life_time::Delta_B_" + opt_q.str()], u),
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.str()], u),
             m_b(p["mass::b(MSbar)"], u),
-            m_q(p["mass::" + o.get("q", "d") + "(2GeV)"], u)
+            m_q(p["mass::" + opt_q.str() + "(2GeV)"], u)
         {
-            if (o.get("q", "d") == "d")
+            Context ctx("When constructing B->ll observables");
+
+            switch (opt_q.value())
             {
-                lambda = &lambda_t_d;
-            }
-            else if (o.get("q", "d") == "s")
-            {
-                lambda = &lambda_t_s;
-            }
-            else
-            {
-                // only neutral B mesons can decay in this channel
-                throw InternalError("ExclusiveBToDilepton: q = '" + o["q"] + "' is not a valid option for a neutral decay channel");
+                case QuarkFlavor::down:
+                    lambda = &lambda_t_d;
+                    break;
+                case QuarkFlavor::strange:
+                    lambda = &lambda_t_s;
+                    break;
+                default:
+                    // only neutral B mesons can decay in this channel
+                    throw InternalError("ExclusiveBToDilepton: q = '" + opt_q.str() + "' is not a valid option for a neutral decay channel");
             }
 
             u.uses(*model);
@@ -182,6 +185,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToDilepton>::options
     {
+        Model::option_specification(),
         {"l", { "e", "mu", "tau" }, "mu"},
         {"q", { "d", "s" }, "d"}
     };

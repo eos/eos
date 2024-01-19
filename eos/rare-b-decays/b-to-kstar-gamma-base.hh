@@ -22,16 +22,17 @@ namespace eos
             UsedParameter mu;
             UsedParameter alpha_e;
             UsedParameter g_fermi;
-            UsedParameter tau;
 
+            QuarkFlavorOption q;
+            UsedParameter tau;
             UsedParameter m_B;
             UsedParameter m_Kstar;
 
             LeptonFlavorOption l;
             UsedParameter m_l;
 
+            BooleanOption opt_cp_conjugate;
             bool cp_conjugate;
-            char q;
             double e_q;
 
             static const std::vector<OptionSpecification> options;

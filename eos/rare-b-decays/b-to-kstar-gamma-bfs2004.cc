@@ -59,6 +59,8 @@ namespace eos
         form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
         mu(p["sb::mu"], *this)
     {
+        Context ctx("When constructing B->K^*gamma BFS2004 amplitudes");
+
         this->uses(*model);
         this->uses(*form_factors);
 
@@ -118,7 +120,7 @@ namespace eos
         static const double e_u = +2.0/3.0;
 
         // spectator contributions
-        double delta_qu = (q == 'u' ? 1.0 : 0.0);
+        double delta_qu = (q.value() == QuarkFlavor::up ? 1.0 : 0.0);
 
         // kinematics
         double m_c_pole = model->m_c_pole();

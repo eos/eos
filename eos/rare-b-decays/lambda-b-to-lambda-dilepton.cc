@@ -341,6 +341,8 @@ namespace eos
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o))
         {
+            Context ctx("When constructing L_b->Lll observables");
+
             u.uses(*form_factors);
             u.uses(*model);
         }
@@ -984,6 +986,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<LambdaBToLambdaDilepton<LowRecoil>>::options
     {
+        Model::option_specification(),
         { "l", {"e", "mu", "tau"}, "mu" }
     };
 

@@ -51,7 +51,7 @@ namespace eos
 
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_q;
+        QuarkFlavorOption opt_q;
 
         UsedParameter m_B;
 
@@ -79,16 +79,18 @@ namespace eos
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             model(Model::make(o.get("model", "SM"), p, o)),
-            opt_q(o, "q", { "d", "u" }, "d"),
-            m_B(p["mass::B_" + opt_q.value()], u),
-            tau_B(p["life_time::B_" + opt_q.value()], u),
-            m_Kstar(p["mass::K_" + opt_q.value() + "^*"], u),
+            opt_q(o, options, "q"),
+            m_B(p["mass::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
+            m_Kstar(p["mass::K_" + opt_q.str() + "^*"], u),
             opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
             nonlocal_formfactor(NonlocalFormFactor<nff::PToV>::make("B->K^*::" + opt_nonlocal_formfactor.value(), p, o)),
             opt_psi(o, "psi", { "J/psi", "psi(2S)" }, "J/psi"),
             m_psi(p["mass::" + opt_psi.value()], u),
             f_psi(p["decay-constant::" + opt_psi.value()], u)
         {
+            Context ctx("When constructing B->K^*psi observables");
+
             if (! nonlocal_formfactor.get())
                 throw InternalError("Cannot construct the nonlocal formfactor");
 

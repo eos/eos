@@ -50,9 +50,13 @@ namespace eos
             UsedParameter uncertainty_xi_perp;
             UsedParameter uncertainty_xi_par;
 
-            bool ccbar_resonance;
+            BooleanOption opt_ccbar_resonance;
+            BooleanOption opt_use_nlo;
 
+            bool ccbar_resonance;
             bool use_nlo;
+
+            static const std::vector<OptionSpecification> options;
 
             std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
                     const double &, const double &, const double &, const double &,

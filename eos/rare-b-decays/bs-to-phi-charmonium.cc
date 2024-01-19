@@ -83,6 +83,8 @@ namespace eos
             m_psi(p["mass::" + opt_psi.value()], u),
             f_psi(p["decay-constant::" + opt_psi.value()], u)
         {
+            Context ctx("When constructing Bs->Phipsi observables");
+
             if (! nonlocal_formfactor.get())
                 throw InternalError("Cannot construct the nonlocal formfactor");
 
