@@ -34,9 +34,12 @@ namespace eos
         m_l(p["mass::" + opt_l.str()], *this),
         m_Lb(p["mass::Lambda_b"], *this),
         m_Lstar(p["mass::Lambda(1520)"], *this),
-        cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+        opt_cp_conjugate(o, options, "cp-conjugate"),
+        cp_conjugate(opt_cp_conjugate.value()),
         lepton_flavor(opt_l.value())
     {
+        Context ctx("When constructing Lb->L(1520)ll amplitudes");
+
         this->uses(*form_factors);
         this->uses(*model);
     }
@@ -49,6 +52,8 @@ namespace eos
     LambdaBToLambda1520Dilepton::AmplitudeGenerator::options
     {
         Model::option_specification(),
+        FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
         { "l", { "e", "mu", "tau" }, "mu" },
     };
 

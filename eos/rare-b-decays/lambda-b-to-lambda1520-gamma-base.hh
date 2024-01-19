@@ -43,7 +43,10 @@ namespace eos
             UsedParameter m_Lb;
             UsedParameter m_Lstar;
 
+            BooleanOption opt_cp_conjugate;
             bool cp_conjugate;
+
+            static const std::vector<OptionSpecification> options;
 
             AmplitudeGenerator(const Parameters &, const Options &);
 

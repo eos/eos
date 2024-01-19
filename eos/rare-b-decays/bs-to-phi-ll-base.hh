@@ -34,6 +34,7 @@ namespace eos
             std::shared_ptr<Model> model;
             std::shared_ptr<FormFactors<PToV>> form_factors;
             LeptonFlavorOption opt_l;
+            BooleanOption opt_cp_conjugate;
 
             UsedParameter mu;
             UsedParameter alpha_e;

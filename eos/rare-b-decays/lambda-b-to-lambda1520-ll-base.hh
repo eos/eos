@@ -44,6 +44,7 @@ namespace eos
             UsedParameter m_Lb;
             UsedParameter m_Lstar;
 
+            BooleanOption opt_cp_conjugate;
             bool cp_conjugate;
             LeptonFlavor lepton_flavor;
 

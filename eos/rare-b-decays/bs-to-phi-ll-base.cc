@@ -27,6 +27,7 @@ namespace eos
         model(Model::make(o.get("model", "SM"), p, o)),
         form_factors(FormFactorFactory<PToV>::create("B_s->phi::" + o.get("form-factors", "BSZ2015"), p)),
         opt_l(o, options, "l"),
+        opt_cp_conjugate(o, options, "cp-conjugate"),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
@@ -35,9 +36,11 @@ namespace eos
         m_B(p["mass::B_s"], *this),
         m_V(p["mass::phi"], *this),
         m_l(p["mass::" + opt_l.str()], *this),
-        cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+        cp_conjugate(opt_cp_conjugate.value()),
         lepton_flavor(opt_l.value())
     {
+        Context ctx("When constructing Bs->Phill amplitudes");
+
         if (0.0 == m_l())
         {
             throw InternalError("Zero lepton mass leads to NaNs in timelike amplitudes. Use tiny lepton mass > 0!");
@@ -55,6 +58,8 @@ namespace eos
     BsToPhiDilepton::AmplitudeGenerator::options
     {
         Model::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
         { "l", { "e", "mu", "tau" }, "mu" },
     };
 

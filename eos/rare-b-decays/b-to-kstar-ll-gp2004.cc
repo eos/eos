@@ -45,14 +45,24 @@ namespace eos
         sl_phase_long(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_0") + "@LowRecoil"], *this),
         sl_phase_par(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pa") + "@LowRecoil"], *this),
         sl_phase_perp(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pp") + "@LowRecoil"], *this),
-        ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
-        use_nlo(destringify<bool>(o.get("nlo", "true")))
+        opt_ccbar_resonance(o, options, "ccbar-resonance"),
+        opt_use_nlo(o, options, "nlo"),
+        ccbar_resonance(opt_ccbar_resonance.value()),
+        use_nlo(opt_use_nlo.value())
     {
+        Context ctx("When constructing B->K^*ll GP2004 amplitudes");
     }
 
     BToKstarDileptonAmplitudes<tag::GP2004>::~BToKstarDileptonAmplitudes()
     {
     }
+
+    const std::vector<OptionSpecification>
+    BToKstarDileptonAmplitudes<tag::GP2004>::options
+    {
+        { "ccbar-resonance", { "true", "false" },  "false" },
+        { "nlo", { "true", "false" },  "true" },
+    };
 
     // cf. [GP2004], Eq. (56)
     complex<double>

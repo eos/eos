@@ -37,9 +37,12 @@ namespace eos
         m_B(p["mass::B_" + o.get("q", "d")], *this),
         m_K(p["mass::K_" + o.get("q", "d")], *this),
         m_l(p["mass::" + opt_l.str()], *this),
-        cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+        opt_cp_conjugate(o, options, "cp-conjugate"),
+        cp_conjugate(opt_cp_conjugate.value()),
         lepton_flavor(opt_l.value())
     {
+        Context ctx("When constructing B->Kll amplitudes");
+
         if (0.0 == m_l())
         {
             throw InternalError("Zero lepton mass leads to NaNs in timelike amplitudes. Use tiny lepton mass > 0!");
@@ -57,6 +60,8 @@ namespace eos
     BToKDilepton::AmplitudeGenerator::options
     {
         Model::option_specification(),
+        FormFactorFactory<PToP>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
         { "l", { "e", "mu", "tau" }, "mu" },
     };
 

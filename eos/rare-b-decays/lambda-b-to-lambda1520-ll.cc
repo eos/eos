@@ -36,7 +36,7 @@ namespace eos
 
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter hbar;
         UsedParameter m_l;
@@ -47,12 +47,14 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WET"), p, o)),
-            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
+            opt_l(o, options, "l"),
             hbar(p["QM::hbar"], u),
-            m_l(p["mass::" + opt_l.value()], u),
+            m_l(p["mass::" + opt_l.str()], u),
             tau(p["life_time::Lambda_b"], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u)
+            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
         {
+            Context ctx("When constructing Lb->L(1520)ll observables");
+
             std::string tag = o.get("tag", "");
 
             if ("Naive" == tag)
@@ -311,7 +313,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<LambdaBToLambda1520Dilepton>::options
     {
-        {"l", { "e", "mu", "tau" }, "mu"},
+        Model::option_specification(),
+        {"l", { "e", "mu", "tau" }, "mu"}
     };
 
     double

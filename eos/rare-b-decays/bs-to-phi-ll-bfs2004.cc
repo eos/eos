@@ -52,9 +52,13 @@ namespace eos
         uncertainty_long(p["B_s->phill::A_long_uncertainty@LargeRecoil"], *this),
         uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], *this),
         uncertainty_xi_par(p["formfactors::xi_par_uncertainty"], *this),
-        ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
-        use_nlo(destringify<bool>(o.get("nlo", "true")))
+        opt_ccbar_resonance(o, options, "ccbar-resonance"),
+        opt_use_nlo(o, options, "nlo"),
+        ccbar_resonance(opt_ccbar_resonance.value()),
+        use_nlo(opt_use_nlo.value())
     {
+        Context ctx("When constructing Bs->Phill BFS2004 amplitudes");
+
         // Select the appropriate calculator for the QCDF integrals
         std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
         if ("mixed" == qcdf_integrals)
@@ -93,6 +97,13 @@ namespace eos
     BsToPhiDileptonAmplitudes<tag::BFS2004>::~BsToPhiDileptonAmplitudes()
     {
     }
+
+    const std::vector<OptionSpecification>
+    BsToPhiDileptonAmplitudes<tag::BFS2004>::options
+    {
+        { "ccbar-resonance", { "true", "false" },  "false" },
+        { "nlo", { "true", "false" },  "true" },
+    };
 
     BsToPhiDilepton::DipoleFormFactors
     BsToPhiDileptonAmplitudes<tag::BFS2004>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const

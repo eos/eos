@@ -56,25 +56,26 @@ namespace eos
         uncertainty_long(p["B->K^*ll::A_long_uncertainty@LargeRecoil"], *this),
         uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], *this),
         uncertainty_xi_par(p["formfactors::xi_par_uncertainty"], *this),
-        ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
-        use_nlo(destringify<bool>(o.get("nlo", "true")))
+        q(o, options, "q"),
+        opt_ccbar_resonance(o, options, "ccbar-resonance"),
+        opt_use_nlo(o, options, "nlo"),
+        ccbar_resonance(opt_ccbar_resonance.value()),
+        use_nlo(opt_use_nlo.value())
     {
-        std::string spectator_quark = o.get("q", "d");
-        if (spectator_quark.size() != 1)
-            throw InternalError("Option q should only be one character!");
+        Context ctx("When constructing B->K^*ll BFS2004 amplitudes");
 
-        q = spectator_quark[0];
-        if (q == 'd')
+        switch (q.value())
         {
-            e_q = -1.0 / 3.0;
-        }
-        else if (q == 'u')
-        {
-            e_q = 2.0 / 3.0;
-        }
-        else
-        {
-            throw InvalidOptionValueError("q", spectator_quark, "u, d");
+            case QuarkFlavor::down:
+                e_q = -1.0 / 3.0;
+                break;
+
+            case QuarkFlavor::up:
+                e_q = 2.0 / 3.0;
+                break;
+
+            default:
+                throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
         }
 
         // Select the appropriate calculator for the QCDF integrals
@@ -116,6 +117,15 @@ namespace eos
     {
     }
 
+    const std::vector<OptionSpecification>
+    BToKstarDileptonAmplitudes<tag::BFS2004>::options
+    {
+        { "q", { "d", "u" }, "d" },
+        { "ccbar-resonance", { "true", "false" },  "false" },
+        { "nlo", { "true", "false" },  "true" },
+    };
+
+
     BToKstarDilepton::DipoleFormFactors
     BToKstarDileptonAmplitudes<tag::BFS2004>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const
     {
@@ -124,7 +134,7 @@ namespace eos
         static const double e_u = +2.0/3.0;
 
         // spectator contributions
-        double delta_qu = (q == 'u' ? 1.0 : 0.0);
+        double delta_qu = (q.value() == QuarkFlavor::up ? 1.0 : 0.0);
 
         // kinematics
         double m_c_pole = model->m_c_pole();

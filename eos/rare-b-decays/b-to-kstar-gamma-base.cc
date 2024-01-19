@@ -12,29 +12,29 @@ namespace eos
         mu(p["sb::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
-        tau(p["life_time::B_" + o.get("q", "d")], *this),
-        m_B(p["mass::B_" + o.get("q", "d")], *this),
+        q(o, options, "q"),
+        tau(p["life_time::B_" + q.str()], *this),
+        m_B(p["mass::B_" + q.str()], *this),
         m_Kstar(p["mass::K_d^*"], *this),
         l(o, options, "l"),
         m_l(p["mass::" + l.str()], *this),
-        cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
+        opt_cp_conjugate(o, options, "cp-conjugate"),
+        cp_conjugate(opt_cp_conjugate.value())
     {
-        std::string spectator_quark = o.get("q", "d");
-        if (spectator_quark.size() != 1)
-            throw InternalError("Option q should only be one character!");
+        Context ctx("When constructing B->K^*gamma amplitudes");
 
-        q = spectator_quark[0];
-        if (q == 'd')
+        switch (q.value())
         {
-            e_q = -1.0 / 3.0;
-        }
-        else if (q == 'u')
-        {
-            e_q = 2.0 / 3.0;
-        }
-        else
-        {
-            throw InternalError("Unsupported spectator quark");
+            case QuarkFlavor::down:
+                e_q = -1.0 / 3.0;
+                break;
+
+            case QuarkFlavor::up:
+                e_q = 2.0 / 3.0;
+                break;
+
+            default:
+                throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
         }
 
         this->uses(*form_factors);
@@ -47,6 +47,9 @@ namespace eos
     BToKstarGamma::AmplitudeGenerator::options
     {
         Model::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
         { "l", { "e", "mu" }, "mu" },
+        { "q", { "d", "u" }, "d" },
+        { "cp-conjugate", { "true", "false" }, "false" }
     };
 }

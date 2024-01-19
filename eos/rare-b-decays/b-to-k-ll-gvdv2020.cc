@@ -40,15 +40,23 @@ namespace eos
         f_B(p["decay-constant::B_" + o.get("q", "d")], *this),
         f_K(p["decay-constant::K_" + o.get("q", "d")], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
-        q(o, "q", { "d", "u" }, "d"),
+        q(o, options, "q"),
         opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
         nonlocal_formfactor(NonlocalFormFactor<nff::PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o))
     {
+        Context ctx("When constructing B->Kll GVdV2020 amplitudes");
     }
 
     BToKDileptonAmplitudes<tag::GvDV2020>::~BToKDileptonAmplitudes()
     {
     }
+
+    const std::vector<OptionSpecification>
+    BToKDileptonAmplitudes<tag::GvDV2020>::options
+    {
+        { "q", { "d", "u" },  "d" },
+        { "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020" }
+    };
 
     BToKDilepton::DipoleFormFactors
     BToKDileptonAmplitudes<tag::GvDV2020>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const
@@ -59,7 +67,7 @@ namespace eos
 
         // spectator contributions
         double delta_qu = 0.0, e_q = e_d;
-        if (q.value()[0] == 'u')
+        if (q.value() == QuarkFlavor::up)
         {
             delta_qu = 1.0;
             e_q = e_u;

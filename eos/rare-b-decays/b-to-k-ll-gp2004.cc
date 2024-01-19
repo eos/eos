@@ -39,14 +39,24 @@ namespace eos
         m_s(p["mass::s(2GeV)"], *this),
         lambda_psd(p["B->Pll::Lambda_pseudo@LargeRecoil"], *this),
         sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], *this),
-        ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
-        use_nlo(destringify<bool>(o.get("nlo", "true")))
+        opt_ccbar_resonance(o, options, "ccbar-resonance"),
+        opt_use_nlo(o, options, "nlo"),
+        ccbar_resonance(opt_ccbar_resonance.value()),
+        use_nlo(opt_use_nlo.value())
     {
+        Context ctx("When constructing B->Kll GP2004 amplitudes");
     }
 
     BToKDileptonAmplitudes<tag::GP2004>::~BToKDileptonAmplitudes()
     {
     }
+
+    const std::vector<OptionSpecification>
+    BToKDileptonAmplitudes<tag::GP2004>::options
+    {
+        { "ccbar-resonance", { "true", "false" },  "false" },
+        { "nlo", { "true", "false" },  "true" },
+    };
 
     // We use the PS mass except for kappa
     double

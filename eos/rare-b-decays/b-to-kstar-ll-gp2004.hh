@@ -47,9 +47,13 @@ namespace eos
             UsedParameter sl_phase_par;
             UsedParameter sl_phase_perp;
 
-            bool ccbar_resonance;
+            BooleanOption opt_ccbar_resonance;
+            BooleanOption opt_use_nlo;
 
+            bool ccbar_resonance;
             bool use_nlo;
+
+            static const std::vector<OptionSpecification> options;
 
             BToKstarDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BToKstarDileptonAmplitudes();

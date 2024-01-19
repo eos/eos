@@ -60,7 +60,8 @@ namespace eos
 
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
+        QuarkFlavorOption opt_q;
 
         UsedParameter hbar;
         UsedParameter m_B;
@@ -73,14 +74,17 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WET"), p, o)),
-            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
+            opt_l(o, options, "l"),
+            opt_q(o, options, "q"),
             hbar(p["QM::hbar"], u),
-            m_B(p["mass::B_" + o.get("q", "d")], u),
-            m_K(p["mass::K_" + o.get("q", "d")], u),
-            m_l(p["mass::" + opt_l.value()], u),
-            tau(p["life_time::B_" + o.get("q", "d")], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u)
+            m_B(p["mass::B_" + opt_q.str()], u),
+            m_K(p["mass::K_" + opt_q.str()], u),
+            m_l(p["mass::" + opt_l.str()], u),
+            tau(p["life_time::B_" + opt_q.str()], u),
+            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
         {
+            Context ctx("When constructing B->Kll observables");
+
             std::string tag = o.get("tag", "");
 
             if ("BFS2004" == tag)
@@ -198,6 +202,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToKDilepton>::options
     {
+        Model::option_specification(),
         {"l", { "e", "mu", "tau" }, "mu"},
         {"q", { "d", "u" }, "d"}
     };

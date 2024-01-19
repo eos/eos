@@ -44,23 +44,24 @@ namespace eos
         a_1(p["K::a_1@1GeV"], *this),
         a_2(p["K::a_2@1GeV"], *this),
         lambda_psd(p["B->Pll::Lambda_pseudo@LargeRecoil"], *this),
-        sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], *this)
+        sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], *this),
+        q(o, options, "q")
     {
-        std::string spectator_quark = o.get("q", "d");
-        if (spectator_quark.size() != 1)
-            throw InternalError("Option q should only be one character!");
+        Context ctx("When constructing B->Kll BFS2004 amplitudes");
 
-        q = spectator_quark[0];
-        if (q == 'd')
+        switch (q.value())
         {
-            e_q = -1.0 / 3.0;
+            case QuarkFlavor::down:
+                e_q = -1.0 / 3.0;
+                break;
+
+            case QuarkFlavor::up:
+                e_q = 2.0 / 3.0;
+                break;
+
+            default:
+                throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
         }
-        else if (q == 'u')
-        {
-            e_q = 2.0 / 3.0;
-        }
-        else
-            throw InvalidOptionValueError("q", spectator_quark, "u, d");
 
         // Select the appropriate calculator for the QCDF integrals
         std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
@@ -101,6 +102,12 @@ namespace eos
     {
     }
 
+    const std::vector<OptionSpecification>
+    BToKDileptonAmplitudes<tag::BFS2004>::options
+    {
+        { "q", { "d", "u" }, "d" },
+    };
+
     BToKDilepton::DipoleFormFactors
     BToKDileptonAmplitudes<tag::BFS2004>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const
     {
@@ -109,7 +116,7 @@ namespace eos
         static const double e_u = +2.0 / 3.0;
 
         // spectator contributions
-        double delta_qu = (q == 'u' ? 1.0 : 0.0);
+        double delta_qu = (q.value() == QuarkFlavor::up ? 1.0 : 0.0);
 
         // kinematics
         double m_c_pole = model->m_c_pole();

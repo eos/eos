@@ -68,6 +68,8 @@ namespace eos
 
         GSL::QAGS::Config int_config;
 
+        BooleanOption opt_cp_conjugate;
+
         bool cp_conjugate;
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -150,9 +152,12 @@ namespace eos
             isospin_factor(_isospin_factor()),
             mu(p[opt_D.str() + "b" + "nunu::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
-            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+            opt_cp_conjugate(o, options, "cp-conjugate"),
+            cp_conjugate(opt_cp_conjugate.value()),
             form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
         {
+            Context ctx("When constructing B->Pnunu observables");
+
             switch (opt_D.value())
             {
                 case QuarkFlavor::strange:
@@ -220,6 +225,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
+        { "cp-conjugate", { "true", "false" },  "false" },
         { "D", { "s" },             "s" },
         { "q", { "u", "d" },        "u" },
         { "I", { "1", "0", "1/2" }, ""  },
