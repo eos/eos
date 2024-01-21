@@ -689,6 +689,14 @@ Belle:2019C:
     id: oai:arXiv.org:1908.01848
   inspire-id: Belle:2019xld
   title: Test of lepton flavor universality and search for lepton flavor violation in $B \rightarrow K\ell \ell$ decays
+Belle-II:2023A:
+  authors: Abudin\'en, F. et al.
+  collaboration: Belle II
+  title: 'Measurement of the $B^{0} \rightarrow D^{*-} \ell^{+} \nu_{\ell}$ branching ratio and $|V_{cb}|$ with a fully reconstructed accompanying $B$ meson in 2019-2021 Belle II data'
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2301.04716
+  inspire-id: Belle-II:2023jtw
 BG:2016A:
   authors: Bigi, Dante and Gambino, Paolo
   eprint:
