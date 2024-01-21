@@ -697,6 +697,14 @@ Belle-II:2023A:
     archive: arXiv
     id: oai:arXiv.org:2301.04716
   inspire-id: Belle-II:2023jtw
+Belle-II:2023B:
+  authors: Adachi, I. and others
+  collaboration: Belle II
+  title: 'Tests of Light-Lepton Universality in Angular Asymmetries of $B^0 \rightarrow D^{*-} \ell^{+} \nu$ Decays'
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2308.02023
+  inspire-id: Belle-II:2023svm
 BG:2016A:
   authors: Bigi, Dante and Gambino, Paolo
   eprint:
