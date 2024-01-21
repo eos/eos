@@ -705,6 +705,14 @@ Belle-II:2023B:
     archive: arXiv
     id: oai:arXiv.org:2308.02023
   inspire-id: Belle-II:2023svm
+Belle-II:2023C:
+  authors: Adachi, I. and others
+  collaboration: Belle II
+  title: 'Determination of $|V_{cb}|$ using $B^0 \rightarrow D^{*+} \ell^{-} \bar\nu$ decays with Belle II'
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2310.01170
+  inspire-id: Belle-II:2023okj
 BG:2016A:
   authors: Bigi, Dante and Gambino, Paolo
   eprint:
