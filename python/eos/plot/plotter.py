@@ -683,7 +683,16 @@ class Plotter:
                 if 'weights' in item['data']:
                     self.weights = item['data']['weights']
             else:
-                raise NotImplementedError('data-file not yet implemented')
+                if 'variable' not in item:
+                    raise KeyError('\'variable\' is mandatory when using \'data-file\' specified')
+                variable = item['variable']
+                data = eos.data.Prediction(item['data-file'])
+                try:
+                    self.xvalues = np.array([(p['kinematics'][variable + '_min'], p['kinematics'][variable + '_max']) for p in data.varied_parameters])
+                except KeyError as e:
+                    raise RuntimeError(f'both \'{variable}_min\' and \'{variable}_max\' must be present in the kinematics of each prediction in the data file') from e
+                self.samples = data.samples
+                self.weights = data.weights
 
             self.xvalues = np.array(self.xvalues)
 
