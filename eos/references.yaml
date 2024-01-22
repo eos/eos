@@ -1320,6 +1320,14 @@ IKMvD:2014A:
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
   title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
+JLQCD:2023A:
+  authors: Aoki, Y. and Colquhoun, B. and Fukaya, H. and Hashimoto, S. and Kaneko, T. and Kellermann, R. and Koponen, J. and Kou, E.
+  collaboration: JLQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2306.05657
+  inspire-id: Aoki:2023qpa
+  title: $B \to D^*\ell\nu_\ell$ semileptonic form factors from lattice QCD with M\"obius domain-wall quarks
 JS:2018A:
   authors: Jung, Martin and Straub, David M.
   eprint:
