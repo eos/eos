@@ -328,9 +328,10 @@ namespace eos
     struct BToKPi {
         using Transition = PToPP;
         static constexpr const char * label = "B->Kpi";
-        static constexpr double m_B  = 5.2795;
-        static constexpr double m_P1 = 0.494;
-        static constexpr double m_P2 = 0.13957;
+        static constexpr const char * name_B = "mass::B";
+        static constexpr const char * name_P1 = "mass::K";
+        static constexpr const char * name_P2 = "mass::Pi";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down);
 
         // for pole and t_0 calculation in zhat
         static constexpr double m_Bst = 5.32465;
