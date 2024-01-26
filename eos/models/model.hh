@@ -52,6 +52,7 @@ namespace eos
             struct SCNuL;
             struct DBCU;
             struct SBCU;
+            struct SBCC;
         }
         struct DeltaBS1;
         ///@}
@@ -164,6 +165,16 @@ namespace eos
     };
 
     /*!
+     * Base class for the sbcc component of models.
+     */
+    template <> class ModelComponent<components::WET::SBCC>
+    {
+        public:
+            /* sbcc Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjguate = false) const = 0;
+    };
+
+    /*!
      * Base class for the dbcu component of models.
      */
     template <> class ModelComponent<components::WET::DBCU>
@@ -197,7 +208,8 @@ namespace eos
         public virtual ModelComponent<components::WET::SBNuNu>,
         public virtual ModelComponent<components::WET::SBCU>,
         public virtual ModelComponent<components::WET::DBCU>,
-        public virtual ModelComponent<components::WET::SCNuL>
+        public virtual ModelComponent<components::WET::SCNuL>,
+        public virtual ModelComponent<components::WET::SBCC>
     {
         public:
             virtual ~Model() = 0;

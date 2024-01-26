@@ -352,6 +352,20 @@ namespace eos
 
             /* b->c Wilson coefficients */
             virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+
+    };
+
+    class WilsonScanComponent<components::WET::SBCC> :
+    public virtual ModelComponent<components::WET::SBCC>
+    {
+        private:
+            /* sbcc Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcc_parameters;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjugate) const;
     };
 
     /*!
@@ -369,7 +383,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
         public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SCNuL>
+        public WilsonScanComponent<components::WET::SCNuL>,
+        public WilsonScanComponent<components::WET::SBCC>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -403,7 +418,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
         public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SCNuL>
+        public WilsonScanComponent<components::WET::SCNuL>,
+        public WilsonScanComponent<components::WET::SBCC>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

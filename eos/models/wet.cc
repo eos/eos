@@ -684,6 +684,57 @@ namespace eos
         return result;
     }
 
+    std::array<std::tuple<UsedParameter, UsedParameter>, 20>
+    make_wet_parameters_classVhadronic(const Parameters & p, ParameterUser & u, const std::string & prefix)
+    {
+        // TODO: Some logic about sbqq (q=u,d,c) vs sqss and sqbb
+        auto result = std::array<std::tuple<UsedParameter, UsedParameter>, 20>{
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c1}"], u),   UsedParameter(p[prefix + "::Im{c1}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c2}"], u),   UsedParameter(p[prefix + "::Im{c2}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c3}"], u),   UsedParameter(p[prefix + "::Im{c3}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c4}"], u),   UsedParameter(p[prefix + "::Im{c4}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c5}"], u),   UsedParameter(p[prefix + "::Im{c5}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c6}"], u),   UsedParameter(p[prefix + "::Im{c6}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c7}"], u),   UsedParameter(p[prefix + "::Im{c7}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c8}"], u),   UsedParameter(p[prefix + "::Im{c8}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c9}"], u),   UsedParameter(p[prefix + "::Im{c9}"], u)  ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c10}"], u),  UsedParameter(p[prefix + "::Im{c10}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c1'}"], u),  UsedParameter(p[prefix + "::Im{c1'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c2'}"], u),  UsedParameter(p[prefix + "::Im{c2'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c3'}"], u),  UsedParameter(p[prefix + "::Im{c3'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c4'}"], u),  UsedParameter(p[prefix + "::Im{c4'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c5'}"], u),  UsedParameter(p[prefix + "::Im{c5'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c6'}"], u),  UsedParameter(p[prefix + "::Im{c6'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c7'}"], u),  UsedParameter(p[prefix + "::Im{c7'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c8'}"], u),  UsedParameter(p[prefix + "::Im{c8'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c9'}"], u),  UsedParameter(p[prefix + "::Im{c9'}"], u) ),
+            std::make_tuple(UsedParameter(p[prefix + "::Re{c10'}"], u), UsedParameter(p[prefix + "::Im{c10'}"], u))
+        };
+
+        return result;
+    }
+
+    /* sbcc Wilson coefficients */
+    WilsonScanComponent<components::WET::SBCC>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _sbcc_parameters(make_wet_parameters_classVhadronic(p, u, "sbcc"))
+    {
+    }
+
+    WilsonCoefficients<wc::SBCC>
+    WilsonScanComponent<components::WET::SBCC>::wet_sbcc(const bool & cp_conjugate) const
+    {
+        const double sign = cp_conjugate ? -1.0 : 1.0;
+
+        WilsonCoefficients<wc::SBCC> result;
+        for (unsigned i = 0 ; i < 10 ; ++i)
+        {
+            result._unprimed[i] = complex<double>(std::get<0>(_sbcc_parameters[i]),      sign * std::get<1>(_sbcc_parameters[i]));
+            result._primed[i]   = complex<double>(std::get<0>(_sbcc_parameters[i + 10]), sign * std::get<1>(_sbcc_parameters[i + 10]));
+        }
+
+        return result;
+    }
+
     ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
@@ -720,7 +771,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SBCC>(parameters, options, *this)
     {
     }
 
@@ -744,7 +796,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SBCC>(parameters, options, *this)
     {
     }
 

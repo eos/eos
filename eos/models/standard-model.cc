@@ -1128,6 +1128,29 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::WET::SBCC>::SMComponent(const Parameters & p , ParameterUser & u) :
+        _alpha_s_Z__sbcc(p["QCD::alpha_s(MZ)"], u),
+        _m_Z__sbcc(p["mass::Z"], u),
+        _m_W__sbcc(p["mass::W"], u),
+        _mu_0__sbcc(p["sbcc::mu_0"], u),
+        _mu__sbcc(p["sbcc::mu"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBCC>
+    SMComponent<components::WET::SBCC>::wet_sbcc(const bool & /* cp_conjugate */) const
+    {
+        // SM Wilson coefficients are real so cp conjugation has no effect
+
+        // TODO: Implement SM
+
+        WilsonCoefficients<wc::SBCC> wc;
+        wc._unprimed.fill(complex<double>(0.0));
+        wc._primed.fill(complex<double>(0.0));
+
+        return wc;
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
@@ -1138,7 +1161,8 @@ namespace implementation
         SMComponent<components::WET::SBNuNu>(p, *this),
         SMComponent<components::WET::SBCU>(p, *this),
         SMComponent<components::WET::DBCU>(p, *this),
-        SMComponent<components::WET::SCNuL>(p, *this)
+        SMComponent<components::WET::SCNuL>(p, *this),
+        SMComponent<components::WET::SBCC>(p, *this)
     {
     }
 
