@@ -1,0 +1,16 @@
+{
+    "name": "report-activity",
+    "version": "1.0.0",
+    "description": "Create a status report for the EOS developer meetings",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "EOS Authors",
+    "license": "ISC",
+    "dependencies": {
+      "fs": "^0.0.1-security",
+      "moment": "^2.30.1",
+      "nunjucks": "^3.2.4"
+    }
+}

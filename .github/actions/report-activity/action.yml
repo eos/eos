@@ -1,0 +1,5 @@
+name: 'Create Activity Report'
+description: 'Creates an activity report for an EOS developer meeting'
+runs:
+  using: 'node20'
+  main: 'index.js'
