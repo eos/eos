@@ -1304,6 +1304,14 @@ HPQCD:2022A:
     id: oai:arXiv.org:2207.12468
   inspire-id: Parrott:2022rgu
   title: $B\to K$ and $D\to K$ form factors from fully relativistic lattice QCD
+HPQCD:2023A:
+  authors: Harrison, Judd and Davies, Christine T. H.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2304.03137
+  inspire-id: Harrison:2023dzh
+  title: $B \rightarrow D^*$ vector, axial-vector and tensor form factors for the full $q^2$ range from lattice QCD
 IKKR:2007A:
   authors: Ivanov, Mikhail A. and Korner, Jurgen G. and Kovalenko, Sergey G. and Roberts,
     Craig D.
