@@ -715,13 +715,13 @@ namespace eos
     }
 
     /* sbcc Wilson coefficients */
-    WilsonScanComponent<components::WET::SBCC>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+    WilsonScanComponent<components::WET::SB>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
         _sbcc_parameters(make_wet_parameters_classVhadronic(p, u, "sbcc"))
     {
     }
 
     WilsonCoefficients<wc::SBCC>
-    WilsonScanComponent<components::WET::SBCC>::wet_sbcc(const bool & cp_conjugate) const
+    WilsonScanComponent<components::WET::SB>::wet_sbcc(const bool & cp_conjugate) const
     {
         const double sign = cp_conjugate ? -1.0 : 1.0;
 
@@ -772,7 +772,7 @@ namespace eos
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBCC>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SB>(parameters, options, *this)
     {
     }
 
@@ -797,7 +797,7 @@ namespace eos
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBCC>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SB>(parameters, options, *this)
     {
     }
 

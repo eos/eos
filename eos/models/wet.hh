@@ -355,8 +355,8 @@ namespace eos
 
     };
 
-    class WilsonScanComponent<components::WET::SBCC> :
-    public virtual ModelComponent<components::WET::SBCC>
+    class WilsonScanComponent<components::WET::SB> :
+    public virtual ModelComponent<components::WET::SB>
     {
         private:
             /* sbcc Wilson coefficients */
@@ -365,6 +365,7 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
+            /* sbcc Wilson coefficients */
             virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjugate) const;
     };
 
@@ -384,7 +385,7 @@ namespace eos
         public WilsonScanComponent<components::WET::SBCU>,
         public WilsonScanComponent<components::WET::DBCU>,
         public WilsonScanComponent<components::WET::SCNuL>,
-        public WilsonScanComponent<components::WET::SBCC>
+        public WilsonScanComponent<components::WET::SB>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -419,7 +420,7 @@ namespace eos
         public WilsonScanComponent<components::WET::SBCU>,
         public WilsonScanComponent<components::WET::DBCU>,
         public WilsonScanComponent<components::WET::SCNuL>,
-        public WilsonScanComponent<components::WET::SBCC>
+        public WilsonScanComponent<components::WET::SB>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

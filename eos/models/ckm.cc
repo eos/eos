@@ -119,7 +119,7 @@ namespace eos
         SMComponent<components::WET::SBCU>(parameters, *this),
         SMComponent<components::WET::DBCU>(parameters, *this),
         SMComponent<components::WET::SCNuL>(parameters, *this),
-        SMComponent<components::WET::SBCC>(parameters, *this)
+        SMComponent<components::WET::SB>(parameters, *this)
     {
     }
 
