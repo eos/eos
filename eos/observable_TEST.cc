@@ -185,6 +185,25 @@ class ObservableTest :
 
                 TEST_CHECK(found_problematic_observable == false);
             }
+
+            /* Test the LaTeX description of observables for unneeded dollar signs */
+            {
+                auto observables = Observables();
+
+                bool found_problematic_observable = false;
+
+                for (auto const & [name, entry] : observables)
+                {
+		            if (entry->latex().find("$") == std::string::npos)
+                        continue;
+
+                    found_problematic_observable = true;
+                    std::cerr << "Found problematic observable: " << name << ", with latex description: " << entry->latex() << "that has (likely) unneeded dollar signs" << std::endl;
+                }
+
+                TEST_CHECK(found_problematic_observable == false);
+
+            }
         }
 
 } observable_test;
