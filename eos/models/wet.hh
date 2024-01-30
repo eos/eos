@@ -282,7 +282,7 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbnunu Wilson coefficients */
+            /* sbcu Wilson coefficients */
             virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
     };
 
@@ -298,7 +298,7 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbnunu Wilson coefficients */
+            /* dbcu Wilson coefficients */
             virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
     };
 
