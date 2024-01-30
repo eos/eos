@@ -907,7 +907,7 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "U", "c" }, { "I", "1/2" } }),
 
-                make_expression_observable("B->D^*lnu::A_FB", R"(\bar A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_FB", R"(A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::A_FB_CP_specific;cp-conjugate=false>>
@@ -915,7 +915,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::A_FB_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::Abar_FB", R"(A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::Abar_FB", R"(\bar{A}_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::A_FB;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -938,7 +938,7 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "U", "c" }, { "I", "1/2" } }),
 
-                make_expression_observable("B->D^*lnu::F_L", R"(\bar F_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::F_L", R"(F_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::F_L_CP_specific;cp-conjugate=false>>
@@ -946,7 +946,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::F_L_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::Fbar_L", R"(F_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::Fbar_L", R"(\bar{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::F_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -969,7 +969,7 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "U", "c" }, { "I", "1/2" } }),
 
-                make_expression_observable("B->D^*lnu::Ftilde_L", R"(\bar{\tilde{F}}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::Ftilde_L", R"(\tilde{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::Ftilde_L_CP_specific;cp-conjugate=false>>
@@ -977,7 +977,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::Ftilde_L_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::Ftildebar_L", R"(\tilde{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::Ftildebar_L", R"(\bar{\tilde{F}}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::Ftilde_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
