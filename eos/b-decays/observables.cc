@@ -969,7 +969,7 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "U", "c" }, { "I", "1/2" } }),
 
-                make_expression_observable("B->D^*lnu::Ftilde_L", R"(\bar \tilde{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::Ftilde_L", R"(\bar{\tilde{F}}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::Ftilde_L_CP_specific;cp-conjugate=false>>
