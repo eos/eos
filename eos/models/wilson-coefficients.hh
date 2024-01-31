@@ -37,7 +37,11 @@ namespace eos
     {
         struct ClassII {};  // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
         struct ClassIII {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
-        struct ClassVhadronic {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators, cf. [AFGB:2017A], eq. (2.10)-(2.12), p. 8.
+        namespace ClassVhadronic
+        {
+            struct full {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators sbqq (q=u,d,c), cf. [AFGB:2017A], eq. (2.10)-(2.11), p. 8.
+            struct restricted {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators, sbqq (q=s,b) cf. [AFGB:2017A], eq. (2.10)-(2.12), p. 8.
+        }
     }
 
     using ChargedCurrent = bern::ClassII;
@@ -95,12 +99,11 @@ namespace eos
         inline complex<double> c10p() const { return _primed[9]; }
     };
 
-    template <> struct WilsonCoefficients<bern::ClassVhadronic>
+    template <> struct WilsonCoefficients<bern::ClassVhadronic::full>
     {
         /*
-         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.12).
-         * Note that for sbss and sbbb only half the operators are needed,
-         * and for sbss the operator definitions are different to sbqq (q=u,d,c,b)
+         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.11).
+         * This class applies to sbqq operators for q=u,d,c.
         */
         std::array<complex<double>, 10> _unprimed, _primed;
 
@@ -125,6 +128,28 @@ namespace eos
         inline complex<double> c8p()  const { return _primed[7]; }
         inline complex<double> c9p()  const { return _primed[8]; }
         inline complex<double> c10p() const { return _primed[9]; }
+    };
+
+    template <> struct WilsonCoefficients<bern::ClassVhadronic::restricted>
+    {
+        /*
+         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.12).
+         * This class applies to sbqq operators for q=s,b.
+         * Note that the operators are defined differently between sbss and sbbb.
+        */
+        std::array<complex<double>, 5> _unprimed, _primed;
+
+        inline complex<double> c1()   const { return _unprimed[0]; }
+        inline complex<double> c3()   const { return _unprimed[2]; }
+        inline complex<double> c5()   const { return _unprimed[4]; }
+        inline complex<double> c7()   const { return _unprimed[6]; }
+        inline complex<double> c9()   const { return _unprimed[8]; }
+
+        inline complex<double> c1p()  const { return _primed[0]; }
+        inline complex<double> c3p()  const { return _primed[2]; }
+        inline complex<double> c5p()  const { return _primed[4]; }
+        inline complex<double> c7p()  const { return _primed[6]; }
+        inline complex<double> c9p()  const { return _primed[8]; }
     };
 
     struct BToS {};
@@ -305,7 +330,7 @@ namespace eos
     };
 
     template <> struct WilsonCoefficients<wc::SBCC> :
-        public WilsonCoefficients<bern::ClassVhadronic>
+        public WilsonCoefficients<bern::ClassVhadronic::full>
     {
         /*
          * Normalisation:
