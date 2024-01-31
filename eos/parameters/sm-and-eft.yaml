@@ -2095,3 +2095,228 @@ groups:
           unit:     '1'
           latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{T}$'
   # }}}
+
+# sbcc WET Parameters
+  # {{{
+  - title: '$\bar{s}b\bar{c}c$ WET Parameters'
+    description: |
+        The list of parameters describing the $\bar{s}b\bar{c}c$ Wilson coefficients in the effective Hamiltonian
+        \begin{equation}
+          \mathcal{H}^{\bar{s}b\bar{c}u}_\mathrm{eff}
+          = \frac{4 G_F}{\sqrt{2}} V_{cb} V_{cs}^* \sum_i \mathcal{C}^{\bar{s}b\bar{c}c}_i \mathcal{O}^{\bar{s}b\bar{c}c}_i\,.
+        \end{equation}
+        The operators read:
+        \begin{equation}
+          \mathcal{O}_{1(')} = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{c} \gamma_\mu c]
+        \end{equation}
+
+    wcxf-relevant: true
+    parameters:
+      'sbcc::mu_0' :
+          central: 80.0
+          min:     80.0
+          max:     80.0
+          latex:   '$\mu_0^{\bar{s}b\bar{c}c}$'
+          unit:    'GeV'
+      # Unprimed coefficients
+      'sbcc::Re{c1}' :
+          central: -0.041469
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1}$'
+      'sbcc::Im{c1}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1}$'
+      'sbcc::Re{c2}' :
+          central: -0.899772
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2}$'
+      'sbcc::Im{c2}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2}$'
+      'sbcc::Re{c3}' :
+          central: 0.011126
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3}$'
+      'sbcc::Im{c3}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3}$'
+      'sbcc::Re{c4}' :
+          central: 0.194904
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4}$'
+      'sbcc::Im{c4}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4}$'
+      'sbcc::Re{c5}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5}$'
+      'sbcc::Im{c5}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5}$'
+      'sbcc::Re{c6}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6}$'
+      'sbcc::Im{c6}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6}$'
+      'sbcc::Re{c7}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7}$'
+      'sbcc::Im{c7}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7}$'
+      'sbcc::Re{c8}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8}$'
+      'sbcc::Im{c8}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8}$'
+      'sbcc::Re{c9}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9}$'
+      'sbcc::Im{c9}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9}$'
+      'sbcc::Re{c10}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10}$'
+      'sbcc::Im{c10}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10}$'
+      # Primed coefficients
+      "sbcc::Re{c1'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1\prime}$'
+      "sbcc::Im{c1'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1\prime}$'
+      "sbcc::Re{c2'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2\prime}$'
+      "sbcc::Im{c2'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2\prime}$'
+      "sbcc::Re{c3'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3\prime}$'
+      "sbcc::Im{c3'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3\prime}$'
+      "sbcc::Re{c4'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4\prime}$'
+      "sbcc::Im{c4'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4\prime}$'
+      "sbcc::Re{c5'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5\prime}$'
+      "sbcc::Im{c5'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5\prime}$'
+      "sbcc::Re{c6'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6\prime}$'
+      "sbcc::Im{c6'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6\prime}$'
+      "sbcc::Re{c7'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7\prime}$'
+      "sbcc::Im{c7'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7\prime}$'
+      "sbcc::Re{c8'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8\prime}$'
+      "sbcc::Im{c8'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8\prime}$'
+      "sbcc::Re{c9'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9\prime}$'
+      "sbcc::Im{c9'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9\prime}$'
+      "sbcc::Re{c10'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10\prime}$'
+      "sbcc::Im{c10'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10\prime}$'
