@@ -67,8 +67,8 @@ jobs:
                     ${{ steps.prerelease.outputs.option }} \
                     --with-boost-python-suffix=${{ matrix.boost_python_suffix }} \
                     --enable-lto
-                  make -j2 all
-                  make -j2 check VERBOSE=1
+                  make -j4 all
+                  make -j4 check VERBOSE=1
                   make -C python eoshep-before DESTDIR={package}
                   popd
                 CIBW_TEST_COMMAND: |

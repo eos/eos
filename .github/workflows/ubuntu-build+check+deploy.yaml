@@ -64,7 +64,7 @@ jobs:
               shell: bash
               run: |
                 pushd _build
-                make -j2 all
+                make -j4 all
                 popd
                 tar caf _build.tar _build
 
@@ -156,7 +156,7 @@ jobs:
                 tar fx _src.tar
                 tar fx _build.tar
                 pushd _build
-                make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-python --prefix=/usr" VERBOSE=1
+                make -j4 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-python --prefix=/usr" VERBOSE=1
                 popd
 
     ubuntu-examples:
@@ -254,7 +254,7 @@ jobs:
               shell: bash
               run: |
                 pushd _build
-                make -j2 all
+                make -j4 all
                 popd
 
             - name: Build .deb file
