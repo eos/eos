@@ -687,9 +687,9 @@ namespace eos
     std::array<std::tuple<UsedParameter, UsedParameter>, 20>
     make_wet_parameters_classVhadronic_full(const Parameters & p, ParameterUser & u, const std::string q)
     {
-        if (q != "cc" || q != "uu" || q != "dd")
+        if (q != "cc" && q != "uu" && q != "dd")
         {
-            throw InternalError("ClassVhadronic::full WCs only implemented for 'cc', 'uu' and 'dd'");
+            throw InternalError("ClassVhadronic::full WCs only implemented for 'cc', 'uu' and 'dd', not for '" + q + "'");
         }
         const auto prefix = "sb" + q;
         auto result = std::array<std::tuple<UsedParameter, UsedParameter>, 20>{
