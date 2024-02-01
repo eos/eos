@@ -27,7 +27,7 @@ jobs:
         name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
         steps:
             - name: Checkout git repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Install QEMU and emulation on the Ubuntu runner
               if: runner.os == 'Linux'
@@ -48,7 +48,7 @@ jobs:
                 fi
 
             - name: Build EOS, run tests, and create wheels
-              uses: pypa/cibuildwheel@v2.15.0
+              uses: pypa/cibuildwheel@v2.16.5
               with:
                 package-dir: eoshep
               env:
@@ -76,8 +76,9 @@ jobs:
                   python3 -c 'import eos ; print(eos.__version__)'
 
             - name: Upload wheels as artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
+                name: wheel-${{ matrix.arch }}-${{ matrix.version }}
                 path: ./wheelhouse/*.whl
 
     upload_pypi:
@@ -86,9 +87,10 @@ jobs:
         runs-on: ubuntu-latest
         name: Deploy EOS wheels to PyPI
         steps:
-            - uses: actions/download-artifact@v2
+            - uses: actions/download-artifact@v4
               with:
-                name: artifact
+                pattern: wheel-*
+                merge-multiple: true
                 path: dist
 
             - uses: pypa/gh-action-pypi-publish@v1.4.2
