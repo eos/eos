@@ -1,0 +1,48 @@
+on:
+  schedule:
+    - cron: '5 8 * * TUE'
+
+name: Report Activity
+
+jobs:
+    report:
+        runs-on: ubuntu-20.04
+        name: Create the weekly activity report
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '20'
+
+            - name: Install dependencies
+              shell: bash
+              run: |
+                npm install @actions/github @actions/core moment nunjucks fs
+
+            - name: Clone the wiki repository
+              uses: actions/checkout@v4
+              with:
+                repository: ${{ github.repository }}.wiki.git
+                token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+                path: ./wiki
+                ref: master
+
+            - name: Report activity
+              env:
+                GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+              uses: ./.github/actions/report-activity
+
+            - name: Commit and push the report
+              shell: bash
+              run: |
+                mv agenda-*.md ./wiki
+                pushd ./wiki
+                git config user.name github-actions
+                git config user.email github-actions@github.com
+                git add ./agenda-*.md
+                git commit -m "Update the weekly activity report"
+                git push
+                popd
