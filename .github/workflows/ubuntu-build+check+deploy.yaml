@@ -26,7 +26,7 @@ jobs:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:6786758f8846fa987e0773e1163546a1b48090f6
         steps:
             - name: Checkout git repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                 path: _src/
 
@@ -69,13 +69,13 @@ jobs:
                 tar caf _build.tar _build
 
             - name: Upload configured source as artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
                 path: _src.tar
 
             - name: Upload build as artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
                 path: _build.tar
@@ -92,12 +92,12 @@ jobs:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:6786758f8846fa987e0773e1163546a1b48090f6
         steps:
             - name: Download configured source as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
             - name: Download build as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
@@ -123,7 +123,7 @@ jobs:
                 tar caf doc.tar _build/doc/html
 
             - name: Upload documentation as artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: eos-doc-${{ github.sha }}
                 path: doc.tar
@@ -141,12 +141,12 @@ jobs:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:6786758f8846fa987e0773e1163546a1b48090f6
         steps:
             - name: Download configured source as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
             - name: Download build as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
@@ -172,12 +172,12 @@ jobs:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:6786758f8846fa987e0773e1163546a1b48090f6
         steps:
             - name: Download configured source as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
             - name: Download build as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
@@ -196,7 +196,7 @@ jobs:
 
             - name: Upload processed example notebooks as artifact
               if: always()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: eos-examples-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
                 path: _src/examples/*.ipynb
@@ -213,7 +213,7 @@ jobs:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:6786758f8846fa987e0773e1163546a1b48090f6
         steps:
             - name: Checkout git repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                 path: _src/
 
@@ -284,7 +284,7 @@ jobs:
                 package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
 
             - name: Upload .deb file as artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: eos-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}.deb
                 path: /tmp/eos-*.deb
@@ -309,7 +309,7 @@ jobs:
                 git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/doc" _build/doc/html
 
             - name: Download documentation as artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: eos-doc-${{ github.sha }}
 
