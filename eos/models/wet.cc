@@ -685,27 +685,13 @@ namespace eos
     }
 
     std::array<std::tuple<UsedParameter, UsedParameter>, 20>
-    make_wet_parameters_classVhadronic_full(const Parameters & p, ParameterUser & u, const QuarkFlavor & q)
+    make_wet_parameters_classVhadronic_full(const Parameters & p, ParameterUser & u, const std::string q)
     {
-        const auto base_prefix = "sb";
-        std::string prefix, quark_flavour_string;
-        switch (q)
+        if (q != "cc" || q != "uu" || q != "dd")
         {
-            case QuarkFlavor::charm:
-                quark_flavour_string = "c";
-                break;
-            case QuarkFlavor::up:
-                quark_flavour_string = "u";
-                break;
-            case QuarkFlavor::down:
-                quark_flavour_string = "d";
-                break;
-            case QuarkFlavor::strange:
-            case QuarkFlavor::bottom:
-            default:
-                throw InternalError("ClassVhadronic::full WCs only implemented for u,d,c");
+            throw InternalError("ClassVhadronic::full WCs only implemented for 'cc', 'uu' and 'dd'");
         }
-        prefix = base_prefix + quark_flavour_string + quark_flavour_string;
+        const auto prefix = "sb" + q;
         auto result = std::array<std::tuple<UsedParameter, UsedParameter>, 20>{
             std::make_tuple(UsedParameter(p[prefix + "::Re{c1}"], u),   UsedParameter(p[prefix + "::Im{c1}"], u)  ),
             std::make_tuple(UsedParameter(p[prefix + "::Re{c2}"], u),   UsedParameter(p[prefix + "::Im{c2}"], u)  ),
@@ -733,7 +719,7 @@ namespace eos
 
     /* sbcc Wilson coefficients */
     WilsonScanComponent<components::WET::SB>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
-        _sbcc_parameters(make_wet_parameters_classVhadronic_full(p, u, QuarkFlavor::charm))
+        _sbcc_parameters(make_wet_parameters_classVhadronic_full(p, u, "cc"))
     {
     }
 
