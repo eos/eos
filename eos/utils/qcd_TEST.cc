@@ -95,7 +95,7 @@ class QCDMassesTest :
                 const constexpr unsigned int zero_loop_order = 0;
                 const constexpr unsigned int higher_loop_order = 4;
                 const constexpr unsigned int even_higher_loop_order = 5;
-                
+
                 TEST_CHECK_THROWS(InternalError, QCD::m_q_pole(4.0, 0.22, 5.0, higher_loop_order));
                 TEST_CHECK_THROWS(InternalError, QCD::alpha_s(4.0, 0.22, 2.0, QCD::beta_function_nf_4, zero_loop_order));
                 TEST_CHECK_THROWS(InternalError, QCD::alpha_s(4.0, 0.22, 2.0, QCD::beta_function_nf_4, even_higher_loop_order));
