@@ -9,28 +9,28 @@ e^+e^-->ccbar::R@BES:2002A:
     type: MultivariateGaussian(Covariance)
     dim: 85
     observables:
-        [ e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E) ]
+        [ "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -157,23 +157,23 @@ e^+e^-->ccbar::R@BES:2006A:
     type: MultivariateGaussian(Covariance)
     dim: 68
     observables:
-        [ e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E),
-        e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E) ]
+        [ "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)",
+        "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
           {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -281,7 +281,7 @@ e^+e^-->ccbar::R@BES:2006B:
     type: MultivariateGaussian(Covariance)
     dim: 3
     observables:
-        [ e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E), e^+e^-->ccbar::R(E) ]
+        [ "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)", "e^+e^-->ccbar::R(E)" ]
     options:
         [ {}, {}, {} ]
     kinematics:
@@ -306,11 +306,11 @@ e^+e^-->D^0Dbar^0::sigma@BES:2008A:
     type: MultivariateGaussian(Covariance)
     dim: 14
     observables:
-        [ e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-          e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-          e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-          e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-          e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E) ]
+        [ "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+          "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+          "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+          "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+          "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {},
           {}, {}, {}, {}, {}, {}, {} ]
@@ -345,23 +345,23 @@ e^+e^-->D^0Dbar^0::sigma@Belle:2008B:
     type: MultivariateGaussian(Covariance)
     dim: 65
     observables:
-        [ e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E) ]
+        [ "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -464,29 +464,29 @@ e^+e^-->D^0Dbar^0::sigma@BaBar:2007B:
     type: MultivariateGaussian(Covariance)
     dim: 89
     observables:
-        [ e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E) ]
+        [ "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -616,15 +616,15 @@ e^+e^-->D^0Dbar^0::sigma@BES:2017A:
     type: MultivariateGaussian(Covariance)
     dim: 34
     observables:
-        [ e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E),
-        e^+e^-->D^0Dbar^0::sigma(E), e^+e^-->D^0Dbar^0::sigma(E) ]
+        [ "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)",
+        "e^+e^-->D^0Dbar^0::sigma(E)", "e^+e^-->D^0Dbar^0::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -692,11 +692,11 @@ e^+e^-->D^+D^-::sigma@BES:2008A:
     type: MultivariateGaussian(Covariance)
     dim: 14
     observables:
-        [ e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-          e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-          e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-          e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-          e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E) ]
+        [ "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+          "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+          "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+          "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+          "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {},
           {}, {}, {}, {}, {}, {}, {} ]
@@ -731,23 +731,23 @@ e^+e^-->D^+D^-::sigma@Belle:2008B:
     type: MultivariateGaussian(Covariance)
     dim: 65
     observables:
-        [ e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E) ]
+        [ "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -848,24 +848,24 @@ e^+e^-->D^+D^-::sigma@BaBar:2007B:
     type: MultivariateGaussian(Covariance)
     dim: 69
     observables:
-        [ e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E) ]
+        [ "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
@@ -972,14 +972,14 @@ e^+e^-->D^+D^-::sigma@BES:2017A:
     type: MultivariateGaussian(Covariance)
     dim: 32
     observables:
-        [ e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E),
-        e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E), e^+e^-->D^+D^-::sigma(E) ]
+        [ "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)",
+        "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)", "e^+e^-->D^+D^-::sigma(E)" ]
     options:
         [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},

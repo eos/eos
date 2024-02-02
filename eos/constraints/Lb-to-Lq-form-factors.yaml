@@ -376,13 +376,13 @@ Lambda_b->Lambda(1520)::FormFactors[f,g,h,htilde]@MR:2021A:
     type: MultivariateGaussian(Covariance)
     dim: 21
     observables:
-        [ Lambda_b->Lambda(1520)::f_long12^V(q2),  Lambda_b->Lambda(1520)::f_time12^V(q2),  Lambda_b->Lambda(1520)::f_time12^V(q2),
-          Lambda_b->Lambda(1520)::f_perp12^V(q2),  Lambda_b->Lambda(1520)::f_perp32^V(q2),  Lambda_b->Lambda(1520)::f_perp32^V(q2),
-          Lambda_b->Lambda(1520)::f_long12^A(q2),  Lambda_b->Lambda(1520)::f_time12^A(q2),  Lambda_b->Lambda(1520)::f_perp12^A(q2),
-          Lambda_b->Lambda(1520)::f_perp12^A(q2),  Lambda_b->Lambda(1520)::f_perp32^A(q2),  Lambda_b->Lambda(1520)::f_perp32^A(q2),
-          Lambda_b->Lambda(1520)::f_long12^T(q2),  Lambda_b->Lambda(1520)::f_perp12^T(q2),  Lambda_b->Lambda(1520)::f_perp32^T(q2),
-          Lambda_b->Lambda(1520)::f_perp32^T(q2),  Lambda_b->Lambda(1520)::f_long12^T5(q2), Lambda_b->Lambda(1520)::f_perp12^T5(q2),
-          Lambda_b->Lambda(1520)::f_perp12^T5(q2), Lambda_b->Lambda(1520)::f_perp32^T5(q2), Lambda_b->Lambda(1520)::f_perp32^T5(q2) ]
+        [ "Lambda_b->Lambda(1520)::f_long12^V(q2)",  "Lambda_b->Lambda(1520)::f_time12^V(q2)",  "Lambda_b->Lambda(1520)::f_time12^V(q2)",
+          "Lambda_b->Lambda(1520)::f_perp12^V(q2)",  "Lambda_b->Lambda(1520)::f_perp32^V(q2)",  "Lambda_b->Lambda(1520)::f_perp32^V(q2)",
+          "Lambda_b->Lambda(1520)::f_long12^A(q2)",  "Lambda_b->Lambda(1520)::f_time12^A(q2)",  "Lambda_b->Lambda(1520)::f_perp12^A(q2)",
+          "Lambda_b->Lambda(1520)::f_perp12^A(q2)",  "Lambda_b->Lambda(1520)::f_perp32^A(q2)",  "Lambda_b->Lambda(1520)::f_perp32^A(q2)",
+          "Lambda_b->Lambda(1520)::f_long12^T(q2)",  "Lambda_b->Lambda(1520)::f_perp12^T(q2)",  "Lambda_b->Lambda(1520)::f_perp32^T(q2)",
+          "Lambda_b->Lambda(1520)::f_perp32^T(q2)",  "Lambda_b->Lambda(1520)::f_long12^T5(q2)", "Lambda_b->Lambda(1520)::f_perp12^T5(q2)",
+          "Lambda_b->Lambda(1520)::f_perp12^T5(q2)", "Lambda_b->Lambda(1520)::f_perp32^T5(q2)", "Lambda_b->Lambda(1520)::f_perp32^T5(q2)" ]
     kinematics:
         [ {q2: 16.5537}, {q2: 16.5537}, {q2: 16.2975}, {q2: 16.5537}, {q2: 16.5537}, {q2: 16.2975}, {q2: 16.5537},
           {q2: 16.5537}, {q2: 16.5537}, {q2: 16.2975}, {q2: 16.5537}, {q2: 16.2975}, {q2: 16.5537}, {q2: 16.5537},
