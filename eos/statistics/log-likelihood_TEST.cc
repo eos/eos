@@ -138,9 +138,9 @@ namespace eos
 
                     // check significances
                     auto c = llh.begin();
-                    TEST_CHECK_RELATIVE_ERROR(-0.5, (**c->begin_blocks()).significance(), eps);
+                    TEST_CHECK_RELATIVE_ERROR((**c->begin_blocks()).significance(), -0.5, eps);
                     ++c;
-                    TEST_CHECK_RELATIVE_ERROR(-2, (**c->begin_blocks()).significance(), eps);
+                    TEST_CHECK_RELATIVE_ERROR((**c->begin_blocks()).significance(), -2, eps);
 
                     std::string observable_values;
                     auto cache = llh.observable_cache();
@@ -276,11 +276,11 @@ namespace eos
 
                     p["mass::b(MSbar)"] = 4.35;
                     cache.update();
-                    TEST_CHECK_RELATIVE_ERROR(-0.5, block->significance(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(block->significance(), -0.5,  eps);
 
                     p["mass::b(MSbar)"] = 4.25;
                     cache.update();
-                    TEST_CHECK_RELATIVE_ERROR(+0.25, block->significance(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(block->significance(), +0.25, eps);
                 }
 
                 // LogGamma
@@ -336,10 +336,10 @@ namespace eos
                     // we get one sigma deviation as desired
                     cache_clone.parameters()["mass::b(MSbar)"] = min;
                     cache_clone.update();
-                    TEST_CHECK_RELATIVE_ERROR(+1.0, log_gamma_clone->significance(), 1e-5);
+                    TEST_CHECK_RELATIVE_ERROR(log_gamma_clone->significance(), +1.0, 1e-5);
                     cache_clone.parameters()["mass::b(MSbar)"] = max;
                     cache_clone.update();
-                    TEST_CHECK_RELATIVE_ERROR(-1.0, log_gamma_clone->significance(), 1e-5);
+                    TEST_CHECK_RELATIVE_ERROR(log_gamma_clone->significance(), -1.0, 1e-5);
                 }
 
                 // compare gaussian and loggamma
@@ -526,7 +526,7 @@ namespace eos
                     TEST_CHECK_NEARLY_EQUAL(block1->evaluate() + block2->evaluate(), block->evaluate(), 1e-13);
 
                     /* significance */
-                    TEST_CHECK_RELATIVE_ERROR(1.557158038223962, block->significance(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(block->significance(), 1.557158038223962, eps);
                     TEST_CHECK_EQUAL(2, block->number_of_observations());
 
                     // with correlation, results are slightly inaccurate due to matrix inversion and determinant
@@ -536,7 +536,7 @@ namespace eos
                     TEST_CHECK_NEARLY_EQUAL(block->evaluate(), 1.30077135, 1e-8);
 
                     // chi^2 now bigger with correlation!!
-                    TEST_CHECK_RELATIVE_ERROR(1.6834363845158217821, block->significance(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(block->significance(), 1.6834363845158217821, eps);
 
                     p["mass::b(MSbar)"] = 4.6;
                     p["mass::c"] = 1.3;
