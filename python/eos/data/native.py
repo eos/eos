@@ -30,17 +30,17 @@ class Mode:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'Mode':
-            raise RuntimeError('Path {} not pointing to a Mode file'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to a Mode file')
 
         self.type = 'Mode'
         self.varied_parameters = description['parameters']
@@ -84,17 +84,17 @@ class MarkovChain:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'MarkovChain':
-            raise RuntimeError('Path {} not pointing to a MarkovChain'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to a MarkovChain')
 
         self.type = 'MarkovChain'
         self.varied_parameters = description['parameters']
@@ -102,18 +102,18 @@ class MarkovChain:
 
         f = os.path.join(path, 'samples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Samples file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Samples file {f} does not exist or is not a file')
         self.samples = _np.load(f)
 
         f = os.path.join(path, 'usamples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('U-space samples file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'U-space samples file {f} does not exist or is not a file')
         self.usamples = _np.load(f)
 
         if description['has-weights']:
             f = os.path.join(path, 'weights.npy')
             if not os.path.exists(f) or not os.path.isfile(f):
-                raise RuntimeError('Weights file {} does not exist or is not a file'.format(f))
+                raise RuntimeError(f'Weights file {f} does not exist or is not a file')
             self.weights = _np.load(f)
         else:
             self.weights = None
@@ -145,13 +145,13 @@ class MarkovChain:
         description['has-weights'] = (not weights is None)
 
         if not samples.shape[1] == len(parameters):
-            raise RuntimeError('Shape of samples {} incompatible with number of parameters {}'.format(samples.shape, len(parameters)))
+            raise RuntimeError(f'Shape of samples {samples.shape} incompatible with number of parameters {len(parameters)}')
 
         if not usamples.shape[1] == len(parameters):
-            raise RuntimeError('Shape of usamples {} incompatible with number of parameters {}'.format(usamples.shape, len(parameters)))
+            raise RuntimeError(f'Shape of usamples {usamples.shape} incompatible with number of parameters {len(parameters)}')
 
         if not weights is None and not samples.shape[0] == weights.shape[0]:
-            raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
+            raise RuntimeError(f'Shape of weights {weights.shape} incompatible with shape of samples {samples.shape}')
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
@@ -171,17 +171,17 @@ class MixtureDensity:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'MixtureDensity':
-            raise RuntimeError('Path {} not pointing to a MixtureDensity'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to a MixtureDensity')
 
         self.type = 'MixtureDensity'
         self.components = description['components']
@@ -215,7 +215,7 @@ class MixtureDensity:
                     'sigma': c.sigma.tolist()
                 })
             else:
-                raise RuntimeError('Unsupported type of MixtureDensity component: {}'.format(type(c)))
+                raise RuntimeError(f'Unsupported type of MixtureDensity component: {type(c)}')
         description['weights'] = density.weights.tolist()
 
         os.makedirs(path, exist_ok=True)
@@ -245,9 +245,9 @@ class MixtureDensity:
                         components.append(pypmc.density.gauss.Gauss(cAB_mu, cAB_sigma))
                         weights.append(wA * wB)
                     else:
-                        raise RuntimeError('Unsupported type of MixtureDensity component: {}'.format(type(cB)))
+                        raise RuntimeError(f'Unsupported type of MixtureDensity component: {type(cB)}')
             else:
-                raise RuntimeError('Unsupported type of MixtureDensity component: {}'.format(type(cA)))
+                raise RuntimeError(f'Unsupported type of MixtureDensity component: {type(cA)}')
         return pypmc.density.mixture.MixtureDensity(components, weights / _np.sum(weights))
 
     @staticmethod
@@ -276,17 +276,17 @@ class PMCSampler:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'PMCSampler':
-            raise RuntimeError('Path {} not pointing to a PMCSampler'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to a PMCSampler')
 
         self.type = 'PMCSampler'
         self.varied_parameters = description['parameters']
@@ -382,17 +382,17 @@ class ImportanceSamples:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'ImportanceSamples':
-            raise RuntimeError('Path {} not pointing to an ImportanceSamples object'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to an ImportanceSamples object')
 
         self.type = 'ImportanceSamples'
         self.varied_parameters = description['parameters']
@@ -400,12 +400,12 @@ class ImportanceSamples:
 
         f = os.path.join(path, 'samples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Samples file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Samples file {f} does not exist or is not a file')
         self.samples = _np.load(f)
 
         f = os.path.join(path, 'weights.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Weights file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Weights file {f} does not exist or is not a file')
         self.weights = _np.load(f)
 
         f = os.path.join(path, 'posterior_values.npy')
@@ -438,10 +438,10 @@ class ImportanceSamples:
         } for p in parameters]
 
         if not samples.shape[1] == len(parameters):
-            raise RuntimeError('Shape of samples {} incompatible with number of parameters {}'.format(samples.shape, len(parameters)))
+            raise RuntimeError(f'Shape of samples {samples.shape} incompatible with number of parameters {len(parameters)}')
 
         if not weights is None and not samples.shape[0] == weights.shape[0]:
-            raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
+            raise RuntimeError(f'Shape of weights {weights.shape} incompatible with shape of samples {samples.shape}')
 
         if not posterior_values is None and not samples.shape[0] == posterior_values.shape[0]:
             raise RuntimeError(f'Shape of posterior values {posterior_values.shape} incompatible with shape of samples {samples.shape}')
@@ -463,17 +463,17 @@ class Prediction:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'Prediction':
-            raise RuntimeError('Path {} not pointing to a Prediction'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to a Prediction')
 
         self.type = 'Prediction'
         self.varied_parameters = description['observables']
@@ -481,12 +481,12 @@ class Prediction:
 
         f = os.path.join(path, 'samples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Samples file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Samples file {f} does not exist or is not a file')
         self.samples = _np.load(f)
 
         f = os.path.join(path, 'weights.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Weights file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Weights file {f} does not exist or is not a file')
         self.weights = _np.load(f)
 
 
@@ -512,10 +512,10 @@ class Prediction:
         } for o in observables]
 
         if not samples.shape[1] == len(observables):
-            raise RuntimeError('Shape of samples {} incompatible with number of observables {}'.format(samples.shape, len(observables)))
+            raise RuntimeError(f'Shape of samples {samples.shape} incompatible with number of observables {len(observables)}')
 
         if not samples.shape[0] == weights.shape[0]:
-            raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
+            raise RuntimeError(f'Shape of weights {weights.shape} incompatible with shape of samples {samples.shape}')
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
@@ -532,17 +532,17 @@ class DynestyResults:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Description file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
         with open(f) as df:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'DynestyResults':
-            raise RuntimeError('Path {} not pointing to a DynestyResults file'.format(path))
+            raise RuntimeError(f'Path {path} not pointing to a DynestyResults file')
 
         self.type = 'DynestyResults'
         self.varied_parameters = description['parameters']
@@ -550,7 +550,7 @@ class DynestyResults:
 
         f = os.path.join(path, 'dynesty_results.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError('Dynesty results file {} does not exist or is not a file'.format(f))
+            raise RuntimeError(f'Dynesty results file {f} does not exist or is not a file')
 
         res_dict = _np.load(f, allow_pickle=True).item()
         if "blob" in res_dict:

@@ -151,6 +151,10 @@ class Observables(_Observables):
                         unit = '&mdash;'
                     else:
                         unit = fr'$$\left[ {unit} \right]$$'
+                    if not self.filter_entry(qn):
+                        continue
+                    if (0 == len(latex)) and not self.showall:
+                        continue
 
                     kinematic_variables = r'<br>'.join(['<tt>' + str(kv) + '</tt>' for kv in entry.kinematic_variables()])
                     if len(kinematic_variables) == 0:

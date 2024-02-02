@@ -25,12 +25,12 @@ class PythonTests:
         try:
             import _eos
         except ImportError as e:
-            raise TestFailedError('importing \'_eos\' failed: \'{}\''.format(str(e)))
+            raise TestFailedError(f'importing \'_eos\' failed: \'{str(e)}\'')
 
         try:
             import eos
         except ImportError as e:
-            raise TestFailedError('importing \'eos\' failed: \'{}\''.format(str(e)))
+            raise TestFailedError(f'importing \'eos\' failed: \'{str(e)}\'')
 
     def check_002_QualifiedName(self):
         """Check if an instance of QualifiedName can be created."""

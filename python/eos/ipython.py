@@ -88,13 +88,13 @@ def __format_Options(o):
 
 def __format_ObservableEntry(e):
     result = '<table>\n'
-    result += '<tr><th>QualifedName</th><td><tt style="color:grey">{qn}</tt></td></tr>'.format(qn=e.name())
-    result += '<tr><th>Description</th><td>$${latex}$$</td></tr>'.format(latex=e.latex())
+    result += f'<tr><th>QualifedName</th><td><tt style="color:grey">{e.name()}</tt></td></tr>'
+    result += f'<tr><th>Description</th><td>$${e.latex()}$$</td></tr>'
     kvs = [kv for kv in e.kinematic_variables()]
     if len(kvs) > 0:
-        result += '<tr><th rowspan={rows}>Kinematic Variables</th><td>{kv}</td></tr>'.format(rows=len(kvs),kv=kvs[0])
+        result += f'<tr><th rowspan={len(kvs)}>Kinematic Variables</th><td>{kvs[0]}</td></tr>'
     for i in range(1, len(kvs)):
-        result += '<tr><td>{kv}</td></tr>'.format(kv=kvs[i])
+        result += f'<tr><td>{kvs[i]}</td></tr>'
     result += '</table>'
     return(result)
 
@@ -105,9 +105,9 @@ def __format_Observable(obs):
     further_kinematics = ""
     span_kinematics = 1
     if len(kinematics) > 0:
-        first_kinematics = "<th>{kvn}</th><td>{kvv}</td>".format(kvn=kinematics[0][0], kvv=kinematics[0][1])
+        first_kinematics = f"<th>{kinematics[0][0]}</th><td>{kinematics[0][1]}</td>"
         further_kinematics = "\n".join([
-            "<tr><th>{kvn}</th><td>{kvv}</td></tr>".format(kvn=kvn, kvv=kvv)
+            f"<tr><th>{kvn}</th><td>{kvv}</td></tr>"
             for kvn, kvv in kinematics[1:]
         ])
         span_kinematics = len(kinematics)
@@ -116,9 +116,9 @@ def __format_Observable(obs):
     further_options = ""
     span_options = 1
     if len(options) > 0:
-        first_options = "<th>{ok}</th><td>{ov}</td>".format(ok=options[0][0], ov=options[0][1])
+        first_options = f"<th>{options[0][0]}</th><td>{options[0][1]}</td>"
         further_options = "\n".join([
-            "<tr><th>{ok}</th><td>{ov}</td></tr>".format(ok=ok, ov=ov)
+            f"<tr><th>{ok}</th><td>{ov}</td></tr>"
             for ok, ov in options[1:]
         ])
         span_options = len(options)
@@ -168,9 +168,9 @@ def __format_GoodnessOfFit(gof):
     dof  = gof.total_degrees_of_freedom()
     pvalue = 1.0 - scipy.stats.chi2(dof).cdf(chi2)
     result += '<table>\n'
-    result += '<tr><th>total &chi;<sup>2</sup></th><td>{chi2:6.4f}</td></tr>\n'.format(chi2=chi2)
-    result += '<tr><th>total degrees of freedom</th><td>{dof}</td></tr>\n'.format(dof=dof)
-    result += '<tr><th>p-value</th><td>{p:6.4f}%</td></tr>\n'.format(p=pvalue * 100)
+    result += f'<tr><th>total &chi;<sup>2</sup></th><td>{chi2:6.4f}</td></tr>\n'
+    result += f'<tr><th>total degrees of freedom</th><td>{dof}</td></tr>\n'
+    result += f'<tr><th>p-value</th><td>{pvalue * 100:6.4f}%</td></tr>\n'
     result += '</table>\n'
     return(result)
 
