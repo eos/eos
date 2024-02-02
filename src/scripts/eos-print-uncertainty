@@ -46,13 +46,13 @@ def main():
     parameters = datafile.parameters
 
     for i in range(0, len(parameters)):
-        print('# {} ({})'.format(parameters[i][0],parameters[i][1]))
+        print(f'# {parameters[i][0]} ({parameters[i][1]})')
 
         x = numpy.sort(data[:, i])
         print('        median: %f' % numpy.percentile(x, 50))
-        print('  68% interval: [{:f}, {:f}]'.format(numpy.percentile(x, 16), numpy.percentile(x, 84)))
-        print('  95% interval: [{:f}, {:f}]'.format(numpy.percentile(x, 2.5), numpy.percentile(x, 97.5)))
-        print('  99% interval: [{:f}, {:f}]'.format(numpy.percentile(x, 0.5), numpy.percentile(x, 99.5)))
+        print(f'  68% interval: [{numpy.percentile(x, 16):f}, {numpy.percentile(x, 84):f}]')
+        print(f'  95% interval: [{numpy.percentile(x, 2.5):f}, {numpy.percentile(x, 97.5):f}]')
+        print(f'  99% interval: [{numpy.percentile(x, 0.5):f}, {numpy.percentile(x, 99.5):f}]')
 
         print('  mean = %e' % numpy.mean(data[:, i]))
         print('   std = %e' % numpy.std(data[:, i]))

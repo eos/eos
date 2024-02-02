@@ -28,12 +28,12 @@ def main():
     # ensure that the EOS installation directory exists and is not empty
     print(os.path.join(args.eosdir, 'share/eos/parameters'))
     if not os.path.isdir(os.path.join(args.eosdir, 'share/eos/parameters')) or len(os.listdir(os.path.join(args.eosdir, 'share/eos/parameters'))) == 0:
-        error('\'{}\' is not a valid EOS installation directory'.format(args.eosdir))
+        error(f'\'{args.eosdir}\' is not a valid EOS installation directory')
 
     # ensure that the EOSHOME is empty
     print(os.path.join(args.eoshome, 'parameters'))
     if os.path.isdir(args.eoshome) and len(os.listdir(args.eoshome)) > 0:
-        error('\'{}\' is not an empty directory'.format(args.eoshome))
+        error(f'\'{args.eoshome}\' is not an empty directory')
     elif not os.path.exists(args.eoshome):
         os.makedirs(args.eoshome)
         os.makedirs(os.path.join(args.eoshome, 'parameters'))
@@ -42,7 +42,7 @@ def main():
     files = os.listdir(os.path.join(args.eosdir, 'share/eos/parameters'))
     print('Copying the following files to the new EOS home')
     for f in files:
-        print('  {}'.format(f))
+        print(f'  {f}')
         copy2(os.path.join(args.eosdir, 'share/eos/parameters/', f), os.path.join(args.eoshome, 'parameters'))
 
     exit(0);
