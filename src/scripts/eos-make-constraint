@@ -44,7 +44,7 @@ def kinstr_to_dict(s):
     for kv in s.split(', '):
         kvarray = kv.split('=')
         if len(kvarray) != 2:
-            error('key/value pair {} is invalid'.format(kv))
+            error(f'key/value pair {kv} is invalid')
             exit(-1)
         result.update({kvarray[0]: float(kvarray[1])})
 
@@ -58,10 +58,10 @@ def print_multivariate_gaussian(parameters, data, **kwargs):
     cov_stat = numpy.cov(data.T)
     for i in range(0, dim):
         if cov_stat[i, i] < 0:
-            raise ValueError('variance < 0 encountered for i = {}'.format(i))
+            raise ValueError(f'variance < 0 encountered for i = {i}')
         for j in range(0, dim):
             if not numpy.isfinite(cov_stat[i, j]):
-                raise ValueError('variance not finite for i, j = {}, {}'.format(i, j))
+                raise ValueError(f'variance not finite for i, j = {i}, {j}')
 
     var_stat = numpy.array([cov_stat[i, i] for i in range(0, dim)])
     if (var_stat <= 0).any():
@@ -75,7 +75,7 @@ def print_multivariate_gaussian(parameters, data, **kwargs):
 
     det_corr = numpy.linalg.det(corr)
     if numpy.fabs(det_corr) < 1e-7 and 'sys_rel' not in kwargs and 'sys_abs' not in kwargs:
-        warn('correlation matrix almost singular with det(corr) = {}; consider adding a systematic uncertainty'.format(det_corr))
+        warn(f'correlation matrix almost singular with det(corr) = {det_corr}; consider adding a systematic uncertainty')
 
     var_sys  = numpy.zeros((dim,))
     if 'sys_abs' in kwargs:
@@ -110,13 +110,13 @@ def print_multivariate_gaussian(parameters, data, **kwargs):
     for i in range(0, dim):
         for j in range(0, dim):
             if not numpy.isfinite(cov_tot[i, j]):
-                warn('non-finite covariance entry encountered in i, j = {}, {}'.format(i, j))
+                warn(f'non-finite covariance entry encountered in i, j = {i}, {j}')
 
             corr_tot[i, j] = cov_tot[i, j] / numpy.sqrt(cov_tot[i, i] * cov_tot[j, j])
 
     det_corr_tot = numpy.linalg.det(corr_tot)
     if numpy.fabs(det_corr_tot) < 1e-7 and ('sys_rel' in kwargs or 'sys_abs' in kwargs):
-        warn('correlation matrix still almost singular with det(corr) = {} after adding systematic uncertainty'.format(det_corr_tot))
+        warn(f'correlation matrix still almost singular with det(corr) = {det_corr_tot} after adding systematic uncertainty')
 
 
 def main():
@@ -166,7 +166,7 @@ def main():
     data = data[~numpy.isnan(data).any(axis=1)]
     len_after = len(data)
     if len_after < len_before:
-        warn('encountered and removed {} data set with either NaN or inf entries; proceeding with filtered data set'.format(len_before - len_after))
+        warn(f'encountered and removed {len_before - len_after} data set with either NaN or inf entries; proceeding with filtered data set')
 
     if len(parameters) > 1:
         print_multivariate_gaussian(numpy.array(parameters), data, **options)

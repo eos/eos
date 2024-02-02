@@ -39,11 +39,11 @@ def main():
         datafile = MCMCDataFile(args.input)
 
     for i, (mode, log_posterior) in enumerate(datafile.modes()):
-        print('# Mode of chain {i} with log(posterior)={log_posterior}'.format(i=i, log_posterior=log_posterior))
+        print(f'# Mode of chain {i} with log(posterior)={log_posterior}')
         print('export GOF_MODE_{i}="{{ {mode} }}"'.format(i=i, mode=' '.join([str(p) for p in mode])))
         if datafile.modes()[i][-1] > datafile.modes()[i-1][-1]:
             global_mode = i
-    print('Global mode found in Chain {global_mode}'.format(global_mode=global_mode))
+    print(f'Global mode found in Chain {global_mode}')
 
     exit(0);
 
