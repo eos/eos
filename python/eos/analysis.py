@@ -282,13 +282,13 @@ class Analysis:
     def _ess(weights):
         """Helper function that computes the effective sample size of an array of weights"""
         return pypmc.tools.convergence.ess(weights)
-    
+
 
     def clone(self):
         """Returns an independent instance of eos.Analysis."""
         return eos.Analysis(**self.init_args)
-    
-    
+
+
     def reset_parameters(self):
         """Resets the analysis parameters to their default values."""
         for p in eos.Parameters():
