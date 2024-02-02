@@ -70,7 +70,7 @@ def warn(msg, *args, **kwargs):
     logger.warning(msg, *args, **kwargs)
 
 def _log_callback(id, level, msg):
-    full_msg = '{id} {msg}'.format(id=id, msg=msg)
+    full_msg = f'{id} {msg}'
 
     if   level == _NativeLogLevel.INFO:
         logger.info(full_msg)
@@ -83,7 +83,7 @@ def _log_callback(id, level, msg):
     elif level == _NativeLogLevel.SILENT:
         pass
     else:
-        raise RuntimeError('Cannot handle log level: {ll}. Log message: {msg}'.format(ll=level, msg=full_msg))
+        raise RuntimeError(f'Cannot handle log level: {level}. Log message: {full_msg}')
 
 _register_log_callback(_log_callback)
 

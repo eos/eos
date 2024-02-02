@@ -122,7 +122,7 @@ class Parameters(_Parameters):
                     if unit == Unit.Undefined() or unit.latex() == '1':
                         unit = '&mdash;'
                     else:
-                        unit = r'$$\left[ {latex} \right]$$'.format(latex=unit.latex())
+                        unit = fr'$$\left[ {unit.latex()} \right]$$'
 
                     value = parameter.evaluate()
 
@@ -229,7 +229,7 @@ class Parameters(_Parameters):
             # Add values provided by WCxf to EOS central (SM) values
             if (prefix == 'b->s') and (coeff in real_coeffs):
                 if (abs(value.imag) > 1.0e-10):
-                    raise ValueError('imaginary part of WC {} larger than 10^-10 threshold, which is not supported at present'.format(name))
+                    raise ValueError(f'imaginary part of WC {name} larger than 10^-10 threshold, which is not supported at present')
 
                 p = parameters[str(prefix) + '::' + str(coeff)]
                 p.set(p.central() + value.real)

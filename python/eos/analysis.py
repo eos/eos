@@ -38,7 +38,7 @@ class BestFitPoint:
             name = p.name()
             latex = p.latex()
             name = latex if latex else name
-            result += '<tr><td>{n}</td><td>{v:6.4f}</td></tr>'.format(n=name, v=v)
+            result += f'<tr><td>{name}</td><td>{v:6.4f}</td></tr>'
         result += '</table>'
 
         return(result)
@@ -87,13 +87,13 @@ class Analysis:
                 eos.debug(' - {name} (constraint)'.format(name=p['constraint']))
         eos.debug('constraints:')
         for cn in likelihood:
-            eos.debug(' - {name}'.format(name=cn))
+            eos.debug(f' - {cn}')
         eos.debug('manual_constraints:')
         for cn, ce in manual_constraints.items():
-            eos.debug(' - {name}'.format(name=cn))
+            eos.debug(f' - {cn}')
         eos.debug('fixed_parameters:')
         for pn, pe in fixed_parameters.items():
-            eos.debug(' - {name}'.format(name=pn))
+            eos.debug(f' - {pn}')
 
         # collect the global options
         for key, value in global_options.items():
@@ -161,7 +161,7 @@ class Analysis:
                         eos.LogPrior.Poisson(self.parameters, parameter, k),
                         False)
                 else:
-                    raise ValueError('Unknown prior type \'{}\''.format(prior_type))
+                    raise ValueError(f'Unknown prior type \'{prior_type}\'')
 
                 p = self.parameters[parameter]
                 self.varied_parameters.append(p)
@@ -216,11 +216,11 @@ class Analysis:
 
         used_but_unvaried = used_parameter_names - varied_parameter_names - fixed_parameter_names
         if (len(used_but_unvaried) > 0):
-            eos.info('likelihood probably depends on {} parameter(s) that do not appear in the prior; check prior?'.format(len(used_but_unvaried)))
+            eos.info(f'likelihood probably depends on {len(used_but_unvaried)} parameter(s) that do not appear in the prior; check prior?')
         for n in used_but_unvaried:
-            eos.debug('used, but not included in any prior: \'{}\''.format(n))
+            eos.debug(f'used, but not included in any prior: \'{n}\'')
         for n in varied_parameter_names - used_parameter_names:
-            eos.warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
+            eos.warn(f'likelihood does not depend on parameter \'{n}\'; remove from prior or check options!')
 
 
     def _u_to_par(self, u):
@@ -257,7 +257,7 @@ class Analysis:
             return list(map(Analysis._sanitize_manual_input, data))
 
         # all valid cases are covered above
-        raise ValueError("Unexpected entry type {} in manual_constraint".format(type(data)))
+        raise ValueError(f"Unexpected entry type {type(data)} in manual_constraint")
 
 
     @staticmethod
@@ -342,7 +342,7 @@ class Analysis:
             eos.warn('Optimization did not succeed')
             eos.warn('  optimizer'' message reads: {}'.format(res.message))
         else:
-            eos.info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
+            eos.info(f'Optimization goal achieved after {res.nfev} function evaluations')
 
         bfp = self._u_to_par(res.x)
 
@@ -366,9 +366,9 @@ class Analysis:
         try:
             return(self._log_posterior.evaluate())
         except RuntimeError as e:
-            eos.error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
+            eos.error(f'encountered run time error ({e}) when evaluating log(posterior) in parameter point:')
             for p in self.varied_parameters:
-                eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+                eos.error(f' - {p.name()}: {p.evaluate()}')
             return(-np.inf)
 
 
@@ -435,10 +435,10 @@ class Analysis:
 
         # pre run to adapt markov chains
         for i in progressbar(range(0, preruns), desc="Pre-runs", leave=False):
-            eos.info('Prerun {} out of {}'.format(i, preruns))
+            eos.info(f'Prerun {i} out of {preruns}')
             accept_count = sampler.run(pre_N)
             accept_rate  = accept_count / pre_N * 100
-            eos.info('Prerun {}: acceptance rate is {:3.0f}%'.format(i, accept_rate))
+            eos.info(f'Prerun {i}: acceptance rate is {accept_rate:3.0f}%')
             sampler.adapt()
         sampler.clear()
 
@@ -451,7 +451,7 @@ class Analysis:
         for current_chunk in progressbar(sample_chunks, desc="Main run", leave=False):
             accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
-        eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
+        eos.info(f'Main run: acceptance rate is {accept_rate:3.0f}%')
 
         # Transform from generator values in u space to the parameter values
         u_samples = sampler.samples[:][::stride]
@@ -628,9 +628,9 @@ class Analysis:
         try:
             return(self._log_likelihood.evaluate())
         except RuntimeError as e:
-            eos.error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
+            eos.error(f'encountered run time error ({e}) when evaluating log(posterior) in parameter point:')
             for p in self.varied_parameters:
-                eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+                eos.error(f' - {p.name()}: {p.evaluate()}')
             return(-np.inf)
 
 
