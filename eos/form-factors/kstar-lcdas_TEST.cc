@@ -75,52 +75,52 @@ class KStarLCDAsTest :
                 AntiKStarLCDAs kstar(p, Options{ });
 
                 // coefficients at mu = 1.0 GeV, and 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL( 0.03000,  kstar.a1para(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.02486,  kstar.a1para(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.11000,  kstar.a2para(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.08200,  kstar.a2para(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.21000,  kstar.a3para(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.14521,  kstar.a3para(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.14000,  kstar.a4para(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.09128,  kstar.a4para(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.04000,  kstar.a1perp(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.03238,  kstar.a1perp(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.10000,  kstar.a2perp(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.07368,  kstar.a2perp(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.15000,  kstar.a3perp(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.10299,  kstar.a3perp(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.19000,  kstar.a4perp(1.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.12330,  kstar.a4perp(2.0),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.15900,  kstar.fperp(1.0),    eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.14637,  kstar.fperp(2.0),    eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a1para(1.0), 0.03000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a1para(2.0), 0.02486, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a2para(1.0), 0.11000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a2para(2.0), 0.08200, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a3para(1.0), 0.21000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a3para(2.0), 0.14521, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a4para(1.0), 0.14000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a4para(2.0), 0.09128, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a1perp(1.0), 0.04000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a1perp(2.0), 0.03238, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a2perp(1.0), 0.10000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a2perp(2.0), 0.07368, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a3perp(1.0), 0.15000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a3perp(2.0), 0.10299, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a4perp(1.0), 0.19000, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.a4perp(2.0), 0.12330, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.fperp(1.0),  0.15900, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.fperp(2.0),  0.14637, eps);
 
                 // phipara LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL( 0.45242, kstar.phipara(0.1, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.43819, kstar.phipara(0.3, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.64625, kstar.phipara(0.5, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.53401, kstar.phipara(0.7, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.20151, kstar.phipara(0.9, 1.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 1.0), 0.45242, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.3, 1.0), 1.43819, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.5, 1.0), 1.64625, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.7, 1.0), 0.53401, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.9, 1.0), 1.20151, eps);
 
                 // phipara LCDA at various u values for mu = 2.0
-                TEST_CHECK_NEARLY_EQUAL( 0.48111, kstar.phipara(0.1, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.38391, kstar.phipara(0.3, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.57223, kstar.phipara(0.5, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.77114, kstar.phipara(0.7, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.00975, kstar.phipara(0.9, 2.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 2.0), 0.48111, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.3, 2.0), 1.38391, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.5, 2.0), 1.57223, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.7, 2.0), 0.77114, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.9, 2.0), 1.00975, eps);
 
                 // phiperp LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL( 0.55003, kstar.phiperp(0.1, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.20175, kstar.phiperp(0.3, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.80938, kstar.phiperp(0.5, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.61207, kstar.phiperp(0.7, 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.13323, kstar.phiperp(0.9, 1.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 1.0), 0.55003, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 1.0), 1.20175, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 1.0), 1.80938, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 1.0), 0.61207, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 1.0), 1.13323, eps);
 
                 // phiperp LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL( 0.54481, kstar.phiperp(0.1, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.22256, kstar.phiperp(0.3, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.68102, kstar.phiperp(0.5, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.83252, kstar.phiperp(0.7, 2.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.95797, kstar.phiperp(0.9, 2.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 2.0), 0.54481, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 2.0), 1.22256, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 2.0), 1.68102, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 2.0), 0.83252, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 2.0), 0.95797, eps);
             }
         }
 } kstar_lcdas_test;

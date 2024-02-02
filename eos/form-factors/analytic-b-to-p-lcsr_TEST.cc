@@ -1183,17 +1183,17 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.270388, ff->f_p(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.356854, ff->f_p( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.494302, ff->f_p(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(-5.0), 0.270388,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p( 0.0), 0.356854,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(+5.0), 0.494302,  eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.304492, ff->f_0(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.356854, ff->f_0( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.431392, ff->f_0(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(-5.0), 0.304492,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0( 0.0), 0.356854,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(+5.0), 0.431392,  eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.227664, ff->f_t(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.301374, ff->f_t( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.419634, ff->f_t(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(-5.0), 0.227664,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t( 0.0), 0.301374,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(+5.0), 0.419634,  eps);
 
             }
 
@@ -1227,17 +1227,17 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.208620, ff->f_p(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.267282, ff->f_p( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.354006, ff->f_p(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(-5.0), 0.208620,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p( 0.0), 0.267282,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(+5.0), 0.354006,  eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.240493, ff->f_0(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.267282, ff->f_0( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.299113, ff->f_0(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(-5.0), 0.240493,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0( 0.0), 0.267282,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(+5.0), 0.299113,  eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.196080, ff->f_t(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.252352, ff->f_t( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.336631, ff->f_t(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(-5.0), 0.196080,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t( 0.0), 0.252352,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(+5.0), 0.336631,  eps);
 
             }
 
@@ -1272,17 +1272,17 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->D::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.628668, ff->f_p(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.745726, ff->f_p( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.917246, ff->f_p(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(-5.0), 0.628668,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p( 0.0), 0.745726,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(+5.0), 0.917246,       eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.692330, ff->f_0(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.745726, ff->f_0( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.810308, ff->f_0(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(-5.0), 0.692330,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0( 0.0), 0.745726,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(+5.0), 0.810308,       eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.501645, ff->f_t(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.616377, ff->f_t( 0.0), 3.0 * eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.823555, ff->f_t(+5.0), 9.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(-5.0), 0.501645,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t( 0.0), 0.616377, 3.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(+5.0), 0.823555, 9.0 * eps);
 
             }
 
@@ -1316,17 +1316,17 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->K::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.189587, ff->f_p(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.239226, ff->f_p( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.308755, ff->f_p(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(-5.0), 0.189587,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p( 0.0), 0.239226,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(+5.0), 0.308755,  eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.219599, ff->f_0(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.239226, ff->f_0( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.259143, ff->f_0(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(-5.0), 0.219599,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0( 0.0), 0.239226,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(+5.0), 0.259143,  eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.184833, ff->f_t(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.234306, ff->f_t( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.304495, ff->f_t(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(-5.0), 0.184833,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t( 0.0), 0.234306,  eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(+5.0), 0.304495,  eps);
 
             }
 
@@ -1361,17 +1361,17 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->D_s::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.539744, ff->f_p(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.642184, ff->f_p( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.787744, ff->f_p(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(-5.0), 0.539744,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p( 0.0), 0.642184,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(+5.0), 0.787744,       eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.600434, ff->f_0(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.642184, ff->f_0( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.688616, ff->f_0(+5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(-5.0), 0.600434,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0( 0.0), 0.642184,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(+5.0), 0.688616,       eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.518002, ff->f_t(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.643604, ff->f_t( 0.0), 2.0 * eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.862329, ff->f_t(+5.0), 5.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(-5.0), 0.518002,       eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t( 0.0), 0.643604, 2.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_t(+5.0), 0.862329, 5.0 * eps);
 
             }
         }

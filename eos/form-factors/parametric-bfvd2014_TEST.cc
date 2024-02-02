@@ -49,28 +49,28 @@ class BFvD2014FormFactorsTest :
             p["mass::Lambda_b"]                         = 5.6194;
             p["mass::Lambda"]                           = 1.1157;
 
-            TEST_CHECK_NEARLY_EQUAL(0.330, ff->f_long_v( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.418, ff->f_long_v( 5.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.555, ff->f_long_v(10.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.794, ff->f_long_v(15.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.302, ff->f_long_v(20.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v( 0.0), 0.330, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v( 5.0), 0.418, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v(10.0), 0.555, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v(15.0), 0.794, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v(20.0), 1.302, eps);
 
-            TEST_CHECK_NEARLY_EQUAL(0.310, ff->f_long_a( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.369, ff->f_long_a( 5.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.453, ff->f_long_a(10.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.584, ff->f_long_a(15.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.810, ff->f_long_a(20.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a( 0.0), 0.310, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a( 5.0), 0.369, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a(10.0), 0.453, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a(15.0), 0.584, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a(20.0), 0.810, eps);
 
-            TEST_CHECK_NEARLY_EQUAL(0.340, ff->f_perp_v( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.429, ff->f_perp_v( 5.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.567, ff->f_perp_v(10.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.806, ff->f_perp_v(15.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.315, ff->f_perp_v(20.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v( 0.0), 0.340, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v( 5.0), 0.429, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v(10.0), 0.567, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v(15.0), 0.806, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v(20.0), 1.315, eps);
 
-            TEST_CHECK_NEARLY_EQUAL(0.310, ff->f_perp_a( 0.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.366, ff->f_perp_a( 5.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.446, ff->f_perp_a(10.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.568, ff->f_perp_a(15.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.780, ff->f_perp_a(20.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a( 0.0), 0.310, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a( 5.0), 0.366, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a(10.0), 0.446, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a(15.0), 0.568, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a(20.0), 0.780, eps);
         }
 } bfvd2014_form_factors_test;

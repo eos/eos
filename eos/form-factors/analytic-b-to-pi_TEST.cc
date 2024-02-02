@@ -140,45 +140,45 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, o);
 
                 // LO, tw2
-                TEST_CHECK_NEARLY_EQUAL( 0.1167, ff.F_lo_tw2(-5.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1484, ff.F_lo_tw2(-1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1584, ff.F_lo_tw2( 0.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1696, ff.F_lo_tw2( 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2290, ff.F_lo_tw2( 5.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3604, ff.F_lo_tw2(10.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2(-5.0),   0.1167, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2(-1.0),   0.1484, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2( 0.0),   0.1584, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2( 1.0),   0.1696, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2( 5.0),   0.2290, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2(10.0),   0.3604, eps);
 
                 // LO, tw3
-                TEST_CHECK_NEARLY_EQUAL( 0.1261, ff.F_lo_tw3(-5.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1628, ff.F_lo_tw3(-1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1746, ff.F_lo_tw3( 0.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1876, ff.F_lo_tw3( 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2580, ff.F_lo_tw3( 5.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4214, ff.F_lo_tw3(10.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw3(-5.0),   0.1261, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw3(-1.0),   0.1628, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw3( 0.0),   0.1746, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw3( 1.0),   0.1876, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw3( 5.0),   0.2580, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw3(10.0),   0.4214, eps);
 
                 // LO, tw4
-                TEST_CHECK_NEARLY_EQUAL(-0.0013, ff.F_lo_tw4( 0.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0016, ff.F_lo_tw4( 1.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0034, ff.F_lo_tw4( 5.0),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0087, ff.F_lo_tw4(10.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw4( 0.0),  -0.0013, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw4( 1.0),  -0.0016, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw4( 5.0),  -0.0034, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw4(10.0),  -0.0087, eps);
 
                 // NLO, tw2
                 const auto nlo_eps = 400 * eps;
-                TEST_CHECK_NEARLY_EQUAL(+0.7706, ff.F_nlo_tw2( 0.0), nlo_eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.8190, ff.F_nlo_tw2( 1.0), nlo_eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.0609, ff.F_nlo_tw2( 5.0), nlo_eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.4741, ff.F_nlo_tw2(10.0), nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw2( 0.0), +0.7706, nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw2( 1.0), +0.8190, nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw2( 5.0), +1.0609, nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw2(10.0), +1.4741, nlo_eps);
 
                 // NLO, tw3
-                TEST_CHECK_NEARLY_EQUAL(-0.9221, ff.F_nlo_tw3( 0.0), nlo_eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.9963, ff.F_nlo_tw3( 1.0), nlo_eps);
-                TEST_CHECK_NEARLY_EQUAL(-1.4371, ff.F_nlo_tw3( 5.0), nlo_eps);
-                TEST_CHECK_NEARLY_EQUAL(-2.7571, ff.F_nlo_tw3(10.0), nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw3( 0.0), -0.9221, nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw3( 1.0), -0.9963, nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw3( 5.0), -1.4371, nlo_eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_nlo_tw3(10.0), -2.7571, nlo_eps);
 
                 // fp form factor @ mu = 3.0
-                TEST_CHECK_NEARLY_EQUAL( 0.2831, ff.f_p( 0.0), 10 * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2988, ff.f_p( 1.0), 10 * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3777, ff.f_p( 5.0), 10 * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.5346, ff.f_p(10.0), 10 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0),        0.2831, 10 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p( 1.0),        0.2988, 10 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p( 5.0),        0.3777, 10 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p(10.0),        0.5346, 10 * eps);
 
                 o = Options{
                     { "decay-constant", "sum-rule" },
@@ -187,93 +187,93 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
                 // Ftil LO, tw3
-                TEST_CHECK_NEARLY_EQUAL( 0.0283, ff_no_rescale.Ftil_lo_tw3(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0452, ff_no_rescale.Ftil_lo_tw3( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0480, ff_no_rescale.Ftil_lo_tw3(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0512, ff_no_rescale.Ftil_lo_tw3(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0677, ff_no_rescale.Ftil_lo_tw3(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1058, ff_no_rescale.Ftil_lo_tw3( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3(-10.0),  0.0283, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3( -1.0),  0.0452, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3(  0.0),  0.0480, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3(  1.0),  0.0512, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3(  5.0),  0.0677, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw3( 10.0),  0.1058, 1. * eps);
 
                 // Ftil LO, tw4
-                TEST_CHECK_NEARLY_EQUAL( 0.0010, ff_no_rescale.Ftil_lo_tw4(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0012, ff_no_rescale.Ftil_lo_tw4( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0012, ff_no_rescale.Ftil_lo_tw4(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0013, ff_no_rescale.Ftil_lo_tw4(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0012, ff_no_rescale.Ftil_lo_tw4(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0006, ff_no_rescale.Ftil_lo_tw4( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw4(-10.0),  0.0010, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw4( -1.0),  0.0012, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw4(  0.0),  0.0012, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw4(  1.0),  0.0013, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw4(  5.0),  0.0012, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_lo_tw4( 10.0),  0.0006, 1. * eps);
 
                 // Ftil NLO, tw2
-                TEST_CHECK_NEARLY_EQUAL( 0.1980, ff_no_rescale.Ftil_nlo_tw2(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2397, ff_no_rescale.Ftil_nlo_tw2( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2454, ff_no_rescale.Ftil_nlo_tw2( 1e-5), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2513, ff_no_rescale.Ftil_nlo_tw2(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2775, ff_no_rescale.Ftil_nlo_tw2(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3147, ff_no_rescale.Ftil_nlo_tw2( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw2(-10.0), 0.1980, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw2( -1.0), 0.2397, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw2( 1e-5), 0.2454, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw2(  1.0), 0.2513, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw2(  5.0), 0.2775, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw2( 10.0), 0.3147, 1. * eps);
 
                 // Ftil NLO, tw3
-                TEST_CHECK_NEARLY_EQUAL(-0.1072, ff_no_rescale.Ftil_nlo_tw3(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1772, ff_no_rescale.Ftil_nlo_tw3( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1907, ff_no_rescale.Ftil_nlo_tw3( 1e-5), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.2064, ff_no_rescale.Ftil_nlo_tw3(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.3023, ff_no_rescale.Ftil_nlo_tw3(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.6126, ff_no_rescale.Ftil_nlo_tw3( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw3(-10.0),-0.1072, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw3( -1.0),-0.1772, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw3( 1e-5),-0.1907, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw3(  1.0),-0.2064, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw3(  5.0),-0.3023, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.Ftil_nlo_tw3( 10.0),-0.6126, 1. * eps);
 
                 // f0 form factor @ mu = 3.0
-                TEST_CHECK_NEARLY_EQUAL( 0.2234, ff_no_rescale.f_0(-10.0), 10. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2757, ff_no_rescale.f_0( -1.0), 10. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2835, ff_no_rescale.f_0(  0.0), 10. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2918, ff_no_rescale.f_0(  1.0), 10. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3318, ff_no_rescale.f_0(  5.0), 10. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4057, ff_no_rescale.f_0( 10.0), 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0(-10.0),          0.2234, 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0( -1.0),          0.2757, 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0(  0.0),          0.2835, 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0(  1.0),          0.2918, 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0(  5.0),          0.3318, 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0( 10.0),          0.4057, 10. * eps);
 
                 // FT LO, tw2
-                TEST_CHECK_NEARLY_EQUAL( 0.0225, ff_no_rescale.FT_lo_tw2(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0336, ff_no_rescale.FT_lo_tw2( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0354, ff_no_rescale.FT_lo_tw2(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0373, ff_no_rescale.FT_lo_tw2(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0473, ff_no_rescale.FT_lo_tw2(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0680, ff_no_rescale.FT_lo_tw2( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw2(-10.0),    0.0225, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw2( -1.0),    0.0336, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw2(  0.0),    0.0354, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw2(  1.0),    0.0373, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw2(  5.0),    0.0473, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw2( 10.0),    0.0680, 1. * eps);
 
                 // FT LO, tw3
-                TEST_CHECK_NEARLY_EQUAL( 0.0137, ff_no_rescale.FT_lo_tw3(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0219, ff_no_rescale.FT_lo_tw3( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0233, ff_no_rescale.FT_lo_tw3(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0248, ff_no_rescale.FT_lo_tw3(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0330, ff_no_rescale.FT_lo_tw3(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0520, ff_no_rescale.FT_lo_tw3( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw3(-10.0),    0.0137, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw3( -1.0),    0.0219, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw3(  0.0),    0.0233, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw3(  1.0),    0.0248, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw3(  5.0),    0.0330, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw3( 10.0),    0.0520, 1. * eps);
 
                 // FT LO, tw4
-                TEST_CHECK_NEARLY_EQUAL(-0.0008, ff_no_rescale.FT_lo_tw4(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0014, ff_no_rescale.FT_lo_tw4( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0016, ff_no_rescale.FT_lo_tw4(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0017, ff_no_rescale.FT_lo_tw4(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0025, ff_no_rescale.FT_lo_tw4(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0044, ff_no_rescale.FT_lo_tw4( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw4(-10.0),   -0.0008, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw4( -1.0),   -0.0014, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw4(  0.0),   -0.0016, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw4(  1.0),   -0.0017, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw4(  5.0),   -0.0025, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_lo_tw4( 10.0),   -0.0044, 1. * eps);
 
                 // FT NLO, tw2
-                TEST_CHECK_NEARLY_EQUAL( 0.1014, ff_no_rescale.FT_nlo_tw2(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1443, ff_no_rescale.FT_nlo_tw2(- 1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1506, ff_no_rescale.FT_nlo_tw2(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1573, ff_no_rescale.FT_nlo_tw2(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1870, ff_no_rescale.FT_nlo_tw2(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2211, ff_no_rescale.FT_nlo_tw2( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw2(-10.0),   0.1014, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw2(- 1.0),   0.1443, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw2(  0.0),   0.1506, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw2(  1.0),   0.1573, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw2(  5.0),   0.1870, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw2( 10.0),   0.2211, 1. * eps);
 
                 // FT NLO, tw3
-                TEST_CHECK_NEARLY_EQUAL(-0.0314, ff_no_rescale.FT_nlo_tw3(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0603, ff_no_rescale.FT_nlo_tw3(- 1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0665, ff_no_rescale.FT_nlo_tw3(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0740, ff_no_rescale.FT_nlo_tw3(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1220, ff_no_rescale.FT_nlo_tw3(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.2879, ff_no_rescale.FT_nlo_tw3( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw3(-10.0),  -0.0314, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw3(- 1.0),  -0.0603, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw3(  0.0),  -0.0665, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw3(  1.0),  -0.0740, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw3(  5.0),  -0.1220, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.FT_nlo_tw3( 10.0),  -0.2879, 1. * eps);
 
                 // fT form factor @ mu = 3.0
-                TEST_CHECK_NEARLY_EQUAL( 0.1750, ff_no_rescale.f_t(-10.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2169, ff_no_rescale.f_t( -5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2636, ff_no_rescale.f_t( -1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2779, ff_no_rescale.f_t(  0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2935, ff_no_rescale.f_t(  1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_t(  5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.5322, ff_no_rescale.f_t( 10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t(-10.0),          0.1750, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t( -5.0),          0.2169, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t( -1.0),          0.2636, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t(  0.0),          0.2779, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t(  1.0),          0.2935, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t(  5.0),          0.3725, 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t( 10.0),          0.5322, 1. * eps);
             }
 
             {
@@ -314,16 +314,16 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
-                TEST_CHECK_NEARLY_EQUAL( 0.2641, ff_no_rescale.f_p(  0.0),   2 * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4964, ff_no_rescale.f_p( 10.0),  15 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_p(  0.0), 0.2641,    2 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_p( 10.0), 0.4964,   15 * eps);
                 // f_0(0) = f_+(0)
-                TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_0( 10.0),   7 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_0( 10.0), 0.3725,    7 * eps);
 
                 // The values for f_T used here differe from the published manuscript due to a typeo
                 // in the formulas for the leading-order expression. The shift is ~2%, and the values
                 // below are taken from an updated Mathematica notebook free of this typo.
-                TEST_CHECK_NEARLY_EQUAL( 0.2606, ff_no_rescale.f_t(  0.0),  10 * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4990, ff_no_rescale.f_t( 10.0),  19 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t(  0.0), 0.2606,   10 * eps);
+                TEST_CHECK_NEARLY_EQUAL(ff_no_rescale.f_t( 10.0), 0.4990,   19 * eps);
             }
         }
 } analytic_form_factor_b_to_pi_DKMMO2008_test;

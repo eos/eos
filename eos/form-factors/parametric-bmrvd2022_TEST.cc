@@ -159,39 +159,39 @@ class BMRvD2022FormFactorsTest :
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
                 // form factor values
-                TEST_CHECK_NEARLY_EQUAL( 33.25224570, ff.f_time_v ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 33.25224570, ff.f_long_v ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 13.71590521, ff.f_perp_v ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 39.04787827, ff.f_time_a ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 39.04787827, ff.f_long_a ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 43.76278718, ff.f_perp_a ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 15.86249033, ff.f_long_t ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 22.45684904, ff.f_perp_t ( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 21.61605973, ff.f_long_t5( 0.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 22.45684904, ff.f_perp_t5( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_time_v ( 0.0), 33.25224570, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_v ( 0.0), 33.25224570, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_v ( 0.0), 13.71590521, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_time_a ( 0.0), 39.04787827, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_a ( 0.0), 39.04787827, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_a ( 0.0), 43.76278718, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_t ( 0.0), 15.86249033, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t ( 0.0), 22.45684904, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_t5( 0.0), 21.61605973, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t5( 0.0), 22.45684904, eps);
 
-                TEST_CHECK_NEARLY_EQUAL( 40.87968764, ff.f_time_v (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 45.45565962, ff.f_long_v (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 20.41738244, ff.f_perp_v (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 51.93704349, ff.f_time_a (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 48.08756014, ff.f_long_a (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 51.98391863, ff.f_perp_a (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 23.61277120, ff.f_long_t (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 30.02964424, ff.f_perp_t (10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 27.11308541, ff.f_long_t5(10.0), eps);
-                TEST_CHECK_NEARLY_EQUAL( 27.65566599, ff.f_perp_t5(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_time_v (10.0), 40.87968764, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_v (10.0), 45.45565962, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_v (10.0), 20.41738244, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_time_a (10.0), 51.93704349, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_a (10.0), 48.08756014, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_a (10.0), 51.98391863, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_t (10.0), 23.61277120, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t (10.0), 30.02964424, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_t5(10.0), 27.11308541, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t5(10.0), 27.65566599, eps);
 
                 const auto tm = power_of<2>(LambdaBToLambda::m1 - LambdaBToLambda::m2);
-                TEST_CHECK_NEARLY_EQUAL( 59.87052714, ff.f_time_v (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 88.45600970, ff.f_long_v (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 44.89007817, ff.f_perp_v (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 96.34996613, ff.f_time_a (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 70.92712078, ff.f_long_a (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 70.92712078, ff.f_perp_a (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 51.91552581, ff.f_long_t (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 56.60821914, ff.f_perp_t (tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 40.79093961, ff.f_long_t5(tm),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 40.79093961, ff.f_perp_t5(tm),   eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_time_v (tm),   59.87052714, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_v (tm),   88.45600970, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_v (tm),   44.89007817, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_time_a (tm),   96.34996613, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_a (tm),   70.92712078, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_a (tm),   70.92712078, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_t (tm),   51.91552581, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t (tm),   56.60821914, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_t5(tm),   40.79093961, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t5(tm),   40.79093961, eps);
             }
         }
 } bmrvd2022_form_factor_test;

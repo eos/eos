@@ -2911,33 +2911,33 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->rho::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.202868, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.254891, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.325801, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(-5.0),   0.202868, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v( 0.0),   0.254891, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(+5.0),   0.325801, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.231651, ff->a_0(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.299211, ff->a_0( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.400604, ff->a_0(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(-5.0), 0.231651, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0( 0.0), 0.299211, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(+5.0), 0.400604, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.187824, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.202553, ff->a_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.218425, ff->a_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(-5.0), 0.187824, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1( 0.0), 0.202553, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(+5.0), 0.218425, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.143643, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.169280, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.196516, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(-5.0), 0.143643, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2( 0.0), 0.169280, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(+5.0), 0.196516, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.177540, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.223847, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.288414, ff->t_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(-5.0), 0.177540, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1( 0.0), 0.223847, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(+5.0), 0.288414, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.209924, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.223847, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.236963, ff->t_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(-5.0), 0.209924, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2( 0.0), 0.223847, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(+5.0), 0.236963, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.132538, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.156777, ff->t_3( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.181452, ff->t_3(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(-5.0), 0.132538, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3( 0.0), 0.156777, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(+5.0), 0.181452, eps);
             }
 
 
@@ -2978,33 +2978,33 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.260799, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.328805, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.423196, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(-5.0),   0.260799, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v( 0.0),   0.328805, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(+5.0),   0.423196, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.268280, ff->a_0(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.346213, ff->a_0( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.463291, ff->a_0(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(-5.0), 0.268280, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0( 0.0), 0.346213, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(+5.0), 0.463291, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.242241, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.264235, ff->a_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.290082, ff->a_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(-5.0), 0.242241, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1( 0.0), 0.264235, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(+5.0), 0.290082, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.192709, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.230725, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.275801, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(-5.0), 0.192709, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2( 0.0), 0.230725, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(+5.0), 0.275801, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.229660, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.290716, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.377439, ff->t_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(-5.0), 0.229660, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1( 0.0), 0.290716, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(+5.0), 0.377439, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.269636, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.290716, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.313430, ff->t_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(-5.0), 0.269636, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2( 0.0), 0.290716, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(+5.0), 0.313430, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.167315, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.200133, ff->t_3( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.236724, ff->t_3(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(-5.0), 0.167315, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3( 0.0), 0.200133, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(+5.0), 0.236724, eps);
             }
 
 
@@ -3046,33 +3046,33 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->D^*::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.874062, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 1.024130, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 1.231090, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(-5.0),   0.874062, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v( 0.0),   1.024130, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(+5.0),   1.231090, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.732174, ff->a_0(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.871237, ff->a_0( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 1.058420, ff->a_0(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(-5.0), 0.732174, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0( 0.0), 0.871237, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(+5.0), 1.058420, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.770035, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.803015, ff->a_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.838538, ff->a_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(-5.0), 0.770035, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1( 0.0), 0.803015, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(+5.0), 0.838538, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.649193, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.719118, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.692782, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(-5.0), 0.649193, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2( 0.0), 0.719118, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(+5.0), 0.692782, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.744459, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.870939, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 1.039270, ff->t_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(-5.0), 0.744459, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1( 0.0), 0.870939, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(+5.0), 1.039270, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.854086, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.870939, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.879057, ff->t_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(-5.0), 0.854086, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2( 0.0), 0.870939, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(+5.0), 0.879057, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.429351, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.473056, ff->t_3( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.399784, ff->t_3(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(-5.0), 0.429351, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3( 0.0), 0.473056, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(+5.0), 0.399784, eps);
             }
 
 
@@ -3113,33 +3113,33 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->K^*::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.167330, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.203912, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.246149, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(-5.0),   0.167330, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v( 0.0),   0.203912, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(+5.0),   0.246149, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.219685, ff->a_0(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.278868, ff->a_0( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.362594, ff->a_0(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(-5.0), 0.219685, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0( 0.0), 0.278868, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(+5.0), 0.362594, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.154442, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.165623, ff->a_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.177698, ff->a_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(-5.0), 0.154442, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1( 0.0), 0.165623, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(+5.0), 0.177698, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.107336, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.120495, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.129637, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(-5.0), 0.107336, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2( 0.0), 0.120495, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(+5.0), 0.129637, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.147053, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.181221, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.224128, ff->t_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(-5.0), 0.147053, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1( 0.0), 0.181221, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(+5.0), 0.224128, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.172067, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.181221, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.188704, ff->t_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(-5.0), 0.172067, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2( 0.0), 0.181221, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(+5.0), 0.188704, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.094625, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.104721, ff->t_3( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.107054, ff->t_3(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(-5.0), 0.094625, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3( 0.0), 0.104721, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(+5.0), 0.107054, eps);
             }
 
 
@@ -3180,33 +3180,33 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->phi::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.188667, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.232526, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.286883, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(-5.0),   0.188667, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v( 0.0),   0.232526, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(+5.0),   0.286883, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.210868, ff->a_0(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.267878, ff->a_0( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.348945, ff->a_0(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(-5.0), 0.210868, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0( 0.0), 0.267878, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(+5.0), 0.348945, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.174001, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.189710, ff->a_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.208671, ff->a_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(-5.0), 0.174001, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1( 0.0), 0.189710, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(+5.0), 0.208671, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.131226, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.153049, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.177031, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(-5.0), 0.131226, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2( 0.0), 0.153049, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(+5.0), 0.177031, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.166630, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.207632, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.262038, ff->t_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(-5.0), 0.166630, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1( 0.0), 0.207632, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(+5.0), 0.262038, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.193698, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.207632, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.222445, ff->t_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(-5.0), 0.193698, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2( 0.0), 0.207632, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(+5.0), 0.222445, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.107931, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.123576, ff->t_3( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.135953, ff->t_3(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(-5.0), 0.107931, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3( 0.0), 0.123576, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(+5.0), 0.135953, eps);
             }
 
 
@@ -3248,33 +3248,33 @@ class LCSRFormFactorsTest :
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->D_s^*::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.653061, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.758854, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.868634, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(-5.0),   0.653061, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v( 0.0),   0.758854, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->v(+5.0),   0.868634, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.596366, ff->a_0(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.716505, ff->a_0( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.871324, ff->a_0(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(-5.0), 0.596366, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0( 0.0), 0.716505, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_0(+5.0), 0.871324, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.590307, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.630581, ff->a_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.683596, ff->a_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(-5.0), 0.590307, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1( 0.0), 0.630581, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_1(+5.0), 0.683596, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.471994, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.519060, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.480577, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(-5.0), 0.471994, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2( 0.0), 0.519060, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->a_2(+5.0), 0.480577, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.569470, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.670264, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.793728, ff->t_1(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(-5.0), 0.569470, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1( 0.0), 0.670264, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_1(+5.0), 0.793728, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.645332, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.670264, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.696802, ff->t_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(-5.0), 0.645332, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2( 0.0), 0.670264, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_2(+5.0), 0.696802, eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.279428, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.286126, ff->t_3( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.150783, ff->t_3(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(-5.0), 0.279428, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3( 0.0), 0.286126, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->t_3(+5.0), 0.150783, eps);
             }
         }
 } kmo2006_form_factors_test;
