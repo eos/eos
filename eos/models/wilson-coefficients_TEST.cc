@@ -138,26 +138,26 @@ class WilsonCoefficientsTest :
                 wc._sm_like_coefficients = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;
 
                 static const double eps = 1e-10;
-                TEST_CHECK_NEARLY_EQUAL(-0.280597305725000, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.009729183490000, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.005821929583920, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.084146804435200, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000405161899729, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.001090753111680, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.326845973907000, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.176431447889000, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.274693790550000, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.227994731400000, real(wc.c10()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0,               imag(wc.c10()), eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c1()),  -0.280597305725000, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c2()),  +1.009729183490000, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()),  -0.005821929583920, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()),  -0.084146804435200, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()),  +0.000405161899729, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()),  +0.001090753111680, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()),  -0.326845973907000, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()),  -0.176431447889000, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()),  +4.274693790550000, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), -4.227994731400000, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()),  +0.0,               eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()), +0.0,               eps);
             }
         }
 } wilson_coefficients_test;
