@@ -100,25 +100,25 @@ class CKMMatrixElementsTest :
 
                 CKMScanModel model(p, o);
 
-                TEST_CHECK_NEARLY_EQUAL( 0.12345,    abs(model.ckm_ud()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.23456,    abs(model.ckm_us()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.34567,    abs(model.ckm_ub()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.45678,    abs(model.ckm_cd()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.56789,    abs(model.ckm_cs()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.67890,    abs(model.ckm_cb()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.78901,    abs(model.ckm_td()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.89012,    abs(model.ckm_ts()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.90123,    abs(model.ckm_tb()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_ud()), 0.12345, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_us()), 0.23456, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_ub()), 0.34567, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_cd()), 0.45678, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_cs()), 0.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_cb()), 0.67890, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_td()), 0.78901, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_ts()), 0.89012, eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_tb()), 0.90123, eps);
 
-                TEST_CHECK_NEARLY_EQUAL( 1.12345,    arg(model.ckm_ud()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.23456,    arg(model.ckm_us()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.34567,    arg(model.ckm_ub()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.45678,    arg(model.ckm_cd()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.56789,    arg(model.ckm_cs()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.67890,    arg(model.ckm_cb()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.78901,    arg(model.ckm_td()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.89012,    arg(model.ckm_ts()),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 1.90123,    arg(model.ckm_tb()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_ud()), 1.12345, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_us()), 1.23456, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_ub()), 1.34567, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_cd()), 1.45678, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_cs()), 1.56789, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_cb()), 1.67890, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_td()), 1.78901, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_ts()), 1.89012, eps);
+                TEST_CHECK_NEARLY_EQUAL(arg(model.ckm_tb()), 1.90123, eps);
             }
         }
 } ckm_matrix_elements_test;
