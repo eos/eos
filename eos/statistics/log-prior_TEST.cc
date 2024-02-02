@@ -219,14 +219,14 @@ class LogPriorTest :
                 prior->sample();
 
                 // check that the parameters are at the median
-                TEST_CHECK_NEARLY_EQUAL(+0.2655528728950212, parameters["B->K::alpha^f+_0@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.6466140804171657, parameters["B->K::alpha^f+_1@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1337677825631754, parameters["B->K::alpha^f+_2@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.3841222758978433, parameters["B->K::alpha^f0_1@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.6628825163091753, parameters["B->K::alpha^f0_2@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.2510192324158927, parameters["B->K::alpha^fT_0@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.6508680050905388, parameters["B->K::alpha^fT_1@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.0999901466869552, parameters["B->K::alpha^fT_2@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f+_0@BSZ2015"], +0.2655528728950212, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f+_1@BSZ2015"], -0.6466140804171657, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f+_2@BSZ2015"], -0.1337677825631754, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f0_1@BSZ2015"], +0.3841222758978433, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f0_2@BSZ2015"], -0.6628825163091753, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^fT_0@BSZ2015"], +0.2510192324158927, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^fT_1@BSZ2015"], -0.6508680050905388, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^fT_2@BSZ2015"], +0.0999901466869552, eps);
 
                 // set generator values to 0.5 and sample
                 parameters["B->K::alpha^f+_0@BSZ2015"].set_generator(0.15865525393145702);
@@ -240,14 +240,14 @@ class LogPriorTest :
                 prior->sample();
 
                 // check that the parameters match the reference implementation
-                TEST_CHECK_NEARLY_EQUAL(+0.185453816796, parameters["B->K::alpha^f+_0@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.802422750729, parameters["B->K::alpha^f+_1@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+2.133896762012, parameters["B->K::alpha^f+_2@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.013676201228, parameters["B->K::alpha^f0_1@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.697392274325, parameters["B->K::alpha^f0_2@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.162651391807, parameters["B->K::alpha^fT_0@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.790991231378, parameters["B->K::alpha^fT_1@BSZ2015"], eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.223260161888, parameters["B->K::alpha^fT_2@BSZ2015"], eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f+_0@BSZ2015"], +0.185453816796, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f+_1@BSZ2015"], -0.802422750729, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f+_2@BSZ2015"], +2.133896762012, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f0_1@BSZ2015"], +0.013676201228, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^f0_2@BSZ2015"], -0.697392274325, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^fT_0@BSZ2015"], +0.162651391807, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^fT_1@BSZ2015"], -0.790991231378, eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["B->K::alpha^fT_2@BSZ2015"], +4.223260161888, eps);
             }
 
             // Poisson prior: k = 10.0
