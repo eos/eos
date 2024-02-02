@@ -117,108 +117,108 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.001599203, std::imag(ff.f_perp(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.002372988, std::imag(ff.f_perp(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.003660134, std::imag(ff.f_perp(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.001327286, std::imag(ff.f_perp(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.001771697, std::imag(ff.f_perp(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.60, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.002414450, std::imag(ff.f_perp(0.60, 18.60, +1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.30, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.30, 18.60, -1.0)), +0.001599203, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.30, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.30, 18.60,  0.0)), +0.002372988, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.30, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.30, 18.60, +1.0)), +0.003660134, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.60, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.60, 18.60, -1.0)), +0.001327286, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.60, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.60, 18.60,  0.0)), +0.001771697, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.60, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.60, 18.60, +1.0)), +0.002414450, eps);
             }
 
             /* F_para, fixed scale */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.014711514, std::imag(ff.f_para(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.021592105, std::imag(ff.f_para(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.032743147, std::imag(ff.f_para(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.016570605, std::imag(ff.f_para(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.021951495, std::imag(ff.f_para(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.60, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.029590914, std::imag(ff.f_para(0.60, 18.60, +1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.30, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.30, 18.60, -1.0)), -0.014711514, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.30, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.30, 18.60,  0.0)), -0.021592105, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.30, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.30, 18.60, +1.0)), -0.032743147, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.60, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.60, 18.60, -1.0)), -0.016570605, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.60, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.60, 18.60,  0.0)), -0.021951495, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.60, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.60, 18.60, +1.0)), -0.029590914, eps);
             }
 
             /* F_long, fixed scale */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.117508425, std::imag(ff.f_long(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.102828699, std::imag(ff.f_long(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.059754354, std::imag(ff.f_long(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.069270859, std::imag(ff.f_long(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.052968246, std::imag(ff.f_long(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.021346673, std::imag(ff.f_long(0.60, 18.60, +1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60, -1.0)), +0.117508425, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60,  0.0)), +0.102828699, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60, +1.0)),  0.059754354, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60, -1.0)), +0.069270859, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60,  0.0)), +0.052968246, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60, +1.0)), +0.021346673, eps);
             }
 
             /* F_time, fixed scale */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.126396815, std::imag(ff.f_time(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.117632744, std::imag(ff.f_time(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.086289383, std::imag(ff.f_time(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.084516600, std::imag(ff.f_time(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.078294218, std::imag(ff.f_time(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.063515338, std::imag(ff.f_time(0.60, 18.60, +1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60, -1.0)), +0.126396815, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60,  0.0)), +0.117632744, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60, +1.0)), +0.086289383, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60, -1.0)), +0.084516600, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60,  0.0)), +0.078294218, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60, +1.0)), +0.063515338, eps);
             }
 
             /* F_long, variable scale */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale", "variable" } });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.157064905, std::imag(ff.f_long(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.133953013, std::imag(ff.f_long(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.070974841, std::imag(ff.f_long(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.093299574, std::imag(ff.f_long(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.068992421, std::imag(ff.f_long(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.023277423, std::imag(ff.f_long(0.60, 18.60, +1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60, -1.0)), +0.157064905, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60,  0.0)), +0.133953013, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60, +1.0)), +0.070974841, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60, -1.0)), +0.093299574, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60,  0.0)), +0.068992421, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60, +1.0)), +0.023277423, eps);
             }
 
             /* F_time, variable scale */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale", "variable" } });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.167697744, std::imag(ff.f_time(0.30, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.153005539, std::imag(ff.f_time(0.30, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.106492190, std::imag(ff.f_time(0.30, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.111584771, std::imag(ff.f_time(0.60, 18.60, -1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.101649520, std::imag(ff.f_time(0.60, 18.60,  0.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60, +1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.079671685, std::imag(ff.f_time(0.60, 18.60, +1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60, -1.0)), +0.167697744, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60,  0.0)), +0.153005539, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60, +1.0)), +0.106492190, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60, -1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60, -1.0)), +0.111584771, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60,  0.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60,  0.0)), +0.101649520, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60, +1.0)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60, +1.0)), +0.079671685, eps);
             }
 
             p["B->pipi::mu@BFvD2016"] = 5.2795 / 2.0; /* for tests with Thorsten */
@@ -227,40 +227,40 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000950503, std::imag(ff.f_perp(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_perp(0.60, 18.60, +0.50)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.001190890, std::imag(ff.f_perp(0.60, 18.60, +0.50)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.30, 20.00, -0.25)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.30, 20.00, -0.25)), +0.000950503, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_perp(0.60, 18.60, +0.50)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_perp(0.60, 18.60, +0.50)), +0.001190890, eps);
             }
 
             /* F_para, comparison with Thorsten */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.013625800, std::imag(ff.f_para(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_para(0.60, 18.60, +0.50)), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.018046200, std::imag(ff.f_para(0.60, 18.60, +0.50)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.30, 20.00, -0.25)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.30, 20.00, -0.25)), -0.013625800, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_para(0.60, 18.60, +0.50)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_para(0.60, 18.60, +0.50)), -0.018046200, eps);
             }
 
             /* F_long, comparison with Thorsten */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.057997292, std::imag(ff.f_long(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_long(0.60, 18.60, +0.50)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.032167500, std::imag(ff.f_long(0.60, 18.60, +0.50)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 20.00, -0.25)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 20.00, -0.25)), +0.057997292, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.60, 18.60, +0.50)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.60, 18.60, +0.50)), +0.032167500, eps);
             }
 
             /* F_time, comparison with Thorsten */
             {
                 AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.070875500, std::imag(ff.f_time(0.30, 20.00, -0.25)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         std::real(ff.f_time(0.60, 18.60, +0.50)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.057476100, std::imag(ff.f_time(0.60, 18.60, +0.50)), eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 20.00, -0.25)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 20.00, -0.25)), +0.070875500, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.60, 18.60, +0.50)),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.60, 18.60, +0.50)), +0.057476100, eps);
             }
         }
 } analytic_form_factor_b_to_pi_pi_BFvD2016_test;
@@ -288,10 +288,10 @@ class AnalyticFormFactorBToPiPiFvDV2018Test :
 
                 TEST_CHECK(0 != ff.get());
 
-                TEST_CHECK_RELATIVE_ERROR(2910.308, ff->f_time_im_res_qhat2(0.05, 13.0), eps);
-                TEST_CHECK_RELATIVE_ERROR(2927.843, ff->f_long_im_res_qhat2(0.05, 13.0), eps);
-                TEST_CHECK_RELATIVE_ERROR( -46.067, ff->f_perp_im_res_qhat2(0.05, 13.0), eps);
-                TEST_CHECK_RELATIVE_ERROR( 129.103, ff->f_para_im_res_qhat2(0.05, 13.0), eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_im_res_qhat2(0.05, 13.0), 2910.308, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_im_res_qhat2(0.05, 13.0), 2927.843, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_im_res_qhat2(0.05, 13.0),  -46.067, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_para_im_res_qhat2(0.05, 13.0),  129.103, eps);
             }
         }
 } analytic_form_factor_b_to_pi_pi_FvDV2018_test;

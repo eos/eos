@@ -133,24 +133,24 @@ class BToPiPiFvDV2018FormFactorsTest :
             p["B->pipi::c^Fperp_1_2@FvDV2018"] =  819.519985258;
 
             // time
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_time(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.068642, imag(ff->f_time(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_time(0.05, 16.0, -0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.433295, imag(ff->f_time(0.05, 16.0, -0.5)), eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_time(0.60, 19.0, +0.5)),  0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_time(0.60, 19.0, +0.5)),  0.068642, eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_time(0.05, 16.0, -0.5)),  0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_time(0.05, 16.0, -0.5)),  0.433295, eps);
             // long
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_long(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.032153, imag(ff->f_long(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_long(0.05, 16.0, -0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.413832, imag(ff->f_long(0.05, 16.0, -0.5)), eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_long(0.60, 19.0, +0.5)),  0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_long(0.60, 19.0, +0.5)),  0.032153, eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_long(0.05, 16.0, -0.5)),  0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_long(0.05, 16.0, -0.5)),  0.413832, eps);
             // para
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_para(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL(-0.021664, imag(ff->f_para(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_para(0.05, 16.0, -0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL(-0.013560, imag(ff->f_para(0.05, 16.0, -0.5)), eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_para(0.60, 19.0, +0.5)),  0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_para(0.60, 19.0, +0.5)), -0.021664, eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_para(0.05, 16.0, -0.5)),  0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_para(0.05, 16.0, -0.5)), -0.013560, eps);
             // perp
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_perp(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.001048, imag(ff->f_perp(0.60, 19.0, +0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,      real(ff->f_perp(0.05, 16.0, -0.5)), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.001215, imag(ff->f_perp(0.05, 16.0, -0.5)), eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_perp(0.60, 19.0, +0.5)), 0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_perp(0.60, 19.0, +0.5)), 0.001048, eps);
+            TEST_CHECK_NEARLY_EQUAL(real(ff->f_perp(0.05, 16.0, -0.5)), 0.0,      eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_perp(0.05, 16.0, -0.5)), 0.001215, eps);
         }
 } b_to_pi_pi_fvdv2018_form_factors_test;

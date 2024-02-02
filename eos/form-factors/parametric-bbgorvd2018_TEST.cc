@@ -55,21 +55,21 @@ class HQETOneHalfFormFactorsTest :
             static constexpr double eps   = 1.0e-5;
             static constexpr double s_max = 9.1643031076;
 
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_time_v( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0296321, ff->f_long_v( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL(-0.1021055, ff->f_perp_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time_v( s_max),  0.0,        eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v( s_max),  0.0296321,  eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v( s_max), -0.1021055,  eps);
 
-            TEST_CHECK_NEARLY_EQUAL(-0.0071049, ff->f_time_a( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_long_a( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_perp_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time_a( s_max), -0.0071049,  eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a( s_max),  0.0,        eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a( s_max),  0.0,        eps);
 
-            TEST_CHECK_NEARLY_EQUAL( 0.9739324, ff->f_time_v( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.2487909, ff->f_long_v( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.1707046, ff->f_perp_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time_v( s_max - 3.0), 0.9739324, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_v( s_max - 3.0), 0.2487909, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_v( s_max - 3.0), 0.1707046, eps);
 
-            TEST_CHECK_NEARLY_EQUAL( 0.1809885, ff->f_time_a( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.8387119, ff->f_long_a( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.8467812, ff->f_perp_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time_a( s_max - 3.0), 0.1809885, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long_a( s_max - 3.0), 0.8387119, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp_a( s_max - 3.0), 0.8467812, eps);
         }
 } hqet_one_half_form_factors_test;
 
@@ -101,24 +101,24 @@ class HQETThreeHalfFormFactorsTest :
             static constexpr double eps   = 1.0e-5;
             static constexpr double s_max = 8.9484739600;
 
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_time12_v( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL(-0.0583747, ff->f_long12_v( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL(-0.2814541, ff->f_perp12_v( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0249132, ff->f_perp32_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time12_v( s_max),  0.0,       eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long12_v( s_max), -0.0583747, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp12_v( s_max), -0.2814541, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp32_v( s_max),  0.0249132, eps);
 
-            TEST_CHECK_NEARLY_EQUAL(-0.0403027, ff->f_time12_a( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_long12_a( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_perp12_a( s_max), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_perp32_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time12_a( s_max), -0.0403027, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long12_a( s_max),  0.0,       eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp12_a( s_max),  0.0,       eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp32_a( s_max),  0.0,       eps);
 
-            TEST_CHECK_NEARLY_EQUAL( 0.7297828, ff->f_time12_v( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.1034446, ff->f_long12_v( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL(-0.1125738, ff->f_perp12_v( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0408266, ff->f_perp32_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time12_v( s_max - 3.0), 0.7297828, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long12_v( s_max - 3.0), 0.1034446, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp12_v( s_max - 3.0),-0.1125738, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp32_v( s_max - 3.0), 0.0408266, eps);
 
-            TEST_CHECK_NEARLY_EQUAL( 0.1251307, ff->f_time12_a( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.7419465, ff->f_long12_a( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.7770269, ff->f_perp12_a( s_max - 3.0), eps);
-            TEST_CHECK_NEARLY_EQUAL( 0.0089753, ff->f_perp32_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_time12_a( s_max - 3.0), 0.1251307, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_long12_a( s_max - 3.0), 0.7419465, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp12_a( s_max - 3.0), 0.7770269, eps);
+            TEST_CHECK_NEARLY_EQUAL(ff->f_perp32_a( s_max - 3.0), 0.0089753, eps);
         }
 } hqet_three_half_form_factors_test;
