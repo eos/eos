@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2017 Elena Graverini
- * Copyright (c) 2017-2018 Danny van Dyk
+ * Copyright (c) 2017-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -44,6 +44,8 @@ namespace eos
 
         UsedParameter m_LambdaC2595;
 
+        LeptonFlavorOption opt_l;
+
         UsedParameter m_l;
 
         UsedParameter g_fermi;
@@ -59,7 +61,8 @@ namespace eos
             m_LambdaB(p["mass::Lambda_b"], u),
             tau_LambdaB(p["life_time::Lambda_b"], u),
             m_LambdaC2595(p["mass::Lambda_c(2595)"], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            opt_l(o, options, "l"),
+            m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
@@ -143,14 +146,14 @@ namespace eos
             return gamma_0(s) * b_l(s);
         }
 
-        double normalized_double_differential_decay_width(const double & s, const double & z) const
+        double normalized_double_differential_decay_width(const double & s, const double & cos_theta_l) const
         {
             if ((s < m_l * m_l) || (lambda(s) < 0.0))
             {
                 return 0.0;
             }
 
-            return gamma_0(s) * (a_l(s) + b_l(s) * z + c_l(s) * power_of<2>(z));
+            return gamma_0(s) * (a_l(s) + b_l(s) * cos_theta_l + c_l(s) * power_of<2>(cos_theta_l));
         }
 
         double differential_decay_width(const double & s) const
@@ -158,9 +161,9 @@ namespace eos
             return normalized_differential_decay_width(s) * std::norm(model->ckm_cb());
         }
 
-        double double_differential_decay_width(const double & s, const double & theta_l) const
+        double double_differential_decay_width(const double & s, const double & cos_theta_l) const
         {
-            return normalized_double_differential_decay_width(s, theta_l) * std::norm(model->ckm_cb());
+            return normalized_double_differential_decay_width(s, cos_theta_l) * std::norm(model->ckm_cb());
         }
 
         double differential_branching_ratio(const double & s) const
@@ -168,9 +171,9 @@ namespace eos
             return differential_decay_width(s) * tau_LambdaB / hbar;
         }
 
-        double double_differential_branching_ratio(const double & s, const double & theta_l) const
+        double double_differential_branching_ratio(const double & s, const double & cos_theta_l) const
         {
-            return double_differential_decay_width(s, theta_l) * tau_LambdaB / hbar;
+            return double_differential_decay_width(s, cos_theta_l) * tau_LambdaB / hbar;
         }
 
         double integrated_branching_ratio(const double & s_min, const double & s_max) const
@@ -237,9 +240,9 @@ namespace eos
     }
 
     double
-    LambdaBToLambdaC2595LeptonNeutrino::double_differential_branching_ratio(const double & s, const double & theta_l) const
+    LambdaBToLambdaC2595LeptonNeutrino::double_differential_branching_ratio(const double & s, const double & cos_theta_l) const
     {
-        return _imp->double_differential_branching_ratio(s, theta_l);
+        return _imp->double_differential_branching_ratio(s, cos_theta_l);
     }
 
     double
