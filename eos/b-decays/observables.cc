@@ -2000,10 +2000,10 @@ namespace eos
                         &LambdaBToLambdaC2595LeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2")),
 
-                make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/dsdtheta_l",
+                make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/dsdcos(theta_l)",
                         Unit::InverseGeV2(),
                         &LambdaBToLambdaC2595LeptonNeutrino::double_differential_branching_ratio,
-                        std::make_tuple("q2", "theta_l")),
+                        std::make_tuple("q2", "cos(theta_l)")),
 
                 make_observable("Lambda_b->Lambda_c(2595)lnu::BR", R"(\mathcal{B}(\Lambda_b\to\Lambda_c(2595) \ell^-\bar\nu))",
                         Unit::None(),
@@ -2047,10 +2047,10 @@ namespace eos
                         &LambdaBToLambdaC2625LeptonNeutrino::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
-                make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/dsdtheta_l",
+                make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/dsdcos(theta_l)",
                         Unit::InverseGeV2(),
                         &LambdaBToLambdaC2625LeptonNeutrino::double_differential_branching_ratio,
-                        std::make_tuple("q2", "theta_l")),
+                        std::make_tuple("q2", "cos(theta_l)")),
 
                 make_observable("Lambda_b->Lambda_c(2625)lnu::BR", R"(\mathcal{B}(\Lambda_b\to\Lambda_c(2625) \ell^-\bar\nu))",
                         Unit::None(),
