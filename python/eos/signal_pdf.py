@@ -236,6 +236,9 @@ class SignalPDFs(_SignalPDFs):
                     </tr>
                 '''
                 for qn, entry in group:
+                    if not self.filter_entry(qn):
+                        continue
+
                     group_result += fr'''
                         <tr>
                             <th class="qn"     rowspan="1"><tt>{qn}</tt></th>
