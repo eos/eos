@@ -157,8 +157,6 @@ class ObservableTest :
                     "z", "z_min", "z_max", "z_min_num", "z_max_num", "z_min_denom", "z_max_denom",
                     // needs to be unified with the notation of Re{E} and Im{E}
                     "q2_real", "q2_imag",
-                    // needs to be rewritten in terms of cos(theta_l)
-                    "theta_l",
                     // deprecated
                     "s", "s_min", "s_max",
                     "i",
