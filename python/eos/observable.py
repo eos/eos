@@ -139,17 +139,18 @@ class Observables(_Observables):
                     </tr>
                 '''
                 for qn, entry in group:
+                    if not self.filter_entry(qn):
+                        continue
+
                     latex = entry.latex()
+                    if (0 == len(latex)) and not self.showall:
+                        continue
 
                     unit = entry.unit().latex()
                     if unit == '1':
                         unit = '&mdash;'
                     else:
-                        unit = r'$$\left[ {unit} \right]$$'.format(unit=unit)
-                    if not self.filter_entry(qn):
-                        continue
-                    if (0 == len(latex)) and not self.showall:
-                        continue
+                        unit = fr'$$\left[ {unit} \right]$$'
 
                     kinematic_variables = r'<br>'.join(['<tt>' + str(kv) + '</tt>' for kv in entry.kinematic_variables()])
                     if len(kinematic_variables) == 0:
