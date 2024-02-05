@@ -67,6 +67,6 @@ class LambdaBToLambdaC2625LeptonNeutrinoTest :
                 { "q2_tau_min", 3.1570 }, { "q2_tau_max", 8.948 }
             };
             auto obs_R = Observable::make("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", p, k, o);
-            TEST_CHECK_RELATIVE_ERROR(0.0994558945773, obs_R->evaluate(), eps);
+            TEST_CHECK_RELATIVE_ERROR(obs_R->evaluate(), 0.0994558945773, eps);
         }
 } lambda_b_to_lambda_c_2625_l_nu_test;

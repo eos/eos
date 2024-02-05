@@ -71,15 +71,15 @@ class BToPiLeptonNeutrinoTest :
 
                 const double eps = 1e-8;
 
-                TEST_CHECK_NEARLY_EQUAL(1.44047e-05, d.integrated_branching_ratio( 0.01,  2.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.43046e-05, d.integrated_branching_ratio( 2.00,  4.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.40803e-05, d.integrated_branching_ratio( 4.00,  6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.37941e-05, d.integrated_branching_ratio( 6.00,  8.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.34323e-05, d.integrated_branching_ratio( 8.00, 10.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.29770e-05, d.integrated_branching_ratio(10.00, 12.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 0.01,  2.00), 1.44047e-05, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 2.00,  4.00), 1.43046e-05, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 4.00,  6.00), 1.40803e-05, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 6.00,  8.00), 1.37941e-05, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 8.00, 10.00), 1.34323e-05, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(10.00, 12.00), 1.29770e-05, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(8.29930e-5,  d.integrated_branching_ratio( 0.01, 12.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.43035e-4,  d.integrated_branching_ratio( 0.01, 25.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 0.01, 12.00), 8.29930e-5,  eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 0.01, 25.00), 1.43035e-4,  eps);
             }
 
             // Consistency check for R_pi
@@ -130,9 +130,9 @@ class BToPiLeptonNeutrinoTest :
                     obs_Rpi->evaluate(),
                     eps
                 );
-                TEST_CHECK_RELATIVE_ERROR(0.352166, obs_Rpi->evaluate(),  eps);
-                TEST_CHECK_RELATIVE_ERROR(0.204647, obs_Rpip->evaluate(), eps);
-                TEST_CHECK_RELATIVE_ERROR(0.147519, obs_Rpi0->evaluate(), eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpi->evaluate(),  0.352166, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpip->evaluate(), 0.204647, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpi0->evaluate(), 0.147519, eps);
             }
 
             // Consistency check for isospin
@@ -160,14 +160,14 @@ class BToPiLeptonNeutrinoTest :
 
                 const double eps = 1e-9;
 
-                TEST_CHECK_NEARLY_EQUAL(1.44047e-05 / 2., d.integrated_branching_ratio( 0.01,  2.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.43046e-05 / 2., d.integrated_branching_ratio( 2.00,  4.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.40803e-05 / 2., d.integrated_branching_ratio( 4.00,  6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.37941e-05 / 2., d.integrated_branching_ratio( 6.00,  8.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.34323e-05 / 2., d.integrated_branching_ratio( 8.00, 10.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.29770e-05 / 2., d.integrated_branching_ratio(10.00, 12.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 0.01,  2.00), 1.44047e-05 / 2., eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 2.00,  4.00), 1.43046e-05 / 2., eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 4.00,  6.00), 1.40803e-05 / 2., eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 6.00,  8.00), 1.37941e-05 / 2., eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 8.00, 10.00), 1.34323e-05 / 2., eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(10.00, 12.00), 1.29770e-05 / 2., eps);
 
-                TEST_CHECK_NEARLY_EQUAL(8.29930e-5 / 2.,  d.integrated_branching_ratio( 0.01, 12.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 0.01, 12.00), 8.29930e-5 / 2.,  eps);
             }
         }
 } b_to_pi_l_nu_test;
