@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -107,3 +107,48 @@ class LogLevelTest :
             }
         }
 } log_level_test;
+
+
+class LogOneTimeMessageTest :
+    public TestCase
+{
+    public:
+        LogOneTimeMessageTest() :
+            TestCase("log_one_time_message_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            std::vector<std::tuple<std::string, LogLevel, std::string>> messages;
+
+            // register callback
+            std::function<void(const std::string &, const LogLevel &, const std::string &)> callback = [&messages](const std::string & id, const LogLevel & level, const std::string & message) {
+                messages.push_back(std::make_tuple(id, level, message));
+            };
+            Log::instance()->register_callback(callback);
+
+            // first message
+            {
+                // no messages yet
+                TEST_CHECK_EQUAL(0u, messages.size());
+
+                // emit message
+                static const Log::OneTimeMessage first_emission("test-one-time-message", ll_informational, "This is a test message.");
+
+                // one message
+                TEST_CHECK_EQUAL(1u, messages.size());
+
+                // check message
+                TEST_CHECK_EQUAL("test-one-time-message", std::get<0>(messages.back()));
+                TEST_CHECK_EQUAL(ll_informational, std::get<1>(messages.back()));
+                TEST_CHECK_EQUAL("This is a test message. (Further messages of this type will be suppressed.)", std::get<2>(messages.back()));
+
+                // try emitting another message with the same id
+                static const Log::OneTimeMessage second_emission("test-one-time-message", ll_informational, "This is a test message.");
+
+                // still one message
+                TEST_CHECK_EQUAL(1u, messages.size());
+            }
+        }
+} one_time_message_test;

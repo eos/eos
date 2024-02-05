@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2022 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  *
  * Based upon 'paludis/util/log.cc', which is
  *
@@ -29,6 +29,7 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <iostream>
+#include <set>
 #include <vector>
 
 #include <time.h>
@@ -129,6 +130,8 @@ namespace eos
         std::string program_name;
 
         std::vector<std::function<void (const std::string &, const LogLevel &, const std::string &)>> callbacks;
+
+        std::set<std::string> one_time_messages;
 
         Implementation() :
             log_level(ll_error),
@@ -250,6 +253,18 @@ namespace eos
     Log::message(const std::string & id, const LogLevel & log_level)
     {
         return LogMessageHandler(this, log_level, id);
+    }
+
+    Log::OneTimeMessage::OneTimeMessage(const std::string & id, const LogLevel & log_level, const std::string & message)
+    {
+        auto imp = Log::instance()->_imp;
+
+        Lock ll(imp->mutex);
+
+        if (imp->one_time_messages.insert(id).second)
+        {
+            imp->message(id, log_level, message + " (Further messages of this type will be suppressed.)");
+        }
     }
 
     /* LogMessageHandler */
