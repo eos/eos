@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  *
  * Based upon 'paludis/util/log.hh', which is
  *
@@ -115,6 +115,19 @@ namespace eos
              * completed upon destruction of the return value.
              */
             LogMessageHandler message(const std::string & id, const LogLevel & log_level) __attribute__((warn_unused_result));
+
+            /*!
+             * Class to be used as a RAII guard for a one-time log message.
+             *
+             * The message will be logged upon construction this object. Further messages can be avoided by
+             * creating this object as a static const object in the scope of the message issuer.
+             */
+            class OneTimeMessage
+            {
+                public:
+                    OneTimeMessage(const std::string & id, const LogLevel & log_level, const std::string & message);
+            };
+            friend class OneTimeMessage;
             ///@}
     };
 
