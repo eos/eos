@@ -44,6 +44,6 @@ class BMesonPropertiesTest :
             BMesonProperties d(p, oo);
 
             const double eps = 1e-5;
-            TEST_CHECK_NEARLY_EQUAL(4.57252e-2, d.mass_splitting_j1_j0(), eps);
+            TEST_CHECK_NEARLY_EQUAL(d.mass_splitting_j1_j0(), 4.57252e-2, eps);
         }
 } b_meson_properties_test;

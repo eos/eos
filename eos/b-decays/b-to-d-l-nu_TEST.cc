@@ -199,7 +199,7 @@ class BToDLeptonNeutrinoTest :
                     };
                     auto obs_BRtau = Observable::make("B->Dlnu::BR", p, k_tau, oo);
                     TEST_CHECK(obs_BRtau.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(0.0069634, obs_BRtau->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_BRtau->evaluate(), 0.0069634, eps);
 
                     oo.declare("l", "mu");
                     auto k_mu = Kinematics{
@@ -208,7 +208,7 @@ class BToDLeptonNeutrinoTest :
                     };
                     auto obs_BRmu = Observable::make("B->Dlnu::BR", p, k_mu, oo);
                     TEST_CHECK(obs_BRmu.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(0.0232794, obs_BRmu->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_BRmu->evaluate(), 0.0232794, eps);
 
                     oo =
                     {
@@ -226,7 +226,7 @@ class BToDLeptonNeutrinoTest :
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
                     TEST_CHECK(obs_RD.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(0.299132, obs_RD->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_RD->evaluate(), 0.299132, eps);
                 }
             }
 
@@ -309,7 +309,7 @@ class BToDLeptonNeutrinoTest :
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 
                     TEST_CHECK(obs_RD.get() != nullptr);
-                    TEST_CHECK_RELATIVE_ERROR(1.43554, obs_RD->evaluate(), eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_RD->evaluate(), 1.43554, eps);
                 }
             }
         }
