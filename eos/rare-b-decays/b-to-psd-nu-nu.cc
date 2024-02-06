@@ -180,7 +180,12 @@ namespace eos
             const double m_P = this->m_P(), m_P2 = m_P * m_P;
             const double m_b = model->m_b_msbar(mu);
             const double m_s = model->m_s_msbar(mu);
-            const double lambda = eos::lambda(m_B2, m_P2, q2), sqrt_lambda = std::sqrt(lambda);
+            const double lambda = eos::lambda(m_B2, m_P2, q2);
+
+            if (q2 < 0 || q2 >= power_of<2>(m_B - m_P))
+                return 0.0;
+
+            double sqrt_lambda = std::sqrt(lambda);
 
             const auto wc = this->wc();
 
