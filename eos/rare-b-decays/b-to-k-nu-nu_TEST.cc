@@ -69,11 +69,11 @@ class BToKDineutrinoTest :
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(2.05845e-06, d.integrated_branching_ratio( 0.00,  8.00), eps);
-                TEST_CHECK_RELATIVE_ERROR(1.68211e-06, d.integrated_branching_ratio( 8.00, 16.00), eps);
-                TEST_CHECK_RELATIVE_ERROR(0.59978e-06, d.integrated_branching_ratio(16.00, 22.90), eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.00,  8.00), 2.05845e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 8.00, 16.00), 1.68211e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(16.00, 22.90), 0.59978e-06, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(4.34034e-06, d.integrated_branching_ratio( 0.00, 22.90), eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.00, 22.90), 4.34034e-06, eps);
             }
         }
 } b_to_k_nu_nu_test;

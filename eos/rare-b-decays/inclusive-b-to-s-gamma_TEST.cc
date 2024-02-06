@@ -144,17 +144,17 @@ class BToXsGammaNLOTest :
                     TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
                 }
 
-                TEST_CHECK_NEARLY_EQUAL(3.13699e-4, decay.integrated_branching_ratio(1.6), eps);
-                TEST_CHECK_NEARLY_EQUAL(3.09211e-4, decay.integrated_branching_ratio(1.8), eps);
-                TEST_CHECK_NEARLY_EQUAL(3.00017e-4, decay.integrated_branching_ratio(2.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(decay.integrated_branching_ratio(1.6), 3.13699e-4, eps);
+                TEST_CHECK_NEARLY_EQUAL(decay.integrated_branching_ratio(1.8), 3.09211e-4, eps);
+                TEST_CHECK_NEARLY_EQUAL(decay.integrated_branching_ratio(2.0), 3.00017e-4, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(2.21890,    decay.photon_energy_moment_1(1.6), 1e-5);
-                TEST_CHECK_NEARLY_EQUAL(2.22731,    decay.photon_energy_moment_1(1.8), 1e-5);
-                TEST_CHECK_NEARLY_EQUAL(2.24520,    decay.photon_energy_moment_1(2.0), 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(1.6),     2.21890,    1e-5);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(1.8),     2.22731,    1e-5);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(2.0),     2.24520,    1e-5);
 
-                TEST_CHECK_NEARLY_EQUAL(0.0423421,  decay.photon_energy_moment_2(1.6), 1e-7);
-                TEST_CHECK_NEARLY_EQUAL(0.0379255,  decay.photon_energy_moment_2(1.8), 1e-7);
-                TEST_CHECK_NEARLY_EQUAL(0.0323984,  decay.photon_energy_moment_2(2.0), 1e-7);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(1.6),     0.0423421,  1e-7);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(1.8),     0.0379255,  1e-7);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(2.0),     0.0323984,  1e-7);
             }
         }
 } b_to_x_s_gamma_nlo_test;

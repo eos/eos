@@ -43,14 +43,14 @@ class EMContributionsTest :
 
             static const double s_hat = 0.2, m_b = 4.6, m_l = 0.105658, mu = 4.2, log_m_l_hat = std::log(m_l / m_b);
 
-            TEST_CHECK_NEARLY_EQUAL(+8.41414,   EMContributions::omegaem_22(s_hat, log_m_l_hat, mu), eps);
-            TEST_CHECK_NEARLY_EQUAL(+2.72822,   real(EMContributions::omegaem_27(s_hat, log_m_l_hat, mu)), eps);
-            TEST_CHECK_NEARLY_EQUAL(+1.07985,   imag(EMContributions::omegaem_27(s_hat, log_m_l_hat, mu)), eps);
-            TEST_CHECK_NEARLY_EQUAL(+9.41651,   real(EMContributions::omegaem_29(s_hat, log_m_l_hat, mu)), eps);
-            TEST_CHECK_NEARLY_EQUAL(+3.26257,   imag(EMContributions::omegaem_29(s_hat, log_m_l_hat, mu)), eps);
-            TEST_CHECK_NEARLY_EQUAL(-3.77437,   EMContributions::omegaem_77(s_hat, log_m_l_hat), eps);
-            TEST_CHECK_NEARLY_EQUAL(+0.0518519, EMContributions::omegaem_79(s_hat, log_m_l_hat), eps);
-            TEST_CHECK_NEARLY_EQUAL(+2.11315,   EMContributions::omegaem_99(s_hat, log_m_l_hat), eps);
-            TEST_CHECK_NEARLY_EQUAL(+2.02214,   EMContributions::omegaem_1010(s_hat, log_m_l_hat), eps);
+            TEST_CHECK_NEARLY_EQUAL(EMContributions::omegaem_22(s_hat, log_m_l_hat, mu),       +8.41414,   eps);
+            TEST_CHECK_NEARLY_EQUAL(real(EMContributions::omegaem_27(s_hat, log_m_l_hat, mu)), +2.72822,   eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(EMContributions::omegaem_27(s_hat, log_m_l_hat, mu)), +1.07985,   eps);
+            TEST_CHECK_NEARLY_EQUAL(real(EMContributions::omegaem_29(s_hat, log_m_l_hat, mu)), +9.41651,   eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(EMContributions::omegaem_29(s_hat, log_m_l_hat, mu)), +3.26257,   eps);
+            TEST_CHECK_NEARLY_EQUAL(EMContributions::omegaem_77(s_hat, log_m_l_hat),           -3.77437,   eps);
+            TEST_CHECK_NEARLY_EQUAL(EMContributions::omegaem_79(s_hat, log_m_l_hat),           +0.0518519, eps);
+            TEST_CHECK_NEARLY_EQUAL(EMContributions::omegaem_99(s_hat, log_m_l_hat),           +2.11315,   eps);
+            TEST_CHECK_NEARLY_EQUAL(EMContributions::omegaem_1010(s_hat, log_m_l_hat),         +2.02214,   eps);
         }
 } em_contributions_test;
