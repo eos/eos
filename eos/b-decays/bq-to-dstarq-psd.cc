@@ -70,9 +70,7 @@ namespace eos
 
         std::function<double ()> mu_P;
 
-        SpecifiedOption opt_ff;
-
-        std::shared_ptr<FormFactors<PToV>> ff;
+        std::shared_ptr<UsedParameter> ff_a_0;
 
         std::shared_ptr<PseudoscalarLCDAs> lcdas;
 
@@ -104,7 +102,6 @@ namespace eos
             f_P(p["decay-constant::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi")], u),
             alpha_s(p["QCD::alpha_s(MZ)"], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
-            opt_ff(o, options, "form-factors"),
             opt_cp_conjugate(o, options, "cp-conjugate"),
             cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
             mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u),
@@ -118,13 +115,13 @@ namespace eos
                 case QuarkFlavor::strange:
                     ckm_factor = [this]() { return conj(model->ckm_ud()) * model->ckm_cb(); };
                     wc         = [this](const bool & cp_conjugate) { return model->wet_dbcu(cp_conjugate); };
-                    ff         = FormFactorFactory<PToV>::create("B_s->D_s^*::" + opt_ff.value(), p, o);
+                    ff_a_0     = std::make_shared<UsedParameter>(p["B_s->D_s^*pi::A_0(Mpi2)"], u);
                     lcdas      = PseudoscalarLCDAs::make("pi", p, o);
                     break;
                 case QuarkFlavor::down:
                     ckm_factor = [this]() { return conj(model->ckm_us()) * model->ckm_cb(); };
                     wc         = [this](const bool & cp_conjugate) { return model->wet_sbcu(cp_conjugate); };
-                    ff         = FormFactorFactory<PToV>::create("B->D^*::" + opt_ff.value(), p, o);
+                    ff_a_0     = std::make_shared<UsedParameter>(p["B->D^*K::A_0(MK2)"], u);
                     lcdas      = PseudoscalarLCDAs::make("K", p, o);
                     break;
                 default:
@@ -163,7 +160,6 @@ namespace eos
             }
 
             u.uses(*model);
-            u.uses(*ff);
         }
 
         // auxiliary functions for hard-scattering kernels
@@ -366,7 +362,7 @@ namespace eos
         double decay_width() const
         {
             // cf. [BBNS:2000A], eq. (210), p. 80
-            const complex<double> amplitude = g_fermi() / sqrt(2.0) * ckm_factor() * f_P() * ff->a_0(m_P * m_P)
+            const complex<double> amplitude = g_fermi() / sqrt(2.0) * ckm_factor() * f_P() * ff_a_0->evaluate()
                 * sqrt(lambda(m_B * m_B, m_Dstar * m_Dstar, m_P * m_P)) * this->a_1();
             // cf. [BBNS:2000A], eq. (216), p. 80
             const double breakup_momentum = sqrt(lambda(m_B * m_B, m_Dstar * m_Dstar, m_P * m_P)) / (2.0 * m_B);
@@ -385,7 +381,6 @@ namespace eos
     Implementation<BqToDstarqPseudoscalar>::options
     {
         Model::option_specification(),
-        FormFactorFactory<PToV>::option_specification(),
         { "accuracy",     { "LO", "NLO", "NLP", "LO+NLO", "all" }, "all"   },
         { "cp-conjugate", { "true", "false" },  "false" },
         { "q",            { "s", "d" }                  },

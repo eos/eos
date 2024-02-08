@@ -56,6 +56,8 @@ class BqToDqPSDTest :
                 p["CKM::arg(V_cb)"] = 0.0;
                 p["CKM::abs(V_us)"] = 0.2243;
                 p["CKM::arg(V_us)"] = 0.0;
+                // form factors
+                p["B->DK::f_0(MK2)"] = 0.684239;
                 // WC Values
                 p["sbcu::Re{c1}" ] = -0.04235657776117585;
                 p["sbcu::Im{c1}" ] = 0.0;
@@ -104,6 +106,8 @@ class BqToDqPSDTest :
                 p["CKM::arg(V_cb)"] = 0.0;
                 p["CKM::abs(V_us)"] = 0.2243;
                 p["CKM::arg(V_us)"] = 0.0;
+                // form factors
+                p["B->DK::f_0(MK2)"] = 0.684239;
                 // BSM test case: WET parameter point
                 p["sbcu::Re{c1}"  ] = -1.72424;
                 p["sbcu::Im{c1}"  ] = -1.56379;
