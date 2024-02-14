@@ -27,6 +27,7 @@
 #include <eos/utils/options-impl.hh>
 #include <eos/maths/polylog.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/utils/log.hh>
 
 #include <cmath>
 #include <limits>
@@ -185,6 +186,13 @@ namespace eos
         _m_B(p[Process_::name_B], *static_cast<ParameterUser *>(this)),
         _m_P(p[Process_::name_P], *static_cast<ParameterUser *>(this))
     {
+        static const Log::OneTimeMessage message_HQET_FFs_PToP
+        (
+            std::string("HQETFormFactors<") + Process_::label + ",PToP>",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     template <typename Process_>
@@ -648,6 +656,13 @@ namespace eos
         _m_B(p[Process_::name_B], *static_cast<ParameterUser *>(this)),
         _m_V(p[Process_::name_V], *static_cast<ParameterUser *>(this))
     {
+        static const Log::OneTimeMessage message_HQET_FFs_PToV
+        (
+            std::string("HQETFormFactors<") + Process_::label + ",PToV>",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     template <typename Process_>
@@ -1005,6 +1020,13 @@ namespace eos
         _m_Bst(p[Process_::name_Bst], *static_cast<ParameterUser *>(this)),
         _m_P(p[Process_::name_P], *static_cast<ParameterUser *>(this))
     {
+        static const Log::OneTimeMessage message_HQET_FFs_VToP
+        (
+            std::string("HQETFormFactors<") + Process_::label + ",VToP>",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     template <typename Process_>
@@ -1321,6 +1343,13 @@ namespace eos
     HQETFormFactors<Process_, VToV>::HQETFormFactors(const Parameters & p, const Options & o) :
         HQETFormFactorBase(p, o, Process_::hqe_prefix)
     {
+        static const Log::OneTimeMessage message_HQET_FFs_VToV
+        (
+            std::string("HQETFormFactors<") + Process_::label + ",VToV>",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     template <typename Process_>
