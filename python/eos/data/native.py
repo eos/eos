@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Danny van Dyk
+# Copyright (c) 2019-2024 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -170,10 +170,16 @@ class MixtureDensity:
         :param path: Path to the storage location.
         :type path: str
         """
-        if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError(f'Path {path} does not exist or is not a directory')
+        if not os.path.exists(path):
+            raise RuntimeError(f'Path {path} does not exist')
 
-        f = os.path.join(path, 'description.yaml')
+        if os.path.isfile(path):
+            f = path
+        elif os.path.isdir(path):
+            f = os.path.join(path, 'description.yaml')
+        else:
+            raise RuntimeError(f'Path {path} is neither a file nor a directory')
+
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError(f'Description file {f} does not exist or is not a file')
 
@@ -186,6 +192,7 @@ class MixtureDensity:
         self.type = 'MixtureDensity'
         self.components = description['components']
         self.weights    = description['weights']
+        self.varied_parameters = description['varied_parameters'] if 'varied_parameters' in description else None
 
 
     def density(self):
@@ -195,13 +202,15 @@ class MixtureDensity:
 
 
     @staticmethod
-    def create(path, density):
+    def create(path, density, varied_parameters=None):
         """ Write a new MixtureDensity object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param density: Mixture density.
         :type density: pypmc.density.MixtureDensity
+        :param varied_parameters: List of the qualified names of varied parameters.
+        :type varied_parameters: ``numpy.array`` of str, optional
         """
         description = {}
         description['version'] = eos.__version__
@@ -217,6 +226,8 @@ class MixtureDensity:
             else:
                 raise RuntimeError(f'Unsupported type of MixtureDensity component: {type(c)}')
         description['weights'] = density.weights.tolist()
+        if varied_parameters is not None:
+            description['varied_parameters'] = varied_parameters.tolist()
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
