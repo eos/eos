@@ -305,7 +305,7 @@ After successful configuration, build EOS by running the following command:
 
 The ``-j`` option instructs the ``make`` program to use all available processors to parallelize the build process.
 (Depending on the amount of RAM in your machine, you might have to use a smaller number of cores when running make,
-e.g. doing `-j4` will only use four cores).
+e.g. doing ``-j4`` will only use four cores).
 We strongly recommend testing the build by running the command
 
 ::
