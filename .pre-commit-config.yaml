@@ -29,3 +29,4 @@ repos:
    rev: v1.0.1
    hooks:
     - id: eos-test-check-argument-order
+      exclude: '^test/test_TEST.cc$'
