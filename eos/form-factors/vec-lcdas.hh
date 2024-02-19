@@ -49,6 +49,18 @@ namespace eos
             virtual double phipara(const double & u, const double & mu) const = 0;
             virtual double phiperp(const double & u, const double & mu) const = 0;
 
+            /* Twist 3 parameters */
+            virtual double kappa3para(const double & mu) const = 0;
+            virtual double omega3para(const double & mu) const = 0;
+            virtual double lambda3para(const double & mu) const = 0;
+            virtual double zeta3para(const double & mu) const = 0;
+            virtual double lambda3paratilde(const double & mu) const = 0;
+            virtual double omega3paratilde(const double & mu) const = 0;
+            virtual double kappa3perp(const double & mu) const = 0;
+            virtual double omega3perp(const double & mu) const = 0;
+            virtual double lambda3perp(const double & mu) const = 0;
+
+
             static std::shared_ptr<VectorLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
 }
