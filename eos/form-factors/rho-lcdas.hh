@@ -56,6 +56,17 @@ namespace eos
             double a4perp(const double & mu) const override;
             double fperp(const double & mu) const override;
 
+            /* Twist 3 LCDA parameters */
+            double kappa3para(const double & /*mu*/) const override { return 0.0; }
+            double omega3para(const double & /*mu*/) const override { return 0.0; }
+            double lambda3para(const double & /*mu*/) const override { return 0.0; }
+            double zeta3para(const double & /*mu*/) const override { return 0.0; }
+            double lambda3paratilde(const double & /*mu*/) const override { return 0.0; }
+            double omega3paratilde(const double & /*mu*/) const override { return 0.0; }
+            double kappa3perp(const double & /*mu*/) const override { return 0.0; }
+            double omega3perp(const double & /*mu*/) const override { return 0.0; }
+            double lambda3perp(const double & /*mu*/) const override { return 0.0; }
+
             /* Twist 2 LCDAs */
             double phipara(const double & u, const double & mu) const override;
             double phiperp(const double & u, const double & mu) const override;
