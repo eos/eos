@@ -290,16 +290,25 @@ namespace eos
     {
     }
 
+    /*
+    * The partial decay width computed with ``decay_width_dbcu`` and ``decay_width_sbcu`` can be negative.
+    * This issue arises, since
+    *  a) the computation is only a partial one (i.e., further terms can arise);
+    *  b) the computation is done to leading-order in alpha_s.
+    * For the purpose of determining bounds on the size of the WET Wilson coefficients,
+    * we would like to compare this partial decay width with the measured total decay
+    * width. Returning the absolute value suffices for this comparison.
+    */
     double
     Lifetime::decay_width_dbcu() const
     {
-        return _imp->decay_width_dbcu();
+        return std::fabs(_imp->decay_width_dbcu());
     }
 
     double
     Lifetime::decay_width_sbcu() const
     {
-        return _imp->decay_width_sbcu();
+        return std::fabs(_imp->decay_width_sbcu());
     }
 
     const std::set<ReferenceName>
