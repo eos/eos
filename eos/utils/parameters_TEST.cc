@@ -105,5 +105,59 @@ class ParametersTest :
 
                 TEST_CHECK_EQUAL(p.has("mass::boing747"), true);
             }
+
+            // Parameters::redirect
+            {
+                Parameters p = Parameters::Defaults();
+
+                Parameter p_tau = p["ubtaunutau::Re{cVL}"];
+                Parameter::Id id_tau = p_tau.id();
+                p_tau.set(-9.87);
+
+                TEST_CHECK_NEARLY_EQUAL(p_tau.evaluate(), -9.87, 1e-12);
+
+                Parameter p_ell = p.declare_and_insert("ublnul::Re{cVL}", R"(\text{Re} C_{V_L}^{ub\ell\nu_\ell})", Unit::None(), 1.23, -1.0, 1.0);
+                Parameter::Id id_ell = p_ell.id();
+
+                TEST_CHECK_NEARLY_EQUAL(p_ell.evaluate(), +1.23, 1e-12);
+
+                // redirect the tau parameter name to the lepton-flavor universal parameter
+                p.redirect_and_apply("ubtaunutau::Re{cVL}", id_ell);
+
+                // check that the old tau parameter still has the old parameter id
+                TEST_CHECK_EQUAL(p_tau.id(), id_tau);
+
+                // re-access the tau parameter
+                p_tau = p["ubtaunutau::Re{cVL}"];
+
+                // check that the tau parameter now has the value and id of the lepton-flavor universal parameter
+                TEST_CHECK_NEARLY_EQUAL(p_tau.evaluate(), +1.23, 1e-12);
+                TEST_CHECK_EQUAL(p_tau.id(), id_ell);
+
+                // check a new Parameters object
+                {
+                    Parameters p2 = Parameters::Defaults();
+                    Parameter p2_tau = p2["ubtaunutau::Re{cVL}"];
+                    TEST_CHECK_NEARLY_EQUAL(p2_tau.evaluate(), +1.23, 1e-12);
+                }
+
+                // undo the redirect
+                p.redirect_and_apply("ubtaunutau::Re{cVL}", id_tau);
+
+                // re-access the tau parameter
+                p_tau = p["ubtaunutau::Re{cVL}"];
+
+                // check that the tau parameter now has the value and id as at the beginning
+                TEST_CHECK_NEARLY_EQUAL(p_tau.evaluate(), -9.87, 1e-12);
+                TEST_CHECK_EQUAL(p_tau.id(), id_tau);
+
+                // check a new Parameters object
+                {
+                    Parameters p2 = Parameters::Defaults();
+                    Parameter p2_tau = p2["ubtaunutau::Re{cVL}"];
+                    TEST_CHECK_NEARLY_EQUAL(p2_tau.evaluate(), +1.00, 1e-12); // default value
+                }
+
+            }
         }
 } parameters_test;

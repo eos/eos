@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2023 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -162,6 +162,18 @@ namespace eos
                 const double & value = 0.0,
                 const double & min = -std::numeric_limits<double>::max(),
                 const double & max = +std::numeric_limits<double>::max());
+
+            /*!
+             * Redirect a parameter name to a different parameter id in the default set of parameters.
+             *
+             * The internal mapping of the parameter name will be redirected to the new id.
+             * If the the parameter's previous id is not already aliased, it will become inaccessible.
+             * This is useful for example to alias a parameter name to a different parameter object.
+             *
+             * @param name  Name of the parameter to be redirected.
+             * @param id    The id of the parameter to which the name shall be redirected.
+             */
+            static void redirect(const QualifiedName & name, const unsigned & id);
             ///@}
 
             ///@name Parameter access
@@ -181,6 +193,19 @@ namespace eos
                 const double & value = 0.0,
                 const double & min = -std::numeric_limits<double>::max(),
                 const double & max = +std::numeric_limits<double>::max());
+
+            /*!
+             * Redirect a parameter name to a different parameter id in the default set of parameters
+             * and apply the redirection to this parameter set.
+             *
+             * The internal mapping of the parameter name will be redirected to the new id.
+             * If the the parameter's previous id is not already aliased, it will become inaccessible.
+             * This is useful for example to alias a parameter name to a different parameter object.
+             *
+             * @param name  Name of the parameter to be redirected.
+             * @param id    The id of the parameter to which the name shall be redirected.
+             */
+            void redirect_and_apply(const QualifiedName & name, const unsigned & id);
 
             /*!
              * Set a parameter's numeric value.

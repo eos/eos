@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2023 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  *
@@ -527,6 +527,15 @@ namespace eos
                 _data->data.push_back(Parameter::Data{ value, idx });
                 _map[key] = idx;
             }
+
+            void redirect(const QualifiedName & name, const Parameter::Id & id)
+            {
+                auto i = _map.find(name);
+                if (_map.end() == i)
+                    throw UnknownParameterError(name);
+
+                i->second = id;
+            }
     };
 
     template <>
@@ -754,6 +763,27 @@ namespace eos
         // ... before returning it
         return _imp->parameters.back();
     }
+
+    void
+    Parameters::redirect(const QualifiedName & name, const Parameter::Id & id)
+    {
+        ParameterDefaults::instance()->redirect(name, id);
+    }
+
+    void
+    Parameters::redirect_and_apply(const QualifiedName & name, const Parameter::Id & id)
+    {
+        // redirect the parameter to the new id ...
+        ParameterDefaults::instance()->redirect(name, id);
+
+        // ... and apply the change to this parameter set ...
+        auto i = _imp->parameters_map.find(name);
+        if (_imp->parameters_map.end() == i)
+            throw UnknownParameterError(name);
+
+        i->second = id;
+    }
+
     void
     Parameters::set(const QualifiedName & name, const double & value)
     {
