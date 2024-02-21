@@ -158,7 +158,7 @@ namespace eos
              * @param min   (Optional) minimal value for the new parameter.
              * @param max   (Optional) maximal value for the new parameter.
              */
-            static void declare(const QualifiedName & name, const std::string & latex, Unit unit,
+            static unsigned declare(const QualifiedName & name, const std::string & latex, Unit unit,
                 const double & value = 0.0,
                 const double & min = -std::numeric_limits<double>::max(),
                 const double & max = +std::numeric_limits<double>::max());

@@ -521,11 +521,13 @@ namespace eos
                 return _sections;
             }
 
-            void declare(const QualifiedName & key, const Parameter::Template & value)
+            Parameter::Id declare(const QualifiedName & key, const Parameter::Template & value)
             {
                 unsigned idx = _data->data.size();
                 _data->data.push_back(Parameter::Data{ value, idx });
                 _map[key] = idx;
+
+                return idx;
             }
 
             void redirect(const QualifiedName & name, const Parameter::Id & id)
@@ -732,10 +734,10 @@ namespace eos
         return _imp->parameters[id];
     }
 
-    void
+    Parameter::Id
     Parameters::declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
-        ParameterDefaults::instance()->declare(name, Parameter::Template { name, min, value, max, latex, unit });
+        return ParameterDefaults::instance()->declare(name, Parameter::Template { name, min, value, max, latex, unit });
     }
 
     Parameter
