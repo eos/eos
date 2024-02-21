@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2023 Danny van Dyk
+ * Copyright (c) 2016-2024 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -246,6 +246,8 @@ BOOST_PYTHON_MODULE(_eos)
             :type min: float
             :param max: The maximum value that the parameter can attain.
             :type max: float
+            :return: The newly inserted parameter.
+            :rtype: eos.Parameter
             )", args("name", "latex", "unit", "value", "min", "max"))
         .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
         .def("set", &Parameters::set,
