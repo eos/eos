@@ -249,6 +249,20 @@ BOOST_PYTHON_MODULE(_eos)
             :return: The newly inserted parameter.
             :rtype: eos.Parameter
             )", args("name", "latex", "unit", "value", "min", "max"))
+        .def("redirect", &Parameters::redirect,
+            R"(
+            Redirect a parameter name to a different parameter id in the default set of parameters.
+
+            The internal mapping of the parameter name will be redirected to the new id.
+            If the the parameter's previous id is not already aliased, it will become inaccessible.
+            This is useful for example to alias a parameter name to a different parameter object.
+
+            :param name: The name of the parameter to be redirected.
+            :type name:
+            :param id: The id of the parameter to which the name shall be redirected.
+            :type id: eos.Parameter::Id
+            )", args("name", "id"))
+        .staticmethod("redirect")
         .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
         .def("set", &Parameters::set,
             R"(
