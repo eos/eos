@@ -521,7 +521,7 @@ namespace eos
                 return _sections;
             }
 
-            void insert(const QualifiedName & key, const Parameter::Template & value)
+            void declare(const QualifiedName & key, const Parameter::Template & value)
             {
                 unsigned idx = _data->data.size();
                 _data->data.push_back(Parameter::Data{ value, idx });
@@ -735,7 +735,7 @@ namespace eos
     void
     Parameters::declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
-        ParameterDefaults::instance()->insert(name, Parameter::Template { name, min, value, max, latex, unit });
+        ParameterDefaults::instance()->declare(name, Parameter::Template { name, min, value, max, latex, unit });
     }
 
     Parameter
@@ -752,7 +752,7 @@ namespace eos
         }
 
         // declare the new parameter ...
-        ParameterDefaults::instance()->insert(name, Parameter::Template { name, min, value, max, latex, unit });
+        ParameterDefaults::instance()->declare(name, Parameter::Template { name, min, value, max, latex, unit });
 
         // ... and insert it into this parameter set ...
         unsigned idx = _imp->parameters.size();
