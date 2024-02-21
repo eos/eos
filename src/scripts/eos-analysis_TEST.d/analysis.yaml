@@ -1,3 +1,12 @@
+parameters:
+  'ublnul::Re{cVL}' :
+      alias_of: [ 'ubenue::Re{cVL}', 'ubmunumu::Re{cVL}', 'ubtaunutau::Re{cVL}' ]
+      central: +1.0
+      min:     +1.0
+      max:     +1.0
+      unit:     '1'
+      latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\ell}\nu_\ell}_{V_L}$'
+
 likelihoods:
   - name: lattice
     constraints:
