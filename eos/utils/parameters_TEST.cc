@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2023 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -93,6 +93,17 @@ class ParametersTest :
 
                 TEST_CHECK_EQUAL(p.has("mass::tau"), true);
                 TEST_CHECK_EQUAL(p.has("mass::boing747"), false);
+            }
+
+            // Parameters::declare_and_insert
+            {
+                Parameters p = Parameters::Defaults();
+
+                TEST_CHECK_EQUAL(p.has("mass::boing747"), false);
+
+                p.declare_and_insert("mass::boing747", R"(\text{Boeing 747})", Unit::Undefined(), 100000.0, 90000.0, 110000.0);
+
+                TEST_CHECK_EQUAL(p.has("mass::boing747"), true);
             }
         }
 } parameters_test;
