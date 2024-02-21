@@ -69,13 +69,14 @@ class AnalysisFile:
             for name in input_data['observables']:
 
                 required_keys = {'latex', 'unit', 'options', 'expression'}
+                optional_keys = {'alias_of'}
                 provided_keys = input_data['observables'][name].keys()
 
                 missing_keys  = required_keys - provided_keys
                 if missing_keys:
                     raise KeyError(f'Missing keys for observable { name }: { missing_keys }')
 
-                ignored_keys = provided_keys - required_keys
+                ignored_keys = provided_keys - required_keys - optional_keys
                 if ignored_keys:
                     eos.warn(f'Ignoring unknown keys for observable { name }: { ignored_keys }')
 
@@ -104,8 +105,12 @@ class AnalysisFile:
                     qn = eos.QualifiedName(name)
                     unit = eos.Unit(param['unit'])
                     central, min, max = float(param['central']), float(param['min']), float(param['max'])
-                    eos.Parameters.declare(qn, param['latex'], unit, central, min, max)
+                    id = eos.Parameters.declare(qn, param['latex'], unit, central, min, max)
                     eos.info(f'Successfully declared parameter: {qn}')
+                    if 'alias_of' in param:
+                        for aliased_qn in param['alias_of']:
+                            eos.Parameters.redirect(eos.QualifiedName(aliased_qn), id)
+                            eos.info(f'Successfully declared alias: {aliased_qn} -> {qn}')
                 except eos.Exception as e:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{name}\': {e}')
 
