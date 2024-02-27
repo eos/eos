@@ -158,6 +158,9 @@ The Python interface to EOS requires the additional software:
 python3
   the Python interpreter in version 3.7 or higher, and required header files;
 
+pip
+  the Python package installer;
+
 BOOST
   the BOOST C++ library ``boost-python`` for interfacing Python and C++;
 
@@ -202,18 +205,17 @@ by running the following commands:
   # for the 'System Software'
   sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
   # for the 'Python Software'
-  sudo apt-get install python3-dev libboost-python-dev python3-matplotlib python3-networkx python3-scipy python3-yaml
+  sudo apt-get install python3-dev libboost-python-dev python3-matplotlib python3-networkx python3-scipy python3-yaml python3-pip
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 
-We recommend that you install ``dynesty``, ``pypmc`` and ``wilson``, and upgrade ``matplotlib`` to the latest available version, by running the following command:
+We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
+the ``dynesty``, ``matplotlib``, ``networkx``, ``scipy``, ``pypmc``, ``pyyaml``, and ``wilson`` packages:
+
 
 ::
-
-  # for the 'pip3' command
-  apt-get install python3-pip
-  pip3 install --user dynesty pypmc wilson
-  pip3 install --user --upgrade matplotlib
+  # Make sure to activate your virtual environment first
+  pip install dynesty matplotlib networkx scipy pypmc pyyaml wilson
 
 
 Installing the dependencies on macOS with Homebrew and PyPi
@@ -238,6 +240,8 @@ To install the packages, run the following commands in a shell:
   brew install gsl
 
 You can now use the ``pip3`` command to install the remaining packages from the \package{PyPi} package index.
+We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments)
+for this.
 
 .. note::
     Due to problems with the Python 3 installation provided by macOS, we strongly recommend using instead the ``pip3`` program
@@ -247,7 +251,7 @@ To install the remaining packages, run the following command in a shell
 
 ::
 
-  pip3 install matplotlib scipy PyYAML
+  pip3 install dynesty matplotlib networkx scipy pypmc pyyaml wilson
 
 
 Installing EOS
@@ -269,12 +273,13 @@ To install from the source code repository, you must first create all the necess
 
 You must now decide where EOS will be installed.
 To proceed we require you to set the environment variable ``PREFIX``.
-We recommend installing to your home directory.
+We recommend installing to the standard directory of your python virtual environment, which is typically given by the $VIRTUAL_ENV environment variable.
 To do this, run the following command:
 
 ::
 
-  export PREFIX=${HOME}/.local
+  export PREFIX=$VIRTUAL_ENV
+
 
 Next, you must configure the EOS build using the ``configure`` script.
 To use the EOS Python interface you must pass ``--enable-python`` to the call ``configure``.
@@ -321,7 +326,7 @@ If all tests pass, install EOS by running the command
   make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
                # or a similarly privileged directory
 
-If you installed EOS to a non-standard location (i.e. not ``/usr/local``),
+If you installed EOS to a non-standard location (i.e. not ``$VIRTUAL_ENV``),
 to use it from the command line you must set up some environment variable.
 For ``BASH``, which is the default Debian/Ubuntu shell, add the following lines to ``\$HOME/.bash_profile``:
 
