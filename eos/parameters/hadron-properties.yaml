@@ -895,6 +895,30 @@ groups:
           latex:    '$f^{\rho}_{\perp}(1\,\mathrm{GeV})$'
           unit:     'GeV'
           comments: 'cf. [BSZ:2015A], table 1'
+      'rho::zeta3para@1GeV' :
+          central: +0.03
+          min:     +0.02
+          max:     +0.04
+          latex:    '$\zeta^\parallel_3$'
+          unit:     '1'
+      'rho::omega3paratilde@1GeV' :
+          central: -0.09
+          min:     -0.12
+          max:     -0.06
+          latex:    '$\tilde{\omega}^\parallel_3$'
+          unit:     '1'
+      'rho::omega3para@1GeV' :
+          central: +0.15
+          min:     +0.10
+          max:     +0.20
+          latex:    '$\omega^\parallel_3$'
+          unit:     '1'
+      'rho::omega3perp@1GeV' :
+          central: +0.55
+          min:     +0.30
+          max:     +0.70
+          latex:    '$\omega^\perp_3$'
+          unit:     '1'
       # Kaon LCDA parameters
       'K::a1@1GeV' :
           central: -0.07
