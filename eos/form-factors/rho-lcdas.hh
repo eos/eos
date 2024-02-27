@@ -58,13 +58,13 @@ namespace eos
 
             /* Twist 3 LCDA parameters */
             double kappa3para(const double & /*mu*/) const override { return 0.0; }
-            double omega3para(const double & /*mu*/) const override { return 0.0; }
+            double omega3para(const double & mu) const override;
             double lambda3para(const double & /*mu*/) const override { return 0.0; }
-            double zeta3para(const double & /*mu*/) const override { return 0.0; }
+            double zeta3para(const double & mu) const override;
             double lambda3paratilde(const double & /*mu*/) const override { return 0.0; }
-            double omega3paratilde(const double & /*mu*/) const override { return 0.0; }
+            double omega3paratilde(const double & mu) const override;
             double kappa3perp(const double & /*mu*/) const override { return 0.0; }
-            double omega3perp(const double & /*mu*/) const override { return 0.0; }
+            double omega3perp(const double & mu) const override;
             double lambda3perp(const double & /*mu*/) const override { return 0.0; }
 
             /* Twist 2 LCDAs */
