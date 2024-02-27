@@ -43,14 +43,18 @@ class RhoLCDAsTest :
             static const double eps = 1e-5;
 
             Parameters p = Parameters::Defaults();
-            p["QCD::alpha_s(MZ)"] = 0.1176;
-            p["mass::d(2GeV)"]    = 0.0048;
-            p["mass::u(2GeV)"]    = 0.0032;
-            p["rho::a2para@1GeV"] = 0.22;
-            p["rho::a4para@1GeV"] = 0.16;
-            p["rho::a2perp@1GeV"] = 0.14;
-            p["rho::a4perp@1GeV"] = 0.25;
-            p["rho::fperp@1GeV"]  = 0.16;
+            p["QCD::alpha_s(MZ)"]          = 0.1176;
+            p["mass::d(2GeV)"]             = 0.0048;
+            p["mass::u(2GeV)"]             = 0.0032;
+            p["rho::a2para@1GeV"]          = 0.22;
+            p["rho::a4para@1GeV"]          = 0.16;
+            p["rho::a2perp@1GeV"]          = 0.14;
+            p["rho::a4perp@1GeV"]          = 0.25;
+            p["rho::fperp@1GeV"]           = 0.16;
+            p["rho::zeta3para@1GeV"]       = 0.03;
+            p["rho::omega3paratilde@1GeV"] = -0.09;
+            p["rho::omega3para@1GeV"]      = 0.15;
+            p["rho::omega3perp@1GeV"]      = 0.55;
 
             /* Diagnostics */
             {
@@ -110,7 +114,7 @@ class RhoLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(4.0),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(5.0),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a4perp(1.0),  0.25,        eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(2.0),  0.162241,    eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(2.0),  0.16224,     eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a4perp(3.0),  0.13658,     eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a4perp(4.0),  0.12317,     eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a4perp(5.0),  0.11450,     eps);
@@ -144,6 +148,33 @@ class RhoLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.5, 2.0), 1.72422,  eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.7, 2.0), 0.951784, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.phiperp(1.0, 2.0), 0.0,      eps);
+            }
+
+            /* Twist 3 */
+            {
+                RhoLCDAs rho(p, Options{ });
+
+                // parameters at mu = 1.0 GeV, 2.0 GeV, 3.0 GeV, 4.0 GeV and 5.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta3para(1.0),        0.03     , eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta3para(2.0),        0.0190839, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta3para(3.0),        0.0159382, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta3para(4.0),        0.0143048, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta3para(5.0),        0.0132535, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3paratilde(1.0), -0.09,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3paratilde(2.0), -0.0471515, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3paratilde(3.0), -0.0365076, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3paratilde(4.0), -0.0313243, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3paratilde(5.0), -0.0281206, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3para(1.0),       0.15     , eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3para(2.0),       0.0932984, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3para(3.0),       0.0770507, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3para(4.0),       0.0686532, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3para(5.0),       0.063268,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(1.0),       0.55,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(2.0),       0.384353,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(3.0),       0.33324,   eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(4.0),       0.305884,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(5.0),       0.287936,  eps);
             }
         }
 } rho_lcdas_test;

@@ -40,6 +40,12 @@ namespace eos
         UsedParameter a4perp_0;
         UsedParameter fperp_0;
 
+        // twist 3 LCDA parameters at mu = 1 GeV
+        UsedParameter zeta3para_0;
+        UsedParameter omega3paratilde_0;
+        UsedParameter omega3para_0;
+        UsedParameter omega3perp_0;
+
         // mass and decay constant of the rho
         UsedParameter m_rho;
 
@@ -56,6 +62,10 @@ namespace eos
             a2perp_0(p["rho::a2perp@1GeV"], u),
             a4perp_0(p["rho::a4perp@1GeV"], u),
             fperp_0(p["rho::fperp@1GeV"], u),
+            zeta3para_0(p["rho::zeta3para@1GeV"], u),
+            omega3paratilde_0(p["rho::omega3paratilde@1GeV"], u),
+            omega3para_0(p["rho::omega3para@1GeV"], u),
+            omega3perp_0(p["rho::omega3perp@1GeV"], u),
             m_rho(p["mass::rho^+"], u),
             _mu_c(p["QCD::mu_c"], u),
             _mu_b(p["QCD::mu_b"], u),
@@ -94,6 +104,7 @@ namespace eos
             throw InternalError("Implementation<RhoLCDAs>: RGE coefficient must not be evolved above mu_t = " + stringify(_mu_t()));
         }
 
+        /* running of twist 2 parameters */
         inline double a2para(const double & mu) const
         {
             return a2para_0 * std::pow(c_rge(mu), 50.0 / 9.0);
@@ -118,6 +129,28 @@ namespace eos
         {
             // [BBKT1998A], p. 23, eq. (3.59)
             return fperp_0 * std::pow(c_rge(mu), +4.0 / 3.0);
+        }
+
+        /* running of twist 3 parameters */
+        inline double zeta3para(const double & mu) const
+        {
+            return zeta3para_0 * std::pow(c_rge(mu), +77.0 / 9.0);
+        }
+        inline double omega3paratilde(const double & mu) const
+        {
+            return
+                (std::pow(c_rge(mu), (205 - std::sqrt(865)) / 18.0) * (6.0 * std::sqrt(865.0) * (-1.0 + std::pow(c_rge(mu), std::sqrt(865.0) / 9.0)) * omega3para_0 +
+                (865.0 - 26.0 * std::sqrt(865.0) + (865.0 + 26.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), std::sqrt(865.0) / 9.0)) * omega3paratilde_0)) / 1730.0;
+        }
+        inline double omega3para(const double & mu) const
+        {
+            return
+                (std::pow(c_rge(mu), (205.0 - std::sqrt(865.0)) / 18.0) * ((1730.0 + 52.0 * std::sqrt(865.0) + (1730.0 - 52.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), std::sqrt(865.0) / 9.0)) * omega3para_0 +
+                63.0 * std::sqrt(865.0) * (-1.0 + std::pow(c_rge(mu), std::sqrt(865.0) / 9.0)) * omega3paratilde_0)) / 3460.0;
+        }
+        inline double omega3perp(const double & mu) const
+        {
+            return  omega3perp_0 * std::pow(c_rge(mu), +73.0 / 9.0) * fperp_0 / fperp(mu);
         }
     };
 
@@ -171,6 +204,30 @@ namespace eos
     RhoLCDAs::fperp(const double &mu) const
     {
         return _imp->fperp(mu);
+    }
+
+    double
+    RhoLCDAs::zeta3para(const double &mu) const
+    {
+        return _imp->zeta3para(mu);
+    }
+
+    double
+    RhoLCDAs::omega3paratilde(const double &mu) const
+    {
+        return _imp->omega3paratilde(mu);
+    }
+
+    double
+    RhoLCDAs::omega3para(const double &mu) const
+    {
+        return _imp->omega3para(mu);
+    }
+
+    double
+    RhoLCDAs::omega3perp(const double &mu) const
+    {
+        return _imp->omega3perp(mu);
     }
 
     double
