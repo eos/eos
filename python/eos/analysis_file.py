@@ -68,14 +68,14 @@ class AnalysisFile:
         if 'observables' in input_data:
             for name in input_data['observables']:
 
-                required_keys = ['latex', 'unit', 'options', 'expression']
+                required_keys = {'latex', 'unit', 'options', 'expression'}
                 provided_keys = input_data['observables'][name].keys()
 
-                missing_keys  = [key for key in required_keys if key not in provided_keys]
+                missing_keys  = required_keys - provided_keys
                 if missing_keys:
                     raise KeyError(f'Missing keys for observable { name }: { missing_keys }')
 
-                ignored_keys = [key for key in provided_keys if key not in required_keys]
+                ignored_keys = provided_keys - required_keys
                 if ignored_keys:
                     eos.warn(f'Ignoring unknown keys for observable { name }: { ignored_keys }')
 
@@ -88,14 +88,14 @@ class AnalysisFile:
         if 'parameters' in input_data:
             for name in input_data['parameters']:
 
-                required_keys = ['latex', 'unit', 'central', 'min', 'max']
+                required_keys = {'latex', 'unit', 'central', 'min', 'max'}
                 provided_keys = input_data['parameters'][name].keys()
 
-                missing_keys  = [key for key in required_keys if key not in provided_keys]
+                missing_keys  = required_keys - provided_keys
                 if missing_keys:
                     raise KeyError(f'Missing keys for parameter { name }: { missing_keys }')
 
-                ignored_keys = [key for key in provided_keys if key not in required_keys]
+                ignored_keys = provided_keys - required_keys
                 if ignored_keys:
                     eos.warn(f'Ignoring unknown keys for parameter { name }: { ignored_keys }')
 
