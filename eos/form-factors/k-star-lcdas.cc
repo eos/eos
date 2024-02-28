@@ -44,6 +44,20 @@ namespace eos
         UsedParameter a4perp_0;
         UsedParameter fperp_0;
 
+        // twist 3 LCDA parameters at mu = 1 Gev
+        UsedParameter zeta3para_0;
+        UsedParameter lambda3paratilde_0;
+        UsedParameter omega3paratilde_0;
+        UsedParameter kappa3para_0;
+        UsedParameter omega3para_0;
+        UsedParameter lambda3para_0;
+        UsedParameter kappa3perp_0;
+        UsedParameter omega3perp_0;
+        UsedParameter lambda3perp_0;
+
+        // Kstar mass
+        UsedParameter M_V;
+
         // matching scales for the individual n-flavor effective QCDs
         UsedParameter _mu_c;
         UsedParameter _mu_b;
@@ -61,6 +75,16 @@ namespace eos
             a3perp_0(p["K^*::a3perp@1GeV"], u),
             a4perp_0(p["K^*::a4perp@1GeV"], u),
             fperp_0(p["K^*::fperp@1GeV"], u),
+            zeta3para_0(p["K^*::zeta3para@1GeV"], u),
+            lambda3paratilde_0(p["K^*::lambda3paratilde@1GeV"], u),
+            omega3paratilde_0(p["K^*::omega3paratilde@1GeV"], u),
+            kappa3para_0(p["K^*::kappa3para@1GeV"], u),
+            omega3para_0(p["K^*::omega3para@1GeV"], u),
+            lambda3para_0(p["K^*::lambda3para@1GeV"], u),
+            kappa3perp_0(p["K^*::kappa3perp@1GeV"], u),
+            omega3perp_0(p["K^*::omega3perp@1GeV"], u),
+            lambda3perp_0(p["K^*::lambda3perp@1GeV"], u),
+            M_V(p["mass::K_u^*"], u),
             _mu_c(p["QCD::mu_c"], u),
             _mu_b(p["QCD::mu_b"], u),
             _mu_t(p["QCD::mu_t"], u)
@@ -143,6 +167,121 @@ namespace eos
             // [BBKT1998A], p. 23, eq. (3.59)
             return fperp_0 * std::pow(c_rge(mu), +4.0 / 3.0);
         }
+
+        // running of twist 3 parameters
+        const double ms0 = model->m_s_msbar(1.0);
+        const double mq0 = model->m_ud_msbar(1.0) / 2.0;
+
+        inline double zeta3para(const double & mu) const
+        {
+            return (zeta3para_0 * std::pow(c_rge(mu), 77.0 / 9.0) * fpara +
+                (6.0 * a1perp_0 * (-1.0 + std::pow(c_rge(mu), 5.0 / 9.0)) * std::pow(c_rge(mu), 8.0) * fperp_0 * (mq0 - ms0)) / (25.0 * M_V) +
+                (2.0 * (std::pow(c_rge(mu), 16.0 / 3.0) - std::pow(c_rge(mu), 77.0 / 9.0)) * fperp_0 * (mq0 + ms0)) / (29.0 * M_V)) / fpara;
+        }
+
+        inline double kappa3para(const double & mu) const
+        {
+            return (std::pow(c_rge(mu), 77.0 / 9.0) * fpara * kappa3para_0 -
+                (2.0 * std::pow(c_rge(mu), 16.0 / 3.0) * (-1.0 + std::pow(c_rge(mu), 29.0 / 9.0)) * fperp_0 * (mq0 - ms0)) / (29.0 * M_V) +
+                (6.0 * a1perp_0 * (-1.0 + std::pow(c_rge(mu), 5.0 / 9.0)) * std::pow(c_rge(mu), 8.0) * fperp_0 * (mq0 + ms0)) / (25.0 * M_V)) / fpara;
+        }
+
+        inline double kappa3perp(const double & mu) const
+        {
+            return (std::pow(c_rge(mu), 55.0 / 9.0) * fperp_0 * kappa3perp_0 -
+                (4.0 * std::pow(c_rge(mu), 4.0) * (-1.0 + std::pow(c_rge(mu), 19.0 / 9.0)) * fpara * (mq0 - ms0)) / (19.0 * M_V) +
+                (12.0 * a1para_0 * std::pow(c_rge(mu), 55.0 / 9.0) * (-1.0 + std::pow(c_rge(mu), 13.0 / 9.0)) * fpara * (mq0 + ms0)) / (65.0 * M_V)) / fperp(mu);
+        }
+
+        inline double omega3perp(const double & mu) const
+        {
+            return ((-42.0 * a1para_0 * (-1.0 + std::pow(c_rge(mu), 5.0 / 9.0)) * std::pow(c_rge(mu), 68.0 / 9.0) * fpara * (mq0 - ms0)) / (25.0 * M_V) +
+                (12.0 * a2para_0 * std::pow(c_rge(mu), 73.0 / 9.0) * (-1 + std::pow(c_rge(mu), 13.0 / 9.0)) * fpara * (mq0 + ms0)) / (13.0 * M_V) +
+                (14.0 * (std::pow(c_rge(mu), 4.0) - std::pow(c_rge(mu), 73.0 / 9.0)) * fpara *(mq0 + ms0)) / (37.0 * M_V) +
+                std::pow(c_rge(mu), 73.0 / 9.0) * fperp_0 * omega3perp_0) / fperp(mu);
+        }
+
+        inline double lambda3perp(const double & mu) const
+        {
+            return (std::pow(c_rge(mu), 4.0) * (3.0 * fpara * (mq0 - ms0) +
+                68.0 * a2para_0 * std::pow(c_rge(mu), 5.555555555555555) * fpara * (mq0 - ms0) -
+                51.0 * a1para_0 * std::pow(c_rge(mu), 3.5555555555555554) * fpara * (mq0 + ms0) +
+                std::pow(c_rge(mu), 7.555555555555555) * (255.0 * fperp_0 * lambda3perp_0 * M_V +
+                (-3.0 + 51.0 * a1para_0 - 68.0 * a2para_0) * fpara * mq0 +
+                (3.0 + 51.0 * a1para_0 + 68.0 * a2para_0) * fpara * ms0))) / (255.0 * fperp(mu) * M_V);
+        }
+
+        inline double omega3para(const double & mu) const
+        {
+            return -3.7780044580452606e-7 * (887490.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865) / 18.0) * fperp_0 * (ms0 - mq0) -
+                448070.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 + mq0) -
+                89465220.0 * a2perp_0 * std::pow(c_rge(mu), (176.0 + std::sqrt(865)) / 18.0) * fperp_0 * (ms0 + mq0) +
+                std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) * (fperp_0 * ((224035.0 - 6811.0 * std::sqrt(865.0) +
+                27.0 * (-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (224035.0 - 6811.0 * std::sqrt(865.0) -
+                27.0 * (-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
+                765.0 * fpara * M_V * (2.0 * (-865.0 + 26.0 * std::sqrt(865.0)) * omega3para_0 -
+                63.0 * std::sqrt(865.0) * omega3paratilde_0)) +
+                std::pow(c_rge(mu), 11.38888888888889) * (fperp_0 * ((7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) -
+                27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) +
+                27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) -
+                765.0 * fpara * M_V * (2.0 * (865.0 + 26.0 * std::sqrt(865.0)) * omega3para_0 -
+                63.0 * std::sqrt(865.0) * omega3paratilde_0))) / (std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
+        }
+
+        inline double omega3paratilde(const double & mu) const
+        {
+            return (9.0 * a1perp_0 * ((865.0 - 7.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889) - 1730.0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865.0) / 18.0) +
+                (865.0 + 7.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0)) * fperp_0 * (mq0 - ms0)) / (147050.0 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V) -
+                ((-((9515.0 + 6707.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889)) + (-9515.0 + 6707.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) +
+                19030.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0)) * fperp_0 * (mq0 + ms0)) / (1.191105e7 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V) -
+                (3.0 * a2perp_0 * (-((2595.0 + 91.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889)) + (-2595.0 + 91.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) +
+                5190.0 * std::pow(c_rge(mu), (176.0 + std::sqrt(865.0)) / 18.0)) * fperp_0 * (mq0 + ms0)) / (4325.0 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V) +
+                (3.0 * (-std::pow(c_rge(mu), 11.38888888888889) + std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0)) * omega3para_0) / (std::sqrt(865.0) * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0)) +
+                (((865.0 - 26.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889) + (865.0 + 26.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0)) * omega3paratilde_0) /
+                (1730.0 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0));
+        }
+
+        inline double lambda3para(const double & mu) const
+        {
+            return (19030.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 - mq0) +
+                42879780.0 * a2perp_0 * std::pow(c_rge(mu), (176 + std::sqrt(865)) / 18.0) * fperp_0 *(ms0 - mq0) -
+                1261170.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865.0) / 18.0) * fperp_0 * (ms0 + mq0) +
+                std::pow(c_rge(mu), 11.38888888888889) * (fperp_0 * (-((9515.0 + 6707.0 * std::sqrt(865.0) +
+                729.0 * (-865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 + 8262.0 * (2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * ms0) +
+                (9515.0 + 6707.0 * std::sqrt(865.0) - 729.0 * (-865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 +
+                8262.0 * (2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * mq0) -
+                6885.0 * fpara * ((-865.0 + 26.0 * std::sqrt(865.0)) * lambda3para_0 +
+                6.0 * std::sqrt(865.0) * lambda3paratilde_0) * M_V) +
+                std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) * (fperp_0 * ((-9515.0 + 6707.0 * std::sqrt(865.0) + 729.0 * (865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 +
+                8262.0 * (-2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (9515.0 - 6707.0 * std::sqrt(865.0) + 729.0 * (865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 - 8262.0 *(-2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
+                6885.0 * fpara * ((865.0 + 26.0 * std::sqrt(865.0)) * lambda3para_0 +
+                6.0 *std::sqrt(865.0) * lambda3paratilde_0) * M_V)) / (1.191105e7 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
+        }
+
+        inline double lambda3paratilde(const double & mu) const
+        {
+            return -3.7780044580452606e-7 * (448070.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 - mq0) +
+                89465220.0 * a2perp_0 * std::pow(c_rge(mu), (176.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 - mq0) -
+                887490.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865.0) / 18.0) * fperp_0 * (ms0 + mq0) +
+                std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) * (fperp_0 * ((7.0 * (-32005.0 + 973.0 * std::sqrt(865.0)) -
+                27.0 * (-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 + (224035.0 - 6811.0 * std::sqrt(865.0) - 27.0 *(-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) - 765.0 * fpara * (63.0 * std::sqrt(865.0) * lambda3para_0 +
+                2.0 * (865.0 - 26.0 * std::sqrt(865.0)) * lambda3paratilde_0) * M_V) +
+                std::pow(c_rge(mu), 11.38888888888889) * (fperp_0 * ((-7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) + 27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) *a2perp_0) * ms0 +
+                (7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) + 27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
+                765.0 * fpara * (63.0 * std::sqrt(865.0) * lambda3para_0 -
+                2.0 * (865.0 + 26.0 * std::sqrt(865.0)) * lambda3paratilde_0) * M_V)) / (std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
+        }
     };
 
     AntiKStarLCDAs::AntiKStarLCDAs(const Parameters & p, const Options & o) :
@@ -221,6 +360,60 @@ namespace eos
     }
 
     double
+    AntiKStarLCDAs::zeta3para(const double & mu) const
+    {
+        return _imp->zeta3para(mu);
+    }
+
+    double
+    AntiKStarLCDAs::lambda3paratilde(const double & mu) const
+    {
+        return _imp->lambda3paratilde(mu);
+    }
+
+    double
+    AntiKStarLCDAs::omega3paratilde(const double & mu) const
+    {
+        return _imp->omega3paratilde(mu);
+    }
+
+    double
+    AntiKStarLCDAs::kappa3para(const double & mu) const
+    {
+        return _imp->kappa3para(mu);
+    }
+
+    double
+    AntiKStarLCDAs::omega3para(const double & mu) const
+    {
+        return _imp->omega3para(mu);
+    }
+
+    double
+    AntiKStarLCDAs::lambda3para(const double & mu) const
+    {
+        return _imp->lambda3para(mu);
+    }
+
+    double
+    AntiKStarLCDAs::kappa3perp(const double & mu) const
+    {
+        return _imp->kappa3perp(mu);
+    }
+
+    double
+    AntiKStarLCDAs::omega3perp(const double & mu) const
+    {
+        return _imp->omega3perp(mu);
+    }
+
+    double
+    AntiKStarLCDAs::lambda3perp(const double & mu) const
+    {
+        return _imp->lambda3perp(mu);
+    }
+
+    double
     AntiKStarLCDAs::phipara(const double & u, const double & mu) const
     {
          // Gegenbauer polynomials C_n^(3/2)
@@ -289,6 +482,20 @@ namespace eos
         UsedParameter a4perp_0;
         UsedParameter fperp_0;
 
+        // twist 3 LCDA parameters at mu = 1 GeV
+        UsedParameter zeta3para_0;
+        UsedParameter lambda3paratilde_0;
+        UsedParameter omega3paratilde_0;
+        UsedParameter kappa3para_0;
+        UsedParameter omega3para_0;
+        UsedParameter lambda3para_0;
+        UsedParameter kappa3perp_0;
+        UsedParameter omega3perp_0;
+        UsedParameter lambda3perp_0;
+
+        // Kstar mass
+        UsedParameter M_V;
+
         // matching scales for the individual n-flavor effective QCDs
         UsedParameter _mu_c;
         UsedParameter _mu_b;
@@ -306,6 +513,16 @@ namespace eos
             a3perp_0(p["K^*::a3perp@1GeV"], u),
             a4perp_0(p["K^*::a4perp@1GeV"], u),
             fperp_0(p["K^*::fperp@1GeV"], u),
+            zeta3para_0(p["K^*::zeta3para@1GeV"], u),
+            lambda3paratilde_0(p["K^*::lambda3paratilde@1GeV"], u),
+            omega3paratilde_0(p["K^*::omega3paratilde@1GeV"], u),
+            kappa3para_0(p["K^*::kappa3para@1GeV"], u),
+            omega3para_0(p["K^*::omega3para@1GeV"], u),
+            lambda3para_0(p["K^*::lambda3para@1GeV"], u),
+            kappa3perp_0(p["K^*::kappa3perp@1GeV"], u),
+            omega3perp_0(p["K^*::omega3perp@1GeV"], u),
+            lambda3perp_0(p["K^*::lambda3perp@1GeV"], u),
+            M_V(p["mass::K_u^*"], u),
             _mu_c(p["QCD::mu_c"], u),
             _mu_b(p["QCD::mu_b"], u),
             _mu_t(p["QCD::mu_t"], u)
@@ -343,6 +560,7 @@ namespace eos
             throw InternalError("Implementation<KStarLCDAs>: RGE coefficient must not be evolved above mu_t = " + stringify(_mu_t()));
         }
 
+        // running of twist 2 parameters
         inline double a1para(const double & mu) const
         {
             return -1.0 * a1para_0 * std::pow(c_rge(mu), 32.0 / 9.0);
@@ -387,6 +605,121 @@ namespace eos
         {
             // [BBKT1998A], p. 23, eq. (3.59)
             return fperp_0 * std::pow(c_rge(mu), +4.0 / 3.0);
+        }
+
+        // running of twist 3 parameters
+        const double ms0 = model->m_s_msbar(1.0);
+        const double mq0 = model->m_ud_msbar(1.0) / 2.0;
+
+        inline double zeta3para(const double & mu) const
+        {
+            return (zeta3para_0 * std::pow(c_rge(mu), 77.0 / 9.0) * fpara +
+                (6.0 * a1perp_0 * (-1.0 + std::pow(c_rge(mu), 5.0 / 9.0)) * std::pow(c_rge(mu), 8.0) * fperp_0 * (mq0 - ms0)) / (25.0 * M_V) +
+                (2.0 * (std::pow(c_rge(mu), 16.0 / 3.0) - std::pow(c_rge(mu), 77.0 / 9.0)) * fperp_0 * (mq0 + ms0)) / (29.0 * M_V)) / fpara;
+        }
+
+        inline double kappa3para(const double & mu) const
+        {
+            return -1.0 * (std::pow(c_rge(mu), 77.0 / 9.0) * fpara * kappa3para_0 -
+                (2.0 * std::pow(c_rge(mu), 16.0 / 3.0) * (-1.0 + std::pow(c_rge(mu), 29.0 / 9.0)) * fperp_0 * (mq0 - ms0)) / (29.0 * M_V) +
+                (6.0 * a1perp_0 * (-1.0 + std::pow(c_rge(mu), 5.0 / 9.0)) * std::pow(c_rge(mu), 8.0) * fperp_0 * (mq0 + ms0)) / (25.0 * M_V)) / fpara;
+        }
+
+        inline double kappa3perp(const double & mu) const
+        {
+            return -1.0 * (std::pow(c_rge(mu), 55.0 / 9.0) * fperp_0 * kappa3perp_0 -
+                (4.0 * std::pow(c_rge(mu), 4.0) * (-1.0 + std::pow(c_rge(mu), 19.0 / 9.0)) * fpara * (mq0 - ms0)) / (19.0 * M_V) +
+                (12.0 * a1para_0 * std::pow(c_rge(mu), 55.0 / 9.0) * (-1.0 + std::pow(c_rge(mu), 13.0 / 9.0)) * fpara * (mq0 + ms0)) / (65.0 * M_V)) / fperp(mu);
+        }
+
+        inline double omega3perp(const double & mu) const
+        {
+            return ((-42.0 * a1para_0 * (-1.0 + std::pow(c_rge(mu), 5.0 / 9.0)) * std::pow(c_rge(mu), 68.0 / 9.0) * fpara * (mq0 - ms0)) / (25.0 * M_V) +
+                (12.0 * a2para_0 * std::pow(c_rge(mu), 73.0 / 9.0) * (-1 + std::pow(c_rge(mu), 13.0 / 9.0)) * fpara * (mq0 + ms0)) / (13.0 * M_V) +
+                (14.0 * (std::pow(c_rge(mu), 4.0) - std::pow(c_rge(mu), 73.0 / 9.0)) * fpara *(mq0 + ms0)) / (37.0 * M_V) +
+                std::pow(c_rge(mu), 73.0 / 9.0) * fperp_0 * omega3perp_0) / fperp(mu);
+        }
+
+        inline double lambda3perp(const double & mu) const
+        {
+            return -1.0 * (std::pow(c_rge(mu), 4.0) * (3.0 * fpara * (mq0 - ms0) +
+                68.0 * a2para_0 * std::pow(c_rge(mu), 5.555555555555555) * fpara * (mq0 - ms0) -
+                51.0 * a1para_0 * std::pow(c_rge(mu), 3.5555555555555554) * fpara * (mq0 + ms0) +
+                std::pow(c_rge(mu), 7.555555555555555) * (255.0 * fperp_0 * lambda3perp_0 * M_V +
+                (-3.0 + 51.0 * a1para_0 - 68.0 * a2para_0) * fpara * mq0 +
+                (3.0 + 51.0 * a1para_0 + 68.0 * a2para_0) * fpara * ms0))) / (255.0 * fperp(mu) * M_V);
+        }
+
+        inline double omega3para(const double & mu) const
+        {
+            return -3.7780044580452606e-7 * (887490.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865) / 18.0) * fperp_0 * (ms0 - mq0) -
+                448070.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 + mq0) -
+                89465220.0 * a2perp_0 * std::pow(c_rge(mu), (176.0 + std::sqrt(865)) / 18.0) * fperp_0 * (ms0 + mq0) +
+                std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) * (fperp_0 * ((224035.0 - 6811.0 * std::sqrt(865.0) +
+                27.0 * (-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (224035.0 - 6811.0 * std::sqrt(865.0) -
+                27.0 * (-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
+                765.0 * fpara * M_V * (2.0 * (-865.0 + 26.0 * std::sqrt(865.0)) * omega3para_0 -
+                63.0 * std::sqrt(865.0) * omega3paratilde_0)) +
+                std::pow(c_rge(mu), 11.38888888888889) * (fperp_0 * ((7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) -
+                27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) +
+                27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) -
+                765.0 * fpara * M_V * (2.0 * (865.0 + 26.0 * std::sqrt(865.0)) * omega3para_0 -
+                63.0 * std::sqrt(865.0) * omega3paratilde_0))) / (std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
+        }
+
+        inline double omega3paratilde(const double & mu) const
+        {
+            return (9.0 * a1perp_0 * ((865.0 - 7.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889) - 1730.0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865.0) / 18.0) +
+                (865.0 + 7.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0)) * fperp_0 * (mq0 - ms0)) / (147050.0 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V) -
+                ((-((9515.0 + 6707.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889)) + (-9515.0 + 6707.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) +
+                19030.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0)) * fperp_0 * (mq0 + ms0)) / (1.191105e7 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V) -
+                (3.0 * a2perp_0 * (-((2595.0 + 91.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889)) + (-2595.0 + 91.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) +
+                5190.0 * std::pow(c_rge(mu), (176.0 + std::sqrt(865.0)) / 18.0)) * fperp_0 * (mq0 + ms0)) / (4325.0 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V) +
+                (3.0 * (-std::pow(c_rge(mu), 11.38888888888889) + std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0)) * omega3para_0) / (std::sqrt(865.0) * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0)) +
+                (((865.0 - 26.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889) + (865.0 + 26.0 * std::sqrt(865.0)) * std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0)) * omega3paratilde_0) /
+                (1730.0 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0));
+        }
+
+        inline double lambda3para(const double & mu) const
+        {
+            return -1.0 * (19030.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 - mq0) +
+                42879780.0 * a2perp_0 * std::pow(c_rge(mu), (176 + std::sqrt(865)) / 18.0) * fperp_0 *(ms0 - mq0) -
+                1261170.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865.0) / 18.0) * fperp_0 * (ms0 + mq0) +
+                std::pow(c_rge(mu), 11.38888888888889) * (fperp_0 * (-((9515.0 + 6707.0 * std::sqrt(865.0) +
+                729.0 * (-865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 + 8262.0 * (2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * ms0) +
+                (9515.0 + 6707.0 * std::sqrt(865.0) - 729.0 * (-865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 +
+                8262.0 * (2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * mq0) -
+                6885.0 * fpara * ((-865.0 + 26.0 * std::sqrt(865.0)) * lambda3para_0 +
+                6.0 * std::sqrt(865.0) * lambda3paratilde_0) * M_V) +
+                std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) * (fperp_0 * ((-9515.0 + 6707.0 * std::sqrt(865.0) + 729.0 * (865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 +
+                8262.0 * (-2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (9515.0 - 6707.0 * std::sqrt(865.0) + 729.0 * (865.0 + 7.0 * std::sqrt(865.0)) * a1perp_0 - 8262.0 *(-2595.0 + 91.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
+                6885.0 * fpara * ((865.0 + 26.0 * std::sqrt(865.0)) * lambda3para_0 +
+                6.0 *std::sqrt(865.0) * lambda3paratilde_0) * M_V)) / (1.191105e7 * std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
+        }
+
+        inline double lambda3paratilde(const double & mu) const
+        {
+            return -1.0 * -3.7780044580452606e-7 * (448070.0 * std::pow(c_rge(mu), (96.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 - mq0) +
+                89465220.0 * a2perp_0 * std::pow(c_rge(mu), (176.0 + std::sqrt(865.0)) / 18.0) * fperp_0 * (ms0 - mq0) -
+                887490.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 + std::sqrt(865.0) / 18.0) * fperp_0 * (ms0 + mq0) +
+                std::pow(c_rge(mu), 11.38888888888889 + std::sqrt(865.0) / 9.0) * (fperp_0 * ((7.0 * (-32005.0 + 973.0 * std::sqrt(865.0)) -
+                27.0 * (-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 + (224035.0 - 6811.0 * std::sqrt(865.0) - 27.0 *(-16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (-146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) - 765.0 * fpara * (63.0 * std::sqrt(865.0) * lambda3para_0 +
+                2.0 * (865.0 - 26.0 * std::sqrt(865.0)) * lambda3paratilde_0) * M_V) +
+                std::pow(c_rge(mu), 11.38888888888889) * (fperp_0 * ((-7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) + 27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 -
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * ms0 +
+                (7.0 * (32005.0 + 973.0 * std::sqrt(865.0)) + 27.0 * (16435.0 + 683.0 * std::sqrt(865.0)) * a1perp_0 +
+                306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
+                765.0 * fpara * (63.0 * std::sqrt(865.0) * lambda3para_0 -
+                2.0 * (865.0 + 26.0 * std::sqrt(865.0)) * lambda3paratilde_0) * M_V)) / (std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
         }
     };
 
@@ -463,6 +796,60 @@ namespace eos
     KStarLCDAs::fperp(const double & mu) const
     {
         return _imp->fperp(mu);
+    }
+
+    double
+    KStarLCDAs::zeta3para(const double & mu) const
+    {
+        return _imp->zeta3para(mu);
+    }
+
+    double
+    KStarLCDAs::lambda3paratilde(const double & mu) const
+    {
+        return _imp->lambda3paratilde(mu);
+    }
+
+    double
+    KStarLCDAs::omega3paratilde(const double & mu) const
+    {
+        return _imp->omega3paratilde(mu);
+    }
+
+    double
+    KStarLCDAs::kappa3para(const double & mu) const
+    {
+        return _imp->kappa3para(mu);
+    }
+
+    double
+    KStarLCDAs::omega3para(const double & mu) const
+    {
+        return _imp->omega3para(mu);
+    }
+
+    double
+    KStarLCDAs::lambda3para(const double & mu) const
+    {
+        return _imp->lambda3para(mu);
+    }
+
+    double
+    KStarLCDAs::kappa3perp(const double & mu) const
+    {
+        return _imp->kappa3perp(mu);
+    }
+
+    double
+    KStarLCDAs::omega3perp(const double & mu) const
+    {
+        return _imp->omega3perp(mu);
+    }
+
+    double
+    KStarLCDAs::lambda3perp(const double & mu) const
+    {
+        return _imp->lambda3perp(mu);
     }
 
     double
