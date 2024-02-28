@@ -1089,6 +1089,60 @@ groups:
           latex:    '$f^{K^*}_{\perp}(1\,\mathrm{GeV})$'
           unit:     'GeV'
           comments: 'cf. [BSZ:2015A], table 1'
+      'K^*::zeta3para@1GeV' :
+          central: +0.023
+          min:     +0.015
+          max:     +0.031
+          latex:    '$\zeta_3^\parallel$'
+          unit:     '1'
+      'K^*::lambda3paratilde@1GeV' :
+          central: +0.035
+          min:     +0.020
+          max:     +0.050
+          latex:    '$\tilde{\lambda}_3^\parallel$'
+          unit:     '1'
+      'K^*::omega3paratilde@1GeV' :
+          central: -0.07
+          min:     -0.10
+          max:     -0.04
+          latex:    '$\tilde{\omega}_3^\parallel$'
+          unit:     '1'
+      'K^*::kappa3para@1GeV' :
+          central: +0.000
+          min:     -0.001
+          max:     +0.001
+          latex:    '$\kappa_3^\parallel$'
+          unit:     '1'
+      'K^*::omega3para@1GeV' :
+          central: +0.10
+          min:     +0.06
+          max:     +0.14
+          latex:    '$\omega_3^\parallel$'
+          unit:     '1'
+      'K^*::lambda3para@1GeV' :
+          central: -0.008
+          min:     -0.012
+          max:     -0.004
+          latex:    '$\lambda_3^\parallel$'
+          unit:     '1'
+      'K^*::kappa3perp@1GeV' :
+          central: +0.003
+          min:     +0.000
+          max:     +0.006
+          latex:    '$\kappa_3^\perp$'
+          unit:     '1'
+      'K^*::omega3perp@1GeV' :
+          central: +0.3
+          min:     +0.2
+          max:     +0.4
+          latex:    '$\omega_3^\perp$'
+          unit:     '1'
+      'K^*::lambda3perp@1GeV' :
+          central: -0.025
+          min:     -0.045
+          max:     -0.005
+          latex:    '$\lambda_3^\perp$'
+          unit:     '1'
       # phi LCDA parameters
       'phi::a_1_para@1GeV' :
           central: +0.00
