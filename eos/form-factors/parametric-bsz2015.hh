@@ -259,6 +259,106 @@ namespace eos
     extern template class BSZ2015FormFactors<DToPi, PToP>;
     extern template class BSZ2015FormFactors<DsToK, PToP>;
     extern template class BSZ2015FormFactors<DToK, PToP>;
+
+    // P -> PP
+    template <typename Process_>
+    class BSZ2015FormFactorTraits<Process_, PToPP> :
+        public virtual ParameterUser
+    {
+        public:
+            // The following parameters are part of the parameterization and should match the
+            // the ones used for the extraction of the coefficients of the z-expension
+            UsedParameter m_B, m_P1, m_P2;
+            UsedParameter m_R_0m, m_R_1m, m_R_1p;
+
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_0m_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
+
+            BSZ2015FormFactorTraits(const Parameters & p) :
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
+                m_P1(UsedParameter(p[std::string(Process_::name_P1) + "@BSZ2015"], *this)),
+                m_P2(UsedParameter(p[std::string(Process_::name_P2) + "@BSZ2015"], *this)),
+                m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
+                m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
+                m_R_1p(UsedParameter(p[resonance_1p_names.at(Process_::partonic_transition)], *this))
+            {
+            }
+
+            double tp() const
+            {
+                return power_of<2>(m_B + m_P1 + m_P2);
+            }
+
+            double tm() const
+            {
+                return power_of<2>(m_B - m_P1 - m_P2);
+            }
+
+            double t0() const
+            {
+                return tp() * (1.0 - std::sqrt(1.0 - tm() / tp()));
+            }
+
+            complex<double> calc_z(const complex<double> & s) const
+            {
+                return (std::sqrt(tp() - s) - std::sqrt(tp() - t0())) / (std::sqrt(tp() - s) + std::sqrt(tp() - t0()));
+            }
+
+            double calc_z(const double & s) const
+            {
+                return real(calc_z(complex<double>(s, 0.0)));
+            }
+    };
+
+    template <typename Process_> class BSZ2015FormFactors<Process_, PToPP> :
+        public FormFactors<PToPP>
+    {
+        private:
+            // TODO: add reference
+            // TODO: check if there is an equation of motion connecting F_para(0), F_long(0), and F_time(0)
+            // TODO: check if there is an equation of motion connecting F_para(q2max), F_long(q2max)
+            // fit parametrization for P -> PP according to [?]
+            std::array<std::array<UsedParameter, 2>, 3> _a_perp, _a_para, _a_long, _a_time;
+
+            const BSZ2015FormFactorTraits<Process_, PToPP> _traits;
+
+            const UsedParameter & _mB, _mP1, _mP2;
+            const UsedParameter & _BW_mass_p, _BR_width_p;
+
+            template <typename Parameter_>
+            double _calculatemomentum(const double & m, const double & m1, const double & m2) const;
+            template <typename Parameter_>
+            complex<double> _relativisticbreitwigner_0_1(const double & sqrt_k2, const double & r, const double & q, const double & q_J) const;
+
+            template <typename Parameter_>
+            double _calc_coeff(const double & k2, const std::array<Parameter_, 2> & a) const;
+            template <typename Parameter_>
+            complex<double> _calc_ff_p(const double & q2, const double & k2, const double & m2_R, const std::array<std::array<Parameter_, 2>, 3> & a) const;
+
+            static std::string _par_name(const std::string & ff_name, const std::string & index);
+
+        public:
+            BSZ2015FormFactors(const Parameters & p, const Options &);
+
+            ~BSZ2015FormFactors();
+
+            static FormFactors<PToPP> * make(const Parameters & parameters, const Options & options);
+
+            // form factors
+            virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const override;
+            virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const override;
+            virtual complex<double> f_long(const double & q2, const double & k2, const double & z) const override;
+            virtual complex<double> f_time(const double & q2, const double & k2, const double & z) const override;
+
+            // residues
+            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const override;
+            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const override;
+            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const override;
+            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const override;
+    };
+
+    extern template class BSZ2015FormFactors<BToKPi, PToPP>;
 }
 
 #endif

@@ -2276,6 +2276,155 @@ groups:
   - title: 'Parameters in $B\to PP$ Form Factor Parametrizations'
     description: ''
     parameters:
+      # form factor parameters for parametrization of B -> K pi according to [?]
+      # perp
+      'B->Kpi::alpha(Fperp,0,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\perp,0,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fperp,0,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\perp,0,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fperp,1,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\perp,1,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fperp,1,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\perp,1,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fperp,2,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\perp,2,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fperp,2,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\perp,2,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      # para
+      'B->Kpi::alpha(Fpara,0,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\para,0,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fpara,0,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\para,0,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fpara,1,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\para,1,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fpara,1,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\para,1,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fpara,2,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\para,2,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Fpara,2,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\para,2,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      # long
+      'B->Kpi::alpha(Flong,0,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\long,0,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Flong,0,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\long,0,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Flong,1,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\long,1,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Flong,1,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\long,1,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Flong,2,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\long,2,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Flong,2,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\long,2,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      # time
+      'B->Kpi::alpha(Ftime,0,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\time,0,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Ftime,0,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\time,0,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Ftime,1,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\time,1,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Ftime,1,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\time,1,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Ftime,2,0)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\time,2,0}^{B \to K\pi,\mathrm{BSZ2015}}$'
+      'B->Kpi::alpha(Ftime,2,1)@BSZ2015' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:    '$a_{\time,2,1}^{B \to K\pi,\mathrm{BSZ2015}}$'
       # form factor parameters for parametrization according to [FvDV2018]
       # para
       'B->pipi::a^Fperp_0_0@FvDV2018' :
