@@ -6,6 +6,7 @@ LINUX_EXAMPLES = \
 	basics.ipynb \
 	predictions.ipynb \
 	inference.ipynb \
+	analysis-organisation.ipynb \
 	simulation.ipynb
 
 MACOSX_EXAMPLES =
