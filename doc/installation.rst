@@ -191,7 +191,7 @@ We recommend you install the above packages via your system's software managemen
 EOS requires the following scientific software:
 
 GSL
-  the GNU Scientific Library \cite{GSL}, in version 1.15 or higher;
+  the GNU Scientific Library GSL, in version 1.15 or higher;
 
 
 If you have administrator access to the computers on which you use EOS,
@@ -239,7 +239,7 @@ To install the packages, run the following commands in a shell:
   # for the 'Scientific Software'
   brew install gsl
 
-You can now use the ``pip3`` command to install the remaining packages from the \package{PyPi} package index.
+You can now use the ``pip3`` command to install the remaining packages from the PyPi package index.
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments)
 for this.
 
