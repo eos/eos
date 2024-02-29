@@ -1,0 +1,87 @@
+parameters:
+  'ublnul::Re{cVL}' :
+      alias_of: [ 'ubenue::Re{cVL}', 'ubmunumu::Re{cVL}', 'ubtaunutau::Re{cVL}' ]
+      central:   1.0
+      min:      -2.0
+      max:       2.0
+      unit:     '1'
+      latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_L}$'
+
+likelihoods:
+  - name: EXP-pyhf
+    pyhf:
+      file: workspace_corr.json
+      parameter_map:
+        mu: {'name': 'B->pilnu::mu', 'kinematics': {'q2_min': 1.0e-7, 'q2_max': 25.0}}
+
+  - name: EXP-pi
+    constraints:
+      - 'B^0->pi^-l^+nu::BR@HFLAV:2019A;form-factors=BCL2008-4'
+
+  - name: TH-pi
+    constraints:
+      - 'B->pi::form-factors[f_+,f_0,f_T]@LMvD:2021A;form-factors=BCL2008-4'
+      - 'B->pi::f_++f_0+f_T@FNAL+MILC:2015C;form-factors=BCL2008-4'
+      - 'B->pi::f_++f_0@RBC+UKQCD:2015A;form-factors=BCL2008-4'
+
+priors:
+  - name: WET
+    descriptions:
+      - { 'parameter': 'ublnul::Re{cVL}', 'min':  0.7, 'max': 1.7, 'type': 'uniform' }
+
+  - name: FF-pi
+    descriptions:
+      - { 'parameter': 'B->pi::f_+(0)@BCL2008', 'min':   0.21, 'max':  0.32, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_+^1@BCL2008' , 'min':  -2.96, 'max': -0.60, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_+^2@BCL2008' , 'min':  -3.98, 'max':  4.38, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_+^3@BCL2008' , 'min': -18.30, 'max':  9.27, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^1@BCL2008' , 'min':  -0.10, 'max':  1.35, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^2@BCL2008' , 'min':  -2.08, 'max':  4.65, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^3@BCL2008' , 'min':  -4.73, 'max':  9.07, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^4@BCL2008' , 'min': -60.00, 'max': 38.00, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::f_T(0)@BCL2008', 'min':   0.18, 'max':  0.32, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_T^1@BCL2008' , 'min':  -3.91, 'max': -0.33, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_T^2@BCL2008' , 'min':  -4.32, 'max':  2.00, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_T^3@BCL2008' , 'min':  -7.39, 'max': 10.60, 'type': 'uniform' }
+
+posteriors:
+  - name: WET-pyhf
+    global_options:
+      model: WET
+    fixed_parameters:
+      CKM::abs(V_ub): 3.67e-3
+    prior:
+      - WET
+      # - FF-pi
+    likelihood:
+      # - TH-pi
+      - EXP-pi
+      - EXP-pyhf
+
+  - name: EXP-pyhf
+    global_options:
+      model: WET
+    fixed_parameters:
+      CKM::abs(V_ub): 3.67e-3
+    prior:
+      - WET
+      # - FF-pi
+    likelihood:
+      # - TH-pi
+      - EXP-pyhf
+
+observables:
+  "B->pilnu::mu":
+    latex: "$\\mu$"
+    unit: '1'
+    options: {}
+    expression: "<<B->pilnu::BR;model=WET>> / <<B->pilnu::BR;model=SM>>"
+
+predictions:
+  - name: leptonic-BR-WET
+    global_options:
+      model: WET
+    observables:
+      - name: B_u->lnu::BR;l=e
+      - name: B_u->lnu::BR;l=mu
+      - name: B_u->lnu::BR;l=tau

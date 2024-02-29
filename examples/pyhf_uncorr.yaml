@@ -1,0 +1,17 @@
+priors:
+  - name: EXP-pyhf-params
+    descriptions:
+      - {'parameter': 'pyhf::mu',
+        'min': -2,
+        'max':  6,
+        'type': 'uniform'}
+likelihoods:
+  - name: EXP-pyhf
+    pyhf:
+      file: workspace_uncorr.json
+posteriors:
+  - name: EXP-pyhf-posterior
+    prior:
+      - EXP-pyhf-params
+    likelihood:
+      - EXP-pyhf
