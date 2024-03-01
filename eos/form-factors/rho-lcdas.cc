@@ -46,6 +46,12 @@ namespace eos
         UsedParameter omega3para_0;
         UsedParameter omega3perp_0;
 
+        // twist 4 LCDA parameters at mu = 1 GeV
+        UsedParameter zeta4para_0;
+        UsedParameter omega4paratilde_0;
+        UsedParameter zeta4perp_0;
+        UsedParameter zeta4perptilde_0;
+
         // mass and decay constant of the rho
         UsedParameter m_rho;
 
@@ -66,6 +72,10 @@ namespace eos
             omega3paratilde_0(p["rho::omega3paratilde@1GeV"], u),
             omega3para_0(p["rho::omega3para@1GeV"], u),
             omega3perp_0(p["rho::omega3perp@1GeV"], u),
+            zeta4para_0(p["rho::zeta4para@1GeV"], u),
+            omega4paratilde_0(p["rho::omega4paratilde@1GeV"], u),
+            zeta4perp_0(p["rho::zeta4perp@1GeV"], u),
+            zeta4perptilde_0(p["rho::zeta4perptilde@1GeV"], u),
             m_rho(p["mass::rho^+"], u),
             _mu_c(p["QCD::mu_c"], u),
             _mu_b(p["QCD::mu_b"], u),
@@ -152,6 +162,28 @@ namespace eos
         {
             return  omega3perp_0 * std::pow(c_rge(mu), +73.0 / 9.0) * fperp_0 / fperp(mu);
         }
+
+        /* running of twist 4 parameters */
+        inline double zeta4para(const double & mu) const
+        {
+            return zeta4para_0 * std::pow(c_rge(mu), +32.0 / 9.0);
+        }
+        inline double omega4paratilde(const double & mu) const
+        {
+            return omega4paratilde_0 * std::pow(c_rge(mu), 10.0);
+        }
+        inline double zeta4perp(const double & mu) const
+        {
+            return
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
+        }
+        inline double zeta4perptilde(const double & mu) const
+        {
+            return
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
+        }
     };
 
     RhoLCDAs::RhoLCDAs(const Parameters & p, const Options & o) :
@@ -228,6 +260,30 @@ namespace eos
     RhoLCDAs::omega3perp(const double &mu) const
     {
         return _imp->omega3perp(mu);
+    }
+
+    double
+    RhoLCDAs::zeta4para(const double &mu) const
+    {
+        return _imp->zeta4para(mu);
+    }
+
+    double
+    RhoLCDAs::omega4paratilde(const double &mu) const
+    {
+        return _imp->omega4paratilde(mu);
+    }
+
+    double
+    RhoLCDAs::zeta4perp(const double &mu) const
+    {
+        return _imp->zeta4perp(mu);
+    }
+
+    double
+    RhoLCDAs::zeta4perptilde(const double &mu) const
+    {
+        return _imp->zeta4perptilde(mu);
     }
 
     double
