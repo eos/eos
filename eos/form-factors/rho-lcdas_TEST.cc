@@ -55,6 +55,10 @@ class RhoLCDAsTest :
             p["rho::omega3paratilde@1GeV"] = -0.09;
             p["rho::omega3para@1GeV"]      = 0.15;
             p["rho::omega3perp@1GeV"]      = 0.55;
+            p["rho::zeta4para@1GeV"]       = 0.07;
+            p["rho::omega4paratilde@1GeV"] = -0.03;
+            p["rho::zeta4perp@1GeV"]       = -0.03;
+            p["rho::zeta4perptilde@1GeV"]  = -0.08;
 
             /* Diagnostics */
             {
@@ -175,6 +179,33 @@ class RhoLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(3.0),       0.33324,   eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(4.0),       0.305884,  eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.omega3perp(5.0),       0.287936,  eps);
+            }
+
+                 /* Twist 4 */
+            {
+                RhoLCDAs rho(p, Options{ });
+
+                // parameters at mu = 1.0 GeV, 2.0 GeV, 3.0 GeV, 4.0 GeV and 5.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4para(1.0),        0.07,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4para(2.0),        0.0580036, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4para(3.0),        0.0538201, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4para(4.0),        0.0514552, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4para(5.0),        0.0498486, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega4paratilde(1.0), -0.03,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega4paratilde(2.0), -0.0176807, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega4paratilde(3.0), -0.014324,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega4paratilde(4.0), -0.0126234, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.omega4paratilde(5.0), -0.011546,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perp(1.0),       -0.03,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perp(2.0),       -0.0236691, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perp(3.0),       -0.0215038, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perp(4.0),       -0.0202925, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perp(5.0),       -0.0194754, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(1.0),  -0.08,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(2.0),  -0.0588162, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(3.0),  -0.0520483, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(4.0),  -0.0483689, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(5.0),  -0.0459306, eps);
             }
         }
 } rho_lcdas_test;
