@@ -1167,6 +1167,42 @@ groups:
           max:     -0.005
           latex:    '$\lambda_3^\perp$'
           unit:     '1'
+      'K^*::zeta4para@1GeV' :
+          central: 0.02
+          min:     0.00
+          max:     0.04
+          latex:    '$\zeta_4^\parallel$'
+          unit:     '1'
+      'K^*::omega4paratilde@1GeV' :
+          central: -0.02
+          min:     -0.03
+          max:     -0.01
+          latex:    '$\tilde{\omega}_4^\parallel$'
+          unit:     '1'
+      'K^*::zeta4perp@1GeV' :
+          central: -0.01
+          min:     -0.04
+          max:     +0.02
+          latex:    '$zeta_4^\perp$'
+          unit:     '1'
+      'K^*::zeta4perptilde@1GeV' :
+          central: -0.05
+          min:     -0.09
+          max:     -0.01
+          latex:    '$\tilde{\zeta}_4^\perp$'
+          unit:     '1'
+      'K^*::kappa4para@1GeV' :
+          central: -0.025
+          min:     -0.030
+          max:     -0.020
+          latex:    '$\kappa_4^\parallel$'
+          unit:     '1'
+      'K^*::kappa4perp@1GeV' :
+          central: 0.013
+          min:     0.008
+          max:     0.018
+          latex:    '$\kappa_4^\parallel$'
+          unit:     '1'
       # phi LCDA parameters
       'phi::a_1_para@1GeV' :
           central: +0.00
