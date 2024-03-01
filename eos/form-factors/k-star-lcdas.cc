@@ -55,6 +55,12 @@ namespace eos
         UsedParameter omega3perp_0;
         UsedParameter lambda3perp_0;
 
+        // twist 4 LCDA parameters at mu = 1 Gev
+        UsedParameter zeta4para_0;
+        UsedParameter omega4paratilde_0;
+        UsedParameter zeta4perp_0;
+        UsedParameter zeta4perptilde_0;
+
         // Kstar mass
         UsedParameter M_V;
 
@@ -84,6 +90,10 @@ namespace eos
             kappa3perp_0(p["K^*::kappa3perp@1GeV"], u),
             omega3perp_0(p["K^*::omega3perp@1GeV"], u),
             lambda3perp_0(p["K^*::lambda3perp@1GeV"], u),
+            zeta4para_0(p["K^*::zeta4para@1GeV"], u),
+            omega4paratilde_0(p["K^*::omega4paratilde@1GeV"], u),
+            zeta4perp_0(p["K^*::zeta4perp@1GeV"], u),
+            zeta4perptilde_0(p["K^*::zeta4perptilde@1GeV"], u),
             M_V(p["mass::K_u^*"], u),
             _mu_c(p["QCD::mu_c"], u),
             _mu_b(p["QCD::mu_b"], u),
@@ -152,7 +162,7 @@ namespace eos
             return a2perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
         }
 
-         inline double a3perp(const double & mu) const
+        inline double a3perp(const double & mu) const
         {
             return a3perp_0 * std::pow(c_rge(mu), 64.0 / 9.0);
         }
@@ -281,6 +291,39 @@ namespace eos
                 306.0 * (146185.0 + 4961.0 * std::sqrt(865.0)) * a2perp_0) * mq0) +
                 765.0 * fpara * (63.0 * std::sqrt(865.0) * lambda3para_0 -
                 2.0 * (865.0 + 26.0 * std::sqrt(865.0)) * lambda3paratilde_0) * M_V)) / (std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
+        }
+
+        // running of twist 4 parameters
+        inline double zeta4para(const double & mu) const
+        {
+            return zeta4para_0 * std::pow(c_rge(mu), 32.0 / 9.0);
+        }
+        inline double omega4paratilde(const double & mu) const
+        {
+            return omega4paratilde_0 * std::pow(c_rge(mu), 10.0);
+        }
+        // mass corrections for running of zeta4perp, zeta4perptilde unknown
+        inline double zeta4perp(const double & mu) const
+        {
+            return  1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
+        }
+        inline double zeta4perptilde(const double & mu) const
+        {
+            return 1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
+        }
+        inline double kappa4para(const double & mu) const
+        {
+            return -3.0 / 20.0 * std::pow(c_rge(mu), 32.0 / 9.0) * a1para_0 -
+                std::pow(c_rge(mu), 16.0 / 3.0) * fperp_0 / fpara * (ms0 - mq0) / (4.0 * M_V) +
+                std::pow(c_rge(mu), 8.0) * (std::pow(ms0, 2.0) - std::pow(mq0, 2.0)) / (2.0 * std::pow(M_V, 2.0));
+        }
+        inline double kappa4perp(const double & mu) const
+        {
+            return 1.0 / 10.0 * std::pow(c_rge(mu), 8.0 / 3.0) * a1perp_0 +
+                std::pow(c_rge(mu), 8.0 / 3.0) * fpara / fperp_0 * (ms0 - mq0) / (12.0 * M_V) -
+                std::pow(c_rge(mu), 8.0) * (std::pow(ms0, 2.0) - std::pow(mq0, 2.0)) / (4.0 * std::pow(M_V, 2.0));
         }
     };
 
@@ -414,6 +457,42 @@ namespace eos
     }
 
     double
+    AntiKStarLCDAs::zeta4para(const double & mu) const
+    {
+        return _imp->zeta4para(mu);
+    }
+
+    double
+    AntiKStarLCDAs::omega4paratilde(const double & mu) const
+    {
+        return _imp->omega4paratilde(mu);
+    }
+
+    double
+    AntiKStarLCDAs::zeta4perp(const double & mu) const
+    {
+        return _imp->zeta4perp(mu);
+    }
+
+    double
+    AntiKStarLCDAs::zeta4perptilde(const double & mu) const
+    {
+        return _imp->zeta4perptilde(mu);
+    }
+
+    double
+    AntiKStarLCDAs::kappa4para(const double & mu) const
+    {
+        return _imp->kappa4para(mu);
+    }
+
+    double
+    AntiKStarLCDAs::kappa4perp(const double & mu) const
+    {
+        return _imp->kappa4perp(mu);
+    }
+
+    double
     AntiKStarLCDAs::phipara(const double & u, const double & mu) const
     {
          // Gegenbauer polynomials C_n^(3/2)
@@ -493,6 +572,12 @@ namespace eos
         UsedParameter omega3perp_0;
         UsedParameter lambda3perp_0;
 
+        // twist 4 LCDA parameters at mu = 1 Gev
+        UsedParameter zeta4para_0;
+        UsedParameter omega4paratilde_0;
+        UsedParameter zeta4perp_0;
+        UsedParameter zeta4perptilde_0;
+
         // Kstar mass
         UsedParameter M_V;
 
@@ -522,6 +607,10 @@ namespace eos
             kappa3perp_0(p["K^*::kappa3perp@1GeV"], u),
             omega3perp_0(p["K^*::omega3perp@1GeV"], u),
             lambda3perp_0(p["K^*::lambda3perp@1GeV"], u),
+            zeta4para_0(p["K^*::zeta4para@1GeV"], u),
+            omega4paratilde_0(p["K^*::omega4paratilde@1GeV"], u),
+            zeta4perp_0(p["K^*::zeta4perp@1GeV"], u),
+            zeta4perptilde_0(p["K^*::zeta4perptilde@1GeV"], u),
             M_V(p["mass::K_u^*"], u),
             _mu_c(p["QCD::mu_c"], u),
             _mu_b(p["QCD::mu_b"], u),
@@ -721,6 +810,39 @@ namespace eos
                 765.0 * fpara * (63.0 * std::sqrt(865.0) * lambda3para_0 -
                 2.0 * (865.0 + 26.0 * std::sqrt(865.0)) * lambda3paratilde_0) * M_V)) / (std::pow(c_rge(mu), std::sqrt(865.0) / 18.0) * fpara * M_V);
         }
+
+        // running of twist 4 parameters
+        inline double zeta4para(const double & mu) const
+        {
+            return zeta4para_0 * std::pow(c_rge(mu), 32.0 / 9.0);
+        }
+        inline double omega4paratilde(const double & mu) const
+        {
+            return omega4paratilde_0 * std::pow(c_rge(mu), 10.0);
+        }
+        // mass corrections for running of zeta4perp, zeta4perptilde unknown
+        inline double zeta4perp(const double & mu) const
+        {
+            return 1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
+        }
+        inline double zeta4perptilde(const double & mu) const
+        {
+            return 1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
+                1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
+        }
+        inline double kappa4para(const double & mu) const
+        {
+            return -1.0 * (-3.0 / 20.0 * std::pow(c_rge(mu), 32.0 / 9.0) * a1para_0 -
+                std::pow(c_rge(mu), 16.0 / 3.0) * fperp_0 / fpara * (ms0 - mq0) / (4.0 * M_V) +
+                std::pow(c_rge(mu), 8.0) * (std::pow(ms0, 2.0) - std::pow(mq0, 2.0)) / (2.0 * std::pow(M_V, 2.0)));
+        }
+        inline double kappa4perp(const double & mu) const
+        {
+            return -1.0 * (1.0 / 10.0 * std::pow(c_rge(mu), 8.0 / 3.0) * a1perp_0 +
+                std::pow(c_rge(mu), 8.0 / 3.0) * fpara / fperp_0 * (ms0 - mq0) / (12.0 * M_V) -
+                std::pow(c_rge(mu), 8.0) * (std::pow(ms0, 2.0) - std::pow(mq0, 2.0)) / (4.0 * std::pow(M_V, 2.0)));
+        }
     };
 
     KStarLCDAs::KStarLCDAs(const Parameters & p, const Options & o) :
@@ -850,6 +972,42 @@ namespace eos
     KStarLCDAs::lambda3perp(const double & mu) const
     {
         return _imp->lambda3perp(mu);
+    }
+
+    double
+    KStarLCDAs::zeta4para(const double & mu) const
+    {
+        return _imp->zeta4para(mu);
+    }
+
+    double
+    KStarLCDAs::omega4paratilde(const double & mu) const
+    {
+        return _imp->omega4paratilde(mu);
+    }
+
+    double
+    KStarLCDAs::zeta4perp(const double & mu) const
+    {
+        return _imp->zeta4perp(mu);
+    }
+
+    double
+    KStarLCDAs::zeta4perptilde(const double & mu) const
+    {
+        return _imp->zeta4perptilde(mu);
+    }
+
+    double
+    KStarLCDAs::kappa4para(const double & mu) const
+    {
+        return _imp->kappa4para(mu);
+    }
+
+    double
+    KStarLCDAs::kappa4perp(const double & mu) const
+    {
+        return _imp->kappa4perp(mu);
     }
 
     double
