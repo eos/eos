@@ -65,6 +65,10 @@ class AntiKStarLCDAsTest :
             p["K^*::kappa3perp@1GeV"]       = 0.003;
             p["K^*::omega3perp@1GeV"]       = 0.3;
             p["K^*::lambda3perp@1GeV"]      = -0.025;
+            p["K^*::zeta4para@1GeV"]        = 0.02;
+            p["K^*::omega4paratilde@1GeV"]  = -0.02;
+            p["K^*::zeta4perp@1GeV"]        = -0.01;
+            p["K^*::zeta4perptilde@1GeV"]   = -0.05;
             p["K^*::fpara"]                 = 0.204;
             p["mass::K_u^*"]                = 0.89166;
 
@@ -188,6 +192,43 @@ class AntiKStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(4.0),     -0.0116894,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(5.0),     -0.0108369,   eps);
             }
+
+            /* Twist 4 */
+            {
+                AntiKStarLCDAs kstar(p, Options{ });
+
+                // parameters at mu = 1.0, 2.0, 3.0, 4.0, 5.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(1.0),        0.02,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(2.0),        0.0165725,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(3.0),        0.0153772,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(4.0),        0.0147015,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(5.0),        0.0142425,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(1.0), -0.02,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(2.0), -0.0117872,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(3.0), -0.00954933, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(4.0), -0.00841563, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(5.0), -0.00769734, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(1.0),       -0.01,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(2.0),       -0.00843717, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(3.0),       -0.00784189, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(4.0),       -0.00749527, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(5.0),       -0.00725593, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(1.0),  -0.05,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(2.0),  -0.0365548,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(3.0),  -0.0322774,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(4.0),  -0.0299564,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(5.0),  -0.0284201,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(1.0),      -0.0210942,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(2.0),      -0.017223,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(3.0),      -0.0158359,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(4.0),      -0.0150461,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(5.0),      -0.0145079,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(1.0),       0.0135855,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(2.0),       0.0128504,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(3.0),       0.0124729,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(4.0),       0.0122315,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(5.0),       0.0120558,  eps);
+            }
         }
 } anti_kstar_lcdas_test;
 
@@ -203,8 +244,8 @@ class KStarLCDAsTest :
         virtual void run() const
         {
             static const double eps = 1.0e-5;
-
             Parameters p = Parameters::Defaults();
+            // switch up and strange mass and flip sign of odd parameters
             p["QCD::alpha_s(MZ)"]           = 0.1176;
             p["mass::s(2GeV)"]              = 0.0032;
             p["mass::u(2GeV)"]              = 0.095;
@@ -227,6 +268,10 @@ class KStarLCDAsTest :
             p["K^*::kappa3perp@1GeV"]       = -0.003;
             p["K^*::omega3perp@1GeV"]       = 0.3;
             p["K^*::lambda3perp@1GeV"]      = 0.025;
+            p["K^*::zeta4para@1GeV"]        = 0.02;
+            p["K^*::omega4paratilde@1GeV"]  = -0.02;
+            p["K^*::zeta4perp@1GeV"]        = -0.01;
+            p["K^*::zeta4perptilde@1GeV"]   = -0.05;
             p["K^*::fpara"]                 = 0.204;
             p["mass::K_u^*"]                = 0.89166;
 
@@ -349,6 +394,43 @@ class KStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(3.0),     -0.0130251,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(4.0),     -0.0116894,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(5.0),     -0.0108369,   eps);
+            }
+
+            /* Twist 4 */
+            {
+                KStarLCDAs kstar(p, Options{ });
+
+                // parameters at mu = 1.0, 2.0, 3.0, 4.0, 5.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(1.0),        0.02,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(2.0),        0.0165725,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(3.0),        0.0153772,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(4.0),        0.0147015,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4para(5.0),        0.0142425,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(1.0), -0.02,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(2.0), -0.0117872,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(3.0), -0.00954933, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(4.0), -0.00841563, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.omega4paratilde(5.0), -0.00769734, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(1.0),       -0.01,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(2.0),       -0.00843717, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(3.0),       -0.00784189, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(4.0),       -0.00749527, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perp(5.0),       -0.00725593, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(1.0),  -0.05,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(2.0),  -0.0365548,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(3.0),  -0.0322774,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(4.0),  -0.0299564,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.zeta4perptilde(5.0),  -0.0284201,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(1.0),      -0.0210942,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(2.0),      -0.017223,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(3.0),      -0.0158359,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(4.0),      -0.0150461,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4para(5.0),      -0.0145079,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(1.0),       0.0135855,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(2.0),       0.0128504,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(3.0),       0.0124729,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(4.0),       0.0122315,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(5.0),       0.0120558,  eps);
             }
         }
 } kstar_lcdas_test;
