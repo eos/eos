@@ -63,6 +63,14 @@ namespace eos
             double omega3perp(const double & mu) const override;
             double lambda3perp(const double & mu) const override;
 
+            /* Twist 4 LCDA parameters */
+            double zeta4para(const double & /*mu*/) const override { return 0.0; }
+            double omega4paratilde(const double & /*mu*/) const override { return 0.0; }
+            double zeta4perp(const double & /*mu*/) const override { return 0.0; }
+            double zeta4perptilde(const double & /*mu*/) const override { return 0.0; }
+            double kappa4para(const double & /*mu*/) const override { return 0.0; }
+            double kappa4perp(const double & /*mu*/) const override { return 0.0; }
+
             /* Twist 2 LCDAs */
             double phipara(const double & u, const double & mu) const override;
             double phiperp(const double & u, const double & mu) const override;
@@ -105,6 +113,14 @@ namespace eos
             double kappa3perp(const double & mu) const override;
             double omega3perp(const double & mu) const override;
             double lambda3perp(const double & mu) const override;
+
+            /* Twist 4 LCDA parameters */
+            double zeta4para(const double & /*mu*/) const override { return 0.0; }
+            double omega4paratilde(const double & /*mu*/) const override { return 0.0; }
+            double zeta4perp(const double & /*mu*/) const override { return 0.0; }
+            double zeta4perptilde(const double & /*mu*/) const override { return 0.0; }
+            double kappa4para(const double & /*mu*/) const override { return 0.0; }
+            double kappa4perp(const double & /*mu*/) const override { return 0.0; }
 
             /* Twist 2 LCDAs */
             double phipara(const double & u, const double & mu) const override;
