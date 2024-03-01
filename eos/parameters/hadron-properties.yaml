@@ -919,6 +919,30 @@ groups:
           max:     +0.70
           latex:    '$\omega^\perp_3$'
           unit:     '1'
+      'rho::zeta4para@1GeV' :
+          central: +0.07
+          min:     +0.04
+          max:     +0.10
+          latex:    '$\zeta^\parallel_4$'
+          unit:     '1'
+      'rho::omega4paratilde@1GeV' :
+          central: -0.03
+          min:     -0.04
+          max:     -0.02
+          latex:    '$\tilde{\omega}^\parallel_4$'
+          unit:     '1'
+      'rho::zeta4perp@1GeV' :
+          central: -0.03
+          min:     -0.08
+          max:     +0.02
+          latex:    '$\zeta^\perp_4$'
+          unit:     '1'
+      'rho::zeta4perptilde@1GeV' :
+          central: -0.08
+          min:     -0.13
+          max:     -0.03
+          latex:    '$\tilde{\zeta}^\perp_4$'
+          unit:     '1'
       # Kaon LCDA parameters
       'K::a1@1GeV' :
           central: -0.07
