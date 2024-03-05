@@ -19,11 +19,11 @@ libeosformfactors_la_SOURCES = \
 	analytic-b-to-rho-lcsr.cc analytic-b-to-kstar-lcsr.cc analytic-b-to-dstar-lcsr.cc \
 	baryonic.cc baryonic.hh \
 	baryonic-processes.hh \
-	b-lcdas.cc b-lcdas.hh \
-	b-lcdas-exponential.cc b-lcdas-exponential.hh \
-	b-lcdas-flvd2022.cc b-lcdas-flvd2022.hh \
 	form-factor-adapter.hh \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
+	heavy-meson-lcdas.cc heavy-meson-lcdas.hh \
+	heavy-meson-lcdas-exponential.cc heavy-meson-lcdas-exponential.hh \
+	heavy-meson-lcdas-flvd2022.cc heavy-meson-lcdas-flvd2022.hh \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
 	k-lcdas.cc k-lcdas.hh \
 	k-star-lcdas.cc k-star-lcdas.hh \
@@ -65,11 +65,11 @@ include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \
 	analytic-b-to-pi-pi.hh \
 	analytic-b-to-psd-dkmmo2008.hh \
-	b-lcdas.hh \
-	b-lcdas-exponential.hh \
-	b-lcdas-flvd2022.hh \
 	form-factor-adapter.hh \
 	form-factors.hh \
+	heavy-meson-lcdas.hh \
+	heavy-meson-lcdas-exponential.hh \
+	heavy-meson-lcdas-flvd2022.hh \
 	observables.hh \
 	parametric-abr2022.hh \
 	parametric-bbgorvd2018.hh \
@@ -97,9 +97,9 @@ TESTS = \
 	analytic-b-to-p-lcsr_TEST \
 	analytic-b-to-v-lcsr_TEST \
 	baryonic_TEST \
-	b-lcdas_TEST \
-	b-lcdas-exponential_TEST \
-	b-lcdas-flvd2022_TEST \
+	heavy-meson-lcdas_TEST \
+	heavy-meson-lcdas-exponential_TEST \
+	heavy-meson-lcdas-flvd2022_TEST \
 	hqet-b-to-c_TEST \
 	k-lcdas_TEST \
 	kstar-lcdas_TEST \
@@ -150,11 +150,11 @@ analytic_b_to_v_lcsr_TEST_SOURCES = analytic-b-to-v-lcsr_TEST.cc
 
 baryonic_TEST_SOURCES = baryonic_TEST.cc
 
-b_lcdas_TEST_SOURCES = b-lcdas_TEST.cc
+heavy_meson_lcdas_TEST_SOURCES = heavy-meson-lcdas_TEST.cc
 
-b_lcdas_exponential_TEST_SOURCES = b-lcdas-exponential_TEST.cc
+heavy_meson_lcdas_exponential_TEST_SOURCES = heavy-meson-lcdas-exponential_TEST.cc
 
-b_lcdas_flvd2022_TEST_SOURCES = b-lcdas-flvd2022_TEST.cc
+heavy_meson_lcdas_flvd2022_TEST_SOURCES = heavy-meson-lcdas-flvd2022_TEST.cc
 
 hqet_b_to_c_TEST_SOURCES = hqet-b-to-c_TEST.cc
 

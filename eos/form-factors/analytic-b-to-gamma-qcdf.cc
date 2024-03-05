@@ -45,7 +45,7 @@ namespace eos
     }
 
     AnalyticFormFactorBToGammaQCDF::AnalyticFormFactorBToGammaQCDF(const Parameters & p, const Options & o):
-        blcdas(BMesonLCDAs::make("FLvD2022", p, o)),
+        blcdas(HeavyMesonLCDAs::make("FLvD2022", p, o)),
         model(Model::make("SM", p, o)),
         mu(p["B->gamma::mu@FLvD2022QCDF"], *this),
         omega_0(p[par_qname("omega_0")], *this),

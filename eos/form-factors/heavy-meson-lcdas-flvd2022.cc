@@ -18,7 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/b-lcdas-flvd2022.hh>
+#include <eos/form-factors/heavy-meson-lcdas-flvd2022.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/matrix.hh>
 #include <eos/maths/power-of.hh>
@@ -34,7 +34,7 @@
 
 namespace eos
 {
-    namespace b_lcdas
+    namespace heavy_meson_lcdas
     {
         FLvD2022::FLvD2022(const Parameters & p, const Options & o) :
             opt_q(o, options, "q"),
@@ -78,13 +78,13 @@ namespace eos
             return QualifiedName(qnp::Prefix("B_u"), name, qnp::Suffix("FLvD2022")).str();
         }
 
-        BMesonLCDAs *
+        HeavyMesonLCDAs *
         FLvD2022::make(const Parameters & parameters, const Options & options)
         {
             return new FLvD2022(parameters, options);
         }
 
-        std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator>
+        std::tuple<HeavyMesonLCDAs::CoefficientIterator, HeavyMesonLCDAs::CoefficientIterator>
         FLvD2022::coefficient_range(const double & mu) const
         {
             // copy values to array of doubles
@@ -542,9 +542,9 @@ namespace eos
     }
 
     template <>
-    struct WrappedForwardIteratorTraits<BMesonLCDAs::CoefficientIteratorTag>
+    struct WrappedForwardIteratorTraits<HeavyMesonLCDAs::CoefficientIteratorTag>
     {
         using UnderlyingIterator = std::array<double, 9>::const_iterator;
     };
-    template class WrappedForwardIterator<BMesonLCDAs::CoefficientIteratorTag, const double &>;
+    template class WrappedForwardIterator<HeavyMesonLCDAs::CoefficientIteratorTag, const double &>;
 }

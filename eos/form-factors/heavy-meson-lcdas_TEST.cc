@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -16,7 +16,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/heavy-meson-lcdas.hh>
 
 #include <eos/models/model.hh>
 #include <eos/maths/power-of.hh>
@@ -24,12 +24,12 @@
 using namespace test;
 using namespace eos;
 
-class BMesonLCDAsTest :
+class HeavyMesonLCDAsTest :
     public TestCase
 {
     public:
-        BMesonLCDAsTest() :
-            TestCase("b_meson_lcdas_test")
+        HeavyMesonLCDAsTest() :
+            TestCase("heavy_meson_lcdas_test")
         {
         }
 
@@ -40,7 +40,7 @@ class BMesonLCDAsTest :
                 auto parameter = Parameters::Defaults();
                 auto options   = Options();
 
-                TEST_CHECK_THROWS(InternalError, BMesonLCDAs::make("FooBar", parameter, options));
+                TEST_CHECK_THROWS(InternalError, HeavyMesonLCDAs::make("FooBar", parameter, options));
             }
         }
-} b_meson_lcdas_test;
+} heavy_meson_lcdas_test;

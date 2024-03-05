@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_HH
-#define EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_HH 1
 
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
@@ -39,16 +39,16 @@ namespace eos
      * The abtract base class defines the interface used in sum rules.
      *
      */
-    class BMesonLCDAs:
+    class HeavyMesonLCDAs:
         public ParameterUser
     {
         public:
-            virtual ~BMesonLCDAs() = default;
+            virtual ~HeavyMesonLCDAs() = default;
 
             /*!
              * Factory method
              */
-            static std::shared_ptr<BMesonLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
+            static std::shared_ptr<HeavyMesonLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
 
             /*!
              * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
@@ -138,7 +138,7 @@ namespace eos
             virtual Diagnostics diagnostics() const = 0;
     };
 
-    extern template class WrappedForwardIterator<BMesonLCDAs::CoefficientIteratorTag, const double &>;
+    extern template class WrappedForwardIterator<HeavyMesonLCDAs::CoefficientIteratorTag, const double &>;
 }
 
 #endif

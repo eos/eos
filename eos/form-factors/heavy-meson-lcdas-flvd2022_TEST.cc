@@ -19,14 +19,14 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/b-lcdas-flvd2022.hh>
+#include <eos/form-factors/heavy-meson-lcdas-flvd2022.hh>
 #include <eos/observable.hh>
 
 #include <numeric>
 
 using namespace test;
 using namespace eos;
-using namespace b_lcdas;
+using namespace heavy_meson_lcdas;
 
 class FLvD2022Test :
     public TestCase
