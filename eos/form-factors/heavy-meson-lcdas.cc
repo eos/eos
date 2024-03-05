@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/b-lcdas-exponential.hh>
-#include <eos/form-factors/b-lcdas-flvd2022.hh>
+#include <eos/form-factors/heavy-meson-lcdas-exponential.hh>
+#include <eos/form-factors/heavy-meson-lcdas-flvd2022.hh>
 #include <eos/utils/exception.hh>
 
 #include <functional>
@@ -28,17 +28,17 @@
 
 namespace eos
 {
-    std::shared_ptr<BMesonLCDAs>
-    BMesonLCDAs::make(const std::string & name, const Parameters & parameters, const Options & options)
+    std::shared_ptr<HeavyMesonLCDAs>
+    HeavyMesonLCDAs::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
         Context ctx("When making an object for pseudoscalar LCDAs");
 
-        std::shared_ptr<BMesonLCDAs> result;
+        std::shared_ptr<HeavyMesonLCDAs> result;
 
-        using type = std::function<BMesonLCDAs * (const Parameters &, const Options &)>;
+        using type = std::function<HeavyMesonLCDAs * (const Parameters &, const Options &)>;
         const std::map<std::string, type> models = {
-            { "exponential",      &b_lcdas::Exponential::make      },
-            { "FLvD2022",         &b_lcdas::FLvD2022::make         }
+            { "exponential",      &heavy_meson_lcdas::Exponential::make      },
+            { "FLvD2022",         &heavy_meson_lcdas::FLvD2022::make         }
         };
 
         auto i = models.find(name);

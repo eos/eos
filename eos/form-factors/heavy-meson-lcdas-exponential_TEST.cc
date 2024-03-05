@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2017-2024 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Philip Lüghausen
@@ -21,7 +21,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/b-lcdas-exponential.hh>
+#include <eos/form-factors/heavy-meson-lcdas-exponential.hh>
 
 #include <eos/models/model.hh>
 
@@ -32,7 +32,7 @@
 
 using namespace test;
 using namespace eos;
-using namespace eos::b_lcdas;
+using namespace eos::heavy_meson_lcdas;
 
 class ExponentialTest :
     public TestCase

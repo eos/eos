@@ -21,7 +21,7 @@
 #ifndef EOS_GUARD_SRC_FORM_FACTORS_ANALYTIC_B_TO_GAMMA_QCDF_HH
 #define EOS_GUARD_SRC_FORM_FACTORS_ANALYTIC_B_TO_GAMMA_QCDF_HH 1
 
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/form-factors/mesonic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
@@ -67,7 +67,7 @@ namespace eos
             static const unsigned int number_of_parameters = 9u;
             using Weights = std::array<double, number_of_parameters>;
 
-            std::shared_ptr<BMesonLCDAs> blcdas;
+            std::shared_ptr<HeavyMesonLCDAs> blcdas;
             std::shared_ptr<Model> model;
 
             UsedParameter mu;

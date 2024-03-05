@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2023 Danny van Dyk
+ * Copyright (c) 2019-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,8 +23,8 @@
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
-#include <eos/form-factors/b-lcdas.hh>
-#include <eos/form-factors/b-lcdas-flvd2022.hh>
+#include <eos/form-factors/heavy-meson-lcdas.hh>
+#include <eos/form-factors/heavy-meson-lcdas-flvd2022.hh>
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
@@ -2041,27 +2041,27 @@ namespace eos
             {
                 make_observable("B::phitilde_+(-i*tau,mu)@FLvD2022", R"(\tilde\phi_{B,+}(-i \tau, \mu))",
                         Unit::None(),
-                        &b_lcdas::FLvD2022::phitilde_plus,
+                        &heavy_meson_lcdas::FLvD2022::phitilde_plus,
                         std::make_tuple("tau", "mu")),
                 make_observable("B::tau*d_dtau_phitilde_+(-i*tau,mu)@FLvD2022", R"(-i \tau \, \tilde\phi^{\prime}_{B,+}(-i \tau, \mu))",
                         Unit::None(),
-                        &b_lcdas::FLvD2022::t_d_dt_phitilde_plus,
+                        &heavy_meson_lcdas::FLvD2022::t_d_dt_phitilde_plus,
                         std::make_tuple("tau", "mu")),
                 make_observable("B::tau^2*d2_d2tau_phitilde_+(-i*tau,mu)@FLvD2022", R"(-\tau^2 \, \tilde\phi^{\prime\prime}_{B,+}(-i \tau, \mu))",
                         Unit::None(),
-                        &b_lcdas::FLvD2022::t2_d2_d2t_phitilde_plus,
+                        &heavy_meson_lcdas::FLvD2022::t2_d2_d2t_phitilde_plus,
                         std::make_tuple("tau", "mu")),
                 make_observable("B::L0@FLvD2022", R"(L_0)",
                         Unit::InverseGeV(),
-                        &b_lcdas::FLvD2022::inverse_moment,
+                        &heavy_meson_lcdas::FLvD2022::inverse_moment,
                         std::make_tuple("mu")),
                 make_observable("B::L1@FLvD2022", R"(L_1)",
                         Unit::InverseGeV(),
-                        &b_lcdas::FLvD2022::logarithmic_moment_1,
+                        &heavy_meson_lcdas::FLvD2022::logarithmic_moment_1,
                         std::make_tuple("mu")),
                 make_observable("B::L2@FLvD2022", R"(L_2)",
                         Unit::InverseGeV(),
-                        &b_lcdas::FLvD2022::logarithmic_moment_2,
+                        &heavy_meson_lcdas::FLvD2022::logarithmic_moment_2,
                         std::make_tuple("mu")),
             }
         );

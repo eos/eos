@@ -18,10 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_FLVD2022_HH
-#define EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_FLVD2022_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_FLVD2022_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_FLVD2022_HH 1
 
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -34,13 +34,13 @@
 
 namespace eos
 {
-    namespace b_lcdas
+    namespace heavy_meson_lcdas
     {
         /*!
          * Parametrization of the B-meson LCDAs according to Ref. [FLvD:2022A]
          */
         class FLvD2022:
-            public BMesonLCDAs
+            public HeavyMesonLCDAs
         {
             private:
                 const static unsigned int number_of_parameters = 9u;
@@ -62,14 +62,14 @@ namespace eos
                 FLvD2022(const Parameters & parameters, const Options & options);
                 virtual ~FLvD2022() = default;
 
-                static BMesonLCDAs * make(const Parameters & parameters, const Options & options);
+                static HeavyMesonLCDAs * make(const Parameters & parameters, const Options & options);
 
                 /*!
                  * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
                  *
                  * mu: the renormalization scale
                  */
-                virtual std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator> coefficient_range(const double & mu) const final override;
+                virtual std::tuple<HeavyMesonLCDAs::CoefficientIterator, HeavyMesonLCDAs::CoefficientIterator> coefficient_range(const double & mu) const final override;
 
                 /*!
                  * Leading twist two-particle LCDAs in momentum space

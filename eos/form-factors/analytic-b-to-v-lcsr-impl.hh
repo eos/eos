@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2018 Danny van Dyk
+ * Copyright (c) 2018-2024 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  *
@@ -23,7 +23,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_V_LCSR_IMPL_HH 1
 
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/utils/exception.hh>
 #include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
@@ -82,7 +82,7 @@ namespace eos
         // renormalization scale
         UsedParameter mu;
 
-        std::shared_ptr<BMesonLCDAs> b_lcdas;
+        std::shared_ptr<HeavyMesonLCDAs> b_lcdas;
 
         // switches to enable/disable certain contributions
         SwitchOption opt_2pt;
@@ -126,7 +126,7 @@ namespace eos
             s0_1_T23B(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T23B,1@B-LCSR"], u),
             M2(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::M^2@B-LCSR"], u),
             mu(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::mu@B-LCSR"], u),
-            b_lcdas(BMesonLCDAs::make("exponential", p, o + Options{ { "q", stringify(Process_::q_s) } })), // operator+ is ordered!
+            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q", stringify(Process_::q_s) } })), // operator+ is ordered!
             opt_2pt(o, "2pt", { "tw2+3", "all", "off" }, "all"),
             opt_3pt(o, "3pt", { "tw3+4", "all", "off" }, "all"),
             switch_2pt_phi(1.0),

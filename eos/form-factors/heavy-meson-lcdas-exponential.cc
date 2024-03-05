@@ -20,7 +20,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/b-lcdas-exponential.hh>
+#include <eos/form-factors/heavy-meson-lcdas-exponential.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
@@ -33,7 +33,7 @@
 
 namespace eos
 {
-    namespace b_lcdas
+    namespace heavy_meson_lcdas
     {
         Exponential::Exponential(const Parameters & p, const Options & o) :
             opt_q(o, "q", { "u", "d", "s" }, "u"),
@@ -60,7 +60,7 @@ namespace eos
             return QualifiedName(qnp::Prefix("B"), name).str();
         }
 
-        BMesonLCDAs *
+        HeavyMesonLCDAs *
         Exponential::make(const Parameters & p, const Options & o)
         {
             return new Exponential(p, o);
@@ -484,7 +484,7 @@ namespace eos
                 * (-3.0 * xi + 13.0 * omega + 6.0 * omega_0 + 3.0 * std::exp(omega / omega_0) * (xi - 2.0 * omega_0));
         }
 
-        std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator>
+        std::tuple<HeavyMesonLCDAs::CoefficientIterator, HeavyMesonLCDAs::CoefficientIterator>
         Exponential::coefficient_range(const double & /* mu */) const
         {
             static const std::array<double, 9> cs = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -500,9 +500,9 @@ namespace eos
     }
 
     template <>
-    struct WrappedForwardIteratorTraits<BMesonLCDAs::CoefficientIteratorTag>
+    struct WrappedForwardIteratorTraits<HeavyMesonLCDAs::CoefficientIteratorTag>
     {
         using UnderlyingIterator = std::array<double, 9>::const_iterator;
     };
-    template class WrappedForwardIterator<BMesonLCDAs::CoefficientIteratorTag, const double &>;
+    template class WrappedForwardIterator<HeavyMesonLCDAs::CoefficientIteratorTag, const double &>;
 }

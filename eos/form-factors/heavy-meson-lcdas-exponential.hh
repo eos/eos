@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017, 2022 Danny van Dyk
+ * Copyright (c) 2017-2024 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Philip Lüghausen
@@ -20,10 +20,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_EXPONENTIAL_HH
-#define EOS_GUARD_EOS_FORM_FACTORS_B_LCDAS_EXPONENTIAL_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_EXPONENTIAL_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_EXPONENTIAL_HH 1
 
-#include <eos/form-factors/b-lcdas.hh>
+#include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -34,7 +34,7 @@
 
 namespace eos
 {
-    namespace b_lcdas
+    namespace heavy_meson_lcdas
     {
         /*!
          * Decomposition of B-meson to vacuum matrix elements of light-cone
@@ -47,7 +47,7 @@ namespace eos
          * as defined in [KMO2006], eq. (28), p. 10.
          */
         class Exponential :
-            public BMesonLCDAs
+            public HeavyMesonLCDAs
         {
             private:
                 SwitchOption opt_q;
@@ -66,7 +66,7 @@ namespace eos
                 Exponential(const Parameters & parameters, const Options & options);
                 virtual ~Exponential() = default;
 
-                static BMesonLCDAs * make(const Parameters & parameters, const Options & options);
+                static HeavyMesonLCDAs * make(const Parameters & parameters, const Options & options);
 
                 /*!
                  * Leading twist two-particle LCDAs
@@ -148,7 +148,7 @@ namespace eos
                  *
                  * mu: the renormalization scale
                  */
-                virtual std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator> coefficient_range(const double & mu) const final override;
+                virtual std::tuple<HeavyMesonLCDAs::CoefficientIterator, HeavyMesonLCDAs::CoefficientIterator> coefficient_range(const double & mu) const final override;
 
                 /* Internal diagnostics */
                 virtual Diagnostics diagnostics() const final override;
