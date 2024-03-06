@@ -50,8 +50,9 @@ namespace eos
             public HeavyMesonLCDAs
         {
             private:
-                SwitchOption opt_q;
-                SwitchOption opt_gminus;
+                QuarkFlavorOption opt_Q;
+                QuarkFlavorOption opt_q;
+                SpecifiedOption opt_gminus;
 
                 UsedParameter lambda_B_inv;
                 UsedParameter lambda_E2;
@@ -61,6 +62,8 @@ namespace eos
 
                 inline double lambda_B() const;
                 std::string parameter(const char * _name) const;
+
+                static const std::vector<OptionSpecification> options;
 
             public:
                 Exponential(const Parameters & parameters, const Options & options);
