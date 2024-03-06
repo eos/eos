@@ -29,6 +29,7 @@
 #include <eos/utils/reference-name.hh>
 
 #include <array>
+#include <map>
 #include <string>
 #include <tuple>
 
@@ -46,7 +47,8 @@ namespace eos
                 const static unsigned int number_of_parameters = 9u;
                 using Weights = std::array<double, number_of_parameters>; // We implement the weights as fixed-size arrays
 
-                SpecifiedOption opt_q;
+                QuarkFlavorOption opt_Q;
+                QuarkFlavorOption opt_q;
                 SpecifiedOption opt_gminus;
                 double switch_gminus;
 

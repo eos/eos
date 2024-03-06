@@ -35,9 +35,17 @@ namespace eos
 {
     namespace heavy_meson_lcdas
     {
+        const std::vector<OptionSpecification> Exponential::options
+        {
+            { "Q",      { "b" },                "b"        },
+            { "q",      { "u", "d", "s" },      "u"        },
+            { "gminus", { "zero", "WW-limit" }, "WW-limit" }
+        };
+
         Exponential::Exponential(const Parameters & p, const Options & o) :
-            opt_q(o, "q", { "u", "d", "s" }, "u"),
-            opt_gminus(o, "gminus", { "zero", "WW-limit" }, "WW-limit"),
+            opt_Q(o, options, "Q"),
+            opt_q(o, options, "q"),
+            opt_gminus(o, options, "gminus"),
             lambda_B_inv(p[parameter("1/lambda_B_p")], *this),
             lambda_E2(p[parameter("lambda_E^2")], *this),
             lambda_H2(p[parameter("lambda_H^2")], *this),
@@ -52,12 +60,18 @@ namespace eos
         std::string
         Exponential::parameter(const char * _name) const
         {
-            qnp::Name name(_name);
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, qnp::Prefix> prefixes
+            {
+                { { QuarkFlavor::bottom, QuarkFlavor::up },      qnp::Prefix("B")   },
+                { { QuarkFlavor::bottom, QuarkFlavor::down },    qnp::Prefix("B")   },
+                { { QuarkFlavor::bottom, QuarkFlavor::strange }, qnp::Prefix("B_s") }
+            };
 
-            if (opt_q.value() == "s")
-                return QualifiedName(qnp::Prefix("B_s"), name).str();
+            auto it = prefixes.find(std::make_tuple(opt_Q.value(), opt_q.value()));
+            if (it == prefixes.end())
+                throw InternalError("Combination of options Q=" + opt_Q.str() + ", q=" + opt_q.str() + " is not supported");
 
-            return QualifiedName(qnp::Prefix("B"), name).str();
+            return QualifiedName(it->second, qnp::Name(_name)).str();
         }
 
         HeavyMesonLCDAs *

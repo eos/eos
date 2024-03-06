@@ -37,6 +37,7 @@ namespace eos
     namespace heavy_meson_lcdas
     {
         FLvD2022::FLvD2022(const Parameters & p, const Options & o) :
+            opt_Q(o, options, "Q"),
             opt_q(o, options, "q"),
             opt_gminus(o, options, "gminus"),
             switch_gminus(1.0),
@@ -70,12 +71,17 @@ namespace eos
         std::string
         FLvD2022::parameter(const char * _name) const
         {
-            qnp::Name name(_name);
+            static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, qnp::Prefix> prefixes
+            {
+                { { QuarkFlavor::bottom, QuarkFlavor::up },      qnp::Prefix("B_u") },
+                { { QuarkFlavor::bottom, QuarkFlavor::strange }, qnp::Prefix("B_s") }
+            };
 
-            if (opt_q.value() == "s")
-                return QualifiedName(qnp::Prefix("B_s"), name, qnp::Suffix("FLvD2022")).str();
+            auto it = prefixes.find(std::make_tuple(opt_Q.value(), opt_q.value()));
+            if (it == prefixes.end())
+                throw InternalError("Combination of options Q=" + opt_Q.str() + ", q=" + opt_q.str() + " is not supported");
 
-            return QualifiedName(qnp::Prefix("B_u"), name, qnp::Suffix("FLvD2022")).str();
+            return QualifiedName(it->second, qnp::Name(_name), qnp::Suffix("FLvD2022")).str();
         }
 
         HeavyMesonLCDAs *
@@ -524,6 +530,7 @@ namespace eos
         const std::vector<OptionSpecification>
         FLvD2022::options
         {
+            { "Q",       { "b" },                "b"        },
             { "q",       { "u", "s" },           "u"        },
             { "gminus", { "zero", "WW-limit" }, "WW-limit" }
         };
