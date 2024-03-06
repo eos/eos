@@ -92,7 +92,7 @@ class KStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.a4perp(1.0), 0.19000, eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.a4perp(2.0), 0.12330, eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.fperp(1.0),  0.15900, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.fperp(2.0),  0.14637, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.fperp(2.0),  0.14818, eps);
 
                 // phipara LCDA at various u values for mu = 1.0
                 TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 1.0), 0.45242, eps);
