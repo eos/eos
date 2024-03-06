@@ -132,6 +132,13 @@ BBJW:2018A:
     id: oai:arXiv.org:1804.04962
   inspire-id: Beneke:2018wjp
   title: 'Radiative leptonic decay $B\to \gamma \ell \nu_\ell$ with subleading power corrections'
+BBKT:1998A:
+  authors: 'Ball, P. and Braun, V. M. and Koike, Y. and Tanaka, K.'
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:9802299
+  inspire-id: Ball:1998sk
+  title: 'Higher twist distribution amplitudes of vector mesons in QCD: Formalism and twist - three distributions'
 BBL:1995A:
   authors: Buchalla, Gerhard and Buras, Andrzej J. and Lautenbacher, Markus E.
   eprint:
