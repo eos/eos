@@ -140,8 +140,8 @@ namespace eos
 
         inline double fperp(const double & mu) const
         {
-            // gamma_0 / (beta_0^Nf=3) = 4 / 23, see [BFS2001], p. 14, below eq. (48)
-            return fperp_0 * std::pow(c_rge(mu), +4.0 / 23.0 * QCD::beta_function_nf_3[0]);
+            // [BBKT1998A], p. 23, eq. (3.59)
+            return fperp_0 * std::pow(c_rge(mu), +4.0 / 3.0);
         }
     };
 
@@ -385,8 +385,8 @@ namespace eos
 
         inline double fperp(const double & mu) const
         {
-            // gamma_0 / (beta_0^Nf=3) = 4 / 23, see [BFS2001], p. 14, below eq. (48)
-            return fperp_0 * std::pow(c_rge(mu), +4.0 / 23.0 * QCD::beta_function_nf_3[0]);
+            // [BBKT1998A], p. 23, eq. (3.59)
+            return fperp_0 * std::pow(c_rge(mu), +4.0 / 3.0);
         }
     };
 

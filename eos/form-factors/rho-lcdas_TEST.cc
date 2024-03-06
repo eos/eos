@@ -116,10 +116,10 @@ class RhoLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(rho.a4perp(5.0),  0.11450,     eps);
 
                 TEST_CHECK_NEARLY_EQUAL(rho.fperp(1.0),   0.16,        eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.fperp(2.0),   0.147292,    eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.fperp(3.0),   0.142517,    eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.fperp(4.0),   0.139726,    eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.fperp(5.0),   0.137788,    eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.fperp(2.0),   0.149109,    eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.fperp(3.0),   0.144981,    eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.fperp(4.0),   0.142559,    eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.fperp(5.0),   0.140873,    eps);
 
                 // scale mu = 1.0 GeV
                 TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.0, 1.0), 0.0,      eps);
