@@ -86,6 +86,51 @@ class BqToDqPSDTest :
                 }
             }
 
+            // Standard Model NLP
+            {
+                Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.519e-12;
+                // Meson masses
+                p["mass::B_d"] = 5.27966;
+                p["mass::D_d"] = 1.86966;
+                p["mass::K_u"] = 0.493677;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
+                p["mass::c"] = 1.2;
+                // decay constant
+                p["decay-constant::K_u"] = 0.1556;
+                // fermi constant
+                p["WET::G_Fermi"] = 1.16637e-05;
+                // CKM matrix elements
+                p["CKM::abs(V_cb)"] = 0.0408;
+                p["CKM::arg(V_cb)"] = 0;
+                p["CKM::abs(V_us)"] = 0.2243;
+                p["CKM::arg(V_us)"] = 0;
+                // WC Values
+                p["sbcu::Re{c1}" ] = -0.04235657776117585;
+                p["sbcu::Im{c1}" ] = 0;
+                p["sbcu::Re{c2}" ] = -0.8948941708221622;
+                p["sbcu::Im{c2}" ] = 0;
+                p["sbcu::Re{c3}" ] = 0.011381250932999982;
+                p["sbcu::Im{c3}" ] = 0;
+                p["sbcu::Re{c4}" ] = 0.19426386543613433;
+                p["sbcu::Im{c4}" ] = 0;
+                Options oo
+                {
+                    { "accuracy",     "NLP" },
+                    { "q",            "d"      },
+                    { "model",        "WET"    },
+                    { "form-factors", "BSZ2015"}
+                };
+                BqToDqPseudoscalar d(p, oo);
+
+                {
+                    const double eps = 1.0e-4;
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.000816362, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.im_a_1()  , +0.0        , eps);
+                }
+            }
+
             // BSM NLO test case
             {
                 Parameters p = Parameters::Defaults();
@@ -166,6 +211,84 @@ class BqToDqPSDTest :
 
                     TEST_CHECK_RELATIVE_ERROR(d.decay_width(),     3.081825190307355e-12, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), 7.1122644546898695,    eps);
+                }
+            }
+
+            // BSM NLP test case
+            {
+                Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.519e-12;
+                // Meson masses
+                p["mass::B_d"] = 5.27966;
+                p["mass::D_d"] = 1.86966;
+                p["mass::K_u"] = 0.493677;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
+                p["mass::c"] = 1.2;
+                // decay constant
+                p["decay-constant::K_u"] = 0.1556;
+                // fermi constant
+                p["WET::G_Fermi"] = 1.16637e-05;
+                // CKM matrix elements
+                p["CKM::abs(V_cb)"] = 0.0408;
+                p["CKM::arg(V_cb)"] = 0;
+                p["CKM::abs(V_us)"] = 0.2243;
+                p["CKM::arg(V_us)"] = 0;
+                // BSM test case: WET parameter point
+                p["sbcu::Re{c1}"  ] = -1.72424;
+                p["sbcu::Im{c1}"  ] = -1.56379;
+                p["sbcu::Re{c1'}" ] = -1.05356;
+                p["sbcu::Im{c1'}" ] = -0.791464;
+                p["sbcu::Re{c2}"  ] = -2.84324;
+                p["sbcu::Im{c2}"  ] = -1.10401;
+                p["sbcu::Re{c2'}" ] = +1.10235;
+                p["sbcu::Im{c2'}" ] = +2.0774;
+                p["sbcu::Re{c3}"  ] = +1.61473;
+                p["sbcu::Im{c3}"  ] = +1.23153;
+                p["sbcu::Re{c3'}" ] = -2.95587;
+                p["sbcu::Im{c3'}" ] = -2.28859;
+                p["sbcu::Re{c4}"  ] = +2.72844;
+                p["sbcu::Im{c4}"  ] = +2.4199;
+                p["sbcu::Re{c4'}" ] = +1.42602;
+                p["sbcu::Im{c4'}" ] = +2.15745;
+                p["sbcu::Re{c5}"  ] = +2.1994;
+                p["sbcu::Im{c5}"  ] = -1.4183;
+                p["sbcu::Re{c5'}" ] = +1.28771;
+                p["sbcu::Im{c5'}" ] = -2.51855;
+                p["sbcu::Re{c6}"  ] = -1.148;
+                p["sbcu::Im{c6}"  ] = +2.69186;
+                p["sbcu::Re{c6'}" ] = -0.857562;
+                p["sbcu::Im{c6'}" ] = -1.25387;
+                p["sbcu::Re{c7}"  ] = -0.0232947;
+                p["sbcu::Im{c7}"  ] = +0.746233;
+                p["sbcu::Re{c7'}" ] = +0.925099;
+                p["sbcu::Im{c7'}" ] = +2.16794;
+                p["sbcu::Re{c8}"  ] = -0.787739;
+                p["sbcu::Im{c8}"  ] = +2.30108;
+                p["sbcu::Re{c8'}" ] = -2.67008;
+                p["sbcu::Im{c8'}" ] = -0.331634;
+                p["sbcu::Re{c9}"  ] = -1.60631;
+                p["sbcu::Im{c9}"  ] = -1.09823;
+                p["sbcu::Re{c9'}" ] = +0.601768;
+                p["sbcu::Im{c9'}" ] = -0.224144;
+                p["sbcu::Re{c10}" ] = +0.25629;
+                p["sbcu::Im{c10}" ] = -2.96255;
+                p["sbcu::Re{c10'}"] = +2.03425;
+                p["sbcu::Im{c10'}"] = +1.24073;
+
+                Options oo
+                {
+                    { "accuracy",     "NLP" },
+                    { "q",            "d"      },
+                    { "model",        "WET"    },
+                    { "form-factors", "BSZ2015"}
+                };
+                BqToDqPseudoscalar d(p, oo);
+
+                {
+                    const double eps = 1e-4;
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), 0.3166137471854839, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.im_a_1(), 0.2024009114565051, eps);
                 }
             }
         }

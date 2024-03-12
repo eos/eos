@@ -355,8 +355,25 @@ namespace eos
 
             const complex<double> a_1_nlo = a_1_nlo_re + a_1_nlo_im * 1.0i;
 
+            // convoluted 3-particle hard-scattering kernels
+            const double TVLL_nlp = (5.0 * lcdas->kappa4(mu()) * m_P * m_P) / (3.0 * (mb * mb - mc * mc));
+            const double TTLL_nlp = (3.0 - lcdas->omega3(mu())) * 2.0 / pow(1.0 - z, 2);
+
+            // calculate contributions from three-particle light-meson states
+            const complex<double> a_1_nlp =
+                    -(4.0 * (wc.c1() + wc.c1p()) * TVLL_nlp) /3.0 +
+                    (2.0 * (wc.c2() + wc.c2p()) * TVLL_nlp) / 9.0 -
+                    (64.0 * (wc.c3() + wc.c3p()) * TVLL_nlp) / 3.0 +
+                    (32.0 * (wc.c4() + wc.c4p()) * TVLL_nlp) / 9.0 +
+                    ((wc.c5() + wc.c5p()) * ((f_3P * m_P * m_P * TTLL_nlp) / (f_P * mb* mb *(mb + mc)) - 4.0 * TVLL_nlp)) / 6.0 +
+                    (wc.c6() + wc.c6p()) * (-1.0 / 36.0 * (f_3P * m_P * m_P * TTLL_nlp) / (f_P * mb * mb * (mb + mc)) + TVLL_nlp / 9.0) +
+                    (-2.0 * (wc.c7() + wc.c7p()) * f_3P * m_P() * m_P() * TTLL_nlp) / (3.0 * f_P * mb * mb * (mb + mc)) +
+                    ((wc.c8() + wc.c8p()) * f_3P * m_P() * m_P() * TTLL_nlp) / (9.0 * f_P * mb * mb * (mb + mc)) +
+                    (32.0 * (wc.c9() + wc.c9p()) * ((2.0 * f_3P * m_P * m_P * TTLL_nlp) / (f_P * mb * mb * (mb + mc)) - TVLL_nlp)) / 3.0 +
+                    (16.0 * (wc.c10() + wc.c10p()) * ((-2.0 * f_3P * m_P * m_P * TTLL_nlp) / (f_P * mb * mb * (mb + mc)) + TVLL_nlp)) / 9.0;
+
             // return sum of all contributions
-            return switch_lo * a_1_lo + switch_nlo * a_s_mu * a_1_nlo;
+            return switch_lo * a_1_lo + switch_nlo * a_s_mu * a_1_nlo + switch_nlp * a_1_nlp;
         };
 
         double decay_width() const
