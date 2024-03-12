@@ -214,6 +214,7 @@ the ``dynesty``, ``matplotlib``, ``networkx``, ``scipy``, ``pypmc``, ``pyyaml``,
 
 
 ::
+
   # Make sure to activate your virtual environment first
   pip install dynesty matplotlib networkx scipy pypmc pyyaml wilson
 
