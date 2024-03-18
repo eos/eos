@@ -198,7 +198,7 @@ class AnalysisFile:
     def observables(self, _posterior, _prediction, parameters):
         """Creates a list of eos.Observable objects for the named set of posterior and predictions."""
         if _posterior not in self._posteriors:
-            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_prediction}\'')
+            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_posterior}\'')
         if _prediction not in self.predictions:
             raise RuntimeError(f'Cannot create observables for unknown set of predictions: \'{_prediction}\'')
 
