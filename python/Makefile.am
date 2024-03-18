@@ -7,8 +7,10 @@ EXTRA_DIST = \
 	eos/analysis_TEST.d \
 	eos/analysis_TEST.py \
 	eos/analysis_file.py \
+	eos/analysis_file_description.py \
 	eos/config.py \
 	eos/constraint.py \
+	eos/deserializable.py \
 	eos/ipython.py \
 	eos/observable.py \
 	eos/parameter.py \
@@ -46,8 +48,10 @@ eos_SCRIPTS = \
 	eos/__init__.py \
 	eos/analysis.py \
 	eos/analysis_file.py \
+	eos/analysis_file_description.py \
 	eos/config.py \
 	eos/constraint.py \
+	eos/deserializable.py \
 	eos/ipython.py \
 	eos/observable.py \
 	eos/parameter.py \
