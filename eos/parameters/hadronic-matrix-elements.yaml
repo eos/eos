@@ -268,8 +268,8 @@ groups:
           unit:     '1'
       'B->pi::b_+^1@BCL2008' :
           central: -1.31
-          min:     +1.73
-          max:     -0.89
+          min:     -0.89
+          max:     +1.73
           latex:    '$b_{+, 1}^{B\to \pi}$'
           unit:     '1'
       'B->pi::b_+^2@BCL2008' :
