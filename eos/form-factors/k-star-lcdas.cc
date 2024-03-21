@@ -365,7 +365,7 @@ namespace eos
 
         inline double a1perp(const double & mu) const
         {
-            return a1perp_0 * std::pow(c_rge(mu), 36.0 / 9.0);
+            return -1.0 * a1perp_0 * std::pow(c_rge(mu), 36.0 / 9.0);
         }
 
         inline double a2perp(const double & mu) const
@@ -375,7 +375,7 @@ namespace eos
 
          inline double a3perp(const double & mu) const
         {
-            return a3perp_0 * std::pow(c_rge(mu), 64.0 / 9.0);
+            return -1.0 * a3perp_0 * std::pow(c_rge(mu), 64.0 / 9.0);
         }
 
         inline double a4perp(const double & mu) const
