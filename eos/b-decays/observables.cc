@@ -25,6 +25,7 @@
 #include <eos/b-decays/b-to-3l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
+#include <eos/b-decays/b-to-psd-psd.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
@@ -2154,6 +2155,27 @@ namespace eos
     }
     // }}}
 
+    // (Pseudo)Observables related to the B -> P(seudoscalar) P(seudoscalar) decays
+    // {{{
+    ObservableGroup
+    make_nonleptonic_b_to_p_p_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"((Pseudo)Observables related to the $B\to PP$ decays)",
+            R"()",
+            {
+                make_observable("B^0->pi^+pi^-::BR", R"(\mathcal{B}(\bar{B}^0\to\pi^+\pi^-))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d"}, { "m1", "pi^+" }, { "m2", "pi^+" } }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // (Pseudo)Observables related to the B-meson lifetime
     // {{{
     ObservableGroup
@@ -2252,6 +2274,9 @@ namespace eos
 
                 // class I nonleptonic heavy-to-heavy decays
                 make_classI_nonleptonic_heavy_to_heavy_group(),
+
+                // nonleptonic B -> PP decays
+                make_nonleptonic_b_to_p_p_group(),
 
                 // B-meson lifetime
                 make_b_lifetime_group(),
