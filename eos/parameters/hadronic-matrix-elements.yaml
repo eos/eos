@@ -5565,3 +5565,69 @@ groups:
           max:     +1.57079632679490
           latex:    '$sl_{\perp}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
   # }}}
+
+
+  # Nonleptonic Amplitudes Parameters
+  # {{{
+  - title: 'Nonleptonic Amplitudes Parameters'
+    description: ''
+    parameters:
+      'nonleptonic::%1%{%2%}@Topological' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\mathrm{%1%}\,%2%$'
+            map:
+              'TES': 'T_{ES}'
+              'TAS': 'T_{AS}'
+              'TS' : 'T_S'
+              'TPA': 'T_{PA}'
+              'TP' : 'T_P'
+              'TSS': 'T_{SS}'
+              'PT' : 'P_T'
+              'PC' : 'P_C'
+              'PTA': 'P_{TA}'
+              'PA' : 'P_A'
+              'PTE': 'P_{TE}'
+              'PAS': 'P_{AS}'
+              'PSS': 'P_{SS}'
+              'PES': 'P_{ES}'
+          matrix:
+            - [ "Re", "Im" ]
+            - [ "T", "C", "A", "E", "TES", "TAS", "TS", "TPA", "TP", "TSS",
+                "P", "PT", "S", "PC", "PTA", "PA", "PTE", "PAS", "PSS", "PES" ]
+      'nonleptonic::%1%{%2%}@SU3F' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\mathrm{%1%}\,%2%$'
+            map:
+              'AT3' : 'A_3^T'
+              'CT3' : 'C_3^T'
+              'AT6' : 'A_6^T'
+              'CT6' : 'C_6^T'
+              'AT15': 'A_{15}^T'
+              'CT15': 'C_{15}^T'
+              'BT3' : 'B_3^T'
+              'BT6' : 'B_6^T'
+              'BT15': 'B_{15}^T'
+              'DT3' : 'D_3^T'
+              'AP3' : 'A_3^P'
+              'CP3' : 'C_3^P'
+              'AP6' : 'A_6^P'
+              'CP6' : 'C_6^P'
+              'AP15': 'A_{15}^P'
+              'CP15': 'C_{15}^P'
+              'BP3' : 'B_3^P'
+              'BP6' : 'B_6^P'
+              'BP15': 'B_{15}^P'
+              'DP3' : 'D_3^P'
+          matrix:
+            - [ "Re", "Im" ]
+            - [ "AT3", "CT3", "AT6", "CT6", "AT15", "CT15", "BT3", "BT6", "BT15", "DT3",
+                "AP3", "CP3", "AP6", "CP6", "AP15", "CP15", "BP3", "BP6", "BP15", "DP3" ]
+  # }}}
