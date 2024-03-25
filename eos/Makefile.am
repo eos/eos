@@ -12,6 +12,7 @@ SUBDIRS = \
 	statistics \
 	form-factors \
 	nonlocal-form-factors \
+	nonleptonic-amplitudes \
 	rare-b-decays \
 	b-decays \
 	c-decays \
@@ -38,6 +39,7 @@ libeos_la_LIBADD = \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
+	$(top_builddir)/eos/nonleptonic-amplitudes/libeosnonleptonicamplitudes.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/c-decays/libeoscdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
@@ -68,6 +70,7 @@ LDADD = \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/c-decays/libeoscdecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	$(top_builddir)/eos/nonleptonic-amplitudes/libeosnonleptonicamplitudes.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
