@@ -1,6 +1,6 @@
 on:
     push:
-        branches: [ master, testing ]
+        branches: [ release, master, testing ]
 
     pull_request:
 
@@ -325,8 +325,8 @@ jobs:
                 git config user.name  "EOS"
                 git add --all
                 git commit --allow-empty -m "Updating documentation based on EOS revision ${{ github.sha }}"
-                # only push if running for the master branch or for a versioned release
-                if [[ ${GITHUB_REF#refs/heads/} == "master" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
+                # only push if running for the release branch or for a versioned release
+                if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
                     git push
                 fi
                 popd
