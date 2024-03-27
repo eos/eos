@@ -1,5 +1,7 @@
 on:
-    pull_request:
+  pull_request:
+    branches:
+      - master
 
 name: Check if pre-commit checks pass
 
