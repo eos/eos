@@ -57,7 +57,7 @@ namespace eos
 
         SwitchOption opt_nonlocal_formfactor;
 
-        NonlocalFormFactorPtr<nff::PToP> nonlocal_formfactor;
+        NonlocalFormFactorPtr<PToP> nonlocal_formfactor;
 
         SwitchOption opt_psi;
 
@@ -78,7 +78,7 @@ namespace eos
             tau_B(p["life_time::B_" + opt_q.str()], u),
             m_K(p["mass::K_" + opt_q.str()], u),
             opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
-            nonlocal_formfactor(NonlocalFormFactor<nff::PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o)),
+            nonlocal_formfactor(NonlocalFormFactor<PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o)),
             opt_psi(o, "psi", { "J/psi", "psi(2S)" }, "J/psi"),
             m_psi(p["mass::" + opt_psi.value()], u),
             f_psi(p["decay-constant::" + opt_psi.value()], u)
@@ -90,11 +90,11 @@ namespace eos
 
             if ("J/psi" == opt_psi.value())
             {
-                residue_H_plus = std::bind(&NonlocalFormFactor<nff::PToP>::H_plus_residue_jpsi, nonlocal_formfactor);
+                residue_H_plus = std::bind(&NonlocalFormFactor<PToP>::H_plus_residue_jpsi, nonlocal_formfactor);
             }
             else
             {
-                residue_H_plus = std::bind(&NonlocalFormFactor<nff::PToP>::H_plus_residue_psi2s, nonlocal_formfactor);
+                residue_H_plus = std::bind(&NonlocalFormFactor<PToP>::H_plus_residue_psi2s, nonlocal_formfactor);
             }
 
             u.uses(*model);

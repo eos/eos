@@ -54,7 +54,7 @@ namespace eos
     // P -> P
 
     template <>
-    class NonlocalFormFactor<nff::PToP> :
+    class NonlocalFormFactor<PToP> :
         public ParameterUser
     {
         protected:
@@ -127,7 +127,7 @@ namespace eos
             ///@}
 
             /// Factory method.
-            static NonlocalFormFactorPtr<nff::PToP> make(const QualifiedName & name, const Parameters & p, const Options & o);
+            static NonlocalFormFactorPtr<PToP> make(const QualifiedName & name, const Parameters & p, const Options & o);
 
             ///@name Internal diagnostics for unit tests
             ///@{
@@ -136,9 +136,9 @@ namespace eos
     };
 
     template <typename Process_>
-    class NonlocalFormFactorObservable<Process_, nff::PToP> :
+    class NonlocalFormFactorObservable<Process_, PToP> :
         public ParameterUser,
-        public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, nff::PToP>>
+        public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToP>>
     {
         public:
             ///@name Basic operations
@@ -209,12 +209,12 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-    extern template class NonlocalFormFactorObservable<nff::BToK, nff::PToP>;
+    extern template class NonlocalFormFactorObservable<nff::BToK, PToP>;
 
     // P -> V
 
     template <>
-    class NonlocalFormFactor<nff::PToV> :
+    class NonlocalFormFactor<PToV> :
         public ParameterUser
     {
         protected:
@@ -312,7 +312,7 @@ namespace eos
             ///@}
 
             /// Factory method.
-            static NonlocalFormFactorPtr<nff::PToV> make(const QualifiedName & name, const Parameters & p, const Options & o);
+            static NonlocalFormFactorPtr<PToV> make(const QualifiedName & name, const Parameters & p, const Options & o);
 
             ///@name Internal diagnostics for unit tests
             ///@{
@@ -321,9 +321,9 @@ namespace eos
     };
 
     template <typename Process_>
-    class NonlocalFormFactorObservable<Process_, nff::PToV> :
+    class NonlocalFormFactorObservable<Process_, PToV> :
         public ParameterUser,
-        public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, nff::PToV>>
+        public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToV>>
     {
         public:
             ///@name Basic operations
@@ -428,8 +428,8 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-    extern template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
-    extern template class NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>;
+    extern template class NonlocalFormFactorObservable<nff::BToKstar, PToV>;
+    extern template class NonlocalFormFactorObservable<nff::BsToPhi, PToV>;
 
     namespace nff_utils
     {

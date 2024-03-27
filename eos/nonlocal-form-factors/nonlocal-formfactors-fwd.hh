@@ -26,15 +26,9 @@ namespace eos
     namespace nff
     {
         // P -> P
-        struct PToP { };
-
-        // forward declarations
         struct BToK;
 
         // P -> V
-        struct PToV { };
-
-        // forward declarations
         struct BToKstar;
         struct BsToPhi;
     }

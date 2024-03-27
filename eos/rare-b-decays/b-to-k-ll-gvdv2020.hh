@@ -45,7 +45,7 @@ namespace eos
             QuarkFlavorOption q;
 
             SwitchOption opt_nonlocal_formfactor;
-            NonlocalFormFactorPtr<nff::PToP> nonlocal_formfactor;
+            NonlocalFormFactorPtr<PToP> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;
 
