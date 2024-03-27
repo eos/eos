@@ -39,7 +39,7 @@ namespace eos
             UsedParameter lambda_B_p_inv;
 
             SwitchOption opt_nonlocal_formfactor;
-            NonlocalFormFactorPtr<nff::PToV> nonlocal_formfactor;
+            NonlocalFormFactorPtr<PToV> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;
 

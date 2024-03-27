@@ -41,7 +41,7 @@ namespace eos
         f_phi_par(p["decay-constant::phi"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
-        nonlocal_formfactor(NonlocalFormFactor<nff::PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o))
+        nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o))
     {
         Context ctx("When constructing Bs->Phill GVdV2020 amplitudes");
     }

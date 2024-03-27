@@ -169,7 +169,7 @@ class BToKDileptonJavierTest :
             static const double eps = 1e-5;
             static const double q2 = 1.0;
 
-            auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GvDV2020", p, oo);
+            auto nff = NonlocalFormFactor<PToP>::make("B->K::GvDV2020", p, oo);
             TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(q2)), -0.0001717492,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(q2)),  0.,        eps);
 

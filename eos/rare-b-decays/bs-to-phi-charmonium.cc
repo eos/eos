@@ -56,7 +56,7 @@ namespace eos
 
         SwitchOption opt_nonlocal_formfactor;
 
-        NonlocalFormFactorPtr<nff::PToV> nonlocal_formfactor;
+        NonlocalFormFactorPtr<PToV> nonlocal_formfactor;
 
         SwitchOption opt_psi;
 
@@ -78,7 +78,7 @@ namespace eos
             tau_Bs(p["life_time::B_s"], u),
             m_phi(p["mass::phi"], u),
             opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
-            nonlocal_formfactor(NonlocalFormFactor<nff::PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o)),
+            nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o)),
             opt_psi(o, "psi", { "J/psi", "psi(2S)" }, "J/psi"),
             m_psi(p["mass::" + opt_psi.value()], u),
             f_psi(p["decay-constant::" + opt_psi.value()], u)
@@ -90,15 +90,15 @@ namespace eos
 
             if ("J/psi" == opt_psi.value())
             {
-                residue_H_long = std::bind(&NonlocalFormFactor<nff::PToV>::H_long_residue_jpsi, nonlocal_formfactor);
-                residue_H_perp = std::bind(&NonlocalFormFactor<nff::PToV>::H_perp_residue_jpsi, nonlocal_formfactor);
-                residue_H_para = std::bind(&NonlocalFormFactor<nff::PToV>::H_para_residue_jpsi, nonlocal_formfactor);
+                residue_H_long = std::bind(&NonlocalFormFactor<PToV>::H_long_residue_jpsi, nonlocal_formfactor);
+                residue_H_perp = std::bind(&NonlocalFormFactor<PToV>::H_perp_residue_jpsi, nonlocal_formfactor);
+                residue_H_para = std::bind(&NonlocalFormFactor<PToV>::H_para_residue_jpsi, nonlocal_formfactor);
             }
             else
             {
-                residue_H_long = std::bind(&NonlocalFormFactor<nff::PToV>::H_long_residue_psi2s, nonlocal_formfactor);
-                residue_H_perp = std::bind(&NonlocalFormFactor<nff::PToV>::H_perp_residue_psi2s, nonlocal_formfactor);
-                residue_H_para = std::bind(&NonlocalFormFactor<nff::PToV>::H_para_residue_psi2s, nonlocal_formfactor);
+                residue_H_long = std::bind(&NonlocalFormFactor<PToV>::H_long_residue_psi2s, nonlocal_formfactor);
+                residue_H_perp = std::bind(&NonlocalFormFactor<PToV>::H_perp_residue_psi2s, nonlocal_formfactor);
+                residue_H_para = std::bind(&NonlocalFormFactor<PToV>::H_para_residue_psi2s, nonlocal_formfactor);
             }
 
             u.uses(*model);
