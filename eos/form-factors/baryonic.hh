@@ -25,6 +25,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
+#include <eos/utils/transitions.hh>
 
 #include <map>
 #include <memory>
@@ -32,23 +33,6 @@
 
 namespace eos
 {
-    /* Baryonic Tags */
-
-    /*
-     * J=1/2^+ -> J=1/2^+ transitions
-     */
-    struct OneHalfPlusToOneHalfPlus { };
-
-    /*
-     * J=1/2^+ -> J=1/2^- transitions
-     */
-    struct OneHalfPlusToOneHalfMinus { };
-
-    /*
-     * J=1/2^+ -> J=3/2^- transitions
-     */
-    struct OneHalfPlusToThreeHalfMinus { };
-
     template <>
     class FormFactors<OneHalfPlusToOneHalfPlus> :
         public ParameterUser
