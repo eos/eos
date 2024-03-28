@@ -115,10 +115,6 @@ class BMRvD2022FormFactorsTest :
                 BMRvD2022FormFactors<LambdaBToLambda> ff(p, Options{ });
 
                 Diagnostics diagnostics = ff.diagnostics();
-                for (const auto & d : diagnostics)
-                {
-                    std::cout << d.description << ": " << d.value << std::endl;
-                }
                 static const std::vector<std::pair<double, double>> reference
                 {
                     std::make_pair( 0.230324,  eps), // z(q2 =  0)
@@ -193,5 +189,89 @@ class BMRvD2022FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_long_t5(tm),   40.79093961, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t5(tm),   40.79093961, eps);
             }
+
+
+            /* Lc -> L FFs */
+            {
+                Parameters p = Parameters::Defaults();
+                // f_time_v
+                p["Lambda_c->Lambda::a^(t,V)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(t,V)_2@BMRvD2022"] = +0.3;
+                // f_long_v
+                p["Lambda_c->Lambda::a^(0,V)_0@BMRvD2022"] = +0.1;
+                p["Lambda_c->Lambda::a^(0,V)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,V)_2@BMRvD2022"] = +0.3;
+                // f_perp_v
+                p["Lambda_c->Lambda::a^(perp,V)_0@BMRvD2022"] = +0.1;
+                p["Lambda_c->Lambda::a^(perp,V)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,V)_2@BMRvD2022"] = +0.3;
+                // f_time_a
+                p["Lambda_c->Lambda::a^(t,A)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(t,A)_2@BMRvD2022"] = +0.3;
+                // f_long_a
+                p["Lambda_c->Lambda::a^(0,A)_0@BMRvD2022"] = +0.1;
+                p["Lambda_c->Lambda::a^(0,A)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,A)_2@BMRvD2022"] = +0.3;
+                // f_perp_a
+                p["Lambda_c->Lambda::a^(perp,A)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,A)_2@BMRvD2022"] = +0.3;
+                // f_long_t
+                p["Lambda_c->Lambda::a^(0,T)_0@BMRvD2022"] = +0.1;
+                p["Lambda_c->Lambda::a^(0,T)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,T)_2@BMRvD2022"] = +0.3;
+                // f_perp_t
+                p["Lambda_c->Lambda::a^(perp,T)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,T)_2@BMRvD2022"] = +0.3;
+                // f_long_t5
+                p["Lambda_c->Lambda::a^(0,T5)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,T5)_2@BMRvD2022"] = +0.3;
+                // f_perp_t5
+                p["Lambda_c->Lambda::a^(perp,T5)_0@BMRvD2022"] = +0.1;
+                p["Lambda_c->Lambda::a^(perp,T5)_1@BMRvD2022"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,T5)_2@BMRvD2022"] = +0.3;
+                // Resonance masses
+                p["mass::D_s@BSZ2015"]   = 1.968;
+                p["mass::D_s,0@BSZ2015"] = 2.318;
+                p["mass::D_s^*@BSZ2015"] = 2.112;
+                p["mass::D_s,1@BSZ2015"] = 2.460;
+
+                BMRvD2022FormFactors<LambdaCToLambda> ff(p, Options{ });
+
+                // form factor values
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_v (0.0), 6.59636, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_v (0.0), 6.59636, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_v (0.0), 3.35211, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_a (0.0), 12.7077, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_a (0.0), 12.7077, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_a (0.0), 12.8642, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t (0.0), 3.87673, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t (0.0), 7.30833, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t5(0.0), 7.28864, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t5(0.0), 7.30833, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_v (3.0), 11.5787, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_v (3.0), 14.6334, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_v (3.0), 8.84449, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_a (3.0), 45.1957, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_a (3.0), 16.6924, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_a (3.0), 16.2581, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t (3.0), 10.2287, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t (3.0), 14.285 , eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t5(3.0), 9.59603, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t5(3.0), 9.59998, eps);
+
+                const auto tm = LambdaCToLambda::tm;
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_v (tm), 8.05686,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_v (tm), 8.35505,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_v (tm), 4.54319,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_a (tm), 17.9229,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_a (tm), 13.9798,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_a (tm), 13.9798,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t (tm), 5.25421,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t (tm), 8.81561,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t5(tm), 8.03994,   eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t5(tm), 8.03994,   eps);
+            }
+
         }
 } bmrvd2022_form_factor_test;

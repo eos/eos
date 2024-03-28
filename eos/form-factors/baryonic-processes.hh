@@ -55,6 +55,26 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
     };
 
+    struct LambdaCToLambda {
+        static constexpr const char * label = "Lambda_c->Lambda";
+        static constexpr const char * name_1 = "mass::Lambda_c";
+        static constexpr const char * name_2 = "mass::Lambda";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange);
+        // initial state mass
+        static constexpr double m1 = 2.2865;
+        // final state mass
+        static constexpr double m2 = 1.115683;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0m = 1.160e-2;
+        static constexpr double chi_0p = 1.394e-2;
+        static constexpr double chi_1m = 1.935e-2 / (1.3 * 1.3);
+        static constexpr double chi_1p = 2.290e-2 / (1.3 * 1.3);
+        static constexpr double chi_t  = 4.012e-2 / 4.0 / (1.3 * 1.3); // factor 4 by convention
+        static constexpr double chi_t5 = 3.164e-2 / 4.0 / (1.3 * 1.3); // factor 4 by convention
+    };
+
     /*
      * J=1/2^+ -> J=1/2^- transitions
      */

@@ -87,7 +87,8 @@ namespace eos
             static const std::vector<OptionSpecification> options;
     };
 
-    extern template class DM2016FormFactors<LambdaBToLambdaC>;
+    extern template class DM2016FormFactors<LambdaBToLambda>;
+    extern template class DM2016FormFactors<LambdaCToLambda>;
 }
 
 #endif

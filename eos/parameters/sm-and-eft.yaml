@@ -23,6 +23,10 @@ groups:
           latex:    '$\sin^2(\theta_{\mathrm{GSW}})$'
           comments: 'cf. [PDG2012]:  p. 4'
       # QED inputs
+      'QED::alpha_e(0)' :
+          central: +0.0072973525693
+          min:     +0.0072973525682
+          max:     +0.0072973525704
       'QED::alpha_e(m_b)' :
           central: +0.00751879699248120
           min:     +0.00751879699248120
@@ -30,10 +34,13 @@ groups:
           unit:     '1'
           latex:    '$\alpha_e(m_b)$'
           comments: 'alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128'
-      'QED::alpha_e(0)' :
-          central: +0.0072973525693
-          min:     +0.0072973525682
-          max:     +0.0072973525704
+      'QED::alpha_e(m_c)' :
+          central: +0.00760641
+          min:     +0.00760641
+          max:     +0.00760641
+          unit:     '1'
+          latex:    '$\alpha_e(m_c)$'
+          comments: 'from alpha_e(m_b) = 1/133 using LL accuracy'
       # G_Fermi
       'WET::G_Fermi' :
           central: +1.1663787e-5
@@ -1865,3 +1872,226 @@ groups:
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{10\prime}$'
+
+  # scnul WET Parameters
+  # {{{
+  - title: '$\bar{s}c\bar{\nu}\ell$ WET Parameters'
+    description: >
+        The list of parameters describing the Wilson coefficients of $\bar{s}c\bar{\nu}\ell$ operators in the effective Lagrangian
+        \begin{equation}
+          \mathcal{H}^{\bar{s}c\bar{\nu}\ell}_\mathrm{eff}
+          = \frac{4 G_F}{\sqrt{2}} V_{cs}^* \sum_i \mathcal{C}^{\bar{s}c\bar{\nu}\ell}_i \mathcal{O}^{\bar{s}c\bar{\nu}\ell}_i\,.
+        \end{equation}
+        The operators read:
+        \begin{align}
+          \mathcal{O}_{V_{L(R)}} & = [\bar{s} \gamma^\mu P_{L(R)} c]\, [\bar{\nu}_\ell \gamma_\mu P_L \ell]\\
+          \mathcal{O}_{S_{L(R)}} & = [\bar{s} P_{L(R)} c]\, [\bar{\nu}_\ell P_L \ell]\\
+          \mathcal{O}_{T}        & = [\bar{s} \sigma^{\mu\nu} c]\, [\bar{\nu}_\ell \sigma_{\mu\nu} P_L \ell]
+        \end{align}
+
+    wcxf-relevant: true
+    parameters:
+      # scnul Wilson coefficients - electron
+      'scnuee::mu' :
+          central: +1.275
+          min:     +1.275
+          max:     +1.275
+          unit:     'GeV'
+          latex:    '$\mu^{\bar{s}c\bar{nu}_ee}$'
+      'scnuee::Re{cVL}' :
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{V_L}$'
+      'scnuee::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{V_L}$'
+      'scnuee::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{V_R}$'
+      'scnuee::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{V_R}$'
+      'scnuee::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{S_L}$'
+      'scnuee::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{S_L}$'
+      'scnuee::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{S_R}$'
+      'scnuee::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{S_R}$'
+      'scnuee::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{T}$'
+      'scnuee::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_ee}_{T}$'
+
+      # scnul Wilson coefficients - muon
+      'scnumumu::mu' :
+          central: 1.275
+          min:     1.275
+          max:     1.275
+          latex:   '$\mu^{\bar{s}c\bar{nu}_\mu\mu}$'
+          unit:    'GeV'
+      'scnumumu::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{V_L}$'
+      'scnumumu::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{V_L}$'
+      'scnumumu::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{V_R}$'
+      'scnumumu::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{V_R}$'
+      'scnumumu::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{S_L}$'
+      'scnumumu::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{S_L}$'
+      'scnumumu::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{S_R}$'
+      'scnumumu::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{S_R}$'
+      'scnumumu::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{T}$'
+      'scnumumu::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\mu\mu}_{T}$'
+
+      # scnul Wilson coefficients - tau
+      'scnutautau::mu' :
+          central: +1.275
+          min:     +1.275
+          max:     +1.275
+          latex:    '$\mu^{\bar{s}c\bar{nu}_\tau\tau}$'
+          unit:     'GeV'
+      'scnutautau::Re{cVL}' :
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{V_L}$'
+      'scnutautau::Im{cVL}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{V_L}$'
+      'scnutautau::Re{cVR}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{V_R}$'
+      'scnutautau::Im{cVR}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{V_R}$'
+      'scnutautau::Re{cSL}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{S_L}$'
+      'scnutautau::Im{cSL}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{S_L}$'
+      'scnutautau::Re{cSR}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{S_R}$'
+      'scnutautau::Im{cSR}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{S_R}$'
+      'scnutautau::Re{cT}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{T}$'
+      'scnutautau::Im{cT}' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{T}$'
+  # }}}

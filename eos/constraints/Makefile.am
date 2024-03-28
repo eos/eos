@@ -21,10 +21,15 @@ CONSTRAINTS_FILES = \
 	Bs-to-Ds-gamma-l-nu.yaml \
 	Bs-to-phi-charmonium.yaml \
 	Bs-to-phi-ll.yaml \
+	D-to-K-l-nu.yaml \
+	D-to-P-form-factors.yaml \
+	Dq-to-dilepton.yaml \
 	dispersive-bounds.yaml \
 	ee-to-ccbar.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
+	Lc-to-L-form-factors.yaml \
+	Lc-to-L-l-nu.yaml \
 	miscellaneous.yaml \
 	wet-constraints.yaml
 

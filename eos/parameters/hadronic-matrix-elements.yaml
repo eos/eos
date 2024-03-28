@@ -191,6 +191,12 @@ groups:
           max:     +6.3311
           latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
           unit:     'GeV'
+      'mass::D_s,0@BSZ2015' :
+          central: +2.318
+          min:     +2.318
+          max:     +2.318
+          latex:   '$m_{D_{s,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
       'mass::B_d,0@BSZ2015' :
           central: +5.540
           min:     +5.540
@@ -214,6 +220,12 @@ groups:
           min:     +6.420
           max:     +6.420
           latex:   '$m_{B_{c,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+      'mass::D_s,1@BSZ2015' :
+          central: +2.460
+          min:     +2.460
+          max:     +2.460
+          latex:   '$m_{D_{s,1}}^\mathrm{BSZ}$'
           unit:     'GeV'
       'mass::B_d,1@BSZ2015' :
           central: +5.724
@@ -245,6 +257,12 @@ groups:
           max:     +1.115683
           latex:   '$m_{\Lambda}^\mathrm{BMRvD}$'
           unit:     'GeV'
+      'mass::Lambda_c@BMRvD2022' :
+          central: +2.2865
+          min:     +2.2865
+          max:     +2.2865
+          latex:   '$m_{\Lambda_c}^\mathrm{BMRvD}$'
+          unit:     'GeV'
       'mass::Lambda_b@BMRvD2022' :
           central: +5.61951
           min:     +5.61951
@@ -268,8 +286,8 @@ groups:
           unit:     '1'
       'B->pi::b_+^1@BCL2008' :
           central: -1.31
-          min:     +1.73
-          max:     -0.89
+          min:     -0.89
+          max:     +1.73
           latex:    '$b_{+, 1}^{B\to \pi}$'
           unit:     '1'
       'B->pi::b_+^2@BCL2008' :
@@ -3806,6 +3824,51 @@ groups:
           unit:     'GeV^-2'
   # }}}
 
+  # Dispersive bounds in c -> s currents
+  # {{{
+  - title: 'Dispersive bounds in the OPE for c -> s currents'
+    description: ''
+    parameters:
+      # [BFW:2010A] using a reference mass mb = 4.2 GeV
+      'c->s::chiOPE[0^+_V]' :
+          central:  1.38e-02
+          min:      1.38e-02
+          max:      1.38e-02
+          latex:    '$\chi_V^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'c->s::chiOPE[1^-_V]' :
+          central:  8.22e-03
+          min:      8.22e-03
+          max:      8.22e-03
+          latex:    '$\chi_V^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'c->s::chiOPE[0^-_A]' :
+          central:  1.91e-02
+          min:      1.91e-02
+          max:      1.91e-02
+          latex:    '$\chi_A^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'c->s::chiOPE[1^+_A]' :
+          central:  7.46e-03
+          min:      7.46e-03
+          max:      7.46e-03
+          latex:    '$\chi_A^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      # Mind the factor of 1/4 due to the definition of the current
+      'c->s::chiOPE[1^-_T]' :
+          central:  2.36e-02
+          min:      2.36e-02
+          max:      2.36e-02
+          latex:    '$\chi_T^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'c->s::chiOPE[1^+_T5]' :
+          central:  1.89e-02
+          min:      1.89e-02
+          max:      1.89e-02
+          latex:    '$\chi_{T_5}^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+  # }}}
+
   # Parameters in D -> P Form Factor Parametrizations
   # {{{
   - title: 'Parameters in $D\to P$ Form Factor Parametrizations'
@@ -3831,6 +3894,29 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
+      # form factor parameters for D->K for [BFW:2010A] parametrization
+      'D->K::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,D \to K,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'D->K::tp@BFW2010' :
+          central:  5.56488
+          min:      5.56488
+          max:      5.56488
+          latex:    '$t_+^{D\to K^*}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV'
+      'D->K::t0@BFW2010' :
+          central:  1.04
+          min:      1.04
+          max:      1.04
+          latex:   '$t_0^{D\to K}$'
+          unit:     'GeV'
       # form factor parameters for D->K inspired by [BSZ:2015A]
       'D->K::alpha^%1%_%2%@BSZ2015' :
           central:  0.0
@@ -4081,6 +4167,23 @@ groups:
           max:     +0.000
           unit:     '1'
           latex:    '$a_{\perp,2}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
+          comments: ''
+      # form factor parameters for Lambda_c -> Lambda decays in the DM2016 parametrization
+      'Lambda_c->Lambda::a_%3%_%1%^%2%@DM2016':
+          central: -0.0
+          min:     -2.0
+          max:     +2.0
+          unit:     '1'
+          latex:
+            template: '$a_{%1%,%3%}^{%2%,\Lambda_c \to \Lambda ,\mathrm{DM2016}}$'
+            map:
+                'time': 't'
+                'perp': '\perp'
+                'long': '0'
+          matrix:
+            - ["time", "long", "perp"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3]
           comments: ''
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [BMRvD:2022A]
@@ -4418,6 +4521,39 @@ groups:
           max:     +1.0
           unit:     '1'
           latex:    '$a_4^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      # form factor parameters for Lambda_c -> Lambda decays according to
+      # [BMRvD:2022A]
+      'Lambda_c->Lambda::tp_a@BMRvD2022' :
+          central:  6.26
+          min:      6.26
+          max:      6.26
+          latex:    '$t_+^{A, \Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comment:  '(mD + mK + mpi)^2'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::tp_v@BMRvD2022' :
+          central:  5.6027
+          min:      5.6027
+          max:      5.6027
+          latex:    '$t_+^{V, \Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comment:  '(mD + mK)^2'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::t0@BMRvD2022' :
+          central:  3.
+          min:      3.
+          max:      3.
+          latex:    '$t_0^{\Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::a^(%1%,%2%)_%3%@BMRvD2022':
+          central: -0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to\Lambda, \mathrm{BMRvD2022}}$'
+          matrix:
+            - ["t", "0", "perp"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3, 4]
           comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
       # [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.

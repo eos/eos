@@ -101,7 +101,7 @@ namespace eos
                 }
             }
 
-            if (correction_small)
+            if (correction_small || n >= 1 << 10)
             {
                 return Q2 - correction;
             }

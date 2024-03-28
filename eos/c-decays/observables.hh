@@ -1,7 +1,7 @@
-/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+/* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2023 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,19 +17,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/parametric-bfw2010-impl.hh>
+#ifndef EOS_GUARD_EOS_C_DECAYS_OBSERVABLES_HH
+#define EOS_GUARD_EOS_C_DECAYS_OBSERVABLES_HH 1
+
+#include <eos/observable-fwd.hh>
 
 namespace eos
 {
-
-    // b -> s
-    template class BFW2010FormFactors<BToK, PToP>;
-    template class BFW2010FormFactors<BToKstar, PToV>;
-    template class BFW2010FormFactors<BsToPhi, PToV>;
-
-    // b -> u
-    template class BFW2010FormFactors<BsToK, PToP>;
-
-    // c -> s
-    template class BFW2010FormFactors<DToK, PToP>;
+    ObservableSection make_c_decays_section();
 }
+
+#endif

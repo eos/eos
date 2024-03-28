@@ -49,6 +49,7 @@ namespace eos
             struct CBLNu;
             struct UBLNu;
             struct SBNuNu;
+            struct SCNuL;
             struct DBCU;
             struct SBCU;
         }
@@ -173,6 +174,16 @@ namespace eos
     };
 
     /*!
+     * Base class for the scnul component of models.
+     */
+    template <> class ModelComponent<components::WET::SCNuL>
+    {
+        public:
+            /* scnul Wilson coefficients */
+            virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    /*!
      * Base class for all models.
      */
     class Model :
@@ -185,7 +196,8 @@ namespace eos
         public virtual ModelComponent<components::WET::CBLNu>,
         public virtual ModelComponent<components::WET::SBNuNu>,
         public virtual ModelComponent<components::WET::SBCU>,
-        public virtual ModelComponent<components::WET::DBCU>
+        public virtual ModelComponent<components::WET::DBCU>,
+        public virtual ModelComponent<components::WET::SCNuL>
     {
         public:
             virtual ~Model() = 0;

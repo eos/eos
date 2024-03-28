@@ -422,6 +422,7 @@ AC_CONFIG_FILES([Makefile
 	debian/Makefile
 	eos/Makefile
 	eos/b-decays/Makefile
+	eos/c-decays/Makefile
 	eos/constraints/Makefile
 	eos/form-factors/Makefile
 	eos/maths/Makefile

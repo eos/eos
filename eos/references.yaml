@@ -934,6 +934,14 @@ DDHLMSW:2019A:
     id: oai:arXiv.org:1907.01025
   inspire-id: Dowdall:2019bea
   title: Neutral B-meson mixing from full lattice QCD at the physical point
+DDKL:2013A:
+  authors: Donald, G.C. and Davies, C.T.H. and Koponen, J. and Lepage, G.P.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1312.5264
+  inspire-id: Donald:2013sra
+  title: Prediction of the $D_s^*$ width from a calculation of its radiative decay in full lattice QCD
 DDS:2014A:
   authors: Datta, A. and Duraisamy, M. and Sharma, P
   eprint:
@@ -1032,7 +1040,23 @@ ETM:2017A:
     archive: arXiv
     id: oai:arXiv.org:1707.04529
   inspire-id: Lubicz:2017asp
-  title: Masses and decay constants of D*$_{(s)}$ and B*$_{(s)}$ mesons with N$_f = 2 + 1 + 1$ twisted mass fermions
+  title: Masses and decay constants of $D^*_{(s)}$ and $B^*_{(s)}$ mesons with $N_f = 2 + 1 + 1$ twisted mass fermions
+ETM:2017B:
+  authors: Lubicz, V. and Riggio, L. and Salerno, G. and Simula, S. and Tarantino, C.
+  collaboration: ETM
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1706.03017
+  inspire-id: Lubicz:2017syv
+  title: Scalar and vector form factors of $D \to \pi(K) \ell \nu$ decays with $N_f=2+1+1$ twisted fermions
+ETM:2018A:
+  authors: Lubicz, V. and Riggio, L. and Salerno, G. and Simula, S. and Tarantino, C.
+  collaboration: ETM
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1803.04807
+  inspire-id: Lubicz:2018rfs
+  title: Tensor form factor of $D \to \pi(K) \ell \nu$ and $D \to \pi(K) \ell \ell$ decays with $N_f=2+1+1$ twisted-mass fermions
 F:2012A:
   authors: Fleischer, Robert
   eprint:
@@ -1303,6 +1327,14 @@ HPQCD:2017A:
   inspire-id: Harrison:2017fmw
   title: Lattice QCD calculation of the ${{B}_{(s)}\to D_{(s)}^{*}\ell{\nu}}$ form
     factors at zero recoil and implications for ${|V_{cb}|}$
+HPQCD:2021A:
+  authors: Chakraborty, Bipasha and Parrott, W. G. and Bouchard, C. and Davies, C. T. H. and Koponen, J. and Lepage, G. P.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2104.09883
+  inspire-id: Chakraborty:2021qav
+  title: Improved $V_{cs}$ determination using precise lattice QCD form factors for $D \to K \ell \nu$
 HPQCD:2022A:
   authors: Parrott, W. G. and Bouchard, C. and Davies, C. T. H.
   collaboration: HPQCD
@@ -1749,6 +1781,13 @@ PDG:2020A:
 PS:1997A:
   authors: Peskin, M. and Schroeder, D.
   title: An Introduction to Quantum Field Theory
+PS:2023A:
+  authors: Plakias, I. and Sumensari, O.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2312.14070
+  inspire-id: Plakias:2023esq
+  title: Lepton Flavor Violation in Semileptonic Observables
 PZ:2021A:
   authors: Pullin, B. and Zwicky, R.
   journal: JHEP 09 (2021) 023

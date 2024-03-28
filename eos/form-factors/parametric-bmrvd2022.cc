@@ -24,4 +24,5 @@
 namespace eos
 {
     template class BMRvD2022FormFactors<LambdaBToLambda>;
+    template class BMRvD2022FormFactors<LambdaCToLambda>;
 }
