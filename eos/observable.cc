@@ -24,6 +24,7 @@
 #include <eos/b-decays/observables.hh>
 #include <eos/rare-b-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/nonleptonic-amplitudes/observables.hh>
 #include <eos/nonlocal-form-factors/observables.hh>
 #include <eos/meson-mixing/observables.hh>
 #include <eos/scattering/observables.hh>
@@ -53,6 +54,7 @@ namespace eos
         std::vector<std::function<ObservableSection ()>> section_makers = {
             make_form_factors_section,
             make_nonlocal_form_factors_section,
+            make_nonleptonic_amplitudes_section,
             make_b_decays_section,
             make_rare_b_decays_section,
             make_meson_mixing_section,
@@ -126,6 +128,7 @@ namespace eos
                     make_b_decays_section(),
                     make_rare_b_decays_section(),
                     make_meson_mixing_section(),
+                    make_nonleptonic_amplitudes_section(),
                     make_nonlocal_form_factors_section(),
                     make_form_factors_section(),
                     make_scattering_section()

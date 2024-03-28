@@ -180,6 +180,17 @@ namespace eos
             QuarkFlavor value() const;
             const std::string & str() const;
     };
+
+    class LightMesonOption :
+        public SpecifiedOption
+    {
+        public:
+            LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "pi^0");
+            ~LightMesonOption();
+
+            LightMeson value() const;
+            const std::string & str() const;
+    };
 }
 
 #endif
