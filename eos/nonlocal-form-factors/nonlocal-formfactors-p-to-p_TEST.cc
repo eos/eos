@@ -56,7 +56,7 @@ class NonlocalFormFactorGvDV2020Test :
 
                 Options o = { { "model", "WET" } };
 
-                auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GvDV2020", p, o);
+                auto nff = NonlocalFormFactor<PToP>::make("B->K::GvDV2020", p, o);
 
 
                 auto diagnostics = nff->diagnostics();

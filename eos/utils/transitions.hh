@@ -1,8 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2020 Danny van Dyk
- * Copyright (c) 2019-2020 Nico Gubernari
+ * Copyright (c) 2024 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,20 +17,28 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_NONLOCAL_FORM_FACTORS_NONLOCAL_FORMFACTORS_FWD_HH
-#define EOS_GUARD_EOS_NONLOCAL_FORM_FACTORS_NONLOCAL_FORMFACTORS_FWD_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_TRANSITIONS_HH
+#define EOS_GUARD_EOS_UTILS_TRANSITIONS_HH 1
 
 namespace eos
 {
-    namespace nff
-    {
-        // P -> P
-        struct BToK;
+    /* Mesonic Tags */
 
-        // P -> V
-        struct BToKstar;
-        struct BsToPhi;
-    }
+    struct PToV { };
+    struct PToGamma { };
+    struct PToGammaOffShell { };
+    struct PToP { };
+    struct PToPP { };
+    struct VToP { };
+    struct VToV { };
+
+    /* Baryonic Tags */
+
+    // J=1/2^+ -> J=1/2^+ transitions
+    struct OneHalfPlusToOneHalfPlus { };
+    // J=1/2^+ -> J=1/2^- transitions
+    struct OneHalfPlusToOneHalfMinus { };
+    // J=1/2^+ -> J=3/2^- transitions
+    struct OneHalfPlusToThreeHalfMinus { };
 }
-
 #endif

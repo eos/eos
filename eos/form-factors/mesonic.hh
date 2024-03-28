@@ -29,6 +29,7 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/qualified-name.hh>
+#include <eos/utils/transitions.hh>
 
 #include <map>
 #include <memory>
@@ -36,28 +37,6 @@
 
 namespace eos
 {
-    /* Mesonic Tags */
-
-    /*
-     * P -> V transitions
-     *
-     * P: (Heavy) pseudoscalar meson.
-     * V: Light vector meson.
-     */
-    struct PToV { };
-
-    struct PToGamma { };
-
-    struct PToGammaOffShell { };
-
-    struct PToP { };
-
-    struct PToPP { };
-
-    struct VToP { };
-
-    struct VToV { };
-
     template <>
     class FormFactors<PToV> :
         public virtual ParameterUser

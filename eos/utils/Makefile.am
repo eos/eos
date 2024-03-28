@@ -56,6 +56,7 @@ libeosutils_la_SOURCES = \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
+	transitions.hh \
 	tuple-maker.hh \
 	type-list.hh type-list-fwd.hh \
 	units.cc units.hh \
@@ -112,6 +113,7 @@ include_eos_utils_HEADERS = \
 	thread.hh \
 	thread_pool.hh \
 	ticket.hh \
+	transitions.hh \
 	tuple-maker.hh \
 	units.hh \
 	verify.hh \

@@ -49,7 +49,7 @@ namespace eos
     namespace nff_p_to_p
     {
         class Naive :
-            public NonlocalFormFactor<nff::PToP>
+            public NonlocalFormFactor<PToP>
         {
             public:
                 Naive(const Parameters &, const Options &)
@@ -123,9 +123,9 @@ namespace eos
                     return 0.0;
                 }
 
-                static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
                 {
-                    return NonlocalFormFactorPtr<nff::PToP>(new Naive(p, o));
+                    return NonlocalFormFactorPtr<PToP>(new Naive(p, o));
                 }
 
                 virtual Diagnostics diagnostics() const
@@ -139,7 +139,7 @@ namespace eos
          */
         template <typename Process_>
         class GvDV2020 :
-            public NonlocalFormFactor<nff::PToP>
+            public NonlocalFormFactor<PToP>
         {
             public:
                 std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -468,9 +468,9 @@ namespace eos
                     return 0.0;
                 }
 
-                static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
                 {
-                    return NonlocalFormFactorPtr<nff::PToP>(new GvDV2020<Process_>(p, o));
+                    return NonlocalFormFactorPtr<PToP>(new GvDV2020<Process_>(p, o));
                 }
 
                 virtual Diagnostics diagnostics() const
@@ -508,7 +508,7 @@ namespace eos
          */
         template <typename Process_>
         class GRvDV2022order5 :
-            public NonlocalFormFactor<nff::PToP>
+            public NonlocalFormFactor<PToP>
         {
             public:
                 std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -901,9 +901,9 @@ namespace eos
                     }
                 }
 
-                static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
                 {
-                    return NonlocalFormFactorPtr<nff::PToP>(new GRvDV2022order5<Process_>(p, o));
+                    return NonlocalFormFactorPtr<PToP>(new GRvDV2022order5<Process_>(p, o));
                 }
 
                 virtual Diagnostics diagnostics() const
@@ -920,7 +920,7 @@ namespace eos
          */
         template <typename Process_>
         class GRvDV2022order6 :
-            public NonlocalFormFactor<nff::PToP>
+            public NonlocalFormFactor<PToP>
         {
             public:
                 std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -1324,9 +1324,9 @@ namespace eos
                     }
                 }
 
-                static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
                 {
-                    return NonlocalFormFactorPtr<nff::PToP>(new GRvDV2022order6<Process_>(p, o));
+                    return NonlocalFormFactorPtr<PToP>(new GRvDV2022order6<Process_>(p, o));
                 }
 
                 virtual Diagnostics diagnostics() const
@@ -1339,11 +1339,11 @@ namespace eos
 
     }
 
-    NonlocalFormFactorPtr<nff::PToP>
-    NonlocalFormFactor<nff::PToP>::make(const QualifiedName & name, const Parameters & p, const Options & o)
+    NonlocalFormFactorPtr<PToP>
+    NonlocalFormFactor<PToP>::make(const QualifiedName & name, const Parameters & p, const Options & o)
     {
         typedef QualifiedName KeyType;
-        typedef std::function<NonlocalFormFactorPtr<nff::PToP> (const Parameters &, const Options &)> ValueType;
+        typedef std::function<NonlocalFormFactorPtr<PToP> (const Parameters &, const Options &)> ValueType;
         std::map<KeyType, ValueType> entries
         {
             // trivial
@@ -1357,22 +1357,22 @@ namespace eos
         auto i = entries.find(name);
         if (entries.end() == i)
         {
-            return NonlocalFormFactorPtr<nff::PToP>(nullptr);
+            return NonlocalFormFactorPtr<PToP>(nullptr);
         }
 
         return i->second(p, o);
     }
 
     template <typename Process_>
-    struct Implementation<NonlocalFormFactorObservable<Process_, nff::PToP>>
+    struct Implementation<NonlocalFormFactorObservable<Process_, PToP>>
     {
         NameOption opt_formfactor;
-        NonlocalFormFactorPtr<nff::PToP> nff;
+        NonlocalFormFactorPtr<PToP> nff;
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_formfactor(o, "nonlocal-formfactor", qnp::Name("GvDV2020")),
-            nff(NonlocalFormFactor<nff::PToP>::make(QualifiedName(qnp::Prefix(Process_::label), opt_formfactor.value()), p, o))
+            nff(NonlocalFormFactor<PToP>::make(QualifiedName(qnp::Prefix(Process_::label), opt_formfactor.value()), p, o))
         {
             u.uses(*nff);
         }
@@ -1381,114 +1381,114 @@ namespace eos
     };
 
     template <typename Process_>
-    NonlocalFormFactorObservable<Process_, nff::PToP>::NonlocalFormFactorObservable(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, nff::PToP>>(new Implementation<NonlocalFormFactorObservable<Process_, nff::PToP>>(p, o, *this))
+    NonlocalFormFactorObservable<Process_, PToP>::NonlocalFormFactorObservable(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToP>>(new Implementation<NonlocalFormFactorObservable<Process_, PToP>>(p, o, *this))
     {
     }
 
     template <typename Process_>
-    NonlocalFormFactorObservable<Process_, nff::PToP>::~NonlocalFormFactorObservable() = default;
+    NonlocalFormFactorObservable<Process_, PToP>::~NonlocalFormFactorObservable() = default;
 
     template <typename Process_>
     const std::vector<OptionSpecification>
-    Implementation<NonlocalFormFactorObservable<Process_, nff::PToP>>::options
+    Implementation<NonlocalFormFactorObservable<Process_, PToP>>::options
     {
     };
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::re_H_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::re_H_plus(const double & q2) const
     {
         return real(this->_imp->nff->H_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::im_H_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::im_H_plus(const double & q2) const
     {
         return imag(this->_imp->nff->H_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::abs_H_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::abs_H_plus(const double & q2) const
     {
         return abs(this->_imp->nff->H_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::re_Hhat_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::re_Hhat_plus(const double & q2) const
     {
         return real(this->_imp->nff->Hhat_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::im_Hhat_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::im_Hhat_plus(const double & q2) const
     {
         return imag(this->_imp->nff->Hhat_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::abs_Hhat_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::abs_Hhat_plus(const double & q2) const
     {
         return abs(this->_imp->nff->Hhat_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::re_ratio_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::re_ratio_plus(const double & q2) const
     {
         return real(this->_imp->nff->ratio_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::im_ratio_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::im_ratio_plus(const double & q2) const
     {
         return imag(this->_imp->nff->ratio_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::abs_ratio_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::abs_ratio_plus(const double & q2) const
     {
         return abs(this->_imp->nff->ratio_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::abs_P_ratio_plus(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::abs_P_ratio_plus(const double & q2) const
     {
         return abs(this->_imp->nff->P_ratio_plus(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::re_ratio_plus_complex(const double & re_q2, const double & im_q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::re_ratio_plus_complex(const double & re_q2, const double & im_q2) const
     {
         return real(this->_imp->nff->ratio_plus(complex<double>(re_q2, im_q2)));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::im_ratio_plus_complex(const double & re_q2, const double & im_q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::im_ratio_plus_complex(const double & re_q2, const double & im_q2) const
     {
         return imag(this->_imp->nff->ratio_plus(complex<double>(re_q2, im_q2)));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::re_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::re_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const
     {
         return real(this->_imp->nff->F_ratio_plus(complex<double>(re_q2, im_q2)));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::im_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::im_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const
     {
         return imag(this->_imp->nff->F_ratio_plus(complex<double>(re_q2, im_q2)));
     }
@@ -1496,63 +1496,63 @@ namespace eos
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::get_real_alpha(const unsigned & i) const
+    NonlocalFormFactorObservable<Process_, PToP>::get_real_alpha(const unsigned & i) const
     {
         return real(this->_imp->nff->get_orthonormal_coefficients(i));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::get_imag_alpha(const unsigned & i) const
+    NonlocalFormFactorObservable<Process_, PToP>::get_imag_alpha(const unsigned & i) const
     {
         return imag(this->_imp->nff->get_orthonormal_coefficients(i));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::weak_bound() const
+    NonlocalFormFactorObservable<Process_, PToP>::weak_bound() const
     {
         return this->_imp->nff->weak_bound();
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::weak_bound_log_likelihood() const
+    NonlocalFormFactorObservable<Process_, PToP>::weak_bound_log_likelihood() const
     {
         return this->_imp->nff->weak_bound_log_likelihood();
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::strong_bound() const
+    NonlocalFormFactorObservable<Process_, PToP>::strong_bound() const
     {
         return this->_imp->nff->strong_bound();
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::strong_bound_log_likelihood() const
+    NonlocalFormFactorObservable<Process_, PToP>::strong_bound_log_likelihood() const
     {
         return this->_imp->nff->strong_bound_log_likelihood();
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::re_normalized_moment_A(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::re_normalized_moment_A(const double & q2) const
     {
         return real(this->_imp->nff->normalized_moment_A(q2));
     }
 
     template <typename Process_>
     double
-    NonlocalFormFactorObservable<Process_, nff::PToP>::im_normalized_moment_A(const double & q2) const
+    NonlocalFormFactorObservable<Process_, PToP>::im_normalized_moment_A(const double & q2) const
     {
         return imag(this->_imp->nff->normalized_moment_A(q2));
     }
 
     template <typename Process_>
     const std::set<ReferenceName>
-    NonlocalFormFactorObservable<Process_, nff::PToP>::references
+    NonlocalFormFactorObservable<Process_, PToP>::references
     {
         "GvDV:2020A"_rn,
         "GRvDV:2022A"_rn,
@@ -1560,17 +1560,17 @@ namespace eos
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
-    NonlocalFormFactorObservable<Process_, nff::PToP>::begin_options()
+    NonlocalFormFactorObservable<Process_, PToP>::begin_options()
     {
-        return Implementation<NonlocalFormFactorObservable<Process_, nff::PToP>>::options.cbegin();
+        return Implementation<NonlocalFormFactorObservable<Process_, PToP>>::options.cbegin();
     }
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
-    NonlocalFormFactorObservable<Process_, nff::PToP>::end_options()
+    NonlocalFormFactorObservable<Process_, PToP>::end_options()
     {
-        return Implementation<NonlocalFormFactorObservable<Process_, nff::PToP>>::options.cend();
+        return Implementation<NonlocalFormFactorObservable<Process_, PToP>>::options.cend();
     }
 
-    template class NonlocalFormFactorObservable<nff::BToK, nff::PToP>;
+    template class NonlocalFormFactorObservable<nff::BToK, PToP>;
 }

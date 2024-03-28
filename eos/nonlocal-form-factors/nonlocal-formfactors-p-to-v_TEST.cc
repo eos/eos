@@ -71,7 +71,7 @@ class NonlocalFormFactorGvDV2020Test :
                     { "q", "d" }
                 };
 
-                auto nff = NonlocalFormFactor<nff::PToV>::make("B->K^*::GvDV2020", p, o);
+                auto nff = NonlocalFormFactor<PToV>::make("B->K^*::GvDV2020", p, o);
 
 
                 auto diagnostics = nff->diagnostics();

@@ -43,7 +43,7 @@ namespace eos
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"),
         opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
-        nonlocal_formfactor(NonlocalFormFactor<nff::PToV>::make("B->K^*::" + opt_nonlocal_formfactor.value(), p, o))
+        nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B->K^*::" + opt_nonlocal_formfactor.value(), p, o))
     {
         Context ctx("When constructing B->K^*ll GVdV2020 amplitudes");
     }

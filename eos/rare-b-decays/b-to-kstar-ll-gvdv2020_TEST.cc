@@ -224,7 +224,7 @@ class BToKstarDileptonJavierTest :
             static const double eps = 1e-5;
             static const double q2 = 1.0;
 
-            auto nff = NonlocalFormFactor<nff::PToV>::make("B->K^*::GvDV2020", p, oo);
+            auto nff = NonlocalFormFactor<PToV>::make("B->K^*::GvDV2020", p, oo);
             TEST_CHECK_NEARLY_EQUAL(real(nff->H_perp(q2)),  0.0063082395,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_perp(q2)),  0.,            eps);
             TEST_CHECK_NEARLY_EQUAL(real(nff->H_para(q2)),  0.0063082395,  eps);
@@ -370,7 +370,7 @@ class BToKstarDileptonJavierGRvDV2022Test :
             static const double eps = 5e-4;
             static const double q2 = 1.0;
 
-            auto nff = NonlocalFormFactor<nff::PToV>::make("B->K^*::GRvDV2022order5", p, oo);
+            auto nff = NonlocalFormFactor<PToV>::make("B->K^*::GRvDV2022order5", p, oo);
             TEST_CHECK_RELATIVE_ERROR(real(nff->Hhat_perp(q2)),  0.000159636,   eps);
             TEST_CHECK_RELATIVE_ERROR(imag(nff->Hhat_perp(q2)),  0.0000113099,  eps);
             TEST_CHECK_RELATIVE_ERROR(real(nff->H_perp(q2)),     0.000115032,   eps);
