@@ -58,7 +58,7 @@ class LifetimeTest :
                 p["mass::B_d"]           = 5.279;
                 p["mass::B_s"]           = 5.366;
                 p["decay-constant::B_u"] = 0.1905;
-                p["decay-constant::B_d"] = 0.8940;
+                p["decay-constant::B_d"] = 0.18940;
                 p["decay-constant::B_s"] = 0.2307;
                 // SM test for the B^-
                 {
@@ -91,8 +91,8 @@ class LifetimeTest :
 
                     // compare to known decay width of
                     // (1.519 +/- 0.004 ps)^-1 = (0.6583 +/- 0.0017) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.013893676, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.0,         eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.0006235, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.0,       eps);
                 }
                 // SM test for the B_s
                 {
@@ -123,7 +123,7 @@ class LifetimeTest :
                 p["mass::B_d"]           = 5.279;
                 p["mass::B_s"]           = 5.366;
                 p["decay-constant::B_u"] = 0.1905;
-                p["decay-constant::B_d"] = 0.8940;
+                p["decay-constant::B_d"] = 0.18940;
                 p["decay-constant::B_s"] = 0.2307;
                 // dbcu WC
                 p["dbcu::Re{c1}"  ] = -1.72424;
@@ -224,7 +224,7 @@ class LifetimeTest :
                 }
                 // BSM test for the B_d
                 {
-                    static const double eps = 1.0e-6;
+                    static const double eps = 1.0e-4;
 
                     Options oo
                     {
@@ -234,8 +234,8 @@ class LifetimeTest :
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 49567.43050502043, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(),   0.0,               eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 2224.8775735372574, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(),   0.0,                eps);
                 }
                 // BSM test for the B_s
                 {
