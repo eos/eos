@@ -50,5 +50,7 @@ def print_template(rst_py__file__, **kwargs):
 qn_to_link_map = {
     ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
     ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
-    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as'
+    ord('>'): 'to', ord('^'): 'ca', ord('*'): 'as', ord('['): 'so',
+    ord(']'): 'sc', ord('{'): 'bo', ord('}'): 'bc', ord('\''): 'pr',
+    ord(','): 'cm'
 }
