@@ -282,7 +282,7 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbnunu Wilson coefficients */
+            /* sbcu Wilson coefficients */
             virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
     };
 
@@ -298,8 +298,24 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbnunu Wilson coefficients */
+            /* dbcu Wilson coefficients */
             virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
+    };
+
+    template <>
+    class WilsonScanComponent<components::WET::SB> :
+    public virtual ModelComponent<components::WET::SB>
+    {
+        private:
+            /* sbcc Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcc_parameters;
+
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* sbcc Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjugate) const;
     };
 
     /*!
@@ -316,7 +332,8 @@ namespace eos
         public WilsonScanComponent<components::WET::CBLNu>,
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
-        public WilsonScanComponent<components::WET::DBCU>
+        public WilsonScanComponent<components::WET::DBCU>,
+        public WilsonScanComponent<components::WET::SB>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -349,7 +366,8 @@ namespace eos
         public WilsonScanComponent<components::WET::CBLNu>,
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
-        public WilsonScanComponent<components::WET::DBCU>
+        public WilsonScanComponent<components::WET::DBCU>,
+        public WilsonScanComponent<components::WET::SB>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

@@ -37,6 +37,11 @@ namespace eos
     {
         struct ClassII {};  // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
         struct ClassIII {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
+        namespace ClassVhadronic
+        {
+            struct full {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators sbqq (q=u,d,c), cf. [AFGB:2017A], eq. (2.10)-(2.11), p. 8.
+            struct restricted {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators, sbqq (q=s,b) cf. [AFGB:2017A], eq. (2.10)-(2.12), p. 8.
+        }
     }
 
     using ChargedCurrent = bern::ClassII;
@@ -88,6 +93,59 @@ namespace eos
         inline complex<double> c8p()  const { return _primed[7]; }
         inline complex<double> c9p()  const { return _primed[8]; }
         inline complex<double> c10p() const { return _primed[9]; }
+    };
+
+    template <> struct WilsonCoefficients<bern::ClassVhadronic::full>
+    {
+        /*
+         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.11).
+         * This class applies to sbqq operators for q=u,d,c.
+        */
+        std::array<complex<double>, 10> _unprimed, _primed;
+
+        inline complex<double> c1()   const { return _unprimed[0]; }
+        inline complex<double> c2()   const { return _unprimed[1]; }
+        inline complex<double> c3()   const { return _unprimed[2]; }
+        inline complex<double> c4()   const { return _unprimed[3]; }
+        inline complex<double> c5()   const { return _unprimed[4]; }
+        inline complex<double> c6()   const { return _unprimed[5]; }
+        inline complex<double> c7()   const { return _unprimed[6]; }
+        inline complex<double> c8()   const { return _unprimed[7]; }
+        inline complex<double> c9()   const { return _unprimed[8]; }
+        inline complex<double> c10()  const { return _unprimed[9]; }
+
+        inline complex<double> c1p()  const { return _primed[0]; }
+        inline complex<double> c2p()  const { return _primed[1]; }
+        inline complex<double> c3p()  const { return _primed[2]; }
+        inline complex<double> c4p()  const { return _primed[3]; }
+        inline complex<double> c5p()  const { return _primed[4]; }
+        inline complex<double> c6p()  const { return _primed[5]; }
+        inline complex<double> c7p()  const { return _primed[6]; }
+        inline complex<double> c8p()  const { return _primed[7]; }
+        inline complex<double> c9p()  const { return _primed[8]; }
+        inline complex<double> c10p() const { return _primed[9]; }
+    };
+
+    template <> struct WilsonCoefficients<bern::ClassVhadronic::restricted>
+    {
+        /*
+         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.12).
+         * This class applies to sbqq operators for q=s,b.
+         * Note that the operators are defined differently between sbss and sbbb.
+        */
+        std::array<complex<double>, 5> _unprimed, _primed;
+
+        inline complex<double> c1()   const { return _unprimed[0]; }
+        inline complex<double> c3()   const { return _unprimed[2]; }
+        inline complex<double> c5()   const { return _unprimed[4]; }
+        inline complex<double> c7()   const { return _unprimed[6]; }
+        inline complex<double> c9()   const { return _unprimed[8]; }
+
+        inline complex<double> c1p()  const { return _primed[0]; }
+        inline complex<double> c3p()  const { return _primed[2]; }
+        inline complex<double> c5p()  const { return _primed[4]; }
+        inline complex<double> c7p()  const { return _primed[6]; }
+        inline complex<double> c9p()  const { return _primed[8]; }
     };
 
     struct BToS {};
@@ -167,6 +225,7 @@ namespace eos
         struct SBSB {};
         struct SBNuNu {};
         struct SBCU {};
+        struct SBCC {};
     }
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
@@ -263,6 +322,15 @@ namespace eos
         /*
          * Normalisation:
          * H^eff = 4 G_F / sqrt(2) V_cb V_us^* \sum C_i O_i
+         */
+    };
+
+    template <> struct WilsonCoefficients<wc::SBCC> :
+        public WilsonCoefficients<bern::ClassVhadronic::full>
+    {
+        /*
+         * Normalisation:
+         * H^eff = 4 G_F / sqrt(2) V_cb V_cs^* \sum C_i O_i
          */
     };
 
