@@ -47,7 +47,7 @@ const fetchClosedPulls = async () => {
 
 	try
 	{
-		const query = `repo:${REPO} is:pull state:closed updated:${last}..${current}`;
+		const query = `repo:${REPO} is:pr state:closed updated:${last}..${current}`;
 
 		const queryResult = await octokit.rest.search.issuesAndPullRequests({q: query});
 
@@ -89,7 +89,7 @@ const fetchOpenedPulls = async () => {
 
 	try
 	{
-		const query = `repo:${REPO} is:pull state:open created:${last}..${current}`;
+		const query = `repo:${REPO} is:pr state:open created:${last}..${current}`;
 
 		const queryResult = await octokit.rest.search.issuesAndPullRequests({q: query});
 

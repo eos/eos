@@ -15,7 +15,7 @@ None
 
 {% if closedPulls.length > 0 %}
 {% for pull in closedPulls %}
-- [{{ pull.number }}](https://github.com/eos/eos/pulls/{{ pulls.number }}): {{ issue.title }}<br/>
+- [{{ pull.number }}](https://github.com/eos/eos/pulls/{{ pull.number }}): {{ pull.title }}<br/>
 
 {% endfor %}
 {% else %}
@@ -33,11 +33,11 @@ None
 None
 {% endif %}
 
-### Issues opened since the last meeting ###
+### PRs opened since the last meeting ###
 
 {% if openedPulls.length > 0 %}
 {% for pull in openedPulls %}
-- [{{ pull.number }}](https://github.com/eos/eos/pulls/{{ pulls.number }}): {{ issue.title }}<br/>
+- [{{ pull.number }}](https://github.com/eos/eos/pulls/{{ pull.number }}): {{ pull.title }}<br/>
 
 {% endfor %}
 {% else %}
