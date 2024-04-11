@@ -1,0 +1,17 @@
+on:
+  schedule:
+    - cron: '5 8 * * TUE'
+
+name: Trigger the build of weekly development releases
+
+jobs:
+    report:
+        runs-on: ubuntu-20.04
+        name: Push ``master`` to ``release``
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v4
+
+            - name: Push ``master`` to ``release``
+              run: |
+                git push origin master:release
