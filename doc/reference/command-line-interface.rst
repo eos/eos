@@ -16,8 +16,8 @@ To circumvent this problem, you can alternatively
   * use EOS on remote workstations or compute clusters via the command-line interface.
 
 Working in the command-line interface requires that all analyses are defined within an analysis file.
-For an example of an analysis file see the corresponding `section in the user guide <user-guide/analysis-file-format-example.html>`_.
-For the description of the file format see the corresponding `section in the reference <reference/analysis-file-format.html>`_.
+For an example of an analysis file see the corresponding `section in the user guide <../user-guide/analysis-organisation.html>`_.
+For the description of the file format see the corresponding `section in the reference <analysis-file-format.html>`_.
 The following provide a documentation of the command-line interface, which is available through a single script called ``eos-analysis``.
 
 .. argparse::
