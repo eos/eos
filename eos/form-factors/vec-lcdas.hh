@@ -60,7 +60,18 @@ namespace eos
             virtual double omega3perp(const double & mu) const = 0;
             virtual double lambda3perp(const double & mu) const = 0;
 
-             /* Twist 4 parameters */
+            /* Twist 3 two particle LCDAs */
+            virtual double phi3para(const double & u, const double & mu) const = 0;
+            virtual double phi3perp(const double & u, const double & mu) const = 0;
+            virtual double psi3para(const double & u, const double & mu) const = 0;
+            virtual double psi3perp(const double & u, const double & mu) const = 0;
+
+            /* Twist 3 three particle LCDAs */
+            virtual double Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+
+            /* Twist 4 parameters */
             virtual double zeta4para(const double & mu) const = 0;
             virtual double omega4paratilde(const double & mu) const = 0;
             virtual double zeta4perp(const double & mu) const = 0;
