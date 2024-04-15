@@ -75,6 +75,17 @@ namespace eos
             double phipara(const double & u, const double & mu) const override;
             double phiperp(const double & u, const double & mu) const override;
 
+            /* Twist 3 two particle LCDAs */
+            virtual double phi3para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            virtual double phi3perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            virtual double psi3para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            virtual double psi3perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+
+            /* Twist 3 three particle LCDAs */
+            double Phi3para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi3paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi3perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
@@ -125,6 +136,17 @@ namespace eos
             /* Twist 2 LCDAs */
             double phipara(const double & u, const double & mu) const override;
             double phiperp(const double & u, const double & mu) const override;
+
+            /* Twist 3 two particle LCDAs */
+            virtual double phi3para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            virtual double phi3perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            virtual double psi3para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            virtual double psi3perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+
+            /* Twist 3 three particle LCDAs */
+            double Phi3para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi3paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi3perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
