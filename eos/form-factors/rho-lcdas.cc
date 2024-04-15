@@ -184,6 +184,29 @@ namespace eos
                 1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) - std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perp_0 +
                 1.0 / 2.0 * (std::pow(c_rge(mu), 49.0 / 9.0) + std::pow(c_rge(mu), 20.0 / 3.0)) * zeta4perptilde_0;
         }
+
+        // inline functions for two particle twist 3 LCDAs (only includes up to a2perp(para) while the leading twist LCDAs are implemented up to a4perp(para))
+        inline double psi3para(const double & u, const double & mu) const
+        {
+            return 6.0 * (1.0 - u) * u * (1.0 + (a2perp(mu) / 6.0 + (5.0 * omega3perp(mu)) / 18.0) * (-1.5 + (15.0 * std::pow(-1.0 + 2.0 * u, 2)) / 2.0));
+        }
+        inline double phi3para(const double & u, const double & mu) const
+        {
+            return 3.0 * std::pow(-1.0 + 2.0 * u, 2) +
+                (3.0 * a2perp(mu) * std::pow(-1.0 + 2.0 * u, 2) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2))) / 2.0 +
+                (5.0 * omega3perp(mu) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) + 35.0 * std::pow(-1.0 + 2.0 * u, 4)))/8.0;
+        }
+        inline double psi3perp(const double & u, const double & mu) const
+        {
+            return 6.0 * (1.0 - u) * u * (1.0 + (-1.5 + (15.0 * std::pow(-1.0 + 2.0 * u, 2)) / 2.0) * (a2para(mu) / 6.0 +
+                (5.0 *omega3para(mu)) / 12.0 - (5.0 * omega3paratilde(mu)) / 24.0 + (10.0 * zeta3para(mu)) / 9.0));
+        }
+        inline double phi3perp(const double & u, const double & mu) const
+        {
+            return (3.0 * (1.0 + std::pow(-1.0 + 2.0 * u, 2))) / 4.0 + ((9.0 * a2para(mu)) / 112.0 + (15.0 * omega3para(mu)) / 32.0 -
+                (15.0 * omega3paratilde(mu)) / 64.0) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) +
+                35.0 * std::pow(-1.0 + 2.0 * u, 4)) + (-1.0 + 3.0 * std::pow(-1.0 + 2.0 * u, 2)) * ((3.0 * a2para(mu)) / 7.0 + 5.0 * zeta3para(mu));
+        }
     };
 
     RhoLCDAs::RhoLCDAs(const Parameters & p, const Options & o) :
@@ -304,6 +327,48 @@ namespace eos
         const double c4 = gp_4_3o2.evaluate(x);
 
         return 6.0 * u * (1.0 - u) * (1.0 + _imp->a2perp(mu) * c2 + _imp->a4perp(mu) * c4);
+    }
+
+    double
+    RhoLCDAs::psi3para(const double & u, const double & mu) const
+    {
+        return _imp->psi3para(u, mu);
+    }
+
+    double
+    RhoLCDAs::phi3para(const double & u, const double & mu) const
+    {
+        return _imp->phi3para(u, mu);
+    }
+
+    double
+    RhoLCDAs::psi3perp(const double & u, const double & mu) const
+    {
+        return _imp->psi3perp(u, mu);
+    }
+
+    double
+    RhoLCDAs::phi3perp(const double & u, const double & mu) const
+    {
+        return _imp->phi3perp(u, mu);
+    }
+
+    double
+    RhoLCDAs::Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * _imp->omega3para(mu) * (u1 - u2);
+    }
+
+    double
+    RhoLCDAs::Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->zeta3para(mu) + _imp->omega3paratilde(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    RhoLCDAs::Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * _imp->omega3perp(mu) * (u1 - u2);
     }
 
     Diagnostics
