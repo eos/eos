@@ -14,8 +14,10 @@ log
 .*.swp
 
 # the following files are generated
-constraints.rst
-observables.rst
-parameters.rst
-references.rst
-api/python.rst
+reference/bibliography.rst
+reference/constraints.rst
+reference/observables.rst
+reference/parameters.rst
+reference/python.rst
+reference/signal-pdfs.rst
+user-guide/CKM-pi/*
