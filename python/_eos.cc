@@ -757,12 +757,12 @@ BOOST_PYTHON_MODULE(_eos)
             Represents an observable or pseudo observable known to EOS.
 
             New observable objects are created using the :meth:`make <eos.Observable.make>` static method.
-            See also `the complete list of observables <../observables.html>`_.
+            See also `the complete list of observables <../reference/observables.html>`_.
         )", no_init)
         .def("make", &Observable::make, return_value_policy<return_by_value>(), R"(
             Makes a new :class:`Observable` object.
 
-            :param name: The name of the observable. See `the complete list of observables <../observables.html>`_.
+            :param name: The name of the observable. See `the complete list of observables <../reference/observables.html>`_.
             :type name: eos.QualifiedName
             :param parameters: The set of parameters to which this observable is bound.
             :type parameters: eos.Parameters
@@ -850,7 +850,7 @@ BOOST_PYTHON_MODULE(_eos)
             Represents a probability density function (PDF) for any of the physics signals known to EOS.
 
             New PDF objects are created using the :meth:`make <eos.SignalPDF.make>` static method.
-            See also `the complete list of PDFs <../signal-pdfs.html>`_.
+            See also `the complete list of PDFs <../reference/signal-pdfs.html>`_.
     )", no_init)
         .def("make", &SignalPDF::make, return_value_policy<return_by_value>()) // docstring is maintained in python/eos/signal_pdf.py
         .staticmethod("make")

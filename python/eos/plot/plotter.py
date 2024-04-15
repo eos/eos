@@ -402,15 +402,15 @@ class Plotter:
         Plotting Observables
         --------------------
 
-        Contents items of type ``observable`` are used to display one of the built-in `observables <../observables.html>`_.
+        Contents items of type ``observable`` are used to display one of the built-in `observables <../reference/observables.html>`_.
         The following keys are mandatory:
 
          * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable that will be plotted.
-           Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
+           Must identify one of the observables known to EOS; see `the complete list of observables <../reference/observables.html>`_.
          * ``range`` (*list* or *tuple* of two *float*) --The tuple of [minimal, maximal] values of the specified kinematic variable
            for which the observable will be evaluated.
          * ``variable`` (*str*) -- The name of the kinematic or parameter variable to which the x axis will be mapped; see
-           `the complete list of parameters <../parameters.html>`_.
+           `the complete list of parameters <../reference/parameters.html>`_.
 
         Example:
 
@@ -535,7 +535,7 @@ class Plotter:
         --------------------------
 
         Contents items of type ``uncertainty`` are used to display uncertainty bands at 68% probability
-        for one of the built-in `observables <../observables.html>`_. This item type requires that either
+        for one of the built-in `observables <../reference/observables.html>`_. This item type requires that either
         a predictive distribution of the observables has been previously produced.
 
         Exactly one of the following keys is mandatory:
@@ -778,17 +778,17 @@ class Plotter:
         Plotting Constraints
         --------------------
 
-        Contents items of type ``constraints`` are used to display one of the built-in `experimental or theoretical constraints <../constraints.html>`_.
+        Contents items of type ``constraints`` are used to display one of the built-in `experimental or theoretical constraints <../reference/constraints.html>`_.
         The following keys are mandatory:
 
          * ``constraints`` (:class:`QualifiedName <eos.QualifiedName>` or iterable thereof) -- The name or the list of names of the constraints
-           that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../constraints.html>`_.
+           that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../reference/constraints.html>`_.
          * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
 
         When plotting multivariate constraints, the following key is also mandatory:
 
          * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable whose constraints will be plotted.
-           Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
+           Must identify one of the observables known to EOS; see `the complete list of observables <../reference/observables.html>`_.
            This is only mandatory in multivariate constraints, since these can constrain more than one observable simultaneously.
 
         The following keys are optional:

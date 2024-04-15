@@ -31,7 +31,7 @@ class Parameters(_Parameters):
     :param suffix: Only show parameters whose qualified names contain the provided ``suffix`` in their suffix part.
     :type suffix: str
 
-    See also `the complete list of parameters <../parameters.html>`_.
+    See also `the complete list of parameters <../reference/parameters.html>`_.
     """
     def __new__(cls, *args, **kwargs):
         instance = _Parameters.Defaults()
