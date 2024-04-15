@@ -32,7 +32,7 @@ class Observables(_Observables):
     :param suffix: Only show observables whose qualified names contain the provided ``suffix`` in their suffix part.
     :type suffix: str
 
-    See also `the complete list of observables <../observables.html>`_ in this documentation.
+    See also `the complete list of observables <../reference/observables.html>`_ in this documentation.
     """
     def __init__(self, prefix=None, name=None, suffix=None, showall=False):
         super().__init__()

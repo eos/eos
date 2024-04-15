@@ -109,7 +109,7 @@ class SignalPDF(_SignalPDF):
         """
         Makes a new :class:`SignalPDF` object.
 
-        :param name: The name of the probability density function (PDF). See `the complete list of PDFs <../signal-pdfs.html>`_.
+        :param name: The name of the probability density function (PDF). See `the complete list of PDFs <../reference/signal-pdfs.html>`_.
         :type name: eos.QualifiedName
         :param parameters: The set of parameters to which this PDF is bound.
         :type parameters: eos.Parameters
@@ -148,7 +148,7 @@ class SignalPDFs(_SignalPDFs):
     :param suffix: Only show observables whose qualified names contain the provided ``suffix`` in their suffix part.
     :type suffix: str
 
-    See also `the complete list of signal PDFs <../signal-pdfs.html>`_ in this documentation.
+    See also `the complete list of signal PDFs <../reference/signal-pdfs.html>`_ in this documentation.
     """
     def __init__(self, prefix=None, name=None, suffix=None, showall=False):
         super().__init__()
