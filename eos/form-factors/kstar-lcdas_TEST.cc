@@ -191,6 +191,160 @@ class AntiKStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(3.0),     -0.0130251,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(4.0),     -0.0116894,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(5.0),     -0.0108369,   eps);
+
+                // two particle LCDAs at scale mu = 1.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.1, 1.0), 0.480777, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.3, 1.0), 0.931977, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.5, 1.0), 1.034104, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.7, 1.0), 1.072796, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.9, 1.0), 0.675659, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.1, 1.0), 1.35473,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.3, 1.0), 0.525137, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.5, 1.0), 0.795833, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.7, 1.0), 0.357182, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.9, 1.0), 1.53821,  eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.1, 1.0), 0.499909, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.3, 1.0), 1.04631,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.5, 1.0), 1.14539,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.7, 1.0), 1.14576,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.9, 1.0), 0.730355, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.1, 1.0), 1.10177,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.3, 1.0), 0.844701, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.5, 1.0), 0.883863, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.7, 1.0), 0.739837, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.9, 1.0), 1.32029,  eps);
+
+                // two particle LCDAs at scale mu = 2.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.1, 2.0), 0.488303, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.3, 2.0), 1.00108,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.5, 2.0), 1.13694,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.7, 2.0), 1.10367,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.9, 2.0), 0.629763, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.1, 2.0), 1.46711,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.3, 2.0), 0.509224, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.5, 2.0), 0.612806, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.7, 2.0), 0.422571, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.9, 2.0), 1.62548,  eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.1, 2.0), 0.507961, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.3, 2.0), 1.10493,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.5, 2.0), 1.25996,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.7, 2.0), 1.18558,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.9, 2.0), 0.662752, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.1, 2.0), 1.13684,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.3, 2.0), 0.84257,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.5, 2.0), 0.835106, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.7, 2.0), 0.79929,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.9, 2.0), 1.29942,  eps);
+
+                // three particle LCDA scale mu = 1.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.1, 0.8, 1.0), -0.0239616, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.3, 0.6, 1.0), -0.0964224, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.5, 0.4, 1.0), -0.112896,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.7, 0.2, 1.0), -0.0540288, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.9, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.1, 0.6, 1.0),  0.0590976, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.3, 0.4, 1.0),  0.0041472, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.5, 0.2, 1.0), -0.029376,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.7, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.1, 0.4, 1.0),  0.117504,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.3, 0.2, 1.0),  0.057024,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.5, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.1, 0.2, 1.0),  0.0669312, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.3, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.0, 0.1, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.1, 0.0, 1.0),  0.0,       eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.1, 0.8, 1.0), -0.156672, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.3, 0.6, 1.0), -0.101088, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.5, 0.4, 1.0),  0.04608,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.7, 0.2, 1.0),  0.058464, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.9, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.1, 0.6, 1.0), -0.046656, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.3, 0.4, 1.0),  0.15552,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.5, 0.2, 1.0),  0.15552,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.7, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.1, 0.4, 1.0),  0.12672,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.3, 0.2, 1.0),  0.18576,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.5, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.1, 0.2, 1.0),  0.1008,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.3, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.0, 0.1, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.1, 0.0, 1.0),  0.0,      eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.1, 0.8, 1.0), -0.067968, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.3, 0.6, 1.0), -0.279936, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.5, 0.4, 1.0), -0.32976,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.7, 0.2, 1.0), -0.158256, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.9, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.1, 0.6, 1.0),  0.186624, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.3, 0.4, 1.0),  0.028512, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.5, 0.2, 1.0), -0.07992,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.7, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.1, 0.4, 1.0),  0.36144,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.3, 0.2, 1.0),  0.17928,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.5, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.1, 0.2, 1.0),  0.204624, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.3, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.0, 0.1, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.1, 0.0, 1.0),  0.0,      eps);
+
+                // three particle LCDA scale mu = 2.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.1, 0.8, 2.0), -0.0160271, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.3, 0.6, 2.0), -0.0652682, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.5, 0.4, 2.0), -0.0766598, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.7, 0.2, 2.0), -0.0367404, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.9, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.1, 0.6, 2.0),  0.0366071, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.3, 0.4, 2.0), -0.0021538, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.5, 0.2, 2.0), -0.0221321, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.7, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.1, 0.4, 2.0),  0.0742666, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.3, 0.2, 2.0),  0.0344653, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.5, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.1, 0.2, 2.0),  0.0424959, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.3, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.0, 0.1, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.1, 0.0, 2.0),  0.0,       eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.1, 0.8, 2.0), -0.072636,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.3, 0.6, 2.0), -0.0383577, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.5, 0.4, 2.0),  0.0339688, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.7, 0.2, 2.0),  0.0337227, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.9, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.1, 0.6, 2.0), -0.0095838, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.3, 0.4, 2.0),  0.0995089, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.5, 0.2, 2.0),  0.0882485, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.7, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.1, 0.4, 2.0),  0.0765967, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.3, 0.2, 2.0),  0.104234,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.5, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.1, 0.2, 2.0),  0.0561024, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.3, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.0, 0.1, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.1, 0.0, 2.0),  0.0,       eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.1, 0.8, 2.0), -0.049339, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.3, 0.6, 2.0), -0.212137, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.5, 0.4, 2.0), -0.252603, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.7, 0.2, 2.0), -0.121824, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.9, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.1, 0.6, 2.0),  0.130711, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.3, 0.4, 2.0),  0.002445, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.5, 0.2, 2.0), -0.070580, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.7, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.1, 0.4, 2.0),  0.25532,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.3, 0.2, 2.0),  0.119891, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.5, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.1, 0.2, 2.0),  0.144836, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.3, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.0, 0.1, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.1, 0.0, 2.0),  0.0,      eps);
             }
 
             /* Twist 4 */
@@ -336,7 +490,7 @@ class KStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 1.0), 0.61207, eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 1.0), 1.13323, eps);
 
-                // phiperp LCDA at various u values for mu = 1.0
+                // phiperp LCDA at various u values for mu = 2.0
                 TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 2.0), 0.54481, eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 2.0), 1.22256, eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 2.0), 1.68102, eps);
@@ -394,6 +548,160 @@ class KStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(3.0),     -0.0130251,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(4.0),     -0.0116894,   eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.lambda3perp(5.0),     -0.0108369,   eps);
+
+                // two particle LCDAs at scale mu = 1.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.1, 1.0), 0.480777, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.3, 1.0), 0.931977, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.5, 1.0), 1.034104, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.7, 1.0), 1.072796, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.9, 1.0), 0.675659, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.1, 1.0), 1.35473,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.3, 1.0), 0.525137, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.5, 1.0), 0.795833, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.7, 1.0), 0.357182, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.9, 1.0), 1.53821,  eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.1, 1.0), 0.499909, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.3, 1.0), 1.04631,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.5, 1.0), 1.14539,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.7, 1.0), 1.14576,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.9, 1.0), 0.730355, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.1, 1.0), 1.10177,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.3, 1.0), 0.844701, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.5, 1.0), 0.883863, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.7, 1.0), 0.739837, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.9, 1.0), 1.32029,  eps);
+
+                // two particle LCDAs at scale mu = 2.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.1, 2.0), 0.488303, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.3, 2.0), 1.00108,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.5, 2.0), 1.13694,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.7, 2.0), 1.10367,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3para(0.9, 2.0), 0.629763, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.1, 2.0), 1.46711,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.3, 2.0), 0.509224, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.5, 2.0), 0.612806, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.7, 2.0), 0.422571, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3para(0.9, 2.0), 1.62548,  eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.1, 2.0), 0.507961, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.3, 2.0), 1.10493,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.5, 2.0), 1.25996,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.7, 2.0), 1.18558,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi3perp(0.9, 2.0), 0.662752, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.1, 2.0), 1.13684,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.3, 2.0), 0.84257,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.5, 2.0), 0.835106, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.7, 2.0), 0.79929,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi3perp(0.9, 2.0), 1.29942,  eps);
+
+                // three particle LCDA scale mu = 1.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.1, 0.8, 1.0), -0.0239616, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.3, 0.6, 1.0), -0.0964224, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.5, 0.4, 1.0), -0.112896,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.7, 0.2, 1.0), -0.0540288, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.9, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.1, 0.6, 1.0),  0.0590976, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.3, 0.4, 1.0),  0.0041472, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.5, 0.2, 1.0), -0.029376,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.7, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.1, 0.4, 1.0),  0.117504,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.3, 0.2, 1.0),  0.057024,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.5, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.1, 0.2, 1.0),  0.0669312, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.3, 0.0, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.0, 0.1, 1.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.1, 0.0, 1.0),  0.0,       eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.1, 0.8, 1.0), -0.156672, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.3, 0.6, 1.0), -0.101088, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.5, 0.4, 1.0),  0.04608,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.7, 0.2, 1.0),  0.058464, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.9, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.1, 0.6, 1.0), -0.046656, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.3, 0.4, 1.0),  0.15552,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.5, 0.2, 1.0),  0.15552,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.7, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.1, 0.4, 1.0),  0.12672,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.3, 0.2, 1.0),  0.18576,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.5, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.1, 0.2, 1.0),  0.1008,   eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.3, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.0, 0.1, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.1, 0.0, 1.0),  0.0,      eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.1, 0.8, 1.0), -0.067968, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.3, 0.6, 1.0), -0.279936, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.5, 0.4, 1.0), -0.32976,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.7, 0.2, 1.0), -0.158256, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.9, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.1, 0.6, 1.0),  0.186624, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.3, 0.4, 1.0),  0.028512, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.5, 0.2, 1.0), -0.07992,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.7, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.1, 0.4, 1.0),  0.36144,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.3, 0.2, 1.0),  0.17928,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.5, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.1, 0.2, 1.0),  0.204624, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.3, 0.0, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.0, 0.1, 1.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.1, 0.0, 1.0),  0.0,      eps);
+
+                // three particle LCDA scale mu = 2.0 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.1, 0.8, 2.0), -0.0160271, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.3, 0.6, 2.0), -0.0652682, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.5, 0.4, 2.0), -0.0766598, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.7, 0.2, 2.0), -0.0367404, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.1, 0.9, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.1, 0.6, 2.0),  0.0366071, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.3, 0.4, 2.0), -0.0021538, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.5, 0.2, 2.0), -0.0221321, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.3, 0.7, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.1, 0.4, 2.0),  0.0742666, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.3, 0.2, 2.0),  0.0344653, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.5, 0.5, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.1, 0.2, 2.0),  0.0424959, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.7, 0.3, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.0, 0.1, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3para(0.9, 0.1, 0.0, 2.0),  0.0,       eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.1, 0.8, 2.0), -0.072636,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.3, 0.6, 2.0), -0.0383577, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.5, 0.4, 2.0),  0.0339688, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.7, 0.2, 2.0),  0.0337227, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.1, 0.9, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.1, 0.6, 2.0), -0.0095838, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.3, 0.4, 2.0),  0.0995089, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.5, 0.2, 2.0),  0.0882485, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.3, 0.7, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.1, 0.4, 2.0),  0.0765967, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.3, 0.2, 2.0),  0.104234,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.5, 0.5, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.1, 0.2, 2.0),  0.0561024, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.7, 0.3, 0.0, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.0, 0.1, 2.0),  0.0,       eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3paratilde(0.9, 0.1, 0.0, 2.0),  0.0,       eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.1, 0.8, 2.0), -0.049339, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.3, 0.6, 2.0), -0.212137, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.5, 0.4, 2.0), -0.252603, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.7, 0.2, 2.0), -0.121824, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.1, 0.9, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.1, 0.6, 2.0),  0.130711, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.3, 0.4, 2.0),  0.002445, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.5, 0.2, 2.0), -0.070580, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.3, 0.7, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.1, 0.4, 2.0),  0.25532,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.3, 0.2, 2.0),  0.119891, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.5, 0.5, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.1, 0.2, 2.0),  0.144836, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.7, 0.3, 0.0, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.0, 0.1, 2.0),  0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.Phi3perp(0.9, 0.1, 0.0, 2.0),  0.0,      eps);
             }
 
             /* Twist 4 */

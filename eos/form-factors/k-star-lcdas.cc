@@ -325,6 +325,56 @@ namespace eos
                 std::pow(c_rge(mu), 8.0 / 3.0) * fpara / fperp_0 * (ms0 - mq0) / (12.0 * M_V) -
                 std::pow(c_rge(mu), 8.0) * (std::pow(ms0, 2.0) - std::pow(mq0, 2.0)) / (4.0 * std::pow(M_V, 2.0));
         }
+
+        // inline functions for two particle twist 3 LCDAs (only includes up to a2perp(para) while the leading twist LCDAs are implemented up to a4perp(para))
+        inline double psi3para(const double & u, const double & mu) const
+        {
+            return 6.0 * (1.0 - u) * u * (1.0 + 3.0 * (a1perp(mu) / 3.0 + (5.0 * kappa3perp(mu)) / 3.0) * (-1.0 + 2.0 * u) +
+                (a2perp(mu) / 6.0 + (5.0 * omega3perp(mu)) / 18.0) * (-1.5 + (15.0 * std::pow(-1.0 + 2.0 * u, 2)) / 2.0) -
+                (lambda3perp(mu) * ((-15.0 * (-1.0 + 2.0 * u)) / 2.0 + (35.0 * std::pow(-1.0 + 2.0 * u, 3.0)) / 2.0)) / 20.0) -
+                (3.0 * fpara * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (9.0 * a1para(mu) + 10.0 * a2para(mu) * (-1.0 + 2.0 * u)) +
+                (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (1.0 - u) * log(1.0 - u) - (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * u * log(u))) / (fperp(mu) * M_V) +
+                (3.0 * fpara * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (1.0 + 2.0 * a1para(mu) * (-1.0 + 2.0 * u) + 3.0 * a2para(mu) * (7.0 - 5.0 * (1.0 - u) * u)) +
+                (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (1.0 - u) * log(1.0 - u) + (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * u * log(u))) / (fperp(mu) * M_V);
+        }
+        inline double phi3para(const double & u, const double & mu) const
+        {
+            return 3.0 * std::pow(-1.0 + 2.0 * u, 2) + (3.0 * a1perp(mu) * (-1.0 + 2.0 * u) * (-1.0 + 3.0 * std::pow(-1.0 + 2.0 * u, 2))) / 2.0 +
+                ((15.0 * kappa3perp(mu)) / 2.0 - (3.0 * lambda3perp(mu)) / 4.0) * (-1.0 + 2.0 * u) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2)) +
+                (3.0 * a2perp(mu) * std::pow(-1.0 + 2.0 * u, 2) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2))) / 2.0 +
+                (5.0 * omega3perp(mu) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) + 35.0 * std::pow(-1.0 + 2.0 * u, 4)))/8.0 -
+                (3.0 * fpara * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * (-1.0 + 2.0 * u) * (2.0 + 9.0 * a1para(mu) * (-1.0 + 2.0 * u) +
+                2.0 * a2para(mu) * (11.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * log(1 - u) +
+                (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * log(u))) / (2.0 * fperp(mu) * M_V) +
+                (3.0 * fpara * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * (1.0 + 8.0 * a1para(mu) * (-1.0 + 2.0 * u) +
+                3.0 * a2para(mu) * (7.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (-1.0 + 2.0 * u) * log(1.0 - u) -
+                (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (-1.0 + 2.0 * u) * log(u))) / (2.0 * fperp(mu) * M_V);
+        }
+        inline double psi3perp(const double & u, const double & mu) const
+        {
+            return 6.0 * (1.0 - u) * u * (1.0 + 3.0 * (a1para(mu) / 3.0 + (20.0 * kappa3para(mu)) / 9.0) * (-1.0 + 2.0 * u) +
+                (-0.125 * lambda3para(mu) + lambda3paratilde(mu) / 4.0) * ((-15.0 * (-1.0 + 2.0 * u)) / 2.0 + (35.0 * std::pow(-1.0 + 2.0 * u, 3)) / 2.0) +
+                (-1.5 + (15.0 * std::pow(-1.0 + 2.0 * u, 2)) / 2.0) * (a2para(mu) / 6.0 + (5.0 * omega3para(mu)) / 12.0 - (5.0 * omega3paratilde(mu)) / 24.0 +
+                (10.0 * zeta3para(mu)) / 9.0)) -
+                (6.0 * fperp(mu) * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (9.0 * a1perp(mu) + 10.0 * a2perp(mu) * (-1.0 + 2.0 * u)) +
+                (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * (1.0 - u) * log(1.0 - u) - (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * u * log(u))) / (fpara * M_V) +
+                (6.0 * fperp(mu) * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (2.0 + 3.0 * a1perp(mu) * (-1.0 + 2.0 * u) +
+                2.0 * a2perp(mu) * (11.0 - 10.0 * (1.0 - u) * u)) + (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * (1.0 - u) * log(1.0 - u) +
+                (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * u * log(u))) / (fpara * M_V);
+        }
+        inline double phi3perp(const double & u, const double & mu) const
+        {
+            return (3.0 * a1para(mu) * std::pow(-1.0 + 2.0 * u, 3)) / 2.0 + (3.0 * (1.0 + std::pow(-1.0 + 2.0 * u, 2))) / 4.0 +
+                (5.0 * kappa3para(mu) - (15.0 * lambda3para(mu)) / 16.0 + (15.0 * lambda3paratilde(mu)) / 8.0) * (-1.0 + 2.0 * u) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2)) +
+                ((9.0 * a2para(mu)) / 112.0 + (15.0 * omega3para(mu)) / 32.0 - (15.0 * omega3paratilde(mu)) / 64.0) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) +
+                35.0 * std::pow(-1.0 + 2.0 * u, 4)) + (-1.0 + 3.0 * std::pow(-1.0 + 2.0 * u, 2)) * ((3.0 * a2para(mu)) / 7.0 + 5.0 * zeta3para(mu)) -
+                (3.0 * fperp(mu) * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * (2.0 * (-1.0 + 2.0 * u) +
+                2.0 * a2perp(mu) * (-1.0 + 2.0 * u) * (11.0 - 20.0 * (1.0 - u) * u) + 9.0 * a1perp(mu) * (1.0 - 2.0 * (1.0 - u) * u) +
+                (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(1 - u) - (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(u))) / (2.0 * fpara * M_V) +
+                (3.0 * fperp(mu) * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * (2.0 + 9.0 * a1perp(mu) * (-1.0 + 2.0 * u) +
+                2.0 * a2perp(mu) * (11.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(1.0 - u) +
+                (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(u))) / (2.0 * fpara * M_V);
+        }
     };
 
     AntiKStarLCDAs::AntiKStarLCDAs(const Parameters & p, const Options & o) :
@@ -526,6 +576,48 @@ namespace eos
         const double c4 = gp_4.evaluate(x);
 
         return 6.0 * u * (1.0 - u) * (1.0 + _imp->a1perp(mu) * c1 + _imp->a2perp(mu) * c2 + _imp->a3perp(mu) * c3 + _imp->a4perp(mu) * c4);
+    }
+
+    double
+    AntiKStarLCDAs::psi3para(const double & u, const double & mu) const
+    {
+        return _imp->psi3para(u, mu);
+    }
+
+    double
+    AntiKStarLCDAs::phi3para(const double & u, const double & mu) const
+    {
+        return _imp->phi3para(u, mu);
+    }
+
+    double
+    AntiKStarLCDAs::psi3perp(const double & u, const double & mu) const
+    {
+        return _imp->psi3perp(u, mu);
+    }
+
+    double
+    AntiKStarLCDAs::phi3perp(const double & u, const double & mu) const
+    {
+        return _imp->phi3perp(u, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->kappa3para(mu) + _imp->omega3para(mu) * (u1 - u2) + _imp->lambda3para(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    AntiKStarLCDAs::Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->zeta3para(mu) + _imp->lambda3paratilde(mu) * (u1 - u2) + _imp->omega3paratilde(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    AntiKStarLCDAs::Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->kappa3perp(mu) + _imp->omega3perp(mu) * (u1 - u2) + _imp->lambda3perp(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
     }
 
     Diagnostics
@@ -843,6 +935,56 @@ namespace eos
                 std::pow(c_rge(mu), 8.0 / 3.0) * fpara / fperp_0 * (ms0 - mq0) / (12.0 * M_V) -
                 std::pow(c_rge(mu), 8.0) * (std::pow(ms0, 2.0) - std::pow(mq0, 2.0)) / (4.0 * std::pow(M_V, 2.0)));
         }
+
+        // inline functions for two particle twist 3 LCDAs (exchange m_s <-> m_ud with respect to AntiKStar case)
+        inline double psi3para(const double & u, const double & mu) const
+        {
+            return 6.0 * (1.0 - u) * u* (1.0 + 3.0 * (a1perp(mu) / 3.0 + (5.0 * kappa3perp(mu)) / 3.0) * (-1.0 + 2.0 * u) +
+            (a2perp(mu) / 6.0 + (5.0 * omega3perp(mu)) / 18.0) * (-1.5 + (15.0 * std::pow(-1.0 + 2.0 * u, 2)) / 2.0) -
+            (lambda3perp(mu) * ((-15.0 * (-1.0 + 2.0 * u)) / 2.0 + (35.0 * std::pow(-1.0 + 2.0 * u, 3.0)) / 2.0)) / 20.0) -
+            (3.0 * fpara * (-1.0) * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (9.0 * a1para(mu) + 10.0 * a2para(mu) * (-1.0 + 2.0 * u)) +
+            (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (1.0 - u) * log(1.0 - u) - (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * u * log(u))) / (fperp(mu) * M_V) +
+            (3.0 * fpara * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (1.0 + 2.0 * a1para(mu) * (-1.0 + 2.0 * u) + 3.0 * a2para(mu) * (7.0 - 5.0 * (1.0 - u) * u)) +
+            (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (1.0 - u) * log(1.0 - u) + (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * u * log(u))) / (fperp(mu) * M_V);
+        }
+        inline double phi3para(const double & u, const double & mu) const
+        {
+            return 3.0 * std::pow(-1.0 + 2.0 * u, 2) + (3.0 * a1perp(mu) * (-1.0 + 2.0 * u) * (-1.0 + 3.0 * std::pow(-1.0 + 2.0 * u, 2))) / 2.0 +
+                ((15.0 * kappa3perp(mu)) / 2.0 - (3.0 * lambda3perp(mu)) / 4.0) * (-1.0 + 2.0 * u) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2)) +
+                (3.0 * a2perp(mu) * std::pow(-1.0 + 2.0 * u, 2) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2))) / 2.0 +
+                (5.0 * omega3perp(mu) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) + 35.0 * std::pow(-1.0 + 2.0 * u, 4)))/8.0 -
+                (3.0 * fpara * (-1.0) * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * (-1.0 + 2.0 * u) * (2.0 + 9.0 * a1para(mu) * (-1.0 + 2.0 * u) +
+                2.0 * a2para(mu) * (11.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * log(1 - u) +
+                (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * log(u))) / (2.0 * fperp(mu) * M_V) +
+                (3.0 * fpara * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * (1.0 + 8.0 * a1para(mu) * (-1.0 + 2.0 * u) +
+                3.0 * a2para(mu) * (7.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (-1.0 + 2.0 * u) * log(1.0 - u) -
+                (1.0 - 3.0 * a1para(mu) + 6.0 * a2para(mu)) * (-1.0 + 2.0 * u) * log(u))) / (2.0 * fperp(mu) * M_V);
+        }
+        inline double psi3perp(const double & u, const double & mu) const
+        {
+            return 6.0 * (1.0 - u) * u * (1.0 + 3.0 * (a1para(mu) / 3.0 + (20.0 * kappa3para(mu)) / 9.0) * (-1.0 + 2.0 * u) +
+                (-0.125 * lambda3para(mu) + lambda3paratilde(mu) / 4.0) * ((-15.0 * (-1.0 + 2.0 * u)) / 2.0 + (35.0 * std::pow(-1.0 + 2.0 * u, 3)) / 2.0) +
+                (-1.5 + (15.0 * std::pow(-1.0 + 2.0 * u, 2)) / 2.0) * (a2para(mu) / 6.0 + (5.0 * omega3para(mu)) / 12.0 - (5.0 * omega3paratilde(mu)) / 24.0 +
+                (10.0 * zeta3para(mu)) / 9.0)) -
+                (6.0 * fperp(mu) * (-1.0) * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (9.0 * a1perp(mu) + 10.0 * a2perp(mu) * (-1.0 + 2.0 * u)) +
+                (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * (1.0 - u) * log(1.0 - u) - (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * u * log(u))) / (fpara * M_V) +
+                (6.0 * fperp(mu) * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * ((1.0 - u) * u * (2.0 + 3.0 * a1perp(mu) * (-1.0 + 2.0 * u) +
+                2.0 * a2perp(mu) * (11.0 - 10.0 * (1.0 - u) * u)) + (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * (1.0 - u) * log(1.0 - u) +
+                (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * u * log(u))) / (fpara * M_V);
+        }
+        inline double phi3perp(const double & u, const double & mu) const
+        {
+            return (3.0 * a1para(mu) * std::pow(-1.0 + 2.0 * u, 3)) / 2.0 + (3.0 * (1.0 + std::pow(-1.0 + 2.0 * u, 2))) / 4.0 +
+                (5.0 * kappa3para(mu) - (15.0 * lambda3para(mu)) / 16.0 + (15.0 * lambda3paratilde(mu)) / 8.0) * (-1.0 + 2.0 * u) * (-3.0 + 5.0 * std::pow(-1.0 + 2.0 * u, 2)) +
+                ((9.0 * a2para(mu)) / 112.0 + (15.0 * omega3para(mu)) / 32.0 - (15.0 * omega3paratilde(mu)) / 64.0) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) +
+                35.0 * std::pow(-1.0 + 2.0 * u, 4)) + (-1.0 + 3.0 * std::pow(-1.0 + 2.0 * u, 2)) * ((3.0 * a2para(mu)) / 7.0 + 5.0 * zeta3para(mu)) -
+                (3.0 * fperp(mu) * (-1.0) * (model->m_s_msbar(mu) - model->m_ud_msbar(mu) / 2.0) * (2.0 * (-1.0 + 2.0 * u) +
+                2.0 * a2perp(mu) * (-1.0 + 2.0 * u) * (11.0 - 20.0 * (1.0 - u) * u) + 9.0 * a1perp(mu) * (1.0 - 2.0 * (1.0 - u) * u) +
+                (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(1 - u) - (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(u))) / (2.0 * fpara * M_V) +
+                (3.0 * fperp(mu) * (model->m_s_msbar(mu) + model->m_ud_msbar(mu) / 2.0) * (2.0 + 9.0 * a1perp(mu) * (-1.0 + 2.0 * u) +
+                2.0 * a2perp(mu) * (11.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(1.0 - u) +
+                (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(u))) / (2.0 * fpara * M_V);
+        }
     };
 
     KStarLCDAs::KStarLCDAs(const Parameters & p, const Options & o) :
@@ -1044,6 +1186,48 @@ namespace eos
         const double c4 = gp_4.evaluate(x);
 
         return 6.0 * u * (1.0 - u) * (1.0 + _imp->a1perp(mu) * c1 + _imp->a2perp(mu) * c2 + _imp->a3perp(mu) * c3 + _imp->a4perp(mu) * c4);
+    }
+
+    double
+    KStarLCDAs::psi3para(const double & u, const double & mu) const
+    {
+        return _imp->psi3para(u, mu);
+    }
+
+    double
+    KStarLCDAs::phi3para(const double & u, const double & mu) const
+    {
+        return _imp->phi3para(u, mu);
+    }
+
+    double
+    KStarLCDAs::psi3perp(const double & u, const double & mu) const
+    {
+        return _imp->psi3perp(u, mu);
+    }
+
+    double
+    KStarLCDAs::phi3perp(const double & u, const double & mu) const
+    {
+        return _imp->phi3perp(u, mu);
+    }
+
+    double
+    KStarLCDAs::Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->kappa3para(mu) + _imp->omega3para(mu) * (u1 - u2) + _imp->lambda3para(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    KStarLCDAs::Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->zeta3para(mu) + _imp->lambda3paratilde(mu) * (u1 - u2) + _imp->omega3paratilde(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    KStarLCDAs::Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 360.0 * u1 * u2 * u3 * u3 * (_imp->kappa3perp(mu) + _imp->omega3perp(mu) * (u1 - u2) + _imp->lambda3perp(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
     }
 
     Diagnostics
