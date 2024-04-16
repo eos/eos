@@ -1,4 +1,6 @@
 on:
+  workflow_dispatch:
+
   schedule:
     - cron: '5 8 * * TUE'
 
@@ -7,11 +9,12 @@ name: Trigger the build of weekly development releases
 jobs:
     report:
         runs-on: ubuntu-20.04
-        name: Push ``master`` to ``release``
+        name: Create PR to merge ``master`` into ``release``
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
 
-            - name: Push ``master`` to ``release``
-              run: |
-                git push origin master:release
+            - name: Create pull request
+              run: gh pr create -B release -H master --title 'Weekly PR to merge ``master`` into ``release``' --body 'Created by ``weekly-builds`` workflow.'
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
