@@ -207,7 +207,8 @@ namespace eos
 
             virtual TestStatistic primary_test_statistic() const
             {
-                return test_statistics::ChiSquare(power_of<2>(significance()), 1.0);
+                double chi = significance();
+                return test_statistics::ChiSquare(chi * chi, 1, chi);
             }
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const

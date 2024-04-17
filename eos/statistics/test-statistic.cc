@@ -20,6 +20,8 @@
 #include <eos/statistics/test-statistic.hh>
 #include <eos/statistics/test-statistic-impl.hh>
 
+#include <limits>
+
 namespace eos
 {
     namespace test_statistics
@@ -34,9 +36,15 @@ namespace eos
             stream << "No test statistic available" << std::endl;
         }
 
-        ChiSquare::ChiSquare(const double & chi2, const int & dof) :
+        ChiSquare::ChiSquare(const double & chi2, const int & dof, const double & signed_chi) :
             chi2(chi2),
-            dof(dof)
+            dof(dof),
+            signed_chi(signed_chi)
+        {
+        }
+
+        ChiSquare::ChiSquare(const double & chi2, const int & dof) :
+            ChiSquare::ChiSquare(chi2, dof, std::numeric_limits<double>::quiet_NaN())
         {
         }
 

@@ -40,6 +40,9 @@ namespace eos
             public:
                 double chi2;
                 int dof;
+                double signed_chi;
+
+                ChiSquare(const double & chi2, const int & dof, const double & signed_chi);
 
                 ChiSquare(const double & chi2, const int & dof);
 
