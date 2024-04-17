@@ -706,6 +706,7 @@ BOOST_PYTHON_MODULE(_eos)
     class_<test_statistics::ChiSquare>("test_statisticsChiSquare", no_init)
         .def_readonly("chi2", &test_statistics::ChiSquare::chi2)
         .def_readonly("dof", &test_statistics::ChiSquare::dof)
+        .def_readonly("signed_chi", &test_statistics::ChiSquare::signed_chi)
         ;
 
     // GoodnessOfFit
