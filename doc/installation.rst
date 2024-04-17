@@ -167,6 +167,12 @@ BOOST
 dynesty
   The Python Dynamic Nested Sampling package for estimating Bayesian posteriors and evidences (needed for some functionality);
 
+ipykernel
+  the IPython kernel for Jupyter notebooks (needed for some functionality);
+
+ipywidgets
+  the IPython widgets for Jupyter notebooks (needed for some functionality);
+
 matplotlib
   the Python plotting library in version 2.0 or higher;
 
