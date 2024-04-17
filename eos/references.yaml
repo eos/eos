@@ -477,6 +477,11 @@ BaBar:2009A:
   inspire-id: Aubert:2009ak
   title: Measurement of Branching Fractions and CP and Isospin Asymmetries in $B \to  K^*(892)\gamma$
     Decays
+BaBar:2009B:
+  authors: Aubert, Bernard et al.
+  collaboration: BaBar
+  inspire-id: BaBar:2009cun
+  title: B meson decays to charmless meson pairs containing eta or eta' mesons
 BaBar:2010A:
   authors: del Amo Sanchez, P. et al.
   collaboration: BaBar
@@ -566,6 +571,14 @@ Belle:2006A:
     id: oai:arXiv.org:hep-ex/0608017
   inspire-id: Ushiroda:2006fi
   title: Time-Dependent CP Asymmetries in $B^0 \to  K^0_S \pi^0 \gamma$ transitions
+Belle:2006B:
+  authors: Abe, Kazuo et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0608049
+  inspire-id: Ushiroda:2006uzg
+  title: Observation of B decays to two kaons
 Belle:2008A:
   authors: Schwanda, C. et al.
   collaboration: Belle
@@ -625,6 +638,14 @@ Belle:2010B:
     id: oai:arXiv.org:1011.4397
   inspire-id: Belle:2010fwv
   title: Measurement of $e^+e^-\to D_s^{(*)+} D_s^{(*)-}$ cross sections near threshold using initial-state radiation
+Belle:2010C:
+  authors: Peng, C. -C. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1006.5115
+  inspire-id: Belle:2010yix
+  title: Search for $B_s^0 \to hh$ Decays at the $\Upsilon(5S)$ Resonance
 Belle:2013A:
   authors: Sibidanov, A. et al.
   collaboration: Belle
@@ -651,6 +672,14 @@ Belle:2015A:
   inspire-id: Glattauer:2015teq
   title: Measurement of the decay $B\to D\ell\nu_\ell$ in fully reconstructed events
     and determination of the Cabibbo-Kobayashi-Maskawa matrix element $|V_{cb}|$
+Belle:2015B:
+  authors: Pal, B. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1504.00957
+  inspire-id: Belle:2015eny
+  title: Evidence for the decay $B^{0} \to \eta \pi^0$}
 Belle:2016A:
   authors: Wehle, S. et al.
   collaboration: Belle
@@ -735,6 +764,14 @@ Belle-II:2023C:
     archive: arXiv
     id: oai:arXiv.org:2310.01170
   inspire-id: Belle-II:2023okj
+Belle-II:2023D:
+  authors: Borah, J. et al.
+  collaboration: Belle II
+  title: Search for the decay $B_s^0 \to \pi^0 \pi^0$ at Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2301.08587
+  inspire-id: Belle-II:2023aau
 BG:2016A:
   authors: Bigi, Dante and Gambino, Paolo
   eprint:
@@ -1581,6 +1618,14 @@ LHCb:2013E:
     id: oai:arXiv.org:1307.2782
   inspire-id: LHCb:2013vga
   title: Measurement of the polarization amplitudes  in $B^0 \to J/\psi K^{*}(892)^0$ decays
+LHCb:2013F:
+  authors: Aaij, R. et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1308.1277
+  inspire-id: LHCb:2013vip
+  title: Branching fraction and CP asymmetry of the decays $B^+ \to K^0_s \pi^+$ and $B^+ \to K^0_s K^+$
 LHCb:2014A:
   authors: Aaij, R. et al.
   collaboration: LHCb
@@ -1658,6 +1703,14 @@ LHCb:2016B:
     id: oai:arXiv.org:1608.04855
   inspire-id: LHCb:2016tuh
   title: First study of the CP-violating phase and decay-width difference in $B_s^0\to\psi(2S)\phi$ decays
+LHCb:2016C:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1610.08288
+  inspire-id: LHCb:2016inp
+  title: Observation of the annihilation decay mode $B^0 \to K^+ K^-$
 LHCb:2017A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1843,6 +1896,13 @@ PDG:2020A:
   collaboration: Particle Data Group
   inspire-id: ParticleDataGroup:2020ssz
   journal: PTEP 2020 083C01 (2020)
+  title: Review of Particle Physics
+  url: http://pdg.lbl.gov
+PDG:2024A:
+  authors: Navas, S. et al.
+  collaboration: Particle Data Group
+  inspire-id: ParticleDataGroup:2024cfk
+  journal: Phys. Rev. D 110, 030001 (2024)
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PS:1997A:
