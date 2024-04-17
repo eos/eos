@@ -15,6 +15,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+import numpy as _np
 import scipy
 
 def __format_Parameter(p):
@@ -156,13 +157,14 @@ def __format_Observable(obs):
 
 def __format_GoodnessOfFit(gof):
     result = '<table>\n'
-    result += '<tr><th>constraint</th><th>&chi;<sup>2</sup></th><th>d.o.f.</th><th>local p-value</th></tr>\n'
+    result += '<tr><th>constraint</th><th>&chi;<sup>2</sup></th><th>&plusmn;&chi;</th><th>d.o.f.</th><th>local p-value</th></tr>\n'
     for entry in gof:
-        local_chi2 = entry[1].chi2
-        local_dof = entry[1].dof
+        local_chi2   = entry[1].chi2
+        local_dof    = entry[1].dof
+        local_chi    = f'{entry[1].signed_chi:+6.4f}' if not _np.isnan(entry[1].signed_chi) else '&mdash;'
         local_pvalue = 1.0 - scipy.stats.chi2(local_dof).cdf(local_chi2)
-        result += '<tr><td><tt>{name}</tt></td><td>{chi2:6.4f}</td><td>{dof}</td><td>{local_p:6.4f}%</td></tr>\n'.format(
-            name=entry[0], chi2=local_chi2, dof=local_dof, local_p=local_pvalue * 100)
+        style        = 'color: red;' if local_pvalue < 0.05 else 'color: orange' if local_pvalue < 0.32 else ''
+        result += f'<tr style="{style}"><td><tt>{entry[0]}</tt></td><td>{local_chi2:6.4f}</td><td>{local_chi}</td><td>{local_dof}</td><td>{local_pvalue * 100:6.4f}%</td></tr>\n'
     result += '</table><br/>\n'
     chi2 = gof.total_chi_square()
     dof  = gof.total_degrees_of_freedom()
