@@ -167,6 +167,8 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         samples_varied_params = [p["name"] for p in _chain.varied_parameters]
         if analysis_varied_params != samples_varied_params:
             raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+        mode = '[ ' + ', '.join([f'{v:.4g}' for v in _chain.samples[idx_mode]]) + ' ]'
+        eos.info(f'Using starting point {mode} from MCMC samples (chain {chain:04})')
         for p, v in zip(analysis.varied_parameters, _chain.samples[idx_mode]):
             p.set(v)
 
@@ -184,6 +186,8 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         samples_varied_params = [p["name"] for p in _file.varied_parameters]
         if analysis_varied_params != samples_varied_params:
             raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+        mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[idx_mode]]) + ' ]'
+        eos.info(f'Using starting point {mode} from importance samples')
         for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
             p.set(v)
 
