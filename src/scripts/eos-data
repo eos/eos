@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+
+# Copyright (c) 2024 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import argparse
+import eos
+from eos import debug, info, warn, error
+import logging
+
+def _parser():
+    parser = argparse.ArgumentParser(description='Download and manage public EOS datasets')
+    # 'parent' parser for common arguments
+    common_subparser = argparse.ArgumentParser(add_help=False)
+    # add verbosity arg and analysis-file arg to all commands
+    common_subparser.add_argument('-v', '--verbose',
+        help = 'Increase the verbosity of the script',
+        dest = 'verbose', action = 'count', default = 0
+    )
+    subparsers = parser.add_subparsers(title = 'commands')
+
+    ## begin of commands
+
+    # download
+    parser_download = subparsers.add_parser('download',
+        parents = [common_subparser],
+        description =
+'''
+Download a single public EOS dataset from Github or Zenodo.
+''',
+        help = 'Download a public EOS dataset.'
+    )
+    parser_download.add_argument('id', metavar = 'ID',
+        help = 'The unique id of the public EOS dataset.'
+    )
+    parser_download.set_defaults(cmd = cmd_download)
+
+    # list
+    parser_list = subparsers.add_parser('list',
+        parents = [common_subparser],
+        description =
+'''
+List the ids of all public EOS datasets.
+'''
+    )
+    parser_list.set_defaults(cmd = cmd_list)
+
+    # update
+    parser_update = subparsers.add_parser('update',
+        parents = [common_subparser],
+        description =
+'''
+Update the list of public EOS datasets from Github.
+''',
+        help = 'Update the list of public EOS datasets.'
+    )
+    parser_update.set_defaults(cmd = cmd_update)
+
+    ## end of commands
+
+    return parser
+
+
+def main():
+    parser = _parser()
+    args = parser.parse_args()
+
+    if not 'cmd' in args:
+        parser.print_help()
+    elif not callable(args.cmd):
+        parser.print_help()
+    else:
+        if args.verbose > 3:
+            args.verbose = 3
+
+        levels = {
+            0: logging.ERROR,
+            1: logging.WARNING,
+            2: logging.INFO,
+            3: logging.DEBUG
+        }
+
+        logging.basicConfig(level=levels[args.verbose])
+
+        args.cmd(args)
+
+
+def cmd_download(args):
+    datasets = eos.DataSets()
+    datasets.download(args.id)
+
+
+def cmd_list(args):
+    datasets = eos.DataSets()
+    for id, dataset in datasets.datasets():
+        print(f'{id:<9}  -  {dataset.title}')
+        print(f'{"":<9}     {", ".join(dataset.authors)}')
+
+
+def cmd_update(args):
+    datasets = eos.DataSets()
+    datasets.update()
+
+
+
+if __name__ == '__main__':
+    main()
