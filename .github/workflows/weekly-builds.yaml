@@ -9,12 +9,14 @@ name: Trigger the build of weekly development releases
 jobs:
     report:
         runs-on: ubuntu-20.04
-        name: Create PR to merge ``master`` into ``release``
+        name: Push branch ``master`` to branch ``release``
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
+              with:
+                token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
 
-            - name: Create pull request
-              run: gh pr create -B release -H master --title 'Weekly PR to merge ``master`` into ``release``' --body 'Created by ``weekly-builds`` workflow.'
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Fetch all branches and push
+              run: |
+                git remote update origin
+                git push origin origin/master:release
