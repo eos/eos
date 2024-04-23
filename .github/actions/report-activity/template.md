@@ -15,7 +15,7 @@ None
 
 {% if closedPulls.length > 0 %}
 {% for pull in closedPulls %}
-- [{{ pull.number }}](https://github.com/eos/eos/pulls/{{ pull.number }}): {{ pull.title }}<br/>
+- [{{ pull.number }}](https://github.com/eos/eos/pull/{{ pull.number }}): {{ pull.title }}<br/>
 
 {% endfor %}
 {% else %}
@@ -37,7 +37,7 @@ None
 
 {% if openedPulls.length > 0 %}
 {% for pull in openedPulls %}
-- [{{ pull.number }}](https://github.com/eos/eos/pulls/{{ pull.number }}): {{ pull.title }}<br/>
+- [{{ pull.number }}](https://github.com/eos/eos/pull/{{ pull.number }}): {{ pull.title }}<br/>
 
 {% endfor %}
 {% else %}
