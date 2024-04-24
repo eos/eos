@@ -5379,25 +5379,25 @@ groups:
           central: 0.672
           min:     0.661
           max:     0.683
-          latex:   '$f_0^{B->D}(q^2 = M_K^2)$'
+          latex:   '$f_0^{B \to D}(q^2 = M_K^2)$'
       # B->D^*K
       'B->D^*K::A_0(MK2)' :
           central: 0.708
           min:     0.670
           max:     0.746
-          latex:   '$A_0^{B->D}(q^2 = M_K^2)$'
+          latex:   '$A_0^{B \to D}(q^2 = M_K^2)$'
       # B_s->D_spi
       'B_s->D_spi::f_0(Mpi2)' :
           central: 0.673
           min:     0.662
           max:     0.684
-          latex:   '$f_0^{B_s->D_s}(q^2 = M_\pi^2)$'
+          latex:   '$f_0^{B_s \to D_s}(q^2 = M_\pi^2)$'
       # B_s->D_s^*pi
       'B_s->D_s^*pi::A_0(Mpi2)' :
           central: 0.689
           min:     0.625
           max:     0.753
-          latex:   '$A_0^{B_s->D_s^*}(q^2 = M_\pi^2)$'
+          latex:   '$A_0^{B_s \to D_s^*}(q^2 = M_\pi^2)$'
   # }}}
 
   # Miscellaneous Form Factor Parameters
