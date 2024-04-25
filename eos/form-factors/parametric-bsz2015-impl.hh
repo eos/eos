@@ -442,6 +442,255 @@ namespace eos
     {
         return real(f_plus_T(complex<double>(s)));
     }
+
+    // P -> P P
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToPP>::resonance_0m_names
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@BSZ2015" }
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToPP>::resonance_1m_names
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" }
+    };
+
+    template <typename Process_>
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
+    BSZ2015FormFactorTraits<Process_, PToPP>::resonance_1p_names
+    {
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@BSZ2015" }
+    };
+
+    template <typename Process_>
+    template <typename Parameter_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::_calc_coeff(const double & k2, const std::array<Parameter_, 2> & a) const
+    {
+        // since we move the known phase below the inelastic threshold into an overall factor,
+        // we only parametrize the remaining mild & analytic k2 dependence of the form factor
+        return a[0] + k2 / power_of<2>(_mP1() + _mP2()) * a[1];
+    }
+
+    template <typename Process_>
+    template <typename Parameter_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::_calculatemomentum(const double & m, const double & m1, const double & m2) const
+    {
+        if(m1+m2 > m ) return 0.;
+        double add_12 = m1 + m2;
+        double sub_12 = m1 - m2;
+
+        return std::sqrt((m*m - add_12*add_12)*(m*m - sub_12*sub_12))/(2.0*m);
+    }
+
+    template <typename Process_>
+    template <typename Parameter_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::_relativisticbreitwigner_0_1(const double & sqrt_k2, const double & r, const double & q, const double & q_J) const
+    {
+        // calculate some helpers
+        double q_ratio = q / q_J;
+        double m_ratio = _BW_mass_p / sqrt_k2;
+        double width;
+        width = _traits._BW_width_p*std::pow(q_ratio, 2 + 1)*m_ratio*((1 + r*r*q_J*q_J) / (1 + r*r*q*q));
+        double tanPhi = (_BW_mass_p * width)/(_BW_mass_p*_BW_mass_p - sqrt_k2*sqrt_k2);
+        double phi = std::atan(tanPhi);
+        complex<double> myAmp = std::polar(std::sin(phi), phi);
+        return myAmp;
+    }
+
+
+
+
+    template <typename Process_>
+    template <typename Parameter_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::_calc_ff_p(const double & q2, const double & k2, const double & m_R, const std::array<std::array<Parameter_, 2>, 3> & a) const
+    {
+        const double a_0(_calc_coeff(k2, a[0]));
+        const double a_1(_calc_coeff(k2, a[1]));
+        const double a_2(_calc_coeff(k2, a[2]));
+
+        const complex<double> diff_z = _traits.calc_z(q2) - _traits.calc_z(0.0);
+
+        double r=1.9676;
+
+        double q = _calculatemomentum(std::sqrt(k2), 0.493677, 0.139570);
+		double q_J = _calculatemomentum(_BW_mass_p, 0.493677, 0.139570);
+
+        double q_ratio = q / q_J;
+        double m_ratio = _BW_mass_p / std::sqrt(k2);
+        double width = _traits._BW_width_p*pow(q_ratio, 2 + 1)*m_ratio*((1 + r*r*q_J*q_J) / (1 + r*r*q*q));
+        complex<double> bwamp = _relativisticbreitwigner_0_1(std::sqrt(k2), r, q, q_J)*(1./(_BW_mass_p*_traits._BW_width_p));
+
+        double p = _calculatemomentum(5.27958, std::sqrt(q2), std::sqrt(k2));
+        double p0 = _calculatemomentum(5.27958, std::sqrt(q2), _BW_mass_p);
+
+        return bwamp*sqrt(p*q)*(q/q_J)*std::sqrt((1 + r*r*q_J*q_J) / (1 + r*r*q*q));
+
+    }
+
+    template <typename Process_>
+    std::string
+    BSZ2015FormFactors<Process_, PToPP>::_par_name(const std::string & ff_name, const std::string & index)
+    {
+        return std::string(Process_::label) + std::string("::alpha(") + ff_name + "," + index + ")" + std::string("@BSZ2015");
+    }
+
+    template <typename Process_>
+    BSZ2015FormFactors<Process_, PToPP>::BSZ2015FormFactors(const Parameters & p, const Options &) :
+        _a_perp{{
+            {{
+                UsedParameter(p[_par_name("Fperp", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Fperp", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fperp", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Fperp", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fperp", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Fperp", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _a_para{{
+            {{
+                UsedParameter(p[_par_name("Fpara", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Fpara", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fpara", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Fpara", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Fpara", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Fpara", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _a_long{{
+            {{
+                UsedParameter(p[_par_name("Flong", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Flong", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Flong", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Flong", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Flong", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Flong", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _a_time{{
+            {{
+                UsedParameter(p[_par_name("Ftime", "0,0")],  *this), // z^0 k2^0
+                UsedParameter(p[_par_name("Ftime", "0,1")],  *this), // z^0 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Ftime", "1,0")],  *this), // z^1 k2^0
+                UsedParameter(p[_par_name("Ftime", "1,1")],  *this), // z^1 k2^1
+            }},
+            {{
+                UsedParameter(p[_par_name("Ftime", "2,0")],  *this), // z^2 k2^0
+                UsedParameter(p[_par_name("Ftime", "2,1")],  *this), // z^2 k2^1
+            }},
+        }},
+        _traits(p),
+        _mB(_traits.m_B),
+        _mP1(_traits.m_P1),
+        _mP2(_traits.m_P2)
+
+    {
+    }
+
+    template <typename Process_>
+    BSZ2015FormFactors<Process_, PToPP>::~BSZ2015FormFactors()
+    {
+    }
+
+    template <typename Process_>
+    FormFactors<PToPP> *
+    BSZ2015FormFactors<Process_, PToPP>::make(const Parameters & parameters, const Options & options)
+    {
+        return new BSZ2015FormFactors(parameters, options);
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::f_perp(const double & q2, const double & k2, const double & z) const
+    {
+        //TODO: what should _traits.m_R_0m be?
+        return (std::sqrt(3)/std::sqrt(2)) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_perp); //https://arxiv.org/pdf/1310.6660.pdf eqn II.15
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::f_para(const double & q2, const double & k2, const double & z) const
+    {
+        //TODO: what should _traits.m_R_0m be?
+        return (std::sqrt(3)/std::sqrt(2)) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_para);
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::f_long(const double & q2, const double & k2, const double & z) const
+    {
+        //TODO: what should _traits.m_R_0m be?
+        return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_long) * z; ////https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
+    }
+
+    template <typename Process_>
+    complex<double>
+    BSZ2015FormFactors<Process_, PToPP>::f_time(const double & q2, const double & k2, const double & z) const
+    {
+        //TODO: what should _traits.m_R_0m be?
+        return std::sqrt(3) * _calc_ff_p(q2, k2, _traits.m_R_0m, _a_time) * z; //https://arxiv.org/pdf/1310.6660.pdf eqn II.14 // was z the cos(theta)?
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_perp_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_para_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_long_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    BSZ2015FormFactors<Process_, PToPP>::f_time_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        throw InternalError("Not implemented!");
+        return 0.0;
+    }
 }
 
 #endif
