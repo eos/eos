@@ -55,6 +55,12 @@ namespace eos
                         &BToLeptonNeutrino::branching_ratio,
                         std::make_tuple(),
                         Options{ { "q", "u" } }),
+
+                make_observable("B_c->lnu::BR", R"(\mathcal{B}(B_c^- \to \ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToLeptonNeutrino::branching_ratio,
+                        std::make_tuple(),
+                        Options{ { "q", "c" } }),
             }
         );
 
