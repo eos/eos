@@ -15,11 +15,15 @@
 
 import eos
 import os
+import numpy as _np
 import yaml as _yaml
 import copy as _copy
 from .data import MixtureDensity
 from .deserializable import Deserializable
 from .datasets_file_description import DataSetDescription, PublicLikelihoodDescription
+
+from scipy.special import erf
+from scipy.stats import chi2
 
 
 class DataSets:
@@ -161,6 +165,29 @@ class DataSets:
         data = _yaml.safe_load(r.text)
         self._data_sets = { k: DataSetDescription.from_dict(**v) for k, v in data.items() }
 
+    def _chi2interp(self, mllh, test_statistics, dof):
+        """
+        Internal function that evaluate the chi^2 for dof degrees of freedom for a value of negative log-likelihood
+
+        :param mllh: Value of (-2 * log L) for which the chi2 for dof degrees of freedom is returned
+        :type mllh: double
+        :param test_statistics: Test statistics (i.e. map between pulls in standard deviation and negative log likelihood values) used for the evaluation.
+        :type test_statistics: dict
+        :param dof: Number of degrees of freedom of the test statistics.
+        :type dof: int
+        """
+
+        chi2_values = chi2.isf(1 - erf(test_statistics["sigma"] / _np.sqrt(2)), df = dof)
+        mllh_values = test_statistics["densities"]
+
+        if mllh < _np.min(mllh_values):
+            eos.warn("Found unexpected value for the likelihood when evaluating the test statistics")
+
+        if mllh > _np.max(mllh_values):
+            eos.warn(f"Likelihood value exceed the test statictics support. Assigning the maximal chi2 = {max(chi2_values):.2f}")
+
+        return _np.interp(mllh, mllh_values, chi2_values)
+
 
     def likelihood(self, id:str, likelihood:str):
         """
@@ -179,11 +206,19 @@ class DataSets:
             f = eos.MixtureDensity(os.path.join(self.storage_directory, id, likelihood.filename))
             varied_parameters = f.varied_parameters
             log_pdf = f.density()
-            return (
-                varied_parameters,
-                lambda x: -log_pdf.evaluate(x),
-                None # chi^2
-            )
+            test_statistics = f.test_statistics
+            if test_statistics:
+                return (
+                    varied_parameters,
+                    lambda x: -log_pdf.evaluate(x),
+                    lambda x: self._chi2interp(x, test_statistics, len(varied_parameters))
+                )
+            else:
+                return (
+                    varied_parameters,
+                    lambda x: -log_pdf.evaluate(x),
+                    None
+                )
 
 
     def _repr_html_(self):
