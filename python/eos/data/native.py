@@ -193,7 +193,7 @@ class MixtureDensity:
         self.components = description['components']
         self.weights    = description['weights']
         self.varied_parameters = description['varied_parameters'] if 'varied_parameters' in description else None
-
+        self.test_statistics = description['test_statistics'] if 'test_statistics' in description else None
 
     def density(self):
         """ Return a pypmc.density.MixtureDensity. """
@@ -202,7 +202,7 @@ class MixtureDensity:
 
 
     @staticmethod
-    def create(path, density, varied_parameters=None):
+    def create(path, density, varied_parameters=None, sigma_test_stat=None, samples=None, weights=None):
         """ Write a new MixtureDensity object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
@@ -211,6 +211,13 @@ class MixtureDensity:
         :type density: pypmc.density.MixtureDensity
         :param varied_parameters: List of the qualified names of varied parameters.
         :type varied_parameters: ``numpy.array`` of str, optional
+        :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
+        :type sigma_test_stat: list or iterable
+        :param samples: Samples as a 2D array of shape (N, P). Needed to generate the test statistic.
+        :type samples: 2D numpy array, optional
+        :param weights: Weights on a linear scale as a 2D array of shape (N, 1). Needed to generate the test statistic.
+        :type weights: 1D numpy array, optional
+
         """
         description = {}
         description['version'] = eos.__version__
@@ -227,7 +234,24 @@ class MixtureDensity:
                 raise RuntimeError(f'Unsupported type of MixtureDensity component: {type(c)}')
         description['weights'] = density.weights.tolist()
         if varied_parameters is not None:
-            description['varied_parameters'] = varied_parameters.tolist()
+            description['varied_parameters'] = list(varied_parameters)
+
+        # The test statistics defaults to two empty lists
+        description['test_statistics'] = { "sigma": [], "densities": [] }
+        if sigma_test_stat is not None and samples is not None and weights is not None:
+            sigma_test_stat = _np.array(sigma_test_stat)
+            samples_pdf = list(map(lambda x: -density.evaluate(x), samples))
+            ind = _np.argsort(samples_pdf)
+            samples_pdf_sorted = _np.array(samples_pdf)[ind]
+            sorted_weights = weights[ind]
+            cumulant = 1.0 * sorted_weights.cumsum() / sorted_weights.sum()
+            percents = erf(sigma_test_stat/_np.sqrt(2))
+            weighted_percentile = _np.interp(percents, cumulant, samples_pdf_sorted)
+
+            description['test_statistics'] = {
+                "sigma": sigma_test_stat.tolist(),
+                "densities": weighted_percentile.tolist()
+            }
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
