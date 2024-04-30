@@ -686,6 +686,22 @@ groups:
           comments: 'cf. PDG2019'
   # }}}
 
+  # Parameters for Miscellanous Meson Properties
+  # {{{
+  - title: 'Parameters for Miscellanous Meson Properties'
+    description: ''
+    parameters:
+      # Mixing angle of the eta meson in Octet-Singlet scheme
+      'eta::theta_18' :
+          central: +0.0
+          min:     -3.14
+          max:     +3.14
+          unit:     '1'
+          latex:    '$\theta_{18}$'
+          comments: 'cf. [FK:2002A] eq. (1)'
+  # }}}
+
+
   # Parameters for Miscellaneous Baryon Properties
   # {{{
   - title: 'Parameters for Miscellaneous Baryon Properties'
