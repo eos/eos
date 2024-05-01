@@ -38,7 +38,7 @@ class CurtailedGaussianDescription(Deserializable):
     sigma:float
     min:float
     max:float
-    type:str=field(repr=False, init=False, default="curtailed gaussian")
+    type:str=field(repr=False, init=False, default="gaussian")
 
 @dataclass
 class GaussianPriorDescription(Deserializable):
