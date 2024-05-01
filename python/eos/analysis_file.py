@@ -52,7 +52,7 @@ class AnalysisFile:
         self._priors = { p["name"]: PriorComponent.from_dict(**p) for p in input_data['priors'] }
 
         if 'likelihoods' not in input_data:
-            raise RuntimeError('Cannot load analysis file: need at least one likelihood component')
+            eos.warn('No likelihood components found in analysis file')
 
         self._likelihoods = { ll["name"]: LikelihoodComponent.from_dict(**ll) for ll in input_data['likelihoods'] }
 
