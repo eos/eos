@@ -385,6 +385,30 @@ namespace eos
                                     unit = Unit(unit_node.as<std::string>());
                                 }
 
+                                std::list<std::string> alias_of_list;
+                                auto alias_of_node = p.second["alias_of"];
+                                if (alias_of_node)
+                                {
+                                    if (YAML::NodeType::Scalar == alias_of_node.Type())
+                                    {
+                                        alias_of_list.push_back(alias_of_node.as<std::string>());
+                                    }
+                                    else if (YAML::NodeType::Sequence == alias_of_node.Type())
+                                    {
+                                        for (auto && alias_of_item_node : alias_of_node)
+                                        {
+                                            if (YAML::NodeType::Scalar != alias_of_item_node.Type())
+                                                throw ParameterInputFileNodeError(file, name + ".alias_of", "is not a sequence of scalars");
+
+                                            alias_of_list.push_back(alias_of_item_node.as<std::string>());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        throw ParameterInputFileNodeError(file, name + ".alias_of", "is not a scalar nor a sequence");
+                                    }
+                                }
+
                                 if (name.find("%") == std::string::npos) // The parameter is not templated
                                 {
                                     if (_map.end() != _map.find(name))
@@ -402,6 +426,10 @@ namespace eos
 
                                     _data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex, unit }, idx));
                                     _map[name] = idx;
+                                    for (auto && alias_of_item : alias_of_list)
+                                    {
+                                        _map[alias_of_item] = idx;
+                                    }
                                     group_parameters.push_back(Parameter(_data, idx));
 
                                     ++idx;
