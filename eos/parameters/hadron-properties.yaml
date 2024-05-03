@@ -16,14 +16,30 @@ groups:
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::pi^+' :
+          alias_of: [ 'mass::pi^-' ]
           central: +0.13957039
           min:     +0.13956921
           max:     +0.13957057
           latex:   '$m_{\pi^\pm}$'
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
+      'mass::eta' :
+          central: +0.547862
+          min:     +0.547845
+          max:     +0.547879
+          latex:   '$m_{\eta}$'
+          unit:     'GeV'
+          comments: "cf. [PDG-Live], December 2024"
+      "mass::eta'" :
+          central: +0.95778
+          min:     +0.95772
+          max:     +0.95784
+          latex:   '$m_{\eta^\prime}$'
+          unit:     'GeV'
+          comments: "cf. [PDG-Live], December 2024"
       # K meson masses
       'mass::K_d' :
+          alias_of: [ 'mass::Kbar_d' ]
           central: +0.497611
           min:     +0.497598
           max:     +0.497624
@@ -31,6 +47,7 @@ groups:
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::K_u' :
+          alias_of: [ 'mass::Kbar_u' ]
           central: +0.493677
           min:     +0.493661
           max:     +0.493693
