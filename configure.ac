@@ -263,7 +263,7 @@ AC_ARG_WITH([boost-python-suffix],
 dnl }}}
 dnl {{{ python checks (you can change the required python version below)
 if test "x$enable_python" == xyes ; then
-	AM_PATH_PYTHON([3.8])
+	AM_PATH_PYTHON([3.9])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="`python$PYTHON_VERSION-config --libs`"
 	if python$PYTHON_VERSION-config --libs --embed 2>&1 > /dev/null ; then
