@@ -19,7 +19,6 @@ jobs:
         strategy:
             matrix:
                 include:
-                  - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 38,  version: cp38  }
                   - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 39,  version: cp39  }
                   - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 310, version: cp310 }
                   - { arch: x86_64,  cxxflags: '-march=x86-64', boost_python_suffix: 311, version: cp311 }
