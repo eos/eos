@@ -289,6 +289,13 @@ BFvD:2016A:
     id: oai:arXiv.org:1608.07127
   inspire-id: Boer:2016iez
   title: QCD Factorization Theorem for $B \to \pi \pi \ell \nu$ Decays at Large Dipion Masses
+BGJvD:2019A:
+  authors: Bordone, M. and Gubernari, N. and van Dyk, D. and Jung, M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1912.09335
+  inspire-id: Bordone:2019guc
+  title: Heavy-Quark expansion for ${{\bar{B}}_s\rightarrow D^{(*)}_s}$ form factors and unitarity bounds beyond the ${SU(3)_F}$ limit
 BGL:1997A:
   authors: Boyd, C.G. and Grinstein, B. and Lebed, R.F.
   eprint:
