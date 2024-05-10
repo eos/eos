@@ -79,6 +79,13 @@ namespace eos
             virtual double kappa4para(const double & mu) const = 0;
             virtual double kappa4perp(const double & mu) const = 0;
 
+            /* Twist 4 three particle chiral even LCDAs */
+            virtual double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+
             static std::shared_ptr<VectorLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
 }
