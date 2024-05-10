@@ -148,6 +148,7 @@ class ObservableComponent(Deserializable):
 class PredictionObservableComponent(Deserializable):
     name:str
     kinematics:dict=field(default_factory=dict) # TODO: once we bump the minimum python version to 3.10, use dict | list[dict] instead
+    options:dict=field(default_factory=dict)
 
 @dataclass
 class PredictionDescription(Deserializable):
@@ -256,6 +257,7 @@ class StepComponent(Deserializable):
 #  observables (mandatory): list of dicts, each with keys:
 #       name (mandatory): string
 #       kinematics (optional): dict or list of dicts
+#       options (optional): dict
 #  global_options (optional): dict
 #  fixed_parameters (optional): dict
 

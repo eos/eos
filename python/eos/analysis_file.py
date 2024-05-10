@@ -176,7 +176,6 @@ class AnalysisFile:
         global_options.update(prediction.global_options)
         fixed_parameters.update(prediction.fixed_parameters)
 
-        options = eos.Options(**global_options)
         for (p, v) in fixed_parameters.items():
             parameters.set(p, v)
 
@@ -185,9 +184,18 @@ class AnalysisFile:
             for key, value in options_part:
                 if key in global_options and global_options[key] != value:
                     eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} in prediction {_prediction}.')
+                if key in o.options and o.options[key] != value:
+                    eos.error(f'Local option {key}={o.options[key]} overrides option part specification {key}={value} for observable {o.name} in prediction {_prediction}.')
+            for key, global_value in global_options.items():
+                if key in o.options and o.options[key] != global_value:
+                    eos.warning(f'Local option {key}={o.options[key]} overrides global option {key}={global_value} for observable {o.name} in prediction {_prediction}.')
+
 
         observables = []
         for o in prediction.observables:
+            # Update global options with any options specified for this particular observable in the AnalysisFile
+            local_options = eos.Options(**(global_options | o.options))
+
             if type(o.kinematics) == dict:
                 kinematics = [o.kinematics]
             else:
@@ -198,7 +206,7 @@ class AnalysisFile:
                     o.name,
                     parameters,
                     eos.Kinematics(k),
-                    options
+                    local_options
                 ))
 
         if None in observables:
