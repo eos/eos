@@ -207,6 +207,49 @@ namespace eos
                 (15.0 * omega3paratilde(mu)) / 64.0) * (3.0 - 30.0 * std::pow(-1.0 + 2.0 * u, 2) +
                 35.0 * std::pow(-1.0 + 2.0 * u, 4)) + (-1.0 + 3.0 * std::pow(-1.0 + 2.0 * u, 2)) * ((3.0 * a2para(mu)) / 7.0 + 5.0 * zeta3para(mu));
         }
+        // definition of chiral even parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 3.22 (renormalon model)
+        inline double psi1para(const double & mu) const
+        {
+            return 7.0 / 12.0 * zeta4para(mu);
+        }
+        inline double psi0paratilde(const double & mu) const
+        {
+            return 1.0 / 3.0 * zeta4para(mu);
+        }
+        inline double psi2paratilde(const double & mu) const
+        {
+            return -7.0 / 12.0 * zeta4para(mu);
+        }
+        inline double phi0para(const double & mu) const
+        {
+            return 1.0 / 3.0 * zeta4para(mu);
+        }
+        inline double phi1para(const double & mu) const
+        {
+            return -7.0 / 18.0 * zeta4para(mu);
+        }
+        inline double phi2para(const double & mu) const
+        {
+            return -7.0 / 9.0 * zeta4para(mu);
+        }
+
+        // inline functions for three-particle twist 4 LCDAs
+        inline double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * psi1para(mu) * (u1 - u2);
+        }
+        inline double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (psi0paratilde(mu) + psi2paratilde(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return -30.0 * u3 * u3 * (u1 - u2) * (phi0para(mu) + u3 * phi1para(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * phi2para(mu));
+        }
+        inline double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (phi0para(mu) * (1.0 - u3) + phi1para(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) + phi2para(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)));
+        }
     };
 
     RhoLCDAs::RhoLCDAs(const Parameters & p, const Options & o) :
@@ -369,6 +412,29 @@ namespace eos
     RhoLCDAs::Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const
     {
         return 360.0 * u1 * u2 * u3 * u3 * _imp->omega3perp(mu) * (u1 - u2);
+    }
+
+    double
+    RhoLCDAs::Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4para(u1, u2, u3, mu);
+    }
+
+    double
+    RhoLCDAs::Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4paratilde(u1, u2, u3, mu);
+    }
+    double
+    RhoLCDAs::Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4para(u1, u2, u3, mu);
+    }
+
+    double
+    RhoLCDAs::Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4paratilde(u1, u2, u3, mu);
     }
 
     Diagnostics
