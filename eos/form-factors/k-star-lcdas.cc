@@ -375,6 +375,82 @@ namespace eos
                 2.0 * a2perp(mu) * (11.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(1.0 - u) +
                 (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(u))) / (2.0 * fpara * M_V);
         }
+        // definition of chiral even parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 3.22 (renormalon model)
+        inline double psi0para(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double psi1para(const double & mu) const
+        {
+            return 7.0 / 12.0 * zeta4para(mu);
+        }
+        inline double psi2para(const double & mu) const
+        {
+            return -7.0 / 20.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double psi0paratilde(const double & mu) const
+        {
+            return 1.0 / 3.0 * zeta4para(mu);
+        }
+        inline double psi1paratilde(const double & mu) const
+        {
+            return 7.0 / 4.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double psi2paratilde(const double & mu) const
+        {
+            return -7.0 / 12.0 * zeta4para(mu);
+        }
+        inline double phi0para(const double & mu) const
+        {
+            return 1.0 / 3.0 * zeta4para(mu);
+        }
+        inline double phi1para(const double & mu) const
+        {
+            return -7.0 / 18.0 * zeta4para(mu);
+        }
+        inline double phi2para(const double & mu) const
+        {
+            return -7.0 / 9.0 * zeta4para(mu);
+        }
+        inline double theta0para(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double theta1para(const double & mu) const
+        {
+            return -7.0 / 10.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double theta2para(const double & mu) const
+        {
+            return 7.0 / 5.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double xi0para(const double & mu) const
+        {
+            return 1.0 / 5.0 * a1para(mu) * zeta4para(mu);
+        }
+        // inline functions for three-particle twist 4 LCDAs
+        inline double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (psi0para(mu) + psi1para(mu) * (u1 - u2) + psi2para(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (psi0paratilde(mu) + psi1paratilde(mu) * (u1 - u2) + psi2paratilde(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (theta0para(mu) * (1.0 - u3) + theta1para(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) + theta2para(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (phi0para(mu) + u3 * phi1para(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * phi2para(mu)));
+        }
+        inline double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (phi0para(mu) * (1.0 - u3) + phi1para(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) + phi2para(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (theta0para(mu) + u3 * theta1para(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * theta2para(mu)));
+        }
+        inline double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 840.0 * u1 * u2 * u3 * u3 * u3 * xi0para(mu);
+        }
     };
 
     AntiKStarLCDAs::AntiKStarLCDAs(const Parameters & p, const Options & o) :
@@ -618,6 +694,34 @@ namespace eos
     AntiKStarLCDAs::Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const
     {
         return 360.0 * u1 * u2 * u3 * u3 * (_imp->kappa3perp(mu) + _imp->omega3perp(mu) * (u1 - u2) + _imp->lambda3perp(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    AntiKStarLCDAs::Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4para(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4paratilde(u1, u2, u3, mu);
+    }
+    double
+    AntiKStarLCDAs::Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4para(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4paratilde(u1, u2, u3, mu);
+    }
+    double
+    AntiKStarLCDAs::Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Xi4para(u1, u2, u3, mu);
     }
 
     Diagnostics
@@ -985,6 +1089,82 @@ namespace eos
                 2.0 * a2perp(mu) * (11.0 - 30.0 * (1.0 - u) * u) + (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(1.0 - u) +
                 (1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * log(u))) / (2.0 * fpara * M_V);
         }
+        // definition of chiral even parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 3.22 (renormalon model)
+        inline double psi0para(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double psi1para(const double & mu) const
+        {
+            return 7.0 / 12.0 * zeta4para(mu);
+        }
+        inline double psi2para(const double & mu) const
+        {
+            return -7.0 / 20.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double psi0paratilde(const double & mu) const
+        {
+            return 1.0 / 3.0 * zeta4para(mu);
+        }
+        inline double psi1paratilde(const double & mu) const
+        {
+            return 7.0 / 4.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double psi2paratilde(const double & mu) const
+        {
+            return -7.0 / 12.0 * zeta4para(mu);
+        }
+        inline double phi0para(const double & mu) const
+        {
+            return 1.0 / 3.0 * zeta4para(mu);
+        }
+        inline double phi1para(const double & mu) const
+        {
+            return -7.0 / 18.0 * zeta4para(mu);
+        }
+        inline double phi2para(const double & mu) const
+        {
+            return -7.0 / 9.0 * zeta4para(mu);
+        }
+        inline double theta0para(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double theta1para(const double & mu) const
+        {
+            return -7.0 / 10.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double theta2para(const double & mu) const
+        {
+            return 7.0 / 5.0 * a1para(mu) * zeta4para(mu);
+        }
+        inline double xi0para(const double & mu) const
+        {
+            return 1.0 / 5.0 * a1para(mu) * zeta4para(mu);
+        }
+        // inline functions for three-particle twist 4 LCDAs
+        inline double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (psi0para(mu) + psi1para(mu) * (u1 - u2) + psi2para(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (psi0paratilde(mu) + psi1paratilde(mu) * (u1 - u2) + psi2paratilde(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (theta0para(mu) * (1.0 - u3) + theta1para(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) + theta2para(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (phi0para(mu) + u3 * phi1para(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * phi2para(mu)));
+        }
+        inline double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (phi0para(mu) * (1.0 - u3) + phi1para(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) + phi2para(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (theta0para(mu) + u3 * theta1para(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * theta2para(mu)));
+        }
+        inline double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 840.0 * u1 * u2 * u3 * u3 * u3 * xi0para(mu);
+        }
     };
 
     KStarLCDAs::KStarLCDAs(const Parameters & p, const Options & o) :
@@ -1228,6 +1408,34 @@ namespace eos
     KStarLCDAs::Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const
     {
         return 360.0 * u1 * u2 * u3 * u3 * (_imp->kappa3perp(mu) + _imp->omega3perp(mu) * (u1 - u2) + _imp->lambda3perp(mu) * 1.0 / 2.0 * (7.0 * u3 - 3.0));
+    }
+
+    double
+    KStarLCDAs::Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4para(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4paratilde(u1, u2, u3, mu);
+    }
+    double
+    KStarLCDAs::Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4para(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4paratilde(u1, u2, u3, mu);
+    }
+    double
+    KStarLCDAs::Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Xi4para(u1, u2, u3, mu);
     }
 
     Diagnostics
