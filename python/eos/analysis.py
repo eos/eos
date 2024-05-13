@@ -384,6 +384,25 @@ class Analysis:
         return -self.log_pdf(u, *args)
 
 
+    def sample_prior(self, N=1000, rng=np.random.mtrand):
+        """
+        Return prior samples of the parameters.
+
+        Obtains random samples of the parameters based on their prior distributions. The code uses inverse transform sampling.
+
+        :param N: Number of samples that shall be returned
+        :type N: int
+        :param rng: Optional random number generator
+
+        :return: An iterable of the parameter samples of size N.
+        """
+        samples = []
+        for _ in range(N):
+            u_samples = rng.uniform(0.0, 1.0, len(self.varied_parameters))
+            samples.append(self._u_to_par(u_samples))
+        return np.array(samples)
+
+
     def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand,
                return_uspace=False):
         """
