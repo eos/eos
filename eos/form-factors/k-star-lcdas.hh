@@ -87,11 +87,11 @@ namespace eos
             double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Twist 4 three particle chiral even LCDAs */
-            double Psi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Psi4paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Phi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Phi4paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Xi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
@@ -156,11 +156,11 @@ namespace eos
             double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Twist 4 three particle chiral even LCDAs */
-            double Phi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Phi4paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Psi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Psi4paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
-            double Xi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
