@@ -121,7 +121,7 @@ namespace eos
                     ckm_factor = [this]() { return conj(model->ckm_us()) * model->ckm_cb(); };
                     wc         = [this](const bool & cp_conjugate) { return model->wet_sbcu(cp_conjugate); };
                     ff_f_0     = std::make_shared<UsedParameter>(p["B->DK::f_0(MK2)"], u);
-                    lcdas      = PseudoscalarLCDAs::make("K", p, o);
+                    lcdas      = PseudoscalarLCDAs::make("Kbar", p, o);
                     break;
                 default:
                     throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
@@ -327,8 +327,8 @@ namespace eos
             const complex<double> a_1_nlo = a_1_nlo_re + a_1_nlo_im * 1.0i;
 
             // convoluted 3-particle hard-scattering kernels
-            const double TVLL_nlp = 4.0 * (5.0 * lcdas->kappa4(mu()) * m_P * m_P) / (3.0 * (mb * mb - mc * mc));
-            const double TTLL_nlp = 4.0 * (3.0 - lcdas->omega3(mu())) * 2.0 / pow(1.0 + z, 2);
+            const double TVLL_nlp = +4.0 * (5.0 * lcdas->kappa4(mu()) * m_P * m_P) / (3.0 * (mb * mb - mc * mc));
+            const double TTLL_nlp = -4.0 * (3.0 - lcdas->omega3(mu())) * 2.0 / pow(1.0 + z, 2);
 
             // calculate contributions from three-particle light-meson states
             const complex<double> a_1_nlp =
@@ -369,8 +369,7 @@ namespace eos
         Model::option_specification(),
         { "accuracy",     { "LO", "NLO", "NLP", "LO+NLO", "all" }, "all"   },
         { "cp-conjugate", { "true", "false" },                     "false" },
-        { "q",            { "s", "d" }                                     },
-        { "P",            { "K", "pi"}                                     }
+        { "q",            { "s", "d" }                                     }
     };
 
     BqToDqPseudoscalar::BqToDqPseudoscalar(const Parameters & parameters, const Options & options) :
