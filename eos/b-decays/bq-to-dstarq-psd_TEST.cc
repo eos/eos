@@ -58,6 +58,13 @@ class BqToDstarqPSDTest :
                 p["CKM::arg(V_us)"] = 0.0;
                 // form-factor
                 p["B->D^*K::A_0(MK2)"] = 0.683228;
+                // LCDA parameters
+                p["K::a1@1GeV"] = 0.07;
+                p["K::a2@1GeV"] = 0.24;
+                p["K::a3@1GeV"] = 0.0;
+                p["K::a4@1GeV"] = 0.0;
+                p["K::omega3@1GeV"] = -1.5;
+                p["K::kappa4@1GeV"] = -0.09;
                 // WC Values
                 p["sbcu::Re{c1}" ] = -0.04235657776117585;
                 p["sbcu::Im{c1}" ] = 0.0;
@@ -71,8 +78,7 @@ class BqToDstarqPSDTest :
                 {
                     { "accuracy",     "LO+NLO" },
                     { "q",            "d"      },
-                    { "model",        "WET"    },
-                    { "form-factors", "BSZ2015"}
+                    { "model",        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
                 {
@@ -105,6 +111,13 @@ class BqToDstarqPSDTest :
                 p["CKM::arg(V_cb)"] = 0;
                 p["CKM::abs(V_us)"] = 0.2243;
                 p["CKM::arg(V_us)"] = 0;
+                // LCDA parameters
+                p["K::a1@1GeV"] = 0.07;
+                p["K::a2@1GeV"] = 0.24;
+                p["K::a3@1GeV"] = 0.0;
+                p["K::a4@1GeV"] = 0.0;
+                p["K::omega3@1GeV"] = -1.5;
+                p["K::kappa4@1GeV"] = -0.09;
                 // WC Values
                 p["sbcu::Re{c1}" ] = -0.04235657776117585;
                 p["sbcu::Im{c1}" ] = 0;
@@ -116,16 +129,15 @@ class BqToDstarqPSDTest :
                 p["sbcu::Im{c4}" ] = 0;
                 Options oo
                 {
-                    { "accuracy",     "NLP" },
+                    { "accuracy",     "NLP"    },
                     { "q",            "d"      },
-                    { "model",        "WET"    },
-                    { "form-factors", "BSZ2015"}
+                    { "model",        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
                 {
-                    const double eps = 1.0e-4;
-                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), 0.000816263, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.im_a_1()  , 0.0        , eps);
+                    const double eps = 1.0e-5;
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.000752259, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.im_a_1(),    0.0,         eps);
                 }
             }
 
@@ -151,6 +163,11 @@ class BqToDstarqPSDTest :
                 p["CKM::arg(V_us)"] = 0.0;
                 // form-factor
                 p["B->D^*K::A_0(MK2)"] = 0.683228;
+                // LCDA parameters
+                p["K::a1@1GeV"] = 0.07;
+                p["K::a2@1GeV"] = 0.24;
+                p["K::a3@1GeV"] = 0.0;
+                p["K::a4@1GeV"] = 0.0;
                 // BSM test case: WET parameter point
                 p["sbcu::Re{c1}"  ] = -1.72424;
                 p["sbcu::Im{c1}"  ] = -1.56379;
@@ -197,8 +214,7 @@ class BqToDstarqPSDTest :
                 {
                     { "accuracy",     "LO+NLO" },
                     { "q",            "d"      },
-                    { "model",        "WET"    },
-                    { "form-factors", "BSZ2015"}
+                    { "model",        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
 
@@ -232,6 +248,13 @@ class BqToDstarqPSDTest :
                 p["CKM::arg(V_cb)"] = 0;
                 p["CKM::abs(V_us)"] = 0.2243;
                 p["CKM::arg(V_us)"] = 0;
+                // LCDA parameters
+                p["K::a1@1GeV"] = 0.07;
+                p["K::a2@1GeV"] = 0.24;
+                p["K::a3@1GeV"] = 0.0;
+                p["K::a4@1GeV"] = 0.0;
+                p["K::omega3@1GeV"] = -1.5;
+                p["K::kappa4@1GeV"] = -0.09;
                 // BSM test case: WET parameter point
                 p["sbcu::Re{c1}"  ] = -1.72424;
                 p["sbcu::Im{c1}"  ] = -1.56379;
@@ -278,15 +301,14 @@ class BqToDstarqPSDTest :
                 {
                     { "accuracy",     "NLP" },
                     { "q",            "d"      },
-                    { "model",        "WET"    },
-                    { "form-factors", "BSZ2015"}
+                    { "model",        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
 
                 {
-                    const double eps = 1e-4;
-                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), 0.139818,  eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.im_a_1(), 0.135191, eps);
+                    const double eps = 1e-5;
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.127433, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.im_a_1(), -0.123423, eps);
                 }
             }
         }
