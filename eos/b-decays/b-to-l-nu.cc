@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2023 Danny van Dyk
+ * Copyright (c) 2015-2024 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -58,15 +58,13 @@ namespace eos
 
         UsedParameter m_l;
 
-        SpecifiedOption opt_cp_conjugate;
-
-        bool cp_conjugate;
+        BooleanOption opt_cp_conjugate;
 
         UsedParameter mu;
 
         std::function<double (const double &)> m_U_msbar;
         std::function<complex<double> ()> v_Ub;
-        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
+        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor)> wc;
 
         static const std::vector<OptionSpecification> options;
 
@@ -82,7 +80,6 @@ namespace eos
             opt_l(o, options, "l"),
             m_l(p["mass::" + opt_l.str()], u),
             opt_cp_conjugate(o, options, "cp-conjugate"),
-            cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
             mu(p[opt_q.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
         {
             Context ctx("When constructing B_q->lnu observable");
@@ -94,12 +91,12 @@ namespace eos
                 case QuarkFlavor::up:
                     m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
                     v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
-                    wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, _2);
+                    wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, opt_cp_conjugate.value());
                     break;
                 case QuarkFlavor::charm:
                     m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
                     v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
-                    wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, _2);
+                    wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, opt_cp_conjugate.value());
                     break;
                 default:
                     throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
@@ -114,7 +111,7 @@ namespace eos
 
         double decay_width() const
         {
-            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), cp_conjugate);
+            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value());
 
             // cf. [DBG2013], eq. (5), p. 5
             const complex<double> ga = wc.cvl() - wc.cvr();

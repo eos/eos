@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  * Copyright (c) 2023 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
@@ -73,9 +73,7 @@ namespace eos
 
         std::shared_ptr<PseudoscalarLCDAs> lcdas;
 
-        SpecifiedOption opt_cp_conjugate;
-
-        bool cp_conjugate;
+        BooleanOption opt_cp_conjugate;
 
         UsedParameter mu;
 
@@ -85,7 +83,7 @@ namespace eos
         double switch_nlp;
 
         std::function<complex<double> ()> ckm_factor;
-        std::function<WilsonCoefficients<bern::ClassIII> (bool)> wc;
+        std::function<WilsonCoefficients<bern::ClassIII> ()> wc;
 
         static const std::vector<OptionSpecification> options;
 
@@ -102,7 +100,6 @@ namespace eos
             alpha_s(p["QCD::alpha_s(MZ)"], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             opt_cp_conjugate(o, options, "cp-conjugate"),
-            cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
             mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u),
             opt_accuracy(o, options, "accuracy")
         {
@@ -113,13 +110,13 @@ namespace eos
             {
                 case QuarkFlavor::strange:
                     ckm_factor = [this]() { return conj(model->ckm_ud()) * model->ckm_cb(); };
-                    wc         = [this](const bool & cp_conjugate) { return model->wet_dbcu(cp_conjugate); };
+                    wc         = [this]() { return model->wet_dbcu(opt_cp_conjugate.value()); };
                     ff_f_0     = std::make_shared<UsedParameter>(p["B_s->D_spi::f_0(Mpi2)"], u);
                     lcdas      = PseudoscalarLCDAs::make("pi", p, o);
                     break;
                 case QuarkFlavor::down:
                     ckm_factor = [this]() { return conj(model->ckm_us()) * model->ckm_cb(); };
-                    wc         = [this](const bool & cp_conjugate) { return model->wet_sbcu(cp_conjugate); };
+                    wc         = [this]() { return model->wet_sbcu(opt_cp_conjugate.value()); };
                     ff_f_0     = std::make_shared<UsedParameter>(p["B->DK::f_0(MK2)"], u);
                     lcdas      = PseudoscalarLCDAs::make("K", p, o);
                     break;
@@ -236,7 +233,7 @@ namespace eos
 
         complex<double> a_1() const
         {
-            const WilsonCoefficients<bern::ClassIII> wc = this->wc(cp_conjugate);
+            const WilsonCoefficients<bern::ClassIII> wc = this->wc();
 
             // cf. [BBNS:2000A], converted to the Bern basis
             const double mb = model->m_b_msbar(mu());
