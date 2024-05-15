@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2017,2021 Danny van Dyk
+ * Copyright (c) 2015-2024 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2021 Christoph Bobeth
@@ -90,8 +90,6 @@ namespace eos
 
         BooleanOption opt_cp_conjugate;
 
-        bool cp_conjugate;
-
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
         // { U, q, I } -> { process, m_B, m_V, c_I }
@@ -174,7 +172,6 @@ namespace eos
             mu(p[opt_U.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             opt_cp_conjugate(o, options, "cp-conjugate"),
-            cp_conjugate(opt_cp_conjugate.value()),
             form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
         {
             Context ctx("When constructing B->Plnu observable");
@@ -207,7 +204,7 @@ namespace eos
         b_to_psd_l_nu::Amplitudes amplitudes(const double & s) const
         {
             // NP contributions in EFT including tensor operator (cf. [DDS:2014A]).
-            auto wc = this->wc(opt_l.value(), cp_conjugate);
+            auto wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
             const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0); // in SM cvl=1 => gV contains NP contribution of cvl
             const complex<double> gS = wc.csr() + wc.csl();
             const complex<double> gT = wc.ct();

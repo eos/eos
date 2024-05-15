@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019-2021 Danny van Dyk
+ * Copyright (c) 2019-2024 Danny van Dyk
  * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -70,8 +70,6 @@ namespace eos
         const double isospin_factor;
 
         BooleanOption opt_cp_conjugate;
-
-        bool cp_conjugate;
 
         UsedParameter mu;
 
@@ -161,7 +159,6 @@ namespace eos
             m_V(p["mass::" + _m_V()], u),
             isospin_factor(_isospin_factor()),
             opt_cp_conjugate(o, options, "cp-conjugate"),
-            cp_conjugate(opt_cp_conjugate.value()),
             mu(p[opt_U.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             opt_int_points(o, "integration-points", {"256", "4096"}, "256"),
             int_points(destringify<int>(opt_int_points.value())),
@@ -209,7 +206,7 @@ namespace eos
             b_to_vec_l_nu::Amplitudes result;
 
             // NP contributions in EFT including tensor operator cf. [DSD2014], p. 3
-            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), cp_conjugate);
+            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
             const complex<double> gV_pl = wc.cvl() + wc.cvr();  // gV_pl = 1 + gV = 1 + VL + VR = cVL + cVR
             const complex<double> gV_mi = wc.cvl() - wc.cvr();  // gV_mi = 1 - gA = 1 + VL - VR = cVL - cVR
             const complex<double> gP = wc.csr() - wc.csl();
