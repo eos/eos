@@ -79,3 +79,28 @@ class IsospinRepresentationTest :
             TEST_CHECK_EQUAL_STR("3/2", stringify(IsospinRepresentation::threehalves));
         }
 } isospin_representation_test;
+
+class LightMesonTest :
+    public TestCase
+{
+    public:
+        LightMesonTest() :
+            TestCase("light_meson_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            TEST_CHECK_EQUAL_STR("pi^0",        stringify(LightMeson::pi0));
+            TEST_CHECK_EQUAL_STR("pi^+",        stringify(LightMeson::piplus));
+            TEST_CHECK_EQUAL_STR("pi^-",        stringify(LightMeson::piminus));
+            TEST_CHECK_EQUAL_STR("K_d",         stringify(LightMeson::K0));
+            TEST_CHECK_EQUAL_STR("Kbar_d",      stringify(LightMeson::K0bar));
+            TEST_CHECK_EQUAL_STR("K_S",         stringify(LightMeson::KS));
+            TEST_CHECK_EQUAL_STR("K_u",         stringify(LightMeson::Kplus));
+            TEST_CHECK_EQUAL_STR("Kbar_u",      stringify(LightMeson::Kminus));
+            TEST_CHECK_EQUAL_STR("eta",         stringify(LightMeson::eta));
+            TEST_CHECK_EQUAL_STR("eta_prime",   stringify(LightMeson::etap));
+
+        }
+} light_meson_test;
