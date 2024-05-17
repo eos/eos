@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020 Danny van Dyk
+ * Copyright (c) 2020-2024 Danny van Dyk
  * Copyright (c) 2020 Nico Gubernari
  * Copyright (c) 2020 Christoph Bobeth
  *
@@ -256,7 +256,7 @@ namespace eos
     {
         // resonances for 1^-, which have overlap with the tensor current
         const double blaschke = _z(s, 6.329 * 6.329) * _z(s, 6.910 * 6.910) * _z(s, 7.020 * 7.020);
-        const double phi      = _phi(s, _t_0, 24.0, 3, 3, 2, _chi_T_1m);
+        const double phi      = _phi(s, _t_0, 16.0, 3, 3, 2, _chi_T_1m);
         const double z        = _z(s, _t_0);
         const double series   = _a_T1[0] + _a_T1[1] * z + _a_T1[2] * z * z + _a_T1[3] * z * z * z;
 
@@ -286,7 +286,7 @@ namespace eos
     {
         // resonances for 1^+, which have overlap with the tensor current
         const double blaschke = _z(s, 6.739 * 6.739) * _z(s, 6.750 * 6.750) * _z(s, 7.145 * 7.145) * _z(s, 7.150 * 7.150);
-        const double phi      = _phi(s, _t_0, 24.0 / (_t_p * _t_m), 1, 1, 2, _chi_T_1p);
+        const double phi      = _phi(s, _t_0, 16.0 / (_t_p * _t_m), 1, 1, 2, _chi_T_1p);
         const double z        = _z(s, _t_0);
         const double series   = a_T2_0() + _a_T2[0] * z + _a_T2[1] * z * z + _a_T2[2] * z * z * z;
 
@@ -305,8 +305,10 @@ namespace eos
     double
     BGL1997FormFactors<BToDstar>::a_T23_0() const
     {
-        const double x_T2  = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 24.0 / (_t_p * _t_m),       1, 1, 2, _chi_T_1p);
-        const double x_T23 = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 3.0 * _t_p / (_mB2 * _mV2), 1, 1, 1, _chi_T_1p)
+        /* a_T23_0 determined from T2(t_-) = 8 mB mV^2 / ((mB + mV) * (mB^2 + 3 mV^2 - t_-)) T23(t_-) */
+        /* note: T_i ~ 1.0 / x_i * sum_n a_n z^n */
+        const double x_T2  = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, 16.0 / (_t_p * _t_m), 1, 1, 2, _chi_T_1p);
+        const double x_T23 = _z(_t_m, 6.739 * 6.739) * _z(_t_m, 6.750 * 6.750) * _z(_t_m, 7.145 * 7.145) * _z(_t_m, 7.150 * 7.150) * _phi(_t_m, _t_0, _t_p / (_mB2 * _mV2), 1, 1, 1, _chi_T_1p)
                            / (8.0 * _mB * _mV2) * ((_mB + _mV) * (_mB2 + 3.0 * _mV2 - _t_m));
         const double z = _z(_t_m, _t_0);
         std::array<double, 4> an, zn;
@@ -325,7 +327,7 @@ namespace eos
     {
         // resonances for 1^+, which have overlap with the tensor current
         const double blaschke = _z(s, 6.739 * 6.739) * _z(s, 6.750 * 6.750) * _z(s, 7.145 * 7.145) * _z(s, 7.150 * 7.150);
-        const double phi      = _phi(s, _t_0, 3.0 * _t_p / (_mB2 * _mV2), 1.0, 1.0, 1.0, _chi_T_1p);
+        const double phi      = _phi(s, _t_0, _t_p / (_mB2 * _mV2), 1.0, 1.0, 1.0, _chi_T_1p);
         const double z        = _z(s, _t_0);
         const double series   = a_T23_0() + _a_T23[0] * z + _a_T23[1] * z * z + _a_T23[2] * z * z * z;
 
@@ -445,7 +447,7 @@ namespace eos
     {
         // resonances for 1^-
         const double blaschke = _z(s, 6.329 * 6.329) * _z(s, 6.910 * 6.910) * _z(s, 7.020 * 7.020);
-        const double phi      = _phi(s, _t_0, 48.0 * _t_p, 3, 3, 1, _chi_T_1m);
+        const double phi      = _phi(s, _t_0, 16.0 * _t_p, 3, 3, 1, _chi_T_1m);
         const double z        = _z(s, _t_0);
         const double series   = _a_f_t[0] + _a_f_t[1] * z + _a_f_t[2] * z * z + _a_f_t[3] * z * z * z;
 

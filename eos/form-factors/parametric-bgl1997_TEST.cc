@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2020 Christoph Bobeth
+ * Copyright (c) 2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -80,6 +81,7 @@ class BGL1997FormFactorsTest :
                 const double t_m = (mB - mV) * (mB - mV);
                 const double r   = mV / mB, wmax = (mB * mB + mV * mV) / (2.0 * mB * mV);
                 const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);
+                const double T23factor = (mB + mV) * (mB * mB + 3.0 * mV * mV - t_m) / (8.0 * mB * mV * mV);
                 BGL1997FormFactors<BToDstar> ff(p, Options{ });
 
                 p["B->D^*::a^g_0@BGL1997"] = 0.1e-02;
@@ -138,22 +140,22 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.F1(t_m), (mB - mV) * ff.f(t_m),  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.F2(0.0), F2factor  * ff.F1(0.0), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.t_1(-2.0),  0.0869380, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+1.0),  0.0928776, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+4.0),  0.1000316, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_1(-2.0),  0.0709845, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+1.0),  0.0758342, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+4.0),  0.0816754, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.a_T2_0(),   2.4837e-4, 1.0e-8);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_2(-2.0),  0.0935896, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+1.0),  0.0893296, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+4.0),  0.0847745, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_2(-2.0),  0.0764157, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+1.0),  0.0729343, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+4.0),  0.0692181, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.a_T23_0(),  6.3477e-4, 1.0e-8);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_23(-2.0), 0.0802478, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+1.0), 0.0820204, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+4.0), 0.0842156, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.a_T23_0(),  8.7541e-4, 1.0e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_23(-2.0), 0.0619518, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+1.0), 0.0640365, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+4.0), 0.0665671, eps);
 
-                TEST_CHECK_NEARLY_EQUAL( ff.t_1(0.0),  ff.t_2(0.0),                                                                      eps);
-                TEST_CHECK_NEARLY_EQUAL( ff.t_23(t_m), (mB + mV) * (mB * mB + 3.0 * mV * mV - t_m) / (8.0 * mB * mV * mV) * ff.t_2(t_m), eps);
+                TEST_CHECK_NEARLY_EQUAL( ff.t_1(0.0),  ff.t_2(0.0),             eps);
+                TEST_CHECK_NEARLY_EQUAL( ff.t_23(t_m), T23factor * ff.t_2(t_m), eps);
 
                 p["B->D^*::a^g_0@BGL1997"] = 0.4e-02;
                 p["B->D^*::a^g_1@BGL1997"] = 0.3e-02;
@@ -212,19 +214,19 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.F1(t_m), (mB - mV) * ff.f(t_m),  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.F2(0.0), F2factor  * ff.F1(0.0), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.t_1(-2.0),  0.331549, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+1.0),  0.360687, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+4.0),  0.395877, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_1(-2.0),  0.270708, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+1.0),  0.294499, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_1(+4.0),  0.323232, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.a_T2_0(),   1.099e-3, 1.0e-7);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_2(-2.0),  0.347005, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+1.0),  0.352278, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+4.0),  0.358958, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_2(-2.0),  0.283329, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+1.0),  0.287634, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_2(+4.0),  0.293088, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.a_T23_0(),  3.118e-3, 5.0e-7);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_23(-2.0), 0.363425, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+1.0), 0.382876, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+4.0), 0.406004, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.a_T23_0(),  4.3747e-3, 5.0e-7);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_23(-2.0), 0.291430, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+1.0), 0.308205, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.t_23(+4.0), 0.328157, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.t_1(0.0),  ff.t_2(0.0),                                                                      eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.t_23(t_m), (mB + mV) * (mB * mB + 3.0 * mV * mV - t_m) / (8.0 * mB * mV * mV) * ff.t_2(t_m), eps);
@@ -257,9 +259,9 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.435522,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.432496,  eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.041750,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.044758,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+4.0), 0.048361,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.024104,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.025841,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+4.0), 0.027921,  eps);
 
                 p["B->D::a^f+_0@BGL1997"] = 0.4e-02;
                 p["B->D::a^f+_1@BGL1997"] = 0.3e-02;
@@ -284,9 +286,9 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 1.68264,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 1.70431,  eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.158273, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.172925, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+4.0), 0.190572, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.091379, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.099838, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_t(+4.0), 0.110027, eps);
             }
         }
 } BGL1997_form_factor_test;
