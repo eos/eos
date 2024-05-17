@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018-2023 Danny van Dyk
+ * Copyright (c) 2018-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1174,6 +1174,95 @@ namespace eos
     }
 
     template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToP>::h_tbar_1(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double chi2 = _chi2(q2);
+        const double chi3 = _chi3(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
+        const double L2 = -4.0 * chi3;
+
+        double result = (1.0 + as * (_CT1(w, z) - (w - 1.0) / 2.0 * (_CT2(w, z) - _CT3(w, z))));
+        result += eps_b * (L2);
+        result += eps_c * (L1);
+        result += eps_c * eps_c * (_l1(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToP>::h_tbar_2(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double eta = _eta(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L4 = 2.0 * eta - 1.0;
+        const double L5 = -1.0;
+
+        double result = (0.0 - as * (w + 1.0) / 2.0 * (_CT2(w, z) + _CT3(w, z)));
+        result += eps_b * L5;
+        result += eps_c * (-L4);
+        result += eps_c * eps_c * (-_l4(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToP>::h_tbar_3(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double eta = _eta(q2);
+        const double chi2 = _chi2(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L3 = 4.0 * chi2;
+        const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+        double result = (0.0 - as * _CT3(w, z));
+        result += eps_b * (L6 - L3);
+
+        return result * xi;
+    }
+
+    template <typename Process_>
     Diagnostics
     HQETFormFactors<Process_, VToP>::diagnostics() const
     {
@@ -1304,16 +1393,25 @@ namespace eos
             results.add(Diagnostics::Entry{ h_abar_2(_q2(1.4)), "h_Abar2(w = 1.4)" });
             results.add(Diagnostics::Entry{ h_abar_3(_q2(1.4)), "h_Abar3(w = 1.4)" });
             results.add(Diagnostics::Entry{ h_vbar (_q2(1.4)),  "h_Vbar (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_tbar_1(_q2(1.4)), "h_Tbar1(w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_tbar_2(_q2(1.4)), "h_Tbar2(w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_tbar_3(_q2(1.4)), "h_Tbar3(w = 1.4)" });
 
             results.add(Diagnostics::Entry{ h_abar_1(_q2(1.2)), "h_Abar1(w = 1.2)" });
             results.add(Diagnostics::Entry{ h_abar_2(_q2(1.2)), "h_Abar2(w = 1.2)" });
             results.add(Diagnostics::Entry{ h_abar_3(_q2(1.2)), "h_Abar3(w = 1.2)" });
             results.add(Diagnostics::Entry{ h_vbar (_q2(1.2)),  "h_Vbar (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_tbar_1(_q2(1.2)), "h_Tbar1(w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_tbar_2(_q2(1.2)), "h_Tbar2(w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_tbar_3(_q2(1.2)), "h_Tbar3(w = 1.2)" });
 
             results.add(Diagnostics::Entry{ h_abar_1(_q2(1.0)), "h_Abar1(w = 1.0)" });
             results.add(Diagnostics::Entry{ h_abar_2(_q2(1.0)), "h_Abar2(w = 1.0)" });
             results.add(Diagnostics::Entry{ h_abar_3(_q2(1.0)), "h_Abar3(w = 1.0)" });
             results.add(Diagnostics::Entry{ h_vbar (_q2(1.0)),  "h_Vbar (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_tbar_1(_q2(1.0)), "h_Tbar1(w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_tbar_2(_q2(1.0)), "h_Tbar2(w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_tbar_3(_q2(1.0)), "h_Tbar3(w = 1.0)" });
         }
 
         return results;

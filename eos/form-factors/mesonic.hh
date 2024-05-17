@@ -252,6 +252,10 @@ namespace eos
             virtual double h_abar_1(const double & s) const = 0;
             virtual double h_abar_2(const double & s) const = 0;
             virtual double h_abar_3(const double & s) const = 0;
+
+            virtual double h_tbar_1(const double & s) const = 0;
+            virtual double h_tbar_2(const double & s) const = 0;
+            virtual double h_tbar_3(const double & s) const = 0;
     };
 
     template <>

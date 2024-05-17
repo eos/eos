@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018, 2019 Danny van Dyk
+ * Copyright (c) 2018-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1690,18 +1690,27 @@ class BstarToDHQETFormFactorsTest :
                 std::make_pair(-0.082947, eps), // h_{Abar2}
                 std::make_pair(+0.712066, eps), // h_{Abar3}
                 std::make_pair(+0.760677, eps), // h_{Vbar}
+                std::make_pair(+0.691044, eps), // h_{Tbar1}
+                std::make_pair(+0.015929, eps), // h_{Tbar2}
+                std::make_pair(-0.064329, eps), // h_{Tbar3}
 
                 /* HQET form factors at w = 1.2 */
                 std::make_pair(+0.779087, eps), // h_{Abar1}
                 std::make_pair(-0.103046, eps), // h_{Abar2}
                 std::make_pair(+0.866333, eps), // h_{Abar3}
                 std::make_pair(+0.928731, eps), // h_{Vbar}
+                std::make_pair(+0.835928, eps), // h_{Tbar1}
+                std::make_pair(+0.016255, eps), // h_{Tbar2}
+                std::make_pair(-0.081062, eps), // h_{Tbar3}
 
                 /* HQET form factors at w = 1.0 */
                 std::make_pair(+0.969229, eps), // h_{Abar1}
                 std::make_pair(-0.130890, eps), // h_{Abar2}
                 std::make_pair(+1.078436, eps), // h_{Abar3}
                 std::make_pair(+1.160604, eps), // h_{Vbar}
+                std::make_pair(+1.031318, eps), // h_{Tbar1}
+                std::make_pair(+0.019816, eps), // h_{Tbar2}
+                std::make_pair(-0.104821, eps), // h_{Tbar3}
             };
 
             TEST_CHECK_DIAGNOSTICS(diag, ref);

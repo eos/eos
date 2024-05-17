@@ -378,6 +378,9 @@ namespace eos
             virtual double h_abar_2(const double & q2) const override;
             virtual double h_abar_3(const double & q2) const override;
             virtual double h_vbar(const double & q2) const override;
+            virtual double h_tbar_1(const double & q2) const override;
+            virtual double h_tbar_2(const double & q2) const override;
+            virtual double h_tbar_3(const double & q2) const override;
 
             Diagnostics diagnostics() const;
 
