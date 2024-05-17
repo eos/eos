@@ -58,6 +58,17 @@ namespace eos
         };
 
         os << names[static_cast<unsigned>(ir)];
+    }
+
+    std::ostream &
+    operator<< (std::ostream & os, LightMeson qf)
+    {
+        static const std::array<std::string, 10u> names
+        {
+            "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime"
+        };
+
+        os << names[static_cast<unsigned>(qf)];
 
         return os;
     }

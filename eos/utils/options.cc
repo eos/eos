@@ -349,4 +349,41 @@ namespace eos
     {
         return _value;
     }
+
+    LightMesonOption::LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key)
+    {
+    }
+
+    LightMesonOption::~LightMesonOption() = default;
+
+    LightMeson
+    LightMesonOption::value() const
+    {
+        static const std::map<std::string, LightMeson> map
+        {
+            { "pi^0",      LightMeson::pi0     },
+            { "pi^+",      LightMeson::piplus  },
+            { "pi^-",      LightMeson::piminus },
+            { "K_d",       LightMeson::K0      },
+            { "Kbar_d",    LightMeson::K0bar   },
+            { "K_S",       LightMeson::KS      },
+            { "K_u",       LightMeson::Kplus   },
+            { "Kbar_u",    LightMeson::Kminus  },
+            { "eta",       LightMeson::eta     },
+            { "eta_prime", LightMeson::etap    }
+        };
+
+        const auto i = map.find(_value);
+        if (map.cend() == i)
+            throw InternalError("Invalid light meson '" + _value + "' encountered in LightMesonOption::value()");
+
+        return i->second;
+    }
+
+    const std::string &
+    LightMesonOption::str() const
+    {
+        return _value;
+    }
 }
