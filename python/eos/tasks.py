@@ -271,6 +271,32 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
             eos.error(f' - {p.name()}: {p.evaluate()}')
 
 
+@task('sample-prior', '{posterior}/samples')
+def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:int=1000, seed:int=1701):
+    """
+    Samples from a named posterior PDF w/o likelihood information, an effective prior PDF.
+
+    The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/samples.
+
+    :param analysis_file: The name of the analysis file that describes the named prior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior PDF (w/o any likelihood information) from which to draw the samples.
+    :type posterior: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param N: The number of samples to be stored in the output file. Defaults to 1000.
+    :type N: int, optional
+    :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
+    :type seed: int, optional
+    """
+
+    analysis = analysis_file.analysis(posterior)
+    rng = _np.random.mtrand.RandomState(seed)
+    samples = analysis.sample_prior(N=N, rng=rng)
+    weights =  _np.ones(N) / N
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
+
+
 @task('find-clusters', '{posterior}/clusters')
 def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K_g:int=1, analysis_file:str=None):
     """
