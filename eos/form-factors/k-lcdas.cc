@@ -43,7 +43,6 @@ namespace eos
 
         // twist 4 parameters
         UsedParameter delta4K_0;
-        UsedParameter kappa4K_0;
         UsedParameter omega4K_0;
 
         // mass and decay constant of the pion
@@ -63,7 +62,6 @@ namespace eos
             lambda3K_0(p["K::lambda3@1GeV"], u),
             omega3K_0(p["K::omega3@1GeV"], u),
             delta4K_0(p["K::delta4@1GeV"], u),
-            kappa4K_0(p["K::kappa4@1GeV"], u),
             omega4K_0(p["K::omega4@1GeV"], u),
             m_K(p["mass::K_u"], u),
             f_K(p["decay-constant::K_u"], u),
@@ -176,9 +174,8 @@ namespace eos
             const double m_s_0 = model->m_s_msbar(mu_0);
             const double m_q_0 = model->m_ud_msbar(mu_0) / 2.0;
 
-            return kappa4K_0
-            - 9.0 / 40.0 * a1K_0 * (std::pow(c_rge, 32.0 / 9.0) - 1.0)
-            + (m_s_0 * m_s_0 - m_q_0 * m_q_0) / (2.0 * m_K * m_K) * (std::pow(c_rge, 8.0) - 1.0);
+            return -1.0 / 8.0 * (m_s_0 - m_q_0) / (m_s_0 + m_q_0) - 9.0 / 40.0 * a1K_0 * std::pow(c_rge, 32.0 / 9.0)
+            + (m_s_0 * m_s_0 - m_q_0 * m_q_0) / (2.0 * m_K * m_K) * std::pow(c_rge, 8.0);
         }
 
         double omega4K(const double & mu) const
@@ -666,7 +663,6 @@ namespace eos
 
         // twist 4 parameters
         UsedParameter delta4K_0;
-        UsedParameter kappa4K_0;
         UsedParameter omega4K_0;
 
         // mass and decay constant of the pion
@@ -686,7 +682,6 @@ namespace eos
             lambda3K_0(p["K::lambda3@1GeV"], u),
             omega3K_0(p["K::omega3@1GeV"], u),
             delta4K_0(p["K::delta4@1GeV"], u),
-            kappa4K_0(p["K::kappa4@1GeV"], u),
             omega4K_0(p["K::omega4@1GeV"], u),
             m_K(p["mass::K_u"], u),
             f_K(p["decay-constant::K_u"], u),
@@ -801,9 +796,8 @@ namespace eos
             const double m_s_0 = model->m_ud_msbar(mu_0) / 2.0; // swapped m_s with m_q
             const double m_q_0 = model->m_s_msbar(mu_0);
 
-            return -kappa4K_0
-            + 9.0 / 40.0 * a1K_0 * (std::pow(c_rge, 32.0 / 9.0) - 1.0)
-            + (m_s_0 * m_s_0 - m_q_0 * m_q_0) / (2.0 * m_K * m_K) * (std::pow(c_rge, 8.0) - 1.0);
+            return -1.0 / 8.0 * (m_s_0 - m_q_0) / (m_s_0 + m_q_0) + 9.0 / 40.0 * a1K_0 * std::pow(c_rge, 32.0 / 9.0)
+                + (m_s_0 * m_s_0 - m_q_0 * m_q_0) / (2.0 * m_K * m_K) * std::pow(c_rge, 8.0);
         }
 
         double omega4K(const double & mu) const
