@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2021 Danny van Dyk
  * Copyright (c) 2022 Carolina Bolognani
+ * Copyright (c) 2024 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -53,8 +54,7 @@ class AntiKaonLCDAsTest :
             p["K::f3@1GeV"]          =  0.0045;
             p["K::omega3@1GeV"]      = -1.5;
             p["K::lambda3@1GeV"]     =  1.6;
-            p["K::delta4@1GeV"]     =  0.18;
-            p["K::kappa4@1GeV"]      = -0.09;
+            p["K::delta4@1GeV"]      =  0.18;
             p["K::omega4@1GeV"]      =  0.2;
             p["mass::K_u"]           =  0.49368;
             p["decay-constant::K_u"] =  0.1561;
@@ -165,63 +165,63 @@ class AntiKaonLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(2.0),  0.15437,   eps);
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(3.0),  0.14544,   eps);
 
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.09,      eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.103105,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.107073,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.070363,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.083466,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.087433,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(1.0),  0.2,       eps);
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(2.0),  0.137439,  eps);
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(3.0),  0.118188,  eps);
 
                 // phi4, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 1.0), 0.3663714,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 1.0), 0.8035002,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 1.0), 1.1313548,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 1.0), 0.3546348,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 1.0), 0.7872947,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 1.0), 1.1168668,  eps);
 
                 // phi4, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 2.0), 0.3255290,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 2.0), 0.7048003,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 2.0), 0.9952677,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 2.0), 0.3137956,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 2.0), 0.6885918,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 2.0), 0.9807768,  eps);
 
                 // phi4_d1, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 1.0),  4.4619481,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 1.0),  3.9998219,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 1.0),  2.4640627,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 1.0),  4.3817199,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 1.0),  3.9886215,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 1.0),  2.5065593,  eps);
 
                 // phi4_d1, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 2.0),  3.8610347,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 2.0),  3.4987248,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 2.0),  2.2209078,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 2.0),  3.7808052,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 2.0),  3.4875212,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 2.0),  2.2634101,  eps);
 
                 // phi4_d2, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 1.0),  5.1756668,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 1.0), -11.852937,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 1.0), -17.533827,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 1.0),  5.9155005,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 1.0), -11.228389,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 1.0), -17.091844,  eps);
 
                 // phi4_d2, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 2.0),  4.0958549,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 2.0), -9.5516860,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 2.0), -14.990626,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 2.0),  4.8356851,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 2.0), -8.9271334,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 2.0), -14.548637,  eps);
 
                 // psi4, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 1.0),  0.7608706,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 1.0),  0.0317497,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 1.0), -0.4249862,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 1.0),  0.8047785210,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 1.0),  0.0753944603,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 1.0), -0.3907843998,  eps);
 
                 // psi4, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 2.0),  0.6338835,  5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 2.0),  0.0037173,  5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 2.0), -0.3743138,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 2.0),  0.6777910058,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 2.0),  0.0473704719,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 2.0), -0.3401055477,  5.0 * eps);
 
                 // psi4_i, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 1.0),  0.11623111, eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 1.0),  0.15368080, eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 1.0),  0.13175167, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 1.0), 0.120139861, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 1.0), 0.162056387, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 1.0), 0.144083365, eps);
 
                 // psi4_i, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 2.0),  0.1019395,  5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 2.0),  0.1317095,  5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 2.0),  0.1111354,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 2.0), 0.105845125, 5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 2.0), 0.140082543, 5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 2.0), 0.123465300, 5.0 * eps);
             }
         }
 } anti_k_lcdas_test;
@@ -249,8 +249,7 @@ class KaonLCDAsTest :
             p["K::f3@1GeV"]          =  0.0045;
             p["K::omega3@1GeV"]      = -1.5;
             p["K::lambda3@1GeV"]     = -1.6;
-            p["K::delta4@1GeV"]     =  0.18;
-            p["K::kappa4@1GeV"]      =  0.09;
+            p["K::delta4@1GeV"]      =  0.18;
             p["K::omega4@1GeV"]      =  0.2;
             p["mass::K_u"]           =  0.49368;
             p["decay-constant::K_u"] =  0.1561;
@@ -362,63 +361,63 @@ class KaonLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(2.0),  0.15437,  eps);
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(3.0),  0.14544,  eps);
 
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.09,     eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.103105, eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.107073, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.070363, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.083466, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.087433, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(1.0),  0.2,      eps);
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(2.0),  0.137439, eps);
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(3.0),  0.118188, eps);
 
                 // phi4, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 1.0), 0.3663714,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 1.0), 0.8035002,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 1.0), 1.1313548,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 1.0), 0.3546348,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 1.0), 0.7872947,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 1.0), 1.1168668,  eps);
 
                 // phi4, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 2.0), 0.3255290,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 2.0), 0.7048003,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 2.0), 0.9952677,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.1, 2.0), 0.3137956,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.2, 2.0), 0.6885918,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4(0.3, 2.0), 0.9807768,  eps);
 
                 // phi4_d1, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 1.0),  4.4619481,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 1.0),  3.9998219,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 1.0),  2.4640627,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 1.0),  4.3817199,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 1.0),  3.9886215,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 1.0),  2.5065593,  eps);
 
                 // phi4_d1, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 2.0),  3.8610347,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 2.0),  3.4987248,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 2.0),  2.2209078,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.1, 2.0),  3.7808052,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.2, 2.0),  3.4875212,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d1(0.3, 2.0),  2.2634101,  eps);
 
                 // phi4_d2, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 1.0),  5.1756668,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 1.0), -11.852937,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 1.0), -17.533827,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 1.0),  5.9155005,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 1.0), -11.228389,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 1.0), -17.091844,  eps);
 
                 // phi4_d2, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 2.0),  4.0958549,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 2.0), -9.5516860,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 2.0), -14.990626,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.1, 2.0),  4.8356851,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.2, 2.0), -8.9271334,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.phi4_d2(0.3, 2.0), -14.548637,  eps);
 
                 // psi4, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 1.0),  0.7608706,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 1.0),  0.0317497,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 1.0), -0.4249862,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 1.0),  0.8047785210,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 1.0),  0.0753944603,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 1.0), -0.3907843998,  eps);
 
                 // psi4, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 2.0),  0.6338835,  5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 2.0),  0.0037173,  5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 2.0), -0.3743138,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.1, 2.0),  0.6777910058,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.2, 2.0),  0.0473704719,  5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4(0.3, 2.0), -0.3401055477,  5.0 * eps);
 
                 // psi4_i, scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 1.0), 0.11623111, eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 1.0), 0.15368080, eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 1.0), 0.13175167, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 1.0), 0.120139861, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 1.0), 0.162056387, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 1.0), 0.144083365, eps);
 
                 // psi4_i, scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 2.0), 0.1019395, 5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 2.0), 0.1317095, 5.0 * eps);
-                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 2.0), 0.1111354, 5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.1, 2.0), 0.105845125, 5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.2, 2.0), 0.140082543, 5.0 * eps);
+                TEST_CHECK_NEARLY_EQUAL(k.psi4_i(0.3, 2.0), 0.123465300, 5.0 * eps);
             }
         }
 } k_lcdas_test;

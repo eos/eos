@@ -843,12 +843,6 @@ groups:
           latex:    '$(\delta^{K})^2(1\,\mathrm{GeV})$'
           unit:     'GeV^2'
           comments: 'cf. [DKMMO:2008A]'
-      'K::kappa4@1GeV' :
-          central: -0.09
-          min:     -0.11
-          max:     -0.07
-          latex:    '$(\kappa_{4K})(1\,\mathrm{GeV})$'
-          unit:     'GeV^2'
       # K^* LCDA parameters
       'K^*::a_1_para@1GeV' :
           central: +0.06
