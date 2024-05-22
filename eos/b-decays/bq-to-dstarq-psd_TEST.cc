@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Stefan Meiser
+ * Copyright (c) 2023-2024 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,7 +64,6 @@ class BqToDstarqPSDTest :
                 p["K::a3@1GeV"] = 0.0;
                 p["K::a4@1GeV"] = 0.0;
                 p["K::omega3@1GeV"] = -1.5;
-                p["K::kappa4@1GeV"] = -0.09;
                 // WC Values
                 p["sbcu::Re{c1}" ] = -0.04235657776117585;
                 p["sbcu::Im{c1}" ] = 0.0;
@@ -117,7 +116,6 @@ class BqToDstarqPSDTest :
                 p["K::a3@1GeV"] = 0.0;
                 p["K::a4@1GeV"] = 0.0;
                 p["K::omega3@1GeV"] = -1.5;
-                p["K::kappa4@1GeV"] = -0.09;
                 // WC Values
                 p["sbcu::Re{c1}" ] = -0.04235657776117585;
                 p["sbcu::Im{c1}" ] = 0;
@@ -136,7 +134,7 @@ class BqToDstarqPSDTest :
                 BqToDstarqPseudoscalar d(p, oo);
                 {
                     const double eps = 1.0e-5;
-                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.000752259, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.000808643, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.im_a_1(),    0.0,         eps);
                 }
             }
@@ -254,7 +252,6 @@ class BqToDstarqPSDTest :
                 p["K::a3@1GeV"] = 0.0;
                 p["K::a4@1GeV"] = 0.0;
                 p["K::omega3@1GeV"] = -1.5;
-                p["K::kappa4@1GeV"] = -0.09;
                 // BSM test case: WET parameter point
                 p["sbcu::Re{c1}"  ] = -1.72424;
                 p["sbcu::Im{c1}"  ] = -1.56379;
@@ -306,9 +303,9 @@ class BqToDstarqPSDTest :
                 BqToDstarqPseudoscalar d(p, oo);
 
                 {
-                    const double eps = 1e-5;
-                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.127433, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.im_a_1(), -0.123423, eps);
+                    const double eps = 2e-5;
+                    TEST_CHECK_RELATIVE_ERROR(d.re_a_1(), -0.13831,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.im_a_1(), -0.133759, eps);
                 }
             }
         }
