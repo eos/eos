@@ -15,6 +15,7 @@ SUBDIRS = \
 	rare-b-decays \
 	b-decays \
 	c-decays \
+	s-decays \
 	meson-mixing \
 	scattering \
 	.
@@ -40,6 +41,7 @@ libeos_la_LIBADD = \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/c-decays/libeoscdecays.la \
+	$(top_builddir)/eos/s-decays/libeossdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
 	$(top_builddir)/eos/meson-mixing/libeosmesonmixing.la \
 	$(top_builddir)/eos/scattering/libeosscattering.la
@@ -67,6 +69,7 @@ LDADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/c-decays/libeoscdecays.la \
+	$(top_builddir)/eos/s-decays/libeossdecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \

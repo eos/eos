@@ -23,6 +23,7 @@
 #include <eos/observable.hh>
 #include <eos/b-decays/observables.hh>
 #include <eos/c-decays/observables.hh>
+#include <eos/s-decays/observables.hh>
 #include <eos/rare-b-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
 #include <eos/nonlocal-form-factors/observables.hh>
@@ -56,6 +57,7 @@ namespace eos
             make_nonlocal_form_factors_section,
             make_b_decays_section,
             make_c_decays_section,
+            make_s_decays_section,
             make_rare_b_decays_section,
             make_meson_mixing_section,
             make_scattering_section
@@ -127,6 +129,7 @@ namespace eos
                 _sections = std::vector<ObservableSection>({
                     make_b_decays_section(),
                     make_c_decays_section(),
+                    make_s_decays_section(),
                     make_rare_b_decays_section(),
                     make_meson_mixing_section(),
                     make_nonlocal_form_factors_section(),
