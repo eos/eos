@@ -2172,39 +2172,52 @@ namespace eos
                 /* B^0 lifetime */
                 make_observable("B^0::Gamma(dbcu)", R"(\Gamma(\bar{B}^0)^{dbcu})",
                         Unit::InversePicoSecond(),
-                        &Lifetime::decay_width_dbcu,
+                        &Lifetime::decay_width_dbcu_dim6_lo,
                         std::make_tuple(),
                         { { "q", "d"} }),
 
                 make_observable("B^0::Gamma(sbcu)", R"(\Gamma(\bar{B}^0)^{sbcu})",
                         Unit::InversePicoSecond(),
-                        &Lifetime::decay_width_sbcu,
+                        &Lifetime::decay_width_sbcu_dim6_lo,
                         std::make_tuple(),
                         { { "q", "d"} }),
 
                 /* B^- lifetime */
                 make_observable("B^-::Gamma(dbcu)", R"(\Gamma(\bar{B}^-)^{dbcu})",
                         Unit::InversePicoSecond(),
-                        &Lifetime::decay_width_dbcu,
+                        &Lifetime::decay_width_dbcu_dim6_lo,
                         std::make_tuple(),
                         { { "q", "u"} }),
 
                 make_observable("B^-::Gamma(sbcu)", R"(\Gamma(\bar{B}^-)^{sbcu})",
                         Unit::InversePicoSecond(),
-                        &Lifetime::decay_width_sbcu,
+                        &Lifetime::decay_width_sbcu_dim6_lo,
                         std::make_tuple(),
                         { { "q", "u"} }),
 
                 /* B_s^0 lifetime */
                 make_observable("B_s^0::Gamma(dbcu)", R"(\Gamma(\bar{B}_s^0)^{dbcu})",
                         Unit::InversePicoSecond(),
-                        &Lifetime::decay_width_dbcu,
+                        &Lifetime::decay_width_dbcu_dim6_lo,
                         std::make_tuple(),
                         { { "q", "s"} }),
 
                 make_observable("B_s^0::Gamma(sbcu)", R"(\Gamma(\bar{B}_s^0)^{sbcu})",
                         Unit::InversePicoSecond(),
-                        &Lifetime::decay_width_sbcu,
+                        &Lifetime::decay_width_sbcu_dim6_lo,
+                        std::make_tuple(),
+                        { { "q", "s"} }),
+
+                /* spectator independent LO B lifetime*/
+                make_observable("B::Gamma(dbcu)", R"(\Gamma(\bar{B})_{\text{LO}}^{dbcu})",
+                        Unit::InversePicoSecond(),
+                        &Lifetime::decay_width_dbcu_dim3_lo,
+                        std::make_tuple(),
+                        { { "q", "s"} }),
+
+                make_observable("B::Gamma(sbcu)", R"(\Gamma(\bar{B})_{\text{LO}}^{sbcu})",
+                        Unit::InversePicoSecond(),
+                        &Lifetime::decay_width_sbcu_dim3_lo,
                         std::make_tuple(),
                         { { "q", "s"} })
             }

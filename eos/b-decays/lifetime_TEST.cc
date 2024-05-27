@@ -60,6 +60,23 @@ class LifetimeTest :
                 p["decay-constant::B_u"] = 0.1905;
                 p["decay-constant::B_d"] = 0.18940;
                 p["decay-constant::B_s"] = 0.2307;
+
+                // SM test for the spectator-independent lifetime at dim3 & LO
+                {
+                    static const double eps = 1.0e-5;
+
+                    Options oo
+                    {
+                        { "model", "CKM" },
+                        { "q",     "s"   }
+                    };
+
+                    Lifetime d(p, oo);
+
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim3_lo(), 0.181764,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim3_lo(), 0.00923456, eps);
+                }
+
                 // SM test for the B^-
                 {
                     static const double eps = 1.0e-6;
@@ -74,9 +91,10 @@ class LifetimeTest :
 
                     // compare to known decay width of
                     // (1.638 +/- 0.004 ps)^-1 = (0.6105 +/- 0.0015) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.0153181,   eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.000778238, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0153181,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.000778238, eps);
                 }
+
                 // SM test for the B_d
                 {
                     static const double eps = 1.0e-7;
@@ -91,9 +109,10 @@ class LifetimeTest :
 
                     // compare to known decay width of
                     // (1.519 +/- 0.004 ps)^-1 = (0.6583 +/- 0.0017) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.0006235, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.0,       eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0006235, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.0,       eps);
                 }
+
                 // SM test for the B_s
                 {
                     static const double eps = 1.0e-7;
@@ -108,10 +127,11 @@ class LifetimeTest :
 
                     // compare to known decay width of
                     // (1.521 +/- 0.005 ps)^-1 = (0.6575 +/- 0.0022) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(), 0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(), 0.0000477726, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.0000477726, eps);
                 }
             }
+
             // BSM tests
             {
                 Parameters p = Parameters::Defaults();
@@ -207,6 +227,23 @@ class LifetimeTest :
                 p["sbcu::Im{c10}" ] = -2.96255;
                 p["sbcu::Re{c10'}"] = +2.03425;
                 p["sbcu::Im{c10'}"] = +1.24073;
+
+                // BSM test for the spectator-independent lifetime at dim3 & LO
+                {
+                    static const double eps = 1.0e-5;
+
+                    Options oo
+                    {
+                        { "model", "WET" },
+                        { "q",     "s"   }
+                    };
+
+                    Lifetime d(p, oo);
+
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim3_lo(), 6272.1,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim3_lo(), 318.655, eps);
+                }
+
                 // BSM test for the B^-
                 {
                     static const double eps = 1.0e-5;
@@ -219,9 +256,10 @@ class LifetimeTest :
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 3683.4330826090,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu(), 187.1374071112458, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim6_lo(), 3683.4330826090,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim6_lo(), 187.1374071112458, eps);
                 }
+
                 // BSM test for the B_d
                 {
                     static const double eps = 1.0e-4;
@@ -234,9 +272,10 @@ class LifetimeTest :
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu(), 2224.8775735372574, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu(),   0.0,                eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim6_lo(), 2224.8775735372574, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(),   0.0,                eps);
                 }
+
                 // BSM test for the B_s
                 {
                     static const double eps = 1.0e-6;
@@ -249,8 +288,8 @@ class LifetimeTest :
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu(),   0.0,                eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu(), 170.4603546103313,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(),   0.0,                eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim6_lo(), 170.4603546103313,  eps);
                 }
             }
         }

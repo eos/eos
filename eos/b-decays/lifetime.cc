@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2024 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -91,10 +92,12 @@ namespace eos
             u.uses(*model);
         }
 
+        inline double convert_GeV_to_inv_ps() const { return 1.0e-12 / hbar(); }
+
         // cf. [LMPR:2022A], eqs. (2.22) to (2.27)
         // provided by A. Rusov as a Mathematica expression
         std::array<std::array<complex<double>, 20u>, 20u>
-        A_pauli_interference(const double & mu, const double & sqrtrho) const
+        A_pauli_interference(const double & /*mu*/, const double & sqrtrho) const
         {
             const double rho = sqrtrho * sqrtrho;
 
@@ -143,7 +146,7 @@ namespace eos
         // cf. [LMPR:2022A], eqs. (2.28) to (2.33)
         // provided by A. Rusov as a Mathematica expression
         std::array<std::array<complex<double>, 20u>, 20u>
-        A_weak_exchange(const double & mu, const double & sqrtrho) const
+        A_weak_exchange(const double & /*mu*/, const double & sqrtrho) const
         {
             const double rho = sqrtrho * sqrtrho;
 
@@ -189,7 +192,7 @@ namespace eos
             return result;
         }
 
-        double decay_width_dbcu() const
+        double decay_width_dbcu_dim6_lo() const
         {
             const double mu      = mu_dbcu();
             const double m_b     = model->m_b_msbar(mu);
@@ -231,7 +234,7 @@ namespace eos
             return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI * hbar) * real(dot(Cconj, (A * C))) * 1.0e-12;
         }
 
-        double decay_width_sbcu() const
+        double decay_width_sbcu_dim6_lo() const
         {
             const double mu      = mu_sbcu();
             const double m_b     = model->m_b_msbar(mu);
@@ -272,6 +275,188 @@ namespace eos
 
             return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI * hbar) * real(dot(Cconj, (A * C))) * 1.0e-12;
         }
+
+        double decay_width_dbcu_dim3_lo() const
+        {
+            const double mu  = mu_dbcu();
+            const double m_b = model->m_b_msbar(mu);
+            const double z   = model->m_c_msbar(mu) / m_b, log_z = std::log(z),
+                         z2  = z * z, z4 = z2 * z2, z6 = z4 * z2, z8 = z4 * z4;
+            const double ckm = abs(model->ckm_ud() * model->ckm_cb());
+            const auto   wc  = model->wet_dbcu(mu);
+
+            std::array<std::array<complex<double>, 5u>, 5u> G
+            {{
+                {
+                    -6.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -6.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -36.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    336.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z)
+                },
+                {
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -816.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -60.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -144.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    768.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z)
+                },
+                {
+                    -6.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -60.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -3.0 / 2.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    0,
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z)
+                },
+                {
+                    -36.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -144.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    0,
+                    -36.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    576.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z)
+                },
+                {
+                    336.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    768.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    576.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -12480.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z)
+                }
+            }};
+
+            const std::array<std::complex<double>, 5u> C_sing
+            {
+                wc.c1(),  wc.c3(),  wc.c5(),  wc.c7(),  wc.c9()
+            };
+
+            std::array<std::complex<double>, 5u> Cconj_sing;
+            complex<double> (*conj_sing)(const std::complex<double> &) = &std::conj<double>;
+            std::transform(C_sing.cbegin(), C_sing.cend(), Cconj_sing.begin(), conj_sing);
+
+            const std::array<std::complex<double>, 5u> C_sing_p
+            {
+                wc.c1p(), wc.c3p(), wc.c5p(), wc.c7p(), wc.c9p()
+            };
+
+            std::array<std::complex<double>, 5u> Cconj_sing_p;
+            complex<double> (*conj_sing_p)(const std::complex<double> &) = &std::conj<double>;
+            std::transform(C_sing_p.cbegin(), C_sing_p.cend(), Cconj_sing_p.begin(), conj_sing_p);
+
+            const std::array<std::complex<double>, 5u> C_oct
+            {
+                wc.c2(),  wc.c4(),  wc.c6(),  wc.c8(),  wc.c10()
+            };
+
+            std::array<std::complex<double>, 5u> Cconj_oct;
+            complex<double> (*conj_oct)(const std::complex<double> &) = &std::conj<double>;
+            std::transform(C_oct.cbegin(), C_oct.cend(), Cconj_oct.begin(), conj_oct);
+
+            const std::array<std::complex<double>, 5u> C_oct_p
+            {
+                wc.c2p(), wc.c4p(), wc.c6p(), wc.c8p(), wc.c10p()
+            };
+
+            std::array<std::complex<double>, 5u> Cconj_oct_p;
+            complex<double> (*conj_oct_p)(const std::complex<double> &) = &std::conj<double>;
+            std::transform(C_oct_p.cbegin(), C_oct_p.cend(), Cconj_oct_p.begin(), conj_oct_p);
+
+            const double Gamma_0      = g_fermi * g_fermi * ckm * ckm * power_of<5>(m_b) / (192.0 * power_of<3>(M_PI));
+            const double Gamma_sing   = real(dot(Cconj_sing, (G * C_sing)));
+            const double Gamma_sing_p = real(dot(Cconj_sing_p, (G * C_sing_p)));
+            const double Gamma_oct    = 2.0 / 9.0 * real(dot(Cconj_oct, (G * C_oct)));
+            const double Gamma_oct_p  = 2.0 / 9.0 * real(dot(Cconj_oct_p, (G * C_oct_p)));
+
+            return Gamma_0 * (Gamma_sing + Gamma_sing_p + Gamma_oct + Gamma_oct_p) * convert_GeV_to_inv_ps();
+        }
+
+        double decay_width_sbcu_dim3_lo() const
+        {
+            const double mu  = mu_sbcu();
+            const double m_b = model->m_b_msbar(mu);
+            const double z   = model->m_c_msbar(mu) / m_b, log_z = std::log(z),
+                         z2  = z * z, z4 = z2 * z2, z6 = z4 * z2, z8 = z4 * z4;
+            const double ckm = abs(model->ckm_us() * model->ckm_cb());
+            const auto   wc  = model->wet_sbcu(mu);
+
+            std::array<std::array<complex<double>, 5u>, 5u> G
+            {{
+                {
+                    -6.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -6.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -36.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    336.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z)
+                },
+                {
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -816.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -60.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -144.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    768.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z)
+                },
+                {
+                    -6.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -60.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -3.0 / 2.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    0,
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z)
+                },
+                {
+                    -36.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -144.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    0,
+                    -36.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    576.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z)
+                },
+                {
+                    336.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    768.0 * z * (-1.0 - 9.0 * z2 + 9.0 * z4 + z6 - 12.0 * (z2 + z4) * log_z),
+                    -60.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    576.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z),
+                    -12480.0 * (-1.0 + 8.0 * z2 - 8.0 * z6 + z8 + 24.0 * z4 * log_z)
+                }
+            }};
+
+            // Singlet Wilson coefficients
+            const std::array<std::complex<double>, 5u> C_singlet
+            {
+                wc.c1(),  wc.c3(),  wc.c5(),  wc.c7(),  wc.c9()
+            };
+            std::array<std::complex<double>, 5u> Cconj_singlet;
+            std::transform(C_singlet.cbegin(), C_singlet.cend(), Cconj_singlet.begin(), static_cast<complex<double> (*)(const std::complex<double> &)>(&std::conj<double>));
+
+            // Singlet Wilson coefficients (helicity-flipped)
+            const std::array<std::complex<double>, 5u> C_singlet_p
+            {
+                wc.c1p(), wc.c3p(), wc.c5p(), wc.c7p(), wc.c9p()
+            };
+            std::array<std::complex<double>, 5u> Cconj_singlet_p;
+            std::transform(C_singlet_p.cbegin(), C_singlet_p.cend(), Cconj_singlet_p.begin(), static_cast<complex<double> (*)(const std::complex<double> &)>(&std::conj<double>));
+
+            // Octet Wilson coefficients
+            const std::array<std::complex<double>, 5u> C_octet
+            {
+                wc.c2(),  wc.c4(),  wc.c6(),  wc.c8(),  wc.c10()
+            };
+            std::array<std::complex<double>, 5u> Cconj_octet;
+            std::transform(C_octet.cbegin(), C_octet.cend(), Cconj_octet.begin(), static_cast<complex<double> (*)(const std::complex<double> &)>(&std::conj<double>));
+
+            // Octet Wilson coefficients (helicity-flipped)
+            const std::array<std::complex<double>, 5u> C_octet_p
+            {
+                wc.c2p(), wc.c4p(), wc.c6p(), wc.c8p(), wc.c10p()
+            };
+            std::array<std::complex<double>, 5u> Cconj_octet_p;
+            std::transform(C_octet_p.cbegin(), C_octet_p.cend(), Cconj_octet_p.begin(), static_cast<complex<double> (*)(const std::complex<double> &)>(&std::conj<double>));
+
+            const double Gamma_0      = g_fermi * g_fermi * ckm * ckm * power_of<5>(m_b) / (192.0 * power_of<3>(M_PI));
+            const double Gamma_sing   = real(dot(Cconj_singlet,   (G * C_singlet)));
+            const double Gamma_sing_p = real(dot(Cconj_singlet_p, (G * C_singlet_p)));
+            const double Gamma_oct    = 2.0 / 9.0 * real(dot(Cconj_octet,   (G * C_octet)));
+            const double Gamma_oct_p  = 2.0 / 9.0 * real(dot(Cconj_octet_p, (G * C_octet_p)));
+
+            return Gamma_0 * (Gamma_sing + Gamma_sing_p + Gamma_oct + Gamma_oct_p) * convert_GeV_to_inv_ps();
+        }
     };
 
     const std::vector<OptionSpecification>
@@ -290,6 +475,18 @@ namespace eos
     {
     }
 
+    double
+    Lifetime::decay_width_dbcu_dim3_lo() const
+    {
+        return _imp->decay_width_dbcu_dim3_lo();
+    }
+
+    double
+    Lifetime::decay_width_sbcu_dim3_lo() const
+    {
+        return _imp->decay_width_sbcu_dim3_lo();
+    }
+
     /*
     * The partial decay width computed with ``decay_width_dbcu`` and ``decay_width_sbcu`` can be negative.
     * This issue arises, since
@@ -300,15 +497,15 @@ namespace eos
     * width. Returning the absolute value suffices for this comparison.
     */
     double
-    Lifetime::decay_width_dbcu() const
+    Lifetime::decay_width_dbcu_dim6_lo() const
     {
-        return std::fabs(_imp->decay_width_dbcu());
+        return std::fabs(_imp->decay_width_dbcu_dim6_lo());
     }
 
     double
-    Lifetime::decay_width_sbcu() const
+    Lifetime::decay_width_sbcu_dim6_lo() const
     {
-        return std::fabs(_imp->decay_width_sbcu());
+        return std::fabs(_imp->decay_width_sbcu_dim6_lo());
     }
 
     const std::set<ReferenceName>
