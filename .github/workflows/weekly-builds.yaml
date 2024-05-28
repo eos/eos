@@ -19,4 +19,17 @@ jobs:
             - name: Fetch all branches and push
               run: |
                 git remote update origin
-                git push origin origin/master:release
+                # determine merge base of origin/master and origin/release
+                BASE=$(git merge-base origin/master origin/release)
+                RELEASE=$(git rev-parse origin/release)
+                MASTER=$(git rev-parse origin/master)
+                echo "BASE = ${BASE}"
+                echo "RELEASE = ${RELEASE}"
+                echo "MASTER = ${MASTER}"
+                #check if RELEASE and BASE are the same
+                if [ ${RELEASE} = ${BASE} ]; then
+                  echo "origin/release and BASE coincide, should be able to fast-forward"
+                  git push origin ${MASTER}:release
+                else
+                  echo "origin/release and BASE differ, would need to force push but will not do it"
+                fi
