@@ -18,7 +18,6 @@ libcli_a_SOURCES = \
 bin_PROGRAMS = \
 	eos-evaluate \
 	eos-list-constraints \
-	eos-list-observables \
 	eos-list-parameters \
 	eos-list-signal-pdfs \
 	eos-print-polynomial
@@ -42,8 +41,6 @@ eos_evaluate_SOURCES = eos-evaluate.cc
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
 eos_list_constraints_CXXFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
-
-eos_list_observables_SOURCES = eos-list-observables.cc
 
 eos_list_parameters_SOURCES = eos-list-parameters.cc
 
