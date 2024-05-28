@@ -127,7 +127,6 @@ namespace eos
             virtual ObservableEntry::OptionIterator end_options() const;
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
-            virtual std::ostream & insert(std::ostream & os) const;
 
             virtual const QualifiedName & name() const
             {

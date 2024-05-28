@@ -181,18 +181,7 @@ namespace eos
             virtual OptionIterator begin_options() const = 0;
             virtual OptionIterator end_options() const = 0;
             ///@}
-
-        protected:
-            virtual std::ostream & insert(std::ostream & os) const = 0;
     };
-
-    /*!
-     * Output stream operator for ObservableEntry.
-     */
-    inline std::ostream & operator<< (std::ostream & os, const ObservableEntry & entry)
-    {
-        return entry.insert(os);
-    }
 
     /*!
      * Container around the known and implemented signal PDFs

@@ -156,13 +156,6 @@ namespace eos
     {
     }
 
-    std::ostream &
-    ObservableEntry::insert(std::ostream & os) const
-    {
-        os << "<empty Observable description>" << std::endl;
-        return os;
-    }
-
     /* ObservableGroup */
 
     template <>

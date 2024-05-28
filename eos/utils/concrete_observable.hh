@@ -201,18 +201,6 @@ namespace eos
                 }
                 return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options + _forced_options, _function, _kinematics_names));
             }
-
-            virtual std::ostream & insert(std::ostream & os) const
-            {
-                os << "    type: regular observable" << std::endl;
-
-                if (sizeof...(Args_) > 0)
-                {
-                    os << "    kinematic variables: " << join(std::begin(_kinematics_names_array), std::end(_kinematics_names_array)) << std::endl;
-                }
-
-                return os;
-            }
     };
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
