@@ -203,13 +203,4 @@ namespace eos
 
         return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, options + _forced_options, _expression));
     }
-
-    std::ostream &
-    ExpressionObservableEntry::insert(std::ostream & os) const
-    {
-        os << "    type: expression observable" << std::endl;
-
-        return os;
-    }
-
 }

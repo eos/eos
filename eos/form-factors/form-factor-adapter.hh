@@ -200,13 +200,6 @@ namespace eos
             {
                 return ObservablePtr(new FormFactorAdapter<Transition_, Args_ ...>(_name, _process, parameters, kinematics, options, _form_factor_function, _kinematics_names));
             }
-
-            virtual std::ostream & insert(std::ostream & os) const
-            {
-                os << "    type: adapter for one form factor" << std::endl;
-
-                return os;
-            }
     };
 }
 
