@@ -93,6 +93,19 @@ namespace eos
             double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
+            /* Twist 4 three particle chiral odd LCDAs */
+            double Psi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4perptilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp1(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp2(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp3(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp4(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde1(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde2(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde3(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde4(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Xi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
@@ -161,6 +174,19 @@ namespace eos
             double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+
+            /* Twist 4 three particle chiral odd LCDAs */
+            double Psi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4perptilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp1(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp2(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp3(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp4(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde1(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde2(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde3(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde4(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Xi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
