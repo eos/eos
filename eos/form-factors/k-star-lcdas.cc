@@ -451,6 +451,132 @@ namespace eos
         {
             return 840.0 * u1 * u2 * u3 * u3 * u3 * xi0para(mu);
         }
+
+        // definition of chiral odd G conserving parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 4.13, setting zeta4perptilde = -zeta4perp (renormalon model)
+        inline double psi0perp(const double & mu) const
+        {
+            return zeta4perp(mu);
+        }
+        inline double psi0perptilde(const double & mu) const
+        {
+            return -zeta4perp(mu);
+        }
+
+        // Twist-4 three particle chiral odd G conserving auxiliary parameters [BBL:2007A], eq. 4.17, setting twist 2, 3 and non-genuin twist 4 to zero
+        inline double phi1perp(const double & mu) const
+        {
+            return 63.0 / 220.0 * Q1(mu) - 119.0 / 44.0 * Q3(mu);
+        }
+        inline double phi1perptilde(const double & mu) const
+        {
+            return -63.0 / 220.0 * Q1(mu) - 35.0 / 44.0 * Q3(mu);
+        }
+        inline double psi1perp(const double & mu) const
+        {
+            return 49.0 / 110.0 * Q1(mu) - 7.0 / 22.0 * Q3(mu);
+        }
+        inline double psi1perptilde(const double & mu) const
+        {
+            return -49.0 / 110.0 * Q1(mu) + 7.0 / 22.0 * Q3(mu);
+        }
+        inline double psi2perp(const double & mu) const
+        {
+            return 28.0 / 55.0 * Q1(mu) + 7.0 / 11.0 * Q3(mu);
+        }
+        inline double psi2perptilde(const double & mu) const
+        {
+            return -28.0 / 55.0 * Q1(mu) - 7.0 / 11.0 * Q3(mu);
+        }
+
+        // definition of chiral odd G conserving parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 4.19 (renormalon model)
+        inline double Q1(const double & mu) const
+        {
+            return -10.0 / 3.0 * zeta4perp(mu);
+        }
+        inline double Q3(const double & mu) const
+        {
+            return -1.0 * zeta4perp(mu);
+        }
+
+        // definition of chiral odd G violating parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 4.20 (renormalon model)
+        inline double phi0perp(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double phi0perptilde(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double phi2perp(const double & mu) const
+        {
+            return -21.0 / 20.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double phi2perptilde(const double & mu) const
+        {
+            return -21.0 / 20.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta0perp(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double theta0perptilde(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double theta1perp(const double & mu) const
+        {
+            return -21.0 / 10.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta1perptilde(const double & mu) const
+        {
+            return 21.0 / 10.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta2perp(const double & mu) const
+        {
+            return 21.0 / 5.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta2perptilde(const double & mu) const
+        {
+            return -21.0 / 5.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double xi0perp(const double & mu) const
+        {
+            return 3.0 / 5.0 * zeta4perp(mu) * a1perp(mu);
+        }
+
+        // inline functions for chriral odd three-particle twist 4 LCDAs
+        inline double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (psi0perp(mu) * (1.0 - u3) + psi1perp(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                psi2perp(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (theta0perp(mu) + u3 * theta1perp(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * theta2perp(mu)));
+        }
+        inline double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (psi0perptilde(mu) * (1.0 - u3) + psi1perptilde(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                psi2perptilde(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (theta0perptilde(mu) + u3 * theta1perptilde(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * theta2perptilde(mu)));
+        }
+        inline double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (phi0perp(mu) + phi1perp(mu) * (u1 - u2) + phi2perp(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return -30.0 * u3 * u3 * (theta0perptilde(mu) * (1.0 - u3) + theta1perptilde(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                theta2perptilde(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (psi0perptilde(mu) + u3 * psi1perptilde(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * psi2perptilde(mu)));
+        }
+        inline double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return -120.0 * u1 * u2 * u3 * (phi0perptilde(mu) + phi1perptilde(mu) * (u1 - u2) + phi2perptilde(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (theta0perp(mu) * (1.0 - u3) + theta1perp(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                theta2perp(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (psi0perp(mu) + u3 * psi1perp(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * psi2perp(mu)));
+        }
     };
 
     AntiKStarLCDAs::AntiKStarLCDAs(const Parameters & p, const Options & o) :
@@ -723,6 +849,73 @@ namespace eos
     {
         return _imp->Xi4para(u1, u2, u3, mu);
     }
+
+    double
+    AntiKStarLCDAs::Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4perp(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4perptilde(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp1(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp2(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp3(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp4(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perptilde1(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp3(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp4(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp1(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp2(u1, u2, u3, mu);
+    }
+
+    double
+    AntiKStarLCDAs::Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 840.0 * u1 * u2 * u3 * u3 * _imp->xi0perp(mu);
+    }
+
 
     Diagnostics
     AntiKStarLCDAs::diagnostics() const
@@ -1165,6 +1358,132 @@ namespace eos
         {
             return 840.0 * u1 * u2 * u3 * u3 * u3 * xi0para(mu);
         }
+
+        // definition of chiral odd G conserving parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 4.13, setting zeta4perptilde = -zeta4perp (renormalon model)
+        inline double psi0perp(const double & mu) const
+        {
+            return zeta4perp(mu);
+        }
+        inline double psi0perptilde(const double & mu) const
+        {
+            return -zeta4perp(mu);
+        }
+
+        // Twist-4 three particle chiral odd G conserving auxiliary parameters [BBL:2007A], eq. 4.17, setting twist 2, 3 and non-genuin twist 4 to zero
+        inline double phi1perp(const double & mu) const
+        {
+            return 63.0 / 220.0 * Q1(mu) - 119.0 / 44.0 * Q3(mu);
+        }
+        inline double phi1perptilde(const double & mu) const
+        {
+            return -63.0 / 220.0 * Q1(mu) - 35.0 / 44.0 * Q3(mu);
+        }
+        inline double psi1perp(const double & mu) const
+        {
+            return 49.0 / 110.0 * Q1(mu) - 7.0 / 22.0 * Q3(mu);
+        }
+        inline double psi1perptilde(const double & mu) const
+        {
+            return -49.0 / 110.0 * Q1(mu) + 7.0 / 22.0 * Q3(mu);
+        }
+        inline double psi2perp(const double & mu) const
+        {
+            return 28.0 / 55.0 * Q1(mu) + 7.0 / 11.0 * Q3(mu);
+        }
+        inline double psi2perptilde(const double & mu) const
+        {
+            return -28.0 / 55.0 * Q1(mu) - 7.0 / 11.0 * Q3(mu);
+        }
+
+        // definition of chiral odd G conserving parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 4.19 (renormalon model)
+        inline double Q1(const double & mu) const
+        {
+            return -10.0 / 3.0 * zeta4perp(mu);
+        }
+        inline double Q3(const double & mu) const
+        {
+            return -1.0 * zeta4perp(mu);
+        }
+
+        // definition of chiral odd G violating parameters appearing in three-particle twist 4 LCDAs, [BBL:2007A], eq. 4.20 (renormalon model)
+        inline double phi0perp(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double phi0perptilde(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double phi2perp(const double & mu) const
+        {
+            return -21.0 / 20.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double phi2perptilde(const double & mu) const
+        {
+            return -21.0 / 20.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta0perp(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double theta0perptilde(const double & mu) const
+        {
+            return 0.0;
+        }
+        inline double theta1perp(const double & mu) const
+        {
+            return -21.0 / 10.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta1perptilde(const double & mu) const
+        {
+            return 21.0 / 10.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta2perp(const double & mu) const
+        {
+            return 21.0 / 5.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double theta2perptilde(const double & mu) const
+        {
+            return -21.0 / 5.0 * zeta4perp(mu) * a1perp(mu);
+        }
+        inline double xi0perp(const double & mu) const
+        {
+            return 3.0 / 5.0 * zeta4perp(mu) * a1perp(mu);
+        }
+
+        // inline functions for chriral odd three-particle twist 4 LCDAs
+        inline double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (psi0perp(mu) * (1.0 - u3) + psi1perp(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                psi2perp(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (theta0perp(mu) + u3 * theta1perp(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * theta2perp(mu)));
+        }
+        inline double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (psi0perptilde(mu) * (1.0 - u3) + psi1perptilde(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                psi2perptilde(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (theta0perptilde(mu) + u3 * theta1perptilde(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * theta2perptilde(mu)));
+        }
+        inline double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 120.0 * u1 * u2 * u3 * (phi0perp(mu) + phi1perp(mu) * (u1 - u2) + phi2perp(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return -30.0 * u3 * u3 * (theta0perptilde(mu) * (1.0 - u3) + theta1perptilde(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                theta2perptilde(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (psi0perptilde(mu) + u3 * psi1perptilde(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * psi2perptilde(mu)));
+        }
+        inline double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return -120.0 * u1 * u2 * u3 * (phi0perptilde(mu) + phi1perptilde(mu) * (u1 - u2) + phi2perptilde(mu) * (3.0 * u3 - 1.0));
+        }
+        inline double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const
+        {
+            return 30.0 * u3 * u3 * (theta0perp(mu) * (1.0 - u3) + theta1perp(mu) * (u3 * (1.0 - u3) - 6.0 * u1 * u2) +
+                theta2perp(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
+                (u1 - u2) * (psi0perp(mu) + u3 * psi1perp(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * psi2perp(mu)));
+        }
     };
 
     KStarLCDAs::KStarLCDAs(const Parameters & p, const Options & o) :
@@ -1436,6 +1755,72 @@ namespace eos
     KStarLCDAs::Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const
     {
         return _imp->Xi4para(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4perp(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Psi4perptilde(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp1(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp2(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp3(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return _imp->Phi4perp4(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perptilde1(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp3(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp4(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp1(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return -Phi4perp2(u1, u2, u3, mu);
+    }
+
+    double
+    KStarLCDAs::Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
+    {
+        return 840.0 * u1 * u2 * u3 * u3 * _imp->xi0perp(mu);
     }
 
     Diagnostics
