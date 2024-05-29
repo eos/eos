@@ -86,6 +86,19 @@ namespace eos
             virtual double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
             virtual double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
 
+            /* Twist 4 three particle chiral odd LCDAs */
+            virtual double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde1(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+
             static std::shared_ptr<VectorLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
 }
