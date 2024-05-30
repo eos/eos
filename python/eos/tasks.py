@@ -299,11 +299,11 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
 
 @task('find-clusters', '{posterior}/clusters')
 def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K_g:int=1, analysis_file:str=None):
-    """
+    r"""
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
 
     Finding clusters and creating a Gaussian mixture density is a necessary intermediate step before using the sample-pmc subcommand.
-    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-*. All MCMC input files present will be used in the clustering.
+    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-\*. All MCMC input files present will be used in the clustering.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
 
     :param posterior: The name of the posterior.
