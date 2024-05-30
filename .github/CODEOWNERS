@@ -1,0 +1,16 @@
+# All reviews should go to @eos/maintainers by default
+*                   @eos/maintainers
+
+# @dvandyk should review commits to the core code
+eos/maths           @dvandyk
+eos/statistics      @dvandyk
+eos/utils           @dvandyk
+python/_eos/        @dvandyk
+python/_eos.cc      @dvandyk
+
+# @mreboud should review commits to:
+eos/rare-b-decays   @mreboud
+eos/scattering      @mreboud
+
+# @lorenzennio should review commits to pyhf code
+python/eos/*pyhf*   @lorenzennio
