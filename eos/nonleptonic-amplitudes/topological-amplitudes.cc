@@ -131,6 +131,8 @@ namespace eos
     complex<double>
     TopologicalRepresentation<PToPP>::ordered_amplitude() const
     {
+        this->update();
+
         return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
             this->tree_amplitude(P1, P2) + this->penguin_amplitude(P1, P2)
         );
@@ -139,6 +141,8 @@ namespace eos
     complex<double>
     TopologicalRepresentation<PToPP>::inverse_amplitude() const
     {
+        this->update();
+
         return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
             this->tree_amplitude(P2, P1) + this->penguin_amplitude(P2, P1)
         );

@@ -46,9 +46,10 @@ namespace eos
 
             UsedParameter theta_18;
 
-            su3f::rank1 B, H1tilde;
-            su3f::rank2 P1, P2;
-            su3f::rank3 Hbar, H3tilde;
+            su3f::rank1 B;
+            mutable su3f::rank1 H1tilde;
+            mutable su3f::rank2 P1, P2;
+            mutable su3f::rank3 Hbar, H3tilde;
 
             UsedParameter Gfermi;
 
@@ -91,8 +92,8 @@ namespace eos
                 theta_18(p["eta::theta_18"], *this),
                 B(su3f::psd_b_triplet.find(opt_q.value())->second),
                 H1tilde({}),
-                P1(su3f::psd_octet(theta_18()).find(opt_p1.value())->second),
-                P2(su3f::psd_octet(theta_18()).find(opt_p2.value())->second),
+                P1({}),
+                P2({}),
                 Hbar({}),
                 H3tilde({}),
                 Gfermi(p["WET::G_Fermi"], *this),
@@ -162,6 +163,13 @@ namespace eos
                 H3tilde[0][2][0] = lamst;
             };
 
+            void update() const
+            {
+                const double theta_18 = this->theta_18.evaluate();
+                su3f::psd_octet.find(opt_p1.value())->second(theta_18, P1);
+                su3f::psd_octet.find(opt_p2.value())->second(theta_18, P2);
+            }
+
             ~TopologicalRepresentation() {};
 
             static NonleptonicAmplitudes<PToPP> * make(const Parameters &, const Options &);
@@ -171,8 +179,8 @@ namespace eos
             complex<double> penguin_amplitude(su3f::rank2 p1, su3f::rank2 p2) const;
 
             // Diagnostic functions
-            complex<double> tree_amplitude() const { return tree_amplitude(P1, P2); }
-            complex<double> penguin_amplitude() const { return penguin_amplitude(P1, P2); };
+            complex<double> tree_amplitude() const { update(); return tree_amplitude(P1, P2); }
+            complex<double> penguin_amplitude() const { update(); return penguin_amplitude(P1, P2); };
 
             // Amplitude for B -> P1 P2
             complex<double> ordered_amplitude() const;

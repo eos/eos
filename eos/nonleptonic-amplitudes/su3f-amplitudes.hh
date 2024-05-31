@@ -46,9 +46,10 @@ namespace eos
 
             UsedParameter theta_18;
 
-            su3f::rank1 B, H3bar, H3tilde;
-            su3f::rank2 P1, P2;
-            su3f::rank3 H6bar, H6tilde, H15bar, H15tilde;
+            su3f::rank1 B;
+            mutable su3f::rank1 H3bar, H3tilde;
+            mutable su3f::rank2 P1, P2;
+            mutable su3f::rank3 H6bar, H6tilde, H15bar, H15tilde;
 
             UsedParameter Gfermi;
 
@@ -92,8 +93,8 @@ namespace eos
                 B(su3f::psd_b_triplet.find(opt_q.value())->second),
                 H3bar({}),
                 H3tilde({}),
-                P1(su3f::psd_octet(theta_18()).find(opt_p1.value())->second),
-                P2(su3f::psd_octet(theta_18()).find(opt_p2.value())->second),
+                P1{{}},
+                P2{{}},
                 H6bar({}),
                 H6tilde({}),
                 H15bar({}),
@@ -209,6 +210,13 @@ namespace eos
                 H15tilde[1][2][1] = -lamst; // Corrected with respect to typo in [HTX:2021A]
             };
 
+            void update() const
+            {
+                const double theta_18 = this->theta_18.evaluate();
+                su3f::psd_octet.find(opt_p1.value())->second(theta_18, P1);
+                su3f::psd_octet.find(opt_p2.value())->second(theta_18, P2);
+            }
+
             ~SU3FRepresentation() {};
 
             static NonleptonicAmplitudes<PToPP> * make(const Parameters &, const Options &);
@@ -218,8 +226,8 @@ namespace eos
             complex<double> penguin_amplitude(su3f::rank2 p1, su3f::rank2 p2) const;
 
             // Diagnostic functions
-            complex<double> tree_amplitude() const { return tree_amplitude(P1, P2); }
-            complex<double> penguin_amplitude() const { return penguin_amplitude(P1, P2); };
+            complex<double> tree_amplitude() const { update(); return tree_amplitude(P1, P2); }
+            complex<double> penguin_amplitude() const { update(); return penguin_amplitude(P1, P2); };
 
             // Amplitude for B -> P1 P2
             complex<double> ordered_amplitude() const;

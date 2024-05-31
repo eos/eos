@@ -34,30 +34,38 @@ namespace eos
 
     namespace su3f
     {
-        const std::map<LightMeson, rank2>
-        psd_octet(const double & theta_18)
+        // Note that this matrix is transposed w.r.t [HTX:2021A] to follow the convention M^i_j = M[i][j]
+        const std::map<LightMeson, std::function<void (const double &, rank2 &)>>
+        psd_octet
         {
-            const double c = std::cos(theta_18),
-                         s = std::sin(theta_18);
-
-            // Note that this matrix is transposed w.r.t [HTX:2021A] to follow the convention M^i_j = M[i][j]
-            return
-            {
-                {LightMeson::pi0,     {{{1.0 / sqrt(2.0), 0.0, 0.0}, {0.0, -1.0 / sqrt(2.0), 0.0}, {0.0, 0.0, 0.0}}} },
-                {LightMeson::piplus,  {{{0.0,             1.0, 0.0}, {0.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}} },
-                {LightMeson::piminus, {{{0.0,             0.0, 0.0}, {1.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}} },
-                {LightMeson::K0,      {{{0.0,             0.0, 0.0}, {0.0,  0.0,             1.0}, {0.0, 0.0, 0.0}}} },
-                {LightMeson::K0bar,   {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {0.0, 1.0, 0.0}}} },
-                {LightMeson::Kplus,   {{{0.0,             0.0, 1.0}, {0.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}} },
-                {LightMeson::Kminus,  {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {1.0, 0.0, 0.0}}} },
-                {LightMeson::eta,     {{{c / sqrt(6.0) - s / sqrt(3.0), 0.0,                            0.0},
-                                        {0.0,                           c / sqrt(6.0) - s / sqrt(3.0),  0.0},
-                                        {0.0,                           0.0,                           -2.0 * c / sqrt(6.0) - s / sqrt(3.0)}}} },
-                {LightMeson::etap,    {{{s / sqrt(6.0) + c / sqrt(3.0), 0.0,                            0.0},
-                                        {0.0,                           s / sqrt(6.0) + c / sqrt(3.0),  0.0},
-                                        {0.0,                           0.0,                           -2.0 * s / sqrt(6.0) + c / sqrt(3.0)}}} }
-            };
-        }
+            { LightMeson::pi0,      [](const double &, rank2 & res) { res = {{{1.0 / sqrt(2.0), 0.0, 0.0}, {0.0, -1.0 / sqrt(2.0), 0.0}, {0.0, 0.0, 0.0}}}; } },
+            { LightMeson::piplus,   [](const double &, rank2 & res) { res = {{{0.0,             1.0, 0.0}, {0.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}}; } },
+            { LightMeson::piminus,  [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {1.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}}; } },
+            { LightMeson::K0,       [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             1.0}, {0.0, 0.0, 0.0}}}; } },
+            { LightMeson::K0bar,    [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {0.0, 1.0, 0.0}}}; } },
+            { LightMeson::Kplus,    [](const double &, rank2 & res) { res = {{{0.0,             0.0, 1.0}, {0.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}}; } },
+            { LightMeson::Kminus,   [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {1.0, 0.0, 0.0}}}; } },
+            { LightMeson::eta,      [](const double & theta_18, rank2 & res)
+                                    {
+                                        const double c = std::cos(theta_18),
+                                                     s = std::sin(theta_18);
+                                        res = {{
+                                                {c / sqrt(6.0) - s / sqrt(3.0), 0.0,                            0.0},
+                                                {0.0,                           c / sqrt(6.0) - s / sqrt(3.0),  0.0},
+                                                {0.0,                           0.0,                           -2.0 * c / sqrt(6.0) - s / sqrt(3.0)}
+                                        }};
+                                    } },
+            { LightMeson::etap,     [](const double & theta_18, rank2 & res)
+                                    {
+                                        const double c = std::cos(theta_18),
+                                                     s = std::sin(theta_18);
+                                        res = {{
+                                                {s / sqrt(6.0) + c / sqrt(3.0), 0.0,                            0.0},
+                                                {0.0,                           s / sqrt(6.0) + c / sqrt(3.0),  0.0},
+                                                {0.0,                           0.0,                           -2.0 * s / sqrt(6.0) + c / sqrt(3.0)}
+                                        }};
+                                    } }
+        };
     }
 
     NonleptonicAmplitudes<PToPP>::~NonleptonicAmplitudes() {};

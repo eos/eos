@@ -54,7 +54,7 @@ namespace eos
             { QuarkFlavor::strange, {{0.0, 0.0, 1.0}}},
         };
 
-        const std::map<LightMeson, rank2> psd_octet(const double & theta_18);
+        extern const std::map<LightMeson, std::function<void (const double &, rank2 &)>> psd_octet;
     }
 
     /* P -> PP transitions */
