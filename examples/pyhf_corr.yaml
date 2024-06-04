@@ -1,0 +1,19 @@
+priors:
+  - name: EXP-pyhf-params
+    descriptions:
+      - {'parameter': 'pyhf::signal_strength',
+        'min': -2,
+        'max':  6,
+        'type': 'uniform'}
+likelihoods:
+  - name: EXP-pyhf
+    pyhf:
+      file: workspace_corr.json
+      parameter_map:
+        mu: 'pyhf::signal_strength'
+posteriors:
+  - name: EXP-pyhf-posterior
+    prior:
+      - EXP-pyhf-params
+    likelihood:
+      - EXP-pyhf
