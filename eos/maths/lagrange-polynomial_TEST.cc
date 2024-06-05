@@ -104,9 +104,9 @@ class LagrangePolynomialTest :
 
                     TEST_CHECK_RELATIVE_ERROR(real(coefficients[0]), -2.,                                 1.0e-5);
                     TEST_CHECK_NEARLY_EQUAL(  imag(coefficients[0]),  0.,                                 1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR_C(coefficients[1], complex<double>(-2.6333333, -6.5666666), 1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR_C(coefficients[2], complex<double>(1.86666666, -6.4),       1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR_C(coefficients[3], complex<double>(3.4,         20.2),      1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(coefficients[1], complex<double>(-2.6333333, -6.5666667), 1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(coefficients[2], complex<double>( 0.9333333, -3.2),       1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR_C(coefficients[3], complex<double>( 0.5666667,  3.3666667), 1.0e-5);
                 }
             }
         }
