@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: '5 8 * * TUE'
+    - cron: '5 6 * * TUE'
 
 name: Trigger the build of weekly development releases
 
