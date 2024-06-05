@@ -810,25 +810,25 @@ namespace eos
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    std::array<complex<double>, interpolation_order + 1> dL = lagrange.get_coefficients(interpolation_values);
+                    std::array<complex<double>, interpolation_order + 1> L_coeffs = lagrange.get_coefficients(interpolation_values);
 
-                    // Split array of derivatives to real and imaginary parts
-                    gsl_vector * dL_real_part = gsl_vector_calloc(interpolation_order + 1);
-                    gsl_vector * dL_imag_part = gsl_vector_calloc(interpolation_order + 1);
+                    // Split array of coefficients to real and imaginary parts
+                    gsl_vector * L_coeffs_real_part = gsl_vector_calloc(interpolation_order + 1);
+                    gsl_vector * L_coeffs_imag_part = gsl_vector_calloc(interpolation_order + 1);
 
                     for (unsigned i = 0; i <= interpolation_order; ++i)
                     {
-                        gsl_vector_set(dL_real_part, i, real(dL[i]));
-                        gsl_vector_set(dL_imag_part, i, imag(dL[i]));
+                        gsl_vector_set(L_coeffs_real_part, i, real(L_coeffs[i]));
+                        gsl_vector_set(L_coeffs_imag_part, i, imag(L_coeffs[i]));
                     }
 
                     const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
 
-                    // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
-                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);
-                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_imag_part);
+                    // Solve the system by computing (coefficient_matrix)^(-1) . L_coeffs_real_part and idem for imag
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, L_coeffs_real_part);
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, L_coeffs_imag_part);
 
-                    return std::make_pair(dL_real_part, dL_imag_part);
+                    return std::make_pair(L_coeffs_real_part, L_coeffs_imag_part);
                 }
 
                 virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
@@ -1233,25 +1233,25 @@ namespace eos
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    std::array<complex<double>, interpolation_order + 1> dL = lagrange.get_coefficients(interpolation_values);
+                    std::array<complex<double>, interpolation_order + 1> L_coeffs = lagrange.get_coefficients(interpolation_values);
 
-                    // Split array of derivatives to real and imaginary parts
-                    gsl_vector * dL_real_part = gsl_vector_calloc(interpolation_order + 1);
-                    gsl_vector * dL_imag_part = gsl_vector_calloc(interpolation_order + 1);
+                    // Split array of coefficients to real and imaginary parts
+                    gsl_vector * L_coeffs_real_part = gsl_vector_calloc(interpolation_order + 1);
+                    gsl_vector * L_coeffs_imag_part = gsl_vector_calloc(interpolation_order + 1);
 
                     for (unsigned i = 0; i <= interpolation_order; ++i)
                     {
-                        gsl_vector_set(dL_real_part, i, real(dL[i]));
-                        gsl_vector_set(dL_imag_part, i, imag(dL[i]));
+                        gsl_vector_set(L_coeffs_real_part, i, real(L_coeffs[i]));
+                        gsl_vector_set(L_coeffs_imag_part, i, imag(L_coeffs[i]));
                     }
 
                     const gsl_matrix * coefficient_matrix = orthonormal_polynomials.coefficient_matrix();
 
-                    // Solve the system by computing (coefficient_matrix)^(-1) . dL_real_part and idem for imag
-                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_real_part);
-                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, dL_imag_part);
+                    // Solve the system by computing (coefficient_matrix)^(-1) . L_coeffs_real_part and idem for imag
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, L_coeffs_real_part);
+                    gsl_blas_dtrsv(CblasUpper, CblasNoTrans, CblasNonUnit, coefficient_matrix, L_coeffs_imag_part);
 
-                    return std::make_pair(dL_real_part, dL_imag_part);
+                    return std::make_pair(L_coeffs_real_part, L_coeffs_imag_part);
                 }
 
                 virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
