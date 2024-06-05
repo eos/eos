@@ -81,7 +81,7 @@ namespace eos
                 return result;
             }
 
-            // Returns the array of derivatives of the polynomial evaluated at zero
+            // Returns the coefficients of the polynomial in the monomial basis (z^n)_n
             std::array<complex<double>, order_ + 1> get_coefficients(const std::array<complex<double>, order_ + 1> & y_values) const
             {
                 LagrangePolynomialCoefficients<order_, order_> lpc;
@@ -183,6 +183,12 @@ namespace eos
     class LagrangePolynomialCoefficients<order_, 0>
     {
         public:
+            unsigned factorial() const
+            {
+                return 1;
+            }
+
+            // Coefficients of the Lagrange polynomial in the monomial basis
             std::array<complex<double>, order_ + 1> fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values,
                                                                       const std::array<complex<double>, order_ + 1> & y_values) const
             {
@@ -200,6 +206,14 @@ namespace eos
     class LagrangePolynomialCoefficients
     {
         public:
+            unsigned factorial() const
+            {
+                LagrangePolynomialCoefficients<order_, n_ - 1> lpc;
+
+                return n_ * lpc.factorial();
+            }
+
+            // Coefficients of the Lagrange polynomial in the monomial basis
             std::array<complex<double>, order_ + 1> fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values,
                                                                       const std::array<complex<double>, order_ + 1> & y_values) const
             {
@@ -209,7 +223,7 @@ namespace eos
 
                 LagrangePolynomialDerivative<order_, n_> dL;
 
-                coefficients[n_] = dL.evaluate(x_values, y_values, 0.);
+                coefficients[n_] = 1.0 / this->factorial() * dL.evaluate(x_values, y_values, 0.);
 
                 return coefficients;
             }
