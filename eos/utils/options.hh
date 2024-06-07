@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,8 +31,7 @@
 namespace eos
 {
     /*!
-     * UnknownOptionError is thrown when no option of a given name could be
-     * found.
+     * UnknownOptionError is thrown when an Options object does not contain a value for a given option key.
      */
     struct UnknownOptionError :
         public Exception
@@ -50,7 +49,7 @@ namespace eos
     };
 
     /*!
-     * UnspecifiedOptionError is thrown when a mandatory option is not specified.
+     * UnspecifiedOptionError is thrown by an observable provider or similar when a mandatory option is not specified.
      */
     struct UnspecifiedOptionError :
         public Exception
