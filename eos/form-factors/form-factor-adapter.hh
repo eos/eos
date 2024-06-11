@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2013-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -45,6 +45,10 @@ namespace eos
 
             Options _options;
 
+            std::vector<OptionSpecification> _option_specifications;
+
+            SpecifiedOption _opt_form_factors;
+
             std::shared_ptr<FormFactors<Transition_>> _form_factors;
 
             std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> _form_factor_function;
@@ -66,16 +70,15 @@ namespace eos
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _form_factors(FormFactorFactory<Transition_>::create(process.str() + "::" + options["form-factors"], _parameters, _options)),
+                _option_specifications{ FormFactorFactory<Transition_>::option_specification(process) },
+                _opt_form_factors(options, _option_specifications, "form-factors"),
+                _form_factors(FormFactorFactory<Transition_>::create(process.str() + "::" + _opt_form_factors.value(), _parameters, _options)),
                 _form_factor_function(form_factor_function),
                 _kinematics_names(kinematics_names),
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors.get()))
             {
-                if (! _options.has("form-factors"))
-                    throw UnknownOptionError("form-factors");
-
                 if (! _form_factors)
-                    throw NoSuchFormFactorError(process.str(), options["form-factors"]);
+                    throw NoSuchFormFactorError(process.str(), _opt_form_factors.value());
 
                 uses(*_form_factors);
             }
