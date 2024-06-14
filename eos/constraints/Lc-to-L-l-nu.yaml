@@ -8,7 +8,7 @@
 Lambda_c->Lambdae^+nu::BR[0.0,q2max]@BESIII:2022A:
     type: Gaussian
     observable: Lambda_c->Lambdalnu::BR
-    kinematics: {q2_min: 2.7e-7, q2_max: 1.3707}
+    kinematics: {q2_min: 5.0e-6, q2_max: 1.3707} # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
     options: {l: e}
     mean: 3.56e-02
     sigma-stat: {hi: 0.11e-02, lo: -0.11e-02}

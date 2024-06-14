@@ -8,7 +8,7 @@
 D^0->K^-e^+nu::BR[0.0,q2max]@BESIII:2015A:
     type: Gaussian
     observable: D->Klnu::BR
-    kinematics: {q2_min: 0.0, q2_max: 1.880}
+    kinematics: {q2_min: 5.0e-6, q2_max: 1.880} # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
     options: {q: u, l: e}
     mean: 3.505e-02
     sigma-stat: {hi: 0.014e-02, lo: -0.014e-02}
@@ -34,7 +34,7 @@ D^0->K^-e^+nu::normalizedwidth@BESIII:2015A:
         -   D->Klnu::P(q2_min,q2_max)
         -   D->Klnu::P(q2_min,q2_max)
     kinematics:
-        -   {q2_min: 0.0, q2_max: 0.1}
+        -   {q2_min: 5.0e-6, q2_max: 0.1} # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
         -   {q2_min: 0.1, q2_max: 0.2}
         -   {q2_min: 0.2, q2_max: 0.3}
         -   {q2_min: 0.3, q2_max: 0.4}
@@ -93,7 +93,7 @@ D^0->K^-e^+nu::normalizedwidth@BESIII:2015A:
 D^+->Kbar^0e^+nu::BR[0.0,q2max]@PDG:2023A:
     type: Gaussian
     observable: D->Klnu::BR
-    kinematics: {q2_min: 0.0, q2_max: 1.880}
+    kinematics: {q2_min: 5.0e-6, q2_max: 1.880} # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
     options: {q: d, l: e}
     mean: 8.72e-02
     sigma-stat: {hi: 0.09e-02, lo: -0.09e-02}
@@ -110,7 +110,7 @@ D^+->Kbar^0e^+nu::normalizedwidth@BESIII:2017A:
         -   D->Klnu::P(q2_min,q2_max)
         -   D->Klnu::P(q2_min,q2_max)
     kinematics:
-        -   {q2_min: 0.0, q2_max: 0.2}
+        -   {q2_min: 5.0e-6, q2_max: 0.2} # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
         -   {q2_min: 0.2, q2_max: 0.4}
         -   {q2_min: 0.4, q2_max: 0.6}
         -   {q2_min: 0.6, q2_max: 0.8}
@@ -140,7 +140,7 @@ D^+->Kbar^0e^+nu::normalizedwidth@BESIII:2017A:
 D^0->K^-mu^+nu::BR[0.0,q2max]@BESIII:2019A:
     type: Gaussian
     observable: D->Klnu::BR
-    kinematics: {q2_min: 0.0, q2_max: 1.880}
+    kinematics: {q2_min: 0.0112, q2_max: 1.880}
     options: {q: u, l: mu}
     mean: 3.413e-02
     sigma-stat: {hi: 0.019e-02, lo: -0.019e-02}
@@ -166,7 +166,7 @@ D^0->K^-mu^+nu::normalizedwidth@BESIII:2019A:
         -   D->Klnu::P(q2_min,q2_max)
         -   D->Klnu::P(q2_min,q2_max)
     kinematics:
-        -   {q2_min: 0.0, q2_max: 0.1}
+        -   {q2_min: 0.112, q2_max: 0.1}
         -   {q2_min: 0.1, q2_max: 0.2}
         -   {q2_min: 0.2, q2_max: 0.3}
         -   {q2_min: 0.3, q2_max: 0.4}
