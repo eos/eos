@@ -117,6 +117,12 @@ namespace eos
                         &LambdaCToLambdaLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{}),
+
+                make_observable("Lambda_c->Lambdalnu::dBR/dq2", R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
+                        Unit::InverseGeV2(),
+                        &LambdaCToLambdaLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{}),
             }
         );
 
