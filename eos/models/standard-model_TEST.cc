@@ -287,8 +287,8 @@ class CKMElementsTest :
                 TEST_CHECK_NEARLY_EQUAL(imag(model.ckm_ub()), -0.003264270, eps);
                 TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_ub()),  +0.00354,     1e-5);
 
-                TEST_CHECK_NEARLY_EQUAL(real(model.ckm_cd()), +0.225296132, eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(model.ckm_cd()), +0.000138121, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(model.ckm_cd()), -0.225293255, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(model.ckm_cd()), -0.000131277, eps);
                 TEST_CHECK_NEARLY_EQUAL(abs(model.ckm_cd()),  +0.22529,     1e-5);
 
                 TEST_CHECK_NEARLY_EQUAL(real(model.ckm_cs()), +0.973416767, eps);
@@ -317,12 +317,12 @@ class CKMElementsTest :
                 TEST_CHECK_NEARLY_EQUAL(std::sin(2.0 * alpha),                  -0.036840406, eps);
 
                 double beta  = arg(-1.0 * model.ckm_cd() * conj(model.ckm_cb()) / model.ckm_td() / conj(model.ckm_tb()));
-                TEST_CHECK_NEARLY_EQUAL(beta,                                   -2.761464006, eps);
-                TEST_CHECK_NEARLY_EQUAL(std::sin(2.0 * beta),                   +0.689107918, eps);
+                TEST_CHECK_NEARLY_EQUAL(beta,                                   +0.380098271, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::sin(2.0 * beta),                   +0.689063892, eps);
 
                 double gamma = arg(-1.0 * model.ckm_ud() * conj(model.ckm_ub()) / model.ckm_cd() / conj(model.ckm_cb()));
-                TEST_CHECK_NEARLY_EQUAL(gamma,                                  -1.969349346, eps);
-                TEST_CHECK_NEARLY_EQUAL(std::abs(std::sin(2.0 * beta + gamma)), +0.935295092, eps);
+                TEST_CHECK_NEARLY_EQUAL(gamma,                                  +1.172273683, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::abs(std::sin(2.0 * beta + gamma)), +0.935305841, eps);
 
                 complex<double> lambda_t = model.ckm_tb() * conj(model.ckm_ts());
                 TEST_CHECK_NEARLY_EQUAL(std::abs(lambda_t), +0.040483577, eps);
