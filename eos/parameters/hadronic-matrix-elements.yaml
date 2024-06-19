@@ -839,35 +839,35 @@ groups:
           max:     0.0
           latex:    '$a_{T,3}^{B\to D,\mathrm{BGL97}}$'
           unit:     '1'
-      # form factor parameters for B_s->D_s inspired by [BSZ:2015A]
+       # form factor parameters for B_s->D_s inspired by [BSZ:2015A]
       'B_s->D_s::alpha^f+_0@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.6657
+          min:      0.6657
+          max:      0.6657
           latex:    '$\alpha_{+,0}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->D_s::alpha^f+_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -3.2411
+          min:      -3.2411
+          max:      -3.2411
           latex:    '$\alpha_{+,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->D_s::alpha^f+_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -0.2214
+          min:      -0.2214
+          max:      -0.2214
           latex:    '$\alpha_{+,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->D_s::alpha^f0_1@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  0.0237
+          min:      0.0237
+          max:      0.0237
           latex:    '$\alpha_{0,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->D_s::alpha^f0_2@BSZ2015' :
-          central:  0.0
-          min:      0.0
-          max:      0.0
+          central:  -1.2447
+          min:      -1.2447
+          max:      -1.2447
           latex:    '$\alpha_{0,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
       'B_s->D_s::alpha^fT_0@BSZ2015' :
@@ -5367,6 +5367,37 @@ groups:
           matrix:
               - [ "bs", "rg" ]
               - [ "Jpsi", "psi2S" ]
+
+  # }}}
+  # Parameters for form factor values appearing in non-leptonic class-I B decays with light vector meson in final state
+  # {{{
+  - title: 'Parameters for form factor values appearing in non-leptonic class-I B decays'
+    description: ''
+    parameters:
+      # B->DK^* (random value)
+      'B->DK^*::f_p(MKstar2)' :
+          central: 0.685068
+          min:     0.685068
+          max:     0.685068
+          latex:   '$f_+^{B->D}(q^2 = M_K^{*2})$'
+      # B->D^* K^* (random value)
+      'B->D^*K^*::a_0(MKstar2)' :
+          central: 0.70023
+          min:     0.70023
+          max:     0.70023
+          latex:   '$a_0^{B->D^*}(q^2 = M_K^{*2})$'
+      # B_s->D_srho (random value)
+      'B_s->D_srho::f_p(Mrho2)' :
+          central: 0.685068
+          min:     0.685068
+          max:     0.685068
+          latex:   '$f_+^{B_s->D_s}(q^2 = M_\rho^2)$'
+      # B_s->D_s^* rho (random value)
+      'B_s->D_s^*rho::a_0(Mrho2)' :
+          central: 0.70023
+          min:     0.70023
+          max:     0.70023
+          latex:   '$a_0^{B_s->D_s^*}(q^2 = M_\rho^2)$'
   # }}}
 
   # Parameters for form factor values appearing in non-leptonic class-I B decays
