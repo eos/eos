@@ -77,41 +77,41 @@ B^0->K^*0Jpsi::PolarizationAmplitude@LHCb:2013E:
 # 2007
 #
 # {{{
-B^0->K^*0psi2S::S_1s_LHCb@BaBar:2007A:
+B^0->K^*0psi2S::S_1s@BaBar:2007A:
     type: Gaussian
-    observable: B->K^*psi::S_1s_LHCb
+    observable: B->K^*psi::S_1s@LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: 0.39
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.04, lo: 0.04}
-B^0->K^*0psi2S::S_3_LHCb@BaBar:2007A:
+B^0->K^*0psi2S::S_3@BaBar:2007A:
     type: Gaussian
-    observable: B->K^*psi::S_3_LHCb
+    observable: B->K^*psi::S_3@LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: 0.04
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.06, lo: 0.06}
-B^0->K^*0psi2S::S_4_LHCb@BaBar:2007A:
+B^0->K^*0psi2S::S_4@BaBar:2007A:
     type: Gaussian
-    observable: B->K^*psi::S_4_LHCb
+    observable: B->K^*psi::S_4@LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: -0.20
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.04, lo: 0.04}
-B^0->K^*0psi2S::S_8_LHCb@BaBar:2007A:
+B^0->K^*0psi2S::S_8@BaBar:2007A:
     type: Gaussian
-    observable: B->K^*psi::S_8_LHCb
+    observable: B->K^*psi::S_8@LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: -0.09
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.08, lo: 0.08}
-B^0->K^*0psi2S::S_9_LHCb@BaBar:2007A:
+B^0->K^*0psi2S::S_9@BaBar:2007A:
     type: Gaussian
-    observable: B->K^*psi::S_9_LHCb
+    observable: B->K^*psi::S_9@LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: -0.15

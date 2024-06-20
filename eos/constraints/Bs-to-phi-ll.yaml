@@ -59,11 +59,11 @@ B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_7@LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -89,11 +89,11 @@ B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_7@LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -119,11 +119,11 @@ B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_7@LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -149,11 +149,11 @@ B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_7@LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -179,11 +179,11 @@ B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_7@LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -209,11 +209,11 @@ B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_7@LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -240,9 +240,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00} ]
     options:
@@ -260,9 +260,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00} ]
     options:
@@ -280,9 +280,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00} ]
     options:
@@ -300,9 +300,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
     options:
@@ -320,9 +320,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
     options:
@@ -340,9 +340,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb:2015C:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89} ]
     options:
@@ -435,9 +435,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,0.98]@LHCb:2021D:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 0.10, q2_max: 0.98}, {q2_min: 0.10, q2_max: 0.98},
           {q2_min: 0.10, q2_max: 0.98}, {q2_min: 0.10, q2_max: 0.98} ]
@@ -456,9 +456,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[1.10,4.00]@LHCb:2021D:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 1.10, q2_max: 4.00}, {q2_min: 1.10, q2_max: 4.00},
           {q2_min: 1.10, q2_max: 4.00}, {q2_min: 1.10, q2_max: 4.00} ]
@@ -477,9 +477,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[4.00,6.00]@LHCb:2021D:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00},
           {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00} ]
@@ -498,9 +498,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[6.00,8.00]@LHCb:2021D:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00},
           {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00} ]
@@ -519,9 +519,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2021D:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50},
           {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
@@ -540,9 +540,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[15.00,19.00]@LHCb:2021D:
     type: MultivariateGaussian
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3_LHCb
-        - B_s->phill::S_4_LHCb
-        - B_s->phill::S_7_LHCb
+        - B_s->phill::S_3@LHCb
+        - B_s->phill::S_4@LHCb
+        - B_s->phill::S_7@LHCb
     kinematics:
         [ {q2_min: 15.00, q2_max: 18.89}, {q2_min: 15.00, q2_max: 18.89},
           {q2_min: 15.00, q2_max: 18.89}, {q2_min: 15.00, q2_max: 18.89} ]
