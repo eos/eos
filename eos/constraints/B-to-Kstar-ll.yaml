@@ -1951,13 +1951,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98},
           {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98} ]
@@ -1981,13 +1981,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50},
           {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50} ]
@@ -2011,13 +2011,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00},
           {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00} ]
@@ -2041,13 +2041,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00},
           {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00} ]
@@ -2071,13 +2071,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00},
           {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00} ]
@@ -2101,13 +2101,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50},
           {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
@@ -2131,13 +2131,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00},
           {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
@@ -2161,13 +2161,13 @@ B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020A:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00},
           {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]
@@ -2192,13 +2192,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98},
           {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98} ]
@@ -2222,13 +2222,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50},
           {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50} ]
@@ -2252,13 +2252,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00},
           {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00} ]
@@ -2282,13 +2282,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00},
           {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00} ]
@@ -2312,13 +2312,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00},
           {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00} ]
@@ -2342,13 +2342,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50},
           {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
@@ -2372,13 +2372,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00},
           {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
@@ -2402,13 +2402,13 @@ B^+->K^*+mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020B:
     type: MultivariateGaussian
     observables:
         - B->K^*ll::F_L
-        - B->K^*ll::S_3_LHCb
-        - B->K^*ll::S_4_LHCb
-        - B->K^*ll::S_5_LHCb
-        - B->K^*ll::A_FB_LHCb
-        - B->K^*ll::S_7_LHCb
-        - B->K^*ll::S_8_LHCb
-        - B->K^*ll::S_9_LHCb
+        - B->K^*ll::S_3@LHCb
+        - B->K^*ll::S_4@LHCb
+        - B->K^*ll::S_5@LHCb
+        - B->K^*ll::A_FB@LHCb
+        - B->K^*ll::S_7@LHCb
+        - B->K^*ll::S_8@LHCb
+        - B->K^*ll::S_9@LHCb
     kinematics:
         [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00},
           {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]

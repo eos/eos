@@ -956,6 +956,13 @@ DDS:2014A:
     id: oai:arXiv.org:1405.3719
   inpire-id: Duraisamy:2014sna
   title: Azimuthal $B \to D^{*} \tau^{-} \bar{\nu_\tau}$ angular distribution with tensor operators
+DHMV:2015A:
+  authors: Descotes-Genon, Sebastien and Hofer, Lars and Matias, Joaquim and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1510.04239
+  inspire-id: Descotes-Genon:2015uva
+  title: Global analysis of $b\to s\ell\ell$ anomalies
 DLKLR:2019A:
   authors: Di Luzio, L. and Kirk, M. and Lenz, A. and Rauh, Th.
   eprint:
