@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2011-2021 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1191,6 +1191,8 @@ namespace eos
 
         unsigned dim_meas, dim_pred;
 
+        double rescale_factor;
+
         MultivariateGaussianCovarianceConstraintEntry(const QualifiedName & name,
                 const std::vector<QualifiedName> & observables,
                 const std::vector<Kinematics> & kinematics,
@@ -1198,7 +1200,8 @@ namespace eos
                 gsl_vector * const means,
                 gsl_matrix * const covariance,
                 gsl_matrix * const response,
-                const unsigned number_of_observations) :
+                const unsigned number_of_observations,
+                const double rescale_factor = 1.0) :
             ConstraintEntryBase(name, observables),
             observables(observables),
             kinematics(kinematics),
@@ -1261,6 +1264,8 @@ namespace eos
             // If specified, these options allow to specify a subset of the measurements
             unsigned begin = destringify<unsigned>(options.get("begin", "0"));
             unsigned end = destringify<unsigned>(options.get("end", stringify(dim_meas)));
+            // If specified, this option allows to rescale the covariance matrix by a factor
+            double rescale_factor = destringify<double>(options.get("rescale-factor", "1.0"));
 
             if (end > dim_meas)
                 throw InvalidOptionValueError("End of the measurements sub-sample: end", options.get("end", stringify(dim_meas)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
@@ -1285,6 +1290,7 @@ namespace eos
             gsl_matrix * covariance = gsl_matrix_alloc(subdim_meas, subdim_meas);
             gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance.get(), begin, begin, subdim_meas, subdim_meas);
             gsl_matrix_memcpy(covariance, &(covariance_subset.matrix));
+            gsl_matrix_scale(covariance, rescale_factor);
 
             if (this->response)
             {
