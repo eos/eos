@@ -564,6 +564,33 @@ groups:
           comments: 'cf. [IKMvD2014]'
   # }}}
 
+  #Fragmentation Fraction Ratios
+  # {{{
+     # B_s/B_d
+  - title: 'Fragmentation Fraction Ratios'
+    description: ''
+    parameters:
+      'hadronization::f_s/f_d@LHCb(7TeV)' :
+          central: +0.2390
+          min:     +0.2314
+          max:     +0.2466
+          latex:    '$\frac{f_s}{f_d}(7 \, \mathrm{TeV})$'
+          comments: 'cf. [LHCb2021]'
+      'hadronization::f_s/f_d@LHCb(8TeV)' :
+          central: +0.2385
+          min:     +0.231
+          max:     +0.246
+          latex:    '$\frac{f_s}{f_d}(8\, \mathrm{TeV})$'
+          comments: 'cf. [LHCb2021]'
+      'hadronization::f_s/f_d@LHCb(13TeV)' :
+          central: +0.2539
+          min:     +0.246
+          max:     +0.2618
+          latex:    '$\frac{f_s}{f_d}(13\, \mathrm{TeV})$'
+          comments: 'cf. [LHCb2021]'
+  # }}}
+
+
   # Mean Meson Lifetimes
   # {{{
   - title: 'Mean Meson Lifetimes'
