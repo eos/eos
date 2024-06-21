@@ -261,6 +261,26 @@ namespace eos
         return _value;
     }
 
+    FloatOption::FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key),
+        _float_value(destringify<double>(_value))
+    {
+    }
+
+    FloatOption::~FloatOption() = default;
+
+    double
+    FloatOption::value() const
+    {
+        return _float_value;
+    }
+
+    const std::string &
+    FloatOption::str() const
+    {
+        return _value;
+    }
+
     LeptonFlavorOption::LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
         SpecifiedOption(options, specifications, key)
     {

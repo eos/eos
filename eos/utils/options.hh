@@ -158,6 +158,20 @@ namespace eos
             const std::string & str() const;
     };
 
+    class FloatOption :
+        public SpecifiedOption
+    {
+        private:
+            double _float_value;
+
+        public:
+            FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            ~FloatOption();
+
+            double value() const;
+            const std::string & str() const;
+    };
+
     class LeptonFlavorOption :
         public SpecifiedOption
     {
