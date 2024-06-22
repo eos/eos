@@ -126,6 +126,7 @@ class OptionValueTest :
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("BCvD2016-model1"));
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("d"));
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("tw2+tw3"));
+            TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("6.346"));
 
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey("D^*"));
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey(""));
@@ -147,6 +148,7 @@ class QualifiedNameTest :
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B^0->K^*0mu^+mu^-::A_FB@LHCb:2015-A;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("mass::b(MSbar);opt=har"));
+            TEST_CHECK_NO_THROW(auto qn = QualifiedName("D->K::f_++f_0@ETM:2017B;form-factors=BFW2010,rescale-factor=6.346"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName(qnp::Prefix("mass"), qnp::Name("b(MSbar)"), qnp::Suffix("non-empty")));
 
             TEST_CHECK_EQUAL_STR(
