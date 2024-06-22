@@ -935,13 +935,15 @@ class Plotter:
                                 obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate())
 
                         elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
-                            xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
-                            xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
+                            var_max = float(_kinematics[self.variable + '_max'])
+                            var_min = float(_kinematics[self.variable + '_min'])
+                            xvalues.append((var_max + var_min) / 2)
+                            xerrors.append((var_max - var_min) / 2)
                             if self.rescale_by_width:
-                                width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
+                                width = (var_max - var_min)
                             if self.plot_residues:
-                                obs_kinematics.declare(self.variable + '_max', _kinematics[self.variable + '_max'])
-                                obs_kinematics.declare(self.variable + '_min', _kinematics[self.variable + '_min'])
+                                obs_kinematics.declare(self.variable + '_max', var_max)
+                                obs_kinematics.declare(self.variable + '_min', var_min)
                                 obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate() / width)
 
                         yvalues.append(np.double(means[i]) / width)
