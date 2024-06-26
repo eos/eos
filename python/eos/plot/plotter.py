@@ -1480,7 +1480,7 @@ class Plotter:
                                              np.ma.masked_array(pdf, mask=pdf < plevel * pdf_norm, fill_value=np.nan),
                                              facecolor=self.color, alpha=self.alpha)
 
-            self.plotter.ax.plot(x, pdf, color=self.color, label=self.label)
+            self.plotter.ax.plot(x, pdf, color=self.color, linestyle=self.style, label=self.label)
 
 
     class KernelDensityEstimate2D(BasePlot):
@@ -1969,7 +1969,6 @@ class Plotter:
             f = item['f']
             alpha  = item['opacity'] if 'opacity' in item else 1.0
             color  = item['color']   if 'color'   in item else 'black'
-            style  = item['style']   if 'style'   in item else '-'
             samples = item['samples'] if 'samples' in item else 100
             label  = item['label']   if 'label'   in item else None
 
@@ -1980,7 +1979,7 @@ class Plotter:
             for xvalue in x:
                 y.append(eval(f, {}, {'x': xvalue}))
 
-            self.plotter.ax.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
+            self.plotter.ax.plot(x, y, color=color, alpha=alpha, linestyle=self.style, label=label)
 
 
     class Watermark(BasePlot):
