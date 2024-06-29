@@ -1,5 +1,5 @@
-# Copyright (c) 2023 Danny van Dyk
-# Copyright (c) 2023 Philip Lueghausen
+# Copyright (c) 2023-2025 Danny van Dyk
+# Copyright (c) 2023      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -14,125 +14,126 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from .plot import PlotFactory
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from eos.analysis_file_description import AnalysisFileContext
+from eos.deserializable import Deserializable
 
+from .plot import Plot, PlotFactory
+
+import copy as _copy
 import matplotlib.pyplot as plt
 import numpy as np
+import yaml as _yaml
+
+@dataclass(kw_only=True)
+class Figure(ABC, Deserializable):
+    r"""Base class for figures to be drawn using matplotlib."""
+    name:str=field(default=None)
+
+    @abstractmethod
+    def draw(self, context:AnalysisFileContext=None):
+        "Draw the figure"
+        raise NotImplementedError
 
 
-class Figure:
-    def __init__(self, figure, axes, descriptions:list):
-        self.figure = figure
-        self.axes = axes
-        self.plots = []
-
-        if not descriptions:
-            raise ValueError(f"Argument 'descriptions' is empty list")
-
-        for ax, plot_description in zip(axes, descriptions):
-            if plot_description is None:
-                self.plots.append(PlotFactory.make(ax, [], plot_type='empty'))
-                continue
-
-            if 'description' not in plot_description:
-                raise ValueError(f"Plot does not contain element 'description'")
-            if 'items' not in plot_description:
-                raise ValueError(f"Plot does not contain element 'items'")
-
-            contents = plot_description['items']
-            plot_description = PlotFactory.sanitize(plot_description['description'])
-
-            self.plots.append(PlotFactory.make(ax, contents, **plot_description))
-
-
-    def draw(self):
-        for plot in self.plots:
-            plot.draw()
-
-
+@dataclass(kw_only=True)
 class SingleFigure(Figure):
-    """Represent a figure with a single set of axes.
+    r"""Represents a figure with a single set of axes.
 
-    Use the value of 'plot' as a set of arguments to construct a Figure.
-
-    :param plot: The plot's data, as a dictionary containing the 'description' and the 'contents'.
-    :type plot: dict
+    :param plot: A representation of the various plot types created by :py:class:`eos.figure.PlotFactory`.
+    :type plot: :py:class:`eos.figure.Plot`
     """
+    type:str=field(repr=False, init=False, default='single')
+    plot:Deserializable
 
-    def __init__(self, description):
-        figure, axes = plt.subplots()
-        super().__init__(figure, [axes,], [description,])
+    def __post_init__(self):
+        self._figure, self._ax = plt.subplots(figsize=(6, 4))
+
+    def draw(self, context:AnalysisFileContext=None):
+        context = AnalysisFileContext() if context is None else context
+        self.plot.prepare(context)
+        self.plot.draw(self._ax)
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
+        return Deserializable.make(cls, **_kwargs)
 
 
+@dataclass(kw_only=True)
 class GridFigure(Figure):
-    """Represent a figure with several axes arranged in a grid.
+    r"""Represents a figure with several axes arranged in a grid.
 
-    :param plots: The list of plots' data, as a list of dictionaries each containing the 'description' and the 'contents' for a single plot.
-    :type plots: list[dict] or iterable[dict]
-    :param nrows: The number of rows in the grid.
-    :type nrows: int
-    :param ncols: The number of columns in the grid.
-    :type ncols: int
+    :param shape: The shape of the grid, i.e. the number of rows and columns.
+    :type shape: tuple[int, int]
+    :param plots: The flattened list of plots (row-major style).
+    :type plots: list[Plot] or iterable[Plot]
     """
+    type:str=field(repr=False, init=False, default='grid')
+    shape:tuple[int, int]
+    plots:list[Plot]
 
-    def __init__(self, descriptions, nrows, ncols, **kwargs):
-        figure, axes = plt.subplots(nrows, ncols, **kwargs)
-        axes = axes.flatten('C') # row-major style
-        super().__init__(figure, np.array(axes), np.array(descriptions))
+    def __post_init__(self):
+        nrow, ncol = self.shape
+        self._figure, axes = plt.subplots(nrow, ncol, figsize=(3.0 * nrow, 3.0 * ncol))
+        self._axes = axes.flatten('C') # flatten to row-major style
 
+    def draw(self, context:AnalysisFileContext=None):
+        context = AnalysisFileContext() if context is None else context
+        for idx, plot in enumerate(self.plots):
+            plot.prepare()
+            plot.draw(self._axes[idx])
 
-def make(description:dict) -> Figure:
-    """
-    This function takes a figure description and handles the contruction of a publication-grade
-    figure in a convenient way.
-    The description contains the arguments used for initialization of the objects in the
-    :py:mod:`eos.figure` module.
+        self._figure.tight_layout()
 
-    A figure can contain one or more plots, where each plot containts one or more items such
-    as a data series from the evaluation of an observable or a kernel density estimate to
-    visualize a set of statistical samples.
-
-    The description can be either a dictionary (`figure description`) describing a single plot
-    or a list of dictionaries describing a grid of plots.
-
-    +---------------+----------------------------+
-    | `figure description` (dict)                |
-    +===============+============================+
-    | `description` | `plot description` (dict)  |
-    +---------------+----------------------------+
-    | `items`       | list of `item description` |
-    +---------------+----------------------------+
-
-    +-------------+----------------------------------+
-    | `plot description` (dict)                      |
-    +=============+==================================+
-    | `plot_type` | valid plot type (str)            |
-    +-------------+----------------------------------+
-    | ...         | one or several keyword arguments |
-    +-------------+----------------------------------+
-
-    +-------------+----------------------------------+
-    | `item description` (dict)                      |
-    +=============+==================================+
-    | `item_type` | valid item type (str)            |
-    +-------------+----------------------------------+
-    | ...         | one or several keyword arguments |
-    +-------------+----------------------------------+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs['plots'] = [PlotFactory.from_dict(**p) for p in kwargs['plots']]
+        return Deserializable.make(cls, **_kwargs)
 
 
-    :param description: A figure description as documented
-    :type description: dict or list of dict
-    :returns: EOS figure
-    :rtype: eos.figure.Figure
-    """
+class FigureFactory:
+    # Also build the documentation based on ordered registry
+    # Initializer is well-defined for python version >= 3.6
+    registry = {
+        'single': SingleFigure, # default
+        'grid':   GridFigure,
+    }
 
-    if type(description) == dict:
-        # Make figure with a single plot
-        return SingleFigure(description)
+    @staticmethod
+    def from_yaml(yaml_data:str):
+        kwargs = _yaml.safe_load(yaml_data)
+        return FigureFactory.from_dict(**kwargs)
 
-    elif type(description) == list:
-        # Mad grid figure with several plots arranged on a grid
-        raise RuntimeError("Making a grid figure is not yet implemented")
+    @staticmethod
+    def from_dict(**kwargs):
+        r"""Factory method to create a plot from a dictionary
 
-    else:
-        raise RuntimeError("Argument 'description' must be either of type dict or list of dict")
+        This method takes a dictionary description of a figure and uses matplotlib to render that
+        figure conveniently and at a publication-grade level.
+
+        The description contains the arguments used for initializing objects of classes within the
+        :py:mod:`eos.figure` module.
+
+        A figure can contain one or more individual plots. Each plot containts one or more plottable
+        items, such as a data series from the evaluation of an observable or a kernel density estimate to
+        visualize a set of statistical samples.
+
+        :param description: A figure description as required by any of the descendant classes of :py:`eos.figure.Figure`.
+        :type description: dict
+        :returns: A descendant of the :py:class:`eos.figure.Figure` class
+        :rtype: :py:class:`eos.figure.Figure`
+        """
+
+        if 'type' not in kwargs:
+            figure_type = 'single'
+        else:
+            figure_type = kwargs.pop('type')
+
+        if figure_type not in FigureFactory.registry:
+            raise ValueError(f'Unknown figure type: {figure_type}')
+
+        return FigureFactory.registry[figure_type].from_dict(**kwargs)

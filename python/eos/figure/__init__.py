@@ -26,17 +26,19 @@ in the form or a line graph.
 
 """
 
-__all__ = ['make']
+#__all__ = ['make']
 
 ## minimal versions checks
 # matplotlib
 import matplotlib._version
 try:
     if matplotlib._version.get_versions()['version'] < '2.0':
-        raise ImportError('eos.plot requires matplotlib in version 2.0 or higher')
+        raise ImportError('eos.figure requires matplotlib in version 2.0 or higher')
 except AttributeError:
     # matplotlib._version.get_versions() was removed in version 3.5 or higher
     pass
 
 from . import config
-from .figure import make
+from .figure import *
+from .plot import *
+from .item import *

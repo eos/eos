@@ -4,6 +4,25 @@ from collections import defaultdict
 import copy as _copy
 import eos
 import inspect
+import os
+
+@dataclass(kw_only=True)
+class AnalysisFileContext:
+    """
+    Auxiliary class to transfer information to consumers of the analysis file.
+    """
+    base_directory:str='./'
+
+    def __post_init__(self):
+        if not os.path.exists(self.base_directory):
+            raise ValueError(f'Base directory \'{self.base_directory}\' does not exist')
+
+        if not os.path.isdir(self.base_directory):
+            raise ValueError(f'Base directory \'{self.base_directory}\' is not a directory')
+
+    def data_path(self, relative_path:str):
+        return os.path.abspath(os.path.join(self.base_directory, relative_path))
+
 
 class PriorDescription:
     @staticmethod
