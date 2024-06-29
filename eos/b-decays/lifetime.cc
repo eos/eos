@@ -224,14 +224,13 @@ namespace eos
                 -8.0 * wc.c10p() - wc.c6p() / 16.0 + wc.c8p() / 4.0, 1.0 / 48.0 * (128.0 * wc.c10p() - 6.0 * wc.c5p() + wc.c6p() + 24.0 * wc.c7p() - 4.0 * wc.c8p() - 768.0 * wc.c9p())
             };
             std::array<std::complex<double>, 20u> Cconj;
-            complex<double> (*conj)(const std::complex<double> &) = &std::conj<double>;
-            std::transform(C.cbegin(), C.cend(), Cconj.begin(), conj);
+            std::transform(C.cbegin(), C.cend(), Cconj.begin(), static_cast<complex<double> (*)(const std::complex<double> &)>(&std::conj<double>));
 
             const double ckm = abs(model->ckm_ud() * model->ckm_cb());
 
             const auto A = A_pi_cd + A_we_cu;
 
-            return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI * hbar) * real(dot(Cconj, (A * C))) * 1.0e-12;
+            return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI) * real(dot(Cconj, (A * C))) * convert_GeV_to_inv_ps();
         }
 
         double decay_width_sbcu_dim6_lo() const
@@ -266,14 +265,13 @@ namespace eos
                 -8.0 * wc.c10p() - wc.c6p() / 16.0 + wc.c8p() / 4.0, 1.0 / 48.0 * (128.0 * wc.c10p() - 6.0 * wc.c5p() + wc.c6p() + 24.0 * wc.c7p() - 4.0 * wc.c8p() - 768.0 * wc.c9p())
             };
             std::array<std::complex<double>, 20u> Cconj;
-            complex<double> (*conj)(const std::complex<double> &) = &std::conj<double>;
-            std::transform(C.cbegin(), C.cend(), Cconj.begin(), conj);
+            std::transform(C.cbegin(), C.cend(), Cconj.begin(), static_cast<complex<double> (*)(const std::complex<double> &)>(&std::conj<double>));
 
             const double ckm = abs(model->ckm_us() * model->ckm_cb());
 
             const auto A = A_pi_cs + A_we_cu;
 
-            return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI * hbar) * real(dot(Cconj, (A * C))) * 1.0e-12;
+            return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI) * real(dot(Cconj, (A * C))) * convert_GeV_to_inv_ps();
         }
 
         double decay_width_dbcu_dim3_lo() const
