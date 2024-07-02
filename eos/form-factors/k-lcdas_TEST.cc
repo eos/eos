@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2021 Danny van Dyk
  * Copyright (c) 2022 Carolina Bolognani
+ * Copyright (c) 2024 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -53,8 +54,7 @@ class AntiKaonLCDAsTest :
             p["K::f3@1GeV"]          =  0.0045;
             p["K::omega3@1GeV"]      = -1.5;
             p["K::lambda3@1GeV"]     =  1.6;
-            p["K::delta4@1GeV"]     =  0.18;
-            p["K::kappa4@1GeV"]      = -0.09;
+            p["K::delta4@1GeV"]      =  0.18;
             p["K::omega4@1GeV"]      =  0.2;
             p["mass::K_u"]           =  0.49368;
             p["decay-constant::K_u"] =  0.1561;
@@ -165,9 +165,9 @@ class AntiKaonLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(2.0),  0.15437,   eps);
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(3.0),  0.14544,   eps);
 
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.09,      eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.103105,  eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.107073,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.070363,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.083466,  eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.087433,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(1.0),  0.2,       eps);
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(2.0),  0.137439,  eps);
@@ -249,8 +249,7 @@ class KaonLCDAsTest :
             p["K::f3@1GeV"]          =  0.0045;
             p["K::omega3@1GeV"]      = -1.5;
             p["K::lambda3@1GeV"]     = -1.6;
-            p["K::delta4@1GeV"]     =  0.18;
-            p["K::kappa4@1GeV"]      =  0.09;
+            p["K::delta4@1GeV"]      =  0.18;
             p["K::omega4@1GeV"]      =  0.2;
             p["mass::K_u"]           =  0.49368;
             p["decay-constant::K_u"] =  0.1561;
@@ -362,9 +361,9 @@ class KaonLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(2.0),  0.15437,  eps);
                 TEST_CHECK_NEARLY_EQUAL(k.delta4(3.0),  0.14544,  eps);
 
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.09,     eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.103105, eps);
-                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.107073, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(1.0), -0.070363, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(2.0), -0.083466, eps);
+                TEST_CHECK_NEARLY_EQUAL(k.kappa4(3.0), -0.087433, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(1.0),  0.2,      eps);
                 TEST_CHECK_NEARLY_EQUAL(k.omega4(2.0),  0.137439, eps);
