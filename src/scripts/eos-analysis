@@ -329,7 +329,7 @@ in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
     )
     parser_find_mode.add_argument('-L', '--label',
         help = 'The label used for the generated data file.',
-        dest = 'label', action = 'store', type = str, default = '-default'
+        dest = 'label', action = 'store', type = str, default = 'default'
     )
     parser_find_mode.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
