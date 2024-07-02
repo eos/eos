@@ -16,14 +16,30 @@ groups:
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::pi^+' :
+          alias_of: [ 'mass::pi^-' ]
           central: +0.13957039
           min:     +0.13956921
           max:     +0.13957057
           latex:   '$m_{\pi^\pm}$'
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
+      'mass::eta' :
+          central: +0.547862
+          min:     +0.547845
+          max:     +0.547879
+          latex:   '$m_{\eta}$'
+          unit:     'GeV'
+          comments: "cf. [PDG-Live], December 2020"
+      "mass::eta'" :
+          central: +0.95778
+          min:     +0.95772
+          max:     +0.95784
+          latex:   '$m_{\eta^\prime}$'
+          unit:     'GeV'
+          comments: "cf. [PDG-Live], December 2020"
       # K meson masses
       'mass::K_d' :
+          alias_of: [ 'mass::Kbar_d' ]
           central: +0.497611
           min:     +0.497598
           max:     +0.497624
@@ -31,6 +47,7 @@ groups:
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::K_u' :
+          alias_of: [ 'mass::Kbar_u' ]
           central: +0.493677
           min:     +0.493661
           max:     +0.493693
@@ -540,6 +557,33 @@ groups:
           comments: 'cf. [IKMvD2014]'
   # }}}
 
+  #Fragmentation Fraction Ratios
+  # {{{
+     # B_s/B_d
+  - title: 'Fragmentation Fraction Ratios'
+    description: ''
+    parameters:
+      'hadronization::f_s/f_d@LHCb(7TeV)' :
+          central: +0.2390
+          min:     +0.2314
+          max:     +0.2466
+          latex:    '$\frac{f_s}{f_d}(7 \, \mathrm{TeV})$'
+          comments: 'cf. [LHCb2021]'
+      'hadronization::f_s/f_d@LHCb(8TeV)' :
+          central: +0.2385
+          min:     +0.231
+          max:     +0.246
+          latex:    '$\frac{f_s}{f_d}(8\, \mathrm{TeV})$'
+          comments: 'cf. [LHCb2021]'
+      'hadronization::f_s/f_d@LHCb(13TeV)' :
+          central: +0.2539
+          min:     +0.246
+          max:     +0.2618
+          latex:    '$\frac{f_s}{f_d}(13\, \mathrm{TeV})$'
+          comments: 'cf. [LHCb2021]'
+  # }}}
+
+
   # Mean Meson Lifetimes
   # {{{
   - title: 'Mean Meson Lifetimes'
@@ -655,6 +699,22 @@ groups:
           latex:    '$\tau_{\Lambda_c}$'
           comments: 'cf. PDG2019'
   # }}}
+
+  # Parameters for Miscellanous Meson Properties
+  # {{{
+  - title: 'Parameters for Miscellanous Meson Properties'
+    description: ''
+    parameters:
+      # Mixing angle of the eta meson in Octet-Singlet scheme
+      'eta::theta_18' :
+          central: +0.0
+          min:     -3.14
+          max:     +3.14
+          unit:     '1'
+          latex:    '$\theta_{18}$'
+          comments: 'cf. [FK:2002A] eq. (1)'
+  # }}}
+
 
   # Parameters for Miscellaneous Baryon Properties
   # {{{

@@ -48,6 +48,21 @@ namespace eos
     };
 
     std::ostream& operator<< (std::ostream & os, QuarkFlavor qf);
+
+    enum class LightMeson : uint8_t
+    {
+        pi0      = 0,
+        piplus   = 1,
+        piminus  = 2,
+        K0       = 3,
+        K0bar    = 4,
+        Kplus    = 5,
+        Kminus   = 6,
+        eta      = 7,
+        etap     = 8,
+    };
+
+    std::ostream& operator<< (std::ostream & os, LightMeson qf);
 }
 
 #endif
