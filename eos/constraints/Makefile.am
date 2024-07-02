@@ -3,6 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 CONSTRAINTS_FILES = \
 	Bq-to-dilepton.yaml \
+	Bq-to-Dq-P.yaml \
 	B-to-K-charmonium.yaml \
 	B-to-K-ll.yaml \
 	B-to-Kstar-charmonium.yaml \
