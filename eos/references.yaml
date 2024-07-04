@@ -118,7 +118,7 @@ BBGJvD:2020A:
   inspire-id: Bobeth:2021lya
   title: Lepton-flavour non-universality of $\bar{B}\to D^*\ell \bar\nu$ angular distributions in and beyond the Standard Model
 BBGORvD:2018A:
-  authors: 'Boeer, Philipp and Bordone, Marzia and Graverini, Elena and Owen, Patri and Rotondo, Marcello and van Dyk, Danny'
+  authors: Boeer, Philipp and Bordone, Marzia and Graverini, Elena and Owen, Patri and Rotondo, Marcello and van Dyk, Danny
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1801.08367
@@ -126,14 +126,14 @@ BBGORvD:2018A:
   title: Testing lepton flavour universality in semileptonic $\Lambda_b \to \Lambda_c^*$
     decays
 BBJW:2018A:
-  authors: 'Beneke, M. and Braun, V. M. and Ji, Yao and Wei, Yan-Bing'
+  authors: Beneke, M. and Braun, V. M. and Ji, Yao and Wei, Yan-Bing
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1804.04962
   inspire-id: Beneke:2018wjp
-  title: 'Radiative leptonic decay $B\to \gamma \ell \nu_\ell$ with subleading power corrections'
+  title: Radiative leptonic decay $B\to \gamma \ell \nu_\ell$ with subleading power corrections
 BBKT:1998A:
-  authors: 'Ball, P. and Braun, V. M. and Koike, Y. and Tanaka, K.'
+  authors: Ball, P. and Braun, V. M. and Koike, Y. and Tanaka, K.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9802299
@@ -407,7 +407,7 @@ BR:2011A:
     archive: arXiv
     id: oai:arXiv.org:1110.3228
   inspire-id: Beneke:2011nf
-  title: 'B meson distribution amplitude from B --\ensuremath{>} \textbackslash{}gamma l \textbackslash{}nu}'
+  title: B meson distribution amplitude from $B\to\gamma\ell\nu$
 BS:2011A:
   authors: Becirevic, Damir and Schneider, Elia
   eprint:
@@ -662,7 +662,7 @@ Belle:2014A:
     archive: arXiv
     id: oai:arXiv.org:1409.5269
   inspire-id: Belle:2014eud
-  title: 'Measurement of the branching fraction of $B^+ \to \tau^+ \nu_\tau$ decays with the semileptonic tagging method and the full Belle data sample'
+  title: Measurement of the branching fraction of $B^+ \to \tau^+ \nu_\tau$ decays with the semileptonic tagging method and the full Belle data sample
 Belle:2015A:
   authors: Glattauer, R. et al.
   collaboration: Belle
@@ -743,23 +743,23 @@ Belle:2019C:
 Belle-II:2023A:
   authors: Abudin\'en, F. et al.
   collaboration: Belle II
-  title: 'Measurement of the $B^{0} \rightarrow D^{*-} \ell^{+} \nu_{\ell}$ branching ratio and $|V_{cb}|$ with a fully reconstructed accompanying $B$ meson in 2019-2021 Belle II data'
+  title: Measurement of the $B^{0} \rightarrow D^{*-} \ell^{+} \nu_{\ell}$ branching ratio and $|V_{cb}|$ with a fully reconstructed accompanying $B$ meson in 2019-2021 Belle II data
   eprint:
     archive: arXiv
     id: oai:arXiv.org:2301.04716
   inspire-id: Belle-II:2023jtw
 Belle-II:2023B:
-  authors: Adachi, I. and others
+  authors: Adachi, I. et al.
   collaboration: Belle II
-  title: 'Tests of Light-Lepton Universality in Angular Asymmetries of $B^0 \rightarrow D^{*-} \ell^{+} \nu$ Decays'
+  title: Tests of Light-Lepton Universality in Angular Asymmetries of $B^0 \rightarrow D^{*-} \ell^{+} \nu$ Decays
   eprint:
     archive: arXiv
     id: oai:arXiv.org:2308.02023
   inspire-id: Belle-II:2023svm
 Belle-II:2023C:
-  authors: Adachi, I. and others
+  authors: Adachi, I. et al.
   collaboration: Belle II
-  title: 'Determination of $|V_{cb}|$ using $B^0 \rightarrow D^{*+} \ell^{-} \bar\nu$ decays with Belle II'
+  title: Determination of $|V_{cb}|$ using $B^0 \rightarrow D^{*+} \ell^{-} \bar\nu$ decays with Belle II
   eprint:
     archive: arXiv
     id: oai:arXiv.org:2310.01170
@@ -935,8 +935,8 @@ CMS:2016A:
     id: 1957565
   inspire-id: Leonardo:2016grh
   journal: Nucl.Part.Phys.Proc. 273-275 (2016) 1308-1313
-  title: 'Search and measurement of the $B \to \mu^+\mu^-$ rare processes with LHC Run
-    I data '
+  title: Search and measurement of the $B \to \mu^+\mu^-$ rare processes with LHC Run
+    I data
 CMS:2019A:
   authors: The CMS Collaboration
   collaboration: CMS
@@ -964,7 +964,7 @@ CMS:2020B:
     B$^0_\mathrm{s}\to$ J$/\psi\, \phi$(1020) $\to \mu^+\mu^-$K$^+$K$^-$ channel
     in proton-proton collisions at $\sqrt{s} =$ 13 TeV
 CMS+LHCb:2014A:
-  authors: Khachatryan, V. and others [CMS and LHCb]
+  authors: Khachatryan, V. et al. [CMS and LHCb]
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1411.4413
@@ -985,7 +985,7 @@ DBG:2013A:
     archive: arXiv
     id: oai:arXiv.org:1307.6653
   inspire-id: Dutta:2013qaa
-  title: 'Effective theory approach to new physics in $b \to u$ and $b \to c$ leptonic and semileptonic decays'
+  title: Effective theory approach to new physics in $b \to u$ and $b \to c$ leptonic and semileptonic decays
 DD:2020A:
   authors: Das, Diganta and Das, Jaydeb
   eprint:
@@ -1029,10 +1029,9 @@ DLKLR:2019A:
     archive: arXiv
     id: oai:arXiv.org:1909.11087
   inspire-id: DiLuzio:2019jyq
-  title: '$\Delta M_s$ theory precision confronts flavour anomalies'
+  title: $\Delta M_s$ theory precision confronts flavour anomalies
 DKMMO:2008A:
-  authors: Duplancic, G. and Khodjamirian, A. and Mannel, Th. and Melic, B. and Offen,
-    N.
+  authors: Duplancic, G. and Khodjamirian, A. and Mannel, Th. and Melic, B. and Offen, N.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:0801.1796
@@ -1044,8 +1043,7 @@ DKMR:2017A:
     archive: arXiv
     id: oai:arXiv.org:1702.02243
   inspire-id: Datta:2017aue
-  title: Phenomenology of $ {\Lambda}_b\to {\Lambda}_c\tau {\overline{\nu}}_{\tau
-    } $ using lattice QCD calculations
+  title: Phenomenology of $ {\Lambda}_b\to {\Lambda}_c\tau {\overline{\nu}}_{\tau} $ using lattice QCD calculations
 DLM:2015A:
   authors: Detmold, William and Lehner, Christoph and Meinel, Stefan
   eprint:
@@ -1060,7 +1058,7 @@ DLMW:2012A:
     archive: arXiv
     id: oai:arXiv.org:1212.4827
   inspire-id: Detmold:2012vy
-  title: '$\Lambda_b\to\Lambda \ell^+\ell^-$ form factors and differential branching fraction from lattice QCD'
+  title: $\Lambda_b\to\Lambda \ell^+\ell^-$ form factors and differential branching fraction from lattice QCD
 DM:2008A:
   authors: Duplancic, G. and Melic, B.
   eprint:
@@ -1188,7 +1186,7 @@ FLvD:2022A:
     archive: arXiv
     id: oai:arXiv.org:2203.15679
   inspire-id: Feldmann:2022uok
-  title: 'Systematic Parametrization of the Leading $B$-meson Light-Cone Distribution Amplitude'
+  title: Systematic Parametrization of the Leading $B$-meson Light-Cone Distribution Amplitude
 FM:2002A:
   authors: Feldmann, Thorsten and Matias, Joaquim
   eprint:
@@ -1343,12 +1341,12 @@ GvDV:2020A:
   inspire-id: Gubernari:2020eft
   title: Non-local matrix elements in $B_{(s)}\to \{K^{(*)},\phi\}\ell^+\ell^-$
 HFLAV:2019A:
-  authors: Amhis, Yasmine Sara and others
+  authors: Amhis, Yasmine Sara et al.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1909.12524
   inspire-id: Amhis:2019ckw
-  title: 'Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018'
+  title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018
 HLMW:2005A:
   authors: Huber, Tobias and Lunghi, Enrico and Misiak, Mikolaj and Wyler, Daniel
   eprint:
@@ -1454,7 +1452,7 @@ IKMvD:2014A:
     archive: arXiv
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
-  title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
+  title: Extrapolation and unitarity bounds for the $B \to \pi$ form factor
 JLQCD:2023A:
   authors: Aoki, Y. and Colquhoun, B. and Fukaya, H. and Hashimoto, S. and Kaneko, T. and Kellermann, R. and Koponen, J. and Kou, E.
   collaboration: JLQCD
@@ -1479,7 +1477,7 @@ KKVDZ:2022A:
     archive: arXiv
     id: oai:arXiv.org:2210.09832
   inspire-id: Kurten:2022zuy
-  title: 'Dispersion relations for $B^- \to \ell^- \bar{\nu}_\ell \ell^{\prime-} \ell^{\prime+}$ form factors'
+  title: Dispersion relations for $B^- \to \ell^- \bar{\nu}_\ell \ell^{\prime-} \ell^{\prime+}$ form factors
 KM:2005A:
   authors: Kruger, F. and Matias, J.
   eprint:
@@ -1586,7 +1584,7 @@ LHCb:2013A:
     archive: arXiv
     id: oai:arXiv.org:1304.2600
   inspire-id: Aaij:2013oba
-  title: 'Measurement of CP violation and the $B^0_s$ meson decay width difference with $B^0_s \to J/\psi K^+K^-$ and $B^0_s \to J/\psi \pi^+\pi^-$ decays'
+  title: Measurement of CP violation and the $B^0_s$ meson decay width difference with $B^0_s \to J/\psi K^+K^-$ and $B^0_s \to J/\psi \pi^+\pi^-$ decays
 LHCb:2013B:
   authors: Aaij, R. et al.
   collaboration: LHCb
@@ -1864,35 +1862,35 @@ NT:2011A:
   inspire-id: Nishikawa:2011qk
   title: QCD Sum Rules for Quark-Gluon Three-Body Components in the B Meson
 PDG:2008A:
-  authors: Amsler, C. and others
+  authors: Amsler, C. et al.
   collaboration: Particle Data Group
   inspire-id: Amsler:2008zzb
   journal: Physics Letters B 667, 1 (2008)
   title: Review of Particle Physics
   url: http:/pdg.lbl.gov
 PDG:2010A:
-  authors: Nakamura, K. and others
+  authors: Nakamura, K. et al.
   collaboration: Particle Data Group
   inspire-id: Nakamura:2010zzi
   journal: Journal of Physics G 37 075021 (2010)
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PDG:2012A:
-  authors: Beringer, J. and others
+  authors: Beringer, J. et al.
   collaboration: Particle Data Group
   inspire-id: Beringer:1900zz
   journal: Phys. Rev. D 86 010001 (2012)
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PDG:2018A:
-  authors: Tanabashi, N. and others
+  authors: Tanabashi, N. et al.
   collaboration: Particle Data Group
   inspire-id: Tanabashi:2018oca
   journal: Phys. Rev. D 98 030001 (2018)
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PDG:2020A:
-  authors: Zyla, P. A. and others
+  authors: Zyla, P. A. et al.
   collaboration: Particle Data Group
   inspire-id: ParticleDataGroup:2020ssz
   journal: PTEP 2020 083C01 (2020)
@@ -1959,7 +1957,7 @@ S:2004B:
     id: oai:arXiv.org:math/0405111
   title: 'Orthogonal polynomials on the unit circle: New results'
 S:2010A:
-  authors: Simone, J. and others
+  authors: Simone, J. et al.
   collaboration:
   - Fermilab Lattice
   - MILC Collaborations
