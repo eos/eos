@@ -471,6 +471,15 @@ BaBar:2008A:
   inspire-id: Aubert:2008gy
   title: Measurement of Time-Dependent CP Asymmetry in $B^0 \to K^0_{S} \pi^0 \gamma$
     Decays
+BaBar:2008B:
+  authors: Aubert, Bernard et al.
+  collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0804.2422
+  inspire-id: Aubert:2008gpt
+  title: Observation of $B^{+} \to \eta \rho^{+}$ and search for $B^0$ decays to
+    $\eta^\prime \eta$, $\eta \pi^0$, $\eta$ ' $\pi^0$, and $\omega \pi^0$
 BaBar:2009A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
@@ -740,6 +749,22 @@ Belle:2019C:
     id: oai:arXiv.org:1908.01848
   inspire-id: Belle:2019xld
   title: Test of lepton flavor universality and search for lepton flavor violation in $B \rightarrow K\ell \ell$ decays
+Belle:2021A:
+  authors: Bhuyan, B. et. al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2111.14437
+  inspire-id: Belle:2021tsq
+  title: Search for the decay $B_s^0 \rightarrow \eta \eta$
+Belle:2021B:
+  authors: Nisar, N. K. et. al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2106.09695
+  inspire-id: Belle:2021bxn
+  title: Search for the Decay $B_s^0 \rightarrow \eta^\prime \eta$
 Belle-II:2023A:
   authors: Abudin\'en, F. et al.
   collaboration: Belle II
@@ -1577,6 +1602,14 @@ LHCb:2012E:
     id: oai:arXiv.org:1210.4492
   inspire-id: LHCb:2012kz
   title: Measurement of the $C\!P$ asymmetry in $B^0 \to K^{*0} \mu^+ \mu^-$ decays
+LHCb:2012F:
+  authors: Aaij, R et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1206.2794
+  inspire-id: LHCb:2012ihl
+  title: Measurement of $b$-hadron branching fractions for two-body decays into charmless charged hadrons
 LHCb:2013A:
   authors: Aaij, R et al.
   collaboration: LHCb
@@ -1684,6 +1717,13 @@ LHCb:2015C:
     id: oai:arXiv.org:1506.08777
   inspire-id: LHCb:2015wdu
   title: Angular analysis and differential branching fraction of the decay $B^0_s\to\phi\mu^+\mu^-$
+LHCb:2015D:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1503.07483
+  title: Observation of the $B_s^0 \to \eta' \eta'$ decay
 LHCb:2016A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1751,6 +1791,14 @@ LHCb:2020A:
     id: oai:arXiv.org:2003.08453
   inspire-id: Aaij:2018xjy
   title: Measurement of the shape of the $B_s^0 \to D_s^{*-}\mu^{+}\nu_{\mu}$ differential decay rate
+LHCb:2020B:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2012.05319
+  inspire-id: LHCb:2020byh
+  title: Observation of $CP$ violation in two-body $ {B}_{(s)}^0 $-meson decays to charged pions and kaons
 LHCb:2021A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
