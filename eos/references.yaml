@@ -1552,6 +1552,14 @@ LHCb:2012E:
     id: oai:arXiv.org:1210.4492
   inspire-id: LHCb:2012kz
   title: Measurement of the $C\!P$ asymmetry in $B^0 \to K^{*0} \mu^+ \mu^-$ decays
+LHCb:2012F:
+  authors: Aaij, R et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1206.2794
+  inspire-id: LHCb:2012ihl
+  title: Measurement of $b$-hadron branching fractions for two-body decays into charmless charged hadrons
 LHCb:2013A:
   authors: Aaij, R et al.
   collaboration: LHCb
