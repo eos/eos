@@ -2247,7 +2247,11 @@ namespace eos
                         /
                         ( <<B^0->pi^+pi^-::BR>> + <<Bbar^0->pi^+pi^-::BR>> )
                         )"),
-
+                make_expression_observable("B^0->pi^+pi^-::S_CP", R"(S_\mathrm{CP}(B^0\to\pi^+\pi^-))",
+                        Unit::None(),
+                        R"(
+                        <<B->PP::S_CP;q=d,P1=pi^+,P2=pi^->>
+                        )"),
                 make_observable("B^0->pi^0pi^0::BR", R"(\mathcal{B}(B^0\to\pi^0\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::branching_ratio,
@@ -2324,6 +2328,11 @@ namespace eos
                         ( <<B^0->K^0Kbar^0::BR>> - <<Bbar^0->Kbar^0K^0::BR>> )
                         /
                         ( <<B^0->K^0Kbar^0::BR>> + <<Bbar^0->Kbar^0K^0::BR>> )
+                        )"),
+                make_expression_observable("B^0->K^0Kbar^0::S_CP", R"(S_\mathrm{CP}(B^0\to \bar{K}^0K^0))",
+                        Unit::None(),
+                        R"(
+                        (<<B->PP::S_CP;q=d,P1=K_d,P2=Kbar_d>>)
                         )"),
 
                 make_observable("B_s^0->K^-pi^+::BR", R"(\mathcal{B}(B_s^0\to K^-\pi^+))",
@@ -2456,6 +2465,12 @@ namespace eos
                         ( <<B^0->K^0pi^0::BR>> + <<Bbar^0->Kbar^0pi^0::BR>> )
                         )"),
 
+                make_expression_observable("B^0->K^0pi^0::S_CP", R"(S_\mathrm{CP}(B^0\to K^0\pi^0))",
+                        Unit::None(),
+                        R"(
+                        (<<B->PP::S_CP;q=d,P1=K_d,P2=pi^0>>)
+                        )"),
+
                 make_observable("B_s^0->pi^+pi^-::BR", R"(\mathcal{B}(B_s^0\to\pi^+\pi^-))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::branching_ratio,
@@ -2506,6 +2521,12 @@ namespace eos
                         ( <<B_s^0->K^+K^-::BR>> - <<Bbar_s^0->K^+K^-::BR>> )
                         /
                         ( <<B_s^0->K^+K^-::BR>> + <<Bbar_s^0->K^+K^-::BR>> )
+                        )"),
+
+                make_expression_observable("B_s^0->K^+K^-::S_CP", R"(S_\mathrm{CP}(B_s^0\to K^+K^-))",
+                        Unit::None(),
+                        R"(
+                        (<<B->PP::S_CP;q=s,P1=K_u,P2=Kbar_u>>)
                         )"),
 
                 make_observable("B_s^0->K^0Kbar^0::BR", R"(\mathcal{B}(B_s^0\to K^0\bar{K}^0))",
