@@ -76,10 +76,10 @@ namespace eos
             }
 
             // Pseudo-observables given for testing purposes
-            double re_amplitude() const { return real(ordered_amplitude()); }
-            double im_amplitude() const { return imag(ordered_amplitude()); }
-            double abs_amplitude() const { return abs(ordered_amplitude()); }
-            double arg_amplitude() const { return arg(ordered_amplitude()); }
+            double re_amplitude() const { return real(amplitude()); }
+            double im_amplitude() const { return imag(amplitude()); }
+            double abs_amplitude() const { return abs(amplitude()); }
+            double arg_amplitude() const { return arg(amplitude()); }
     };
 
     template <>
