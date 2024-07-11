@@ -1734,6 +1734,14 @@ LHCb:2020A:
     id: oai:arXiv.org:2003.08453
   inspire-id: Aaij:2018xjy
   title: Measurement of the shape of the $B_s^0 \to D_s^{*-}\mu^{+}\nu_{\mu}$ differential decay rate
+LHCb:2020B:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2012.05319
+  inspire-id: LHCb:2020byh
+  title: Observation of $CP$ violation in two-body $ {B}_{(s)}^0 $-meson decays to charged pions and kaons
 LHCb:2021A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
