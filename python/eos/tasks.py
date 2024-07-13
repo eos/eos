@@ -672,6 +672,17 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
         fig.savefig(os.path.join(base_directory, posterior, 'plots', f'corner-plot.{f}'))
 
 
+@task('validate', '', logfile=False)
+def validate(analysis_file:str):
+    """
+    Validates the analysis file by checking that all posteriors and all prediction sets can be created.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or :class:`eos.AnalysisFile`
+    """
+    analysis_file.validate()
+
+
 class Executor:
     _factory_methods = {}
 
