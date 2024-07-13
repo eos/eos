@@ -48,7 +48,7 @@ class LogfileHandler:
 
 _tasks = {}
 
-def task(name, output, mode=lambda **kwargs: 'w', modules=[]):
+def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
@@ -74,11 +74,14 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[]):
             _args.update(kwargs)
             if 'analysis_file' in _args and type(_args['analysis_file']) is str:
                 _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
-            # create output directory
-            outputpath = ('{base_directory}/' + output).format(**_args)
-            os.makedirs(outputpath, exist_ok=True)
-            # create invocation-specific log file handler
-            handler = LogfileHandler(path=outputpath, mode=mode(**_args))
+            if logfile:
+                # create output directory
+                outputpath = ('{base_directory}/' + output).format(**_args)
+                os.makedirs(outputpath, exist_ok=True)
+                # create invocation-specific log file handler
+                handler = LogfileHandler(path=outputpath, mode=mode(**_args))
+            else:
+                handler = contextlib.nullcontext()
             # use invocation-specific log file handler
             with handler:
                 iaccordion = None
