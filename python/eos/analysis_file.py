@@ -374,6 +374,25 @@ class AnalysisFile:
         return result
 
 
+    def validate(self):
+        """Validates the analysis file."""
+        messages = []
+        for posterior in self._posteriors:
+            try:
+                self.analysis(posterior)
+                eos.info(f'Successfully created analysis for posterior \'{posterior}\'')
+
+                for prediction in self._predictions:
+                    try:
+                        self.observables(posterior, prediction, eos.Parameters())
+                        eos.info(f'Successfully created prediction \'{prediction}\' set for posterior \'{posterior}\'')
+                    except Exception as e:
+                        messages.append(f'Error encountered when creating observables for prediction \'{prediction}\' of posterior \'{posterior}\': {e}')
+
+            except Exception as e:
+                messages.append(f'Error encountered when creating posterior \'{posterior}\': {e}')
+
+
     @property
     def priors(self):
         """Returns a list of all priors recorded in the analysis file."""
