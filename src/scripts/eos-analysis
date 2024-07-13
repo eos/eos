@@ -467,6 +467,18 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
     parser_corner_plot.set_defaults(cmd = cmd_corner_plot)
 
 
+    # validate
+    parser_validate = subparsers.add_parser('validate',
+        parents = [common_subparser],
+        description =
+'''
+Validates the analysis file by checking that all posteriors and all prediction sets can be created.
+''',
+        help = 'Validate the analysis file.'
+    )
+    parser_validate.set_defaults(cmd = cmd_validate)
+
+
     # run
     parser_run = subparsers.add_parser('run',
         parents = [common_subparser],
@@ -671,6 +683,11 @@ def cmd_mixture_product(args):
 # Predict observables
 def cmd_predict_observables(args):
     return eos.predict_observables(**args_to_dict(args))
+
+
+# Validate analysis file
+def cmd_validate(args):
+    return eos.validate(**args_to_dict(args))
 
 
 # Run steps
