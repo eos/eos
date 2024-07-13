@@ -543,31 +543,33 @@ def main():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
-    if not 'cmd' in args:
-        parser.print_help()
-    elif not callable(args.cmd):
-        parser.print_help()
-    else:
-        if args.verbose > 5:
-            args.verbose = 5
+    try:
+        if not 'cmd' in args:
+            parser.print_help()
+        elif not callable(args.cmd):
+            parser.print_help()
+        else:
+            if args.verbose > 5:
+                args.verbose = 5
 
-        levels = {
-            0: logging.ERROR,
-            1: logging.WARNING,
-            2: logging.SUCCESS,
-            3: logging.INPROGRESS,
-            4: logging.INFO,
-            5: logging.DEBUG
-        }
+            levels = {
+                0: logging.ERROR,
+                1: logging.WARNING,
+                2: logging.SUCCESS,
+                3: logging.INPROGRESS,
+                4: logging.INFO,
+                5: logging.DEBUG
+            }
 
-        eos.logger.setLevel(levels[args.verbose])
-        eos.logger.removeHandler(eos.logger.handlers[0])
-        handler = logging.StreamHandler(stream=sys.stdout)
-        handler.setFormatter(CustomLogFormatter())
-        eos.logger.addHandler(handler)
+            eos.logger.setLevel(levels[args.verbose])
+            eos.logger.removeHandler(eos.logger.handlers[0])
+            handler = logging.StreamHandler(stream=sys.stdout)
+            handler.setFormatter(CustomLogFormatter())
+            eos.logger.addHandler(handler)
 
-        args.cmd(args)
-
+            args.cmd(args)
+    except Exception as e:
+        print(colored('✖ Encountered an unrecovarable error', 'red', attrs=['bold']), f'{e}')
 
 
 def make_analysis_file(args):
