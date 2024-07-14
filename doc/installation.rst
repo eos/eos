@@ -225,6 +225,16 @@ the ``dynesty``, ``matplotlib``, ``networkx``, ``scipy``, ``pypmc``, ``pyyaml``,
   pip install dynesty matplotlib networkx scipy pypmc pyyaml wilson
 
 
+If you intend to build the EOS documentation, you will also need the following software:
+
+::
+
+  # for the 'Documentation Software'
+  sudo apt-get install python3-sphinx python3-sphinx-rtd-theme python3-sphinx-argparse python3-sphinxcontrib-contentui python3-nbsphinx pandoc
+  # or using pip
+  pip install sphinx sphinx_rtd_theme sphinx-argparse sphinxcontrib-contentui nbsphinx pandoc
+
+
 Installing the dependencies on macOS with Homebrew and PyPi
 ===========================================================
 
