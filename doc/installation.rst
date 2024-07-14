@@ -211,7 +211,7 @@ by running the following commands:
   # for the 'System Software'
   sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
   # for the 'Python Software'
-  sudo apt-get install python3-dev libboost-python-dev python3-matplotlib python3-networkx python3-scipy python3-yaml python3-pip
+  sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-networkx python3-scipy python3-yaml python3-pip
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 

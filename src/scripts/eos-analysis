@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
 
-# Copyright (c) 2020-2023 Danny van Dyk
+# Copyright (c) 2020-2024 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -15,7 +16,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-import argparse
+import argparse, argcomplete
 import eos
 from eos import debug, info, warn, error
 import logging
@@ -527,6 +528,7 @@ class CustomLogFormatter(logging.Formatter):
 
 def main():
     parser = _parser()
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     if not 'cmd' in args:
