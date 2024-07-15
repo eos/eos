@@ -35,7 +35,7 @@ class LogfileHandler:
         self.path = path
         self.name = name
         self.mode = mode
-        self.formatter = logging.Formatter('%(asctime)-15s %(levelname)-8s %(message)s')
+        self.formatter = logging.Formatter('%(asctime)-15s %(levelname)-10s %(message)s')
         self.handler = logging.FileHandler(os.path.join(path, name), mode=mode)
         self.handler.setFormatter(self.formatter)
 
@@ -149,17 +149,16 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     gof = None
     bfp = None
 
-    eos.info(f'Starting minimization in {optimizations} points')
-
+    eos.inprogress(f'Beginning minimization in {optimizations} points')
     if not start_point is None:
         _start_point = _np.array(start_point)
-        eos.info('Starting optimization from user-provided point')
+        eos.info('Using a user-provided starting point')
 
         _bfp = analysis.optimize(start_point=_start_point)
         _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
     elif not chain is None:
-        eos.info('Initializing starting point from MCMC data file')
+        eos.info(f'Using a starting point based on the existing MCMC data file (chain {chain:04})')
         _chain = eos.data.MarkovChain(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'))
         idx_mode = _np.argmax(_chain.weights)
         # Check the parameters varied in the analysis file match those of the loaded MCMC sample
@@ -168,7 +167,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         if analysis_varied_params != samples_varied_params:
             raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
         mode = '[ ' + ', '.join([f'{v:.4g}' for v in _chain.samples[idx_mode]]) + ' ]'
-        eos.info(f'Using starting point {mode} from MCMC samples (chain {chain:04})')
+        eos.info(f'Using starting point {mode}')
         for p, v in zip(analysis.varied_parameters, _chain.samples[idx_mode]):
             p.set(v)
 
@@ -176,7 +175,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
     elif importance_samples:
-        eos.info('Initializing starting point from importance samples')
+        eos.info('Using a starting point based on the existing importance samples')
         _file = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
         if _file.posterior_values is None:
             FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
@@ -187,7 +186,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         if analysis_varied_params != samples_varied_params:
             raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
         mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[idx_mode]]) + ' ]'
-        eos.info(f'Using starting point {mode} from importance samples')
+        eos.info(f'Using starting point {mode}')
         for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
             p.set(v)
 
@@ -195,13 +194,14 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
     else:
-        eos.info('Starting optimization from a random point')
+        eos.info('Using a random point')
         if seed is None:
             seed = 17
         _bfp = analysis.optimize(start_point='random', rng=_np.random.mtrand.RandomState(seed))
         _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
 
+    eos.info(f'First optimization finished')
     for i in range(optimizations - 1):
         starting_point = [float(p) for p in analysis.varied_parameters]
         _bfp = analysis.optimize(start_point = starting_point)
@@ -212,7 +212,8 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
             bfp = _bfp
             min_chi2 = _chi2
 
-    eos.info(f'Minimization finished, best point is:')
+    eos.completed(f'... optimization finished')
+    eos.info('The best-fit point is:')
     for p, v in zip(analysis.varied_parameters, _bfp.point):
         eos.info(f'  - {p.name()} -> {v}')
     eos.info(f'total chi^2 = {min_chi2:.2f}')
@@ -227,6 +228,10 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         eos.info(f'  - {n}: chi^2 / dof = {e.chi2:.2f} / {e.dof}, local_pvalue = {100 * local_pvalue:.2f}%')
 
     eos.data.Mode.create(os.path.join(base_directory, posterior, f'mode-{label}'), analysis.varied_parameters, bfp.point, pvalue, local_pvalues)
+    if (pvalue < 0.03):
+        eos.warn(f'Final p value is {100 * pvalue:.2f}%, which is below the a-priori threshold 3%')
+    else:
+        eos.success(f'Final p value is {100 * pvalue:.2f}%, indicating a successful fit')
 
     return (bfp, gof)
 
@@ -328,7 +333,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
                            n, threshold)
     eos.info(f'Found {len(groups)} groups using an R value threshold of {threshold}')
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
-    eos.info(f'Created mixture density with {len(density.components)} components')
+    eos.success(f'Created mixture density with {len(density.components)} components')
     eos.data.MixtureDensity.create(os.path.join(base_directory, posterior, 'clusters'), density)
 
 
@@ -473,6 +478,8 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
 
     parameters = [_parameters[p['name']] for p in data.varied_parameters]
     observable_samples = []
+    nsamples = len(data.samples[begin:end])
+    eos.inprogress(f'Predicting observables from set \'{prediction}\' for {nsamples} samples')
     for i, sample in enumerate(progressbar(data.samples[begin:end])):
         for p, v in zip(parameters, sample):
             p.set(v)
@@ -483,6 +490,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
             eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
+    eos.completed(f'... done')
 
     output_path = os.path.join(base_directory, posterior, f'pred-{prediction}')
     eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[begin:end])

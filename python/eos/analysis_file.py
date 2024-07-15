@@ -77,24 +77,28 @@ class AnalysisFile:
 
         # Optional: insert custom observables using the expression parser
         if 'observables' in input_data:
+            eos.inprogress('Inserting custom observables ...')
             _obs = [ObservableComponent.from_dict(name=n, **d) for n,d in input_data['observables'].items()]
             for o in _obs:
                 eos.Observables().insert(o.name, o.latex, eos.Unit(o.unit), eos.Options(**o.options), o.expression)
-                eos.info(f'Successfully inserted observable: { o.name }')
+                eos.info(f'Inserted observable: { o.name }')
+            eos.completed(f'... finished inserting {len(_obs)} custom observables')
 
         if 'parameters' in input_data:
+            eos.inprogress('Declaring custom parameters ...')
             _params = [ParameterComponent.from_dict(name=n, **d) for n, d in input_data["parameters"].items()]
             for p in _params:
                 try:
                     qn = eos.QualifiedName(p.name)
                     id = eos.Parameters.declare(qn, p.latex, eos.Unit(p.unit), p.central, p.min, p.max)
-                    eos.info(f'Successfully declared parameter: {qn}')
+                    eos.info(f'Declared parameter: {qn}')
                     if p.alias_of:
                         for aliased_qn in p.alias_of:
                             eos.Parameters.redirect(eos.QualifiedName(aliased_qn), id)
-                            eos.info(f'Successfully declared alias: {aliased_qn} -> {qn}')
+                            eos.info(f'Created parameter alias: {aliased_qn} -> {qn}')
                 except eos.Exception as e:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
+            eos.completed(f'... finished declaring {len(_params)} custom parameters')
 
         if 'steps' not in input_data:
             self._steps = []
