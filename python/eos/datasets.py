@@ -115,7 +115,7 @@ class DataSets:
             url             = self.DOWNLOAD_URL_GITHUB.format(id=id)
             expect_redirect = False
 
-        eos.info(f"Downloading EOS data set {id} from {url}")
+        eos.inprogress(f"Downloading EOS data set '{id}' from '{url}' ...")
         r = requests.get(url)
         if not r.ok:
             raise RuntimeError(f"Could not download EOS data set {id} from {url}; status code: {r.status_code}")
@@ -129,7 +129,9 @@ class DataSets:
             if not r.ok:
                 raise RuntimeError(f"Could not download EOS data set {id} from {url}; status code: {r.status_code}")
 
-        os.makedirs(os.path.join(self.storage_directory, id), exist_ok=True)
+        directory = os.path.join(self.storage_directory, id)
+        eos.inprogress(f"... and extracting to '{directory}' ...")
+        os.makedirs(directory, exist_ok=True)
         with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
             for zi in zf.infolist():
                 oldname = zi.filename
@@ -140,6 +142,7 @@ class DataSets:
                 zi.filename = newname
                 targetdir = os.path.join(self.storage_directory, id)
                 zf.extract(zi, path=targetdir)
+        eos.completed(f"... done")
 
 
     def update(self, ref:str='main'):
@@ -155,12 +158,13 @@ class DataSets:
             raise RuntimeError("eos.DataSets.update() needs to import the 'requests' module. Please install it.")
 
         update_url = self.UPDATE_URL.format(ref=ref)
-        eos.info(f"Updating data sets from {update_url}")
+        eos.inprogress(f"Downloading data sets information from '{update_url}' ...")
         r = requests.get(update_url)
         if not r.ok:
-            raise RuntimeError(f"Could not download data sets from {update_url}; status code: {r.status_code}")
+            raise RuntimeError(f"Could not download data sets information from '{update_url}'; status code: {r.status_code}")
         with open(os.path.join(self.storage_directory, 'datasets.yaml'), 'w') as f:
             f.write(r.text)
+        eos.completed(f"... done")
 
         data = _yaml.safe_load(r.text)
         self._data_sets = { k: DataSetDescription.from_dict(**v) for k, v in data.items() }

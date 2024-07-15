@@ -342,7 +342,7 @@ class Analysis:
             eos.warn('Optimization did not succeed')
             eos.warn('  optimizer'' message reads: {}'.format(res.message))
         else:
-            eos.info(f'Optimization goal achieved after {res.nfev} function evaluations')
+            eos.success(f'Optimization goal achieved after {res.nfev} function evaluations')
 
         bfp = self._u_to_par(res.x)
 
@@ -453,16 +453,18 @@ class Analysis:
         sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True, rng=rng)
 
         # pre run to adapt markov chains
-        for i in progressbar(range(0, preruns), desc="Pre-runs", leave=False):
+        eos.inprogress('Beginning preruns ...')
+        for i in progressbar(range(0, preruns), desc="Preruns", leave=False):
             eos.info(f'Prerun {i} out of {preruns}')
             accept_count = sampler.run(pre_N)
             accept_rate  = accept_count / pre_N * 100
             eos.info(f'Prerun {i}: acceptance rate is {accept_rate:3.0f}%')
             sampler.adapt()
         sampler.clear()
+        eos.completed(f'... completed {preruns} preruns')
 
         # obtain final samples
-        eos.info('Main run: started ...')
+        eos.inprogress('Beginning main run ...')
         sample_total  = N * stride
         sample_chunk  = sample_total // 100
         sample_chunks = [sample_chunk for i in range(0, 99)]
@@ -470,7 +472,7 @@ class Analysis:
         for current_chunk in progressbar(sample_chunks, desc="Main run", leave=False):
             accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
-        eos.info(f'Main run: acceptance rate is {accept_rate:3.0f}%')
+        eos.completed(f'... completed main run with acceptance rate {accept_rate:3.0f}%')
 
         # Transform from generator values in u space to the parameter values
         u_samples = sampler.samples[:][::stride]
@@ -568,7 +570,8 @@ class Analysis:
         proposals = [sampler.proposal]
 
         # carry out adaptions
-        for step in progressbar(range(steps), desc="Adaptions", leave=False):
+        eos.inprogress('Beggning PMC adaptations ...')
+        for step in progressbar(range(steps), desc="Adaptations", leave=False):
             origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
 
@@ -607,10 +610,11 @@ class Analysis:
 
             # stop adaptation if the perplexity of the last step is larger than the threshold
             if last_perplexity > final_perplexity_threshold:
-                eos.info(f'Perplexity threshold reached after {step} step(s)')
                 break
+        eos.completed(f'... completed adaptations after {step} steps(s) with perplexity = {last_perplexity}')
 
         # draw final samples
+        eos.inprogress(f'Beginning the final sampling ...')
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
 
@@ -627,7 +631,7 @@ class Analysis:
             posterior_values = sampler.target_values[:]
         perplexity = self._perplexity(np.copy(weights))
         ess = self._ess(np.copy(weights))
-        eos.info(f'Convergence diagnostics after final samples: perplexity = {perplexity}, ESS = {ess}')
+        eos.completed(f'... completed final sampling with perplexity = {perplexity} and ESS = {ess}')
 
         return samples, weights, posterior_values, sampler.proposal
 
