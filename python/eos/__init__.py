@@ -53,34 +53,70 @@ from .tasks import *
 from .pyhf_likelihood import PyhfLogLikelihood
 
 import logging
+logging.addLevelName(logging.INFO + 1, 'INPROGRESS')
+setattr(logging, 'INPROGRESS', logging.INFO + 1)
+logging.addLevelName(logging.INFO + 2, 'COMPLETED')
+setattr(logging, 'COMPLETED', logging.INFO + 2)
+logging.addLevelName(logging.WARNING - 1, 'SUCCESS')
+setattr(logging, 'SUCCESS', logging.WARNING - 1)
 logger = logging.getLogger('EOS')
 logger.setLevel(logging.INFO)
 from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel
 _set_native_log_level(_NativeLogLevel.INFO) # default native log level
 
+_MAP_PYTHON_TO_NATIVE_LOG_LEVEL = {
+    logging.DEBUG: _NativeLogLevel.DEBUG,
+    logging.INFO: _NativeLogLevel.INFO,
+    logging.INPROGRESS: _NativeLogLevel.INPROGRESS,
+    logging.COMPLETED: _NativeLogLevel.COMPLETED,
+    logging.SUCCESS: _NativeLogLevel.SUCCESS,
+    logging.WARNING: _NativeLogLevel.WARNING,
+    logging.ERROR: _NativeLogLevel.ERROR,
+}
+def set_log_level(level):
+    logger.setLevel(level)
+    if level not in _MAP_PYTHON_TO_NATIVE_LOG_LEVEL:
+        raise RuntimeError(f'Cannot handle unknown log level: {level}')
+    _set_native_log_level(_MAP_PYTHON_TO_NATIVE_LOG_LEVEL[level])
+
 def debug(msg, *args, **kwargs):
     logger.debug(msg, *args, **kwargs)
-
-def error(msg, *args, **kwargs):
-    logger.error(msg, *args, **kwargs)
 
 def info(msg, *args, **kwargs):
     logger.info(msg, *args, **kwargs)
 
+def inprogress(msg, *args, **kwargs):
+    logger.log(logging.INPROGRESS, msg, *args, **kwargs)
+
+def completed(msg, *args, **kwargs):
+    logger.log(logging.COMPLETED, msg, *args, **kwargs)
+
+def success(msg, *args, **kwargs):
+    logger.log(logging.SUCCESS, msg, *args, **kwargs)
+
 def warn(msg, *args, **kwargs):
     logger.warning(msg, *args, **kwargs)
+
+def error(msg, *args, **kwargs):
+    logger.error(msg, *args, **kwargs)
 
 def _log_callback(id, level, msg):
     full_msg = f'{id} {msg}'
 
-    if   level == _NativeLogLevel.INFO:
-        logger.info(full_msg)
-    elif level == _NativeLogLevel.DEBUG:
-        logger.debug(full_msg)
+    if   level == _NativeLogLevel.DEBUG:
+        debug(full_msg)
+    elif level == _NativeLogLevel.INFO:
+        info(full_msg)
+    elif level == _NativeLogLevel.INPROGRESS:
+        inprogress(full_msg)
+    elif level == _NativeLogLevel.COMPLETED:
+        completed(full_msg)
+    elif level == _NativeLogLevel.SUCCESS:
+        success(full_msg)
     elif level == _NativeLogLevel.WARNING:
-        logger.warning(full_msg)
+        warn(full_msg)
     elif level == _NativeLogLevel.ERROR:
-        logger.error(full_msg)
+        error(full_msg)
     elif level == _NativeLogLevel.SILENT:
         pass
     else:
