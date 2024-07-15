@@ -40,6 +40,9 @@ namespace eos
         ll_silent,             ///< do not print any error message
         ll_error,              ///< only print error messages
         ll_warning,            ///< also print warning messages
+        ll_success,            ///< also print success messages
+        ll_completed,          ///< also print completion messages
+        ll_inprogress,         ///< also print in-progress messages
         ll_informational,      ///< also print informational messages
         ll_debug,              ///< also print debug messages
         ll_last

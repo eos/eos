@@ -126,11 +126,14 @@ BOOST_PYTHON_MODULE(_eos)
     def("_emit_native_log", &::impl::emit_native_log);
     def("_set_native_log_level", &::impl::set_native_log_level);
     enum_<LogLevel>("_NativeLogLevel")
-        .value("SILENT",  ll_silent)
-        .value("ERROR",   ll_error)
-        .value("WARNING", ll_warning)
-        .value("INFO",    ll_informational)
-        .value("DEBUG",   ll_debug)
+        .value("SILENT",     ll_silent)
+        .value("ERROR",      ll_error)
+        .value("WARNING",    ll_warning)
+        .value("SUCCESS",    ll_success)
+        .value("COMPLETED",  ll_completed)
+        .value("INPROGRESS", ll_inprogress)
+        .value("INFO",       ll_informational)
+        .value("DEBUG",      ll_debug)
         ;
 
     // {{{ eos/utils
