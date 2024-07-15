@@ -129,7 +129,7 @@ if not __ipython__:
     import logging
     logger = logging.getLogger('EOS')
     logger.setLevel(logging.INFO)
-    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+    logger.addHandler(logging.StreamHandler(stream=sys.stderr))
 
 import time as _time
 import os as _os
