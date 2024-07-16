@@ -18,7 +18,9 @@ libeosbdecays_la_SOURCES = \
 	b-to-vec-l-nu.cc b-to-vec-l-nu.hh b-to-vec-l-nu-impl.hh \
 	bs-to-kstar-l-nu.cc bs-to-kstar-l-nu.hh \
 	bq-to-dq-psd.cc bq-to-dq-psd.hh \
+	bq-to-dq-vec.cc bq-to-dq-vec.hh \
 	bq-to-dstarq-psd.cc bq-to-dstarq-psd.hh \
+	bq-to-dstarq-vec.cc bq-to-dstarq-vec.hh \
 	lambdab-to-lambdac-l-nu.cc lambdab-to-lambdac-l-nu.hh \
 	lambdab-to-lambdac2595-l-nu.cc lambdab-to-lambdac2595-l-nu.hh \
 	lambdab-to-lambdac2625-l-nu.cc lambdab-to-lambdac2625-l-nu.hh \
@@ -50,7 +52,9 @@ include_eos_bdecays_HEADERS = \
 	b-to-v-l-nu.hh \
 	b-to-vec-l-nu.hh \
 	bq-to-dq-psd.hh \
+	bq-to-dq-vec.hh \
 	bq-to-dstarq-psd.hh \
+	bq-to-dstarq-vec.hh \
 	bs-to-kstar-l-nu.hh \
 	inclusive-b-to-u.hh \
 	lambdab-to-lambdac-l-nu.hh \
@@ -74,7 +78,9 @@ TESTS = \
 	b-to-pi-pi-l-nu_TEST \
 	b-to-rho-l-nu_TEST \
 	bq-to-dq-psd_TEST \
+	bq-to-dq-vec_TEST \
 	bq-to-dstarq-psd_TEST \
+	bq-to-dstarq-vec_TEST \
 	bs-to-kstar-l-nu_TEST \
 	lifetime_TEST \
 	lambdab-to-lambdac-l-nu_TEST \
@@ -112,7 +118,11 @@ b_to_rho_l_nu_TEST_SOURCES = b-to-rho-l-nu_TEST.cc
 
 bq_to_dq_psd_TEST_SOURCES = bq-to-dq-psd_TEST.cc
 
+bq_to_dq_vec_TEST_SOURCES = bq-to-dq-vec_TEST.cc
+
 bq_to_dstarq_psd_TEST_SOURCES = bq-to-dstarq-psd_TEST.cc
+
+bq_to_dstarq_vec_TEST_SOURCES = bq-to-dstarq-vec_TEST.cc
 
 bs_to_kstar_l_nu_TEST_SOURCES = bs-to-kstar-l-nu_TEST.cc
 
