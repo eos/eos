@@ -355,6 +355,7 @@ namespace eos
 
     };
 
+    template <>
     class WilsonScanComponent<components::WET::SB> :
     public virtual ModelComponent<components::WET::SB>
     {
