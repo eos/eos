@@ -2096,227 +2096,829 @@ groups:
           latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{s}c\bar{nu}_\tau\tau}_{T}$'
   # }}}
 
-# sbcc WET Parameters
+# sbqq WET Parameters
   # {{{
-  - title: '$\bar{s}b\bar{c}c$ WET Parameters'
+  - title: '$\bar{s}b\bar{q}q$ WET Parameters'
     description: |
-        The list of parameters describing the $\bar{s}b\bar{c}c$ Wilson coefficients in the effective Hamiltonian
+        The list of parameters describing the $\bar{s}b\bar{q}q$ Wilson coefficients in the effective Hamiltonian
         \begin{equation}
-          \mathcal{H}^{\bar{s}b\bar{c}u}_\mathrm{eff}
-          = \frac{4 G_F}{\sqrt{2}} V_{cb} V_{cs}^* \sum_i \mathcal{C}^{\bar{s}b\bar{c}c}_i \mathcal{O}^{\bar{s}b\bar{c}c}_i\,.
+          \mathcal{H}^{\bar{s}b\bar{q}q}_\mathrm{eff}
+          = -\frac{4 G_F}{\sqrt{2}} V_{tb} V_{ts}^* \sum_i \mathcal{C}^{\bar{s}b\bar{q}q}_i \mathcal{O}^{\bar{s}b\bar{q}q}_i\,.
         \end{equation}
         The operators read:
         \begin{equation}
-          \mathcal{O}_{1(')} = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{c} \gamma_\mu c]
+          \mathcal{O}_{1(')} = [\bar{s} \gamma^\mu t^a P_{L(R)} c]\, [\bar{c} \gamma_\mu t^a P_L(R) b]
+          \mathcal{O}_{2(')} = [\bar{s} \gamma^\mu P_{L(R)} c]\, [\bar{c} \gamma_\mu P_L(R) b]
+          \mathcal{O}_{3(')} = [\bar{s} \gamma^\mu P_{L(R)} b]\, \sum_q [\bar{q} \gamma_\mu q]
         \end{equation}
 
     wcxf-relevant: true
     parameters:
-      'sbcc::mu_0' :
+      'sbqq::mu_0' :
           central: 80.0
           min:     80.0
           max:     80.0
-          latex:   '$\mu_0^{\bar{s}b\bar{c}c}$'
+          latex:   '$\mu_0^{\bar{s}b\bar{q}q}$'
           unit:    'GeV'
       # Unprimed coefficients
-      'sbcc::Re{c1}' :
-          central: -0.041469
+      'sbqq::Re{c1}' :
+          central: -0.261646
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1}$'
-      'sbcc::Im{c1}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{1}$'
+      'sbqq::Im{c1}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1}$'
-      'sbcc::Re{c2}' :
-          central: -0.899772
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{1}$'
+      'sbqq::Re{c2}' :
+          central: 1.0085
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2}$'
-      'sbcc::Im{c2}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{2}$'
+      'sbqq::Im{c2}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2}$'
-      'sbcc::Re{c3}' :
-          central: 0.011126
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{2}$'
+      'sbqq::Re{c3}' :
+          central: -0.00532449
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3}$'
-      'sbcc::Im{c3}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{3}$'
+      'sbqq::Im{c3}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3}$'
-      'sbcc::Re{c4}' :
-          central: 0.194904
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{3}$'
+      'sbqq::Re{c4}' :
+          central: -0.0803057
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4}$'
-      'sbcc::Im{c4}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{4}$'
+      'sbqq::Im{c4}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4}$'
-      'sbcc::Re{c5}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{4}$'
+      'sbqq::Re{c5}' :
+          central: 0.000366464
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{5}$'
+      'sbqq::Im{c5}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5}$'
-      'sbcc::Im{c5}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{5}$'
+      'sbqq::Re{c6}' :
+          central: 0.000961624
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{6}$'
+      'sbqq::Im{c6}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5}$'
-      'sbcc::Re{c6}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{6}$'
+      'sbqq::Re{c7}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6}$'
-      'sbcc::Im{c6}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{7}$'
+      'sbqq::Im{c7}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6}$'
-      'sbcc::Re{c7}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{7}$'
+      'sbqq::Re{c8}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7}$'
-      'sbcc::Im{c7}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{8}$'
+      'sbqq::Im{c8}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7}$'
-      'sbcc::Re{c8}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{8}$'
+      'sbqq::Re{c9}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8}$'
-      'sbcc::Im{c8}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{9}$'
+      'sbqq::Im{c9}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8}$'
-      'sbcc::Re{c9}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{9}$'
+      'sbqq::Re{c10}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9}$'
-      'sbcc::Im{c9}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{10}$'
+      'sbqq::Im{c10}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9}$'
-      'sbcc::Re{c10}' :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{10}$'
+      'sbqq::Re{c11}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10}$'
-      'sbcc::Im{c10}' :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{11}$'
+      'sbqq::Im{c11}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{11}$'
+      'sbqq::Re{c12}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{12}$'
+      'sbqq::Im{c12}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{12}$'
+      'sbqq::Re{c13}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{13}$'
+      'sbqq::Im{c13}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{13}$'
+      'sbqq::Re{c14}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{14}$'
+      'sbqq::Im{c14}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{14}$'
+      'sbqq::Re{c15}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{15}$'
+      'sbqq::Im{c15}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{15}$'
+      'sbqq::Re{c16}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{16}$'
+      'sbqq::Im{c16}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{16}$'
+      'sbqq::Re{c17}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{17}$'
+      'sbqq::Im{c17}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{17}$'
+      'sbqq::Re{c18}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{18}$'
+      'sbqq::Im{c18}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{18}$'
+      'sbqq::Re{c19}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{19}$'
+      'sbqq::Im{c19}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{19}$'
+      'sbqq::Re{c20}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{20}$'
+      'sbqq::Im{c20}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{20}$'
+      'sbqq::Re{c21}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{21}$'
+      'sbqq::Im{c21}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{21}$'
+      'sbqq::Re{c22}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{22}$'
+      'sbqq::Im{c22}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{22}$'
+      'sbqq::Re{c23}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{23}$'
+      'sbqq::Im{c23}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{23}$'
+      'sbqq::Re{c24}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{24}$'
+      'sbqq::Im{c24}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{24}$'
+      'sbqq::Re{c25}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{25}$'
+      'sbqq::Im{c25}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{25}$'
+      'sbqq::Re{c26}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{26}$'
+      'sbqq::Im{c26}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{26}$'
+      'sbqq::Re{c27}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{27}$'
+      'sbqq::Im{c27}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{27}$'
+      'sbqq::Re{c28}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{28}$'
+      'sbqq::Im{c28}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{28}$'
+      'sbqq::Re{c29}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{29}$'
+      'sbqq::Im{c29}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{29}$'
+      'sbqq::Re{c30}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{30}$'
+      'sbqq::Im{c30}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{30}$'
+      'sbqq::Re{c31}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{31}$'
+      'sbqq::Im{c31}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{31}$'
+      'sbqq::Re{c32}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{32}$'
+      'sbqq::Im{c32}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{32}$'
+      'sbqq::Re{c33}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{33}$'
+      'sbqq::Im{c33}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{33}$'
+      'sbqq::Re{c34}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{34}$'
+      'sbqq::Im{c34}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{34}$'
+      'sbqq::Re{c35}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{35}$'
+      'sbqq::Im{c35}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{35}$'
+      'sbqq::Re{c36}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{36}$'
+      'sbqq::Im{c36}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{36}$'
+      'sbqq::Re{c37}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{37}$'
+      'sbqq::Im{c37}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{37}$'
+      'sbqq::Re{c38}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{38}$'
+      'sbqq::Im{c38}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{38}$'
+      'sbqq::Re{c39}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{39}$'
+      'sbqq::Im{c39}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{39}$'
+      'sbqq::Re{c40}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{40}$'
+      'sbqq::Im{c40}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{40}$'
       # Primed coefficients
-      "sbcc::Re{c1'}" :
+      "sbqq::Re{c1'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1\prime}$'
-      "sbcc::Im{c1'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{1\prime}$'
+      "sbqq::Im{c1'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{1\prime}$'
-      "sbcc::Re{c2'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{1\prime}$'
+      "sbqq::Re{c2'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2\prime}$'
-      "sbcc::Im{c2'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{2\prime}$'
+      "sbqq::Im{c2'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{2\prime}$'
-      "sbcc::Re{c3'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{2\prime}$'
+      "sbqq::Re{c3'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3\prime}$'
-      "sbcc::Im{c3'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{3\prime}$'
+      "sbqq::Im{c3'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{3\prime}$'
-      "sbcc::Re{c4'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{3\prime}$'
+      "sbqq::Re{c4'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4\prime}$'
-      "sbcc::Im{c4'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{4\prime}$'
+      "sbqq::Im{c4'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{4\prime}$'
-      "sbcc::Re{c5'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{4\prime}$'
+      "sbqq::Re{c5'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5\prime}$'
-      "sbcc::Im{c5'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{5\prime}$'
+      "sbqq::Im{c5'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{5\prime}$'
-      "sbcc::Re{c6'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{5\prime}$'
+      "sbqq::Re{c6'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6\prime}$'
-      "sbcc::Im{c6'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{6\prime}$'
+      "sbqq::Im{c6'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{6\prime}$'
-      "sbcc::Re{c7'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{6\prime}$'
+      "sbqq::Re{c7'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7\prime}$'
-      "sbcc::Im{c7'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{7\prime}$'
+      "sbqq::Im{c7'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{7\prime}$'
-      "sbcc::Re{c8'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{7\prime}$'
+      "sbqq::Re{c8'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8\prime}$'
-      "sbcc::Im{c8'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{8\prime}$'
+      "sbqq::Im{c8'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{8\prime}$'
-      "sbcc::Re{c9'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{8\prime}$'
+      "sbqq::Re{c9'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9\prime}$'
-      "sbcc::Im{c9'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{9\prime}$'
+      "sbqq::Im{c9'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{9\prime}$'
-      "sbcc::Re{c10'}" :
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{9\prime}$'
+      "sbqq::Re{c10'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10\prime}$'
-      "sbcc::Im{c10'}" :
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{10\prime}$'
+      "sbqq::Im{c10'}" :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}c}_{10\prime}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{10\prime}$'
+      "sbqq::Re{c11'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{11\prime}$'
+      "sbqq::Im{c11'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{11\prime}$'
+      "sbqq::Re{c12'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{12\prime}$'
+      "sbqq::Im{c12'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{12\prime}$'
+      "sbqq::Re{c13'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{13\prime}$'
+      "sbqq::Im{c13'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{13\prime}$'
+      "sbqq::Re{c14'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{14\prime}$'
+      "sbqq::Im{c14'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{14\prime}$'
+      "sbqq::Re{c15'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{15\prime}$'
+      "sbqq::Im{c15'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{15\prime}$'
+      "sbqq::Re{c16'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{16\prime}$'
+      "sbqq::Im{c16'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{16\prime}$'
+      "sbqq::Re{c17'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{17\prime}$'
+      "sbqq::Im{c17'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{17\prime}$'
+      "sbqq::Re{c18'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{18\prime}$'
+      "sbqq::Im{c18'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{18\prime}$'
+      "sbqq::Re{c19'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{19\prime}$'
+      "sbqq::Im{c19'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{19\prime}$'
+      "sbqq::Re{c20'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{20\prime}$'
+      "sbqq::Im{c20'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{20\prime}$'
+      "sbqq::Re{c21'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{21\prime}$'
+      "sbqq::Im{c21'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{21\prime}$'
+      "sbqq::Re{c22'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{22\prime}$'
+      "sbqq::Im{c22'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{22\prime}$'
+      "sbqq::Re{c23'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{23\prime}$'
+      "sbqq::Im{c23'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{23\prime}$'
+      "sbqq::Re{c24'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{24\prime}$'
+      "sbqq::Im{c24'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{24\prime}$'
+      "sbqq::Re{c25'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{25\prime}$'
+      "sbqq::Im{c25'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{25\prime}$'
+      "sbqq::Re{c26'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{26\prime}$'
+      "sbqq::Im{c26'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{26\prime}$'
+      "sbqq::Re{c27'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{27\prime}$'
+      "sbqq::Im{c27'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{27\prime}$'
+      "sbqq::Re{c28'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{28\prime}$'
+      "sbqq::Im{c28'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{28\prime}$'
+      "sbqq::Re{c29'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{29\prime}$'
+      "sbqq::Im{c29'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{29\prime}$'
+      "sbqq::Re{c30'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{30\prime}$'
+      "sbqq::Im{c30'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{30\prime}$'
+      "sbqq::Re{c31'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{31\prime}$'
+      "sbqq::Im{c31'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{31\prime}$'
+      "sbqq::Re{c32'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{32\prime}$'
+      "sbqq::Im{c32'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{32\prime}$'
+      "sbqq::Re{c33'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{33\prime}$'
+      "sbqq::Im{c33'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{33\prime}$'
+      "sbqq::Re{c34'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{34\prime}$'
+      "sbqq::Im{c34'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{34\prime}$'
+      "sbqq::Re{c35'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{35\prime}$'
+      "sbqq::Im{c35'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{35\prime}$'
+      "sbqq::Re{c36'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{36\prime}$'
+      "sbqq::Im{c36'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{36\prime}$'
+      "sbqq::Re{c37'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{37\prime}$'
+      "sbqq::Im{c37'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{37\prime}$'
+      "sbqq::Re{c38'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{38\prime}$'
+      "sbqq::Im{c38'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{38\prime}$'
+      "sbqq::Re{c39'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{39\prime}$'
+      "sbqq::Im{c39'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{39\prime}$'
+      "sbqq::Re{c40'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{40\prime}$'
+      "sbqq::Im{c40'}" :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{q}q}_{40\prime}$'

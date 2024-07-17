@@ -261,12 +261,12 @@ namespace eos
     public virtual ModelComponent<components::WET::SB>
     {
             /* QCD parameters */
-            UsedParameter _alpha_s_Z__sbcc;
-            UsedParameter _m_Z__sbcc;
+            UsedParameter _alpha_s_Z__sbqq;
+            UsedParameter _m_Z__sbqq;
 
             /* Matching scale */
-            UsedParameter _m_W__sbcc;
-            UsedParameter _mu_0__sbcc;
+            UsedParameter _m_W__sbqq;
+            UsedParameter _mu_0__sbqq;
 
             /* Low scale */
             UsedParameter _mu__sb;
@@ -274,7 +274,7 @@ namespace eos
         public:
             SMComponent(const Parameters &, ParameterUser &);
 
-            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<wc::SBQQ> wet_sbqq(const bool & cp_conjugate) const;
     };
 
     class StandardModel :

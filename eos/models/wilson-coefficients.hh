@@ -37,11 +37,7 @@ namespace eos
     {
         struct ClassII {};  // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
         struct ClassIII {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
-        namespace ClassVhadronic
-        {
-            struct full {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators sbqq (q=u,d,c), cf. [AFGB:2017A], eq. (2.10)-(2.11), p. 8.
-            struct restricted {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators, sbqq (q=s,b) cf. [AFGB:2017A], eq. (2.10)-(2.12), p. 8.
-        }
+        struct ClassVhadronic {}; // |Delta B| = 1, |Delta C| = 0 four-quark operators sbqq (q=u,d,c,s,b), from our "ugly basis" document
     }
 
     using ChargedCurrent = bern::ClassII;
@@ -99,13 +95,12 @@ namespace eos
         inline complex<double> c10p() const { return _primed[9]; }
     };
 
-    template <> struct WilsonCoefficients<bern::ClassVhadronic::full>
+    template <> struct WilsonCoefficients<bern::ClassVhadronic>
     {
         /*
-         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.11).
-         * This class applies to sbqq operators for q=u,d,c.
+         * Following the definitions in our "ugly basis" document.
         */
-        std::array<complex<double>, 10> _unprimed, _primed;
+        std::array<complex<double>, 40> _unprimed, _primed;
 
         inline complex<double> c1()   const { return _unprimed[0]; }
         inline complex<double> c2()   const { return _unprimed[1]; }
@@ -117,6 +112,36 @@ namespace eos
         inline complex<double> c8()   const { return _unprimed[7]; }
         inline complex<double> c9()   const { return _unprimed[8]; }
         inline complex<double> c10()  const { return _unprimed[9]; }
+        inline complex<double> c11()  const { return _unprimed[10]; }
+        inline complex<double> c12()  const { return _unprimed[11]; }
+        inline complex<double> c13()  const { return _unprimed[12]; }
+        inline complex<double> c14()  const { return _unprimed[13]; }
+        inline complex<double> c15()  const { return _unprimed[14]; }
+        inline complex<double> c16()  const { return _unprimed[15]; }
+        inline complex<double> c17()  const { return _unprimed[16]; }
+        inline complex<double> c18()  const { return _unprimed[17]; }
+        inline complex<double> c19()  const { return _unprimed[18]; }
+        inline complex<double> c20()  const { return _unprimed[19]; }
+        inline complex<double> c21()  const { return _unprimed[20]; }
+        inline complex<double> c22()  const { return _unprimed[21]; }
+        inline complex<double> c23()  const { return _unprimed[22]; }
+        inline complex<double> c24()  const { return _unprimed[23]; }
+        inline complex<double> c25()  const { return _unprimed[24]; }
+        inline complex<double> c26()  const { return _unprimed[25]; }
+        inline complex<double> c27()  const { return _unprimed[26]; }
+        inline complex<double> c28()  const { return _unprimed[27]; }
+        inline complex<double> c29()  const { return _unprimed[28]; }
+        inline complex<double> c30()  const { return _unprimed[29]; }
+        inline complex<double> c31()  const { return _unprimed[30]; }
+        inline complex<double> c32()  const { return _unprimed[31]; }
+        inline complex<double> c33()  const { return _unprimed[32]; }
+        inline complex<double> c34()  const { return _unprimed[33]; }
+        inline complex<double> c35()  const { return _unprimed[34]; }
+        inline complex<double> c36()  const { return _unprimed[35]; }
+        inline complex<double> c37()  const { return _unprimed[36]; }
+        inline complex<double> c38()  const { return _unprimed[37]; }
+        inline complex<double> c39()  const { return _unprimed[38]; }
+        inline complex<double> c40()  const { return _unprimed[39]; }
 
         inline complex<double> c1p()  const { return _primed[0]; }
         inline complex<double> c2p()  const { return _primed[1]; }
@@ -128,28 +153,36 @@ namespace eos
         inline complex<double> c8p()  const { return _primed[7]; }
         inline complex<double> c9p()  const { return _primed[8]; }
         inline complex<double> c10p() const { return _primed[9]; }
-    };
-
-    template <> struct WilsonCoefficients<bern::ClassVhadronic::restricted>
-    {
-        /*
-         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.10)-(2.12).
-         * This class applies to sbqq operators for q=s,b.
-         * Note that the operators are defined differently between sbss and sbbb.
-        */
-        std::array<complex<double>, 5> _unprimed, _primed;
-
-        inline complex<double> c1()   const { return _unprimed[0]; }
-        inline complex<double> c3()   const { return _unprimed[2]; }
-        inline complex<double> c5()   const { return _unprimed[4]; }
-        inline complex<double> c7()   const { return _unprimed[6]; }
-        inline complex<double> c9()   const { return _unprimed[8]; }
-
-        inline complex<double> c1p()  const { return _primed[0]; }
-        inline complex<double> c3p()  const { return _primed[2]; }
-        inline complex<double> c5p()  const { return _primed[4]; }
-        inline complex<double> c7p()  const { return _primed[6]; }
-        inline complex<double> c9p()  const { return _primed[8]; }
+        inline complex<double> c11p() const { return _primed[10]; }
+        inline complex<double> c12p() const { return _primed[11]; }
+        inline complex<double> c13p() const { return _primed[12]; }
+        inline complex<double> c14p() const { return _primed[13]; }
+        inline complex<double> c15p() const { return _primed[14]; }
+        inline complex<double> c16p() const { return _primed[15]; }
+        inline complex<double> c17p() const { return _primed[16]; }
+        inline complex<double> c18p() const { return _primed[17]; }
+        inline complex<double> c19p() const { return _primed[18]; }
+        inline complex<double> c20p() const { return _primed[19]; }
+        inline complex<double> c21p() const { return _primed[20]; }
+        inline complex<double> c22p() const { return _primed[21]; }
+        inline complex<double> c23p() const { return _primed[22]; }
+        inline complex<double> c24p() const { return _primed[23]; }
+        inline complex<double> c25p() const { return _primed[24]; }
+        inline complex<double> c26p() const { return _primed[25]; }
+        inline complex<double> c27p() const { return _primed[26]; }
+        inline complex<double> c28p() const { return _primed[27]; }
+        inline complex<double> c29p() const { return _primed[28]; }
+        inline complex<double> c30p() const { return _primed[29]; }
+        inline complex<double> c31p() const { return _primed[30]; }
+        inline complex<double> c32p() const { return _primed[31]; }
+        inline complex<double> c33p() const { return _primed[32]; }
+        inline complex<double> c34p() const { return _primed[33]; }
+        inline complex<double> c35p() const { return _primed[34]; }
+        inline complex<double> c36p() const { return _primed[35]; }
+        inline complex<double> c37p() const { return _primed[36]; }
+        inline complex<double> c38p() const { return _primed[37]; }
+        inline complex<double> c39p() const { return _primed[38]; }
+        inline complex<double> c40p() const { return _primed[39]; }
     };
 
     struct BToS {};
@@ -229,7 +262,7 @@ namespace eos
         struct SBSB {};
         struct SBNuNu {};
         struct SBCU {};
-        struct SBCC {};
+        struct SBQQ {};
     }
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
@@ -329,12 +362,12 @@ namespace eos
          */
     };
 
-    template <> struct WilsonCoefficients<wc::SBCC> :
-        public WilsonCoefficients<bern::ClassVhadronic::full>
+    template <> struct WilsonCoefficients<wc::SBQQ> :
+        public WilsonCoefficients<bern::ClassVhadronic>
     {
         /*
          * Normalisation:
-         * H^eff = 4 G_F / sqrt(2) V_cb V_cs^* \sum C_i O_i
+         * H^eff = - 4 G_F / sqrt(2) V_tb V_ts^* \sum C_i O_i
          */
     };
 

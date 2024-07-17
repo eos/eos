@@ -360,14 +360,14 @@ namespace eos
     public virtual ModelComponent<components::WET::SB>
     {
         private:
-            /* sbcc Wilson coefficients */
-            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcc_parameters;
+            /* sbqq Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 80> _sbqq_parameters;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbcc Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjugate) const;
+            /* sbqq Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBQQ> wet_sbqq(const bool & cp_conjugate) const;
     };
 
     /*!

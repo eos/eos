@@ -170,9 +170,9 @@ namespace eos
     template <> class ModelComponent<components::WET::SB>
     {
         public:
-            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjguate = false) const = 0;
-            // virtual WilsonCoefficients<wc::SBCC> wet_sb(const bool & cp_conjguate = false) const = 0;
-            // virtual WilsonCoefficients<wc::SBCC> wet_sbll(const bool & cp_conjguate = false) const = 0;
+            virtual WilsonCoefficients<wc::SBQQ> wet_sbqq(const bool & cp_conjguate = false) const = 0;
+            // virtual WilsonCoefficients<wc::SBQQ> wet_sb(const bool & cp_conjguate = false) const = 0;
+            // virtual WilsonCoefficients<wc::SBQQ> wet_sbll(const bool & cp_conjguate = false) const = 0;
     };
 
     /*!
