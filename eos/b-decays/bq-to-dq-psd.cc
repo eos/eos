@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  * Copyright (c) 2023 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
@@ -65,8 +65,6 @@ namespace eos
 
         UsedParameter f_P;
 
-        UsedParameter alpha_s;
-
         std::function<double ()> mu_P;
 
         std::shared_ptr<UsedParameter> ff_f_0;
@@ -92,15 +90,14 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_model(o, options, "model"),
             model(Model::make(opt_model.value(), p, o)),
-            opt_q(o, options, "q"),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
+            opt_q(o, options, "q"),
             m_B(p["mass::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
             m_D(p["mass::D_" + opt_q.str()], u),
             m_P(p["mass::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi^+")], u),
             f_P(p["decay-constant::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi")], u),
-            alpha_s(p["QCD::alpha_s(MZ)"], u),
-            tau_B(p["life_time::B_" + opt_q.str()], u),
             opt_cp_conjugate(o, options, "cp-conjugate"),
             cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
             mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u),
@@ -369,7 +366,7 @@ namespace eos
         Model::option_specification(),
         { "accuracy",     { "LO", "NLO", "NLP", "LO+NLO", "all" }, "all"   },
         { "cp-conjugate", { "true", "false" },                     "false" },
-        { "q",            { "s", "d" }                                     }
+        { "q",            { "s", "d" },                            ""      }
     };
 
     BqToDqPseudoscalar::BqToDqPseudoscalar(const Parameters & parameters, const Options & options) :
