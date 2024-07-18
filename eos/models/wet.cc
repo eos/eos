@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2023 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
@@ -177,7 +177,7 @@ namespace eos
     }
 
     WilsonCoefficients<BToS>
-    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const
+    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & /*mu*/, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const
     {
         std::function<complex<double> ()> c9,  c9prime;
         std::function<complex<double> ()> c10, c10prime;
