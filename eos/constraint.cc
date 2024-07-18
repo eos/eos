@@ -1191,8 +1191,6 @@ namespace eos
 
         unsigned dim_meas, dim_pred;
 
-        double rescale_factor;
-
         MultivariateGaussianCovarianceConstraintEntry(const QualifiedName & name,
                 const std::vector<QualifiedName> & observables,
                 const std::vector<Kinematics> & kinematics,
@@ -1200,8 +1198,7 @@ namespace eos
                 gsl_vector * const means,
                 gsl_matrix * const covariance,
                 gsl_matrix * const response,
-                const unsigned number_of_observations,
-                const double rescale_factor = 1.0) :
+                const unsigned number_of_observations) :
             ConstraintEntryBase(name, observables),
             observables(observables),
             kinematics(kinematics),
