@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2016, 2020 Danny van Dyk
+ * Copyright (c) 2011-2024 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -206,7 +206,7 @@ namespace eos
         // evaluate all cacheable observables in parallel
         for (auto co : _imp->cacheable_observables)
         {
-            auto f = [=]() {
+            auto f = [=, this]() {
                 auto & o   = std::get<0>(co.second);
                 auto & idx = std::get<1>(co.second);
                 try
@@ -231,7 +231,7 @@ namespace eos
         // evaluate all regular observables in parallel
         for (auto ro : _imp->regular_observables)
         {
-            auto f = [=]() {
+            auto f = [=, this]() {
                 auto & o   = std::get<0>(ro);
                 auto & idx = std::get<1>(ro);
                 try
@@ -262,7 +262,7 @@ namespace eos
         // evaluate all cached observables in parallel
         for (auto co : _imp->cached_observables)
         {
-            auto f = [=]() {
+            auto f = [=, this]() {
                 auto & o   = std::get<0>(co);
                 auto & idx = std::get<1>(co);
                 try
