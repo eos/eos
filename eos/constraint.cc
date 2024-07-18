@@ -215,7 +215,7 @@ namespace eos
             return Constraint(name, { observable }, { block });
         }
 
-        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        virtual LogPriorPtr make_prior(const Parameters & /* parameters */, const Options & /* options */) const
         {
             throw InternalError("GaussianConstraintEntry::make_prior: not yet implemented");
             return nullptr;
@@ -418,7 +418,7 @@ namespace eos
             return Constraint(name, { observable }, { block });
         }
 
-        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        virtual LogPriorPtr make_prior(const Parameters & /* parameters */, const Options & /* options */) const
         {
             throw InternalError("LogGammaConstraintEntry::make_prior: not yet implemented");
             return nullptr;
@@ -617,7 +617,7 @@ namespace eos
             return Constraint(name, { observable }, { block });
         }
 
-        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        virtual LogPriorPtr make_prior(const Parameters & /* parameters */, const Options & /* options */) const
         {
             throw InternalError("AmorosoConstraintEntry::make_prior: not yet implemented");
             return nullptr;
@@ -1678,7 +1678,7 @@ namespace eos
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
 
-        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        virtual LogPriorPtr make_prior(const Parameters & /* parameters */, const Options & /* options */) const
         {
             throw InternalError("UniformBoundConstraintEntry::make_prior: not yet implemented");
             return nullptr;
@@ -1968,7 +1968,7 @@ namespace eos
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
 
-        virtual LogPriorPtr make_prior(const Parameters & parameters, const Options & options) const
+        virtual LogPriorPtr make_prior(const Parameters & /* parameters */, const Options & /* options */) const
         {
             throw InternalError("MixtureConstraintEntry::make_prior: not yet implemented");
             return nullptr;
