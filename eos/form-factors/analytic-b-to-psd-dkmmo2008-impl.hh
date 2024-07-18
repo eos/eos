@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2023 Danny van Dyk
+ * Copyright (c) 2014-2024 Danny van Dyk
  * Copyright (c) 2019, 2020 Domagoj Leljak
  * Copyright (c) 2023 Carolina Bolognani
  *
@@ -142,7 +142,6 @@ namespace eos
         {
             static const double pi = M_PI;
 
-            const double MB2 = MB * MB;
             const double mb = this->model->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double Mprime4 = Mprime2 * Mprime2;
 
@@ -165,7 +164,6 @@ namespace eos
         {
             static const double pi = M_PI;
 
-            const double MB2 = MB * MB;
             const double mb = this->model->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double Mprime4 = Mprime2 * Mprime2;
 
@@ -247,7 +245,6 @@ namespace eos
         {
             static const double pi = M_PI;
 
-            const double MB2 = MB * MB;
             const double mb = this->model->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double mq = this->m_q_msbar(mu);
             const double mbplusmq = mb + mq, mbplusmq2 = mbplusmq * mbplusmq;
@@ -273,7 +270,6 @@ namespace eos
         {
             static const double pi = M_PI;
 
-            const double MB2 = MB * MB;
             const double mb = this->model->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double mq = this->m_q_msbar(mu);
             const double mbplusmq = mb + mq, mbplusmq2 = mbplusmq * mbplusmq;
@@ -412,7 +408,7 @@ namespace eos
             static const double eps = 1.0e-10;
 
             const double MB2 = MB * MB, MB4 = MB2 * MB2;
-            const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double mq = this->m_q_msbar(mu);
 
             const double alpha_s_mu = model->alpha_s(mu());
@@ -442,7 +438,6 @@ namespace eos
             static const double eps = 1.0e-10;
 
             const double mb = this->model->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
-            const double Mprime4 = Mprime2 * Mprime2;
             const double mq = this->m_q_msbar(mu);
 
             const double alpha_s_mu = model->alpha_s(mu());
