@@ -156,6 +156,12 @@ namespace eos
         static constexpr const bool uses_tensor_form_factors = true;
     };
 
+    struct PiToPi
+    {
+        using Transition = PToP;
+        static constexpr const char * label = "pi->pi";
+    };
+
     /* P -> V Processes */
 
     struct BToDstar {
@@ -357,6 +363,15 @@ namespace eos
         static constexpr const double mR2_1m = (m_Bc + 0.056) * (m_Bc + 0.056);
         static constexpr const double mR2_1p = (m_Bc + 0.492) * (m_Bc + 0.492);
         static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
+    };
+
+    /* Vacuum -> P P Processes */
+
+    struct VacuumToPiPi
+    {
+        using Transition = VacuumToPP;
+
+        static constexpr const char * label = "0->pipi";
     };
 }
 

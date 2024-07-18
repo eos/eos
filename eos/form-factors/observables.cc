@@ -31,6 +31,7 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -2149,6 +2150,64 @@ namespace eos
         return ObservableGroup(imp);
     }
 
+    // 0 -> PP
+    // {{{
+
+    // 0 -> pi pi
+    // {{{
+    ObservableGroup
+    make_vacuum_to_pipi_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>{
+            R"(Form factors for $0 \to \pi \pi$ transitions)",
+            R"(Pseudo observables representing the full basis of $0 \to \pi \pi$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("pi->pi::f_+(q2)", R"(f_+^{\pi \to \pi}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("0->pipi::Abs{f_+}^2(q2)", R"(|f_+^{0\to \pi\pi}(q^2)|^2)",
+                        &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("0->pipi::Arg{f_+}(q2)", R"(\textrm{arg}(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("0->pipi::Re{f_+}(q2)", R"(\textrm{Re}(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::re_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
+
+                make_form_factor_adapter("0->pipi::Im{f_+}(q2)", R"(\textrm{Im}(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
+
+                make_observable("0->pipi::b_0", R"(b_0^{0 \to \pi\pi})", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::b_0),
+
+                make_observable("0->pipi::b_1", R"(b_1^{0 \to \pi\pi})", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::b_1),
+
+                make_observable("0->pipi::Re{c}", R"(\textrm{Re}\,\textrm{Res}_{q^2=M_\rho^2}\,f_+^{0\to\pi\pi})", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::re_residue_rho),
+
+                make_observable("0->pipi::Im{c}", R"(\textrm{Im}\,\textrm{Res}_{q^2=M_\rho^2}\,f_+^{0\to\pi\pi})", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::im_residue_rho),
+
+                make_observable("0->pipi::r_pi^2", R"(\langle r_\pi^2 \rangle)", Unit::Femtometer2(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::r_pi_squared),
+                make_observable("0->pipi::r_pi", R"(\langle r_\pi \rangle)", Unit::Femtometer(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::r_pi),
+
+                make_observable("0->pipi::Saturation", R"(\textrm{Saturation})", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::saturation)
+            }
+        };
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
+
+
     ObservableSection
     make_form_factors_section()
     {
@@ -2199,6 +2258,9 @@ namespace eos
 
                 // D -> P
                 make_d_to_k_form_factors_group(),
+
+                // 0 -> PP
+                make_vacuum_to_pipi_form_factors_group(),
             }
         );
 
