@@ -473,6 +473,8 @@ namespace eos
              * @param user      The user of above parameter.
              */
             UsedParameter(const Parameter & parameter, ParameterUser & user);
+
+            using Parameter::operator=;
     };
 
     struct ParameterDescription
