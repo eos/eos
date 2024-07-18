@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2024 Danny van Dyk
  * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -159,19 +159,6 @@ namespace eos
 
                 const double g2  = g  * g;
                 const double g3  = g2  * g;
-                const double g4  = g3  * g;
-                const double g5  = g4  * g;
-                const double g6  = g5  * g;
-                const double g7  = g6  * g;
-                const double g8  = g7  * g;
-                const double g9  = g8  * g;
-                const double g10 = g9  * g;
-                const double g11 = g10 * g;
-                const double g12 = g11 * g;
-                const double g13 = g12 * g;
-                const double g14 = g13 * g;
-                const double g15 = g14 * g;
-                const double g16 = g15 * g;
 
                 const std::array<std::array<double, 9>, 9> rge_matrix =
                 {{
@@ -197,26 +184,26 @@ namespace eos
         /* Leading twist two-particle LCDAs */
 
         double
-        FLvD2022::phi_plus(const double & omega) const
+        FLvD2022::phi_plus(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_minus(const double & omega) const
+        FLvD2022::phi_minus(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
 
         double
-        FLvD2022::phi_bar(const double & omega) const
+        FLvD2022::phi_bar(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar_d1(const double & omega) const
+        FLvD2022::phi_bar_d1(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
@@ -308,61 +295,61 @@ namespace eos
         /* Next-to-leading twist two-particle LCDAs */
 
         double
-        FLvD2022::g_minusWW(const double & omega) const
+        FLvD2022::g_minusWW(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_minusWW_d1(const double & omega) const
+        FLvD2022::g_minusWW_d1(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_minusWW_d2(const double & omega) const
+        FLvD2022::g_minusWW_d2(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_plus(const double & omega) const
+        FLvD2022::g_plus(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_plus_d1(const double & omega) const
+        FLvD2022::g_plus_d1(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_plus_d2(const double & omega) const
+        FLvD2022::g_plus_d2(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_bar(const double & omega) const
+        FLvD2022::g_bar(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_bar_d1(const double & omega) const
+        FLvD2022::g_bar_d1(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_bar_d2(const double & omega) const
+        FLvD2022::g_bar_d2(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::g_bar_d3(const double & omega) const
+        FLvD2022::g_bar_d3(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
         }
@@ -370,74 +357,74 @@ namespace eos
         /* Leading twist three-particle LCDAs */
 
         double
-        FLvD2022::phi_3(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_3(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar_3(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_bar_3(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_bar_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar2_3(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_bar2_3(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar2_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_bar2_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar_bar_3(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_bar_bar_3(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::phi_bar_bar_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::phi_bar_bar_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::psi_bar_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::psi_bar_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::psi_bar_bar_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::psi_bar_bar_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
 
         double
-        FLvD2022::chi_bar_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::chi_bar_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::chi_bar_bar_4(const double & omega_1, const double & omega_2) const
+        FLvD2022::chi_bar_bar_4(const double & /* omega_1 */, const double & /* omega_2 */) const
         {
             throw InternalError("Function not yet implemented");
         }
@@ -485,37 +472,37 @@ namespace eos
         }
 
         double
-        FLvD2022::psi_A(const double & omega, const double & xi) const
+        FLvD2022::psi_A(const double & /* omega */, const double & /* xi */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::psi_V(const double & omega, const double & xi) const
+        FLvD2022::psi_V(const double & /* omega */, const double & /* xi */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::X_A(const double & omega, const double & xi) const
+        FLvD2022::X_A(const double & /* omega */, const double & /* xi */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::Y_A(const double & omega, const double & xi) const
+        FLvD2022::Y_A(const double & /* omega */, const double & /* xi */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::Xbar_A(const double & omega, const double & xi) const
+        FLvD2022::Xbar_A(const double & /* omega */, const double & /* xi */) const
         {
             throw InternalError("Function not yet implemented");
         }
 
         double
-        FLvD2022::Ybar_A(const double & omega, const double & xi) const
+        FLvD2022::Ybar_A(const double & /* omega */, const double & /* xi */) const
         {
             throw InternalError("Function not yet implemented");
         }
