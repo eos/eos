@@ -45,7 +45,7 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> threshold_tp_values;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> config_t0_values;
 
-            DM2016FormFactorTraits(const Parameters & p) :
+            DM2016FormFactorTraits(const Parameters & /* p */) :
                 m_1(Process_::m1),
                 m_2(Process_::m2),
                 m_R_0m(resonance_0m_masses.at(Process_::partonic_transition)),
