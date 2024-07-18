@@ -43,7 +43,7 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_1m_masses;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_1p_masses;
 
-            DKMR2017FormFactorTraits(const Parameters & p) :
+            DKMR2017FormFactorTraits(const Parameters & /* p */) :
                 m_1(Process_::m1),
                 m_2(Process_::m2),
                 m_R_0m(resonance_0m_masses.at(Process_::partonic_transition)),
