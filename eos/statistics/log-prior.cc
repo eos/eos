@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2017-2023 Danny van Dyk
+ * Copyright (c) 2017-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -487,8 +487,6 @@ namespace eos
 
                     if (_dim != _mean->size)
                         throw InternalError("priors::MultivariateGaussian: number of parameters and dimension of mean vector are not identical");
-
-                    const double inf = std::numeric_limits<double>::max();
 
                     for (auto & n : names)
                     {
