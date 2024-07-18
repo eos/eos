@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2012, 2013 Danny van Dyk
+ * Copyright (c) 2012-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,10 +33,10 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        QuarkFlavorOption opt_q;
+
         // HQE non-perturbative matrix elements
         UsedParameter mu2_g;
-
-        QuarkFlavorOption opt_q;
 
         static const std::vector<OptionSpecification> options;
 
