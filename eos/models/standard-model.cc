@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2023 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018, 2021 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
@@ -848,7 +848,7 @@ namespace implementation
     }
 
     WilsonCoefficients<ChargedCurrent>
-    SMComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor lepton_flavor, const bool & /* cp_conjugate */) const
+    SMComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
     {
         // universal electroweak correction, cf. [S1982]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
@@ -867,7 +867,7 @@ namespace implementation
     }
 
     WilsonCoefficients<ChargedCurrent>
-    SMComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor lepton_flavor, const bool & /* cp_conjugate */) const
+    SMComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
     {
         // universal electroweak correction, cf. [S:1982A]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
