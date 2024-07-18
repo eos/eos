@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2017-2024 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Philip Lüghausen
@@ -485,7 +485,7 @@ namespace eos
         }
 
         std::tuple<BMesonLCDAs::CoefficientIterator, BMesonLCDAs::CoefficientIterator>
-        Exponential::coefficient_range(const double & mu) const
+        Exponential::coefficient_range(const double & /* mu */) const
         {
             static const std::array<double, 9> cs = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
             return {cs.begin(), cs.end()};
