@@ -45,8 +45,8 @@ namespace eos
         {
             switch (rhs)
             {
-                case ll_debug:
-                    lhs << "debug";
+                case ll_silent:
+                    lhs << "silent";
                     continue;
 
                 case ll_error:
@@ -57,12 +57,24 @@ namespace eos
                     lhs << "warning";
                     continue;
 
+                case ll_success:
+                    lhs << "success";
+                    continue;
+
+                case ll_completed:
+                    lhs << "completed";
+                    continue;
+
+                case ll_inprogress:
+                    lhs << "inprogress";
+                    continue;
+
                 case ll_informational:
                     lhs << "informational";
                     continue;
 
-                case ll_silent:
-                    lhs << "silent";
+                case ll_debug:
+                    lhs << "debug";
                     continue;
 
                 case ll_last:
@@ -84,9 +96,9 @@ namespace eos
 
         do
         {
-            if ("debug" == word)
+            if ("silent" == word)
             {
-                rhs = ll_debug;
+                rhs = ll_silent;
                 break;
             }
             else if ("error" == word)
@@ -99,14 +111,29 @@ namespace eos
                 rhs = ll_warning;
                 break;
             }
+            else if ("success" == word)
+            {
+                rhs = ll_success;
+                break;
+            }
+            else if ("completed" == word)
+            {
+                rhs = ll_completed;
+                break;
+            }
+            else if ("inprogress" == word)
+            {
+                rhs = ll_inprogress;
+                break;
+            }
             else if ("informational" == word)
             {
                 rhs = ll_informational;
                 break;
             }
-            else if ("silent" == word)
+            else if ("debug" == word)
             {
-                rhs = ll_silent;
+                rhs = ll_debug;
                 break;
             }
 
@@ -159,10 +186,6 @@ namespace eos
             {
                 switch (l)
                 {
-                    case ll_debug:
-                        *stream << "[DEBUG " << id << "] ";
-                        continue;
-
                     case ll_error:
                         *stream << "[ERROR " << id << "] ";
                         continue;
@@ -173,6 +196,22 @@ namespace eos
 
                     case ll_informational:
                         *stream << "[INFO " << id << "] ";
+                        continue;
+
+                    case ll_success:
+                        *stream << "[SUCCESS " << id << "] ";
+                        continue;
+
+                    case ll_completed:
+                        *stream << "[COMPLETED " << id << "] ";
+                        continue;
+
+                    case ll_inprogress:
+                        *stream << "[INPROGRESS " << id << "] ";
+                        continue;
+
+                    case ll_debug:
+                        *stream << "[DEBUG " << id << "] ";
                         continue;
 
                     case ll_silent:

@@ -40,6 +40,9 @@ class LogLevelTest :
                 TEST_CHECK_EQUAL("silent",        stringify(ll_silent));
                 TEST_CHECK_EQUAL("error",         stringify(ll_error));
                 TEST_CHECK_EQUAL("warning",       stringify(ll_warning));
+                TEST_CHECK_EQUAL("success",       stringify(ll_success));
+                TEST_CHECK_EQUAL("completed",     stringify(ll_completed));
+                TEST_CHECK_EQUAL("inprogress",    stringify(ll_inprogress));
                 TEST_CHECK_EQUAL("informational", stringify(ll_informational));
                 TEST_CHECK_EQUAL("debug",         stringify(ll_debug));
                 TEST_CHECK_THROWS(InternalError,  stringify(ll_last));
@@ -75,6 +78,36 @@ class LogLevelTest :
                     ss >> log_level;
 
                     TEST_CHECK_EQUAL(log_level, ll_warning);
+                }
+
+                // success
+                {
+                    std::stringstream ss("success");
+                    LogLevel log_level;
+
+                    ss >> log_level;
+
+                    TEST_CHECK_EQUAL(log_level, ll_success);
+                }
+
+                // completed
+                {
+                    std::stringstream ss("completed");
+                    LogLevel log_level;
+
+                    ss >> log_level;
+
+                    TEST_CHECK_EQUAL(log_level, ll_completed);
+                }
+
+                // inprogress
+                {
+                    std::stringstream ss("inprogress");
+                    LogLevel log_level;
+
+                    ss >> log_level;
+
+                    TEST_CHECK_EQUAL(log_level, ll_inprogress);
                 }
 
                 // informational
