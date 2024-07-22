@@ -24,6 +24,7 @@
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <map>
+#include <algorithm>
 
 namespace eos
 {
