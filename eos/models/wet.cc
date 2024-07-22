@@ -684,6 +684,115 @@ namespace eos
         return result;
     }
 
+    std::array<std::tuple<UsedParameter, UsedParameter>, 80>
+    make_wet_parameters_classVhadronic(const Parameters & p, ParameterUser & u)
+    {
+        auto result = std::array<std::tuple<UsedParameter, UsedParameter>, 80>{
+            std::make_tuple(UsedParameter(p["sbqq::Re{c1}"], u),   UsedParameter(p["sbqq::Im{c1}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c2}"], u),   UsedParameter(p["sbqq::Im{c2}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c3}"], u),   UsedParameter(p["sbqq::Im{c3}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c4}"], u),   UsedParameter(p["sbqq::Im{c4}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c5}"], u),   UsedParameter(p["sbqq::Im{c5}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c6}"], u),   UsedParameter(p["sbqq::Im{c6}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c7}"], u),   UsedParameter(p["sbqq::Im{c7}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c8}"], u),   UsedParameter(p["sbqq::Im{c8}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c9}"], u),   UsedParameter(p["sbqq::Im{c9}"], u)  ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c10}"], u),  UsedParameter(p["sbqq::Im{c10}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c11}"], u),  UsedParameter(p["sbqq::Im{c11}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c12}"], u),  UsedParameter(p["sbqq::Im{c12}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c13}"], u),  UsedParameter(p["sbqq::Im{c13}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c14}"], u),  UsedParameter(p["sbqq::Im{c14}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c15}"], u),  UsedParameter(p["sbqq::Im{c15}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c16}"], u),  UsedParameter(p["sbqq::Im{c16}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c17}"], u),  UsedParameter(p["sbqq::Im{c17}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c18}"], u),  UsedParameter(p["sbqq::Im{c18}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c19}"], u),  UsedParameter(p["sbqq::Im{c19}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c20}"], u),  UsedParameter(p["sbqq::Im{c20}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c21}"], u),  UsedParameter(p["sbqq::Im{c21}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c22}"], u),  UsedParameter(p["sbqq::Im{c22}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c23}"], u),  UsedParameter(p["sbqq::Im{c23}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c24}"], u),  UsedParameter(p["sbqq::Im{c24}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c25}"], u),  UsedParameter(p["sbqq::Im{c25}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c26}"], u),  UsedParameter(p["sbqq::Im{c26}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c27}"], u),  UsedParameter(p["sbqq::Im{c27}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c28}"], u),  UsedParameter(p["sbqq::Im{c28}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c29}"], u),  UsedParameter(p["sbqq::Im{c29}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c30}"], u),  UsedParameter(p["sbqq::Im{c30}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c31}"], u),  UsedParameter(p["sbqq::Im{c31}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c32}"], u),  UsedParameter(p["sbqq::Im{c32}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c33}"], u),  UsedParameter(p["sbqq::Im{c33}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c34}"], u),  UsedParameter(p["sbqq::Im{c34}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c35}"], u),  UsedParameter(p["sbqq::Im{c35}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c36}"], u),  UsedParameter(p["sbqq::Im{c36}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c37}"], u),  UsedParameter(p["sbqq::Im{c37}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c38}"], u),  UsedParameter(p["sbqq::Im{c38}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c39}"], u),  UsedParameter(p["sbqq::Im{c39}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c40}"], u),  UsedParameter(p["sbqq::Im{c40}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c1'}"], u),  UsedParameter(p["sbqq::Im{c1'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c2'}"], u),  UsedParameter(p["sbqq::Im{c2'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c3'}"], u),  UsedParameter(p["sbqq::Im{c3'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c4'}"], u),  UsedParameter(p["sbqq::Im{c4'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c5'}"], u),  UsedParameter(p["sbqq::Im{c5'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c6'}"], u),  UsedParameter(p["sbqq::Im{c6'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c7'}"], u),  UsedParameter(p["sbqq::Im{c7'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c8'}"], u),  UsedParameter(p["sbqq::Im{c8'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c9'}"], u),  UsedParameter(p["sbqq::Im{c9'}"], u) ),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c10'}"], u), UsedParameter(p["sbqq::Im{c10'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c11'}"], u), UsedParameter(p["sbqq::Im{c11'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c12'}"], u), UsedParameter(p["sbqq::Im{c12'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c13'}"], u), UsedParameter(p["sbqq::Im{c13'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c14'}"], u), UsedParameter(p["sbqq::Im{c14'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c15'}"], u), UsedParameter(p["sbqq::Im{c15'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c16'}"], u), UsedParameter(p["sbqq::Im{c16'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c17'}"], u), UsedParameter(p["sbqq::Im{c17'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c18'}"], u), UsedParameter(p["sbqq::Im{c18'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c19'}"], u), UsedParameter(p["sbqq::Im{c19'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c20'}"], u), UsedParameter(p["sbqq::Im{c20'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c21'}"], u), UsedParameter(p["sbqq::Im{c21'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c22'}"], u), UsedParameter(p["sbqq::Im{c22'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c23'}"], u), UsedParameter(p["sbqq::Im{c23'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c24'}"], u), UsedParameter(p["sbqq::Im{c24'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c25'}"], u), UsedParameter(p["sbqq::Im{c25'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c26'}"], u), UsedParameter(p["sbqq::Im{c26'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c27'}"], u), UsedParameter(p["sbqq::Im{c27'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c28'}"], u), UsedParameter(p["sbqq::Im{c28'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c29'}"], u), UsedParameter(p["sbqq::Im{c29'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c30'}"], u), UsedParameter(p["sbqq::Im{c30'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c31'}"], u), UsedParameter(p["sbqq::Im{c31'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c32'}"], u), UsedParameter(p["sbqq::Im{c32'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c33'}"], u), UsedParameter(p["sbqq::Im{c33'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c34'}"], u), UsedParameter(p["sbqq::Im{c34'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c35'}"], u), UsedParameter(p["sbqq::Im{c35'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c36'}"], u), UsedParameter(p["sbqq::Im{c36'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c37'}"], u), UsedParameter(p["sbqq::Im{c37'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c38'}"], u), UsedParameter(p["sbqq::Im{c38'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c39'}"], u), UsedParameter(p["sbqq::Im{c39'}"], u)),
+            std::make_tuple(UsedParameter(p["sbqq::Re{c40'}"], u), UsedParameter(p["sbqq::Im{c40'}"], u))
+        };
+        return result;
+    }
+
+    /* sbqq Wilson coefficients */
+    WilsonScanComponent<components::WET::SB>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _sbqq_parameters(make_wet_parameters_classVhadronic(p, u))
+    {
+    }
+
+    WilsonCoefficients<wc::SBQQ>
+    WilsonScanComponent<components::WET::SB>::wet_sbqq(const bool & cp_conjugate) const
+    {
+        const double sign = cp_conjugate ? -1.0 : 1.0;
+
+        WilsonCoefficients<wc::SBQQ> result;
+        for (unsigned i = 0 ; i < 40 ; ++i)
+        {
+            result._unprimed[i] = complex<double>(std::get<0>(_sbqq_parameters[i]),      sign * std::get<1>(_sbqq_parameters[i]));
+            result._primed[i]   = complex<double>(std::get<0>(_sbqq_parameters[i + 10]), sign * std::get<1>(_sbqq_parameters[i + 10]));
+        }
+
+        return result;
+    }
+
     ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
@@ -720,7 +829,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SB>(parameters, options, *this)
     {
     }
 
@@ -744,7 +854,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SB>(parameters, options, *this)
     {
     }
 
