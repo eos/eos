@@ -28,6 +28,8 @@
 
 #include <gsl/gsl_cdf.h>
 
+#include <algorithm>
+
 namespace eos
 {
     struct RangeError :
