@@ -163,21 +163,9 @@ namespace eos
             double saturation_0p_v() const;
             double saturation_0m_a() const;
             // J = 1
-            double saturation_1m_v_0() const;
-            double saturation_1m_v_perp() const;
-            double saturation_1m_v_para() const;
             double saturation_1m_v() const;
-            double saturation_1p_a_0() const;
-            double saturation_1p_a_perp() const;
-            double saturation_1p_a_para() const;
             double saturation_1p_a() const;
-            double saturation_1m_t_0() const;
-            double saturation_1m_t_perp() const;
-            double saturation_1m_t_para() const;
             double saturation_1m_t() const;
-            double saturation_1p_t5_0() const;
-            double saturation_1p_t5_perp() const;
-            double saturation_1p_t5_para() const;
             double saturation_1p_t5() const;
 
             Diagnostics diagnostics() const;
@@ -329,21 +317,9 @@ namespace eos
             double saturation_0p_v() const;
             double saturation_0m_a() const;
             // J = 1
-            double saturation_1m_v_0() const;
-            double saturation_1m_v_perp() const;
-            double saturation_1m_v_para() const;
             double saturation_1m_v() const;
-            double saturation_1p_a_0() const;
-            double saturation_1p_a_perp() const;
-            double saturation_1p_a_para() const;
             double saturation_1p_a() const;
-            double saturation_1m_t_0() const;
-            double saturation_1m_t_perp() const;
-            double saturation_1m_t_para() const;
             double saturation_1m_t() const;
-            double saturation_1p_t5_0() const;
-            double saturation_1p_t5_perp() const;
-            double saturation_1p_t5_para() const;
             double saturation_1p_t5() const;
 
             Diagnostics diagnostics() const;
