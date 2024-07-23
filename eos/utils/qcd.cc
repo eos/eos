@@ -22,6 +22,7 @@
 #include <eos/maths/power-of.hh>
 
 #include <cmath>
+#include <algorithm>
 
 namespace eos
 {
