@@ -25,6 +25,7 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <complex>
+#include <algorithm>
 
 namespace eos
 {
