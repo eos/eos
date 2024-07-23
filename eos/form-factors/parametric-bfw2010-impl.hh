@@ -134,7 +134,7 @@ namespace eos
         const double z = _traits.calc_z(t, threshold_tp, _traits.t0),
             kinematic_tp = power_of<2>(_mB + _mV);
         const double norm = std::sqrt(Process_::eta * k * pow(kinematic_tp, A) * pow(_traits.tm(), B)
-                                * pow(4 * _mB * _mV, C) / 32 / M_PI / M_PI / chi);
+                                * pow(4 * _mB * _mV, C) / 96 / M_PI / M_PI / chi);
 
         // set Q^2 to 0
         const double invt = 1 / ( 2.0 * (std::sqrt(threshold_tp) * std::sqrt(threshold_tp - t) + threshold_tp) - t); // simplification of -_traits.calc_z(t, threshold_tp, 0) / t
@@ -155,7 +155,7 @@ namespace eos
     inline double
     BFW2010FormFactors<Process_, PToV>::_phi_a_0(const double & q2) const
     {
-        return _phi(q2, _traits.tp_a, Process_::chi_0m_a, 0, 0, 0, 1, 2, 1, 3);
+        return _phi(q2, _traits.tp_a, Process_::chi_0m_a, 0, 0, 0, 3, 2, 1, 3);
     }
 
     template<typename Process_>
@@ -464,126 +464,49 @@ namespace eos
 
     template<typename Process_>
     double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_v_0() const
-    {
-        return 0.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_v_perp() const
+    BFW2010FormFactors<Process_, PToV>::saturation_1m_v() const
     {
         return std::inner_product(_a_V.begin(), _a_V.end(), _a_V.begin(), 0.0);
     }
 
     template<typename Process_>
     double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_v_para() const
-    {
-        return 0.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_v() const
-    {
-        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
-        return (saturation_1m_v_0() + saturation_1m_v_perp() + saturation_1m_v_para()) / 3.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_a_0() const
+    BFW2010FormFactors<Process_, PToV>::saturation_1p_a() const
     {
         std::array<double, 5> coefficients_A12;
         coefficients_A12[0] = _a_A12_0();
         std::copy(_a_A12.begin(), _a_A12.end(), coefficients_A12.begin() + 1);
 
-        return std::inner_product(coefficients_A12.begin(), coefficients_A12.end(), coefficients_A12.begin(), 0.0);
-    }
+        std::array<double, 5> coefficients_A1;
+        coefficients_A1[0] = _a_A1_0();
+        std::copy(_a_A1.begin(), _a_A1.end(), coefficients_A1.begin() + 1);
 
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_a_perp() const
-    {
-        return 0.0;
-    }
 
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_a_para() const
-    {
-        return std::inner_product(_a_A1.begin(), _a_A1.end(), _a_A1.begin(), 0.0);
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_a() const
-    {
-        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
-        return (saturation_1p_a_0() + saturation_1p_a_perp() + saturation_1p_a_para()) / 3.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_t_0() const
-    {
-        return 0.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_t_perp() const
-    {
-        return std::inner_product(_a_T1.begin(), _a_T1.end(), _a_T1.begin(), 0.0);
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1m_t_para() const
-    {
-        return 0.0;
+        return std::inner_product(coefficients_A12.begin(), coefficients_A12.end(), coefficients_A12.begin(), 0.0)
+          + std::inner_product(coefficients_A1.begin(), coefficients_A1.end(), coefficients_A1.begin(), 0.0);
     }
 
     template<typename Process_>
     double
     BFW2010FormFactors<Process_, PToV>::saturation_1m_t() const
     {
-        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
-        return (saturation_1m_t_0() + saturation_1m_t_perp() + saturation_1m_t_para()) / 3.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_t5_0() const
-    {
-        return std::inner_product(_a_T23.begin(), _a_T23.end(), _a_T23.begin(), 0.0);
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_t5_perp() const
-    {
-        return 0.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToV>::saturation_1p_t5_para() const
-    {
-        std::array<double, 5> coefficients_T2;
-        coefficients_T2[0] = _a_T2_0();
-        std::copy(_a_T2.begin(), _a_T2.end(), coefficients_T2.begin() + 1);
-
-        return std::inner_product(coefficients_T2.begin(), coefficients_T2.end(), coefficients_T2.begin(), 0.0);
+        return std::inner_product(_a_T1.begin(), _a_T1.end(), _a_T1.begin(), 0.0);
     }
 
     template<typename Process_>
     double
     BFW2010FormFactors<Process_, PToV>::saturation_1p_t5() const
     {
-        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
-        return (saturation_1p_t5_0() + saturation_1p_t5_perp() + saturation_1p_t5_para()) / 3.0;
+        std::array<double, 5> coefficients_T2;
+        coefficients_T2[0] = _a_T2_0();
+        std::copy(_a_T2.begin(), _a_T2.end(), coefficients_T2.begin() + 1);
+
+        std::array<double, 5> coefficients_T23;
+        coefficients_T23[0] = _a_T23_0();
+        std::copy(_a_T23.begin(), _a_T23.end(), coefficients_T23.begin() + 1);
+
+        return std::inner_product(coefficients_T2.begin(), coefficients_T2.end(), coefficients_T2.begin(), 0.0)
+          + std::inner_product(coefficients_T23.begin(), coefficients_T23.end(), coefficients_T23.begin(), 0.0);
     }
 
     template <typename Process_>
@@ -645,6 +568,13 @@ namespace eos
             results.add({ _phi_t_23(-2.0),  "phi_t_23(z = z(q2 = -2.0))" });
             results.add({ _phi_t_23( 1.0),  "phi_t_23(z = z(q2 =  1.0))" });
             results.add({ _phi_t_23( 4.0),  "phi_t_23(z = z(q2 =  4.0))" });
+        }
+
+        {
+            results.add({ _a_A1_0(),      "a_A1_0"  });
+            results.add({ _a_A12_0(),     "a_A12_0" });
+            results.add({ _a_T2_0(),      "a_T2_0"  });
+            results.add({ _a_T23_0(),     "a_T23_0" });
         }
 
         return results;
@@ -750,8 +680,8 @@ namespace eos
         // [GRvDV:2022B]
         const double z = _traits.calc_z(t, threshold_tp, _traits.t0),
             kinematic_tp = power_of<2>(_mB + _mP);
-        const double norm = std::sqrt(Process_::eta * pow(kinematic_tp, A) * pow(_traits.tm(), B)
-                                * pow(4 * _mB * _mP, C) / 32 / k / M_PI / M_PI / chi);
+        const double norm = std::sqrt(Process_::eta * k * pow(kinematic_tp, A) * pow(_traits.tm(), B)
+                                * pow(4 * _mB * _mP, C) / 96 / M_PI / M_PI / chi);
 
         // set Q^2 to 0
         const double invt = 1 / ( 2.0 * (std::sqrt(threshold_tp) * std::sqrt(threshold_tp - t) + threshold_tp) - t); // simplification of -_z(t, t_p, 0) / t
@@ -772,7 +702,7 @@ namespace eos
     inline double
     BFW2010FormFactors<Process_, PToP>::_phi_f_0(const double & q2) const
     {
-        return _phi(q2, _traits.tp, Process_::chi_0p_v, 1, 1, 0, 1, 2, 1, 1);
+        return _phi(q2, _traits.tp, Process_::chi_0p_v, 1, 1, 0, 3, 2, 1, 1);
     }
 
     template<typename Process_>
@@ -952,52 +882,9 @@ namespace eos
 
     template <typename Process_>
     double
-    BFW2010FormFactors<Process_, PToP>::saturation_1m_v_0() const
-    {
-        return std::inner_product(_a_fp.begin(), _a_fp.end(), _a_fp.begin(), 0.0);
-    }
-
-    template <typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1m_v_perp() const
-    {
-        return 0.0;
-    }
-
-    template <typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1m_v_para() const
-    {
-        return 0.0;
-    }
-
-    template <typename Process_>
-    double
     BFW2010FormFactors<Process_, PToP>::saturation_1m_v() const
     {
-        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
-        return (saturation_1m_v_0() + saturation_1m_v_perp() + saturation_1m_v_para()) / 3.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1p_a_0() const
-    {
-        return 0.;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1p_a_perp() const
-    {
-        return 0.;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1p_a_para() const
-    {
-        return 0.;
+        return std::inner_product(_a_fp.begin(), _a_fp.end(), _a_fp.begin(), 0.0);
     }
 
     template<typename Process_>
@@ -1009,52 +896,9 @@ namespace eos
 
     template <typename Process_>
     double
-    BFW2010FormFactors<Process_, PToP>::saturation_1m_t_0() const
-    {
-        return std::inner_product(_a_ft.begin(), _a_ft.end(), _a_ft.begin(), 0.0);
-    }
-
-    template <typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1m_t_perp() const
-    {
-        return 0.0;
-    }
-
-    template <typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1m_t_para() const
-    {
-        return 0.0;
-    }
-
-    template <typename Process_>
-    double
     BFW2010FormFactors<Process_, PToP>::saturation_1m_t() const
     {
-        // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
-        return (saturation_1m_t_0() + saturation_1m_t_perp() + saturation_1m_t_para()) / 3.0;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1p_t5_0() const
-    {
-        return 0.;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1p_t5_perp() const
-    {
-        return 0.;
-    }
-
-    template<typename Process_>
-    double
-    BFW2010FormFactors<Process_, PToP>::saturation_1p_t5_para() const
-    {
-        return 0.;
+        return std::inner_product(_a_ft.begin(), _a_ft.end(), _a_ft.begin(), 0.0);
     }
 
     template<typename Process_>
@@ -1097,6 +941,10 @@ namespace eos
             results.add({ _phi_f_t(-2.0),   "phi_f_t(z = z(q2 = -2))" });
             results.add({ _phi_f_t( 1.0),   "phi_f_t(z = z(q2 =  1))" });
             results.add({ _phi_f_t( 4.0),   "phi_f_t(z = z(q2 =  4))" });
+        }
+
+        {
+            results.add({ _a_f0_0(),  "_a_f0_0" });
         }
 
         return results;
