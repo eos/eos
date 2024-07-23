@@ -735,7 +735,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
             xmax = _np.max(xsamples)
             ymin = _np.min(ysamples)
             ymax = _np.max(ysamples)
-            ax.hist2d(xsamples, ysamples, weights=weights, alpha=1.0, bins=100, cmap='Greys')
+            ax.hist2d(xsamples, ysamples, weights=weights, alpha=1.0, bins=100, cmap='Greys', rasterized=True)
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
             ax.set_aspect(_np.diff((xmin, xmax))[0] / _np.diff((ymin, ymax))[0])
