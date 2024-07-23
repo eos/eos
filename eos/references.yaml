@@ -827,6 +827,13 @@ CLEO:2008A:
     id: oai:arXiv.org:0801.3418
   inspire-id: CLEO:2008ojp
   title: Measurement of Charm Production Cross Sections in $e^+ e^-$ Annihilation at Energies between 3.97 and 4.26-GeV
+CMD3:2023A:
+  authors: Ignatov, F. V. et al.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2302.08834
+  inspire-id: CMD-3:2023alj
+  title: Measurement of the $e^+e^-\to\pi^+\pi^-$ cross section from threshold to 1.2~GeV with the CMD-3 detector
 CMM:1996A:
   authors: Chetyrkin, Konstantin G. and Misiak, Mikolaj and Munz, Manfred
   eprint:
