@@ -15,6 +15,7 @@ libeosmaths_la_SOURCES = \
 	integrate-cubature.cc integrate-cubature.hh \
 	interpolation.cc interpolation.hh \
 	lagrange-polynomial.hh \
+	legendre-polynomial-vector.hh \
 	matrix.hh \
 	multiplepolylog-li22.cc multiplepolylog-li22.hh \
 	multiplepolylog-li22-const.cc multiplepolylog-li22-const.hh \
@@ -45,6 +46,7 @@ include_eos_utils_HEADERS = \
 	integrate-cubature.hh \
 	interpolation.hh \
 	lagrange-polynomial.hh \
+	legendre-polynomial-vector.hh \
 	matrix.hh \
 	multiplepolylog-li22.hh \
 	multiplepolylog-li22-const.hh \
@@ -62,6 +64,7 @@ TESTS = \
 	integrate_TEST \
 	interpolation_TEST \
 	lagrange-polynomial_TEST \
+	legendre-polynomial-vector_TEST \
 	matrix_TEST \
 	multiplepolylog_TEST \
 	polylog_TEST \
@@ -89,6 +92,8 @@ integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
 interpolation_TEST_SOURCES = interpolation_TEST.cc
 
 lagrange_polynomial_TEST_SOURCES = lagrange-polynomial_TEST.cc
+
+legendre_polynomial_vector_TEST_SOURCES = legendre-polynomial-vector_TEST.cc
 
 matrix_TEST_SOURCES = matrix_TEST.cc
 
