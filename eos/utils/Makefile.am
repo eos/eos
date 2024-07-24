@@ -43,6 +43,7 @@ libeosutils_la_SOURCES = \
 	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
 	observable_stub.cc observable_stub.hh \
+	omnes-factor.hh omnes-factor-impl.hh \
 	one-of.hh \
 	options.cc options.hh options-impl.hh \
 	parameters.cc parameters.hh parameters-fwd.hh \
@@ -100,6 +101,7 @@ include_eos_utils_HEADERS = \
 	mutable.hh mutable-fwd.hh \
 	observable_cache.hh \
 	observable_set.hh \
+	omnes-factor.hh omnes-factor-impl.hh \
 	one-of.hh \
 	options.hh \
 	parameters.hh parameters-fwd.hh \
@@ -138,6 +140,7 @@ TESTS = \
 	observable_set_TEST \
 	observable_stub_TEST \
 	options_TEST \
+	omnes-factor_TEST \
 	one-of_TEST \
 	parameters_TEST \
 	qcd_TEST \
@@ -184,6 +187,8 @@ mutable_TEST_SOURCES = mutable_TEST.cc
 observable_set_TEST_SOURCES = observable_set_TEST.cc
 
 observable_stub_TEST_SOURCES = observable_stub_TEST.cc
+
+omnes_factor_TEST_SOURCES = omnes-factor_TEST.cc
 
 one_of_TEST_SOURCES = one-of_TEST.cc
 
