@@ -1720,6 +1720,13 @@ LT:2007A:
     id: oai:arXiv.org:0707.1694
   inspire-id: Ligeti:2007sn
   title: Precise predictions for $B \to  X_s l^+ l^-$ in the large $q^2$ region
+M:1999A:
+  authors: Moussallam, B.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9909292
+  inspire-id: Moussallam::1999aq
+  title: $N_f$ dependence of the quark condensate from a chiral sum rule
 M:2006A:
   authors: Misiak, M. et al.
   eprint:
