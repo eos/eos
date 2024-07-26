@@ -356,15 +356,15 @@ namespace eos
     {
         static const std::map<std::string, LightMeson> map
         {
-            { "pi^0",   LightMeson::pi0     },
-            { "pi^+",   LightMeson::piplus  },
-            { "pi^-",   LightMeson::piminus },
-            { "K_d",    LightMeson::K0      },
-            { "Kbar_d", LightMeson::K0bar   },
-            { "K_u",    LightMeson::Kplus   },
-            { "Kbar_u", LightMeson::Kminus  },
-            { "eta",    LightMeson::eta     },
-            { "eta'",   LightMeson::etap    }
+            { "pi^0",      LightMeson::pi0     },
+            { "pi^+",      LightMeson::piplus  },
+            { "pi^-",      LightMeson::piminus },
+            { "K_d",       LightMeson::K0      },
+            { "Kbar_d",    LightMeson::K0bar   },
+            { "K_u",       LightMeson::Kplus   },
+            { "Kbar_u",    LightMeson::Kminus  },
+            { "eta",       LightMeson::eta     },
+            { "eta_prime", LightMeson::etap    }
         };
 
         const auto i = map.find(_value);
