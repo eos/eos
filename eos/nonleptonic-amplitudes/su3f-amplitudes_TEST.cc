@@ -319,7 +319,7 @@ class SU3AmplitudesTest :
                 Options oo
                 {
                     { "q", "d" },
-                    { "P1", "eta'" },
+                    { "P1", "eta_prime" },
                     { "P2", "K_d" },
                     { "model", "CKM" },
                     { "cp-conjugate", "true"}
@@ -352,7 +352,228 @@ class SU3AmplitudesTest :
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.inverse_amplitude(), complex<double>(-3.9774064069014413e-7, -1.366196555610822e-8), eps);
 
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.amplitude(), complex<double>(-7.954812813802883e-7, -2.7323931112216412e-8), eps);
+
+                Options o4
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "pi^+" },
+                    { "P2", "pi^-" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "false"}
+                };
+
+                SU3FRepresentation<PToPP> d4(p, o4);
+
+
+                Options o5
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "pi^+" },
+                    { "P2", "pi^-" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "true"}
+                };
+
+                SU3FRepresentation<PToPP> d5(p, o5);
+
+                TEST_CHECK_NEARLY_EQUAL(2*(d4.re_amplitude()*d5.im_amplitude() - d4.im_amplitude()*d5.re_amplitude()) / (d4.abs_amplitude()*d4.abs_amplitude() + d5.abs_amplitude()*d5.abs_amplitude()),0.6004206408016731, eps);
+
+
+                Options o6
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "K_d" },
+                    { "P2", "Kbar_d" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "false"}
+                };
+
+                SU3FRepresentation<PToPP> d6(p, o6);
+
+
+                Options o7
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "K_d" },
+                    { "P2", "Kbar_d" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "true"}
+                };
+
+                SU3FRepresentation<PToPP> d7(p, o7);
+
+                TEST_CHECK_NEARLY_EQUAL(2*(d6.re_amplitude()*d7.im_amplitude() - d6.im_amplitude()*d7.re_amplitude()) / (d6.abs_amplitude()*d6.abs_amplitude() + d7.abs_amplitude()*d7.abs_amplitude()),0.49395869433764805, eps);
             }
+
+            //Test with THXs best fit point
+
+            {
+                Parameters p = Parameters::Defaults();
+                p["nonleptonic::Re{AT3}@SU3F"]  =  0.029 * std::cos( -3.083);
+                p["nonleptonic::Im{AT3}@SU3F"]  =  0.029 * std::sin( -3.083);
+                p["nonleptonic::Re{CT3}@SU3F"]  =  0.258 * std::cos(-0.105);
+                p["nonleptonic::Im{CT3}@SU3F"]  =  0.258 * std::sin(-0.105);
+                p["nonleptonic::Re{AT6}@SU3F"]  =  0. * std::cos( 0.3);
+                p["nonleptonic::Im{AT6}@SU3F"]  =  0. * std::sin( 0.3);
+                p["nonleptonic::Re{CT6}@SU3F"]  =  0.235 * std::cos(-0.079);
+                p["nonleptonic::Im{CT6}@SU3F"]  =  0.235 * std::sin(-0.079);
+                p["nonleptonic::Re{AT15}@SU3F"] =  0.029 * std::cos(-3.083);
+                p["nonleptonic::Im{AT15}@SU3F"] =  0.029 * std::sin(-3.083);
+                p["nonleptonic::Re{CT15}@SU3F"] =  0.151 * std::cos(0.061);
+                p["nonleptonic::Im{CT15}@SU3F"] =  0.151 * std::sin(0.061);
+                p["nonleptonic::Re{BT3}@SU3F"]  =  0.034 * std::cos(3.087);
+                p["nonleptonic::Im{BT3}@SU3F"]  =  0.034 * std::sin(3.087);
+                p["nonleptonic::Re{BT6}@SU3F"]  =  0.033 * std::cos(-0.286);
+                p["nonleptonic::Im{BT6}@SU3F"]  =  0.033 * std::sin(-0.286);
+                p["nonleptonic::Re{BT15}@SU3F"] =  0.008 * std::cos(-1.892);
+                p["nonleptonic::Im{BT15}@SU3F"] =  0.008 * std::sin(-1.892);
+                p["nonleptonic::Re{DT3}@SU3F"]  =  0.055 * std::cos(2.942);
+                p["nonleptonic::Im{DT3}@SU3F"]  =  0.055 * std::sin(2.942);
+                p["nonleptonic::Re{AP3}@SU3F"]  =  0.014 * std::cos(-1.328);
+                p["nonleptonic::Im{AP3}@SU3F"]  =  0.014 * std::sin(-1.328);
+                p["nonleptonic::Re{CP3}@SU3F"]  =  0.008 * std::cos(0.);
+                p["nonleptonic::Im{CP3}@SU3F"]  =  0.008 * std::sin(0.);
+                p["nonleptonic::Re{AP6}@SU3F"]  =  0. * std::cos( 1.3);
+                p["nonleptonic::Im{AP6}@SU3F"]  =  0. * std::sin( 1.3);
+                p["nonleptonic::Re{CP6}@SU3F"]  =  0.145 * std::cos(-2.881);
+                p["nonleptonic::Im{CP6}@SU3F"]  =  0.145 * std::sin(-2.881);
+                p["nonleptonic::Re{AP15}@SU3F"] =  0.003 * std::cos( 2.234);
+                p["nonleptonic::Im{AP15}@SU3F"] =  0.003 * std::sin( 2.234);
+                p["nonleptonic::Re{CP15}@SU3F"] =  0.003 * std::cos(-0.608);
+                p["nonleptonic::Im{CP15}@SU3F"] =  0.003 * std::sin(-0.608);
+                p["nonleptonic::Re{BP3}@SU3F"]  =  0.043 * std::cos( 2.367);
+                p["nonleptonic::Im{BP3}@SU3F"]  =  0.043 * std::sin( 2.367);
+                p["nonleptonic::Re{BP6}@SU3F"]  =  0.099 * std::cos(0.353);
+                p["nonleptonic::Im{BP6}@SU3F"]  =  0.099 * std::sin(0.353);
+                p["nonleptonic::Re{BP15}@SU3F"] =  0.031 * std::cos( -0.690);
+                p["nonleptonic::Im{BP15}@SU3F"] =  0.031 * std::sin( -0.690);
+                p["nonleptonic::Re{DP3}@SU3F"]  =  0.030 * std::cos( 0.477);
+                p["nonleptonic::Im{DP3}@SU3F"]  =  0.030 * std::sin( 0.477);
+                p["eta::theta_18"]              = -0.3273166181245092;
+
+
+
+                static const double eps = 1.0e-6;
+
+                Options o1
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "pi^+" },
+                    { "P2", "pi^-" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "false"}
+                };
+
+                SU3FRepresentation<PToPP> d1(p, o1);
+
+
+                Options o2
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "pi^-" },
+                    { "P2", "pi^+" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "true"}
+                };
+
+                SU3FRepresentation<PToPP> d2(p, o2);
+
+                TEST_CHECK_NEARLY_EQUAL(2*(d1.re_amplitude()*d2.im_amplitude() - d1.im_amplitude()*d2.re_amplitude()) / (d1.abs_amplitude()*d1.abs_amplitude() + d2.abs_amplitude()*d2.abs_amplitude()),-0.0339696, eps);
+
+
+                Options o3
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "pi^0" },
+                    { "P2", "K_d" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "false"}
+                };
+
+                SU3FRepresentation<PToPP> d3(p, o3);
+
+
+                Options o4
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "K_d" },
+                    { "P2", "pi^0" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "true"}
+                };
+
+                SU3FRepresentation<PToPP> d4(p, o4);
+
+                TEST_CHECK_NEARLY_EQUAL(2*(d3.re_amplitude()*d4.im_amplitude() - d3.im_amplitude()*d4.re_amplitude()) / (d3.abs_amplitude()*d3.abs_amplitude() + d4.abs_amplitude()*d4.abs_amplitude()), 0.026275355893312025, eps);
+
+                Options o5
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "K_d" },
+                    { "P2", "Kbar_d" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "false"}
+                };
+
+                SU3FRepresentation<PToPP> d5(p, o5);
+
+
+                Options o6
+                {
+                    { "representation", "SU3F" },
+                    { "q", "d" },
+                    { "P1", "Kbar_d" },
+                    { "P2", "K_d" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "true"}
+                };
+
+                SU3FRepresentation<PToPP> d6(p, o6);
+
+                TEST_CHECK_NEARLY_EQUAL(2*(d5.re_amplitude()*d6.im_amplitude() - d5.im_amplitude()*d6.re_amplitude()) / (d5.abs_amplitude()*d5.abs_amplitude() + d6.abs_amplitude()*d6.abs_amplitude()), 0.949735305000383, eps);
+           
+                Options o7
+                {
+                    { "representation", "SU3F" },
+                    { "q", "s" },
+                    { "P1", "K_u" },
+                    { "P2", "Kbar_u" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "false"}
+                };
+
+                SU3FRepresentation<PToPP> d7(p, o7);
+
+
+                Options o8
+                {
+                    { "representation", "SU3F" },
+                    { "q", "s" },
+                    { "P1", "Kbar_u" },
+                    { "P2", "K_u" },
+                    { "model", "CKM" },
+                    { "cp-conjugate", "true"}
+                };
+
+                SU3FRepresentation<PToPP> d8(p, o8);
+
+               
+                TEST_CHECK_NEARLY_EQUAL(2*(d7.re_amplitude()*d8.im_amplitude() - d7.im_amplitude()*d8.re_amplitude()) / (d7.abs_amplitude()*d7.abs_amplitude() + d8.abs_amplitude()*d8.abs_amplitude()), -0.22630547119600518, eps);
+           
+
+            }
+
+            
+        
         }
 } su3_amplitudes_test;
 
