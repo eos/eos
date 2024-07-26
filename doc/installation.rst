@@ -147,7 +147,7 @@ pkg-config
   the freedesktop.org library helper, in version 0.27.1 or higher;
 
 BOOST
-  the BOOST C++ libraries (sub-libraries ``boost-filesystem`` and ``boost-system``);
+  the BOOST C++ libraries (sub-libraries ``boost-filesystem``, ``boost-system`` and ``boost-math``);
 
 yaml-cpp
   a C++ YAML parser and interpreter library, in version 0.5.1 or higher.
@@ -209,7 +209,7 @@ by running the following commands:
 ::
 
   # for the 'System Software'
-  sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
+  sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libboost-math-dev libyaml-cpp-dev
   # for the 'Python Software'
   sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-networkx python3-scipy python3-yaml python3-pip
   # for the 'Scientific Software'
