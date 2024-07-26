@@ -30,7 +30,7 @@ groups:
           latex:   '$m_{\eta}$'
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2024"
-      "mass::eta'" :
+      'mass::eta_prime' :
           central: +0.95778
           min:     +0.95772
           max:     +0.95784
@@ -408,6 +408,7 @@ groups:
           unit:     'GeV'
           comments: 'cf. [PZ:2021A]'
       'decay-constant::K_d' :
+          alias_of: [ 'decay-constant::Kbar_d' ]
           central: +0.1561
           min:     +0.155
           max:     +0.1572
@@ -415,6 +416,7 @@ groups:
           unit:     'GeV'
           comments: 'cf. [LATAVG2011]'
       'decay-constant::K_u' :
+          alias_of: [ 'decay-constant::Kbar_u' ]
           central: +0.1561
           min:     +0.155
           max:     +0.1572
@@ -443,12 +445,27 @@ groups:
           unit:     'GeV'
           comments: 'cf. [BSZ:2015A]'
       'decay-constant::pi' :
+          alias_of: [ 'decay-constant::pi^+', 'decay-constant::pi^-', 'decay-constant::pi^0' ]
           central: +0.1302
           min:     +0.1288
           max:     +0.1326
           latex:    '$f_\pi$'
           unit:     'GeV'
           comments: 'cf. [FLAG2013], eq. (43)'
+      'decay-constant::eta' :
+          central: +0.1176
+          min:     +0.1131
+          max:     +0.1221
+          latex:    '$f_\eta$'
+          unit:     'GeV'
+          comments: 'calculated from 2106.05398, maybe update'
+      'decay-constant::eta_prime' :
+          central: +0.0490
+          min:     +0.0437
+          max:     +0.0543
+          latex:    '$f_{\eta^\prime}$'
+          unit:     'GeV'
+          comments: 'calculated from 2106.05398, maybe update'
       'decay-constant::J/psi' :
           central: +0.2773
           min:     +0.2733
