@@ -14,19 +14,21 @@ libeosbdecays_la_SOURCES = \
 	b-to-pi-pi-l-nu.cc b-to-pi-pi-l-nu.hh \
 	b-to-pi-l-x-nu.cc b-to-pi-l-x-nu.hh \
 	b-to-psd-l-nu.cc b-to-psd-l-nu.hh \
+	b-to-psd-psd.cc b-to-psd-psd.hh \
 	b-to-v-l-nu.hh \
 	b-to-vec-l-nu.cc b-to-vec-l-nu.hh b-to-vec-l-nu-impl.hh \
 	bs-to-kstar-l-nu.cc bs-to-kstar-l-nu.hh \
 	bq-to-dq-psd.cc bq-to-dq-psd.hh \
 	bq-to-dstarq-psd.cc bq-to-dstarq-psd.hh \
+	inclusive-b-to-u.cc inclusive-b-to-u.hh \
 	lambdab-to-lambdac-l-nu.cc lambdab-to-lambdac-l-nu.hh \
 	lambdab-to-lambdac2595-l-nu.cc lambdab-to-lambdac2595-l-nu.hh \
 	lambdab-to-lambdac2625-l-nu.cc lambdab-to-lambdac2625-l-nu.hh \
-	inclusive-b-to-u.cc inclusive-b-to-u.hh \
+	lifetime.cc lifetime.hh \
 	observables.cc observables.hh \
 	properties.cc properties.hh \
-	signal-pdfs.cc signal-pdfs.hh \
-	lifetime.cc lifetime.hh
+	signal-pdfs.cc signal-pdfs.hh
+
 libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosbdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosbdecays_la_LIBADD = \
@@ -34,6 +36,7 @@ libeosbdecays_la_LIBADD = \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	$(top_builddir)/eos/nonleptonic-amplitudes/libeosnonleptonicamplitudes.la \
 	-lgslcblas \
 	-lgsl
 
@@ -47,6 +50,7 @@ include_eos_bdecays_HEADERS = \
 	b-to-pi-pi-l-nu.hh \
 	b-to-pi-l-x-nu.hh \
 	b-to-psd-l-nu.hh \
+	b-to-psd-psd.hh \
 	b-to-v-l-nu.hh \
 	b-to-vec-l-nu.hh \
 	bq-to-dq-psd.hh \
@@ -54,9 +58,10 @@ include_eos_bdecays_HEADERS = \
 	bs-to-kstar-l-nu.hh \
 	inclusive-b-to-u.hh \
 	lambdab-to-lambdac-l-nu.hh \
+	lifetime.hh \
 	observables.hh \
 	properties.hh \
-	lifetime.hh
+	signal-pdfs.hh
 
 EXTRA_DIST =
 
@@ -72,6 +77,7 @@ TESTS = \
 	b-to-gamma-l-nu_TEST \
 	b-to-pi-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
+	b-to-psd-psd_TEST \
 	b-to-rho-l-nu_TEST \
 	bq-to-dq-psd_TEST \
 	bq-to-dstarq-psd_TEST \
@@ -86,6 +92,7 @@ LDADD = \
 	$(top_builddir)/test/libeostest.la \
 	libeosbdecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	$(top_builddir)/eos/nonleptonic-amplitudes/libeosnonleptonicamplitudes.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
@@ -107,6 +114,8 @@ b_to_gamma_l_nu_TEST_SOURCES = b-to-gamma-l-nu_TEST.cc
 b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
 
 b_to_pi_pi_l_nu_TEST_SOURCES = b-to-pi-pi-l-nu_TEST.cc
+
+b_to_psd_psd_TEST_SOURCES = b-to-psd-psd_TEST.cc
 
 b_to_rho_l_nu_TEST_SOURCES = b-to-rho-l-nu_TEST.cc
 

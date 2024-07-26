@@ -71,7 +71,7 @@ namespace implementation
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
         double A2 = power_of<2>(_A__ckm()), lambda4 = power_of<4>(_lambda__ckm()), lambda6 = power_of<6>(_lambda__ckm());
 
-        complex<double> result = _lambda__ckm() * (1.0 - A2 * lambda4 * (1.0 - 2.0 * rho_eta) / 2.0 + A2 * lambda6 * rho_eta / 2.0);
+        complex<double> result = -_lambda__ckm() * (1.0 - A2 * lambda4 * (1.0 - 2.0 * rho_eta) / 2.0 - A2 * lambda6 * rho_eta / 2.0);
 
         return result;
     }
