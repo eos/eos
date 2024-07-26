@@ -279,6 +279,7 @@ groups:
       # form factor parameters for B->pi in [BCL:2008A] parametrization, with
       # f_+ taken from [IKMvD:2014A]
       'B->pi::f_+(0)@BCL2008' :
+          alias_of: [ 'B_d->pi^0::f_+(0)', 'B_d->pi^+::f_+(0)', 'B_d->pi^-::f_+(0)', 'B_u->pi^0::f_+(0)', 'B_u->pi^+::f_+(0)', 'B_u->pi^-::f_+(0)' ]
           central: +0.307
           min:     +0.287
           max:     +0.327
@@ -425,6 +426,49 @@ groups:
           max:     -0.2580355775883392
           latex:    '$\alpha_{T,2}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      # form factor parameters for B_s->pi
+      'B_s->pi::f_+(0)' :
+          alias_of: [ 'B_s->pi^0::f_+(0)', 'B_s->pi^+::f_+(0)', 'B_s->pi^-::f_+(0)' ]
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          latex:    '$f_+^{B_s\to \pi}(0)$'
+          unit:     '1'
+          comments: "not the real values, update"
+      # form factor parameters for B->eta
+      'B->eta::f_+(0)' :
+          alias_of: [ 'B_u->eta::f_+(0)', 'B_d->eta::f_+(0)' ]
+          central:  0.168
+          min:      0.121
+          max:      0.210
+          latex:    '$f_+^{B\to \eta}(0)$'
+          unit:     '1'
+          comments: 'from 1508.05287'
+      # form factor parameters for B_s->eta
+      'B_s->eta::f_+(0)' :
+          central:  0.212
+          min:      0.199
+          max:      0.227
+          latex:    '$f_+^{B_s\to \eta}(0)$'
+          unit:     '1'
+          comments: 'from 1508.05287'
+      # form factor parameters for B->eta'
+      'B->eta_prime::f_+(0)' :
+          alias_of: [ 'B_u->eta_prime::f_+(0)', 'B_d->eta_prime::f_+(0)' ]
+          central:  0.130
+          min:      0.098
+          max:      0.166
+          latex:    '$f_+^{B\to \eta^\prime}(0)$'
+          unit:     '1'
+          comments: 'from 1508.05287'
+      # form factor parameters for B_s->eta'
+      'B_s->eta_prime::f_+(0)' :
+          central:  0.252
+          min:      0.232
+          max:      0.275
+          latex:    '$f_+^{B_s\to \eta^\prime}(0)$'
+          unit:     '1'
+          comments: 'from 1508.05287'
       # form factor parameters for B->K for [BFW:2010A] parametrization
       'B->K::a^%1%_%2%@BFW2010' :
           central:  0.
@@ -450,6 +494,7 @@ groups:
           unit:     'GeV'
       # form factor parameters for B->K for [BCL:2008A] parametrization
       'B->K::f_+(0)@BCL2008' :
+          alias_of: [ 'B_d->K_d::f_+(0)', 'B_d->Kbar_d::f_+(0)', 'B_d->K_u::f_+(0)','B_d->Kbar_u::f_+(0)', 'B_u->K_d::f_+(0)', 'B_u->Kbar_d::f_+(0)', 'B_u->K_u::f_+(0)','B_u->Kbar_u::f_+(0)' ]
           central: +0.0
           min:     +0.0
           max:     +0.0
@@ -585,6 +630,14 @@ groups:
           latex:    '$b_{t,1}^{B \to K,\mathrm{KMPW2010}}$'
           unit:     '1'
       # form factor parameters for B_s->K inspired by [BSZ:2015A]
+      'B_s->K::f_+' :
+          alias_of: [ 'B_s->K_d::f_+(0)', 'B_s->Kbar_d::f_+(0)', 'B_s->K_u::f_+(0)','B_s->Kbar_u::f_+(0)' ]
+          central:  0.30
+          min:      0.27
+          max:      0.34
+          latex:    '$f_+^{B_s\to K}$'
+          unit:     '1'
+          comments: "from 0805.4170, maybe update"
       'B_s->K::alpha^f+_0@BSZ2015' :
           central:  0.0
           min:      0.0
@@ -5837,4 +5890,113 @@ groups:
           max:     +0.0
           latex:    '$t_0^\textrm{KKRvD2024}$'
           comments: ''
+  # }}}
+
+  # Nonleptonic Amplitudes Parameters
+  # {{{
+  - title: 'Nonleptonic Amplitudes Parameters'
+    description: ''
+    parameters:
+      'nonleptonic::%1%{%2%}@Topological' :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\mathrm{%1%}\,%2%$'
+            map:
+              'TES': 'T_{ES}'
+              'TAS': 'T_{AS}'
+              'TS' : 'T_S'
+              'TPA': 'T_{PA}'
+              'TP' : 'T_P'
+              'TSS': 'T_{SS}'
+              'PT' : 'P_T'
+              'PC' : 'P_C'
+              'PTA': 'P_{TA}'
+              'PA' : 'P_A'
+              'PTE': 'P_{TE}'
+              'PAS': 'P_{AS}'
+              'PSS': 'P_{SS}'
+              'PES': 'P_{ES}'
+          matrix:
+            - [ "Re", "Im" ]
+            - [ "T", "C", "A", "E", "TES", "TAS", "TS", "TPA", "TP", "TSS",
+                "P", "PT", "S", "PC", "PTA", "PA", "PTE", "PAS", "PSS", "PES" ]
+      'nonleptonic::%1%{%2%}@SU3F' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\mathrm{%1%}\,%2%$'
+            map:
+              'AT3' : 'A_3^T'
+              'CT3' : 'C_3^T'
+              'AT6' : 'A_6^T'
+              'CT6' : 'C_6^T'
+              'AT15': 'A_{15}^T'
+              'CT15': 'C_{15}^T'
+              'BT3' : 'B_3^T'
+              'BT6' : 'B_6^T'
+              'BT15': 'B_{15}^T'
+              'DT3' : 'D_3^T'
+              'AP3' : 'A_3^P'
+              'CP3' : 'C_3^P'
+              'AP6' : 'A_6^P'
+              'CP6' : 'C_6^P'
+              'AP15': 'A_{15}^P'
+              'CP15': 'C_{15}^P'
+              'BP3' : 'B_3^P'
+              'BP6' : 'B_6^P'
+              'BP15': 'B_{15}^P'
+              'DP3' : 'D_3^P'
+          matrix:
+            - [ "Re", "Im" ]
+            - [ "AT3", "CT3", "AT6", "CT6", "AT15", "CT15", "BT3", "BT6", "BT15", "DT3",
+                "AP3", "CP3", "AP6", "CP6", "AP15", "CP15", "BP3", "BP6", "BP15", "DP3" ]
+      'nonleptonic::%1%{%2%}@QCDF' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\mathrm{%1%}\,%2%$'
+            map:
+              'alpha1'    :  '\alpha_1'
+              'alpha2'    :  '\alpha_2'
+              'b1'        :  '\b_1'
+              'b2'        :  '\b_2'
+              'bS1'       :  '\b_{S1}'
+              'bS2'       :  '\b_{S2}'
+              'alpha3_u'  :  '\alpha_3^u'
+              'alpha3_c'  :  '\alpha_3^c'
+              'alpha4_u'  :  '\alpha_4^u'
+              'alpha4_c'  :  '\alpha_4^c'
+              'b3_u'      :  '\b_3^u'
+              'b3_c'      :  '\b_3^c'
+              'b4_u'      :  '\b_4^u'
+              'b4_c'      :  '\b_4^c'
+              'bS3_u'     :  '\b_{S3}^u'
+              'bS3_c'     :  '\b_{S3}^c'
+              'bS4_u'     :  '\b_{S4}^u'
+              'bS4_c'     :  '\b_{S4}^c'
+              'alpha3EW_u':  '\alpha_{3,EW}^u'
+              'alpha3EW_c':  '\alpha_{3,EW}^c'
+              'alpha4EW_u':  '\alpha_{4,EW}^u'
+              'alpha4EW_c':  '\alpha_{4,EW}^c'
+              'b3EW_u'    :  '\b_{3,EW}^u'
+              'b3EW_c'    :  '\b_{3,EW}^c'
+              'bS3EW_u'   :  '\b_{S3,EW}^u'
+              'bS3EW_c'   :  '\b_{S3,EW}^c'
+              'b4EW_u'    :  'b_{4,EW}^u'
+              'b4EW_c'    :  'b_{4,EW}^c'
+              'bS4EW_u'   :  'b_{S4,EW}^u'
+              'bS4EW_c'   :  'b_{S4,EW}^c'
+          matrix:
+            - [ "Re", "Im" ]
+            - [ "alpha1", "alpha2", "b1", "b2", "bS1", "bS2", "alpha3_u", "alpha3_c",
+                "alpha4_u", "alpha4_c", "b3_u", "b3_c", "b4_u", "b4_c", "bS3_u",
+                "bS3_c", "bS4_u", "bS4_c", "alpha3EW_u", "alpha3EW_c", "alpha4EW_u", "alpha4EW_c",
+                "b3EW_u", "b3EW_c", "bS3EW_u", "bS3EW_c", "b4EW_u", "b4EW_c",  "bS4EW_u", "bS4EW_c"]
   # }}}
