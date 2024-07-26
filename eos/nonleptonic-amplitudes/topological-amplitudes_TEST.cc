@@ -316,7 +316,7 @@ class TopologicalAmplitudesTest :
                 Options oo
                 {
                     { "q", "d" },
-                    { "P1", "eta'" },
+                    { "P1", "eta_prime" },
                     { "P2", "K_d" },
                     { "model", "CKM" },
                     { "cp-conjugate", "true"}
