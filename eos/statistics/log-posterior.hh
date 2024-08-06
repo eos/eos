@@ -113,16 +113,6 @@ namespace eos
             ///@}
 
         private:
-            /*!
-             * Find index of definition of parameter
-             * @param name
-             * @return index if found, _parameter_descriptions.size() if not found
-             */
-            unsigned index(const std::string & name) const;
-
-            LogPosterior *
-            private_clone() const;
-
             LogLikelihood _log_likelihood;
 
             Parameters _parameters;
