@@ -698,11 +698,21 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // LogPosterior
-    class_<LogPosterior>("LogPosterior", init<LogLikelihood>())
-        .def("add", &LogPosterior::add)
-        .def("log_likelihood", &LogPosterior::log_likelihood)
-        .def("log_priors", range(&LogPosterior::begin_priors, &LogPosterior::end_priors))
-        .def("evaluate", &LogPosterior::evaluate)
+    class_<LogPosterior>("LogPosterior", R"(
+            Represents a Bayesian posterior on the log scale.
+        )", init<LogLikelihood>())
+        .def("add", &LogPosterior::add, R"(
+            Adds a new prior object to the posterior.
+        )")
+        .def("log_likelihood", &LogPosterior::log_likelihood, R"(
+            Returns the likelihood object used as part of the posterior.
+        )")
+        .def("log_priors", range(&LogPosterior::begin_priors, &LogPosterior::end_priors), R"(
+            Returns a range of :class:`LogPrior` objects used as part of the posterior.
+        )")
+        .def("evaluate", &LogPosterior::evaluate, R"(
+            Returns the posterior probability density.
+        )")
         ;
 
     // test_statistics::ChiSquare
