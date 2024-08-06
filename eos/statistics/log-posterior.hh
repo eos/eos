@@ -38,6 +38,23 @@ namespace eos
 {
     class LogPosterior
     {
+        private:
+            LogLikelihood _log_likelihood;
+
+            Parameters _parameters;
+
+            /// names of all parameters. prevent using a parameter twice
+            std::set<QualifiedName> _parameter_names;
+
+            /// prior in N dimensions can decouple
+            /// at most into N 1D priors
+            std::vector<LogPriorPtr> _priors;
+
+            unsigned _informative_priors;
+
+            /// Parameters with priors
+            std::vector<Parameter> _varied_parameters;
+
         public:
             friend struct Implementation<LogPosterior>;
 
@@ -111,23 +128,6 @@ namespace eos
              */
             unsigned informative_priors() const;
             ///@}
-
-        private:
-            LogLikelihood _log_likelihood;
-
-            Parameters _parameters;
-
-            /// names of all parameters. prevent using a parameter twice
-            std::set<QualifiedName> _parameter_names;
-
-            /// prior in N dimensions can decouple
-            /// at most into N 1D priors
-            std::vector<LogPriorPtr> _priors;
-
-            unsigned _informative_priors;
-
-            /// Parameters with priors
-            std::vector<Parameter> _varied_parameters;
     };
 
     extern template class WrappedForwardIterator<LogPosterior::PriorIteratorTag, const LogPriorPtr>;
