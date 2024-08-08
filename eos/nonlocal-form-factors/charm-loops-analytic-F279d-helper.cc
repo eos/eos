@@ -30,6 +30,12 @@
 #include <cmath>
 #include <complex>
 
+#include <boost/predef.h>
+
+#if BOOST_COMP_GNUC
+#  pragma GCC optimize("no-var-tracking")
+#endif
+
 namespace eos
 {
 	using std::complex;
