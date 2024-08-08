@@ -37,6 +37,12 @@
 #include <functional>
 #include <memory>
 
+#include <boost/predef.h>
+
+#if BOOST_COMP_GNUC
+#  pragma GCC optimize("no-var-tracking")
+#endif
+
 namespace eos
 {
     template <typename Process_>
