@@ -1238,6 +1238,13 @@ GM:2001A:
     id: oai:arXiv.org:hep-ph/0104034
   inspire-id: Gambino:2001ew
   title: Quark mass effects in $\bar{B} \to X_s \gamma$
+GMKPRDEY:2011A:
+  authors: Garcia-Martin, R. and Kaminski, R. and Pelaez, J. R. and Ruiz de Elvira, J. and Yndurain, F. J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1102.2183
+  inspire-id: Garcia-Martin:2011iqs
+  title: 'The Pion-pion scattering amplitude. IV: Improved analysis with once subtracted Roy-like equations up to 1100 MeV'
 GN:1997A:
   authors: Guetta, Dafne and Nardi, Enrico
   eprint:
