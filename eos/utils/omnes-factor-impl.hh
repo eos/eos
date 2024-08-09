@@ -159,7 +159,7 @@ namespace eos
 
     // Compute sums of Eq. 58 in [M:1999A]
     template <unsigned order_, unsigned nints_>
-    std::array<double, order_> OmnesFactor<order_, nints_>::lq_sum(const double & z)
+    std::array<double, order_> OmnesFactor<order_, nints_>::lq_sum(const double & z) const
     {
         std::array<double, order_> ret_vec  {};
         LegendreReQVector<order_ - 1> lq_v;
@@ -180,7 +180,7 @@ namespace eos
 
     // Compute generic part of integrand of Eq. 57 in [M:1999A]
     template <unsigned order_, unsigned nints_>
-    std::array<double, order_> OmnesFactor<order_, nints_>::p_ab(const double & z, const double & a, const double & b)
+    std::array<double, order_> OmnesFactor<order_, nints_>::p_ab(const double & z, const double & a, const double & b) const
     {
         std::array<double, order_> ret_vec = lq_sum((2 * z - a - b) / (b - a));
         for (unsigned i = 0 ; i < order_ ; i++)
@@ -192,7 +192,7 @@ namespace eos
 
     // Compute generic part of integrand of Eq. 60 in [M:1999A]
     template <unsigned order_, unsigned nints_>
-    std::array<double, order_> OmnesFactor<order_, nints_>::p_inf(const double & z, const double & a)
+    std::array<double, order_> OmnesFactor<order_, nints_>::p_inf(const double & z, const double & a) const
     {
         std::array<double, order_> ret_vec  {};
         if (std::abs(z) > 1e-10)
@@ -218,7 +218,7 @@ namespace eos
 
     // Compute full integrand of Eq. 57 in [M:1999A]
     template <unsigned order_, unsigned nints_>
-    std::array<double, order_> OmnesFactor<order_, nints_>::rr_ab(const double & z, const double & a, const double & b)
+    std::array<double, order_> OmnesFactor<order_, nints_>::rr_ab(const double & z, const double & a, const double & b) const
     {
         std::array<double, order_> ret_vec  {};
         std::array<double, order_> pab = p_ab(z, a, b);
@@ -232,7 +232,7 @@ namespace eos
 
     // Compute full integrand of Eq. 60 in [M:1999A]
     template <unsigned order_, unsigned nints_>
-    std::array<double, order_> OmnesFactor<order_, nints_>::rr_inf(const double & z, const double & a)
+    std::array<double, order_> OmnesFactor<order_, nints_>::rr_inf(const double & z, const double & a) const
     {
         std::array<double, order_> ret_vec  {};
         std::array<double, order_> pinf = p_inf(z, a);
@@ -245,7 +245,7 @@ namespace eos
     }
 
     template <unsigned order_, unsigned nints_>
-    complex<double> OmnesFactor<order_, nints_>::evaluate_omnes(const double & s)
+    complex<double> OmnesFactor<order_, nints_>::evaluate_omnes(const double & s) const
     {
         double res = 0.0;
 
