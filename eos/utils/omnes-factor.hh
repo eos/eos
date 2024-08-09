@@ -68,17 +68,17 @@ namespace eos
             OmnesFactor(const std::array<double, nints_> & intervals, std::function<double(const double &)> scattering_phase);
 
             // Helper routines to compute ingredients for solution
-            std::array<double, order_> lq_sum(const double & z);
-            std::array<double, order_> p_ab(const double & z, const double & a, const double & b);
-            std::array<double, order_> p_inf(const double & z, const double & a);
-            std::array<double, order_> rr_ab(const double & z, const double & a, const double & b);
-            std::array<double, order_> rr_inf(const double & z, const double & a);
+            std::array<double, order_> lq_sum(const double & z) const;
+            std::array<double, order_> p_ab(const double & z, const double & a, const double & b) const;
+            std::array<double, order_> p_inf(const double & z, const double & a) const;
+            std::array<double, order_> rr_ab(const double & z, const double & a, const double & b) const;
+            std::array<double, order_> rr_inf(const double & z, const double & a) const;
 
             // Solve the system of equations
             std::array<double, nints_ * order_> solve_sys(const double & bc_pos);
 
             // Evaluate results
-            complex<double> evaluate_omnes(const double & s);
+            complex<double> evaluate_omnes(const double & s) const;
 
         public:
             // Constructors
@@ -95,7 +95,7 @@ namespace eos
             std::array<double, nints_ * order_> get_weights() { return _sol; }
 
             // Return Omnes factor evaluated at s
-            complex<double> constexpr operator() (const double & s)
+            complex<double> constexpr operator() (const double & s) const
             {
                 double eps = 1e-7;
                 for (unsigned i = 0 ; i < nints_ ; i++)
