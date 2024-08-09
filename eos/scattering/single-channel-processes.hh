@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2024 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,31 +17,22 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_UTILS_TRANSITIONS_HH
-#define EOS_GUARD_EOS_UTILS_TRANSITIONS_HH 1
+#ifndef EOS_GUARD_EOS_SCATTERING_SINGLE_CHANNEL_PROCESSES_HH
+#define EOS_GUARD_EOS_SCATTERING_SINGLE_CHANNEL_PROCESSES_HH 1
+
+#include <array>
 
 namespace eos
 {
-    /* Mesonic Tags */
+    /* PP -> PP Processes */
 
-    struct PToV { };
-    struct PToGamma { };
-    struct PToGammaOffShell { };
-    struct PToP { };
-    struct PToPP { };
-    struct VToP { };
-    struct VToV { };
+    struct PiPiToPiPi {
+        using Transition = PPToPP;
+        static constexpr const char * label = "pipi->pipi";
+        static constexpr const char * name_P = "mass::pi^+";
+        static constexpr const std::array<const char *, 3> iso = { "0" , "1" , "2" };
+    };
 
-    /* Baryonic Tags */
-
-    // J=1/2^+ -> J=1/2^+ transitions
-    struct OneHalfPlusToOneHalfPlus { };
-    // J=1/2^+ -> J=1/2^- transitions
-    struct OneHalfPlusToOneHalfMinus { };
-    // J=1/2^+ -> J=3/2^- transitions
-    struct OneHalfPlusToThreeHalfMinus { };
-
-    /* Scattering Tags */
-    struct PPToPP {};
 }
+
 #endif

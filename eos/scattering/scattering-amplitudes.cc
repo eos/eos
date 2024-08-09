@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2024 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,31 +17,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_UTILS_TRANSITIONS_HH
-#define EOS_GUARD_EOS_UTILS_TRANSITIONS_HH 1
+#include <eos/scattering/scattering-amplitudes.hh>
 
 namespace eos
 {
-    /* Mesonic Tags */
-
-    struct PToV { };
-    struct PToGamma { };
-    struct PToGammaOffShell { };
-    struct PToP { };
-    struct PToPP { };
-    struct VToP { };
-    struct VToV { };
-
-    /* Baryonic Tags */
-
-    // J=1/2^+ -> J=1/2^+ transitions
-    struct OneHalfPlusToOneHalfPlus { };
-    // J=1/2^+ -> J=1/2^- transitions
-    struct OneHalfPlusToOneHalfMinus { };
-    // J=1/2^+ -> J=3/2^- transitions
-    struct OneHalfPlusToThreeHalfMinus { };
-
-    /* Scattering Tags */
-    struct PPToPP {};
+    NoSuchScatteringAmplitudeError::NoSuchScatteringAmplitudeError(const std::string & process, const std::string & tag) :
+        Exception("No scattering amplitude found for process '" + process + "' and tag '" + tag + "'!")
+    {
+    }
 }
-#endif
