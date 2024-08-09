@@ -40,5 +40,8 @@ namespace eos
     struct OneHalfPlusToOneHalfMinus { };
     // J=1/2^+ -> J=3/2^- transitions
     struct OneHalfPlusToThreeHalfMinus { };
+
+    /* Scattering Tags */
+    struct PPToPP {};
 }
 #endif
