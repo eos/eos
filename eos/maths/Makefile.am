@@ -19,6 +19,7 @@ libeosmaths_la_SOURCES = \
 	matrix.hh \
 	multiplepolylog-li22.cc multiplepolylog-li22.hh \
 	multiplepolylog-li22-const.cc multiplepolylog-li22-const.hh \
+	outer-function.hh outer-function.cc \
 	polylog.cc polylog.hh \
 	power-of.hh \
 	szego-polynomial.hh
@@ -50,6 +51,7 @@ include_eos_utils_HEADERS = \
 	matrix.hh \
 	multiplepolylog-li22.hh \
 	multiplepolylog-li22-const.hh \
+	outer-function.hh \
 	polylog.hh \
 	power-of.hh \
 	szego-polynomial.hh
@@ -67,6 +69,7 @@ TESTS = \
 	legendre-polynomial-vector_TEST \
 	matrix_TEST \
 	multiplepolylog_TEST \
+	outer-function_TEST \
 	polylog_TEST \
 	power_of_TEST \
 	szego-polynomial_TEST
@@ -98,6 +101,8 @@ legendre_polynomial_vector_TEST_SOURCES = legendre-polynomial-vector_TEST.cc
 matrix_TEST_SOURCES = matrix_TEST.cc
 
 multiplepolylog_TEST_SOURCES = multiplepolylog_TEST.cc
+
+outer_function_TEST_SOURCES = outer-function_TEST.cc
 
 polylog_TEST_SOURCES = polylog_TEST.cc
 
