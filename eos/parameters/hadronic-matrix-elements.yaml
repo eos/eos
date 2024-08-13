@@ -6304,3 +6304,112 @@ groups:
                 "bS3_c", "bS4_u", "bS4_c", "alpha3EW_u", "alpha3EW_c", "alpha4EW_u", "alpha4EW_c",
                 "b3EW_u", "b3EW_c", "bS3EW_u", "bS3EW_c", "b4EW_u", "b4EW_c",  "bS4EW_u", "bS4EW_c"]
   # }}}
+
+  # Two-hadron form factors
+  # {{{
+  - title: 'Parameters in P->PP form-factor parametrization'
+    description: ''
+    parameters:
+      # Masses used in [HKVT:2025A]
+      'mass::pi^+@HKvT2025' :
+          central: +0.13957
+          min:     +0.13957
+          max:     +0.13957
+          unit:     'GeV'
+          latex:    '$m_{\pi^+}^\mathrm{HKVT}$'
+      'mass::pi^0@HKvT2025' :
+          central: +0.135
+          min:     +0.135
+          max:     +0.135
+          unit:     'GeV'
+          latex:    '$m_{\pi^0}^\mathrm{HKVT}$'
+      'mass::B_u@HKvT2025' :
+          central: +5.279
+          min:     +5.279
+          max:     +5.279
+          unit:     'GeV'
+          latex:    '$m_{B^+}^\mathrm{HKVT}$'
+      'mass::B_d@HKvT2025' :
+          central: +5.279
+          min:     +5.279
+          max:     +5.279
+          unit:     'GeV'
+          latex:    '$m_{B^0}^\mathrm{HKVT}$'
+      'mass::Bstar@HKvT2025' :
+          central: +5.324
+          min:     +5.324
+          max:     +5.324
+          unit:     'GeV'
+          latex:    '$m_{B^\ast}^\mathrm{HKVT}$'
+      # Susceptibilities
+      'B->pipi::chi_0m_a@HKvT2025' :
+          central: +1.516e-2
+          min:     +1.516e-2
+          max:     +1.516e-2
+          unit:     '1'
+          latex:    '$\chi^{A}_{L}(0)$'
+      'B->pipi::chi_1p_a@HKvT2025' :
+          central: +5.742e-4
+          min:     +5.742e-4
+          max:     +5.742e-4
+          unit:     'GeV^{-2}'
+          latex:    '$\chi^{A}_{T}(0)$'
+      'B->pipi::chi_1m_v@HKvT2025' :
+          central: +5.742e-4
+          min:     +5.742e-4
+          max:     +5.742e-4
+          unit:     'GeV^{-2}'
+          latex:    '$\chi^{V}_{T}(0)$'
+      # Input for the conformal mappings
+      'B->pipi::tp_a@HKvT2025' :
+          central: +29.8
+          min:     +29.8
+          max:     +29.8
+          comment:  '(Mbstar + mpi0)^2'
+          unit:     'GeV^2'
+          latex:    '$t^+_a$'
+      'B->pipi::tp_v@HKvT2025' :
+          central: +29.8
+          min:     +29.8
+          max:     +29.8
+          comment:  '(Mbstar + mpi0)^2'
+          unit:     'GeV^2'
+          latex:    '$t^+_v$'
+      'B->pipi::t0@HKvT2025' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     'GeV^2'
+          latex:    '$t_0$'
+      'B->pipi::sin0@HKvT2025' :
+          central: +0.976144
+          min:     +0.976144
+          max:     +0.976144
+          unit:     'GeV^2'
+          latex:    '$t_0$'
+      'B->pipi::sin1@HKvT2025' :
+          central: +0.81
+          min:     +0.81
+          max:     +0.81
+          unit:     'GeV^2'
+          latex:    '$t_0$'
+      'B->pipi::s0@HKvT2025' :
+          central: +0.07792
+          min:     +0.07792
+          max:     +0.07792
+          unit:     'GeV^2'
+          latex:    '$s_0$'
+      'B->pipi::a^%1%_%2%_%3%_%4%_%5%@HKvT2025' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_{%2%,%3%,%4%%5%}^{%1%,B \to \pi\pi,\mathrm{HKvT2025}}$'
+          matrix:
+            - ["g", "f", "F1", "F2"]
+            - [0, 1]
+            - [0, 1, 2]
+            - [0, 1, 2]
+            - [0, 1, 2]
+
+  # }}}
