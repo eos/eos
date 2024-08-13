@@ -104,7 +104,7 @@ namespace eos
                 // Fill I and J recursively and compute Verblunsky coefficients
                 for (unsigned n = 1; n < order_; ++n)
                 {
-                    for (unsigned i = 0; i <= order_; ++i)
+                    for (unsigned i = 0; i < order_; ++i)
                     {
                         // cf. [S:2004B], eq. (1.4), p.2, integrated over the arc of the unit circle
                         I[n][i] = I[n - 1][i + 1] - verblunsky[n - 1] * J[n - 1][i    ];
