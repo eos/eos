@@ -105,12 +105,12 @@ class SzegoPolynomialTest :
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p.derivatives(-0.1);
 
-                    TEST_CHECK_NEARLY_EQUAL(p0,    0.0,                1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p1, +0.982422,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p2, -2.56765,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p3, +6.48297,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p4, -15.2203,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p5, +34.0797,            1.0e-5);
+                    TEST_CHECK_NEARLY_EQUAL(std::real(p0),    0.0,                1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(std::real(p1), +0.982422,           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(std::real(p2), -2.56765,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(std::real(p3), +6.48297,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(std::real(p4), -15.2203,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(std::real(p5), +34.0797,            1.0e-5);
                 }
 
                 {
