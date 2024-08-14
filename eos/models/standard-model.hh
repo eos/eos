@@ -263,6 +263,10 @@ namespace eos
             /* QCD parameters */
             UsedParameter _alpha_s_Z__sbqq;
             UsedParameter _m_Z__sbqq;
+            UsedParameter _mu_t__sbqq;
+
+            /* Masses */
+            UsedParameter _m_t_pole__sbqq;
 
             /* Matching scale */
             UsedParameter _m_W__sbqq;
