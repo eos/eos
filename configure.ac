@@ -89,17 +89,9 @@ AC_MSG_CHECKING([for <source_location>])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS -std=c++20"
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-	#ifdef __clang__
-	#  include <experimental/source_location>
-	#else
-	#  include <source_location>
-	#endif
+	#include <source_location>
 
-	#ifdef __clang__
-		using source_location = std::experimental::source_location;
-	#else
-		using source_location = std::source_location;
-	#endif
+	using source_location = std::source_location;
 
 	int main(int, char **)
 	{
