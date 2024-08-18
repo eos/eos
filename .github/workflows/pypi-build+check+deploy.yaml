@@ -18,16 +18,41 @@ jobs:
         strategy:
             matrix:
                 include:
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 39,  version: cp39,  runner: ubuntu-20.04         }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-20.04         }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-20.04         }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-20.04         }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp39,  runner: ubuntu-24.04-aarch64 }
+                  #- { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 39,  version: cp39,  runner: ubuntu-20.04          }
+                  #- { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-20.04          }
+                  #- { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-20.04          }
+                  #- { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-20.04          }
+                  #- { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp39,  runner: ubuntu-24.04-aarch64  }
+                  - { arch: x86_64, cxxflags: '-march=x86-64',     boost_python_suffix: 312, version: cp312, runner: macos-13,
+                      prefix: '/usr/local',
+                      image_sha256: 'e532582907eaaa9b25db587563b6b45a4b3554d9b8eff30dda8dcbd7a9c84ec7'                                     }
+                  #- { arch: arm64,   cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: macos-14,
+                  #    prefix: '/opt/homebrew',
+                  #    image_sha256: 'a444d8df74a56826cf58aaac2cad03b514f1557b8a98882cc74ac3cc5eab3b57'                                     }
         runs-on: ${{ matrix.runner }}
-        name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
+        name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }} on runner ${{ matrix.runner }}
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
+
+            - name: Install build dependencies and image
+              if: ${{ runner.os == 'macOS' }}
+              run: |
+                brew install \
+                  autoconf automake libtool m4 make pkg-config
+                export TOKEN="$(curl "https://ghcr.io/token?scope=repository:eos/docker.io:pull" | awk -F'"' '$0=$4')"
+                curl \
+                  -L \
+                  -H "Authorization: Bearer ${TOKEN}" \
+                  -H "Accept: application/vnd.oci.image.layer.v1.tar" \
+                  --cookie /dev/null \
+                  --output image.tar.gz \
+                  https://ghcr.io/v2/eos/docker.io/blobs/sha256:${{ matrix.image_sha256}}
+                gtar \
+                  --no-overwrite-dir --touch \
+                  --strip-components=2 \
+                  -C ${{ matrix.prefix }} \
+                  -zxf ./image.tar.gz
 
             - name: Create a package directory to make cibuildwheel happy
               run: |
@@ -46,12 +71,12 @@ jobs:
               with:
                 package-dir: eoshep
               env:
-                CIBW_BUILD: ${{ matrix.version}}-*
+                CIBW_BUILD: ${{ matrix.version }}-*
                 CIBW_SKIP: \*-musllinux_*
-                CIBW_ARCHS: ${{ matrix.arch}}
+                CIBW_ARCHS: ${{ matrix.arch }}
                 CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_28@sha256:73adc406a728a2ee1aff8b39185012554ab72be1d8d74f3dc66797dbe698f046
                 CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_28@sha256:f07ce0cffd3aac0a4358f9fa6ee5d0c932945f39e4f3681bb317532f4f2e571b
-                CIBW_BEFORE_BUILD_LINUX: |
+                CIBW_BEFORE_BUILD: |
                   pushd {project}
                   ./autogen.bash
                   export BOOST_PYTHON_SKIP=yes
