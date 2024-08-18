@@ -24,7 +24,7 @@ EXTRA_DIST = \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
 	eos/data/native.py \
-    eos/data/native_TEST.d \
+	eos/data/native_TEST.d \
 	eos/figure/__init__.py \
 	eos/figure/config.py \
 	eos/figure/figure.py \
