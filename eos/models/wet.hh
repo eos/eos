@@ -282,7 +282,7 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbnunu Wilson coefficients */
+            /* sbcu Wilson coefficients */
             virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
     };
 
@@ -298,7 +298,7 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* sbnunu Wilson coefficients */
+            /* dbcu Wilson coefficients */
             virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
     };
 
@@ -352,6 +352,22 @@ namespace eos
 
             /* b->c Wilson coefficients */
             virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+
+    };
+
+    template <>
+    class WilsonScanComponent<components::WET::SB> :
+    public virtual ModelComponent<components::WET::SB>
+    {
+        private:
+            /* sbqq Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 80> _sbqq_parameters;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* sbqq Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBQQ> wet_sbqq(const bool & cp_conjugate) const;
     };
 
     /*!
@@ -369,7 +385,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
         public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SCNuL>
+        public WilsonScanComponent<components::WET::SCNuL>,
+        public WilsonScanComponent<components::WET::SB>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -403,7 +420,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
         public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SCNuL>
+        public WilsonScanComponent<components::WET::SCNuL>,
+        public WilsonScanComponent<components::WET::SB>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

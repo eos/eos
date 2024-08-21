@@ -257,6 +257,30 @@ namespace eos
             virtual WilsonCoefficients<ChargedCurrent> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::WET::SB> :
+    public virtual ModelComponent<components::WET::SB>
+    {
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__sbqq;
+            UsedParameter _m_Z__sbqq;
+            UsedParameter _mu_t__sbqq;
+
+            /* Masses */
+            UsedParameter _m_t_pole__sbqq;
+
+            /* Matching scale */
+            UsedParameter _m_W__sbqq;
+            UsedParameter _mu_0__sbqq;
+
+            /* Low scale */
+            UsedParameter _mu__sb;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            virtual WilsonCoefficients<wc::SBQQ> wet_sbqq(const bool & cp_conjugate) const;
+    };
+
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
@@ -268,7 +292,8 @@ namespace eos
         public SMComponent<components::WET::SBNuNu>,
         public SMComponent<components::WET::SBCU>,
         public SMComponent<components::WET::DBCU>,
-        public SMComponent<components::WET::SCNuL>
+        public SMComponent<components::WET::SCNuL>,
+        public SMComponent<components::WET::SB>
     {
         public:
             StandardModel(const Parameters &);

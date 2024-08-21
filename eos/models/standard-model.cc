@@ -1128,6 +1128,120 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::WET::SB>::SMComponent(const Parameters & p , ParameterUser & u) :
+        _alpha_s_Z__sbqq(p["QCD::alpha_s(MZ)"], u),
+        _m_Z__sbqq(p["mass::Z"], u),
+        _m_W__sbqq(p["mass::W"], u),
+        _mu_0__sbqq(p["sbqq::mu_0"], u),
+        _mu__sb(p["sb::mu"], u),
+        _mu_t__sbqq(p["QCD::mu_t"], u),
+        _m_t_pole__sbqq(p["mass::t(pole)"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBQQ>
+    SMComponent<components::WET::SB>::wet_sbqq(const bool & /* cp_conjugate */) const
+    {
+        // SM Wilson coefficients are real so cp conjugation has no effect
+
+        // RGE
+        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 11u> rge
+        {
+            // gamma_0: eigenvalues
+            std::array<double, 11u>{{
+                -19.494503, -13.790721, -12.819708, 12.093029, -8.0000000, -6.4858258, 6.2654910, 4.0000000, 4.0000000, 2.2332779, 2.2211815
+            }},
+            // gamma_0: V
+            {{
+                {{0,0,0,0,-1.00000000,0,0,0,1.00000000,0,0}},
+                {{0,0,0,0,0.333333333,0,0,0,0.666666667,0,0}},
+                {{-0.00888718779,-0.0107035682,1.51315026,0.135698334,-0.0370370370,-0.0200744548,-0.113763345,0.0634920635,0.0317460317,0.0810493047,1.06027001}},
+                {{-0.0565215183,-0.0655927704,9.74852994,-0.241743497,0.111111111,0.00583079358,0.0408844728,0.0952380952,0.0476190476,-0.0763605912,-0.986766989}},
+                {{0.000663783899,0.000483358181,-0.0463214633,-0.0162052853,0.00925925926,0.00336138495,0.0161441871,-0.0158730159,-0.00793650794,-0.00411591439,-0.0546038906}},
+                {{0.00274062101,0.00505945904,-0.841241774,-0.0199191229,-0.0277777778,-0.00548838474,0.0186705861,-0.0238095238,-0.0119047619,0.00556786345,0.0713875393}},
+                {{-0.0322597457,0,1.82885075,-0.165870115,0,0,0,0,0,0,-1.63072088}},
+                {{-0.417566380,0,2.32733294,-2.77515573,0,0,0,0,0,0,0.865389169}},
+                {{-0.0199827510,0,-0.559744385,0.453850259,0,0,0,0,0,0,0.125876878}},
+                {{0.0431354138,0,0.460604211,0.504137026,0,0,0,0,0,0,-0.00787665082}},
+                {{0,0,0,0,0,0,0,1.00000000,0,0,0}}
+            }},
+            // gamma_1
+            {{
+                {{-355. / 9., -502. / 27., -1412. / 243., -1369. / 243., 134. / 243., -35. / 162., 0., 0., 0., 0., 0}},
+                {{-35. / 3., -28. / 3., -416. / 81., 1280. / 81., 56. / 81., 35. / 27., 0., 0., 0., 0., 0}},
+                {{0., 0., -4468. / 81., -31469. / 81., 400. / 81., 3373. / 108., 0., 0., 0., 0., 0}},
+                {{0., 0., -8158. / 243., -59399. / 243., 269. / 483., 12899. / 648., 0., 0., 0., 0., 0}},
+                {{0., 0., -251680. / 81., -128648. / 81., 23836. / 81., 6106. / 27., 0., 0., 0., 0., 0}},
+                {{0., 0., 58640. / 243., -26348. / 243., -14324. / 243., -2551. / 162., 0., 0., 0., 0., 0}},
+                {{0., 0., 832. / 243., -4000. / 243., -112. / 243., -70. / 81., -404. / 9., -3077. / 9., 32. / 9., 1031. / 36., 0}},
+                {{0., 0., 3376. / 729., 6344. / 729., -280. / 729., 55. / 486., -2698. / 81., -8035. / 27., -49. / 162., 4493. / 216., 0}},
+                {{0., 0., 2272. / 243., -72088. / 243., -688. / 243., -1240. / 81., -19072. / 9., -14096. / 9., 1708. / 9., 1622. / 9., 0}},
+                {{0., 0., 45424. / 729., 84236. / 729., -3880. / 729., 1220. / 243., 32288. / 81., -15976. / 27., -6692. / 81., -2437. / 54., 0}},
+                {{0., 0., -1576. / 81., 446. / 27., 172. / 81., 40. / 27., 0., 0., 0., 0., 325. / 9.}}
+            }}
+        };
+
+        WilsonCoefficients<wc::SBQQ> wc;
+        wc._unprimed.fill(complex<double>(0.0));
+        wc._primed.fill(complex<double>(0.0));
+
+        // only unprimed WCs are non-zero in the SM
+        // leading order in alpha_s
+        const std::array<double, 11u> lo_unprimed = {
+            0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.
+        };
+        // next-to-leading order in alpha_s
+
+        // calculate alpha_s
+        static const double nf    = 5.0;
+        static const auto & beta5 = QCD::beta_function_nf_5;
+        static const auto & beta6 = QCD::beta_function_nf_6;
+        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__sbqq, _alpha_s_Z__sbqq, _m_Z__sbqq, beta5);
+
+        double alpha_s_m_t_pole = 0.0;
+        if (_mu_t__sbqq <= _m_t_pole__sbqq)
+        {
+            alpha_s_m_t_pole = QCD::alpha_s(_mu_t__sbqq, _alpha_s_Z__sbqq, _m_Z__sbqq, beta5);
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__sbqq, alpha_s_m_t_pole, _mu_t__sbqq, beta6);
+        }
+        else
+        {
+            Log::instance()->message("sm_component<sbqq>.wc", ll_error)
+                << "mu_t > m_t_pole!";
+
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__sbqq, _alpha_s_Z__sbqq, _m_Z__sbqq, beta5);
+        }
+
+        // calculate m_t at the matching scale in the MSbar scheme
+        const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__sbqq, alpha_s_m_t_pole, nf);
+        const double m_t_mu_0 = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
+        const double xt = power_of<2>(m_t_mu_0/_m_W__sbqq);
+
+        const double E0 = ( (8 - 42*xt + 35*power_of<2>(xt) - 7*power_of<3>(xt)) / (12*power_of<3>(xt-1)) ) - (4 - 16*xt+ 9*power_of<2>(xt))*std::log(xt) / (6*power_of<4>(xt-1));
+        const double L = 2.0 * std::log(_mu_0__sbqq / _m_W__sbqq);
+        const std::array<double, 11u> nlo_unprimed = {
+            +15.0 + 6.0 * L,
+            0.,
+            0.,
+            E0    + 2.0 / 3.0 * L,
+            0.,
+            0.,
+            0.,
+            0.,
+            0.,
+            0.,
+            0.,
+        };
+
+        const double alpha_s_mu   = QCD::alpha_s(_mu__sb,     _alpha_s_Z__sbqq, _m_Z__sbqq, beta5);
+
+        const auto _unprimed = rge.evolve(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+
+        std::copy(_unprimed.begin(), _unprimed.end(), wc._unprimed.begin());
+
+        return wc;
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
@@ -1138,7 +1252,8 @@ namespace implementation
         SMComponent<components::WET::SBNuNu>(p, *this),
         SMComponent<components::WET::SBCU>(p, *this),
         SMComponent<components::WET::DBCU>(p, *this),
-        SMComponent<components::WET::SCNuL>(p, *this)
+        SMComponent<components::WET::SCNuL>(p, *this),
+        SMComponent<components::WET::SB>(p, *this)
     {
     }
 
