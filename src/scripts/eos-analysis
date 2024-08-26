@@ -479,6 +479,29 @@ Validates the analysis file by checking that all posteriors and all prediction s
     parser_validate.set_defaults(cmd = cmd_validate)
 
 
+    # report
+    parser_report = subparsers.add_parser('report',
+        parents = [common_subparser],
+        description =
+'''
+Generates a report of the analysis based on the analysis file and the recorded results.
+''',
+        help = 'Generates a report of the analysis.'
+    )
+    parser_report.add_argument('template_file', metavar='TEMPLATE',
+        help = 'The file name of the template that is used to generate the report.'
+    )
+    parser_report.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_report.add_argument('-o', '--output-file',
+        help = 'The file name of the output report. If not provided, the report will be printed to the console.',
+        dest = 'output_file', action = 'store', default = None
+    )
+    parser_report.set_defaults(cmd = cmd_report)
+
+
     # run
     parser_run = subparsers.add_parser('run',
         parents = [common_subparser],
@@ -690,6 +713,11 @@ def cmd_predict_observables(args):
 # Validate analysis file
 def cmd_validate(args):
     return eos.validate(**args_to_dict(args))
+
+
+# Report
+def cmd_report(args):
+    return print(eos.report(**args_to_dict(args)))
 
 
 # Run steps
