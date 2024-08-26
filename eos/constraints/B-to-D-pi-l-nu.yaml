@@ -50,70 +50,70 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[w]@Belle:2017A:
         - [0.4006477, 0.4512786, 0.5532237, 0.5724568, 0.4947789, 0.6020515, 0.8512704, 0.9999999, 0.8254023]
         - [0.3718988, 0.4290042, 0.5242777, 0.5447906, 0.4958819, 0.4913688, 0.6096553, 0.8254024, 1.0      ]
 
-B^0->(Dpi)^+l^-nu::KinematicalDistribution[c_D,c_l,chi]@Belle:2017A:
+B^0->(Dpi)^+l^-nu::KinematicalDistribution[cos(theta_D),cos(theta_l),phi]@Belle:2017A:
     type: MultivariateGaussian
     observables:
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
     kinematics:
-        - { c_D_min: -1.0, c_D_max: -0.8 }
-        - { c_D_min: -0.8, c_D_max: -0.6 }
-        - { c_D_min: -0.6, c_D_max: -0.4 }
-        - { c_D_min: -0.4, c_D_max: -0.2 }
-        - { c_D_min: -0.2, c_D_max:  0.0 }
-        - { c_D_min:  0.0, c_D_max: +0.2 }
-        - { c_D_min: +0.2, c_D_max: +0.4 }
-        - { c_D_min: +0.4, c_D_max: +0.6 }
-        - { c_D_min: +0.6, c_D_max: +0.8 }
-        - { c_D_min: +0.8, c_D_max: +1.0 }
-        - { c_l_min: -1.0, c_l_max: -0.8 }
-        - { c_l_min: -0.8, c_l_max: -0.6 }
-        - { c_l_min: -0.6, c_l_max: -0.4 }
-        - { c_l_min: -0.4, c_l_max: -0.2 }
-        - { c_l_min: -0.2, c_l_max:  0.0 }
-        - { c_l_min:  0.0, c_l_max: +0.2 }
-        - { c_l_min: +0.2, c_l_max: +0.4 }
-        - { c_l_min: +0.4, c_l_max: +0.6 }
-        - { c_l_min: +0.6, c_l_max: +0.8 }
-        - { c_l_min: +0.8, c_l_max: +1.0 }
-        - { chi_min: 0.00000, chi_max: 0.62832}
-        - { chi_min: 0.62832, chi_max: 1.25664}
-        - { chi_min: 1.25664, chi_max: 1.88496}
-        - { chi_min: 1.88496, chi_max: 2.51327}
-        - { chi_min: 2.51327, chi_max: 3.14159}
-        - { chi_min: 3.14159, chi_max: 3.76991}
-        - { chi_min: 3.76991, chi_max: 4.39823}
-        - { chi_min: 4.39823, chi_max: 5.02655}
-        - { chi_min: 5.02655, chi_max: 5.65487}
-        - { chi_min: 5.65487, chi_max: 6.28319}
+        - { cos(theta_D)_min: -1.0, cos(theta_D)_max: -0.8 }
+        - { cos(theta_D)_min: -0.8, cos(theta_D)_max: -0.6 }
+        - { cos(theta_D)_min: -0.6, cos(theta_D)_max: -0.4 }
+        - { cos(theta_D)_min: -0.4, cos(theta_D)_max: -0.2 }
+        - { cos(theta_D)_min: -0.2, cos(theta_D)_max:  0.0 }
+        - { cos(theta_D)_min:  0.0, cos(theta_D)_max: +0.2 }
+        - { cos(theta_D)_min: +0.2, cos(theta_D)_max: +0.4 }
+        - { cos(theta_D)_min: +0.4, cos(theta_D)_max: +0.6 }
+        - { cos(theta_D)_min: +0.6, cos(theta_D)_max: +0.8 }
+        - { cos(theta_D)_min: +0.8, cos(theta_D)_max: +1.0 }
+        - { cos(theta_l)_min: -1.0, cos(theta_l)_max: -0.8 }
+        - { cos(theta_l)_min: -0.8, cos(theta_l)_max: -0.6 }
+        - { cos(theta_l)_min: -0.6, cos(theta_l)_max: -0.4 }
+        - { cos(theta_l)_min: -0.4, cos(theta_l)_max: -0.2 }
+        - { cos(theta_l)_min: -0.2, cos(theta_l)_max:  0.0 }
+        - { cos(theta_l)_min:  0.0, cos(theta_l)_max: +0.2 }
+        - { cos(theta_l)_min: +0.2, cos(theta_l)_max: +0.4 }
+        - { cos(theta_l)_min: +0.4, cos(theta_l)_max: +0.6 }
+        - { cos(theta_l)_min: +0.6, cos(theta_l)_max: +0.8 }
+        - { cos(theta_l)_min: +0.8, cos(theta_l)_max: +1.0 }
+        - { phi_min: 0.00000, phi_max: 0.62832}
+        - { phi_min: 0.62832, phi_max: 1.25664}
+        - { phi_min: 1.25664, phi_max: 1.88496}
+        - { phi_min: 1.88496, phi_max: 2.51327}
+        - { phi_min: 2.51327, phi_max: 3.14159}
+        - { phi_min: 3.14159, phi_max: 3.76991}
+        - { phi_min: 3.76991, phi_max: 4.39823}
+        - { phi_min: 4.39823, phi_max: 5.02655}
+        - { phi_min: 5.02655, phi_max: 5.65487}
+        - { phi_min: 5.65487, phi_max: 6.28319}
     options:
         [{}, {}, {}, {}, {}, {},
          {}, {}, {}, {}, {}, {},
@@ -295,7 +295,7 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[c_D,c_l,chi]@Belle:2017A:
            0.471779, 0.504196, 0.499079, 0.504288, 0.462851, 0.490262,
            0.539642, 0.519853, 0.261603, 0.324782, 0.429447, 0.497298,
            0.468187, 0.470658, 0.419953, 0.565412, 0.87824,  1.      ]
-B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,c_D,c_l,chi]@Belle:2017A:
+B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,cos(theta_D),cos(theta_l),phi]@Belle:2017A:
     type: MultivariateGaussian
     observables:
         - B->Dpilnu::P(w_min,w_max)
@@ -308,36 +308,36 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,c_D,c_l,chi]@Belle:2017A:
         - B->Dpilnu::P(w_min,w_max)
         - B->Dpilnu::P(w_min,w_max)
         - B->Dpilnu::P(w_min,w_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_D_min,c_D_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(c_l_min,c_l_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
-        - B->Dpilnu::P(chi_min,chi_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
+        - B->Dpilnu::P(phi_min,phi_max)
     kinematics:
         - { w_min:    1.0002, w_max:    1.05   }
         - { w_min:    1.05,   w_max:    1.10   }
@@ -349,36 +349,36 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,c_D,c_l,chi]@Belle:2017A:
         - { w_min:    1.35,   w_max:    1.40   }
         - { w_min:    1.40,   w_max:    1.45   }
         - { w_min:    1.45,   w_max:    1.503  }
-        - { c_D_min: -1.0,    c_D_max: -0.8    }
-        - { c_D_min: -0.8,    c_D_max: -0.6    }
-        - { c_D_min: -0.6,    c_D_max: -0.4    }
-        - { c_D_min: -0.4,    c_D_max: -0.2    }
-        - { c_D_min: -0.2,    c_D_max:  0.0    }
-        - { c_D_min:  0.0,    c_D_max: +0.2    }
-        - { c_D_min: +0.2,    c_D_max: +0.4    }
-        - { c_D_min: +0.4,    c_D_max: +0.6    }
-        - { c_D_min: +0.6,    c_D_max: +0.8    }
-        - { c_D_min: +0.8,    c_D_max: +1.0    }
-        - { c_l_min: -1.0,    c_l_max: -0.8    }
-        - { c_l_min: -0.8,    c_l_max: -0.6    }
-        - { c_l_min: -0.6,    c_l_max: -0.4    }
-        - { c_l_min: -0.4,    c_l_max: -0.2    }
-        - { c_l_min: -0.2,    c_l_max:  0.0    }
-        - { c_l_min:  0.0,    c_l_max: +0.2    }
-        - { c_l_min: +0.2,    c_l_max: +0.4    }
-        - { c_l_min: +0.4,    c_l_max: +0.6    }
-        - { c_l_min: +0.6,    c_l_max: +0.8    }
-        - { c_l_min: +0.8,    c_l_max: +1.0    }
-        - { chi_min: 0.00000, chi_max: 0.62832 }
-        - { chi_min: 0.62832, chi_max: 1.25664 }
-        - { chi_min: 1.25664, chi_max: 1.88496 }
-        - { chi_min: 1.88496, chi_max: 2.51327 }
-        - { chi_min: 2.51327, chi_max: 3.14159 }
-        - { chi_min: 3.14159, chi_max: 3.76991 }
-        - { chi_min: 3.76991, chi_max: 4.39823 }
-        - { chi_min: 4.39823, chi_max: 5.02655 }
-        - { chi_min: 5.02655, chi_max: 5.65487 }
-        - { chi_min: 5.65487, chi_max: 6.28319 }
+        - { cos(theta_D)_min: -1.0,    cos(theta_D)_max: -0.8    }
+        - { cos(theta_D)_min: -0.8,    cos(theta_D)_max: -0.6    }
+        - { cos(theta_D)_min: -0.6,    cos(theta_D)_max: -0.4    }
+        - { cos(theta_D)_min: -0.4,    cos(theta_D)_max: -0.2    }
+        - { cos(theta_D)_min: -0.2,    cos(theta_D)_max:  0.0    }
+        - { cos(theta_D)_min:  0.0,    cos(theta_D)_max: +0.2    }
+        - { cos(theta_D)_min: +0.2,    cos(theta_D)_max: +0.4    }
+        - { cos(theta_D)_min: +0.4,    cos(theta_D)_max: +0.6    }
+        - { cos(theta_D)_min: +0.6,    cos(theta_D)_max: +0.8    }
+        - { cos(theta_D)_min: +0.8,    cos(theta_D)_max: +1.0    }
+        - { cos(theta_l)_min: -1.0,    cos(theta_l)_max: -0.8    }
+        - { cos(theta_l)_min: -0.8,    cos(theta_l)_max: -0.6    }
+        - { cos(theta_l)_min: -0.6,    cos(theta_l)_max: -0.4    }
+        - { cos(theta_l)_min: -0.4,    cos(theta_l)_max: -0.2    }
+        - { cos(theta_l)_min: -0.2,    cos(theta_l)_max:  0.0    }
+        - { cos(theta_l)_min:  0.0,    cos(theta_l)_max: +0.2    }
+        - { cos(theta_l)_min: +0.2,    cos(theta_l)_max: +0.4    }
+        - { cos(theta_l)_min: +0.4,    cos(theta_l)_max: +0.6    }
+        - { cos(theta_l)_min: +0.6,    cos(theta_l)_max: +0.8    }
+        - { cos(theta_l)_min: +0.8,    cos(theta_l)_max: +1.0    }
+        - { phi_min: 0.00000, phi_max: 0.62832 }
+        - { phi_min: 0.62832, phi_max: 1.25664 }
+        - { phi_min: 1.25664, phi_max: 1.88496 }
+        - { phi_min: 1.88496, phi_max: 2.51327 }
+        - { phi_min: 2.51327, phi_max: 3.14159 }
+        - { phi_min: 3.14159, phi_max: 3.76991 }
+        - { phi_min: 3.76991, phi_max: 4.39823 }
+        - { phi_min: 4.39823, phi_max: 5.02655 }
+        - { phi_min: 5.02655, phi_max: 5.65487 }
+        - { phi_min: 5.65487, phi_max: 6.28319 }
     options:
         [{}, {}, {}, {}, {}, {}, {}, {}, {}, {},
          {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
