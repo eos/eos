@@ -377,6 +377,41 @@ class AnalysisFile:
     def validate(self):
         """Validates the analysis file."""
         messages = []
+        # Check that all priors are known to EOS
+        known_params = eos.Parameters()
+        for p_name, pc in self._priors.items():
+            for description in pc.descriptions:
+                try:
+                    known_params[description.parameter]
+                except RuntimeError as e:
+                    messages.append(f"Error in prior {p_name}: {description.parameter} not known to EOS")
+        # Check that all likelihoods contain valid constraints and manual constraints
+        known_constraints = eos.Constraints()
+        for l_name, lc in self._likelihoods.items():
+            for description in lc.constraints:
+                if not known_constraints[description.constraint]:
+                    messages.append(f"Error in likelihood {l_name}: {description.constraint} not known to EOS")
+            for manual in lc.manual_constraints:
+                if known_constraints[manual.name]:
+                    messages.append("Error in likelihood {l_name}: {manual.name} matches an already defined constraint name")
+        # Check that all observables in a prediction are known to EOS
+        known_observables = eos.Observables()
+        for pred_name, pd in self._predictions.items():
+            for o in pd.observables:
+                if not known_observables[o.name]:
+                    messages.append(f"Error in prediction {pred_name}: {o.name} not known to EOS")
+        # Check that any parameters that are fixed (in posteriors or predictions) are known to EOS
+        for p_name, posterior in self._posteriors.items():
+            for param, value in posterior.fixed_parameters.items():
+                if not known_params[param]:
+                    messages.append(f"Error in posterior {p_name}: {param} not known to EOS")
+        for p_name, prediction in self._predictions.items():
+            for param, value in prediction.fixed_parameters.items():
+                if not known_params[param]:
+                    messages.append(f"Error in prediction {p_name}: {param} not known to EOS")
+
+        # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
+        # This will (hopefully) act as a catch all for any errors not spotted above
         for posterior in self._posteriors:
             try:
                 self.analysis(posterior)
@@ -391,6 +426,9 @@ class AnalysisFile:
 
             except Exception as e:
                 messages.append(f'Error encountered when creating posterior \'{posterior}\': {e}')
+        for m in messages:
+            print(m)
+        return messages
 
 
     @property
