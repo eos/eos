@@ -19,6 +19,7 @@
 import eos
 import contextlib
 import functools
+import glob
 import inspect
 import logging
 import numpy as _np
@@ -570,6 +571,47 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     eos.data.DynestyResults.create(os.path.join(base_directory, posterior, 'nested'), analysis.varied_parameters, results)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
+
+
+def _get_modes(posterior:str, base_directory:str='./'):
+    result = []
+    search_path = os.path.join(base_directory, posterior, 'mode-*')
+
+    for mode_dir in glob.glob(search_path):
+        name = mode_dir.split('mode-')[1]
+        mode = eos.data.Mode(mode_dir)
+        result.append((name, mode))
+
+    return result
+
+
+# Create a report
+@task('report', 'reports')
+def report(analysis_file:str, template_file:str, base_directory:str='./', output_file:str=None):
+    import jinja2
+
+    directory = os.path.dirname(template_file)
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(searchpath=directory),
+        undefined=jinja2.StrictUndefined, # error for undefined variables in
+                                          # template
+        trim_blocks=True,
+        lstrip_blocks=True)
+    template = env.get_template(template_file)
+    result = template.render(
+        eos={ 'version': eos.__version__ },
+        analysis_file=analysis_file,
+        base_directory=base_directory,
+        len=len,
+        zip=zip,
+        modes=lambda posterior: _get_modes(posterior, base_directory=base_directory),
+    )
+
+    if output_file is not None:
+        with open(output_file, 'w') as f:
+            f.write(result)
+
+    return result
 
 
 # Corner plot
