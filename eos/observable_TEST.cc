@@ -144,10 +144,11 @@ class ObservableTest :
                     "q2_mu", "q2_mu_min", "q2_mu_max",
                     "q2_tau", "q2_tau_min", "q2_tau_max",
                     "k2", "k2_min", "k2_max", "k2_min_num", "k2_max_num", "k2_min_denom", "k2_max_denom",
-                    "cos(theta_l)",
+                    "cos(theta_l)", "cos(theta_l)_min", "cos(theta_l)_max",
+                    "cos(theta_D)", "cos(theta_D)_min", "cos(theta_D)_max",
                     "cos(theta_pi)",
                     "cos(theta_k)",
-                    "phi",
+                    "phi", "phi_min", "phi_max",
                     "E", "E_min", "E_max",
                     "Re{E}", "Im{E}",
                     "E_gamma", "E_gamma_min",
@@ -155,14 +156,8 @@ class ObservableTest :
                     "w", "w_min", "w_max", "w_min_num", "w_max_num", "w_min_denom", "w_max_denom",
                     "mu", "tau",
                     "z", "z_min", "z_max", "z_min_num", "z_max_num", "z_min_denom", "z_max_denom",
-                    // needs to be unified with the notation of Re{E} and Im{E}
-                    "q2_real", "q2_imag",
-                    // deprecated
-                    "s", "s_min", "s_max",
-                    "i",
-                    "c_D", "c_D_min", "c_D_max",
-                    "c_l", "c_l_min", "c_l_max",
-                    "chi", "chi_min", "chi_max",
+                    // Temporary hack for discrete itemization
+                    "k"
                 };
 
                 auto observables = Observables();
@@ -177,7 +172,7 @@ class ObservableTest :
                             continue;
 
                         found_problematic_observable = true;
-                        std::cerr << "Found problematic observable: " << name << ", with kinematic variable: " << kinematic_variable << std::endl;
+                        std::cerr << "Found observable: " << name << ", with invalid kinematic variable: " << kinematic_variable << std::endl;
                     }
                 }
 
