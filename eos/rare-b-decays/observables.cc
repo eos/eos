@@ -249,22 +249,22 @@ namespace eos
                 make_observable("B->K^*gamma::Gamma_CP_specific",
                         Unit::None(),
                         &BToKstarGamma::decay_rate),
-                make_observable("B->K^*gamma::real_q_over_p",
+                make_observable("B->K^*gamma::Re{q_over_p}",
                         Unit::None(),
                         &BToKstarGamma::real_q_over_p),
-                make_observable("B->K^*gamma::imag_q_over_p",
+                make_observable("B->K^*gamma::Im{q_over_p}",
                         Unit::None(),
                         &BToKstarGamma::imag_q_over_p),
-                make_observable("B->K^*gamma::real_a_left",
+                make_observable("B->K^*gamma::Re{a_left}",
                         Unit::None(),
                         &BToKstarGamma::real_a_left),
-                make_observable("B->K^*gamma::imag_a_left",
+                make_observable("B->K^*gamma::Im{a_left}",
                         Unit::None(),
                         &BToKstarGamma::imag_a_left),
-                make_observable("B->K^*gamma::real_a_right",
+                make_observable("B->K^*gamma::Re{a_right}",
                         Unit::None(),
                         &BToKstarGamma::real_a_right),
-                make_observable("B->K^*gamma::imag_a_right",
+                make_observable("B->K^*gamma::Im{a_right}",
                         Unit::None(),
                         &BToKstarGamma::imag_a_right),
 
@@ -272,18 +272,18 @@ namespace eos
                         Unit::None(),
                         R"(
                         -2.0 * (
-                            <<B->K^*gamma::real_q_over_p>> * (
-                                    <<B->K^*gamma::real_a_left;cp-conjugate=true>>  * <<B->K^*gamma::imag_a_right;cp-conjugate=false>>
-                                  - <<B->K^*gamma::imag_a_left;cp-conjugate=true>>  * <<B->K^*gamma::real_a_right;cp-conjugate=false>>
-                                  + <<B->K^*gamma::real_a_right;cp-conjugate=true>> * <<B->K^*gamma::imag_a_left;cp-conjugate=false>>
-                                  - <<B->K^*gamma::imag_a_right;cp-conjugate=true>> * <<B->K^*gamma::real_a_left;cp-conjugate=false>>
+                            <<B->K^*gamma::Re{q_over_p}>> * (
+                                    <<B->K^*gamma::Re{a_left};cp-conjugate=true>>  * <<B->K^*gamma::Im{a_right};cp-conjugate=false>>
+                                  - <<B->K^*gamma::Im{a_left};cp-conjugate=true>>  * <<B->K^*gamma::Re{a_right};cp-conjugate=false>>
+                                  + <<B->K^*gamma::Re{a_right};cp-conjugate=true>> * <<B->K^*gamma::Im{a_left};cp-conjugate=false>>
+                                  - <<B->K^*gamma::Im{a_right};cp-conjugate=true>> * <<B->K^*gamma::Re{a_left};cp-conjugate=false>>
                             )
                             +
-                            <<B->K^*gamma::imag_q_over_p>> * (
-                                    <<B->K^*gamma::real_a_left;cp-conjugate=true>>  * <<B->K^*gamma::real_a_right;cp-conjugate=false>>
-                                  + <<B->K^*gamma::real_a_right;cp-conjugate=true>> * <<B->K^*gamma::real_a_left;cp-conjugate=false>>
-                                  + <<B->K^*gamma::imag_a_left;cp-conjugate=true>>  * <<B->K^*gamma::imag_a_right;cp-conjugate=false>>
-                                  + <<B->K^*gamma::imag_a_right;cp-conjugate=true>> * <<B->K^*gamma::imag_a_left;cp-conjugate=false>>
+                            <<B->K^*gamma::Im{q_over_p}>> * (
+                                    <<B->K^*gamma::Re{a_left};cp-conjugate=true>>  * <<B->K^*gamma::Re{a_right};cp-conjugate=false>>
+                                  + <<B->K^*gamma::Re{a_right};cp-conjugate=true>> * <<B->K^*gamma::Re{a_left};cp-conjugate=false>>
+                                  + <<B->K^*gamma::Im{a_left};cp-conjugate=true>>  * <<B->K^*gamma::Im{a_right};cp-conjugate=false>>
+                                  + <<B->K^*gamma::Im{a_right};cp-conjugate=true>> * <<B->K^*gamma::Im{a_left};cp-conjugate=false>>
                             )
                         )
                         /
@@ -322,7 +322,7 @@ namespace eos
                 make_observable("B->Kll::d^2Gamma", R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
                         Unit::InverseGeV2(),
                         &BToKDilepton::two_differential_decay_width,
-                        std::make_tuple("s", "cos(theta_l)")),
+                        std::make_tuple("q2", "cos(theta_l)")),
 
                 make_observable("B->Kll::dBR/ds", R"(d\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/dq^2)",
                         Unit::InverseGeV2(),
@@ -438,7 +438,7 @@ namespace eos
                 make_observable("B->K^*ll::d^4Gamma",
                         Unit::GeV(),
                         &BToKstarDilepton::decay_width,
-                        std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi")),
 
                 make_observable("B->K^*ll::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::InverseGeV2(),
@@ -1349,22 +1349,22 @@ namespace eos
                         <<B->K^*ll::BR>> / <<B->K^*psi::BR;psi=J/psi>>
                         )"),
 
-                make_observable("B->K^*ll::real_C9_perp(q2)",
+                make_observable("B->K^*ll::Re{C9_perp}(q2)",
                         Unit::None(),
                         &BToKstarDilepton::real_C9_perp,
                         std::make_tuple("q2")),
 
-                make_observable("B->K^*ll::real_C9_para(q2)",
+                make_observable("B->K^*ll::Re{C9_para}(q2)",
                         Unit::None(),
                         &BToKstarDilepton::real_C9_para,
                         std::make_tuple("q2")),
 
-                make_observable("B->K^*ll::imag_C9_perp(q2)",
+                make_observable("B->K^*ll::Im{C9_perp}(q2)",
                         Unit::None(),
                         &BToKstarDilepton::imag_C9_perp,
                         std::make_tuple("q2")),
 
-                make_observable("B->K^*ll::imag_C9_para(q2)",
+                make_observable("B->K^*ll::Im{C9_para}(q2)",
                         Unit::None(),
                         &BToKstarDilepton::imag_C9_para,
                         std::make_tuple("q2")),
@@ -1391,7 +1391,7 @@ namespace eos
                 make_observable("B_s->phill::d^4Gamma",
                         Unit::InverseGeV2(),
                         &BsToPhiDilepton::decay_width,
-                        std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi"),
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi"),
                         Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -2017,25 +2017,25 @@ namespace eos
                         <<B_s->phill::expBR>> / <<B_s->phipsi::BR;psi=J/psi>>
                         )"),
 
-                make_observable("B_s->phill::real_C9_perp(q2)",
+                make_observable("B_s->phill::Re{C9_perp}(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::real_C9_perp,
                         std::make_tuple("q2"),
                         Options{ { "q", "s" } }),
 
-                make_observable("B_s->phill::real_C9_para(q2)",
+                make_observable("B_s->phill::Re{C9_para}(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::real_C9_para,
                         std::make_tuple("q2"),
                         Options{ { "q", "s" } }),
 
-                make_observable("B_s->phill::imag_C9_perp(q2)",
+                make_observable("B_s->phill::Im{C9_perp}(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::imag_C9_perp,
                         std::make_tuple("q2"),
                         Options{ { "q", "s" } }),
 
-                make_observable("B_s->phill::imag_C9_para(q2)",
+                make_observable("B_s->phill::Im{C9_para}(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::imag_C9_para,
                         std::make_tuple("q2"),
