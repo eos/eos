@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2024 Danny van Dyk
  * Copyright (c) 2024 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
@@ -24,6 +24,7 @@
 #include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
+#include <algorithm>
 #include <complex>
 #include <algorithm>
 
