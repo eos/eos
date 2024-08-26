@@ -80,38 +80,59 @@ class HQETUnitarityBoundsTest :
                 TEST_CHECK_NEARLY_EQUAL(bgl.S1_a0(),  0.04848134891,  eps);
                 TEST_CHECK_NEARLY_EQUAL(bgl.S1_a1(), -0.1309252213,   eps);
                 TEST_CHECK_NEARLY_EQUAL(bgl.S1_a2(), -0.1689469063,   eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.fT_a0(),  0.0202552,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.fT_a1(), -0.023729,       eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.fT_a2(), -0.180908,       eps);
                 // }}}
 
                 // B -> D^* form factors
                 // {{{
-                TEST_CHECK_NEARLY_EQUAL(bgl.A1_a0(),  0.007552254359, eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A1_a1(),  0.003247814948, eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A1_a2(), -0.06359704257,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A5_a0(),  0.005059073459, eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A5_a1(),  0.005920314047, eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A5_a2(), -0.162949878,    eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.V4_a0(),  0.007950422174, eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.V4_a1(), -0.01113445173,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.V4_a2(), -0.0793764426,   eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.P1_a0(),  0.03360836283,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.P1_a1(), -0.07697180543,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.P1_a2(), -0.3364350931,   eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A1_a0(),   0.007552254359, eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A1_a1(),   0.003247814948, eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A1_a2(),  -0.06359704257,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A5_a0(),   0.005059073459, eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A5_a1(),   0.005920314047, eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A5_a2(),  -0.162949878,    eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.V4_a0(),   0.007950422174, eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.V4_a1(),  -0.01113445173,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.V4_a2(),  -0.0793764426,   eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.P1_a0(),   0.03360836283,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.P1_a1(),  -0.07697180543,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.P1_a2(),  -0.3364350931,   eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T1_a0(),   0.00876024,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T1_a1(),  -0.0148831,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T1_a2(),  -0.0868694,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T2_a0(),   0.00230017,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T2_a1(),  -0.000145233,    eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T2_a2(),  -0.0193053,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T23_a0(),  0.00686745,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T23_a1(),  0.00928835,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T23_a2(), -0.117773,       eps);
                 // }}}
 
                 // B^* -> D form factors
                 // {{{
-                TEST_CHECK_NEARLY_EQUAL(bgl.P2_a0(),  0.04205833422,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.P2_a1(), -0.09669309662,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.P2_a2(), -0.3371268552,   eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.V5_a0(),  0.01057138680,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.V5_a1(), -0.02172979075,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.V5_a2(), -0.09017432407,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A2_a0(),  0.01307983275,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A2_a1(), -0.00456493219,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A2_a2(), -0.1286945256,   eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A6_a0(),  0.009476549398, eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A6_a1(), -0.03275163135,  eps);
-                TEST_CHECK_NEARLY_EQUAL(bgl.A6_a2(), -0.01927000667,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.P2_a0(),      0.04205833422,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.P2_a1(),     -0.09669309662,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.P2_a2(),     -0.3371268552,   eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.V5_a0(),      0.01057138680,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.V5_a1(),     -0.02172979075,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.V5_a2(),     -0.09017432407,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A2_a0(),      0.01307983275,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A2_a1(),     -0.00456493219,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A2_a2(),     -0.1286945256,   eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A6_a0(),      0.009476549398, eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A6_a1(),     -0.03275163135,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.A6_a2(),     -0.01927000667,  eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T1bar_a0(),   0.0114801,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T1bar_a1(),  -0.0251051,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T1bar_a2(),  -0.100484,       eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T2bar_a0(),  -0.00443151,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T2bar_a1(),   0.00802323,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T2bar_a2(),   0.0328107,      eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T23bar_a0(), -0.012233,       eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T23bar_a1(),  0.00187907,     eps);
+                TEST_CHECK_NEARLY_EQUAL(bgl.T23bar_a2(),  0.12846,        eps);
                 // }}}
 
                 // B^* -> D^* form factors

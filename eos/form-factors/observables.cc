@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2023 Danny van Dyk
+ * Copyright (c) 2019-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1841,6 +1841,14 @@ namespace eos
                 make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\to c}_{1^-})",
                         Unit::None(),
                         &HQETUnitarityBounds::bound_1m),
+
+                make_observable("b->c::Bound[1^+,T]@CLN", R"(B^{b\to c}_{1^+,T})",
+                        Unit::None(),
+                        &HQETUnitarityBounds::bound_1p_T),
+
+                make_observable("b->c::Bound[1^-,T]@CLN", R"(B^{b\to c}_{1^-,T})",
+                        Unit::None(),
+                        &HQETUnitarityBounds::bound_1m_T),
 
                 make_observable("b->c::Bound[0^+]@OPE", R"(B^{b\to c}_{0^+})",
                         Unit::None(),

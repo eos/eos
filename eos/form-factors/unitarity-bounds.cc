@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 tw=140 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
- * Copyright (c) 2019 Nico Gubernari
+ * Copyright (c) 2019-2024 Danny van Dyk
+ * Copyright (c) 2019-2024 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -245,6 +245,36 @@ namespace eos
 
             return 0.6559703043190044 + 0.3219759165015938*as + -1.5890932982243737*epsb + -12.128588768170292*chi2one*epsb + -12.117697894789417*chi2pone*epsb + 36.385766304510874*chi3pone*epsb + 18.176546842184127*chi3ppone*epsb + 1.5890932982243737*epsc + -12.128588768170292*chi2one*epsc + -12.117697894789417*chi2pone*epsc + 36.385766304510874*chi3pone*epsc + 18.176546842184127*chi3ppone*epsc + 3.1781865964487475*epsb*etaone + -3.1781865964487475*epsc*etaone + 6.344968016127237*epsb*etapone + -6.344968016127237*epsc*etapone + 3.032147192042573*xipone + 1.9127915739217567*as*xipone + -3.1724840080636185*epsb*xipone + -12.117697894789417*chi2one*epsb*xipone + 36.353093684368254*chi3pone*epsb*xipone + 3.1724840080636185*epsc*xipone + -12.117697894789417*chi2one*epsc*xipone + 36.353093684368254*chi3pone*epsc*xipone + 6.344968016127237*epsb*etaone*xipone + -6.344968016127237*epsc*etaone*xipone + 1.5147122368486772*xippone + 0.37122315046492455*as*xippone + 0.6559703043190044*l1one*epsc2 + 2.274791073618234*l1pone*epsc2 + -1.5890932982243737*l4one*epsc2 + -3.1724840080636185*l4pone*epsc2 + 3.032147192042573*l1one*xipone*epsc2 + 3.0294244736973543*l1pone*xipone*epsc2 + -3.1724840080636185*l4one*xipone*epsc2 + 1.5147122368486772*l1one*xippone*epsc2;
         }
+
+        double fT_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.017437787998361664 + 0.029079383031848226*as + 0.017437787998361664*epsb + 0.017437787998361664*epsc + -0.03487557599672333*epsb*etaone + -0.03487557599672333*epsc*etaone + 0.017437787998361664*l1one*epsc2 + -0.017437787998361664*l4one*epsc2;
+        }
+
+        double fT_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.13698311127827445 + 0.2691485796779464*as + 0.13698311127827445*epsb + -0.5580092159475732*chi2one*epsb + 1.6740276478427198*chi3pone*epsb + 0.13698311127827445*epsc + -0.5580092159475732*chi2one*epsc + 1.6740276478427198*chi3pone*epsc + -0.2739662225565489*epsb*etaone + -0.2739662225565489*epsc*etaone + -0.2790046079737866*epsb*etapone + -0.2790046079737866*epsc*etapone + 0.1395023039868933*xipone + 0.2326350642547858*as*xipone + 0.1395023039868933*epsb*xipone + 0.1395023039868933*epsc*xipone + -0.2790046079737866*epsb*etaone*xipone + -0.2790046079737866*epsc*etaone*xipone + 0.13698311127827445*l1one*epsc2 + 0.1395023039868933*l1pone*epsc2 + -0.13698311127827445*l4one*epsc2 + -0.1395023039868933*l4pone*epsc2 + 0.1395023039868933*l1one*xipone*epsc2 + -0.1395023039868933*l4one*xipone*epsc2;
+        }
+
+        double fT_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.3909719871623271 + 0.822128925360601*as + 0.3909719871623271*epsb + -5.499477992799929*chi2one*epsb + -4.464073727580586*chi2pone*epsb + 16.498433978399785*chi3pone*epsb + 6.696110591370879*chi3ppone*epsb + 0.3909719871623271*epsc + -5.499477992799929*chi2one*epsc + -4.464073727580586*chi2pone*epsc + 16.498433978399785*chi3pone*epsc + 6.696110591370879*chi3ppone*epsc + -0.7819439743246542*epsb*etaone + -0.7819439743246542*epsc*etaone + -2.7497389963999646*epsb*etapone + -2.7497389963999646*epsc*etapone + -1.1160184318951465*epsb*etappone + -1.1160184318951465*epsc*etappone + 1.3748694981999823*xipone + 2.618458765933143*as*xipone + 1.3748694981999823*epsb*xipone + -4.464073727580586*chi2one*epsb*xipone + 13.392221182741759*chi3pone*epsb*xipone + 1.3748694981999823*epsc*xipone + -4.464073727580586*chi2one*epsc*xipone + 13.392221182741759*chi3pone*epsc*xipone + -2.7497389963999646*epsb*etaone*xipone + -2.7497389963999646*epsc*etaone*xipone + -2.232036863790293*epsb*etapone*xipone + -2.232036863790293*epsc*etapone*xipone + 0.5580092159475732*xippone + 0.9305402570191432*as*xippone + 0.5580092159475732*epsb*xippone + 0.5580092159475732*epsc*xippone + -1.1160184318951465*epsb*etaone*xippone + -1.1160184318951465*epsc*etaone*xippone + 0.3909719871623271*l1one*epsc2 + 1.0958648902261956*l1pone*epsc2 + -0.3909719871623271*l4one*epsc2 + -1.0958648902261956*l4pone*epsc2 + 1.3748694981999823*l1one*xipone*epsc2 + 1.1160184318951465*l1pone*xipone*epsc2 + -1.3748694981999823*l4one*xipone*epsc2 + -1.1160184318951465*l4pone*xipone*epsc2 + 0.5580092159475732*l1one*xippone*epsc2 + -0.5580092159475732*l4one*xippone*epsc2;
+        }
         // }}}
 
         // B -> D^* form factors
@@ -366,6 +396,96 @@ namespace eos
 
             return 0.7662176967652994 + -0.34366073873619646*epsb + -10.38095697166454*chi2one*epsb + -8.061073283253533*chi2pone*epsb + 31.142870914993626*chi3pone*epsb + 12.091609924880299*chi3ppone*epsb + 0.34366073873619657*epsc + 10.38095697166454*chi2one*epsc + 8.061073283253533*chi2pone*epsc + -10.38095697166454*chi3pone*epsc + -4.0305366416267665*chi3ppone*epsc + 0.6873214774723929*epsb*etaone + 0.687321477472393*epsc*etaone + 2.3280115799542*epsb*etapone + 2.3280115799542*epsc*etapone + 0.9038796712816234*epsb*etappone + 0.9038796712816234*epsc*etappone + 2.595239242916135*xipone + -1.1640057899771*epsb*xipone + -8.061073283253533*chi2one*epsb*xipone + 24.183219849760597*chi3pone*epsb*xipone + 1.1640057899771*epsc*xipone + 8.061073283253533*chi2one*epsc*xipone + -8.061073283253533*chi3pone*epsc*xipone + 2.3280115799542*epsb*etaone*xipone + 2.3280115799542*epsc*etaone*xipone + 1.8077593425632468*epsb*etapone*xipone + 1.8077593425632468*epsc*etapone*xipone + as*(-0.5977425693276348 - 0.401787676923819*xipone - 0.07256576271752786*xippone) + 1.0076341604066916*xippone + -0.4519398356408117*epsb*xippone + 0.4519398356408117*epsc*xippone + 0.9038796712816234*epsb*etaone*xippone + 0.9038796712816234*epsc*etaone*xippone + (2.091422162712789*l2pone + 2.595239242916135*l3one + 2.0152683208133833*l3pone + 0.34366073873619646*l5one + 0.9380358721566939*l5pone - 1.8513272674494927*l6one - 2.779951415595011*l6pone + 2.0152683208133833*l2pone*xipone + 2.0152683208133833*l3one*xipone + 1.1640057899771*l5one*xipone + 0.9038796712816234*l5pone*xipone - 3.2318912512358233*l6one*xipone - 1.8077593425632468*l6pone*xipone + 0.4519398356408117*l5one*xippone - 0.9038796712816234*l6one*xippone + l2one*(0.7662176967652994 + 2.595239242916135*xipone + 1.0076341604066916*xippone))*epsc2;
         }
+
+        double T1_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.008628652853130884 + 0.004916484838474541*as + -0.0038700870866383297*epsb + 0.0038700870866383297*epsc + 0.007740174173276659*epsb*etaone + 0.008628652853130884*l2one*epsc2 + -0.0038700870866383297*l5one*epsc2;
+        }
+
+        double T1_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.06858000994795192 + 0.0456412589856029*as + -0.03075921762280579*epsb + -0.2761168913001883*chi2one*epsb + 0.8283506739005648*chi3pone*epsb + 0.03075921762280579*epsc + -0.2761168913001883*chi3pone*epsc + 0.06151843524561158*epsb*etaone + 0.06192139338621328*epsb*etapone + 0.06902922282504707*xipone + 0.03933187870779633*as*xipone + -0.03096069669310664*epsb*xipone + 0.03096069669310664*epsc*xipone + 0.06192139338621328*epsb*etaone*xipone + 0.06858000994795192*l2one*epsc2 + 0.06902922282504707*l2pone*epsc2 + -0.03075921762280579*l5one*epsc2 + -0.03096069669310664*l5pone*epsc2 + 0.06902922282504707*l2one*xipone*epsc2 + -0.03096069669310664*l5one*xipone*epsc2;
+        }
+
+        double T1_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.17755221018213055 + 0.0727749083560964*as + -0.0796349705482276*epsb + -2.7467941009348387*chi2one*epsb + -2.2089351304015064*chi2pone*epsb + 8.240382302804516*chi3pone*epsb + 3.3134026956022598*chi3ppone*epsb + 0.0796349705482276*epsc + -2.7467941009348387*chi3pone*epsc + -1.1044675652007532*chi3ppone*epsc + 0.1592699410964552*epsb*etaone + 0.6159902687373193*epsb*etapone + 0.24768557354485313*epsb*etappone + 0.6866985252337097*xipone + 0.44379382930041594*as*xipone + -0.30799513436865966*epsb*xipone + -2.2089351304015064*chi2one*epsb*xipone + 6.6268053912045195*chi3pone*epsb*xipone + 0.30799513436865966*epsc*xipone + -2.2089351304015064*chi3pone*epsc*xipone + 0.6159902687373193*epsb*etaone*xipone + 0.49537114708970625*epsb*etapone*xipone + 0.2761168913001883*xippone + 0.15732751483118532*as*xippone + -0.12384278677242656*epsb*xippone + 0.12384278677242656*epsc*xippone + 0.24768557354485313*epsb*etaone*xippone + 0.17755221018213055*l2one*epsc2 + 0.5486400795836155*l2pone*epsc2 + -0.0796349705482276*l5one*epsc2 + -0.2460737409824464*l5pone*epsc2 + 0.6866985252337097*l2one*xipone*epsc2 + 0.5522337826003766*l2pone*xipone*epsc2 + -0.30799513436865966*l5one*xipone*epsc2 + -0.24768557354485313*l5pone*xipone*epsc2 + 0.2761168913001883*l2one*xippone*epsc2 + -0.12384278677242656*l5one*xippone*epsc2;
+        }
+
+        double T2_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0023821002705322267 + 0.0007962741706233552*as + 0.0023821002705322267*l2one*epsc2;
+        }
+
+        double T2_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.020888787017993283 + 0.019464771256022948*as + -0.021244293304651007*epsb + -0.07622720865703125*chi2one*epsb + 0.22868162597109384*chi3pone*epsb + 0.021244293304651007*epsc + -0.07622720865703125*chi3pone*epsc + 0.04248858660930201*epsb*etaone + 0.019056802164257813*xipone + 0.006370193364986843*as*xipone + 0.020888787017993283*l2one*epsc2 + 0.019056802164257813*l2pone*epsc2 + -0.021244293304651007*l5one*epsc2 + 0.019056802164257813*l2one*xipone*epsc2;
+        }
+
+        double T2_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0683889769826146 + 0.09751805245075064*as + -0.14380395685675687*epsb + -0.8208956018898476*chi2one*epsb + -0.60981766925625*chi2pone*epsb + 2.4626868056695423*chi3pone*epsb + 0.9147265038843752*chi3ppone*epsb + 0.14380395685675687*epsc + -0.8208956018898476*chi3pone*epsc + -0.304908834628125*chi3ppone*epsc + 0.28760791371351374*epsb*etaone + 0.33990869287441605*epsb*etapone + 0.2052239004724619*xipone + 0.1684585567781573*as*xipone + -0.16995434643720803*epsb*xipone + -0.60981766925625*chi2one*epsb*xipone + 1.8294530077687503*chi3pone*epsb*xipone + 0.16995434643720803*epsc*xipone + -0.60981766925625*chi3pone*epsc*xipone + 0.33990869287441605*epsb*etaone*xipone + 0.07622720865703125*xippone + 0.025480773459947374*as*xippone + 0.0683889769826146*l2one*epsc2 + 0.16711029614394624*l2pone*epsc2 + -0.14380395685675687*l5one*epsc2 + -0.16995434643720803*l5pone*epsc2 + 0.2052239004724619*l2one*xipone*epsc2 + 0.1524544173140625*l2pone*xipone*epsc2 + -0.16995434643720803*l5one*xipone*epsc2 + 0.07622720865703125*l2one*xippone*epsc2;
+        }
+
+        double T23_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0071120640164273686 + 0.0023773780416202245*as + 0.0071120640164273686*l2one*epsc2;
+        }
+
+        double T23_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.06907927254915379 + 0.06498431321285762*as + 0.02844825606570953*epsb + -0.2275860485256758*chi2one*epsb + 0.6827581455770273*chi3pone*epsb + 0.028448256065709446*epsc + 0.2275860485256759*chi2one*epsc + -0.2275860485256758*chi3pone*epsc + -0.05689651213141906*epsb*etaone + 0.05689651213141897*epsc*etaone + 0.05689651213141895*xipone + 0.019019024332961796*as*xipone + 0.06907927254915379*l2one*epsc2 + 0.05689651213141895*l2pone*epsc2 + 0.056896512131418976*l3one*epsc2 + 0.02844825606570953*l5one*epsc2 + -0.056896512131418976*l6one*epsc2 + 0.05689651213141895*l2one*xipone*epsc2;
+        }
+
+        double T23_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.2697650572908066 + 0.4056823395859018*as + 0.21942057806519646*epsb + -2.665708818624273*chi2one*epsb + -1.8206883882054063*chi2pone*epsb + 7.997126455872819*chi3pone*epsb + 2.7310325823081096*chi3ppone*epsb + 0.219420578065196*epsc + 2.6657088186242732*chi2one*epsc + 1.820688388205407*chi2pone*epsc + -2.665708818624273*chi3pone*epsc + -0.9103441941027032*chi3ppone*epsc + -0.43884115613039293*epsb*etaone + 0.43884115613039254*epsc*etaone + -0.4551720970513525*epsb*etapone + 0.45517209705135175*epsc*etapone + 0.6664272046560682*xipone + 0.5579125543687846*as*xipone + 0.22758604852567624*epsb*xipone + -1.8206883882054063*chi2one*epsb*xipone + 5.462065164616219*chi3pone*epsb*xipone + 0.22758604852567554*epsc*xipone + 1.820688388205407*chi2one*epsc*xipone + -1.8206883882054063*chi3pone*epsc*xipone + -0.4551720970513525*epsb*etaone*xipone + 0.45517209705135175*epsc*etaone*xipone + 0.2275860485256758*xippone + 0.07607609733184718*as*xippone + 0.2697650572908066*l2one*epsc2 + 0.5526341803932302*l2pone*epsc2 + 0.6664272046560683*l3one*epsc2 + 0.45517209705135175*l3pone*epsc2 + 0.21942057806519646*l5one*epsc2 + 0.22758604852567624*l5pone*epsc2 + -0.6664272046560683*l6one*epsc2 + -0.45517209705135175*l6pone*epsc2 + 0.6664272046560682*l2one*xipone*epsc2 + 0.4551720970513516*l2pone*xipone*epsc2 + 0.45517209705135175*l3one*xipone*epsc2 + 0.22758604852567624*l5one*xipone*epsc2 + -0.45517209705135175*l6one*xipone*epsc2 + 0.2275860485256758*l2one*xippone*epsc2;
+        }
         // }}}
 
         // B^* -> D form factors
@@ -486,6 +606,95 @@ namespace eos
             const double epsc2 = power_of<2>(epsc);
 
             return 0.14122128288513747 + -0.375796859081217*epsb + 2.697099330471651*chi2one*epsb + 2.503481082834127*chi2pone*epsb + -2.697099330471651*chi3pone*epsb + -1.2517405414170635*chi3ppone*epsb + 0.37579685908121685*epsc + -2.697099330471651*chi2one*epsc + -2.503481082834127*chi2pone*epsc + 8.091297991414953*chi3pone*epsc + 3.7552216242511904*chi3ppone*epsc + -0.7515937181624335*epsb*etaone + -0.7515937181624337*epsc*etaone + -1.301822543748723*epsb*etapone + -1.3018225437487234*epsc*etapone + 0.6742748326179128*xipone + -0.6509112718743617*epsb*xipone + 2.503481082834127*chi2one*epsb*xipone + -2.503481082834127*chi3pone*epsb*xipone + 0.6509112718743617*epsc*xipone + -2.503481082834127*chi2one*epsc*xipone + 7.510443248502381*chi3pone*epsc*xipone + -1.301822543748723*epsb*etaone*xipone + -1.3018225437487234*epsc*etaone*xipone + as*(0.1351402435746817 + 0.11693457984698744*xipone - 0.13192980215989944*xippone) + 0.31293513535426587*xippone + (0.5178072649407798*l1pone - 0.37579685908121685*l4one - 0.6509112718743617*l4pone + 0.6258702707085317*l1pone*xipone - 0.6509112718743617*l4one*xipone + l1one*(0.14122128288513747 + 0.6742748326179128*xipone + 0.31293513535426587*xippone))*epsc2;
+        }
+
+        double T1bar_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.011019489994071291 + 0.0064653499158731104*as + -0.0052977813441449865*epsb + 0.0052977813441449865*epsc + -0.010595562688289973*epsc*etaone + 0.011019489994071291*l1one*epsc2 + -0.0052977813441449865*l4one*epsc2;
+        }
+
+        double T1bar_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0810875409156531 + 0.056121590131220006*as + -0.03898402391913465*epsb + -0.3526236798102813*chi3pone*epsb + 0.03898402391913465*epsc + -0.3526236798102813*chi2one*epsc + 1.057871039430844*chi3pone*epsc + -0.0779680478382693*epsc*etaone + -0.08476450150631978*epsc*etapone + 0.08815591995257033*xipone + 0.051722799326984883*as*xipone + -0.04238225075315989*epsb*xipone + 0.04238225075315989*epsc*xipone + -0.08476450150631978*epsc*etaone*xipone + 0.0810875409156531*l1one*epsc2 + 0.08815591995257033*l1pone*epsc2 + -0.03898402391913465*l4one*epsc2 + -0.04238225075315989*l4pone*epsc2 + 0.08815591995257033*l1one*xipone*epsc2 + -0.04238225075315989*l4one*xipone*epsc2;
+        }
+
+        double T1bar_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.1906942811763703 + 0.07183847554990976*as + -0.09167907097287185*epsb + -3.300048668921462*chi3pone*epsb + -1.4104947192411255*chi3ppone*epsb + 0.09167907097287185*epsc + -3.300048668921462*chi2one*epsc + -2.820989438482251*chi2pone*epsc + 9.900146006764384*chi3pone*epsc + 4.231484157723376*chi3ppone*epsc + -0.1833581419457437*epsc*etaone + -0.793273385718794*epsc*etapone + -0.3390580060252792*epsc*etappone + 0.8250121672303655*xipone + 0.5524183197037298*as*xipone + -0.396636692859397*epsb*xipone + -2.820989438482251*chi3pone*epsb*xipone + 0.396636692859397*epsc*xipone + -2.820989438482251*chi2one*epsc*xipone + 8.462968315446751*chi3pone*epsc*xipone + -0.793273385718794*epsc*etaone*xipone + -0.6781160120505584*epsc*etapone*xipone + 0.35262367981028137*xippone + 0.20689119730793953*as*xippone + -0.1695290030126396*epsb*xippone + 0.1695290030126396*epsc*xippone + -0.3390580060252792*epsc*etaone*xippone + 0.1906942811763703*l1one*epsc2 + 0.6487003273252248*l1pone*epsc2 + -0.09167907097287185*l4one*epsc2 + -0.3118721913530772*l4pone*epsc2 + 0.8250121672303655*l1one*xipone*epsc2 + 0.7052473596205627*l1pone*xipone*epsc2 + -0.396636692859397*l4one*xipone*epsc2 + -0.3390580060252792*l4pone*xipone*epsc2 + 0.35262367981028137*l1one*xippone*epsc2 + -0.1695290030126396*l4one*xippone*epsc2;
+        }
+
+        double T2bar_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return -0.0042957399533329775 + -0.0014359541497342488*as + -0.0042957399533329775*l1one*epsc2;
+        }
+
+        double T2bar_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return -0.0327280264540359 + -0.03210039372527584*as + 0.035740896317059886*epsb + 0.1374636785066553*chi3pone*epsb + -0.035740896317059886*epsc + 0.1374636785066553*chi2one*epsc + -0.41239103551996587*chi3pone*epsc + 0.07148179263411977*epsc*etaone + -0.03436591962666383*xipone + -0.01148763319787399*as*xipone + -0.0327280264540359*l1one*epsc2 + -0.03436591962666383*l1pone*epsc2 + 0.035740896317059886*l4one*epsc2 + -0.03436591962666383*l1one*xipone*epsc2;
+        }
+
+        double T2bar_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return -0.09046685800013926 + -0.13023001939827816*as + 0.20081797710592722*epsb + 1.3222242035424594*chi3pone*epsb + 0.5498547140266211*chi3ppone*epsb + -0.20081797710592722*epsc + 1.3222242035424594*chi2one*epsc + 1.0997094280532422*chi2pone*epsc + -3.966672610627378*chi3pone*epsc + -1.6495641420798635*chi3ppone*epsc + 0.40163595421185444*epsc*etaone + 0.5718543410729582*epsc*etapone + -0.33055605088561485*xipone + -0.27977841619795474*as*xipone + 0.2859271705364791*epsb*xipone + 1.0997094280532422*chi3pone*epsb*xipone + -0.2859271705364791*epsc*xipone + 1.0997094280532422*chi2one*epsc*xipone + -3.299128284159727*chi3pone*epsc*xipone + 0.5718543410729582*epsc*etaone*xipone + -0.13746367850665528*xippone + -0.045950532791495954*as*xippone + -0.09046685800013926*l1one*epsc2 + -0.2618242116322872*l1pone*epsc2 + 0.20081797710592722*l4one*epsc2 + 0.2859271705364791*l4pone*epsc2 + -0.33055605088561485*l1one*xipone*epsc2 + -0.27492735701331056*l1pone*xipone*epsc2 + 0.2859271705364791*l4one*xipone*epsc2 + -0.13746367850665528*l1one*xippone*epsc2;
+        }
+
+        double T23bar_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return -0.01185823188755188 + -0.0039638985302705605*as + 2.624996878466212e-18*epsb + 6.818129920341117e-18*chi2one*epsb + -9.204643983809323e-19*epsc + 1.7045324800852792e-18*epsb*etaone + 1.8409287967618647e-18*epsc*etaone + -0.01185823188755188*l1one*epsc2 + 9.204643983809323e-19*l4one*epsc2;
+        }
+
+        double T23bar_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return -0.1014246600361772 + -0.1037533669756102*as + -0.04743292755020748*epsb + -0.3794634204016601*chi2one*epsb + 5.4545039362728935e-17*chi2pone*epsb + 0.37946342040166015*chi3pone*epsb + -0.04743292755020752*epsc + 0.37946342040166015*chi2one*epsc + -1.1383902612049805*chi3pone*epsc + -0.09486585510041502*epsb*etaone + 0.09486585510041504*epsc*etaone + 1.3636259840682234e-17*epsb*etapone + 1.4727430374094914e-17*epsc*etapone + -0.09486585510041504*xipone + -0.031711188242164484*as*xipone + 2.0999975027729694e-17*epsb*xipone + -0.1014246600361772*l1one*epsc2 + -0.09486585510041504*l1pone*epsc2 + 0.04743292755020752*l4one*epsc2 + -0.09486585510041504*l1one*xipone*epsc2;
+        }
+
+        double T23bar_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return -0.3452270932642073 + -0.5604412450690728*as + -0.3108327850442937*epsb + -4.004515961960989*chi2one*epsb + -3.0357073632132807*chi2pone*epsb + 4.00451596196099*chi3pone*epsb + 1.5178536816066406*chi3ppone*epsb + -0.31083278504429346*epsc + 4.00451596196099*chi2one*epsc + 3.035707363213281*chi2pone*epsc + -12.013547885882968*chi3pone*epsc + -4.553561044819921*chi3ppone*epsc + -0.6216655700885872*epsb*etaone + 0.6216655700885869*epsc*etaone + -0.7589268408033202*epsb*etapone + 0.75892684080332*epsc*etapone + -1.0011289904902474*xipone + -0.8934493122892104*as*xipone + -0.3794634204016599*epsb*xipone + -3.0357073632132807*chi2one*epsb*xipone + 4.363603149018315e-16*chi2pone*epsb*xipone + 3.035707363213281*chi3pone*epsb*xipone + -0.37946342040166*epsc*xipone + 3.035707363213281*chi2one*epsc*xipone + -9.107122089639843*chi3pone*epsc*xipone + -0.7589268408033202*epsb*etaone*xipone + 0.75892684080332*epsc*etaone*xipone + 1.0909007872545787e-16*epsb*etapone*xipone + 1.178194429927593e-16*epsc*etapone*xipone + -0.37946342040166015*xippone + -0.1268447529686579*as*xippone + 8.399990011091876e-17*epsb*xippone + 2.1818015745091574e-16*chi2one*epsb*xippone + -2.945486074818982e-17*epsc*xippone + 5.4545039362728935e-17*epsb*etaone*xippone + 5.890972149637964e-17*epsc*etaone*xippone + -0.3452270932642073*l1one*epsc2 + -0.8113972802894173*l1pone*epsc2 + 0.31083278504429346*l4one*epsc2 + 0.37946342040166*l4pone*epsc2 + -1.0011289904902474*l1one*xipone*epsc2 + -0.7589268408033203*l1pone*xipone*epsc2 + 0.37946342040166*l4one*xipone*epsc2 + -0.37946342040166015*l1one*xippone*epsc2;
         }
         // }}}
 
@@ -1420,6 +1629,9 @@ namespace eos
     double BGLCoefficients::S1_a0() const { return _imp->S1_a0(); }
     double BGLCoefficients::S1_a1() const { return _imp->S1_a1(); }
     double BGLCoefficients::S1_a2() const { return _imp->S1_a2(); }
+    double BGLCoefficients::fT_a0() const { return _imp->fT_a0(); }
+    double BGLCoefficients::fT_a1() const { return _imp->fT_a1(); }
+    double BGLCoefficients::fT_a2() const { return _imp->fT_a2(); }
     // }}}
 
     // B -> D^* form factors
@@ -1436,6 +1648,15 @@ namespace eos
     double BGLCoefficients::P1_a0() const { return _imp->P1_a0(); }
     double BGLCoefficients::P1_a1() const { return _imp->P1_a1(); }
     double BGLCoefficients::P1_a2() const { return _imp->P1_a2(); }
+    double BGLCoefficients::T1_a0() const { return _imp->T1_a0(); }
+    double BGLCoefficients::T1_a1() const { return _imp->T1_a1(); }
+    double BGLCoefficients::T1_a2() const { return _imp->T1_a2(); }
+    double BGLCoefficients::T2_a0() const { return _imp->T2_a0(); }
+    double BGLCoefficients::T2_a1() const { return _imp->T2_a1(); }
+    double BGLCoefficients::T2_a2() const { return _imp->T2_a2(); }
+    double BGLCoefficients::T23_a0() const { return _imp->T23_a0(); }
+    double BGLCoefficients::T23_a1() const { return _imp->T23_a1(); }
+    double BGLCoefficients::T23_a2() const { return _imp->T23_a2(); }
     // }}}
 
     // B^* -> D form factors
@@ -1452,6 +1673,15 @@ namespace eos
     double BGLCoefficients::A6_a0() const { return _imp->A6_a0(); }
     double BGLCoefficients::A6_a1() const { return _imp->A6_a1(); }
     double BGLCoefficients::A6_a2() const { return _imp->A6_a2(); }
+    double BGLCoefficients::T1bar_a0() const { return _imp->T1bar_a0(); }
+    double BGLCoefficients::T1bar_a1() const { return _imp->T1bar_a1(); }
+    double BGLCoefficients::T1bar_a2() const { return _imp->T1bar_a2(); }
+    double BGLCoefficients::T2bar_a0() const { return _imp->T2bar_a0(); }
+    double BGLCoefficients::T2bar_a1() const { return _imp->T2bar_a1(); }
+    double BGLCoefficients::T2bar_a2() const { return _imp->T2bar_a2(); }
+    double BGLCoefficients::T23bar_a0() const { return _imp->T23bar_a0(); }
+    double BGLCoefficients::T23bar_a1() const { return _imp->T23bar_a1(); }
+    double BGLCoefficients::T23bar_a2() const { return _imp->T23bar_a2(); }
     // }}}
 
     // B^* -> D^* form factors
@@ -1829,6 +2059,60 @@ namespace eos
 
             return result;
         }
+
+        double bound_1m_T() const
+        {
+            // 3 rows of form factors with 3 columns (one column per z coefficient)
+            // for spectator quark q=u,d
+            const std::array<std::array<double, 3>, 3> bgl_coeffs_ud
+            {{
+                // B -> D f_T
+                { bgl->fT_a0(),    bgl->fT_a1(),    bgl->fT_a2()    },
+                // B -> D^* V_2
+                { bgl->T1_a0(),    bgl->T1_a1(),    bgl->T1_a2()    },
+                // B^* -> D V_3
+                { bgl->T1bar_a0(), bgl->T1bar_a1(), bgl->T1bar_a2() }
+            }};
+
+            double result = 0.0;
+            for (const auto & ff : bgl_coeffs_ud)
+            {
+                for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+                {
+                    result += power_of<2>(ff[i]) * nf; // to account for flavor symmetry
+                }
+            }
+
+            return result;
+        }
+
+        double bound_1p_T() const
+        {
+            // 4 rows of form factors with 3 columns (one column per z coefficient)
+            // for spectator quark q=u,d
+            const std::array<std::array<double, 3>, 4> bgl_coeffs_ud
+            {{
+                // B -> D^* T_2
+                { bgl->T2_a0(), bgl->T2_a1(), bgl->T2_a2() },
+                // B^* -> D Tbar_2
+                { bgl->T2bar_a0(), bgl->T2bar_a1(), bgl->T2bar_a2() },
+                // B -> D^* T_23
+                { bgl->T23_a0(), bgl->T23_a1(), bgl->T23_a2() },
+                // B^* -> D Tbar_23
+                { bgl->T23bar_a0(), bgl->T23bar_a1(), bgl->T23bar_a2() },
+            }};
+
+            double result = 0.0;
+            for (const auto & ff : bgl_coeffs_ud)
+            {
+                for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+                {
+                    result += power_of<2>(ff[i]) * nf; // to account for flavor symmetry
+                }
+            }
+
+            return result;
+        }
         // }}}
     };
 
@@ -1868,6 +2152,18 @@ namespace eos
     HQETUnitarityBounds::bound_1m() const
     {
         return _imp->bound_1m();
+    }
+
+    double
+    HQETUnitarityBounds::bound_1p_T() const
+    {
+        return _imp->bound_1p_T();
+    }
+
+    double
+    HQETUnitarityBounds::bound_1m_T() const
+    {
+        return _imp->bound_1m_T();
     }
 
     const std::set<ReferenceName>

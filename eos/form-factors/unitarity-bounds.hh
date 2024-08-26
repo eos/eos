@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2020 Christoph Bobeth
- * Copyright (c) 2019, 2020 Danny van Dyk
+ * Copyright (c) 2019-2024 Danny van Dyk
  * Copyright (c) 2019 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
@@ -45,6 +45,10 @@ namespace eos
             double S1_a0() const;
             double S1_a1() const;
             double S1_a2() const;
+
+            double fT_a0() const;
+            double fT_a1() const;
+            double fT_a2() const;
             // }}}
 
             // B -> D^* form factor (q=u,d)
@@ -64,6 +68,18 @@ namespace eos
             double P1_a0() const;
             double P1_a1() const;
             double P1_a2() const;
+
+            double T1_a0() const;
+            double T1_a1() const;
+            double T1_a2() const;
+
+            double T2_a0() const;
+            double T2_a1() const;
+            double T2_a2() const;
+
+            double T23_a0() const;
+            double T23_a1() const;
+            double T23_a2() const;
             // }}}
 
             // B^* -> D form factor (q=u,d)
@@ -83,6 +99,18 @@ namespace eos
             double A6_a0() const;
             double A6_a1() const;
             double A6_a2() const;
+
+            double T1bar_a0() const;
+            double T1bar_a1() const;
+            double T1bar_a2() const;
+
+            double T2bar_a0() const;
+            double T2bar_a1() const;
+            double T2bar_a2() const;
+
+            double T23bar_a0() const;
+            double T23bar_a1() const;
+            double T23bar_a2() const;
             // }}}
 
             // B^* -> D^* form factor (q=u,d)
@@ -249,6 +277,10 @@ namespace eos
             double bound_1p() const;
 
             double bound_1m() const;
+
+            double bound_1p_T() const;
+
+            double bound_1m_T() const;
 
             /*!
              * References used in the computation of our observables.
