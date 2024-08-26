@@ -47,9 +47,15 @@ class Mode:
         self.mode = description['mode']
         self.pvalue = description['pvalue']
         self.local_pvalues = description['local_pvalues']
+        self.global_chi2 = None
+        if 'global_chi2' in description:
+            self.global_chi2 = description['global_chi2']
+        self.dof = None
+        if 'dof' in description:
+            self.dof = description['dof']
 
     @staticmethod
-    def create(path, parameters, mode, pvalue, local_pvalues):
+    def create(path, parameters, mode, pvalue, local_pvalues, global_chi2, dof):
         """ Write a new Mode object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
@@ -58,6 +64,14 @@ class Mode:
         :type parameters: list or iterable of eos.Parameter
         :param mode: The mode to be stored.
         :type mode: numpy.ndarray
+        :param pvalue: The p-value of the mode.
+        :type pvalue: float
+        :param local_pvalues: The local p-values of the mode.
+        :type local_pvalues: dict
+        :param global_chi2: The global chi2 value of the mode.
+        :type global_chi2: float
+        :param dof: The degrees of freedom of the mode.
+        :type dof: float
         """
         description = {}
         description['version'] = eos.__version__
@@ -70,6 +84,8 @@ class Mode:
         description['mode'] = mode.tolist()
         description['pvalue'] = float(pvalue) if pvalue is not None else None
         description['local_pvalues'] = local_pvalues
+        description['global_chi2'] = global_chi2
+        description['dof'] = dof
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
