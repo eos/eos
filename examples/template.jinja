@@ -1,0 +1,30 @@
+\documentclass[a4paper,12pt]{article}
+\begin{document}
+\section{Report of Analysis}
+
+\begin{tabular}{l c c c c}
+Posterior & mode & chi2 & dof & pvalue\\ \hline
+{% for posterior in analysis_file.posteriors %}
+{% set modes = modes(posterior) %}
+{% for label, mode in modes %}
+{{ posterior }} & {{ label }} & {{"%.4f"|format(mode.global_chi2|float)}} & {{mode.dof}} & {{"%.4e"|format(mode.pvalue|float)}} \\
+{% endfor %}
+{% endfor %}
+\end{tabular}
+
+{% for posterior in analysis_file.posteriors %}
+\section{ {{posterior}} }
+{% set modes = modes(posterior) %}
+{% for label, mode in modes %}
+\subsection{ {{label}} }
+\begin{tabular}{l c}
+parameter & bfp \\ \hline
+{% for parameter,bfp in zip(mode.varied_parameters,mode.mode) %}
+\verb|{{parameter['name']}}| & {{"%.4f"|format(bfp|float)}} \\
+{% endfor %}
+\end{tabular}
+{% endfor %}
+
+{% endfor %}
+
+\end{document}
