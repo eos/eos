@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2015-2023 Danny van Dyk
+ * Copyright (c) 2015-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,8 @@
 #include <eos/utils/log.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+
+#include <algorithm>
 
 #include <gsl/gsl_cdf.h>
 
