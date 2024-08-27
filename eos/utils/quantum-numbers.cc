@@ -48,4 +48,17 @@ namespace eos
 
         return os;
     }
+
+    std::ostream &
+    operator<< (std::ostream & os, IsospinRepresentation ir)
+    {
+        static const std::array<std::string, 5u> names
+        {
+            "0", "1", "2", "1/2", "3/2"
+        };
+
+        os << names[static_cast<unsigned>(ir)];
+
+        return os;
+    }
 }

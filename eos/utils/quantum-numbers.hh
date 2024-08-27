@@ -48,6 +48,17 @@ namespace eos
     };
 
     std::ostream& operator<< (std::ostream & os, QuarkFlavor qf);
+
+    enum class IsospinRepresentation : uint8_t
+    {
+        zero        = 0,
+        one         = 1,
+        two         = 2,
+        onehalf     = 3,
+        threehalves = 4
+    };
+
+    std::ostream& operator<< (std::ostream & os, IsospinRepresentation ir);
 }
 
 #endif
