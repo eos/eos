@@ -208,6 +208,7 @@ class StepComponent(Deserializable):
 #   predictions (optional)
 #   parameters (optional)
 #   steps (optional)
+#   configuration (optional)
 
 
 # priors schema:
@@ -281,3 +282,8 @@ class StepComponent(Deserializable):
 #  iterations (optional): list of dicts
 #  depends-on (optional): list of strings ???????
 #  ???????
+
+# configuration schema:
+# dict, where each key is a EOS task, and the corresponding value is a list of dicts each with keys:
+#   match (mandatory): dict, whose keys are arguments of the task and values are regex-ish strings
+#   set (mandatory): dict, whose keys are options of the task and values are the corresponding values
