@@ -437,7 +437,7 @@ class Plotter:
             item = self.item
             oname = item['observable']
 
-            obs_entry = eos.Observables._get_obs_entry(oname)
+            obs_entry = eos.Observables()[oname]
             valid_kin_vars = [kv for kv in obs_entry.kinematic_variables()]
             eos.info(f'   plotting EOS observable "{oname}"')
 
