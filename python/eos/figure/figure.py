@@ -27,13 +27,14 @@ import yaml as _yaml
 
 class Figure(Deserializable):
     r"""Base class for figures to be drawn using matplotlib."""
+    name:str=field(default=None)
 
     def draw(self):
         "Draw the figure"
         raise NotImplementedError
 
 
-@dataclass
+@dataclass(kw_only=True)
 class SingleFigure(Figure):
     r"""Represents a figure with a single set of axes.
 
@@ -57,7 +58,7 @@ class SingleFigure(Figure):
         return Deserializable.make(cls, **_kwargs)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GridFigure(Figure):
     r"""Represent a figure with several axes arranged in a grid.
 

@@ -155,6 +155,14 @@ class OneDimensionalHistogramItem(Item):
     bins:int=field(default=50)
 
     def __post_init__(self):
+        if self.bins < 2:
+            raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
+
+    def prepare(self):
+        "Prepare the histogram for drawing"
+
+        # These checks are necessary to ensure that the data file is in the correct format,
+        # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         os.path.exists(self.datafile) or eos.error(f"Data file '{self.datafile}' does not exist")
         abspath = os.path.abspath(self.datafile)
         name = os.path.split(abspath)[-1]
@@ -169,11 +177,6 @@ class OneDimensionalHistogramItem(Item):
         if self.variable not in self._datafile.lookup_table:
             raise ValueError(f"Data file '{self.datafile}' does not contain samples of variable '{self.variable}'")
 
-        if self.bins < 2:
-            raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
-
-    def prepare(self):
-        "Prepare the histogram for drawing"
         pass
 
     def draw(self, ax):
@@ -198,6 +201,14 @@ class TwoDimensionalHistogramItem(Item):
     bins:int=field(default=50)
 
     def __post_init__(self):
+        if self.bins < 2:
+            raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
+
+    def prepare(self):
+        "Prepare the histogram for drawing"
+
+        # These checks are necessary to ensure that the data file is in the correct format,
+        # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         os.path.exists(self.datafile) or eos.error(f"Data file '{self.datafile}' does not exist")
         abspath = os.path.abspath(self.datafile)
         name = os.path.split(abspath)[-1]
@@ -212,12 +223,6 @@ class TwoDimensionalHistogramItem(Item):
         for v in self.variables:
             if v not in self._datafile.lookup_table:
                 raise ValueError(f"Data file '{self.datafile}' does not contain samples of variable '{v}'")
-
-        if self.bins < 2:
-            raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
-
-    def prepare(self):
-        pass
 
     def draw(self, ax):
         xidx = self._datafile.lookup_table[self.variables[0]]
@@ -248,6 +253,17 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     bandwidth:float=field(default=None)
 
     def __post_init__(self):
+        if self.level is not None and (self.level <= 0 or self.level >= 100):
+            raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
+
+        if self.bandwidth is not None and self.bandwidth <= 0.0:
+            raise ValueError(f"Bandwidth factor '{self.bandwidth}' is not positive")
+
+    def prepare(self):
+        "Prepare the KDE for drawing"
+
+        # These checks are necessary to ensure that the data file is in the correct format,
+        # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         os.path.exists(self.datafile) or eos.error(f"Data file '{self.datafile}' does not exist")
         abspath = os.path.abspath(self.datafile)
         name = os.path.split(abspath)[-1]
@@ -267,14 +283,6 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         if self.range is None:
             self.range = (self._datafile.samples[:, self.idx].min(), self._datafile.samples[:, self.idx].max())
 
-        if self.level is not None and (self.level <= 0 or self.level >= 100):
-            raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
-
-        if self.bandwidth is not None and self.bandwidth <= 0.0:
-            raise ValueError(f"Bandwidth factor '{self.bandwidth}' is not positive")
-
-    def prepare(self):
-        "Prepare the KDE for drawing"
         self.kde = _scipy.stats.gaussian_kde(self._datafile.samples[:, self.idx], weights=self._datafile.weights)
         self.kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
@@ -362,6 +370,33 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
 
     def prepare(self):
         "Prepare the KDE for drawing"
+
+        # These checks are necessary to ensure that the data file is in the correct format,
+        # but they are not possible in the __post_init__ method, because the data file might not yet exist.
+        os.path.exists(self.datafile) or eos.error(f"Data file '{self.datafile}' does not exist")
+        abspath = os.path.abspath(self.datafile)
+        name = os.path.split(abspath)[-1]
+        if name == 'samples':
+            self._datafile = eos.data.ImportanceSamples(abspath)
+        elif name.startswith('pred-'):
+            self._datafile = eos.data.Prediction(abspath)
+        else:
+            eos.error(f"Data file '{self.datafile}' has an unsupported format")
+            raise NotImplementedError
+
+        if self.variables[0] not in self._datafile.lookup_table:
+            raise ValueError(f"Data file '{self.datafile}' does not contain samples of variable '{self.variables[0]}'")
+        if self.variables[1] not in self._datafile.lookup_table:
+            raise ValueError(f"Data file '{self.datafile}' does not contain samples of variable '{self.variables[1]}'")
+
+        self.xidx = self._datafile.lookup_table[self.variables[0]]
+        self.yidx = self._datafile.lookup_table[self.variables[1]]
+
+        if self.xrange is None:
+            self.xrange = (self._datafile.samples[:, self.xidx].min(), self._datafile.samples[:, self.xidx].max())
+
+        if self.yrange is None:
+            self.yrange = (self._datafile.samples[:, self.yidx].min(), self._datafile.samples[:, self.yidx].max())
 
         samples = self._datafile.samples[:, (self.xidx, self.yidx)]
         weights = self._datafile.weights[:]
