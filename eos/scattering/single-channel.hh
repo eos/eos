@@ -42,6 +42,7 @@ namespace eos
 
             virtual complex<double> scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
             virtual complex<double> omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
+            virtual complex<double> isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
             virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const unsigned & npoints, const unsigned & l, const IsospinRepresentation & i) const = 0;
 
     };
