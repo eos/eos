@@ -2572,7 +2572,7 @@ namespace eos
 
         if (_imp->constraint_entries.end() == i)
         {
-            return {};
+            throw UnknownConstraintError(name);
         }
 
         return i->second;
