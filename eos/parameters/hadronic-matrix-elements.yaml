@@ -5770,6 +5770,24 @@ groups:
           max:     +0.7745
           unit:     'GeV'
           latex:    '$m_{\rho^0}^\mathrm{GMKPRDEY}$'
+      'mass::omega@GMKPRDEY2011' :
+          central: +0.782
+          min:     +0.782
+          max:     +0.782
+          unit:     'GeV'
+          latex:    '$m_{\omega}^\mathrm{GMKPRDEY}$'
+      'width::omega@GMKPRDEY2011' :
+          central: +0.0085
+          min:     +0.0085
+          max:     +0.0085
+          unit:     'GeV'
+          latex:    '$\Gamma_{\omega}^\mathrm{GMKPRDEY}$'
+      'mixing::kappaEM@GMKPRDEY2011' :
+          central: +0.0054
+          min:     +0.0054
+          max:     +0.0054
+          unit:     '1'
+          latex:    '$\kappa_{EM}^\mathrm{GMKPRDEY}$'
       'mass::f_2@GMKPRDEY2011' :
           central: +1.2754
           min:     +1.2754
@@ -5920,6 +5938,19 @@ groups:
           max:     +10.0
           unit:     '1'
           latex:    '$n^{(D0)}$'
+      'pipi->pipi::Gamman0_pi@HKvT2025' :
+          central: +0.984
+          min:     +0.99
+          max:     +0.978
+          unit:     '1'
+          latex:   '$\Gamma^n_\pi(0)$'
+      'pipi->pipi::Gamman0_K@HKvT2025' :
+          central: +0.5
+          min:     +0.4
+          max:     +0.6
+          unit:     '1'
+          latex:   '$\Gamma^n_K(0)$'
+  # }}}
 
   # Parameters in 0 -> PP Form Factor Parametrizations
   # {{{
