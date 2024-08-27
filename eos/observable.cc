@@ -284,7 +284,7 @@ namespace eos
         if (i != observable_entries.end())
             return i->second;
 
-        return ObservableEntryPtr(nullptr);
+        throw UnknownObservableError("'" + qn.full() + "' not known");
     }
 
     Observables::ObservableIterator
