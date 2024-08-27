@@ -198,6 +198,241 @@ class StepComponent(Deserializable):
         return Deserializable.make(cls, **_kwargs)
 
 
+@dataclass
+class SampleNestedMatchDescription(Deserializable):
+    posterior:str
+    bound:str = None
+    nlive:int = None
+    dlogz:float = None
+    maxiter:int = None
+    seed:int = None
+    base_directory:str = None
+
+@dataclass
+class SampleNestedSetDescription(Deserializable):
+    bound:str
+    nlive:int
+    dlogz:float
+    maxiter:int
+    seed:int
+    base_directory:str
+
+@dataclass
+class SampleMCMCMatchDescription(Deserializable):
+    posterior:str
+    chain:int
+    N:int = None
+    stride:int = None
+    preruns:int = None
+    pre_N:int = None
+    start_point:tuple[float] = None
+    cov_scale:float = None
+    base_directory:str = None
+
+@dataclass
+class SampleMCMCSetDescription(Deserializable):
+    N:int
+    stride:int
+    preruns:int
+    pre_N:int
+    start_point:tuple[float]
+    cov_scale:float
+    base_directory:str
+
+@dataclass
+class MixtureProductMatchDescription(Deserializable):
+    posterior:str
+    posteriors:tuple[str]
+    base_directory:str = None
+
+@dataclass
+class MixtureProductSetDescription(Deserializable):
+    base_directory:str
+
+@dataclass
+class FindClustersMatchDescription(Deserializable):
+    posterior:str
+    threshold:float = None
+    K_g:int = None
+    base_directory:str = None
+
+@dataclass
+class FindClustersSetDescription(Deserializable):
+    threshold:float
+    K_g:int
+    base_directory:str
+
+@dataclass
+class PredictObservablesMatchDescription(Deserializable):
+    posterior:str
+    prediction:str
+    begin:int = None
+    end:int = None
+    base_directory:str = None
+
+@dataclass
+class PredictObservablesSetDescription(Deserializable):
+    begin:int
+    end:int
+    base_directory:str
+
+dataclass
+class CornerPlotMatchDescription(Deserializable):
+    posterior:str
+    begin:int = None
+    end:int = None
+    base_directory:str = None
+
+@dataclass
+class CornerPlotSetDescription(Deserializable):
+    begin:int
+    end:int
+    base_directory:str
+
+@dataclass
+class SamplePMCMatchDescription(Deserializable):
+    posterior:str
+    step_N:int = None
+    steps:int = None
+    perplexity_threshold:float = None
+    weight_threshold:float = None
+    final_N:int = None
+    pmc_iterations:int = None
+    pmc_rel_tol:float = None
+    pmc_abs_tol:float = None
+    pmc_lookback:int = None
+    initial_proposal:str = None
+    sigma_test_stat:tuple[float] = None
+    base_directory:str = None
+
+@dataclass
+class SamplePMCSetDescription(Deserializable):
+    step_N:int
+    steps:int
+    perplexity_threshold:float
+    weight_threshold:float
+    final_N:int
+    pmc_iterations:int
+    pmc_rel_tol:float
+    pmc_abs_tol:float
+    pmc_lookback:int
+    initial_proposal:str
+    sigma_test_stat:tuple[float]
+    base_directory:str
+
+@dataclass
+class PlotSamplesMatchDescription(Deserializable):
+    posterior:str
+    bins:int = None
+    base_directory:str = None
+
+@dataclass
+class PlotSamplesSetDescription(Deserializable):
+    bins:int
+    base_directory:str
+
+@dataclass
+class FindModeMatchDescription(Deserializable):
+    posterior:str
+    optimizations:int = None
+    importance_samples:bool = None
+    label:str = None
+    base_directory:str = None
+
+@dataclass
+class FindModeSetDescription(Deserializable):
+    optimizations:int
+    importance_samples:bool
+    label:str
+    base_directory:str
+
+@dataclass
+class ConfigurationComponent(Deserializable):
+    task:str
+    match:dict
+    set:dict
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+
+        if 'task' not in kwargs or 'match' not in kwargs or 'set' not in kwargs:
+            raise ValueError('ConfigurationComponent must have all of task, match and set')
+
+        task = kwargs["task"]
+
+        # Check: nothing in match is in set
+        if (overlap := kwargs["match"].keys() & kwargs["set"].keys()): # Check for any intersection
+            raise ValueError(f'Arguments {overlap} are in both match and set of the configuration of task {task}')
+
+        if task == "sample-nested":
+            _kwargs["match"] = SampleNestedMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = SampleNestedSetDescription.from_dict(**kwargs["set"])
+        elif task == "sample-pmc":
+            if "sigma_test_stat" in kwargs["match"]:
+                kwargs["match"]["sigma_test_stat"] = tuple(kwargs["match"]["sigma_test_stat"])
+            _kwargs["match"] = SamplePMCMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = SamplePMCSetDescription.from_dict(**kwargs["set"])
+        elif task == "plot-samples":
+            _kwargs["match"] = PlotSamplesMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = PlotSamplesSetDescription.from_dict(**kwargs["set"])
+        elif task == "find-mode":
+            _kwargs["match"] = FindModeMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = FindModeSetDescription.from_dict(**kwargs["set"])
+        elif task == "corner-plot":
+            _kwargs["match"] = CornerPlotMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = CornerPlotSetDescription.from_dict(**kwargs["set"])
+        elif task == "sample-mcmc":
+            if "start_point" in kwargs["match"]:
+                kwargs["match"]["start_point"] = tuple(kwargs["match"]["start_point"])
+            _kwargs["match"] = SampleMCMCMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["match"].pop("chain")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = SampleMCMCSetDescription.from_dict(**kwargs["set"])
+        elif task == "mixture-product":
+            kwargs["match"]["posteriors"] = tuple(kwargs["match"]["posteriors"])
+            _kwargs["match"] = MixtureProductMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["match"].pop("posteriors")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = MixtureProductSetDescription.from_dict(**kwargs["set"])
+        elif task == "find-clusters":
+            _kwargs["match"] = FindClustersMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = FindClustersSetDescription.from_dict(**kwargs["set"])
+        elif task == "predict-observables":
+            _kwargs["match"] = PredictObservablesMatchDescription.from_dict(**kwargs["match"])
+            # Remove the mandatory argument, then add anything else to "set" so it is complete
+            kwargs["match"].pop("posterior")
+            kwargs["match"].pop("prediction")
+            kwargs["set"].update(kwargs["match"])
+            _kwargs["set"] = PredictObservablesSetDescription.from_dict(**kwargs["set"])
+        else:
+            raise ValueError(f'Configuration for unknown task : {task}')
+
+        return Deserializable.make(cls, **_kwargs)
+
+
 # AnalysisFile schema
 
 # dict with keys:

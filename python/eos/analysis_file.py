@@ -23,7 +23,7 @@ import yaml
 from dataclasses import asdict
 from .analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
-                                       StepComponent, PriorDescription
+                                       StepComponent, PriorDescription, ConfigurationComponent
 
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
@@ -104,6 +104,14 @@ class AnalysisFile:
             self._steps = []
         else:
             self._steps = [StepComponent.from_dict(**s) for s in input_data['steps']]
+
+        if 'configuration' not in input_data:
+            self._configuration = {}
+        else:
+            self._configuration = {
+                task: [ConfigurationComponent.from_dict(task=task, **config) for config in configs]
+                                   for task, configs in input_data["configuration"].items()
+            }
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
