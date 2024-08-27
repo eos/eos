@@ -64,6 +64,11 @@ namespace eos
             // Phase input
             std::function<double(const double &)> _scattering_phase;
 
+            // Cached values necessary when evaluating the Omnes factor
+            std::array<std::array<double, order_>, nints_> _tanvals;
+            std::array<std::array<double, order_>, order_> _p_j_u;
+            std::array<double, (nints_ + 1) * order_> _slist;
+
             // Base constructor
             OmnesFactor(const std::array<double, nints_> & intervals, std::function<double(const double &)> scattering_phase);
 

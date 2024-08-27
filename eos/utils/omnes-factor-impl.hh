@@ -53,6 +53,33 @@ namespace eos
         // Obtain zeros of Legendre Polynomials and compute Gauss-Legendre weights
         LegendrePVector<order_> lp;
         lp.gauss_legendre(_zeros, _weights);
+
+        // Compute values for evaluation
+        for (unsigned i = 0 ; i < nints_ - 1 ; i++)
+        {
+            for (unsigned j = 0 ; j < order_ ; j++)
+            {
+                _slist[i * order_ + j] = (_intervals[i] + _intervals[i + 1] + (_intervals[i + 1] - _intervals[i]) * _zeros[j]) / 2.0;
+                _tanvals[i][j] = std::tan(_scattering_phase(_slist[i * order_ + j]));
+            }
+        }
+
+        for (unsigned j = 0 ; j < order_ ; j++)
+        {
+            _slist[(nints_ - 1) * order_ + j] = (2.0 * _intervals[nints_ - 1] / (1 - _zeros[j]));
+            _tanvals[nints_ - 1][j] = std::tan(_scattering_phase(_slist[(nints_ - 1) * order_ + j]));
+        }
+
+        LegendrePVector<order_ - 1> lp_v;
+        for(unsigned i = 0 ; i < order_ ; i++)
+        {
+            _p_j_u[i] = lp_v(_zeros[i]);
+            for (unsigned j = 0 ; j < order_ ; j++)
+            {
+                _p_j_u[i][j] *= (2 * j + 1);
+            }
+            _weights[i] /= M_PI;
+        }
     }
 
     // Deallocate memory
@@ -85,23 +112,21 @@ namespace eos
     template <unsigned order_, unsigned nints_>
     std::array<double, nints_ * order_> OmnesFactor<order_, nints_>::solve_sys(const double & bc_pos)
     {
-        std::array<double, (nints_ + 1) * order_> slist  {};
         std::array<double, (nints_ + 1) * order_> bc  {};
         std::array<double, nints_ * order_> sol {};
 
         for (unsigned i = 0 ; i < nints_ - 1 ; i++)
         {
-            std::array<double, order_> bcslice = rr_ab(bc_pos, _intervals[i], _intervals[i + 1]);
+            const std::array<double, order_> bcslice = rr_ab(bc_pos, _intervals[i], _intervals[i + 1]);
             for (unsigned j = 0 ; j < order_ ; j++)
             {
-                slist[i * order_ + j] = (_intervals[i] + _intervals[i + 1] + (_intervals[i + 1] - _intervals[i]) * _zeros[j]) / 2;
                 bc[i * order_ + j] = bcslice[j];
             }
         }
+
         std::array<double, order_> bc_end = rr_inf(bc_pos, _intervals[nints_ - 1]);
         for (unsigned j = 0 ; j < order_ ; j++)
         {
-            slist[(nints_ - 1) * order_ + j] = (2 * _intervals[nints_ - 1] / (1 - _zeros[j]));
             bc[(nints_ - 1) * order_ + j] = bc_end[j];
         }
 
@@ -112,11 +137,11 @@ namespace eos
                 std::array<double, order_> row  {};
                 if (j != nints_ - 1)
                 {
-                    row = rr_ab(slist[i], _intervals[j], _intervals[j + 1]);
+                    row = rr_ab(_slist[i], _intervals[j], _intervals[j + 1]);
                 }
                 else
                 {
-                    row = rr_inf(slist[i], _intervals[j]);
+                    row = rr_inf(_slist[i], _intervals[j]);
                 }
                 for (unsigned k = 0 ; k < order_ ; k++)
                 {
@@ -163,16 +188,14 @@ namespace eos
     {
         std::array<double, order_> ret_vec  {};
         LegendreReQVector<order_ - 1> lq_v;
-        LegendrePVector<order_ - 1> lp_v;
-        std::array<double, order_> q_j_z = lq_v(z);
+        const std::array<double, order_> q_j_z = lq_v(z);
 
         for (unsigned i = 0 ; i < order_ ; i++)
         {
             ret_vec[i] = 0.0;
-            std::array<double, order_> p_j_u_i = lp_v(_zeros[i]);
             for (unsigned j = 0 ; j < order_ ; j++)
             {
-                ret_vec[i] += (2 * j + 1) * p_j_u_i[j] * q_j_z[j];
+                ret_vec[i] += _p_j_u[i][j] * q_j_z[j];
             }
         }
         return ret_vec;
@@ -185,7 +208,7 @@ namespace eos
         std::array<double, order_> ret_vec = lq_sum((2 * z - a - b) / (b - a));
         for (unsigned i = 0 ; i < order_ ; i++)
         {
-            ret_vec[i] *= -_weights[i] / M_PI;
+            ret_vec[i] *= -_weights[i];
         }
         return ret_vec;
     }
@@ -197,20 +220,18 @@ namespace eos
         std::array<double, order_> ret_vec  {};
         if (std::abs(z) > 1e-10)
         {
-            ret_vec = lq_sum(1 - 2 * a / z);
+            ret_vec = lq_sum(1.0 - 2.0 * a / z);
             for (unsigned i = 0 ; i < order_ ; i++)
             {
-                ret_vec[i] *= -2 * a / z * _weights[i] / M_PI / (1 - _zeros[i]);
+                ret_vec[i] *= -2.0 * a / z * _weights[i] / (1 - _zeros[i]);
             }
         }
         else
         {
             // Special case for z = 0
-            LegendrePVector<order_-1> lp_v;
             for (unsigned i = 0 ; i < order_ ; i++)
             {
-                std::array<double, order_> p_j_u_i = lp_v(_zeros[i]);
-                ret_vec[i] = p_j_u_i[0] * _weights[i] / M_PI / (1 - _zeros[i]);
+                ret_vec[i] = _p_j_u[i][0] * _weights[i] / (1 - _zeros[i]);
             }
         }
         return ret_vec;
@@ -221,7 +242,7 @@ namespace eos
     std::array<double, order_> OmnesFactor<order_, nints_>::rr_ab(const double & z, const double & a, const double & b) const
     {
         std::array<double, order_> ret_vec  {};
-        std::array<double, order_> pab = p_ab(z, a, b);
+        const std::array<double, order_> pab = p_ab(z, a, b);
 
         for (unsigned i = 0 ; i < order_ ; i++)
         {
@@ -235,7 +256,7 @@ namespace eos
     std::array<double, order_> OmnesFactor<order_, nints_>::rr_inf(const double & z, const double & a) const
     {
         std::array<double, order_> ret_vec  {};
-        std::array<double, order_> pinf = p_inf(z, a);
+        const std::array<double, order_> pinf = p_inf(z, a);
 
         for (unsigned i = 0 ; i < order_ ; i++)
         {
@@ -255,25 +276,21 @@ namespace eos
             throw InternalError("Tried to evaluate Omnes factor too close to delta(s) = Pi/2!");
         }
 
-        for (unsigned i = 0 ; i < nints_ ; i++)
+        for (unsigned i = 0 ; i < nints_ - 1 ; i++)
         {
-            if (i == nints_ - 1)
+            const std::array<double, order_> pab = p_ab(s, _intervals[i], _intervals[i + 1]);
+            for (unsigned j = 0 ; j < order_ ; j++)
             {
-                std::array<double, order_> pinf = p_inf(s, _intervals[i]);
-                for (unsigned j = 0 ; j < order_ ; j++)
-                {
-                    res += pinf[j] * std::tan(_scattering_phase(2 * _intervals[i] / (1 - _zeros[j]))) * _sol[i * order_ + j];
-                }
-            }
-            else
-            {
-                std::array<double, order_> pab = p_ab(s, _intervals[i], _intervals[i + 1]);
-                for (unsigned j = 0 ; j < order_ ; j++)
-                {
-                    res += pab[j] * std::tan(_scattering_phase((_intervals[i] + _intervals[i + 1] + (_intervals[i + 1] - _intervals[i]) * _zeros[j]) / 2)) * _sol[i * order_ + j];
-                }
+                res += pab[j] * _tanvals[i][j] * _sol[i * order_ + j];
             }
         }
+
+        const std::array<double, order_> pinf = p_inf(s, _intervals[nints_ - 1]);
+        for (unsigned j = 0 ; j < order_ ; j++)
+        {
+            res += pinf[j] * _tanvals[nints_ - 1][j] * _sol[(nints_ - 1) * order_ + j];
+        }
+
         if (s > _intervals[0])
         {
             return complex<double>(res, res * std::tan(_scattering_phase(s)));
