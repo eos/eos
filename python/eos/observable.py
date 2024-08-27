@@ -223,11 +223,3 @@ class Observables(_Observables):
         result += r'</table>'
 
         return(result)
-
-    @staticmethod
-    def _get_obs_entry(name):
-        obs = Observables()[name]
-        if obs is None:
-            raise ValueError("Observable with name '" + name + "' is not known")
-        else:
-            return obs

@@ -79,7 +79,7 @@ class Observable(Item):
         ):
         super().__init__()
 
-        obs_entry = eos.Observables._get_obs_entry(observable)
+        obs_entry = eos.Observables()[observable]
         valid_kin_vars = [kv for kv in obs_entry.kinematic_variables()]
         eos.info(f'Plotting EOS observable "{observable}"')
 
