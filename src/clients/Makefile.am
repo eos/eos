@@ -28,6 +28,7 @@ LDADD = \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	$(top_builddir)/eos/nonleptonic-amplitudes/libeosnonleptonicamplitudes.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \

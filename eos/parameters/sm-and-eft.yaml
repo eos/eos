@@ -276,13 +276,13 @@ groups:
           unit:     '1'
           latex:   '$\arg{V_{ub}}$'
       'CKM::abs(V_cd)' :
-          central: +0.22520640670275255
+          central: +0.2252036736908776
           min:     +0.00
           max:     +1.00
           unit:     '1'
           latex:   '$|V_{cd}|$'
       'CKM::arg(V_cd)' :
-          central: +0.0006498478746344896
+          central: -3.140974982014205
           min:     -3.14159
           max:     +3.14159
           unit:     '1'
