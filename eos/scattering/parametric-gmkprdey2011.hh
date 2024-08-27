@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -47,6 +47,7 @@ namespace eos
 
             // Masses
             const UsedParameter _mPi, _mK, _mEta, _mRho, _mF2;
+            const UsedParameter _mOmega, _GammaOmega, _kappa;
             // Parameters for conformal mappings
             const UsedParameter _sM_S0, _s0_P1, _s0_D0, _sh_D0;
             // Parameters controlling evolution of phases above \sqrt{s} = 1.42 GeV
@@ -56,8 +57,8 @@ namespace eos
             std::array<double, 4> _intervals_P1;
             std::array<double, 5> _intervals_D0;
             std::function<double(const double &)> _f_phase_P1, _f_phase_D0;
-            OmnesFactor<50, 4> _omnes_P1;
-            OmnesFactor<60, 5> _omnes_D0;
+            OmnesFactor<30, 4> _omnes_P1;
+            OmnesFactor<40, 5> _omnes_D0;
 
             QualifiedName _par_name(const std::string & partial_wave, const std::string & par_name, unsigned idx) const;
             QualifiedName _par_name(const std::string & partial_wave, const std::string & par_name) const;
@@ -80,6 +81,7 @@ namespace eos
 
             virtual complex<double> scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const;
             virtual complex<double> omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const;
+            virtual complex<double> isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const;
             virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const unsigned & npoints, const unsigned & l, const IsospinRepresentation & i) const;
 
             Diagnostics diagnostics() const;

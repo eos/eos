@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -123,8 +123,8 @@ class GMKPRDEY2011ScatteringAmplitudesTest :
 
                 TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(0.55  , 2 , IsospinRepresentation::zero).real()   ,  1.611722 ,  eps);
                 TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(0.55  , 2 , IsospinRepresentation::zero).imag()   ,  0.079599 ,  eps);
-                TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(1.44  , 2 , IsospinRepresentation::zero).real()   ,  4.823117 ,  eps);
-                TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(1.44  , 2 , IsospinRepresentation::zero).imag()   ,  5.003168 ,  eps);
+                TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(1.44  , 2 , IsospinRepresentation::zero).real()   ,  4.823093 ,  eps);
+                TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(1.44  , 2 , IsospinRepresentation::zero).imag()   ,  5.003143 ,  eps);
                 TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(1.65  , 2 , IsospinRepresentation::zero).real()   , -0.917640 ,  eps);
                 TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(1.65  , 2 , IsospinRepresentation::zero).imag()   ,  8.643233 ,  eps);
                 TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(100.0 , 2 , IsospinRepresentation::zero).real()   , -0.016038 ,  eps);
