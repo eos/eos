@@ -60,3 +60,22 @@ class QuarkFlavorTest :
             TEST_CHECK_EQUAL_STR("t", stringify(QuarkFlavor::top));
         }
 } quark_flavor_test;
+
+class IsospinRepresentationTest :
+    public TestCase
+{
+    public:
+        IsospinRepresentationTest() :
+            TestCase("isospin_representation_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            TEST_CHECK_EQUAL_STR("0",   stringify(IsospinRepresentation::zero));
+            TEST_CHECK_EQUAL_STR("1",   stringify(IsospinRepresentation::one));
+            TEST_CHECK_EQUAL_STR("2",   stringify(IsospinRepresentation::two));
+            TEST_CHECK_EQUAL_STR("1/2", stringify(IsospinRepresentation::onehalf));
+            TEST_CHECK_EQUAL_STR("3/2", stringify(IsospinRepresentation::threehalves));
+        }
+} isospin_representation_test;
