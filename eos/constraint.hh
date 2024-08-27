@@ -132,6 +132,15 @@ namespace eos
             }
             ///@}
 
+            ///@name Iteration over our references
+            ///@{
+            struct ReferenceNameIteratorTag;
+            using ReferenceNameIterator = WrappedForwardIterator<ReferenceNameIteratorTag, const ReferenceName>;
+
+            virtual ReferenceNameIterator begin_references() const = 0;
+            virtual ReferenceNameIterator end_references() const = 0;
+            ///@}
+
             /// Serialize to YAML
             virtual void serialize(YAML::Emitter &) const = 0;
 
@@ -140,6 +149,7 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
+    extern template class WrappedForwardIterator<ConstraintEntry::ReferenceNameIteratorTag, const ReferenceName>;
 
     /*!
      * Container around the known and implemented constraints

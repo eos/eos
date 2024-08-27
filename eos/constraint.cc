@@ -72,6 +72,13 @@ namespace eos
     };
     template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
 
+    template <>
+    struct WrappedForwardIteratorTraits<ConstraintEntry::ReferenceNameIteratorTag>
+    {
+        using UnderlyingIterator = std::vector<ReferenceName>::const_iterator;
+    };
+    template class WrappedForwardIterator<ConstraintEntry::ReferenceNameIteratorTag, const ReferenceName>;
+
     namespace impl
     {
         static bool less(const std::pair<YAML::Node, YAML::Node> & lhs, const std::pair<YAML::Node, YAML::Node> & rhs)
@@ -89,31 +96,38 @@ namespace eos
 
             std::vector<QualifiedName> _observable_names;
 
+            std::vector<ReferenceName> _reference_names;
+
             ConstraintEntryBase(const QualifiedName & name,
-                    std::vector<QualifiedName> && observable_names) :
+                    std::vector<QualifiedName> && observable_names,
+                    std::vector<ReferenceName> && reference_names) :
                 _name(name),
-                _observable_names(std::move(observable_names))
+                _observable_names(std::move(observable_names)),
+                _reference_names(std::move(reference_names))
             {
             }
 
         public:
             ConstraintEntryBase(const QualifiedName & name,
-                    const QualifiedName & observable_name) :
-                ConstraintEntryBase(name, std::vector<QualifiedName>{ observable_name })
+                    const QualifiedName & observable_name,
+                    const std::vector<ReferenceName> & reference_names) :
+                ConstraintEntryBase(name, std::vector<QualifiedName>{ observable_name }, reference_names)
             {
             }
 
             ConstraintEntryBase(const QualifiedName & name,
-                    const std::vector<QualifiedName> & observable_names) :
+                    const std::vector<QualifiedName> & observable_names,
+                    const std::vector<ReferenceName> & reference_names) :
                 _name(name),
-                _observable_names(observable_names)
+                _observable_names(observable_names),
+                _reference_names(reference_names)
             {
             }
 
             template <unsigned long n_>
             ConstraintEntryBase(const QualifiedName & name,
                     const std::array<QualifiedName, n_> & observable_names) :
-                ConstraintEntryBase(name, std::vector<QualifiedName>(observable_names.begin(), observable_names.end()))
+                ConstraintEntryBase(name, std::vector<QualifiedName>(observable_names.begin(), observable_names.end()), std::vector<ReferenceName>())
             {
             }
 
@@ -129,6 +143,16 @@ namespace eos
             virtual ConstraintEntry::ObservableNameIterator end_observable_names() const
             {
                 return _observable_names.end();
+            }
+
+            virtual ConstraintEntry::ReferenceNameIterator begin_references() const final
+            {
+                return _reference_names.begin();
+            }
+
+            virtual ConstraintEntry::ReferenceNameIterator end_references() const final
+            {
+                return _reference_names.end();
             }
 
             virtual void serialize(YAML::Emitter & out) const
@@ -163,8 +187,9 @@ namespace eos
                 const Kinematics & kinematics, const Options & options,
                 const double & central,
                 const double & sigma_hi_stat, const double & sigma_lo_stat,
-                const double & sigma_hi_sys, const double & sigma_lo_sys) :
-            ConstraintEntryBase(name, observable),
+                const double & sigma_hi_sys, const double & sigma_lo_sys,
+                const  std::vector<ReferenceName> & references) :
+            ConstraintEntryBase(name, observable, references),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -257,6 +282,12 @@ namespace eos
             out << YAML::Key << "hi" << YAML::Value << sigma_hi_sys;
             out << YAML::Key << "lo" << YAML::Value << sigma_lo_sys;
             out << YAML::EndMap;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
         }
 
         static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
@@ -340,8 +371,22 @@ namespace eos
                 double sigma_hi_sys  = n["sigma-sys"]["hi"].as<double>();
                 double sigma_lo_sys  = n["sigma-sys"]["lo"].as<double>();
 
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
                 return new GaussianConstraintEntry(name.str(), observable, kinematics, options, mean,
-                        sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys);
+                        sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys, reference_names);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -370,8 +415,9 @@ namespace eos
                 const Kinematics & kinematics, const Options & options,
                 const double & central,
                 const double & sigma_hi, const double & sigma_lo,
-                const double & alpha, const double & lambda) :
-            ConstraintEntryBase(name, observable),
+                const double & alpha, const double & lambda,
+                const  std::vector<ReferenceName> & references) :
+            ConstraintEntryBase(name, observable, references),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -458,6 +504,12 @@ namespace eos
             out << YAML::EndMap;
             out << YAML::Key << "alpha" << YAML::Value << alpha;
             out << YAML::Key << "lambda" << YAML::Value << lambda;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
             out << YAML::EndMap;
         }
 
@@ -543,8 +595,22 @@ namespace eos
                 double alpha  = n["alpha"].as<double>();
                 double lambda = n["lambda"].as<double>();
 
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
                 return new LogGammaConstraintEntry(name.str(), observable, kinematics, options, mode,
-                        sigma_hi, sigma_lo, alpha, lambda);
+                        sigma_hi, sigma_lo, alpha, lambda, reference_names);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -573,8 +639,9 @@ namespace eos
                 const double & physical_limit,
                 const double & theta,
                 const double & alpha,
-                const double & beta) :
-            ConstraintEntryBase(name, observable),
+                const double & beta,
+                const  std::vector<ReferenceName> & references) :
+            ConstraintEntryBase(name, observable, references),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -654,6 +721,12 @@ namespace eos
             out << YAML::Key << "theta" << YAML::Value << theta;
             out << YAML::Key << "alpha" << YAML::Value << alpha;
             out << YAML::Key << "beta" << YAML::Value << beta;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
             out << YAML::EndMap;
         }
 
@@ -737,8 +810,22 @@ namespace eos
                 double alpha          = n["alpha"].as<double>();
                 double beta           = n["beta"].as<double>();
 
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
                 return new AmorosoConstraintEntry(name.str(), observable, kinematics, options,
-                        physical_limit, theta, alpha, beta);
+                        physical_limit, theta, alpha, beta, reference_names);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -780,8 +867,9 @@ namespace eos
                 const std::vector<double> & sigma_stat_lo,
                 const std::vector<double> & sigma_sys,
                 const std::vector<std::vector<double>> & correlation,
-                const unsigned number_of_observations) :
-            ConstraintEntryBase(name, observable_names),
+                const unsigned number_of_observations,
+                const std::vector<ReferenceName> & references) :
+            ConstraintEntryBase(name, observable_names, references),
             observable_names(observable_names),
             kinematics(kinematics),
             options(options),
@@ -1024,6 +1112,12 @@ namespace eos
                 out << YAML::EndSeq;
             }
             out << YAML::EndSeq;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
@@ -1160,8 +1254,22 @@ namespace eos
                     }
                 }
 
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
                 return new MultivariateGaussianConstraintEntry(name.str(), observables, kinematics, options, means,
-                        sigma_stat_hi, sigma_stat_lo, sigma_sys, correlations, dof);
+                        sigma_stat_hi, sigma_stat_lo, sigma_sys, correlations, dof, reference_names);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -1198,8 +1306,9 @@ namespace eos
                 gsl_vector * const means,
                 gsl_matrix * const covariance,
                 gsl_matrix * const response,
+                const std::vector<ReferenceName> & references,
                 const unsigned number_of_observations) :
-            ConstraintEntryBase(name, observables),
+            ConstraintEntryBase(name, observables, references),
             observables(observables),
             kinematics(kinematics),
             options(options),
@@ -1408,6 +1517,12 @@ namespace eos
                 out << YAML::EndSeq;
             }
             out << YAML::EndSeq;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
             if (response)
             {
                 out << YAML::Key << "response" << YAML::Value << YAML::BeginSeq;
@@ -1594,7 +1709,21 @@ namespace eos
                     }
                 }
 
-                return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, response, dof);
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
+                return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, response, reference_names, dof);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -1624,8 +1753,9 @@ namespace eos
                 const std::vector<Kinematics> & kinematics,
                 const std::vector<Options> & options,
                 const double & bound,
-                const double & uncertainty) :
-            ConstraintEntryBase(name, observable_names),
+                const double & uncertainty,
+                const std::vector<ReferenceName> & references) :
+            ConstraintEntryBase(name, observable_names, references),
             observable_names(observable_names),
             kinematics(kinematics),
             options(options),
@@ -1724,6 +1854,12 @@ namespace eos
             out << YAML::EndSeq;
             out << YAML::Key << "bound" << YAML::Value << bound;
             out << YAML::Key << "uncertainty" << YAML::Value << uncertainty;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
             out << YAML::EndMap;
         }
 
@@ -1827,7 +1963,21 @@ namespace eos
                 double bound       = n["bound"].as<double>();
                 double uncertainty = n["uncertainty"].as<double>();
 
-                return new UniformBoundConstraintEntry(name.str(), observables, kinematics, options, bound, uncertainty);
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
+                return new UniformBoundConstraintEntry(name.str(), observables, kinematics, options, bound, uncertainty,reference_names);
             }
             catch (QualifiedNameSyntaxError & e)
             {
@@ -1868,8 +2018,9 @@ namespace eos
                 std::vector<GSLMatrixPtr> && _covariances,
                 const std::vector<double> & weights,
                 const std::vector<std::array<double, 2>> & test_stat,
-                const unsigned number_of_observations) :
-            ConstraintEntryBase(name, observables),
+                const unsigned number_of_observations,
+                const std::vector<ReferenceName> & references) :
+            ConstraintEntryBase(name, observables, references),
             observables(observables),
             kinematics(kinematics),
             options(options),
@@ -2062,6 +2213,12 @@ namespace eos
             }
             out << YAML::EndSeq;
             out << YAML::EndMap;
+            out << YAML::Key << "references" << YAML::Value << YAML::BeginSeq << YAML::Flow;
+            for (auto rn: this->_reference_names)
+            {
+                out << rn.str();
+            }
+            out << YAML::EndSeq;
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
@@ -2247,7 +2404,21 @@ namespace eos
                     test_stat.push_back(std::array<double, 2>{*sigma_it, *value});
                 }
 
-                return new MixtureConstraintEntry(name.str(), observables, kinematics, options, std::move(means), std::move(covariances), std::move(weights), std::move(test_stat), dof);
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
+                {
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
+                }
+
+                return new MixtureConstraintEntry(name.str(), observables, kinematics, options, std::move(means), std::move(covariances), std::move(weights), std::move(test_stat), dof, reference_names);
             }
             catch (QualifiedNameSyntaxError & e)
             {

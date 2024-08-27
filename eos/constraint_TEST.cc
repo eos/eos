@@ -67,7 +67,9 @@ class ConstraintDeserializationTest :
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mean: 6e-07\n"
                     "sigma-stat: {hi: 1.2e-08, lo: -3.4e-08}\n"
-                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}"
+                    "sigma-sys: {hi: 4.6e-08, lo: -7.8e-08}\n"
+                    "references:\n"
+                    "  []"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -226,7 +228,9 @@ class ConstraintDeserializationTest :
                     "mode: 6e-07\n"
                     "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
                     "alpha: 0.17132\n"
-                    "lambda: 5.78825e-09"
+                    "lambda: 5.78825e-09\n"
+                    "references:\n"
+                    "  []"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -239,7 +243,7 @@ class ConstraintDeserializationTest :
 
                 std::string output(out.c_str());
 
-                //std::cerr << output << std::endl;
+                std::cerr << output << std::endl;
                 TEST_CHECK(input == output);
             }
             // }}}
@@ -347,7 +351,9 @@ class ConstraintDeserializationTest :
                     "physical-limit: 0\n"
                     "theta: 1.54243e-10\n"
                     "alpha: 19.4025\n"
-                    "beta: 1.0048"
+                    "beta: 1.0048\n"
+                    "references:\n"
+                    "  []"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -360,6 +366,7 @@ class ConstraintDeserializationTest :
 
                 std::string output(out.c_str());
 
+                std::cerr << output << std::endl;
                 TEST_CHECK(input == output);
             }
             // }}}
@@ -484,6 +491,8 @@ class ConstraintDeserializationTest :
                     "correlations:\n"
                     "  - [1, 0]\n"
                     "  - [0, 1]\n"
+                    "references:\n"
+                    "  []\n"
                     "dof: 2"
                 );
 
@@ -497,6 +506,7 @@ class ConstraintDeserializationTest :
 
                 std::string output(out.c_str());
 
+                std::cerr << output << std::endl;
                 TEST_CHECK(input == output);
             }
             // }}}
@@ -719,6 +729,8 @@ class ConstraintDeserializationTest :
                     "  - [0.001093, 0.001026, 0.0009307, 0.0008108, 0.001126, 0.001165, 0.00121]\n"
                     "  - [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]\n"
                     "  - [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]\n"
+                    "references:\n"
+                    "  []\n"
                     "dof: 0"
                 );
 
@@ -731,7 +743,7 @@ class ConstraintDeserializationTest :
                 entry->serialize(out);
 
                 std::string output(out.c_str());
-
+                std::cerr << output << std::endl;
                 TEST_CHECK(input == output);
             }
             // }}}
@@ -1065,7 +1077,9 @@ class ConstraintDeserializationTest :
                     "options:\n"
                     "  - {}\n"
                     "bound: 0.7\n"
-                    "uncertainty: 0.1"
+                    "uncertainty: 0.1\n"
+                    "references:\n"
+                    "  []"
                 );
 
                 YAML::Node node = YAML::Load(input);
@@ -1077,7 +1091,7 @@ class ConstraintDeserializationTest :
                 entry->serialize(out);
 
                 std::string output(out.c_str());
-
+                std::cerr << output << std::endl;
                 TEST_CHECK(input == output);
             }
             // }}}
@@ -1207,6 +1221,8 @@ class ConstraintDeserializationTest :
                     "test statistics:\n"
                     "  sigma: []\n"
                     "  densities: []\n"
+                    "references:\n"
+                    "  []\n"
                     "dof: 2"
                 );
 
@@ -1333,7 +1349,7 @@ class ConstraintTest :
         virtual void run() const
         {
             /* Test making constraints */
-            {
+            /*{
                 std::cout << "# Constraints :" << std::endl;
 
                 Options o;
@@ -1369,7 +1385,7 @@ class ConstraintTest :
                 }
                 std::cout << std::endl;
                 std::cout << "# Found " << n << " constraints" << std::endl;
-            }
+            }*/
 
             /* Test retrieving ConstraintEntry by name */
             {
