@@ -1,0 +1,48 @@
+priors:
+  - name: CKM
+    descriptions:
+      - { parameter: 'CKM::abs(V_cb)',           min:  38e-3, max:  45e-3 , type: 'uniform' }
+
+  - name: FF
+    descriptions:
+      - { parameter: 'B->D::alpha^f+_0@BSZ2015', min:  0.0,   max:  1.0   , type: 'uniform' }
+      - { parameter: 'B->D::alpha^f+_1@BSZ2015', min: -4.0,   max: -1.0   , type: 'uniform' }
+      - { parameter: 'B->D::alpha^f+_2@BSZ2015', min: +4.0,   max: +6.0   , type: 'uniform' }
+      - { parameter: 'B->D::alpha^f0_1@BSZ2015', min: -1.0,   max: +2.0   , type: 'uniform' }
+      - { parameter: 'B->D::alpha^f0_2@BSZ2015', min: -2.0,   max:  0.0   , type: 'uniform' }
+
+likelihoods:
+  - name: FF-LQCD
+    constraints:
+      - 'B->D::f_++f_0@HPQCD:2015A;form-factors=BSZ2015'
+      - 'B->D::f_++f_0@FNAL+MILC:2015B;form-factors=BSZ2015'
+
+  - name: B-to-D-l-nu
+    constraints:
+      - 'B^0->D^+e^-nu::BRs@Belle:2015A;form-factors=BSZ2015'
+      - 'B^0->D^+mu^-nu::BRs@Belle:2015A;form-factors=BSZ2015'
+
+posteriors:
+  - name: CKM
+    global_options:
+      model: CKM
+    prior:
+      - CKM
+      - FF
+    likelihood:
+      - FF-LQCD
+      - B-to-D-l-nu
+
+predictions:
+  - name: B-to-D-e-nu
+    observables:
+      - name: B->Dlnu::dBR/dq2;l=e
+        kinematics: [
+          { q2:  3.e-5 },
+          { q2:  0.01 }, { q2:  0.05 }, { q2:  0.10 }, { q2:  0.15 }, { q2:  0.20 }, { q2:  0.25 },
+          { q2:  0.30 }, { q2:  0.35 }, { q2:  0.40 }, { q2:  0.45 }, { q2:  0.50 }, { q2:  0.55 },
+          { q2:  0.60 }, { q2:  0.65 }, { q2:  0.70 }, { q2:  0.75 }, { q2:  0.80 }, { q2:  0.85 },
+          { q2:  0.90 }, { q2:  0.95 }, { q2:  1.0  }, { q2:  1.5  }, { q2:  2.0  }, { q2:  2.5  },
+          { q2:  3.0  }, { q2:  4.0  }, { q2:  5.0  }, { q2:  6.0 }, { q2:  7.0 }, { q2:  8.0 },
+          { q2:  9.0  }, { q2: 10.0  }, { q2: 11.0  }, { q2: 11.6 }
+        ]
