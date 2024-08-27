@@ -409,13 +409,13 @@ class AnalysisFile:
                     messages.append(f"Error in prediction {pred_name}: Observable '{o.name}' not known to EOS")
         # Check that any parameters that are fixed (in posteriors or predictions) are known to EOS
         for p_name, posterior in self._posteriors.items():
-            for param, value in posterior.fixed_parameters.items():
+            for param in posterior.fixed_parameters:
                 try:
                     known_params[param]
                 except RuntimeError:
                     messages.append(f"Error in posterior {p_name}: Fixed parameter '{param}' not known to EOS")
         for p_name, prediction in self._predictions.items():
-            for param, value in prediction.fixed_parameters.items():
+            for param in prediction.fixed_parameters:
                 try:
                     known_params[param]
                 except RuntimeError:
