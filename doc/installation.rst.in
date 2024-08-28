@@ -135,7 +135,7 @@ g++
   the GNU C++ compiler, in version 10.1 or higher;
 
 autoconf
-  the GNU tool for creating configure scripts, in version 2.69 or higher;
+  the GNU tool for creating configure scripts, in version @MIN_AUTOCONF_VERSION@ or higher;
 
 automake
   the GNU tool for creating makefiles, in version 1.16.2 or higher;
@@ -156,7 +156,7 @@ yaml-cpp
 The Python interface to EOS requires the additional software:
 
 python3
-  the Python interpreter in version 3.7 or higher, and required header files;
+  the Python interpreter in version @MIN_PYTHON_VERSION@ or higher, and required header files;
 
 pip
   the Python package installer;
