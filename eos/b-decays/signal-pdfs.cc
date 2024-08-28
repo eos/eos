@@ -25,7 +25,6 @@
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/b-decays/b-to-3l-nu.hh>
-#include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/utils/concrete-signal-pdf.hh>
@@ -277,19 +276,32 @@ namespace eos
                 ),
 
                 // B_s -> K^* l nu
-                make_signal_pdf("B_s->K^*lnu::d^4Gamma",
-                    Options{ },
-                    &BsToKstarLeptonNeutrino::four_differential_decay_width,
+                make_signal_pdf("B_s->K^*lnu::dBR",
+                    Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } },
+                    &BToVectorLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
-                        KinematicRange{ "s", 0.02, 19.71, BsToKstarLeptonNeutrino::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BsToKstarLeptonNeutrino::kinematics_description_phi }
+                        KinematicRange{ "q2", 0.0, 10.68, BToVectorLeptonNeutrino::kinematics_description_q2 }
                     ),
-                    &BsToKstarLeptonNeutrino::integrated_decay_width,
+                    &BToVectorLeptonNeutrino::integrated_branching_ratio,
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
+
+                make_signal_pdf("B_s->K^*lnu::d^4Gamma",
+                    Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } },
+                    &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "q2",            0.0,  10.68,      BToVectorLeptonNeutrino::kinematics_description_q2        },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0,        BToVectorLeptonNeutrino::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_d)", -1.0, +1.0,        BToVectorLeptonNeutrino::kinematics_description_c_theta_d },
+                        KinematicRange{ "phi",           0.0,  2.0 * M_PI, BToVectorLeptonNeutrino::kinematics_description_phi       }
+                    ),
+                    &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
                     )
                 ),
             }

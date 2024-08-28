@@ -16,7 +16,6 @@ libeosbdecays_la_SOURCES = \
 	b-to-psd-l-nu.cc b-to-psd-l-nu.hh \
 	b-to-v-l-nu.hh \
 	b-to-vec-l-nu.cc b-to-vec-l-nu.hh b-to-vec-l-nu-impl.hh \
-	bs-to-kstar-l-nu.cc bs-to-kstar-l-nu.hh \
 	bq-to-dq-psd.cc bq-to-dq-psd.hh \
 	bq-to-dstarq-psd.cc bq-to-dstarq-psd.hh \
 	lambdab-to-lambdac-l-nu.cc lambdab-to-lambdac-l-nu.hh \
@@ -51,7 +50,6 @@ include_eos_bdecays_HEADERS = \
 	b-to-vec-l-nu.hh \
 	bq-to-dq-psd.hh \
 	bq-to-dstarq-psd.hh \
-	bs-to-kstar-l-nu.hh \
 	inclusive-b-to-u.hh \
 	lambdab-to-lambdac-l-nu.hh \
 	observables.hh \
