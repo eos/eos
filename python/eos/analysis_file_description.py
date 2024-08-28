@@ -198,7 +198,7 @@ class StepComponent(Deserializable):
         return Deserializable.make(cls, **_kwargs)
 
 
-@dataclass
+@dataclass(frozen=True)
 class SampleNestedMatchDescription(Deserializable):
     posterior:str
     bound:str = None
@@ -217,7 +217,7 @@ class SampleNestedSetDescription(Deserializable):
     seed:int
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class SampleMCMCMatchDescription(Deserializable):
     posterior:str
     chain:int
@@ -239,7 +239,7 @@ class SampleMCMCSetDescription(Deserializable):
     cov_scale:float
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class MixtureProductMatchDescription(Deserializable):
     posterior:str
     posteriors:tuple[str]
@@ -249,7 +249,7 @@ class MixtureProductMatchDescription(Deserializable):
 class MixtureProductSetDescription(Deserializable):
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class FindClustersMatchDescription(Deserializable):
     posterior:str
     threshold:float = None
@@ -262,7 +262,7 @@ class FindClustersSetDescription(Deserializable):
     K_g:int
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class PredictObservablesMatchDescription(Deserializable):
     posterior:str
     prediction:str
@@ -276,7 +276,7 @@ class PredictObservablesSetDescription(Deserializable):
     end:int
     base_directory:str
 
-dataclass
+@dataclass(frozen=True)
 class CornerPlotMatchDescription(Deserializable):
     posterior:str
     begin:int = None
@@ -289,7 +289,7 @@ class CornerPlotSetDescription(Deserializable):
     end:int
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class SamplePMCMatchDescription(Deserializable):
     posterior:str
     step_N:int = None
@@ -320,7 +320,7 @@ class SamplePMCSetDescription(Deserializable):
     sigma_test_stat:tuple[float]
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class PlotSamplesMatchDescription(Deserializable):
     posterior:str
     bins:int = None
@@ -331,7 +331,7 @@ class PlotSamplesSetDescription(Deserializable):
     bins:int
     base_directory:str
 
-@dataclass
+@dataclass(frozen=True)
 class FindModeMatchDescription(Deserializable):
     posterior:str
     optimizations:int = None

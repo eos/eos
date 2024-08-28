@@ -428,6 +428,11 @@ class AnalysisFile:
                     known_params[param]
                 except RuntimeError:
                     messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
+        # Check that two configurations don't have identical match criteria
+        for task_name, configs in self._configuration.items():
+            matches = [c.match for c in configs]
+            if len(matches) != len(set(matches)):
+                messages.append(f"Error in configuration for task {task_name}: two configurations have identical match criteria")
 
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
