@@ -327,7 +327,7 @@ in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
     )
     parser_find_mode.add_argument('-p', '--from-point',
         help = 'The point from which the minimization is started.',
-        dest = 'start_point', action = 'store', type = str, default = None
+        dest = 'start_point', action = 'store', type = lambda s: [float(item) for item in s.split(',')]
     )
     parser_find_mode.add_argument('-s', '--use-random-seed',
         help = 'The seed used to generate the random starting point of the minimization.',
