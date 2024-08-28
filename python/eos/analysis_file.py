@@ -471,59 +471,161 @@ class AnalysisFile:
 
     def _repr_html_(self):
         result = r'''
-        <table>
+            <table style="width: 80%">
+                <colgroup>
+                    <col width="40%" style="min-width: 160px">
+                    <col width="15%" style="min-width:  80px">
+                    <col width="15%" style="min-width:  80px">
+                    <col width="30%" style="min-width:  80px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center">PRIORS</th>
+                    </tr>
+                </thead>
+            '''
+        for name, priors in self._priors.items():
+            result += fr'''
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: left">{name}</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center">qualified name</th>
+                        <th style="text-align: center">min</th>
+                        <th style="text-align: center">max</th>
+                        <th style="text-align: center">type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                '''
+            for p in priors.descriptions:
+                p_min, p_max = None, None
+                if p.type == 'uniform':
+                    p_min, p_max = p.min, p.max
+                result += fr'''
+                    <tr>
+                        <td style="text-align: center"><code>{p.parameter}</code></td>
+                        <td style="text-align: center">{p_min}</td>
+                        <td style="text-align: center">{p_max}</td>
+                        <td style="text-align: center">{p.type}</td>
+                    </tr>
+                '''
+
+        result += r'''
+            </tbody>
+            </table>
+            <br>
+            <table style="width: 80%">
+            <thead>
+                <tr>
+                    <th style="text-align: center">LIKELIHOODS</th>
+                </tr>
+            </thead>
+        '''
+        for name, likelihoods in self._likelihoods.items():
+            result += rf'''
+                <thead>
+                    <tr>
+                        <th style="text-align: left">{name}</th>
+                    </tr>
+                </thead>
+                <tbody>
+            '''
+            for constraint in likelihoods.constraints:
+                result += fr'''
+                    <tr>
+                        <td style="text-align: left"><code>{constraint.constraint}</code></td>
+                    </tr>
+                '''
+
+        result += r'''
+            </tbody>
+            </table>
+            <br>
+            <table style="width: 80%">
             <colgroup>
-                <col width="100%" id="posterior"    style="min-width: 200px">
+                <col width="25%" id="priors"            style="min-width: 100px">
+                <col width="25%" id="likelihoods"       style="min-width: 100px">
+                <col width="25%" id="global_options"    style="min-width: 100px">
+                <col width="25%" id="fixed_parameters"  style="min-width: 100px">
             </colgroup>
             <thead>
                 <tr>
-                    <th style="text-align: center">priors</th>
+                    <th colspan="4" style="text-align: center">POSTERIORS</th>
                 </tr>
             </thead>
-            <tbody>
-        '''
-        for p in self._priors:
-            result += fr'''
-                <tr>
-                    <td style="text-align: left">{p}</td>
-                </tr>
-            '''
-
-        result += r'''
-            </tbody>
-            <thead>
-                <tr>
-                    <th style="text-align: center">likelihoods</th>
-                </tr>
-            </thead>
-            <tbody>
-        '''
-        for l in self._likelihoods:
-            result += fr'''
-                <tr>
-                    <td style="text-align: left">{l}</td>
-                </tr>
-            '''
-
-        result += r'''
-            </tbody>
-            <thead>
-                <tr>
-                    <th style="text-align: center">posteriors</th>
-                </tr>
-            </thead>
-            <tbody>
         '''
 
-        for p in self._posteriors:
+        for name, posterior in self._posteriors.items():
+            pp = ', '.join(posterior.prior)
+            pl = ', '.join(posterior.likelihood)
+            pg = ', '.join(f'{k} = {v}' for k, v in posterior.global_options.items())
+            pf = ', '.join(f'{k} = {v}' for k, v in posterior.fixed_parameters.items())
             result += fr'''
-                <tr>
-                    <td style="text-align: left">{p}</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: left">{name}</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center">priors</th>
+                        <th style="text-align: center">likelihoods</th>
+                        <th style="text-align: center">global options</th>
+                        <th style="text-align: center">fixed parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: center">{pp}</td>
+                        <td style="text-align: center">{pl}</td>
+                        <td style="text-align: center">{pg}</td>
+                        <td style="text-align: center">{pf}</td>
+                    </tr>
+                </tbody>
+                '''
+        if self._predictions:
+            result += r'''
+                </tbody>
+                </table>
+                <br>
+                <table style="width: 80%">
+                <colgroup>
+                    <col width="33%" id="observables"       style="min-width: 133px">
+                    <col width="33%" id="global_options"    style="min-width: 133px">
+                    <col width="33%" id="fixed_parameters"  style="min-width: 133px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="3" style="text-align: center">PREDICTIONS</th>
+                    </tr>
+                </thead>
             '''
 
+            for name, prediction in self._predictions.items():
+                po = ', '.join(list({obs.name for obs in prediction.observables}))
+                pg = ', '.join(f'{k} = {v}' for k, v in prediction.global_options.items())
+                pf = ', '.join(f'{k} = {v}' for k, v in prediction.fixed_parameters.items())
+                result += fr'''
+                    <thead>
+                        <tr>
+                            <th colspan="3" style="text-align: left">{name}</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center">observables</th>
+                            <th style="text-align: center">global options</th>
+                            <th style="text-align: center">fixed parameters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center">{po}</td>
+                            <td style="text-align: center">{pg}</td>
+                            <td style="text-align: center">{pf}</td>
+                        </tr>
+                    </tbody>
+                    '''
+
         result += r'''
-            </tbody>
         </table>
         '''
 
