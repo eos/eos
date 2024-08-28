@@ -11,11 +11,11 @@ likelihoods:
 
 priors:
   - name: CKM
-    parameters:
+    descriptions:
      - { 'parameter': 'CKM::abs(V_ub)', 'min': 3.0e-3, 'max': 4.0e-3, 'type': 'uniform' }
 
   - name: FF-pi
-    parameters:
+    descriptions:
       - { 'parameter':  'B->pi::f_+(0)@BCL2008' , 'min':   0.21 , 'max':   0.32 , 'type': 'uniform' }
       - { 'parameter':  'B->pi::b_+^1@BCL2008'  , 'min':  -2.96 , 'max':  -0.60 , 'type': 'uniform' }
       - { 'parameter':  'B->pi::b_+^2@BCL2008'  , 'min':  -3.98 , 'max':   4.38 , 'type': 'uniform' }
