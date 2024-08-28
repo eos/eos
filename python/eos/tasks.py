@@ -28,6 +28,7 @@ import pypmc
 import scipy
 import sys
 import copy as _copy
+import warnings
 
 from .ipython import __ipython__
 
@@ -584,6 +585,23 @@ def _get_modes(posterior:str, base_directory:str='./'):
 
     return result
 
+def _get_references(analysis_file):
+    all_references = eos.References()
+    all_constraints = eos.Constraints()
+    result = []
+    for likelihood in analysis_file.likelihoods.values():
+        constraints         = likelihood.constraints
+        for constraint in constraints:
+            constraint_name = constraint.constraint.split(';')[0]
+            for reference in all_constraints[constraint_name].references():
+
+                try:
+                    result.append(all_references[reference].inspire_id())
+                except:
+                    warnings.warn(f'No reference found for {reference}')
+
+    result = _np.unique(result)
+    return result
 
 # Create a report
 @task('report', 'reports')
@@ -605,6 +623,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', output
         len=len,
         zip=zip,
         modes=lambda posterior: _get_modes(posterior, base_directory=base_directory),
+        references=_get_references(analysis_file),
     )
 
     if output_file is not None:
