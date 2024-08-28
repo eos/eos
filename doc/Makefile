@@ -29,5 +29,13 @@ html: source Makefile
 %.rst: %.rst.py %.rst.jinja
 	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
 
+%.rst: %.rst.in
+	MIN_AUTOCONF_VERSION=$$(sed -n -e 's/\s*AC_PREREQ(\[\(.*\)\])/\1/p' ../configure.ac) ; \
+	MIN_PYTHON_VERSION=$$(sed -n -e 's/\s*AM_PATH_PYTHON(\[\(.*\)\])/\1/p' ../configure.ac) ; \
+	sed \
+		-e "s/@MIN_AUTOCONF_VERSION@/$${MIN_AUTOCONF_VERSION}/" \
+		-e "s/@MIN_PYTHON_VERSION@/$${MIN_PYTHON_VERSION}/" \
+		$< > $@
+
 .PHONY: source
 source: reference/constraints.rst reference/observables.rst reference/parameters.rst reference/bibliography.rst reference/signal-pdfs.rst reference/python.rst
