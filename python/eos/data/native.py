@@ -512,7 +512,14 @@ class Prediction:
 
         self.type = 'Prediction'
         self.varied_parameters = description['observables']
-        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
+        self.lookup_table = {}
+        for idx, item in enumerate(self.varied_parameters):
+            id = item['name']
+            if item['options']:
+                id += ';' + str(eos.Options(item['options'])).replace(" ", "")
+            if item['kinematics']:
+                id += '[' + str(eos.Kinematics(item['kinematics'])).replace(" ", "") + ']'
+            self.lookup_table[id] = idx
 
         f = os.path.join(path, 'samples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
@@ -543,7 +550,8 @@ class Prediction:
         description['type'] = 'Prediction'
         description['observables'] = [{
             'name': o.name().full(),
-            'kinematics': { k.name(): float(k) for k in o.kinematics() }
+            'kinematics': { k.name(): float(k) for k in o.kinematics() },
+            'options': dict(o.options())
         } for o in observables]
 
         if not samples.shape[1] == len(observables):
