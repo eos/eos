@@ -684,6 +684,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param k: The mode of the prior.
             :type k: float, strictly positive
         )", args("parameters", "name", "k"))
+        .staticmethod("Poisson")
         .def("evaluate", &LogPrior::operator(), R"(
             Returns the logarithm of the prior's probability density at the current parameter values.
         )")
