@@ -107,6 +107,43 @@ namespace impl
               >();
         }
     };
+
+    template<typename T>
+    struct iterable_to_std_vector_converter
+    {
+        iterable_to_std_vector_converter()
+        {
+            converter::registry::push_back(&convertible, &construct, type_id<std::vector<T>>());
+        }
+
+        static void * convertible(PyObject * obj_ptr)
+        {
+            // the second condition is important, for some reason otherwise there were attempted conversions of Body to list which failed afterwards.
+            if ((! PySequence_Check(obj_ptr)) || (! PyObject_HasAttrString(obj_ptr,"__len__")))
+            {
+                return nullptr;
+            }
+
+            return obj_ptr;
+        }
+
+        static void construct(PyObject * obj_ptr, converter::rvalue_from_python_stage1_data * data)
+        {
+            void * storage=((converter::rvalue_from_python_storage<std::vector<T>> *)(data))->storage.bytes;
+            new (storage) std::vector<T>();
+            std::vector<T> * v = (std::vector<T> *)(storage);
+            int l = PySequence_Size(obj_ptr);
+                    if (l < 0)
+                        abort();
+                        /*std::cerr<<"l="<<l<<"; "<<typeid(T).name()<<std::endl;*/
+                    v->reserve(l);
+                    for (int i = 0 ; i < l ; i++)
+                    {
+                        v->push_back(extract<T>(PySequence_GetItem(obj_ptr,i)));
+                    }
+            data->convertible = storage;
+        }
+    };
 }
 
 BOOST_PYTHON_MODULE(_eos)
@@ -586,6 +623,9 @@ BOOST_PYTHON_MODULE(_eos)
 
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
+    ::impl::iterable_to_std_vector_converter<QualifiedName> iterable_to_std_vector_converter_QualifiedName;
+    ::impl::iterable_to_std_vector_converter<double> iterable_to_std_vector_converter_double;
+    ::impl::iterable_to_std_vector_converter<std::vector<double>> iterable_to_std_vector_converter_vector_double;
     class_<LogPrior, boost::noncopyable>("LogPrior", R"(
             Represents a Bayesian prior on the log scale.
 
@@ -685,6 +725,25 @@ BOOST_PYTHON_MODULE(_eos)
             :type k: float, strictly positive
         )", args("parameters", "name", "k"))
         .staticmethod("Poisson")
+        .def("Transform", &LogPrior::Transform, return_value_policy<return_by_value>(), R"(
+            Returns a new transformed uniform prior from original uniform priors as a LogPrior.
+
+            The prior's support is infinite.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameters for which the LogPrior is defined.
+            :type name: str
+            :param shift: The shift vector to the original set of parameters
+            :type shift: vector
+            :param transform; The matrix that transforms the original set of parameters
+            :type transform: matrix
+            :param min: The vector of minimum values that the parameters are allowed to take.
+            :type min: vector
+            :param max: The vector of maximum values that the parameters are allowed to take.
+            :type max: vector
+        )", args("parameters", "name", "shift", "transform", "min", "max"))
+        .staticmethod("Transform")
         .def("evaluate", &LogPrior::operator(), R"(
             Returns the logarithm of the prior's probability density at the current parameter values.
         )")
