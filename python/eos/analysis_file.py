@@ -454,6 +454,43 @@ class AnalysisFile:
             print(m)
         return messages
 
+    def find_configuration(self, task_name:str, task_args:dict):
+        """Find configurations (if any) that match the task and arguments provided.
+
+        :param task_name: The name of the task to find a configuration for.
+        :type task_name: str
+        :param task_args: The arguments to the task that should be matched against.
+        :type task_args: dict
+        """
+
+        if task_name not in self._configuration:
+            return []
+
+        remove_nones = lambda d: { k:v for k,v in d.items() if v is not None }
+        # Filter out None values from the task_args, as these are default arguments for non-specified options
+        task_args = remove_nones(task_args)
+
+        potential_configs = []
+        # First find all the configurations that match the given task arguments
+        for cc in self._configuration[task_name]:
+            config_matching = remove_nones(asdict(cc.match))
+            count = 0
+            for k,v in config_matching.items():
+                try:
+                    if task_args[k] == v:
+                        count += 1
+                except KeyError:
+                    pass
+            if count == len(config_matching):
+                potential_configs.append(cc)
+        if not potential_configs:
+            return []
+        # Then find the longest configuration, i.e. the most specific configuration
+        max_length = max([len(remove_nones(asdict(pc.match))) for pc in potential_configs])
+        # Choose only configurations that have that length
+        best_configs = [pc for pc in potential_configs if len(remove_nones(asdict(pc.match)))  == max_length]
+        return best_configs
+
 
     @property
     def priors(self):
