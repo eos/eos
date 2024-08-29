@@ -629,6 +629,92 @@ class AnalysisFile:
                     </tbody>
                     '''
 
+        if self._obs:
+            result += r'''
+                </tbody>
+                </table>
+                <br>
+                <table style="width: 80%">
+                <colgroup>
+                    <col width="25%" style="min-width:  100px">
+                    <col width="25%" style="min-width:  100px">
+                    <col width="25%" style="min-width:  100px">
+                    <col width="25%" style="min-width:  100px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center">OBSERVABLES</th>
+                    </tr>
+                </thead>
+            '''
+
+            for obs in self._obs:
+                oo = ', '.join(f'{k} = {v}' for k, v in obs.options.items())
+                result += fr'''
+                    <thead>
+                        <tr>
+                            <th colspan="1" style="text-align: left">{obs.name}</th>
+                            <th colspan="2" style="text-align: left">{obs.latex}</th>
+                            <th colspan="1" style="text-align: left">unit: {obs.unit}</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" style="text-align: center">expression</th>
+                            <th colspan="2" style="text-align: center">options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="text-align: center">{obs.expression}</td>
+                            <td colspan="2" style="text-align: center">{oo}</td>
+                        </tr>
+                    </tbody>
+                    '''
+
+        if self._params:
+            result += r'''
+                </tbody>
+                </table>
+                <br>
+                <table style="width: 80%">
+                <colgroup>
+                    <col width="20%" style="min-width:  80px">
+                    <col width="20%" style="min-width:  80px">
+                    <col width="20%" style="min-width:  80px">
+                    <col width="40%" style="min-width: 160px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center">PARAMETERS</th>
+                    </tr>
+                </thead>
+            '''
+
+            for param in self._params:
+                po = ', '.join(param.alias_of)
+                result += fr'''
+                    <thead>
+                        <tr>
+                            <th colspan="1" style="text-align: left">{param.name}</th>
+                            <th colspan="2" style="text-align: left">{param.latex}</th>
+                            <th colspan="1" style="text-align: left">unit: {param.unit}</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center">central</th>
+                            <th style="text-align: center">min</th>
+                            <th style="text-align: center">max</th>
+                            <th style="text-align: center">alias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center">{param.central}</td>
+                            <td style="text-align: center">{param.min}</td>
+                            <td style="text-align: center">{param.max}</td>
+                            <td style="text-align: center">{po}</td>
+                        </tr>
+                    </tbody>
+                    '''
+
         result += r'''
         </table>
         '''
