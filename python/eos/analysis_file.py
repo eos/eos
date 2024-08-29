@@ -192,7 +192,7 @@ class AnalysisFile:
                     eos.error(f'Local option {key}={o.options[key]} overrides option part specification {key}={value} for observable {o.name} in prediction {_prediction}.')
             for key, global_value in global_options.items():
                 if key in o.options and o.options[key] != global_value:
-                    eos.warning(f'Local option {key}={o.options[key]} overrides global option {key}={global_value} for observable {o.name} in prediction {_prediction} when using posterior {_posterior}.')
+                    eos.warn(f'Local option {key}={o.options[key]} overrides global option {key}={global_value} for observable {o.name} in prediction {_prediction} when using posterior {_posterior}.')
 
 
         observables = []
