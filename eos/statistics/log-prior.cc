@@ -513,6 +513,7 @@ namespace eos
                 virtual ~MultivariateGaussian()
                 {
                     gsl_matrix_free(_covariance_inv);
+                    gsl_matrix_free(_chol_inv);
                     gsl_matrix_free(_chol);
                     gsl_matrix_free(_covariance);
 
