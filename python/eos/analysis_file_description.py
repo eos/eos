@@ -21,7 +21,9 @@ class PriorDescription:
                 return Deserializable.make(GaussianPriorDescription, **_kwargs)
             elif kwargs['type'] in ("poisson",):
                 return Deserializable.make(PoissonPriorDescription, **_kwargs)
-
+        elif 'parameters' in kwargs:
+            if kwargs['type'] in ("transform"):
+                return Deserializable.make(TransformPriorDescription, **_kwargs)
 
         raise ValueError('Unknown type of prior description')
 
@@ -67,6 +69,15 @@ class UniformPriorDescription(Deserializable):
 @dataclass
 class ConstraintPriorDescription(Deserializable):
      constraint:str
+
+@dataclass
+class TransformPriorDescription(Deserializable):
+    parameters:list[str]
+    shift:list[float]
+    transform:list[list[float]]
+    min:list[float]
+    max:list[float]
+    type:str=field(repr=False, init=False, default="transform")
 
 @dataclass
 class PriorComponent(Deserializable):
