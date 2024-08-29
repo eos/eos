@@ -44,22 +44,22 @@ class AnalysisFile:
             raise RuntimeError(f'Cannot load analysis file: \'{analysis_file}\' is not a file')
 
         with open(analysis_file) as input_file:
-            input_data = yaml.safe_load(input_file)
+            self.input_data = yaml.safe_load(input_file)
 
-        if 'priors' not in input_data:
+        if 'priors' not in self.input_data:
             raise RuntimeError('Cannot load analysis file: need at least one prior component')
 
-        self._priors = { p["name"]: PriorComponent.from_dict(**p) for p in input_data['priors'] }
+        self._priors = { p["name"]: PriorComponent.from_dict(**p) for p in self.input_data['priors'] }
 
-        if 'likelihoods' not in input_data:
+        if 'likelihoods' not in self.input_data:
             eos.warn('No likelihood components found in analysis file')
 
-        self._likelihoods = { ll["name"]: LikelihoodComponent.from_dict(**ll) for ll in input_data['likelihoods'] }
+        self._likelihoods = { ll["name"]: LikelihoodComponent.from_dict(**ll) for ll in self.input_data['likelihoods'] }
 
-        if 'posteriors' not in input_data:
+        if 'posteriors' not in self.input_data:
             raise RuntimeError('Cannot load analysis file: need at least one posterior')
 
-        self._posteriors = { p["name"]: PosteriorDescription.from_dict(**p) for p in input_data['posteriors'] }
+        self._posteriors = { p["name"]: PosteriorDescription.from_dict(**p) for p in self.input_data['posteriors'] }
         # Check that the priors and likelihoods referenced by the posteriors are defined
         for pc in self._posteriors.values():
             for p in pc.prior:
@@ -70,27 +70,27 @@ class AnalysisFile:
                     raise RuntimeError(f'Posterior \'{pc.name}\' references likelihood \'{l}\' which is not defined')
 
         # Optional: provide a list of observables for posterior prediction
-        if 'predictions' not in input_data:
+        if 'predictions' not in self.input_data:
             self._predictions = []
         else:
-            self._predictions = { p["name"]: PredictionDescription.from_dict(**p) for p in input_data['predictions'] }
+            self._predictions = { p["name"]: PredictionDescription.from_dict(**p) for p in self.input_data['predictions'] }
 
         # Optional: insert custom observables using the expression parser
-        if 'observables' not in input_data:
+        if 'observables' not in self.input_data:
             self._obs = []
         else:
             eos.inprogress('Inserting custom observables ...')
-            self._obs = [ObservableComponent.from_dict(name=n, **d) for n,d in input_data['observables'].items()]
+            self._obs = [ObservableComponent.from_dict(name=n, **d) for n,d in self.input_data['observables'].items()]
             for o in self._obs:
                 eos.Observables().insert(o.name, o.latex, eos.Unit(o.unit), eos.Options(**o.options), o.expression)
                 eos.info(f'Inserted observable: { o.name }')
             eos.completed(f'... finished inserting {len(self._obs)} custom observables')
 
-        if 'parameters' not in input_data:
+        if 'parameters' not in self.input_data:
             self._params = []
         else:
             eos.inprogress('Declaring custom parameters ...')
-            self._params = [ParameterComponent.from_dict(name=n, **d) for n, d in input_data["parameters"].items()]
+            self._params = [ParameterComponent.from_dict(name=n, **d) for n, d in self.input_data["parameters"].items()]
             for p in self._params:
                 try:
                     qn = eos.QualifiedName(p.name)
@@ -104,10 +104,10 @@ class AnalysisFile:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
-        if 'steps' not in input_data:
+        if 'steps' not in self.input_data:
             self._steps = []
         else:
-            self._steps = [StepComponent.from_dict(**s) for s in input_data['steps']]
+            self._steps = [StepComponent.from_dict(**s) for s in self.input_data['steps']]
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
