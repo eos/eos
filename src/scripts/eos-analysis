@@ -559,10 +559,10 @@ class CustomLogFormatter(logging.Formatter):
 
     def format(self, record):
         levelno = record.levelno
-        if record.levelno not in self._MAP_LEVEL_TO_COLOR:
+        if levelno not in self._MAP_LEVEL_TO_COLOR:
             levelno = logging.ERROR
 
-        symbol, color = self._MAP_LEVEL_TO_COLOR[record.levelno]
+        symbol, color = self._MAP_LEVEL_TO_COLOR[levelno]
         record.levelname = colored(symbol, color, attrs=['bold'])
         record.msg = colored(record.msg, color)
 
@@ -600,6 +600,7 @@ def main():
             args.cmd(args)
     except Exception as e:
         print(colored('✖ Encountered an unrecoverable error', 'red', attrs=['bold']), f'{e}')
+        raise e
 
 
 def make_analysis_file(args):
