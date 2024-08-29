@@ -924,7 +924,7 @@ namespace eos
         }
 
         {
-            const auto & [p0, p1, p2, p3, p4, p5] = _traits.orthonormal_polynomials(_traits.calc_z(10.0, _traits.tp,_traits.t0));
+            const auto & [p0, p1, p2, p3, p4, p5] = _traits.orthonormal_polynomials(_traits.calc_z(10.0, _traits.tp, _traits.t0));
             results.add({ p0,              "p_0(z = z(q2 = 10))" });
             results.add({ p1,              "p_1(z = z(q2 = 10))" });
         }
