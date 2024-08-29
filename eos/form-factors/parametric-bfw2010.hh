@@ -250,8 +250,8 @@ namespace eos
 
             std::array<double, 6> orthonormal_polynomials(const double & z) const
             {
-                // Since BK is the lowest b\bar{s} pair production threshold, those are just monomials
-                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(2 * M_PI));
+                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
+                const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
