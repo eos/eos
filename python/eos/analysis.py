@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2018, 2019, 2020 Danny van Dyk
+# Copyright (c) 2018-2024 Danny van Dyk
+# Copyright (c) 2024 Carolina Bolognani
 # Copyright (c) 2023 Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
@@ -76,6 +77,7 @@ class Analysis:
         self._log_likelihood = eos.LogLikelihood(self.parameters)
         self._log_posterior = eos.LogPosterior(self._log_likelihood)
         self.varied_parameters = []
+        self.varied_parameter_names = []
 
         eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, {nmanual} manually-entered constraints and {nparams} fixed parameters.'.format(
             nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints), nparams=len(fixed_parameters)))
@@ -109,6 +111,12 @@ class Analysis:
         for prior in priors:
             if 'parameter' in prior and 'constraint' in prior:
                 raise ValueError('Prior specification must not contain both a parameter and a constraint')
+
+            if 'parameter' in prior and 'parameters' in prior:
+                raise ValueError('Prior specification must not contain both a parameter and parameters')
+
+            if 'parameters' in prior and 'constraint' in prior:
+                raise ValueError('Prior specification must not contain both parameters and a constraint')
 
             if 'parameter' in prior:
                 prior_type = prior['type'] if 'type' in prior else 'uniform'
@@ -166,17 +174,18 @@ class Analysis:
                     raise ValueError(f'Unknown prior type \'{prior_type}\'')
 
                 p = self.parameters[parameter]
+                if p.name() in self.varied_parameter_names:
+                    raise ValueError(f'Parameter {p} is repeated in a univariate prior.')
                 self.varied_parameters.append(p)
-            elif 'constraint' in prior:
-                constraint_name = eos.QualifiedName(prior['constraint'])
-                constraint_entry = eos.Constraints()[constraint_name]
-                log_prior = constraint_entry.make_prior(self.parameters, constraint_name.options_part())
-                self._log_posterior.add(log_prior, False)
-                for p in log_prior.varied_parameters():
-                    self.varied_parameters.append(p)
+                self.varied_parameter_names.append(p.name())
             elif 'parameters' in prior:
                 prior_type = prior['type']
                 parameters = prior['parameters']
+                for p in parameters:
+                    if p in self.varied_parameter_names:
+                        raise ValueError(f'Parameter {p} is repeated in a multivariate prior.')
+                    self.varied_parameters.append(self.parameters[p])
+                    self.varied_parameter_names.append(p)
 
                 if prior_type=='transform':
                     minv = list[float](prior['min'])
@@ -186,8 +195,18 @@ class Analysis:
                     self._log_posterior.add(eos.LogPrior.Transform(self.parameters, parameters, shift, transform, minv, maxv), False)
                 else:
                     raise ValueError(f'Unknown prior type \'{prior_type}\'')
+            elif 'constraint' in prior:
+                constraint_name = eos.QualifiedName(prior['constraint'])
+                constraint_entry = eos.Constraints()[constraint_name]
+                log_prior = constraint_entry.make_prior(self.parameters, constraint_name.options_part())
+                self._log_posterior.add(log_prior, False)
+                for p in log_prior.varied_parameters():
+                    if p.name() in self.varied_parameter_names:
+                        raise ValueError(f'Parameter {p} is repeated in a prior using constraint {constraint_name}')
+                    self.varied_parameters.append(p)
+                    self.varied_parameter_names.append(p.name())
             else:
-                raise ValueError('Prior specification must contains either \'parameter\', \'constraint\' or \'parameters\'')
+                raise ValueError('Prior specification must contains either \'parameter\', \'parameters\', or \'constraint\'')
 
         # check for duplicate entries in the likelihood
         set_likelihood = set(likelihood)

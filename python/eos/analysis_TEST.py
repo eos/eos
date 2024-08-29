@@ -32,6 +32,69 @@ class ClassMethodTests(unittest.TestCase):
                 self.fail(f"Can not construct analysis with prior '{ prior }'")
 
 
+    def test_repeating_priors_parameters(self):
+
+         # Note: the cases are not physically meaningful
+         priors = [
+             { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0, 'max': 1.0, 'type': 'uniform'},
+             { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0, 'max': 1.0, 'type': 'uniform'}
+         ]
+
+         analysis_args = {
+             'priors': priors ,
+             'likelihood': [ ]
+         }
+
+         errorraised = False
+         try:
+             analysis = eos.Analysis(**analysis_args)
+         except Exception as e:
+             errorraised=True
+         if errorraised==False:
+             self.fail(f"Can construct analysis with prior '{ priors } eventhough prior is repeated'")
+
+    def test_repeating_priors_constraints(self):
+
+         # Note: the cases are not physically meaningful
+         priors = [
+             { 'constraint': 'D_s^*::decay-constants@PZ:2021A' },
+             { 'constraint': 'D_s^*_T::decay-constants@PZ:2021A' }
+         ]
+
+         analysis_args = {
+             'priors': priors ,
+             'likelihood': [ ]
+         }
+
+         errorraised = False
+         try:
+             analysis = eos.Analysis(**analysis_args)
+         except Exception as e:
+             errorraised=True
+         if errorraised==False:
+             self.fail(f"Can construct analysis with prior '{ priors } eventhough prior is repeated'")
+
+    def test_repeating_priors(self):
+
+         # Note: the cases are not physically meaningful
+         priors = [
+             { 'parameter': 'decay-constant::D_s',      'min':  0.24781, 'max':  0.25197, 'type': 'uniform'},
+             { 'constraint': 'D_s^*::decay-constants@PZ:2021A' }
+         ]
+
+         analysis_args = {
+             'priors': priors ,
+             'likelihood': [ ]
+         }
+
+         errorraised = False
+         try:
+             analysis = eos.Analysis(**analysis_args)
+         except Exception as e:
+             errorraised=True
+         if errorraised==False:
+             self.fail(f"Can construct analysis with prior '{ priors } eventhough prior is repeated'")
+
     def test_parameter_scaling(self):
 
         analysis_args = {
