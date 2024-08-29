@@ -284,6 +284,24 @@ class LogPriorTest :
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.95) * k, 16.9622192357219,   eps);
             }
 
+            // Transform prior
+            {
+                // use factory
+                std::vector<double> shift     = {0.0,0.0};
+                std::vector<std::vector<double>> transform = {{ 0.707106, 0.707106 }, {-0.707106, 0.707106}};
+                std::vector<double> min       = {-2.0,-2.0};
+                std::vector<double> max       = {2.0,2.0};
+                LogPriorPtr transform_prior = LogPrior::Transform(parameters, {"scnuee::Re{cVL}","scnuee::Re{cVR}"}, shift, transform, min, max);
+
+                parameters["scnuee::Re{cVL}"] = 0.0;
+                parameters["scnuee::Re{cVR}"] = 0.0;
+                TEST_CHECK_NEARLY_EQUAL((*transform_prior)(), -2.77259, 1.0e-5);
+
+                parameters["scnuee::Re{cVL}"] = -3.0;
+                parameters["scnuee::Re{cVR}"] = 0.0;
+                TEST_CHECK(! std::isfinite((*transform_prior)()));
+            }
+
             //Make
             {
                 Parameters p = Parameters::Defaults();
