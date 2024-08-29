@@ -120,6 +120,7 @@ class ClassMethodTests(unittest.TestCase):
         prior_cases = [
             { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'central': 0.0, 'sigma': 1.0 , 'type': 'gaussian'},
             { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'k':       5.0,                'type': 'poisson'},
+            { 'parameters': ['scnuee::Re{cVL}','scnuee::Re{cVR}'], 'shift': [0.0,0.0], 'transform': [[ 0.707106, 0.707106 ], [-0.707106, 0.707106]], 'min': [-2.0,-2.0], 'max': [2.0,2.0], 'type': 'transform'}
         ]
 
         for prior in prior_cases:
