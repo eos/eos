@@ -76,18 +76,22 @@ class AnalysisFile:
             self._predictions = { p["name"]: PredictionDescription.from_dict(**p) for p in input_data['predictions'] }
 
         # Optional: insert custom observables using the expression parser
-        if 'observables' in input_data:
+        if 'observables' not in input_data:
+            self._obs = []
+        else:
             eos.inprogress('Inserting custom observables ...')
-            _obs = [ObservableComponent.from_dict(name=n, **d) for n,d in input_data['observables'].items()]
-            for o in _obs:
+            self._obs = [ObservableComponent.from_dict(name=n, **d) for n,d in input_data['observables'].items()]
+            for o in self._obs:
                 eos.Observables().insert(o.name, o.latex, eos.Unit(o.unit), eos.Options(**o.options), o.expression)
                 eos.info(f'Inserted observable: { o.name }')
-            eos.completed(f'... finished inserting {len(_obs)} custom observables')
+            eos.completed(f'... finished inserting {len(self._obs)} custom observables')
 
-        if 'parameters' in input_data:
+        if 'parameters' not in input_data:
+            self._params = []
+        else:
             eos.inprogress('Declaring custom parameters ...')
-            _params = [ParameterComponent.from_dict(name=n, **d) for n, d in input_data["parameters"].items()]
-            for p in _params:
+            self._params = [ParameterComponent.from_dict(name=n, **d) for n, d in input_data["parameters"].items()]
+            for p in self._params:
                 try:
                     qn = eos.QualifiedName(p.name)
                     id = eos.Parameters.declare(qn, p.latex, eos.Unit(p.unit), p.central, p.min, p.max)
@@ -98,7 +102,7 @@ class AnalysisFile:
                             eos.info(f'Created parameter alias: {aliased_qn} -> {qn}')
                 except eos.Exception as e:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
-            eos.completed(f'... finished declaring {len(_params)} custom parameters')
+            eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
         if 'steps' not in input_data:
             self._steps = []
