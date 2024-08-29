@@ -19,6 +19,7 @@
 
 import eos
 import os
+import sys
 import yaml
 from dataclasses import asdict
 from .analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
@@ -472,6 +473,16 @@ class AnalysisFile:
 
         return self._predictions
 
+    def dump(self):
+        """Dumps the contents of the analysis file in YAML format."""
+
+        yaml.safe_dump(
+            self.input_data,
+            sys.stdout,
+            width=100,
+            allow_unicode=True,
+            default_flow_style=False
+            )
 
     def _repr_html_(self):
         result = r'''
