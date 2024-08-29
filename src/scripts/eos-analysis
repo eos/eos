@@ -144,7 +144,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-IDX.
         dest = 'pre_N', action = 'store', type = int, default = 150
     )
     parser_sample_mcmc.add_argument('-s', '--start-point',
-        help = 'Optional starting point for the chain',
+        help = 'Optional starting point for the chain; a comma separated list of floats',
         dest = 'start_point', action = 'store', type = lambda s: [float(item) for item in s.split(',')]
     )
     parser_sample_mcmc.add_argument('-c', '--cov-scale',
@@ -302,11 +302,10 @@ The plots will be stored as PDF files within the respective sample inputs.
 '''
 Finds the mode of the named posterior.
 
-The optimization process can be initialized either with a random point,
-a provided parameter point, or by extracting the point with the largest posterior
-from among previously obtained MCMC samples. The optimization can be iterated to
-increase the accuracy of the result. The output will be stored
-in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
+The optimization process can be initialised either by a provided parameter point or previously obtained
+importance samples (recommended), a random point, or from a pre-existing Markov chain with provided index (deprecated). The optimization
+can be iterated to increase the accuracy of the result. The output will be stored in
+EOS_BASE_DIRECTORY/posterior/mode-LABEL.
 ''',
         help = 'Finds the mode of a named posterior.'
     )
@@ -318,7 +317,7 @@ in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
         dest = 'optimizations', action = 'store', type = int, default = 3
     )
     parser_find_mode.add_argument('-c', '--from-mcmc',
-        help = 'The chain index of an MCMC data file from which the maximization is started.',
+        help = 'The chain index of an MCMC data file from which the maximization is started, this is now deprecated.',
         dest = 'chain', action = 'store', type = int, default = None
     )
     parser_find_mode.add_argument('-S', '--from-samples',
@@ -326,7 +325,7 @@ in EOS_BASE_DIRECTORY/posterior/mode-LABEL.
         dest = 'importance_samples', action = 'store_true', default = False
     )
     parser_find_mode.add_argument('-p', '--from-point',
-        help = 'The point from which the minimization is started.',
+        help = 'The point from which the minimization is started; a comma separated list of floats.',
         dest = 'start_point', action = 'store', type = lambda s: [float(item) for item in s.split(',')]
     )
     parser_find_mode.add_argument('-s', '--use-random-seed',
