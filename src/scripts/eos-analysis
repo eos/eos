@@ -94,6 +94,10 @@ Lists the named posterior PDFs defined within the scope of this analysis file.
 ''',
         help = 'Lists the named posteriors defined in the analysis file.'
     )
+    parser_list_posteriors.add_argument("-c", "--configured-only",
+        help = "List only the posteriors that appear in configurations in the analysis file.",
+        dest = "configured_only", action = "store_true", default = False
+    )
     parser_list_posteriors.set_defaults(cmd = cmd_list_posteriors)
 
 
@@ -105,6 +109,10 @@ Lists the named posterior PDFs defined within the scope of this analysis file.
 Lists the named prediction sets defined within the scope of this analysis file.
 ''',
         help = 'Lists the named predictions define in the analysis file.'
+    )
+    parser_list_predictions.add_argument("-c", "--configured-only",
+        help = "List only the predictions that appear in configurations in the analysis file.",
+        dest = "configured_only", action = "store_true", default = False
     )
     parser_list_predictions.set_defaults(cmd = cmd_list_predictions)
 
@@ -752,16 +760,32 @@ def cmd_list_likelihoods(args):
 
 # List predictions
 def cmd_list_predictions(args):
+    configured_only = args.configured_only
     analysis_file = make_analysis_file(args)
-    for name, pred in analysis_file.predictions.items():
-        print(name)
+    if configured_only:
+        configured_predictions = set()
+        try:
+            for task_config in analysis_file.configurations["predict-observables"]:
+                configured_predictions.add(task_config.match.prediction)
+        except KeyError:
+            pass
+    for name in analysis_file.predictions:
+        if not configured_only or (configured_only and name in configured_predictions):
+            print(name)
 
 
 # List posteriors
 def cmd_list_posteriors(args):
+    configured_only = args.configured_only
     analysis_file = make_analysis_file(args)
-    for name, lh in analysis_file.posteriors.items():
-        print(name)
+    if configured_only:
+        configured_posteriors = set()
+        for task_configs in analysis_file.configurations.values():
+            for task_config in task_configs:
+                configured_posteriors.add(task_config.match.posterior)
+    for name in analysis_file.posteriors:
+        if not configured_only or (configured_only and name in configured_posteriors):
+            print(name)
 
 
 # Initialize analysis directory

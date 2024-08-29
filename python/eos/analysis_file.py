@@ -518,6 +518,12 @@ class AnalysisFile:
 
         return self._predictions
 
+    @property
+    def configurations(self):
+        """Returns a dictionary of all configurations recorded for each task in the analysis file."""
+
+        return self._configuration
+
 
     def _repr_html_(self):
         result = r'''
