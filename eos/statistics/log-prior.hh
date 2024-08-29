@@ -129,6 +129,8 @@ namespace eos
             static LogPriorPtr MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names,
                     gsl_vector * mean, gsl_matrix * covariance);
             static LogPriorPtr Poisson(const Parameters & parameters, const std::string & name, const double & k);
+            static LogPriorPtr Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, const std::vector<double> & shift, const std::vector<std::vector<double>> & transform,
+                        const std::vector<double> &  min, const std::vector<double> & max);
             ///@}
 
             /*!

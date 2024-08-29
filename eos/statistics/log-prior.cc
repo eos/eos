@@ -754,6 +754,254 @@ namespace eos
                     return true;
                 }
         };
+
+        /*!
+         * Transformed and shifted multivariate uniform prior distribution
+         */
+        class Transform :
+            public LogPrior
+        {
+            private:
+                std::vector<Parameter> _parameters;
+
+                std::vector<QualifiedName> _names;
+
+                // inputs
+                gsl_vector * const _shift;
+                gsl_matrix * const _transform;
+                gsl_vector * const _min;
+                gsl_vector * const _max;
+
+                // the normalization constant of the density
+                double _value;
+
+                // cholesky matrix of transformation, and inverse of transformation
+                gsl_matrix * _chol;
+                gsl_matrix * _transform_inv;
+
+                // temporary storage for evaluation
+                gsl_vector * _tmp;
+                gsl_vector * _tmp2;
+                gsl_vector * _tmpmatrix;
+
+            public:
+                Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, gsl_vector * shift, gsl_matrix * transform,
+                        gsl_vector * min, gsl_vector * max) :
+                    LogPrior(parameters),
+                    _names(names),
+                    _shift(shift),
+                    _transform(transform),
+                    _min(min),
+                    _max(max),
+                    _value(-1.0 * compute_log_volume()),
+                    _chol(gsl_matrix_alloc(transform->size1, transform->size2)),
+                    _transform_inv(gsl_matrix_alloc(transform->size1, transform->size2)),
+                    _tmp(gsl_vector_alloc(_shift->size)),
+                    _tmp2(gsl_vector_alloc(_shift->size))
+                {
+                    if (_transform->size1 != _transform->size2)
+                        throw InternalError("priors::Transform: transform matrix is not a square matrix");
+
+                    if (_transform->size1 != _names.size())
+                        throw InternalError("priors::Transform: number of parameters and dimension of transform matrix are not identical");
+
+                    if (_names.size() != _shift->size)
+                        throw InternalError("priors::Transform: number of parameters and dimension of shift vector are not identical");
+
+                    if (_names.size() != _min->size)
+                        throw InternalError("priors::Transform: number of parameters and minimum range elements are not identical");
+
+                    if (_names.size() != _max->size)
+                        throw InternalError("priors::Transform: number of parameters and maximum range elements are not identical");
+
+
+                    for (auto & n : names)
+                    {
+                        const auto & param = parameters[n];
+                        _parameters.push_back(param);
+                        _varied_parameters.push_back(param);
+                    }
+
+                    // cholesky decomposition (informally: the sqrt of the transform matrix)
+                    // the GSL matrix contains both the cholesky and its transpose, see GSL reference, ch. 14.5
+                    cholesky();
+                    invert_transform();
+                    _value -= log_determinant();
+                }
+
+                virtual ~Transform()
+                {
+                    gsl_vector_free(_tmp);
+                    gsl_vector_free(_max);
+                    gsl_vector_free(_min);
+                    gsl_matrix_free(_transform_inv);
+                    gsl_matrix_free(_chol);
+                    gsl_matrix_free(_transform);
+                    gsl_vector_free(_shift);
+                }
+
+                virtual std::string as_string() const
+                {
+                    throw InternalError("priors::Transform::as_string() not implemented");
+
+                    return "";
+                }
+
+                // compute the normalization constant on log scale
+                double compute_log_volume()
+                {
+                    double result = 0.0;
+                    for (unsigned i = 0u; i < _shift->size; ++i)
+                    {
+                        if (gsl_vector_get(_min, i) >= gsl_vector_get(_max, i))
+                            throw InternalError("priors::Transform: min >= max for parameter " + _names[i].full());
+
+                        result += std::log(gsl_vector_get(_max, i) - gsl_vector_get(_min, i));
+                    }
+
+                    return result;
+                }
+
+                // compute the inverse of the determinant of the transformation matrix
+                double log_determinant()
+                {
+                    int signum = 0;
+                    gsl_matrix * tmp = gsl_matrix_alloc(_transform->size1, _transform->size2);
+                    gsl_matrix_memcpy(tmp , _transform);
+                    gsl_permutation * p = gsl_permutation_alloc(_transform->size1);
+                    gsl_linalg_LU_decomp(tmp , p , &signum);
+                    double ln_det = gsl_linalg_LU_lndet(tmp);
+                    gsl_permutation_free(p);
+                    gsl_matrix_free(tmp);
+                    return ln_det;
+                }
+
+                // compute cholesky decomposition of covariance matrix
+                void cholesky()
+                {
+                    // copy covariance matrix
+                    gsl_matrix_memcpy(_chol, _transform);
+                    if (GSL_SUCCESS != GSL_LINALG_CHOLESKY_DECOMP(_chol))
+                    {
+                        throw InternalError("priors::Transform: Cholesky decomposition failed");
+                    }
+                }
+
+                // invert covariance matrix based on previously obtained Cholesky decomposition
+                void invert_transform()
+                {
+                    // copy cholesky matrix
+                    gsl_matrix_memcpy(_transform_inv, _chol);
+
+                    // compute inverse matrix from cholesky
+                    if (GSL_SUCCESS != gsl_linalg_cholesky_invert(_transform_inv))
+                    {
+                        throw InternalError("priors::Transform: Cholesky inversion failed");
+                    }
+                }
+
+                virtual double operator()() const
+                {
+                    // get parameters
+                    for (unsigned i = 0u; i < _tmp2->size; ++i)
+                    {
+                        gsl_vector_set(_tmp2, i, _parameters[i].evaluate());
+                    }
+
+                    // shift: _tmp2 <- _tmp2 - _shift
+                    gsl_vector_sub(_tmp2, _shift);
+
+                    // transform: _tmp <- _transform_inv * _tmp2
+                    gsl_blas_dgemv(CblasNoTrans, 1.0, _transform_inv, _tmp2, 0.0, _tmp);
+
+                    // check if parameters are in range
+                    for (unsigned i = 0u; i < _tmp->size; ++i)
+                    {
+                        double v = gsl_vector_get(_tmp, i);
+                        if (v < gsl_vector_get(_min, i) || v > gsl_vector_get(_max, i))
+                        {
+                            return -std::numeric_limits<double>::infinity();
+                        }
+                    }
+
+                    return _value;
+                }
+
+                virtual LogPriorPtr clone(const Parameters & parameters) const
+                {
+                    gsl_vector * shift = gsl_vector_alloc(_shift->size);
+                    gsl_vector_memcpy(shift, _shift);
+
+                    gsl_matrix * transform = gsl_matrix_alloc(_transform->size1, _transform->size2);
+                    gsl_matrix_memcpy(transform, _transform);
+
+                    gsl_vector * min = gsl_vector_alloc(_min->size);
+                    gsl_vector_memcpy(min, _min);
+
+                    gsl_vector * max = gsl_vector_alloc(_max->size);
+                    gsl_vector_memcpy(max, _max);
+
+                    return LogPriorPtr(new priors::Transform(parameters, _names, shift, transform, min, max));
+                }
+
+                virtual void sample()
+                {
+                    // generate sample in _tmp
+                    gsl_vector_set_zero(_tmp);
+                    for (unsigned i = 0u; i < _tmp->size; ++i)
+                    {
+                        const double u = _parameters[i].evaluate_generator();
+                        const double min = gsl_vector_get(_min, i);
+                        const double max = gsl_vector_get(_max, i);
+                        const double range = max - min;
+
+                        gsl_vector_set(_tmp, i, u * range + min);
+                    }
+
+                    // transform: _tmp2 <- _transform * _tmp
+                    gsl_blas_dgemv(CblasNoTrans, 1.0, _transform, _tmp, 0.0, _tmp2);
+
+                    // shift: _tmp2 <- _tmp2 + _shift
+                    gsl_vector_add(_tmp2, _shift);
+
+                    // set parameters
+                    for (unsigned i = 0u; i < _tmp2->size; ++i)
+                    {
+                        _parameters[i].set(gsl_vector_get(_tmp2, i));
+                    }
+                }
+
+                virtual void compute_cdf()
+                {
+                    // get parameters
+                    for (unsigned i = 0u; i < _tmp2->size; ++i)
+                    {
+                        gsl_vector_set(_tmp2, i, _parameters[i].evaluate());
+                    }
+
+                    // shift: _tmp2 <- _tmp2 - _shift
+                    gsl_vector_sub(_tmp2, _shift);
+
+                    // transform: _tmp <- _transform_inv * _tmp2
+                    gsl_blas_dgemv(CblasNoTrans, 1.0, _transform_inv, _tmp2, 0.0, _tmp);
+
+                    // compute cdfs for uniform distributions in _tmp
+                    for (unsigned i = 0u; i < _tmp->size; ++i)
+                    {
+                        const double x = gsl_vector_get(_tmp, i);
+                        const double min = gsl_vector_get(_min, i);
+                        const double max = gsl_vector_get(_max, i);
+                        const double range = max - min;
+                        const double u = (x - min) / range;
+                        _parameters[i].set_generator(u);
+                    }
+                }
+
+                virtual bool informative() const
+                {
+                    return false;
+                }
+        };
     }
 
     LogPrior::LogPrior(const Parameters & parameters) :
@@ -834,6 +1082,39 @@ namespace eos
     LogPrior::Poisson(const Parameters & parameters, const std::string & name, const double & k)
     {
         LogPriorPtr prior = std::make_shared<eos::priors::Poisson>(parameters, name, k);
+
+        return prior;
+    }
+
+    LogPriorPtr
+    LogPrior::Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, const std::vector<double> & shift, const std::vector<std::vector<double>> & transform,
+                        const std::vector<double> &  min, const std::vector<double> & max)
+    {
+        gsl_vector * _shift = gsl_vector_alloc(shift.size());
+        for (unsigned i = 0 ; i < shift.size() ; ++i)
+        {
+            gsl_vector_set(_shift, i, shift[i]);
+        }
+        gsl_matrix * _transform = gsl_matrix_alloc(transform.size(), transform.size());
+        for (unsigned i = 0 ; i < transform.size() ; ++i)
+        {
+            for (unsigned j = 0 ; j < transform.size() ; ++j)
+            {
+                gsl_matrix_set(_transform, i, j, transform[i][j]);
+            }
+        }
+        gsl_vector * _min = gsl_vector_alloc(min.size());
+        for (unsigned i = 0 ; i < min.size() ; ++i)
+        {
+            gsl_vector_set(_min, i, min[i]);
+        }
+        gsl_vector * _max = gsl_vector_alloc(max.size());
+        for (unsigned i = 0 ; i < max.size() ; ++i)
+        {
+            gsl_vector_set(_max, i, max[i]);
+        }
+
+        LogPriorPtr prior = std::make_shared<eos::priors::Transform>(parameters, names, _shift, _transform, _min, _max);
 
         return prior;
     }
