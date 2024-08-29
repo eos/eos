@@ -85,6 +85,8 @@ class Analysis:
                 eos.debug(' - {name} ({type})'.format(name=p['parameter'], type=p['type']))
             elif 'constraint' in p:
                 eos.debug(' - {name} (constraint)'.format(name=p['constraint']))
+            elif 'parameters' in p:
+                eos.debug(' - {names} ({type})'.format(names=p['parameters'], type=p['type']))
         eos.debug('constraints:')
         for cn in likelihood:
             eos.debug(f' - {cn}')
@@ -172,8 +174,20 @@ class Analysis:
                 self._log_posterior.add(log_prior, False)
                 for p in log_prior.varied_parameters():
                     self.varied_parameters.append(p)
+            elif 'parameters' in prior:
+                prior_type = prior['type']
+                parameters = prior['parameters']
+
+                if prior_type=='transform':
+                    minv = list[float](prior['min'])
+                    maxv = list[float](prior['max'])
+                    shift = list[float](prior['shift'])
+                    transform = list[list[float]](prior['transform'])
+                    self._log_posterior.add(eos.LogPrior.Transform(self.parameters, parameters, shift, transform, minv, maxv), False)
+                else:
+                    raise ValueError(f'Unknown prior type \'{prior_type}\'')
             else:
-                raise ValueError('Prior specification must contains either a parameter or a constraint')
+                raise ValueError('Prior specification must contains either \'parameter\', \'constraint\' or \'parameters\'')
 
         # check for duplicate entries in the likelihood
         set_likelihood = set(likelihood)
