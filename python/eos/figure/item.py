@@ -25,13 +25,34 @@ import os
 import scipy as _scipy
 import yaml as _yaml
 
+class ItemColorCycler:
+    _colors = [
+        'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'
+    ]
+    _color_idx = 0
+
+    @classmethod
+    def reset(cls):
+        cls._color_idx = 0
+
+    @classmethod
+    def next_color(cls):
+        """Returns the next available color"""
+        result = cls._colors[cls._color_idx]
+        cls._color_idx = (cls._color_idx + 1) % len(cls._colors)
+        return result
+
 @dataclass(kw_only=True)
 class Item(Deserializable):
     r"""Base class for items to be drawn in a figure."""
 
-    color:str=field(default='black')
+    color:str=field(default=None)
     label:str=field(default=None)
     linestyle:str=field(default='solid')
+
+    def __post_init__(self):
+        if not self.color:
+            self.color = ItemColorCycler.next_color()
 
     def prepare(self):
         "Prepare the item for drawing"
@@ -75,6 +96,7 @@ class ObservableItem(Item):
     label:str=None
 
     def __post_init__(self):
+        super().__post_init__()
         eos.info(f'Handling item to plot {self.observable}')
         self._observable_entry = eos.Observables._get_obs_entry(self.observable)
         valid_kinematic_variables = {kv for kv in self._observable_entry.kinematic_variables()}
@@ -155,6 +177,7 @@ class OneDimensionalHistogramItem(Item):
     bins:int=field(default=50)
 
     def __post_init__(self):
+        super().__post_init__()
         if self.bins < 2:
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
@@ -201,6 +224,7 @@ class TwoDimensionalHistogramItem(Item):
     bins:int=field(default=50)
 
     def __post_init__(self):
+        super().__post_init__()
         if self.bins < 2:
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
@@ -253,6 +277,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     bandwidth:float=field(default=None)
 
     def __post_init__(self):
+        super().__post_init__()
         if self.level is not None and (self.level <= 0 or self.level >= 100):
             raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
 
@@ -327,6 +352,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
     yrange:tuple[float,float]=field(default=None)
 
     def __post_init__(self):
+        super().__post_init__()
         os.path.exists(self.datafile) or eos.error(f"Data file '{self.datafile}' does not exist")
         abspath = os.path.abspath(self.datafile)
         name = os.path.split(abspath)[-1]
