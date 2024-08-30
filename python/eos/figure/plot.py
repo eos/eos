@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
-from .item import ItemFactory
+from .item import ItemFactory, ItemColorCycler
 
 import copy as _copy
 import eos
@@ -261,5 +261,7 @@ class PlotFactory:
 
         if plot_type not in PlotFactory.registry:
             raise ValueError(f'Unknown plot type: {plot_type}')
+
+        ItemColorCycler.reset()
 
         return PlotFactory.registry[plot_type].from_dict(**kwargs)
