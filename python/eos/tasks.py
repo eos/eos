@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020-2023 Danny van Dyk
+# Copyright (c) 2020-2024 Danny van Dyk
 # Copyright (c) 2023 Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -66,16 +66,38 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
                 eos.error(f'failed to import module \'{module}\': {e}')
                 raise e
 
-            # extract default arguments
-            _args = {
+            # create dictionary of the provided args, and remove the analysis_file argument
+            provided_args = dict(zip(func.__code__.co_varnames, args))
+            provided_args.update(kwargs)
+            if 'analysis_file' in provided_args and type(provided_args['analysis_file']) is str:
+                provided_args.update({ 'analysis_file': eos.AnalysisFile(provided_args['analysis_file'])})
+            analysis_file = provided_args.pop('analysis_file')
+
+            # extract the default args from the function signature
+            default_args = {
                 k: v.default
                 for k, v in inspect.signature(func).parameters.items()
                 if v.default is not inspect.Parameter.empty
             }
-            _args.update(zip(func.__code__.co_varnames, args))
-            _args.update(kwargs)
-            if 'analysis_file' in _args and type(_args['analysis_file']) is str:
-                _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
+
+            # do we have configurations for this task?
+            configurations = analysis_file.find_configuration(name, provided_args)
+
+            # if more than one configuration is found, we cannot decide which one to use;
+            # this is a user error
+            if len(configurations) > 1:
+                raise ValueError(f'found more than one configuration for task \'{name}\' in analysis file \'{analysis_file.analysis_file}\'')
+
+            _args = {}
+            # if exactly one configuration is found, use it
+            if len(configurations) == 1:
+                _args = configurations[0]
+            # else if no configurations found, use the default configuration
+            else:
+                _args = default_args
+            _args.update(provided_args)
+            _args.update({ 'analysis_file': analysis_file })
+
             if logfile:
                 # create output directory
                 outputpath = ('{base_directory}/' + output).format(**_args)
