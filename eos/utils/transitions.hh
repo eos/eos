@@ -29,6 +29,7 @@ namespace eos
     struct PToGammaOffShell { };
     struct PToP { };
     struct PToPP { };
+    struct PToPP2 { };
     struct VToP { };
     struct VToV { };
     struct VacuumToPP { };
