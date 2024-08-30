@@ -1132,12 +1132,39 @@ namespace eos
 
             virtual double significance() const
             {
-                return 0.0;
+                double saturation = 0.0;
+
+                for (auto i : ids)
+                {
+                    saturation += cache[i];
+                }
+
+                if (saturation < 0.0)
+                {
+                    throw InternalError("Contribution to the uniform bound must be positive; found to be negative!");
+                }
+                else if ((0.0 <= saturation) && (saturation < bound))
+                {
+                    return 0.0;
+                }
+                else
+                {
+                    if (uncertainty == 0.0)
+                    {
+                        return - std::numeric_limits<double>::infinity();
+                    }
+                    else
+                    {
+                        // add a gaussian like penalty
+                        return (saturation - bound) / uncertainty;
+                    }
+                }
             }
 
             virtual TestStatistic primary_test_statistic() const
             {
-                return test_statistics::Empty();
+                double chi = significance();
+                return test_statistics::ChiSquare(chi * chi, 1, chi);
             }
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
