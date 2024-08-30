@@ -27,13 +27,35 @@ import os
 import scipy as _scipy
 import yaml as _yaml
 
+class ItemColorCycler:
+    _colors = [
+        # 10-colors colorblind-friendly cycle from 2107.02270
+        (0.247, 0.565, 0.855), (1.000, 0.663, 0.055), (0.741, 0.122, 0.004), (0.580, 0.643, 0.635), (0.514, 0.176, 0.714), (0.663, 0.420, 0.349), (0.906, 0.388, 0.000), (0.725, 0.675, 0.439), (0.443, 0.459, 0.506), (0.573, 0.855, 0.867)
+    ]
+    _color_idx = 0
+
+    @classmethod
+    def reset(cls):
+        cls._color_idx = 0
+
+    @classmethod
+    def next_color(cls):
+        """Returns the next available color"""
+        result = cls._colors[cls._color_idx]
+        cls._color_idx = (cls._color_idx + 1) % len(cls._colors)
+        return result
+
 @dataclass(kw_only=True)
 class Item(Deserializable):
     r"""Base class for items to be drawn in a figure."""
 
-    color:str=field(default='black')
+    color:str=field(default=None)
     label:str=field(default=None)
     linestyle:str=field(default='solid')
+
+    def __post_init__(self):
+        if not self.color:
+            self.color = ItemColorCycler.next_color()
 
     @abstractmethod
     def prepare(self, context:AnalysisFileContext=None):
@@ -79,6 +101,7 @@ class ObservableItem(Item):
     label:str=None
 
     def __post_init__(self):
+        super().__post_init__()
         eos.info(f'Handling item to plot {self.observable}')
         self._observable_entry = eos.Observables()[self.observable]
         valid_kinematic_variables = {kv for kv in self._observable_entry.kinematic_variables()}
@@ -160,6 +183,7 @@ class OneDimensionalHistogramItem(Item):
     bins:int=field(default=50)
 
     def __post_init__(self):
+        super().__post_init__()
         if self.bins < 2:
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
@@ -208,6 +232,7 @@ class TwoDimensionalHistogramItem(Item):
     bins:int=field(default=50)
 
     def __post_init__(self):
+        super().__post_init__()
         if self.bins < 2:
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
@@ -262,6 +287,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     bandwidth:float=field(default=None)
 
     def __post_init__(self):
+        super().__post_init__()
         if self.level is not None and (self.level <= 0 or self.level >= 100):
             raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
 
