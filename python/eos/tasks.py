@@ -143,11 +143,17 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     if not seed is None and not chain is None:
         raise ValueError('The arguments seed and chain are mutually exclusive')
 
-    if not chain is None and not start_point is None:
+    if not seed is None and not importance_samples is None:
+        raise ValueError('The arguments seed and importance_samples are mutually exclusive')
+
+    if not start_point is None and not chain is None:
         raise ValueError('The arguments chain and start_point are mutually exclusive')
 
-    if not importance_samples is None and not start_point is None:
+    if not start_point is None and not importance_samples is None:
         raise ValueError('The arguments importance_samples and start_point are mutually exclusive')
+
+    if not chain is None and not importance_samples is None:
+        raise ValueError('The arguments importance_samples and chain are mutually exclusive')
 
     analysis = analysis_file.analysis(posterior)
     min_chi2 = sys.float_info.max
