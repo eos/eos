@@ -44,31 +44,61 @@ class PyhfLogLikelihood:
         self.model = self.workspace.model()
         self.data = np.array(self.workspace.data(self.model, include_auxdata=False))
 
-        self.varied_parameters = []
-        for pn, v, bounds in zip(self.model.config.par_names,
-                                 self.model.config.suggested_init(),
-                                 self.model.config.suggested_bounds()):
+        self._pyhf_parameters = []
+        for parameter_name, init, bounds in zip(
+            self.model.config.par_names,
+            self.model.config.suggested_init(),
+            self.model.config.suggested_bounds()
+            ):
 
-            if pn in parameter_map:
-                qn = eos.QualifiedName(parameter_map[pn])
+            kinematics = eos.Kinematics()
+            options = eos.Options()
+
+            if parameter_name in parameter_map:
+                if isinstance(parameter_map[parameter_name], str):
+                    qualified_name = eos.QualifiedName(
+                        parameter_map[parameter_name]
+                        )
+                elif isinstance(parameter_map[parameter_name], dict):
+                    qualified_name = eos.QualifiedName(
+                        parameter_map[parameter_name]['name']
+                        )
+                    kinematics = eos.Kinematics(parameter_map[parameter_name].get('kinematics', {}))
+                    options = eos.Options(parameter_map[parameter_name].get('options', {}))
+                else:
+                    raise ValueError('parameter_map values must be either strings or dictionaries.')
             else:
-                qn = eos.QualifiedName('pyhf::' + pn)
+                qualified_name = eos.QualifiedName('pyhf::' + parameter_name)
 
-            if self.parameters.has(qn):
-                p = self.parameters[qn]
+            # check if qualified name corresponds to an existing observable
+            observables = eos.Observables()
+            if qualified_name in observables:
+                pyhf_obs = eos.Observable.make(qualified_name, self.parameters, kinematics, options)
+                self._pyhf_parameters.append(pyhf_obs)
             else:
-                p = self.parameters.declare_and_insert(qn, pn, eos.Unit.Undefined(), v, bounds[0], bounds[1])
+                # check if qualified name corresponds to an existing parameter
+                if self.parameters.has(qualified_name):
+                    pyhf_param = self.parameters[qualified_name]
+                # otherwise, create a new parameter
+                else:
+                    pyhf_param = self.parameters.declare_and_insert(
+                        qualified_name,
+                        parameter_name,
+                        eos.Unit.Undefined(),
+                        init,
+                        bounds[0],
+                        bounds[1]
+                        )
+                pyhf_param.set(init)
+                self._pyhf_parameters.append(pyhf_param)
+                pyhf_obs = eos.Observable.make(qualified_name, self.parameters, kinematics, options)
 
-            p.set(v)
-            self.varied_parameters.append(p)
-
-            o = eos.Observable.make(qn, self.parameters, eos.Kinematics(), eos.Options())
-            self.cache.add(o)
+            self.cache.add(pyhf_obs)
 
         self.number_of_observations = int(1)
 
     def evaluate(self):
-        parameter_values = np.array([p.evaluate() for p in self.varied_parameters])
+        parameter_values = np.array([p.evaluate() for p in self._pyhf_parameters])
         # only main term in pyhf - constraints are handled in EOS
         return self.model.mainlogpdf(self.data, parameter_values).item()
 
@@ -79,7 +109,12 @@ class PyhfLogLikelihood:
     def priors(self):
         priors = []
         for name, _ in self.model.config.modifiers:
-            param_name = self.parameter_map[name] if name in self.parameter_map else 'pyhf::' + name
+            param_name = 'pyhf::' + name
+            if name in self.parameter_map:
+                if isinstance(self.parameter_map[name], str):
+                    param_name = self.parameter_map[name]
+                elif isinstance(self.parameter_map[name], dict):
+                    continue
             param_set = self.model.config.param_set(name)
 
             if not param_set.constrained:
@@ -110,5 +145,4 @@ class PyhfLogLikelihood:
                         'k': param_set.auxdata[i],
                     }
                     priors.append(prior)
-
         return priors
