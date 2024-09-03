@@ -73,6 +73,10 @@ namespace eos
                                       b4EW_c     = complex<double>(this->re_b4EW_c(),     this->im_b4EW_c()),
                                       bS4EW_c    = complex<double>(this->re_bS4EW_c(),    this->im_bS4EW_c());
 
+        std::array<complex<double>, 6> T, P1_c, P1_u, P2_c;
+
+        std::array<std::array<std::array<complex<double>, 6>, 6>, 6> C_u, C_c;
+
                 T[0] = alpha1;
                 T[1] = alpha2;
                 T[2] = b2;
@@ -160,6 +164,11 @@ namespace eos
                                       b4EW_c     = complex<double>(this->re_b4EW_c(),     this->im_b4EW_c()),
                                       bS4EW_c    = complex<double>(this->re_bS4EW_c(),    this->im_bS4EW_c());
 
+        std::array<complex<double>, 6> T, P1_c, P1_u, P2_c;
+
+        std::array<std::array<std::array<complex<double>, 6>, 6>, 6> C_u, C_c;
+
+        
                 T[0] = alpha1;
                 T[1] = alpha2;
                 T[2] = b2;

@@ -47,9 +47,9 @@ namespace eos
             UsedParameter theta_18;
 
             su3f::rank1 B; 
-            std::array<complex<double>, 6> T, P1_c, P1_u, P2_c, Lambda_u, Lambda_c;
+            std::array<complex<double>, 6> Lambda_u, Lambda_c;
             mutable su3f::rank2 P1, P2, U, I;
-            std::array<std::array<std::array<complex<double>, 6>, 6>, 6> C_u, C_c;
+            
 
 
             UsedParameter Gfermi;
@@ -100,14 +100,8 @@ namespace eos
                 opt_cp_conjugate(o, options, "cp-conjugate"),
                 theta_18(p["eta::theta_18"], *this),
                 B(su3f::psd_b_triplet.find(opt_q.value())->second),
-                T({}),
-                P1_c({}),
-                P1_u({}),
-                P2_c({}),
                 P1{{}},
                 P2{{}},
-                C_u({}),
-                C_c({}),
                 Gfermi(p["WET::G_Fermi"], *this),
                 mB(p["mass::B_" + opt_q.str()], *this),
                 FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),
