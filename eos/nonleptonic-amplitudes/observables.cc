@@ -79,7 +79,7 @@ namespace eos
                 make_expression_observable("B->PP::S_CP", R"(S_{CP})",
                         Unit::None(),
                         R"(
-                        2*(<<B->PP::Re{amplitude};cp-conjugate=false>> * <<B->PP::Im{amplitude};cp-conjugate=true>>
+                        -2*(<<B->PP::Re{amplitude};cp-conjugate=false>> * <<B->PP::Im{amplitude};cp-conjugate=true>>
                         -
                         <<B->PP::Im{amplitude};cp-conjugate=false>> * <<B->PP::Re{amplitude};cp-conjugate=true>>)
                         /
