@@ -66,7 +66,7 @@ B^0->pi^+pi^-::S_CP@PDG:2024A:
     observable: B^0->pi^+pi^-::S_CP
     options: {}
     kinematics: {}
-    mean: -67.0e-02
+    mean: 67.0e-02
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 3.0e-02, lo: 3.0e-02}
 # B0 to pi0 pi0
@@ -125,7 +125,7 @@ B^0->K^0Kbar^0::S_CP@PDG:2024A:
     observable: B^0->K^0Kbar^0::S_CP
     options: {}
     kinematics: {}
-    mean: -80.0e-02
+    mean: 80.0e-02
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 50.0e-02, lo: 50.0e-02}
 # B_s to K- pi+
@@ -210,7 +210,7 @@ B^0->K^0pi^0::S_CP@PDG:2024A:
     observable: B^0->K^0pi^0::S_CP
     options: {}
     kinematics: {}
-    mean: 64.0e-02
+    mean: -64.0e-02
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 13.0e-02, lo: 13.0e-02}
 # B_s to pi0 pi0
@@ -244,7 +244,7 @@ B_s^0->K^+K^-::S_CP@LHCb:2020B:
     observable: B_s^0->K^+K^-::S_CP
     options: {}
     kinematics: {}
-    mean: 12.3e-02
+    mean: -12.3e-02
     sigma-stat: {hi: 3.4e-02, lo: 3.4e-02}
     sigma-sys: {hi: 1.5e-02, lo: 1.5e-02}
 # B_s to K0 K0
