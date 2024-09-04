@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2016-2024 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
+ * Copyright (c) 2024 Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -914,6 +915,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param expression: The expression to be parsed.
             :type expression: std::string
         )", args("name", "latex", "unit", "options", "expression"))
+        .def("__contains__", &Observables::has)
         .def("sections", range(&Observables::begin_sections, &Observables::end_sections))
         ;
 

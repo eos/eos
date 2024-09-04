@@ -5,6 +5,7 @@
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2018, 2019 Nico Gubernari
+ * Copyright (c) 2024 Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -345,6 +346,16 @@ namespace eos
         }
 
         ObservableEntries::instance()->insert_or_assign(name, std::shared_ptr<const ObservableEntry>(expression_observable_entry));
+    }
+
+    bool
+    Observables::has(const QualifiedName & name)
+    {
+        auto i(_imp->observable_entries.find(name));
+
+        if (_imp->observable_entries.end() == i)
+            return false;
+        else return true;
     }
 
     std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
