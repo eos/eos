@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2021 Méril Reboud
  * Copyright (c) 2021-2023 Danny van Dyk
+ * Copyright (c) 2024 Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -196,6 +197,14 @@ class ObservableTest :
 
                 TEST_CHECK(found_problematic_observable == false);
 
+            }
+
+            // Observables::has
+            {
+                Observables o = Observables();
+
+                TEST_CHECK_EQUAL(o.has("B_c->lnu::BR"), true);
+                TEST_CHECK_EQUAL(o.has("B_c->lnu::TEST"), false);
             }
         }
 
