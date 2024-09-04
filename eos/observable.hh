@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2016-2019, 2022 Danny van Dyk
+ * Copyright (c) 2024 Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -227,6 +228,13 @@ namespace eos
             * @param expression The expression to be parsed.
             */
             void insert(const QualifiedName & name, const std::string & latex, const Unit & unit, const Options & options, const std::string & expression) const;
+
+            /*!
+             * Verify if an observable with a given name exists.
+             *
+             * @param name  The name to be checked against the known observables.
+             */
+            bool has(const QualifiedName & name);
     };
 
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
