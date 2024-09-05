@@ -38,4 +38,6 @@ html: source Makefile
 		$< > $@
 
 .PHONY: source
-source: reference/constraints.rst reference/observables.rst reference/parameters.rst reference/bibliography.rst reference/signal-pdfs.rst reference/python.rst
+SOURCES_IN = $(shell find . -name '*.rst.in')
+SOURCES_JINJA = $(shell find . -name '*.rst.jinja')
+source: $(SOURCES_IN:.rst.in=.rst) $(SOURCES_JINJA:.rst.jinja=.rst)
