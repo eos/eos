@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2023 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -49,6 +49,7 @@ namespace eos
             struct CBLNu;
             struct UBLNu;
             struct SBNuNu;
+            struct DCNuL;
             struct SCNuL;
             struct DBCU;
             struct SBCU;
@@ -184,6 +185,16 @@ namespace eos
     };
 
     /*!
+     * Base class for the dcnul component of models.
+     */
+    template <> class ModelComponent<components::WET::DCNuL>
+    {
+        public:
+            /* dcnul Wilson coefficients */
+            virtual WilsonCoefficients<bern::ClassII> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    /*!
      * Base class for all models.
      */
     class Model :
@@ -197,7 +208,8 @@ namespace eos
         public virtual ModelComponent<components::WET::SBNuNu>,
         public virtual ModelComponent<components::WET::SBCU>,
         public virtual ModelComponent<components::WET::DBCU>,
-        public virtual ModelComponent<components::WET::SCNuL>
+        public virtual ModelComponent<components::WET::SCNuL>,
+        public virtual ModelComponent<components::WET::DCNuL>
     {
         public:
             virtual ~Model() = 0;

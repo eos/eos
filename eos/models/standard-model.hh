@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2023 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -257,6 +257,21 @@ namespace eos
             virtual WilsonCoefficients<ChargedCurrent> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::WET::DCNuL> :
+    public virtual ModelComponent<components::WET::DCNuL>
+    {
+        private:
+            UsedParameter _alpha_e__dcnul;
+            UsedParameter _m_Z__dcnul;
+            std::array<UsedParameter, 3u> _mu__dcnul;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            /* c->d Wilson coefficients */
+            virtual WilsonCoefficients<ChargedCurrent> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
@@ -268,7 +283,8 @@ namespace eos
         public SMComponent<components::WET::SBNuNu>,
         public SMComponent<components::WET::SBCU>,
         public SMComponent<components::WET::DBCU>,
-        public SMComponent<components::WET::SCNuL>
+        public SMComponent<components::WET::SCNuL>,
+        public SMComponent<components::WET::DCNuL>
     {
         public:
             StandardModel(const Parameters &);
