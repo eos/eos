@@ -36,6 +36,12 @@ namespace eos
             R"(Observables in $D_q^{(*)+}\to \ell^+\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor.)",
             {
+                make_observable("D->lnu::BR", R"(\mathcal{B}(D^+ \to \ell^+\nu))",
+                        Unit::None(),
+                        &DqToLeptonNeutrino::branching_ratio,
+                        std::make_tuple(),
+                        Options{ { "q", "d" } }),
+
                 make_observable("D_s->lnu::BR", R"(\mathcal{B}(D_s^+ \to \ell^+\nu))",
                         Unit::None(),
                         &DqToLeptonNeutrino::branching_ratio,

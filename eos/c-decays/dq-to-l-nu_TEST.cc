@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2019 Danny van Dyk
+ * Copyright (c) 2014-2024 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -46,6 +46,35 @@ class DqToLeptonNeutrinoTest :
 
         virtual void run() const
         {
+            // D^+ -> l^+ nu
+            {
+                Parameters p = Parameters::Defaults();
+                p["WET::G_Fermi"]        = 1.000;
+                p["CKM::abs(V_cd)"]      = 1.000;
+                p["mass::D_d"]           = 4.000;
+                p["decay-constant::D_d"] = 3.000;
+                p["mass::e"]             = 1.000;
+                p["QM::hbar"]            = 1.000;
+                p["life_time::D_d"]      = 0.500;
+
+                Options oo
+                {
+                    { "model", "CKM" },
+                    { "l",     "e"   },
+                    { "q",     "d"   }
+                };
+
+                DqToLeptonNeutrino d(p, oo);
+
+                const double eps = 2.0e-5;
+
+                TEST_CHECK_NEARLY_EQUAL(
+                        d.branching_ratio(),
+                        0.5 * std::pow(1.01033 * 3., 2) * std::pow((1.-std::pow(1./4., 2)), 2) * 4. / (8. * M_PI),
+                        eps);
+            }
+
+            // D_s^+ -> l^+ nu
             {
                 Parameters p = Parameters::Defaults();
                 p["WET::G_Fermi"]        = 1.000;
