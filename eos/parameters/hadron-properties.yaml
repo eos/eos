@@ -559,6 +559,12 @@ groups:
           max:     +1.038e-12
           unit:     's'
           latex:    '$\tau_{D^+}$'
+      'life_time::D_d^*' :
+          central: +7.892e-21
+          min:     +7.725e-21
+          max:     +8.066e-21
+          unit:     's'
+          latex:    '$\tau_{D_s^*}$'
       'life_time::D_u' :
           central: +4.103e-13
           min:     +4.093e-13
