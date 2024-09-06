@@ -488,6 +488,13 @@ groups:
           latex:    '$f_{D^{*-}}$'
           unit:     'GeV'
           comments: 'cf. [GKPR2013], symmetrized errors'
+      'decay-constant::D_d^*,T' :
+          central: +0.30
+          min:     +0.25
+          max:     +0.35
+          latex:    '$f_{\bar{D}_d^{*,T}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
       'decay-constant::D_u^*' :
           central: +0.242
           min:     +0.222
