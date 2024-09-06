@@ -90,6 +90,11 @@ namespace eos
 
             switch (opt_q.value())
             {
+                case QuarkFlavor::down:
+                    m_D_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
+                    v_cD      = [this]() -> complex<double> { return model->ckm_cd(); };
+                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
+                    break;
                 case QuarkFlavor::strange:
                     m_D_msbar = [this](const double & mu) -> double { return model->m_s_msbar(mu); };
                     v_cD      = [this]() -> complex<double> { return model->ckm_cs(); };
@@ -139,7 +144,7 @@ namespace eos
         Model::option_specification(),
         { "cp-conjugate", { "true", "false" },  "false" },
         { "l",            { "e", "mu", "tau" }, "mu"    },
-        { "q",            { "s" },              "s"     }
+        { "q",            { "d", "s" },         ""      }
     };
 
     DstarqToLeptonNeutrino::DstarqToLeptonNeutrino(const Parameters & parameters, const Options & options) :
