@@ -265,6 +265,10 @@ In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTE
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
+    parser_sample_nested.add_argument('-M', '--sampling-method',
+        help = 'The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation.',
+        dest = 'sample', action = 'store', type = str, default = 'auto'
+    )
     parser_sample_nested.set_defaults(cmd = cmd_sample_nested)
 
 

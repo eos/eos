@@ -546,7 +546,7 @@ def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor
 
 # Nested sampling
 @task('sample-nested', '{posterior}/nested')
-def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, seed:int=10):
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, seed:int=10, sample:str='auto'):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
@@ -569,9 +569,11 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type maxiter: int, optional
     :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
     :type seed: int, optional
+    :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
+    :type sample: str, optional
     """
     analysis = analysis_file.analysis(posterior)
-    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, seed=seed)
+    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]
     weights = _np.exp(posterior_values)
