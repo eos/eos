@@ -86,9 +86,6 @@ namespace eos
 
             switch (opt_q.value())
             {
-                case QuarkFlavor::down:
-                    lambda = &lambda_t_d;
-                    break;
                 case QuarkFlavor::strange:
                     lambda = &lambda_t_s;
                     break;
@@ -187,7 +184,7 @@ namespace eos
     {
         Model::option_specification(),
         {"l", { "e", "mu", "tau" }, "mu"},
-        {"q", { "d", "s" }, "d"}
+        {"q", { "s" }, "s"}
     };
 
     double

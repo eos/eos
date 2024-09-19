@@ -76,41 +76,11 @@ class BToDileptonTest :
                 p["CKM::arg(V_ts)"]     = -3.123445879630718;
 
                 p["decay-constant::B_s"] = 0.2276;
-                p["decay-constant::B_d"] = 0.256;
-                p["mass::B_d"] = 5.2795;
                 p["mass::B_s"] = 5.3663;
-                p["life_time::B_d"] = 1.525e-12;
                 p["life_time::B_s"] = 1.472e-12;
-                p["life_time::Delta_B_d"] = 0.0;
                 p["life_time::Delta_B_s"] = 0.104e12;
 
                 static const double eps = 1e-4;
-
-                // B_d -> mu^+ mu^-
-                {
-                    Options oo;
-                    oo.declare("model", "WET");
-                    oo.declare("q", "d");
-                    oo.declare("l", "mu");
-
-                    BToDilepton d(p, oo);
-
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +1.75327e-10, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +1.75327e-10, eps);
-                }
-
-                // B_d -> e^+ e^-
-                {
-                    Options oo;
-                    oo.declare("model", "WET");
-                    oo.declare("q", "d");
-                    oo.declare("l", "e");
-
-                    BToDilepton d(p, oo);
-
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +4.10420e-15, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +4.10420e-15, eps);
-                }
 
                 // B_s -> mu^+ mu^-
                 {
@@ -178,13 +148,9 @@ class BToDileptonTest :
                 p["CKM::abs(V_ts)"]  =  0.04121212396309175;
                 p["CKM::arg(V_ts)"]  = -3.1230250224697222;
 
-                p["mass::B_d"] = 5.27958;
                 p["mass::B_s"] = 5.36677;
-                p["life_time::B_d"] = 1.519e-12;
                 p["life_time::B_s"] = 1.516e-12;
-                p["life_time::Delta_B_d"] = 0.0;
                 p["life_time::Delta_B_s"] = 0.081e12;
-                p["decay-constant::B_d"] = 0.1906;
                 p["decay-constant::B_s"] = 0.2276;
 
                 static const double eps = 1e-4;
