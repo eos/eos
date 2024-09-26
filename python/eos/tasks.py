@@ -690,7 +690,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
         f = eos.data.Prediction(os.path.join(base_directory, posterior, f'pred-{distribution}'))
 
         observables = eos.Observables()
-        qualified_names = [obs['name'] for obs in prediction['observables']]
+        qualified_names = [obs.name for obs in prediction.observables]
         labels = [f'${observables[qn].latex()}$' for qn in qualified_names]
 
     else:
