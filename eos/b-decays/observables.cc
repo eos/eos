@@ -2176,25 +2176,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "pi^+" }, { "P2", "pi^0" } }),
 
-                make_observable("B^-->pi^-pi^0::BR", R"(\mathcal{B}(B^-\to\pi^-\pi^0))",
+                make_observable("B^+->pi^+pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\pi^+\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "u" }, { "P1", "pi^+" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "u" }, { "P1", "pi^+" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B^+->pi^+pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\pi^+\pi^0))",
+                make_observable("B^+->pi^+pi^0::A_CP", R"(A_\mathrm{CP}(B^+\to\pi^+\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^+->pi^+pi^0::BR>> + <<B^-->pi^-pi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^+->pi^+pi^0::A_CP", R"(A_\mathrm{CP}(B^+\to\pi^+\pi^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^+->pi^+pi^0::BR>> - <<B^-->pi^-pi^0::BR>> )
-                        /
-                        ( <<B^+->pi^+pi^0::BR>> + <<B^-->pi^-pi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "pi^+" }, { "P2", "pi^0" } }),
 
                 make_observable("B^+->K^+Kbar^0::BR", R"(\mathcal{B}(B^+\to K^+\bar{K}^0))",
                         Unit::None(),
@@ -2202,25 +2194,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "K_u" }, { "P2", "Kbar_d" } }),
 
-                make_observable("B^-->K^-K^0::BR", R"(\mathcal{B}(B^-\to K^-K^0))",
+                make_observable("B^+->K^+Kbar^0::BR_avg", R"(\bar{\mathcal{B}}(B^+\to K^+\bar{K}^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "u" }, { "P1", "K_u" }, { "P2", "Kbar_d" }, { "cp-conjugate", "true" } }),
+                        { { "q", "u" }, { "P1", "K_u" }, { "P2", "Kbar_d" } }),
 
-                make_expression_observable("B^+->K^+Kbar^0::BR_avg", R"(\bar{\mathcal{B}}(B^+\to K^+\bar{K}^0))",
+                make_observable("B^+->K^+Kbar^0::A_CP", R"(A_\mathrm{CP}(B^+\to K^+\bar{K}^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^+->K^+Kbar^0::BR>> + <<B^-->K^-K^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^+->K^+Kbar^0::A_CP", R"(A_\mathrm{CP}(B^+\to K^+\bar{K}^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^+->K^+Kbar^0::BR>> - <<B^-->K^-K^0::BR>> )
-                        /
-                        ( <<B^+->K^+Kbar^0::BR>> + <<B^-->K^-K^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "K_u" }, { "P2", "Kbar_d" } }),
 
                 make_observable("B^0->pi^+pi^-::BR", R"(\mathcal{B}(B^0\to\pi^+\pi^-))",
                         Unit::None(),
@@ -2228,55 +2212,41 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
-                make_observable("Bbar^0->pi^+pi^-::BR", R"(\mathcal{B}(\bar{B}^0\to\pi^+\pi^-))",
+                make_observable("B^0->pi^+pi^-::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\pi^+\pi^-))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "pi^+" }, { "P2", "pi^-" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
-                make_expression_observable("B^0->pi^+pi^-::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\pi^+\pi^-))",
+                make_observable("B^0->pi^+pi^-::A_CP", R"(A_\mathrm{CP}(B^0\to\pi^+\pi^-))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->pi^+pi^-::BR>> + <<Bbar^0->pi^+pi^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
-                make_expression_observable("B^0->pi^+pi^-::A_CP", R"(A_\mathrm{CP}(B^0\to\pi^+\pi^-))",
+                make_observable("B^0->pi^+pi^-::S_CP", R"(S_\mathrm{CP}(B^0\to\pi^+\pi^-))",
                         Unit::None(),
-                        R"(
-                        ( <<B^0->pi^+pi^-::BR>> - <<Bbar^0->pi^+pi^-::BR>> )
-                        /
-                        ( <<B^0->pi^+pi^-::BR>> + <<Bbar^0->pi^+pi^-::BR>> )
-                        )"),
-                make_expression_observable("B^0->pi^+pi^-::S_CP", R"(S_\mathrm{CP}(B^0\to\pi^+\pi^-))",
-                        Unit::None(),
-                        R"(
-                        <<B->PP::S_CP;q=d,P1=pi^+,P2=pi^->>
-                        )"),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "pi^+" }, { "P2", "pi^-" }}),
+
                 make_observable("B^0->pi^0pi^0::BR", R"(\mathcal{B}(B^0\to\pi^0\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::branching_ratio,
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
-                make_observable("Bbar^0->pi^0pi^0::BR", R"(\mathcal{B}(\bar{B}^0\to\pi^0\pi^0))",
+                make_observable("B^0->pi^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\pi^0\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "pi^0" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B^0->pi^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\pi^0\pi^0))",
+                make_observable("B^0->pi^0pi^0::A_CP", R"(A_\mathrm{CP}(B^0\to\pi^0\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->pi^0pi^0::BR>> + <<Bbar^0->pi^0pi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->pi^0pi^0::A_CP", R"(A_\mathrm{CP}(B^0\to\pi^0\pi^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^0->pi^0pi^0::BR>> - <<Bbar^0->pi^0pi^0::BR>> )
-                        /
-                        ( <<B^0->pi^0pi^0::BR>> + <<Bbar^0->pi^0pi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
                 make_observable("B^0->K^+K^-::BR", R"(\mathcal{B}(B^0\to K^+K^-))",
                         Unit::None(),
@@ -2284,25 +2254,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
-                make_observable("Bbar^0->K^+K^-::BR", R"(\mathcal{B}("\bar{B}^0\to K^+K^-))",
+                make_observable("B^0->K^+K^-::BR_avg", R"(\bar{\mathcal{B}}(B^0\to K^+K^-))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "K_u" }, { "P2", "Kbar_u" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
-                make_expression_observable("B^0->K^+K^-::BR_avg", R"(\bar{\mathcal{B}}(B^0\to K^+K^-))",
+                make_observable("B^0->K^+K^-::A_CP", R"(A_\mathrm{CP}(B^0\to K^+K^-))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->K^+K^-::BR>> + <<Bbar^0->K^+K^-::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->K^+K^-::A_CP", R"(A_\mathrm{CP}(B^0\to K^+K^-))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^0->K^+K^-::BR>> - <<Bbar^0->K^+K^-::BR>> )
-                        /
-                        ( <<B^0->K^+K^-::BR>> + <<Bbar^0->K^+K^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
                 make_observable("B^0->K^0Kbar^0::BR", R"(\mathcal{B}(B^0\to K^0\bar{K}^0))",
                         Unit::None(),
@@ -2310,30 +2272,23 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
-                make_observable("Bbar^0->Kbar^0K^0::BR", R"(\mathcal{B}(\bar{B}^0\to \bar{K}^0K^0))",
+                make_observable("B^0->K^0Kbar^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to \bar{K}^0K^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "Kbar_d" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
-                make_expression_observable("B^0->K^0Kbar^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to \bar{K}^0K^0))",
+                make_observable("B^0->K^0Kbar^0::A_CP", R"(A_\mathrm{CP}(B^0\to \bar{K}^0K^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->K^0Kbar^0::BR>> + <<Bbar^0->Kbar^0K^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
-                make_expression_observable("B^0->K^0Kbar^0::A_CP", R"(A_\mathrm{CP}(B^0\to \bar{K}^0K^0))",
+                make_observable("B^0->K^0Kbar^0::S_CP", R"(S_\mathrm{CP}(B^0\to \bar{K}^0K^0))",
                         Unit::None(),
-                        R"(
-                        ( <<B^0->K^0Kbar^0::BR>> - <<Bbar^0->Kbar^0K^0::BR>> )
-                        /
-                        ( <<B^0->K^0Kbar^0::BR>> + <<Bbar^0->Kbar^0K^0::BR>> )
-                        )"),
-                make_expression_observable("B^0->K^0Kbar^0::S_CP", R"(S_\mathrm{CP}(B^0\to \bar{K}^0K^0))",
-                        Unit::None(),
-                        R"(
-                        (<<B->PP::S_CP;q=d,P1=K_d,P2=Kbar_d>>)
-                        )"),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
                 make_observable("B_s^0->K^-pi^+::BR", R"(\mathcal{B}(B_s^0\to K^-\pi^+))",
                         Unit::None(),
@@ -2341,25 +2296,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "Kbar_u" }, { "P2", "pi^+" } }),
 
-                make_observable("Bbar_s^0->K^+pi^-::BR", R"(\mathcal{B}(\bar{B}_s^0\to K^+\pi^-))",
+                make_observable("B_s^0->K^-pi^+::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^-\pi^+))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "Kbar_u" }, { "P2", "pi^+" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "Kbar_u" }, { "P2", "pi^+" } }),
 
-                make_expression_observable("B_s^0->K^-pi^+::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^-\pi^+))",
+                make_observable("B_s^0->K^-pi^+::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^-\pi^+))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->K^-pi^+::BR>> + <<Bbar_s^0->K^+pi^-::BR>> )
-                        )"),
-
-                make_expression_observable("B_s^0->K^-pi^+::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^-\pi^+))",
-                        Unit::None(),
-                        R"(
-                        ( <<B_s^0->K^-pi^+::BR>> - <<Bbar_s^0->K^+pi^-::BR>> )
-                        /
-                        ( <<B_s^0->K^-pi^+::BR>> + <<Bbar_s^0->K^+pi^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "Kbar_u" }, { "P2", "pi^+" } }),
 
                 make_observable("B^+->K^+pi^0::BR", R"(\mathcal{B}(B^+\to K^+\pi^0))",
                         Unit::None(),
@@ -2367,25 +2314,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "K_u" }, { "P2", "pi^0" } }),
 
-                make_observable("B^-->K^-pi^0::BR", R"(\mathcal{B}(B^-\to K^-\pi^0))",
+                make_observable("B^+->K^+pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^+\to K^+\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "u" }, { "P1", "K_u" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "u" }, { "P1", "K_u" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B^+->K^+pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^+\to K^+\pi^0))",
+                make_observable("B^+->K^+pi^0::A_CP", R"(A_\mathrm{CP}(B^+\to K^+\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^+->K^+pi^0::BR>> + <<B^-->K^-pi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^+->K^+pi^0::A_CP", R"(A_\mathrm{CP}(B^+\to K^+\pi^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^+->K^+pi^0::BR>> - <<B^-->K^-pi^0::BR>> )
-                        /
-                        ( <<B^+->K^+pi^0::BR>> + <<B^-->K^-pi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "K_u" }, { "P2", "pi^0" } }),
 
                 make_observable("B^+->K^0pi^+::BR", R"(\mathcal{B}(B^+\to K^0\pi^+))",
                         Unit::None(),
@@ -2393,25 +2332,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "K_d" }, { "P2", "pi^+" } }),
 
-                make_observable("B^-->Kbar^0pi^-::BR", R"(\mathcal{B}(B^-\to\bar{K}^0\pi^-))",
+                make_observable("B^+->K^0pi^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to K^0\pi^+))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "u" }, { "P1", "K_d" }, { "P2", "pi^+" }, { "cp-conjugate", "true" } }),
+                        { { "q", "u" }, { "P1", "K_d" }, { "P2", "pi^+" } }),
 
-                make_expression_observable("B^+->K^0pi^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to K^0\pi^+))",
+                make_observable("B^+->K^0pi^+::A_CP", R"(A_\mathrm{CP}(B^+\to K^0\pi^+))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^+->K^0pi^+::BR>> + <<B^-->Kbar^0pi^-::BR>> )
-                        )"),
-
-                make_expression_observable("B^+->K^0pi^+::A_CP", R"(A_\mathrm{CP}(B^+\to K^0\pi^+))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^+->K^0pi^+::BR>> - <<B^-->Kbar^0pi^-::BR>> )
-                        /
-                        ( <<B^+->K^0pi^+::BR>> + <<B^-->Kbar^0pi^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "K_d" }, { "P2", "pi^+" } }),
 
                 make_observable("B^0->K^+pi^-::BR", R"(\mathcal{B}(B^0\to K^+\pi^-))",
                         Unit::None(),
@@ -2419,25 +2350,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "K_u" }, { "P2", "pi^-" } }),
 
-                make_observable("Bbar^0->K^-pi^+::BR", R"(\mathcal{B}(\bar{B}^0\to K^-\pi^+))",
+                make_observable("B^0->K^+pi^-::BR_avg", R"(\bar{\mathcal{B}}(B^0\to K^+\pi^-))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "K_u" }, { "P2", "pi^-" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "K_u" }, { "P2", "pi^-" } }),
 
-                make_expression_observable("B^0->K^+pi^-::BR_avg", R"(\bar{\mathcal{B}}(B^0\to K^+\pi^-))",
+                make_observable("B^0->K^+pi^-::A_CP", R"(A_\mathrm{CP}(B^0\to K^+\pi^-))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->K^+pi^-::BR>> + <<Bbar^0->K^-pi^+::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->K^+pi^-::A_CP", R"(A_\mathrm{CP}(B^0\to K^+\pi^-))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^0->K^+pi^-::BR>> - <<Bbar^0->K^-pi^+::BR>> )
-                        /
-                        ( <<B^0->K^+pi^-::BR>> + <<Bbar^0->K^-pi^+::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "K_u" }, { "P2", "pi^-" } }),
 
                 make_observable("B^0->K^0pi^0::BR", R"(\mathcal{B}(B^0\to K^0\pi^0))",
                         Unit::None(),
@@ -2445,31 +2368,23 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "K_d" }, { "P2", "pi^0" } }),
 
-                make_observable("Bbar^0->Kbar^0pi^0::BR", R"(\mathcal{B}(\bar{B}^0\to\bar{K}^0\pi^0))",
+                make_observable("B^0->K^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to K^0\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B^0->K^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to K^0\pi^0))",
+                make_observable("B^0->K^0pi^0::A_CP", R"(A_\mathrm{CP}(B^0\to K^0\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->K^0pi^0::BR>> + <<Bbar^0->Kbar^0pi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B^0->K^0pi^0::A_CP", R"(A_\mathrm{CP}(B^0\to K^0\pi^0))",
+                make_observable("B^0->K^0pi^0::S_CP", R"(S_\mathrm{CP}(B^0\to K^0\pi^0))",
                         Unit::None(),
-                        R"(
-                        ( <<B^0->K^0pi^0::BR>> - <<Bbar^0->Kbar^0pi^0::BR>> )
-                        /
-                        ( <<B^0->K^0pi^0::BR>> + <<Bbar^0->Kbar^0pi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->K^0pi^0::S_CP", R"(S_\mathrm{CP}(B^0\to K^0\pi^0))",
-                        Unit::None(),
-                        R"(
-                        (<<B->PP::S_CP;q=d,P1=K_d,P2=pi^0>>)
-                        )"),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "K_d" }, { "P2", "pi^0" } }),
 
                 make_observable("B_s^0->pi^+pi^-::BR", R"(\mathcal{B}(B_s^0\to\pi^+\pi^-))",
                         Unit::None(),
@@ -2477,25 +2392,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
-                make_observable("Bbar_s^0->pi^+pi^-::BR", R"(\mathcal{B}(\bar{B}_s^0\to\pi^+\pi^-))",
+                make_observable("B_s^0->pi^+pi^-::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\pi^+\pi^-))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "pi^+" }, { "P2", "pi^-" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
-                make_expression_observable("B_s^0->pi^+pi^-::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\pi^+\pi^-))",
+                make_observable("B_s^0->pi^+pi^-::A_CP", R"(A_\mathrm{CP}(B_s^0\to\pi^+\pi^-))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->pi^+pi^-::BR>> + <<Bbar_s^0->pi^+pi^-::BR>> )
-                        )"),
-
-                make_expression_observable("B_s^0->pi^+pi^-::A_CP", R"(A_\mathrm{CP}(B_s^0\to\pi^+\pi^-))",
-                        Unit::None(),
-                        R"(
-                        ( <<B_s^0->pi^+pi^-::BR>> - <<Bbar_s^0->pi^+pi^-::BR>> )
-                        /
-                        ( <<B_s^0->pi^+pi^-::BR>> + <<Bbar_s^0->pi^+pi^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
                 make_observable("B_s^0->K^+K^-::BR", R"(\mathcal{B}(B_s^0\to K^+K^-))",
                         Unit::None(),
@@ -2503,31 +2410,23 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
-                make_observable("Bbar_s^0->K^+K^-::BR", R"(\mathcal{B}(\bar{B}_s^0\to K^+K^-))",
+                make_observable("B_s^0->K^+K^-::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^+K^-))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
-                make_expression_observable("B_s^0->K^+K^-::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^+K^-))",
+                make_observable("B_s^0->K^+K^-::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^+K^-))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->K^+K^-::BR>> + <<Bbar_s^0->K^+K^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
-                make_expression_observable("B_s^0->K^+K^-::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^+K^-))",
+                make_observable("B_s^0->K^+K^-::S_CP", R"(S_\mathrm{CP}(B_s^0\to K^+K^-))",
                         Unit::None(),
-                        R"(
-                        ( <<B_s^0->K^+K^-::BR>> - <<Bbar_s^0->K^+K^-::BR>> )
-                        /
-                        ( <<B_s^0->K^+K^-::BR>> + <<Bbar_s^0->K^+K^-::BR>> )
-                        )"),
-
-                make_expression_observable("B_s^0->K^+K^-::S_CP", R"(S_\mathrm{CP}(B_s^0\to K^+K^-))",
-                        Unit::None(),
-                        R"(
-                        (<<B->PP::S_CP;q=s,P1=K_u,P2=Kbar_u>>)
-                        )"),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
                 make_observable("B_s^0->K^0Kbar^0::BR", R"(\mathcal{B}(B_s^0\to K^0\bar{K}^0))",
                         Unit::None(),
@@ -2535,25 +2434,23 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
-                make_observable("Bbar_s^0->Kbar^0K^0::BR", R"(\mathcal{B}(\bar{B}_s^0\to\bar{K}^0K^0))",
+                make_observable("B_s^0->K^0Kbar^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^0\bar{K}^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
-                make_expression_observable("B_s^0->K^0Kbar^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^0\bar{K}^0))",
+                make_observable("B_s^0->K^0Kbar^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^0\bar{K}^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->K^0Kbar^0::BR>> + <<Bbar_s^0->Kbar^0K^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
-                make_expression_observable("B_s^0->K^0Kbar^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^0\bar{K}^0))",
+                make_observable("B_s^0->K^0Kbar^0::S_CP", R"(S_\mathrm{CP}(B_s^0\to K^0\bar{K}^0))",
                         Unit::None(),
-                        R"(
-                        ( <<B_s^0->K^0Kbar^0::BR>> - <<Bbar_s^0->Kbar^0K^0::BR>> )
-                        /
-                        ( <<B_s^0->K^0Kbar^0::BR>> + <<Bbar_s^0->Kbar^0K^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
                 make_observable("B_s^0->pi^0pi^0::BR", R"(\mathcal{B}(B_s^0\to\pi^0\pi^0))",
                         Unit::None(),
@@ -2561,25 +2458,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
-                make_observable("Bbar_s^0->pi^0pi^0::BR", R"(\mathcal{B}(\bar{B}_s^0\to\pi^0\pi^0))",
+                make_observable("B_s^0->pi^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\pi^0\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "pi^0" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B_s^0->pi^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\pi^0\pi^0))",
+                make_observable("B_s^0->pi^0pi^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to\pi^0\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->pi^0pi^0::BR>> + <<Bbar_s^0->pi^0pi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B_s^0->pi^0pi^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to\pi^0\pi^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B_s^0->pi^0pi^0::BR>> - <<Bbar_s^0->pi^0pi^0::BR>> )
-                        /
-                        ( <<B_s^0->pi^0pi^0::BR>> + <<Bbar_s^0->pi^0pi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
                 make_observable("B^+->etapi^+::BR", R"(\mathcal{B}(B^+\to\eta\pi^+))",
                         Unit::None(),
@@ -2587,25 +2476,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "eta" }, { "P2", "pi^+" } }),
 
-                make_observable("B^-->etapi^-::BR", R"(\mathcal{B}(B^-\to\eta\pi^-))",
+                make_observable("B^+->etapi^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\eta\pi^+))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "u" }, { "P1", "eta" }, { "P2", "pi^+" }, { "cp-conjugate", "true" } }),
+                        { { "q", "u" }, { "P1", "eta" }, { "P2", "pi^+" } }),
 
-                make_expression_observable("B^+->etapi^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\eta\pi^+))",
+                make_observable("B^+->etapi^+::A_CP", R"(A_\mathrm{CP}(B^+\to\eta\pi^+))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^+->etapi^+::BR>> + <<B^-->etapi^-::BR>> )
-                        )"),
-
-                make_expression_observable("B^+->etapi^+::A_CP", R"(A_\mathrm{CP}(B^+\to\eta\pi^+))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^+->etapi^+::BR>> - <<B^-->etapi^-::BR>> )
-                        /
-                        ( <<B^+->etapi^+::BR>> + <<B^-->etapi^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta" }, { "P2", "pi^+" } }),
 
                 make_observable("B^0->etapi^0::BR", R"(\mathcal{B}(B^0\to\eta\pi^0))",
                         Unit::None(),
@@ -2613,25 +2494,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
-                make_observable("Bbar^0->etapi^0::BR", R"(\mathcal{B}(\bar{B}^0\to\eta\pi^0))",
+                make_observable("B^0->etapi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B^0->etapi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta\pi^0))",
+                make_observable("B^0->etapi^0::A_CP", R"(A_\mathrm{CP}(B^0\to\eta\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->etapi^0::BR>> + <<Bbar^0->etapi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->etapi^0::A_CP", R"(A_\mathrm{CP}(B^0\to\eta\pi^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^0->etapi^0::BR>> - <<Bbar^0->etapi^0::BR>> )
-                        /
-                        ( <<B^0->etapi^0::BR>> + <<Bbar^0->etapi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
                 make_observable("B^+->etaK^+::BR", R"(\mathcal{B}(B^+\to\eta K^+))",
                         Unit::None(),
@@ -2639,25 +2512,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "eta" }, { "P2", "K_u" } }),
 
-                make_observable("B^-->etaK^-::BR", R"(\mathcal{B}(B^-\to\eta K^-))",
+                make_observable("B^+->etaK^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\eta K^+))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "u" }, { "P1", "eta" }, { "P2", "K_u" }, { "cp-conjugate", "true" } }),
+                        { { "q", "u" }, { "P1", "eta" }, { "P2", "K_u" } }),
 
-                make_expression_observable("B^+->etaK^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\eta K^+))",
+                make_observable("B^+->etaK^+::A_CP", R"(A_\mathrm{CP}(B^+\to\eta K^+))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^+->etaK^+::BR>> + <<B^-->etaK^-::BR>> )
-                        )"),
-
-                make_expression_observable("B^+->etaK^+::A_CP", R"(A_\mathrm{CP}(B^+\to\eta K^+))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^+->etaK^+::BR>> - <<B^-->etaK^-::BR>> )
-                        /
-                        ( <<B^+->etaK^+::BR>> + <<B^-->etaK^-::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta" }, { "P2", "K_u" } }),
 
                 make_observable("B^0->etaK^0::BR", R"(\mathcal{B}(B^0\to\eta K^0))",
                         Unit::None(),
@@ -2665,25 +2530,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "K_d" } }),
 
-                make_observable("Bbar^0->etaKbar^0::BR", R"(\mathcal{B}(B^0\to\eta\bar{K}^0))",
+                make_observable("B^0->etaK^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta K^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "eta" }, { "P2", "K_d" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "K_d" } }),
 
-                make_expression_observable("B^0->etaK^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta K^0))",
+                make_observable("B^0->etaK^0::A_CP", R"(A_\mathrm{CP}(B^0\to\eta K^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->etaK^0::BR>> + <<Bbar^0->etaKbar^0::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->etaK^0::A_CP", R"(A_\mathrm{CP}(B^0\to\eta K^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^0->etaK^0::BR>> - <<Bbar^0->etaKbar^0::BR>> )
-                        /
-                        ( <<B^0->etaK^0::BR>> + <<Bbar^0->etaKbar^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "K_d" } }),
 
                 make_observable("B_s^0->etapi^0::BR", R"(\mathcal{B}(B_s^0\to\eta\pi^0))",
                         Unit::None(),
@@ -2691,25 +2548,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
-                make_observable("Bbar_s^0->etapi^0::BR", R"(\mathcal{B}(\bar{B}_s^0\to\eta\pi^0))",
+                make_observable("B_s^0->etapi^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta\pi^0))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
-                make_expression_observable("B_s^0->etapi^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta\pi^0))",
+                make_observable("B_s^0->etapi^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to\eta\pi^0))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->etapi^0::BR>> + <<Bbar_s^0->etapi^0::BR>> )
-                        )"),
-
-                make_expression_observable("B_s^0->etapi^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to\eta\pi^0))",
-                        Unit::None(),
-                        R"(
-                        ( <<B_s^0->etapi^0::BR>> - <<Bbar_s^0->etapi^0::BR>> )
-                        /
-                        ( <<B_s^0->etapi^0::BR>> + <<Bbar_s^0->etapi^0::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
                 make_observable("B^0->etaeta::BR", R"(\mathcal{B}(B^0\to\eta\eta))",
                         Unit::None(),
@@ -2717,25 +2566,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" } }),
 
-                make_observable("Bbar^0->etaeta::BR", R"(\mathcal{B}(\bar{B}^0\to\eta\eta))",
+                make_observable("B^0->etaeta::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta\eta))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" }, { "cp-conjugate", "true" } }),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" } }),
 
-                make_expression_observable("B^0->etaeta::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta\eta))",
+                make_observable("B^0->etaeta::A_CP", R"(A_\mathrm{CP}(B^0\to\eta\eta))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B^0->etaeta::BR>> + <<Bbar^0->etaeta::BR>> )
-                        )"),
-
-                make_expression_observable("B^0->etaeta::A_CP", R"(A_\mathrm{CP}(B^0\to\eta\eta))",
-                        Unit::None(),
-                        R"(
-                        ( <<B^0->etaeta::BR>> - <<Bbar^0->etaeta::BR>> )
-                        /
-                        ( <<B^0->etaeta::BR>> + <<Bbar^0->etaeta::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" } }),
 
                 make_observable("B_s^0->etaeta::BR", R"(\mathcal{B}(B_s^0\to\eta\eta))",
                         Unit::None(),
@@ -2743,25 +2584,17 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
 
-                make_observable("Bbar_s^0->etaeta::BR", R"(\mathcal{B}(\bar{B}_s^0\to\eta\eta))",
+                make_observable("B_s^0->etaeta::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta\eta))",
                         Unit::None(),
-                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
                         std::make_tuple(),
-                        { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" }, { "cp-conjugate", "true" } }),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
 
-                make_expression_observable("B_s^0->etaeta::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta\eta))",
+                make_observable("B_s^0->etaeta::A_CP", R"(A_\mathrm{CP}(B_s^0\to\eta\eta))",
                         Unit::None(),
-                        R"(
-                        0.5 * ( <<B_s^0->etaeta::BR>> + <<Bbar_s^0->etaeta::BR>> )
-                        )"),
-
-                make_expression_observable("B_s^0->etaeta::A_CP", R"(A_\mathrm{CP}(B_s^0\to\eta\eta))",
-                        Unit::None(),
-                        R"(
-                        ( <<B_s^0->etaeta::BR>> - <<Bbar_s^0->etaeta::BR>> )
-                        /
-                        ( <<B_s^0->etaeta::BR>> + <<Bbar_s^0->etaeta::BR>> )
-                        )"),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
             }
         );
 

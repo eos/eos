@@ -40,7 +40,9 @@ namespace eos
         UsedParameter mB;
         UsedParameter mP1;
         UsedParameter mP2;
+        UsedParameter phiB;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
+        std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
 
         static const std::vector<OptionSpecification> options;
 
@@ -53,11 +55,14 @@ namespace eos
             mB(p["mass::B_" + opt_q.str()], u),
             mP1(p["mass::" + opt_p1.str()], u),
             mP2(p["mass::" + opt_p2.str()], u),
-            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o))
+            phiB(p["B_" + (opt_q.str()=="u"?"d":opt_q.str()) + "::q_over_p_phase"], u),
+            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o + Options{{"cp-conjugate", "false"}})),
+            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o + Options{{"cp-conjugate", "true"}}))
         {
             Context ctx("When constructing B->PP observable");
 
             u.uses(*nl_amplitudes);
+            u.uses(*cp_nl_amplitudes);
         }
 
         double decay_width() const
@@ -76,6 +81,38 @@ namespace eos
 
             return  prefactor * std::norm(nl_amplitudes->amplitude());
         }
+
+        double cp_decay_width() const
+        {
+            const double mB = this->mB();
+            const double mP1 = this->mP1();
+            const double mP2 = this->mP2();
+            double prefactor = 1.0 / 16.0 / M_PI / power_of<3>(mB) * std::sqrt(lambda(mB * mB, mP1 * mP1, mP2 * mP2));
+
+            // The decay width is a physical observable, the inputs are symmetrized
+            // BR(B -> P1 P2) = prefactor * S * |A(B -> P1 P2) + A(B -> P2 P1)|^2
+            if (opt_p1.value() == opt_p2.value())
+            {
+                prefactor *= 0.5;
+            }
+
+            return  prefactor * std::norm(cp_nl_amplitudes->amplitude());
+        }
+
+        double mixing_induced_cp_asymmetry() const
+        {
+            const double phiB = this->phiB();
+            complex<double> ii = complex<double>(0.0, 1.0);
+
+            const complex<double> amp = nl_amplitudes->amplitude();
+            const complex<double> cp_amp = cp_nl_amplitudes->amplitude();
+
+            // Assumes the mixing parameter ratio q / p to be a pure phase
+            const complex<double> lambdaf = std::exp(ii * phiB) * cp_amp / amp;
+
+
+            return -2 * std::imag(lambdaf) / (1 + std::norm(lambdaf)) ;
+        }
     };
 
     const std::vector<OptionSpecification>
@@ -83,8 +120,7 @@ namespace eos
     {
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "q", { "u", "d", "s" } },
+        { "q", { "u", "d", "s" }, "" },
         { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
         { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
     };
@@ -109,6 +145,30 @@ namespace eos
     BToPseudoscalarPseudoscalar::branching_ratio() const
     {
         return _imp->decay_width() * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToPseudoscalarPseudoscalar::cp_branching_ratio() const
+    {
+        return _imp->cp_decay_width() * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToPseudoscalarPseudoscalar::avg_branching_ratio() const
+    {
+        return 0.5 * (branching_ratio() + cp_branching_ratio());
+    }
+
+    double
+    BToPseudoscalarPseudoscalar::cp_asymmetry() const
+    {
+        return (branching_ratio() - cp_branching_ratio()) / (branching_ratio() + cp_branching_ratio());
+    }
+
+    double
+    BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry() const
+    {
+        return _imp->mixing_induced_cp_asymmetry();
     }
 
 
