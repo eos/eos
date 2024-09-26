@@ -688,6 +688,12 @@ groups:
           max:     0.0715
           latex:    '$y_{B_s}$'
           comments: 'Temporary result 1909.12524 eq. 74'
+      'B_d::q_over_p_phase' :
+          central:  0.7749
+          min:      0.7487
+          max:      0.8029
+          latex:    '$\phi_{B_d}$'
+          comments: 'Temporary result 2010.14423'
       'B_s::q_over_p_phase' :
           central: -0.050
           min:     -0.069
