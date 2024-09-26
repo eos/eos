@@ -583,6 +583,14 @@ Belle:2008B:
     id: oai:arXiv.org:0708.0082
   inspire-id: Belle:2007qxm
   title: Measurement of the near-threshold $e^+ e^- \to D \bar{D}$ cross section using initial-state radiation
+Belle:2008C:
+  authors: Fujikawa, M. and others
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0805.3773
+  inspire-id: Belle:2008xpe
+  title: High-Statistics Study of the $\tau^- \to \pi^- \pi^0 \nu_\tau Decay
 Belle:2009A:
   authors: Wei, J.-T. et al.
   collaboration: Belle
@@ -819,6 +827,14 @@ CLEO:2000A:
     id: oai:arXiv.org:hep-ex/9912057
   inspire-id: Coan:1999kh
   title: Study of exclusive radiative B meson decays
+CLEO:2000B:
+  authors: Anderson, S. and others
+  collaboration: CLEO
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/9910046
+  inspire-id: CLEO:1999dln
+  title: 'Hadronic structure in the decay $\tau \to \pi^- \pi^0 \nu_\tau'
 CLEO:2008A:
   authors: Cronin-Hennessy, D. et al.
   collaboration: CLEO
