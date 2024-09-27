@@ -27,6 +27,8 @@ CONSTRAINTS_FILES = \
 	Dq-to-dilepton.yaml \
 	dispersive-bounds.yaml \
 	ee-to-ccbar.yaml \
+	ee-to-pipi.yaml \
+	epi-to-epi.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	Lc-to-L-form-factors.yaml \
