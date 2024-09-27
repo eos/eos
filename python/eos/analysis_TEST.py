@@ -310,48 +310,43 @@ class ClassMethodTests(unittest.TestCase):
     def test_pyhf_likelihood(self):
 
         try:
-            import pyhf
+            import pyhf, os, contextlib
         except ModuleNotFoundError:
             raise RuntimeError('Attempting to use a PyHF likelihood without the `pyhf` module installed')
 
-        with open(Path(__file__).parent / 'analysis_TEST.d/workspace.json') as serialized:
-            spec = json.load(serialized)
+        @contextlib.contextmanager
+        def cd(path):
+            cwd = os.getcwd()
+            os.chdir(path)
+            try:
+                yield
+            finally:
+                os.chdir(cwd)
 
-        workspace = pyhf.Workspace(spec)
-        model = workspace.model()
-        data = np.array(workspace.data(model, include_auxdata=False))
-        pars = np.array(model.config.suggested_init())
+        with cd(Path(__file__).parent / 'analysis_TEST.d'):
+            with open('workspace.json') as workspace:
+                spec = json.load(workspace)
 
-        p = eos.Parameters()
-        cache = eos.ObservableCache(p)
-        llh_block = eos.LogLikelihoodBlock.External(
-            cache,
-            lambda cache: eos.PyhfLogLikelihood.factory(cache, workspace)
-            )
+            workspace = pyhf.Workspace(spec)
+            model = workspace.model()
+            data = np.array(workspace.data(model, include_auxdata=False))
+            init_pars = np.array(model.config.suggested_init())
 
-        pyhf_priors = eos.PyhfLogLikelihood.factory(cache, workspace).priors()
+            af = eos.AnalysisFile('analysis_file_pyhf.yaml')
+            analysis = af.analysis('EXP-pyhf')
 
-        analysis_args = {
-            'priors': pyhf_priors,
-            'likelihood': [],
-            'external_likelihood': [llh_block],
-            'parameters': p
-        }
+            # Compare log likelihood values for the main term
+            eos_likelihood = analysis.log_likelihood([])
+            pyhf_likelihood = model.mainlogpdf(data, init_pars).item()
+            self.assertAlmostEqual(eos_likelihood, pyhf_likelihood)
 
-        analysis = eos.Analysis(**analysis_args)
+            # Check if the best fit point is close to pyhf fit results
+            best_fit_point = analysis.optimize().point
+            expected_best_fit_point = [2., 0., 1., 1., 1., 1.]
+            eps = 5
 
-        # Compare log likelihood values for the main term
-        eos_likelihood = analysis.log_likelihood([])
-        pyhf_likelihood = model.mainlogpdf(data, pars).item()
-        self.assertAlmostEqual(eos_likelihood, pyhf_likelihood)
-
-        # Check if the best fit point is close to pyhf fit results
-        best_fit_point = analysis.optimize().point
-        expected_best_fit_point = [0., 2., 1., 1., 1., 1.]
-        eps = 5
-
-        for expected, obtained in zip(expected_best_fit_point, best_fit_point):
-            self.assertAlmostEqual(expected, obtained, eps)
+            for expected, obtained in zip(expected_best_fit_point, best_fit_point):
+                self.assertAlmostEqual(expected, obtained, eps)
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
