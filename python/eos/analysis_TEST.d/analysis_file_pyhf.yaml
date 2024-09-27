@@ -1,0 +1,16 @@
+likelihoods:
+  - name: EXP-pyhf
+    pyhf:
+      file: workspace.json
+
+priors:
+  - name: MU
+    descriptions:
+      - { 'parameter': 'pyhf::mu', 'min':  0., 'max': 10., 'type': 'uniform' }
+
+posteriors:
+  - name: EXP-pyhf
+    prior:
+      - MU
+    likelihood:
+      - EXP-pyhf
