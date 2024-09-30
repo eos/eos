@@ -145,7 +145,7 @@ class Plotter:
 
             if 'scale' in myx:
                 myxscale = myx['scale']
-                self.ax.xaxis.set_scale(myxscale)
+                self.ax.set_xscale(myxscale)
 
             if 'scaling_factor' in myx:
 
@@ -182,7 +182,7 @@ class Plotter:
 
             if 'scale' in myy:
                 myyscale = myy['scale']
-                self.ax.yaxis.set_scale(myyscale)
+                self.ax.set_yscale(myyscale)
 
             if 'scaling_factor' in myy:
 
