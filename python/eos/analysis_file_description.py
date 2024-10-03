@@ -22,6 +22,8 @@ class PriorDescription:
             elif kwargs['type'] in ("poisson",):
                 return Deserializable.make(PoissonPriorDescription, **_kwargs)
         elif 'parameters' in kwargs:
+            _kwargs = _copy.deepcopy(kwargs)
+            _kwargs.pop('type')
             if kwargs['type'] in ("transform"):
                 return Deserializable.make(TransformPriorDescription, **_kwargs)
 
