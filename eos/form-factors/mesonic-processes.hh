@@ -301,6 +301,23 @@ namespace eos
         static constexpr double mR2_0m = 5.27932;
     };
 
+    struct BToKPi {
+        using Transition = PToPP;
+        static constexpr const char * label = "B->Kpi";
+        static constexpr const char * name_B = "mass::B";
+        static constexpr const char * name_P1 = "mass::K";
+        static constexpr const char * name_P2 = "mass::Pi";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down);
+
+        // for pole and t_0 calculation in zhat
+        static constexpr double m_Bst = 5.32465;
+
+        // for pole calculation in z, depending on the current at hand
+        static constexpr double mR2_1m = 5.32465;
+        static constexpr double mR2_1p = 5.72590;
+        static constexpr double mR2_0m = 5.27932;
+    };
+
     /* V -> P Processes */
 
     struct BstarToD {
