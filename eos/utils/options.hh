@@ -138,6 +138,7 @@ namespace eos
             std::string _value;
 
         public:
+            SpecifiedOption(const Options & options, const OptionSpecification & specification);
             SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
             ~SpecifiedOption();
 
