@@ -33,6 +33,7 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <boost/filesystem/directory.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <yaml-cpp/yaml.h>

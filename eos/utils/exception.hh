@@ -23,19 +23,11 @@
 #include <exception>
 #include <memory>
 #include <string>
-#ifdef __clang__
-#  include <experimental/source_location>
-#else
-#  include <source_location>
-#endif
+#include <source_location>
 
 namespace eos
 {
-#ifdef __clang__
-    using source_location = std::experimental::source_location;
-#else
     using source_location = std::source_location;
-#endif
 
     class Context
     {
