@@ -95,56 +95,26 @@ class BToPseudoscalarPseudoscalarTest :
                     { "P1", "eta" },
                     { "P2", "K_d" },
                     { "model", "CKM" },
-                    { "cp-conjugate", "true"}
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
 
+                TEST_CHECK_RELATIVE_ERROR(d.avg_branching_ratio(), 1.4164770202846702e-6, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.cp_asymmetry(), 0.0008872201130703394, eps);
 
-                Options oo
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "K_d" },
-                    { "model", "CKM" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar dd(p, oo);
-
-                TEST_CHECK_RELATIVE_ERROR(0.5 * (d.branching_ratio() + dd.branching_ratio()), 1.4164770202846702e-6, eps);
-
-                TEST_CHECK_RELATIVE_ERROR((dd.branching_ratio() - d.branching_ratio()) / (dd.branching_ratio() + d.branching_ratio()), 0.0008872201130703394, eps);
-            
-                Options o3
+                Options o2
                 {
                     { "representation", "SU3F" },
                     { "q", "d" },
                     { "P1", "pi^+" },
                     { "P2", "pi^-" },
                     { "model", "CKM" },
-                    { "cp-conjugate", "true"}
                 };
 
-                BToPseudoscalarPseudoscalar d3(p, o3);
+                BToPseudoscalarPseudoscalar d2(p, o2);
 
-
-                Options o4
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
-                    { "model", "CKM" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d4(p, o4);
-
-                TEST_CHECK_RELATIVE_ERROR(0.5 * (d3.branching_ratio() + d4.branching_ratio()), 6.382209068937381e-6, eps);
-
-                TEST_CHECK_RELATIVE_ERROR((d4.branching_ratio() - d3.branching_ratio()) / (d4.branching_ratio() + d3.branching_ratio()), -0.35001688891865884, eps);
+                TEST_CHECK_RELATIVE_ERROR(d2.avg_branching_ratio(), 6.382209068937381e-6, eps);
+                TEST_CHECK_RELATIVE_ERROR(d2.cp_asymmetry(), -0.35001688891865884, eps);
 
             }
 
@@ -201,125 +171,78 @@ class BToPseudoscalarPseudoscalarTest :
                     { "q", "d" },
                     { "P1", "pi^+" },
                     { "P2", "pi^-" },
-                    { "cp-conjugate", "true"}
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
 
+                TEST_CHECK_NEARLY_EQUAL( d.avg_branching_ratio(), 0.0022804835159666867, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.cp_asymmetry(), -0.09133792735291475, eps);
+
                 Options oo
-                {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar dd(p, oo);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d.branching_ratio() + dd.branching_ratio()), 0.0022804835159666867, eps);
-                TEST_CHECK_NEARLY_EQUAL((d.branching_ratio() - dd.branching_ratio()) / (d.branching_ratio() + dd.branching_ratio()), 0.09133792735291475, eps);
-
-                Options ooo
                 {
                     { "representation", "topological" },
                     { "q", "s" },
                     { "P1", "pi^0" },
                     { "P2", "Kbar_d" },
-                    { "cp-conjugate", "true"}
                 };
 
-                BToPseudoscalarPseudoscalar ddd(p, ooo);
+                BToPseudoscalarPseudoscalar dd(p, oo);
 
-                Options o4
-                {
-                    { "representation", "topological" },
-                     { "q", "s" },
-                    { "P1", "pi^0" },
-                    { "P2", "Kbar_d" },
-                    { "cp-conjugate", "false"}
-                };
+                TEST_CHECK_NEARLY_EQUAL( dd.avg_branching_ratio(), 0.00001936527065018223, eps);
+                TEST_CHECK_NEARLY_EQUAL( dd.cp_asymmetry(), -0.7366560008503581, eps);
 
-                BToPseudoscalarPseudoscalar d4(p, o4);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (ddd.branching_ratio() + d4.branching_ratio()), 0.00001936527065018223, eps);
-                TEST_CHECK_NEARLY_EQUAL((ddd.branching_ratio() - d4.branching_ratio()) / (ddd.branching_ratio() + d4.branching_ratio()), 0.7366560008503581, eps);
-
-                Options o5
+                Options o3
                 {
                     { "representation", "topological" },
                     { "q", "u" },
                     { "P1", "eta" },
                     { "P2", "pi^+" },
-                    { "cp-conjugate", "true"}
+                };
+
+                BToPseudoscalarPseudoscalar d3(p, o3);
+
+
+                TEST_CHECK_NEARLY_EQUAL(d3.avg_branching_ratio(), 0.0022644592272822654, eps);
+                TEST_CHECK_NEARLY_EQUAL(d3.cp_asymmetry(), 0.16086877559501292, eps);
+
+                Options o4
+                {
+                    { "representation", "topological" },
+                    { "q", "d" },
+                    { "P1", "eta_prime" },
+                    { "P2", "K_d" },
+                };
+
+                BToPseudoscalarPseudoscalar d4(p, o4);
+
+                TEST_CHECK_NEARLY_EQUAL(d4.avg_branching_ratio(), 0.00537825569161075, eps);
+                TEST_CHECK_NEARLY_EQUAL(d4.cp_asymmetry(), -0.006891941917256833, eps);
+
+
+                Options o5
+                {
+                    { "representation", "topological" },
+                    { "q", "d" },
+                    { "P1", "eta" },
+                    { "P2", "eta" },
                 };
 
                 BToPseudoscalarPseudoscalar d5(p, o5);
+
+                TEST_CHECK_NEARLY_EQUAL(d5.avg_branching_ratio(), 0.004473515098754955, eps);
+                TEST_CHECK_NEARLY_EQUAL(d5.cp_asymmetry(), -0.14535763351380676, eps);
 
                 Options o6
                 {
                     { "representation", "topological" },
                     { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
-                    { "cp-conjugate", "false"}
+                    { "P1", "K_u" },
+                    { "P2", "Kbar_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d6(p, o6);
 
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d5.branching_ratio() + d6.branching_ratio()), 0.0022644592272822654, eps);
-                TEST_CHECK_NEARLY_EQUAL((d5.branching_ratio() - d6.branching_ratio()) / (d5.branching_ratio() + d6.branching_ratio()), -0.16086877559501292, eps);
-
-                Options o7
-                {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "eta_prime" },
-                    { "P2", "K_d" },
-                    { "cp-conjugate", "true"}
-                };
-
-                BToPseudoscalarPseudoscalar d7(p, o7);
-
-                Options o8
-                {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "eta_prime" },
-                    { "P2", "K_d" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d8(p, o8);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d7.branching_ratio() + d8.branching_ratio()), 0.00537825569161075, eps);
-                TEST_CHECK_NEARLY_EQUAL((d7.branching_ratio() - d8.branching_ratio()) / (d7.branching_ratio() + d8.branching_ratio()), 0.006891941917256833, eps);
-
-
-                Options o9
-                {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "eta" },
-                    { "cp-conjugate", "true"}
-                };
-
-                BToPseudoscalarPseudoscalar d9(p, o9);
-
-                Options o10
-                {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "eta" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d10(p, o10);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d9.branching_ratio() + d10.branching_ratio()), 0.004473515098754955, eps);
-                TEST_CHECK_NEARLY_EQUAL((d9.branching_ratio() - d10.branching_ratio()) / (d9.branching_ratio() + d10.branching_ratio()), 0.14535763351380676, eps);
+                TEST_CHECK_NEARLY_EQUAL(d6.avg_branching_ratio(), 0.00032802869044737436, eps);
             }
 
             /*Tests with su3 parameterization */
@@ -377,127 +300,65 @@ class BToPseudoscalarPseudoscalarTest :
                     { "P1", "pi^+" },
                     { "P2", "pi^-" },
                     { "model", "CKM" },
-                    { "cp-conjugate", "true"}
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
 
+                TEST_CHECK_NEARLY_EQUAL(d.avg_branching_ratio(),0.00420439042550259, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.cp_asymmetry(), -0.14470492226141188, eps);
 
-                Options oo
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
-                    { "model", "CKM" },
-                    { "cp-conjugate", "false"}
-                 };
-
-                BToPseudoscalarPseudoscalar dd(p, oo);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d.branching_ratio() + dd.branching_ratio()),0.00420439042550259, eps);
-                TEST_CHECK_NEARLY_EQUAL((d.branching_ratio() - dd.branching_ratio()) / (d.branching_ratio() + dd.branching_ratio()), 0.14470492226141188, eps);
-
-                Options o3
+                Options o2
                 {
                     { "representation", "SU3F" },
                     { "q", "s" },
                     { "P1", "pi^0" },
                     { "P2", "Kbar_d" },
-                    { "cp-conjugate", "true"}
+                };
+
+                BToPseudoscalarPseudoscalar d2(p, o2);
+
+                TEST_CHECK_NEARLY_EQUAL(d2.avg_branching_ratio(), 0.0015865861860772175, eps);
+                TEST_CHECK_NEARLY_EQUAL(d2.cp_asymmetry(), -0.13929047286150023, eps);
+
+
+                Options o3
+                {
+                    { "representation", "SU3F" },
+                    { "q", "u" },
+                    { "P1", "eta" },
+                    { "P2", "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d3(p, o3);
 
+                TEST_CHECK_NEARLY_EQUAL(d3.avg_branching_ratio(), 0.016622890508282546, eps);
+                TEST_CHECK_NEARLY_EQUAL(d3.cp_asymmetry(), 0.06464070737112038, eps);
+
                 Options o4
                 {
                     { "representation", "SU3F" },
-                     { "q", "s" },
-                    { "P1", "pi^0" },
-                    { "P2", "Kbar_d" },
-                    { "cp-conjugate", "false"}
+                    { "q", "d" },
+                    { "P1", "eta_prime" },
+                    { "P2", "K_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d4(p, o4);
 
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d3.branching_ratio() + d4.branching_ratio()), 0.0015865861860772175, eps);
-                TEST_CHECK_NEARLY_EQUAL((d3.branching_ratio() - d4.branching_ratio()) / (d3.branching_ratio() + d4.branching_ratio()), 0.13929047286150023, eps);
-
+                TEST_CHECK_NEARLY_EQUAL(d4.avg_branching_ratio(), 0.0013884379780450893, eps);
+                TEST_CHECK_NEARLY_EQUAL(d4.cp_asymmetry(), -0.025695932529644958, eps);
 
                 Options o5
                 {
                     { "representation", "SU3F" },
-                    { "q", "u" },
+                    { "q", "d" },
                     { "P1", "eta" },
-                    { "P2", "pi^+" },
-                    { "cp-conjugate", "true"}
+                    { "P2", "eta" },
                 };
 
                 BToPseudoscalarPseudoscalar d5(p, o5);
 
-                Options o6
-                {
-                    { "representation", "SU3F" },
-                    { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d6(p, o6);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d5.branching_ratio() + d6.branching_ratio()), 0.016622890508282546, eps);
-                TEST_CHECK_NEARLY_EQUAL((d5.branching_ratio() - d6.branching_ratio()) / (d5.branching_ratio() + d6.branching_ratio()), -0.06464070737112038, eps);
-
-                Options o7
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta_prime" },
-                    { "P2", "K_d" },
-                    { "cp-conjugate", "true"}
-                };
-
-                BToPseudoscalarPseudoscalar d7(p, o7);
-
-                Options o8
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta_prime" },
-                    { "P2", "K_d" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d8(p, o8);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d7.branching_ratio() + d8.branching_ratio()), 0.0013884379780450893, eps);
-                TEST_CHECK_NEARLY_EQUAL((d7.branching_ratio() - d8.branching_ratio()) / (d7.branching_ratio() + d8.branching_ratio()), 0.025695932529644958, eps);
-
-                Options o9
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "eta" },
-                    { "cp-conjugate", "true"}
-                };
-
-                BToPseudoscalarPseudoscalar d9(p, o9);
-
-                Options o10
-                {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "eta" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d10(p, o10);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d9.branching_ratio() + d10.branching_ratio()), 0.0025284115535334, eps);
-                TEST_CHECK_NEARLY_EQUAL((d9.branching_ratio() - d10.branching_ratio()) / (d9.branching_ratio() + d10.branching_ratio()), 0.06574658066886276, eps);
+                TEST_CHECK_NEARLY_EQUAL(d5.avg_branching_ratio(), 0.0025284115535334, eps);
+                TEST_CHECK_NEARLY_EQUAL(d5.cp_asymmetry(), -0.06574658066886276, eps);
             }
 
             /*Test with QCDF amplitudes*/
@@ -522,11 +383,11 @@ class BToPseudoscalarPseudoscalarTest :
                 p["nonleptonic::Re{alpha3_u}@QCDF"]   = -0.8 * std::cos(-0.8);
                 p["nonleptonic::Im{alpha3_u}@QCDF"]   = -0.8 * std::sin(-0.8);
                 p["nonleptonic::Re{b4_u}@QCDF"]       =  0.9 * std::cos( 0.9);
-                p["nonleptonic::Im{b4_u}@QCDF"]       =  0.9 * std::sin( 0.9);  
+                p["nonleptonic::Im{b4_u}@QCDF"]       =  0.9 * std::sin( 0.9);
                 p["nonleptonic::Re{bS4_u}@QCDF"]      = -1.0 * std::cos(-1.0);
-                p["nonleptonic::Im{bS4_u}@QCDF"]      = -1.0 * std::sin(-1.0); 
+                p["nonleptonic::Im{bS4_u}@QCDF"]      = -1.0 * std::sin(-1.0);
                 p["nonleptonic::Re{alpha4EW_c}@QCDF"] =  1.1 * std::cos( 1.1);
-                p["nonleptonic::Im{alpha4EW_c}@QCDF"] =  1.1 * std::sin( 1.1);    
+                p["nonleptonic::Im{alpha4EW_c}@QCDF"] =  1.1 * std::sin( 1.1);
                 p["nonleptonic::Re{alpha3EW_c}@QCDF"] = -1.2 * std::cos(-1.2);
                 p["nonleptonic::Im{alpha3EW_c}@QCDF"] = -1.2 * std::sin(-1.2);
                 p["nonleptonic::Re{b3EW_c}@QCDF"]     =  1.3 * std::cos( 1.3);
@@ -536,9 +397,9 @@ class BToPseudoscalarPseudoscalarTest :
                 p["nonleptonic::Re{bS3EW_c}@QCDF"]    =  1.5 * std::cos( 1.5);
                 p["nonleptonic::Im{bS3EW_c}@QCDF"]    =  1.5 * std::sin( 1.5);
                 p["nonleptonic::Re{bS4EW_c}@QCDF"]    = -1.6 * std::cos(-1.6);
-                p["nonleptonic::Im{bS4EW_c}@QCDF"]    = -1.6 * std::sin(-1.6); 
+                p["nonleptonic::Im{bS4EW_c}@QCDF"]    = -1.6 * std::sin(-1.6);
                 p["nonleptonic::Re{alpha4_c}@QCDF"]   =  1.7 * std::cos( 1.7);
-                p["nonleptonic::Im{alpha4_c}@QCDF"]   =  1.7 * std::sin( 1.7);                          
+                p["nonleptonic::Im{alpha4_c}@QCDF"]   =  1.7 * std::sin( 1.7);
                 p["nonleptonic::Re{alpha3_c}@QCDF"]   = -1.8 * std::cos(-1.8);
                 p["nonleptonic::Im{alpha3_c}@QCDF"]   = -1.8 * std::sin(-1.8);
                 p["nonleptonic::Re{b4_c}@QCDF"]       =  1.9 * std::cos( 1.9);
@@ -558,77 +419,39 @@ class BToPseudoscalarPseudoscalarTest :
                     { "P1", "pi^+" },
                     { "P2", "pi^-" },
                     { "model", "CKM" },
-                    { "cp-conjugate", "false"}
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
 
+                TEST_CHECK_NEARLY_EQUAL(d.avg_branching_ratio(),0.0006527162398220627, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.cp_asymmetry(), -0.12500386250445233, eps);
 
-                Options oo
-                {
-                    { "representation", "QCDF" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
-                    { "model", "CKM" },
-                    { "cp-conjugate", "true"}
-                 };
-
-                BToPseudoscalarPseudoscalar dd(p, oo);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d.branching_ratio() + dd.branching_ratio()),0.0006527162398220627, eps);
-                TEST_CHECK_NEARLY_EQUAL((d.branching_ratio() - dd.branching_ratio()) / (d.branching_ratio() + dd.branching_ratio()), -0.12500386250445233, eps);
-
-                Options o3
+                Options o2
                 {
                     { "representation", "QCDF" },
                     { "q", "s" },
                     { "P1", "pi^0" },
                     { "P2", "Kbar_d" },
-                    { "cp-conjugate", "false"}
+                };
+
+                BToPseudoscalarPseudoscalar d2(p, o2);
+
+                TEST_CHECK_NEARLY_EQUAL(d2.avg_branching_ratio(), 6.57074367468329e-6, eps);
+                TEST_CHECK_NEARLY_EQUAL(d2.cp_asymmetry(), 0.5974882599801686, eps);
+
+
+                Options o3
+                {
+                    { "representation", "QCDF" },
+                    { "q", "u" },
+                    { "P1", "eta" },
+                    { "P2", "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d3(p, o3);
 
-                Options o4
-                {
-                    { "representation", "QCDF" },
-                     { "q", "s" },
-                    { "P1", "pi^0" },
-                    { "P2", "Kbar_d" },
-                    { "cp-conjugate", "true"}
-                };
-
-                BToPseudoscalarPseudoscalar d4(p, o4);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d3.branching_ratio() + d4.branching_ratio()), 6.57074367468329e-6, eps);
-                TEST_CHECK_NEARLY_EQUAL((d3.branching_ratio() - d4.branching_ratio()) / (d3.branching_ratio() + d4.branching_ratio()), 0.5974882599801686, eps);
-
-
-                Options o5
-                {
-                    { "representation", "QCDF" },
-                    { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
-                    { "cp-conjugate", "false"}
-                };
-
-                BToPseudoscalarPseudoscalar d5(p, o5);
-
-                Options o6
-                {
-                    { "representation", "QCDF" },
-                    { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
-                    { "cp-conjugate", "true"}
-                };
-
-                BToPseudoscalarPseudoscalar d6(p, o6);
-
-                TEST_CHECK_NEARLY_EQUAL(0.5 * (d5.branching_ratio() + d6.branching_ratio()), 0.00026162417428286685, eps);
-                TEST_CHECK_NEARLY_EQUAL((d5.branching_ratio() - d6.branching_ratio()) / (d5.branching_ratio() + d6.branching_ratio()), -0.10865091499908583, eps);
+                TEST_CHECK_NEARLY_EQUAL(d3.avg_branching_ratio(), 0.00026162417428286685, eps);
+                TEST_CHECK_NEARLY_EQUAL(d3.cp_asymmetry(), -0.10865091499908583, eps);
 
             }
 
