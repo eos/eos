@@ -207,6 +207,26 @@ namespace eos
         return result;
     }
 
+    SpecifiedOption::SpecifiedOption(const Options & options, const OptionSpecification & specification)
+    {
+        if (! options.has(specification.key))
+        {
+            if ("" == specification.default_value)
+                throw UnspecifiedOptionError(specification.key, join(specification.allowed_values.cbegin(), specification.allowed_values.cend()));
+
+            _value = specification.default_value;
+        }
+        else
+        {
+            _value = options[specification.key];
+
+            if (std::find(specification.allowed_values.cbegin(), specification.allowed_values.cend(), _value) == specification.allowed_values.cend())
+            {
+                throw InvalidOptionValueError(specification.key, _value, join(specification.allowed_values.cbegin(), specification.allowed_values.cend()));
+            }
+        }
+    }
+
     SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key)
     {
         const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&] (const auto & e) -> bool {
@@ -214,24 +234,9 @@ namespace eos
         });
 
         if (specifications.cend() == s)
-            throw InternalError("Options key '" + key + "' is not specified in the options specifications");
+            throw UnspecifiedOptionError("Options key '" + key + "' is not specified in the options specifications");
 
-        if (! options.has(key))
-        {
-            if ("" == s->default_value)
-                throw UnspecifiedOptionError(key, join(s->allowed_values.cbegin(), s->allowed_values.cend()));
-
-            _value = s->default_value;
-        }
-        else
-        {
-            _value = options[key];
-
-            if (std::find(s->allowed_values.cbegin(), s->allowed_values.cend(), _value) == s->allowed_values.cend())
-            {
-                throw InvalidOptionValueError(key, _value, join(s->allowed_values.cbegin(), s->allowed_values.cend()));
-            }
-        }
+        *this = SpecifiedOption(options, *s);
     }
 
     SpecifiedOption::~SpecifiedOption() = default;
