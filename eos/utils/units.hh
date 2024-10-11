@@ -51,7 +51,8 @@ namespace eos
                 s,
                 inverse_s,
                 inverse_ps,
-                gev_s
+                gev_s,
+                fm2
             };
 
             Unit(const std::string &);
@@ -73,6 +74,7 @@ namespace eos
             static Unit InverseSecond();
             static Unit InversePicoSecond();
             static Unit GeVSecond();
+            static Unit Femtometer2();
 
             bool operator== (const Unit &) const;
             Unit & operator= (const Unit &) = default;
