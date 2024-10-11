@@ -31,6 +31,7 @@ namespace eos
     struct PToPP { };
     struct VToP { };
     struct VToV { };
+    struct VacuumToPP { };
 
     /* Baryonic Tags */
 

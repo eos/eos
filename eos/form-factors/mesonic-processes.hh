@@ -358,6 +358,15 @@ namespace eos
         static constexpr const double mR2_1p = (m_Bc + 0.492) * (m_Bc + 0.492);
         static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
+
+    /* Vacuum -> P P Processes */
+
+    struct VacuumToPiPi
+    {
+        using Transition = VacuumToPP;
+
+        static constexpr const char * label = "0->pipi";
+    };
 }
 
 #endif
