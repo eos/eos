@@ -45,6 +45,7 @@ namespace eos
             R"(\textrm{s}^{-1})",
             R"(\textrm{ps}^{-1})",
             R"(\textrm{GeV}\,\textrm{s})",
+            R"(\textrm{fm}^2)",
         };
 
         return representations[static_cast<int>(_id)];
@@ -65,7 +66,8 @@ namespace eos
             { "s",       Id::s            },
             { "s^-1",    Id::inverse_s    },
             { "ps^-1",   Id::inverse_ps   },
-            { "GeV s",   Id::gev_s        }
+            { "GeV s",   Id::gev_s        },
+            { "fm^2",    Id::fm2          },
         };
 
         const auto i = map.find(s);
@@ -150,6 +152,12 @@ namespace eos
     Unit::GeVSecond()
     {
         return Unit(Id::gev_s);
+    }
+
+    Unit
+    Unit::Femtometer2()
+    {
+        return Unit(Id::fm2);
     }
 
     bool
