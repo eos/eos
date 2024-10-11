@@ -2,10 +2,11 @@
 
 /*
  * Copyright (c) 2022 Stephan Kuerten
- * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2024 Matthew J. Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -302,6 +303,45 @@ namespace eos
             static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
+
+    /*
+     * Vacuum -> P P transitions
+     */
+    template <>
+    class FormFactors<VacuumToPP> :
+        public virtual ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            // vector form factor
+            virtual complex<double> f_p(const double & q2) const = 0;
+            virtual double abs2_f_p(const double & q2) const;
+            virtual double arg_f_p(const double & q2) const;
+
+            virtual complex<double> f_p(const complex<double> & q2) const = 0;
+            virtual double re_f_p(const double & re_q2, const double & im_q2) const;
+            virtual double im_f_p(const double & re_q2, const double & im_q2) const;
+
+            // scalar form factor
+            virtual complex<double> f_0(const double & q2) const = 0;
+
+            // tensor form factor
+            virtual complex<double> f_t(const double & q2) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<VacuumToPP>
+    {
+        public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<VacuumToPP> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
+            static std::shared_ptr<FormFactors<VacuumToPP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+            static OptionSpecification option_specification(const qnp::Prefix & process);
+    };
 }
 
 
