@@ -431,7 +431,7 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
     )
     parser_predict_observables.add_argument('-E', '--end-index',
         help = 'The index beyond the last sample to use for the predictions.',
-        dest = 'end', action = 'store', type = int, default = -1
+        dest = 'end', action = 'store', type = int, default = None
     )
     parser_predict_observables.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
