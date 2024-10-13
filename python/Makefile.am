@@ -22,7 +22,7 @@ EXTRA_DIST = \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
 	eos/data/native.py \
-    eos/data/native_TEST.d \
+	eos/data/native_TEST.d \
 	eos/figure/__init__.py \
 	eos/figure/config.py \
 	eos/figure/figure.py \
@@ -106,42 +106,89 @@ TESTS = \
 EXTRA_DIST += $(TESTS)
 
 PYPI_SHARED_OBJECTS = 'libboost|libeos|libgfortran|libgsl|libquadmath|libsatlas|libyaml|libz'
-eoshep-before: setup.py all
+eoshep-before-Linux: setup.py all
 	echo preparation to build wheel in "$(DESTDIR)" for version $(PYPI_VERSION) using "$(PYTHON)" \(`$(PYTHON) -V`\) ; \
-    cp $(abs_top_builddir)/python/setup.py $(DESTDIR)/ ; \
-    cp $(abs_top_builddir)/python/.libs/_eos.so $(DESTDIR)/ ; \
-    echo "$(PYPI_SHARED_OBJECTS)" ; \
-    for f in `ldd $(DESTDIR)/_eos.so | grep '=>' | grep -E $(PYPI_SHARED_OBJECTS) | awk '{print $$3}'` ; \
-    do \
-        echo copying $$f ; \
-        cp $$f $(DESTDIR)/ ; \
-    done ; \
-    chrpath -r '$$ORIGIN/_eos_libs' $(DESTDIR)/_eos.so ; \
-    for f in $(DESTDIR)/libeos*.so* ; \
-    do \
-        chrpath -l $$f || continue ; \
-        chrpath -r '$$ORIGIN' $$f ; \
-    done ; \
-    cp -r $(abs_top_srcdir)/python/eos $(DESTDIR)/ ; \
-    mkdir $(DESTDIR)/_eos_data ; \
-    for d in references.yaml constraints parameters ; \
-    do \
-        cp -r $(abs_top_srcdir)/eos/$$d $(DESTDIR)/_eos_data/ ; \
-    done ; \
-    echo 'is_wheel = True' >> $(DESTDIR)/eos/config.py ; \
-    echo 'int foo() { return -1; }' > $(DESTDIR)/dummy.cc ; \
-    mkdir $(DESTDIR)/bin ; \
-    for f in $(abs_top_builddir)/src/scripts/* ; \
-    do \
-        cp -r $$f $(DESTDIR)/bin/ ; \
-    done ; \
-    cp $(abs_top_srcdir)/README.md $(DESTDIR)/ ; \
-    pushd $(DESTDIR) ; \
-    $(PYTHON) $(DESTDIR)/setup.py build ; \
-    popd ; \
-    for f in `find $(DESTDIR)/build/ -name "_eos.*.so"` ; \
-    do \
-        cp $(DESTDIR)/_eos.so $$f ; \
-    done
+	cp $(abs_top_builddir)/python/setup.py $(DESTDIR)/ ; \
+	cp $(abs_top_builddir)/python/.libs/_eos.so $(DESTDIR)/ ; \
+	echo "$(PYPI_SHARED_OBJECTS)" ; \
+	for f in `ldd $(DESTDIR)/_eos.so | grep '=>' | grep -E $(PYPI_SHARED_OBJECTS) | awk '{print $$3}'` ; \
+	do \
+		echo copying $$f ; \
+		cp $$f $(DESTDIR)/ ; \
+	done ; \
+	chrpath -r '$$ORIGIN/_eos_libs' $(DESTDIR)/_eos.so ; \
+	for f in $(DESTDIR)/libeos*.so* ; \
+	do \
+		chrpath -l $$f || continue ; \
+		chrpath -r '$$ORIGIN' $$f ; \
+	done ; \
+	cp -r $(abs_top_srcdir)/python/eos $(DESTDIR)/ ; \
+	mkdir $(DESTDIR)/_eos_data ; \
+	for d in references.yaml constraints parameters ; \
+	do \
+		cp -r $(abs_top_srcdir)/eos/$$d $(DESTDIR)/_eos_data/ ; \
+	done ; \
+	echo 'is_wheel = True' >> $(DESTDIR)/eos/config.py ; \
+	echo 'int foo() { return -1; }' > $(DESTDIR)/dummy.cc ; \
+	mkdir $(DESTDIR)/bin ; \
+	for f in $(abs_top_builddir)/src/scripts/* ; \
+	do \
+		cp -r $$f $(DESTDIR)/bin/ ; \
+	done ; \
+	cp $(abs_top_srcdir)/README.md $(DESTDIR)/ ; \
+	pushd $(DESTDIR) ; \
+	$(PYTHON) $(DESTDIR)/setup.py build ; \
+	popd ; \
+	for f in `find $(DESTDIR)/build/ -name "_eos.*.so"` ; \
+	do \
+		cp $(DESTDIR)/_eos.so $$f ; \
+	done
+
+eoshep-before-Darwin: setup.py all
+	echo preparation to build wheel in "$(DESTDIR)" for version $(PYPI_VERSION) using "$(PYTHON)" \(`$(PYTHON) -V`\) ; \
+	cp $(abs_top_builddir)/python/setup.py $(DESTDIR)/ ; \
+	cp $(abs_top_builddir)/python/.libs/_eos.so $(DESTDIR)/ ; \
+	for f in $(shell find $(abs_top_builddir) -name "libeos*.0.dylib") ; \
+	do \
+		echo copying $$f ; \
+		cp $$f $(DESTDIR)/ ; \
+		echo changing dylib paths for $$f ; \
+		for lib in $$(otool -L $(DESTDIR)/$$(basename $$f) | grep "libeos" | awk '{print $$1}') ; \
+		do \
+			echo changing dylib path from $$lib to $$(realpath $(DESTDIR))/$$(basename $$lib) ; \
+			install_name_tool -change $$lib $$(realpath $(DESTDIR))/$$(basename $$lib) $(DESTDIR)/$$(basename $$f) ; \
+		done ; \
+	done ; \
+	echo changing dylib paths for _eos.so ; \
+	for lib in $$(otool -L $(DESTDIR)/_eos.so | grep 'libeos' | awk '{print $$1}') ; \
+	do \
+		echo changing dylib path from $$lib to $$(realpath $(DESTDIR))/$$(basename $$lib) ; \
+		install_name_tool -change $$lib $$(realpath $(DESTDIR))/$$(basename $$lib) $(DESTDIR)/_eos.so ; \
+	done ; \
+	cp -r $(abs_top_srcdir)/python/eos $(DESTDIR)/ ; \
+	mkdir $(DESTDIR)/_eos_data ; \
+	for d in references.yaml constraints parameters ; \
+	do \
+		cp -r $(abs_top_srcdir)/eos/$$d $(DESTDIR)/_eos_data/ ; \
+	done ; \
+	echo 'is_wheel = True' >> $(DESTDIR)/eos/config.py ; \
+	echo 'int foo() { return -1; }' > $(DESTDIR)/dummy.cc ; \
+	mkdir $(DESTDIR)/bin ; \
+	for f in $(abs_top_builddir)/src/scripts/* ; \
+	do \
+		cp -r $$f $(DESTDIR)/bin/ ; \
+	done ; \
+	cp $(abs_top_srcdir)/README.md $(DESTDIR)/ ; \
+	pushd $(DESTDIR) ; \
+	echo running setup.py ; \
+	$(PYTHON) $(DESTDIR)/setup.py build ; \
+	popd ; \
+	for f in `find $(DESTDIR)/build/ -name "_eos.*.so"` ; \
+	do \
+		cp $(DESTDIR)/_eos.so $$f ; \
+	done
+
+eoshep-before: setup.py all
+	make eoshep-before-$(shell uname -s)
 
 endif
