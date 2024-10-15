@@ -87,9 +87,8 @@ class BToDLeptonNeutrinoTest :
                 Options o{
                     { "l",             "e"         },
                     { "model",         "CKM"       },
-                    { "U",             "c"         },
+                    { "P",             "D"         },
                     { "q",             "d"         },
-                    { "I",             "1/2"       },
                     { "z-order-lp",    "3"         },
                     { "z-order-slp",   "2"         },
                     { "z-order-sslp",  "1"         },
@@ -141,9 +140,8 @@ class BToDLeptonNeutrinoTest :
                 Options o{
                     { "l",             "tau"       },
                     { "model",         "CKM"       },
-                    { "U",             "c"         },
+                    { "P",             "D"         },
                     { "q",             "d"         },
-                    { "I",             "1/2"       },
                     { "z-order-lp",    "3"         },
                     { "z-order-slp",   "2"         },
                     { "z-order-sslp",  "1"         },
@@ -176,11 +174,10 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
+                    { "model",        "WET"        },
                     { "form-factors", "BCL2008"    },
-                    { "U",            "c"          },
+                    { "P",            "D"          },
                     { "q",            "d"          },
-                    { "I",            "1/2"        },
                     { "l",            "mu"         }
                 };
 
@@ -212,11 +209,10 @@ class BToDLeptonNeutrinoTest :
 
                     oo =
                     {
-                        { "model",        "WET" },
+                        { "model",        "WET"        },
                         { "form-factors", "BCL2008"    },
-                        { "U",            "c"          },
-                        { "q",            "d"          },
-                        { "I",            "1/2"        }
+                        { "P",            "D"          },
+                        { "q",            "d"          }
                     };
                     auto k = Kinematics{
                         { "q2_mu_min",   0.011164 },
@@ -277,11 +273,10 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
+                    { "model",        "WET"        },
                     { "form-factors", "BCL2008"    },
-                    { "U",            "c"          },
+                    { "P",            "D"          },
                     { "q",            "d"          },
-                    { "I",            "1/2"        },
                     { "l",            "mu"         }
                 };
 
@@ -300,11 +295,10 @@ class BToDLeptonNeutrinoTest :
                     };
                     oo =
                     {
-                        { "model",        "WET" },
+                        { "model",        "WET"        },
                         { "form-factors", "BCL2008"    },
-                        { "U",            "c"          },
-                        { "q",            "d"          },
-                        { "I",            "1/2"        }
+                        { "P",            "D"          },
+                        { "q",            "d"          }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 

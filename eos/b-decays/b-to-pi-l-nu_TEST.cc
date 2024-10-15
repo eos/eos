@@ -59,12 +59,11 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM" },
+                    { "model",        "CKM"     },
                     { "form-factors", "BCL2008" },
-                    { "U",            "u"       },
+                    { "P",            "pi"      },
                     { "q",            "d"       },
                     { "l",            "e"       },
-                    { "I",            "1"       }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);
@@ -94,12 +93,11 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM" },
+                    { "model",        "CKM"     },
                     { "form-factors", "BCL2008" },
-                    { "U",            "u"       },
+                    { "P",            "pi"      },
                     { "q",            "d"       },
-                    { "l",            "tau"     },
-                    { "I",            "1"     }
+                    { "l",            "tau"     }
                 };
                 BToPseudoscalarLeptonNeutrino dtau(p, oo);
 
@@ -108,11 +106,10 @@ class BToPiLeptonNeutrinoTest :
 
                 oo =
                 {
-                    { "model",        "CKM" },
+                    { "model",        "CKM"     },
                     { "form-factors", "BCL2008" },
-                    { "U",            "u"       },
+                    { "P",            "pi"      },
                     { "q",            "d"       },
-                    { "I",            "1"       }
                 };
                 Kinematics k
                 {
@@ -148,12 +145,11 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM" },
+                    { "model",        "CKM"     },
                     { "form-factors", "BCL2008" },
-                    { "U",            "u"       },
+                    { "P",            "pi"      },
                     { "q",            "u"       },
                     { "l",            "e"       },
-                    { "I",            "1"       }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);

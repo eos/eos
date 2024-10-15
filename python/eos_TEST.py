@@ -212,10 +212,10 @@ class LoggingTests(unittest.TestCase):
                     "B->pilnu::BR",
                     eos.Parameters.Defaults(),
                     eos.Kinematics(q2_min=1, q2_max=6),
-                    eos.Options(**{'U': 'c'})) # will  be overwritten by the
+                    eos.Options(**{'P': 'D'})) # will  be overwritten by the
                                                # implementation of the observable
             self.assertEqual(cm.output,
-                    [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'U' to value 'u', overriding user-provided value 'c'"""])
+                    [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'P' to value 'pi', overriding user-provided value 'D'"""])
 
 
 # Run legacy test cases
