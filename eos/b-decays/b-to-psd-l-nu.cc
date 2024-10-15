@@ -58,9 +58,8 @@ namespace eos
 
         Parameters parameters;
 
-        QuarkFlavorOption opt_U;
         QuarkFlavorOption opt_q;
-        SwitchOption opt_I;
+        SpecifiedOption opt_P;
 
         UsedParameter m_B;
 
@@ -92,84 +91,90 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
-        // { U, q, I } -> { process, m_B, m_V, c_I }
-        // U: u, c; the quark flavor in the weak transition
+        // { q, P } -> { process, U, B_name, P_name, c_I }
         // q: u, d, s: the spectar quark flavor
-        // I: 1, 0, 1/2: the total isospin of the daughter meson
+        // P: D, K, pi: the type of daughter meson
         // process: string that can be used to obtain the form factor
-        // B: name of the B meson
-        // P: name of the daughter meson
+        // U: the quark flavor in the weak transition
+        // B_name: name of the B meson
+        // P_name: name of the daughter meson
         // c_I: isospin factor by which the amplitudes are multiplied
-        static const std::map<std::tuple<QuarkFlavor, QuarkFlavor, std::string>, std::tuple<std::string, std::string, std::string, double>> process_map;
+        static const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>> process_map;
 
         inline std::string _process() const
         {
-            const QuarkFlavor U = opt_U.value();
             const QuarkFlavor q = opt_q.value();
-            const std::string I = opt_I.value();
-            const auto p = process_map.find(std::make_tuple(U, q, I));
+            const std::string P = opt_P.value();
+            const auto p = process_map.find(std::make_tuple(q, P));
 
             if (p == process_map.end())
-                throw InternalError("Unsupported combination of U=" + opt_U.str() + ", q=" + opt_q.str() + ", I=" + I);
+                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
 
             return std::get<0>(p->second);
         }
 
-        inline std::string _B() const
+        inline QuarkFlavor _U() const
         {
-            const QuarkFlavor U = opt_U.value();
             const QuarkFlavor q = opt_q.value();
-            const std::string I = opt_I.value();
-            const auto p = process_map.find(std::make_tuple(U, q, I));
+            const std::string P = opt_P.value();
+            const auto p = process_map.find(std::make_tuple(q, P));
 
             if (p == process_map.end())
-                throw InternalError("Unsupported combination of U=" + opt_U.str() + ", q=" + opt_q.str() + ", I=" + I);
+                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
 
             return std::get<1>(p->second);
         }
 
-        inline std::string _P() const
+        inline std::string _B() const
         {
-            const QuarkFlavor U = opt_U.value();
             const QuarkFlavor q = opt_q.value();
-            const std::string I = opt_I.value();
-            const auto p = process_map.find(std::make_tuple(U, q, I));
+            const std::string P = opt_P.value();
+            const auto p = process_map.find(std::make_tuple(q, P));
 
             if (p == process_map.end())
-                throw InternalError("Unsupported combination of U=" + opt_U.str() + ", q=" + opt_q.str() + ", I=" + I);
+                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
 
             return std::get<2>(p->second);
         }
 
-        inline double _isospin_factor() const
+        inline std::string _P() const
         {
-            const QuarkFlavor U = opt_U.value();
             const QuarkFlavor q = opt_q.value();
-            const std::string I = opt_I.value();
-            const auto p = process_map.find(std::make_tuple(U, q, I));
+            const std::string P = opt_P.value();
+            const auto p = process_map.find(std::make_tuple(q, P));
 
             if (p == process_map.end())
-                throw InternalError("Unsupported combination of U=" + opt_U.str() + ", q=" + opt_q.str() + ", I=" + I);
+                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
 
             return std::get<3>(p->second);
         }
 
+        inline double _isospin_factor() const
+        {
+            const QuarkFlavor q = opt_q.value();
+            const std::string P = opt_P.value();
+            const auto p = process_map.find(std::make_tuple(q, P));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
+
+            return std::get<4>(p->second);
+        }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
-            opt_U(o, options, "U"),
             opt_q(o, options, "q"),
-            opt_I(o, "I", { "1", "0", "1/2" }),
+            opt_P(o, options, "P"),
             m_B(p["mass::" + _B()], u),
-            tau_B(p["life_time::B_" + opt_q.str()], u),
+            tau_B(p["life_time::" + _B()], u),
             m_P(p["mass::" + _P()], u),
             opt_l(o, options, "l"),
             m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             isospin_factor(_isospin_factor()),
-            mu(p[opt_U.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
+            mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             opt_cp_conjugate(o, options, "cp-conjugate"),
             form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
@@ -179,22 +184,20 @@ namespace eos
             using std::placeholders::_1;
             using std::placeholders::_2;
 
-            switch (opt_U.value())
+            switch (_U())
             {
                 case QuarkFlavor::up:
                     m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
                     v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
                     wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, _2);
                     break;
-
                 case QuarkFlavor::charm:
                     m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
                     v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
                     wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, _2);
                     break;
-
                 default:
-                    throw InternalError("Unexpected quark flavor: '" + opt_U.str() + "'");
+                    throw InternalError("Invalid quark flavor: " + stringify(_U()));
             }
 
             u.uses(*form_factors);
@@ -428,15 +431,15 @@ namespace eos
         }
     };
 
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor, std::string>, std::tuple<std::string, std::string, std::string, double>>
+    const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>>
     Implementation<BToPseudoscalarLeptonNeutrino>::Implementation::process_map
     {
-        { { QuarkFlavor::charm, QuarkFlavor::up,      "1/2" }, { "B->D",     "B_u", "D_u",  1.0                  } },
-        { { QuarkFlavor::charm, QuarkFlavor::down,    "1/2" }, { "B->D",     "B_d", "D_d",  1.0                  } },
-        { { QuarkFlavor::charm, QuarkFlavor::strange, "0"   }, { "B_s->D_s", "B_s", "D_s",  1.0                  } },
-        { { QuarkFlavor::up,    QuarkFlavor::up,      "1"   }, { "B->pi",    "B_u", "pi^0", 1.0 / std::sqrt(2.0) } },
-        { { QuarkFlavor::up,    QuarkFlavor::down,    "1"   }, { "B->pi",    "B_d", "pi^+", 1.0                  } },
-        { { QuarkFlavor::up,    QuarkFlavor::strange, "1/2" }, { "B_s->K",   "B_s", "K_u",  1.0                  } },
+        { { QuarkFlavor::up,      "D"         }, { "B->D",         QuarkFlavor::charm, "B_u", "D_u",       1.0                  } },
+        { { QuarkFlavor::down,    "D"         }, { "B->D",         QuarkFlavor::charm, "B_d", "D_d",       1.0                  } },
+        { { QuarkFlavor::strange, "D"         }, { "B_s->D_s",     QuarkFlavor::charm, "B_s", "D_s",       1.0                  } },
+        { { QuarkFlavor::up,      "pi"        }, { "B->pi",        QuarkFlavor::up,    "B_u", "pi^0",      1.0 / std::sqrt(2.0) } },
+        { { QuarkFlavor::down,    "pi"        }, { "B->pi",        QuarkFlavor::up,    "B_d", "pi^+",      1.0                  } },
+        { { QuarkFlavor::strange, "K"         }, { "B_s->K",       QuarkFlavor::up,    "B_s", "K_u",       1.0                  } },
     };
 
     const std::vector<OptionSpecification>
@@ -444,11 +447,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "l",            { "e", "mu", "tau" }, "mu"    },
-        { "U",            { "c", "u" },         "c"     },
-        { "q",            { "u", "d", "s" },    "d"     },
-        { "I",            { "1", "0", "1/2" },  "1"     },
+        { "P",            { "D", "pi", "K"},     ""      },
+        { "cp-conjugate", { "true", "false" },   "false" },
+        { "l",            { "e", "mu", "tau" },  "mu"    },
+        { "q",            { "u", "d", "s" },     "d"     },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
