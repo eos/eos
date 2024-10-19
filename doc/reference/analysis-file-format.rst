@@ -99,7 +99,7 @@ The likelihoods can be of three types:
         - 'B^0->pi^-l^+nu::BR@HFLAV:2019A;form-factors=BCL2008-4'
 
   - ``manual_constraints`` Additional manually-specified constraints can also be added.
-  The syntax needs to follow the syntax of the usual ``EOS constraints``, as in the following example.
+    The syntax needs to follow the syntax of the usual ``EOS constraints``, as in the following example.
 
   .. code-block:: yaml
 
