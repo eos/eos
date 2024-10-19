@@ -17,14 +17,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/test-observable.hh>
 
-#include <cxxabi.h>
+#include <test/test.hh>
+
 #include <cstdlib>
+#include <cxxabi.h>
 #include <iostream>
 #include <list>
 #include <sstream>
@@ -35,22 +36,19 @@ namespace test
     // Use a small, local singleton in order to avoid linking against libeosutils
     struct TestCasesHolder
     {
-        std::list<const TestCase *> test_cases;
+            std::list<const TestCase *> test_cases;
 
-        TestCasesHolder()
-        {
-        }
+            TestCasesHolder() {}
 
-        ~TestCasesHolder()
-        {
-        }
+            ~TestCasesHolder() {}
 
-        static TestCasesHolder * instance()
-        {
-            static TestCasesHolder result;
+            static TestCasesHolder *
+            instance()
+            {
+                static TestCasesHolder result;
 
-            return &result;
-        }
+                return &result;
+            }
     };
 
     TestCase::TestCase(const std::string & name) :
@@ -59,9 +57,7 @@ namespace test
         TestCasesHolder::instance()->test_cases.push_back(this);
     }
 
-    TestCase::~TestCase()
-    {
-    }
+    TestCase::~TestCase() {}
 
     std::string
     TestCase::name() const
@@ -90,35 +86,36 @@ namespace test
 
         return _file + ":" + ss.str();
     }
-}
+} // namespace test
 
-int main(int, char ** argv)
+int
+main(int, char ** argv)
 {
     int result(EXIT_SUCCESS);
 
     // Extract the program name from argv[0]
-    std::string program_name(argv[0]);
+    std::string            program_name(argv[0]);
     std::string::size_type pos = program_name.rfind('/');
     if (std::string::npos != pos)
+    {
         program_name.erase(0, pos + 1);
+    }
 
     eos::Log::instance()->set_program_name(program_name);
     eos::Log::instance()->set_log_level(eos::ll_debug);
 
     // Set up the observable test environment
     auto test_function = [](const eos::Parameters & p, const std::vector<eos::KinematicVariable> & kv, const eos::Options & o)
-    {
-        return p["mass::c"] * std::stoi(o.get("multiplier", "1")) * (kv[1] - kv[0]);
-    };
+    { return p["mass::c"] * std::stoi(o.get("multiplier", "1")) * (kv[1] - kv[0]); };
 
-    std::shared_ptr<const eos::TestObservableEntry> obs_entry = std::make_shared<const eos::TestObservableEntry>(
-        "test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{"q2_min", "q2_max"}
-    );
+    std::shared_ptr<const eos::TestObservableEntry> obs_entry =
+            std::make_shared<const eos::TestObservableEntry>("test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{ "q2_min", "q2_max" });
     eos::ObservableEntries::instance()->insert_or_assign("test::obs1", obs_entry);
 
 
-    for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()),
-            i_end(test::TestCasesHolder::instance()->test_cases.end()) ; i != i_end ; ++i)
+    for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()), i_end(test::TestCasesHolder::instance()->test_cases.end());
+         i != i_end;
+         ++i)
     {
         std::cout << "Running test case '" << (*i)->name() << "'" << std::endl;
 
