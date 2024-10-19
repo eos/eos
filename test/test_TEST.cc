@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/maths/complex.hh>
+
+#include <test/test.hh>
 
 #include <cmath>
 
 using namespace test;
 using namespace eos;
 
-class NoThrowTest :
-    public TestCase
+class NoThrowTest : public TestCase
 {
     public:
         NoThrowTest() :
@@ -34,7 +34,8 @@ class NoThrowTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             try
             {
@@ -51,8 +52,7 @@ class NoThrowTest :
         }
 } no_throw_test;
 
-class EqualTest :
-    public TestCase
+class EqualTest : public TestCase
 {
     public:
         EqualTest() :
@@ -60,7 +60,8 @@ class EqualTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK_NO_THROW(TEST_CHECK_EQUAL(0, 0));
             TEST_CHECK_NO_THROW(TEST_CHECK_EQUAL(std::string("foo"), std::string("foo")));
@@ -72,8 +73,7 @@ class EqualTest :
         }
 } equal_test;
 
-class RelativeErrorTest :
-    public TestCase
+class RelativeErrorTest : public TestCase
 {
     public:
         RelativeErrorTest() :
@@ -81,7 +81,8 @@ class RelativeErrorTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK_NO_THROW(TEST_CHECK_RELATIVE_ERROR(1.0, 1.09, 0.1));
             TEST_CHECK_THROWS(TestCaseFailedException, TEST_CHECK_RELATIVE_ERROR(+1.0, +2.0, 0.1));
@@ -93,8 +94,7 @@ class RelativeErrorTest :
         }
 } relative_error_test;
 
-class RelativeErrorComplexTest :
-    public TestCase
+class RelativeErrorComplexTest : public TestCase
 {
     public:
         RelativeErrorComplexTest() :
@@ -102,7 +102,8 @@ class RelativeErrorComplexTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             complex<double> x(1.0, 2.0);
             TEST_CHECK_NO_THROW(TEST_CHECK_RELATIVE_ERROR_C(x, complex<double>(1.03, 2.1), 0.1));
