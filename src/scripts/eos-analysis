@@ -269,6 +269,10 @@ In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTE
         help = 'The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation.',
         dest = 'sample', action = 'store', type = str, default = 'auto'
     )
+    parser_sample_nested.add_argument('-i', '--check-point-interval',
+        help = 'The interval in second between the generation of check-points.',
+        dest = 'check_point_interval', action='store', type=int, default = 'None'
+    )
     parser_sample_nested.set_defaults(cmd = cmd_sample_nested)
 
 
