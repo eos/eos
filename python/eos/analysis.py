@@ -700,7 +700,7 @@ class Analysis:
         return self._u_to_par(u)
 
 
-    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10, print_progress=True, sample='auto'):
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10, print_progress=True, sample='auto', check_point_interval=None):
         """
         Return samples of the parameters.
 
@@ -718,14 +718,53 @@ class Analysis:
         :type seed: {None, int, array_like[ints], SeedSequence}, optional
         :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
         :type sample: str, optional
+        :param checkpoint_interval: The number of seconds between checkpoints at which the intermediate dynesty sampler results are stored. If None, then no intermediate results are stored. Defaults to 60.
+        :type checkpoint_interval: float, optional
 
         .. note::
            This method requires the dynesty python module, which can be installed from PyPI.
         """
         import dynesty
+        import itertools
+        from dynesty.dynamicsampler import stopping_function, weight_function
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)), sample=sample)
-        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress)
-        return sampler.results
+
+        eos.info('Drawing initial samples')
+        for results in sampler.sample_initial(dlogz=dlogz, maxiter=maxiter):
+            pass
+
+        eos.inprogress('Starting nested sampling loop')
+        if check_point_interval is not None:
+            timer = dynesty.utils.DelayTimer(check_point_interval)
+            time = 0
+
+        for iter in itertools.count():
+            if check_point_interval is not None and timer.is_time():
+                time += check_point_interval
+                eos.info(f'Created check-point after {time} seconds')
+                yield sampler.results
+
+            stop = stopping_function(sampler.results)
+
+            if maxiter is not None and iter > maxiter:
+                stop = True
+                eos.sucess("The sampling was stopped because the maximum number of iterations was reached")
+
+            delta_logz = np.logaddexp(0, np.max(sampler.live_logl) + sampler.results.logvol - sampler.results.logz)[-1]
+            if delta_logz < dlogz:
+                stop = True
+                eos.success("The sampling was stopped because the limit of the remaining evidence was reached")
+
+            if not stop:
+                logl_bounds = weight_function(sampler.results)  # derive bounds
+                for results in sampler.sample_batch(logl_bounds=logl_bounds, dlogz=dlogz, maxiter=maxiter):
+                    pass
+                sampler.combine_runs()  # add new samples to previous results
+            else:
+                break
+
+        yield sampler.results
+        return
 
 
     def _repr_html_(self):
