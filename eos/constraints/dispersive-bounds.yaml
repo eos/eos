@@ -40,16 +40,16 @@ b->c::Bound[1^+,T]:
     kinematics: [ {} ]
     options: [ {} ]
     bound: 1.0
-    # same relative uncertainty as for 1^+, cf. [BG:2016A], eq. (2.8), p.5
-    uncertainty: 0.0093549
+    # estimate of relative uncertainty based on the value of alpha_s^2
+    uncertainty: 0.08
 b->c::Bound[1^-,T]:
     type: UniformBound
     observables: [ 'b->c::Bound[1^-,T]@CLN' ]
     kinematics: [ {} ]
     options: [ {} ]
     bound: 1.0
-    # same relative uncertainty as for 1^+, cf. [BG:2016A], eq. (2.8), p.5
-    uncertainty: 0.0093549
+    # estimate of relative uncertainty based on the value of alpha_s^2
+    uncertainty: 0.08
 # }}}
 
 ###########################
