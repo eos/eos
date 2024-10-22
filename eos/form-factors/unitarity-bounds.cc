@@ -994,6 +994,210 @@ namespace eos
 
             return 0.1562776264382128 + 0.14297208702450237*as + -0.35819217355149036*epsb + -2.115830213901852*chi3pone*epsb + -0.8207713941901237*chi3ppone*epsb + 0.35819217355149036*epsc + -2.115830213901852*chi3pone*epsc + -0.8207713941901237*chi3ppone*epsc + 0.528957553475463*xipone + 0.06852885086787484*as*xipone + -0.4540239952024553*epsb*xipone + -1.6415427883802474*chi3pone*epsb*xipone + 0.4540239952024553*epsc*xipone + -1.6415427883802474*chi3pone*epsc*xipone + 0.20519284854753092*xippone + -0.08535225765602886*as*xippone + 0.1562776264382128*l2one*epsc2 + 0.4263611292016975*l2pone*epsc2 + -0.35819217355149036*l5one*epsc2 + -0.4540239952024553*l5pone*epsc2 + 0.528957553475463*l2one*xipone*epsc2 + 0.41038569709506184*l2pone*xipone*epsc2 + -0.4540239952024553*l5one*xipone*epsc2 + 0.20519284854753092*l2one*xippone*epsc2;
         }
+
+        double T4_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T4_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T4_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T5_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T5_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T5_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T6_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T6_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T6_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T7_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T7_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T7_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T8_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T8_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T8_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T9_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T9_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T9_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T10_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T10_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T10_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b();
+            const double epsc = _eps_c();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
         // }}}
 
         // B_s -> D_s form factors
@@ -1058,6 +1262,33 @@ namespace eos
 
 
             return 0.5502247632998395 + 0.35019441270807145*as + -1.2435335848826854*epsb + -8.138017046343501*chi2sone*epsb + -7.057608732155861*chi2spone*epsb + 24.414051139030498*chi3spone*epsb + 10.586413098233795*chi3sppone*epsb + 1.2435335848826854*epsc + -8.138017046343501*chi2sone*epsc + -7.057608732155861*chi2spone*epsc + 24.414051139030498*chi3spone*epsc + 10.586413098233795*chi3sppone*epsc + 2.487067169765371*epsb*etasone + -2.487067169765371*epsc*etasone + 3.808187686792293*epsb*etaspone + -3.808187686792293*epsc*etaspone + 2.0345042615858753*xispone + 1.2157893994735705*as*xispone + -1.9040938433961465*epsb*xispone + -7.057608732155861*chi2sone*epsb*xispone + 21.17282619646759*chi3spone*epsb*xispone + 1.9040938433961465*epsc*xispone + -7.057608732155861*chi2sone*epsc*xispone + 21.17282619646759*chi3spone*epsc*xispone + 3.808187686792293*epsb*etasone*xispone + -3.808187686792293*epsc*etasone*xispone + 0.8822010915194827*xisppone + 0.22117291506280895*as*xisppone + 0.5502247632998395*l1sone*epsc2 + 1.5934037158261338*l1spone*epsc2 + -1.2435335848826854*l4sone*epsc2 + -1.9040938433961465*l4spone*epsc2 + 2.0345042615858753*l1sone*xispone*epsc2 + 1.7644021830389653*l1spone*xispone*epsc2 + -1.9040938433961465*l4sone*xispone*epsc2 + 0.8822010915194827*l1sone*xisppone*epsc2;
+        }
+
+        double fTs_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double fTs_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double fTs_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
         }
         // }}}
 
@@ -1180,6 +1411,87 @@ namespace eos
 
             return 0.6199338182961519 + -0.37274031827421483*as + -0.269777325517593*epsb + -6.69061610770223*chi2sone*epsb + -4.509338658874715*chi2spone*epsb + 20.071848323106686*chi3spone*epsb + 6.7640079883120725*chi3sppone*epsb + 0.269777325517593*epsc + 6.690616107702229*chi2sone*epsc + 4.509338658874715*chi2spone*epsc + -6.69061610770223*chi3spone*epsc + -2.2546693294373576*chi3sppone*epsc + 0.539554651035186*epsb*etasone + 0.539554651035186*epsc*etasone + 1.45578162243326*epsb*etaspone + 1.4557816224332596*epsc*etaspone + 0.49058354591294506*epsb*etasppone + 0.49058354591294506*epsc*etasppone + 1.6726540269255574*xispone + -0.24246612189750352*as*xispone + -0.72789081121663*epsb*xispone + -4.509338658874715*chi2sone*epsb*xispone + 13.528015976624145*chi3spone*epsb*xispone + 0.7278908112166298*epsc*xispone + 4.509338658874715*chi2sone*epsc*xispone + -4.509338658874715*chi3spone*epsc*xispone + 1.45578162243326*epsb*etasone*xispone + 1.4557816224332598*epsc*etasone*xispone + 0.9811670918258901*epsb*etaspone*xispone + 0.9811670918258901*epsc*etaspone*xispone + 0.5636673323593394*xisppone + -0.04126244998162756*as*xisppone + -0.24529177295647253*epsb*xisppone + 0.24529177295647253*epsc*xisppone + 0.49058354591294506*epsb*etasone*xisppone + 0.49058354591294506*epsc*etasone*xisppone + 0.6199338182961519*l2sone*epsc2 + 1.3908203607458876*l2spone*epsc2 + 1.6726540269255572*l3sone*epsc2 + 1.1273346647186788*l3spone*epsc2 + 0.269777325517593*l5sone*epsc2 + 0.6052449247383936*l5spone*epsc2 + -1.2674454622518159*l6sone*epsc2 + -1.7010733953897321*l6spone*epsc2 + 1.6726540269255574*l2sone*xispone*epsc2 + 1.1273346647186788*l2spone*xispone*epsc2 + 1.1273346647186788*l3sone*xispone*epsc2 + 0.72789081121663*l5sone*xispone*epsc2 + 0.49058354591294506*l5spone*xispone*epsc2 + -1.9463651683462044*l6sone*xispone*epsc2 + -0.9811670918258901*l6spone*xispone*epsc2 + 0.5636673323593394*l2sone*xisppone*epsc2 + 0.24529177295647253*l5sone*xisppone*epsc2 + -0.49058354591294506*l6sone*xisppone*epsc2;
         }
+
+        double T1s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T1s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T1s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T2s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T2s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T2s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T23s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T23s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T23s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
         // }}}
 
         // B_s^* -> D_s form factors
@@ -1300,6 +1612,87 @@ namespace eos
             const double epsc2 = power_of<2>(epsc);
 
             return 0.1012710007502295 + 0.07834959986071738*as + -0.21003049797287487*epsb + 1.2360683649968567*chi2sone*epsb + 0.903310680663964*chi2spone*epsb + -1.2360683649968567*chi3spone*epsb + -0.451655340331982*chi3sppone*epsb + 0.21003049797287487*epsc + -1.2360683649968567*chi2sone*epsc + -0.903310680663964*chi2spone*epsc + 3.708205094990571*chi3spone*epsc + 1.354966020995946*chi3sppone*epsc + -0.42006099594574975*epsb*etasone + -0.42006099594574975*epsc*etasone + -0.4837318762398783*epsb*etaspone + -0.4837318762398782*epsc*etaspone + 0.30901709124921417*xispone + 0.02396591722516295*as*xispone + -0.24186593811993914*epsb*xispone + 0.903310680663964*chi2sone*epsb*xispone + -0.903310680663964*chi3spone*epsb*xispone + 0.2418659381199391*epsc*xispone + -0.903310680663964*chi2sone*epsc*xispone + 2.709932041991892*chi3spone*epsc*xispone + -0.4837318762398783*epsb*etasone*xispone + -0.4837318762398782*epsc*etasone*xispone + 0.1129138350829955*xisppone + -0.046967738664116764*as*xisppone + 0.1012710007502295*l1sone*epsc2 + 0.25256017370771644*l1spone*epsc2 + -0.21003049797287487*l4sone*epsc2 + -0.2418659381199391*l4spone*epsc2 + 0.30901709124921417*l1sone*xispone*epsc2 + 0.225827670165991*l1spone*xispone*epsc2 + -0.2418659381199391*l4sone*xispone*epsc2 + 0.1129138350829955*l1sone*xisppone*epsc2;
+        }
+
+        double T1bars_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T1bars_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T1bars_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T2bars_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T2bars_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T2bars_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T23bars_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T23bars_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T23bars_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
         }
         // }}}
 
@@ -1599,6 +1992,209 @@ namespace eos
 
             return 0.11437742691975071 + 0.08810044101490708*as + -0.2250545454775743*epsb + -1.1763768368075502*chi3spone*epsb + -0.3863240448191096*chi3sppone*epsb + 0.2250545454775743*epsc + -1.1763768368075502*chi3spone*epsc + -0.3863240448191096*chi3sppone*epsc + 0.29409420920188756*xispone + 0.01852326157479586*as*xispone + -0.22009663960555897*epsb*xispone + -0.7726480896382192*chi3spone*epsb*xispone + 0.22009663960555897*epsc*xispone + -0.7726480896382192*chi3spone*epsc*xispone + 0.0965810112047774*xisppone + -0.040173922804480615*as*xisppone + 0.11437742691975071*l2sone*epsc2 + 0.24580370359949882*l2spone*epsc2 + -0.2250545454775743*l5sone*epsc2 + -0.22009663960555897*l5spone*epsc2 + 0.29409420920188756*l2sone*xispone*epsc2 + 0.1931620224095548*l2spone*xispone*epsc2 + -0.22009663960555897*l5sone*xispone*epsc2 + 0.0965810112047774*l2sone*xisppone*epsc2;
         }
+
+        double T4s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T4s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T4s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T5s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T5s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T5s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T6s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T6s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T6s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T7s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T7s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T7s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T8s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T8s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T8s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T9s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T9s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T9s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T10s_a0() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T10s_a1() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
+
+        double T10s_a2() const
+        {
+            const double as   = _alpha_s() / M_PI;
+            const double epsb = _eps_b_s();
+            const double epsc = _eps_c_s();
+            const double epsc2 = power_of<2>(epsc);
+
+            return 0.0; // TODO: implement
+        }
         // }}}
     };
 
@@ -1716,6 +2312,27 @@ namespace eos
     double BGLCoefficients::A7_a0() const { return _imp->A7_a0(); }
     double BGLCoefficients::A7_a1() const { return _imp->A7_a1(); }
     double BGLCoefficients::A7_a2() const { return _imp->A7_a2(); }
+    double BGLCoefficients::T4_a0() const { return _imp->T4_a0(); }
+    double BGLCoefficients::T4_a1() const { return _imp->T4_a1(); }
+    double BGLCoefficients::T4_a2() const { return _imp->T4_a2(); }
+    double BGLCoefficients::T5_a0() const { return _imp->T5_a0(); }
+    double BGLCoefficients::T5_a1() const { return _imp->T5_a1(); }
+    double BGLCoefficients::T5_a2() const { return _imp->T5_a2(); }
+    double BGLCoefficients::T6_a0() const { return _imp->T6_a0(); }
+    double BGLCoefficients::T6_a1() const { return _imp->T6_a1(); }
+    double BGLCoefficients::T6_a2() const { return _imp->T6_a2(); }
+    double BGLCoefficients::T7_a0() const { return _imp->T7_a0(); }
+    double BGLCoefficients::T7_a1() const { return _imp->T7_a1(); }
+    double BGLCoefficients::T7_a2() const { return _imp->T7_a2(); }
+    double BGLCoefficients::T8_a0() const { return _imp->T8_a0(); }
+    double BGLCoefficients::T8_a1() const { return _imp->T8_a1(); }
+    double BGLCoefficients::T8_a2() const { return _imp->T8_a2(); }
+    double BGLCoefficients::T9_a0() const { return _imp->T9_a0(); }
+    double BGLCoefficients::T9_a1() const { return _imp->T9_a1(); }
+    double BGLCoefficients::T9_a2() const { return _imp->T9_a2(); }
+    double BGLCoefficients::T10_a0() const { return _imp->T10_a0(); }
+    double BGLCoefficients::T10_a1() const { return _imp->T10_a1(); }
+    double BGLCoefficients::T10_a2() const { return _imp->T10_a2(); }
     // }}}
 
     // B_s -> D_s form factors
@@ -1726,6 +2343,9 @@ namespace eos
     double BGLCoefficients::S1s_a0() const { return _imp->S1s_a0(); }
     double BGLCoefficients::S1s_a1() const { return _imp->S1s_a1(); }
     double BGLCoefficients::S1s_a2() const { return _imp->S1s_a2(); }
+    double BGLCoefficients::fTs_a0() const { return _imp->fTs_a0(); }
+    double BGLCoefficients::fTs_a1() const { return _imp->fTs_a1(); }
+    double BGLCoefficients::fTs_a2() const { return _imp->fTs_a2(); }
     // }}}
 
     // B_s -> D_s^* form factors
@@ -1742,6 +2362,15 @@ namespace eos
     double BGLCoefficients::P1s_a0() const { return _imp->P1s_a0(); }
     double BGLCoefficients::P1s_a1() const { return _imp->P1s_a1(); }
     double BGLCoefficients::P1s_a2() const { return _imp->P1s_a2(); }
+    double BGLCoefficients::T1s_a0() const { return _imp->T1s_a0(); }
+    double BGLCoefficients::T1s_a1() const { return _imp->T1s_a1(); }
+    double BGLCoefficients::T1s_a2() const { return _imp->T1s_a2(); }
+    double BGLCoefficients::T2s_a0() const { return _imp->T2s_a0(); }
+    double BGLCoefficients::T2s_a1() const { return _imp->T2s_a1(); }
+    double BGLCoefficients::T2s_a2() const { return _imp->T2s_a2(); }
+    double BGLCoefficients::T23s_a0() const { return _imp->T23s_a0(); }
+    double BGLCoefficients::T23s_a1() const { return _imp->T23s_a1(); }
+    double BGLCoefficients::T23s_a2() const { return _imp->T23s_a2(); }
     // }}}
 
     // B_s^* -> D_s form factors
@@ -1758,6 +2387,15 @@ namespace eos
     double BGLCoefficients::A6s_a0() const { return _imp->A6s_a0(); }
     double BGLCoefficients::A6s_a1() const { return _imp->A6s_a1(); }
     double BGLCoefficients::A6s_a2() const { return _imp->A6s_a2(); }
+    double BGLCoefficients::T1bars_a0() const { return _imp->T1bars_a0(); }
+    double BGLCoefficients::T1bars_a1() const { return _imp->T1bars_a1(); }
+    double BGLCoefficients::T1bars_a2() const { return _imp->T1bars_a2(); }
+    double BGLCoefficients::T2bars_a0() const { return _imp->T2bars_a0(); }
+    double BGLCoefficients::T2bars_a1() const { return _imp->T2bars_a1(); }
+    double BGLCoefficients::T2bars_a2() const { return _imp->T2bars_a2(); }
+    double BGLCoefficients::T23bars_a0() const { return _imp->T23bars_a0(); }
+    double BGLCoefficients::T23bars_a1() const { return _imp->T23bars_a1(); }
+    double BGLCoefficients::T23bars_a2() const { return _imp->T23bars_a2(); }
     // }}}
 
     // B_s^* -> D_s^* form factors
@@ -1792,6 +2430,27 @@ namespace eos
     double BGLCoefficients::A7s_a0() const { return _imp->A7s_a0(); }
     double BGLCoefficients::A7s_a1() const { return _imp->A7s_a1(); }
     double BGLCoefficients::A7s_a2() const { return _imp->A7s_a2(); }
+    double BGLCoefficients::T4s_a0() const { return _imp->T4s_a0(); }
+    double BGLCoefficients::T4s_a1() const { return _imp->T4s_a1(); }
+    double BGLCoefficients::T4s_a2() const { return _imp->T4s_a2(); }
+    double BGLCoefficients::T5s_a0() const { return _imp->T5s_a0(); }
+    double BGLCoefficients::T5s_a1() const { return _imp->T5s_a1(); }
+    double BGLCoefficients::T5s_a2() const { return _imp->T5s_a2(); }
+    double BGLCoefficients::T6s_a0() const { return _imp->T6s_a0(); }
+    double BGLCoefficients::T6s_a1() const { return _imp->T6s_a1(); }
+    double BGLCoefficients::T6s_a2() const { return _imp->T6s_a2(); }
+    double BGLCoefficients::T7s_a0() const { return _imp->T7s_a0(); }
+    double BGLCoefficients::T7s_a1() const { return _imp->T7s_a1(); }
+    double BGLCoefficients::T7s_a2() const { return _imp->T7s_a2(); }
+    double BGLCoefficients::T8s_a0() const { return _imp->T8s_a0(); }
+    double BGLCoefficients::T8s_a1() const { return _imp->T8s_a1(); }
+    double BGLCoefficients::T8s_a2() const { return _imp->T8s_a2(); }
+    double BGLCoefficients::T9s_a0() const { return _imp->T9s_a0(); }
+    double BGLCoefficients::T9s_a1() const { return _imp->T9s_a1(); }
+    double BGLCoefficients::T9s_a2() const { return _imp->T9s_a2(); }
+    double BGLCoefficients::T10s_a0() const { return _imp->T10s_a0(); }
+    double BGLCoefficients::T10s_a1() const { return _imp->T10s_a1(); }
+    double BGLCoefficients::T10s_a2() const { return _imp->T10s_a2(); }
     // }}}
 
     std::vector<OptionSpecification>::const_iterator
@@ -2062,16 +2721,24 @@ namespace eos
 
         double bound_1m_T() const
         {
-            // 3 rows of form factors with 3 columns (one column per z coefficient)
+            // 7 rows of form factors with 3 columns (one column per z coefficient)
             // for spectator quark q=u,d
-            const std::array<std::array<double, 3>, 3> bgl_coeffs_ud
+            const std::array<std::array<double, 3>, 7> bgl_coeffs_ud
             {{
                 // B -> D f_T
                 { bgl->fT_a0(),    bgl->fT_a1(),    bgl->fT_a2()    },
-                // B -> D^* V_2
+                // B -> D^* T_1
                 { bgl->T1_a0(),    bgl->T1_a1(),    bgl->T1_a2()    },
-                // B^* -> D V_3
-                { bgl->T1bar_a0(), bgl->T1bar_a1(), bgl->T1bar_a2() }
+                // B^* -> D Tbar_1
+                { bgl->T1bar_a0(), bgl->T1bar_a1(), bgl->T1bar_a2() },
+                // B^* -> D^* T_7
+                { bgl->T7_a0(),    bgl->T7_a1(),    bgl->T7_a2()    },
+                // B -> D^* T_8
+                { bgl->T8_a0(),    bgl->T8_a1(),    bgl->T8_a2()    },
+                // B -> D^* T_9
+                { bgl->T9_a0(),    bgl->T9_a1(),    bgl->T9_a2()    },
+                // B -> D^* T_10
+                { bgl->T10_a0(),   bgl->T10_a1(),   bgl->T10_a2()   }
             }};
 
             double result = 0.0;
@@ -2083,14 +2750,42 @@ namespace eos
                 }
             }
 
+            // 7 rows of form factors with 3 columns (one column per z coefficient)
+            // for spectator quark q=s
+            const std::array<std::array<double, 3>, 7> bgl_coeffs_s
+            {{
+                // B_s -> D_s f_T
+                { bgl->fTs_a0(),    bgl->fTs_a1(),    bgl->fTs_a2()    },
+                // B_s -> D_s^* T_1
+                { bgl->T1s_a0(),    bgl->T1s_a1(),    bgl->T1s_a2()    },
+                // B_s^* -> D_s Tbar_1
+                { bgl->T1bars_a0(), bgl->T1bars_a1(), bgl->T1bars_a2() },
+                // B_s^* -> D_s^* T_7
+                { bgl->T7s_a0(),    bgl->T7s_a1(),    bgl->T7s_a2()    },
+                // B_s -> D_s^* T_8
+                { bgl->T8s_a0(),    bgl->T8s_a1(),    bgl->T8s_a2()    },
+                // B_s -> D_s^* T_9
+                { bgl->T9s_a0(),    bgl->T9s_a1(),    bgl->T9s_a2()    },
+                // B_s -> D_s^* T_10
+                { bgl->T10s_a0(),   bgl->T10s_a1(),   bgl->T10s_a2()   }
+            }};
+
+            for (const auto & ff : bgl_coeffs_s)
+            {
+                for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+                {
+                    result += power_of<2>(ff[i]) * ns;
+                }
+            }
+
             return result;
         }
 
         double bound_1p_T() const
         {
-            // 4 rows of form factors with 3 columns (one column per z coefficient)
+            // 7 rows of form factors with 3 columns (one column per z coefficient)
             // for spectator quark q=u,d
-            const std::array<std::array<double, 3>, 4> bgl_coeffs_ud
+            const std::array<std::array<double, 3>, 7> bgl_coeffs_ud
             {{
                 // B -> D^* T_2
                 { bgl->T2_a0(), bgl->T2_a1(), bgl->T2_a2() },
@@ -2100,6 +2795,12 @@ namespace eos
                 { bgl->T23_a0(), bgl->T23_a1(), bgl->T23_a2() },
                 // B^* -> D Tbar_23
                 { bgl->T23bar_a0(), bgl->T23bar_a1(), bgl->T23bar_a2() },
+                // B^* -> D^* T_4
+                { bgl->T4_a0(), bgl->T4_a1(), bgl->T4_a2() },
+                // B^* -> D^* T_5
+                { bgl->T5_a0(), bgl->T5_a1(), bgl->T5_a2() },
+                // B^* -> D^* T_6
+                { bgl->T6_a0(), bgl->T6_a1(), bgl->T6_a2() }
             }};
 
             double result = 0.0;
@@ -2108,6 +2809,35 @@ namespace eos
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
                     result += power_of<2>(ff[i]) * nf; // to account for flavor symmetry
+                }
+            }
+
+
+            // 7 rows of form factors with 3 columns (one column per z coefficient)
+            // for spectator quark q=s
+            const std::array<std::array<double, 3>, 7> bgl_coeffs_s
+            {{
+                // B_s -> D_s^* T_2
+                { bgl->T2s_a0(), bgl->T2s_a1(), bgl->T2s_a2() },
+                // B_s^* -> D_s Tbar_2
+                { bgl->T2bars_a0(), bgl->T2bars_a1(), bgl->T2bars_a2() },
+                // B_s -> D_s^* T_23
+                { bgl->T23s_a0(), bgl->T23s_a1(), bgl->T23s_a2() },
+                // B_s^* -> D_s Tbar_23
+                { bgl->T23bars_a0(), bgl->T23bars_a1(), bgl->T23bars_a2() },
+                // B_s^* -> D_s^* T_4
+                { bgl->T4s_a0(), bgl->T4s_a1(), bgl->T4s_a2() },
+                // B_s^* -> D_s^* T_5
+                { bgl->T5s_a0(), bgl->T5s_a1(), bgl->T5s_a2() },
+                // B_s^* -> D_s^* T_6
+                { bgl->T6s_a0(), bgl->T6s_a1(), bgl->T6s_a2() }
+            }};
+
+            for (const auto & ff : bgl_coeffs_s)
+            {
+                for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+                {
+                    result += power_of<2>(ff[i]) * ns;
                 }
             }
 

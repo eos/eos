@@ -154,6 +154,34 @@ namespace eos
             double A7_a0() const;
             double A7_a1() const;
             double A7_a2() const;
+
+            double T4_a0() const;
+            double T4_a1() const;
+            double T4_a2() const;
+
+            double T5_a0() const;
+            double T5_a1() const;
+            double T5_a2() const;
+
+            double T6_a0() const;
+            double T6_a1() const;
+            double T6_a2() const;
+
+            double T7_a0() const;
+            double T7_a1() const;
+            double T7_a2() const;
+
+            double T8_a0() const;
+            double T8_a1() const;
+            double T8_a2() const;
+
+            double T9_a0() const;
+            double T9_a1() const;
+            double T9_a2() const;
+
+            double T10_a0() const;
+            double T10_a1() const;
+            double T10_a2() const;
             // }}}
 
             // B_s -> D_s form factors
@@ -165,6 +193,10 @@ namespace eos
             double S1s_a0() const;
             double S1s_a1() const;
             double S1s_a2() const;
+
+            double fTs_a0() const;
+            double fTs_a1() const;
+            double fTs_a2() const;
             // }}}
 
             // B_s -> D_s^* form factor
@@ -184,6 +216,18 @@ namespace eos
             double P1s_a0() const;
             double P1s_a1() const;
             double P1s_a2() const;
+
+            double T1s_a0() const;
+            double T1s_a1() const;
+            double T1s_a2() const;
+
+            double T2s_a0() const;
+            double T2s_a1() const;
+            double T2s_a2() const;
+
+            double T23s_a0() const;
+            double T23s_a1() const;
+            double T23s_a2() const;
             // }}}
 
             // B_s^* -> D_s form factor
@@ -203,6 +247,18 @@ namespace eos
             double A6s_a0() const;
             double A6s_a1() const;
             double A6s_a2() const;
+
+            double T1bars_a0() const;
+            double T1bars_a1() const;
+            double T1bars_a2() const;
+
+            double T2bars_a0() const;
+            double T2bars_a1() const;
+            double T2bars_a2() const;
+
+            double T23bars_a0() const;
+            double T23bars_a1() const;
+            double T23bars_a2() const;
             // }}}
 
             // B_s^* -> D_s^* form factor
@@ -246,6 +302,34 @@ namespace eos
             double A7s_a0() const;
             double A7s_a1() const;
             double A7s_a2() const;
+
+            double T4s_a0() const;
+            double T4s_a1() const;
+            double T4s_a2() const;
+
+            double T5s_a0() const;
+            double T5s_a1() const;
+            double T5s_a2() const;
+
+            double T6s_a0() const;
+            double T6s_a1() const;
+            double T6s_a2() const;
+
+            double T7s_a0() const;
+            double T7s_a1() const;
+            double T7s_a2() const;
+
+            double T8s_a0() const;
+            double T8s_a1() const;
+            double T8s_a2() const;
+
+            double T9s_a0() const;
+            double T9s_a1() const;
+            double T9s_a2() const;
+
+            double T10s_a0() const;
+            double T10s_a1() const;
+            double T10s_a2() const;
             // }}}
 
             /*!
