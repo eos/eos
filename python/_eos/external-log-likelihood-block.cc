@@ -17,8 +17,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "eos/statistics/test-statistic-impl.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
+
+#include "eos/statistics/test-statistic-impl.hh"
 
 using boost::python::extract;
 using boost::python::object;
@@ -89,4 +90,4 @@ namespace eos
     {
         return test_statistics::Empty();
     }
-}
+} // namespace eos
