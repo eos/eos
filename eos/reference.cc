@@ -23,26 +23,24 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <yaml-cpp/yaml.h>
-
-#include <map>
-#include <vector>
 
 #include <iostream>
+#include <map>
+#include <vector>
+#include <yaml-cpp/yaml.h>
 
 namespace fs = boost::filesystem;
 
 namespace eos
 {
-    template <>
-    struct Implementation<Reference>
+    template <> struct Implementation<Reference>
     {
-        ReferenceName name;
-        std::string authors;
-        std::string title;
-        std::string eprint_archive;
-        std::string eprint_id;
-        std::string inspire_id;
+            ReferenceName name;
+            std::string   authors;
+            std::string   title;
+            std::string   eprint_archive;
+            std::string   eprint_id;
+            std::string   inspire_id;
     };
 
     Reference::Reference(Implementation<Reference> * imp) :
@@ -88,137 +86,155 @@ namespace eos
         return _imp->inspire_id;
     }
 
-    template <>
-    struct Implementation<References>
+    template <> struct Implementation<References>
     {
-        std::map<ReferenceName, std::shared_ptr<const Reference>> reference_map;
+            std::map<ReferenceName, std::shared_ptr<const Reference>> reference_map;
 
-        Implementation()
-        {
-            load();
-        }
+            Implementation() { load(); }
 
-        Implementation(const Implementation &) = delete;
+            Implementation(const Implementation &) = delete;
 
-        void load()
-        {
-            fs::path base;
-            if (std::getenv("EOS_TESTS_REFERENCES"))
+            void
+            load()
             {
-                std::string envvar = std::string(std::getenv("EOS_TESTS_REFERENCES"));
-                base = fs::system_complete(envvar);
-            }
-            else if (std::getenv("EOS_HOME"))
-            {
-                std::string envvar = std::string(std::getenv("EOS_HOME"));
-                base = fs::system_complete(envvar);
-            }
-            else
-            {
-                base = fs::system_complete(EOS_DATADIR "/eos/");
-            }
-
-            if (! fs::exists(base))
-            {
-                throw InternalError("Could not find the directory containing the references file");
-            }
-
-            if (! fs::is_directory(base))
-            {
-                throw InternalError("Expect '" + base.string() + " to be a directory");
-            }
-
-            auto file_path = base / "references.yaml";
-
-            if (! fs::is_regular_file(status(file_path)))
-                throw InternalError("Expect '" + file_path.string() + " to be a regular file");
-
-            std::string file = file_path.string();
-            try
-            {
-                YAML::Node root_node = YAML::LoadFile(file);
-
-                // parse the references
-                for (auto && r : root_node)
+                fs::path base;
+                if (std::getenv("EOS_TESTS_REFERENCES"))
                 {
-                    ReferenceName name(r.first.Scalar());
+                    std::string envvar = std::string(std::getenv("EOS_TESTS_REFERENCES"));
+                    base               = fs::system_complete(envvar);
+                }
+                else if (std::getenv("EOS_HOME"))
+                {
+                    std::string envvar = std::string(std::getenv("EOS_HOME"));
+                    base               = fs::system_complete(envvar);
+                }
+                else
+                {
+                    base = fs::system_complete(EOS_DATADIR "/eos/");
+                }
 
-                    // authors
-                    auto authors_node = r.second["authors"];
-                    if (! authors_node)
-                        throw ReferencesInputFileNodeError(file, name.str(), "has no entry named 'authors'");
-                    if (YAML::NodeType::Scalar != authors_node.Type())
-                        throw ReferencesInputFileNodeError(file, name.str() + ".authors", "is not a scalar");
-                    auto authors = authors_node.as<std::string>();
+                if (! fs::exists(base))
+                {
+                    throw InternalError("Could not find the directory containing the references file");
+                }
 
-                    // title
-                    auto title_node = r.second["title"];
-                    if (! title_node)
-                        throw ReferencesInputFileNodeError(file, name.str(), "has no entry named 'title'");
-                    if (YAML::NodeType::Scalar != title_node.Type())
-                        throw ReferencesInputFileNodeError(file, name.str() + ".title", "is not a scalar");
-                    auto title = title_node.as<std::string>();
+                if (! fs::is_directory(base))
+                {
+                    throw InternalError("Expect '" + base.string() + " to be a directory");
+                }
 
-                    // eprint
-                    auto eprint_node = r.second["eprint"];
-                    std::string eprint_archive, eprint_id;
-                    if (eprint_node)
+                auto file_path = base / "references.yaml";
+
+                if (! fs::is_regular_file(status(file_path)))
+                {
+                    throw InternalError("Expect '" + file_path.string() + " to be a regular file");
+                }
+
+                std::string file = file_path.string();
+                try
+                {
+                    YAML::Node root_node = YAML::LoadFile(file);
+
+                    // parse the references
+                    for (auto && r : root_node)
                     {
-                        if (YAML::NodeType::Map != eprint_node.Type())
-                            throw ReferencesInputFileNodeError(file, name.str() + ".eprint", "is not a map");
+                        ReferenceName name(r.first.Scalar());
 
-                        auto eprint_archive_node = eprint_node["archive"];
-                        if (! eprint_archive_node)
-                            throw ReferencesInputFileNodeError(file, name.str() + ".eprint", "has no entry named 'archive'");
-                        if (YAML::NodeType::Scalar != eprint_archive_node.Type())
-                            throw ReferencesInputFileNodeError(file, name.str() + ".eprint.archive", "is not a scalar");
+                        // authors
+                        auto authors_node = r.second["authors"];
+                        if (! authors_node)
+                        {
+                            throw ReferencesInputFileNodeError(file, name.str(), "has no entry named 'authors'");
+                        }
+                        if (YAML::NodeType::Scalar != authors_node.Type())
+                        {
+                            throw ReferencesInputFileNodeError(file, name.str() + ".authors", "is not a scalar");
+                        }
+                        auto authors = authors_node.as<std::string>();
 
-                        auto eprint_id_node = eprint_node["id"];
-                        if (! eprint_id_node)
-                            throw ReferencesInputFileNodeError(file, name.str() + ".eprint", "has no entry named 'id'");
-                        if (YAML::NodeType::Scalar != eprint_id_node.Type())
-                            throw ReferencesInputFileNodeError(file, name.str() + ".eprint.id", "is not a scalar");
+                        // title
+                        auto title_node = r.second["title"];
+                        if (! title_node)
+                        {
+                            throw ReferencesInputFileNodeError(file, name.str(), "has no entry named 'title'");
+                        }
+                        if (YAML::NodeType::Scalar != title_node.Type())
+                        {
+                            throw ReferencesInputFileNodeError(file, name.str() + ".title", "is not a scalar");
+                        }
+                        auto title = title_node.as<std::string>();
 
-                        eprint_archive = eprint_archive_node.as<std::string>();
-                        eprint_id      = eprint_id_node.as<std::string>();
+                        // eprint
+                        auto        eprint_node = r.second["eprint"];
+                        std::string eprint_archive, eprint_id;
+                        if (eprint_node)
+                        {
+                            if (YAML::NodeType::Map != eprint_node.Type())
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".eprint", "is not a map");
+                            }
+
+                            auto eprint_archive_node = eprint_node["archive"];
+                            if (! eprint_archive_node)
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".eprint", "has no entry named 'archive'");
+                            }
+                            if (YAML::NodeType::Scalar != eprint_archive_node.Type())
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".eprint.archive", "is not a scalar");
+                            }
+
+                            auto eprint_id_node = eprint_node["id"];
+                            if (! eprint_id_node)
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".eprint", "has no entry named 'id'");
+                            }
+                            if (YAML::NodeType::Scalar != eprint_id_node.Type())
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".eprint.id", "is not a scalar");
+                            }
+
+                            eprint_archive = eprint_archive_node.as<std::string>();
+                            eprint_id      = eprint_id_node.as<std::string>();
+                        }
+
+                        // inspire id
+                        auto        inspire_id_node = r.second["inspire-id"];
+                        std::string inspire_id;
+                        if (inspire_id_node)
+                        {
+                            if (YAML::NodeType::Scalar != inspire_id_node.Type())
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".inspire-id", "is not a scalar");
+                            }
+
+                            inspire_id = inspire_id_node.as<std::string>();
+                        }
+
+                        // check for duplicates
+                        if (reference_map.end() != reference_map.find(name))
+                        {
+                            throw ReferencesInputDuplicateError(file, name.str());
+                        }
+
+                        reference_map[name] =
+                                std::shared_ptr<const Reference>(new Reference(new Implementation<Reference>{ name, authors, title, eprint_archive, eprint_id, inspire_id }));
                     }
-
-                    // inspire id
-                    auto inspire_id_node = r.second["inspire-id"];
-                    std::string inspire_id;
-                    if (inspire_id_node)
-                    {
-                        if (YAML::NodeType::Scalar != inspire_id_node.Type())
-                            throw ReferencesInputFileNodeError(file, name.str() + ".inspire-id", "is not a scalar");
-
-                        inspire_id = inspire_id_node.as<std::string>();
-                    }
-
-                    // check for duplicates
-                    if (reference_map.end() != reference_map.find(name))
-                    {
-                        throw ReferencesInputDuplicateError(file, name.str());
-                    }
-
-                    reference_map[name] = std::shared_ptr<const Reference>(new Reference(new Implementation<Reference>{
-                        name, authors, title, eprint_archive, eprint_id, inspire_id }));
+                }
+                catch (ReferenceNameSyntaxError & e)
+                {
+                    throw ReferencesInputFileParseError(file, e.what());
+                }
+                catch (std::exception & e)
+                {
+                    throw ReferencesInputFileParseError(file, e.what());
                 }
             }
-            catch (ReferenceNameSyntaxError & e)
-            {
-                throw ReferencesInputFileParseError(file, e.what());
-            }
-            catch (std::exception & e)
-            {
-                throw ReferencesInputFileParseError(file, e.what());
-            }
-        }
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<References::ReferenceIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<References::ReferenceIteratorTag>
     {
-        using UnderlyingIterator = std::map<ReferenceName, std::shared_ptr<const Reference>>::const_iterator;
+            using UnderlyingIterator = std::map<ReferenceName, std::shared_ptr<const Reference>>::const_iterator;
     };
     template class WrappedForwardIterator<References::ReferenceIteratorTag, const std::pair<const ReferenceName, std::shared_ptr<const Reference>>>;
 
@@ -227,9 +243,7 @@ namespace eos
     {
     }
 
-    References::~References()
-    {
-    }
+    References::~References() {}
 
     References::ReferenceIterator
     References::begin() const
@@ -250,16 +264,15 @@ namespace eos
 
         if (_imp->reference_map.end() == i)
         {
-            return { };
+            return {};
         }
 
         return i->second;
     }
 
-    template <>
-    struct WrappedForwardIteratorTraits<ReferenceUser::ReferenceIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<ReferenceUser::ReferenceIteratorTag>
     {
-        using UnderlyingIterator = std::set<ReferenceName>::const_iterator;
+            using UnderlyingIterator = std::set<ReferenceName>::const_iterator;
     };
     template class WrappedForwardIterator<ReferenceUser::ReferenceIteratorTag, const ReferenceName>;
 
@@ -280,18 +293,18 @@ namespace eos
     {
     }
 
-    ReferencesInputFileParseError::ReferencesInputFileParseError(const std::string & file, const std::string & msg) throw () :
+    ReferencesInputFileParseError::ReferencesInputFileParseError(const std::string & file, const std::string & msg) throw() :
         Exception("Malformed references file '" + file + "': " + msg)
     {
     }
 
-    ReferencesInputFileNodeError::ReferencesInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw () :
+    ReferencesInputFileNodeError::ReferencesInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw() :
         Exception("Malformed references file '" + file + "': Node '" + node + "' " + msg)
     {
     }
 
-    ReferencesInputDuplicateError::ReferencesInputDuplicateError(const std::string & file, const std::string & node) throw () :
+    ReferencesInputDuplicateError::ReferencesInputDuplicateError(const std::string & file, const std::string & node) throw() :
         Exception("Malformed references file '" + file + "': Duplicate entry for reference '" + node + "'")
     {
     }
-}
+} // namespace eos

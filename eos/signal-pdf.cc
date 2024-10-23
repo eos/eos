@@ -18,11 +18,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/signal-pdf.hh>
-#include <eos/signal-pdf-impl.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/b-decays/signal-pdfs.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/signal-pdfs.hh>
+#include <eos/signal-pdf-impl.hh>
+#include <eos/signal-pdf.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
@@ -41,16 +41,16 @@ namespace eos
         class Legendre1DPDF
         {
             public:
-                Legendre1DPDF(const Parameters &, const Options &)
-                {
-                }
+                Legendre1DPDF(const Parameters &, const Options &) {}
 
-                double pdf(const double & z) const
+                double
+                pdf(const double & z) const
                 {
                     return (9.0 + 8.0 * z + 9.0 * z * z);
                 }
 
-                double norm(const double & z_min, const double & z_max) const
+                double
+                norm(const double & z_min, const double & z_max) const
                 {
                     return (9.0 * (z_max - z_min) + 4.0 * (power_of<2>(z_max) - power_of<2>(z_min)) + 3.0 * (power_of<3>(z_max) - power_of<3>(z_min)));
                 }
@@ -59,8 +59,8 @@ namespace eos
         };
 
         const std::string Legendre1DPDF::description = "1D PDF up to 2nd order in z; used for unit tests only.";
-    }
-}
+    } // namespace test
+} // namespace eos
 
 #include <eos/utils/concrete-signal-pdf.hh>
 
@@ -74,7 +74,7 @@ namespace eos
     SignalPDFEntries::SignalPDFEntries() :
         _entries(&impl::signal_pdf_entries)
     {
-        std::vector<std::function<SignalPDFSection ()>> section_makers = {
+        std::vector<std::function<SignalPDFSection()>> section_makers = {
             make_b_decays_pdf_section,
             make_rare_b_decays_pdf_section,
         };
@@ -91,17 +91,11 @@ namespace eos
         // 1D Legendre PDF
         {
             auto name_and_entry_pair = make_signal_pdf("Test::Legendre1D",
-                Options{ },
-                &test::Legendre1DPDF::pdf,
-                std::make_tuple(
-                    KinematicRange{ "z", -1.0, +1.0, "" }
-                ),
-                &test::Legendre1DPDF::norm,
-                std::make_tuple(
-                    "z_min",
-                    "z_max"
-                )
-            );
+                                                       Options{},
+                                                       &test::Legendre1DPDF::pdf,
+                                                       std::make_tuple(KinematicRange{ "z", -1.0, +1.0, "" }),
+                                                       &test::Legendre1DPDF::norm,
+                                                       std::make_tuple("z_min", "z_max"));
 
             _entries->insert(name_and_entry_pair);
         }
@@ -114,9 +108,7 @@ namespace eos
     {
     }
 
-    SignalPDFEntry::SignalPDFEntry()
-    {
-    }
+    SignalPDFEntry::SignalPDFEntry() {}
 
     SignalPDFEntry::~SignalPDFEntry() = default;
 
@@ -138,7 +130,9 @@ namespace eos
         {
             auto i = signal_pdf_entries.find(name);
             if (signal_pdf_entries.end() != i)
+            {
                 return i->second->make(parameters, kinematics, name.options() + _options);
+            }
         }
 
         return SignalPDFPtr();
@@ -146,8 +140,7 @@ namespace eos
 
     /* SignalPDFSections */
 
-    class SignalPDFSections :
-        public InstantiationPolicy<SignalPDFSections, Singleton>
+    class SignalPDFSections : public InstantiationPolicy<SignalPDFSections, Singleton>
     {
         private:
             std::vector<SignalPDFSection> _sections;
@@ -156,8 +149,7 @@ namespace eos
             {
                 // ensure that the observable entries have been generated already
                 auto entries = std::distance(SignalPDFEntries::instance()->entries().begin(), SignalPDFEntries::instance()->entries().end());
-                Log::instance()->message("SignalPDFSections::SignalPDFSections()", ll_debug)
-                    << "Total number of registered signal PDFs: " << entries;
+                Log::instance()->message("SignalPDFSections::SignalPDFSections()", ll_debug) << "Total number of registered signal PDFs: " << entries;
 
                 _sections = std::vector<SignalPDFSection>({
                     make_b_decays_pdf_section(),
@@ -170,7 +162,8 @@ namespace eos
         public:
             friend class InstantiationPolicy<SignalPDFSections, Singleton>;
 
-            const std::vector<SignalPDFSection> & sections() const
+            const std::vector<SignalPDFSection> &
+            sections() const
             {
                 return _sections;
             }
@@ -178,10 +171,9 @@ namespace eos
 
     /* SignalPDFGroup */
 
-    template <>
-    struct WrappedForwardIteratorTraits<SignalPDFGroup::SignalPDFIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<SignalPDFGroup::SignalPDFIteratorTag>
     {
-        using UnderlyingIterator = std::map<QualifiedName, SignalPDFEntryPtr>::const_iterator;
+            using UnderlyingIterator = std::map<QualifiedName, SignalPDFEntryPtr>::const_iterator;
     };
     template class WrappedForwardIterator<SignalPDFGroup::SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
 
@@ -218,10 +210,9 @@ namespace eos
 
     /* SignalPDFSection */
 
-    template <>
-    struct WrappedForwardIteratorTraits<SignalPDFSection::GroupIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<SignalPDFSection::GroupIteratorTag>
     {
-        using UnderlyingIterator = std::vector<SignalPDFGroup>::const_iterator;
+            using UnderlyingIterator = std::vector<SignalPDFGroup>::const_iterator;
     };
     template class WrappedForwardIterator<SignalPDFSection::GroupIteratorTag, const SignalPDFGroup &>;
 
@@ -258,32 +249,29 @@ namespace eos
 
     /* SignalPDFs */
 
-    template <>
-    struct WrappedForwardIteratorTraits<SignalPDFs::SignalPDFIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<SignalPDFs::SignalPDFIteratorTag>
     {
-        using UnderlyingIterator = std::map<QualifiedName, SignalPDFEntryPtr>::const_iterator;
+            using UnderlyingIterator = std::map<QualifiedName, SignalPDFEntryPtr>::const_iterator;
     };
     template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
 
-    template <>
-    struct WrappedForwardIteratorTraits<SignalPDFs::SectionIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<SignalPDFs::SectionIteratorTag>
     {
-        using UnderlyingIterator = std::vector<SignalPDFSection>::const_iterator;
+            using UnderlyingIterator = std::vector<SignalPDFSection>::const_iterator;
     };
     template class WrappedForwardIterator<SignalPDFs::SectionIteratorTag, const SignalPDFSection &>;
 
-    template<>
-    struct Implementation<SignalPDFs>
+    template <> struct Implementation<SignalPDFs>
     {
-        std::vector<SignalPDFSection> signal_pdf_sections;
+            std::vector<SignalPDFSection> signal_pdf_sections;
 
-        std::map<QualifiedName, SignalPDFEntryPtr> signal_pdf_entries;
+            std::map<QualifiedName, SignalPDFEntryPtr> signal_pdf_entries;
 
-        Implementation() :
-            signal_pdf_sections(SignalPDFSections::instance()->sections()),
-            signal_pdf_entries(SignalPDFEntries::instance()->entries())
-        {
-        }
+            Implementation() :
+                signal_pdf_sections(SignalPDFSections::instance()->sections()),
+                signal_pdf_entries(SignalPDFEntries::instance()->entries())
+            {
+            }
     };
 
     SignalPDFs::SignalPDFs() :
@@ -291,16 +279,16 @@ namespace eos
     {
     }
 
-    SignalPDFs::~SignalPDFs()
-    {
-    }
+    SignalPDFs::~SignalPDFs() {}
 
     SignalPDFEntryPtr
     SignalPDFs::operator[] (const QualifiedName & qn) const
     {
         auto i = _imp->signal_pdf_entries.find(qn);
         if (i != _imp->signal_pdf_entries.end())
+        {
             return i->second;
+        }
 
         return SignalPDFEntryPtr(nullptr);
     }
@@ -328,4 +316,4 @@ namespace eos
     {
         return SectionIterator(_imp->signal_pdf_sections.end());
     }
-}
+} // namespace eos

@@ -15,16 +15,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/signal-pdf.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/units.hh>
 
+#include <test/test.hh>
+
 using namespace test;
 using namespace eos;
 
-class SignalPDFTest :
-    public TestCase
+class SignalPDFTest : public TestCase
 {
     public:
         SignalPDFTest() :
@@ -32,7 +32,8 @@ class SignalPDFTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // test that the list of signal pdfs is non-empty
             {

@@ -20,6 +20,7 @@
 #ifndef EOS_GUARD_EOS_UTILS_SIGNAL_PDF_HH
 #define EOS_GUARD_EOS_UTILS_SIGNAL_PDF_HH 1
 
+#include <eos/signal-pdf-fwd.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/iterator-range.hh>
@@ -27,7 +28,6 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
-#include <eos/signal-pdf-fwd.hh>
 
 #include <map>
 #include <memory>
@@ -44,14 +44,10 @@ namespace eos
 
             const std::string description;
 
-            operator const char * () const
-            {
-                return name;
-            }
+            operator const char * () const { return name; }
     };
 
-    class SignalPDF :
-        public Density
+    class SignalPDF : public Density
     {
         public:
             virtual const QualifiedName & name() const = 0;
@@ -78,8 +74,7 @@ namespace eos
      * them together under a common name. Examples of observable sections include semileptonic B decays
      * or ee->hadrons.
      */
-    class SignalPDFSection :
-        public PrivateImplementationPattern<SignalPDFSection>
+    class SignalPDFSection : public PrivateImplementationPattern<SignalPDFSection>
     {
         public:
             SignalPDFSection(Implementation<SignalPDFSection> *);
@@ -108,8 +103,7 @@ namespace eos
      * SignalPDFGroup is used to keep track of one or more ObservableEntry objects, and groups
      * them together under a common name and description. Examples of Observables Groups include B->pilnu observables and B->D form factors.
      */
-    class SignalPDFGroup :
-        public PrivateImplementationPattern<SignalPDFGroup>
+    class SignalPDFGroup : public PrivateImplementationPattern<SignalPDFGroup>
     {
         public:
             SignalPDFGroup(Implementation<SignalPDFGroup> *);
@@ -161,12 +155,14 @@ namespace eos
             using KinematicRangeIterator = WrappedForwardIterator<KinematicRangeIteratorTag, const KinematicRange>;
 
             virtual KinematicRangeIterator begin_kinematic_ranges() const = 0;
-            virtual KinematicRangeIterator end_kinematic_ranges() const = 0;
+            virtual KinematicRangeIterator end_kinematic_ranges() const   = 0;
 
-            inline IteratorRange<KinematicRangeIterator> kinematic_ranges() const
+            inline IteratorRange<KinematicRangeIterator>
+            kinematic_ranges() const
             {
                 return IteratorRange<KinematicRangeIterator>(begin_kinematic_ranges(), end_kinematic_ranges());
             }
+
             ///@}
 
         protected:
@@ -178,7 +174,8 @@ namespace eos
     /*!
      * Output stream operator for SignalPDFEntry.
      */
-    inline std::ostream & operator<< (std::ostream & os, const SignalPDFEntry & entry)
+    inline std::ostream &
+    operator<< (std::ostream & os, const SignalPDFEntry & entry)
     {
         return entry.insert(os);
     }
@@ -186,8 +183,7 @@ namespace eos
     /*!
      * Container around the known and implemented signal PDFs
      */
-    class SignalPDFs :
-        public PrivateImplementationPattern<SignalPDFs>
+    class SignalPDFs : public PrivateImplementationPattern<SignalPDFs>
     {
         public:
             /// Constructor.
@@ -223,8 +219,7 @@ namespace eos
     extern template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
     extern template class WrappedForwardIterator<SignalPDFs::SectionIteratorTag, const SignalPDFSection &>;
 
-    class SignalPDFEntries :
-        public InstantiationPolicy<SignalPDFEntries, Singleton>
+    class SignalPDFEntries : public InstantiationPolicy<SignalPDFEntries, Singleton>
     {
         private:
             std::map<QualifiedName, std::shared_ptr<const SignalPDFEntry>> * _entries;
@@ -236,25 +231,28 @@ namespace eos
         public:
             friend class InstantiationPolicy<SignalPDFEntries, Singleton>;
 
-            inline const std::map<QualifiedName, std::shared_ptr<const SignalPDFEntry>> & entries() const { return *_entries; }
+            inline const std::map<QualifiedName, std::shared_ptr<const SignalPDFEntry>> &
+            entries() const
+            {
+                return *_entries;
+            }
     };
 
     /*!
      * SignalPDFNameError is thrown when SignalPDF::make encounters a malformed observable name.
      */
-    struct SignalPDFNameError :
-        public Exception
+    struct SignalPDFNameError : public Exception
     {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param name The offending malformed observable name.
-         */
-        SignalPDFNameError(const std::string & name);
-        ///@}
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param name The offending malformed observable name.
+             */
+            SignalPDFNameError(const std::string & name);
+            ///@}
     };
-}
+} // namespace eos
 
 #endif

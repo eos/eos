@@ -36,7 +36,7 @@ namespace YAML
 {
     class Emitter;
     class Node;
-}
+} // namespace YAML
 
 namespace eos
 {
@@ -44,13 +44,11 @@ namespace eos
      * Constraint models experimental constraints via one or more LogLikelihoodBlock objects that
      * depend on one more Observable objects.
      */
-    class Constraint :
-        public PrivateImplementationPattern<Constraint>
+    class Constraint : public PrivateImplementationPattern<Constraint>
     {
         public:
             /// Constructor.
-            Constraint(const QualifiedName & name, const std::vector<ObservablePtr> & observable,
-                    const std::vector<LogLikelihoodBlockPtr> & blocks);
+            Constraint(const QualifiedName & name, const std::vector<ObservablePtr> & observable, const std::vector<LogLikelihoodBlockPtr> & blocks);
 
             /// Destructor.
             ~Constraint();
@@ -124,9 +122,10 @@ namespace eos
             using ObservableNameIterator = WrappedForwardIterator<ObservableNameIteratorTag, const QualifiedName>;
 
             virtual ObservableNameIterator begin_observable_names() const = 0;
-            virtual ObservableNameIterator end_observable_names() const = 0;
+            virtual ObservableNameIterator end_observable_names() const   = 0;
 
-            inline IteratorRange<ObservableNameIterator> observable_names() const
+            inline IteratorRange<ObservableNameIterator>
+            observable_names() const
             {
                 return IteratorRange<ObservableNameIterator>(begin_observable_names(), end_observable_names());
             }
@@ -138,7 +137,7 @@ namespace eos
             using ReferenceNameIterator = WrappedForwardIterator<ReferenceNameIteratorTag, const ReferenceName>;
 
             virtual ReferenceNameIterator begin_references() const = 0;
-            virtual ReferenceNameIterator end_references() const = 0;
+            virtual ReferenceNameIterator end_references() const   = 0;
             ///@}
 
             /// Serialize to YAML
@@ -154,38 +153,37 @@ namespace eos
     /*!
      * Container around the known and implemented constraints
      */
-    class Constraints :
-        public PrivateImplementationPattern<Constraints>
+    class Constraints : public PrivateImplementationPattern<Constraints>
     {
-    public:
-        /// Constructor.
-        Constraints();
+        public:
+            /// Constructor.
+            Constraints();
 
-        /// Destructor.
-        ~Constraints();
+            /// Destructor.
+            ~Constraints();
 
-        ///@name Iteration over known constraints
-        ///@{
-        struct ConstraintIteratorTag;
-        using ConstraintIterator = WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
+            ///@name Iteration over known constraints
+            ///@{
+            struct ConstraintIteratorTag;
+            using ConstraintIterator = WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
 
-        ConstraintIterator begin() const;
-        ConstraintIterator end() const;
-        ///@}
+            ConstraintIterator begin() const;
+            ConstraintIterator end() const;
+            ///@}
 
-        /*!
-         * Retrieve a ConstraintEntry object by name.
-         *
-         * @param name  The name of the ConstraintEntry that shall be retrieved.
-         */
-        std::shared_ptr<const ConstraintEntry> operator[] (const QualifiedName & name) const;
+            /*!
+             * Retrieve a ConstraintEntry object by name.
+             *
+             * @param name  The name of the ConstraintEntry that shall be retrieved.
+             */
+            std::shared_ptr<const ConstraintEntry> operator[] (const QualifiedName & name) const;
 
-        /*!
-         * Insert a new ConstraintEntry.
-         * @param name  The name of the new ConstraintEntry.
-         * @param entry A YAML-formatted string representing the new ConstraintEntry.
-         */
-        std::shared_ptr<const ConstraintEntry> insert(const QualifiedName & name, const std::string & entry) const;
+            /*!
+             * Insert a new ConstraintEntry.
+             * @param name  The name of the new ConstraintEntry.
+             * @param entry A YAML-formatted string representing the new ConstraintEntry.
+             */
+            std::shared_ptr<const ConstraintEntry> insert(const QualifiedName & name, const std::string & entry) const;
     };
 
     extern template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
@@ -193,72 +191,68 @@ namespace eos
     /*!
      * UnknownConstraintError is thrown when Constraint::make encounters an unknown constraint name.
      */
-    struct UnknownConstraintError :
-        public Exception
+    struct UnknownConstraintError : public Exception
     {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param name The offending constraint name.
-         */
-        UnknownConstraintError(const QualifiedName & name);
-        ///@}
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param name The offending constraint name.
+             */
+            UnknownConstraintError(const QualifiedName & name);
+            ///@}
     };
 
     /*!
      * ConstrainDeserializationError is thrown when ConstraintEntry::FromYAML or ConstrainEntry::deserialize
      * encounters an invalid YAML input.
      */
-    struct ConstraintDeserializationError :
-        public Exception
+    struct ConstraintDeserializationError : public Exception
     {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param type The name of the entry for which the error occured during deserialization.
-         * @param msg  The error message.
-         */
-        ConstraintDeserializationError(const QualifiedName & name, const std::string & msg);
-        ///@}
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param type The name of the entry for which the error occured during deserialization.
+             * @param msg  The error message.
+             */
+            ConstraintDeserializationError(const QualifiedName & name, const std::string & msg);
+            ///@}
     };
 
     /*!
      * ConstraintEntryEncodingError is thrown when the encoding of a constraint entry contains non-ascii characters.
      */
-    struct ConstraintEntryEncodingError :
-        public Exception
+    struct ConstraintEntryEncodingError : public Exception
     {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param name The name of the incorrectly encoded constraint entry.
-         */
-        ConstraintEntryEncodingError(const QualifiedName & entry);
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param name The name of the incorrectly encoded constraint entry.
+             */
+            ConstraintEntryEncodingError(const QualifiedName & entry);
     };
 
     /*!
      * ConstrainInputFileParseError is thrown when an error occurs while parsing the constraint input files.
      */
-    struct ConstraintInputFileParseError :
-        public Exception
+    struct ConstraintInputFileParseError : public Exception
     {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param filename The name of the constraint input file for which the error occured during deserialization.
-         * @param msg      The error message.
-         */
-        ConstraintInputFileParseError(const std::string & filename, const std::string & msg);
-        ///@}
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param filename The name of the constraint input file for which the error occured during deserialization.
+             * @param msg      The error message.
+             */
+            ConstraintInputFileParseError(const std::string & filename, const std::string & msg);
+            ///@}
     };
-}
+} // namespace eos
 
 #endif

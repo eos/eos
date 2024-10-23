@@ -21,13 +21,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/observable.hh>
 #include <eos/b-decays/observables.hh>
 #include <eos/c-decays/observables.hh>
-#include <eos/rare-b-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
-#include <eos/nonlocal-form-factors/observables.hh>
 #include <eos/meson-mixing/observables.hh>
+#include <eos/nonlocal-form-factors/observables.hh>
+#include <eos/observable-impl.hh>
+#include <eos/observable.hh>
+#include <eos/rare-b-decays/observables.hh>
 #include <eos/scattering/observables.hh>
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/expression-observable.hh>
@@ -37,7 +38,6 @@
 #include <eos/utils/observable_stub.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
-#include <eos/observable-impl.hh>
 
 #include <algorithm>
 #include <map>
@@ -52,15 +52,9 @@ namespace eos
     ObservableEntries::ObservableEntries() :
         _entries(&impl::observable_entries)
     {
-        std::vector<std::function<ObservableSection ()>> section_makers = {
-            make_form_factors_section,
-            make_nonlocal_form_factors_section,
-            make_b_decays_section,
-            make_c_decays_section,
-            make_rare_b_decays_section,
-            make_meson_mixing_section,
-            make_scattering_section
-        };
+        std::vector<std::function<ObservableSection()>> section_makers = { make_form_factors_section, make_nonlocal_form_factors_section, make_b_decays_section,
+                                                                           make_c_decays_section,     make_rare_b_decays_section,         make_meson_mixing_section,
+                                                                           make_scattering_section };
 
         for (const auto & section_maker : section_makers)
         {
@@ -80,8 +74,7 @@ namespace eos
 
         if (! result.second)
         {
-            Log::instance()->message("[ObservableEntries.insert_or_assign]", ll_warning)
-                << "Entry for observable " << key.str() << " has been replaced.";
+            Log::instance()->message("[ObservableEntries.insert_or_assign]", ll_warning) << "Entry for observable " << key.str() << " has been replaced.";
         }
     }
 
@@ -94,13 +87,15 @@ namespace eos
         {
             auto i = observable_entries.find(name);
             if (observable_entries.end() != i)
+            {
                 return i->second->make(parameters, kinematics, name.options() + _options);
+            }
         }
 
         // check if 'name' matches a parameter
         if (name.options().empty())
         {
-            auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == name.str(); });
+            auto i = std::find_if(parameters.begin(), parameters.end(), [&](const Parameter & p) { return p.name() == name.str(); });
             if (parameters.end() != i)
             {
                 return ObservablePtr(new ObservableStub(parameters, name));
@@ -112,8 +107,7 @@ namespace eos
         return ObservablePtr();
     }
 
-    class ObservableSections :
-        public InstantiationPolicy<ObservableSections, Singleton>
+    class ObservableSections : public InstantiationPolicy<ObservableSections, Singleton>
     {
         private:
             std::vector<ObservableSection> _sections;
@@ -122,18 +116,15 @@ namespace eos
             {
                 // ensure that the observable entries have been generated already
                 auto entries = std::distance(ObservableEntries::instance()->entries().begin(), ObservableEntries::instance()->entries().end());
-                Log::instance()->message("ObservableSections::ObservableSections()", ll_debug)
-                    << "Total number of registered observables: " << entries;
+                Log::instance()->message("ObservableSections::ObservableSections()", ll_debug) << "Total number of registered observables: " << entries;
 
-                _sections = std::vector<ObservableSection>({
-                    make_b_decays_section(),
-                    make_c_decays_section(),
-                    make_rare_b_decays_section(),
-                    make_meson_mixing_section(),
-                    make_nonlocal_form_factors_section(),
-                    make_form_factors_section(),
-                    make_scattering_section()
-                });
+                _sections = std::vector<ObservableSection>({ make_b_decays_section(),
+                                                             make_c_decays_section(),
+                                                             make_rare_b_decays_section(),
+                                                             make_meson_mixing_section(),
+                                                             make_nonlocal_form_factors_section(),
+                                                             make_form_factors_section(),
+                                                             make_scattering_section() });
             }
 
             ~ObservableSections() = default;
@@ -141,7 +132,8 @@ namespace eos
         public:
             friend class InstantiationPolicy<ObservableSections, Singleton>;
 
-            const std::vector<ObservableSection> & sections() const
+            const std::vector<ObservableSection> &
+            sections() const
             {
                 return _sections;
             }
@@ -149,20 +141,15 @@ namespace eos
 
     /* ObservableEntry */
 
-    ObservableEntry::ObservableEntry()
-    {
-    }
+    ObservableEntry::ObservableEntry() {}
 
-    ObservableEntry::~ObservableEntry()
-    {
-    }
+    ObservableEntry::~ObservableEntry() {}
 
     /* ObservableGroup */
 
-    template <>
-    struct WrappedForwardIteratorTraits<ObservableGroup::ObservableIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<ObservableGroup::ObservableIteratorTag>
     {
-        using UnderlyingIterator = std::map<QualifiedName, ObservableEntryPtr>::const_iterator;
+            using UnderlyingIterator = std::map<QualifiedName, ObservableEntryPtr>::const_iterator;
     };
     template class WrappedForwardIterator<ObservableGroup::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
 
@@ -199,10 +186,9 @@ namespace eos
 
     /* ObservableSection */
 
-    template <>
-    struct WrappedForwardIteratorTraits<ObservableSection::GroupIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<ObservableSection::GroupIteratorTag>
     {
-        using UnderlyingIterator = std::vector<ObservableGroup>::const_iterator;
+            using UnderlyingIterator = std::vector<ObservableGroup>::const_iterator;
     };
     template class WrappedForwardIterator<ObservableSection::GroupIteratorTag, const ObservableGroup &>;
 
@@ -239,32 +225,29 @@ namespace eos
 
     /* Observables */
 
-    template <>
-    struct WrappedForwardIteratorTraits<Observables::ObservableIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<Observables::ObservableIteratorTag>
     {
-        using UnderlyingIterator = std::map<QualifiedName, ObservableEntryPtr>::const_iterator;
+            using UnderlyingIterator = std::map<QualifiedName, ObservableEntryPtr>::const_iterator;
     };
     template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
 
-    template <>
-    struct WrappedForwardIteratorTraits<Observables::SectionIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<Observables::SectionIteratorTag>
     {
-        using UnderlyingIterator = std::vector<ObservableSection>::const_iterator;
+            using UnderlyingIterator = std::vector<ObservableSection>::const_iterator;
     };
     template class WrappedForwardIterator<Observables::SectionIteratorTag, const ObservableSection &>;
 
-    template<>
-    struct Implementation<Observables>
+    template <> struct Implementation<Observables>
     {
-        std::vector<ObservableSection> observable_sections;
+            std::vector<ObservableSection> observable_sections;
 
-        std::map<QualifiedName, ObservableEntryPtr> observable_entries;
+            std::map<QualifiedName, ObservableEntryPtr> observable_entries;
 
-        Implementation() :
-            observable_sections(ObservableSections::instance()->sections()),
-            observable_entries(ObservableEntries::instance()->entries())
-        {
-        }
+            Implementation() :
+                observable_sections(ObservableSections::instance()->sections()),
+                observable_entries(ObservableEntries::instance()->entries())
+            {
+            }
     };
 
     Observables::Observables() :
@@ -272,9 +255,7 @@ namespace eos
     {
     }
 
-    Observables::~Observables()
-    {
-    }
+    Observables::~Observables() {}
 
     ObservableEntryPtr
     Observables::operator[] (const QualifiedName & qn) const
@@ -283,7 +264,9 @@ namespace eos
 
         auto i = observable_entries.find(qn);
         if (i != observable_entries.end())
+        {
             return i->second;
+        }
 
         throw UnknownObservableError("'" + qn.full() + "' not known");
     }
@@ -324,7 +307,7 @@ namespace eos
         using It = std::string::const_iterator;
         ExpressionParser<It> parser;
 
-        It first(input.begin()), last(input.end());
+        It   first(input.begin()), last(input.end());
         bool completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
 
         if ((! completed) || expression.empty())
@@ -332,13 +315,7 @@ namespace eos
             throw ParsingError("Could not parse expression '" + input + "'");
         }
 
-        ExpressionObservableEntry * expression_observable_entry = new
-            ExpressionObservableEntry(name,
-                                      latex,
-                                      unit,
-                                      expression,
-                                      forced_options
-                                      );
+        ExpressionObservableEntry * expression_observable_entry = new ExpressionObservableEntry(name, latex, unit, expression, forced_options);
 
         if (! expression_observable_entry)
         {
@@ -354,21 +331,23 @@ namespace eos
         auto i(_imp->observable_entries.find(name));
 
         if (_imp->observable_entries.end() == i)
+        {
             return false;
-        else return true;
+        }
+        else
+        {
+            return true;
+        }
     }
 
-    std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
-            const char * latex,
-            const Unit & unit,
-            const char * _expression
-            )
+    std::pair<QualifiedName, ObservableEntryPtr>
+    make_expression_observable(const char * name, const char * latex, const Unit & unit, const char * _expression)
     {
         using namespace exp;
 
         const QualifiedName qn(name);
-        const std::string input(_expression);
-        Expression expression;
+        const std::string   input(_expression);
+        Expression          expression;
 
         {
             bool completed;
@@ -391,4 +370,4 @@ namespace eos
 
         return result;
     }
-}
+} // namespace eos

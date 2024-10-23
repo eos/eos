@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/reference.hh>
+
+#include <test/test.hh>
 
 #include <vector>
 
 using namespace test;
 using namespace eos;
 
-class ReferencesTest :
-    public TestCase
+class ReferencesTest : public TestCase
 {
     public:
         ReferencesTest() :
@@ -34,14 +34,15 @@ class ReferencesTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             /* Test iterating over references */
             {
                 std::cout << "# References :" << std::endl;
 
-                auto references = References();
-                unsigned n = 0;
+                auto     references = References();
+                unsigned n          = 0;
 
                 for (const auto & r : references)
                 {
@@ -55,11 +56,7 @@ class ReferencesTest :
             {
                 auto references = References();
 
-                static const std::vector<ReferenceName> names
-                {
-                    "ATLAS:2013A",
-                    "BHvD:2012A"
-                };
+                static const std::vector<ReferenceName> names{ "ATLAS:2013A", "BHvD:2012A" };
 
                 for (auto & n : names)
                 {
