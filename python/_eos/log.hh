@@ -33,4 +33,4 @@ namespace impl
 
     // for testing purposes only
     void emit_native_log(const std::string & id, const eos::LogLevel & log_level, const std::string & m);
-}
+} // namespace impl

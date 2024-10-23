@@ -21,24 +21,28 @@
 
 namespace impl
 {
-    void logging_callback(PyObject * c, const std::string & id, const eos::LogLevel & l, const std::string & m)
+    void
+    logging_callback(PyObject * c, const std::string & id, const eos::LogLevel & l, const std::string & m)
     {
         call<void>(c, id, l, m);
     }
 
-    void register_log_callback(PyObject * c)
+    void
+    register_log_callback(PyObject * c)
     {
         eos::Log::instance()->register_callback(std::bind(&logging_callback, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
-    void set_native_log_level(const eos::LogLevel & log_level)
+    void
+    set_native_log_level(const eos::LogLevel & log_level)
     {
         eos::Log::instance()->set_log_level(log_level);
     }
 
     // for testing purpose only
-    void emit_native_log(const std::string & id, const eos::LogLevel & log_level, const std::string & m)
+    void
+    emit_native_log(const std::string & id, const eos::LogLevel & log_level, const std::string & m)
     {
         eos::Log::instance()->message(id, log_level) << m;
     }
-}
+} // namespace impl

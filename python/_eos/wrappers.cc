@@ -20,12 +20,12 @@
 
 #include "python/_eos/wrappers.hh"
 
+using boost::python::_;
 using boost::python::dict;
 using boost::python::len;
 using boost::python::list;
 using boost::python::object;
 using boost::python::tuple;
-using boost::python::_;
 
 namespace impl
 {
@@ -35,7 +35,7 @@ namespace impl
     {
         // strip off self
         object self = args[0];
-        args = tuple(args.slice(1,_));
+        args        = tuple(args.slice(1, _));
 
         self.attr("__init__")();
 
@@ -50,7 +50,7 @@ namespace impl
         if (1 == len(args))
         {
             kinematics = dict(args[0]);
-            args = tuple(args.slice(1,_));
+            args       = tuple(args.slice(1, _));
         }
         else
         {
@@ -58,9 +58,9 @@ namespace impl
         }
 
         list items = kinematics.items();
-        for (unsigned i = 0 ; i < len(items) ; ++i)
+        for (unsigned i = 0; i < len(items); ++i)
         {
-            object name = items[i][0];
+            object name  = items[i][0];
             object value = items[i][1];
             self.attr("declare")(name, value);
         }
@@ -74,7 +74,7 @@ namespace impl
     {
         // strip off self
         object self = args[0];
-        args = tuple(args.slice(1,_));
+        args        = tuple(args.slice(1, _));
 
         self.attr("__init__")();
 
@@ -89,7 +89,7 @@ namespace impl
         if (1 == len(args))
         {
             options = dict(args[0]);
-            args = tuple(args.slice(1,_));
+            args    = tuple(args.slice(1, _));
         }
         else
         {
@@ -97,9 +97,9 @@ namespace impl
         }
 
         list items = options.items();
-        for (unsigned i = 0 ; i < len(items) ; ++i)
+        for (unsigned i = 0; i < len(items); ++i)
         {
-            object name = items[i][0];
+            object name  = items[i][0];
             object value = items[i][1];
             self.attr("declare")(name, value);
         }
@@ -108,8 +108,9 @@ namespace impl
     }
 
     // converter for eos::Exception
-    void translate_exception(const eos::Exception & e)
+    void
+    translate_exception(const eos::Exception & e)
     {
         PyErr_SetString(PyExc_RuntimeError, e.what());
     }
-}
+} // namespace impl

@@ -23,15 +23,14 @@
 
 namespace eos
 {
-    class ExternalLogLikelihoodBlock :
-        public LogLikelihoodBlock
+    class ExternalLogLikelihoodBlock : public LogLikelihoodBlock
     {
         private:
-            ObservableCache _cache;
+            ObservableCache       _cache;
             boost::python::object _factory;
             boost::python::object _python_llh_block;
             boost::python::object _evaluate;
-            unsigned _number_of_observations;
+            unsigned              _number_of_observations;
 
         public:
             ExternalLogLikelihoodBlock(const ObservableCache & cache, boost::python::object factory);
@@ -54,4 +53,4 @@ namespace eos
 
             virtual TestStatistic primary_test_statistic() const override;
     };
-}
+} // namespace eos

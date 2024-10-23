@@ -35,5 +35,9 @@ namespace impl
     void translate_exception(const eos::Exception & e);
 
     // wrappers to avoid issues with virtual inheritance and overloading
-    inline double m_b_pole_wrapper_noargs(const eos::Model & m) { return m.m_b_pole(); }
-}
+    inline double
+    m_b_pole_wrapper_noargs(const eos::Model & m)
+    {
+        return m.m_b_pole();
+    }
+} // namespace impl
