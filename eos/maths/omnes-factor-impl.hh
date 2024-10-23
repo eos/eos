@@ -20,8 +20,8 @@
 
 #include <eos/maths/complex.hh>
 #include <eos/maths/legendre-polynomial-vector.hh>
+#include <eos/maths/omnes-factor.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/omnes-factor.hh>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>

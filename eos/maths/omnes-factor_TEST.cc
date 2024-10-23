@@ -17,8 +17,8 @@
 
 #include <test/test.hh>
 #include <eos/maths/complex.hh>
-#include <eos/utils/omnes-factor.hh>
-#include <eos/utils/omnes-factor-impl.hh>
+#include <eos/maths/omnes-factor.hh>
+#include <eos/maths/omnes-factor-impl.hh>
 
 #include <cmath>
 #include <array>
