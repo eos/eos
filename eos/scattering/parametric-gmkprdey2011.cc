@@ -18,8 +18,9 @@
  */
 
 #include <eos/scattering/parametric-gmkprdey2011.hh>
+#include <eos/maths/omnes-factor-impl.hh>
 #include <eos/maths/outer-function.hh>
-#include <eos/utils/omnes-factor-impl.hh>
+
 
 #include <functional>
 
