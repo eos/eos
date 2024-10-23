@@ -14,8 +14,7 @@ namespace eos
         /**
          * Thrown if an invalid command line argument is provided.
          */
-        class Error :
-            public eos::Exception
+        class Error : public eos::Exception
         {
             protected:
                 /**
@@ -27,8 +26,7 @@ namespace eos
         /**
          * Thrown if an unrecognised command line argument is specified.
          */
-        class BadArgument :
-            public cli::Error
+        class BadArgument : public cli::Error
         {
             public:
                 /**
@@ -40,22 +38,20 @@ namespace eos
         /**
          * Thrown if an invalid parameter is passed to a valid command line argument.
          */
-        class BadValue :
-            public cli::Error
+        class BadValue : public cli::Error
         {
             public:
                 /**
                  * Constructor
                  */
-                BadValue(const std::string& option, const std::string& value) noexcept;
+                BadValue(const std::string & option, const std::string & value) noexcept;
         };
 
         /**
          * Thrown if an argument is specified that needs a parameter,
          * but no parameter is given.
          */
-        class MissingValue :
-            public cli::Error
+        class MissingValue : public cli::Error
         {
             public:
                 /**
@@ -69,11 +65,11 @@ namespace eos
          */
         struct DoHelp
         {
-            const std::string message;
+                const std::string message;
 
-            DoHelp(const std::string & m = "");
+                DoHelp(const std::string & m = "");
         };
-    }
-}
+    } // namespace cli
+} // namespace eos
 
 #endif

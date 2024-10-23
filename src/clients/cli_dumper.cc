@@ -21,8 +21,8 @@
  */
 
 #include "cli_dumper.hh"
-#include "cli_option.hh"
 
+#include "cli_option.hh"
 #include <sstream>
 
 namespace eos
@@ -34,16 +34,23 @@ namespace eos
         {
         }
 
-        void Dumper::generic_visit(const Option & a)
+        void
+        Dumper::generic_visit(const Option & a)
         {
             std::stringstream p;
             p << "  --" << a.long_name();
             if (a.short_name())
+            {
                 p << ", -" << a.short_name();
+            }
             if (p.str().length() < 24)
+            {
                 p << std::string(24 - p.str().length(), ' ');
+            }
             else
+            {
                 p << std::endl << std::string(24, ' ');
+            }
             _os << p.str();
             _os << " " << a.description() << std::endl;
         }
@@ -51,27 +58,35 @@ namespace eos
         void
         Dumper::visit(const AliasArg & a)
         {
-            if(! a.hidden())
+            if (! a.hidden())
+            {
                 generic_visit(a);
+            }
         }
 
-        void Dumper::visit(const EnumArg & a)
+        void
+        Dumper::visit(const EnumArg & a)
         {
             generic_visit(a);
 
-            for (EnumArg::AllowedArgConstIterator it = a.begin_allowed_args(), it_end = a.end_allowed_args();
-                    it != it_end; ++it)
+            for (EnumArg::AllowedArgConstIterator it = a.begin_allowed_args(), it_end = a.end_allowed_args(); it != it_end; ++it)
             {
                 std::stringstream p;
                 p << "      " << it->long_name();
                 if (it->short_name())
+                {
                     p << " (" << std::string(1, it->short_name()) << ")";
+                }
                 if (p.str().length() < 26)
+                {
                     p << std::string(26 - p.str().length(), ' ');
+                }
                 _os << p.str();
                 _os << " " << it->description();
                 if (it->long_name() == a.default_arg())
+                {
                     _os << " (default)";
+                }
                 _os << std::endl;
             }
         }
@@ -105,5 +120,5 @@ namespace eos
         {
             generic_visit(a);
         }
-    }
-}
+    } // namespace cli
+} // namespace eos

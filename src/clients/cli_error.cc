@@ -50,5 +50,5 @@ namespace eos
             message(m)
         {
         }
-    }
-}
+    } // namespace cli
+} // namespace eos

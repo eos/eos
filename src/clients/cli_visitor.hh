@@ -24,12 +24,11 @@
 #ifndef EOS_GUARD_SRC_CLIENTS_CLI_VISITOR_HH
 #define EOS_GUARD_SRC_CLIENTS_CLI_VISITOR_HH 1
 
-#include "cli_handler.hh"
-
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/visitor.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include "cli_handler.hh"
 #include <string>
 
 namespace eos
@@ -44,17 +43,13 @@ namespace eos
         class StringArg;
         class SwitchArg;
 
-        class Visitor :
-            public PrivateImplementationPattern<cli::Visitor>
+        class Visitor : public PrivateImplementationPattern<cli::Visitor>
         {
             private:
                 const std::string & get_param(const Option &);
 
             public:
-                Visitor(Handler::ArgsIterator *,
-                        Handler::ArgsIterator,
-                        std::string & remaining_chars,
-                        bool no);
+                Visitor(Handler::ArgsIterator *, Handler::ArgsIterator, std::string & remaining_chars, bool no);
 
                 ~Visitor();
 
@@ -79,7 +74,7 @@ namespace eos
                 /// Visit a SwitchArg.
                 void visit(SwitchArg &);
         };
-    }
-}
+    } // namespace cli
+} // namespace eos
 
 #endif

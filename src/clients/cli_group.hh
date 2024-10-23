@@ -23,10 +23,9 @@
 #ifndef PALUDIS_GUARD_ARGS_ARGS_GROUP_HH
 #define PALUDIS_GUARD_ARGS_ARGS_GROUP_HH 1
 
-#include <src/clients/cli_option.hh>
-
 #include <eos/utils/private_implementation_pattern.hh>
 
+#include <src/clients/cli_option.hh>
 #include <string>
 
 /** \file
@@ -41,8 +40,7 @@ namespace eos
         /**
          * Contains a related group of command line arguments.
          */
-        class Group :
-            public PrivateImplementationPattern<cli::Group>
+        class Group : public PrivateImplementationPattern<cli::Group>
         {
             private:
                 const std::string _name;
@@ -59,7 +57,8 @@ namespace eos
                 /**
                  * Fetch our section.
                  */
-                Section * section() const
+                Section *
+                section() const
                 {
                     return _section;
                 }
@@ -91,12 +90,11 @@ namespace eos
                 ///\name Basic operations
                 ///\{
 
-                Group(Section * s, const std::string & name,
-                        const std::string & description);
+                Group(Section * s, const std::string & name, const std::string & description);
 
                 ~Group();
 
-                Group(const Group &) = delete;
+                Group(const Group &)              = delete;
                 Group & operator= (const Group &) = delete;
 
                 ///\}
@@ -104,7 +102,8 @@ namespace eos
                 /**
                  * Fetch our name.
                  */
-                const std::string & name() const
+                const std::string &
+                name() const
                 {
                     return _name;
                 }
@@ -112,14 +111,15 @@ namespace eos
                 /**
                  * Fetch our description.
                  */
-                const std::string & description() const
+                const std::string &
+                description() const
                 {
                     return _description;
                 }
         };
-    }
+    } // namespace cli
 
     extern template class WrappedForwardIterator<cli::Group::ConstIteratorTag, cli::Option * const>;
-}
+} // namespace eos
 
 #endif

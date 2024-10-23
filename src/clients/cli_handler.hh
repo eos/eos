@@ -23,24 +23,22 @@
 #ifndef EOS_GUARD_SRC_CLIENTS_CLI_HANDLER_HH
 #define EOS_GUARD_SRC_CLIENTS_CLI_HANDLER_HH 1
 
-#include "cli_section.hh"
-#include "cli_group.hh"
-
 #include <eos/utils/private_implementation_pattern.hh>
 
-#include <memory>
+#include "cli_group.hh"
+#include "cli_section.hh"
 #include <iosfwd>
+#include <memory>
 #include <string>
 
 namespace eos
 {
     namespace cli
     {
-        class Handler :
-            public PrivateImplementationPattern<cli::Handler>
+        class Handler : public PrivateImplementationPattern<cli::Handler>
         {
-            friend class cli::Section;
-            friend std::ostream & operator<< (std::ostream &, const Handler &);
+                friend class cli::Section;
+                friend std::ostream & operator<< (std::ostream &, const Handler &);
 
             protected:
                 /**
@@ -115,8 +113,7 @@ namespace eos
                 /**
                  * Add an Option instance.
                  */
-                void add_option(cli::Option * const, const std::string & long_name,
-                        const char short_name = '\0');
+                void add_option(cli::Option * const, const std::string & long_name, const char short_name = '\0');
 
                 /**
                  * Remove an Option instance.
@@ -134,7 +131,8 @@ namespace eos
                 /**
                  * What is our application's Unix manual section?
                  */
-                virtual std::string man_section() const
+                virtual std::string
+                man_section() const
                 {
                     return "1";
                 }
@@ -170,8 +168,7 @@ namespace eos
                 ///@{
 
                 struct ExamplesConstIteratorTag;
-                using ExamplesConstIterator = WrappedForwardIterator<ExamplesConstIteratorTag,
-                                                                     const std::pair<std::string, std::string> >;
+                using ExamplesConstIterator = WrappedForwardIterator<ExamplesConstIteratorTag, const std::pair<std::string, std::string>>;
 
                 ExamplesConstIterator begin_examples() const;
                 ExamplesConstIterator end_examples() const;
@@ -208,7 +205,7 @@ namespace eos
                 ///@{
 
                 struct NotesIteratorTag;
-                using NotesIterator = WrappedForwardIterator<NotesIteratorTag, const std::string >;
+                using NotesIterator = WrappedForwardIterator<NotesIteratorTag, const std::string>;
 
                 NotesIterator begin_notes() const;
                 NotesIterator end_notes() const;
@@ -239,7 +236,7 @@ namespace eos
                 ///@{
 
                 struct SeeAlsoConstIteratorTag;
-                using SeeAlsoConstIterator = WrappedForwardIterator<SeeAlsoConstIteratorTag, const std::pair<std::string, int> >;
+                using SeeAlsoConstIterator = WrappedForwardIterator<SeeAlsoConstIteratorTag, const std::pair<std::string, int>>;
 
                 SeeAlsoConstIterator begin_see_alsos() const;
                 SeeAlsoConstIterator end_see_alsos() const;
@@ -261,27 +258,23 @@ namespace eos
                 /**
                  * Parse command line arguments.
                  */
-                void run(
-                        const int argc,
-                        const char * const * const argv,
-                        const std::string & client);
+                void run(const int argc, const char * const * const argv, const std::string & client);
         };
 
         /**
          * Output an Handler to an ostream, for --help output.
          */
         std::ostream & operator<< (std::ostream &, const Handler &);
-    }
+    } // namespace cli
 
     extern template class WrappedForwardIterator<cli::Handler::ParametersConstIteratorTag, const std::string>;
     extern template class WrappedForwardIterator<cli::Handler::UsageLineConstIteratorTag, const std::string>;
-    extern template class WrappedForwardIterator<cli::Handler::ExamplesConstIteratorTag,
-            const std::pair<std::string, std::string> >;
+    extern template class WrappedForwardIterator<cli::Handler::ExamplesConstIteratorTag, const std::pair<std::string, std::string>>;
     extern template class WrappedForwardIterator<cli::Handler::SectionsConstIteratorTag, const cli::Section>;
     extern template class WrappedForwardIterator<cli::Handler::DescriptionLineConstIteratorTag, const std::string>;
     extern template class WrappedForwardIterator<cli::Handler::NotesIteratorTag, const std::string>;
     extern template class WrappedForwardIterator<cli::Handler::ArgsIteratorTag, std::string>;
-    extern template class WrappedForwardIterator<cli::Handler::SeeAlsoConstIteratorTag, const std::pair<std::string, int> >;
+    extern template class WrappedForwardIterator<cli::Handler::SeeAlsoConstIteratorTag, const std::pair<std::string, int>>;
 
     namespace cli
     {
@@ -290,21 +283,20 @@ namespace eos
          *
          * Knows about --help, --log-level, and --version.
          */
-        class DefaultHandler :
-            public Handler
+        class DefaultHandler : public Handler
         {
             public:
                 // universal options
-                cli::Group g_universal_options;
-                cli::SwitchArg a_help;
+                cli::Group       g_universal_options;
+                cli::SwitchArg   a_help;
                 cli::LogLevelArg a_log_level;
-                cli::SwitchArg a_version;
+                cli::SwitchArg   a_version;
 
                 DefaultHandler();
 
                 virtual ~DefaultHandler() = default;
         };
-    }
-}
+    } // namespace cli
+} // namespace eos
 
 #endif

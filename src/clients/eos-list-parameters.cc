@@ -43,14 +43,14 @@ class DoUsage
         {
         }
 
-        const std::string & what() const
+        const std::string &
+        what() const
         {
             return _what;
         }
 };
 
-class CommandLine :
-    public InstantiationPolicy<CommandLine, Singleton>
+class CommandLine : public InstantiationPolicy<CommandLine, Singleton>
 {
     public:
         Parameters parameters;
@@ -65,20 +65,21 @@ class CommandLine :
         {
         }
 
-        void parse(int argc, char ** argv)
+        void
+        parse(int argc, char ** argv)
         {
             Log::instance()->set_program_name("eos-list-parameters");
 
             std::shared_ptr<Kinematics> kinematics(new Kinematics);
 
-            for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
+            for (char **a(argv + 1), **a_end(argv + argc); a != a_end; ++a)
             {
                 std::string argument(*a);
 
                 if ("--kinematics" == argument)
                 {
-                    std::string name = std::string(*(++a));
-                    double value = destringify<double>(*(++a));
+                    std::string name  = std::string(*(++a));
+                    double      value = destringify<double>(*(++a));
                     kinematics->declare(name);
                     kinematics->set(name, value);
 
@@ -87,10 +88,12 @@ class CommandLine :
 
                 if ("--observable" == argument)
                 {
-                    std::string name(*(++a));
+                    std::string   name(*(++a));
                     ObservablePtr observable = Observable::make(name, parameters, *kinematics, Options());
                     if (! observable)
+                    {
                         throw DoUsage("Unknown observable '" + name + "'");
+                    }
 
                     observables.push_back(observable);
                     kinematics.reset(new Kinematics);
@@ -117,7 +120,7 @@ main(int argc, char * argv[])
     {
         CommandLine::instance()->parse(argc, argv);
 
-        std::string::size_type max_name_length = 20;
+        std::string::size_type  max_name_length = 20;
         std::set<Parameter::Id> ids;
 
         if (CommandLine::instance()->observables.empty())
@@ -138,7 +141,9 @@ main(int argc, char * argv[])
         for (const auto & p : CommandLine::instance()->parameters)
         {
             if (ids.end() == ids.find(p.id()))
+            {
                 continue;
+            }
 
             max_name_length = std::max(max_name_length, p.name().length());
         }
@@ -146,7 +151,7 @@ main(int argc, char * argv[])
         if (CommandLine::instance()->scan_format)
         {
             // how big to choose the range around mode
-            double number_of_sigmas = 2.0;
+            double                 number_of_sigmas = 2.0;
             std::string::size_type max_prior_length = std::string("log-gamma").length();
 
             for (const auto & p : CommandLine::instance()->parameters)
@@ -156,44 +161,32 @@ main(int argc, char * argv[])
 
                 // upper and lower ranges
                 double delta_down = p() - p.min();
-                double delta_up = p.max() - p();
+                double delta_up   = p.max() - p();
 
                 if ((delta_down == 0) && (delta_up == 0))
                 {
                     prior = "flat";
-                    min = "MIN\t";
-                    max = "MAX\t";
+                    min   = "MIN\t";
+                    max   = "MAX\t";
                 }
                 else
                 {
                     // for asymmetries larger than 5%, use log-gamma
-                    prior =  std::fabs(delta_up / delta_down - 1.0) < 0.05 ? "gaussian" : "log-gamma";
+                    prior = std::fabs(delta_up / delta_down - 1.0) < 0.05 ? "gaussian" : "log-gamma";
                     std::stringstream ss;
-                    ss
-                    << std::setprecision(4)
-                    << double(p) - number_of_sigmas * delta_down;
+                    ss << std::setprecision(4) << double(p) - number_of_sigmas * delta_down;
                     min = ss.str();
                     ss.str("");
-                    ss
-                    << std::setprecision(4)
-                    << double(p) + number_of_sigmas * delta_up;
+                    ss << std::setprecision(4) << double(p) + number_of_sigmas * delta_up;
                     max = ss.str();
                 }
 
-                std::cout
-                << "    --scan" << '\t'
-                << std::setw(max_name_length) << std::setiosflags(std::ios::left)
-                << "\"" + p.name() + "\"" << '\t'
-                << min << '\t' << max << '\t'
-                << "--prior" << '\t'
-                << std::setw(max_prior_length) << std::setiosflags(std::ios::left)
-                << prior;
+                std::cout << "    --scan" << '\t' << std::setw(max_name_length) << std::setiosflags(std::ios::left) << "\"" + p.name() + "\"" << '\t' << min << '\t' << max << '\t'
+                          << "--prior" << '\t' << std::setw(max_prior_length) << std::setiosflags(std::ios::left) << prior;
 
                 if (prior != "flat")
                 {
-                    std::cout
-                    << std::setw(7) << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
-                    << '\t' << p.min() << '\t' << p() << '\t' << p.max();
+                    std::cout << std::setw(7) << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos) << '\t' << p.min() << '\t' << p() << '\t' << p.max();
                 }
 
                 std::cout << " \\" << std::endl;
@@ -201,51 +194,59 @@ main(int argc, char * argv[])
         }
         else
         {
-            for (auto s = CommandLine::instance()->parameters.begin_sections(), s_end = CommandLine::instance()->parameters.end_sections() ; s != s_end ; ++s)
+            for (auto s = CommandLine::instance()->parameters.begin_sections(), s_end = CommandLine::instance()->parameters.end_sections(); s != s_end; ++s)
             {
                 std::string section_title(s->name());
 
-                std::cout
-                << std::string(section_title.length(), '=') << '\n'
-                << section_title << '\n'
-                << std::string(section_title.length(), '=') << '\n' << '\n';
+                std::cout << std::string(section_title.length(), '=') << '\n' << section_title << '\n' << std::string(section_title.length(), '=') << '\n' << '\n';
 
                 for (const auto & g : *s)
                 {
                     std::string group_title(g.name());
 
-                    std::cout
-                    << group_title << '\n'
-                    << std::string(group_title.length(), '-') << '\n' << '\n';
+                    std::cout << group_title << '\n' << std::string(group_title.length(), '-') << '\n' << '\n';
 
 
                     std::vector<Parameter> group_parameters(g.begin(), g.end());
                     // nasty hack to sort
                     // TODO: remove entirely once all parameter names are QualifiedName compatible
-                    std::sort(group_parameters.begin(), group_parameters.end(), [] (const Parameter & x, const Parameter & y) -> bool
+                    std::sort(group_parameters.begin(),
+                              group_parameters.end(),
+                              [](const Parameter & x, const Parameter & y) -> bool
                     {
                         bool x_is_qualified_name = false;
                         try
                         {
-                            QualifiedName qnx(x.name()); x_is_qualified_name = true;
+                            QualifiedName qnx(x.name());
+                            x_is_qualified_name = true;
                             QualifiedName qny(y.name());
 
                             if (qnx.prefix_part() < qny.prefix_part())
+                            {
                                 return true;
+                            }
                             else if (qny.prefix_part() < qnx.prefix_part())
+                            {
                                 return false;
+                            }
 
                             if (qnx.suffix_part() < qny.suffix_part())
+                            {
                                 return true;
+                            }
                             else if (qny.suffix_part() < qnx.suffix_part())
+                            {
                                 return false;
+                            }
 
                             return qnx.name_part() < qny.name_part();
                         }
                         catch (QualifiedNameSyntaxError & e)
                         {
                             if (x_is_qualified_name)
+                            {
                                 return false;
+                            }
 
                             return x.name() < y.name();
                         }
@@ -254,14 +255,12 @@ main(int argc, char * argv[])
                     for (const auto & p : group_parameters)
                     {
                         if (ids.end() == ids.find(p.id()))
+                        {
                             continue;
+                        }
 
-                        std::cout
-                        << std::setw(max_name_length) << std::setiosflags(std::ios::right)
-                        << p.name() << '\t'
-                        << std::setw(7) << std::scientific << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
-                        << p.min() << '\t' << p() << '\t' << p.max()
-                        << std::endl;
+                        std::cout << std::setw(max_name_length) << std::setiosflags(std::ios::right) << p.name() << '\t' << std::setw(7) << std::scientific << std::setprecision(4)
+                                  << std::setiosflags(std::ios::left | std::ios::showpos) << p.min() << '\t' << p() << '\t' << p.max() << std::endl;
                     }
 
                     std::cout << std::endl;
@@ -269,7 +268,7 @@ main(int argc, char * argv[])
             }
         }
     }
-    catch(DoUsage & e)
+    catch (DoUsage & e)
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-list-parameters" << std::endl;
@@ -282,12 +281,12 @@ main(int argc, char * argv[])
         std::cout << "as input to a call to eos-scan-mc." << std::endl;
         std::cout << "If no observable is specified, all parameters are listed." << std::endl;
     }
-    catch(Exception & e)
+    catch (Exception & e)
     {
         std::cerr << "Caught exception: '" << e.what() << "'" << std::endl;
         return EXIT_FAILURE;
     }
-    catch(...)
+    catch (...)
     {
         std::cerr << "Aborting after unknown exception" << std::endl;
         return EXIT_FAILURE;
