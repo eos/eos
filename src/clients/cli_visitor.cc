@@ -21,15 +21,15 @@
  */
 
 #include "cli_visitor.hh"
-#include "cli_option.hh"
-#include "cli_error.hh"
-#include "cli_handler.hh"
 
 #include <eos/utils/destringify.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include "cli_error.hh"
+#include "cli_handler.hh"
+#include "cli_option.hh"
 #include <algorithm>
 #include <sstream>
 #include <stdlib.h>
@@ -39,25 +39,20 @@ using namespace eos::cli;
 
 namespace eos
 {
-    template <>
-    struct Implementation<cli::Visitor>
+    template <> struct Implementation<cli::Visitor>
     {
-        Handler::ArgsIterator * args_index;
-        Handler::ArgsIterator args_end;
-        std::string & remaining_chars;
-        bool no;
+            Handler::ArgsIterator * args_index;
+            Handler::ArgsIterator   args_end;
+            std::string &           remaining_chars;
+            bool                    no;
 
-        Implementation(
-                Handler::ArgsIterator * i,
-                Handler::ArgsIterator e,
-                std::string & s,
-                bool n) :
-            args_index(i),
-            args_end(e),
-            remaining_chars(s),
-            no(n)
-        {
-        }
+            Implementation(Handler::ArgsIterator * i, Handler::ArgsIterator e, std::string & s, bool n) :
+                args_index(i),
+                args_end(e),
+                remaining_chars(s),
+                no(n)
+            {
+            }
     };
 
     namespace cli
@@ -73,16 +68,21 @@ namespace eos
         Visitor::get_param(const Option & arg)
         {
             if (++(*_imp->args_index) == _imp->args_end)
+            {
                 throw MissingValue("--" + arg.long_name());
+            }
 
             return **_imp->args_index;
         }
 
-        void Visitor::visit(EnumArg & arg)
+        void
+        Visitor::visit(EnumArg & arg)
         {
             if (arg.specified())
+            {
                 Log::instance()->message("args.specified_twice", ll_warning)
-                    <<  "Option '--" << arg.long_name() << "' was specified more than once, but it does not take multiple values";
+                        << "Option '--" << arg.long_name() << "' was specified more than once, but it does not take multiple values";
+            }
 
             arg.set_specified(true);
 
@@ -93,16 +93,21 @@ namespace eos
                 _imp->remaining_chars.clear();
             }
             else
+            {
                 p = get_param(arg);
+            }
 
             arg.set_argument(p);
         }
 
-        void Visitor::visit(IntegerArg & arg)
+        void
+        Visitor::visit(IntegerArg & arg)
         {
             if (arg.specified())
+            {
                 Log::instance()->message("args.specified_twice", ll_warning)
-                    <<  "Option '--" << arg.long_name() << "' was specified more than once, but it does not take multiple values";
+                        << "Option '--" << arg.long_name() << "' was specified more than once, but it does not take multiple values";
+            }
 
             arg.set_specified(true);
             std::string param;
@@ -113,7 +118,9 @@ namespace eos
                 _imp->remaining_chars.clear();
             }
             else
+            {
                 param = get_param(arg);
+            }
 
             try
             {
@@ -126,38 +133,45 @@ namespace eos
             }
         }
 
-        void Visitor::visit(KeyValueArg & arg)
+        void
+        Visitor::visit(KeyValueArg & arg)
         {
             std::string key(get_param(arg));
             std::string value(get_param(arg));
             arg.validate_and_set_arguments(key, value);
         }
 
-        void Visitor::visit(StringArg & arg)
+        void
+        Visitor::visit(StringArg & arg)
         {
             if (arg.specified())
+            {
                 Log::instance()->message("args.specified_twice", ll_warning)
-                    <<  "Option '--" << arg.long_name() << "' was specified more than once, but it does not take multiple values";
+                        << "Option '--" << arg.long_name() << "' was specified more than once, but it does not take multiple values";
+            }
 
             std::string p(get_param(arg));
             arg.set_specified(true);
             arg.set_argument(p);
         }
 
-        void Visitor::visit(StringListArg & arg)
+        void
+        Visitor::visit(StringListArg & arg)
         {
             std::string p(get_param(arg));
             arg.validate_and_add_argument(p);
         }
 
-        void Visitor::visit(AliasArg & arg)
+        void
+        Visitor::visit(AliasArg & arg)
         {
             arg.other()->accept(*this);
         }
 
-        void Visitor::visit(SwitchArg & arg)
+        void
+        Visitor::visit(SwitchArg & arg)
         {
             arg.set_specified(true);
         }
-    }
-}
+    } // namespace cli
+} // namespace eos

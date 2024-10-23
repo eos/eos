@@ -44,7 +44,8 @@ class DoUsage
         {
         }
 
-        const std::string & what() const
+        const std::string &
+        what() const
         {
             return _what;
         }
@@ -52,11 +53,10 @@ class DoUsage
 
 struct ObservableInput
 {
-    ObservablePtr observable;
+        ObservablePtr observable;
 };
 
-class CommandLine :
-    public InstantiationPolicy<CommandLine, Singleton>
+class CommandLine : public InstantiationPolicy<CommandLine, Singleton>
 {
     public:
         Parameters parameters;
@@ -70,28 +70,31 @@ class CommandLine :
         {
         }
 
-        void parse(int argc, char ** argv)
+        void
+        parse(int argc, char ** argv)
         {
             Log::instance()->set_program_name("eos-print-polynomial");
 
             std::shared_ptr<Kinematics> kinematics(new Kinematics);
 
-            for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
+            for (char **a(argv + 1), **a_end(argv + argc); a != a_end; ++a)
             {
                 std::string argument(*a);
                 if ("--coefficient" == argument)
                 {
                     std::string coefficient = std::string(*(++a));
                     if (coefficients.cend() == std::find(coefficients.cbegin(), coefficients.cend(), coefficient))
+                    {
                         coefficients.push_back(coefficient);
+                    }
 
                     continue;
                 }
 
                 if ("--kinematics" == argument)
                 {
-                    std::string name = std::string(*(++a));
-                    double value = destringify<double>(*(++a));
+                    std::string name  = std::string(*(++a));
+                    double      value = destringify<double>(*(++a));
                     kinematics->declare(name);
                     kinematics->set(name, value);
 
@@ -105,7 +108,9 @@ class CommandLine :
                     ObservableInput input;
                     input.observable = Observable::make(name, parameters, *kinematics, Options());
                     if (! input.observable)
+                    {
                         throw DoUsage("Unknown observable '" + name + "'");
+                    }
 
                     inputs.push_back(input);
                     kinematics.reset(new Kinematics);
@@ -116,12 +121,12 @@ class CommandLine :
                 if ("--parameter" == argument)
                 {
                     std::string parameter_name(*(++a));
-                    double parameter_value = destringify<double>(*(++a));
+                    double      parameter_value = destringify<double>(*(++a));
 
                     try
                     {
                         Parameter parameter = parameters[parameter_name];
-                        parameter = parameter_value;
+                        parameter           = parameter_value;
                     }
                     catch (UnknownParameterError & e)
                     {
@@ -144,11 +149,13 @@ main(int argc, char * argv[])
         CommandLine::instance()->parse(argc, argv);
 
         if (CommandLine::instance()->inputs.empty())
+        {
             throw DoUsage("No input specified");
+        }
 
         WilsonPolynomialEvaluator evaluator;
-        WilsonPolynomialPrinter printer;
-        for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
+        WilsonPolynomialPrinter   printer;
+        for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend(); i != i_end; ++i)
         {
             WilsonPolynomial polynomial = make_polynomial(i->observable, CommandLine::instance()->coefficients);
 
@@ -161,7 +168,7 @@ main(int argc, char * argv[])
                 ++c;
             }
 
-            for ( ; c != c_end ; ++c)
+            for (; c != c_end; ++c)
             {
                 std::cout << ", " << *c;
             }
@@ -170,19 +177,19 @@ main(int argc, char * argv[])
             std::cout << "direct     = " << i->observable->evaluate() << std::endl;
         }
     }
-    catch(DoUsage & e)
+    catch (DoUsage & e)
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-print-polynomial" << std::endl;
         std::cout << "  [--coefficient WILSONCOEFFICIENT]*" << std::endl;
         std::cout << "  [[--kinematics NAME VALUE]* [--parameter NAME VALUE]* --observable NAME]+" << std::endl;
     }
-    catch(Exception & e)
+    catch (Exception & e)
     {
         std::cerr << "Caught exception: '" << e.what() << "'" << std::endl;
         return EXIT_FAILURE;
     }
-    catch(...)
+    catch (...)
     {
         std::cerr << "Aborting after unknown exception" << std::endl;
         return EXIT_FAILURE;

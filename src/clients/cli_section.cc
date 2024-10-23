@@ -20,35 +20,32 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/clients/cli_section.hh>
-#include <src/clients/cli_handler.hh>
-
-#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/indirect-iterator-impl.hh>
+#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <list>
+#include <src/clients/cli_handler.hh>
+#include <src/clients/cli_section.hh>
 
 namespace eos
 {
-    template <>
-    struct Implementation<cli::Section>
+    template <> struct Implementation<cli::Section>
     {
-        cli::Handler * const handler;
-        const std::string name;
-        std::list<cli::Group *> groups;
+            cli::Handler * const    handler;
+            const std::string       name;
+            std::list<cli::Group *> groups;
 
-        Implementation(cli::Handler * const h, const std::string & s) :
-            handler(h),
-            name(s)
-        {
-        }
+            Implementation(cli::Handler * const h, const std::string & s) :
+                handler(h),
+                name(s)
+            {
+            }
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Section::GroupsConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Section::GroupsConstIteratorTag>
     {
-        using UnderlyingIterator = IndirectIterator<std::list<cli::Group *>::const_iterator>;
+            using UnderlyingIterator = IndirectIterator<std::list<cli::Group *>::const_iterator>;
     };
 
     template class WrappedForwardIterator<cli::Section::GroupsConstIteratorTag, const cli::Group>;
@@ -98,5 +95,5 @@ namespace eos
         {
             return _imp->name;
         }
-    }
-}
+    } // namespace cli
+} // namespace eos

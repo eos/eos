@@ -20,13 +20,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/clients/cli_group.hh>
-#include <src/clients/cli_section.hh>
-
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <list>
+#include <src/clients/cli_group.hh>
+#include <src/clients/cli_section.hh>
 
 namespace eos
 {
@@ -35,22 +34,19 @@ namespace eos
      *
      * \ingroup grplibpaludisargs
      */
-    template <>
-    struct Implementation<cli::Group>
+    template <> struct Implementation<cli::Group>
     {
-        std::list<cli::Option *> args_options;
+            std::list<cli::Option *> args_options;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Group::ConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Group::ConstIteratorTag>
     {
-        using UnderlyingIterator = std::list<cli::Option *>::const_iterator;
+            using UnderlyingIterator = std::list<cli::Option *>::const_iterator;
     };
 
     namespace cli
     {
-        Group::Group(Section * s, const std::string & our_name,
-                const std::string & our_description) :
+        Group::Group(Section * s, const std::string & our_name, const std::string & our_description) :
             PrivateImplementationPattern<cli::Group>(new Implementation<cli::Group>()),
             _name(our_name),
             _description(our_description),
@@ -77,7 +73,9 @@ namespace eos
         {
             _imp->args_options.remove(value);
             if (_imp->args_options.empty())
+            {
                 remove();
+            }
         }
 
         Group::~Group() = default;
@@ -93,7 +91,7 @@ namespace eos
         {
             return ConstIterator(_imp->args_options.end());
         }
-    }
+    } // namespace cli
 
     template class WrappedForwardIterator<cli::Group::ConstIteratorTag, cli::Option * const>;
-}
+} // namespace eos

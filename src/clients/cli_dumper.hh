@@ -24,7 +24,6 @@
 #define EOS_GUARD_SRC_CLIENTS_CLI_DUMPER_HH 1
 
 #include "cli_visitor.hh"
-
 #include <iosfwd>
 
 namespace eos
@@ -76,6 +75,6 @@ namespace eos
                 /// Visit a SwitchArg.
                 void visit(const SwitchArg &);
         };
-    }
-}
+    } // namespace cli
+} // namespace eos
 #endif

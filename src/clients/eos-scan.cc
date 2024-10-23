@@ -17,7 +17,6 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <config.h>
 #include <eos/observable.hh>
 #include <eos/utils/cartesian-product.hh>
 #include <eos/utils/destringify.hh>
@@ -27,12 +26,13 @@
 #include <eos/utils/thread_pool.hh>
 
 #include <cmath>
+#include <config.h>
 #include <cstdlib>
-#include <iostream>
+#include <functional>
 #include <iomanip>
+#include <iostream>
 #include <list>
 #include <map>
-#include <functional>
 #include <utility>
 #include <vector>
 
@@ -40,25 +40,25 @@ using namespace eos;
 
 struct Input
 {
-    const double min;
+        const double min;
 
-    const double max;
+        const double max;
 
-    const double o_min;
+        const double o_min;
 
-    const double o;
+        const double o;
 
-    const double o_max;
+        const double o_max;
 
-    const std::string o_name;
+        const std::string o_name;
 };
 
 struct ScanData
 {
-    std::string name;
-    unsigned points;
-    double min;
-    double max;
+        std::string name;
+        unsigned    points;
+        double      min;
+        double      max;
 };
 
 class WilsonScan
@@ -78,11 +78,8 @@ class WilsonScan
 
         std::list<std::pair<std::vector<double>, double>> results;
 
-        WilsonScan(const std::list<ScanData> & scan_data,
-                const std::list<Input> & inputs,
-                const std::list<std::pair<std::string, double>> & param_changes,
-                const std::list<std::string> & variation_names,
-                const double & theory_uncertainty) :
+        WilsonScan(const std::list<ScanData> & scan_data, const std::list<Input> & inputs, const std::list<std::pair<std::string, double>> & param_changes,
+                   const std::list<std::string> & variation_names, const double & theory_uncertainty) :
             mutex(new Mutex),
             scan_data(scan_data),
             inputs(inputs),
@@ -105,47 +102,55 @@ class WilsonScan
             }
         }
 
-        void calc_chi_square(const Input & input, const ObservablePtr & observable,
-                const CartesianProduct<std::vector<double>>::Iterator & wc_iterator)
+        void
+        calc_chi_square(const Input & input, const ObservablePtr & observable, const CartesianProduct<std::vector<double>>::Iterator & wc_iterator)
         {
             Kinematics k = observable->kinematics();
             k.set("s_min", input.min);
             k.set("s_max", input.max);
 
-            ObservablePtr o = observable->clone();
-            Parameters params = o->parameters();
+            ObservablePtr o      = observable->clone();
+            Parameters    params = o->parameters();
 
-            auto sd = scan_data.cbegin();
+            auto                sd        = scan_data.cbegin();
             std::vector<double> wc_values = *wc_iterator;
-            for (auto w = wc_values.cbegin() ; wc_values.cend() != w ; ++w, ++sd)
+            for (auto w = wc_values.cbegin(); wc_values.cend() != w; ++w, ++sd)
             {
                 params[sd->name] = *w;
             }
 
             // Calculate chi^2
-            double central = o->evaluate();
+            double central   = o->evaluate();
             double delta_min = 0.0, delta_max = 0.0;
             for (auto & variation_name : variation_names)
             {
-                Parameter p = params[variation_name];
-                double old_p = p();
-                double max = 0.0, min = 0.0, value;
+                Parameter p     = params[variation_name];
+                double    old_p = p();
+                double    max = 0.0, min = 0.0, value;
 
-                p = p.min();
+                p     = p.min();
                 value = o->evaluate();
                 if (value > central)
+                {
                     max = value - central;
+                }
 
                 if (value < central)
+                {
                     min = central - value;
+                }
 
-                p = p.max();
+                p     = p.max();
                 value = o->evaluate();
                 if (value > central)
+                {
                     max = std::max(max, value - central);
+                }
 
                 if (value < central)
+                {
                     min = std::max(min, central - value);
+                }
 
                 p = old_p;
 
@@ -161,12 +166,16 @@ class WilsonScan
 
             double chi = 0.0;
             if (input.o - central > delta_max)
+            {
                 chi = input.o - central - delta_max;
+            }
             else if (central - input.o > delta_min)
+            {
                 chi = central - input.o - delta_min;
+            }
 
-            chi /= (input.o_max - input.o_min);
-            double chi_squared = chi * chi;
+            chi                /= (input.o_max - input.o_min);
+            double chi_squared  = chi * chi;
 
             {
                 Lock l(*mutex);
@@ -174,18 +183,19 @@ class WilsonScan
             }
         }
 
-        void scan()
+        void
+        scan()
         {
             std::cout << "# Generated by eos-scan (" EOS_GITHEAD ")" << std::endl;
             std::cout << "# Scan data" << std::endl;
 
             CartesianProduct<std::vector<double>> cp;
-            for (auto sd = scan_data.cbegin() ; scan_data.cend() != sd ; ++sd)
+            for (auto sd = scan_data.cbegin(); scan_data.cend() != sd; ++sd)
             {
                 std::vector<double> set;
-                double delta = (sd->max - sd->min) / sd->points;
+                double              delta = (sd->max - sd->min) / sd->points;
 
-                for (unsigned i = 0 ; i <= sd->points ; ++i)
+                for (unsigned i = 0; i <= sd->points; ++i)
                 {
                     set.push_back(sd->min + delta * i);
                 }
@@ -197,24 +207,23 @@ class WilsonScan
             std::cout << "# Inputs" << std::endl;
             for (const auto & input : inputs)
             {
-                std::cout
-                    << "#   " << input.o_name
-                    << "[" << input.min << ", " << input.max << "]"
-                    << " = (" << input.o_min << ", " << input.o << ", " << input.o_max << ")"
-                    << std::endl;
+                std::cout << "#   " << input.o_name << "[" << input.min << ", " << input.max << "]" << " = (" << input.o_min << ", " << input.o << ", " << input.o_max << ")"
+                          << std::endl;
             }
 
-            TicketList tickets;
+            TicketList    tickets;
             unsigned long jobs = 0;
-            for (auto bin = bins.begin() ; bins.end() != bin ; ++bin)
+            for (auto bin = bins.begin(); bins.end() != bin; ++bin)
             {
-                for (auto w = cp.begin() ; cp.end() != w ; ++w)
+                for (auto w = cp.begin(); cp.end() != w; ++w)
                 {
                     ThreadPool::instance()->wait_for_free_capacity();
                     tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&WilsonScan::calc_chi_square, this, bin->first, bin->second, w)));
                     ++jobs;
                     if (jobs % 100 == 0)
+                    {
                         std::cerr << '[' << jobs << '/' << cp.size() << ']' << std::endl;
+                    }
                 }
             }
 
@@ -223,7 +232,7 @@ class WilsonScan
             std::cout << std::scientific << std::setprecision(7);
             for (const auto & result : results)
             {
-                for (auto w = result.first.cbegin(), w_end = result.first.cend() ; w != w_end ; ++w)
+                for (auto w = result.first.cbegin(), w_end = result.first.cend(); w != w_end; ++w)
                 {
                     std::cout << *w << '\t';
                 }
@@ -244,7 +253,8 @@ class DoUsage
         {
         }
 
-        const std::string & what() const
+        const std::string &
+        what() const
         {
             return _what;
         }
@@ -255,31 +265,31 @@ main(int argc, char * argv[])
 {
     try
     {
-        std::list<ScanData> scan_data;
-        std::list<Input> input;
-        std::list<std::string> variation_names;
+        std::list<ScanData>                       scan_data;
+        std::list<Input>                          input;
+        std::list<std::string>                    variation_names;
         std::list<std::pair<std::string, double>> param_changes;
-        double theory_uncertainty = 0.0;
+        double                                    theory_uncertainty = 0.0;
 
         Log::instance()->set_program_name("eos-scan");
 
-        for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
+        for (char **a(argv + 1), **a_end(argv + argc); a != a_end; ++a)
         {
             std::string argument(*a);
             if ("--scan" == argument)
             {
-                std::string name = std::string(*(++a));
-                unsigned points = destringify<unsigned>(*(++a));
-                double min = destringify<double>(*(++a));
-                double max = destringify<double>(*(++a));
-                scan_data.push_back(ScanData{name, points, min, max});
+                std::string name   = std::string(*(++a));
+                unsigned    points = destringify<unsigned>(*(++a));
+                double      min    = destringify<double>(*(++a));
+                double      max    = destringify<double>(*(++a));
+                scan_data.push_back(ScanData{ name, points, min, max });
                 continue;
             }
 
             if ("--parameter" == argument)
             {
-                std::string name = std::string(*(++a));
-                double value = destringify<double>(*(++a));
+                std::string name  = std::string(*(++a));
+                double      value = destringify<double>(*(++a));
                 param_changes.push_back(std::make_pair(name, value));
                 continue;
             }
@@ -287,13 +297,13 @@ main(int argc, char * argv[])
             if ("--input" == argument)
             {
                 std::string observable(*(++a));
-                double k1 = destringify<double>(*(++a));
-                double k2 = destringify<double>(*(++a));
-                double min = destringify<double>(*(++a));
-                double central = destringify<double>(*(++a));
-                double max = destringify<double>(*(++a));
+                double      k1      = destringify<double>(*(++a));
+                double      k2      = destringify<double>(*(++a));
+                double      min     = destringify<double>(*(++a));
+                double      central = destringify<double>(*(++a));
+                double      max     = destringify<double>(*(++a));
 
-                input.push_back(Input{k1, k2, min, central, max, observable});
+                input.push_back(Input{ k1, k2, min, central, max, observable });
 
                 continue;
             }
@@ -317,15 +327,19 @@ main(int argc, char * argv[])
         }
 
         if (scan_data.empty())
+        {
             throw DoUsage("Need at least one scan parameter");
+        }
 
         if (input.empty())
+        {
             throw DoUsage("Need at least one input");
+        }
 
         WilsonScan scanner(scan_data, input, param_changes, variation_names, theory_uncertainty);
         scanner.scan();
     }
-    catch(DoUsage & e)
+    catch (DoUsage & e)
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-scan" << std::endl;
@@ -335,12 +349,12 @@ main(int argc, char * argv[])
         std::cout << "  [--scan PARAMETER POINTS MIN MAX]+" << std::endl;
         std::cout << "  [--theory-uncertainty PERCENT]" << std::endl;
     }
-    catch(Exception & e)
+    catch (Exception & e)
     {
         std::cerr << "Caught exception: '" << e.what() << "'" << std::endl;
         return EXIT_FAILURE;
     }
-    catch(...)
+    catch (...)
     {
         std::cerr << "Aborting after unknown exception" << std::endl;
         return EXIT_FAILURE;

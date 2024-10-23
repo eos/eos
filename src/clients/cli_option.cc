@@ -20,76 +20,73 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "cli_error.hh"
-#include "cli_group.hh"
-#include "cli_handler.hh"
 #include "cli_option.hh"
-#include "cli_section.hh"
 
 #include <eos/utils/destringify.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
-#include <set>
-#include <vector>
+#include "cli_error.hh"
+#include "cli_group.hh"
+#include "cli_handler.hh"
+#include "cli_section.hh"
 #include <algorithm>
 #include <list>
+#include <set>
+#include <vector>
 
 namespace
 {
     struct ArgIs
     {
-        const std::string arg;
+            const std::string arg;
 
-        ArgIs(const std::string & a) :
-            arg(a)
-        {
-        }
+            ArgIs(const std::string & a) :
+                arg(a)
+            {
+            }
 
-        bool operator() (const std::pair<std::string, std::string> & p) const
-        {
-            return p.first == arg;
-        }
+            bool
+            operator() (const std::pair<std::string, std::string> & p) const
+            {
+                return p.first == arg;
+            }
 
-        bool operator() (const eos::cli::AllowedEnumArg & p) const
-        {
-            return p.long_name() == arg || (p.short_name() && std::string(1, p.short_name()) == arg);
-        }
+            bool
+            operator() (const eos::cli::AllowedEnumArg & p) const
+            {
+                return p.long_name() == arg || (p.short_name() && std::string(1, p.short_name()) == arg);
+            }
     };
-}
+} // namespace
 
 namespace eos
 {
-    template <>
-    struct Implementation<cli::EnumArg>
+    template <> struct Implementation<cli::EnumArg>
     {
-        std::vector<cli::AllowedEnumArg> allowed_args;
+            std::vector<cli::AllowedEnumArg> allowed_args;
     };
 
-    template <>
-    struct Implementation<cli::EnumArg::EnumArgOptions>
+    template <> struct Implementation<cli::EnumArg::EnumArgOptions>
     {
-        std::vector<cli::AllowedEnumArg> options;
+            std::vector<cli::AllowedEnumArg> options;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::EnumArg::AllowedArgConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::EnumArg::AllowedArgConstIteratorTag>
     {
-        using UnderlyingIterator = std::vector<cli::AllowedEnumArg>::const_iterator;
+            using UnderlyingIterator = std::vector<cli::AllowedEnumArg>::const_iterator;
     };
 
     template class WrappedForwardIterator<cli::EnumArg::AllowedArgConstIteratorTag, const cli::AllowedEnumArg>;
 
-    template <>
-    struct Implementation<cli::StringListArg>
+    template <> struct Implementation<cli::StringListArg>
     {
-        std::vector<std::string> args;
+            std::vector<std::string> args;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::StringListArg::ConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::StringListArg::ConstIteratorTag>
     {
-        using UnderlyingIterator = std::vector<std::string>::const_iterator;
+            using UnderlyingIterator = std::vector<std::string>::const_iterator;
     };
 
     template class WrappedForwardIterator<cli::StringListArg::ConstIteratorTag, const std::string>;
@@ -97,8 +94,7 @@ namespace eos
     namespace cli
     {
         // Option
-        Option::Option(Group * const g, const std::string & our_long_name,
-                const char our_short_name, const std::string & our_description) :
+        Option::Option(Group * const g, const std::string & our_long_name, const char our_short_name, const std::string & our_description) :
             _group(g),
             _long_name(our_long_name),
             _short_name(our_short_name),
@@ -121,7 +117,8 @@ namespace eos
         // AliasArg
         AliasArg::AliasArg(Option * const o, const std::string & our_long_name, bool is_hidden) :
             Option(o->group(), our_long_name, '\0', "Alias for --" + o->long_name()),
-            _other(o), _hidden(is_hidden)
+            _other(o),
+            _hidden(is_hidden)
         {
         }
 
@@ -134,9 +131,8 @@ namespace eos
         }
 
         // EnumArg
-        EnumArg::EnumArg(Group * const our_group, const std::string & our_long_name,
-                const char our_short_name, const std::string & our_description,
-                const EnumArgOptions & opts, const std::string & our_default_arg) :
+        EnumArg::EnumArg(Group * const our_group, const std::string & our_long_name, const char our_short_name, const std::string & our_description, const EnumArgOptions & opts,
+                         const std::string & our_default_arg) :
             cli::Option(our_group, our_long_name, our_short_name, our_description),
             PrivateImplementationPattern<cli::EnumArg>(new Implementation<cli::EnumArg>()),
             _argument(our_default_arg),
@@ -156,12 +152,14 @@ namespace eos
         void
         EnumArg::set_argument(const std::string & arg)
         {
-//            Context context("When handling argument '" + arg + "' for '--" + long_name() + "':");
+            //            Context context("When handling argument '" + arg + "' for '--" + long_name() + "':");
 
             /* if we're given the short arg, turn it magically into the long one */
             AllowedArgConstIterator i(std::find_if(_imp->allowed_args.begin(), _imp->allowed_args.end(), ArgIs(arg)));
             if (i == _imp->allowed_args.end())
+            {
                 throw BadValue("--" + long_name(), arg);
+            }
 
             _argument = i->long_name();
         }
@@ -169,7 +167,7 @@ namespace eos
         void
         EnumArg::set_default_arg(const std::string & arg)
         {
-            _argument = arg;
+            _argument    = arg;
             _default_arg = arg;
         }
 
@@ -189,21 +187,13 @@ namespace eos
         EnumArg::EnumArgOptions::EnumArgOptions(const std::string & opt, const std::string & desc) :
             PrivateImplementationPattern<cli::EnumArg::EnumArgOptions>(new Implementation<cli::EnumArg::EnumArgOptions>())
         {
-            _imp->options.push_back(make_named_values<AllowedEnumArg>(
-                        n::description() = desc,
-                        n::long_name() = opt,
-                        n::short_name() = '\0'
-                        ));
+            _imp->options.push_back(make_named_values<AllowedEnumArg>(n::description() = desc, n::long_name() = opt, n::short_name() = '\0'));
         }
 
         EnumArg::EnumArgOptions::EnumArgOptions(const std::string & opt, const char s, const std::string & desc) :
             PrivateImplementationPattern<cli::EnumArg::EnumArgOptions>(new Implementation<cli::EnumArg::EnumArgOptions>())
         {
-            _imp->options.push_back(make_named_values<AllowedEnumArg>(
-                        n::description() = desc,
-                        n::long_name() = opt,
-                        n::short_name() = s
-                        ));
+            _imp->options.push_back(make_named_values<AllowedEnumArg>(n::description() = desc, n::long_name() = opt, n::short_name() = s));
         }
 
         EnumArg::EnumArgOptions::~EnumArgOptions() = default;
@@ -211,28 +201,19 @@ namespace eos
         EnumArg::EnumArgOptions &
         EnumArg::EnumArgOptions::operator() (const std::string & opt, const std::string & desc)
         {
-            _imp->options.push_back(make_named_values<AllowedEnumArg>(
-                        n::description() = desc,
-                        n::long_name() = opt,
-                        n::short_name() = '\0'
-                        ));
+            _imp->options.push_back(make_named_values<AllowedEnumArg>(n::description() = desc, n::long_name() = opt, n::short_name() = '\0'));
             return *this;
         }
 
         EnumArg::EnumArgOptions &
         EnumArg::EnumArgOptions::operator() (const std::string & opt, const char s, const std::string & desc)
         {
-            _imp->options.push_back(make_named_values<AllowedEnumArg>(
-                        n::description() = desc,
-                        n::long_name() = opt,
-                        n::short_name() = s
-                        ));
+            _imp->options.push_back(make_named_values<AllowedEnumArg>(n::description() = desc, n::long_name() = opt, n::short_name() = s));
             return *this;
         }
 
         // IntegerArg
-        IntegerArg::IntegerArg(Group * const our_group, const std::string & our_long_name,
-                        char our_short_name, const std::string & our_description) :
+        IntegerArg::IntegerArg(Group * const our_group, const std::string & our_long_name, char our_short_name, const std::string & our_description) :
             Option(our_group, our_long_name, our_short_name, our_description)
         {
         }
@@ -246,8 +227,7 @@ namespace eos
         }
 
         // KeyValueArg
-        KeyValueArg::KeyValueArg(Group * const our_group, const std::string & our_long_name,
-                        char our_short_name, const std::string & our_description) :
+        KeyValueArg::KeyValueArg(Group * const our_group, const std::string & our_long_name, char our_short_name, const std::string & our_description) :
             Option(our_group, our_long_name, our_short_name, our_description)
         {
         }
@@ -255,18 +235,15 @@ namespace eos
         KeyValueArg::~KeyValueArg() = default;
 
         // StringArg
-        StringArg::StringArg(Group * const g, const std::string & our_long_name,
-                const char our_short_name, const std::string & our_description,
-                const bool neg) :
+        StringArg::StringArg(Group * const g, const std::string & our_long_name, const char our_short_name, const std::string & our_description, const bool neg) :
             Option(g, our_long_name, our_short_name, our_description),
             _can_be_negated(neg),
             _validator(nullptr)
         {
         }
 
-        StringArg::StringArg(Group * const g, const std::string & our_long_name,
-                const char our_short_name, const std::string & our_description,
-                void (* v) (const std::string &), const bool neg) :
+        StringArg::StringArg(Group * const g, const std::string & our_long_name, const char our_short_name, const std::string & our_description, void (*v)(const std::string &),
+                             const bool neg) :
             Option(g, our_long_name, our_short_name, our_description),
             _can_be_negated(neg),
             _validator(v)
@@ -284,26 +261,26 @@ namespace eos
         void
         StringArg::set_argument(const std::string & arg)
         {
-//            Context context("When handling argument '" + arg + "' for '--" + long_name() + "':");
+            //            Context context("When handling argument '" + arg + "' for '--" + long_name() + "':");
 
             if (_validator)
+            {
                 (*_validator)(arg);
+            }
 
             _argument = arg;
         }
 
         // StringListArg
-        StringListArg::StringListArg(Group * const g, const std::string & our_long_name,
-                const char our_short_name, const std::string & our_description) :
+        StringListArg::StringListArg(Group * const g, const std::string & our_long_name, const char our_short_name, const std::string & our_description) :
             Option(g, our_long_name, our_short_name, our_description),
             PrivateImplementationPattern<cli::StringListArg>(new Implementation<cli::StringListArg>()),
             _validator(nullptr)
         {
         }
 
-        StringListArg::StringListArg(Group * const g, const std::string & our_long_name,
-                const char our_short_name, const std::string & our_description,
-                void (* v) (const std::string &)) :
+        StringListArg::StringListArg(Group * const g, const std::string & our_long_name, const char our_short_name, const std::string & our_description,
+                                     void (*v)(const std::string &)) :
             Option(g, our_long_name, our_short_name, our_description),
             PrivateImplementationPattern<cli::StringListArg>(new Implementation<cli::StringListArg>()),
             _validator(v)
@@ -321,10 +298,12 @@ namespace eos
         void
         StringListArg::validate_and_add_argument(const std::string & arg)
         {
-//            Context context("When handling argument '" + arg + "' for '--" + long_name() + "':");
-//
+            //            Context context("When handling argument '" + arg + "' for '--" + long_name() + "':");
+            //
             if (_validator)
+            {
                 (*_validator)(arg);
+            }
 
             _imp->args.push_back(arg);
         }
@@ -342,8 +321,7 @@ namespace eos
         }
 
         // SwitchArg
-        SwitchArg::SwitchArg(Group * const our_group, const std::string & our_long_name, char our_short_name,
-                const std::string & our_description, const bool c) :
+        SwitchArg::SwitchArg(Group * const our_group, const std::string & our_long_name, char our_short_name, const std::string & our_description, const bool c) :
             Option(our_group, our_long_name, our_short_name, our_description),
             _can_be_negated(c)
         {
@@ -356,28 +334,22 @@ namespace eos
         {
             return _can_be_negated;
         }
-    }
+    } // namespace cli
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag>
     {
-        using UnderlyingIterator = std::vector<cli::ParameterBudgetArg::ParameterBudget>::const_iterator;
+            using UnderlyingIterator = std::vector<cli::ParameterBudgetArg::ParameterBudget>::const_iterator;
     };
     template class WrappedForwardIterator<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag, const cli::ParameterBudgetArg::ParameterBudget>;
-
 
     namespace cli
     {
         // LogLevelArg
         LogLevelArg::LogLevelArg(Group * const our_group, const std::string & our_long_name, char our_short_name) :
             EnumArg(our_group, our_long_name, our_short_name, "Specify the log level",
-            EnumArgOptions
-            ("debug",   'd', "Show debug output (noisy)")
-            ("info",    'i', "Show informations and and warnings only")
-            ("warning", 'w', "Show warnings only")
-            ("error",   'e', "Show errors only")
-            ("silent",  's', "Suppress all log messages (UNSAFE)"),
-            "info")
+                    EnumArgOptions("debug", 'd', "Show debug output (noisy)")("info", 'i', "Show informations and and warnings only")("warning", 'w', "Show warnings only")(
+                            "error", 'e', "Show errors only")("silent", 's', "Suppress all log messages (UNSAFE)"),
+                    "info")
         {
         }
 
@@ -387,22 +359,31 @@ namespace eos
         LogLevelArg::option() const
         {
             if ("debug" == argument())
+            {
                 return ll_debug;
+            }
             if ("info" == argument())
+            {
                 return ll_informational;
+            }
             if ("warning" == argument())
+            {
                 return ll_warning;
+            }
             if ("error" == argument())
+            {
                 return ll_error;
+            }
             if ("silent" == argument())
+            {
                 return ll_silent;
+            }
 
             throw DoHelp("Bad value for --" + long_name());
         }
 
         // KinematicVariableArg
-        KinematicVariableArg::KinematicVariableArg(Group * const our_group, const std::string & our_long_name,
-                char our_short_name, const Kinematics & k) :
+        KinematicVariableArg::KinematicVariableArg(Group * const our_group, const std::string & our_long_name, char our_short_name, const Kinematics & k) :
             KeyValueArg(our_group, our_long_name, our_short_name, "Set the value of a kinematic variable"),
             _kinematics(k)
         {
@@ -430,8 +411,8 @@ namespace eos
         }
 
         // ParameterBudgetArg
-        ParameterBudgetArg::ParameterBudgetArg(Group * const our_group, const std::string & our_long_name,
-                char our_short_name, const std::string & our_description, const Parameters & p) :
+        ParameterBudgetArg::ParameterBudgetArg(Group * const our_group, const std::string & our_long_name, char our_short_name, const std::string & our_description,
+                                               const Parameters & p) :
             StringArg(our_group, our_long_name, our_short_name, our_description),
             _parameters(p)
         {
@@ -450,5 +431,5 @@ namespace eos
         {
             return _budgets.end();
         }
-    }
-}
+    } // namespace cli
+} // namespace eos

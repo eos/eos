@@ -38,8 +38,7 @@ namespace eos
         /**
          * Holds a number of Group instances.
          */
-        class Section :
-            public PrivateImplementationPattern<cli::Section>
+        class Section : public PrivateImplementationPattern<cli::Section>
         {
             public:
                 Section(Handler * const, const std::string &);
@@ -50,16 +49,15 @@ namespace eos
                 GroupsConstIterator begin() const;
                 GroupsConstIterator end() const;
 
-                Handler * handler() const;
+                Handler *         handler() const;
                 const std::string name() const;
 
                 void add(Group * const);
                 void remove(Group * const);
         };
-    }
+    } // namespace cli
 
-    extern template class
-    WrappedForwardIterator<cli::Section::GroupsConstIteratorTag, const cli::Group>;
-}
+    extern template class WrappedForwardIterator<cli::Section::GroupsConstIteratorTag, const cli::Group>;
+} // namespace eos
 
 #endif

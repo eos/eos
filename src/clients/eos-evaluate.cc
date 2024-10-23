@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/observable.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/observable.hh>
 #include <eos/utils/cartesian-product.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
@@ -42,7 +42,8 @@ class DoUsage
         {
         }
 
-        const std::string & what() const
+        const std::string &
+        what() const
         {
             return _what;
         }
@@ -50,22 +51,21 @@ class DoUsage
 
 struct EvaluationInput
 {
-    ObservablePtr observable;
+        ObservablePtr observable;
 
-    CartesianProduct<std::vector<double>> ranges;
+        CartesianProduct<std::vector<double>> ranges;
 
-    std::shared_ptr<Kinematics> kinematics;
+        std::shared_ptr<Kinematics> kinematics;
 
-    std::vector<std::string> kinematic_names;
+        std::vector<std::string> kinematic_names;
 
-    EvaluationInput() :
-        kinematics(new Kinematics)
-    {
-    }
+        EvaluationInput() :
+            kinematics(new Kinematics)
+        {
+        }
 };
 
-class CommandLine :
-    public InstantiationPolicy<CommandLine, Singleton>
+class CommandLine : public InstantiationPolicy<CommandLine, Singleton>
 {
     public:
         Parameters parameters;
@@ -80,33 +80,34 @@ class CommandLine :
 
         CommandLine() :
             parameters(Parameters::Defaults()),
-            budgets{std::make_tuple(std::string("delta"), std::vector<Parameter>())},
+            budgets{ std::make_tuple(std::string("delta"), std::vector<Parameter>()) },
             use_budget(false),
             precision(-1)
         {
         }
 
-        void parse(int argc, char ** argv)
+        void
+        parse(int argc, char ** argv)
         {
             Log::instance()->set_program_name("eos-evaluate");
 
             std::shared_ptr<EvaluationInput> evaluation_input(new EvaluationInput);
 
-            for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
+            for (char **a(argv + 1), **a_end(argv + argc); a != a_end; ++a)
             {
                 std::string argument(*a);
 
                 if ("--precision" == argument)
                 {
-                	precision = destringify<unsigned>(*(++a));
+                    precision = destringify<unsigned>(*(++a));
 
-                	continue;
+                    continue;
                 }
 
                 if ("--kinematics" == argument)
                 {
-                    std::string name = std::string(*(++a));
-                    double value = destringify<double>(*(++a));
+                    std::string name  = std::string(*(++a));
+                    double      value = destringify<double>(*(++a));
                     evaluation_input->kinematics->declare(name);
                     evaluation_input->kinematic_names.push_back(name);
 
@@ -119,15 +120,15 @@ class CommandLine :
 
                 if ("--range" == argument)
                 {
-                    std::string name = std::string(*(++a));
-                    double min_value = destringify<double>(*(++a));
-                    double max_value = destringify<double>(*(++a));
-                    unsigned points  = destringify<unsigned>(*(++a));
+                    std::string name      = std::string(*(++a));
+                    double      min_value = destringify<double>(*(++a));
+                    double      max_value = destringify<double>(*(++a));
+                    unsigned    points    = destringify<unsigned>(*(++a));
                     evaluation_input->kinematics->declare(name);
                     evaluation_input->kinematic_names.push_back(name);
 
                     std::vector<double> range;
-                    double increment = (max_value - min_value) / points;
+                    double              increment = (max_value - min_value) / points;
                     for (std::size_t i = 0; i <= points; ++i)
                     {
                         range.push_back(min_value + i * increment);
@@ -141,8 +142,10 @@ class CommandLine :
                 {
                     std::string name(*(++a));
                     evaluation_input->observable = Observable::make(name, parameters, *evaluation_input->kinematics, Options());
-                    if (! evaluation_input->observable )
+                    if (! evaluation_input->observable)
+                    {
                         throw DoUsage("Unknown observable '" + name + "'");
+                    }
 
                     evaluation_inputs.push_back(evaluation_input);
 
@@ -157,7 +160,7 @@ class CommandLine :
 
                     if (! use_budget)
                     {
-                        use_budget = true;
+                        use_budget                  = true;
                         std::get<0>(budgets.back()) = name;
                     }
                     else
@@ -188,12 +191,12 @@ class CommandLine :
                 if ("--parameter" == argument)
                 {
                     std::string parameter_name(*(++a));
-                    double parameter_value = destringify<double>(*(++a));
+                    double      parameter_value = destringify<double>(*(++a));
 
                     try
                     {
                         Parameter parameter = parameters[parameter_name];
-                        parameter = parameter_value;
+                        parameter           = parameter_value;
                     }
                     catch (UnknownParameterError & e)
                     {
@@ -208,11 +211,11 @@ class CommandLine :
         }
 };
 
-void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluation_input)
+void
+evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluation_input)
 {
     // print headlines
-    std::cout << "# " << evaluation_input->observable->name()
-              << ": " << evaluation_input->observable->options().as_string() << std::endl;
+    std::cout << "# " << evaluation_input->observable->name() << ": " << evaluation_input->observable->options().as_string() << std::endl;
 
     std::cout << "# ";
     for (const auto & kinematic_name : evaluation_input->kinematic_names)
@@ -229,7 +232,9 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
     int precision = CommandLine::instance()->precision;
     // set requested precision
     if (precision != -1)
+    {
         std::cout.precision(precision);
+    }
 
     bool ranges_empty = false;
     // check if the kinematical ranges are empty
@@ -244,13 +249,13 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
     }
 
     // iterate over all kinematical ranges
-    for (auto r = evaluation_input->ranges.begin() ; r != evaluation_input->ranges.end() ; ++r)
+    for (auto r = evaluation_input->ranges.begin(); r != evaluation_input->ranges.end(); ++r)
     {
-        if (!ranges_empty)
+        if (! ranges_empty)
         {
             // set the kinematics
             // for every dimension
-            for (std::size_t i = 0 ; i < (*r).size() ; ++i)
+            for (std::size_t i = 0; i < (*r).size(); ++i)
             {
                 evaluation_input->kinematics->set(evaluation_input->kinematic_names[i], (*r)[i]);
                 std::cout << (*r)[i] << '\t';
@@ -311,13 +316,10 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
             std::cout << '\t' << std::sqrt(budget_min) << '\t' << std::sqrt(budget_max);
         }
 
-        std::cout
-            << '\t' << std::sqrt(delta_min) << '\t' << std::sqrt(delta_max)
-            << "   (-" << std::abs(std::sqrt(delta_min) / central) * 100 << "% / +" << std::abs(std::sqrt(delta_max) / central) * 100 << "%)"
-            << std::endl;
+        std::cout << '\t' << std::sqrt(delta_min) << '\t' << std::sqrt(delta_max) << "   (-" << std::abs(std::sqrt(delta_min) / central) * 100 << "% / +"
+                  << std::abs(std::sqrt(delta_max) / central) * 100 << "%)" << std::endl;
     }
 }
-
 
 int
 main(int argc, char * argv[])
@@ -327,14 +329,16 @@ main(int argc, char * argv[])
         CommandLine::instance()->parse(argc, argv);
 
         if (CommandLine::instance()->evaluation_inputs.empty())
+        {
             throw DoUsage("No input specified");
+        }
 
         for (const auto & evaluation_input : CommandLine::instance()->evaluation_inputs)
         {
             evaluate_with_sum_of_squares(evaluation_input);
         }
     }
-    catch(DoUsage & e)
+    catch (DoUsage & e)
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-evaluate" << std::endl;
@@ -348,12 +352,12 @@ main(int argc, char * argv[])
         std::cout << "               --budget \"CKM\" --vary \"CKM::A\" --vary \"CKM::lambda\" \\" << std::endl;
         std::cout << "               --range s 14.18 22.86 12 --observable \"B->Kll::dBR/ds@LowRecoil;l=tau\"" << std::endl;
     }
-    catch(Exception & e)
+    catch (Exception & e)
     {
         std::cerr << "Caught exception: '" << e.what() << "'" << std::endl;
         return EXIT_FAILURE;
     }
-    catch(...)
+    catch (...)
     {
         std::cerr << "Aborting after unknown exception" << std::endl;
         return EXIT_FAILURE;

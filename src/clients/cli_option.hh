@@ -41,9 +41,9 @@ namespace eos
     namespace n
     {
         using description = Name<struct name_description>;
-        using long_name = Name<struct name_long_name>;
-        using short_name = Name<struct name_short_name>;
-    }
+        using long_name   = Name<struct name_long_name>;
+        using short_name  = Name<struct name_short_name>;
+    } // namespace n
 
     namespace cli
     {
@@ -66,18 +66,15 @@ namespace eos
         class ParameterBudgetArg;
         class ParameterVariationArg;
 
-        class Option :
-            public virtual DeclareAbstractAcceptMethods<Option, MakeTypeList<
-                    AliasArg, EnumArg, IntegerArg, KeyValueArg, StringArg, StringListArg, SwitchArg
-                    >::Type>
+        class Option : public virtual DeclareAbstractAcceptMethods<Option, MakeTypeList<AliasArg, EnumArg, IntegerArg, KeyValueArg, StringArg, StringListArg, SwitchArg>::Type>
         {
-            friend class Handler;
+                friend class Handler;
 
             private:
                 Group * const _group;
 
                 const std::string _long_name;
-                const char _short_name;
+                const char        _short_name;
                 const std::string _description;
 
                 bool _specified;
@@ -89,8 +86,7 @@ namespace eos
                 /**
                  * Constructor.
                  */
-                Option(Group * const, const std::string & long_name,
-                        const char short_name, const std::string & description);
+                Option(Group * const, const std::string & long_name, const char short_name, const std::string & description);
 
                 /**
                  * Destructor.
@@ -107,7 +103,8 @@ namespace eos
                 /**
                  * Fetch our long name.
                  */
-                const std::string & long_name() const
+                const std::string &
+                long_name() const
                 {
                     return _long_name;
                 }
@@ -115,7 +112,8 @@ namespace eos
                 /**
                  * Fetch our short name (may be 0).
                  */
-                char short_name() const
+                char
+                short_name() const
                 {
                     return _short_name;
                 }
@@ -123,7 +121,8 @@ namespace eos
                 /**
                  * Fetch our description.
                  */
-                const std::string & description() const
+                const std::string &
+                description() const
                 {
                     return _description;
                 }
@@ -132,7 +131,8 @@ namespace eos
                  * Fetch whether or not we were specified on the
                  * command line (or as an env var).
                  */
-                virtual bool specified() const
+                virtual bool
+                specified() const
                 {
                     return _specified;
                 }
@@ -140,7 +140,8 @@ namespace eos
                 /**
                  * Set the value returned by specified().
                  */
-                virtual void set_specified(bool value)
+                virtual void
+                set_specified(bool value)
                 {
                     _specified = value;
                 }
@@ -148,7 +149,8 @@ namespace eos
                 /**
                  * Fetch our group.
                  */
-                Group * group()
+                Group *
+                group()
                 {
                     return _group;
                 }
@@ -164,13 +166,11 @@ namespace eos
         /**
          * An AliasArg is an alias for another argument.
          */
-        class AliasArg :
-            public Option,
-            public ImplementAcceptMethods<Option, AliasArg>
+        class AliasArg : public Option, public ImplementAcceptMethods<Option, AliasArg>
         {
             private:
                 Option * const _other;
-                bool _hidden;
+                bool           _hidden;
 
             public:
                 /**
@@ -183,22 +183,26 @@ namespace eos
                  */
                 virtual ~AliasArg();
 
-                virtual bool specified() const
+                virtual bool
+                specified() const
                 {
                     return _other->specified();
                 }
 
-                virtual void set_specified(const bool value)
+                virtual void
+                set_specified(const bool value)
                 {
                     _other->set_specified(value);
                 }
 
-                virtual bool hidden() const
+                virtual bool
+                hidden() const
                 {
                     return _hidden;
                 }
 
-                virtual void set_hidden(const bool value)
+                virtual void
+                set_hidden(const bool value)
                 {
                     _hidden = value;
                 }
@@ -206,7 +210,8 @@ namespace eos
                 /**
                  * Fetch our associated option.
                  */
-                Option * other() const
+                Option *
+                other() const
                 {
                     return _other;
                 }
@@ -218,9 +223,7 @@ namespace eos
          * A SwitchArg is an option that can either be specified or not
          * specified, and that takes no value (for example, --help).
          */
-        class SwitchArg :
-            public Option,
-            public ImplementAcceptMethods<Option, SwitchArg>
+        class SwitchArg : public Option, public ImplementAcceptMethods<Option, SwitchArg>
         {
             private:
                 bool _can_be_negated;
@@ -229,8 +232,7 @@ namespace eos
                 /**
                  * Constructor.
                  */
-                SwitchArg(Group * const group, const std::string & long_name, char short_name,
-                        const std::string & description, const bool can_be_negated);
+                SwitchArg(Group * const group, const std::string & long_name, char short_name, const std::string & description, const bool can_be_negated);
 
                 /**
                  * Destructor.
@@ -243,30 +245,24 @@ namespace eos
         /**
          * An option that takes a string argument.
          */
-        class StringArg :
-            public Option,
-            public ImplementAcceptMethods<Option, StringArg>
+        class StringArg : public Option, public ImplementAcceptMethods<Option, StringArg>
         {
             private:
                 std::string _argument;
-                bool _can_be_negated;
-                void (* _validator) (const std::string &);
+                bool        _can_be_negated;
+                void (*_validator)(const std::string &);
 
             public:
                 /**
                  * Constructor.
                  */
-                StringArg(Group * const, const std::string & long_name,
-                       const char short_name, const std::string & description,
-                       const bool can_be_negated = false);
+                StringArg(Group * const, const std::string & long_name, const char short_name, const std::string & description, const bool can_be_negated = false);
 
                 /**
                  * Constructor with validator.
                  */
-                StringArg(Group * const, const std::string & long_name,
-                       const char short_name, const std::string & description,
-                       void (* validator) (const std::string &),
-                       const bool can_be_negated = false);
+                StringArg(Group * const, const std::string & long_name, const char short_name, const std::string & description, void (*validator)(const std::string &),
+                          const bool can_be_negated = false);
 
                 /**
                  * Destructor.
@@ -276,7 +272,11 @@ namespace eos
                 /**
                  * Fetch the argument that was given to this option.
                  */
-                const std::string & argument() const { return _argument; }
+                const std::string &
+                argument() const
+                {
+                    return _argument;
+                }
 
                 /**
                  * Set the argument returned by argument().
@@ -289,27 +289,21 @@ namespace eos
         /**
          * An option that takes a list of strings.
          */
-        class StringListArg :
-            public Option,
-            public ImplementAcceptMethods<Option, StringListArg>,
-            public PrivateImplementationPattern<StringListArg>
+        class StringListArg : public Option, public ImplementAcceptMethods<Option, StringListArg>, public PrivateImplementationPattern<StringListArg>
         {
             private:
-                void (* _validator) (const std::string &);
+                void (*_validator)(const std::string &);
 
             public:
                 /**
                  * Constructor
                  */
-                StringListArg(Group * const, const std::string & long_name,
-                        const char short_name, const std::string & description);
+                StringListArg(Group * const, const std::string & long_name, const char short_name, const std::string & description);
 
                 /**
                  * Constructor with validator.
                  */
-                StringListArg(Group * const, const std::string & long_name,
-                        const char short_name, const std::string & description,
-                        void (* validator) (const std::string &));
+                StringListArg(Group * const, const std::string & long_name, const char short_name, const std::string & description, void (*validator)(const std::string &));
 
                 /**
                  * Destructor.
@@ -336,9 +330,7 @@ namespace eos
         /**
          * An option that takes an integer argument.
          */
-        class IntegerArg :
-            public Option,
-            public ImplementAcceptMethods<Option, IntegerArg>
+        class IntegerArg : public Option, public ImplementAcceptMethods<Option, IntegerArg>
         {
             private:
                 int _argument;
@@ -347,8 +339,7 @@ namespace eos
                 /**
                  * Constructor
                  */
-                IntegerArg(Group * const, const std::string & long_name,
-                        const char short_name, const std::string & description);
+                IntegerArg(Group * const, const std::string & long_name, const char short_name, const std::string & description);
 
                 /**
                  * Destructor.
@@ -358,12 +349,20 @@ namespace eos
                 /**
                  * Fetch the argument that was given to this option.
                  */
-                int argument() const { return _argument; }
+                int
+                argument() const
+                {
+                    return _argument;
+                }
 
                 /**
                  * Set the argument returned by argument().
                  */
-                void set_argument(const int arg) { _argument = arg; }
+                void
+                set_argument(const int arg)
+                {
+                    _argument = arg;
+                }
 
                 virtual bool can_be_negated() const;
         };
@@ -371,16 +370,13 @@ namespace eos
         /**
          * An option that takes a key and a value.
          */
-        class KeyValueArg :
-            public Option,
-            public ImplementAcceptMethods<Option, KeyValueArg>
+        class KeyValueArg : public Option, public ImplementAcceptMethods<Option, KeyValueArg>
         {
             public:
                 /**
                  * Constructor
                  */
-                KeyValueArg(Group * const, const std::string & long_name,
-                        const char short_name, const std::string & description);
+                KeyValueArg(Group * const, const std::string & long_name, const char short_name, const std::string & description);
 
                 /**
                  * Destructor.
@@ -393,7 +389,11 @@ namespace eos
                  */
                 virtual void validate_and_set_arguments(const std::string & key, const std::string & value) = 0;
 
-                virtual bool can_be_negated() const { return false; }
+                virtual bool
+                can_be_negated() const
+                {
+                    return false;
+                }
         };
 
         /**
@@ -401,20 +401,17 @@ namespace eos
          */
         struct AllowedEnumArg
         {
-            NamedValue<n::description, std::string> description;
-            NamedValue<n::long_name, std::string> long_name;
+                NamedValue<n::description, std::string> description;
+                NamedValue<n::long_name, std::string>   long_name;
 
-            /// Might be '@0', for none.
-            NamedValue<n::short_name, char> short_name;
+                /// Might be '@0', for none.
+                NamedValue<n::short_name, char> short_name;
         };
 
         /**
          * An option that takes one of a predefined set of string arguments.
          */
-        class EnumArg :
-            public Option,
-            public ImplementAcceptMethods<Option, EnumArg>,
-            public PrivateImplementationPattern<EnumArg>
+        class EnumArg : public Option, public ImplementAcceptMethods<Option, EnumArg>, public PrivateImplementationPattern<EnumArg>
         {
             private:
                 std::string _argument;
@@ -425,10 +422,9 @@ namespace eos
                  * Helper class for passing available options and associated descriptions
                  * to the EnumArg constructor.
                  */
-                class EnumArgOptions :
-                    public PrivateImplementationPattern<EnumArgOptions>
+                class EnumArgOptions : public PrivateImplementationPattern<EnumArgOptions>
                 {
-                    friend class EnumArg;
+                        friend class EnumArg;
 
                     public:
                         /**
@@ -462,9 +458,8 @@ namespace eos
                 /**
                  * Constructor.
                  */
-                EnumArg(Group * const group, const std::string & long_name,
-                        const char short_name, const std::string & description,
-                        const EnumArgOptions & opts, const std::string & default_arg);
+                EnumArg(Group * const group, const std::string & long_name, const char short_name, const std::string & description, const EnumArgOptions & opts,
+                        const std::string & default_arg);
 
                 /**
                  * Destructor.
@@ -474,7 +469,8 @@ namespace eos
                 /**
                  * Fetch the argument that was given to this option.
                  */
-                const std::string & argument() const
+                const std::string &
+                argument() const
                 {
                     return _argument;
                 }
@@ -495,7 +491,8 @@ namespace eos
                  * Fetch the default option, as specified to the
                  * constructor or set_default_arg().
                  */
-                const std::string & default_arg() const
+                const std::string &
+                default_arg() const
                 {
                     return _default_arg;
                 }
@@ -504,8 +501,7 @@ namespace eos
                 ///@{
 
                 struct AllowedArgConstIteratorTag;
-                using AllowedArgConstIterator = WrappedForwardIterator<AllowedArgConstIteratorTag,
-                                                                       const AllowedEnumArg>;
+                using AllowedArgConstIterator = WrappedForwardIterator<AllowedArgConstIteratorTag, const AllowedEnumArg>;
 
                 AllowedArgConstIterator begin_allowed_args() const;
 
@@ -519,8 +515,7 @@ namespace eos
         /**
          * The '--log-level' standard command line argument.
          */
-        class LogLevelArg :
-            public EnumArg
+        class LogLevelArg : public EnumArg
         {
             public:
                 ///@name Basic operations
@@ -540,8 +535,7 @@ namespace eos
         /**
          * The '--kinematic-variable' EOS-specific command line argument.
          */
-        class KinematicVariableArg :
-            public KeyValueArg
+        class KinematicVariableArg : public KeyValueArg
         {
             private:
                 /// Our set of kinematic variables.
@@ -571,14 +565,13 @@ namespace eos
         /**
          * The '--parameter-budget' EOS-specific command line argument.
          */
-        class ParameterBudgetArg :
-            public StringArg
+        class ParameterBudgetArg : public StringArg
         {
             public:
                 struct ParameterBudget
                 {
-                    std::string name;
-                    std::vector<Parameter> parameters;
+                        std::string            name;
+                        std::vector<Parameter> parameters;
                 };
 
             private:
@@ -601,8 +594,7 @@ namespace eos
                 ///@{
 
                 struct ParameterBudgetArgConstIteratorTag;
-                using ParameterBudgetArgConstIterator = WrappedForwardIterator<ParameterBudgetArgConstIteratorTag,
-                                                                               const ParameterBudget>;
+                using ParameterBudgetArgConstIterator = WrappedForwardIterator<ParameterBudgetArgConstIteratorTag, const ParameterBudget>;
 
                 ParameterBudgetArgConstIterator begin_budgets() const;
 
@@ -611,11 +603,11 @@ namespace eos
 
                 ///@}
         };
-    }
+    } // namespace cli
 
     extern template class WrappedForwardIterator<cli::EnumArg::AllowedArgConstIteratorTag, const cli::AllowedEnumArg>;
 
     extern template class WrappedForwardIterator<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag, const cli::ParameterBudgetArg::ParameterBudget>;
-}
+} // namespace eos
 
 #endif

@@ -20,15 +20,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "cli_error.hh"
 #include "cli_handler.hh"
-#include "cli_dumper.hh"
-#include "cli_visitor.hh"
 
+#include <eos/utils/indirect-iterator-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
-#include <eos/utils/indirect-iterator-impl.hh>
 
+#include "cli_dumper.hh"
+#include "cli_error.hh"
+#include "cli_visitor.hh"
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
@@ -43,74 +43,63 @@ namespace eos
     /**
      * Imp data for Handler.
      */
-    template<>
-    struct Implementation<cli::Handler>
+    template <> struct Implementation<cli::Handler>
     {
-        std::list<cli::Section *> sections;
-        std::list<std::string> parameters;
-        std::list<std::string> usage_lines;
-        std::list<std::pair<std::string, std::string> > environment_lines;
-        std::list<std::pair<std::string, std::string> > example_lines;
-        std::list<std::string> notes;
-        std::list<std::string> descriptions;
-        std::list<std::pair<std::string, int> > see_alsos;
+            std::list<cli::Section *>                      sections;
+            std::list<std::string>                         parameters;
+            std::list<std::string>                         usage_lines;
+            std::list<std::pair<std::string, std::string>> environment_lines;
+            std::list<std::pair<std::string, std::string>> example_lines;
+            std::list<std::string>                         notes;
+            std::list<std::string>                         descriptions;
+            std::list<std::pair<std::string, int>>         see_alsos;
 
-        std::map<std::string, cli::Option *> longopts;
-        std::map<char, cli::Option *> shortopts;
+            std::map<std::string, cli::Option *> longopts;
+            std::map<char, cli::Option *>        shortopts;
 
-        std::shared_ptr<cli::Section> main_options_section;
+            std::shared_ptr<cli::Section> main_options_section;
 
-        Implementation()
-        {
-        }
+            Implementation() {}
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::SectionsConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::SectionsConstIteratorTag>
     {
-        using UnderlyingIterator = IndirectIterator<std::list<cli::Section *>::const_iterator>;
+            using UnderlyingIterator = IndirectIterator<std::list<cli::Section *>::const_iterator>;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::ParametersConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::ParametersConstIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::string>::const_iterator;
+            using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::NotesIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::NotesIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::string>::const_iterator;
+            using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::DescriptionLineConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::DescriptionLineConstIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::string>::const_iterator;
+            using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::ExamplesConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::ExamplesConstIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::pair<std::string, std::string> >::const_iterator;
+            using UnderlyingIterator = std::list<std::pair<std::string, std::string>>::const_iterator;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::UsageLineConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::UsageLineConstIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::string>::const_iterator;
+            using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::ArgsIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::ArgsIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::string>::iterator;
+            using UnderlyingIterator = std::list<std::string>::iterator;
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<cli::Handler::SeeAlsoConstIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<cli::Handler::SeeAlsoConstIteratorTag>
     {
-        using UnderlyingIterator = std::list<std::pair<std::string, int> >::const_iterator;
+            using UnderlyingIterator = std::list<std::pair<std::string, int>>::const_iterator;
     };
 
     namespace cli
@@ -153,16 +142,13 @@ namespace eos
         }
 
         void
-        Handler::run(
-                const int argc,
-                const char * const * const argv,
-                const std::string & /*client*/)
+        Handler::run(const int argc, const char * const * const argv, const std::string & /*client*/)
         {
             std::list<std::string> args;
             std::copy(&argv[1], &argv[argc], std::back_inserter(args));
             ArgsIterator argit(args.begin()), arge(args.end());
 
-            for ( ; argit != arge ; ++argit)
+            for (; argit != arge; ++argit)
             {
                 std::string arg = *argit;
 
@@ -177,22 +163,28 @@ namespace eos
                     if (it == _imp->longopts.end())
                     {
                         if (0 != arg.compare(0, 3, "no-"))
+                        {
                             throw BadArgument("--" + arg);
+                        }
                         arg.erase(0, 3);
                         it = _imp->longopts.find(arg);
                         if (it == _imp->longopts.end())
+                        {
                             throw BadArgument("--no-" + arg);
+                        }
                         if (! it->second->can_be_negated())
+                        {
                             throw BadArgument("--no-" + arg);
+                        }
 
                         std::string remaining_chars;
-                        Visitor visitor(&argit, arge, remaining_chars, true);
+                        Visitor     visitor(&argit, arge, remaining_chars, true);
                         it->second->accept(visitor);
                     }
                     else
                     {
                         std::string remaining_chars;
-                        Visitor visitor(&argit, arge, remaining_chars, false);
+                        Visitor     visitor(&argit, arge, remaining_chars, false);
                         it->second->accept(visitor);
                     }
                 }
@@ -202,25 +194,31 @@ namespace eos
                     arg.erase(0, 1);
                     for (std::string::iterator c = arg.begin(); c != arg.end(); ++c)
                     {
-                        bool maybe_second_char_used(false);
+                        bool        maybe_second_char_used(false);
                         std::string remaining_chars;
                         if (arg.length() >= 2 && c == arg.begin())
                         {
                             maybe_second_char_used = true;
-                            remaining_chars = arg.substr(1);
+                            remaining_chars        = arg.substr(1);
                         }
 
                         std::map<char, Option *>::iterator it = _imp->shortopts.find(*c);
                         if (it == _imp->shortopts.end())
+                        {
                             throw BadArgument(std::string(negate ? "+" : "-") + *c);
+                        }
                         if (negate && ! it->second->can_be_negated())
+                        {
                             throw BadArgument(std::string("+") + *c);
+                        }
 
                         Visitor visitor(&argit, arge, remaining_chars, negate);
                         it->second->accept(visitor);
 
                         if (maybe_second_char_used && remaining_chars.empty())
+                        {
                             break;
+                        }
                     }
                 }
                 else
@@ -243,11 +241,9 @@ namespace eos
         Handler::dump_to_stream(std::ostream & s) const
         {
             Dumper dump(s);
-            for (SectionsConstIterator a(begin_args_sections()), a_end(end_args_sections()) ;
-                    a != a_end ; ++a)
+            for (SectionsConstIterator a(begin_args_sections()), a_end(end_args_sections()); a != a_end; ++a)
             {
-                for (Section::GroupsConstIterator g(a->begin()), g_end(a->end()) ;
-                        g != g_end ; ++g)
+                for (Section::GroupsConstIterator g(a->begin()), g_end(a->end()); g != g_end; ++g)
                 {
                     s << g->name() << ":" << std::endl;
 
@@ -284,16 +280,21 @@ namespace eos
         }
 
         void
-        Handler::add_option(Option * const opt, const std::string & long_name,
-                const char short_name)
+        Handler::add_option(Option * const opt, const std::string & long_name, const char short_name)
         {
             if (! _imp->longopts.insert(std::make_pair(long_name, opt)).second)
+            {
                 throw InternalError("duplicate long name '" + long_name + "'");
+            }
 
             _imp->longopts[long_name] = opt;
             if (short_name != '\0')
+            {
                 if (! _imp->shortopts.insert(std::make_pair(short_name, opt)).second)
+                {
                     throw InternalError("duplicate short name '" + stringify(short_name) + "'");
+                }
+            }
         }
 
         void
@@ -301,7 +302,9 @@ namespace eos
         {
             _imp->longopts.erase(long_name);
             if (short_name != '\0')
+            {
                 _imp->shortopts.erase(short_name);
+            }
         }
 
         Handler::UsageLineConstIterator
@@ -368,7 +371,9 @@ namespace eos
         Handler::main_options_section()
         {
             if (! _imp->main_options_section)
+            {
                 _imp->main_options_section = std::make_shared<Section>(this, "Options");
+            }
             return _imp->main_options_section.get();
         }
 
@@ -389,16 +394,16 @@ namespace eos
         {
             _imp->descriptions.push_back(e);
         }
-    }
+    } // namespace cli
 
     template class WrappedForwardIterator<cli::Handler::ParametersConstIteratorTag, const std::string>;
     template class WrappedForwardIterator<cli::Handler::UsageLineConstIteratorTag, const std::string>;
-    template class WrappedForwardIterator<cli::Handler::ExamplesConstIteratorTag, const std::pair<std::string, std::string> >;
+    template class WrappedForwardIterator<cli::Handler::ExamplesConstIteratorTag, const std::pair<std::string, std::string>>;
     template class WrappedForwardIterator<cli::Handler::SectionsConstIteratorTag, const cli::Section>;
     template class WrappedForwardIterator<cli::Handler::NotesIteratorTag, const std::string>;
     template class WrappedForwardIterator<cli::Handler::DescriptionLineConstIteratorTag, const std::string>;
     template class WrappedForwardIterator<cli::Handler::ArgsIteratorTag, std::string>;
-    template class WrappedForwardIterator<cli::Handler::SeeAlsoConstIteratorTag, const std::pair<std::string, int> >;
+    template class WrappedForwardIterator<cli::Handler::SeeAlsoConstIteratorTag, const std::pair<std::string, int>>;
 
     namespace cli
     {
@@ -411,5 +416,5 @@ namespace eos
             add_usage_line("[ --log-level level ]");
             add_usage_line("help [ --all ]");
         }
-    }
-}
+    } // namespace cli
+} // namespace eos
