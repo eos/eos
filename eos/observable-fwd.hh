@@ -37,6 +37,6 @@ namespace eos
     class ObservableGroup;
 
     class ObservableSection;
-}
+} // namespace eos
 
 #endif

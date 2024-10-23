@@ -34,88 +34,81 @@ namespace eos
         extern std::map<QualifiedName, std::shared_ptr<const SignalPDFEntry>> signal_pdf_entries;
     }
 
-    template <>
-    struct Implementation<SignalPDFGroup>
+    template <> struct Implementation<SignalPDFGroup>
     {
-        std::string name;
+            std::string name;
 
-        std::string description;
+            std::string description;
 
-        std::map<QualifiedName, SignalPDFEntryPtr> entries;
+            std::map<QualifiedName, SignalPDFEntryPtr> entries;
 
-        Implementation(const std::string & name, const std::string & description,
-                std::initializer_list<std::pair<const QualifiedName, SignalPDFEntryPtr>> && entries) :
-            name(name),
-            description(description),
-            entries(entries)
-        {
-        }
+            Implementation(const std::string & name, const std::string & description, std::initializer_list<std::pair<const QualifiedName, SignalPDFEntryPtr>> && entries) :
+                name(name),
+                description(description),
+                entries(entries)
+            {
+            }
     };
 
-    template <>
-    struct Implementation<SignalPDFSection>
+    template <> struct Implementation<SignalPDFSection>
     {
-        std::string name;
+            std::string name;
 
-        std::string description;
+            std::string description;
 
-        std::vector<SignalPDFGroup> groups;
+            std::vector<SignalPDFGroup> groups;
 
-        Implementation(const std::string & name, const std::string & description,
-                std::initializer_list<SignalPDFGroup> && groups) :
-            name(name),
-            description(description),
-            groups(groups)
-        {
-        }
+            Implementation(const std::string & name, const std::string & description, std::initializer_list<SignalPDFGroup> && groups) :
+                name(name),
+                description(description),
+                groups(groups)
+            {
+            }
     };
 
-    template <typename Decay_, typename ... PDFArgs_, typename ... PDFKinematicRanges_, typename ... NormArgs_,  typename ... NormKinematicNames_>
-    std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>> make_signal_pdf(const char * name,
-            const Options & default_options,
-            double (Decay_::* pdf)(const PDFArgs_ & ...) const,
-            const std::tuple<PDFKinematicRanges_ ...> & pdf_kinematic_ranges,
-            double (Decay_::* norm)(const NormArgs_ & ...) const,
-            const std::tuple<NormKinematicNames_ ...> & norm_kinematic_names)
+    template <typename Decay_, typename... PDFArgs_, typename... PDFKinematicRanges_, typename... NormArgs_, typename... NormKinematicNames_>
+    std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>>
+    make_signal_pdf(const char * name, const Options & default_options, double (Decay_::*pdf)(const PDFArgs_ &...) const,
+                    const std::tuple<PDFKinematicRanges_...> & pdf_kinematic_ranges, double (Decay_::*norm)(const NormArgs_ &...) const,
+                    const std::tuple<NormKinematicNames_...> & norm_kinematic_names)
     {
         static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments for the PDF as kinematics ranges!");
         static_assert(sizeof...(NormArgs_) == sizeof...(NormKinematicNames_), "Need as many function arguments for the normalization as kinematics names!");
 
         QualifiedName qn(name);
 
-        std::function<double (const Decay_ *, const PDFArgs_ & ...)> pdf_function = std::mem_fn(pdf);
-        std::function<double (const Decay_ *, const NormArgs_ & ...)> norm_function = std::mem_fn(norm);
+        std::function<double(const Decay_ *, const PDFArgs_ &...)>  pdf_function  = std::mem_fn(pdf);
+        std::function<double(const Decay_ *, const NormArgs_ &...)> norm_function = std::mem_fn(norm);
 
-        auto entry_ptr = std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf_function, pdf_kinematic_ranges, norm_function, norm_kinematic_names));
+        auto entry_ptr =
+                std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf_function, pdf_kinematic_ranges, norm_function, norm_kinematic_names));
 
         return std::make_pair(qn, entry_ptr);
     }
 
-    template <typename Decay_, typename ... PDFArgs_, typename ... PDFKinematicRanges_, typename ... NormArgs_,  typename ... NormKinematicNames_>
-    std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>> make_signal_pdf(const char * name,
-            const Options & default_options,
-            double (Decay_::* pdf)(const PDFArgs_ & ...) const,
-            const std::tuple<PDFKinematicRanges_ ...> & pdf_kinematic_ranges,
-            const std::function<double (const Decay_ *, const NormArgs_ & ...)> & norm_function,
-            const std::tuple<NormKinematicNames_ ...> & norm_kinematic_names)
+    template <typename Decay_, typename... PDFArgs_, typename... PDFKinematicRanges_, typename... NormArgs_, typename... NormKinematicNames_>
+    std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>>
+    make_signal_pdf(const char * name, const Options & default_options, double (Decay_::*pdf)(const PDFArgs_ &...) const,
+                    const std::tuple<PDFKinematicRanges_...> & pdf_kinematic_ranges, const std::function<double(const Decay_ *, const NormArgs_ &...)> & norm_function,
+                    const std::tuple<NormKinematicNames_...> & norm_kinematic_names)
     {
         static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments for the PDF as kinematics ranges!");
         static_assert(sizeof...(NormArgs_) == sizeof...(NormKinematicNames_), "Need as many function arguments for the normalization as kinematics names!");
 
         QualifiedName qn(name);
 
-        std::function<double (const Decay_ *, const PDFArgs_ & ...)> pdf_function = std::mem_fn(pdf);
+        std::function<double(const Decay_ *, const PDFArgs_ &...)> pdf_function = std::mem_fn(pdf);
 
-        auto entry_ptr = std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf_function, pdf_kinematic_ranges, norm_function, norm_kinematic_names));
+        auto entry_ptr =
+                std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf_function, pdf_kinematic_ranges, norm_function, norm_kinematic_names));
 
         return std::make_pair(qn, entry_ptr);
     }
 
-    template <>
-    struct WrappedForwardIteratorTraits<SignalPDFEntry::KinematicRangeIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<SignalPDFEntry::KinematicRangeIteratorTag>
     {
-        using UnderlyingIterator = const KinematicRange *;
+            using UnderlyingIterator = const KinematicRange *;
     };
-}
+} // namespace eos
 
 #endif

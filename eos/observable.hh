@@ -40,9 +40,7 @@ namespace eos
      * Observable is internally used to handle the creation,
      * evaluation and cloning of any (pseudo)observable quantities.
      */
-    class Observable :
-        public ParameterUser,
-        public ReferenceUser
+    class Observable : public ParameterUser, public ReferenceUser
     {
         public:
             virtual const QualifiedName & name() const = 0;
@@ -69,11 +67,11 @@ namespace eos
      * CacheableObservable is internally used to handle such observables
      * that have a computationally expensive intermediate result.
      */
-    class CacheableObservable :
-        public Observable
+    class CacheableObservable : public Observable
     {
         public:
-            struct IntermediateResult {};
+            struct IntermediateResult
+            {};
 
             virtual const IntermediateResult * prepare() const = 0;
 
@@ -88,8 +86,7 @@ namespace eos
      * ObservableSection is used to keep track of one or more ObservableGroup objects, and groups
      * them together under a common name. Examples of observable sections include semileptonic B decays and form factors.
      */
-    class ObservableSection :
-        public PrivateImplementationPattern<ObservableSection>
+    class ObservableSection : public PrivateImplementationPattern<ObservableSection>
     {
         public:
             ObservableSection(Implementation<ObservableSection> *);
@@ -118,8 +115,7 @@ namespace eos
      * ObservableGroup is used to keep track of one or more ObservableEntry objects, and groups
      * them together under a common name and description. Examples of Observables Groups include B->pilnu observables and B->D form factors.
      */
-    class ObservableGroup :
-        public PrivateImplementationPattern<ObservableGroup>
+    class ObservableGroup : public PrivateImplementationPattern<ObservableGroup>
     {
         public:
             ObservableGroup(Implementation<ObservableGroup> *);
@@ -171,7 +167,7 @@ namespace eos
             using KinematicVariableIterator = WrappedForwardIterator<KinematicVariableIteratorTag, const std::string &>;
 
             virtual KinematicVariableIterator begin_kinematic_variables() const = 0;
-            virtual KinematicVariableIterator end_kinematic_variables() const = 0;
+            virtual KinematicVariableIterator end_kinematic_variables() const   = 0;
             ///@}
 
             ///@name Iteration over options
@@ -180,15 +176,14 @@ namespace eos
             using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const OptionSpecification &>;
 
             virtual OptionIterator begin_options() const = 0;
-            virtual OptionIterator end_options() const = 0;
+            virtual OptionIterator end_options() const   = 0;
             ///@}
     };
 
     /*!
      * Container around the known and implemented signal PDFs
      */
-    class Observables :
-        public PrivateImplementationPattern<Observables>
+    class Observables : public PrivateImplementationPattern<Observables>
     {
         public:
             /// Constructor.
@@ -221,12 +216,12 @@ namespace eos
             ///@}
 
             /*!
-            * Insert a new Observable by parsing its expression.
-            * @param name  The name of the new Observable.
-            * @param latex The latex representation of the new observable.
-            * @param options A set of options that applies to all the observables in the expression.
-            * @param expression The expression to be parsed.
-            */
+             * Insert a new Observable by parsing its expression.
+             * @param name  The name of the new Observable.
+             * @param latex The latex representation of the new observable.
+             * @param options A set of options that applies to all the observables in the expression.
+             * @param expression The expression to be parsed.
+             */
             void insert(const QualifiedName & name, const std::string & latex, const Unit & unit, const Options & options, const std::string & expression) const;
 
             /*!
@@ -240,8 +235,7 @@ namespace eos
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
     extern template class WrappedForwardIterator<Observables::SectionIteratorTag, const ObservableSection &>;
 
-    class ObservableEntries :
-        public InstantiationPolicy<ObservableEntries, Singleton>
+    class ObservableEntries : public InstantiationPolicy<ObservableEntries, Singleton>
     {
         private:
             std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> * _entries;
@@ -253,10 +247,14 @@ namespace eos
         public:
             friend class InstantiationPolicy<ObservableEntries, Singleton>;
 
-            inline const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> & entries() const { return *_entries; }
+            inline const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> &
+            entries() const
+            {
+                return *_entries;
+            }
 
             void insert_or_assign(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value);
     };
-}
+} // namespace eos
 
 #endif

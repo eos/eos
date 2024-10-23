@@ -20,8 +20,8 @@
 #ifndef EOS_GUARD_EOS_REFERENCES_HH
 #define EOS_GUARD_EOS_REFERENCES_HH 1
 
-#include <eos/utils/reference-name.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/reference-name.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <set>
@@ -31,7 +31,7 @@ namespace YAML
 {
     class Emitter;
     class Node;
-}
+} // namespace YAML
 
 namespace eos
 {
@@ -41,8 +41,7 @@ namespace eos
     /*!
      * Reference is used to keep track of the known references.
      */
-    class Reference :
-        public PrivateImplementationPattern<Reference>
+    class Reference : public PrivateImplementationPattern<Reference>
     {
         private:
             Reference(Implementation<Reference> * imp);
@@ -52,7 +51,7 @@ namespace eos
 
             /// Copy constructor
             Reference(const Reference &) = default;
-            Reference(Reference &&) = default;
+            Reference(Reference &&)      = default;
 
             /// Destructor
             ~Reference();
@@ -81,8 +80,7 @@ namespace eos
     /*!
      * Container around the known references
      */
-    class References :
-        public PrivateImplementationPattern<References>
+    class References : public PrivateImplementationPattern<References>
     {
         public:
             /// Constructor.
@@ -119,7 +117,7 @@ namespace eos
             std::set<ReferenceName> _references;
 
         public:
-            ReferenceUser() = default;
+            ReferenceUser()  = default;
             ~ReferenceUser() = default;
 
             ///@name Iteration over references
@@ -129,6 +127,7 @@ namespace eos
 
             ReferenceIterator begin_references() const;
             ReferenceIterator end_references() const;
+
             ///@}
 
             ///@name Access
@@ -138,12 +137,17 @@ namespace eos
              *
              * @param name   The reference name that we use.
              */
-            inline void uses(const ReferenceName & name) { this->_references.insert(name); }
+            inline void
+            uses(const ReferenceName & name)
+            {
+                this->_references.insert(name);
+            }
 
             /*!
              * Convenience access to add an entire set of used references.
              */
-            inline void uses(const std::set<ReferenceName> & names)
+            inline void
+            uses(const std::set<ReferenceName> & names)
             {
                 for (const auto & name : names)
                 {
@@ -156,7 +160,12 @@ namespace eos
              *
              * @param user The other ReferenceUser whose reference we are going to copy.
              */
-            inline void uses(const ReferenceUser & user) { this->uses(user._references); }
+            inline void
+            uses(const ReferenceUser & user)
+            {
+                this->uses(user._references);
+            }
+
             ///@}
     };
 
@@ -165,50 +174,46 @@ namespace eos
     /*!
      * UnknownReferenceError is thrown when References encounters an unknown constraint name.
      */
-    struct UnknownReferenceError :
-        public Exception
+    struct UnknownReferenceError : public Exception
     {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param name The offending reference name.
-         */
-        UnknownReferenceError(const ReferenceName & name);
-        ///@}
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param name The offending reference name.
+             */
+            UnknownReferenceError(const ReferenceName & name);
+            ///@}
     };
 
     /*!
      * ReferencesInputFileParseError is thrown when a malformed references file
      * cannot be parsed by libyaml-cpp.
      */
-    struct ReferencesInputFileParseError :
-        public Exception
+    struct ReferencesInputFileParseError : public Exception
     {
-        ReferencesInputFileParseError(const std::string & file, const std::string & msg) throw ();
+            ReferencesInputFileParseError(const std::string & file, const std::string & msg) throw();
     };
 
     /*!
      * ReferencesInputFileNodeError is thrown when a malformed node is encountered
      * within the references file.
      */
-    struct ReferencesInputFileNodeError :
-        public Exception
+    struct ReferencesInputFileNodeError : public Exception
     {
-        ReferencesInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw ();
+            ReferencesInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw();
     };
 
     /*!
      * ReferencesInputDuplicateError is thrown when a duplicate parameter entry is encountered when parsing
      * the references file.
      */
-    struct ReferencesInputDuplicateError :
-        public Exception
+    struct ReferencesInputDuplicateError : public Exception
     {
-        ReferencesInputDuplicateError(const std::string & file, const std::string & msg) throw ();
+            ReferencesInputDuplicateError(const std::string & file, const std::string & msg) throw();
     };
 
-}
+} // namespace eos
 
 #endif

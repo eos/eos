@@ -36,6 +36,6 @@ namespace eos
     class SignalPDFEntry;
 
     using SignalPDFEntryPtr = std::shared_ptr<const SignalPDFEntry>;
-}
+} // namespace eos
 
 #endif
