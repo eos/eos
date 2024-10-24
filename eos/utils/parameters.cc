@@ -36,6 +36,8 @@
 #include <vector>
 
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/directory.hpp>
+#include <boost/filesystem/file_status.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/format.hpp>
 #include <yaml-cpp/yaml.h>
