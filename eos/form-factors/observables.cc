@@ -1411,6 +1411,41 @@ namespace eos
                 make_form_factor_adapter("B_s->D_s^*::T_23(q2)", R"(T_{23}^{B_s\to D_s^*}(q^2))",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
+                make_observable("B_s->D_s^*::h_A1(q2)", R"(h_{A_1}^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_a1,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*::h_A2(q2)", R"(h_{A_2}^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_a2,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*::h_A3(q2)", R"(h_{A_3}^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_a3,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*::h_V(q2)", R"(h_V^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_v,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*::h_T1(q2)", R"(h_{T_1}^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_t1,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*::h_T2(q2)", R"(h_{T_2}^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_t2,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*::h_T3(q2)", R"(h_{T_3}^{\bar{B}_s\to D_s^*}(q^2))",
+                        Unit::None(),
+                        &HQETFormFactors<BsToDsstar, PToV>::h_t3,
+                        std::make_tuple("q2")),
+
                 make_expression_observable("B_s->D_s^*::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
                         Unit::None(),
                         R"( <<B_s->D_s^*::V(q2)>> / <<B_s->D_s^*::A_1(q2)>> )"),
