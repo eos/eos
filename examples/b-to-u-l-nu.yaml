@@ -127,3 +127,25 @@ predictions:
           q2_e_min: 1.0e-7
           q2_tau_min: 3.3
           q2_max: 25.0
+
+steps:
+  - title: 'Sample from CKM-all posterior'
+    id: 'CKM-all.sample'
+    depends_on: []
+    tasks:
+      - task: 'sample-nested'
+        arguments:
+          posterior: 'CKM-all'
+          bound: 'multi'
+          nlive: 100
+          dlogz: 9.0
+          maxiter: 4000
+
+  - title: 'Create corner plot for CKM-all posterior'
+    id: 'CKM-all.corner-plot'
+    depends_on: ['CKM-all.sample']
+    tasks:
+      - task: 'corner-plot'
+        arguments:
+          posterior: 'CKM-all'
+          format: ['pdf', 'png']
