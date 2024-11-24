@@ -760,6 +760,17 @@ def validate(analysis_file:str):
     analysis_file.validate()
 
 
+@task('list-steps', '', logfile=False)
+def list_steps(analysis_file:str):
+    """
+    Lists the steps in the analysis file.
+
+    :param analysis_file: The name of the analysis file that shall be inspected`.
+    :type analysis_file: str or :class:`eos.AnalysisFile`
+    """
+    return [step.id for step in analysis_file._steps]
+
+
 class Executor:
     _factory_methods = {}
 
