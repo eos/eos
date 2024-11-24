@@ -484,6 +484,18 @@ Validates the analysis file by checking that all posteriors and all prediction s
     parser_validate.set_defaults(cmd = cmd_validate)
 
 
+    # list-steps
+    parser_list_steps = subparsers.add_parser('list-steps',
+        parents = [common_subparser],
+        description =
+'''
+Lists the steps defined within the analysis file.
+''',
+        help = 'List the steps defined in the analysis file.'
+    )
+    parser_list_steps.set_defaults(cmd = cmd_list_steps)
+
+
     # report
     parser_report = subparsers.add_parser('report',
         parents = [common_subparser],
@@ -720,6 +732,12 @@ def cmd_predict_observables(args):
 # Validate analysis file
 def cmd_validate(args):
     return eos.validate(**args_to_dict(args))
+
+
+# List steps in analysis file
+def cmd_list_steps(args):
+    result = eos.list_steps(**args_to_dict(args))
+    print('\n'.join(result))
 
 
 # Report
