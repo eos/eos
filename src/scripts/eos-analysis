@@ -496,6 +496,21 @@ Lists the steps defined within the analysis file.
     parser_list_steps.set_defaults(cmd = cmd_list_steps)
 
 
+    # list-step-dependencies
+    parser_list_step_dependencies = subparsers.add_parser('list-step-dependencies',
+        parents = [common_subparser],
+        description =
+'''
+Lists the dependencies of a step defined within the analysis file.
+''',
+        help = 'List the dependencies of a step defined in the analysis file.'
+    )
+    parser_list_step_dependencies.add_argument('id', metavar = 'ID',
+        help = 'The id of the step for which to list the dependencies.'
+    )
+    parser_list_step_dependencies.set_defaults(cmd = cmd_list_step_dependencies)
+
+
     # report
     parser_report = subparsers.add_parser('report',
         parents = [common_subparser],
@@ -738,6 +753,15 @@ def cmd_validate(args):
 def cmd_list_steps(args):
     result = eos.list_steps(**args_to_dict(args))
     print('\n'.join(result))
+
+
+# List steps in analysis file
+def cmd_list_step_dependencies(args):
+    result = eos.list_step_dependencies(**args_to_dict(args))
+    if isinstance(result, list) and len(result) > 0:
+        print('\n'.join(result))
+    elif isinstance(result, str):
+        print(result)
 
 
 # Report
