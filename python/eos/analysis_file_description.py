@@ -2,6 +2,7 @@ from .deserializable import Deserializable
 from dataclasses import dataclass, field
 import copy as _copy
 import eos
+import inspect
 
 class PriorDescription:
     @staticmethod
@@ -195,12 +196,45 @@ class TaskComponent(Deserializable):
     task:str
     arguments:dict=field(default_factory=dict)
 
+    def __post_init__(self):
+        if self.task not in eos.tasks._tasks.keys():
+            raise ValueError(f'Task \'{self.task}\' is not a valid task')
+        task = eos.tasks._tasks[self.task]
+
+        provided_arguments = set(self.arguments.keys())
+        # inject 'analysis_file' and 'base_directory' into known arguments
+        # these will be provided implicitly when the task is executed
+        provided_arguments.add('analysis_file')
+        provided_arguments.add('base_directory')
+
+        known_arguments = set(inspect.signature(task).parameters.keys())
+        default_arguments = { k for k, v in inspect.signature(task).parameters.items() if v.default is not inspect.Parameter.empty }
+        required_arguments = known_arguments - default_arguments
+
+        for arg in provided_arguments - known_arguments:
+            raise ValueError(f'Task \'{self.task}\' does not recognize argument \'{arg}\'')
+
+        for arg in required_arguments - provided_arguments:
+            raise ValueError(f'Task \'{self.task}\' requires provision of argument \'{arg}\'')
+
+        for arg in default_arguments - provided_arguments:
+            eos.warn(f'Task \'{self.task}\' has a default value for argument \'{arg}\', which can change across versions; consider providing a value explicitly')
+
+
 @dataclass
 class StepComponent(Deserializable):
-    name:str
+    title:str
+    id:str
     tasks:list
-    iterations:list=field(default_factory=list)
     depends_on:list=field(default_factory=list)
+
+    def __post_init__(self):
+        if '/' in self.id:
+            raise ValueError(f'Invalid character \'/\' in step id \'{self.id}\'')
+        if ' ' in self.id:
+            raise ValueError(f'Invalid character \' \' in step id \'{self.id}\'')
+        if len(self.tasks) == 0:
+            raise ValueError(f'Step \'{self.id}\' has no tasks')
 
     @classmethod
     def from_dict(cls, **kwargs):
