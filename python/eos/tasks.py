@@ -771,6 +771,24 @@ def list_steps(analysis_file:str):
     return [step.id for step in analysis_file._steps]
 
 
+@task('list-step-dependencies', '', logfile=False)
+def list_step_dependencies(analysis_file:str, id:str):
+    """
+    Lists all steps required to be completed before the given step can be executed.
+
+    :param analysis_file: The name of the analysis file that shall be inspected`.
+    :type analysis_file: str or :class:`eos.AnalysisFile`
+    :param id: The id of the step to inspect.
+    :type id: str
+    """
+    steps = { step.id: step for step in analysis_file._steps }
+
+    if id not in steps:
+        raise ValueError(f'Step with id \'{id}\' not found in analysis file')
+
+    return steps[id].depends_on
+
+
 class Executor:
     _factory_methods = {}
 
