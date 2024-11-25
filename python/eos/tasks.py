@@ -797,39 +797,3 @@ def list_step_dependencies(analysis_file:str, id:str):
         raise ValueError(f'Step with id \'{id}\' not found in analysis file')
 
     return steps[id].depends_on
-
-
-class Executor:
-    _factory_methods = {}
-
-    def __init__(self, steps, dry_run):
-        self._steps = steps
-        self._dry_run = dry_run
-
-    @staticmethod
-    def register(name, type):
-        Executor._factory_methods.update({name: type})
-
-    @staticmethod
-    def make(executor, **kwargs):
-        if executor not in Executor._factory_methods:
-            raise ValueError(f'Task "run" encountered invalid executor "{executor}"')
-
-        return Executor._factory_methods[executor](**kwargs)
-
-
-class SerialExecutor(Executor):
-    def __init__(self, steps, dry_run=False):
-        Executor.__init__(self, steps, dry_run)
-
-    def run(self):
-        pass
-
-    def join(self):
-        for name, desc, task, arguments in self._steps:
-            if self._dry_run:
-                print(f'eos-analysis {task} {arguments}')
-            else:
-                _tasks[task](**arguments)
-
-Executor.register('serial', SerialExecutor)
