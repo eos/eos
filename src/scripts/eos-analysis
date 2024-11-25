@@ -539,9 +539,12 @@ Generates a report of the analysis based on the analysis file and the recorded r
         parents = [common_subparser],
         description =
 '''
-Runs a list of subcommands based on the pre-recorded steps defined within an analysis.
+Runs one out of a list of steps recorded within an analysis file.
 ''',
-        help = 'Runs a list of subcommands.'
+        help = 'Run a step by id.'
+    )
+    parser_run.add_argument('id', metavar = 'ID',
+        help = 'The id of the step to run.'
     )
     parser_run.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
