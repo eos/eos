@@ -12,9 +12,16 @@ echo using PYTHONPATH=${PYTHONPATH} >&2
 ###########################################
 ## Run the Analysis's steps automaticall ##
 ###########################################
-echo running analysis steps test ... >&2
+echo running analysis steps test \(optimize\)... >&2
 $PYTHON ${SOURCE_DIR}/eos-analysis \
     run \
+    optimize \
+    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+echo ... success >&2
+echo running analysis steps test \(sample\)... >&2
+$PYTHON ${SOURCE_DIR}/eos-analysis \
+    run \
+    sample \
     -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 

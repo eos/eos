@@ -515,11 +515,11 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[begin:end])
 
 
-# Run analysis steps
-@task('run', '', modules=['networkx'])
-def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor:str='serial'):
+# Run one analysis step
+@task('run', '')
+def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
     """
-    Runs a list of predefined steps recorded in the analysis file.
+    Runs one out of a list of predefined steps recorded in the analysis file.
 
     Each step corresponds to a call to one or more of the common tasks, e.g.,
      - sample-mcmc
@@ -529,19 +529,29 @@ def run(analysis_file:str, base_directory:str='./', dry_run:bool=False, executor
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
+    :param id: The id of the step to run.
+    :type id: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     :param dry_run: The flag that disables execution and insteads prints the full information on the tasks that would be run to standard output. Defaults to `False`.
     :type dry_run: bool, optional
-    :param executor: The flag that governs the execution type for the tasks. Currently only supports `serial` execution. Defaults to `serial`.
-    :type executor: str, optional
     """
-    try:
-        exec = Executor.make(executor, steps=analysis_file.steps(base_directory), dry_run=dry_run)
-        exec.run()
-        exec.join()
-    except Exception as e:
-        raise e
+    steps = { step.id: step for step in analysis_file._steps }
+
+    if id not in steps:
+        raise ValueError(f'Step with id \'{id}\' not found in analysis file')
+
+    step = steps[id]
+
+    for task in step.tasks:
+        if dry_run:
+            arguments = task.arguments | { 'analysis_file': analysis_file.analysis_file, 'base_directory': base_directory }
+            print(f"{task.task}({','.join([f'{k}={v}' for k, v in arguments.items()])})")
+        else:
+            arguments = task.arguments | { 'analysis_file': analysis_file, 'base_directory': base_directory }
+            task_function = _tasks[task.task]
+
+            return task_function(**arguments)
 
 
 # Nested sampling

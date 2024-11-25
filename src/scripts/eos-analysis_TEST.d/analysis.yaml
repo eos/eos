@@ -93,25 +93,26 @@ predictions:
 
 steps:
   - name: optimize
-    iterations:
-      - posterior: CKM+FF
-        seed: 123
     tasks:
       - task: find-mode
         arguments:
+          posterior: CKM+FF
+          seed: 123
           label: 'seed-{seed}'
 
   - name: sample
-    iterations:
-      - { posterior: CKM+FF }
     tasks:
       - task: sample-mcmc
         arguments:
+          posterior: CKM+FF
           chain: '0,1-2,3'
           pre_N: 500
 
       - task: find-clusters
+        arguments:
+          posterior: CKM+FF
 
       - task: sample-pmc
         arguments:
+          posterior: CKM+FF
           step_N: 1000
