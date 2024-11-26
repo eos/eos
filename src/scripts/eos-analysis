@@ -36,6 +36,8 @@ except ImportError:
 def get_from_env(envvar, default):
     if not envvar in os.environ:
         return default
+    if envvar == "EOS_VERBOSITY":
+        return int(os.environ[envvar])
 
     return os.environ[envvar]
 
@@ -46,8 +48,8 @@ def _parser():
     common_subparser = argparse.ArgumentParser(add_help=False)
     # add verbosity arg and analysis-file arg to all commands
     common_subparser.add_argument('-v', '--verbose',
-        help = 'Increases the verbosity of the script',
-        dest = 'verbose', action = 'count', default = 0
+        help = 'Increases the verbosity of the script. Can also be set via the EOS_VERBOSITY environment variable.',
+        dest = 'verbose', action = 'count', default = None
     )
     common_subparser.add_argument('-f', '--analysis-file',
         help = 'The analysis file. Defaults to \'analysis.yaml\'.',
@@ -575,6 +577,8 @@ def main():
         elif not callable(args.cmd):
             parser.print_help()
         else:
+            if not args.verbose:
+                args.verbose = get_from_env('EOS_VERBOSITY', 0)
             if args.verbose > 5:
                 args.verbose = 5
 
