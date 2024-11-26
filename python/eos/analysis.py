@@ -372,8 +372,10 @@ class Analysis:
             **scipy_opt_kwargs)
 
         if not res.success:
-            eos.warn('Optimization did not succeed')
-            eos.warn('  optimizer'' message reads: {}'.format(res.message))
+            eos.error('Optimization did not succeed')
+            eos.error('  optimizer'' message reads: {}'.format(res.message))
+            if str(start_point) == "random":
+                eos.error('  random start point was used, perhaps try another method?')
         else:
             eos.success(f'Optimization goal achieved after {res.nfev} function evaluations')
 
