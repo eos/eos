@@ -307,7 +307,7 @@ The plots will be stored as PDF files within the respective sample inputs.
 Finds the mode of the named posterior.
 
 The optimization process can be initialised either by a provided parameter point or previously obtained
-importance samples (recommended), a random point, or from a pre-existing Markov chain with provided index (deprecated). The optimization
+importance samples (recommended), a random point (default), or from a pre-existing Markov chain with provided index (deprecated). The optimization
 can be iterated to increase the accuracy of the result. The output will be stored in
 EOS_BASE_DIRECTORY/posterior/mode-LABEL.
 ''',
