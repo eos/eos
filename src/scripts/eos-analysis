@@ -543,7 +543,7 @@ Initializes a new analysis directory based on the EOS analysis template.
 class CustomLogFormatter(logging.Formatter):
     _MAP_LEVEL_TO_COLOR = {
         logging.ERROR:      ('✖', 'red'),
-        logging.WARNING:    ('⚠', 'orange'),
+        logging.WARNING:    ('⚠', 'yellow'),
         logging.SUCCESS:    ('🗸', 'green'),
         logging.COMPLETED:  ('🗸', 'green'),
         logging.INPROGRESS: ('…', 'green'),
