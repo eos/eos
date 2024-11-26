@@ -443,14 +443,20 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Unit>("Unit", R"(
             Represents the unit of the observables.
 
-            Seven possible entries are currently implemented in EOS:
-            - Undefined
-            - None
-            - GeV
-            - GeV2
-            - InverseGeV2
-            - InverseGeV4
-            - InversePicoSecond
+            Thirteen possible entries are currently implemented in EOS:
+              - Undefined
+              - None
+              - GeV
+              - GeV2
+              - GeV3
+              - InverseGeV
+              - InverseGeV2
+              - InverseGeV4
+              - Second
+              - InverseSecond
+              - InversePicoSecond
+              - GeVSecond
+              - Femtometer2
         )",
                  init<std::string>())
             .def("Undefined", &Unit::Undefined)
@@ -461,12 +467,24 @@ BOOST_PYTHON_MODULE(_eos)
             .staticmethod("GeV")
             .def("GeV2", &Unit::GeV2)
             .staticmethod("GeV2")
+            .def("GeV3", &Unit::GeV3)
+            .staticmethod("GeV3")
+            .def("InverseGeV", &Unit::InverseGeV)
+            .staticmethod("InverseGeV")
             .def("InverseGeV2", &Unit::InverseGeV2)
             .staticmethod("InverseGeV2")
             .def("InverseGeV4", &Unit::InverseGeV4)
             .staticmethod("InverseGeV4")
+            .def("Second", &Unit::Second)
+            .staticmethod("Second")
+            .def("InverseSecond", &Unit::InverseSecond)
+            .staticmethod("InverseSecond")
             .def("InversePicoSecond", &Unit::InversePicoSecond)
             .staticmethod("InversePicoSecond")
+            .def("GeVSecond", &Unit::GeVSecond)
+            .staticmethod("GeVSecond")
+            .def("Femtometer2", &Unit::Femtometer2)
+            .staticmethod("Femtometer2")
             .def("latex", &Unit::latex, return_value_policy<copy_const_reference>())
             .def("__eq__", &Unit::operator==);
 
