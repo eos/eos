@@ -560,6 +560,8 @@ class Plotter:
            If ``'median'`` is provided, the band's median line is drawn.
            If ``'area'`` is provided, the band's areas are filled.
            Defaults to ``['area', 'outer', 'median']``.
+         * ``interpolation-type`` (*str*) -- The type of interpolation to be used for the band. Can be either ``linear`` (default) or ``cubic``.
+         * ``plot-data`` (*bool*) -- If set to ``True``, the data points are plotted on top of the band.
 
         Example:
 
@@ -621,6 +623,9 @@ class Plotter:
             self.band   = item['band']  if 'band'  in item else ['area', 'outer', 'median']
             self.xrange = item['range'] if 'range' in item else None
 
+            self.interpolation_type = item['interpolation-type'] if 'interpolation-type' in item else 'linear'
+            self.plot_data = item['plot-data'] if 'plot-data' in item else False
+
         def plot(self):
             _ovalues_lower   = []
             _ovalues_central = []
@@ -637,13 +642,16 @@ class Plotter:
             if self.xrange:
                 xvalues = np.ma.masked_outside(xvalues, float(self.xrange[0]), float(self.xrange[1]))
 
-            # work around CubicSpline missing in SciPy version < 0.18
-            if scipy.__version__ >= '0.18':
-                from scipy.interpolate import CubicSpline
-                interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
-            else:
-                from scipy.interpolate import spline
-                interpolate = spline
+            if self.interpolation_type == "linear":
+                interpolate = lambda x, y, xv: np.interp(xv, x, y)
+            elif self.interpolation_type == "cubic":
+                # work around CubicSpline missing in SciPy version < 0.18
+                if scipy.__version__ >= '0.18':
+                    from scipy.interpolate import CubicSpline
+                    interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
+                else:
+                    from scipy.interpolate import spline
+                    interpolate = spline
 
             ovalues_lower   = interpolate(self.xvalues, _ovalues_lower,   xvalues)
             ovalues_central = interpolate(self.xvalues, _ovalues_central, xvalues)
@@ -663,6 +671,9 @@ class Plotter:
                     self.plotter.ax.plot(xvalues, ovalues_central,                   alpha=self.alpha, color=self.color, ls=self.style, lw=self.lw)
             elif 'median' in self.band:
                 self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color, ls=self.style, label=self.label, lw=self.lw)
+
+            if self.plot_data:
+                self.plotter.ax.scatter(self.xvalues, _ovalues_central,              alpha=self.alpha, color=self.color, lw=self.lw)
 
 
     class UncertaintyBinned(BasePlot):
