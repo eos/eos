@@ -25,6 +25,7 @@ import os
 import pypmc
 import scipy
 import sys
+import traceback
 import yaml
 
 try:
@@ -634,6 +635,8 @@ def main():
             args.cmd(args)
     except Exception as e:
         print(colored('✖ Encountered an unrecoverable error:\n', 'red', attrs=['bold']), f'{e}')
+        if not isinstance(e, ValueError):
+            traceback.print_exception(e, e, e.__traceback__)
         sys.exit(1)
 
 
