@@ -455,7 +455,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
-def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None):
+def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_label=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
@@ -474,12 +474,22 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type begin: int
     :param end: The index beyond the last sample to use for the predictions. Defaults to None.
     :type begin: int
+    :param mask_label: The label of the mask to apply to the observables. Defaults to None.
+    :type mask_label: str, optional
     '''
     _analysis      = analysis_file.analysis(posterior)
     _parameters    = _analysis.parameters
     cache          = eos.ObservableCache(_parameters)
     observables    = analysis_file.observables(posterior, prediction, _parameters)
     observable_ids = [cache.add(o) for o in observables]
+
+    if mask_label is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-label and begin or end are mutually exclusive')
+    if mask_label is not None:
+        with open(os.path.join(base_directory, posterior, f'mask-{mask_label}', 'mask.npy'), 'rb') as f:
+            mask = _np.load(f)
+    else:
+        mask = slice(None) # Since you can't set mask = :
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -508,7 +518,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         except RuntimeError as e:
             eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
-    observable_samples = _np.array(observable_samples)
+    observable_samples = _np.array(observable_samples)[mask]
     eos.completed(f'... done')
 
     output_path = os.path.join(base_directory, posterior, f'pred-{prediction}')
