@@ -2302,6 +2302,12 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "Kbar_u" }, { "P2", "pi^+" } }),
 
+                make_observable("B_s^0->K^-pi^+::BR_exp", R"(\mathcal{B}^\mathrm{exp}(B_s^0\to K^-\pi^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::exp_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "Kbar_u" }, { "P2", "pi^+" } }),
+
                 make_observable("B_s^0->K^-pi^+::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^-\pi^+))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
@@ -2398,6 +2404,12 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
 
+                make_observable("B_s^0->pi^+pi^-::BR_exp", R"(\mathcal{B}^\mathrm{exp}(B_s^0\to\pi^+\pi^-))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::exp_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "pi^+" }, { "P2", "pi^-" } }),
+
                 make_observable("B_s^0->pi^+pi^-::A_CP", R"(A_\mathrm{CP}(B_s^0\to\pi^+\pi^-))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
@@ -2413,6 +2425,12 @@ namespace eos
                 make_observable("B_s^0->K^+K^-::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to K^+K^-))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
+
+                make_observable("B_s^0->K^+K^-::BR_exp", R"(\mathcal{B}^\mathrm{exp}(B_s^0\to K^+K^-))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::exp_branching_ratio,
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "K_u" }, { "P2", "Kbar_u" } }),
 
@@ -2440,6 +2458,12 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
 
+                make_observable("B_s^0->K^0Kbar^0::BR_exp", R"(\mathcal{B}^\mathrm{exp}(B_s^0\to K^0\bar{K}^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::exp_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "K_d" }, { "P2", "Kbar_d" } }),
+
                 make_observable("B_s^0->K^0Kbar^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to K^0\bar{K}^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
@@ -2461,6 +2485,12 @@ namespace eos
                 make_observable("B_s^0->pi^0pi^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\pi^0\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
+
+                make_observable("B_s^0->pi^0pi^0::BR_exp", R"(\mathcal{B}^\mathrm{exp}(B_s^0\to\pi^0\pi^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::exp_branching_ratio,
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "pi^0" }, { "P2", "pi^0" } }),
 
@@ -2595,6 +2625,125 @@ namespace eos
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
+
+                make_observable("B^+->eta^primepi^+::BR", R"(\mathcal{B}(B^+\to\eta^\prime\pi^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta_prime" }, { "P2", "pi^+" } }),
+
+                make_observable("B^+->eta^primepi^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\eta^\prime\pi^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta_prime" }, { "P2", "pi^+" } }),
+
+                make_observable("B^+->eta^primepi^+::A_CP", R"(A\mathrm{CP}(B^+\to\eta^\prime\pi^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta_prime" }, { "P2", "pi^+" } }),
+
+                make_observable("B^0->eta^primepi^0::BR", R"(\mathcal{B}(B^0\to\eta^\prime\pi^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "pi^0" } }),
+
+                make_observable("B^0->eta^primepi^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta^\prime\pi^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "pi^0" } }),
+
+                make_observable("B^+->eta^primeK^+::BR", R"(\mathcal{B}(B^+\to\eta^\prime K^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta_prime" }, { "P2", "K_u" } }),
+
+                make_observable("B^+->eta^primeK^+::BR_avg", R"(\bar{\mathcal{B}}(B^+\to\eta^\prime K^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta_prime" }, { "P2", "K_u" } }),
+
+                make_observable("B^+->eta^primeK^+::A_CP", R"(A\mathrm{CP}(B^+\to\eta^\prime K^+))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "u" }, { "P1", "eta_prime" }, { "P2", "K_u" } }),
+
+                make_observable("B^0->eta^primeK^0::BR", R"(\mathcal{B}(B^0\to\eta^\prime K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "K_d" } }),
+
+                make_observable("B^0->eta^primeK^0::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta^\prime K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "K_d" } }),
+
+                make_observable("B^0->eta^primeK^0::A_CP", R"(A\mathrm{CP}(B^0\to\eta^\prime K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "K_d" } }),
+
+                make_observable("B^0->eta^primeK^0::S_CP", R"(S\mathrm{CP}(B^0\to\eta^\prime K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "K_d" } }),
+
+                make_observable("B^0->eta^primeeta^prime::BR", R"(\mathcal{B}(B^0\to\eta^\prime\eta^\prime))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "eta_prime" } }),
+
+                make_observable("B^0->eta^primeeta^prime::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta^\prime\eta^\prime))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "eta_prime" } }),
+
+                make_observable("B^0->eta^primeeta::BR", R"(\mathcal{B}(B^0\to\eta^\prime\eta))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "eta" } }),
+
+                make_observable("B^0->eta^primeeta::BR_avg", R"(\bar{\mathcal{B}}(B^0\to\eta^\prime\eta))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta_prime" }, { "P2", "eta" } }),
+
+                make_observable("B_s^0->eta^primeeta::BR", R"(\mathcal{B}(B_s^0\to\eta^\prime\eta))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta_prime" }, { "P2", "eta" } }),
+
+                make_observable("B_s^0->eta^primeeta::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta^\prime\eta))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta_prime" }, { "P2", "eta" } }),
+                make_observable("B_s^0->eta^primeeta^prime::BR", R"(\mathcal{B}(B_s^0\to\eta^\prime\eta^\prime))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta_prime" }, { "P2", "eta_prime" } }),
+
+                make_observable("B_s^0->eta^primeeta^prime::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta^\prime\eta^\prime))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta_prime" }, { "P2", "eta_prime" } }),
             }
         );
 

@@ -43,8 +43,10 @@ namespace eos
             double branching_ratio() const;
             double cp_branching_ratio() const;
             double avg_branching_ratio() const;
+            double exp_branching_ratio() const;
             double cp_asymmetry() const;
             double mixing_induced_cp_asymmetry() const;
+            double a_Delta_Gamma() const;
 
             /*!
              * Descriptions of the process and its kinematics.

@@ -41,6 +41,7 @@ namespace eos
         UsedParameter mP1;
         UsedParameter mP2;
         UsedParameter phiB;
+        UsedParameter yq;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
 
@@ -56,6 +57,7 @@ namespace eos
             mP1(p["mass::" + opt_p1.str()], u),
             mP2(p["mass::" + opt_p2.str()], u),
             phiB(p["B_" + (opt_q.str()=="u"?"d":opt_q.str()) + "::q_over_p_phase"], u),
+            yq(p["B_" + (opt_q.str()=="u"?"d":opt_q.str()) + "::y" + (opt_q.str()=="u"?"d":opt_q.str())],u),
             nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o + Options{{"cp-conjugate", "false"}})),
             cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o + Options{{"cp-conjugate", "true"}}))
         {
@@ -113,6 +115,21 @@ namespace eos
 
             return -2 * std::imag(lambdaf) / (1 + std::norm(lambdaf)) ;
         }
+
+        double a_Delta_Gamma() const
+        {
+            const double phiB = this->phiB();
+            complex<double> ii = complex<double>(0.0, 1.0);
+
+            const complex<double> amp = nl_amplitudes->amplitude();
+            const complex<double> cp_amp = cp_nl_amplitudes->amplitude();
+
+            // Assumes the mixing parameter ratio q / p to be a pure phase
+            const complex<double> lambdaf = std::exp(ii * phiB) * cp_amp / amp;
+
+
+            return -2 * std::real(lambdaf) / (1 + std::norm(lambdaf)) ;
+        }
     };
 
     const std::vector<OptionSpecification>
@@ -160,6 +177,12 @@ namespace eos
     }
 
     double
+    BToPseudoscalarPseudoscalar::exp_branching_ratio() const
+    {
+        return avg_branching_ratio() * (1 - _imp->a_Delta_Gamma() * (-1 * _imp->yq())) / (1 - power_of<2>(_imp->yq()));
+    }
+
+    double
     BToPseudoscalarPseudoscalar::cp_asymmetry() const
     {
         return (branching_ratio() - cp_branching_ratio()) / (branching_ratio() + cp_branching_ratio());
@@ -169,6 +192,12 @@ namespace eos
     BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry() const
     {
         return _imp->mixing_induced_cp_asymmetry();
+    }
+
+    double
+    BToPseudoscalarPseudoscalar::a_Delta_Gamma() const
+    {
+        return _imp->a_Delta_Gamma();
     }
 
 
