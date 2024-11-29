@@ -158,13 +158,13 @@ namespace eos
             virtual double f_long_T(const double & s) const;
     };
 
-    extern template class BSZ2015FormFactors<BToRho, PToV>;
-    extern template class BSZ2015FormFactors<BToOmega, PToV>;
-    extern template class BSZ2015FormFactors<BToKstar, PToV>;
     extern template class BSZ2015FormFactors<BToDstar, PToV>;
+    extern template class BSZ2015FormFactors<BToKstar, PToV>;
+    extern template class BSZ2015FormFactors<BToOmega, PToV>;
+    extern template class BSZ2015FormFactors<BToRho, PToV>;
+    extern template class BSZ2015FormFactors<BsToDsstar, PToV>;
     extern template class BSZ2015FormFactors<BsToKstar, PToV>;
     extern template class BSZ2015FormFactors<BsToPhi, PToV>;
-    extern template class BSZ2015FormFactors<BsToDsstar, PToV>;
 
 
     // P -> P
@@ -251,14 +251,18 @@ namespace eos
             virtual double f_plus_T(const double & s) const;
     };
 
-    extern template class BSZ2015FormFactors<BToPi, PToP>;
-    extern template class BSZ2015FormFactors<BToK, PToP>;
     extern template class BSZ2015FormFactors<BToD, PToP>;
-    extern template class BSZ2015FormFactors<BsToK, PToP>;
+    extern template class BSZ2015FormFactors<BToEta, PToP>;
+    extern template class BSZ2015FormFactors<BToEtaPrime, PToP>;
+    extern template class BSZ2015FormFactors<BToK, PToP>;
+    extern template class BSZ2015FormFactors<BToPi, PToP>;
     extern template class BSZ2015FormFactors<BsToDs, PToP>;
+    extern template class BSZ2015FormFactors<BsToEta, PToP>;
+    extern template class BSZ2015FormFactors<BsToEtaPrime, PToP>;
+    extern template class BSZ2015FormFactors<BsToK, PToP>;
+    extern template class BSZ2015FormFactors<DToK, PToP>;
     extern template class BSZ2015FormFactors<DToPi, PToP>;
     extern template class BSZ2015FormFactors<DsToK, PToP>;
-    extern template class BSZ2015FormFactors<DToK, PToP>;
 }
 
 #endif
