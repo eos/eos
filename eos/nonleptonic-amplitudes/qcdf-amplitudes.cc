@@ -50,9 +50,9 @@ namespace eos
     {
         complex<double> A_alpha_qcdf = 0.0;
 
-        complex<double>               alpha1     = complex<double>(this->re_alpha1(),    this->im_alpha1()),
+        complex<double>               alpha1     = complex<double>(this->re_alpha1p4_u(),    this->im_alpha1p4_u()) - complex<double>(this->re_alpha4_u(),   this->im_alpha4_u()),
                                       alpha2     = complex<double>(this->re_alpha2(),    this->im_alpha2()),
-                                      b1      = complex<double>(this->re_b1(),     this->im_b1()),
+                                      b1      = complex<double>(this->re_b1p4_u(),    this->im_b1p4_u()) - complex<double>(this->re_b4_u(),    this->im_b4_u()),
                                       b2      = complex<double>(this->re_b2(),     this->im_b2()),
                                       bS1     = complex<double>(this->re_bS1(),    this->im_bS1()),
                                       bS2     = complex<double>(this->re_bS2(),    this->im_bS2()),
@@ -67,10 +67,10 @@ namespace eos
                                       bS4_c   = complex<double>(this->re_bS4_c(),   this->im_bS4_c()),
 
                                       alpha3EW_c = complex<double>(this->re_alpha3EW_c(), this->im_alpha3EW_c()),
-                                      alpha4EW_c = complex<double>(this->re_alpha4EW_c(), this->im_alpha4EW_c()),
+                                      alpha4EW_c = complex<double>(this->re_alpha4cp4EW_c(),    this->im_alpha4cp4EW_c()) - 2.0 / 3.0 * complex<double>(this->re_alpha4_c(),   this->im_alpha4_c()),
                                       b3EW_c  = complex<double>(this->re_b3EW_c(),  this->im_b3EW_c()),
                                       bS3EW_c = complex<double>(this->re_bS3EW_c(), this->im_bS3EW_c()),
-                                      b4EW_c     = complex<double>(this->re_b4EW_c(),     this->im_b4EW_c()),
+                                      b4EW_c     = complex<double>(this->re_b4cp4EW_c(),    this->im_b4cp4EW_c()) - 2.0 / 3.0 * complex<double>(this->re_b4_c(),    this->im_b4_c()),
                                       bS4EW_c    = complex<double>(this->re_bS4EW_c(),    this->im_bS4EW_c());
 
         std::array<complex<double>, 6> T, P1_c, P1_u, P2_c;
@@ -83,7 +83,7 @@ namespace eos
                 T[3] = b1;
                 T[4] = bS2;
                 T[5] = bS1;
- 
+
                 P1_u[0] = alpha4_u;
                 P1_u[1] = alpha3_u;
                 P1_u[3] = b4_u;
@@ -102,17 +102,17 @@ namespace eos
                 P2_c[5] = bS4EW_c;
 
                 for (unsigned i = 0; i < 3; i++)
-                { 
+                {
                     for (unsigned j = 0; j < 3; j++)
-                    { 
+                    {
                         for (unsigned a = 0; a < 6; a++)
-                        { 
+                        {
                             C_u[a][i][j] = T[a] * U[i][j] + P1_u[a] * I[i][j];
                             C_c[a][i][j] = 3.0/2.0 * P2_c[a] * U[i][j] + P1_c[a] * I[i][j] ;
                         }
                     }
                 }
-        
+
         for (unsigned i = 0; i < 3; i++)
         {
             for (unsigned j = 0; j < 3; j++)
@@ -141,9 +141,9 @@ namespace eos
     {
         complex<double> A_b_qcdf = 0.0;
 
-        complex<double> alpha1     = complex<double>(this->re_alpha1(),    this->im_alpha1()),
+        complex<double>               alpha1     = complex<double>(this->re_alpha1p4_u(),    this->im_alpha1p4_u()) - complex<double>(this->re_alpha4_u(),   this->im_alpha4_u()),
                                       alpha2     = complex<double>(this->re_alpha2(),    this->im_alpha2()),
-                                      b1      = complex<double>(this->re_b1(),     this->im_b1()),
+                                      b1      = complex<double>(this->re_b1p4_u(),    this->im_b1p4_u()) - complex<double>(this->re_b4_u(),    this->im_b4_u()),
                                       b2      = complex<double>(this->re_b2(),     this->im_b2()),
                                       bS1     = complex<double>(this->re_bS1(),    this->im_bS1()),
                                       bS2     = complex<double>(this->re_bS2(),    this->im_bS2()),
@@ -158,24 +158,25 @@ namespace eos
                                       bS4_c   = complex<double>(this->re_bS4_c(),   this->im_bS4_c()),
 
                                       alpha3EW_c = complex<double>(this->re_alpha3EW_c(), this->im_alpha3EW_c()),
-                                      alpha4EW_c = complex<double>(this->re_alpha4EW_c(), this->im_alpha4EW_c()),
+                                      alpha4EW_c = complex<double>(this->re_alpha4cp4EW_c(),    this->im_alpha4cp4EW_c()) - 2.0 / 3.0 * complex<double>(this->re_alpha4_c(),   this->im_alpha4_c()),
                                       b3EW_c  = complex<double>(this->re_b3EW_c(),  this->im_b3EW_c()),
                                       bS3EW_c = complex<double>(this->re_bS3EW_c(), this->im_bS3EW_c()),
-                                      b4EW_c     = complex<double>(this->re_b4EW_c(),     this->im_b4EW_c()),
+                                      b4EW_c     = complex<double>(this->re_b4cp4EW_c(),    this->im_b4cp4EW_c()) - 2.0 / 3.0 * complex<double>(this->re_b4_c(),    this->im_b4_c()),
                                       bS4EW_c    = complex<double>(this->re_bS4EW_c(),    this->im_bS4EW_c());
+
 
         std::array<complex<double>, 6> T, P1_c, P1_u, P2_c;
 
         std::array<std::array<std::array<complex<double>, 6>, 6>, 6> C_u, C_c;
 
-        
+
                 T[0] = alpha1;
                 T[1] = alpha2;
                 T[2] = b2;
                 T[3] = b1;
                 T[4] = bS2;
                 T[5] = bS1;
- 
+
                 P1_u[0] = alpha4_u;
                 P1_u[1] = alpha3_u;
                 P1_u[3] = b4_u;
@@ -194,17 +195,17 @@ namespace eos
                 P2_c[5] = bS4EW_c;
 
                 for (unsigned i = 0; i < 3; i++)
-                { 
+                {
                     for (unsigned j = 0; j < 3; j++)
-                    { 
+                    {
                         for (unsigned a = 0; a < 6; a++)
-                        { 
+                        {
                             C_u[a][i][j] = T[a] * U[i][j] + P1_u[a] * I[i][j];
                             C_c[a][i][j] = 3.0/2.0 * P2_c[a] * U[i][j] + P1_c[a] * I[i][j] ;
                         }
                     }
                 }
-        
+
         for (unsigned i = 0; i < 3; i++)
         {
             for (unsigned j = 0; j < 3; j++)
@@ -237,8 +238,8 @@ namespace eos
     {
         this->update();
 
-        return power_of<2>(mB()) * FP1() * fP2() * this->alpha_amplitude(P1, P2) + fB() * fP1() * fP2() * this->b_amplitude(P1, P2);
-        
+        return power_of<2>(mB()) * FP1() * fP2() / (1 - power_of<2>(mP2() / mB_q_0())) * this->alpha_amplitude(P1, P2) + fB() * fP1() * fP2() * this->b_amplitude(P1, P2);
+
     }
 
     complex<double>
@@ -246,7 +247,7 @@ namespace eos
     {
         this->update();
 
-        return power_of<2>(mB()) * FP2() * fP1() * this->alpha_amplitude(P2, P1) + fB() * fP1() * fP2() * this->b_amplitude(P2, P1);
-        
+        return power_of<2>(mB()) * FP2() * fP1() / (1 - power_of<2>(mP1() / mB_q_0())) * this->alpha_amplitude(P2, P1) + fB() * fP1() * fP2() * this->b_amplitude(P2, P1);
+
     }
 }

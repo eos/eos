@@ -46,23 +46,26 @@ namespace eos
 
             UsedParameter theta_18;
 
-            su3f::rank1 B; 
+            su3f::rank1 B;
             std::array<complex<double>, 6> Lambda_u, Lambda_c;
             mutable su3f::rank2 P1, P2, U, I;
-            
+
 
 
             UsedParameter Gfermi;
             UsedParameter mB;
+            UsedParameter mB_q_0;
+            UsedParameter mP1;
+            UsedParameter mP2;
             UsedParameter FP1;
             UsedParameter FP2;
             UsedParameter fB;
             UsedParameter fP1;
             UsedParameter fP2;
 
-            UsedParameter re_alpha1, im_alpha1;
+            /*UsedParameter re_alpha1, im_alpha1;*/
             UsedParameter re_alpha2, im_alpha2;
-            UsedParameter re_b1, im_b1;
+            /*UsedParameter re_b1, im_b1;*/
             UsedParameter re_b2, im_b2;
             UsedParameter re_bS1, im_bS1;
             UsedParameter re_bS2, im_bS2;
@@ -77,11 +80,17 @@ namespace eos
             UsedParameter re_bS4_c, im_bS4_c;
 
             UsedParameter re_alpha3EW_c, im_alpha3EW_c;
-            UsedParameter re_alpha4EW_c, im_alpha4EW_c;
+            /*UsedParameter re_alpha4EW_c, im_alpha4EW_c;*/
             UsedParameter re_b3EW_c, im_b3EW_c;
             UsedParameter re_bS3EW_c, im_bS3EW_c;
-            UsedParameter re_b4EW_c, im_b4EW_c;
+            /*UsedParameter re_b4EW_c, im_b4EW_c;*/
             UsedParameter re_bS4EW_c, im_bS4EW_c;
+
+            UsedParameter re_alpha1p4_u, im_alpha1p4_u;
+            /*UsedParameter re_alpha2p4_u, im_alpha2p4_u;*/
+            UsedParameter re_alpha4cp4EW_c, im_alpha4cp4EW_c;
+            UsedParameter re_b1p4_u, im_b1p4_u;
+            UsedParameter re_b4cp4EW_c, im_b4cp4EW_c;
 
             static const std::vector<OptionSpecification> options;
 
@@ -89,7 +98,7 @@ namespace eos
             complex<double> lamsu;
             complex<double> lamdc;
             complex<double> lamsc;
-            
+
 
         public:
             QCDFRepresentation(const Parameters & p, const Options & o) :
@@ -104,24 +113,23 @@ namespace eos
                 P2{{}},
                 Gfermi(p["WET::G_Fermi"], *this),
                 mB(p["mass::B_" + opt_q.str()], *this),
+                mB_q_0(p["mass::B_" + opt_q.str() + ",0@BSZ2015"], *this),
+                mP1(p["mass::" + opt_p1.str()], *this),
+                mP2(p["mass::" + opt_p2.str()], *this),
                 FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),
                 FP2(p["B_" + opt_q.str() + "->" + opt_p2.str() + "::f_+(0)"], *this),
                 fB(p["decay-constant::B_" + opt_q.str()], *this),
                 fP1(p["decay-constant::" + opt_p1.str()], *this),
                 fP2(p["decay-constant::" + opt_p2.str()], *this),
-                
-                re_alpha1(    p["nonleptonic::Re{alpha1}@QCDF"] , *this),
-                im_alpha1(    p["nonleptonic::Im{alpha1}@QCDF"] , *this),
+
                 re_alpha2(    p["nonleptonic::Re{alpha2}@QCDF"] , *this),
                 im_alpha2(    p["nonleptonic::Im{alpha2}@QCDF"] , *this),
-                re_b1(     p["nonleptonic::Re{b1}@QCDF"] , *this),
-                im_b1(     p["nonleptonic::Im{b1}@QCDF"] , *this),
-                re_b2(     p["nonleptonic::Re{b2}@QCDF"] , *this),
-                im_b2(     p["nonleptonic::Im{b2}@QCDF"] , *this),
-                re_bS1(    p["nonleptonic::Re{bS1}@QCDF"], *this),
-                im_bS1(    p["nonleptonic::Im{bS1}@QCDF"], *this),
-                re_bS2(    p["nonleptonic::Re{bS2}@QCDF"], *this),
-                im_bS2(    p["nonleptonic::Im{bS2}@QCDF"], *this),
+                re_b2(        p["nonleptonic::Re{b2}@QCDF"] , *this),
+                im_b2(        p["nonleptonic::Im{b2}@QCDF"] , *this),
+                re_bS1(       p["nonleptonic::Re{bS1}@QCDF"], *this),
+                im_bS1(       p["nonleptonic::Im{bS1}@QCDF"], *this),
+                re_bS2(       p["nonleptonic::Re{bS2}@QCDF"], *this),
+                im_bS2(       p["nonleptonic::Im{bS2}@QCDF"], *this),
 
                 re_alpha3_u(  p["nonleptonic::Re{alpha3_u}@QCDF"] , *this),
                 im_alpha3_u(  p["nonleptonic::Im{alpha3_u}@QCDF"] , *this),
@@ -131,27 +139,32 @@ namespace eos
                 im_alpha4_u(  p["nonleptonic::Im{alpha4_u}@QCDF"] , *this),
                 re_alpha4_c(  p["nonleptonic::Re{alpha4_c}@QCDF"] , *this),
                 im_alpha4_c(  p["nonleptonic::Im{alpha4_c}@QCDF"] , *this),
-                re_b4_u(   p["nonleptonic::Re{b4_u}@QCDF"] , *this),
-                im_b4_u(   p["nonleptonic::Im{b4_u}@QCDF"] , *this),
-                re_b4_c(   p["nonleptonic::Re{b4_c}@QCDF"] , *this),
-                im_b4_c(   p["nonleptonic::Im{b4_c}@QCDF"] , *this),
-                re_bS4_u(  p["nonleptonic::Re{bS4_u}@QCDF"] , *this),
-                im_bS4_u(  p["nonleptonic::Im{bS4_u}@QCDF"] , *this),
-                re_bS4_c(  p["nonleptonic::Re{bS4_c}@QCDF"] , *this),
-                im_bS4_c(  p["nonleptonic::Im{bS4_c}@QCDF"] , *this),
+                re_b4_u(      p["nonleptonic::Re{b4_u}@QCDF"] , *this),
+                im_b4_u(      p["nonleptonic::Im{b4_u}@QCDF"] , *this),
+                re_b4_c(      p["nonleptonic::Re{b4_c}@QCDF"] , *this),
+                im_b4_c(      p["nonleptonic::Im{b4_c}@QCDF"] , *this),
+                re_bS4_u(     p["nonleptonic::Re{bS4_u}@QCDF"] , *this),
+                im_bS4_u(     p["nonleptonic::Im{bS4_u}@QCDF"] , *this),
+                re_bS4_c(     p["nonleptonic::Re{bS4_c}@QCDF"] , *this),
+                im_bS4_c(     p["nonleptonic::Im{bS4_c}@QCDF"] , *this),
 
                 re_alpha3EW_c(p["nonleptonic::Re{alpha3EW_c}@QCDF"] , *this),
                 im_alpha3EW_c(p["nonleptonic::Im{alpha3EW_c}@QCDF"] , *this),
-                re_alpha4EW_c(p["nonleptonic::Re{alpha4EW_c}@QCDF"] , *this),
-                im_alpha4EW_c(p["nonleptonic::Im{alpha4EW_c}@QCDF"] , *this),
-                re_b3EW_c( p["nonleptonic::Re{b3EW_c}@QCDF"], *this),
-                im_b3EW_c( p["nonleptonic::Im{b3EW_c}@QCDF"], *this),
-                re_bS3EW_c(p["nonleptonic::Re{bS3EW_c}@QCDF"], *this),
-                im_bS3EW_c(p["nonleptonic::Im{bS3EW_c}@QCDF"], *this),
-                re_b4EW_c(    p["nonleptonic::Re{b4EW_c}@QCDF"] , *this),
-                im_b4EW_c(    p["nonleptonic::Im{b4EW_c}@QCDF"] , *this),
+                re_b3EW_c(    p["nonleptonic::Re{b3EW_c}@QCDF"], *this),
+                im_b3EW_c(    p["nonleptonic::Im{b3EW_c}@QCDF"], *this),
+                re_bS3EW_c(   p["nonleptonic::Re{bS3EW_c}@QCDF"], *this),
+                im_bS3EW_c(   p["nonleptonic::Im{bS3EW_c}@QCDF"], *this),
                 re_bS4EW_c(   p["nonleptonic::Re{bS4EW_c}@QCDF"] , *this),
-                im_bS4EW_c(   p["nonleptonic::Im{bS4EW_c}@QCDF"] , *this)
+                im_bS4EW_c(   p["nonleptonic::Im{bS4EW_c}@QCDF"] , *this),
+
+                re_alpha1p4_u( p["nonleptonic::Re{alpha1p4_u}@QCDF"] , *this),
+                im_alpha1p4_u( p["nonleptonic::Im{alpha1p4_u}@QCDF"] , *this),
+                re_alpha4cp4EW_c( p["nonleptonic::Re{alpha4cp4EW_c}@QCDF"] , *this),
+                im_alpha4cp4EW_c( p["nonleptonic::Im{alpha4cp4EW_c}@QCDF"] , *this),
+                re_b1p4_u(       p["nonleptonic::Re{b1p4_u}@QCDF"] , *this),
+                im_b1p4_u(       p["nonleptonic::Im{b1p4_u}@QCDF"] , *this),
+                re_b4cp4EW_c( p["nonleptonic::Re{b4cp4EW_c}@QCDF"] , *this),
+                im_b4cp4EW_c( p["nonleptonic::Im{b4cp4EW_c}@QCDF"] , *this)
             {
                 Context ctx("When constructing B->PP QCD amplitudes");
 
@@ -173,7 +186,7 @@ namespace eos
 
 
                 U[0][0] = 1;
-                
+
                 I[0][0] = 1;
                 I[1][1] = 1;
                 I[2][2] = 1;
@@ -184,7 +197,7 @@ namespace eos
                 Lambda_c[1] = lamdc;
                 Lambda_c[2] = lamsc;
 
-    
+
             };
 
             void update() const
@@ -201,7 +214,7 @@ namespace eos
             // Helper functions
             complex<double> alpha_amplitude(su3f::rank2 p1, su3f::rank2 p2) const;
             complex<double> b_amplitude(su3f::rank2 p1, su3f::rank2 p2) const;
-            
+
             // Diagnostic functions
             complex<double> alpha_amplitude() const { update(); return alpha_amplitude(P1, P2); }
             complex<double> b_amplitude() const { update(); return b_amplitude(P1, P2); };
