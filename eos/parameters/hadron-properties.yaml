@@ -682,6 +682,12 @@ groups:
           latex:    '$\Delta \Gamma_{B_s}$'
           unit:     's^-1'
           comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
+      'B_d::yd' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$y_{B_d}$'
+          comments: '[PDG2012]'
       'B_s::ys' :
           central: 0.0675
           min:     0.0635
