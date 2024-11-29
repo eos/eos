@@ -767,6 +767,74 @@ def validate(analysis_file:str):
     """
     analysis_file.validate()
 
+# Filter samples
+@task('filter-samples', '{posterior}/mask-{label}')
+def filter_samples(analysis_file:str, posterior:str, prediction:str, label:str, base_directory:str='./'):
+    """
+    Filters samples based on the observables.
+
+    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mask-LABEL.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param prediction: The name of the set of observables to use to filter.
+    :type prediction: str
+    :param label: The label for the mask
+    :type label: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    """
+    _analysis = analysis_file.analysis(posterior)
+    _parameters    = _analysis.parameters
+    cache          = eos.ObservableCache(_parameters)
+    observables    = analysis_file.observables(posterior, prediction, _parameters)
+    observable_ids = [cache.add(o) for o in observables]
+
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+    # TODO: Should we refactor this check into a separate function ???
+    # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
+    analysis_varied_params = [p.name() for p in _analysis.varied_parameters]
+    samples_varied_params = [p["name"] for p in data.varied_parameters]
+    if analysis_varied_params != samples_varied_params:
+        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+
+    try:
+        from tqdm.auto import tqdm
+        progressbar = tqdm
+    except ImportError:
+        progressbar = lambda x: x
+
+    parameters = [_parameters[p['name']] for p in data.varied_parameters]
+    observable_samples = []
+    nsamples = len(data.samples)
+    eos.inprogress(f'Predicting observables from set \'{prediction}\' for {nsamples} samples')
+    for i, sample in enumerate(progressbar(data.samples)):
+        for p, v in zip(parameters, sample):
+            p.set(v)
+        try:
+            cache.update()
+            observable_samples.append([cache[id] for id in observable_ids])
+        except RuntimeError as e:
+            eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
+            observable_samples.append([_np.nan for _ in observable_ids])
+    observable_samples = _np.array(observable_samples)
+    mask = _np.all(observable_samples > 0, axis=1)
+    with open(os.path.join(base_directory, posterior, f'mask-{label}', 'mask.npy'), 'wb') as f:
+        _np.save(f, mask)
+
+    description = {}
+    description['version'] = eos.__version__
+    description['type'] = 'Filter Mask'
+    description['observables'] = [ ";".join(map(str, [o.name(), o.options(), o.kinematics()])) for o in observables]
+
+    import yaml
+    with open(os.path.join(base_directory, posterior, f'mask-{label}', 'description.yaml'), 'w') as description_file:
+        yaml.dump(description, description_file, default_flow_style=False)
+
 
 @task('list-steps', '', logfile=False)
 def list_steps(analysis_file:str):

@@ -511,6 +511,32 @@ Lists the dependencies of a step defined within the analysis file.
     parser_list_step_dependencies.set_defaults(cmd = cmd_list_step_dependencies)
 
 
+    # filter-samples
+    parser_filter_samples = subparsers.add_parser('filter-samples',
+        parents = [common_subparser],
+        description =
+'''
+Filters samples from a named posterior based on a prediction set.
+''',
+        help = 'Filters samples from a posterior.'
+    )
+    parser_filter_samples.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
+    )
+    parser_filter_samples.add_argument('observables', metavar = 'OBSERVABLES',
+        help = 'The name of the set of observables to use to filter the samples. Currently must be a prediction set',
+        action = 'store', type = str
+    )
+    parser_filter_samples.add_argument('label', metavar = 'LABEL',
+        help = 'The label to assign to the filtered samples.'
+    )
+    parser_filter_samples.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_filter_samples.set_defaults(cmd = cmd_filter_samples)
+
+
     # report
     parser_report = subparsers.add_parser('report',
         parents = [common_subparser],
@@ -766,6 +792,11 @@ def cmd_list_step_dependencies(args):
         print('\n'.join(result))
     elif isinstance(result, str):
         print(result)
+
+
+# Filter samples
+def cmd_filter_samples(args):
+    return eos.filter_samples(**args_to_dict(args))
 
 
 # Report
