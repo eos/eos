@@ -426,7 +426,7 @@ groups:
           max:     -0.2580355775883392
           latex:    '$\alpha_{T,2}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
-      # form factor parameters for B_s->pi 
+      # form factor parameters for B_s->pi
       'B_s->pi::f_+(0)' :
           alias_of: [ 'B_s->pi^0::f_+(0)', 'B_s->pi^+::f_+(0)', 'B_s->pi^-::f_+(0)' ]
           central:  0.0
@@ -435,7 +435,7 @@ groups:
           latex:    '$f_+^{B_s\to \pi}(0)$'
           unit:     '1'
           comments: "not the real values, update"
-      # form factor parameters for B->eta 
+      # form factor parameters for B->eta
       'B->eta::f_+(0)' :
           alias_of: [ 'B_u->eta::f_+(0)', 'B_d->eta::f_+(0)' ]
           central:  0.168
@@ -444,7 +444,7 @@ groups:
           latex:    '$f_+^{B\to \eta}(0)$'
           unit:     '1'
           comments: 'from 1508.05287'
-      # form factor parameters for B_s->eta 
+      # form factor parameters for B_s->eta
       'B_s->eta::f_+(0)' :
           central:  0.212
           min:      0.199
@@ -452,7 +452,7 @@ groups:
           latex:    '$f_+^{B_s\to \eta}(0)$'
           unit:     '1'
           comments: 'from 1508.05287'
-      # form factor parameters for B->eta' 
+      # form factor parameters for B->eta'
       'B->eta_prime::f_+(0)' :
           alias_of: [ 'B_u->eta_prime::f_+(0)', 'B_d->eta_prime::f_+(0)' ]
           central:  0.130
@@ -461,7 +461,7 @@ groups:
           latex:    '$f_+^{B\to \eta^\prime}(0)$'
           unit:     '1'
           comments: 'from 1508.05287'
-      # form factor parameters for B_s->eta' 
+      # form factor parameters for B_s->eta'
       'B_s->eta_prime::f_+(0)' :
           central:  0.252
           min:      0.232
@@ -502,7 +502,6 @@ groups:
           unit:     '1'
           comments: "from 2207.12468, maybe update"
       'B->K::f_+(0)@BCL2008' :
-          alias_of: [ 'B_d->K_d::f_+(0)', 'B_d->Kbar_d::f_+(0)', 'B_d->K_u::f_+(0)','B_d->Kbar_u::f_+(0)', 'B_u->K_d::f_+(0)', 'B_u->Kbar_d::f_+(0)', 'B_u->K_u::f_+(0)','B_u->Kbar_u::f_+(0)' ]
           central: +0.0
           min:     +0.0
           max:     +0.0
@@ -5699,40 +5698,40 @@ groups:
           latex:
             template: '$\mathrm{%1%}\,%2%$'
             map:
-              'alpha1'    :  '\alpha_1'
-              'alpha2'    :  '\alpha_2'
-              'b1'        :  '\b_1'
-              'b2'        :  '\b_2'
-              'bS1'       :  '\b_{S1}'
-              'bS2'       :  '\b_{S2}'
-              'alpha3_u'  :  '\alpha_3^u'
-              'alpha3_c'  :  '\alpha_3^c'
-              'alpha4_u'  :  '\alpha_4^u'
-              'alpha4_c'  :  '\alpha_4^c'
-              'b3_u'      :  '\b_3^u'
-              'b3_c'      :  '\b_3^c'
-              'b4_u'      :  '\b_4^u'
-              'b4_c'      :  '\b_4^c'
-              'bS3_u'     :  '\b_{S3}^u'
-              'bS3_c'     :  '\b_{S3}^c'
-              'bS4_u'     :  '\b_{S4}^u'
-              'bS4_c'     :  '\b_{S4}^c'
-              'alpha3EW_u':  '\alpha_{3,EW}^u'
-              'alpha3EW_c':  '\alpha_{3,EW}^c'
-              'alpha4EW_u':  '\alpha_{4,EW}^u'
-              'alpha4EW_c':  '\alpha_{4,EW}^c'
-              'b3EW_u'    :  '\b_{3,EW}^u'
-              'b3EW_c'    :  '\b_{3,EW}^c'
-              'bS3EW_u'   :  '\b_{S3,EW}^u'
-              'bS3EW_c'   :  '\b_{S3,EW}^c'
-              'b4EW_u'    :  'b_{4,EW}^u'
-              'b4EW_c'    :  'b_{4,EW}^c'
-              'bS4EW_u'   :  'b_{S4,EW}^u'
-              'bS4EW_c'   :  'b_{S4,EW}^c'
+              'alpha1p4_u'   :  '\alpha_1 + \alpha_4^u'
+              'alpha2'       :  '\alpha_2'
+              'b1p4_u'       :  'b_1 + \,b_4^u'
+              'b2'           :  'b_2'
+              'bS1'          :  'b_{S1}'
+              'bS2'          :  'b_{S2}'
+              'alpha3_u'     :  '\alpha_3^u'
+              'alpha3_c'     :  '\alpha_3^c'
+              'alpha4_u'     :  '\alpha_4^u'
+              'alpha4_c'     :  '\alpha_4^c'
+              'b3_u'         :  'b_3^u'
+              'b3_c'         :  'b_3^c'
+              'b4_u'         :  'b_4^u'
+              'b4_c'         :  'b_4^c'
+              'bS3_u'        :  'b_{S3}^u'
+              'bS3_c'        :  'b_{S3}^c'
+              'bS4_u'        :  'b_{S4}^u'
+              'bS4_c'        :  'b_{S4}^c'
+              'alpha3EW_u'   :  '\alpha_{3,EW}^u'
+              'alpha3EW_c'   :  '\alpha_{3,EW}^c'
+              'alpha4EW_u'   :  '\alpha_{4,EW}^u'
+              'alpha4cp4EW_c':  '\alpha_{4,EW}^c + \frac{2}{3} \alpha_4^c'
+              'b3EW_u'       :  'b_{3,EW}^u'
+              'b3EW_c'       :  'b_{3,EW}^c'
+              'bS3EW_u'      :  'b_{S3,EW}^u'
+              'bS3EW_c'      :  'b_{S3,EW}^c'
+              'b4EW_u'       :  'b_{4,EW}^u'
+              'b4cp4EW_c'    :  'b_{4,EW}^c + \frac{2}{3} b_4^c'
+              'bS4EW_u'      :  'b_{S4,EW}^u'
+              'bS4EW_c'      :  'b_{S4,EW}^c'
           matrix:
             - [ "Re", "Im" ]
-            - [ "alpha1", "alpha2", "b1", "b2", "bS1", "bS2", "alpha3_u", "alpha3_c", 
-                "alpha4_u", "alpha4_c", "b3_u", "b3_c", "b4_u", "b4_c", "bS3_u", 
-                "bS3_c", "bS4_u", "bS4_c", "alpha3EW_u", "alpha3EW_c", "alpha4EW_u", "alpha4EW_c", 
-                "b3EW_u", "b3EW_c", "bS3EW_u", "bS3EW_c", "b4EW_u", "b4EW_c",  "bS4EW_u", "bS4EW_c"]
+            - [ "alpha1p4_u", "alpha2", "b1p4_u", "b2", "bS1", "bS2", "alpha3_u", "alpha3_c",
+                "alpha4_u", "alpha4_c", "b3_u", "b3_c", "b4_u", "b4_c", "bS3_u",
+                "bS3_c", "bS4_u", "bS4_c", "alpha3EW_u", "alpha3EW_c", "alpha4EW_u", "alpha4cp4EW_c",
+                "b3EW_u", "b3EW_c", "bS3EW_u", "bS3EW_c", "b4EW_u", "b4cp4EW_c",  "bS4EW_u", "bS4EW_c"]
   # }}}
