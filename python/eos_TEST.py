@@ -138,7 +138,6 @@ class PythonTests:
         for obs in con.observables():
             print(obs.name())
 
-
     """
     Check if an instance of Model can be created, and if we can compute the
     running MSbar mass of the b quark.
@@ -162,6 +161,22 @@ class PythonTests:
                 raise TestFailedError('internal error')
         except:
             raise TestFailedError('cannot determine running b quark mass')
+
+    """
+    Check if the latex strings of the Units are valid.
+    """
+    def check_009_Units(self):
+        from eos import Unit
+        import matplotlib
+        from matplotlib import texmanager
+
+        for attr, value in Unit.__dict__.items():
+            if attr[0] != "_" and attr != "latex":
+                try:
+                    s = value.__func__().latex()
+                    matplotlib.texmanager.TexManager.get_text_width_height_descent(f"${s}$", 1)
+                except:
+                    raise TestFailedError('invalid latex string for unit ' + attr)
 
 
 class LoggingTests(unittest.TestCase):
