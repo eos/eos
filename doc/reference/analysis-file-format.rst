@@ -210,7 +210,7 @@ The recognized ``predictions`` keys are:
 
 The observables accept two keys:
   - ``name`` (**mandatory**) The qualified name of the observable.
-    Options can be specified in the observable name following the syntax of [eos.QualifiedName](../reference/python.rst#eos.QualifiedName).
+    Options can be specified in the observable name following the syntax of :class:`QualifiedName <eos.QualifiedName>`.
     A warning will be raised if the observable option override the global options defined above.
   - ``kinematics`` (**optional**) The dictionary of kinematics specifications for the observables.
     For brevety, a list of kinematic specification can be provided. In this case, one observable per specification will be created.
