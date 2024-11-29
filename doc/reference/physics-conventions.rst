@@ -4,6 +4,14 @@ Summary of the Physics Conventions
 
 EOS implicitly uses the following conventions in the predictions of flavour physics observables.
 
+Units
+-----
+
+EOS uses natural units :math:`(\hbar = c =1)` and, with the exceptions of lifetimes that are expressed in seconds, all quantities are expressed in powers of GeV.
+Units are specified in the definition of observables and parameters.
+They can be found in this documentation (`here <constraints.html>`_ and `here <parameters.html>`_ respectively),
+or directly from python, as described in the `basic examples <../user-guide/basics.html>`_.
+
 Weak Effective Theory
 ---------------------
 
