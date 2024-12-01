@@ -195,7 +195,7 @@ class OneDimensionalHistogramItem(Item):
         # These checks are necessary to ensure that the data file is in the correct format,
         # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         datafile = context.data_path(self.datafile)
-        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist")
+        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist when preparing 1D histogram")
         name = os.path.split(datafile)[-1]
         if name == 'samples':
             self._datafile = eos.data.ImportanceSamples(datafile)
@@ -244,7 +244,7 @@ class TwoDimensionalHistogramItem(Item):
         # These checks are necessary to ensure that the data file is in the correct format,
         # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         datafile = context.data_path(self.datafile)
-        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist")
+        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist when preparing 2D histogram")
         name = os.path.split(datafile)[-1]
         if name == 'samples':
             self._datafile = eos.data.ImportanceSamples(datafile)
@@ -302,7 +302,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         # These checks are necessary to ensure that the data file is in the correct format,
         # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         datafile = context.data_path(self.datafile)
-        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist")
+        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist when preparing 1D KDE")
         name = os.path.split(datafile)[-1]
         if name == 'samples':
             self._datafile = eos.data.ImportanceSamples(datafile)
@@ -382,7 +382,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             if contour_type not in ['lines', 'filled']:
                 raise ValueError(f"Contour type '{contour_type}' is not supported")
 
-    def prepare(self):
+    def prepare(self, context:AnalysisFileContext=None):
         "Prepare the KDE for drawing"
 
         context = AnalysisFileContext() if context is None else context
@@ -390,7 +390,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         # These checks are necessary to ensure that the data file is in the correct format,
         # but they are not possible in the __post_init__ method, because the data file might not yet exist.
         datafile = context.data_path(self.datafile)
-        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist")
+        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist when preparing 2D KDE")
         name = os.path.split(datafile)[-1]
         if name == 'samples':
             self._datafile = eos.data.ImportanceSamples(datafile)

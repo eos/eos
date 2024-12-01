@@ -20,7 +20,9 @@ from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 from .plot import Plot, PlotFactory
+from .common import DataFile
 
+import os
 import copy as _copy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -32,7 +34,7 @@ class Figure(ABC, Deserializable):
     name:str=field(default=None)
 
     @abstractmethod
-    def draw(self, context:AnalysisFileContext=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
         "Draw the figure"
         raise NotImplementedError
 
@@ -50,10 +52,12 @@ class SingleFigure(Figure):
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=(6, 4))
 
-    def draw(self, context:AnalysisFileContext=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
         self.plot.draw(self._ax)
+        if output is not None:
+            self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -80,18 +84,137 @@ class GridFigure(Figure):
         self._figure, axes = plt.subplots(nrow, ncol, figsize=(3.0 * nrow, 3.0 * ncol))
         self._axes = axes.flatten('C') # flatten to row-major style
 
-    def draw(self, context:AnalysisFileContext=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
         context = AnalysisFileContext() if context is None else context
         for idx, plot in enumerate(self.plots):
             plot.prepare()
             plot.draw(self._axes[idx])
 
         self._figure.tight_layout()
+        if output is not None:
+            self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['plots'] = [PlotFactory.from_dict(**p) for p in kwargs['plots']]
+        return Deserializable.make(cls, **_kwargs)
+
+
+@dataclass(kw_only=True)
+class CornerFigure(Figure):
+    r"""Produces a grid figure representing the variables described by one or several datafiles.
+    Distributions of the variables are shown on the diagonal, while correlations are plotted on the lower-left corner.
+
+    :param contents: List of contents to be drawn. Contents should be dictionaries containing the path to the data file, a label and optionally a color.
+    :type contents: list[eos.figure.DataFile] or iterable[eos.figure.DataFile]
+    :param variables: List of the names of the variables to be considered. Defaults to None, in this case all variables are shown.
+    :type variables: list[str] (optional)
+    """
+    type:str=field(repr=False, init=False, default='corner')
+    contents:list[DataFile]
+    variables:list[str]=None
+
+    def __post_init__(self):
+        if not self.contents:
+            raise ValueError("Contents must include at least one item to be plotted.")
+
+    def prepare(self, context:AnalysisFileContext=None, output:str|None=None):
+        context = AnalysisFileContext() if context is None else context
+        for content in self.contents:
+            content.prepare(context=context)
+
+        if self.variables:
+            self._variables = self.variables
+        else:
+            self._variables = list(self.contents[0].variables)
+
+        # Check that the variables of the data files match
+        for content in self.contents:
+            unknown_variables = set(self._variables) - set(content.variables)
+            if len(unknown_variables) > 0:
+                raise ValueError(f"Unknown variables requested from data file '{content.path}': {list(unknown_variables)}")
+
+        self._labels = self.contents[0].labels(self._variables)
+
+        plots = []
+        size = len(self._variables)
+
+        for i in range(size):
+            for j in range(size):
+
+                if i < j:
+                    plots.append(PlotFactory.from_dict(**{
+                        'type': 'empty'
+                    }))
+
+                elif i == j:
+                    plots.append(PlotFactory.from_dict(**{
+                        'xaxis': {
+                            'ticks': { 'visible': True },
+                            'label': self._labels[i]
+                        }
+                        if (i == size - 1) else
+                        {
+                            'ticks': { 'visible': False }
+                        },
+                        'yaxis': { 'ticks': { 'visible': False } },
+                        'grid': { 'visible': True, 'axis': 'x' },
+                        'items': [
+                            {
+                                'type': 'kde1D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variable': self._variables[i],
+                                'color': content.color,
+                            }
+                        for content in self.contents]
+                    }))
+
+                else:
+                    plots.append(PlotFactory.from_dict(**{
+                        'xaxis': {
+                            'ticks': { 'visible': True },
+                            'label': self._labels[j]
+                        }
+                        if (i == size - 1) else
+                        {
+                            'ticks': { 'visible': False }
+                        },
+                        'yaxis': {
+                            'ticks': { 'visible': True },
+                            'label': self._labels[i]
+                        }
+                        if (j == 0) else
+                        {
+                            'ticks': { 'visible': False }
+                        },
+                        'grid': { 'visible': True},
+                        'items': [
+                            {
+                                'type': 'kde2D', 'label': content.label ,
+                                'datafile': context.data_path(content.path),
+                                'variables': [self._variables[j], self._variables[i]],
+                                'color': content.color,
+                            }
+                        for content in self.contents]
+                    }))
+
+        self._figure = GridFigure(shape=(size, size), plots=plots)
+
+
+    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+        context = AnalysisFileContext() if context is None else context
+        if not hasattr(self, '_figure'):
+            self.prepare(context=context, output=output)
+
+        self._figure.draw(context=context, output=output)
+
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        if 'contents' in kwargs:
+            _kwargs['contents'] = [DataFile.from_dict(**c) for c in kwargs['contents']]
         return Deserializable.make(cls, **_kwargs)
 
 
@@ -101,6 +224,7 @@ class FigureFactory:
     registry = {
         'single': SingleFigure, # default
         'grid':   GridFigure,
+        'corner': CornerFigure,
     }
 
     @staticmethod
