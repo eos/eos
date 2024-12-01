@@ -49,6 +49,56 @@ namespace eos
             virtual double phipara(const double & u, const double & mu) const = 0;
             virtual double phiperp(const double & u, const double & mu) const = 0;
 
+            /* Twist 3 parameters */
+            virtual double kappa3para(const double & mu) const = 0;
+            virtual double omega3para(const double & mu) const = 0;
+            virtual double lambda3para(const double & mu) const = 0;
+            virtual double zeta3para(const double & mu) const = 0;
+            virtual double lambda3paratilde(const double & mu) const = 0;
+            virtual double omega3paratilde(const double & mu) const = 0;
+            virtual double kappa3perp(const double & mu) const = 0;
+            virtual double omega3perp(const double & mu) const = 0;
+            virtual double lambda3perp(const double & mu) const = 0;
+
+            /* Twist 3 two particle LCDAs */
+            virtual double phi3para(const double & u, const double & mu) const = 0;
+            virtual double phi3perp(const double & u, const double & mu) const = 0;
+            virtual double psi3para(const double & u, const double & mu) const = 0;
+            virtual double psi3perp(const double & u, const double & mu) const = 0;
+
+            /* Twist 3 three particle LCDAs */
+            virtual double Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+
+            /* Twist 4 parameters */
+            virtual double zeta4para(const double & mu) const = 0;
+            virtual double omega4paratilde(const double & mu) const = 0;
+            virtual double zeta4perp(const double & mu) const = 0;
+            virtual double zeta4perptilde(const double & mu) const = 0;
+            virtual double kappa4para(const double & mu) const = 0;
+            virtual double kappa4perp(const double & mu) const = 0;
+
+            /* Twist 4 three particle chiral even LCDAs */
+            virtual double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+
+            /* Twist 4 three particle chiral odd LCDAs */
+            virtual double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde1(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+
             static std::shared_ptr<VectorLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
 }
