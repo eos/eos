@@ -26,6 +26,7 @@ EXTRA_DIST = \
 	eos/data/native.py \
     eos/data/native_TEST.d \
 	eos/figure/__init__.py \
+	eos/figure/common.py \
 	eos/figure/config.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
@@ -80,6 +81,7 @@ eosplot_SCRIPTS = \
 eosfiguredir = $(pkgpythondir)/figure
 eosfigure_SCRIPTS = \
 	eos/figure/__init__.py \
+	eos/figure/common.py \
 	eos/figure/config.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
