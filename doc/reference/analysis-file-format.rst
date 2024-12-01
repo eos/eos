@@ -23,6 +23,8 @@ At the top level, the format includes the following YAML keys:
 
  - ``predictions`` (**optional**) --- The list of theory predictions within the analysis.
 
+ - ``figures`` (**optional**) --- The list of figures to be produced in the analysis.
+
  - ``steps`` (**optional**) --- The list of steps to be executed in the analysis.
 
  - ``masks`` (**optional**) --- The list of masks for filtering samples defined for the analysis.
@@ -246,6 +248,12 @@ The following code provides a valid example of predictions.
                       { q2: 16.0 }, { q2: 17.0 }, { q2: 18.0 }, { q2: 19.0 }, { q2: 20.0 },
                       { q2: 21.0 }, { q2: 22.0 }, { q2: 23.0 }, { q2: 24.0 }, { q2: 25.0 },
                       { q2: 26.0 }, { q2: 27.0 } ]
+
+
+Figures
+~~~~~~~
+
+The ``figures`` key contains a list of *named* figures. For the format of a figure's description, see `the corresponding section <figure-format.html>`_.
 
 
 Steps

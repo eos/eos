@@ -128,6 +128,36 @@ predictions:
           q2_tau_min: 3.3
           q2_max: 25.0
 
+figures:
+  - name: CKM-Vub
+    type: single
+    plot:
+      legend:
+        position: 'lower left'
+      xaxis:
+        label: '$|V_{ub}|$'
+      yaxis:
+        label: 'Posterior Density'
+      items:
+      - type: 'histogram1D'
+        datafile: 'CKM+FF/samples'
+        variable: 'CKM::abs(V_ub)'
+      - type: 'kde1D'
+        datafile: 'CKM+FF/samples'
+        variable: 'CKM::abs(V_ub)'
+  - name: Vub-v-FF
+    type: single
+    plot:
+      legend:
+        position: 'lower left'
+      xaxis:
+        label: '$|V_{ub}|$'
+      yaxis:
+        label: '$f_+(0)^{B\to \pi}$'
+      items:
+      - type: 'kde2D'
+        datafile: 'CKM+FF/samples'
+        variables: [ 'CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008' ]
 steps:
   - title: 'Sample from CKM-all and WET-all posteriors'
     id: 'CKM-all,WET-all.sample'

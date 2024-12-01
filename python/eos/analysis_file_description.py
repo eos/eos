@@ -389,6 +389,7 @@ class MaskComponent(Deserializable):
 #   priors (mandatory)
 #   likelihoods (mandatory)
 #   posteriors (mandatory)
+#   figures (optional)
 #   observables (optional)
 #   predictions (optional)
 #   parameters (optional)
@@ -427,6 +428,11 @@ class MaskComponent(Deserializable):
 #  likelihood (mandatory): list of strings (corresponding to likelihood names)
 #  global_options (optional): dict
 #  fixed_parameters (optional): dict
+
+
+# figures schema:
+# list of dicts, each dict describing a valid type of figure;
+# see eos/figure/figure.py for the schema of each figure type
 
 
 # observables schema:
