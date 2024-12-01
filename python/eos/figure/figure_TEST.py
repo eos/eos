@@ -52,5 +52,27 @@ class SingleFigureTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing figure of type 'single': {e}")
 
+
+class CornerFigureTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'corner'
+            contents:
+              - path: 'path/to/datafile'
+                label: 'label 1'
+                color: 'red'
+              - path: 'path/to/anotherdatafile'
+                label: 'label 2'
+                color: 'blue'
+            variables: ['var1', 'var2']
+            """
+            figure = eos.figure.FigureFactory.from_yaml(input)
+        except Exception as e:
+            self.fail(f"Error when testing figure of type 'corner': {e}")
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)

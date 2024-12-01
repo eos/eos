@@ -80,6 +80,7 @@ eosplot_SCRIPTS = \
 eosfiguredir = $(pkgpythondir)/figure
 eosfigure_SCRIPTS = \
 	eos/figure/__init__.py \
+	eos/figure/common.py \
 	eos/figure/config.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
