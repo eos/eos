@@ -22,7 +22,7 @@ import os
 import sys
 import yaml
 from dataclasses import asdict
-from .analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
+from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
                                        StepComponent, PriorDescription
 
