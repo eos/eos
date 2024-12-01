@@ -27,6 +27,7 @@ from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
                                        StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent, MaskNamedComponent
+from eos.figure import FigureFactory
 
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
@@ -71,6 +72,12 @@ class AnalysisFile:
             for l in pc.likelihood:
                 if l not in self._likelihoods:
                     raise RuntimeError(f'Posterior \'{pc.name}\' references likelihood \'{l}\' which is not defined')
+
+        # Optional: provide a list of figures
+        if 'figures' not in self.input_data:
+            self._figures = {}
+        else:
+            self._figures = { f['name']: FigureFactory.from_dict(**f) for f in self.input_data['figures'] }
 
         # Optional: provide a list of observables for posterior prediction
         if 'predictions' not in self.input_data:
