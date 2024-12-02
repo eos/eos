@@ -92,7 +92,8 @@ predictions:
       - name: B_u->lnu::BR
 
 steps:
-  - name: optimize
+  - title: 'Optimize posterior CKM+FF'
+    id: CKM+FF.find-mode
     tasks:
       - task: find-mode
         arguments:
@@ -100,13 +101,15 @@ steps:
           seed: 123
           label: 'seed-{seed}'
 
-  - name: sample
+  - title: 'Sample from posterior CKM+FF'
+    id: CKM+FF.sample
     tasks:
-      - task: sample-mcmc
+      - task: sample-nested
         arguments:
           posterior: CKM+FF
-          chain: '0,1-2,3'
-          pre_N: 500
+          nlive: 100
+          dlogz: 1.0
+          maxiter: 4000
 
       - task: find-clusters
         arguments:
