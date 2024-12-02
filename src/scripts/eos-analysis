@@ -328,7 +328,7 @@ EOS_BASE_DIRECTORY/posterior/mode-LABEL.
     )
     parser_find_mode.add_argument('-S', '--from-samples',
         help = 'If specified, the optimization will start from the importance samples stored in posterior/samples.',
-        dest = 'importance_samples', action = 'store_true', default = False
+        dest = 'importance_samples', action = 'store_true', default = None
     )
     parser_find_mode.add_argument('-p', '--from-point',
         help = 'The point from which the minimization is started; a comma separated list of floats.',
