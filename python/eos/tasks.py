@@ -770,6 +770,17 @@ def validate(analysis_file:str):
     analysis_file.validate()
 
 
+@task('list-figures', '', logfile=False)
+def list_figures(analysis_file:str):
+    """
+    Lists all figures that can be created from the analysis file.
+
+    :param analysis_file: The name of the analysis file, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or :class:`eos.AnalysisFile`
+    """
+    return [name for name in analysis_file._figures.keys()]
+
+
 @task('list-steps', '', logfile=False)
 def list_steps(analysis_file:str):
     """
