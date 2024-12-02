@@ -285,7 +285,7 @@ To do this, run the following command:
 
 ::
 
-  export PREFIX=$VIRTUAL_ENV
+  export PREFIX="$VIRTUAL_ENV"
 
 
 Next, you must configure the EOS build using the ``configure`` script.
