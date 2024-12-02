@@ -630,6 +630,7 @@ def main():
             args.cmd(args)
     except Exception as e:
         print(colored('✖ Encountered an unrecoverable error', 'red', attrs=['bold']), f'{e}')
+        sys.exit(1)
 
 
 def make_analysis_file(args):
