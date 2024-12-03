@@ -20,6 +20,9 @@ For an example of an analysis file see the corresponding `section in the user gu
 For the description of the file format see the corresponding `section in the reference <analysis-file-format.html>`_.
 The following provide a documentation of the command-line interface, which is available through a single script called ``eos-analysis``.
 
+Note that the CLI verbosity can be changed using the EOS_VERBOSITY environment variable that ranges between 0 (show only errors) to 5 (show all messages).
+Similarly, verbosity can be set for an individual command using the ``-v`` or ``--verbose`` argument.
+
 .. argparse::
    :filename: ../src/scripts/eos-analysis
    :func: _parser

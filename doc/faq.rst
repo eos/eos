@@ -163,3 +163,24 @@ We collect here the different ``tags`` used in EOS and the corresponding referen
    * - ``GvDV2020``
      - Parametrization based on unitarity and analyticity valid for small dilepton masses below the :math:`\psi(2S)` state.
      - [GvDV:2020A], [GRvDV:2022A]
+
+.. _faq-verbose:
+
+... get more information on what is going on
+============================================
+
+EOS verbosity is handeled by the `logging module <https://docs.python.org/3/library/logging.html>`__.
+For the CLI, verbosity is set using the EOS_VERBOSITY environment variable and ranges from 0 (show only errors) to 5 (show all messages).
+Similarly, verbosity can be set for an individual command using the ``-v`` or ``--verbose`` argument.
+The same can be achive in a python notebook with the following trick:
+
+.. code-block:: python
+
+    import sys
+    import logging
+
+    eos.logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler(stream=sys.stdout)
+    eos.logger.addHandler(handler)
+
+Above, ``logging.DEBUG`` can be replaced by any logging level, which are listed `here <https://docs.python.org/3/library/logging.html#levels>`__.
