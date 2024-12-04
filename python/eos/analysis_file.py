@@ -109,6 +109,8 @@ class AnalysisFile:
         if 'steps' not in self.input_data:
             self._steps = {}
         else:
+            if len(self.input_data['steps']) != len({s['id'] for s in self.input_data['steps']}):
+                raise ValueError("All steps must have a unique id")
             self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
 
     def analysis(self, _posterior):
