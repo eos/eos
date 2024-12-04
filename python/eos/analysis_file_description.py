@@ -321,10 +321,9 @@ class StepComponent(Deserializable):
 
 # steps schema:
 # list of dicts, each with keys:
-#  name (mandatory): string
+#  title (mandatory): string
+#  id (mandatory): unique string
+#  depends_on (optional): list of strings (each string is a step id)
 #  tasks (mandatory): list of dicts, each with keys:
     #  task (mandatory) : string
-    #  arguments (optional): dict
-#  iterations (optional): list of dicts
-#  depends-on (optional): list of strings ???????
-#  ???????
+    #  arguments (optional): dict, whose keys are arguments for the task
