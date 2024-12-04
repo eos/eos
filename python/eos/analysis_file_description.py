@@ -227,6 +227,7 @@ class StepComponent(Deserializable):
     id:str
     tasks:list
     depends_on:list=field(default_factory=list)
+    default_arguments:dict=field(default_factory=dict)
 
     def __post_init__(self):
         if '/' in self.id:
@@ -239,6 +240,9 @@ class StepComponent(Deserializable):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
+        if "default_arguments" in kwargs:
+            for t in kwargs["tasks"]:
+                t["arguments"] |= kwargs["default_arguments"]
         _kwargs["tasks"] = [TaskComponent.from_dict(**t) for t in kwargs["tasks"]]
         if "depends-on" in kwargs:
             _kwargs["depends_on"] = kwargs["depends-on"]
