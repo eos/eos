@@ -108,6 +108,8 @@ class AnalysisFile:
         if 'steps' not in self.input_data:
             self._steps = {}
         else:
+            if len(self.input_data['steps']) != len({s['id'] for s in self.input_data['steps']}):
+                raise ValueError("All steps must have a unique id")
             self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
 
     def analysis(self, _posterior):
@@ -425,7 +427,12 @@ class AnalysisFile:
                     known_params[param]
                 except RuntimeError:
                     messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
-
+        # Check all posteriors named in steps exist
+        for step_id, step in self._steps.items():
+            for task in step.tasks:
+                if 'posterior' in task.arguments:
+                    if task.arguments['posterior'] not in self._posteriors:
+                        messages.append(f"Error in step {step_id}: Posterior '{task.arguments['posterior']}' not known to EOS")
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
         for posterior in self._posteriors:
