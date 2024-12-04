@@ -629,7 +629,7 @@ def main():
 
             args.cmd(args)
     except Exception as e:
-        print(colored('✖ Encountered an unrecoverable error', 'red', attrs=['bold']), f'{e}')
+        print(colored('✖ Encountered an unrecoverable error:\n', 'red', attrs=['bold']), f'{e}')
         sys.exit(1)
 
 
