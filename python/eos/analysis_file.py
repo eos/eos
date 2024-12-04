@@ -106,9 +106,9 @@ class AnalysisFile:
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
         if 'steps' not in self.input_data:
-            self._steps = []
+            self._steps = {}
         else:
-            self._steps = [StepComponent.from_dict(**s) for s in self.input_data['steps']]
+            self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
