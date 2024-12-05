@@ -455,7 +455,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
-def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None):
+def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
@@ -474,12 +474,19 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type begin: int
     :param end: The index beyond the last sample to use for the predictions. Defaults to None.
     :type begin: int
+    :param mask_name: The label of the mask to apply to the observables. Defaults to None.
+    :type mask_name: str, optional
     '''
     _analysis      = analysis_file.analysis(posterior)
     _parameters    = _analysis.parameters
     cache          = eos.ObservableCache(_parameters)
     observables    = analysis_file.observables(posterior, prediction, _parameters)
     observable_ids = [cache.add(o) for o in observables]
+
+    if mask_name is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -509,6 +516,9 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
             eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
+    if mask_name is not None:
+        eos.info(f'Applying mask {mask_name} to the observables')
+        observable_samples = observable_samples[mask]
     eos.completed(f'... done')
 
     output_path = os.path.join(base_directory, posterior, f'pred-{prediction}')
@@ -533,15 +543,13 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
     :type id: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param dry_run: The flag that disables execution and insteads prints the full information on the tasks that would be run to standard output. Defaults to `False`.
+    :param dry_run: The flag that disables execution and instead prints the full information on the tasks that would be run to standard output. Defaults to `False`.
     :type dry_run: bool, optional
     """
-    steps = { step.id: step for step in analysis_file._steps }
-
-    if id not in steps:
+    try:
+        step = analysis_file._steps[id]
+    except KeyError:
         raise ValueError(f'Step with id \'{id}\' not found in analysis file')
-
-    step = steps[id]
 
     for task in step.tasks:
         if dry_run:
@@ -768,6 +776,63 @@ def validate(analysis_file:str):
     :type analysis_file: str or :class:`eos.AnalysisFile`
     """
     analysis_file.validate()
+
+# Create mask
+@task('create-mask', '{posterior}/mask-{mask_name}')
+def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
+    """
+    Create a sample mask based on the observables.
+
+    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mask-LABEL.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param mask_name: The name of mask to create.
+    :type mask_name: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    """
+    _analysis = analysis_file.analysis(posterior)
+    _parameters    = _analysis.parameters
+    cache          = eos.ObservableCache(_parameters)
+    observables    = analysis_file.mask_observables(posterior, mask_name, _parameters)
+    observable_ids = [cache.add(o) for o in observables]
+
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+    # TODO: Should we refactor this check into a separate function ???
+    # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
+    analysis_varied_params = [p.name() for p in _analysis.varied_parameters]
+    samples_varied_params = [p["name"] for p in data.varied_parameters]
+    if analysis_varied_params != samples_varied_params:
+        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+
+    try:
+        from tqdm.auto import tqdm
+        progressbar = tqdm
+    except ImportError:
+        progressbar = lambda x: x
+
+    parameters = [_parameters[p['name']] for p in data.varied_parameters]
+    observable_samples = []
+    nsamples = len(data.samples)
+    eos.inprogress(f'Predicting observables from mask \'{mask_name}\' for {nsamples} samples')
+    for i, sample in enumerate(progressbar(data.samples)):
+        for p, v in zip(parameters, sample):
+            p.set(v)
+        try:
+            cache.update()
+            observable_samples.append([cache[id] for id in observable_ids])
+        except RuntimeError as e:
+            eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
+            observable_samples.append([_np.nan for _ in observable_ids])
+    observable_samples = _np.array(observable_samples)
+    mask = _np.all(observable_samples > 0, axis=1)
+
+    eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
 
 
 @task('list-steps', '', logfile=False)

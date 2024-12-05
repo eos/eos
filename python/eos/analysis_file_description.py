@@ -227,6 +227,7 @@ class StepComponent(Deserializable):
     id:str
     tasks:list
     depends_on:list=field(default_factory=list)
+    default_arguments:dict=field(default_factory=dict)
 
     def __post_init__(self):
         if '/' in self.id:
@@ -239,11 +240,37 @@ class StepComponent(Deserializable):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
+        if "default_arguments" in kwargs:
+            for t in kwargs["tasks"]:
+                t["arguments"] |= kwargs["default_arguments"]
         _kwargs["tasks"] = [TaskComponent.from_dict(**t) for t in kwargs["tasks"]]
         if "depends-on" in kwargs:
             _kwargs["depends_on"] = kwargs["depends-on"]
         return Deserializable.make(cls, **_kwargs)
 
+
+@dataclass
+class MaskDescription(Deserializable):
+    @staticmethod
+    def from_dict(**kwargs):
+        if 'expression' in kwargs:
+            raise ValueError("expressions not currently supported")
+            # return Deserializable.make(MaskExpressionComponent, **kwargs)
+        elif 'observable' in kwargs:
+            return Deserializable.make(PredictionObservableComponent, **{"name": kwargs["observable"], "kinematics": {}, "options": {}})
+        raise ValueError('Unknown type of mask description')
+
+@dataclass
+class MaskComponent(Deserializable):
+    name:str
+    description:dict
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs.pop('description')
+        _kwargs['description'] = [MaskDescription.from_dict(**d) for d in kwargs['description']]
+        return Deserializable.make(cls, **_kwargs)
 
 # AnalysisFile schema
 
@@ -255,6 +282,7 @@ class StepComponent(Deserializable):
 #   predictions (optional)
 #   parameters (optional)
 #   steps (optional)
+#   masks (optional)
 
 
 # priors schema:
@@ -321,10 +349,17 @@ class StepComponent(Deserializable):
 
 # steps schema:
 # list of dicts, each with keys:
-#  name (mandatory): string
+#  title (mandatory): string
+#  id (mandatory): unique string
+#  depends-on (optional): list of strings (each string is a step id)
+#  default_arguments (optional): dict, whose keys are arguments for the task
 #  tasks (mandatory): list of dicts, each with keys:
     #  task (mandatory) : string
-    #  arguments (optional): dict
-#  iterations (optional): list of dicts
-#  depends-on (optional): list of strings ???????
-#  ???????
+    #  arguments (optional): dict, whose keys are arguments for the task
+
+# masks schema:
+# list of dicts, each with keys:
+#  name (mandatory): unique string
+#  description (mandatory): list of dicts, whose keys can be:
+#      expression: str, valid EOS observable expression
+#      observable: str, valid EOS observable name

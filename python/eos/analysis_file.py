@@ -24,7 +24,7 @@ import yaml
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
-                                       StepComponent, PriorDescription
+                                       StepComponent, PriorDescription, MaskComponent
 
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
@@ -106,9 +106,19 @@ class AnalysisFile:
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
         if 'steps' not in self.input_data:
-            self._steps = []
+            self._steps = {}
         else:
-            self._steps = [StepComponent.from_dict(**s) for s in self.input_data['steps']]
+            if len(self.input_data['steps']) != len({s['id'] for s in self.input_data['steps']}):
+                raise ValueError("All steps must have a unique id")
+            self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
+
+        if 'masks' not in self.input_data:
+            self._masks = []
+        else:
+            if len(self.input_data['masks']) != len({m['name'] for m in self.input_data['masks']}):
+                raise ValueError("All masks must have a unique name")
+            self._masks = { m["name"]: MaskComponent.from_dict(**m) for m in self.input_data['masks'] }
+
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
@@ -228,6 +238,47 @@ class AnalysisFile:
         return observables
 
 
+    def mask_observables(self, _posterior, _mask_name, parameters):
+        """Creates a list of eos.Observable objects for the named posterior and mask."""
+        if _posterior not in self._posteriors:
+            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_posterior}\'')
+        if _mask_name not in self._masks:
+            raise RuntimeError(f'Cannot create mask for unknown mask name: \'{_mask_name}\'')
+
+        posterior = self._posteriors[_posterior]
+        mask = self._masks[_mask_name]
+
+        global_options = posterior.global_options
+        fixed_parameters = posterior.fixed_parameters
+
+        for (p, v) in fixed_parameters.items():
+            parameters.set(p, v)
+
+        for o in mask.description:
+            options_part = eos.QualifiedName(o.name).options_part()
+            for key, value in options_part:
+                if key in global_options and global_options[key] != value:
+                    eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} in mask {_mask_name} when using posterior {_posterior}.')
+
+        observables = []
+        for o in mask.description:
+            observables.append(eos.Observable.make(
+                o.name,
+                parameters,
+                eos.Kinematics(),
+                eos.Options(**global_options)
+            ))
+
+        if None in observables:
+            unknown_observables = set()
+            for p, o in zip(mask.description, observables):
+                if o is None:
+                    unknown_observables.add(p.name)
+            raise RuntimeError(f'Mask \'{_mask_name}\' contains unknown observable names: {unknown_observables}')
+
+        return observables
+
+
     @staticmethod
     def _sanitize_params(command, params):
         """Helper functions to sanitize parameters for individual steps loaded from a raw YAML file."""
@@ -257,126 +308,6 @@ class AnalysisFile:
             else k
             for k, v in params.items()
         }
-
-    def steps(self, base_directory=None):
-        """Runs predefined analysis steps recorded in the analysis file."""
-        from .tasks import _tasks
-        from collections import ChainMap
-        from inspect import signature
-        from itertools import chain, product
-        import networkx as nx
-
-        def _expand_arguments(step_name, task, arguments):
-            task_sig = signature(_tasks[task])
-
-            task_required_args = set()
-            for n, p in task_sig.parameters.items():
-                if p.default != p.empty:
-                    continue
-                task_required_args.add(n)
-            for n in task_required_args:
-                if n in arguments.keys():
-                    continue
-                raise ValueError(f'Task "{task}" in step "{step_name}" requires mandatory argument \'{n}\', which is not provided')
-
-            outer_list = []
-            for key, value in arguments.items():
-                if key not in task_sig.parameters:
-                    eos.warn(f'Task "{task}" in step "{step_name}" does not expect argument "{key}", possibly misspelled?')
-                    continue
-
-                param_type = task_sig.parameters[key].annotation
-
-                # handle special cases
-                if param_type is int:
-                    # integer range?
-                    if type(value) is str:
-                        values = list(chain.from_iterable(range(int(v.split("-")[0]),int(v.split("-")[-1])+1) for v in value.split(",")))
-                        outer_list.append([{key: v} for v in values])
-                    else:
-                        # append
-                        outer_list.append([{key: value}])
-                # otherwise append w/o modification
-                else:
-                    # append
-                    outer_list.append([{key: value}])
-
-            result = []
-            for r in list(product(*outer_list)):
-                _arguments = {}
-                for d in r:
-                    _arguments.update(d)
-
-                # replace format strings
-                arguments = {}
-                for key, value in _arguments.items():
-                    if type(value) is str:
-                        arguments.update({key: value.format(**_arguments)})
-                    else:
-                        arguments.update({key: value})
-
-                result.append(arguments)
-
-            return result
-
-        def _handle_single_step(step_desc, step_arguments):
-            step_name = step_desc.name
-            tasks     = step_desc.tasks
-
-            for task_desc in tasks:
-                task = task_desc.task
-                if task not in _tasks.keys():
-                    raise ValueError(f'Unknown task \"{task}\" encountered in step {step_name}')
-
-                arguments = { 'analysis_file': self }
-                for key, value in step_arguments.items():
-                    if key in _tasks.keys():
-                        continue
-
-                    arguments[key] = value
-
-                if task_desc.arguments:
-                    arguments.update(task_desc.arguments)
-
-                if task in step_arguments:
-                    arguments.update(step_arguments[task])
-
-                if base_directory:
-                    arguments.update({ 'base_directory': base_directory })
-
-                return [(step_name, step_desc, task, a) for a in _expand_arguments(step_name, task, arguments)]
-
-        # main part starts here
-
-        # check inputs
-        for step_idx, step_desc in enumerate(self._steps):
-            if step_desc.iterations:
-                if type(step_desc.iterations) is not list:
-                    raise ValueError(f'Description of step #{step_idx} ({step_desc.name} expects a list of iterations')
-
-        # resolve dependencies
-        graph = nx.MultiDiGraph()
-        graph.add_nodes_from([step.name for step in self._steps])
-        for step in self._steps:
-            if not step.depends_on:
-                continue
-
-            for dep in step.depends_on:
-                graph.add_edge(dep, step.name)
-        steps = list(nx.topological_sort(graph))
-
-        # return steps and their tasks in the order imposed by the dependency graph
-        result = []
-        for step in steps:
-            step_desc = { sd.name: sd for sd in self._steps }[step]
-            iterations = [{}]
-            if step_desc.iterations:
-                iterations = step_desc.iterations
-
-            for iteration_arguments in iterations:
-                result.extend(_handle_single_step(step_desc, iteration_arguments))
-
-        return result
 
 
     def validate(self):
@@ -425,7 +356,12 @@ class AnalysisFile:
                     known_params[param]
                 except RuntimeError:
                     messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
-
+        # Check all posteriors named in steps exist
+        for step_id, step in self._steps.items():
+            for task in step.tasks:
+                if 'posterior' in task.arguments:
+                    if task.arguments['posterior'] not in self._posteriors:
+                        messages.append(f"Error in step {step_id}: Posterior '{task.arguments['posterior']}' not known to EOS")
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
         for posterior in self._posteriors:
