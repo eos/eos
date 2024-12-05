@@ -486,8 +486,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     if mask_label is not None and (begin != 0 or end is not None):
         raise ValueError('The arguments mask-label and begin or end are mutually exclusive')
     if mask_label is not None:
-        with open(os.path.join(base_directory, posterior, f'mask-{mask_label}', 'mask.npy'), 'rb') as f:
-            mask = _np.load(f)
+        mask = eos.data.Mask(os.path.join(base_directory, posterior, f'mask-{mask_label}')).mask
     else:
         mask = slice(None) # Since you can't set mask = :
 
@@ -833,17 +832,8 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
             observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
     mask = _np.all(observable_samples > 0, axis=1)
-    with open(os.path.join(base_directory, posterior, f'mask-{label}', 'mask.npy'), 'wb') as f:
-        _np.save(f, mask)
 
-    description = {}
-    description['version'] = eos.__version__
-    description['type'] = 'Filter Mask'
-    description['observables'] = [ ";".join(map(str, [o.name(), o.options(), o.kinematics()])) for o in observables]
-
-    import yaml
-    with open(os.path.join(base_directory, posterior, f'mask-{label}', 'description.yaml'), 'w') as description_file:
-        yaml.dump(description, description_file, default_flow_style=False)
+    eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
 
 
 @task('list-steps', '', logfile=False)
