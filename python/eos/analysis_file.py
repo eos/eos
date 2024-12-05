@@ -24,7 +24,7 @@ import yaml
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
-                                       StepComponent, PriorDescription
+                                       StepComponent, PriorDescription, MaskComponent
 
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
@@ -111,6 +111,14 @@ class AnalysisFile:
             if len(self.input_data['steps']) != len({s['id'] for s in self.input_data['steps']}):
                 raise ValueError("All steps must have a unique id")
             self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
+
+        if 'masks' not in self.input_data:
+            self._masks = []
+        else:
+            if len(self.input_data['mask']) != len({m['name'] for m in self.input_data['masks']}):
+                raise ValueError("All masks must have a unique name")
+            self._masks = { m["name"]: MaskComponent.from_dict(**m) for m in self.input_data['masks'] }
+
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
@@ -226,6 +234,47 @@ class AnalysisFile:
                 if o is None:
                     unknown_observables.add(p.name)
             raise RuntimeError(f'Prediction \'{_prediction}\' contains unknown observable names: {unknown_observables}')
+
+        return observables
+
+
+    def mask_observables(self, _posterior, _mask_name, parameters):
+        """Creates a list of eos.Observable objects for the named posterior and mask."""
+        if _posterior not in self._posteriors:
+            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_posterior}\'')
+        if _mask_name not in self._masks:
+            raise RuntimeError(f'Cannot create mask for unknown mask name: \'{_mask_name}\'')
+
+        posterior = self._posteriors[_posterior]
+        mask = self._mask[_mask_name]
+
+        global_options = posterior.global_options
+        fixed_parameters = posterior.fixed_parameters
+
+        for (p, v) in fixed_parameters.items():
+            parameters.set(p, v)
+
+        for o in mask.description:
+            options_part = eos.QualifiedName(o.name).options_part()
+            for key, value in options_part:
+                if key in global_options and global_options[key] != value:
+                    eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} in mask {_mask_name} when using posterior {_posterior}.')
+
+        observables = []
+        for o in mask.description:
+            observables.append(eos.Observable.make(
+                o.name,
+                parameters,
+                eos.Kinematics(),
+                eos.Options(**global_options)
+            ))
+
+        if None in observables:
+            unknown_observables = set()
+            for p, o in zip(mask.description, observables):
+                if o is None:
+                    unknown_observables.add(p.name)
+            raise RuntimeError(f'Mask \'{_mask_name}\' contains unknown observable names: {unknown_observables}')
 
         return observables
 
