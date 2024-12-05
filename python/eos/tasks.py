@@ -779,7 +779,7 @@ def validate(analysis_file:str):
     analysis_file.validate()
 
 # Create mask
-@task('create-mask', '{posterior}/mask-{label}')
+@task('create-mask', '{posterior}/mask-{mask_name}')
 def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
     """
     Create a sample mask based on the observables.
