@@ -455,7 +455,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
-def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_label=None):
+def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
@@ -474,8 +474,8 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type begin: int
     :param end: The index beyond the last sample to use for the predictions. Defaults to None.
     :type begin: int
-    :param mask_label: The label of the mask to apply to the observables. Defaults to None.
-    :type mask_label: str, optional
+    :param mask_name: The label of the mask to apply to the observables. Defaults to None.
+    :type mask_name: str, optional
     '''
     _analysis      = analysis_file.analysis(posterior)
     _parameters    = _analysis.parameters
@@ -483,12 +483,10 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     observables    = analysis_file.observables(posterior, prediction, _parameters)
     observable_ids = [cache.add(o) for o in observables]
 
-    if mask_label is not None and (begin != 0 or end is not None):
-        raise ValueError('The arguments mask-label and begin or end are mutually exclusive')
-    if mask_label is not None:
-        mask = eos.data.Mask(os.path.join(base_directory, posterior, f'mask-{mask_label}')).mask
-    else:
-        mask = slice(None) # Since you can't set mask = :
+    if mask_name is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -517,7 +515,10 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         except RuntimeError as e:
             eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
-    observable_samples = _np.array(observable_samples)[mask]
+    observable_samples = _np.array(observable_samples)
+    if mask_name is not None:
+        eos.info(f'Applying mask {mask_name} to the observables')
+        observable_samples = observable_samples[mask]
     eos.completed(f'... done')
 
     output_path = os.path.join(base_directory, posterior, f'pred-{prediction}')
