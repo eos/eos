@@ -115,7 +115,7 @@ class AnalysisFile:
         if 'masks' not in self.input_data:
             self._masks = []
         else:
-            if len(self.input_data['mask']) != len({m['name'] for m in self.input_data['masks']}):
+            if len(self.input_data['masks']) != len({m['name'] for m in self.input_data['masks']}):
                 raise ValueError("All masks must have a unique name")
             self._masks = { m["name"]: MaskComponent.from_dict(**m) for m in self.input_data['masks'] }
 
@@ -246,7 +246,7 @@ class AnalysisFile:
             raise RuntimeError(f'Cannot create mask for unknown mask name: \'{_mask_name}\'')
 
         posterior = self._posteriors[_posterior]
-        mask = self._mask[_mask_name]
+        mask = self._masks[_mask_name]
 
         global_options = posterior.global_options
         fixed_parameters = posterior.fixed_parameters
