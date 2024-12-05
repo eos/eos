@@ -455,7 +455,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
-def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name=None):
+def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name:str=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
@@ -663,7 +663,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', output
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior', begin:int=0, end:int=None):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior', begin:int=0, end:int=None, mask_name=None):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -684,10 +684,17 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     :type begin: int, optional
     :param end: The index beyond the last parameter to plot. Defaults to ``None``.
     :type end: int or NoneType, optional
+    :param mask_name: The label of the mask to apply to the observables. Defaults to None.
+    :type mask_name: str, optional
     """
     import matplotlib.pyplot as _plt
 
     analysis = analysis_file.analysis(posterior)
+
+    if mask_name is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
 
     # Provide file with distribution samples and LaTeX labels for either parameters or observables
     if distribution == 'posterior':
@@ -720,6 +727,10 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     samples = f.samples[:, begin:end]
     weights = f.weights[:]
     labels = labels[begin:end]
+    # Apply mask if specified
+    if mask_name is not None:
+        samples = samples[:, mask]
+        weights = weights[mask]
     size = samples.shape[-1]
 
     fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
