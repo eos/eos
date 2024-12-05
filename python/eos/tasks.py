@@ -779,11 +779,11 @@ def validate(analysis_file:str):
     """
     analysis_file.validate()
 
-# Filter samples
-@task('filter-samples', '{posterior}/mask-{label}')
-def filter_samples(analysis_file:str, posterior:str, prediction:str, label:str, base_directory:str='./'):
+# Create mask
+@task('create-mask', '{posterior}/mask-{label}')
+def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
     """
-    Filters samples based on the observables.
+    Create a sample mask based on the observables.
 
     The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mask-LABEL.
@@ -792,17 +792,15 @@ def filter_samples(analysis_file:str, posterior:str, prediction:str, label:str, 
     :type analysis_file: str or `eos.AnalysisFile`
     :param posterior: The name of the posterior.
     :type posterior: str
-    :param prediction: The name of the set of observables to use to filter.
-    :type prediction: str
-    :param label: The label for the mask
-    :type label: str
+    :param mask_name: The name of mask to create.
+    :type mask_name: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     """
     _analysis = analysis_file.analysis(posterior)
     _parameters    = _analysis.parameters
     cache          = eos.ObservableCache(_parameters)
-    observables    = analysis_file.observables(posterior, prediction, _parameters)
+    observables    = analysis_file.mask_observables(posterior, mask_name, _parameters)
     observable_ids = [cache.add(o) for o in observables]
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
@@ -823,7 +821,7 @@ def filter_samples(analysis_file:str, posterior:str, prediction:str, label:str, 
     parameters = [_parameters[p['name']] for p in data.varied_parameters]
     observable_samples = []
     nsamples = len(data.samples)
-    eos.inprogress(f'Predicting observables from set \'{prediction}\' for {nsamples} samples')
+    eos.inprogress(f'Predicting observables from mask \'{mask_name}\' for {nsamples} samples')
     for i, sample in enumerate(progressbar(data.samples)):
         for p, v in zip(parameters, sample):
             p.set(v)
