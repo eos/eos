@@ -361,6 +361,7 @@ namespace eos
             { "pi^-",      LightMeson::piminus },
             { "K_d",       LightMeson::K0      },
             { "Kbar_d",    LightMeson::K0bar   },
+            { "K_s",       LightMeson::Ks      },
             { "K_u",       LightMeson::Kplus   },
             { "Kbar_u",    LightMeson::Kminus  },
             { "eta",       LightMeson::eta     },

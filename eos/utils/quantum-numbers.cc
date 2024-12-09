@@ -52,9 +52,9 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, LightMeson qf)
     {
-        static const std::array<std::string, 9u> names
+        static const std::array<std::string, 10u> names
         {
-            "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d" "K_u", "Kbar_u", "eta", "eta'"
+            "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime"
         };
 
         os << names[static_cast<unsigned>(qf)];

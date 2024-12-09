@@ -56,10 +56,11 @@ namespace eos
         piminus  = 2,
         K0       = 3,
         K0bar    = 4,
-        Kplus    = 5,
-        Kminus   = 6,
-        eta      = 7,
-        etap     = 8,
+        Ks       = 5,
+        Kplus    = 6,
+        Kminus   = 7,
+        eta      = 8,
+        etap     = 9,
     };
 
     std::ostream& operator<< (std::ostream & os, LightMeson qf);
