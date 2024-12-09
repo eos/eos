@@ -40,9 +40,10 @@ namespace eos
     {
         Model::option_specification(),
         { "cp-conjugate", { "true", "false" },  "false" },
+        { "B_bar", { "true", "false"},  "false" },
         { "q", { "u", "d", "s" } },
-        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
-        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime" } },
     };
 
     complex<double>
@@ -136,8 +137,23 @@ namespace eos
     {
         this->update();
 
+        // Meril: change this!!!!!
+
+        su3f::rank2 conjP1, conjP2;
+
+        if (opt_B_bar.value())
+        {
+            conjP1 = su3f::trans(P1);
+            conjP2 = su3f::trans(P2);
+        }
+        else
+        {
+            conjP1 = P1;
+            conjP2 = P2;
+        }
+
         return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
-            this->tree_amplitude(P1, P2) + this->penguin_amplitude(P1, P2)
+            this->tree_amplitude(conjP1, conjP2) + this->penguin_amplitude(conjP1, conjP2)
         );
     }
 
@@ -146,8 +162,23 @@ namespace eos
     {
         this->update();
 
+        // Meril: change this!!!!!
+
+        su3f::rank2 conjP1, conjP2;
+
+        if (opt_B_bar.value())
+        {
+            conjP1 = su3f::trans(P1);
+            conjP2 = su3f::trans(P2);
+        }
+        else
+        {
+            conjP1 = P1;
+            conjP2 = P2;
+        }
+
         return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
-            this->tree_amplitude(P2, P1) + this->penguin_amplitude(P2, P1)
+            this->tree_amplitude(conjP2, conjP1) + this->penguin_amplitude(conjP2, conjP1)
         );
     }
 }

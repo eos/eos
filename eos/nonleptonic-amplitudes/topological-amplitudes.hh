@@ -43,6 +43,7 @@ namespace eos
             LightMesonOption opt_p1;
             LightMesonOption opt_p2;
             BooleanOption opt_cp_conjugate;
+            BooleanOption opt_B_bar;
 
             UsedParameter theta_18;
 
@@ -89,6 +90,7 @@ namespace eos
                 opt_p1(o, options, "P1"),
                 opt_p2(o, options, "P2"),
                 opt_cp_conjugate(o, options, "cp-conjugate"),
+                opt_B_bar(o, options, "B_bar"),
                 theta_18(p["eta::theta_18"], *this),
                 B(su3f::psd_b_triplet.find(opt_q.value())->second),
                 H1tilde({}),
@@ -140,7 +142,7 @@ namespace eos
             {
                 Context ctx("When constructing B->PP topological amplitudes");
 
-                if (opt_cp_conjugate.value())
+                if (opt_cp_conjugate.value() ^ opt_B_bar.value())
                 {
                     lamdu = model->ckm_ub() * conj(model->ckm_ud());
                     lamsu = model->ckm_ub() * conj(model->ckm_us());

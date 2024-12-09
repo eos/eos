@@ -39,10 +39,11 @@ namespace eos
     QCDFRepresentation<PToPP>::options
     {
         Model::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
+        { "cp-conjugate", { "true", "false"},  "false" },
+        { "B_bar", { "true", "false"},  "false" },
         { "q", { "u", "d", "s" } },
-        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
-        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime" } },
     };
 
     complex<double>
@@ -238,7 +239,22 @@ namespace eos
     {
         this->update();
 
-        return power_of<2>(mB()) * FP1() * fP2() / (1 - power_of<2>(mP2() / mB_q_0())) * this->alpha_amplitude(P1, P2) + fB() * fP1() * fP2() * this->b_amplitude(P1, P2);
+        // Meril: change this!!!!!
+
+        su3f::rank2 conjP1, conjP2;
+
+        if (opt_B_bar.value())
+        {
+            conjP1 = su3f::trans(P1);
+            conjP2 = su3f::trans(P2);
+        }
+        else
+        {
+            conjP1 = P1;
+            conjP2 = P2;
+        }
+
+        return power_of<2>(mB()) * FP1() * fP2() / (1 - power_of<2>(mP2() / mB_q_0())) * this->alpha_amplitude(conjP1, conjP2) + fB() * fP1() * fP2() * this->b_amplitude(conjP1, conjP2);
 
     }
 
@@ -247,7 +263,22 @@ namespace eos
     {
         this->update();
 
-        return power_of<2>(mB()) * FP2() * fP1() / (1 - power_of<2>(mP1() / mB_q_0())) * this->alpha_amplitude(P2, P1) + fB() * fP1() * fP2() * this->b_amplitude(P2, P1);
+        // Meril: change this!!!!!
+
+        su3f::rank2 conjP1, conjP2;
+
+        if (opt_B_bar.value())
+        {
+            conjP1 = su3f::trans(P1);
+            conjP2 = su3f::trans(P2);
+        }
+        else
+        {
+            conjP1 = P1;
+            conjP2 = P2;
+        }
+
+        return power_of<2>(mB()) * FP2() * fP1() / (1 - power_of<2>(mP1() / mB_q_0())) * this->alpha_amplitude(conjP2, conjP1) + fB() * fP1() * fP2() * this->b_amplitude(conjP2, conjP1);
 
     }
 }
