@@ -494,7 +494,7 @@ groups:
           unit:     'GeV'
       # form factor parameters for B->K for [BCL:2008A] parametrization
       'B->K::f_+(0)' :
-          alias_of: [ 'B_d->K_d::f_+(0)', 'B_d->Kbar_d::f_+(0)', 'B_d->K_u::f_+(0)','B_d->Kbar_u::f_+(0)', 'B_u->K_d::f_+(0)', 'B_u->Kbar_d::f_+(0)', 'B_u->K_u::f_+(0)','B_u->Kbar_u::f_+(0)' ]
+          alias_of: [ 'B_d->K_d::f_+(0)', 'B_d->Kbar_d::f_+(0)', 'B_d->K_S::f_+(0)', 'B_d->K_u::f_+(0)','B_d->Kbar_u::f_+(0)', 'B_u->K_d::f_+(0)', 'B_u->Kbar_d::f_+(0)', 'B_u->K_S::f_+(0)', 'B_u->K_u::f_+(0)','B_u->Kbar_u::f_+(0)' ]
           central: +0.332
           min:     +0.320
           max:     +0.344
@@ -638,7 +638,7 @@ groups:
           unit:     '1'
       # form factor parameters for B_s->K inspired by [BSZ:2015A]
       'B_s->K::f_+' :
-          alias_of: [ 'B_s->K_d::f_+(0)', 'B_s->Kbar_d::f_+(0)', 'B_s->K_u::f_+(0)','B_s->Kbar_u::f_+(0)' ]
+          alias_of: [ 'B_s->K_d::f_+(0)', 'B_s->Kbar_d::f_+(0)', 'B_s->K_S::f_+(0)', 'B_s->K_u::f_+(0)','B_s->Kbar_u::f_+(0)' ]
           central:  0.30
           min:      0.27
           max:      0.34
