@@ -39,7 +39,7 @@ groups:
           comments: "cf. [PDG-Live], December 2024"
       # K meson masses
       'mass::K_d' :
-          alias_of: [ 'mass::Kbar_d' ]
+          alias_of: [ 'mass::Kbar_d', 'mass::K_S' ]
           central: +0.497611
           min:     +0.497598
           max:     +0.497624
@@ -408,7 +408,7 @@ groups:
           unit:     'GeV'
           comments: 'cf. [PZ:2021A]'
       'decay-constant::K_d' :
-          alias_of: [ 'decay-constant::Kbar_d' ]
+          alias_of: [ 'decay-constant::Kbar_d', 'decay-constant::K_S' ]
           central: +0.1561
           min:     +0.155
           max:     +0.1572
