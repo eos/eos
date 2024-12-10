@@ -533,15 +533,13 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
     :type id: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param dry_run: The flag that disables execution and insteads prints the full information on the tasks that would be run to standard output. Defaults to `False`.
+    :param dry_run: The flag that disables execution and instead prints the full information on the tasks that would be run to standard output. Defaults to `False`.
     :type dry_run: bool, optional
     """
-    steps = { step.id: step for step in analysis_file._steps }
-
-    if id not in steps:
+    try:
+        step = analysis_file._steps[id]
+    except KeyError:
         raise ValueError(f'Step with id \'{id}\' not found in analysis file')
-
-    step = steps[id]
 
     for task in step.tasks:
         if dry_run:
