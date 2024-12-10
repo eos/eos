@@ -111,7 +111,7 @@ class AnalysisFile:
             self._steps = [StepComponent.from_dict(**s) for s in self.input_data['steps']]
 
         if 'masks' not in self.input_data:
-            self._masks = []
+            self._masks = {}
         else:
             if len(self.input_data['masks']) != len({m['name'] for m in self.input_data['masks']}):
                 raise ValueError("All masks must have a unique name")
