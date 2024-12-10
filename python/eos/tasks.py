@@ -107,7 +107,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
 
 @task('find-mode', '{posterior}/mode-{label}')
 def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
-              importance_samples:bool=None, seed:int=None, label:str='default'):
+              importance_samples:bool=None, seed:int=None, label:str='default', mask_name:str=None):
     '''
     Finds the mode of the named posterior.
 
@@ -155,6 +155,16 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     if not chain is None and not importance_samples is None:
         raise ValueError('The arguments importance_samples and chain are mutually exclusive')
 
+    if mask_name is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
+    if mask_name is not None and importance_samples is None:
+        raise ValueError('The argument mask-name can only be used with importance_samples')
+
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
+    else:
+        mask = slice() # Equivalent to mask = : but allowed
+
     analysis = analysis_file.analysis(posterior)
     min_chi2 = sys.float_info.max
     gof = None
@@ -190,15 +200,15 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _file = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
         if _file.posterior_values is None:
             FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
-        idx_mode = _np.argmax(_file.posterior_values)
+        idx_mode = _np.argmax(_file.posterior_values[mask])
         # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
         analysis_varied_params = [p.name() for p in analysis.varied_parameters]
         samples_varied_params = [p["name"] for p in _file.varied_parameters]
         if analysis_varied_params != samples_varied_params:
             raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
-        mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[idx_mode]]) + ' ]'
+        mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[mask][idx_mode]]) + ' ]'
         eos.info(f'Using starting point {mode}')
-        for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
+        for p, v in zip(analysis.varied_parameters, _file.samples[mask][idx_mode]):
             p.set(v)
 
         _bfp = analysis.optimize()

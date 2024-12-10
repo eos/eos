@@ -342,6 +342,10 @@ EOS_BASE_DIRECTORY/posterior/mode-LABEL.
         help = 'The label used for the generated data file.',
         dest = 'label', action = 'store', type = str, default = 'default'
     )
+    parser_find_mode.add_argument('-M', '--mask-name', metavar = 'MASK-NAME',
+        help = 'The name of the mask to apply to the importance samples.',
+        dest = 'mask_name', action = 'store', type = str
+    )
     parser_find_mode.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
