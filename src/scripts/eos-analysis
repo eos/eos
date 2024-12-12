@@ -465,6 +465,10 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
         help = 'The index beyond the last parameter to plot.',
         dest = 'end', action = 'store', type = int, default = None
     )
+    parser_corner_plot.add_argument('-F', '--format',
+        help = 'The plot output format. Can be a comma separated list of formats.',
+        dest = 'format', action = 'store', type = lambda s: s.split(','), default = 'pdf'
+    )
     parser_corner_plot.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
