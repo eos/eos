@@ -595,6 +595,58 @@ class AnalysisFile:
                     </tbody>
                     '''
 
+        if self._steps:
+            result += r'''
+                </tbody>
+                </table>
+                <br>
+                <table style="width: 80%">
+                <colgroup>
+                    <col width="15%" style="min-width:  60px">
+                    <col width="15%" style="min-width:  60px">
+                    <col width="15%" style="min-width:  60px">
+                    <col width="55%" style="min-width: 220px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center">STEPS</th>
+                    </tr>
+                </thead>
+            '''
+
+            for step_id, step in self._steps.items():
+                result += fr'''
+                    <thead>
+                        <tr>
+                            <th colspan="4" style="text-align: left">{step.title}</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2", style="text-align: center">id</th>
+                            <th rowspan="2", style="text-align: center">depends on</th>
+                            <th colspan="2", style="text-align: center">tasks</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">name</td>
+                            <td style="text-align: center">arguments</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                '''
+                result += fr'''
+                    <tr>
+                        <td rowspan="2", style="text-align: center">{step_id}</td>
+                        <td rowspan="2", style="text-align: center">{', '.join(step.depends_on)}</td>
+                '''
+                for task in step.tasks:
+                    result += fr'''
+                            <td style="text-align: center">{task.task}</td>
+                            <td style="text-align: center">{task.arguments}</td>
+                        </tr>
+                        <tr>
+                    '''
+                result += r'''
+                    </tr>
+                '''
         result += r'''
         </table>
         '''
