@@ -637,3 +637,63 @@ class DynestyResults:
 
         res_dict = results.asdict()
         _np.save(os.path.join(path, 'dynesty_results.npy'), res_dict)
+
+
+class NabuLikelihood:
+    def __init__(self, path):
+        """ Read a nabu serialized likelihood from disk.
+
+        :param path: Path to the storage location.
+        :type path: str
+        """
+        import nabu
+
+        if not os.path.exists(path) or not os.path.isdir(path):
+            raise RuntimeError(f'Path {path} does not exist or is not a directory')
+
+        f = os.path.join(path, 'description.yaml')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError(f'Description file {f} does not exist or is not a file')
+
+        with open(f) as df:
+            description = yaml.load(df, Loader=yaml.SafeLoader)
+
+        if not description['type'] == 'NabuLikelihood':
+            raise RuntimeError(f'Path {path} not pointing to a NabuLikelihood file')
+
+        self.type = 'NabuLikelihood'
+        self.varied_parameters = description['parameters']
+        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
+
+        f = os.path.join(path, 'likelihood.nabu')
+        if not os.path.exists(f) or not os.path.isfile(f):
+            raise RuntimeError(f'Nabu likelihood file {f} does not exist or is not a file')
+
+        self.likelihood = nabu.Likelihood.load(f)
+
+
+    @staticmethod
+    def create(path, parameters, likelihood):
+        """ Write a new Results object (in the dynesty.results module) to disk.
+
+        :param path: Path to the storage location, which will be created as a directory.
+        :type path: str
+        :param parameters: Parameter descriptions as a 1D array of shape (N, ).
+        :type parameters: list or iterable of eos.Parameter
+        :param likelihood: The likelihood object created by nabu.
+        :type results: nabu.Likelihood or descendant
+        """
+        description = {}
+        description['version'] = eos.__version__
+        description['type'] = 'NabuLikelihood'
+        description['parameters'] = [{
+            'name': p.name(),
+            'min': p.min(),
+            'max': p.max()
+        } for p in parameters]
+
+        os.makedirs(path, exist_ok=True)
+        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
+            yaml.dump(description, description_file, default_flow_style=False)
+
+        likelihood.save(os.path.join(path, 'likelihood.nabu'))
