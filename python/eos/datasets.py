@@ -223,6 +223,19 @@ class DataSets:
                     lambda x: -log_pdf.evaluate(x),
                     None
                 )
+        elif likelihood.filetype == 'NabuLikelihood':
+            import nabu
+            f = eos.NabuLikelihood(os.path.join(self.storage_directory, id, likelihood.filename))
+            varied_parameters = f.varied_parameters
+            log_pdf = f.likelihood.log_prob
+            chi2 = f.likelihood.chi2
+            return (
+                varied_parameters,
+                lambda x: -log_pdf(x),
+                chi2
+            )
+        else:
+            raise ValueError(f'Unsupported likelihood file type: {likelihood.filetype}')
 
 
     def _repr_html_(self):
