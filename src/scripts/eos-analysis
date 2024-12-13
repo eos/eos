@@ -627,7 +627,7 @@ def main():
 
             eos.logger.setLevel(levels[args.verbose])
             eos.logger.removeHandler(eos.logger.handlers[0])
-            handler = logging.StreamHandler(stream=sys.stdout)
+            handler = logging.StreamHandler(stream=sys.stderr)
             handler.setFormatter(CustomLogFormatter())
             eos.logger.addHandler(handler)
 
