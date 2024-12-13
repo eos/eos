@@ -584,7 +584,7 @@ class CustomLogFormatter(logging.Formatter):
         logging.COMPLETED:  ('🗸', 'green'),
         logging.INPROGRESS: ('…', 'green'),
         logging.INFO:       ('ℹ', 'blue'),
-        logging.DEBUG:      ('🤖', 'black'),
+        logging.DEBUG:      ('🤖', ''),
     }
     def __init__(self):
         super().__init__(fmt='%(levelname)s %(message)s', datefmt=None, style='%')
@@ -594,9 +594,14 @@ class CustomLogFormatter(logging.Formatter):
         if record.levelno not in self._MAP_LEVEL_TO_COLOR:
             levelno = logging.ERROR
 
-        symbol, color = self._MAP_LEVEL_TO_COLOR[record.levelno]
-        record.levelname = colored(symbol, color, attrs=['bold'])
-        record.msg = colored(record.msg, color)
+        if levelno != logging.DEBUG:
+            symbol, color = self._MAP_LEVEL_TO_COLOR[record.levelno]
+            record.levelname = colored(symbol, color, attrs=['bold'])
+            record.msg = colored(record.msg, color)
+        else:
+            symbol, _ = self._MAP_LEVEL_TO_COLOR[record.levelno]
+            record.levelname = colored(symbol, attrs=['bold'])
+            record.msg = colored(record.msg)
 
         return super().format(record)
 
