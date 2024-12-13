@@ -584,7 +584,7 @@ class CustomLogFormatter(logging.Formatter):
         logging.COMPLETED:  ('🗸', 'green'),
         logging.INPROGRESS: ('…', 'green'),
         logging.INFO:       ('ℹ', 'blue'),
-        logging.DEBUG:      ('🤖', 'black'),
+        logging.DEBUG:      ('🤖', None),
     }
     def __init__(self):
         super().__init__(fmt='%(levelname)s %(message)s', datefmt=None, style='%')
