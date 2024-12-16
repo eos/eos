@@ -549,7 +549,7 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
             arguments = step.default_arguments[task.task] | task.arguments | { 'analysis_file': analysis_file, 'base_directory': base_directory }
             task_function = _tasks[task.task]
 
-            return task_function(**arguments)
+            task_function(**arguments)
 
 
 # Nested sampling
