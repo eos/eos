@@ -775,9 +775,9 @@ namespace eos
                 // the normalization constant of the density
                 double _value;
 
-                // cholesky matrix of transformation, and inverse of transformation
-                gsl_matrix * _chol;
-                gsl_matrix * _transform_inv;
+                // LU decomposition of the matrix of transformation, and inverse of transformation
+                gsl_permutation * _perm;
+                gsl_matrix * _LU;
 
                 // temporary storage for evaluation
                 gsl_vector * _tmp;
@@ -794,8 +794,8 @@ namespace eos
                     _min(min),
                     _max(max),
                     _value(-1.0 * compute_log_volume()),
-                    _chol(gsl_matrix_alloc(transform->size1, transform->size2)),
-                    _transform_inv(gsl_matrix_alloc(transform->size1, transform->size2)),
+                    _perm(gsl_permutation_calloc(transform->size1)),
+                    _LU(gsl_matrix_alloc(transform->size1, transform->size2)),
                     _tmp(gsl_vector_alloc(_shift->size)),
                     _tmp2(gsl_vector_alloc(_shift->size))
                 {
@@ -822,11 +822,8 @@ namespace eos
                         _varied_parameters.push_back(param);
                     }
 
-                    // cholesky decomposition (informally: the sqrt of the transform matrix)
-                    // the GSL matrix contains both the cholesky and its transpose, see GSL reference, ch. 14.5
-                    cholesky();
-                    invert_transform();
-                    _value -= log_determinant();
+                    // compute the LU decomposition
+                    compute_LU_and_det();
                 }
 
                 virtual ~Transform()
@@ -834,8 +831,8 @@ namespace eos
                     gsl_vector_free(_tmp);
                     gsl_vector_free(_max);
                     gsl_vector_free(_min);
-                    gsl_matrix_free(_transform_inv);
-                    gsl_matrix_free(_chol);
+                    gsl_matrix_free(_LU);
+                    gsl_permutation_free(_perm);
                     gsl_matrix_free(_transform);
                     gsl_vector_free(_shift);
                 }
@@ -862,42 +859,14 @@ namespace eos
                     return result;
                 }
 
-                // compute the inverse of the determinant of the transformation matrix
-                double log_determinant()
+                // compute LU decomposition of the transform matrix, compute log determinant and inverse transform
+                void compute_LU_and_det()
                 {
                     int signum = 0;
-                    gsl_matrix * tmp = gsl_matrix_alloc(_transform->size1, _transform->size2);
-                    gsl_matrix_memcpy(tmp , _transform);
-                    gsl_permutation * p = gsl_permutation_alloc(_transform->size1);
-                    gsl_linalg_LU_decomp(tmp , p , &signum);
-                    double ln_det = gsl_linalg_LU_lndet(tmp);
-                    gsl_permutation_free(p);
-                    gsl_matrix_free(tmp);
-                    return ln_det;
-                }
+                    gsl_matrix_memcpy(_LU, _transform);
+                    gsl_linalg_LU_decomp(_LU, _perm, &signum);
 
-                // compute cholesky decomposition of covariance matrix
-                void cholesky()
-                {
-                    // copy covariance matrix
-                    gsl_matrix_memcpy(_chol, _transform);
-                    if (GSL_SUCCESS != GSL_LINALG_CHOLESKY_DECOMP(_chol))
-                    {
-                        throw InternalError("priors::Transform: Cholesky decomposition failed");
-                    }
-                }
-
-                // invert covariance matrix based on previously obtained Cholesky decomposition
-                void invert_transform()
-                {
-                    // copy cholesky matrix
-                    gsl_matrix_memcpy(_transform_inv, _chol);
-
-                    // compute inverse matrix from cholesky
-                    if (GSL_SUCCESS != gsl_linalg_cholesky_invert(_transform_inv))
-                    {
-                        throw InternalError("priors::Transform: Cholesky inversion failed");
-                    }
+                    _value -= gsl_linalg_LU_lndet(_LU);
                 }
 
                 virtual double operator()() const
@@ -911,8 +880,8 @@ namespace eos
                     // shift: _tmp2 <- _tmp2 - _shift
                     gsl_vector_sub(_tmp2, _shift);
 
-                    // transform: _tmp <- _transform_inv * _tmp2
-                    gsl_blas_dgemv(CblasNoTrans, 1.0, _transform_inv, _tmp2, 0.0, _tmp);
+                    // solve: _tmp <- solution of _transform * _tmp == _tmp2
+                    gsl_linalg_LU_solve(_LU, _perm, _tmp2, _tmp);
 
                     // check if parameters are in range
                     for (unsigned i = 0u; i < _tmp->size; ++i)
@@ -982,8 +951,8 @@ namespace eos
                     // shift: _tmp2 <- _tmp2 - _shift
                     gsl_vector_sub(_tmp2, _shift);
 
-                    // transform: _tmp <- _transform_inv * _tmp2
-                    gsl_blas_dgemv(CblasNoTrans, 1.0, _transform_inv, _tmp2, 0.0, _tmp);
+                    // solve: _tmp <- solution of _transform * _tmp == _tmp2
+                    gsl_linalg_LU_solve(_LU, _perm, _tmp2, _tmp);
 
                     // compute cdfs for uniform distributions in _tmp
                     for (unsigned i = 0u; i < _tmp->size; ++i)
