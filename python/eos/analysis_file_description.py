@@ -223,14 +223,14 @@ _task_argument_map = {
     ('sample-nested', 'n'): 'nlive', ('sample-nested', 'number-of-live-points'): 'nlive', ('sample-nested', 'NLIVE'): 'nlive',
     ('sample-nested', 'd'): 'dlogz', ('sample-nested', 'evidence-tolerance'): 'dlogz', ('sample-nested', 'DLOGZ'): 'dlogz',
     ('sample-nested', 'm'): 'maxiter', ('sample-nested', 'max-number-iterations'): 'maxiter', ('sample-nested', 'MAXITER'): 'maxiter',
-    ('sample-nested', 's'): 'seed', ('sample-nested', 'use-random-seed'): 'seed', ('sample-neested', 'SEED'): 'seed',
+    ('sample-nested', 's'): 'seed', ('sample-nested', 'use-random-seed'): 'seed', ('sample-nested', 'SEED'): 'seed',
     ('sample-nested', 'M'): 'sample', ('sample-nested', 'sampling-method'): 'sample', ('sample-nested', 'SAMPLE'): 'sample',
     # plot-samples
     ('plot-samples', 'POSTERIOR'): 'posterior',
     ('plot-samples', 'B'): 'bins', ('plot-samples', 'BINS'): 'bins',
     # find-mode
     ('find-mode', 'POSTERIOR'): 'posterior',
-    ('find-mode', 'o'): 'optimizations', ('find-mode', 'optimizations'): 'optimizations', ('find-mode', 'OPTIMIZATIONS'): 'optimizations',
+    ('find-mode', 'o'): 'optimizations', ('find-mode', 'OPTIMIZATIONS'): 'optimizations',
     ('find-mode', 'c'): 'chain', ('find-mode', 'from-mcmc'): 'chain', ('find-mode', 'CHAIN'): 'chain',
     ('find-mode', 'S'): 'importance_samples', ('find-mode', 'from-samples'): 'importance_samples',
     ('find-mode', 'p'): 'start_point', ('find-mode', 'from-point'): 'start_point', ('find-mode', 'START_POINT'): 'start_point',
@@ -241,7 +241,7 @@ _task_argument_map = {
     ('mixture-product', 'POSTERIORS'): 'posteriors',
     # find-clusters
     ('find-clusters', 'POSTERIOR'): 'posterior',
-    ('find-clusters', 't'): 'threshold', ('find-clusters', 'threshold'): 'threshold', ('find-clusters', 'THRESHOLD'): 'threshold',
+    ('find-clusters', 't'): 'threshold', ('find-clusters', 'THRESHOLD'): 'threshold',
     ('find-clusters', 'c'): 'K_g', ('find-clusters', 'clusters-per-group'): 'cluster', ('find-clusters', 'CLUSTER'): 'cluster', ('find-clusters', 'K_G'): 'K_g',
     # predict-observables
     ('predict-observables', 'POSTERIOR'): 'posterior',
@@ -251,7 +251,7 @@ _task_argument_map = {
     # corner-plot
     ('corner-plot', 'B'): 'begin', ('corner-plot', 'begin-parameter'): 'begin', ('corner-plot', 'BEGIN'): 'begin',
     ('corner-plot', 'E'): 'end', ('corner-plot', 'end-parameter'): 'end', ('corner-plot', 'END'): 'end',
-    ('corner-plot', 'F'): 'format', ('corner-plot', 'format'): 'format', ('corner-plot', 'FORMAT'): 'format',
+    ('corner-plot', 'F'): 'format', ('corner-plot', 'FORMAT'): 'format',
     # list-step-dependencies
     ('list-step-dependencies', 'ID'): 'id',
     # report
