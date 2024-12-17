@@ -104,12 +104,11 @@ steps:
   - title: 'Sample from posterior CKM+FF'
     id: CKM+FF.sample
     tasks:
-      - task: sample-nested
+      - task: sample-mcmc
         arguments:
           posterior: CKM+FF
-          nlive: 100
-          dlogz: 1.0
-          maxiter: 4000
+          chain: 0
+          pre_N: 500
 
       - task: find-clusters
         arguments:
