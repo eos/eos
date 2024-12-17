@@ -131,7 +131,6 @@ predictions:
 steps:
   - title: 'Sample from CKM-all posterior'
     id: 'CKM-all.sample'
-    depends_on: []
     tasks:
       - task: 'sample-nested'
         arguments:
@@ -141,11 +140,27 @@ steps:
           dlogz: 9.0
           maxiter: 4000
 
+  - title: 'Sample from WET-all posterior'
+    id: 'WET-all.sample'
+    tasks:
+      - task: 'sample-nested'
+        arguments:
+          posterior: 'WET-all'
+          bound: 'multi'
+          nlive: 100
+          dlogz: 9.0
+          maxiter: 4000
+
   - title: 'Create corner plot for CKM-all posterior'
     id: 'CKM-all.corner-plot'
-    depends_on: ['CKM-all.sample']
+    depends_on: ['CKM-all.sample', 'WET-all.sample']
+    default_arguments:
+      corner-plot:
+        format: ['pdf', 'png']
     tasks:
       - task: 'corner-plot'
         arguments:
           posterior: 'CKM-all'
-          format: ['pdf', 'png']
+      - task: 'corner-plot'
+        arguments:
+          posterior: 'WET-all'
