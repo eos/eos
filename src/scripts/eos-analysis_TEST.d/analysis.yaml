@@ -121,7 +121,8 @@ steps:
 
   - title: 'Sample from posteriors FF & CKM+FF'
     id: both.sample
-    default_arguments: { 'nlive': 100, 'dlogz': 1.0, 'maxiter': 4000 }
+    default_arguments:
+      sample-nested: { 'nlive': 100, 'dlogz': 1.0, 'maxiter': 4000 }
     tasks:
       - task: sample-nested
         arguments:

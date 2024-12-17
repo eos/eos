@@ -21,6 +21,7 @@ import eos
 import os
 import sys
 import yaml
+import inspect
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
@@ -276,12 +277,24 @@ class AnalysisFile:
                     known_params[param]
                 except RuntimeError:
                     messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
-        # Check all posteriors named in steps exist
         for step_id, step in self._steps.items():
+            # Check that the default arguments correspond to real tasks
+            if (unknown_tasks := step.default_arguments.keys() - eos.tasks._tasks.keys()):
+                raise ValueError(f'Step \'{step_id}\' has default arguments for unknown tasks: {unknown_tasks}')
+            # Check all posteriors named in steps exist
             for task in step.tasks:
                 if 'posterior' in task.arguments:
                     if task.arguments['posterior'] not in self._posteriors:
                         messages.append(f"Error in step {step_id}: Posterior '{task.arguments['posterior']}' not known to EOS")
+
+        # Check that default arguments in steps can be applied to all specified tasks
+        for step in self._steps.values():
+            for tc in step.tasks:
+                task_func = eos.tasks._tasks[tc.task]
+                provided_arguments = step.default_arguments[tc.task].keys() | tc.arguments.keys()
+                known_arguments = set(inspect.signature(task_func).parameters.keys())
+                for arg in provided_arguments - known_arguments:
+                    raise ValueError(f'Task \'{tc.task}\' does not recognize argument \'{arg}\'')
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
         for posterior in self._posteriors:
