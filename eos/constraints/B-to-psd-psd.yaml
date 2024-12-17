@@ -215,14 +215,20 @@ B_s^0->K^+K^-::BR_exp@Belle:2010C:
     mean: 38.0e-06
     sigma-stat: {hi: 10.0e-06, lo: 9.0e-06}
     sigma-sys: {hi: 7.0e-06, lo: 7.0e-06}
-B_s^0->K^+K^-::A_CP@PDG:2024A:
-    type: Gaussian
-    observable: B_s^0->K^+K^-::A_CP
-    options: {}
-    kinematics: {}
-    mean: 16.2e-02
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 3.5e-02, lo: 3.5e-02}
+B_s^0->K^+K^-::CP_Observables@LHCb:2020B:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        [ "B_s^0->K^+K^-::A_CP", "B_s^0->K^+K^-::S_CP", "B_s^0->K^+K^-::A_DG"]
+    options:
+        [{}, {}, {}]
+    kinematics:
+        [{}, {}, {}]
+    means:
+        [17.2e-02, -13.9e-02, -89.7e-02]
+    covariance:
+        - [9.61e-04, -6.94e-06, 7.28e-05]
+        - [-6.94e-06, 1.02e-03, -1.20e-04]
+        - [7.28e-05, -1.20e-04, 7.57e-03]
 B_s^0->K^+K^-::S_CP@LHCb:2020B:
     type: Gaussian
     observable: B_s^0->K^+K^-::S_CP
