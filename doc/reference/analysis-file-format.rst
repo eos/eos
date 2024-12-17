@@ -35,7 +35,7 @@ The following example illustrates the analysis file format at the hand of a real
 Priors
 ~~~~~~
 
-The ``priors`` key contains a list of *named* priors. Each prior has one mandatory key:
+The ``priors`` key contains a list of *named* priors. Each prior has two mandatory keys:
 
   - ``name`` (**mandatory**) --- The unique name of this prior.
   - ``descriptions`` (**mandatory**) --- The ordered list of parameters described by this prior.
@@ -69,7 +69,7 @@ For example, the following code create two named priors ``CKM`` (univariate) and
 
 
 For a correlated multivariate prior, ``descriptions`` contains a single element consisting of a key/value pair.
-The mandatorys key is ``constraint`` and the value is the qualified name of an EOS constraint.
+The mandatory key is ``constraint`` and the value is the qualified name of an EOS constraint.
 The following example illustrates the organisation of a correlated multivariate prior.
 
 .. code-block:: yaml
@@ -213,7 +213,7 @@ The observables accept two keys:
     Options can be specified in the observable name following the syntax of :class:`QualifiedName <eos.QualifiedName>`.
     A warning will be raised if the observable option override the global options defined above.
   - ``kinematics`` (**optional**) The dictionary of kinematics specifications for the observables.
-    For brevety, a list of kinematic specification can be provided. In this case, one observable per specification will be created.
+    For brevity, a list of kinematic specifications can be provided. In this case, one observable per specification will be created.
 
 The following code provides a valid example of predictions.
 
