@@ -23,6 +23,8 @@ At the top level, the format includes the following YAML keys:
 
  - ``predictions`` (**optional**) --- The list of theory predictions within the analysis.
 
+ - ``steps`` (**optional**) --- The list of steps to be executed in the analysis.
+
 The following example illustrates the analysis file format at the hand of a real-world example.
 
 .. toggle-header::
@@ -242,3 +244,56 @@ The following code provides a valid example of predictions.
                       { q2: 16.0 }, { q2: 17.0 }, { q2: 18.0 }, { q2: 19.0 }, { q2: 20.0 },
                       { q2: 21.0 }, { q2: 22.0 }, { q2: 23.0 }, { q2: 24.0 }, { q2: 25.0 },
                       { q2: 26.0 }, { q2: 27.0 } ]
+
+
+Steps
+~~~~~~~~~~~
+
+The ``steps`` key contains a list of pre-defined tasks that allow an analysis to be fully reproduced. Each step has three mandatory keys, and two optional keys:
+
+  - ``title`` (**mandatory**) --- The title of this step.
+  - ``id`` (**mandatory**) --- The unique identifier of this step.
+  - ``depends_on`` (**optional**) --- A list of step ``id``\ s that need to be executed prior to this step.
+  - ``default_arguments`` (**optional**) --- A dictionary of tasks and default arguments, for any of the tasks in this step.
+  - ``tasks`` (**mandatory**) --- The list of tasks that are part of this step.
+
+The following example illustrates the description of two nested sampling steps, followed by plotting of the results.
+
+.. code-block:: yaml
+
+  steps:
+    - title: 'Sample from CKM-all posterior'
+      id: 'CKM-all.sample'
+      tasks:
+        - task: 'sample-nested'
+          arguments:
+            posterior: 'CKM-all'
+            bound: 'multi'
+            nlive: 100
+            dlogz: 9.0
+            maxiter: 4000
+
+    - title: 'Sample from WET-all posterior'
+      id: 'CKM-all.sample'
+      tasks:
+        - task: 'sample-nested'
+          arguments:
+            posterior: 'WET-all'
+            bound: 'multi'
+            nlive: 100
+            dlogz: 9.0
+            maxiter: 4000
+
+    - title: 'Create corner plot for CKM-all posterior'
+      id: 'CKM-all.corner-plot'
+      depends_on: ['CKM-all.sample', 'WET-all.sample']
+      default_arguments:
+        corner-plot:
+          format: ['pdf', 'png']
+      tasks:
+        - task: 'corner-plot'
+          arguments:
+            posterior: 'CKM-all'
+        - task: 'corner-plot'
+          arguments:
+            posterior: 'WET-all'
