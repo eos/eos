@@ -702,7 +702,7 @@ class Analysis:
         return self._u_to_par(u)
 
 
-    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, seed=10, print_progress=True, sample='auto'):
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, print_progress=True, print_function=None, seed=10, sample='auto'):
         """
         Return samples of the parameters.
 
@@ -725,8 +725,10 @@ class Analysis:
            This method requires the dynesty python module, which can be installed from PyPI.
         """
         import dynesty
+        if print_function is None:
+            print_function = dynesty.results.print_fn
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)), sample=sample)
-        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress)
+        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
         return sampler.results
 
 
