@@ -29,6 +29,7 @@ import scipy
 import sys
 import copy as _copy
 import warnings
+import dynesty as _dynesty
 
 from .ipython import __ipython__
 
@@ -552,6 +553,18 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
             task_function(**arguments)
 
 
+class DynestyResultLogger:
+    def __init__(self):
+        self.timer = _dynesty.utils.DelayTimer(15)
+
+    def print_function(self, results, niter, ncall, add_live_it=None, dlogz=None, stop_val=None, nbatch=None, logl_min=-_np.inf, logl_max=_np.inf):
+        if not self.timer.is_time():
+            return
+
+        fn_args = _dynesty.utils.get_print_fn_args(results, niter, ncall, add_live_it=add_live_it, dlogz=dlogz, stop_val=stop_val, nbatch=nbatch, logl_min=logl_min, logl_max=logl_max)
+        eos.info(f'iteration {fn_args.niter} | {" | ".join(fn_args.long_str)}')
+
+
 # Nested sampling
 @task('sample-nested', '{posterior}/nested')
 def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, seed:int=10, sample:str='auto'):
@@ -581,7 +594,8 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type sample: str, optional
     """
     analysis = analysis_file.analysis(posterior)
-    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, seed=seed, sample=sample)
+    logger = DynestyResultLogger()
+    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]
     weights = _np.exp(posterior_values)

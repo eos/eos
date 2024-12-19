@@ -726,9 +726,12 @@ class Analysis:
         .. note::
            This method requires the dynesty python module, which can be installed from PyPI.
         """
-        import dynesty
+        import dynesty, tqdm
+        from functools import partial
+
         if print_function is None:
-            print_function = dynesty.results.print_fn
+            print_function = partial(dynesty.results.print_fn, pbar=tqdm.tqdm())
+
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)), sample=sample)
         sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
         return sampler.results
