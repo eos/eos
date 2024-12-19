@@ -223,6 +223,7 @@ _task_argument_map = {
     ('sample-nested', 'n'): 'nlive', ('sample-nested', 'number-of-live-points'): 'nlive', ('sample-nested', 'NLIVE'): 'nlive',
     ('sample-nested', 'd'): 'dlogz', ('sample-nested', 'evidence-tolerance'): 'dlogz', ('sample-nested', 'DLOGZ'): 'dlogz',
     ('sample-nested', 'm'): 'maxiter', ('sample-nested', 'max-number-iterations'): 'maxiter', ('sample-nested', 'MAXITER'): 'maxiter',
+    ('sample-nested', 'min-number-iterations'): 'miniter', ('sample-nested', 'MINITER'): 'miniter',
     ('sample-nested', 's'): 'seed', ('sample-nested', 'use-random-seed'): 'seed', ('sample-nested', 'SEED'): 'seed',
     ('sample-nested', 'M'): 'sample', ('sample-nested', 'sampling-method'): 'sample', ('sample-nested', 'SAMPLE'): 'sample',
     # plot-samples
