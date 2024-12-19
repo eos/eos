@@ -18,7 +18,6 @@ jobs:
         strategy:
             matrix:
                 include:
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 39,  version: cp39,  runner: ubuntu-20.04         }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-20.04         }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-20.04         }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-20.04         }
