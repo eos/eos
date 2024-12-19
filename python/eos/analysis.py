@@ -702,7 +702,7 @@ class Analysis:
         return self._u_to_par(u)
 
 
-    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, print_progress=True, print_function=None, seed=10, sample='auto'):
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, miniter=0, print_progress=True, print_function=None, seed=10, sample='auto'):
         """
         Return samples of the parameters.
 
@@ -716,6 +716,8 @@ class Analysis:
         :type dlogz: float, optional
         :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
         :type maxiter: int, optional
+        :param miniter: The minimum number of iterations. Defaults to 0. Samples will be added until miniter is reached, even if the termination condition is reached earlier.
+        :type miniter: int, optional
         :param print_function: The function used to print progress messages. Defaults to using a dynesty-based function.
         :type print_function: callable, optional
         :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
@@ -734,6 +736,9 @@ class Analysis:
 
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)), sample=sample)
         sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
+        while sampler.results['niter'] < miniter:
+            # using mode='full' ensures sampling from the entire posterior
+            sampler.add_batch(mode='full', dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
         return sampler.results
 
 
