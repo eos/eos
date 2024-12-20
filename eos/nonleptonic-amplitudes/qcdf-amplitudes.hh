@@ -60,27 +60,27 @@ namespace eos
             UsedParameter fP1;
             UsedParameter fP2;
 
-            UsedParameter re_alpha1, im_alpha1;
-            UsedParameter re_alpha2, im_alpha2;
-            UsedParameter re_b1, im_b1;
-            UsedParameter re_b2, im_b2;
+            UsedParameter re_alpha1p4_u, im_alpha1p4_u;
+            UsedParameter re_alpha2m4_u, im_alpha2m4_u;
+            UsedParameter re_b1p4_u, im_b1p4_u;
+            UsedParameter re_b2palpha2, im_b2palpha2;
             UsedParameter re_bS1, im_bS1;
             UsedParameter re_bS2, im_bS2;
 
             UsedParameter re_alpha3_u, im_alpha3_u;
             UsedParameter re_alpha3_c, im_alpha3_c;
             UsedParameter re_alpha4_u, im_alpha4_u;
-            UsedParameter re_alpha4_c, im_alpha4_c;
-            UsedParameter re_b4_u, im_b4_u;
+            UsedParameter re_alpha4p4EW_c, im_alpha4p4EW_c;
+            UsedParameter re_b4palpha4_u, im_b4palpha4_u;
             UsedParameter re_b4_c, im_b4_c;
             UsedParameter re_bS4_u, im_bS4_u;
             UsedParameter re_bS4_c, im_bS4_c;
 
-            UsedParameter re_alpha3EW_c, im_alpha3EW_c;
+            UsedParameter re_alpha3p4EW_c, im_alpha3p4EW_c;
             UsedParameter re_alpha4EW_c, im_alpha4EW_c;
-            UsedParameter re_b3EW_c, im_b3EW_c;
+            UsedParameter re_b3malpha4EW_c, im_b3malpha4EW_c;
             UsedParameter re_bS3EW_c, im_bS3EW_c;
-            UsedParameter re_b4EW_c, im_b4EW_c;
+            UsedParameter re_b4p4EW_c, im_b4p4EW_c;
             UsedParameter re_bS4EW_c, im_bS4EW_c;
 
             static const std::vector<OptionSpecification> options;
