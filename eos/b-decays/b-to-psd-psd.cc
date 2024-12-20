@@ -40,14 +40,20 @@ namespace eos
         UsedParameter mB;
         UsedParameter mP1;
         UsedParameter mP2;
-        UsedParameter phiB;
+        SpecifiedOption opt_rep;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
+        std::shared_ptr<NonleptonicAmplitudes<PToPP>> Bbar_nl_amplitudes;
+        std::shared_ptr<Model> model;
 
-        double yq;
+        // B mixing
+        std::shared_ptr<UsedParameter> life_time_difference;
+        std::function<double ()> yq;
+        std::function<double ()> phiB;
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            model(Model::make(o.get("model", "SM"), p, o)),
             opt_q(o, options, "q"),
             opt_p1(o, options, "P1"),
             opt_p2(o, options, "P2"),
@@ -56,22 +62,33 @@ namespace eos
             mB(p["mass::B_" + opt_q.str()], u),
             mP1(p["mass::" + opt_p1.str()], u),
             mP2(p["mass::" + opt_p2.str()], u),
-            phiB(p["B_" + (opt_q.str()=="u"?"d":opt_q.str()) + "::q_over_p_phase"], u),
-            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o + Options{{"cp-conjugate", "false"}})),
-            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + o.get("representation", "topological"), p, o + Options{{"cp-conjugate", "true"}}))
+            opt_rep(o, options, "representation"),
+            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate", "false"}})),
+            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate", "true"}})),
+            Bbar_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate", "false"}} + Options{{"B_bar", "true"}}))
         {
             Context ctx("When constructing B->PP observable");
 
             switch (opt_q.value())
             {
                 case QuarkFlavor::up:
-                    yq = 0.0;
+                    life_time_difference = nullptr;
+                    yq = []() { return 0.0; };
+                    phiB = []() { return 0.0; };
                     break;
+
                 case QuarkFlavor::down:
-                case QuarkFlavor::strange:
-                    u.uses(p["life_time::Delta_B_" + opt_q.str()]);
-                    yq = p["life_time::Delta_B_" + opt_q.str()] / (2.0 * tau);
+                    life_time_difference = std::make_shared<UsedParameter>(p["life_time::Delta_B_d"], u);
+                    yq = [this]() { return this->life_time_difference->evaluate() / (2.0 / tau); };
+                    phiB = [this]() { return 2.0 * arg(model->ckm_tb() * conj(model->ckm_td())); };
                     break;
+
+                case QuarkFlavor::strange:
+                    life_time_difference = std::make_shared<UsedParameter>(p["life_time::Delta_B_s"], u);
+                    yq = [this]() { return this->life_time_difference->evaluate() / (2.0 / tau); };
+                    phiB = [this]() { return 2.0 * arg(model->ckm_tb() * conj(model->ckm_ts())); };
+                    break;
+
                 default:
                     throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
             }
@@ -79,6 +96,7 @@ namespace eos
             u.uses(*model);
             u.uses(*nl_amplitudes);
             u.uses(*cp_nl_amplitudes);
+            u.uses(*Bbar_nl_amplitudes);
         }
 
         double decay_width() const
@@ -117,32 +135,30 @@ namespace eos
 
         double mixing_induced_cp_asymmetry() const
         {
-            const double phiB = this->phiB();
             complex<double> ii = complex<double>(0.0, 1.0);
 
             const complex<double> amp = nl_amplitudes->amplitude();
-            const complex<double> cp_amp = cp_nl_amplitudes->amplitude();
+            const complex<double> Bbar_amp = Bbar_nl_amplitudes->amplitude();
 
             // Assumes the mixing parameter ratio q / p to be a pure phase
-            const complex<double> lambdaf = std::exp(ii * phiB) * cp_amp / amp;
+            const complex<double> xif = - std::exp(-phiB() * ii) * Bbar_amp / amp;
 
 
-            return -2 * std::imag(lambdaf) / (1 + std::norm(lambdaf)) ;
+            return 2 * std::imag(xif) / (1 + std::norm(xif)) ;
         }
 
         double a_Delta_Gamma() const
         {
-            const double phiB = this->phiB();
             complex<double> ii = complex<double>(0.0, 1.0);
 
             const complex<double> amp = nl_amplitudes->amplitude();
-            const complex<double> cp_amp = cp_nl_amplitudes->amplitude();
+            const complex<double> Bbar_amp = Bbar_nl_amplitudes->amplitude();
 
             // Assumes the mixing parameter ratio q / p to be a pure phase
-            const complex<double> lambdaf = std::exp(ii * phiB) * cp_amp / amp;
+            const complex<double> xif = - std::exp(-phiB() * ii) * Bbar_amp / amp;
 
 
-            return -2 * std::real(lambdaf) / (1 + std::norm(lambdaf)) ;
+            return 2 * std::real(xif) / (1 + std::norm(xif)) ;
         }
     };
 
@@ -151,9 +167,10 @@ namespace eos
     {
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-        { "q", { "u", "d", "s" }, "" },
-        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
-        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "q",              { "u", "d", "s" },                                                                       "" },
+        { "P1",             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "P2",             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "representation", { "topological", "SU3F", "QCDF" },                                                       "" }
     };
 
     BToPseudoscalarPseudoscalar::BToPseudoscalarPseudoscalar(const Parameters & parameters, const Options & options) :
@@ -193,7 +210,8 @@ namespace eos
     double
     BToPseudoscalarPseudoscalar::exp_branching_ratio() const
     {
-        return avg_branching_ratio() * (1 - _imp->a_Delta_Gamma() * (-1 * _imp->yq)) / (1 - power_of<2>(_imp->yq));
+        const double yq = _imp->yq();
+        return avg_branching_ratio() * (1 + _imp->a_Delta_Gamma() * yq) / (1 - power_of<2>(yq));
     }
 
     double
