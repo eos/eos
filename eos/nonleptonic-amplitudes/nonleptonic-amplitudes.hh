@@ -77,11 +77,20 @@ namespace eos
                 return ordered_amplitude() + inverse_amplitude();
             }
 
+            // CP-conserving penguin vs tree correction defined as - |(Vub Vud*) / (Vcb Vcd*)| penguin / (tree - penguin), cf. [FJV:2016A]
+            virtual complex<double> penguin_correction() const
+            {
+                throw InternalError("Not implemented");
+                return 0.0;
+            }
+
             // Pseudo-observables given for testing purposes
             double re_amplitude() const { return real(amplitude()); }
             double im_amplitude() const { return imag(amplitude()); }
             double abs_amplitude() const { return abs(amplitude()); }
             double arg_amplitude() const { return arg(amplitude()); }
+            double abs_penguin_correction() const {return abs(penguin_correction()); }
+            double arg_penguin_correction() const {return arg(penguin_correction()); }
     };
 
     template <>
