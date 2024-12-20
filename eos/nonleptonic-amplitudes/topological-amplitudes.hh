@@ -109,6 +109,8 @@ namespace eos
             complex<double> ordered_amplitude() const;
             // Amplitude for B -> P2 P1
             complex<double> inverse_amplitude() const;
+            // CP-conserving penguin vs tree correction defined as - |(Vub Vud*) / (Vcb Vcd*)| penguin / (tree - penguin), cf. [FJV:2016A]
+            complex<double> penguin_correction() const override;
     };
 }
 #endif
