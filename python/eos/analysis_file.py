@@ -605,11 +605,12 @@ class AnalysisFile:
                     <col width="15%" style="min-width:  60px">
                     <col width="15%" style="min-width:  60px">
                     <col width="15%" style="min-width:  60px">
-                    <col width="55%" style="min-width: 220px">
+                    <col width="15%" style="min-width:  60px">
+                    <col width="40%" style="min-width: 160px">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th colspan="4" style="text-align: center">STEPS</th>
+                        <th colspan="5" style="text-align: center">STEPS</th>
                     </tr>
                 </thead>
             '''
@@ -618,11 +619,12 @@ class AnalysisFile:
                 result += fr'''
                     <thead>
                         <tr>
-                            <th colspan="4" style="text-align: left">{step.title}</th>
+                            <th colspan="5" style="text-align: left">{step.title}</th>
                         </tr>
                         <tr>
                             <th rowspan="2", style="text-align: center">id</th>
                             <th rowspan="2", style="text-align: center">depends on</th>
+                            <th rowspan="2", style="text-align: center">default arguments</th>
                             <th colspan="2", style="text-align: center">tasks</th>
                         </tr>
                         <tr>
@@ -634,8 +636,9 @@ class AnalysisFile:
                 '''
                 result += fr'''
                     <tr>
-                        <td rowspan="2", style="text-align: center">{step_id}</td>
-                        <td rowspan="2", style="text-align: center">{', '.join(step.depends_on)}</td>
+                        <td rowspan="{len(step.tasks)}", style="text-align: center">{step_id}</td>
+                        <td rowspan="{len(step.tasks)}", style="text-align: center">{', '.join(step.depends_on)}</td>
+                        <td rowspan="{len(step.tasks)}", style="text-align: center">{', '.join(f'{k} = {v}' for k, v in step.default_arguments.items())}</td>
                 '''
                 for task in step.tasks:
                     result += fr'''
