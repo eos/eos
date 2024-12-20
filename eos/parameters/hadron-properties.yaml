@@ -672,12 +672,12 @@ groups:
           unit:     's^-1'
           comments: 'smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]'
       'life_time::Delta_B_s' :
-          central: +0.081e+12
-          min:     +0.070e+12
-          max:     +0.092e+12
+          central: +0.084e+12
+          min:     +0.079e+12
+          max:     +0.088e+12
           latex:    '$\Delta \Gamma_{B_s}$'
           unit:     's^-1'
-          comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
+          comments: 'cf. [PDG2024]'
       'B_s::ys' :
           central: 0.0675
           min:     0.0635
