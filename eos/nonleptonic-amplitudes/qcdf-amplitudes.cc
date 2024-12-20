@@ -39,10 +39,11 @@ namespace eos
     QCDFRepresentation<PToPP>::options
     {
         Model::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "q", { "u", "d", "s" } },
-        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
-        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "cp-conjugate", { "true", "false"},  "false" },
+        { "B_bar", { "true", "false"},  "false" },
+        { "q", { "u", "d", "s" }, "" },
+        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
     };
 
     complex<double>
@@ -236,8 +237,13 @@ namespace eos
     {
         this->update();
 
-        return power_of<2>(mB()) * FP1() * fP2() * this->alpha_amplitude(P1, P2) + fB() * fP1() * fP2() * this->b_amplitude(P1, P2);
+        if (opt_B_bar.value())
+        {
+            su3f::transpose(P1);
+            su3f::transpose(P2);
+        }
 
+        return power_of<2>(mB()) * FP1() * fP2() / (1 - power_of<2>(mP2() / mB_q_0())) * this->alpha_amplitude(P1, P2) + fB() * fP1() * fP2() * this->b_amplitude(P1, P2);
     }
 
     complex<double>
@@ -245,7 +251,12 @@ namespace eos
     {
         this->update();
 
-        return power_of<2>(mB()) * FP2() * fP1() * this->alpha_amplitude(P2, P1) + fB() * fP1() * fP2() * this->b_amplitude(P2, P1);
+        if (opt_B_bar.value())
+        {
+            su3f::transpose(P1);
+            su3f::transpose(P2);
+        }
 
+        return power_of<2>(mB()) * FP2() * fP1() / (1 - power_of<2>(mP1() / mB_q_0())) * this->alpha_amplitude(P2, P1) + fB() * fP1() * fP2() * this->b_amplitude(P2, P1);
     }
 }
