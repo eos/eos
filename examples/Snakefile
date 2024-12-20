@@ -1,0 +1,24 @@
+from snakemake.utils import min_version
+min_version("7")
+
+rule all:
+    input:
+        "analysis.yaml",
+        expand([f"steps/{s}" for s in shell("eos-analysis list-steps -f analysis.yaml", iterable=True)])
+    output:
+        touch("steps/all")
+
+STEPS=[s for s in shell("eos-analysis list-steps -f analysis.yaml", iterable=True)]
+for s in STEPS:
+    rule:
+        name: f"{s}"
+        params:
+            step=s,
+            basedir='YOUR_BASEDIR_HERE'
+        input:
+            "analysis.yaml",
+            expand([f"steps/{d}" for d in shell(f"eos-analysis list-step-dependencies -f analysis.yaml {s}", iterable=True)])
+        output:
+            f"steps/{s}"
+        shell:
+            "eos-analysis run -f analysis.yaml -b {params.basedir} {params.step} > {output[0]} 2> /dev/null"
