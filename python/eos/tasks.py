@@ -533,25 +533,23 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
     :type id: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param dry_run: The flag that disables execution and insteads prints the full information on the tasks that would be run to standard output. Defaults to `False`.
+    :param dry_run: The flag that disables execution and instead prints the full information on the tasks that would be run to standard output. Defaults to `False`.
     :type dry_run: bool, optional
     """
-    steps = { step.id: step for step in analysis_file._steps }
-
-    if id not in steps:
+    try:
+        step = analysis_file._steps[id]
+    except KeyError:
         raise ValueError(f'Step with id \'{id}\' not found in analysis file')
-
-    step = steps[id]
 
     for task in step.tasks:
         if dry_run:
-            arguments = task.arguments | { 'analysis_file': analysis_file.analysis_file, 'base_directory': base_directory }
+            arguments = step.default_arguments[task.task] | task.arguments | { 'analysis_file': analysis_file.analysis_file, 'base_directory': base_directory }
             print(f"{task.task}({','.join([f'{k}={v}' for k, v in arguments.items()])})")
         else:
-            arguments = task.arguments | { 'analysis_file': analysis_file, 'base_directory': base_directory }
+            arguments = step.default_arguments[task.task] | task.arguments | { 'analysis_file': analysis_file, 'base_directory': base_directory }
             task_function = _tasks[task.task]
 
-            return task_function(**arguments)
+            task_function(**arguments)
 
 
 # Nested sampling
@@ -778,7 +776,7 @@ def list_steps(analysis_file:str):
     :param analysis_file: The name of the analysis file that shall be inspected`.
     :type analysis_file: str or :class:`eos.AnalysisFile`
     """
-    return [step.id for step in analysis_file._steps]
+    return analysis_file._steps.keys()
 
 
 @task('list-step-dependencies', '', logfile=False)
@@ -791,7 +789,7 @@ def list_step_dependencies(analysis_file:str, id:str):
     :param id: The id of the step to inspect.
     :type id: str
     """
-    steps = { step.id: step for step in analysis_file._steps }
+    steps = analysis_file._steps
 
     if id not in steps:
         raise ValueError(f'Step with id \'{id}\' not found in analysis file')

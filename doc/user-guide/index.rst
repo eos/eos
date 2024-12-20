@@ -20,3 +20,4 @@ and how to `simulate processes <simulation.html>`_.
    simulation
    analysis-organisation
    tasks
+   reproducible-analyses
