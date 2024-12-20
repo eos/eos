@@ -290,4 +290,15 @@ namespace eos
             this->tree_amplitude(P2, P1) + this->penguin_amplitude(P2, P1)
         );
     }
+
+    complex<double>
+    SU3FRepresentation<PToPP>::penguin_correction() const
+    {
+        this->update();
+
+        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt;
+        auto tree = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu;
+
+        return - penguin / (tree - penguin);
+    }
 }

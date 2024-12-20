@@ -76,6 +76,10 @@ namespace eos
                         &NonleptonicAmplitudes<PToPP>::abs_amplitude, std::make_tuple()),
                 make_nonleptonic_amplitudes_adapter("B->PP::Arg{amplitude}", R"(|\mathcal{A}^{B\to PP}|)",
                         &NonleptonicAmplitudes<PToPP>::arg_amplitude, std::make_tuple()),
+                make_nonleptonic_amplitudes_adapter("B->PP::r_q", R"(r_q)",
+                        &NonleptonicAmplitudes<PToPP>::abs_penguin_correction, std::make_tuple()),
+                make_nonleptonic_amplitudes_adapter("B->PP::theta_q", R"(\theta_q)",
+                        &NonleptonicAmplitudes<PToPP>::arg_penguin_correction, std::make_tuple()),
             }
         );
 
