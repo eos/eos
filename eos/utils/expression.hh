@@ -32,6 +32,13 @@
 
 namespace eos::exp
 {
+    class ExpressionError :
+        public eos::Exception
+    {
+        public:
+            ExpressionError(const std::string & msg);
+    };
+
     class BinaryExpression
     {
         public:
