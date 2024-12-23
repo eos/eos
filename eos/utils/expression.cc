@@ -23,6 +23,11 @@
 
 namespace eos::exp
 {
+    ExpressionError::ExpressionError(const std::string & msg) :
+        eos::Exception("Invalid expression statement (" + msg + ")")
+    {
+    }
+
     double BinaryExpression::sum(const double & a, const double & b)        { return a + b; }
     double BinaryExpression::difference(const double & a, const double & b) { return a - b; }
     double BinaryExpression::product(const double & a, const double & b)    { return a * b; }
