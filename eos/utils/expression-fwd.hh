@@ -24,6 +24,7 @@
 namespace eos::exp
 {
     class BinaryExpression;
+    class FunctionExpression;
     class ConstantExpression;
     class ObservableNameExpression;
     class ObservableExpression;
@@ -35,6 +36,7 @@ namespace eos::exp
 
     using Expression = OneOf<
         BinaryExpression,
+        FunctionExpression,
         ConstantExpression,
         ObservableNameExpression,
         ObservableExpression,
