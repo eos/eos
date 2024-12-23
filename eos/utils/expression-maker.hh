@@ -39,6 +39,8 @@ namespace eos::exp
 
             Expression visit(const BinaryExpression & e);
 
+            Expression visit(const FunctionExpression & e);
+
             Expression visit(const ConstantExpression & e);
 
             Expression visit(const ObservableNameExpression & e);

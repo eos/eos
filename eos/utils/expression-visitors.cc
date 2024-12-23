@@ -56,6 +56,14 @@ namespace eos::exp
         _os << ")";
     }
 
+    void ExpressionPrinter::visit(FunctionExpression & e)
+    {
+        _os << "FunctionExpression(";
+        _os << e.fname << ", ";
+        e.arg.accept(*this);
+        _os << ")";
+    }
+
     void ExpressionPrinter::visit(ConstantExpression & e)
     {
         _os << "ConstantExpression(" << e.value << ")";
@@ -157,6 +165,12 @@ namespace eos::exp
     }
 
     double
+    ExpressionEvaluator::visit(FunctionExpression & e)
+    {
+        return e.f(e.arg.accept_returning<double>(*this));
+    }
+
+    double
     ExpressionEvaluator::visit(ConstantExpression & e)
     {
         return e.value;
@@ -225,6 +239,12 @@ namespace eos::exp
     ExpressionCloner::visit(const BinaryExpression & e)
     {
         return BinaryExpression(e.op, e.lhs.accept_returning<Expression>(*this), e.rhs.accept_returning<Expression>(*this));
+    }
+
+    Expression
+    ExpressionCloner::visit(const FunctionExpression & e)
+    {
+        return FunctionExpression(e.fname, e.arg.accept_returning<Expression>(*this));
     }
 
     Expression
@@ -339,6 +359,12 @@ namespace eos::exp
     ExpressionMaker::visit(const BinaryExpression & e)
     {
         return BinaryExpression(e.op, e.lhs.accept_returning<Expression>(*this), e.rhs.accept_returning<Expression>(*this));
+    }
+
+    Expression
+    ExpressionMaker::visit(const FunctionExpression & e)
+    {
+        return FunctionExpression(e.fname, e.arg.accept_returning<Expression>(*this));
     }
 
     Expression
@@ -496,6 +522,12 @@ namespace eos::exp
     }
 
     void
+    ExpressionKinematicReader::visit(const FunctionExpression & e)
+    {
+        e.arg.accept(*this);
+    }
+
+    void
     ExpressionKinematicReader::visit(const ConstantExpression &)
     {
     }
@@ -644,6 +676,12 @@ namespace eos::exp
     }
 
     Expression
+    ExpressionCacher::visit(const FunctionExpression & e)
+    {
+        return FunctionExpression(e.fname, e.arg.accept_returning<Expression>(*this));
+    }
+
+    Expression
     ExpressionCacher::visit(const ConstantExpression & e)
     {
         return ConstantExpression(e);
@@ -709,6 +747,12 @@ namespace eos::exp
     {
         e.lhs.accept(*this);
         e.rhs.accept(*this);
+    }
+
+    void
+    ExpressionUsedParameterReader::visit(const FunctionExpression & e)
+    {
+        e.arg.accept(*this);
     }
 
     void

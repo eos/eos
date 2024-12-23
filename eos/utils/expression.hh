@@ -63,6 +63,20 @@ namespace eos::exp
             }
     };
 
+    class FunctionExpression
+    {
+        public:
+            using FunctionType = double(*)(const double &);
+
+            FunctionType f;
+            std::string fname;
+            Expression arg;
+
+            FunctionExpression() {};
+
+            FunctionExpression(const std::string & f, const Expression & arg);
+    };
+
     class ConstantExpression
     {
         public:

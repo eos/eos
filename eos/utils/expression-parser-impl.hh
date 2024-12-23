@@ -85,6 +85,7 @@ namespace eos
             | observable_name                              [ _val = phx::bind(make_observable, _1, KinematicsSpecification()) ]
             | parameter_name                               [ _val = phx::bind(make_parameter, _1)]
             | kinematic_variable_name                      [ _val = phx::bind(make_kinematic_variable, _1) ]
+            | function_expr                                [ _val = _1 ]
             ;
 
         constant = double_ | int_;
@@ -128,6 +129,26 @@ namespace eos
             as_string [ lexeme [ *~char_(",=>]") ] ]
             >> '='
             >> double_
+            )
+            ;
+
+        auto make_function = [] (const std::string & f, const auto & arg)
+        {
+            return eos::exp::FunctionExpression(f, arg);
+        };
+
+        function_expr =
+            (
+            function_name
+            >> '('
+            >> primary_expr
+            >> ')'
+            ) [ _val = phx::bind(make_function, _1, _2)]
+            ;
+
+        function_name =
+            *(
+                string("exp") | string("cos") | string("sin")
             )
             ;
     }
