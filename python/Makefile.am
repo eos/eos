@@ -112,19 +112,6 @@ PYPI_SHARED_OBJECTS = 'libboost|libeos|libgfortran|libgsl|libquadmath|libsatlas|
 eoshep-before: setup.py all
 	echo preparation to build wheel in "$(DESTDIR)" for version $(PYPI_VERSION) using "$(PYTHON)" \(`$(PYTHON) -V`\) ; \
     cp $(abs_top_builddir)/python/setup.py $(DESTDIR)/ ; \
-    cp $(abs_top_builddir)/python/.libs/_eos.so $(DESTDIR)/ ; \
-    echo "$(PYPI_SHARED_OBJECTS)" ; \
-    for f in `ldd $(DESTDIR)/_eos.so | grep '=>' | grep -E $(PYPI_SHARED_OBJECTS) | awk '{print $$3}'` ; \
-    do \
-        echo copying $$f ; \
-        cp $$f $(DESTDIR)/ ; \
-    done ; \
-    chrpath -r '$$ORIGIN/_eos_libs' $(DESTDIR)/_eos.so ; \
-    for f in $(DESTDIR)/libeos*.so* ; \
-    do \
-        chrpath -l $$f || continue ; \
-        chrpath -r '$$ORIGIN' $$f ; \
-    done ; \
     cp -r $(abs_top_srcdir)/python/eos $(DESTDIR)/ ; \
     mkdir $(DESTDIR)/_eos_data ; \
     for d in references.yaml constraints parameters ; \
@@ -132,19 +119,16 @@ eoshep-before: setup.py all
         cp -r $(abs_top_srcdir)/eos/$$d $(DESTDIR)/_eos_data/ ; \
     done ; \
     echo 'is_wheel = True' >> $(DESTDIR)/eos/config.py ; \
-    echo 'int foo() { return -1; }' > $(DESTDIR)/dummy.cc ; \
     mkdir $(DESTDIR)/bin ; \
-    for f in $(abs_top_builddir)/src/scripts/* ; \
+    for f in $(abs_top_builddir)/src/scripts/eos-* ; \
     do \
         cp -r $$f $(DESTDIR)/bin/ ; \
     done ; \
     cp $(abs_top_srcdir)/README.md $(DESTDIR)/ ; \
-    pushd $(DESTDIR) ; \
-    $(PYTHON) $(DESTDIR)/setup.py build ; \
-    popd ; \
-    for f in `find $(DESTDIR)/build/ -name "_eos.*.so"` ; \
-    do \
-        cp $(DESTDIR)/_eos.so $$f ; \
-    done
+	cp $(abs_top_srcdir)/python/_eos.cc $(DESTDIR)/ ; \
+	mkdir -p $(DESTDIR)/_eos ; \
+	cp $(abs_top_srcdir)/python/_eos/*.cc $(DESTDIR)/_eos/ ; \
+	cp $(abs_top_srcdir)/python/_eos/*.hh $(DESTDIR)/_eos/ ; \
+    pushd $(DESTDIR)
 
 endif

@@ -62,6 +62,7 @@ jobs:
                     --enable-lto
                   make -j4 all
                   make -j4 check VERBOSE=1
+                  make -C eos -j4 install
                   make -C python eoshep-before DESTDIR={package}
                   popd
                 CIBW_TEST_COMMAND: |
