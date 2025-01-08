@@ -543,10 +543,10 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
 
     for task in step.tasks:
         if dry_run:
-            arguments = task.arguments | { 'analysis_file': analysis_file.analysis_file, 'base_directory': base_directory }
+            arguments = step.default_arguments[task.task] | task.arguments | { 'analysis_file': analysis_file.analysis_file, 'base_directory': base_directory }
             print(f"{task.task}({','.join([f'{k}={v}' for k, v in arguments.items()])})")
         else:
-            arguments = task.arguments | { 'analysis_file': analysis_file, 'base_directory': base_directory }
+            arguments = step.default_arguments[task.task] | task.arguments | { 'analysis_file': analysis_file, 'base_directory': base_directory }
             task_function = _tasks[task.task]
 
             return task_function(**arguments)
