@@ -150,9 +150,24 @@ steps:
 
   - title: 'Create corner plot for CKM-all posterior'
     id: 'CKM-all.corner-plot'
-    depends_on: ['CKM-all.sample']
+    depends_on: ['CKM-all,WET-all.sample']
     tasks:
       - task: 'corner-plot'
         arguments:
           posterior: 'CKM-all'
           format: ['pdf', 'png']
+
+  - title: 'Find mode and corner plot for WET-all posterior'
+    id: 'WET-all.mode,corner-plot'
+    depends_on: ['CKM-all,WET-all.sample']
+    default_arguments:
+      find-mode:
+        from-samples: True
+    tasks:
+      - task: 'corner-plot'
+        arguments:
+          posterior: 'CKM-all'
+          format: ['pdf']
+      - task: 'find-mode'
+        arguments:
+          posterior: 'WET-all'
