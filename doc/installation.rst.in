@@ -78,7 +78,7 @@ You might need to install the ``curl`` program first, if not already installed. 
 
 ::
 
-  pip3 install --user --upgrade dynesty matplotlib networkx numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade dynesty matplotlib numpy pypmc pyyaml scipy
 
 
 *******
@@ -176,9 +176,6 @@ ipywidgets
 matplotlib
   the Python plotting library in version 2.0 or higher;
 
-networkx
-  the Python graph library (needed for some functionality);
-
 scipy
   the Python scientific library;
 
@@ -211,18 +208,18 @@ by running the following commands:
   # for the 'System Software'
   sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libboost-math-dev libyaml-cpp-dev
   # for the 'Python Software'
-  sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-networkx python3-scipy python3-yaml python3-pip
+  sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-scipy python3-yaml python3-pip
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
-the ``dynesty``, ``matplotlib``, ``networkx``, ``scipy``, ``pypmc``, ``pyyaml``, and ``wilson`` packages:
+the ``dynesty``, ``matplotlib``,  ``scipy``, ``pypmc``, ``pyyaml``, and ``wilson`` packages:
 
 
 ::
 
   # Make sure to activate your virtual environment first
-  pip install dynesty matplotlib networkx scipy pypmc pyyaml wilson
+  pip install dynesty matplotlib scipy pypmc pyyaml wilson
 
 
 Installing the dependencies on macOS with Homebrew and PyPi
@@ -258,7 +255,7 @@ To install the remaining packages, run the following command in a shell
 
 ::
 
-  pip3 install dynesty matplotlib networkx scipy pypmc pyyaml wilson
+  pip3 install dynesty matplotlib scipy pypmc pyyaml wilson
 
 
 Installing EOS
