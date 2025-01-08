@@ -192,6 +192,73 @@ class ParameterComponent(Deserializable):
 
 
 
+# Mapping between CLI argument names and internal names for individual tasks
+_task_argument_map = {
+    # list-likelihoods
+    ('list-likelihoods', 'd'): 'display', ('list-likelihoods', 'display-details'): 'display', ('list-likelihoods', 'DISPLAY'): 'display',
+    # sample-mcmc
+    ('sample-mcmc', 'POSTERIOR'): 'posterior',
+    ('sample-mcmc', 'CHAIN-IDX'): 'chain',
+    ('sample-mcmc', 'number-of-samples'): 'N',
+    ('sample-mcmc', 'S'): 'stride', ('sample-mcmc', 'STRIDE'): 'stride',
+    ('sample-mcmc', 'p'): 'preruns', ('sample-mcmc', 'number-of-preruns'): 'preruns', ('sample-mcmc', 'PRERUNS'): 'preruns',
+    ('sample-mcmc', 'n'): 'pre_N', ('sample-mcmc', 'number-of-prerun-samples'): 'pre_N', ('sample-mcmc', 'PRE_N'): 'pre_N',
+    ('sample-mcmc', 's'): 'start_point', ('sample-mcmc', 'start-point'): 'start_point', ('sample-mcmc', 'START_POINT'): 'start_point',
+    ('sample-mcmc', 'c'): 'cov_scale', ('sample-mcmc', 'cov-scale'): 'cov_scale', ('sample-mcmc', 'COV_SCALE'): 'cov_scale',
+    # sample-pmc
+    ('sample-pmc', 'POSTERIOR'): 'posterior',
+    ('sample-pmc', 'n'): 'step_N', ('sample-pmc', 'number-of-adaptation-samples'): 'step_N', ('sample-pmc', 'STEP_N'): 'step_N',
+    ('sample-pmc', 's'): 'steps', ('sample-pmc', 'number-of-adaptation-steps'): 'steps', ('sample-pmc', 'STEPS'): 'steps',
+    ('sample-pmc', 't'): 'perplexity_threshold', ('sample-pmc', 'perplexity-threshold'): 'perplexity_threshold', ('sample-pmc', 'PERPLEXITY_THRESHOLD'): 'perplexity_threshold',
+    ('sample-pmc', 'w'): 'weight_thresold', ('sample-pmc', 'weight-threshold'): 'weight_thresold', ('sample-pmc', 'WEIGHT_THRESHOLD'): 'weight_thresold',
+    ('sample-pmc', 'N'): 'final_N', ('sample-pmc', 'numerb-of-final-samples'): 'final_N', ('sample-pmc', 'FINAL_N'): 'final_N',
+    ('sample-pmc', 'PMC_ITERATIONS'): 'pmc_iterations',
+    ('sample-pmc', 'pmc-rel-tol'): 'pmc_rel_tol', ('sample-pmc', 'PMC_REL_TOL'): 'pmc_rel_tol',
+    ('sample-pmc', 'pmc-abs-tol'): 'pmc_abs_tol', ('sample-pmc', 'PMC_ABS_TOL'): 'pmc_abs_tol',
+    ('sample-pmc', 'l'): 'pmc_lookback', ('sample-pmc', 'pmc-lookback'): 'pmc_lookback', ('sample-pmc', 'PMC_LOOKBACK'): 'pmc_lookback',
+    ('sample-pmc', 'p'): 'initial_proposal', ('sample-pmc', 'initial-proposal'): 'initial_proposal', ('sample-pmc', 'INITIAL_PROPOSAL'): 'initial_proposal',
+    ('sample-pmc', 'S'): 'sigma_stat_test', ('sample-pmc', 'sigma-stat-test'): 'sigma_stat_test', ('sample-pmc', 'SIGMA_STAT_TEST'): 'sigma_stat_test',
+    # sample-nested
+    ('sample-nested', 'B'): 'bound', ('sample-nested', 'target-bound'): 'bound', ('sample-nested', 'BOUND'): 'bound',
+    ('sample-nested', 'n'): 'nlive', ('sample-nested', 'number-of-live-points'): 'nlive', ('sample-nested', 'NLIVE'): 'nlive',
+    ('sample-nested', 'd'): 'dlogz', ('sample-nested', 'evidence-tolerance'): 'dlogz', ('sample-nested', 'DLOGZ'): 'dlogz',
+    ('sample-nested', 'm'): 'maxiter', ('sample-nested', 'max-number-iterations'): 'maxiter', ('sample-nested', 'MAXITER'): 'maxiter',
+    ('sample-nested', 's'): 'seed', ('sample-nested', 'use-random-seed'): 'seed', ('sample-nested', 'SEED'): 'seed',
+    ('sample-nested', 'M'): 'sample', ('sample-nested', 'sampling-method'): 'sample', ('sample-nested', 'SAMPLE'): 'sample',
+    # plot-samples
+    ('plot-samples', 'POSTERIOR'): 'posterior',
+    ('plot-samples', 'B'): 'bins', ('plot-samples', 'BINS'): 'bins',
+    # find-mode
+    ('find-mode', 'POSTERIOR'): 'posterior',
+    ('find-mode', 'o'): 'optimizations', ('find-mode', 'OPTIMIZATIONS'): 'optimizations',
+    ('find-mode', 'c'): 'chain', ('find-mode', 'from-mcmc'): 'chain', ('find-mode', 'CHAIN'): 'chain',
+    ('find-mode', 'S'): 'importance_samples', ('find-mode', 'from-samples'): 'importance_samples',
+    ('find-mode', 'p'): 'start_point', ('find-mode', 'from-point'): 'start_point', ('find-mode', 'START_POINT'): 'start_point',
+    ('find-mode', 's'): 'seed', ('find-mode', 'use-random-seed'): 'seed', ('find-mode', 'SEED'): 'seed',
+    ('find-mode', 'L'): 'label', ('find-mode', 'LABEL'): 'label',
+    # mixture-product
+    ('mixture-product', 'POSTERIOR'): 'posterior',
+    ('mixture-product', 'POSTERIORS'): 'posteriors',
+    # find-clusters
+    ('find-clusters', 'POSTERIOR'): 'posterior',
+    ('find-clusters', 't'): 'threshold', ('find-clusters', 'THRESHOLD'): 'threshold',
+    ('find-clusters', 'c'): 'K_g', ('find-clusters', 'clusters-per-group'): 'cluster', ('find-clusters', 'CLUSTER'): 'cluster', ('find-clusters', 'K_G'): 'K_g',
+    # predict-observables
+    ('predict-observables', 'POSTERIOR'): 'posterior',
+    ('predict-obserables', 'PREDICTION'): 'prediction',
+    ('predict-observables', 'B'): 'begin', ('predict-observables', 'begin-index'): 'begin', ('predict-observables', 'BEGIN'): 'begin',
+    ('predict-observables', 'E'): 'end', ('predict-observables', 'end-index'): 'end', ('predict-observables', 'END'): 'end',
+    # corner-plot
+    ('corner-plot', 'B'): 'begin', ('corner-plot', 'begin-parameter'): 'begin', ('corner-plot', 'BEGIN'): 'begin',
+    ('corner-plot', 'E'): 'end', ('corner-plot', 'end-parameter'): 'end', ('corner-plot', 'END'): 'end',
+    ('corner-plot', 'F'): 'format', ('corner-plot', 'FORMAT'): 'format',
+    # list-step-dependencies
+    ('list-step-dependencies', 'ID'): 'id',
+    # report
+    ('report', 'TEMPLATE'): 'template',
+    ('report', 'o'): 'output_file', ('report', 'output-file'): 'output_file', ('report', 'OUTPUT_FILE'): 'output_file',
+}
+
 @dataclass
 class TaskComponent(Deserializable):
     task:str
@@ -201,6 +268,11 @@ class TaskComponent(Deserializable):
         if self.task not in eos.tasks._tasks.keys():
             raise ValueError(f'Task \'{self.task}\' is not a valid task')
         task = eos.tasks._tasks[self.task]
+
+        self.arguments = {
+            (_task_argument_map[(self.task, k)] if (self.task, k) in _task_argument_map else k): v
+            for k,v in self.arguments.items()
+        }
 
         provided_arguments = set(self.arguments.keys())
         # inject 'analysis_file' and 'base_directory' into known arguments
@@ -242,6 +314,12 @@ class StepComponent(Deserializable):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
+        if "default_arguments" in kwargs:
+            for task, args in kwargs["default_arguments"].items():
+                _kwargs["default_arguments"][task] = {
+                    (_task_argument_map[(task, k)] if (task, k) in _task_argument_map else k): v
+                    for k, v in args.items()
+                }
         _kwargs["tasks"] = [TaskComponent.from_dict(**t) for t in kwargs["tasks"]]
         return Deserializable.make(cls, **_kwargs)
 

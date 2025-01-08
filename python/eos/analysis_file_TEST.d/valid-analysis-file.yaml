@@ -129,8 +129,8 @@ predictions:
           q2_max: 25.0
 
 steps:
-  - title: 'Sample from CKM-all posterior'
-    id: 'CKM-all.sample'
+  - title: 'Sample from CKM-all and WET-all posteriors'
+    id: 'CKM-all,WET-all.sample'
     depends_on: []
     tasks:
       - task: 'sample-nested'
@@ -140,6 +140,13 @@ steps:
           nlive: 100
           dlogz: 9.0
           maxiter: 4000
+      - task: 'sample-nested'
+        arguments:
+          posterior: 'WET-all'
+          target-bound: 'multi'
+          number-of-live-points: 100
+          evidence-tolerance: 9.0
+          max-number-iterations: 4000
 
   - title: 'Create corner plot for CKM-all posterior'
     id: 'CKM-all.corner-plot'
