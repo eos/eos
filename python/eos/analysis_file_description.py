@@ -240,8 +240,6 @@ class StepComponent(Deserializable):
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs["tasks"] = [TaskComponent.from_dict(**t) for t in kwargs["tasks"]]
-        if "depends-on" in kwargs:
-            _kwargs["depends_on"] = kwargs["depends-on"]
         return Deserializable.make(cls, **_kwargs)
 
 
