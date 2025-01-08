@@ -1,5 +1,6 @@
 from .deserializable import Deserializable
 from dataclasses import dataclass, field
+from collections import defaultdict
 import copy as _copy
 import eos
 import inspect
@@ -227,6 +228,7 @@ class StepComponent(Deserializable):
     id:str
     tasks:list
     depends_on:list=field(default_factory=list)
+    default_arguments:defaultdict=field(default_factory=lambda: defaultdict(dict))
 
     def __post_init__(self):
         if '/' in self.id:
@@ -235,6 +237,7 @@ class StepComponent(Deserializable):
             raise ValueError(f'Invalid character \' \' in step id \'{self.id}\'')
         if len(self.tasks) == 0:
             raise ValueError(f'Step \'{self.id}\' has no tasks')
+        self.default_arguments = defaultdict(dict, self.default_arguments)
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -322,6 +325,7 @@ class StepComponent(Deserializable):
 #  title (mandatory): string
 #  id (mandatory): unique string
 #  depends_on (optional): list of strings (each string is a step id)
+#  default_arguments (optional): dict, whose keys are task names, and values are dicts with argument names and values for that task
 #  tasks (mandatory): list of dicts, each with keys:
     #  task (mandatory) : string
     #  arguments (optional): dict, whose keys are arguments for the task
