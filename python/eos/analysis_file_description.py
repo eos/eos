@@ -245,6 +245,34 @@ class StepComponent(Deserializable):
         return Deserializable.make(cls, **_kwargs)
 
 
+class MaskDescription(Deserializable):
+    @staticmethod
+    def from_dict(**kwargs):
+        if 'expression' in kwargs:
+            return Deserializable.make(MaskExpressionComponent, **kwargs)
+        else:
+            return Deserializable.make(MaskObservableComponent, **kwargs)
+
+@dataclass
+class MaskExpressionComponent(Deserializable):
+    expression:str
+    name:str
+
+@dataclass
+class MaskObservableComponent(Deserializable):
+    name:str
+
+@dataclass
+class MaskComponent(Deserializable):
+    name:str
+    description:dict
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs['description'] = [MaskDescription.from_dict(**d) for d in kwargs['description']]
+        return Deserializable.make(cls, **_kwargs)
+
 # AnalysisFile schema
 
 # dict with keys:
@@ -255,6 +283,7 @@ class StepComponent(Deserializable):
 #   predictions (optional)
 #   parameters (optional)
 #   steps (optional)
+#   masks (optional)
 
 
 # priors schema:
@@ -328,3 +357,13 @@ class StepComponent(Deserializable):
 #  iterations (optional): list of dicts
 #  depends-on (optional): list of strings ???????
 #  ???????
+
+# masks schema:
+# list of dicts, each with keys:
+#  name (mandatory): unique string
+#  description (mandatory): list of dicts, with keys:
+#    either:
+#      name: str, valid EOS observable name
+#    or:
+#      name: str, valid EOS observable name
+#      expression: str, valid EOS observable expression
