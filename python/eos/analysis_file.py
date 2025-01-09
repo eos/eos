@@ -21,6 +21,7 @@ import eos
 import os
 import sys
 import yaml
+from collections import Counter
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
@@ -482,6 +483,14 @@ class AnalysisFile:
                 except RuntimeError:
                     messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
         # Check that any expression observables defined in masks have unique names
+        counts = Counter()
+        for mc in self._masks.values():
+            for d in mc.description:
+                if isinstance(d, MaskExpressionComponent):
+                    counts[d.name] += 1
+        repeated = {name for name, count in counts.items() if count > 1}
+        for name in repeated:
+            messages.append(f"Error in masks: Name '{name}' is used repeatedly")
 
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
