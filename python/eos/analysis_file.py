@@ -243,6 +243,47 @@ class AnalysisFile:
         return observables
 
 
+    def mask_observables(self, _posterior, _mask_name, parameters):
+        """Creates a list of eos.Observable objects for the named posterior and mask."""
+        if _posterior not in self._posteriors:
+            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_posterior}\'')
+        if _mask_name not in self._masks:
+            raise RuntimeError(f'Cannot create mask for unknown mask name: \'{_mask_name}\'')
+
+        posterior = self._posteriors[_posterior]
+        mask = self._masks[_mask_name]
+
+        global_options = posterior.global_options
+        fixed_parameters = posterior.fixed_parameters
+
+        for (p, v) in fixed_parameters.items():
+            parameters.set(p, v)
+
+        for o in mask.description:
+            options_part = eos.QualifiedName(o.name).options_part()
+            for key, value in options_part:
+                if key in global_options and global_options[key] != value:
+                    eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} in mask {_mask_name} when using posterior {_posterior}.')
+
+        observables = []
+        for o in mask.description:
+            observables.append(eos.Observable.make(
+                o.name,
+                parameters,
+                eos.Kinematics(),
+                eos.Options(**global_options)
+            ))
+
+        if None in observables:
+            unknown_observables = set()
+            for p, o in zip(mask.description, observables):
+                if o is None:
+                    unknown_observables.add(p.name)
+            raise RuntimeError(f'Mask \'{_mask_name}\' contains unknown observable names: {unknown_observables}')
+
+        return observables
+
+
     @staticmethod
     def _sanitize_params(command, params):
         """Helper functions to sanitize parameters for individual steps loaded from a raw YAML file."""
