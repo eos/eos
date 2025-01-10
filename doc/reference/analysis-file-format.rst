@@ -23,6 +23,8 @@ At the top level, the format includes the following YAML keys:
 
  - ``predictions`` (**optional**) --- The list of theory predictions within the analysis.
 
+ - ``masks`` (**optional**) --- The list of masks for filtering samples defined for the analysis.
+
 The following example illustrates the analysis file format at the hand of a real-world example.
 
 .. toggle-header::
@@ -242,3 +244,32 @@ The following code provides a valid example of predictions.
                       { q2: 16.0 }, { q2: 17.0 }, { q2: 18.0 }, { q2: 19.0 }, { q2: 20.0 },
                       { q2: 21.0 }, { q2: 22.0 }, { q2: 23.0 }, { q2: 24.0 }, { q2: 25.0 },
                       { q2: 26.0 }, { q2: 27.0 } ]
+
+
+Masks
+~~~~~
+
+In some analyses, the resulting posterior is multi-modal, and it is useful to be able to define within the analysis file a filter, or mask, that selects a subset of the posterior samples.
+The masks section allows to define a mask as a set of (pseudo-)observables, and filtering on all (pseudo-)observables being > 0.
+
+The ``masks`` key contains a list of *named* masks. Each mask contains two mandatory keys:
+
+  - ``name`` (**mandatory**) --- The unique name of this mask.
+  - ``description`` (**mandatory**) --- A list of expressions that define the mask.
+
+The ``descriptions`` block contains a list of either existing EOS observable names, or new observable names and valid expressions.
+An example is shown below:
+
+.. code-block:: yaml
+
+  masks:
+    - name: fplus-arg-large
+      description:
+        - name: '0->pipi::Arg{f_+}(2)'
+          expression: '<<0->pipi::Arg{f_+}(q2)>>[q2=2] - 4.5'
+    - name: b3b4-large
+      description:
+        - name: 0->pipi::b3
+          expression: '[[0->pipi::b_(+,1)^3@KKRvD2024]] + 0.1'
+        - name: 0->pipi::b4
+          expression: '[[0->pipi::b_(+,1)^4@KKRvD2024]] + 0.05'
