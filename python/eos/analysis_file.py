@@ -792,6 +792,47 @@ class AnalysisFile:
                     </tbody>
                     '''
 
+        if self._masks:
+            result += r'''
+                </tbody>
+                </table>
+                <br>
+                <table style="width: 80%">
+                <colgroup>
+                    <col width="50%" id="name"       style="min-width: 200">
+                    <col width="50%" id="expression"    style="min-width: 200px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: center">MASKS</th>
+                    </tr>
+                </thead>
+            '''
+
+            for mask in self._masks.values():
+                result += fr'''
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="text-align: left">{mask.name}</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center">name</th>
+                            <th style="text-align: center">expression</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                '''
+                for d in mask.description:
+                    result += fr'''
+                        <tr>
+                            <td style="text-align: center">{d.name}</td>
+                            <td style="text-align: center">{d.expression if isinstance(d, MaskExpressionComponent) else ""}</td>
+                        </tr>
+                    '''
+                result += fr'''
+                    </tbody>
+                '''
+
         result += r'''
         </table>
         '''
