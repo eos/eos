@@ -21,20 +21,24 @@
 
 namespace eos
 {
-    template class BSZ2015FormFactors<BToRho, PToV>;
-    template class BSZ2015FormFactors<BToOmega, PToV>;
-    template class BSZ2015FormFactors<BToKstar, PToV>;
     template class BSZ2015FormFactors<BToDstar, PToV>;
+    template class BSZ2015FormFactors<BToKstar, PToV>;
+    template class BSZ2015FormFactors<BToOmega, PToV>;
+    template class BSZ2015FormFactors<BToRho, PToV>;
+    template class BSZ2015FormFactors<BsToDsstar, PToV>;
     template class BSZ2015FormFactors<BsToKstar, PToV>;
     template class BSZ2015FormFactors<BsToPhi, PToV>;
-    template class BSZ2015FormFactors<BsToDsstar, PToV>;
 
-    template class BSZ2015FormFactors<BToPi, PToP>;
-    template class BSZ2015FormFactors<BToK, PToP>;
     template class BSZ2015FormFactors<BToD, PToP>;
-    template class BSZ2015FormFactors<BsToK, PToP>;
+    template class BSZ2015FormFactors<BToEta, PToP>;
+    template class BSZ2015FormFactors<BToEtaPrime, PToP>;
+    template class BSZ2015FormFactors<BToK, PToP>;
+    template class BSZ2015FormFactors<BToPi, PToP>;
     template class BSZ2015FormFactors<BsToDs, PToP>;
+    template class BSZ2015FormFactors<BsToEta, PToP>;
+    template class BSZ2015FormFactors<BsToEtaPrime, PToP>;
+    template class BSZ2015FormFactors<BsToK, PToP>;
+    template class BSZ2015FormFactors<DToK, PToP>;
     template class BSZ2015FormFactors<DToPi, PToP>;
     template class BSZ2015FormFactors<DsToK, PToP>;
-    template class BSZ2015FormFactors<DToK, PToP>;
 }
