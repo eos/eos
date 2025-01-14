@@ -341,6 +341,72 @@ namespace eos
 
             return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
         }
+
+        double differential_pdf_l(const double & c_theta_l, const double & q2_min, const double & q2_max)
+        {
+            b_to_vec_l_nu::AngularObservables ao = integrated_angular_observables(q2_min, q2_max);
+
+            const double a_fb = ao.a_fb_leptonic();
+            const double ftilde_L = ao.ftilde_L();
+
+            return 0.5 + a_fb * c_theta_l + (1.0 - 3.0 * ftilde_L) / 8.0 * (3.0 * c_theta_l * c_theta_l - 1.0);
+        }
+
+        double differential_pdf_v(const double & c_theta_v, const double & q2_min, const double & q2_max)
+        {
+            b_to_vec_l_nu::AngularObservables ao = integrated_angular_observables(q2_min, q2_max);
+
+            const double f_L = ao.f_L();
+
+            return 3.0 / 4.0 * ((1.0 - f_L) - (1.0 - 3.0 * f_L) * c_theta_v * c_theta_v);
+        }
+
+        double differential_pdf_phi(const double & phi, const double & q2_min, const double & q2_max)
+        {
+            b_to_vec_l_nu::AngularObservables ao = integrated_angular_observables(q2_min, q2_max);
+
+            const double J3 = 3.0 / 4.0 * ao.vv4T();
+            const double J9 = 3.0 / 4.0 * ao.vv5T();
+
+            return (0.5 + 2.0 / 3.0 * J3 * std::cos(2.0 * phi) + 2.0 / 3.0 * J9 * std::sin(2.0 * phi)) / M_PI;
+        }
+
+        double integrated_pdf_l(const double & c_theta_l_min, const double & c_theta_l_max, const double & q2_min, const double & q2_max)
+        {
+            b_to_vec_l_nu::AngularObservables ao = integrated_angular_observables(q2_min, q2_max);
+
+            const double a_fb = ao.a_fb_leptonic();
+            const double ftilde_L = ao.ftilde_L();
+
+            return 0.5 * (c_theta_l_max - c_theta_l_min)
+                + a_fb * 0.5 * (c_theta_l_max * c_theta_l_max - c_theta_l_min * c_theta_l_min)
+                + (1.0 - 3.0 * ftilde_L) / 8.0 * ((c_theta_l_max * c_theta_l_max * c_theta_l_max - c_theta_l_min * c_theta_l_min * c_theta_l_min) - (c_theta_l_max - c_theta_l_min));
+        }
+
+        double integrated_pdf_v(const double & c_theta_v_min, const double & c_theta_v_max, const double & q2_min, const double & q2_max)
+        {
+            b_to_vec_l_nu::AngularObservables ao = integrated_angular_observables(q2_min, q2_max);
+
+            const double f_L = ao.f_L();
+
+            return 3.0 / 4.0 * (
+                (1.0 - f_L) * (c_theta_v_max - c_theta_v_min)
+                - (1.0 - 3.0 * f_L) * (c_theta_v_max * c_theta_v_max * c_theta_v_max - c_theta_v_min * c_theta_v_min * c_theta_v_min) / 3.0
+            );
+        }
+
+        double integrated_pdf_phi(const double & phi_min, const double & phi_max, const double & q2_min, const double & q2_max)
+        {
+            b_to_vec_l_nu::AngularObservables ao = integrated_angular_observables(q2_min, q2_max);
+
+            const double J3 = 3.0 / 4.0 * ao.vv4T();
+            const double J9 = 3.0 / 4.0 * ao.vv5T();
+
+            return (0.5 * (phi_max - phi_min)
+                + 1.0 / 3.0 * J3 * (std::sin(2.0 * phi_max) - std::sin(2.0 * phi_min))
+                - 1.0 / 3.0 * J9 * (std::cos(2.0 * phi_max) - std::cos(2.0 * phi_min))
+            ) / M_PI;
+        }
     };
 
     const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>>
@@ -517,6 +583,84 @@ namespace eos
     BToVectorLeptonNeutrino::integrated_pdf_w(const double & w_min, const double & w_max) const
     {
         return _imp->integrated_pdf_w(w_min, w_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_pdf_q2(const double & q2) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->differential_angular_observables(q2).normalized_decay_width() / _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width();
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_pdf_w(const double & w) const
+    {
+        const double m_B    = _imp->m_B();
+        const double m_V    = _imp->m_V();
+        const double q2     = m_B * m_B + m_V * m_V - 2.0 * m_B * m_V * w;
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(m_B - m_V);
+
+        // Jacobian |dq2/dw|
+        const double jacobian = 2.0 * m_B * m_V;
+
+        return jacobian * _imp->differential_angular_observables(q2).normalized_decay_width() / _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width();
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_pdf_l(const double & c_theta_l) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->differential_pdf_l(c_theta_l, q2_min, q2_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_pdf_v(const double & c_theta_v) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->differential_pdf_v(c_theta_v, q2_min, q2_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_pdf_phi(const double & phi) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->differential_pdf_phi(phi, q2_min, q2_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_pdf_l(const double & c_theta_l_min, const double & c_theta_l_max) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->integrated_pdf_l(c_theta_l_min, c_theta_l_max, q2_min, q2_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_pdf_v(const double & c_theta_v_min, const double & c_theta_v_max) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->integrated_pdf_v(c_theta_v_min, c_theta_v_max, q2_min, q2_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_pdf_phi(const double & phi_min, const double & phi_max) const
+    {
+        const double q2_min = power_of<2>(_imp->m_l());
+        const double q2_max = power_of<2>(_imp->m_B() - _imp->m_V());
+
+        return _imp->integrated_pdf_phi(phi_min, phi_max, q2_min, q2_max);
     }
 
     double

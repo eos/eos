@@ -99,8 +99,14 @@ namespace eos
             // PDF
             double differential_pdf_q2(const double & q2) const;
             double differential_pdf_w(const double & w) const;
+            double differential_pdf_l(const double & c_theta_l) const;
+            double differential_pdf_v(const double & c_theta_v) const;
+            double differential_pdf_phi(const double & phi) const;
             double integrated_pdf_q2(const double & q2_min, const double & q2_max) const;
             double integrated_pdf_w(const double & w_min, const double & w_max) const;
+            double integrated_pdf_l(const double & c_theta_l_min, const double & c_theta_l_max) const;
+            double integrated_pdf_v(const double & c_theta_v_min, const double & c_theta_v_max) const;
+            double integrated_pdf_phi(const double & phi_min, const double & phi_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
