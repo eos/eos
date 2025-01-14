@@ -23,6 +23,11 @@
 
 namespace eos::exp
 {
+    ExpressionError::ExpressionError(const std::string & msg) :
+        eos::Exception("Invalid expression statement (" + msg + ")")
+    {
+    }
+
     double BinaryExpression::sum(const double & a, const double & b)        { return a + b; }
     double BinaryExpression::difference(const double & a, const double & b) { return a - b; }
     double BinaryExpression::product(const double & a, const double & b)    { return a * b; }
@@ -42,5 +47,24 @@ namespace eos::exp
                 InternalError("Unknown binary operator '" + stringify(op) + "' encountered");
                 return nullptr;
         }
+    }
+
+    FunctionExpression::FunctionExpression(const std::string & f, const Expression & arg) :
+        f(nullptr),
+        fname(f),
+        arg(arg)
+    {
+        static const std::map<std::string, FunctionType> function_table
+        {
+            { std::string("exp"), FunctionType([] (const double & x) -> double { return std::exp(x); }) },
+            { std::string("sin"), FunctionType([] (const double & x) -> double { return std::sin(x); }) },
+            { std::string("cos"), FunctionType([] (const double & x) -> double { return std::cos(x); }) }
+        };
+
+        auto it = function_table.find(f);
+        if (function_table.end() == it)
+            throw ExpressionError("unknown function name " + f);
+
+        this->f = it->second;
     }
 }

@@ -99,6 +99,15 @@ class ExpressionParserTest :
                 ExpressionTest test3("2^(1+3.5)+3");
                 TEST_CHECK(test3.completed);
                 TEST_CHECK_RELATIVE_ERROR(test3.e.accept_returning<double>(evaluator), 25.627416998, 1e-5);
+
+                // Function evaluation for built-in functions
+                ExpressionTest test4("exp(0.0)");
+                TEST_CHECK(test4.completed);
+                TEST_CHECK_RELATIVE_ERROR(test4.e.accept_returning<double>(evaluator), 1.0, 1e-16);
+
+                ExpressionTest test5("sin(0.0)");
+                TEST_CHECK(test5.completed);
+                TEST_CHECK_NEARLY_EQUAL(test5.e.accept_returning<double>(evaluator), 0.0, 1e-16);
             }
 
             // testing parsing of an expression containing kinematic variables

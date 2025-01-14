@@ -32,6 +32,13 @@
 
 namespace eos::exp
 {
+    class ExpressionError :
+        public eos::Exception
+    {
+        public:
+            ExpressionError(const std::string & msg);
+    };
+
     class BinaryExpression
     {
         public:
@@ -54,6 +61,20 @@ namespace eos::exp
                 op(op), lhs(l), rhs(r)
             {
             }
+    };
+
+    class FunctionExpression
+    {
+        public:
+            using FunctionType = double(*)(const double &);
+
+            FunctionType f;
+            std::string fname;
+            Expression arg;
+
+            FunctionExpression() {};
+
+            FunctionExpression(const std::string & f, const Expression & arg);
     };
 
     class ConstantExpression

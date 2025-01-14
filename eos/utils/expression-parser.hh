@@ -42,12 +42,14 @@ namespace eos
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> additive_expr;
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> multiplicative_expr;
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> exponential_expr;
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> function_expr;
 
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> primary_expr;
         qi::rule<Iterator, eos::exp::ConstantExpression()       , ascii::space_type> constant;
         qi::rule<Iterator, std::string()                        , ascii::space_type> observable_name;
         qi::rule<Iterator, std::string()                        , ascii::space_type> parameter_name;
         qi::rule<Iterator, std::string()                        , ascii::space_type> kinematic_variable_name;
+        qi::rule<Iterator, std::string()                        , ascii::space_type> function_name;
 
         using KinematicsSpecification = eos::exp::KinematicsSpecification;
 
