@@ -35,6 +35,7 @@
 #include <random>
 #include <vector>
 
+#include <boost/filesystem/directory.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/directory.hpp>
 #include <boost/filesystem/file_status.hpp>
