@@ -25,6 +25,7 @@ import os
 import pypmc
 import scipy
 import sys
+import traceback
 import yaml
 
 try:
@@ -465,6 +466,10 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
         help = 'The index beyond the last parameter to plot.',
         dest = 'end', action = 'store', type = int, default = None
     )
+    parser_corner_plot.add_argument('-F', '--format',
+        help = 'The plot output format. Can be a comma separated list of formats.',
+        dest = 'format', action = 'store', type = lambda s: s.split(','), default = 'pdf'
+    )
     parser_corner_plot.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
@@ -580,7 +585,7 @@ class CustomLogFormatter(logging.Formatter):
         logging.COMPLETED:  ('🗸', 'green'),
         logging.INPROGRESS: ('…', 'green'),
         logging.INFO:       ('ℹ', 'blue'),
-        logging.DEBUG:      ('🤖', 'black'),
+        logging.DEBUG:      ('🤖', ''),
     }
     def __init__(self):
         super().__init__(fmt='%(levelname)s %(message)s', datefmt=None, style='%')
@@ -590,9 +595,14 @@ class CustomLogFormatter(logging.Formatter):
         if record.levelno not in self._MAP_LEVEL_TO_COLOR:
             levelno = logging.ERROR
 
-        symbol, color = self._MAP_LEVEL_TO_COLOR[record.levelno]
-        record.levelname = colored(symbol, color, attrs=['bold'])
-        record.msg = colored(record.msg, color)
+        if levelno != logging.DEBUG:
+            symbol, color = self._MAP_LEVEL_TO_COLOR[record.levelno]
+            record.levelname = colored(symbol, color, attrs=['bold'])
+            record.msg = colored(record.msg, color)
+        else:
+            symbol, _ = self._MAP_LEVEL_TO_COLOR[record.levelno]
+            record.levelname = colored(symbol, attrs=['bold'])
+            record.msg = colored(record.msg)
 
         return super().format(record)
 
@@ -623,13 +633,15 @@ def main():
 
             eos.logger.setLevel(levels[args.verbose])
             eos.logger.removeHandler(eos.logger.handlers[0])
-            handler = logging.StreamHandler(stream=sys.stdout)
+            handler = logging.StreamHandler(stream=sys.stderr)
             handler.setFormatter(CustomLogFormatter())
             eos.logger.addHandler(handler)
 
             args.cmd(args)
     except Exception as e:
-        print(colored('✖ Encountered an unrecoverable error', 'red', attrs=['bold']), f'{e}')
+        print(colored('✖ Encountered an unrecoverable error:\n', 'red', attrs=['bold']), f'{e}')
+        if not isinstance(e, ValueError):
+            traceback.print_exception(e, e, e.__traceback__)
         sys.exit(1)
 
 

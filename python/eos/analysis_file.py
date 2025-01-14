@@ -21,6 +21,7 @@ import eos
 import os
 import sys
 import yaml
+import inspect
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
@@ -106,9 +107,11 @@ class AnalysisFile:
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
         if 'steps' not in self.input_data:
-            self._steps = []
+            self._steps = {}
         else:
-            self._steps = [StepComponent.from_dict(**s) for s in self.input_data['steps']]
+            if len(self.input_data['steps']) != len({s['id'] for s in self.input_data['steps']}):
+                raise ValueError("All steps must have a unique id")
+            self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
@@ -228,157 +231,6 @@ class AnalysisFile:
         return observables
 
 
-    @staticmethod
-    def _sanitize_params(command, params):
-        """Helper functions to sanitize parameters for individual steps loaded from a raw YAML file."""
-        general_params_maps = {
-            'b': 'base_directory'
-        }
-        specific_params_map = {
-            # find-clusters
-            ('find-clusters', 't'): 'threshold',
-            ('find-clusters', 'c'): 'K_g', ('find-clusters', 'clusters-per-group'): 'K_g',
-            # predict-observables
-            ('predict-observables', 'B'): 'begin',
-            ('predict-observables', 'E'): 'end',
-            # sample-mcmc
-            ('sample-mcmc', 'n'): 'pre_N', ('sample-mcmc', 'prerun-samples'): 'pre_N',
-            ('sample-mcmc', 'p'): 'preruns',
-            ('sample-mcmc', 'S'): 'stride',
-            # sample-pmc
-            ('sample-pmc', 'n'): 'step_N', ('sample-pmc', 'step-samples'): 'step_N',
-            ('sample-pmc', 's'): 'steps',
-            ('sample-pmc', 'N'): 'final_N', ('sample-pmc', 'final-samples'): 'final_N'
-
-        }
-        return {
-            specific_params_map[(command, k)] if (command, k) in specific_params_map
-            else general_params_map[k] if k in general_params_map
-            else k
-            for k, v in params.items()
-        }
-
-    def steps(self, base_directory=None):
-        """Runs predefined analysis steps recorded in the analysis file."""
-        from .tasks import _tasks
-        from collections import ChainMap
-        from inspect import signature
-        from itertools import chain, product
-        import networkx as nx
-
-        def _expand_arguments(step_name, task, arguments):
-            task_sig = signature(_tasks[task])
-
-            task_required_args = set()
-            for n, p in task_sig.parameters.items():
-                if p.default != p.empty:
-                    continue
-                task_required_args.add(n)
-            for n in task_required_args:
-                if n in arguments.keys():
-                    continue
-                raise ValueError(f'Task "{task}" in step "{step_name}" requires mandatory argument \'{n}\', which is not provided')
-
-            outer_list = []
-            for key, value in arguments.items():
-                if key not in task_sig.parameters:
-                    eos.warn(f'Task "{task}" in step "{step_name}" does not expect argument "{key}", possibly misspelled?')
-                    continue
-
-                param_type = task_sig.parameters[key].annotation
-
-                # handle special cases
-                if param_type is int:
-                    # integer range?
-                    if type(value) is str:
-                        values = list(chain.from_iterable(range(int(v.split("-")[0]),int(v.split("-")[-1])+1) for v in value.split(",")))
-                        outer_list.append([{key: v} for v in values])
-                    else:
-                        # append
-                        outer_list.append([{key: value}])
-                # otherwise append w/o modification
-                else:
-                    # append
-                    outer_list.append([{key: value}])
-
-            result = []
-            for r in list(product(*outer_list)):
-                _arguments = {}
-                for d in r:
-                    _arguments.update(d)
-
-                # replace format strings
-                arguments = {}
-                for key, value in _arguments.items():
-                    if type(value) is str:
-                        arguments.update({key: value.format(**_arguments)})
-                    else:
-                        arguments.update({key: value})
-
-                result.append(arguments)
-
-            return result
-
-        def _handle_single_step(step_desc, step_arguments):
-            step_name = step_desc.name
-            tasks     = step_desc.tasks
-
-            for task_desc in tasks:
-                task = task_desc.task
-                if task not in _tasks.keys():
-                    raise ValueError(f'Unknown task \"{task}\" encountered in step {step_name}')
-
-                arguments = { 'analysis_file': self }
-                for key, value in step_arguments.items():
-                    if key in _tasks.keys():
-                        continue
-
-                    arguments[key] = value
-
-                if task_desc.arguments:
-                    arguments.update(task_desc.arguments)
-
-                if task in step_arguments:
-                    arguments.update(step_arguments[task])
-
-                if base_directory:
-                    arguments.update({ 'base_directory': base_directory })
-
-                return [(step_name, step_desc, task, a) for a in _expand_arguments(step_name, task, arguments)]
-
-        # main part starts here
-
-        # check inputs
-        for step_idx, step_desc in enumerate(self._steps):
-            if step_desc.iterations:
-                if type(step_desc.iterations) is not list:
-                    raise ValueError(f'Description of step #{step_idx} ({step_desc.name} expects a list of iterations')
-
-        # resolve dependencies
-        graph = nx.MultiDiGraph()
-        graph.add_nodes_from([step.name for step in self._steps])
-        for step in self._steps:
-            if not step.depends_on:
-                continue
-
-            for dep in step.depends_on:
-                graph.add_edge(dep, step.name)
-        steps = list(nx.topological_sort(graph))
-
-        # return steps and their tasks in the order imposed by the dependency graph
-        result = []
-        for step in steps:
-            step_desc = { sd.name: sd for sd in self._steps }[step]
-            iterations = [{}]
-            if step_desc.iterations:
-                iterations = step_desc.iterations
-
-            for iteration_arguments in iterations:
-                result.extend(_handle_single_step(step_desc, iteration_arguments))
-
-        return result
-
-
     def validate(self):
         """Validates the analysis file."""
         messages = []
@@ -425,7 +277,24 @@ class AnalysisFile:
                     known_params[param]
                 except RuntimeError:
                     messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
-
+        for step_id, step in self._steps.items():
+            # Check that all the dependencies of a step exist
+            if (unknown_dependencies := step.depends_on - self._steps.keys()):
+                raise ValueError(f'Step \'{step_id}\' depends on unknown steps: {unknown_dependencies}')
+            # Check that the default arguments correspond to real tasks
+            if (unknown_tasks := step.default_arguments.keys() - eos.tasks._tasks.keys()):
+                raise ValueError(f'Step \'{step_id}\' has default arguments for unknown tasks: {unknown_tasks}')
+            for tc in step.tasks:
+                # Check all posteriors named in steps exist
+                if 'posterior' in tc.arguments:
+                    if tc.arguments['posterior'] not in self._posteriors:
+                        messages.append(f"Error in step {step_id}: Posterior '{task.arguments['posterior']}' not known to EOS")
+                # Check that default arguments in steps can be applied to all specified tasks
+                task_func = eos.tasks._tasks[tc.task]
+                provided_arguments = step.default_arguments[tc.task].keys() | tc.arguments.keys()
+                known_arguments = set(inspect.signature(task_func).parameters.keys())
+                for arg in provided_arguments - known_arguments:
+                    raise ValueError(f'Task \'{tc.task}\' does not recognize argument \'{arg}\'')
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
         for posterior in self._posteriors:
@@ -726,6 +595,61 @@ class AnalysisFile:
                     </tbody>
                     '''
 
+        if self._steps:
+            result += r'''
+                </tbody>
+                </table>
+                <br>
+                <table style="width: 80%">
+                <colgroup>
+                    <col width="15%" style="min-width:  60px">
+                    <col width="15%" style="min-width:  60px">
+                    <col width="15%" style="min-width:  60px">
+                    <col width="15%" style="min-width:  60px">
+                    <col width="40%" style="min-width: 160px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="5" style="text-align: center">STEPS</th>
+                    </tr>
+                </thead>
+            '''
+
+            for step_id, step in self._steps.items():
+                result += fr'''
+                    <thead>
+                        <tr>
+                            <th colspan="5" style="text-align: left">{step.title}</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2", style="text-align: center">id</th>
+                            <th rowspan="2", style="text-align: center">depends on</th>
+                            <th rowspan="2", style="text-align: center">default arguments</th>
+                            <th colspan="2", style="text-align: center">tasks</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">name</td>
+                            <td style="text-align: center">arguments</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                '''
+                result += fr'''
+                    <tr>
+                        <td rowspan="{len(step.tasks)}", style="text-align: center">{step_id}</td>
+                        <td rowspan="{len(step.tasks)}", style="text-align: center">{', '.join(step.depends_on)}</td>
+                        <td rowspan="{len(step.tasks)}", style="text-align: center">{', '.join(f'{k} = {v}' for k, v in step.default_arguments.items())}</td>
+                '''
+                for task in step.tasks:
+                    result += fr'''
+                            <td style="text-align: center">{task.task}</td>
+                            <td style="text-align: center">{task.arguments}</td>
+                        </tr>
+                        <tr>
+                    '''
+                result += r'''
+                    </tr>
+                '''
         result += r'''
         </table>
         '''

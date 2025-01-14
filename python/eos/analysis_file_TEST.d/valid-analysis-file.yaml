@@ -129,8 +129,8 @@ predictions:
           q2_max: 25.0
 
 steps:
-  - title: 'Sample from CKM-all posterior'
-    id: 'CKM-all.sample'
+  - title: 'Sample from CKM-all and WET-all posteriors'
+    id: 'CKM-all,WET-all.sample'
     depends_on: []
     tasks:
       - task: 'sample-nested'
@@ -140,12 +140,34 @@ steps:
           nlive: 100
           dlogz: 9.0
           maxiter: 4000
+      - task: 'sample-nested'
+        arguments:
+          posterior: 'WET-all'
+          target-bound: 'multi'
+          number-of-live-points: 100
+          evidence-tolerance: 9.0
+          max-number-iterations: 4000
 
   - title: 'Create corner plot for CKM-all posterior'
     id: 'CKM-all.corner-plot'
-    depends_on: ['CKM-all.sample']
+    depends_on: ['CKM-all,WET-all.sample']
     tasks:
       - task: 'corner-plot'
         arguments:
           posterior: 'CKM-all'
           format: ['pdf', 'png']
+
+  - title: 'Find mode and corner plot for WET-all posterior'
+    id: 'WET-all.mode,corner-plot'
+    depends_on: ['CKM-all,WET-all.sample']
+    default_arguments:
+      find-mode:
+        from-samples: True
+    tasks:
+      - task: 'corner-plot'
+        arguments:
+          posterior: 'CKM-all'
+          format: ['pdf']
+      - task: 'find-mode'
+        arguments:
+          posterior: 'WET-all'
