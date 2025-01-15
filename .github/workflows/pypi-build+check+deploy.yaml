@@ -18,11 +18,10 @@ jobs:
         strategy:
             matrix:
                 include:
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 39,  version: cp39,  runner: ubuntu-20.04         }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-20.04         }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-20.04         }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-20.04         }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp39,  runner: ubuntu-24.04-aarch64 }
+                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-aarch64 }
         runs-on: ${{ matrix.runner }}
         name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
         steps:
@@ -49,8 +48,8 @@ jobs:
                 CIBW_BUILD: ${{ matrix.version}}-*
                 CIBW_SKIP: \*-musllinux_*
                 CIBW_ARCHS: ${{ matrix.arch}}
-                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_28@sha256:73adc406a728a2ee1aff8b39185012554ab72be1d8d74f3dc66797dbe698f046
-                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_28@sha256:f07ce0cffd3aac0a4358f9fa6ee5d0c932945f39e4f3681bb317532f4f2e571b
+                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_28@sha256:03c63bfb48c45c10915262740c1633fa6970485d4395ecb99bfdfe7fc3b12290
+                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_28@sha256:0a27b0ae8f0394f48ed5b89bed523d20a3c1de96e2af4f6de987c2e5d752b52e
                 CIBW_BEFORE_BUILD_LINUX: |
                   pushd {project}
                   ./autogen.bash

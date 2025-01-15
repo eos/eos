@@ -36,6 +36,8 @@ namespace eos::exp
 
             void visit(BinaryExpression & e);
 
+            void visit(FunctionExpression & e);
+
             void visit(ConstantExpression & e);
 
             void visit(ObservableNameExpression & e);

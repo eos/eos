@@ -14,7 +14,7 @@ class PublicLikelihoodDescription(Deserializable):
     filetype:str
 
     def __post_init__(self):
-        VALID_FILETYPES = ['MixtureDensity']
+        VALID_FILETYPES = ['MixtureDensity', 'NabuLikelihood']
         if not self.filetype in VALID_FILETYPES:
             raise ValueError(f'Invalid likelihood file type: {self.filetype}')
 
