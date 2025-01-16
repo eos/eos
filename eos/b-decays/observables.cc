@@ -2462,13 +2462,13 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "Kbar_d" }, { "P2", "pi^0" } }),
 
-                make_observable("B_s^0->K_Spi^0::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B_s^0\to K^0_S\pi^0))",
+                make_observable("B_s^0->K_Spi^0::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B_s^0\to K_S\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "K_S" }, { "P2", "pi^0" } }),
 
-                make_observable("B_s^0->K_Spi^0::A_DG", R"(A^{\Delta\Gamma}_\mathrm{CP}(B_s^0\to K^0_S\pi^0))",
+                make_observable("B_s^0->K_Spi^0::A_DG", R"(A^{\Delta\Gamma}_\mathrm{CP}(B_s^0\to K_S\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::a_Delta_Gamma,
                         std::make_tuple(),
@@ -2576,13 +2576,13 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "K_d" }, { "P2", "pi^0" } }),
 
-                make_observable("B^0->K_Spi^0::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B^0\to K^0_s\pi^0))",
+                make_observable("B^0->K_Spi^0::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B^0\to K_S\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "K_S" }, { "P2", "pi^0" } }),
 
-                make_observable("B^0->K_Spi^0::A_DG", R"(A^{\Delta\Gamma}_\mathrm{CP}(B^0\to K^0_S\pi^0))",
+                make_observable("B^0->K_Spi^0::A_DG", R"(A^{\Delta\Gamma}_\mathrm{CP}(B^0\to K_S\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::a_Delta_Gamma,
                         std::make_tuple(),
@@ -2750,7 +2750,7 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "eta" }, { "P2", "pi^+" } }),
 
-                make_observable("B^+->etapi^+::A_CP", R"(A_\mathrm{CP}(B^+\to\eta\pi^+))",
+                make_observable("B^+->etapi^+::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B^+\to\eta\pi^+))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
                         std::make_tuple(),
@@ -2774,9 +2774,15 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
-                make_observable("B^0->etapi^0::A_CP", R"(A_\mathrm{CP}(B^0\to\eta\pi^0))",
+                make_observable("B^0->etapi^0::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B^0\to\eta\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" } }),
+
+                make_observable("B^0->etapi^0::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B^0\to\eta\pi^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
@@ -2798,7 +2804,7 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "u" }, { "P1", "eta" }, { "P2", "K_u" } }),
 
-                make_observable("B^+->etaK^+::A_CP", R"(A_\mathrm{CP}(B^+\to\eta K^+))",
+                make_observable("B^+->etaK^+::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B^+\to\eta K^+))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
                         std::make_tuple(),
@@ -2828,6 +2834,12 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "K_d" } }),
 
+                make_observable("B^0->etaK_S::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B^0\to\eta K_S^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "K_S" } }),
+
                 make_observable("B_s^0->etapi^0::BR", R"(\mathcal{B}(B_s^0\to\eta\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::branching_ratio,
@@ -2846,11 +2858,47 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" } }),
 
-                make_observable("B_s^0->etapi^0::A_CP", R"(A_\mathrm{CP}(B_s^0\to\eta\pi^0))",
+                make_observable("B_s^0->etapi^0::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B_s^0\to\eta\pi^0))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" } }),
+
+                make_observable("B_s^0->etapi^0::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B_s^0\to\eta\pi^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "pi^0" } }),
+
+                make_observable("B_s^0->etaK^0::BR", R"(\mathcal{B}(B_s^0\to\eta\bar K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "Kbar_d" } }),
+
+                make_observable("B_s^0->etaK^0::BR_avg", R"(\bar{\mathcal{B}}(B_s^0\to\eta\bar K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::avg_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "Kbar_d" } }),
+
+                make_observable("B_s^0->etaK^0::BR_exp", R"(\mathcal{B}_\mathrm{exp}(B_s^0\to\eta\bar K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::exp_branching_ratio,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "Kbar_d" } }),
+
+                make_observable("B_s^0->etaK^0::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B_s^0\to\eta\bar K^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "Kbar_d" } }),
+
+                make_observable("B_s^0->etaK_S::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B_s^0\to\eta\bar K_S^0))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "K_S" } }),
 
                 make_observable("B^0->etaeta::BR", R"(\mathcal{B}(B^0\to\eta\eta))",
                         Unit::None(),
@@ -2870,9 +2918,15 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" } }),
 
-                make_observable("B^0->etaeta::A_CP", R"(A_\mathrm{CP}(B^0\to\eta\eta))",
+                make_observable("B^0->etaeta::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B^0\to\eta\eta))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" } }),
+
+                make_observable("B^0->etaeta::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B^0\to\eta\eta))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "d" }, { "P1", "eta" }, { "P2", "eta" } }),
 
@@ -2894,9 +2948,15 @@ namespace eos
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
 
-                make_observable("B_s^0->etaeta::A_CP", R"(A_\mathrm{CP}(B_s^0\to\eta\eta))",
+                make_observable("B_s^0->etaeta::A_CP", R"(A^\mathrm{dir}_\mathrm{CP}(B_s^0\to\eta\eta))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::cp_asymmetry,
+                        std::make_tuple(),
+                        { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
+
+                make_observable("B_s^0->etaeta::S_CP", R"(A^\mathrm{mix}_\mathrm{CP}(B_s^0\to\eta\eta))",
+                        Unit::None(),
+                        &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
                         std::make_tuple(),
                         { { "q", "s" }, { "P1", "eta" }, { "P2", "eta" } }),
 
