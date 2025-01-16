@@ -117,7 +117,7 @@ namespace eos
      *   OPTIONSLIST := OPTION | OPTIONSLIST ',' OPTION
      *   OPTION      := KEY '=' VALUE
      *   KEY         := ['a'-'z', 'A'-'Z', '0'-'9', '-']
-     *   VALUE       := ['a'-'z', 'A'-'Z', '0'-'9', '+', '-', '/']
+     *   VALUE       := ['a'-'z', 'A'-'Z', '0'-'9', '+', '-', '/', '.', '^', '_']
      */
     class QualifiedName
     {

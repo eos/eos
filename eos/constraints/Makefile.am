@@ -12,6 +12,7 @@ CONSTRAINTS_FILES = \
 	B-to-D-l-nu.yaml \
 	B-to-D-pi-l-nu.yaml \
 	B-to-pi-l-nu.yaml \
+	B-to-psd-psd.yaml \
 	B-to-omega-l-nu.yaml \
 	B-to-rho-l-nu.yaml \
 	B-to-Xs-gamma.yaml \

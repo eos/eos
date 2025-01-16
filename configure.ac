@@ -429,6 +429,7 @@ AC_CONFIG_FILES([Makefile
 	eos/meson-mixing/Makefile
 	eos/models/Makefile
 	eos/nonlocal-form-factors/Makefile
+	eos/nonleptonic-amplitudes/Makefile
 	eos/parameters/Makefile
 	eos/rare-b-decays/Makefile
 	eos/scattering/Makefile
