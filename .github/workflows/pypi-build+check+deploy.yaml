@@ -18,10 +18,10 @@ jobs:
         strategy:
             matrix:
                 include:
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-20.04         }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-20.04         }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-20.04         }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-aarch64 }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-20.04     }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-20.04     }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-20.04     }
+                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-arm }
         runs-on: ${{ matrix.runner }}
         name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
         steps:
