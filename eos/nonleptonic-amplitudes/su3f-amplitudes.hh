@@ -43,6 +43,7 @@ namespace eos
             LightMesonOption opt_p1;
             LightMesonOption opt_p2;
             BooleanOption opt_cp_conjugate;
+            BooleanOption opt_B_bar;
 
             UsedParameter theta_18;
 

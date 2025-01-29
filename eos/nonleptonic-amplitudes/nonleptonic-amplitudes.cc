@@ -34,6 +34,17 @@ namespace eos
 
     namespace su3f
     {
+        void transpose(rank2 & M)
+        {
+            for (size_t i = 0; i < 3; ++i)
+            {
+                for (size_t j = i + 1; j < 3; ++j)
+                {
+                    std::swap(M[i][j], M[j][i]);
+                }
+            }
+        }
+
         // Note that this matrix is transposed w.r.t [HTX:2021A] to follow the convention M^i_j = M[i][j]
         const std::map<LightMeson, std::function<void (const double &, rank2 &)>>
         psd_octet
@@ -43,6 +54,7 @@ namespace eos
             { LightMeson::piminus,  [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {1.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}}; } },
             { LightMeson::K0,       [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             1.0}, {0.0, 0.0, 0.0}}}; } },
             { LightMeson::K0bar,    [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {0.0, 1.0, 0.0}}}; } },
+            { LightMeson::KS,       [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             1.0 / sqrt(2.0)}, {0.0, -1.0 / sqrt(2.0), 0.0}}}; } },
             { LightMeson::Kplus,    [](const double &, rank2 & res) { res = {{{0.0,             0.0, 1.0}, {0.0,  0.0,             0.0}, {0.0, 0.0, 0.0}}}; } },
             { LightMeson::Kminus,   [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {1.0, 0.0, 0.0}}}; } },
             { LightMeson::eta,      [](const double & theta_18, rank2 & res)
