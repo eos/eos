@@ -5503,6 +5503,27 @@ groups:
           latex:   '$A_0^{B_s \to D_s^*}(q^2 = M_\pi^2)$'
   # }}}
 
+  #
+  # {{{
+  - title: 'Parameters parametrizing power corrections in non-leptonic class-I B decays'
+    description: ''
+    parameters:
+      # B->DP
+      'B->DP::DeltaP' :
+          central: 0
+          min:     0
+          max:     0
+          unit:    '1'
+          latex:   '$\Delta_P$'
+      # B->D^*P
+      'B->DP::DeltaV' :
+          central: 0
+          min:     0
+          max:     0
+          unit:    '1'
+          latex:   '$\Delta_V$'
+  # }}}
+
   # Miscellaneous Form Factor Parameters
   # {{{
   - title: 'Miscellaneous Form Factor Parameters'
