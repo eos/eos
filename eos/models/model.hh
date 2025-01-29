@@ -24,8 +24,8 @@
 
 #include <eos/models/wilson-coefficients.hh>
 #include <eos/utils/options.hh>
-#include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/quantum-numbers.hh>
 
 #include <complex>
@@ -43,6 +43,7 @@ namespace eos
         ///@{
         struct CKM;
         struct QCD;
+
         namespace WET
         {
             // Charged-current semileptonic sectors (Delta C = 1)
@@ -62,12 +63,12 @@ namespace eos
 
             // Hadronic sectors (Delta B = 2)
             struct SBSB;
-        }
+        } // namespace WET
 
         // Old-style WET sectors
         struct DeltaBS1;
         ///@}
-    }
+    } // namespace components
 
     /*!
      * Base classes for individual model components.
@@ -99,20 +100,20 @@ namespace eos
     {
         public:
             /* QCD */
-            virtual double alpha_s(const double & mu) const = 0;
-            virtual double m_t_msbar(const double & mu) const = 0;
-            virtual double m_t_pole() const = 0;
-            virtual double m_b_kin(const double & mu_kin) const = 0;
-            virtual double m_b_msbar(const double & mu) const = 0;
+            virtual double alpha_s(const double & mu) const            = 0;
+            virtual double m_t_msbar(const double & mu) const          = 0;
+            virtual double m_t_pole() const                            = 0;
+            virtual double m_b_kin(const double & mu_kin) const        = 0;
+            virtual double m_b_msbar(const double & mu) const          = 0;
             virtual double m_b_pole(unsigned int loop_order = 3) const = 0;
-            virtual double m_b_ps(const double & mu_f) const = 0;
-            virtual double m_c_kin(const double & mu_kin) const = 0;
-            virtual double m_c_msbar(const double & mu) const = 0;
-            virtual double m_c_pole() const = 0;
-            virtual double m_s_msbar(const double & mu) const = 0;
-            virtual double m_ud_msbar(const double & mu) const = 0;
-            virtual double m_u_msbar(const double & mu) const = 0;
-            virtual double m_d_msbar(const double & mu) const = 0;
+            virtual double m_b_ps(const double & mu_f) const           = 0;
+            virtual double m_c_kin(const double & mu_kin) const        = 0;
+            virtual double m_c_msbar(const double & mu) const          = 0;
+            virtual double m_c_pole() const                            = 0;
+            virtual double m_s_msbar(const double & mu) const          = 0;
+            virtual double m_ud_msbar(const double & mu) const         = 0;
+            virtual double m_u_msbar(const double & mu) const          = 0;
+            virtual double m_d_msbar(const double & mu) const          = 0;
     };
 
     /* Charged-current semileptonic sectors (Delta C = 1) */
@@ -228,18 +229,17 @@ namespace eos
             virtual ~Model() = 0;
 
             using KeyType   = std::string;
-            using ValueType = std::function<std::shared_ptr<Model> (const Parameters &, const Options &)>;
+            using ValueType = std::function<std::shared_ptr<Model>(const Parameters &, const Options &)>;
             static const std::map<KeyType, ValueType> models;
 
             static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters, const Options & options);
-            static OptionSpecification option_specification();
+            static OptionSpecification    option_specification();
     };
 
-    struct NoSuchModelError :
-        public Exception
+    struct NoSuchModelError : public Exception
     {
-        NoSuchModelError(const std::string & name);
+            NoSuchModelError(const std::string & name);
     };
-}
+} // namespace eos
 
 #endif

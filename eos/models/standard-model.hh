@@ -29,8 +29,7 @@ namespace eos
 {
     template <typename Tag> class SMComponent;
 
-    template <> class SMComponent<components::CKM> :
-        public virtual ModelComponent<components::CKM>
+    template <> class SMComponent<components::CKM> : public virtual ModelComponent<components::CKM>
     {
         private:
             /* CKM Wolfenstein parameters */
@@ -54,8 +53,7 @@ namespace eos
             virtual complex<double> ckm_tb() const;
     };
 
-    template <> class SMComponent<components::QCD> :
-        public virtual ModelComponent<components::QCD>
+    template <> class SMComponent<components::QCD> : public virtual ModelComponent<components::QCD>
     {
         private:
             /* QCD parameters */
@@ -96,12 +94,11 @@ namespace eos
 
     /* Charged-current semileptonic sectors (Delta C = 1) */
 
-    template <> class SMComponent<components::WET::DCNuL> :
-    public virtual ModelComponent<components::WET::DCNuL>
+    template <> class SMComponent<components::WET::DCNuL> : public virtual ModelComponent<components::WET::DCNuL>
     {
         private:
-            UsedParameter _alpha_e__dcnul;
-            UsedParameter _m_Z__dcnul;
+            UsedParameter                 _alpha_e__dcnul;
+            UsedParameter                 _m_Z__dcnul;
             std::array<UsedParameter, 3u> _mu__dcnul;
 
         public:
@@ -111,12 +108,11 @@ namespace eos
             virtual WilsonCoefficients<ChargedCurrent> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
-    template <> class SMComponent<components::WET::SCNuL> :
-    public virtual ModelComponent<components::WET::SCNuL>
+    template <> class SMComponent<components::WET::SCNuL> : public virtual ModelComponent<components::WET::SCNuL>
     {
         private:
-            UsedParameter _alpha_e__scnul;
-            UsedParameter _m_Z__scnul;
+            UsedParameter                 _alpha_e__scnul;
+            UsedParameter                 _m_Z__scnul;
             std::array<UsedParameter, 3u> _mu__scnul;
 
         public:
@@ -128,8 +124,7 @@ namespace eos
 
     /* Charged-current semileptonic sectors (Delta B = 1) */
 
-    template <> class SMComponent<components::WET::UBLNu> :
-        public virtual ModelComponent<components::WET::UBLNu>
+    template <> class SMComponent<components::WET::UBLNu> : public virtual ModelComponent<components::WET::UBLNu>
     {
         public:
             SMComponent(const Parameters &, ParameterUser &);
@@ -138,8 +133,7 @@ namespace eos
             virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
-    template <> class SMComponent<components::WET::CBLNu> :
-    public virtual ModelComponent<components::WET::CBLNu>
+    template <> class SMComponent<components::WET::CBLNu> : public virtual ModelComponent<components::WET::CBLNu>
     {
         public:
             SMComponent(const Parameters &, ParameterUser &);
@@ -150,8 +144,7 @@ namespace eos
 
     /* Neutral-current semileptonic sectors (Delta B = 1) */
 
-    template <> class SMComponent<components::WET::SBNuNu> :
-    public virtual ModelComponent<components::WET::SBNuNu>
+    template <> class SMComponent<components::WET::SBNuNu> : public virtual ModelComponent<components::WET::SBNuNu>
     {
             /* QCD parameters */
             UsedParameter _alpha_s_Z__sbnunu;
@@ -177,8 +170,7 @@ namespace eos
 
     /* Hadronic sectors (Delta B = 1) */
 
-    template <> class SMComponent<components::WET::DBCU> :
-    public virtual ModelComponent<components::WET::DBCU>
+    template <> class SMComponent<components::WET::DBCU> : public virtual ModelComponent<components::WET::DBCU>
     {
             /* QCD parameters */
             UsedParameter _alpha_s_Z__dbcu;
@@ -198,8 +190,7 @@ namespace eos
             virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
     };
 
-    template <> class SMComponent<components::WET::SBCU> :
-    public virtual ModelComponent<components::WET::SBCU>
+    template <> class SMComponent<components::WET::SBCU> : public virtual ModelComponent<components::WET::SBCU>
     {
             /* QCD parameters */
             UsedParameter _alpha_s_Z__sbcu;
@@ -221,8 +212,7 @@ namespace eos
 
     /* Hadronic sectors (Delta B = 2) */
 
-    template <> class SMComponent<components::WET::SBSB> :
-        public virtual ModelComponent<components::WET::SBSB>
+    template <> class SMComponent<components::WET::SBSB> : public virtual ModelComponent<components::WET::SBSB>
     {
         private:
             /* Weak decay parameters */
@@ -257,8 +247,7 @@ namespace eos
 
     /* Old-style WET sectors */
 
-    template <> class SMComponent<components::DeltaBS1> :
-        public virtual ModelComponent<components::DeltaBS1>
+    template <> class SMComponent<components::DeltaBS1> : public virtual ModelComponent<components::DeltaBS1>
     {
         private:
             /* QCD parameters */
@@ -312,6 +301,6 @@ namespace eos
 
             static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
-}
+} // namespace eos
 
 #endif

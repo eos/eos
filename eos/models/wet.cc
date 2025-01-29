@@ -20,11 +20,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/models/wet.hh>
 #include <eos/maths/complex.hh>
-#include <eos/utils/log.hh>
 #include <eos/maths/matrix.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/wet.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 
@@ -36,12 +36,36 @@ namespace eos
 
     namespace wcimplementation
     {
-        complex<double> polar(const Parameter & abs, const Parameter & arg) { return std::polar(abs(), arg()); }
-        complex<double> cartesian(const Parameter & re, const Parameter & im) { return complex<double>(re(), im()); }
-        complex<double> polar_negative(const Parameter & abs, const Parameter & arg) { return std::polar(abs(), arg() + M_PI); }
-        complex<double> cartesian_negative(const Parameter & re, const Parameter & im) { return complex<double>(-re(), -im()); }
-        complex<double> zero() { return complex<double>(0.0, 0.0); }
-    }
+        complex<double>
+        polar(const Parameter & abs, const Parameter & arg)
+        {
+            return std::polar(abs(), arg());
+        }
+
+        complex<double>
+        cartesian(const Parameter & re, const Parameter & im)
+        {
+            return complex<double>(re(), im());
+        }
+
+        complex<double>
+        polar_negative(const Parameter & abs, const Parameter & arg)
+        {
+            return std::polar(abs(), arg() + M_PI);
+        }
+
+        complex<double>
+        cartesian_negative(const Parameter & re, const Parameter & im)
+        {
+            return complex<double>(-re(), -im());
+        }
+
+        complex<double>
+        zero()
+        {
+            return complex<double>(0.0, 0.0);
+        }
+    } // namespace wcimplementation
 
     /* Charged-current semileptonic sectors (Delta C = 1) */
 
@@ -103,40 +127,43 @@ namespace eos
     WilsonCoefficients<bern::ClassII>
     WilsonScanComponent<components::WET::DCNuL>::wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
     {
-        std::function<complex<double> ()> cvl;
-        std::function<complex<double> ()> cvr;
-        std::function<complex<double> ()> csl;
-        std::function<complex<double> ()> csr;
-        std::function<complex<double> ()> ct;
+        std::function<complex<double>()> cvl;
+        std::function<complex<double>()> cvr;
+        std::function<complex<double>()> csl;
+        std::function<complex<double>()> csr;
+        std::function<complex<double>()> ct;
 
         if (LeptonFlavor::electron == lepton_flavor)
         {
-            cvl = _e_cvl;   cvr = _e_cvr;
-            csl = _e_csl;   csr = _e_csr;
-            ct = _e_ct;
+            cvl = _e_cvl;
+            cvr = _e_cvr;
+            csl = _e_csl;
+            csr = _e_csr;
+            ct  = _e_ct;
         }
         else if (LeptonFlavor::muon == lepton_flavor)
         {
-            cvl = _mu_cvl;   cvr = _mu_cvr;
-            csl = _mu_csl;   csr = _mu_csr;
-            ct = _mu_ct;
+            cvl = _mu_cvl;
+            cvr = _mu_cvr;
+            csl = _mu_csl;
+            csr = _mu_csr;
+            ct  = _mu_ct;
         }
         else if (LeptonFlavor::tauon == lepton_flavor)
         {
-            cvl = _tau_cvl;   cvr = _tau_cvr;
-            csl = _tau_csl;   csr = _tau_csr;
-            ct = _tau_ct;
+            cvl = _tau_cvl;
+            cvr = _tau_cvr;
+            csl = _tau_csl;
+            csr = _tau_csr;
+            ct  = _tau_ct;
         }
         else
         {
             throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavors");
         }
 
-        WilsonCoefficients<ChargedCurrent> result
-        {
-            {{
-                cvl(), cvr(), csl(), csr(), ct()
-            }},
+        WilsonCoefficients<ChargedCurrent> result{
+            { { cvl(), cvr(), csl(), csr(), ct() } },
         };
 
         if (cp_conjugate)
@@ -208,40 +235,43 @@ namespace eos
     WilsonCoefficients<bern::ClassII>
     WilsonScanComponent<components::WET::SCNuL>::wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
     {
-        std::function<complex<double> ()> cvl;
-        std::function<complex<double> ()> cvr;
-        std::function<complex<double> ()> csl;
-        std::function<complex<double> ()> csr;
-        std::function<complex<double> ()> ct;
+        std::function<complex<double>()> cvl;
+        std::function<complex<double>()> cvr;
+        std::function<complex<double>()> csl;
+        std::function<complex<double>()> csr;
+        std::function<complex<double>()> ct;
 
         if (LeptonFlavor::electron == lepton_flavor)
         {
-            cvl = _e_cvl;   cvr = _e_cvr;
-            csl = _e_csl;   csr = _e_csr;
-            ct = _e_ct;
+            cvl = _e_cvl;
+            cvr = _e_cvr;
+            csl = _e_csl;
+            csr = _e_csr;
+            ct  = _e_ct;
         }
         else if (LeptonFlavor::muon == lepton_flavor)
         {
-            cvl = _mu_cvl;   cvr = _mu_cvr;
-            csl = _mu_csl;   csr = _mu_csr;
-            ct = _mu_ct;
+            cvl = _mu_cvl;
+            cvr = _mu_cvr;
+            csl = _mu_csl;
+            csr = _mu_csr;
+            ct  = _mu_ct;
         }
         else if (LeptonFlavor::tauon == lepton_flavor)
         {
-            cvl = _tau_cvl;   cvr = _tau_cvr;
-            csl = _tau_csl;   csr = _tau_csr;
-            ct = _tau_ct;
+            cvl = _tau_cvl;
+            cvr = _tau_cvr;
+            csl = _tau_csl;
+            csr = _tau_csr;
+            ct  = _tau_ct;
         }
         else
         {
             throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavors");
         }
 
-        WilsonCoefficients<ChargedCurrent> result
-        {
-            {{
-                cvl(), cvr(), csl(), csr(), ct()
-            }},
+        WilsonCoefficients<ChargedCurrent> result{
+            { { cvl(), cvr(), csl(), csr(), ct() } },
         };
 
         if (cp_conjugate)
@@ -315,40 +345,43 @@ namespace eos
     WilsonCoefficients<ChargedCurrent>
     WilsonScanComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
     {
-        std::function<complex<double> ()> cvl;
-        std::function<complex<double> ()> cvr;
-        std::function<complex<double> ()> csl;
-        std::function<complex<double> ()> csr;
-        std::function<complex<double> ()> ct;
+        std::function<complex<double>()> cvl;
+        std::function<complex<double>()> cvr;
+        std::function<complex<double>()> csl;
+        std::function<complex<double>()> csr;
+        std::function<complex<double>()> ct;
 
         if (LeptonFlavor::electron == lepton_flavor)
         {
-            cvl = _e_cvl;   cvr = _e_cvr;
-            csl = _e_csl;   csr = _e_csr;
-            ct = _e_ct;
+            cvl = _e_cvl;
+            cvr = _e_cvr;
+            csl = _e_csl;
+            csr = _e_csr;
+            ct  = _e_ct;
         }
         else if (LeptonFlavor::muon == lepton_flavor)
         {
-            cvl = _mu_cvl;   cvr = _mu_cvr;
-            csl = _mu_csl;   csr = _mu_csr;
-            ct = _mu_ct;
+            cvl = _mu_cvl;
+            cvr = _mu_cvr;
+            csl = _mu_csl;
+            csr = _mu_csr;
+            ct  = _mu_ct;
         }
         else if (LeptonFlavor::tauon == lepton_flavor)
         {
-            cvl = _tau_cvl;   cvr = _tau_cvr;
-            csl = _tau_csl;   csr = _tau_csr;
-            ct = _tau_ct;
+            cvl = _tau_cvl;
+            cvr = _tau_cvr;
+            csl = _tau_csl;
+            csr = _tau_csr;
+            ct  = _tau_ct;
         }
         else
         {
             throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavors");
         }
 
-        WilsonCoefficients<ChargedCurrent> result
-        {
-            {{
-                cvl(), cvr(), csl(), csr(), ct()
-            }},
+        WilsonCoefficients<ChargedCurrent> result{
+            { { cvl(), cvr(), csl(), csr(), ct() } },
         };
 
         if (cp_conjugate)
@@ -420,40 +453,43 @@ namespace eos
     WilsonCoefficients<ChargedCurrent>
     WilsonScanComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
     {
-        std::function<complex<double> ()> cvl;
-        std::function<complex<double> ()> cvr;
-        std::function<complex<double> ()> csl;
-        std::function<complex<double> ()> csr;
-        std::function<complex<double> ()> ct;
+        std::function<complex<double>()> cvl;
+        std::function<complex<double>()> cvr;
+        std::function<complex<double>()> csl;
+        std::function<complex<double>()> csr;
+        std::function<complex<double>()> ct;
 
         if (LeptonFlavor::electron == lepton_flavor)
         {
-            cvl = _e_cvl;   cvr = _e_cvr;
-            csl = _e_csl;   csr = _e_csr;
-            ct = _e_ct;
+            cvl = _e_cvl;
+            cvr = _e_cvr;
+            csl = _e_csl;
+            csr = _e_csr;
+            ct  = _e_ct;
         }
         else if (LeptonFlavor::muon == lepton_flavor)
         {
-            cvl = _mu_cvl;   cvr = _mu_cvr;
-            csl = _mu_csl;   csr = _mu_csr;
-            ct = _mu_ct;
+            cvl = _mu_cvl;
+            cvr = _mu_cvr;
+            csl = _mu_csl;
+            csr = _mu_csr;
+            ct  = _mu_ct;
         }
         else if (LeptonFlavor::tauon == lepton_flavor)
         {
-            cvl = _tau_cvl;   cvr = _tau_cvr;
-            csl = _tau_csl;   csr = _tau_csr;
-            ct = _tau_ct;
+            cvl = _tau_cvl;
+            cvr = _tau_cvr;
+            csl = _tau_csl;
+            csr = _tau_csr;
+            ct  = _tau_ct;
         }
         else
         {
             throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavors");
         }
 
-        WilsonCoefficients<ChargedCurrent> result
-        {
-            {{
-                cvl(), cvr(), csl(), csr(), ct()
-            }},
+        WilsonCoefficients<ChargedCurrent> result{
+            { { cvl(), cvr(), csl(), csr(), ct() } },
         };
 
         if (cp_conjugate)
@@ -489,13 +525,13 @@ namespace eos
     {
         WilsonCoefficients<wc::SBNuNu> result;
 
-        result._coefficients = std::array<complex<double>, 5>{{
-            complex<double>(_re_cvl,  _im_cvl),
-            complex<double>(_re_cvr,  _im_cvr),
-            complex<double>(_re_csl,  _im_csl),
-            complex<double>(_re_csr,  _im_csr),
-            complex<double>(_re_ctl,  _im_ctl)
-        }};
+        result._coefficients = std::array<complex<double>, 5>{
+            { complex<double>(_re_cvl, _im_cvl),
+             complex<double>(_re_cvr, _im_cvr),
+             complex<double>(_re_csl, _im_csl),
+             complex<double>(_re_csr, _im_csr),
+             complex<double>(_re_ctl, _im_ctl) }
+        };
 
         if (cp_conjugate)
         {
@@ -513,28 +549,27 @@ namespace eos
     std::array<std::tuple<UsedParameter, UsedParameter>, 20>
     make_wet_parameters_classIII(const Parameters & p, ParameterUser & u, const std::string & prefix)
     {
-        auto result = std::array<std::tuple<UsedParameter, UsedParameter>, 20>{
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c1}"], u),   UsedParameter(p[prefix + "::Im{c1}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c2}"], u),   UsedParameter(p[prefix + "::Im{c2}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c3}"], u),   UsedParameter(p[prefix + "::Im{c3}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c4}"], u),   UsedParameter(p[prefix + "::Im{c4}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c5}"], u),   UsedParameter(p[prefix + "::Im{c5}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c6}"], u),   UsedParameter(p[prefix + "::Im{c6}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c7}"], u),   UsedParameter(p[prefix + "::Im{c7}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c8}"], u),   UsedParameter(p[prefix + "::Im{c8}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c9}"], u),   UsedParameter(p[prefix + "::Im{c9}"], u)  ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c10}"], u),  UsedParameter(p[prefix + "::Im{c10}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c1'}"], u),  UsedParameter(p[prefix + "::Im{c1'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c2'}"], u),  UsedParameter(p[prefix + "::Im{c2'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c3'}"], u),  UsedParameter(p[prefix + "::Im{c3'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c4'}"], u),  UsedParameter(p[prefix + "::Im{c4'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c5'}"], u),  UsedParameter(p[prefix + "::Im{c5'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c6'}"], u),  UsedParameter(p[prefix + "::Im{c6'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c7'}"], u),  UsedParameter(p[prefix + "::Im{c7'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c8'}"], u),  UsedParameter(p[prefix + "::Im{c8'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c9'}"], u),  UsedParameter(p[prefix + "::Im{c9'}"], u) ),
-            std::make_tuple(UsedParameter(p[prefix + "::Re{c10'}"], u), UsedParameter(p[prefix + "::Im{c10'}"], u))
-        };
+        auto result =
+                std::array<std::tuple<UsedParameter, UsedParameter>, 20>{ std::make_tuple(UsedParameter(p[prefix + "::Re{c1}"], u), UsedParameter(p[prefix + "::Im{c1}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c2}"], u), UsedParameter(p[prefix + "::Im{c2}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c3}"], u), UsedParameter(p[prefix + "::Im{c3}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c4}"], u), UsedParameter(p[prefix + "::Im{c4}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c5}"], u), UsedParameter(p[prefix + "::Im{c5}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c6}"], u), UsedParameter(p[prefix + "::Im{c6}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c7}"], u), UsedParameter(p[prefix + "::Im{c7}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c8}"], u), UsedParameter(p[prefix + "::Im{c8}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c9}"], u), UsedParameter(p[prefix + "::Im{c9}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c10}"], u), UsedParameter(p[prefix + "::Im{c10}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c1'}"], u), UsedParameter(p[prefix + "::Im{c1'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c2'}"], u), UsedParameter(p[prefix + "::Im{c2'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c3'}"], u), UsedParameter(p[prefix + "::Im{c3'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c4'}"], u), UsedParameter(p[prefix + "::Im{c4'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c5'}"], u), UsedParameter(p[prefix + "::Im{c5'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c6'}"], u), UsedParameter(p[prefix + "::Im{c6'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c7'}"], u), UsedParameter(p[prefix + "::Im{c7'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c8'}"], u), UsedParameter(p[prefix + "::Im{c8'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c9'}"], u), UsedParameter(p[prefix + "::Im{c9'}"], u)),
+                                                                          std::make_tuple(UsedParameter(p[prefix + "::Re{c10'}"], u), UsedParameter(p[prefix + "::Im{c10'}"], u)) };
 
         return result;
     }
@@ -551,9 +586,9 @@ namespace eos
         const double sign = cp_conjugate ? -1.0 : 1.0;
 
         WilsonCoefficients<wc::DBCU> result;
-        for (unsigned i = 0 ; i < 10 ; ++i)
+        for (unsigned i = 0; i < 10; ++i)
         {
-            result._unprimed[i] = complex<double>(std::get<0>(_dbcu_parameters[i]),      sign * std::get<1>(_dbcu_parameters[i]));
+            result._unprimed[i] = complex<double>(std::get<0>(_dbcu_parameters[i]), sign * std::get<1>(_dbcu_parameters[i]));
             result._primed[i]   = complex<double>(std::get<0>(_dbcu_parameters[i + 10]), sign * std::get<1>(_dbcu_parameters[i + 10]));
         }
 
@@ -572,9 +607,9 @@ namespace eos
         const double sign = cp_conjugate ? -1.0 : 1.0;
 
         WilsonCoefficients<wc::SBCU> result;
-        for (unsigned i = 0 ; i < 10 ; ++i)
+        for (unsigned i = 0; i < 10; ++i)
         {
-            result._unprimed[i] = complex<double>(std::get<0>(_sbcu_parameters[i]),      sign * std::get<1>(_sbcu_parameters[i]));
+            result._unprimed[i] = complex<double>(std::get<0>(_sbcu_parameters[i]), sign * std::get<1>(_sbcu_parameters[i]));
             result._primed[i]   = complex<double>(std::get<0>(_sbcu_parameters[i + 10]), sign * std::get<1>(_sbcu_parameters[i + 10]));
         }
 
@@ -609,16 +644,16 @@ namespace eos
     {
         WilsonCoefficients<wc::SBSB> result;
 
-        result._coefficients = std::array<complex<double>, 8>{{
-            complex<double>(_re_sbsb_c1__deltab2(),  _im_sbsb_c1__deltab2()),
-            complex<double>(_re_sbsb_c2__deltab2(),  _im_sbsb_c2__deltab2()),
-            complex<double>(_re_sbsb_c3__deltab2(),  _im_sbsb_c3__deltab2()),
-            complex<double>(_re_sbsb_c4__deltab2(),  _im_sbsb_c4__deltab2()),
-            complex<double>(_re_sbsb_c5__deltab2(),  _im_sbsb_c5__deltab2()),
-            complex<double>(_re_sbsb_c1p__deltab2(), _im_sbsb_c1p__deltab2()),
-            complex<double>(_re_sbsb_c2p__deltab2(), _im_sbsb_c2p__deltab2()),
-            complex<double>(_re_sbsb_c3p__deltab2(), _im_sbsb_c3p__deltab2())
-        }};
+        result._coefficients = std::array<complex<double>, 8>{
+            { complex<double>(_re_sbsb_c1__deltab2(), _im_sbsb_c1__deltab2()),
+             complex<double>(_re_sbsb_c2__deltab2(), _im_sbsb_c2__deltab2()),
+             complex<double>(_re_sbsb_c3__deltab2(), _im_sbsb_c3__deltab2()),
+             complex<double>(_re_sbsb_c4__deltab2(), _im_sbsb_c4__deltab2()),
+             complex<double>(_re_sbsb_c5__deltab2(), _im_sbsb_c5__deltab2()),
+             complex<double>(_re_sbsb_c1p__deltab2(), _im_sbsb_c1p__deltab2()),
+             complex<double>(_re_sbsb_c2p__deltab2(), _im_sbsb_c2p__deltab2()),
+             complex<double>(_re_sbsb_c3p__deltab2(), _im_sbsb_c3p__deltab2()) }
+        };
 
         return result;
     }
@@ -689,59 +724,69 @@ namespace eos
 
 
         /* functions for b->sgamma */
-        _c7(std::bind(&wcimplementation::cartesian,          _re_c7,          _im_c7)),
-        _c7prime(std::bind(&wcimplementation::cartesian,     _re_c7prime,     _im_c7prime)),
+        _c7(std::bind(&wcimplementation::cartesian, _re_c7, _im_c7)),
+        _c7prime(std::bind(&wcimplementation::cartesian, _re_c7prime, _im_c7prime)),
 
         /* functions for b->see */
-        _e_c9(std::bind(&wcimplementation::cartesian,        _e_re_c9,        _e_im_c9)),
-        _e_c10(std::bind(&wcimplementation::cartesian,       _e_re_c10,       _e_im_c10)),
-        _e_c9prime(std::bind(&wcimplementation::cartesian,   _e_re_c9prime,   _e_im_c9prime)),
-        _e_c10prime(std::bind(&wcimplementation::cartesian,  _e_re_c10prime,  _e_im_c10prime)),
-        _e_cS(std::bind(&wcimplementation::cartesian,        _e_re_cS,        _e_im_cS)),
-        _e_cSprime(std::bind(&wcimplementation::cartesian,   _e_re_cSprime,   _e_im_cSprime)),
-        _e_cP(std::bind(&wcimplementation::cartesian,        _e_re_cP,        _e_im_cP)),
-        _e_cPprime(std::bind(&wcimplementation::cartesian,   _e_re_cPprime,   _e_im_cPprime)),
-        _e_cT(std::bind(&wcimplementation::cartesian,        _e_re_cT,        _e_im_cT)),
-        _e_cT5(std::bind(&wcimplementation::cartesian,       _e_re_cT5,       _e_im_cT5)),
+        _e_c9(std::bind(&wcimplementation::cartesian, _e_re_c9, _e_im_c9)),
+        _e_c10(std::bind(&wcimplementation::cartesian, _e_re_c10, _e_im_c10)),
+        _e_c9prime(std::bind(&wcimplementation::cartesian, _e_re_c9prime, _e_im_c9prime)),
+        _e_c10prime(std::bind(&wcimplementation::cartesian, _e_re_c10prime, _e_im_c10prime)),
+        _e_cS(std::bind(&wcimplementation::cartesian, _e_re_cS, _e_im_cS)),
+        _e_cSprime(std::bind(&wcimplementation::cartesian, _e_re_cSprime, _e_im_cSprime)),
+        _e_cP(std::bind(&wcimplementation::cartesian, _e_re_cP, _e_im_cP)),
+        _e_cPprime(std::bind(&wcimplementation::cartesian, _e_re_cPprime, _e_im_cPprime)),
+        _e_cT(std::bind(&wcimplementation::cartesian, _e_re_cT, _e_im_cT)),
+        _e_cT5(std::bind(&wcimplementation::cartesian, _e_re_cT5, _e_im_cT5)),
 
         /* functions for b->smumu */
-        _mu_c9(std::bind(&wcimplementation::cartesian,       _mu_re_c9,       _mu_im_c9)),
-        _mu_c10(std::bind(&wcimplementation::cartesian,      _mu_re_c10,      _mu_im_c10)),
-        _mu_c9prime(std::bind(&wcimplementation::cartesian,  _mu_re_c9prime,  _mu_im_c9prime)),
+        _mu_c9(std::bind(&wcimplementation::cartesian, _mu_re_c9, _mu_im_c9)),
+        _mu_c10(std::bind(&wcimplementation::cartesian, _mu_re_c10, _mu_im_c10)),
+        _mu_c9prime(std::bind(&wcimplementation::cartesian, _mu_re_c9prime, _mu_im_c9prime)),
         _mu_c10prime(std::bind(&wcimplementation::cartesian, _mu_re_c10prime, _mu_im_c10prime)),
-        _mu_cS(std::bind(&wcimplementation::cartesian,       _mu_re_cS,       _mu_im_cS)),
-        _mu_cSprime(std::bind(&wcimplementation::cartesian,  _mu_re_cSprime,  _mu_im_cSprime)),
-        _mu_cP(std::bind(&wcimplementation::cartesian,       _mu_re_cP,       _mu_im_cP)),
-        _mu_cPprime(std::bind(&wcimplementation::cartesian,  _mu_re_cPprime,  _mu_im_cPprime)),
-        _mu_cT(std::bind(&wcimplementation::cartesian,       _mu_re_cT,       _mu_im_cT)),
-        _mu_cT5(std::bind(&wcimplementation::cartesian,      _mu_re_cT5,      _mu_im_cT5))
+        _mu_cS(std::bind(&wcimplementation::cartesian, _mu_re_cS, _mu_im_cS)),
+        _mu_cSprime(std::bind(&wcimplementation::cartesian, _mu_re_cSprime, _mu_im_cSprime)),
+        _mu_cP(std::bind(&wcimplementation::cartesian, _mu_re_cP, _mu_im_cP)),
+        _mu_cPprime(std::bind(&wcimplementation::cartesian, _mu_re_cPprime, _mu_im_cPprime)),
+        _mu_cT(std::bind(&wcimplementation::cartesian, _mu_re_cT, _mu_im_cT)),
+        _mu_cT5(std::bind(&wcimplementation::cartesian, _mu_re_cT5, _mu_im_cT5))
     {
     }
 
     WilsonCoefficients<BToS>
     WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & /*mu*/, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const
     {
-        std::function<complex<double> ()> c9,  c9prime;
-        std::function<complex<double> ()> c10, c10prime;
-        std::function<complex<double> ()> cS,  cSprime;
-        std::function<complex<double> ()> cP,  cPprime;
-        std::function<complex<double> ()> cT,  cT5;
+        std::function<complex<double>()> c9, c9prime;
+        std::function<complex<double>()> c10, c10prime;
+        std::function<complex<double>()> cS, cSprime;
+        std::function<complex<double>()> cP, cPprime;
+        std::function<complex<double>()> cT, cT5;
 
         if (LeptonFlavor::electron == lepton_flavor)
         {
-            c9 = _e_c9;     c9prime = _e_c9prime;
-            c10 = _e_c10;   c10prime = _e_c10prime;
-            cS = _e_cS;     cSprime = _e_cSprime;
-            cP = _e_cP;     cPprime = _e_cPprime;
-            cT = _e_cT;     cT5 = _e_cT5;
+            c9       = _e_c9;
+            c9prime  = _e_c9prime;
+            c10      = _e_c10;
+            c10prime = _e_c10prime;
+            cS       = _e_cS;
+            cSprime  = _e_cSprime;
+            cP       = _e_cP;
+            cPprime  = _e_cPprime;
+            cT       = _e_cT;
+            cT5      = _e_cT5;
         }
         else if (LeptonFlavor::muon == lepton_flavor)
         {
-            c9 = _mu_c9;    c9prime = _mu_c9prime;
-            c10 = _mu_c10;  c10prime = _mu_c10prime;
-            cS = _mu_cS;    cSprime = _mu_cSprime;
-            cP = _mu_cP;    cPprime = _mu_cPprime;
-            cT = _mu_cT;    cT5 = _mu_cT5;
+            c9       = _mu_c9;
+            c9prime  = _mu_c9prime;
+            c10      = _mu_c10;
+            c10prime = _mu_c10prime;
+            cS       = _mu_cS;
+            cSprime  = _mu_cSprime;
+            cP       = _mu_cP;
+            cPprime  = _mu_cPprime;
+            cT       = _mu_cT;
+            cT5      = _mu_cT5;
         }
         else
         {
@@ -759,25 +804,26 @@ namespace eos
             alpha_s = QCD::alpha_s(_mu__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
         }
 
-        complex<double> a_s = alpha_s / 4.0 / M_PI;
+        complex<double>          a_s = alpha_s / 4.0 / M_PI;
         WilsonCoefficients<BToS> result;
-        result._sm_like_coefficients = std::array<std::complex<double>, 15>
-        {{
-            _c1(), _c2(), _c3(), _c4(), _c5(), _c6(),
-            0.0, 0.0, 0.0, 0.0, 0.0,
-            a_s * _c7(), a_s * _c8(), a_s * c9(), a_s * c10()
-        }};
-        result._primed_coefficients = std::array<std::complex<double>, 15>
-        {{
-            /* we only consider c7', c8', c9' and c10' */
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0,
-            a_s * _c7prime(), a_s * _c8prime(), a_s * c9prime(), a_s * c10prime()
-        }};
-        result._scalar_tensor_coefficients = std::array<std::complex<double>, 6>
-        {{
-            cS(), cSprime(), cP(), cPprime(), cT(), cT5()
-        }};
+        result._sm_like_coefficients = std::array<std::complex<double>, 15>{
+            { _c1(), _c2(), _c3(), _c4(), _c5(), _c6(), 0.0, 0.0, 0.0, 0.0, 0.0, a_s * _c7(), a_s * _c8(), a_s * c9(), a_s * c10() }
+        };
+        result._primed_coefficients = std::array<std::complex<double>, 15>{
+            { /* we only consider c7', c8', c9' and c10' */
+              0.0, 0.0,
+             0.0, 0.0,
+             0.0, 0.0,
+             0.0, 0.0,
+             0.0, 0.0,
+             0.0, a_s * _c7prime(),
+             a_s * _c8prime(),
+             a_s * c9prime(),
+             a_s * c10prime() }
+        };
+        result._scalar_tensor_coefficients = std::array<std::complex<double>, 6>{
+            { cS(), cSprime(), cP(), cPprime(), cT(), cT5() }
+        };
         result._alpha_s = alpha_s;
 
         if (cp_conjugate)
@@ -805,26 +851,34 @@ namespace eos
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
         /* b->smee */
-        _e_cT = std::bind(&wcimplementation::zero);
-        _e_cT5 = std::bind(&wcimplementation::zero);
-        _e_cP = std::bind(&wcimplementation::cartesian_negative, _e_re_cS,        _e_im_cS);
-        _e_cPprime = std::bind(&wcimplementation::cartesian,     _e_re_cSprime,   _e_im_cSprime);
+        _e_cT      = std::bind(&wcimplementation::zero);
+        _e_cT5     = std::bind(&wcimplementation::zero);
+        _e_cP      = std::bind(&wcimplementation::cartesian_negative, _e_re_cS, _e_im_cS);
+        _e_cPprime = std::bind(&wcimplementation::cartesian, _e_re_cSprime, _e_im_cSprime);
 
-        u.drop(_e_re_cP.id());       u.drop(_e_im_cP.id());
-        u.drop(_e_re_cPprime.id());  u.drop(_e_im_cPprime.id());
-        u.drop(_e_re_cT.id());       u.drop(_e_im_cT.id());
-        u.drop(_e_re_cT5.id());      u.drop(_e_im_cT5.id());
+        u.drop(_e_re_cP.id());
+        u.drop(_e_im_cP.id());
+        u.drop(_e_re_cPprime.id());
+        u.drop(_e_im_cPprime.id());
+        u.drop(_e_re_cT.id());
+        u.drop(_e_im_cT.id());
+        u.drop(_e_re_cT5.id());
+        u.drop(_e_im_cT5.id());
 
         /* b->smumu */
-        _mu_cT = std::bind(&wcimplementation::zero);
-        _mu_cT5 = std::bind(&wcimplementation::zero);
-        _mu_cP = std::bind(&wcimplementation::cartesian_negative, _mu_re_cS,      _mu_im_cS);
-        _mu_cPprime = std::bind(&wcimplementation::cartesian,     _mu_re_cSprime, _mu_im_cSprime);
+        _mu_cT      = std::bind(&wcimplementation::zero);
+        _mu_cT5     = std::bind(&wcimplementation::zero);
+        _mu_cP      = std::bind(&wcimplementation::cartesian_negative, _mu_re_cS, _mu_im_cS);
+        _mu_cPprime = std::bind(&wcimplementation::cartesian, _mu_re_cSprime, _mu_im_cSprime);
 
-        u.drop(_mu_re_cP.id());      u.drop(_mu_im_cP.id());
-        u.drop(_mu_re_cPprime.id()); u.drop(_mu_im_cPprime.id());
-        u.drop(_mu_re_cT.id());      u.drop(_mu_im_cT.id());
-        u.drop(_mu_re_cT5.id());     u.drop(_mu_im_cT5.id());
+        u.drop(_mu_re_cP.id());
+        u.drop(_mu_im_cP.id());
+        u.drop(_mu_re_cPprime.id());
+        u.drop(_mu_im_cPprime.id());
+        u.drop(_mu_re_cT.id());
+        u.drop(_mu_im_cT.id());
+        u.drop(_mu_re_cT5.id());
+        u.drop(_mu_im_cT5.id());
     }
 
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
@@ -842,9 +896,7 @@ namespace eos
     {
     }
 
-    WilsonScanModel::~WilsonScanModel()
-    {
-    }
+    WilsonScanModel::~WilsonScanModel() {}
 
     std::shared_ptr<Model>
     WilsonScanModel::make(const Parameters & parameters, const Options & options)
@@ -867,13 +919,11 @@ namespace eos
     {
     }
 
-    ConstrainedWilsonScanModel::~ConstrainedWilsonScanModel()
-    {
-    }
+    ConstrainedWilsonScanModel::~ConstrainedWilsonScanModel() {}
 
     std::shared_ptr<Model>
     ConstrainedWilsonScanModel::make(const Parameters & parameters, const Options & options)
     {
         return std::shared_ptr<Model>(new ConstrainedWilsonScanModel(parameters, options));
     }
-}
+} // namespace eos
