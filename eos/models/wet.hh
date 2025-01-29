@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2025 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
@@ -30,6 +30,313 @@
 namespace eos
 {
     template <typename Tag_> class WilsonScanComponent;
+
+    /* Charged-current semileptonic sectors (Delta C = 1) */
+
+    template <>
+    class WilsonScanComponent<components::WET::DCNuL> :
+        public virtual ModelComponent<components::WET::DCNuL>
+    {
+        private:
+            /* [dbar c] [nubar l] Wilson coefficients */
+
+            // [dbar c] [nuebar e]
+            UsedParameter _e_re_csl, _e_im_csl;
+            UsedParameter _e_re_csr, _e_im_csr;
+            UsedParameter _e_re_cvl, _e_im_cvl;
+            UsedParameter _e_re_cvr, _e_im_cvr;
+            UsedParameter _e_re_ct,  _e_im_ct;
+
+            // [dbar c] [numubar mu]
+            UsedParameter _mu_re_csl, _mu_im_csl;
+            UsedParameter _mu_re_csr, _mu_im_csr;
+            UsedParameter _mu_re_cvl, _mu_im_cvl;
+            UsedParameter _mu_re_cvr, _mu_im_cvr;
+            UsedParameter _mu_re_ct,  _mu_im_ct;
+
+            // [dbar c] [nutaubar tau]
+            UsedParameter _tau_re_csl, _tau_im_csl;
+            UsedParameter _tau_re_csr, _tau_im_csr;
+            UsedParameter _tau_re_cvl, _tau_im_cvl;
+            UsedParameter _tau_re_cvr, _tau_im_cvr;
+            UsedParameter _tau_re_ct,  _tau_im_ct;
+
+            std::function<complex<double> ()> _e_csl;
+            std::function<complex<double> ()> _e_csr;
+            std::function<complex<double> ()> _e_cvl;
+            std::function<complex<double> ()> _e_cvr;
+            std::function<complex<double> ()> _e_ct;
+
+            std::function<complex<double> ()> _mu_csl;
+            std::function<complex<double> ()> _mu_csr;
+            std::function<complex<double> ()> _mu_cvl;
+            std::function<complex<double> ()> _mu_cvr;
+            std::function<complex<double> ()> _mu_ct;
+
+            std::function<complex<double> ()> _tau_csl;
+            std::function<complex<double> ()> _tau_csr;
+            std::function<complex<double> ()> _tau_cvl;
+            std::function<complex<double> ()> _tau_cvr;
+            std::function<complex<double> ()> _tau_ct;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [dbar c] [nubar l] Wilson coefficients
+            virtual WilsonCoefficients<bern::ClassII> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    template <>
+    class WilsonScanComponent<components::WET::SCNuL> :
+        public virtual ModelComponent<components::WET::SCNuL>
+    {
+        private:
+            /* [sbar c] [nubar l] Wilson coefficients */
+
+            // [sbar c] [nuebar e]
+            UsedParameter _e_re_csl, _e_im_csl;
+            UsedParameter _e_re_csr, _e_im_csr;
+            UsedParameter _e_re_cvl, _e_im_cvl;
+            UsedParameter _e_re_cvr, _e_im_cvr;
+            UsedParameter _e_re_ct,  _e_im_ct;
+
+            // [sbar c] [numubar mu]
+            UsedParameter _mu_re_csl, _mu_im_csl;
+            UsedParameter _mu_re_csr, _mu_im_csr;
+            UsedParameter _mu_re_cvl, _mu_im_cvl;
+            UsedParameter _mu_re_cvr, _mu_im_cvr;
+            UsedParameter _mu_re_ct,  _mu_im_ct;
+
+            // [sbar c] [nutaubar tau]
+            UsedParameter _tau_re_csl, _tau_im_csl;
+            UsedParameter _tau_re_csr, _tau_im_csr;
+            UsedParameter _tau_re_cvl, _tau_im_cvl;
+            UsedParameter _tau_re_cvr, _tau_im_cvr;
+            UsedParameter _tau_re_ct,  _tau_im_ct;
+
+            std::function<complex<double> ()> _e_csl;
+            std::function<complex<double> ()> _e_csr;
+            std::function<complex<double> ()> _e_cvl;
+            std::function<complex<double> ()> _e_cvr;
+            std::function<complex<double> ()> _e_ct;
+
+            std::function<complex<double> ()> _mu_csl;
+            std::function<complex<double> ()> _mu_csr;
+            std::function<complex<double> ()> _mu_cvl;
+            std::function<complex<double> ()> _mu_cvr;
+            std::function<complex<double> ()> _mu_ct;
+
+            std::function<complex<double> ()> _tau_csl;
+            std::function<complex<double> ()> _tau_csr;
+            std::function<complex<double> ()> _tau_cvl;
+            std::function<complex<double> ()> _tau_cvr;
+            std::function<complex<double> ()> _tau_ct;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [sbar c] [nubar l] Wilson coefficients
+            virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    /* Charged-current semileptonic sectors (Delta B = 1) */
+
+    template <>
+    class WilsonScanComponent<components::WET::UBLNu> :
+        public virtual ModelComponent<components::WET::UBLNu>
+    {
+        private:
+            /* [ubar b] [lbar nu] Wilson coefficients */
+
+            // [ubar b] [ebar nue]
+            UsedParameter _e_re_csl, _e_im_csl;
+            UsedParameter _e_re_csr, _e_im_csr;
+            UsedParameter _e_re_cvl, _e_im_cvl;
+            UsedParameter _e_re_cvr, _e_im_cvr;
+            UsedParameter _e_re_ct,  _e_im_ct;
+
+            // [ubar b] [mubar numu]
+            UsedParameter _mu_re_csl, _mu_im_csl;
+            UsedParameter _mu_re_csr, _mu_im_csr;
+            UsedParameter _mu_re_cvl, _mu_im_cvl;
+            UsedParameter _mu_re_cvr, _mu_im_cvr;
+            UsedParameter _mu_re_ct,  _mu_im_ct;
+
+            // [ubar b] [taubar nutau]
+            UsedParameter _tau_re_csl, _tau_im_csl;
+            UsedParameter _tau_re_csr, _tau_im_csr;
+            UsedParameter _tau_re_cvl, _tau_im_cvl;
+            UsedParameter _tau_re_cvr, _tau_im_cvr;
+            UsedParameter _tau_re_ct,  _tau_im_ct;
+
+            std::function<complex<double> ()> _e_csl;
+            std::function<complex<double> ()> _e_csr;
+            std::function<complex<double> ()> _e_cvl;
+            std::function<complex<double> ()> _e_cvr;
+            std::function<complex<double> ()> _e_ct;
+
+            std::function<complex<double> ()> _mu_csl;
+            std::function<complex<double> ()> _mu_csr;
+            std::function<complex<double> ()> _mu_cvl;
+            std::function<complex<double> ()> _mu_cvr;
+            std::function<complex<double> ()> _mu_ct;
+
+            std::function<complex<double> ()> _tau_csl;
+            std::function<complex<double> ()> _tau_csr;
+            std::function<complex<double> ()> _tau_cvl;
+            std::function<complex<double> ()> _tau_cvr;
+            std::function<complex<double> ()> _tau_ct;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [ubar b] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    template <>
+    class WilsonScanComponent<components::WET::CBLNu> :
+    public virtual ModelComponent<components::WET::CBLNu>
+    {
+        private:
+            /* [cbar b] [lbar nu] Wilson coefficients */
+
+            // [cbar b] [ebar nue]
+            UsedParameter _e_re_csl, _e_im_csl;
+            UsedParameter _e_re_csr, _e_im_csr;
+            UsedParameter _e_re_cvl, _e_im_cvl;
+            UsedParameter _e_re_cvr, _e_im_cvr;
+            UsedParameter _e_re_ct,  _e_im_ct;
+
+            // [cbar b] [mubar numu]
+            UsedParameter _mu_re_csl, _mu_im_csl;
+            UsedParameter _mu_re_csr, _mu_im_csr;
+            UsedParameter _mu_re_cvl, _mu_im_cvl;
+            UsedParameter _mu_re_cvr, _mu_im_cvr;
+            UsedParameter _mu_re_ct,  _mu_im_ct;
+
+            // [cbar b] [taubar nutau]
+            UsedParameter _tau_re_csl, _tau_im_csl;
+            UsedParameter _tau_re_csr, _tau_im_csr;
+            UsedParameter _tau_re_cvl, _tau_im_cvl;
+            UsedParameter _tau_re_cvr, _tau_im_cvr;
+            UsedParameter _tau_re_ct,  _tau_im_ct;
+
+            std::function<complex<double> ()> _e_csl;
+            std::function<complex<double> ()> _e_csr;
+            std::function<complex<double> ()> _e_cvl;
+            std::function<complex<double> ()> _e_cvr;
+            std::function<complex<double> ()> _e_ct;
+
+            std::function<complex<double> ()> _mu_csl;
+            std::function<complex<double> ()> _mu_csr;
+            std::function<complex<double> ()> _mu_cvl;
+            std::function<complex<double> ()> _mu_cvr;
+            std::function<complex<double> ()> _mu_ct;
+
+            std::function<complex<double> ()> _tau_csl;
+            std::function<complex<double> ()> _tau_csr;
+            std::function<complex<double> ()> _tau_cvl;
+            std::function<complex<double> ()> _tau_cvr;
+            std::function<complex<double> ()> _tau_ct;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [cbar b] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    /* Neutral-current semileptonic sectors (Delta B = 1) */
+
+    template <>
+    class WilsonScanComponent<components::WET::SBNuNu> :
+    public virtual ModelComponent<components::WET::SBNuNu>
+    {
+        private:
+            /* [sbar b] [nubar nu] Wilson coefficients */
+
+            // vector
+            UsedParameter _re_cvl, _im_cvl;
+            UsedParameter _re_cvr, _im_cvr;
+            // scalar
+            UsedParameter _re_csl, _im_csl;
+            UsedParameter _re_csr, _im_csr;
+            // tensor
+            UsedParameter _re_ctl, _im_ctl;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [sbar b] [nubar nu] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
+    };
+
+    /* Hadronic sectors (Delta B = 1) */
+
+    template <>
+    class WilsonScanComponent<components::WET::DBCU> :
+    public virtual ModelComponent<components::WET::DBCU>
+    {
+        private:
+            // [dbar b] [cbar u] Wilson coefficients
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _dbcu_parameters;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [dbar b] [cbar u] Wilson coefficients
+            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
+    };
+
+    template <>
+    class WilsonScanComponent<components::WET::SBCU> :
+    public virtual ModelComponent<components::WET::SBCU>
+    {
+        private:
+            // [sbar b] [cbar u] Wilson coefficients
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcu_parameters;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [sbar b] [cbar u] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
+    };
+
+    /* Hadronic sectors (Delta B = 2) */
+
+    template <>
+    class WilsonScanComponent<components::WET::SBSB> :
+        public virtual ModelComponent<components::WET::SBSB>
+    {
+        protected:
+            // [sbar b] [sbar b] Wilson coefficients
+            UsedParameter _re_sbsb_c1__deltab2;
+            UsedParameter _im_sbsb_c1__deltab2;
+            UsedParameter _re_sbsb_c2__deltab2;
+            UsedParameter _im_sbsb_c2__deltab2;
+            UsedParameter _re_sbsb_c3__deltab2;
+            UsedParameter _im_sbsb_c3__deltab2;
+            UsedParameter _re_sbsb_c4__deltab2;
+            UsedParameter _im_sbsb_c4__deltab2;
+            UsedParameter _re_sbsb_c5__deltab2;
+            UsedParameter _im_sbsb_c5__deltab2;
+            UsedParameter _re_sbsb_c1p__deltab2;
+            UsedParameter _im_sbsb_c1p__deltab2;
+            UsedParameter _re_sbsb_c2p__deltab2;
+            UsedParameter _im_sbsb_c2p__deltab2;
+            UsedParameter _re_sbsb_c3p__deltab2;
+            UsedParameter _im_sbsb_c3p__deltab2;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            // [sbar b] [sbar b] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
+    };
+
+    /* Old-style WET sectors */
 
     template <>
     class WilsonScanComponent<components::DeltaBS1> :
@@ -115,297 +422,6 @@ namespace eos
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const;
     };
 
-    template <>
-    class WilsonScanComponent<components::WET::SBSB> :
-        public virtual ModelComponent<components::WET::SBSB>
-    {
-        protected:
-            /* b->s Wilson coefficients */
-            UsedParameter _re_sbsb_c1__deltab2;
-            UsedParameter _im_sbsb_c1__deltab2;
-            UsedParameter _re_sbsb_c2__deltab2;
-            UsedParameter _im_sbsb_c2__deltab2;
-            UsedParameter _re_sbsb_c3__deltab2;
-            UsedParameter _im_sbsb_c3__deltab2;
-            UsedParameter _re_sbsb_c4__deltab2;
-            UsedParameter _im_sbsb_c4__deltab2;
-            UsedParameter _re_sbsb_c5__deltab2;
-            UsedParameter _im_sbsb_c5__deltab2;
-            UsedParameter _re_sbsb_c1p__deltab2;
-            UsedParameter _im_sbsb_c1p__deltab2;
-            UsedParameter _re_sbsb_c2p__deltab2;
-            UsedParameter _im_sbsb_c2p__deltab2;
-            UsedParameter _re_sbsb_c3p__deltab2;
-            UsedParameter _im_sbsb_c3p__deltab2;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /*! sbar b sbar b Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::UBLNu> :
-        public virtual ModelComponent<components::WET::UBLNu>
-    {
-        private:
-            /* b->u Wilson coefficients */
-            /* b->u e nu_e */
-            UsedParameter _e_re_csl, _e_im_csl;
-            UsedParameter _e_re_csr, _e_im_csr;
-            UsedParameter _e_re_cvl, _e_im_cvl;
-            UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
-
-            /* b->u mu nu_mu */
-            UsedParameter _mu_re_csl, _mu_im_csl;
-            UsedParameter _mu_re_csr, _mu_im_csr;
-            UsedParameter _mu_re_cvl, _mu_im_cvl;
-            UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
-
-            /* b->u tau nu_tau */
-            UsedParameter _tau_re_csl, _tau_im_csl;
-            UsedParameter _tau_re_csr, _tau_im_csr;
-            UsedParameter _tau_re_cvl, _tau_im_cvl;
-            UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
-
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
-
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
-
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::CBLNu> :
-    public virtual ModelComponent<components::WET::CBLNu>
-    {
-        private:
-            /* b->c Wilson coefficients */
-            /* b->c e nu_e */
-            UsedParameter _e_re_csl, _e_im_csl;
-            UsedParameter _e_re_csr, _e_im_csr;
-            UsedParameter _e_re_cvl, _e_im_cvl;
-            UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
-
-            /* b->c mu nu_mu */
-            UsedParameter _mu_re_csl, _mu_im_csl;
-            UsedParameter _mu_re_csr, _mu_im_csr;
-            UsedParameter _mu_re_cvl, _mu_im_cvl;
-            UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
-
-            /* b->c tau nu_tau */
-            UsedParameter _tau_re_csl, _tau_im_csl;
-            UsedParameter _tau_re_csr, _tau_im_csr;
-            UsedParameter _tau_re_cvl, _tau_im_cvl;
-            UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
-
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
-
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
-
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* b->c Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::SBNuNu> :
-    public virtual ModelComponent<components::WET::SBNuNu>
-    {
-        private:
-            /* sbnunu Wilson coefficients */
-            // vector
-            UsedParameter _re_cvl, _im_cvl;
-            UsedParameter _re_cvr, _im_cvr;
-            // scalar
-            UsedParameter _re_csl, _im_csl;
-            UsedParameter _re_csr, _im_csr;
-            // tensor
-            UsedParameter _re_ctl, _im_ctl;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* sbnunu Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::SBCU> :
-    public virtual ModelComponent<components::WET::SBCU>
-    {
-        private:
-            /* sbcu Wilson coefficients */
-            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcu_parameters;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* sbnunu Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::DBCU> :
-    public virtual ModelComponent<components::WET::DBCU>
-    {
-        private:
-            /* dbcu Wilson coefficients */
-            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _dbcu_parameters;
-
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* sbnunu Wilson coefficients */
-            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::SCNuL> :
-        public virtual ModelComponent<components::WET::SCNuL>
-    {
-        private:
-            /* c->s Wilson coefficients */
-            /* c->s e nu_e */
-            UsedParameter _e_re_csl, _e_im_csl;
-            UsedParameter _e_re_csr, _e_im_csr;
-            UsedParameter _e_re_cvl, _e_im_cvl;
-            UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
-
-            /* c->s mu nu_mu */
-            UsedParameter _mu_re_csl, _mu_im_csl;
-            UsedParameter _mu_re_csr, _mu_im_csr;
-            UsedParameter _mu_re_cvl, _mu_im_cvl;
-            UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
-
-            /* c->s tau nu_tau */
-            UsedParameter _tau_re_csl, _tau_im_csl;
-            UsedParameter _tau_re_csr, _tau_im_csr;
-            UsedParameter _tau_re_cvl, _tau_im_cvl;
-            UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
-
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
-
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
-
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* c->s Wilson coefficients */
-            virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
-    template <>
-    class WilsonScanComponent<components::WET::DCNuL> :
-        public virtual ModelComponent<components::WET::DCNuL>
-    {
-        private:
-            /* c->d Wilson coefficients */
-            /* c->d e nu_e */
-            UsedParameter _e_re_csl, _e_im_csl;
-            UsedParameter _e_re_csr, _e_im_csr;
-            UsedParameter _e_re_cvl, _e_im_cvl;
-            UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
-
-            /* c->d mu nu_mu */
-            UsedParameter _mu_re_csl, _mu_im_csl;
-            UsedParameter _mu_re_csr, _mu_im_csr;
-            UsedParameter _mu_re_cvl, _mu_im_cvl;
-            UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
-
-            /* c->d tau nu_tau */
-            UsedParameter _tau_re_csl, _tau_im_csl;
-            UsedParameter _tau_re_csr, _tau_im_csr;
-            UsedParameter _tau_re_cvl, _tau_im_cvl;
-            UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
-
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
-
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
-
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
-
-        public:
-            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-
-            /* c->d Wilson coefficients */
-            virtual WilsonCoefficients<bern::ClassII> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
     /*!
      * A model with all possible operators; their Wilson coefficients
      * are allowed to have arbitrary values.
@@ -414,15 +430,21 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
-        public WilsonScanComponent<components::WET::SBSB>,
-        public WilsonScanComponent<components::DeltaBS1>,
+        // Charged-current semileptonic sectors (Delta C = 1)
+        public WilsonScanComponent<components::WET::DCNuL>,
+        public WilsonScanComponent<components::WET::SCNuL>,
+        // Charged-current semileptonic sectors (Delta B = 1)
         public WilsonScanComponent<components::WET::UBLNu>,
         public WilsonScanComponent<components::WET::CBLNu>,
+        // Neutral-current semileptonic sectors (Delta B = 1)
         public WilsonScanComponent<components::WET::SBNuNu>,
-        public WilsonScanComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 1)
         public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SCNuL>,
-        public WilsonScanComponent<components::WET::DCNuL>
+        public WilsonScanComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 2)
+        public WilsonScanComponent<components::WET::SBSB>,
+        // Old-style WET sectors
+        public WilsonScanComponent<components::DeltaBS1>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -449,15 +471,21 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
-        public WilsonScanComponent<components::WET::SBSB>,
-        public ConstrainedWilsonScanComponent,
+        // Charged-current semileptonic sectors (Delta C = 1)
+        public WilsonScanComponent<components::WET::DCNuL>,
+        public WilsonScanComponent<components::WET::SCNuL>,
+        // Charged-current semileptonic sectors (Delta B = 1)
         public WilsonScanComponent<components::WET::UBLNu>,
         public WilsonScanComponent<components::WET::CBLNu>,
+        // Neutral-current semileptonic sectors (Delta B = 1)
         public WilsonScanComponent<components::WET::SBNuNu>,
-        public WilsonScanComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 1)
         public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SCNuL>,
-        public WilsonScanComponent<components::WET::DCNuL>
+        public WilsonScanComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 2)
+        public WilsonScanComponent<components::WET::SBSB>,
+        // Old-style WET sectors
+        public ConstrainedWilsonScanComponent
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

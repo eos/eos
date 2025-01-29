@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2023 Danny van Dyk
+ * Copyright (c) 2014-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -76,15 +76,21 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
-        public SMComponent<components::WET::SBSB>,
-        public SMComponent<components::DeltaBS1>,
+        // Charged-current semileptonic sectors (Delta C = 1)
+        public SMComponent<components::WET::DCNuL>,
+        public SMComponent<components::WET::SCNuL>,
+        // Charged-current semileptonic sectors (Delta B = 1)
         public SMComponent<components::WET::UBLNu>,
         public SMComponent<components::WET::CBLNu>,
+        // Neutral-current semileptonic sectors (Delta B = 1)
         public SMComponent<components::WET::SBNuNu>,
-        public SMComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 1)
         public SMComponent<components::WET::DBCU>,
-        public SMComponent<components::WET::SCNuL>,
-        public SMComponent<components::WET::DCNuL>
+        public SMComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 2)
+        public SMComponent<components::WET::SBSB>,
+        // Old-style WET sectors
+        public SMComponent<components::DeltaBS1>
     {
         public:
             CKMScanModel(const Parameters &, const Options &);

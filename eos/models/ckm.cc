@@ -111,15 +111,21 @@ namespace eos
     CKMScanModel::CKMScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
-        SMComponent<components::WET::SBSB>(parameters, *this),
-        SMComponent<components::DeltaBS1>(parameters, *this),
+        // Charged-current semileptonic sectors (Delta C = 1)
+        SMComponent<components::WET::DCNuL>(parameters, *this),
+        SMComponent<components::WET::SCNuL>(parameters, *this),
+        // Charged-current semileptonic sectors (Delta B = 1)
         SMComponent<components::WET::UBLNu>(parameters, *this),
         SMComponent<components::WET::CBLNu>(parameters, *this),
+        // Neutral-current semileptonic sectors (Delta B = 1)
         SMComponent<components::WET::SBNuNu>(parameters, *this),
-        SMComponent<components::WET::SBCU>(parameters, *this),
+        // Hadronic sectors (Delta B = 1)
         SMComponent<components::WET::DBCU>(parameters, *this),
-        SMComponent<components::WET::SCNuL>(parameters, *this),
-        SMComponent<components::WET::DCNuL>(parameters, *this)
+        SMComponent<components::WET::SBCU>(parameters, *this),
+        // Hadronic sectors (Delta B = 2)
+        SMComponent<components::WET::SBSB>(parameters, *this),
+        // Old-style WET sectors
+        SMComponent<components::DeltaBS1>(parameters, *this)
     {
     }
 
