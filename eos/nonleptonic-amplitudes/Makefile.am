@@ -9,6 +9,7 @@ libeosnonleptonicamplitudes_la_SOURCES = \
 	nonleptonic-amplitudes.cc nonleptonic-amplitudes.hh \
 	nonleptonic-amplitudes-fwd.hh nonleptonic-amplitudes-adapter.hh \
 	observables.cc observables.hh \
+	qcdf-amplitudes.cc qcdf-amplitudes.hh \
 	su3f-amplitudes.cc su3f-amplitudes.hh \
 	topological-amplitudes.cc topological-amplitudes.hh
 
@@ -27,6 +28,7 @@ include_eos_nonleptonicamplitudes_HEADERS = \
 	nonleptonic-amplitudes-fwd.hh \
 	nonleptonic-amplitudes-adapter.hh \
 	observables.hh \
+	qcdf-amplitudes.hh \
 	su3f-amplitudes.hh \
 	topological-amplitudes.hh
 
@@ -36,6 +38,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
+	qcdf-amplitudes_TEST \
 	su3f-amplitudes_TEST \
 	topological-amplitudes_TEST
 
@@ -48,6 +51,8 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+qcdf_amplitudes_TEST_SOURCES = qcdf-amplitudes_TEST.cc
+
 su3f_amplitudes_TEST_SOURCES = su3f-amplitudes_TEST.cc
 
 topological_amplitudes_TEST_SOURCES = topological-amplitudes_TEST.cc

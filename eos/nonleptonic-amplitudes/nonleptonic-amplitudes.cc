@@ -20,6 +20,7 @@
 #include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
 #include <eos/nonleptonic-amplitudes/topological-amplitudes.hh>
 #include <eos/nonleptonic-amplitudes/su3f-amplitudes.hh>
+#include <eos/nonleptonic-amplitudes/qcdf-amplitudes.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/options-impl.hh>
 
@@ -86,7 +87,8 @@ namespace eos
     NonleptonicAmplitudeFactory<PToPP>::amplitudes
     {
         { "B->PP::topological",         &TopologicalRepresentation<PToPP>::make},
-        { "B->PP::SU3F",                &SU3FRepresentation<PToPP>::make}
+        { "B->PP::SU3F",                &SU3FRepresentation<PToPP>::make},
+        { "B->PP::QCDF",                &QCDFRepresentation<PToPP>::make}
     };
 
     std::shared_ptr<NonleptonicAmplitudes<PToPP>>
