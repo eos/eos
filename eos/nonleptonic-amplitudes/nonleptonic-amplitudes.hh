@@ -47,6 +47,8 @@ namespace eos
         typedef std::array<std::array<complex<double>, 3>, 3> rank2;
         typedef std::array<complex<double>, 3> rank1;
 
+        void transpose(rank2 &);
+
         const std::map<QuarkFlavor, rank1> psd_b_triplet
         {
             { QuarkFlavor::up,      {{1.0, 0.0, 0.0}}},

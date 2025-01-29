@@ -40,6 +40,7 @@ namespace eos
         opt_p1(o, options, "P1"),
         opt_p2(o, options, "P2"),
         opt_cp_conjugate(o, options, "cp-conjugate"),
+        opt_B_bar(o, options, "B_bar"),
         theta_18(p["eta::theta_18"], *this),
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
         H1tilde({}),
@@ -91,7 +92,7 @@ namespace eos
     {
         Context ctx("When constructing B->PP topological amplitudes");
 
-        if (opt_cp_conjugate.value())
+        if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
             lamdu = model->ckm_ub() * conj(model->ckm_ud());
             lamsu = model->ckm_ub() * conj(model->ckm_us());
@@ -119,9 +120,10 @@ namespace eos
     {
         Model::option_specification(),
         { "cp-conjugate", { "true", "false" },  "false" },
-        { "q", { "u", "d", "s" } },
-        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
-        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_u", "Kbar_u", "eta", "eta_prime" } },
+        { "B_bar", { "true", "false"},  "false" },
+        { "q", { "u", "d", "s" }, "" },
+        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
     };
 
     complex<double>
@@ -212,6 +214,12 @@ namespace eos
     {
         this->update();
 
+        if (opt_B_bar.value())
+        {
+            su3f::transpose(P1);
+            su3f::transpose(P2);
+        }
+
         return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
             this->tree_amplitude(P1, P2) + this->penguin_amplitude(P1, P2)
         );
@@ -221,6 +229,12 @@ namespace eos
     TopologicalRepresentation<PToPP>::inverse_amplitude() const
     {
         this->update();
+
+        if (opt_B_bar.value())
+        {
+            su3f::transpose(P1);
+            su3f::transpose(P2);
+        }
 
         return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
             this->tree_amplitude(P2, P1) + this->penguin_amplitude(P2, P1)
