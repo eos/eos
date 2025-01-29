@@ -76,6 +76,8 @@ namespace eos
 
         UsedParameter mu;
 
+        UsedParameter DeltaV;
+
         RestrictedOption opt_accuracy;
         double switch_lo;
         double switch_nlo;
@@ -99,6 +101,7 @@ namespace eos
             f_P(p["decay-constant::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi")], u),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u),
+            DeltaV(p["B->DP::DeltaV"], u),
             opt_accuracy(o, options, "accuracy"_ok)
         {
             Context ctx("When constructing B_q->Dstar_q P observable");
@@ -367,7 +370,7 @@ namespace eos
                     (16.0 * (wc.c10() + wc.c10p()) * ((-2.0 * f_3P * m_P * m_P * TTLL_nlp) / (f_P * mb * mb * (mb + mc)) + TVLL_nlp)) / 9.0;
 
             // return sum of all contributions
-            return switch_lo * a_1_lo + switch_nlo * a_s_mu * a_1_nlo + switch_nlp * a_1_nlp;
+            return (switch_lo * a_1_lo + switch_nlo * a_s_mu * a_1_nlo + switch_nlp * a_1_nlp) * (1.0 + DeltaV);
         };
 
         double decay_width() const
