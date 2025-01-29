@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -45,15 +45,26 @@ namespace eos
         struct QCD;
         namespace WET
         {
-            struct SBSB;
-            struct CBLNu;
-            struct UBLNu;
-            struct SBNuNu;
+            // Charged-current semileptonic sectors (Delta C = 1)
             struct DCNuL;
             struct SCNuL;
+
+            // Charged-current semileptonic sectors (Delta B = 1)
+            struct UBLNu;
+            struct CBLNu;
+
+            // Neutral-current semileptonic sectors (Delta B = 1)
+            struct SBNuNu;
+
+            // Hadronic sectors (Delta B = 1)
             struct DBCU;
             struct SBCU;
+
+            // Hadronic sectors (Delta B = 2)
+            struct SBSB;
         }
+
+        // Old-style WET sectors
         struct DeltaBS1;
         ///@}
     }
@@ -104,6 +115,82 @@ namespace eos
             virtual double m_d_msbar(const double & mu) const = 0;
     };
 
+    /* Charged-current semileptonic sectors (Delta C = 1) */
+
+    // Base class for the DCNuL WET sector
+    template <> class ModelComponent<components::WET::DCNuL>
+    {
+        public:
+            // [dbar c] [nubar l] Wilson coefficients
+            virtual WilsonCoefficients<bern::ClassII> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    // Base class for the SCNuL WET sector
+    template <> class ModelComponent<components::WET::SCNuL>
+    {
+        public:
+            // [sbar c] [nubar l] Wilson coefficients
+            virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    /* Charged-current semileptonic sectors (Delta B = 1) */
+
+    // Base class for the UBLNu WET sector
+    template <> class ModelComponent<components::WET::UBLNu>
+    {
+        public:
+            // [ubar b] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    // Base class for the CBLNu WET sector
+    template <> class ModelComponent<components::WET::CBLNu>
+    {
+        public:
+            // [cbar b] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
+    /* Neutral-current semileptonic sectors (Delta B = 1) */
+
+    // Base class for the SBNuNu WET sector
+    template <> class ModelComponent<components::WET::SBNuNu>
+    {
+        public:
+            // [sbar b] [nubar nu] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjguate = false) const = 0;
+    };
+
+    /* Hadronic sectors (Delta B = 1) */
+
+    // Base class for the DBCU WET sector
+    template <> class ModelComponent<components::WET::DBCU>
+    {
+        public:
+            // [dbar b] [cbar u] Wilson coefficients
+            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjguate = false) const = 0;
+    };
+
+    // Base class for the SBCU WET sector
+    template <> class ModelComponent<components::WET::SBCU>
+    {
+        public:
+            // [sbar b] [cbar u] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjguate = false) const = 0;
+    };
+
+    /* Hadronic sectors (Delta B = 2) */
+
+    // Base class for the SBSB WET sector
+    template <> class ModelComponent<components::WET::SBSB>
+    {
+        public:
+            // [sbar b] [sbar b] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const = 0;
+    };
+
+    /* Old-style WET sectors */
+
     /*!
      * Base class for the Delta B = 1 = -Delta S FCNC component of models.
      */
@@ -115,101 +202,27 @@ namespace eos
     };
 
     /*!
-     * Base class for the Delta B = 2 = -Delta S FCNC component of models.
-     */
-    template <> class ModelComponent<components::WET::SBSB>
-    {
-        public:
-            /* sbar b sbar b Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const = 0;
-    };
-
-    /*!
-     * Base class for the Delta B = 1 = Delta U CC component of models.
-     */
-    template <> class ModelComponent<components::WET::UBLNu>
-    {
-        public:
-            /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
-    };
-
-    /*!
-     * Base class for the Delta B = 1 = Delta C CC component of models.
-     */
-    template <> class ModelComponent<components::WET::CBLNu>
-    {
-        public:
-            /* b->c Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
-    };
-
-    /*!
-     * Base class for the sbnunu component of models.
-     */
-    template <> class ModelComponent<components::WET::SBNuNu>
-    {
-        public:
-            /* sbnunu Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjguate = false) const = 0;
-    };
-
-    /*!
-     * Base class for the sbcu component of models.
-     */
-    template <> class ModelComponent<components::WET::SBCU>
-    {
-        public:
-            /* sbcu Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjguate = false) const = 0;
-    };
-
-    /*!
-     * Base class for the dbcu component of models.
-     */
-    template <> class ModelComponent<components::WET::DBCU>
-    {
-        public:
-            /* dbcu Wilson coefficients */
-            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjguate = false) const = 0;
-    };
-
-    /*!
-     * Base class for the scnul component of models.
-     */
-    template <> class ModelComponent<components::WET::SCNuL>
-    {
-        public:
-            /* scnul Wilson coefficients */
-            virtual WilsonCoefficients<bern::ClassII> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
-    };
-
-    /*!
-     * Base class for the dcnul component of models.
-     */
-    template <> class ModelComponent<components::WET::DCNuL>
-    {
-        public:
-            /* dcnul Wilson coefficients */
-            virtual WilsonCoefficients<bern::ClassII> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
-    };
-
-    /*!
      * Base class for all models.
      */
     class Model :
         public ParameterUser,
         public virtual ModelComponent<components::CKM>,
         public virtual ModelComponent<components::QCD>,
-        public virtual ModelComponent<components::WET::SBSB>,
-        public virtual ModelComponent<components::DeltaBS1>,
+        // Charged-current semileptonic sectors (Delta C = 1)
+        public virtual ModelComponent<components::WET::DCNuL>,
+        public virtual ModelComponent<components::WET::SCNuL>,
+        // Charged-current semileptonic sectors (Delta B = 1)
         public virtual ModelComponent<components::WET::UBLNu>,
         public virtual ModelComponent<components::WET::CBLNu>,
+        // Neutral-current semileptonic sectors (Delta B = 1)
         public virtual ModelComponent<components::WET::SBNuNu>,
-        public virtual ModelComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 1)
         public virtual ModelComponent<components::WET::DBCU>,
-        public virtual ModelComponent<components::WET::SCNuL>,
-        public virtual ModelComponent<components::WET::DCNuL>
+        public virtual ModelComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 2)
+        public virtual ModelComponent<components::WET::SBSB>,
+        // Old-style WET sectors
+        public virtual ModelComponent<components::DeltaBS1>
     {
         public:
             virtual ~Model() = 0;

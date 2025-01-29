@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -94,34 +94,132 @@ namespace eos
             virtual double m_d_msbar(const double & mu) const;
     };
 
-    template <> class SMComponent<components::DeltaBS1> :
-        public virtual ModelComponent<components::DeltaBS1>
+    /* Charged-current semileptonic sectors (Delta C = 1) */
+
+    template <> class SMComponent<components::WET::DCNuL> :
+    public virtual ModelComponent<components::WET::DCNuL>
     {
         private:
-            /* QCD parameters */
-            UsedParameter _alpha_s_Z__deltabs1;
-            UsedParameter _mu_t__deltabs1;
-            UsedParameter _mu_b__deltabs1;
-            UsedParameter _mu_c__deltabs1;
-
-            /* GSW parameters */
-            UsedParameter _sw2__deltabs1;
-
-            /* Masses */
-            UsedParameter _m_t_pole__deltabs1;
-            UsedParameter _m_W__deltabs1;
-            UsedParameter _m_Z__deltabs1;
-
-            /* Matching scales */
-            UsedParameter _mu_0c__deltabs1;
-            UsedParameter _mu_0t__deltabs1;
+            UsedParameter _alpha_e__dcnul;
+            UsedParameter _m_Z__dcnul;
+            std::array<UsedParameter, 3u> _mu__dcnul;
 
         public:
             SMComponent(const Parameters &, ParameterUser &);
 
-            /* b->s Wilson coefficients */
-            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const;
+            // [dbar c] [nubar l] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
+
+    template <> class SMComponent<components::WET::SCNuL> :
+    public virtual ModelComponent<components::WET::SCNuL>
+    {
+        private:
+            UsedParameter _alpha_e__scnul;
+            UsedParameter _m_Z__scnul;
+            std::array<UsedParameter, 3u> _mu__scnul;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            // [sbar c] [nubar l] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    /* Charged-current semileptonic sectors (Delta B = 1) */
+
+    template <> class SMComponent<components::WET::UBLNu> :
+        public virtual ModelComponent<components::WET::UBLNu>
+    {
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            // [ubar b] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    template <> class SMComponent<components::WET::CBLNu> :
+    public virtual ModelComponent<components::WET::CBLNu>
+    {
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            // [cbar b] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+    };
+
+    /* Neutral-current semileptonic sectors (Delta B = 1) */
+
+    template <> class SMComponent<components::WET::SBNuNu> :
+    public virtual ModelComponent<components::WET::SBNuNu>
+    {
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__sbnunu;
+            UsedParameter _mu_t__sbnunu;
+
+            /* GSW parameters */
+            UsedParameter _sw2__sbnunu;
+
+            /* Masses */
+            UsedParameter _m_t_pole__sbnunu;
+            UsedParameter _m_W__sbnunu;
+            UsedParameter _m_Z__sbnunu;
+
+            /* Matching scale */
+            UsedParameter _mu_0__sbnunu;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            // [sbar b] [nubar nu] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
+    };
+
+    /* Hadronic sectors (Delta B = 1) */
+
+    template <> class SMComponent<components::WET::DBCU> :
+    public virtual ModelComponent<components::WET::DBCU>
+    {
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__dbcu;
+            UsedParameter _m_Z__dbcu;
+
+            /* Matching scale */
+            UsedParameter _m_W__dbcu;
+            UsedParameter _mu_0__dbcu;
+
+            /* Low scale */
+            UsedParameter _mu__dbcu;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            // [dbar b] [cbar u] Wilson coefficients
+            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
+    };
+
+    template <> class SMComponent<components::WET::SBCU> :
+    public virtual ModelComponent<components::WET::SBCU>
+    {
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__sbcu;
+            UsedParameter _m_Z__sbcu;
+
+            /* Matching scale */
+            UsedParameter _m_W__sbcu;
+            UsedParameter _mu_0__sbcu;
+
+            /* Low scale */
+            UsedParameter _mu__sbcu;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            // [sbar b] [cbar u] Wilson coefficients
+            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
+    };
+
+    /* Hadronic sectors (Delta B = 2) */
 
     template <> class SMComponent<components::WET::SBSB> :
         public virtual ModelComponent<components::WET::SBSB>
@@ -153,138 +251,60 @@ namespace eos
         public:
             SMComponent(const Parameters &, ParameterUser &);
 
-            /* sbar b sbar b Wilson coefficients */
+            // [sbar b] [sbar b] Wilson coefficients
             virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
     };
 
-    template <> class SMComponent<components::WET::UBLNu> :
-        public virtual ModelComponent<components::WET::UBLNu>
+    /* Old-style WET sectors */
+
+    template <> class SMComponent<components::DeltaBS1> :
+        public virtual ModelComponent<components::DeltaBS1>
     {
-        public:
-            SMComponent(const Parameters &, ParameterUser &);
-
-            /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
-    template <> class SMComponent<components::WET::CBLNu> :
-    public virtual ModelComponent<components::WET::CBLNu>
-    {
-        public:
-            SMComponent(const Parameters &, ParameterUser &);
-
-            /* b->c Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
-    template <> class SMComponent<components::WET::SBNuNu> :
-    public virtual ModelComponent<components::WET::SBNuNu>
-    {
+        private:
             /* QCD parameters */
-            UsedParameter _alpha_s_Z__sbnunu;
-            UsedParameter _mu_t__sbnunu;
+            UsedParameter _alpha_s_Z__deltabs1;
+            UsedParameter _mu_t__deltabs1;
+            UsedParameter _mu_b__deltabs1;
+            UsedParameter _mu_c__deltabs1;
 
             /* GSW parameters */
-            UsedParameter _sw2__sbnunu;
+            UsedParameter _sw2__deltabs1;
 
             /* Masses */
-            UsedParameter _m_t_pole__sbnunu;
-            UsedParameter _m_W__sbnunu;
-            UsedParameter _m_Z__sbnunu;
+            UsedParameter _m_t_pole__deltabs1;
+            UsedParameter _m_W__deltabs1;
+            UsedParameter _m_Z__deltabs1;
 
-            /* Matching scale */
-            UsedParameter _mu_0__sbnunu;
+            /* Matching scales */
+            UsedParameter _mu_0c__deltabs1;
+            UsedParameter _mu_0t__deltabs1;
 
         public:
             SMComponent(const Parameters &, ParameterUser &);
 
             /* b->s Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
-    };
-
-    template <> class SMComponent<components::WET::SBCU> :
-    public virtual ModelComponent<components::WET::SBCU>
-    {
-            /* QCD parameters */
-            UsedParameter _alpha_s_Z__sbcu;
-            UsedParameter _m_Z__sbcu;
-
-            /* Matching scale */
-            UsedParameter _m_W__sbcu;
-            UsedParameter _mu_0__sbcu;
-
-            /* Low scale */
-            UsedParameter _mu__sbcu;
-
-        public:
-            SMComponent(const Parameters &, ParameterUser &);
-
-            virtual WilsonCoefficients<wc::SBCU> wet_sbcu(const bool & cp_conjugate) const;
-    };
-
-    template <> class SMComponent<components::WET::DBCU> :
-    public virtual ModelComponent<components::WET::DBCU>
-    {
-            /* QCD parameters */
-            UsedParameter _alpha_s_Z__dbcu;
-            UsedParameter _m_Z__dbcu;
-
-            /* Matching scale */
-            UsedParameter _m_W__dbcu;
-            UsedParameter _mu_0__dbcu;
-
-            /* Low scale */
-            UsedParameter _mu__dbcu;
-
-        public:
-            SMComponent(const Parameters &, ParameterUser &);
-
-            virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
-    };
-
-    template <> class SMComponent<components::WET::SCNuL> :
-    public virtual ModelComponent<components::WET::SCNuL>
-    {
-        private:
-            UsedParameter _alpha_e__scnul;
-            UsedParameter _m_Z__scnul;
-            std::array<UsedParameter, 3u> _mu__scnul;
-
-        public:
-            SMComponent(const Parameters &, ParameterUser &);
-
-            /* c->s Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_scnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
-    };
-
-    template <> class SMComponent<components::WET::DCNuL> :
-    public virtual ModelComponent<components::WET::DCNuL>
-    {
-        private:
-            UsedParameter _alpha_e__dcnul;
-            UsedParameter _m_Z__dcnul;
-            std::array<UsedParameter, 3u> _mu__dcnul;
-
-        public:
-            SMComponent(const Parameters &, ParameterUser &);
-
-            /* c->d Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const;
     };
 
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
-        public SMComponent<components::WET::SBSB>,
-        public SMComponent<components::DeltaBS1>,
+        // Charged-current semileptonic sectors (Delta C = 1)
+        public SMComponent<components::WET::DCNuL>,
+        public SMComponent<components::WET::SCNuL>,
+        // Charged-current semileptonic sectors (Delta B = 1)
         public SMComponent<components::WET::UBLNu>,
         public SMComponent<components::WET::CBLNu>,
+        // Neutral-current semileptonic sectors (Delta B = 1)
         public SMComponent<components::WET::SBNuNu>,
-        public SMComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 1)
         public SMComponent<components::WET::DBCU>,
-        public SMComponent<components::WET::SCNuL>,
-        public SMComponent<components::WET::DCNuL>
+        public SMComponent<components::WET::SBCU>,
+        // Hadronic sectors (Delta B = 2)
+        public SMComponent<components::WET::SBSB>,
+        // Old-style WET sectors
+        public SMComponent<components::DeltaBS1>
     {
         public:
             StandardModel(const Parameters &);
