@@ -25,8 +25,7 @@
 
 namespace eos
 {
-    class CKMScanComponent :
-        public virtual ModelComponent<components::CKM>
+    class CKMScanComponent : public virtual ModelComponent<components::CKM>
     {
         private:
             /* CKM matrix elements */
@@ -98,6 +97,6 @@ namespace eos
 
             static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
-}
+} // namespace eos
 
 #endif

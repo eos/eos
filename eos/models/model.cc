@@ -26,16 +26,12 @@
 
 namespace eos
 {
-    Model::~Model()
-    {
-    }
+    Model::~Model() {}
 
-    const std::map<Model::KeyType, Model::ValueType>
-    Model::models
-    {
-        std::make_pair("CKM",       &CKMScanModel::make),
-        std::make_pair("SM",        &StandardModel::make),
-        std::make_pair("WET",       &WilsonScanModel::make),
+    const std::map<Model::KeyType, Model::ValueType> Model::models{
+        std::make_pair("CKM", &CKMScanModel::make),
+        std::make_pair("SM", &StandardModel::make),
+        std::make_pair("WET", &WilsonScanModel::make),
         std::make_pair("WET-SMEFT", &ConstrainedWilsonScanModel::make),
     };
 
@@ -45,7 +41,9 @@ namespace eos
         auto i = Model::models.find(name);
 
         if (Model::models.cend() == i)
+        {
             throw NoSuchModelError(name);
+        }
 
         return i->second(parameters, options);
     }
@@ -53,7 +51,7 @@ namespace eos
     OptionSpecification
     Model::option_specification()
     {
-        OptionSpecification result { "model", { }, "SM" };
+        OptionSpecification result{ "model", {}, "SM" };
 
         for (const auto & m : Model::models)
         {
@@ -67,4 +65,4 @@ namespace eos
         Exception("No such model: '" + name + "'")
     {
     }
-}
+} // namespace eos

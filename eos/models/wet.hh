@@ -33,9 +33,7 @@ namespace eos
 
     /* Charged-current semileptonic sectors (Delta C = 1) */
 
-    template <>
-    class WilsonScanComponent<components::WET::DCNuL> :
-        public virtual ModelComponent<components::WET::DCNuL>
+    template <> class WilsonScanComponent<components::WET::DCNuL> : public virtual ModelComponent<components::WET::DCNuL>
     {
         private:
             /* [dbar c] [nubar l] Wilson coefficients */
@@ -45,39 +43,39 @@ namespace eos
             UsedParameter _e_re_csr, _e_im_csr;
             UsedParameter _e_re_cvl, _e_im_cvl;
             UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
+            UsedParameter _e_re_ct, _e_im_ct;
 
             // [dbar c] [numubar mu]
             UsedParameter _mu_re_csl, _mu_im_csl;
             UsedParameter _mu_re_csr, _mu_im_csr;
             UsedParameter _mu_re_cvl, _mu_im_cvl;
             UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
+            UsedParameter _mu_re_ct, _mu_im_ct;
 
             // [dbar c] [nutaubar tau]
             UsedParameter _tau_re_csl, _tau_im_csl;
             UsedParameter _tau_re_csr, _tau_im_csr;
             UsedParameter _tau_re_cvl, _tau_im_cvl;
             UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
+            UsedParameter _tau_re_ct, _tau_im_ct;
 
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
+            std::function<complex<double>()> _e_csl;
+            std::function<complex<double>()> _e_csr;
+            std::function<complex<double>()> _e_cvl;
+            std::function<complex<double>()> _e_cvr;
+            std::function<complex<double>()> _e_ct;
 
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
+            std::function<complex<double>()> _mu_csl;
+            std::function<complex<double>()> _mu_csr;
+            std::function<complex<double>()> _mu_cvl;
+            std::function<complex<double>()> _mu_cvr;
+            std::function<complex<double>()> _mu_ct;
 
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
+            std::function<complex<double>()> _tau_csl;
+            std::function<complex<double>()> _tau_csr;
+            std::function<complex<double>()> _tau_cvl;
+            std::function<complex<double>()> _tau_cvr;
+            std::function<complex<double>()> _tau_ct;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
@@ -86,9 +84,7 @@ namespace eos
             virtual WilsonCoefficients<bern::ClassII> wet_dcnul(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
-    template <>
-    class WilsonScanComponent<components::WET::SCNuL> :
-        public virtual ModelComponent<components::WET::SCNuL>
+    template <> class WilsonScanComponent<components::WET::SCNuL> : public virtual ModelComponent<components::WET::SCNuL>
     {
         private:
             /* [sbar c] [nubar l] Wilson coefficients */
@@ -98,39 +94,39 @@ namespace eos
             UsedParameter _e_re_csr, _e_im_csr;
             UsedParameter _e_re_cvl, _e_im_cvl;
             UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
+            UsedParameter _e_re_ct, _e_im_ct;
 
             // [sbar c] [numubar mu]
             UsedParameter _mu_re_csl, _mu_im_csl;
             UsedParameter _mu_re_csr, _mu_im_csr;
             UsedParameter _mu_re_cvl, _mu_im_cvl;
             UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
+            UsedParameter _mu_re_ct, _mu_im_ct;
 
             // [sbar c] [nutaubar tau]
             UsedParameter _tau_re_csl, _tau_im_csl;
             UsedParameter _tau_re_csr, _tau_im_csr;
             UsedParameter _tau_re_cvl, _tau_im_cvl;
             UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
+            UsedParameter _tau_re_ct, _tau_im_ct;
 
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
+            std::function<complex<double>()> _e_csl;
+            std::function<complex<double>()> _e_csr;
+            std::function<complex<double>()> _e_cvl;
+            std::function<complex<double>()> _e_cvr;
+            std::function<complex<double>()> _e_ct;
 
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
+            std::function<complex<double>()> _mu_csl;
+            std::function<complex<double>()> _mu_csr;
+            std::function<complex<double>()> _mu_cvl;
+            std::function<complex<double>()> _mu_cvr;
+            std::function<complex<double>()> _mu_ct;
 
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
+            std::function<complex<double>()> _tau_csl;
+            std::function<complex<double>()> _tau_csr;
+            std::function<complex<double>()> _tau_cvl;
+            std::function<complex<double>()> _tau_cvr;
+            std::function<complex<double>()> _tau_ct;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
@@ -141,9 +137,7 @@ namespace eos
 
     /* Charged-current semileptonic sectors (Delta B = 1) */
 
-    template <>
-    class WilsonScanComponent<components::WET::UBLNu> :
-        public virtual ModelComponent<components::WET::UBLNu>
+    template <> class WilsonScanComponent<components::WET::UBLNu> : public virtual ModelComponent<components::WET::UBLNu>
     {
         private:
             /* [ubar b] [lbar nu] Wilson coefficients */
@@ -153,39 +147,39 @@ namespace eos
             UsedParameter _e_re_csr, _e_im_csr;
             UsedParameter _e_re_cvl, _e_im_cvl;
             UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
+            UsedParameter _e_re_ct, _e_im_ct;
 
             // [ubar b] [mubar numu]
             UsedParameter _mu_re_csl, _mu_im_csl;
             UsedParameter _mu_re_csr, _mu_im_csr;
             UsedParameter _mu_re_cvl, _mu_im_cvl;
             UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
+            UsedParameter _mu_re_ct, _mu_im_ct;
 
             // [ubar b] [taubar nutau]
             UsedParameter _tau_re_csl, _tau_im_csl;
             UsedParameter _tau_re_csr, _tau_im_csr;
             UsedParameter _tau_re_cvl, _tau_im_cvl;
             UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
+            UsedParameter _tau_re_ct, _tau_im_ct;
 
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
+            std::function<complex<double>()> _e_csl;
+            std::function<complex<double>()> _e_csr;
+            std::function<complex<double>()> _e_cvl;
+            std::function<complex<double>()> _e_cvr;
+            std::function<complex<double>()> _e_ct;
 
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
+            std::function<complex<double>()> _mu_csl;
+            std::function<complex<double>()> _mu_csr;
+            std::function<complex<double>()> _mu_cvl;
+            std::function<complex<double>()> _mu_cvr;
+            std::function<complex<double>()> _mu_ct;
 
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
+            std::function<complex<double>()> _tau_csl;
+            std::function<complex<double>()> _tau_csr;
+            std::function<complex<double>()> _tau_cvl;
+            std::function<complex<double>()> _tau_cvr;
+            std::function<complex<double>()> _tau_ct;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
@@ -194,9 +188,7 @@ namespace eos
             virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
-    template <>
-    class WilsonScanComponent<components::WET::CBLNu> :
-    public virtual ModelComponent<components::WET::CBLNu>
+    template <> class WilsonScanComponent<components::WET::CBLNu> : public virtual ModelComponent<components::WET::CBLNu>
     {
         private:
             /* [cbar b] [lbar nu] Wilson coefficients */
@@ -206,39 +198,39 @@ namespace eos
             UsedParameter _e_re_csr, _e_im_csr;
             UsedParameter _e_re_cvl, _e_im_cvl;
             UsedParameter _e_re_cvr, _e_im_cvr;
-            UsedParameter _e_re_ct,  _e_im_ct;
+            UsedParameter _e_re_ct, _e_im_ct;
 
             // [cbar b] [mubar numu]
             UsedParameter _mu_re_csl, _mu_im_csl;
             UsedParameter _mu_re_csr, _mu_im_csr;
             UsedParameter _mu_re_cvl, _mu_im_cvl;
             UsedParameter _mu_re_cvr, _mu_im_cvr;
-            UsedParameter _mu_re_ct,  _mu_im_ct;
+            UsedParameter _mu_re_ct, _mu_im_ct;
 
             // [cbar b] [taubar nutau]
             UsedParameter _tau_re_csl, _tau_im_csl;
             UsedParameter _tau_re_csr, _tau_im_csr;
             UsedParameter _tau_re_cvl, _tau_im_cvl;
             UsedParameter _tau_re_cvr, _tau_im_cvr;
-            UsedParameter _tau_re_ct,  _tau_im_ct;
+            UsedParameter _tau_re_ct, _tau_im_ct;
 
-            std::function<complex<double> ()> _e_csl;
-            std::function<complex<double> ()> _e_csr;
-            std::function<complex<double> ()> _e_cvl;
-            std::function<complex<double> ()> _e_cvr;
-            std::function<complex<double> ()> _e_ct;
+            std::function<complex<double>()> _e_csl;
+            std::function<complex<double>()> _e_csr;
+            std::function<complex<double>()> _e_cvl;
+            std::function<complex<double>()> _e_cvr;
+            std::function<complex<double>()> _e_ct;
 
-            std::function<complex<double> ()> _mu_csl;
-            std::function<complex<double> ()> _mu_csr;
-            std::function<complex<double> ()> _mu_cvl;
-            std::function<complex<double> ()> _mu_cvr;
-            std::function<complex<double> ()> _mu_ct;
+            std::function<complex<double>()> _mu_csl;
+            std::function<complex<double>()> _mu_csr;
+            std::function<complex<double>()> _mu_cvl;
+            std::function<complex<double>()> _mu_cvr;
+            std::function<complex<double>()> _mu_ct;
 
-            std::function<complex<double> ()> _tau_csl;
-            std::function<complex<double> ()> _tau_csr;
-            std::function<complex<double> ()> _tau_cvl;
-            std::function<complex<double> ()> _tau_cvr;
-            std::function<complex<double> ()> _tau_ct;
+            std::function<complex<double>()> _tau_csl;
+            std::function<complex<double>()> _tau_csr;
+            std::function<complex<double>()> _tau_cvl;
+            std::function<complex<double>()> _tau_cvr;
+            std::function<complex<double>()> _tau_ct;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
@@ -249,9 +241,7 @@ namespace eos
 
     /* Neutral-current semileptonic sectors (Delta B = 1) */
 
-    template <>
-    class WilsonScanComponent<components::WET::SBNuNu> :
-    public virtual ModelComponent<components::WET::SBNuNu>
+    template <> class WilsonScanComponent<components::WET::SBNuNu> : public virtual ModelComponent<components::WET::SBNuNu>
     {
         private:
             /* [sbar b] [nubar nu] Wilson coefficients */
@@ -274,9 +264,7 @@ namespace eos
 
     /* Hadronic sectors (Delta B = 1) */
 
-    template <>
-    class WilsonScanComponent<components::WET::DBCU> :
-    public virtual ModelComponent<components::WET::DBCU>
+    template <> class WilsonScanComponent<components::WET::DBCU> : public virtual ModelComponent<components::WET::DBCU>
     {
         private:
             // [dbar b] [cbar u] Wilson coefficients
@@ -289,9 +277,7 @@ namespace eos
             virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
     };
 
-    template <>
-    class WilsonScanComponent<components::WET::SBCU> :
-    public virtual ModelComponent<components::WET::SBCU>
+    template <> class WilsonScanComponent<components::WET::SBCU> : public virtual ModelComponent<components::WET::SBCU>
     {
         private:
             // [sbar b] [cbar u] Wilson coefficients
@@ -306,9 +292,7 @@ namespace eos
 
     /* Hadronic sectors (Delta B = 2) */
 
-    template <>
-    class WilsonScanComponent<components::WET::SBSB> :
-        public virtual ModelComponent<components::WET::SBSB>
+    template <> class WilsonScanComponent<components::WET::SBSB> : public virtual ModelComponent<components::WET::SBSB>
     {
         protected:
             // [sbar b] [sbar b] Wilson coefficients
@@ -338,9 +322,7 @@ namespace eos
 
     /* Old-style WET sectors */
 
-    template <>
-    class WilsonScanComponent<components::DeltaBS1> :
-        public virtual ModelComponent<components::DeltaBS1>
+    template <> class WilsonScanComponent<components::DeltaBS1> : public virtual ModelComponent<components::DeltaBS1>
     {
         protected:
             /* QCD parameters */
@@ -360,60 +342,60 @@ namespace eos
             UsedParameter _c4;
             UsedParameter _c5;
             UsedParameter _c6;
-            UsedParameter _re_c7,          _im_c7;
-            UsedParameter _re_c7prime,     _im_c7prime;
+            UsedParameter _re_c7, _im_c7;
+            UsedParameter _re_c7prime, _im_c7prime;
             UsedParameter _c8;
             UsedParameter _c8prime;
             /* b->see Wilson coefficients */
-            UsedParameter _e_re_c9,        _e_im_c9;
-            UsedParameter _e_re_c10,       _e_im_c10;
-            UsedParameter _e_re_c9prime,   _e_im_c9prime;
-            UsedParameter _e_re_c10prime,  _e_im_c10prime;
-            UsedParameter _e_re_cS,        _e_im_cS;
-            UsedParameter _e_re_cSprime,   _e_im_cSprime;
-            UsedParameter _e_re_cP,        _e_im_cP;
-            UsedParameter _e_re_cPprime,   _e_im_cPprime;
-            UsedParameter _e_re_cT,        _e_im_cT;
-            UsedParameter _e_re_cT5,       _e_im_cT5;
+            UsedParameter _e_re_c9, _e_im_c9;
+            UsedParameter _e_re_c10, _e_im_c10;
+            UsedParameter _e_re_c9prime, _e_im_c9prime;
+            UsedParameter _e_re_c10prime, _e_im_c10prime;
+            UsedParameter _e_re_cS, _e_im_cS;
+            UsedParameter _e_re_cSprime, _e_im_cSprime;
+            UsedParameter _e_re_cP, _e_im_cP;
+            UsedParameter _e_re_cPprime, _e_im_cPprime;
+            UsedParameter _e_re_cT, _e_im_cT;
+            UsedParameter _e_re_cT5, _e_im_cT5;
             /* b->smumu Wilson coefficients */
-            UsedParameter _mu_re_c9,       _mu_im_c9;
-            UsedParameter _mu_re_c10,      _mu_im_c10;
-            UsedParameter _mu_re_c9prime,  _mu_im_c9prime;
+            UsedParameter _mu_re_c9, _mu_im_c9;
+            UsedParameter _mu_re_c10, _mu_im_c10;
+            UsedParameter _mu_re_c9prime, _mu_im_c9prime;
             UsedParameter _mu_re_c10prime, _mu_im_c10prime;
-            UsedParameter _mu_re_cS,       _mu_im_cS;
-            UsedParameter _mu_re_cSprime,  _mu_im_cSprime;
-            UsedParameter _mu_re_cP,       _mu_im_cP;
-            UsedParameter _mu_re_cPprime,  _mu_im_cPprime;
-            UsedParameter _mu_re_cT,       _mu_im_cT;
-            UsedParameter _mu_re_cT5,      _mu_im_cT5;
+            UsedParameter _mu_re_cS, _mu_im_cS;
+            UsedParameter _mu_re_cSprime, _mu_im_cSprime;
+            UsedParameter _mu_re_cP, _mu_im_cP;
+            UsedParameter _mu_re_cPprime, _mu_im_cPprime;
+            UsedParameter _mu_re_cT, _mu_im_cT;
+            UsedParameter _mu_re_cT5, _mu_im_cT5;
 
             /* b->sgamma */
-            std::function<complex<double> ()> _c7;
-            std::function<complex<double> ()> _c7prime;
+            std::function<complex<double>()> _c7;
+            std::function<complex<double>()> _c7prime;
 
             /* b->see */
-            std::function<complex<double> ()> _e_c9;
-            std::function<complex<double> ()> _e_c10;
-            std::function<complex<double> ()> _e_c9prime;
-            std::function<complex<double> ()> _e_c10prime;
-            std::function<complex<double> ()> _e_cS;
-            std::function<complex<double> ()> _e_cSprime;
-            std::function<complex<double> ()> _e_cP;
-            std::function<complex<double> ()> _e_cPprime;
-            std::function<complex<double> ()> _e_cT;
-            std::function<complex<double> ()> _e_cT5;
+            std::function<complex<double>()> _e_c9;
+            std::function<complex<double>()> _e_c10;
+            std::function<complex<double>()> _e_c9prime;
+            std::function<complex<double>()> _e_c10prime;
+            std::function<complex<double>()> _e_cS;
+            std::function<complex<double>()> _e_cSprime;
+            std::function<complex<double>()> _e_cP;
+            std::function<complex<double>()> _e_cPprime;
+            std::function<complex<double>()> _e_cT;
+            std::function<complex<double>()> _e_cT5;
 
             /* b->smumu */
-            std::function<complex<double> ()> _mu_c9;
-            std::function<complex<double> ()> _mu_c10;
-            std::function<complex<double> ()> _mu_c9prime;
-            std::function<complex<double> ()> _mu_c10prime;
-            std::function<complex<double> ()> _mu_cS;
-            std::function<complex<double> ()> _mu_cSprime;
-            std::function<complex<double> ()> _mu_cP;
-            std::function<complex<double> ()> _mu_cPprime;
-            std::function<complex<double> ()> _mu_cT;
-            std::function<complex<double> ()> _mu_cT5;
+            std::function<complex<double>()> _mu_c9;
+            std::function<complex<double>()> _mu_c10;
+            std::function<complex<double>()> _mu_c9prime;
+            std::function<complex<double>()> _mu_c10prime;
+            std::function<complex<double>()> _mu_cS;
+            std::function<complex<double>()> _mu_cSprime;
+            std::function<complex<double>()> _mu_cP;
+            std::function<complex<double>()> _mu_cPprime;
+            std::function<complex<double>()> _mu_cT;
+            std::function<complex<double>()> _mu_cT5;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
@@ -453,8 +435,7 @@ namespace eos
             static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
 
-    class ConstrainedWilsonScanComponent :
-        public WilsonScanComponent<components::DeltaBS1>
+    class ConstrainedWilsonScanComponent : public WilsonScanComponent<components::DeltaBS1>
     {
         public:
             ConstrainedWilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
@@ -493,6 +474,6 @@ namespace eos
 
             static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
-}
+} // namespace eos
 
 #endif

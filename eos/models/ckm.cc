@@ -17,11 +17,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/models/ckm.hh>
 #include <eos/maths/complex.hh>
-#include <eos/utils/log.hh>
 #include <eos/maths/matrix.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/ckm.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 
@@ -129,13 +129,11 @@ namespace eos
     {
     }
 
-    CKMScanModel::~CKMScanModel()
-    {
-    }
+    CKMScanModel::~CKMScanModel() {}
 
     std::shared_ptr<Model>
     CKMScanModel::make(const Parameters & parameters, const Options & options)
     {
         return std::shared_ptr<Model>(new CKMScanModel(parameters, options));
     }
-}
+} // namespace eos

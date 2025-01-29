@@ -35,114 +35,359 @@ namespace eos
 
     namespace bern
     {
-        struct ClassII {};  // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
-        struct ClassIII {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
-    }
+        struct ClassII
+        {}; // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
+
+        struct ClassIII
+        {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
+    } // namespace bern
 
     using ChargedCurrent = bern::ClassII;
 
     template <> struct WilsonCoefficients<ChargedCurrent>
     {
-        /*
-         * We follow the definition of [FMvD2013], eqs. (1) and (2), p. 2.
-         * This coincides with the Bern basis of class II operators in Ref.
-         * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_Ub, where U=u,c.
-         *
-         * We also use this class for semileptonic operators of type Dcnul,
-         * i.e., scnul or dcnul. In this case, the normalization uses V_cD,
-         * where D=d,s.
-         */
+            /*
+             * We follow the definition of [FMvD2013], eqs. (1) and (2), p. 2.
+             * This coincides with the Bern basis of class II operators in Ref.
+             * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_Ub, where U=u,c.
+             *
+             * We also use this class for semileptonic operators of type Dcnul,
+             * i.e., scnul or dcnul. In this case, the normalization uses V_cD,
+             * where D=d,s.
+             */
 
-        /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T, or equivalently: 1, 1', 5, 5', 7'. */
-        std::array<complex<double>, 5> _coefficients;
+            /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T, or equivalently: 1, 1', 5, 5', 7'. */
+            std::array<complex<double>, 5> _coefficients;
 
-        // cf. [FMvD2015], eqs. (1) and (2)
-        inline complex<double> cvl() const { return _coefficients[0]; }
-        inline complex<double> cvr() const { return _coefficients[1]; }
-        inline complex<double> csl() const { return _coefficients[2]; }
-        inline complex<double> csr() const { return _coefficients[3]; }
-        inline complex<double> ct()  const { return _coefficients[4]; }
+            // cf. [FMvD2015], eqs. (1) and (2)
+            inline complex<double>
+            cvl() const
+            {
+                return _coefficients[0];
+            }
+
+            inline complex<double>
+            cvr() const
+            {
+                return _coefficients[1];
+            }
+
+            inline complex<double>
+            csl() const
+            {
+                return _coefficients[2];
+            }
+
+            inline complex<double>
+            csr() const
+            {
+                return _coefficients[3];
+            }
+
+            inline complex<double>
+            ct() const
+            {
+                return _coefficients[4];
+            }
     };
 
     template <> struct WilsonCoefficients<bern::ClassIII>
     {
-        /*
-         * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.6).
-        */
-        std::array<complex<double>, 10> _unprimed, _primed;
+            /*
+             * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.6).
+             */
+            std::array<complex<double>, 10> _unprimed, _primed;
 
-        inline complex<double> c1()   const { return _unprimed[0]; }
-        inline complex<double> c2()   const { return _unprimed[1]; }
-        inline complex<double> c3()   const { return _unprimed[2]; }
-        inline complex<double> c4()   const { return _unprimed[3]; }
-        inline complex<double> c5()   const { return _unprimed[4]; }
-        inline complex<double> c6()   const { return _unprimed[5]; }
-        inline complex<double> c7()   const { return _unprimed[6]; }
-        inline complex<double> c8()   const { return _unprimed[7]; }
-        inline complex<double> c9()   const { return _unprimed[8]; }
-        inline complex<double> c10()  const { return _unprimed[9]; }
+            inline complex<double>
+            c1() const
+            {
+                return _unprimed[0];
+            }
 
-        inline complex<double> c1p()  const { return _primed[0]; }
-        inline complex<double> c2p()  const { return _primed[1]; }
-        inline complex<double> c3p()  const { return _primed[2]; }
-        inline complex<double> c4p()  const { return _primed[3]; }
-        inline complex<double> c5p()  const { return _primed[4]; }
-        inline complex<double> c6p()  const { return _primed[5]; }
-        inline complex<double> c7p()  const { return _primed[6]; }
-        inline complex<double> c8p()  const { return _primed[7]; }
-        inline complex<double> c9p()  const { return _primed[8]; }
-        inline complex<double> c10p() const { return _primed[9]; }
+            inline complex<double>
+            c2() const
+            {
+                return _unprimed[1];
+            }
+
+            inline complex<double>
+            c3() const
+            {
+                return _unprimed[2];
+            }
+
+            inline complex<double>
+            c4() const
+            {
+                return _unprimed[3];
+            }
+
+            inline complex<double>
+            c5() const
+            {
+                return _unprimed[4];
+            }
+
+            inline complex<double>
+            c6() const
+            {
+                return _unprimed[5];
+            }
+
+            inline complex<double>
+            c7() const
+            {
+                return _unprimed[6];
+            }
+
+            inline complex<double>
+            c8() const
+            {
+                return _unprimed[7];
+            }
+
+            inline complex<double>
+            c9() const
+            {
+                return _unprimed[8];
+            }
+
+            inline complex<double>
+            c10() const
+            {
+                return _unprimed[9];
+            }
+
+            inline complex<double>
+            c1p() const
+            {
+                return _primed[0];
+            }
+
+            inline complex<double>
+            c2p() const
+            {
+                return _primed[1];
+            }
+
+            inline complex<double>
+            c3p() const
+            {
+                return _primed[2];
+            }
+
+            inline complex<double>
+            c4p() const
+            {
+                return _primed[3];
+            }
+
+            inline complex<double>
+            c5p() const
+            {
+                return _primed[4];
+            }
+
+            inline complex<double>
+            c6p() const
+            {
+                return _primed[5];
+            }
+
+            inline complex<double>
+            c7p() const
+            {
+                return _primed[6];
+            }
+
+            inline complex<double>
+            c8p() const
+            {
+                return _primed[7];
+            }
+
+            inline complex<double>
+            c9p() const
+            {
+                return _primed[8];
+            }
+
+            inline complex<double>
+            c10p() const
+            {
+                return _primed[9];
+            }
     };
 
-    struct BToS {};
+    struct BToS
+    {};
 
     template <> struct WilsonCoefficients<BToS>
     {
-        /* Order: c1..c6, cq3..cq6, c2b, c7..c10 */
-        std::array<complex<double>, 15> _sm_like_coefficients;
+            /* Order: c1..c6, cq3..cq6, c2b, c7..c10 */
+            std::array<complex<double>, 15> _sm_like_coefficients;
 
-        /* Same order as above, with helicity flip */
-        std::array<complex<double>, 15> _primed_coefficients;
+            /* Same order as above, with helicity flip */
+            std::array<complex<double>, 15> _primed_coefficients;
 
-        /* Scalar, pseudoscalar, and tensor coefficients */
-        std::array<complex<double>, 6> _scalar_tensor_coefficients;
+            /* Scalar, pseudoscalar, and tensor coefficients */
+            std::array<complex<double>, 6> _scalar_tensor_coefficients;
 
-        double _alpha_s;
+            double _alpha_s;
 
-        /*! Default ctor */
-        WilsonCoefficients();
+            /*! Default ctor */
+            WilsonCoefficients();
 
-        // Misiak basis, cf. [BMU1999], Eq. (2), p. 3
-        inline complex<double> c1() const { return _sm_like_coefficients[0]; }
-        inline complex<double> c2() const { return _sm_like_coefficients[1]; }
-        inline complex<double> c3() const { return _sm_like_coefficients[2]; }
-        inline complex<double> c4() const { return _sm_like_coefficients[3]; }
-        inline complex<double> c5() const { return _sm_like_coefficients[4]; }
-        inline complex<double> c6() const { return _sm_like_coefficients[5]; }
+            // Misiak basis, cf. [BMU1999], Eq. (2), p. 3
+            inline complex<double>
+            c1() const
+            {
+                return _sm_like_coefficients[0];
+            }
 
-        inline complex<double> cq3() const { return _sm_like_coefficients[6]; }
-        inline complex<double> cq4() const { return _sm_like_coefficients[7]; }
-        inline complex<double> cq5() const { return _sm_like_coefficients[8]; }
-        inline complex<double> cq6() const { return _sm_like_coefficients[9]; }
+            inline complex<double>
+            c2() const
+            {
+                return _sm_like_coefficients[1];
+            }
 
-        inline complex<double> c2b() const { return _sm_like_coefficients[10]; }
+            inline complex<double>
+            c3() const
+            {
+                return _sm_like_coefficients[2];
+            }
 
-        inline complex<double> c7() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[11]; }
-        inline complex<double> c8() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[12]; }
-        inline complex<double> c9() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[13]; }
-        inline complex<double> c10() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[14]; }
+            inline complex<double>
+            c4() const
+            {
+                return _sm_like_coefficients[3];
+            }
 
-        inline complex<double> c7prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[11]; }
-        inline complex<double> c8prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[12]; }
-        inline complex<double> c9prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[13]; }
-        inline complex<double> c10prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[14]; }
+            inline complex<double>
+            c5() const
+            {
+                return _sm_like_coefficients[4];
+            }
 
-        inline complex<double> cS() const { return  _scalar_tensor_coefficients[0]; }
-        inline complex<double> cSprime() const { return  _scalar_tensor_coefficients[1]; }
-        inline complex<double> cP() const { return  _scalar_tensor_coefficients[2]; }
-        inline complex<double> cPprime() const { return  _scalar_tensor_coefficients[3]; }
-        inline complex<double> cT() const { return  _scalar_tensor_coefficients[4]; }
-        inline complex<double> cT5() const { return  _scalar_tensor_coefficients[5]; }
+            inline complex<double>
+            c6() const
+            {
+                return _sm_like_coefficients[5];
+            }
+
+            inline complex<double>
+            cq3() const
+            {
+                return _sm_like_coefficients[6];
+            }
+
+            inline complex<double>
+            cq4() const
+            {
+                return _sm_like_coefficients[7];
+            }
+
+            inline complex<double>
+            cq5() const
+            {
+                return _sm_like_coefficients[8];
+            }
+
+            inline complex<double>
+            cq6() const
+            {
+                return _sm_like_coefficients[9];
+            }
+
+            inline complex<double>
+            c2b() const
+            {
+                return _sm_like_coefficients[10];
+            }
+
+            inline complex<double>
+            c7() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[11];
+            }
+
+            inline complex<double>
+            c8() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[12];
+            }
+
+            inline complex<double>
+            c9() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[13];
+            }
+
+            inline complex<double>
+            c10() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[14];
+            }
+
+            inline complex<double>
+            c7prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[11];
+            }
+
+            inline complex<double>
+            c8prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[12];
+            }
+
+            inline complex<double>
+            c9prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[13];
+            }
+
+            inline complex<double>
+            c10prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[14];
+            }
+
+            inline complex<double>
+            cS() const
+            {
+                return _scalar_tensor_coefficients[0];
+            }
+
+            inline complex<double>
+            cSprime() const
+            {
+                return _scalar_tensor_coefficients[1];
+            }
+
+            inline complex<double>
+            cP() const
+            {
+                return _scalar_tensor_coefficients[2];
+            }
+
+            inline complex<double>
+            cPprime() const
+            {
+                return _scalar_tensor_coefficients[3];
+            }
+
+            inline complex<double>
+            cT() const
+            {
+                return _scalar_tensor_coefficients[4];
+            }
+
+            inline complex<double>
+            cT5() const
+            {
+                return _scalar_tensor_coefficients[5];
+            }
     };
 
     /*!
@@ -159,125 +404,191 @@ namespace eos
      * @param nf        The number of active flavors
      * @param beta      Coefficients of the beta function of QCD for nf active flavors.
      */
-    WilsonCoefficients<BToS> evolve(const std::array<complex<double>, 15> & wc_qcd_0,
-            const std::array<complex<double>, 15> & wc_qcd_1,
-            const std::array<complex<double>, 15> & wc_qcd_2,
-            const double & alpha_s_0, const double & alpha_s,
-            const double & nf, const QCD::BetaFunction & beta);
+    WilsonCoefficients<BToS> evolve(const std::array<complex<double>, 15> & wc_qcd_0, const std::array<complex<double>, 15> & wc_qcd_1,
+                                    const std::array<complex<double>, 15> & wc_qcd_2, const double & alpha_s_0, const double & alpha_s, const double & nf,
+                                    const QCD::BetaFunction & beta);
 
     namespace wc
     {
-        struct DBCU {};
-        struct SBSB {};
-        struct SBNuNu {};
-        struct SBCU {};
-    }
+        struct DBCU
+        {};
+
+        struct SBSB
+        {};
+
+        struct SBNuNu
+        {};
+
+        struct SBCU
+        {};
+    } // namespace wc
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
     template <> struct WilsonCoefficients<wc::SBSB>
     {
-        /*
-         * The eight operators are defined as in [AFGV:2017A], eq. (2.4), p. 6
-         *
-         * C++ idx -> operator
-         * 0       -> O_1
-         * 1       -> O_2
-         * 2       -> O_3
-         * 3       -> O_4
-         * 4       -> O_5
-         * 5       -> O_1'
-         * 6       -> O_2'
-         * 7       -> O_3'
-         */
-        std::array<complex<double>, 8> _coefficients;
+            /*
+             * The eight operators are defined as in [AFGV:2017A], eq. (2.4), p. 6
+             *
+             * C++ idx -> operator
+             * 0       -> O_1
+             * 1       -> O_2
+             * 2       -> O_3
+             * 3       -> O_4
+             * 4       -> O_5
+             * 5       -> O_1'
+             * 6       -> O_2'
+             * 7       -> O_3'
+             */
+            std::array<complex<double>, 8> _coefficients;
 
-        /*! Default ctor */
-        WilsonCoefficients();
+            /*! Default ctor */
+            WilsonCoefficients();
 
-        // AFGV basis
-        inline complex<double> c1()   const { return _coefficients[0]; }
-        inline complex<double> c2()   const { return _coefficients[1]; }
-        inline complex<double> c3()   const { return _coefficients[2]; }
-        inline complex<double> c4()   const { return _coefficients[3]; }
-        inline complex<double> c5()   const { return _coefficients[4]; }
-        inline complex<double> c1p()  const { return _coefficients[5]; }
-        inline complex<double> c2p()  const { return _coefficients[6]; }
-        inline complex<double> c3p()  const { return _coefficients[7]; }
+            // AFGV basis
+            inline complex<double>
+            c1() const
+            {
+                return _coefficients[0];
+            }
+
+            inline complex<double>
+            c2() const
+            {
+                return _coefficients[1];
+            }
+
+            inline complex<double>
+            c3() const
+            {
+                return _coefficients[2];
+            }
+
+            inline complex<double>
+            c4() const
+            {
+                return _coefficients[3];
+            }
+
+            inline complex<double>
+            c5() const
+            {
+                return _coefficients[4];
+            }
+
+            inline complex<double>
+            c1p() const
+            {
+                return _coefficients[5];
+            }
+
+            inline complex<double>
+            c2p() const
+            {
+                return _coefficients[6];
+            }
+
+            inline complex<double>
+            c3p() const
+            {
+                return _coefficients[7];
+            }
     };
 
     template <> struct WilsonCoefficients<wc::SBNuNu>
     {
-        /*
-         * Assuming only left-handed neutrinos, only two vector operators exist beyond the SM.
-         * These two operators are defined via
-         *
-         * H^eff_vec = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) (
-         *             C_VL [sbar gamma^mu P_L b][nubar gamma_mu P_L nu]
-         *             C_VR [sbar gamma^mu P_R b][nubar gamma_mu P_L nu]
-         *         )
-         *       = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_VL O_VL + C_VR O_VR )
-         *
-         * O_VR extends the SM to include coupling to RH fermions.
-         *
-         * Furthermore, we can add the scalar and tensor operators according to [FLS:2021A], eq. (2).
-         * These operators go beyond the SM, by including Majorana neutrinos.
-         *
-         * The scalar operator contributions are
-         *
-         * H^eff_sca = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_SL O_SL + C_SR O_SR )
-         *
-         * where
-         * O_SL = [sbar P_L b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
-         * O_SR = [sbar P_R b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
-         *
-         * The tensor operator contribution is
-         *
-         * H^eff_ten = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) C_TL O_TL
-         *
-         * where
-         * O_TL = [sbar sigma_{mu nu} P_L b][bar(nu_L^c) sigma^{mu nu} P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
-         *
-         *
-         * In total we then have
-         * H^eff = H^eff_vec + H^eff_sca + H^eff_ten
-         *
-         *
-         * C++ idx -> operator
-         * 0       -> O_VL
-         * 1       -> O_VR
-         * 2       -> O_SL
-         * 3       -> O_SR
-         * 4       -> O_TL
-         */
-        std::array<complex<double>, 5> _coefficients;
+            /*
+             * Assuming only left-handed neutrinos, only two vector operators exist beyond the SM.
+             * These two operators are defined via
+             *
+             * H^eff_vec = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) (
+             *             C_VL [sbar gamma^mu P_L b][nubar gamma_mu P_L nu]
+             *             C_VR [sbar gamma^mu P_R b][nubar gamma_mu P_L nu]
+             *         )
+             *       = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_VL O_VL + C_VR O_VR )
+             *
+             * O_VR extends the SM to include coupling to RH fermions.
+             *
+             * Furthermore, we can add the scalar and tensor operators according to [FLS:2021A], eq. (2).
+             * These operators go beyond the SM, by including Majorana neutrinos.
+             *
+             * The scalar operator contributions are
+             *
+             * H^eff_sca = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) ( C_SL O_SL + C_SR O_SR )
+             *
+             * where
+             * O_SL = [sbar P_L b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
+             * O_SR = [sbar P_R b][bar(nu_L^c) P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
+             *
+             * The tensor operator contribution is
+             *
+             * H^eff_ten = 4 G_F / sqrt(2) V_tb V_ts^* alpha_e / (2 pi) C_TL O_TL
+             *
+             * where
+             * O_TL = [sbar sigma_{mu nu} P_L b][bar(nu_L^c) sigma^{mu nu} P_L nu], where nu_L^c = C nubar_L^T, C = i gamma^2 gamma^0
+             *
+             *
+             * In total we then have
+             * H^eff = H^eff_vec + H^eff_sca + H^eff_ten
+             *
+             *
+             * C++ idx -> operator
+             * 0       -> O_VL
+             * 1       -> O_VR
+             * 2       -> O_SL
+             * 3       -> O_SR
+             * 4       -> O_TL
+             */
+            std::array<complex<double>, 5> _coefficients;
 
-        /*! Default ctor */
-        WilsonCoefficients();
+            /*! Default ctor */
+            WilsonCoefficients();
 
-        inline complex<double> cVL()   const { return _coefficients[0]; }
-        inline complex<double> cVR()   const { return _coefficients[1]; }
-        inline complex<double> cSL()   const { return _coefficients[2]; }
-        inline complex<double> cSR()   const { return _coefficients[3]; }
-        inline complex<double> cTL()   const { return _coefficients[4]; }
+            inline complex<double>
+            cVL() const
+            {
+                return _coefficients[0];
+            }
+
+            inline complex<double>
+            cVR() const
+            {
+                return _coefficients[1];
+            }
+
+            inline complex<double>
+            cSL() const
+            {
+                return _coefficients[2];
+            }
+
+            inline complex<double>
+            cSR() const
+            {
+                return _coefficients[3];
+            }
+
+            inline complex<double>
+            cTL() const
+            {
+                return _coefficients[4];
+            }
     };
 
-    template <> struct WilsonCoefficients<wc::SBCU> :
-        public WilsonCoefficients<bern::ClassIII>
+    template <> struct WilsonCoefficients<wc::SBCU> : public WilsonCoefficients<bern::ClassIII>
     {
-        /*
-         * Normalisation:
-         * H^eff = 4 G_F / sqrt(2) V_cb V_us^* \sum C_i O_i
-         */
+            /*
+             * Normalisation:
+             * H^eff = 4 G_F / sqrt(2) V_cb V_us^* \sum C_i O_i
+             */
     };
 
-    template <> struct WilsonCoefficients<wc::DBCU> :
-        public WilsonCoefficients<bern::ClassIII>
+    template <> struct WilsonCoefficients<wc::DBCU> : public WilsonCoefficients<bern::ClassIII>
     {
-        /*
-         * Normalisation:
-         * H^eff = 4 G_F / sqrt(2) V_cb V_ud^* \sum C_i O_i
-         */
+            /*
+             * Normalisation:
+             * H^eff = 4 G_F / sqrt(2) V_cb V_ud^* \sum C_i O_i
+             */
     };
-}
+} // namespace eos
 
 #endif

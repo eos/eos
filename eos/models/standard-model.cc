@@ -20,21 +20,21 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/models/top-loops.hh>
-#include <eos/models/standard-model.hh>
 #include <eos/maths/matrix.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/standard-model.hh>
+#include <eos/models/top-loops.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 #include <eos/utils/rge-impl.hh>
 #include <eos/utils/stringify.hh>
 
-#include <array>
-#include <cmath>
-
 #include <gsl/gsl_sf_clausen.h>
 #include <gsl/gsl_sf_dilog.h>
+
+#include <array>
+#include <cmath>
 
 namespace eos
 {
@@ -48,19 +48,20 @@ namespace eos
     {
     }
 
-namespace implementation
-{
-    // return rho + i eta, cf. [CKMfitter04], Eq. (17), p. 12
-    complex<double> rho_eta(const double & A, const double & lambda, const double & rhobar, const double & etabar)
+    namespace implementation
     {
-        double A2 = power_of<2>(A), lambda2 = power_of<2>(lambda), lambda4 = power_of<2>(lambda2);
+        // return rho + i eta, cf. [CKMfitter04], Eq. (17), p. 12
+        complex<double>
+        rho_eta(const double & A, const double & lambda, const double & rhobar, const double & etabar)
+        {
+            double A2 = power_of<2>(A), lambda2 = power_of<2>(lambda), lambda4 = power_of<2>(lambda2);
 
-        complex<double> result = complex<double>(rhobar, etabar) * std::sqrt(1.0 - A2 * lambda4)
-            / std::sqrt(1.0 - lambda2) / (1.0 - A2 * lambda4 * complex<double>(rhobar, etabar));
+            complex<double> result =
+                    complex<double>(rhobar, etabar) * std::sqrt(1.0 - A2 * lambda4) / std::sqrt(1.0 - lambda2) / (1.0 - A2 * lambda4 * complex<double>(rhobar, etabar));
 
-        return result;
-    }
-}
+            return result;
+        }
+    } // namespace implementation
 
     /*
      * For the parametrisation of all CKM matrix elements, cf. [CKMfitter04], Footnote 4, p. 10
@@ -69,7 +70,7 @@ namespace implementation
     SMComponent<components::CKM>::ckm_cd() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), lambda4 = power_of<4>(_lambda__ckm()), lambda6 = power_of<6>(_lambda__ckm());
+        double          A2 = power_of<2>(_A__ckm()), lambda4 = power_of<4>(_lambda__ckm()), lambda6 = power_of<6>(_lambda__ckm());
 
         complex<double> result = -_lambda__ckm() * (1.0 - A2 * lambda4 * (1.0 - 2.0 * rho_eta) / 2.0 - A2 * lambda6 * rho_eta / 2.0);
 
@@ -80,11 +81,12 @@ namespace implementation
     SMComponent<components::CKM>::ckm_cs() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), A4 = power_of<2>(A2);
-        double lambda2 = power_of<2>(_lambda__ckm()), lambda4 = power_of<2>(lambda2), lambda6 = lambda4 * lambda2, lambda8 = lambda4 * lambda4;;
+        double          A2 = power_of<2>(_A__ckm()), A4 = power_of<2>(A2);
+        double          lambda2 = power_of<2>(_lambda__ckm()), lambda4 = power_of<2>(lambda2), lambda6 = lambda4 * lambda2, lambda8 = lambda4 * lambda4;
+        ;
 
-        complex<double> result = 1.0 - lambda2 / 2.0 - lambda4 * (1.0 + 4.0 * A2) / 8.0
-            - lambda6 * (1.0 - 4.0 * A2 + 16.0 * A2 * rho_eta) / 16.0 - lambda8 * (5.0 - 8.0 * A2 + 16.0 * A4) / 128.0;
+        complex<double> result =
+                1.0 - lambda2 / 2.0 - lambda4 * (1.0 + 4.0 * A2) / 8.0 - lambda6 * (1.0 - 4.0 * A2 + 16.0 * A2 * rho_eta) / 16.0 - lambda8 * (5.0 - 8.0 * A2 + 16.0 * A4) / 128.0;
 
         return result;
     }
@@ -93,7 +95,7 @@ namespace implementation
     SMComponent<components::CKM>::ckm_cb() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda6 = power_of<3>(lambda2);
+        double          A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda6 = power_of<3>(lambda2);
 
         double result = _A__ckm * lambda2 * (1.0 - 0.5 * A2 * lambda6 * std::norm(rho_eta));
 
@@ -104,11 +106,9 @@ namespace implementation
     SMComponent<components::CKM>::ckm_ud() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda4 = lambda2 * lambda2,
-               lambda6 = lambda2 * lambda4, lambda8 = lambda4 * lambda4;
+        double          A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda4 = lambda2 * lambda2, lambda6 = lambda2 * lambda4, lambda8 = lambda4 * lambda4;
 
-        double result = 1.0 - lambda2 / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * std::norm(rho_eta)) / 16.0
-            - lambda8 * (5.0 - 32.0 * A2 * std::norm(rho_eta)) / 128.0;
+        double result = 1.0 - lambda2 / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * std::norm(rho_eta)) / 16.0 - lambda8 * (5.0 - 32.0 * A2 * std::norm(rho_eta)) / 128.0;
 
         return complex<double>(result, 0.0);
     }
@@ -117,7 +117,7 @@ namespace implementation
     SMComponent<components::CKM>::ckm_us() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), lambda6 = power_of<6>(_lambda__ckm());
+        double          A2 = power_of<2>(_A__ckm()), lambda6 = power_of<6>(_lambda__ckm());
 
         double result = _lambda__ckm * (1.0 - 0.5 * A2 * lambda6 * std::norm(rho_eta));
 
@@ -138,10 +138,9 @@ namespace implementation
     SMComponent<components::CKM>::ckm_td() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda3 = _lambda__ckm() * lambda2, lambda4 = lambda2 * lambda2;
+        double          A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda3 = _lambda__ckm() * lambda2, lambda4 = lambda2 * lambda2;
 
-        complex<double> result = _A__ckm * lambda3 *
-            ((1.0 - rho_eta) + lambda2 * rho_eta / 2.0 + lambda4 * (1.0 + 4.0 * A2) * rho_eta / 8.0);
+        complex<double> result = _A__ckm * lambda3 * ((1.0 - rho_eta) + lambda2 * rho_eta / 2.0 + lambda4 * (1.0 + 4.0 * A2) * rho_eta / 8.0);
 
         return result;
     }
@@ -150,10 +149,9 @@ namespace implementation
     SMComponent<components::CKM>::ckm_ts() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda4 = lambda2 * lambda2, lambda6 = lambda2 * lambda4;
+        double          A2 = power_of<2>(_A__ckm()), lambda2 = power_of<2>(_lambda__ckm()), lambda4 = lambda2 * lambda2, lambda6 = lambda2 * lambda4;
 
-        complex<double> result = -1.0 * _A__ckm * lambda2 *
-            (1.0 - lambda2 * (1.0 - 2.0 * rho_eta) / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * rho_eta) / 16.0);
+        complex<double> result = -1.0 * _A__ckm * lambda2 * (1.0 - lambda2 * (1.0 - 2.0 * rho_eta) / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * rho_eta) / 16.0);
 
         return result;
     }
@@ -162,8 +160,8 @@ namespace implementation
     SMComponent<components::CKM>::ckm_tb() const
     {
         complex<double> rho_eta = implementation::rho_eta(_A__ckm, _lambda__ckm, _rhobar__ckm, _etabar__ckm);
-        double A2 = power_of<2>(_A__ckm()), A4 = A2 * A2;
-        double lambda4 = power_of<4>(_lambda__ckm()), lambda6 = power_of<6>(_lambda__ckm()), lambda8 = lambda4 * lambda4;
+        double          A2 = power_of<2>(_A__ckm()), A4 = A2 * A2;
+        double          lambda4 = power_of<4>(_lambda__ckm()), lambda6 = power_of<6>(_lambda__ckm()), lambda8 = lambda4 * lambda4;
 
         double result = 1.0 - A2 * lambda4 / 2.0 - A2 * lambda6 * std::norm(rho_eta) / 2.0 - A4 * lambda8 / 8.0;
 
@@ -194,28 +192,36 @@ namespace implementation
         if (mu >= _m_Z__qcd)
         {
             if (mu < _mu_t__qcd)
+            {
                 return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_5);
+            }
 
             alpha_s_0 = QCD::alpha_s(_mu_t__qcd, alpha_s_0, mu_0, QCD::beta_function_nf_5);
-            mu_0 = _mu_t__qcd;
+            mu_0      = _mu_t__qcd;
 
             return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_6);
         }
 
         if (mu >= _mu_b__qcd)
+        {
             return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_5);
+        }
 
         alpha_s_0 = QCD::alpha_s(_mu_b__qcd, alpha_s_0, mu_0, QCD::beta_function_nf_5);
-        mu_0 = _mu_b__qcd;
+        mu_0      = _mu_b__qcd;
 
         if (mu >= _mu_c__qcd)
+        {
             return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_4);
+        }
 
         alpha_s_0 = QCD::alpha_s(_mu_c__qcd, alpha_s_0, mu_0, QCD::beta_function_nf_4);
-        mu_0 = _mu_c__qcd;
+        mu_0      = _mu_c__qcd;
 
         if (mu >= _lambda_qcd__qcd)
+        {
             return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_3);
+        }
 
         throw InternalError("SMComponent<components::QCD>::alpha_s: Cannot run alpha_s to mu < lambda_qcd");
     }
@@ -223,11 +229,13 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_t_msbar(const double & mu) const
     {
-        double alpha_s_m_t_pole = this->alpha_s(_m_t_pole__qcd);
+        double alpha_s_m_t_pole   = this->alpha_s(_m_t_pole__qcd);
         double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__qcd, alpha_s_m_t_pole, 5.0);
 
         if ((_mu_b__qcd <= mu) && (mu < _mu_t__qcd))
+        {
             return QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, this->alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+        }
 
         throw InternalError("SMComponent<components::QCD>::m_t_msbar: Running of m_t_MSbar to mu >= mu_t or to mu < m_b not yet implemented");
     }
@@ -241,7 +249,7 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_b_kin(const double & mu_kin) const
     {
-        double m_b_MSbar = _m_b_MSbar__qcd();
+        double m_b_MSbar  = _m_b_MSbar__qcd();
         double alpha_mu_0 = alpha_s(m_b_MSbar);
 
         return QCD::m_q_kin(m_b_MSbar, alpha_mu_0, mu_kin, QCD::beta_function_nf_5);
@@ -250,20 +258,24 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_b_msbar(const double & mu) const
     {
-        double m_b_MSbar = _m_b_MSbar__qcd();
+        double m_b_MSbar  = _m_b_MSbar__qcd();
         double alpha_mu_0 = alpha_s(m_b_MSbar);
 
         if (mu > m_b_MSbar)
         {
             if (mu < _mu_t__qcd)
+            {
                 return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_b_msbar: Running of m_b_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _mu_c__qcd)
+            {
                 return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_b_msbar: Running of m_b_MSbar to mu < mu_c not yet implemented");
         }
@@ -275,15 +287,18 @@ namespace implementation
         // The true (central) pole mass of the bottom is very close to the values
         // that can be calculated by the following quadratic polynomial.
         // This holds vor 4.13 <= m_b_MSbar <= 4.37, which corresponds to the values from [PDG2010].
-        using Coefficients = std::array<double, 4>;
-        static const std::array<Coefficients, 4> c = {{
-            // m0,                a,                 b,                   c
-            { 0.0,                0.0,               1.0,                 0.0                 }, // trivial order
-            { 3.8870091768922093, 4.156247812901621, 1.2735213574282815, -0.25935468202619605 }, // loop order 1
-            { 3.962932009714688,  4.38323050264802,  1.2544893957664187, -0.26527600396378315 }, // loop order 2
-            { 4.19,               4.7266,            1.14485,            -0.168099            }  // loop order 3
-        }};
-        if (loop_order > c.size() - 1) {
+        using Coefficients                         = std::array<double, 4>;
+        static const std::array<Coefficients, 4> c = {
+            {
+             // m0,                a,                 b,                   c
+                { 0.0, 0.0, 1.0, 0.0 },                                                              // trivial order
+                { 3.8870091768922093, 4.156247812901621, 1.2735213574282815, -0.25935468202619605 }, // loop order 1
+                { 3.962932009714688, 4.38323050264802, 1.2544893957664187, -0.26527600396378315 },   // loop order 2
+                { 4.19, 4.7266, 1.14485, -0.168099 }                                                 // loop order 3
+            }
+        };
+        if (loop_order > c.size() - 1)
+        {
             throw InternalError("SMComponent<components::QCD>::m_b_pole: maximum loop order (" + stringify(c.size() - 1) + ") exceeded (" + stringify(loop_order) + ")");
         }
         double m_b_MSbar = _m_b_MSbar__qcd();
@@ -293,17 +308,19 @@ namespace implementation
         double m_b_pole = c[loop_order][1] + (m_b_MSbar - c[loop_order][0]) * c[loop_order][2] + power_of<2>(m_b_MSbar - c[loop_order][0]) * c[loop_order][3];
 
         // Iterative fixed-point procedure
-        for (int i = 0 ; i < 10 ; ++i)
+        for (int i = 0; i < 10; ++i)
         {
-            m_b_MSbar = m_b_msbar(m_b_pole);
+            m_b_MSbar   = m_b_msbar(m_b_pole);
             // Neglect the dependence of alpha_s on the loop order
             double next = QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_pole), 5.0, loop_order);
 
             double delta = (m_b_pole - next) / m_b_pole;
-            m_b_pole = next;
+            m_b_pole     = next;
 
             if (std::abs(delta) < 1e-3)
+            {
                 return m_b_pole;
+            }
         }
 
         throw InternalError("SMComponent<components::QCD>::m_b_pole: fixed-point procedure did not converge");
@@ -321,7 +338,7 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_c_kin(const double & mu_kin) const
     {
-        double m_c_MSbar = _m_c_MSbar__qcd();
+        double m_c_MSbar  = _m_c_MSbar__qcd();
         double alpha_mu_0 = alpha_s(m_c_MSbar);
 
         return QCD::m_q_kin(m_c_MSbar, alpha_mu_0, mu_kin, QCD::beta_function_nf_4);
@@ -330,20 +347,24 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_c_msbar(const double & mu) const
     {
-        double m_c_0 = _m_c_MSbar__qcd();
+        double m_c_0       = _m_c_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(m_c_0);
 
         if (mu >= _mu_c__qcd)
         {
             if (mu <= _mu_b__qcd)
+            {
                 return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_b = alpha_s(_mu_b__qcd);
-            m_c_0 = QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_b;
+            m_c_0            = QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_b;
 
             if (mu <= _mu_t__qcd)
+            {
                 return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_c_msbar: Running of m_c_MSbar to mu > mu_t not yet implemented");
         }
@@ -362,18 +383,20 @@ namespace implementation
         static const double m0 = 1.27, a = 1.59564, b = 1.13191, c = -0.737165;
 
         double m_c_MSbar = _m_c_MSbar__qcd();
-        double m_c_pole = a + (m_c_MSbar - m0) * b + power_of<2>(m_c_MSbar - m0) * c;
+        double m_c_pole  = a + (m_c_MSbar - m0) * b + power_of<2>(m_c_MSbar - m0) * c;
 
-        for (int i = 0 ; i < 10 ; ++i)
+        for (int i = 0; i < 10; ++i)
         {
-            m_c_MSbar = m_c_msbar(m_c_pole);
+            m_c_MSbar   = m_c_msbar(m_c_pole);
             double next = QCD::m_q_pole(m_c_MSbar, alpha_s(m_c_pole), 4.0);
 
             double delta = (m_c_pole - next) / m_c_pole;
-            m_c_pole = next;
+            m_c_pole     = next;
 
             if (std::abs(delta) < 1e-3)
+            {
                 break;
+            }
         }
 
         return m_c_pole;
@@ -382,33 +405,41 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_s_msbar(const double & mu) const
     {
-        double m_s_0 = _m_s_MSbar__qcd();
+        double m_s_0       = _m_s_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(2.0);
 
         if (mu >= 2.0)
         {
             if (mu <= _mu_b__qcd)
+            {
                 return QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_b = alpha_s(_mu_b__qcd);
-            m_s_0 = QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_b;
+            m_s_0            = QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_b;
 
             if (mu <= _mu_t__qcd)
+            {
                 return QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_s_msbar: Running of m_s_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _mu_c__qcd)
+            {
                 return QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_c = alpha_s(_mu_c__qcd);
-            double m_s_c = QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            double m_s_c     = QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
 
             if (mu >= 0.5)
+            {
                 return QCD::m_q_msbar(m_s_c, alpha_s_c, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_s_msbar: Running of m_s_MSbar to mu < 0.5 GeV not yet implemented");
         }
@@ -417,34 +448,42 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_ud_msbar(const double & mu) const
     {
-        double m_ud_0 = _m_u_MSbar__qcd() + _m_d_MSbar__qcd();
+        double m_ud_0      = _m_u_MSbar__qcd() + _m_d_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(2.0);
 
         if (mu >= 2.0)
         {
             if (mu <= _mu_b__qcd)
+            {
                 return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_b = alpha_s(_mu_b__qcd);
-            m_ud_0 = QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_b;
+            m_ud_0           = QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_b;
 
             if (mu <= _mu_t__qcd)
+            {
                 return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_ud_msbar: Running of m_ud_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _mu_c__qcd)
+            {
                 return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_c = alpha_s(_mu_c__qcd);
-            m_ud_0 = QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_c;
+            m_ud_0           = QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_c;
 
             if (mu >= 1.0)
+            {
                 return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_ud_msbar: Running of m_ud_MSbar to mu < 1.0 GeV not yet implemented");
         }
@@ -453,34 +492,42 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_u_msbar(const double & mu) const
     {
-        double m_u_0 = _m_u_MSbar__qcd();
+        double m_u_0       = _m_u_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(2.0);
 
         if (mu >= 2.0)
         {
             if (mu <= _mu_b__qcd)
+            {
                 return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_b = alpha_s(_mu_b__qcd);
-            m_u_0 = QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_b;
+            m_u_0            = QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_b;
 
             if (mu <= _mu_t__qcd)
+            {
                 return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_u_msbar: Running of m_u_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _mu_c__qcd)
+            {
                 return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_c = alpha_s(_mu_c__qcd);
-            m_u_0 = QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_c;
+            m_u_0            = QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_c;
 
             if (mu >= 1.0)
+            {
                 return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_u_msbar: Running of m_u_MSbar to mu < 1.0 GeV not yet implemented");
         }
@@ -489,34 +536,42 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_d_msbar(const double & mu) const
     {
-        double m_d_0 = _m_d_MSbar__qcd();
+        double m_d_0       = _m_d_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(2.0);
 
         if (mu >= 2.0)
         {
             if (mu <= _mu_b__qcd)
+            {
                 return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_b = alpha_s(_mu_b__qcd);
-            m_d_0 = QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_b;
+            m_d_0            = QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_b;
 
             if (mu <= _mu_t__qcd)
+            {
                 return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_d_msbar: Running of m_d_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _mu_c__qcd)
+            {
                 return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            }
 
             double alpha_s_c = alpha_s(_mu_c__qcd);
-            m_d_0 = QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
-            alpha_s_mu0 = alpha_s_c;
+            m_d_0            = QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0      = alpha_s_c;
 
             if (mu >= 1.0)
+            {
                 return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+            }
 
             throw InternalError("SMComponent<components::QCD>::m_d_msbar: Running of m_d_MSbar to mu < 1.0 GeV not yet implemented");
         }
@@ -572,9 +627,7 @@ namespace implementation
 
     /* Charged-current semileptonic sectors (Delta B = 1) */
 
-    SMComponent<components::WET::UBLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */)
-    {
-    }
+    SMComponent<components::WET::UBLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */) {}
 
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
@@ -591,9 +644,7 @@ namespace implementation
         return wc;
     }
 
-    SMComponent<components::WET::CBLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* c */)
-    {
-    }
+    SMComponent<components::WET::CBLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* c */) {}
 
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
@@ -612,7 +663,7 @@ namespace implementation
 
     /* Neutral-current semileptonic sectors (Delta B = 1) */
 
-    SMComponent<components::WET::SBNuNu>::SMComponent(const Parameters &  p , ParameterUser &  u) :
+    SMComponent<components::WET::SBNuNu>::SMComponent(const Parameters & p, ParameterUser & u) :
         _alpha_s_Z__sbnunu(p["QCD::alpha_s(MZ)"], u),
         _mu_t__sbnunu(p["QCD::mu_t"], u),
         _sw2__sbnunu(p["GSW::sin^2(theta)"], u),
@@ -643,30 +694,25 @@ namespace implementation
         }
         else
         {
-            Log::instance()->message("sm_component<sbnunu>.wc", ll_error)
-                << "mu_t > m_t_pole!";
+            Log::instance()->message("sm_component<sbnunu>.wc", ll_error) << "mu_t > m_t_pole!";
 
             alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__sbnunu, _alpha_s_Z__sbnunu, _m_Z__sbnunu, beta5);
         }
 
         // calculate m_t at the matching scale in the MSbar scheme
         const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__sbnunu, alpha_s_m_t_pole, nf);
-        const double m_t_mu_0 = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
-        const double x_t = power_of<2>(m_t_mu_0 / _m_W__sbnunu);
+        const double m_t_mu_0           = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
+        const double x_t                = power_of<2>(m_t_mu_0 / _m_W__sbnunu);
         const double x_t2 = power_of<2>(x_t), x_t3 = power_of<3>(x_t), x_t4 = power_of<4>(x_t);
 
         // [BGS:2010A] TODO: implement EW corrections
-        const double X_t0 = x_t / 8.0 * (
-            (x_t + 2.0) / (x_t - 1.0) + (3.0 * x_t - 6.0) / power_of<2>(x_t - 1.0) * std::log(x_t)
-        );
-        const double X_t1 =
-            - (29.0 * x_t - x_t2 - 4.0 * x_t3) / 3.0 / power_of<2>(1.0 - x_t)
-            - (x_t + 9.0 * x_t2 - x_t3 - x_t4) / power_of<3>(1.0 - x_t) * std::log(x_t)
-            + (8.0 * x_t + 4.0 * x_t2 + x_t3 - x_t4) / 2.0 / power_of<3>(1.0 - x_t) * power_of<2>(std::log(x_t))
-            - (4.0 * x_t - x_t3) / power_of<2>(1.0 - x_t) * gsl_sf_dilog(1.0 - x_t)
-            + 16.0 * x_t * std::log(_mu_t__sbnunu / _m_W__sbnunu) * (
-                (8.0 - 9.0 * x_t + x_t3 + 6.0 * std::log(x_t)) / (8.0 * power_of<3>(x_t - 1.0)) // dX_t0 / dx_t
-            );
+        const double X_t0 = x_t / 8.0 * ((x_t + 2.0) / (x_t - 1.0) + (3.0 * x_t - 6.0) / power_of<2>(x_t - 1.0) * std::log(x_t));
+        const double X_t1 = -(29.0 * x_t - x_t2 - 4.0 * x_t3) / 3.0 / power_of<2>(1.0 - x_t) - (x_t + 9.0 * x_t2 - x_t3 - x_t4) / power_of<3>(1.0 - x_t) * std::log(x_t)
+                            + (8.0 * x_t + 4.0 * x_t2 + x_t3 - x_t4) / 2.0 / power_of<3>(1.0 - x_t) * power_of<2>(std::log(x_t))
+                            - (4.0 * x_t - x_t3) / power_of<2>(1.0 - x_t) * gsl_sf_dilog(1.0 - x_t)
+                            + 16.0 * x_t * std::log(_mu_t__sbnunu / _m_W__sbnunu)
+                                      * ((8.0 - 9.0 * x_t + x_t3 + 6.0 * std::log(x_t)) / (8.0 * power_of<3>(x_t - 1.0)) // dX_t0 / dx_t
+                                      );
 
         const double X_t = X_t0 + alpha_s_mu_0 / 4.0 / M_PI * X_t1;
 
@@ -680,7 +726,7 @@ namespace implementation
 
     /* Hadronic sectors (Delta B = 1) */
 
-    SMComponent<components::WET::DBCU>::SMComponent(const Parameters & p , ParameterUser & u) :
+    SMComponent<components::WET::DBCU>::SMComponent(const Parameters & p, ParameterUser & u) :
         _alpha_s_Z__dbcu(p["QCD::alpha_s(MZ)"], u),
         _m_Z__dbcu(p["mass::Z"], u),
         _m_W__dbcu(p["mass::W"], u),
@@ -695,38 +741,60 @@ namespace implementation
         // SM Wilson coefficients are real so cp conjugation has no effect
 
         // RGE
-        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge
-        {
+        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge{
             // gamma_0: eigenvalues
-            (2.0 / 3.0) * std::array<double, 10u>{{
-                -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0))
-            }},
+            (2.0 / 3.0) * std::array<double, 10u>{ { -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0)) } },
             // gamma_0: V
-            {{
-                {{  -8.0 / 3.0, +4.0 / 3.0,  -8.0 / 3.0, +64.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{ -16.0,       -4.0,        -4.0,       -16.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{  +1.0 / 6.0, -1.0 / 3.0,  +2.0 / 3.0,  -4.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{  +1.0,       +1.0,        +1.0,        +1.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{   0.0,        0.0,         0.0,         0.0,       -53.0 / 3.0 - sqrt(241.0),               -64.0,  86.0 / 15.0 - 2.0 / 5.0 * sqrt(241.0),   2.0 / 15.0 * (43.0 + 3.0 * sqrt(241.0)),   0.0, -53.0 / 3.0 + sqrt(241.0)               }},
-                {{   0.0,        0.0,         0.0,         0.0,       -16.0,                                     0.0, -16.0,                                  -16.0,                                     -64.0, -16.0                                   }},
-                {{   0.0,        0.0,         0.0,         0.0,       +79.0 / 4.0 + 11.0 / 12.0 * sqrt(241.0), +16.0, (-207.0 + 7.0 * sqrt(241.0)) / 30.0,    (-207.0 - 7.0 * sqrt(241.0)) / 30.0,         0.0, +79.0 / 4.0 - 11.0 / 12.0 * sqrt(241.0) }},
-                {{   0.0,        0.0,         0.0,         0.0,       +27.0 + sqrt(241.0),                       0.0,  2.0 * (51.0 - sqrt(241.0)) / 5.0,      2.0 * (51.0 + sqrt(241.0)) / 5.0,          +16.0, +27.0 - sqrt(241.0)                     }},
-                {{   0.0,        0.0,         0.0,         0.0,       (53.0 + 3.0 * sqrt(241.0)) / 48.0,        +1.0, (-43.0 + 3.0 * sqrt(241.0)) / 120.0,    (-43.0 - 3.0 * sqrt(241.0)) / 120.0,         0.0,  (53.0 - 3.0 * sqrt(241.0)) / 48.0      }},
-                {{   0.0,        0.0,         0.0,         0.0,       +1.0,                                      0.0,  +1.0,                                   +1.0,                                      +1.0,  +1.0                                   }}
-            }},
+            { { { { -8.0 / 3.0, +4.0 / 3.0, -8.0 / 3.0, +64.0 / 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { -16.0, -4.0, -4.0, -16.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { +1.0 / 6.0, -1.0 / 3.0, +2.0 / 3.0, -4.0 / 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { +1.0, +1.0, +1.0, +1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { 0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    -53.0 / 3.0 - sqrt(241.0),
+                    -64.0,
+                    86.0 / 15.0 - 2.0 / 5.0 * sqrt(241.0),
+                    2.0 / 15.0 * (43.0 + 3.0 * sqrt(241.0)),
+                    0.0,
+                    -53.0 / 3.0 + sqrt(241.0) } },
+                { { 0.0, 0.0, 0.0, 0.0, -16.0, 0.0, -16.0, -16.0, -64.0, -16.0 } },
+                { { 0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    +79.0 / 4.0 + 11.0 / 12.0 * sqrt(241.0),
+                    +16.0,
+                    (-207.0 + 7.0 * sqrt(241.0)) / 30.0,
+                    (-207.0 - 7.0 * sqrt(241.0)) / 30.0,
+                    0.0,
+                    +79.0 / 4.0 - 11.0 / 12.0 * sqrt(241.0) } },
+                { { 0.0, 0.0, 0.0, 0.0, +27.0 + sqrt(241.0), 0.0, 2.0 * (51.0 - sqrt(241.0)) / 5.0, 2.0 * (51.0 + sqrt(241.0)) / 5.0, +16.0, +27.0 - sqrt(241.0) } },
+                { { 0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    (53.0 + 3.0 * sqrt(241.0)) / 48.0,
+                    +1.0,
+                    (-43.0 + 3.0 * sqrt(241.0)) / 120.0,
+                    (-43.0 - 3.0 * sqrt(241.0)) / 120.0,
+                    0.0,
+                    (53.0 - 3.0 * sqrt(241.0)) / 48.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, +1.0, 0.0, +1.0, +1.0, +1.0, +1.0 } } } },
             // gamma_1
-            {{
-                {{    44.0 /  9.0,  -899.0 / 3.0,  -32.0 /  9.0,  245.0 / 12.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{  -646.0 / 27.0, -2072.0 / 9.0, -115.0 / 54.0,  739.0 / 72.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{ -6848.0 /  9.0, -1344.0,        524.0 /  9.0,  178.0,             0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{     0.0,        -8468.0 / 9.0, -172.0 /  9.0,  367.0 / 18.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{     0.0,            0.0,          0.0,           0.0,         -1832.0 /  9.0,     -64.0 / 3.0,   -104.0 /  9.0,  -296.0 /   9.0,     -7.0 /  18.0,   11.0 /  48.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,          -128.0 / 27.0,     608.0 / 9.0,    -52.0 / 81.0, -1783.0 / 108.0,     11.0 / 216.0,   59.0 / 144.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,         -9488.0 / 27.0,    7108.0 / 9.0,   3052.0 /  9.0,   -31.0 /   9.0,    521.0 /  27.0, -217.0 /  36.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,        -25528.0 / 81.0,     896.0 / 3.0,  -6974.0 / 81.0, -4727.0 /  27.0,    863.0 / 162.0,   38.0 /   9.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,        -26368.0 / 27.0, -249088.0 / 9.0, -91456.0 /  9.0, 68192.0 /   9.0,  -8912.0 /  27.0, 8143.0 /   9.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,        510976.0 / 81.0,  -14080.0 / 9.0,   1600.0 / 81.0, 46960.0 /  27.0, -11794.0 /  81.0,  -41.0 /   6.0 }},
-            }}
+            { {
+                { { 44.0 / 9.0, -899.0 / 3.0, -32.0 / 9.0, 245.0 / 12.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { -646.0 / 27.0, -2072.0 / 9.0, -115.0 / 54.0, 739.0 / 72.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { -6848.0 / 9.0, -1344.0, 524.0 / 9.0, 178.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { 0.0, -8468.0 / 9.0, -172.0 / 9.0, 367.0 / 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -1832.0 / 9.0, -64.0 / 3.0, -104.0 / 9.0, -296.0 / 9.0, -7.0 / 18.0, 11.0 / 48.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -128.0 / 27.0, 608.0 / 9.0, -52.0 / 81.0, -1783.0 / 108.0, 11.0 / 216.0, 59.0 / 144.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -9488.0 / 27.0, 7108.0 / 9.0, 3052.0 / 9.0, -31.0 / 9.0, 521.0 / 27.0, -217.0 / 36.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -25528.0 / 81.0, 896.0 / 3.0, -6974.0 / 81.0, -4727.0 / 27.0, 863.0 / 162.0, 38.0 / 9.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -26368.0 / 27.0, -249088.0 / 9.0, -91456.0 / 9.0, 68192.0 / 9.0, -8912.0 / 27.0, 8143.0 / 9.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 510976.0 / 81.0, -14080.0 / 9.0, 1600.0 / 81.0, 46960.0 / 27.0, -11794.0 / 81.0, -41.0 / 6.0 } },
+            } }
         };
 
         WilsonCoefficients<wc::DBCU> wc;
@@ -735,22 +803,16 @@ namespace implementation
 
         // only unprimed WCs are non-zero in the SM
         // leading order in alpha_s
-        const std::array<double, 10u> lo_unprimed = {
-            -1.0 / 9.0, -2.0 / 3.0, +1.0 / 36.0, +1.0 / 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-        };
+        const std::array<double, 10u> lo_unprimed  = { -1.0 / 9.0, -2.0 / 3.0, +1.0 / 36.0, +1.0 / 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
         // next-to-leading order in alpha_s
-        const double L = 2.0 * std::log(_mu_0__dbcu / _m_W__dbcu);
+        const double                  L            = 2.0 * std::log(_mu_0__dbcu / _m_W__dbcu);
         const std::array<double, 10u> nlo_unprimed = {
-            +52.0 / 27.0 - 8.0 / 9.0 * L,
-            -85.0 /  9.0 + 2.0 / 3.0 * L,
-             -1.0 / 27.0 + 2.0 / 9.0 * L,
-            +19.0 / 36.0 - 1.0 / 6.0 * L,
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+            +52.0 / 27.0 - 8.0 / 9.0 * L, -85.0 / 9.0 + 2.0 / 3.0 * L, -1.0 / 27.0 + 2.0 / 9.0 * L, +19.0 / 36.0 - 1.0 / 6.0 * L, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         };
 
-        static const auto & beta5 = QCD::beta_function_nf_5;
-        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__dbcu, _alpha_s_Z__dbcu, _m_Z__dbcu, beta5);
-        const double alpha_s_mu   = QCD::alpha_s(_mu__dbcu,   _alpha_s_Z__dbcu, _m_Z__dbcu, beta5);
+        static const auto & beta5        = QCD::beta_function_nf_5;
+        const double        alpha_s_mu_0 = QCD::alpha_s(_mu_0__dbcu, _alpha_s_Z__dbcu, _m_Z__dbcu, beta5);
+        const double        alpha_s_mu   = QCD::alpha_s(_mu__dbcu, _alpha_s_Z__dbcu, _m_Z__dbcu, beta5);
 
         const auto _unprimed = rge.evolve(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
 
@@ -759,7 +821,7 @@ namespace implementation
         return wc;
     }
 
-    SMComponent<components::WET::SBCU>::SMComponent(const Parameters & p , ParameterUser & u) :
+    SMComponent<components::WET::SBCU>::SMComponent(const Parameters & p, ParameterUser & u) :
         _alpha_s_Z__sbcu(p["QCD::alpha_s(MZ)"], u),
         _m_Z__sbcu(p["mass::Z"], u),
         _m_W__sbcu(p["mass::W"], u),
@@ -774,38 +836,60 @@ namespace implementation
         // SM Wilson coefficients are real so cp conjugation has no effect
 
         // RGE
-        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge
-        {
+        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge{
             // gamma_0: eigenvalues
-            (2.0 / 3.0) * std::array<double, 10u>{{
-                -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0))
-            }},
+            (2.0 / 3.0) * std::array<double, 10u>{ { -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0)) } },
             // gamma_0: V
-            {{
-                {{  -8.0 / 3.0, +4.0 / 3.0,  -8.0 / 3.0, +64.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{ -16.0,       -4.0,        -4.0,       -16.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{  +1.0 / 6.0, -1.0 / 3.0,  +2.0 / 3.0,  -4.0 / 3.0,  0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{  +1.0,       +1.0,        +1.0,        +1.0,        0.0,                                      0.0,   0.0,                                    0.0,                                       0.0,   0.0                                   }},
-                {{   0.0,        0.0,         0.0,         0.0,       -53.0 / 3.0 - sqrt(241.0),               -64.0,  86.0 / 15.0 - 2.0 / 5.0 * sqrt(241.0),   2.0 / 15.0 * (43.0 + 3.0 * sqrt(241.0)),   0.0, -53.0 / 3.0 + sqrt(241.0)               }},
-                {{   0.0,        0.0,         0.0,         0.0,       -16.0,                                     0.0, -16.0,                                  -16.0,                                     -64.0, -16.0                                   }},
-                {{   0.0,        0.0,         0.0,         0.0,       +79.0 / 4.0 + 11.0 / 12.0 * sqrt(241.0), +16.0, (-207.0 + 7.0 * sqrt(241.0)) / 30.0,    (-207.0 - 7.0 * sqrt(241.0)) / 30.0,         0.0, +79.0 / 4.0 - 11.0 / 12.0 * sqrt(241.0) }},
-                {{   0.0,        0.0,         0.0,         0.0,       +27.0 + sqrt(241.0),                       0.0,  2.0 * (51.0 - sqrt(241.0)) / 5.0,      2.0 * (51.0 + sqrt(241.0)) / 5.0,          +16.0, +27.0 - sqrt(241.0)                     }},
-                {{   0.0,        0.0,         0.0,         0.0,       (53.0 + 3.0 * sqrt(241.0)) / 48.0,        +1.0, (-43.0 + 3.0 * sqrt(241.0)) / 120.0,    (-43.0 - 3.0 * sqrt(241.0)) / 120.0,         0.0,  (53.0 - 3.0 * sqrt(241.0)) / 48.0      }},
-                {{   0.0,        0.0,         0.0,         0.0,       +1.0,                                      0.0,  +1.0,                                   +1.0,                                      +1.0,  +1.0                                   }}
-            }},
+            { { { { -8.0 / 3.0, +4.0 / 3.0, -8.0 / 3.0, +64.0 / 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { -16.0, -4.0, -4.0, -16.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { +1.0 / 6.0, -1.0 / 3.0, +2.0 / 3.0, -4.0 / 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { +1.0, +1.0, +1.0, +1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { 0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    -53.0 / 3.0 - sqrt(241.0),
+                    -64.0,
+                    86.0 / 15.0 - 2.0 / 5.0 * sqrt(241.0),
+                    2.0 / 15.0 * (43.0 + 3.0 * sqrt(241.0)),
+                    0.0,
+                    -53.0 / 3.0 + sqrt(241.0) } },
+                { { 0.0, 0.0, 0.0, 0.0, -16.0, 0.0, -16.0, -16.0, -64.0, -16.0 } },
+                { { 0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    +79.0 / 4.0 + 11.0 / 12.0 * sqrt(241.0),
+                    +16.0,
+                    (-207.0 + 7.0 * sqrt(241.0)) / 30.0,
+                    (-207.0 - 7.0 * sqrt(241.0)) / 30.0,
+                    0.0,
+                    +79.0 / 4.0 - 11.0 / 12.0 * sqrt(241.0) } },
+                { { 0.0, 0.0, 0.0, 0.0, +27.0 + sqrt(241.0), 0.0, 2.0 * (51.0 - sqrt(241.0)) / 5.0, 2.0 * (51.0 + sqrt(241.0)) / 5.0, +16.0, +27.0 - sqrt(241.0) } },
+                { { 0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    (53.0 + 3.0 * sqrt(241.0)) / 48.0,
+                    +1.0,
+                    (-43.0 + 3.0 * sqrt(241.0)) / 120.0,
+                    (-43.0 - 3.0 * sqrt(241.0)) / 120.0,
+                    0.0,
+                    (53.0 - 3.0 * sqrt(241.0)) / 48.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, +1.0, 0.0, +1.0, +1.0, +1.0, +1.0 } } } },
             // gamma_1
-            {{
-                {{    44.0 /  9.0,  -899.0 / 3.0,  -32.0 /  9.0,  245.0 / 12.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{  -646.0 / 27.0, -2072.0 / 9.0, -115.0 / 54.0,  739.0 / 72.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{ -6848.0 /  9.0, -1344.0,        524.0 /  9.0,  178.0,             0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{     0.0,        -8468.0 / 9.0, -172.0 /  9.0,  367.0 / 18.0,      0.0,              0.0,            0.0,            0.0,              0.0,            0.0         }},
-                {{     0.0,            0.0,          0.0,           0.0,         -1832.0 /  9.0,     -64.0 / 3.0,   -104.0 /  9.0,  -296.0 /   9.0,     -7.0 /  18.0,   11.0 /  48.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,          -128.0 / 27.0,     608.0 / 9.0,    -52.0 / 81.0, -1783.0 / 108.0,     11.0 / 216.0,   59.0 / 144.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,         -9488.0 / 27.0,    7108.0 / 9.0,   3052.0 /  9.0,   -31.0 /   9.0,    521.0 /  27.0, -217.0 /  36.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,        -25528.0 / 81.0,     896.0 / 3.0,  -6974.0 / 81.0, -4727.0 /  27.0,    863.0 / 162.0,   38.0 /   9.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,        -26368.0 / 27.0, -249088.0 / 9.0, -91456.0 /  9.0, 68192.0 /   9.0,  -8912.0 /  27.0, 8143.0 /   9.0 }},
-                {{     0.0,            0.0,          0.0,           0.0,        510976.0 / 81.0,  -14080.0 / 9.0,   1600.0 / 81.0, 46960.0 /  27.0, -11794.0 /  81.0,  -41.0 /   6.0 }},
-            }}
+            { {
+                { { 44.0 / 9.0, -899.0 / 3.0, -32.0 / 9.0, 245.0 / 12.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { -646.0 / 27.0, -2072.0 / 9.0, -115.0 / 54.0, 739.0 / 72.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { -6848.0 / 9.0, -1344.0, 524.0 / 9.0, 178.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { 0.0, -8468.0 / 9.0, -172.0 / 9.0, 367.0 / 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -1832.0 / 9.0, -64.0 / 3.0, -104.0 / 9.0, -296.0 / 9.0, -7.0 / 18.0, 11.0 / 48.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -128.0 / 27.0, 608.0 / 9.0, -52.0 / 81.0, -1783.0 / 108.0, 11.0 / 216.0, 59.0 / 144.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -9488.0 / 27.0, 7108.0 / 9.0, 3052.0 / 9.0, -31.0 / 9.0, 521.0 / 27.0, -217.0 / 36.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -25528.0 / 81.0, 896.0 / 3.0, -6974.0 / 81.0, -4727.0 / 27.0, 863.0 / 162.0, 38.0 / 9.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, -26368.0 / 27.0, -249088.0 / 9.0, -91456.0 / 9.0, 68192.0 / 9.0, -8912.0 / 27.0, 8143.0 / 9.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 510976.0 / 81.0, -14080.0 / 9.0, 1600.0 / 81.0, 46960.0 / 27.0, -11794.0 / 81.0, -41.0 / 6.0 } },
+            } }
         };
 
         WilsonCoefficients<wc::SBCU> wc;
@@ -814,22 +898,16 @@ namespace implementation
 
         // only unprimed WCs are non-zero in the SM
         // leading order in alpha_s
-        const std::array<double, 10u> lo_unprimed = {
-            -1.0 / 9.0, -2.0 / 3.0, +1.0 / 36.0, +1.0 / 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-        };
+        const std::array<double, 10u> lo_unprimed  = { -1.0 / 9.0, -2.0 / 3.0, +1.0 / 36.0, +1.0 / 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
         // next-to-leading order in alpha_s
-        const double L = 2.0 * std::log(_mu_0__sbcu / _m_W__sbcu);
+        const double                  L            = 2.0 * std::log(_mu_0__sbcu / _m_W__sbcu);
         const std::array<double, 10u> nlo_unprimed = {
-            +52.0 / 27.0 - 8.0 / 9.0 * L,
-            -85.0 /  9.0 + 2.0 / 3.0 * L,
-             -1.0 / 27.0 + 2.0 / 9.0 * L,
-            +19.0 / 36.0 - 1.0 / 6.0 * L,
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+            +52.0 / 27.0 - 8.0 / 9.0 * L, -85.0 / 9.0 + 2.0 / 3.0 * L, -1.0 / 27.0 + 2.0 / 9.0 * L, +19.0 / 36.0 - 1.0 / 6.0 * L, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         };
 
-        static const auto & beta5 = QCD::beta_function_nf_5;
-        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__sbcu, _alpha_s_Z__sbcu, _m_Z__sbcu, beta5);
-        const double alpha_s_mu   = QCD::alpha_s(_mu__sbcu,   _alpha_s_Z__sbcu, _m_Z__sbcu, beta5);
+        static const auto & beta5        = QCD::beta_function_nf_5;
+        const double        alpha_s_mu_0 = QCD::alpha_s(_mu_0__sbcu, _alpha_s_Z__sbcu, _m_Z__sbcu, beta5);
+        const double        alpha_s_mu   = QCD::alpha_s(_mu__sbcu, _alpha_s_Z__sbcu, _m_Z__sbcu, beta5);
 
         const auto _unprimed = rge.evolve(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
 
@@ -859,10 +937,14 @@ namespace implementation
     SMComponent<components::WET::SBSB>::wet_sbsb() const
     {
         if (_mu__deltabs2 >= _mu_t__deltabs2)
+        {
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_sbsb: Evolution to mu >= mu_t is illdefined!");
+        }
 
         if (_mu__deltabs2 <= _mu_c__deltabs2)
+        {
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_sbsb: Evolution to mu <= mu_c is not implemented!");
+        }
 
         // only evolve the wilson coefficients for 5 active flavors
         static const double nf    = 5.0;
@@ -892,68 +974,59 @@ namespace implementation
         }
         else
         {
-            Log::instance()->message("sm_component<deltabs2>.wc", ll_error)
-                << "mu_t > m_t_pole!";
+            Log::instance()->message("sm_component<deltabs2>.wc", ll_error) << "mu_t > m_t_pole!";
 
             alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
         }
 
         // calculate m_t at the matching scale in the MSbar scheme
         const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__deltabs2, alpha_s_m_t_pole, nf);
-        const double m_t_mu_0 = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
+        const double m_t_mu_0           = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
 
         // calculate dependent inputs
         const double log_t = std::log(_mu_0__deltabs2 / _m_W__deltabs2);
-        const double xt = power_of<2>(m_t_mu_0 / _m_W__deltabs2);
-        const double xt2 = xt  * xt,
-                     xt3 = xt2 * xt,
-                     xt4 = xt2 * xt2;
+        const double xt    = power_of<2>(m_t_mu_0 / _m_W__deltabs2);
+        const double xt2 = xt * xt, xt3 = xt2 * xt, xt4 = xt2 * xt2;
         const double lnxt = std::log(xt), ln2xt = lnxt * lnxt;
         // GSL and [BBL:1995A] convention for the dilogarithm agree:
         //   gsl_sf_dilog(1.0 - x) = L_2(1.0 - x)
         const double L2 = gsl_sf_dilog(1.0 - xt);
 
         /*
-        * Initial scale Wilson coefficients from the top sector, cf. [BBL:1995A], Eqs. (XIII.1) to (XIII.5), pp. 118.
-        */
+         * Initial scale Wilson coefficients from the top sector, cf. [BBL:1995A], Eqs. (XIII.1) to (XIII.5), pp. 118.
+         */
 
         // anomalous mass dimension, eq. (XII.7), in the five-flavor scheme
         const double Nc      = 3.0;
         const double gamma_0 = 6.0 * (Nc - 1.0) / Nc;
-        const double gamma_1 = (-21.0 + 57.0 / Nc - 19.0 / 3.0 * Nc + 4.0 / 3.0 * nf) * (Nc - 1.0) /(2.0 * Nc);
-        const double d5      = gamma_0  / (2.0 * beta5[0]);
+        const double gamma_1 = (-21.0 + 57.0 / Nc - 19.0 / 3.0 * Nc + 4.0 / 3.0 * nf) * (Nc - 1.0) / (2.0 * Nc);
+        const double d5      = gamma_0 / (2.0 * beta5[0]);
         const double J5      = d5 * beta5[1] / beta5[0] - gamma_1 / (2.0 * beta5[0]);
 
         // one-loop (Inami-Lim) function S_0 = S_0(x_t, x_t), cf. [BBL:1995A], Eq. (XII.4), p. 101
-        const double S_0 = (4.0 * xt - 11.0 * xt2 + xt3) / (4.0 * power_of<2>(1.0 - xt))
-                         - 3.0 * xt3 * std::log(xt) / (2.0 * power_of<3>(1.0 - xt));
+        const double S_0    = (4.0 * xt - 11.0 * xt2 + xt3) / (4.0 * power_of<2>(1.0 - xt)) - 3.0 * xt3 * std::log(xt) / (2.0 * power_of<3>(1.0 - xt));
         // derivative of S_0 w.r.t. to xt
-        const double S_0_d1 = (4.0 - 18.0 * xt - 3.0 * xt2 - xt3) / (4.0 * power_of<3>(1.0 - xt))
-                            - 9.0 * xt2 * std::log(xt) / (2.0 * power_of<4>(1.0 - xt));
+        const double S_0_d1 = (4.0 - 18.0 * xt - 3.0 * xt2 - xt3) / (4.0 * power_of<3>(1.0 - xt)) - 9.0 * xt2 * std::log(xt) / (2.0 * power_of<4>(1.0 - xt));
 
         // two-loop function, eqs. (XII.11)-(XII.14)
         const double B_t   = 5.0 * (Nc - 1.0) / (2.0 * Nc) + 3.0 * (Nc * Nc - 1.0) / (2.0 * Nc);
         // two-loop function S_1 (color singlet part)
         const double S_1_1 = -xt * (4.0 - 39.0 * xt + 168.0 * xt2 + 11.0 * xt3) / (4.0 * power_of<3>(1.0 - xt))
-                           - 3.0 * xt * (4.0 - 24.0 * xt + 36.0 * xt2 + 7.0 * xt3 + xt4) / (2.0 * power_of<4>(1.0 - xt)) * lnxt
-                           + 3.0 * xt3 * (13.0 + 4.0 * xt + xt2) / (2.0 * power_of<4>(1.0 - xt)) * ln2xt
-                           - 3.0 * xt3 * (5.0 + xt) / power_of<3>(1.0 - xt) * L2;
+                             - 3.0 * xt * (4.0 - 24.0 * xt + 36.0 * xt2 + 7.0 * xt3 + xt4) / (2.0 * power_of<4>(1.0 - xt)) * lnxt
+                             + 3.0 * xt3 * (13.0 + 4.0 * xt + xt2) / (2.0 * power_of<4>(1.0 - xt)) * ln2xt - 3.0 * xt3 * (5.0 + xt) / power_of<3>(1.0 - xt) * L2;
         // two-loop function S_1 (color octet part)
         const double S_1_8 = -(64.0 - 68.0 * xt - 17.0 * xt2 + 11.0 * xt3) / (4.0 * power_of<2>(1.0 - xt))
-                           + (32.0 - 68.0 * xt + 32.0 * xt2 - 28.0 * xt3 + 3.0 * xt4) / (2.0 * power_of<3>(1.0 - xt)) * lnxt
-                           + xt2 * (4.0 - 7.0 * xt + 7.0 * xt2 - 2.0 * xt3) / (2.0 * power_of<4>(1.0 - xt)) * ln2xt
-                           + 2.0 * xt * (4.0 - 7.0 * xt - 7.0 * xt2 + xt3) / power_of<3>(1.0 - xt) * L2
-                           + 16.0 / xt * (M_PI * M_PI / 6.0 - L2);
+                             + (32.0 - 68.0 * xt + 32.0 * xt2 - 28.0 * xt3 + 3.0 * xt4) / (2.0 * power_of<3>(1.0 - xt)) * lnxt
+                             + xt2 * (4.0 - 7.0 * xt + 7.0 * xt2 - 2.0 * xt3) / (2.0 * power_of<4>(1.0 - xt)) * ln2xt
+                             + 2.0 * xt * (4.0 - 7.0 * xt - 7.0 * xt2 + xt3) / power_of<3>(1.0 - xt) * L2 + 16.0 / xt * (M_PI * M_PI / 6.0 - L2);
         // two-loop function S_1 (full result)
-        const double S_1   = (Nc - 1.0) / (2.0 * Nc) * S_1_8 + (Nc * Nc - 1.0) / (2.0 * Nc) * S_1_1;
+        const double S_1 = (Nc - 1.0) / (2.0 * Nc) * S_1_8 + (Nc * Nc - 1.0) / (2.0 * Nc) * S_1_1;
 
         // auxilliary quantities
         const double eta   = std::pow(alpha_s_mu_0 / alpha_s, 6.0 / 23.0);
         // eta2B from (XIII.3), except for
         //  - a factor alpha_s(mu)^(-6/23), which has been absorbed into eta
-        const double eta2B = 1.0 + alpha_s_mu_0 / (4.0 * M_PI) * (
-            S_1 / S_0 + B_t - J5 + gamma_0 * log_t + 8.0 * xt * S_0_d1 / (S_0) * 2.0 * log_t
-        );
+        const double eta2B = 1.0 + alpha_s_mu_0 / (4.0 * M_PI) * (S_1 / S_0 + B_t - J5 + gamma_0 * log_t + 8.0 * xt * S_0_d1 / (S_0) * 2.0 * log_t);
         // U5(mu, mu_0) corresponds to the square brackets in (XIII.1) and (XIII.5)
         const double U5    = 1.0 + alpha_s / (4.0 * M_PI) * J5;
 
@@ -962,8 +1035,7 @@ namespace implementation
         // where 4 * O_1 coincides with the operator Q in eq. (XIII.2).
         // We can obtain C_i from eq. (XIII.1)
         WilsonCoefficients<wc::SBSB> wc;
-        wc._coefficients[0] = _G_Fermi__deltabs2 * power_of<2>(_m_W__deltabs2()) * std::sqrt(2.0) / (16.0 * M_PI * M_PI)
-                  * S_0 * eta2B * eta * U5;
+        wc._coefficients[0] = _G_Fermi__deltabs2 * power_of<2>(_m_W__deltabs2()) * std::sqrt(2.0) / (16.0 * M_PI * M_PI) * S_0 * eta2B * eta * U5;
 
         return wc;
     }
@@ -985,109 +1057,102 @@ namespace implementation
     }
 
     /* b->s Wilson coefficients */
-namespace implementation
-{
-    /*
-     * Initial scale Wilson coefficients from the charm sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
-     *
-     * x_c = m_t(mu_0c)^2 / m_W^2
-     * log_c = ln(mu_0c^2 / m_W^2)
-     * sw2 = sin^2(theta_Weinberg)
-     */
-    std::array<complex<double>, 15>
-    initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0()
+    namespace implementation
     {
-        std::array<complex<double>, 15> result
-        {{
-            0.0, -1.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0
-        }};
+        /*
+         * Initial scale Wilson coefficients from the charm sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
+         *
+         * x_c = m_t(mu_0c)^2 / m_W^2
+         * log_c = ln(mu_0c^2 / m_W^2)
+         * sw2 = sin^2(theta_Weinberg)
+         */
+        std::array<complex<double>, 15>
+        initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0()
+        {
+            std::array<complex<double>, 15> result{
+                { 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }
+            };
 
-        return result;
-    }
+            return result;
+        }
 
-    std::array<complex<double>, 15>
-    initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(const double & log_c, const double & sw2)
-    {
-        std::array<complex<double>, 15> result
-        {{
-            -15.0 - 6.0 * log_c, 0.0, 0.0, 7.0/9.0 - 2.0 / 3.0 * log_c, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0,
-            23.0/36.0, 1.0/3.0, -0.25 / sw2 - 38.0/27.0, 0.25 / sw2
-        }};
+        std::array<complex<double>, 15>
+        initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(const double & log_c, const double & sw2)
+        {
+            std::array<complex<double>, 15> result{
+                { -15.0 - 6.0 * log_c, 0.0, 0.0, 7.0 / 9.0 - 2.0 / 3.0 * log_c, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 23.0 / 36.0, 1.0 / 3.0, -0.25 / sw2 - 38.0 / 27.0, 0.25 / sw2 }
+            };
 
-        return result;
-    }
+            return result;
+        }
 
-    std::array<complex<double>, 15>
-    initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(const double & x_c, const double & log_c, const double & sw2)
-    {
-        std::array<complex<double>, 15> result;
-        result.fill(0.0);
-        result[0] = -(16.0 * x_c + 8.0) * std::sqrt(4.0 * x_c - 1.0) * gsl_sf_clausen(2.0 * std::asin(1.0 / 2.0 / std::sqrt(x_c)))
-            + (16.0 * x_c + 20.0 / 3.0) * std::log(x_c) + 32.0 * x_c + 112.0 / 9.0
-            - 7987.0 / 72.0 - 17.0 / 3.0 * M_PI * M_PI - 475.0 / 6.0 * log_c - 17.0 * log_c * log_c;
-        result[1] = -127.0 / 18.0 - 4.0 / 3.0 * M_PI * M_PI - 46.0 / 3.0 * log_c - 4.0 * log_c * log_c;
-        result[2] = 680.0 / 243.0 + 20.0 / 81.0 * M_PI * M_PI + 68.0 / 81.0 * log_c + 20.0 / 27.0 * log_c * log_c;
-        result[3] = -950.0 / 243.0 - 10.0 / 81.0 * M_PI * M_PI - 124.0 / 27.0 * log_c - 10.0 / 27.0  * log_c * log_c;
-        result[4] = -68.0 / 243.0 - 2.0 / 81.0 * M_PI * M_PI - 14.0 / 81.0 * log_c - 2.0 / 27.0 * log_c * log_c;
-        result[5] = -85.0 / 162.0 - 5.0 / 108.0 * M_PI * M_PI - 35.0 / 108.0 * log_c - 5.0 / 36.0 * log_c * log_c;
-        result[11] = -713.0 / 243.0 - 4.0 / 81.0 * log_c;
-        result[12] = -91.0 / 324.0 + 4.0 / 27.0 * log_c;
-        result[13] = -1.0 / sw2 - 524.0 / 729.0 + 128.0 / 243.0 * M_PI * M_PI + 16.0 / 3.0 * log_c + 128.0 / 81.0 * log_c * log_c;
-        result[14] = 1.0 / sw2;
+        std::array<complex<double>, 15>
+        initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(const double & x_c, const double & log_c, const double & sw2)
+        {
+            std::array<complex<double>, 15> result;
+            result.fill(0.0);
+            result[0] = -(16.0 * x_c + 8.0) * std::sqrt(4.0 * x_c - 1.0) * gsl_sf_clausen(2.0 * std::asin(1.0 / 2.0 / std::sqrt(x_c))) + (16.0 * x_c + 20.0 / 3.0) * std::log(x_c)
+                        + 32.0 * x_c + 112.0 / 9.0 - 7987.0 / 72.0 - 17.0 / 3.0 * M_PI * M_PI - 475.0 / 6.0 * log_c - 17.0 * log_c * log_c;
+            result[1]  = -127.0 / 18.0 - 4.0 / 3.0 * M_PI * M_PI - 46.0 / 3.0 * log_c - 4.0 * log_c * log_c;
+            result[2]  = 680.0 / 243.0 + 20.0 / 81.0 * M_PI * M_PI + 68.0 / 81.0 * log_c + 20.0 / 27.0 * log_c * log_c;
+            result[3]  = -950.0 / 243.0 - 10.0 / 81.0 * M_PI * M_PI - 124.0 / 27.0 * log_c - 10.0 / 27.0 * log_c * log_c;
+            result[4]  = -68.0 / 243.0 - 2.0 / 81.0 * M_PI * M_PI - 14.0 / 81.0 * log_c - 2.0 / 27.0 * log_c * log_c;
+            result[5]  = -85.0 / 162.0 - 5.0 / 108.0 * M_PI * M_PI - 35.0 / 108.0 * log_c - 5.0 / 36.0 * log_c * log_c;
+            result[11] = -713.0 / 243.0 - 4.0 / 81.0 * log_c;
+            result[12] = -91.0 / 324.0 + 4.0 / 27.0 * log_c;
+            result[13] = -1.0 / sw2 - 524.0 / 729.0 + 128.0 / 243.0 * M_PI * M_PI + 16.0 / 3.0 * log_c + 128.0 / 81.0 * log_c * log_c;
+            result[14] = 1.0 / sw2;
 
-        return result;
-    }
+            return result;
+        }
 
-    /*
-     * Initial scale Wilson coefficients from the top sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
-     *
-     * x_t = m_t(mu_0t)^2 / m_W^2
-     * log_t = ln(mu_0t / m_t(mu_0t))
-     * sw2 = sin^2(theta_Weinberg)
-     */
-    std::array<complex<double>, 15>
-    initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0()
-    {
-        std::array<complex<double>, 15> result;
-        result.fill(0.0);
+        /*
+         * Initial scale Wilson coefficients from the top sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
+         *
+         * x_t = m_t(mu_0t)^2 / m_W^2
+         * log_t = ln(mu_0t / m_t(mu_0t))
+         * sw2 = sin^2(theta_Weinberg)
+         */
+        std::array<complex<double>, 15>
+        initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0()
+        {
+            std::array<complex<double>, 15> result;
+            result.fill(0.0);
 
-        return result;
-    }
+            return result;
+        }
 
-    std::array<complex<double>, 15>
-    initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(const double & x_t, const double & sw2)
-    {
-        std::array<complex<double>, 15> result;
-        result.fill(0.0);
-        result[3] = TopLoops::E0(x_t);
-        result[11] = -0.5 * TopLoops::A0(x_t);
-        result[12] = -0.5 * TopLoops::F0(x_t);
-        result[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C0(x_t) - TopLoops::B0(x_t) / sw2 - TopLoops::D0(x_t);
-        result[14] = (TopLoops::B0(x_t) - TopLoops::C0(x_t)) / sw2;
+        std::array<complex<double>, 15>
+        initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(const double & x_t, const double & sw2)
+        {
+            std::array<complex<double>, 15> result;
+            result.fill(0.0);
+            result[3]  = TopLoops::E0(x_t);
+            result[11] = -0.5 * TopLoops::A0(x_t);
+            result[12] = -0.5 * TopLoops::F0(x_t);
+            result[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C0(x_t) - TopLoops::B0(x_t) / sw2 - TopLoops::D0(x_t);
+            result[14] = (TopLoops::B0(x_t) - TopLoops::C0(x_t)) / sw2;
 
-        return result;
-    }
+            return result;
+        }
 
-    std::array<complex<double>, 15>
-    initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(const double & x_t, const double & log_t, const double & sw2)
-    {
-        std::array<complex<double>, 15> result;
-        result.fill(0.0);
-        result[2] = TopLoops::G1(x_t, log_t);
-        result[3] = TopLoops::E1(x_t, log_t);
-        result[4] = -0.1 * TopLoops::G1(x_t, log_t) + 2.0 / 15.0 * TopLoops::E0(x_t);
-        result[5] = -3.0 / 16.0 * TopLoops::E1(x_t, log_t) + 0.25 * TopLoops::E0(x_t);
-        result[11] = -0.5 * TopLoops::A1(x_t, log_t);
-        result[12] = -0.5 * TopLoops::F1(x_t, log_t);
-        result[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C1(x_t, log_t) - TopLoops::B1(x_t, log_t) / sw2 - TopLoops::D1(x_t, log_t);
-        result[14] = (TopLoops::B1(x_t, log_t) - TopLoops::C1(x_t, log_t)) / sw2;
+        std::array<complex<double>, 15>
+        initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(const double & x_t, const double & log_t, const double & sw2)
+        {
+            std::array<complex<double>, 15> result;
+            result.fill(0.0);
+            result[2]  = TopLoops::G1(x_t, log_t);
+            result[3]  = TopLoops::E1(x_t, log_t);
+            result[4]  = -0.1 * TopLoops::G1(x_t, log_t) + 2.0 / 15.0 * TopLoops::E0(x_t);
+            result[5]  = -3.0 / 16.0 * TopLoops::E1(x_t, log_t) + 0.25 * TopLoops::E0(x_t);
+            result[11] = -0.5 * TopLoops::A1(x_t, log_t);
+            result[12] = -0.5 * TopLoops::F1(x_t, log_t);
+            result[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C1(x_t, log_t) - TopLoops::B1(x_t, log_t) / sw2 - TopLoops::D1(x_t, log_t);
+            result[14] = (TopLoops::B1(x_t, log_t) - TopLoops::C1(x_t, log_t)) / sw2;
 
-        return result;
-    }
-}
+            return result;
+        }
+    } // namespace implementation
 
     WilsonCoefficients<BToS>
     SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const LeptonFlavor & /*lepton_flavor*/, const bool & /*cp_conjugate*/) const
@@ -1102,10 +1167,14 @@ namespace implementation
         // Calculation according to [BMU1999], Eq. (25), p. 7
 
         if (mu >= _mu_t__deltabs1)
+        {
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s: Evolution to mu >= mu_t is not yet implemented!");
+        }
 
         if (mu <= _mu_c__deltabs1)
+        {
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s: Evolution to mu <= mu_c is not yet implemented!");
+        }
 
         // only evolve the wilson coefficients for 5 active flavors
         static const double nf = 5.0;
@@ -1133,32 +1202,37 @@ namespace implementation
         }
         else
         {
-            Log::instance()->message("sm_component<deltab1>.wc", ll_error)
-                << "mu_t > m_t_pole!";
+            Log::instance()->message("sm_component<deltab1>.wc", ll_error) << "mu_t > m_t_pole!";
 
             alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
         }
 
         // calculate m_t at the matching scales in the MSbar scheme
         const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__deltabs1, alpha_s_m_t_pole, 5.0);
-        const double m_t_mu_0c = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0c, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
-        const double m_t_mu_0t = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0t, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+        const double m_t_mu_0c          = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0c, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+        const double m_t_mu_0t          = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0t, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
 
         // calculate dependent inputs
         const double log_c = 2.0 * std::log(_mu_0c__deltabs1 / _m_W__deltabs1), log_t = std::log(_mu_0t__deltabs1 / m_t_mu_0t);
         const double x_c = power_of<2>(m_t_mu_0c / _m_W__deltabs1), x_t = power_of<2>(m_t_mu_0t / _m_W__deltabs1);
 
         WilsonCoefficients<BToS> downscaled_charm = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0(),
-                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2__deltabs1),
-                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2__deltabs1),
-                alpha_s_mu_0c, alpha_s, nf, QCD::beta_function_nf_5);
-        WilsonCoefficients<BToS> downscaled_top = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
-                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2__deltabs1),
-                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2__deltabs1),
-                alpha_s_mu_0t, alpha_s, nf, QCD::beta_function_nf_5);
+                                                           implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2__deltabs1),
+                                                           implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2__deltabs1),
+                                                           alpha_s_mu_0c,
+                                                           alpha_s,
+                                                           nf,
+                                                           QCD::beta_function_nf_5);
+        WilsonCoefficients<BToS> downscaled_top   = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
+                                                         implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2__deltabs1),
+                                                         implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2__deltabs1),
+                                                         alpha_s_mu_0t,
+                                                         alpha_s,
+                                                         nf,
+                                                         QCD::beta_function_nf_5);
 
         WilsonCoefficients<BToS> wc = downscaled_top;
-        wc._sm_like_coefficients = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;
+        wc._sm_like_coefficients    = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;
 
         return wc;
     }
@@ -1184,13 +1258,11 @@ namespace implementation
     {
     }
 
-    StandardModel::~StandardModel()
-    {
-    }
+    StandardModel::~StandardModel() {}
 
     std::shared_ptr<Model>
     StandardModel::make(const Parameters & parameters, const Options &)
     {
         return std::shared_ptr<Model>(new StandardModel(parameters));
     }
-}
+} // namespace eos
