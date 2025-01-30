@@ -43,6 +43,7 @@ groups:
   # }}}
 
   # Masses used in BSZ-like Form Factor Parametrizations
+  # All resonance masses higher order with B_c taken from 1707.09509
   # {{{
   - title: 'Masses used in BSZ-like Form Factor Parametrizations'
     description: ''
@@ -137,6 +138,19 @@ groups:
           max:     +6.2751
           latex:    '$m_{B_c}^\mathrm{BSZ}$'
           unit:     'GeV'
+      # B_c higher order taken from [BGS:2017A]
+      'mass::B_c[1]@BSZ2015' :
+          central: +6.842
+          min:     +6.842
+          max:     +6.842
+          latex:   '$m_{B_c}[1]^\mathrm{BSZ}$'
+          unit:    'GeV'
+      'mass::B_c[2]@BSZ2015' :
+          central: +7.250
+          min:     +7.250
+          max:     +7.250
+          latex:   '$m_{B_c}[2]^\mathrm{BSZ}$'
+          unit:    'GeV'
       'mass::K_d^*@BSZ2015' :
           central: +0.896
           min:     +0.896
@@ -191,6 +205,25 @@ groups:
           max:     +6.3311
           latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
           unit:     'GeV'
+      # B_c^* higher order taken from [BGS:2017A]
+      'mass::B_c^*[1]@BSZ2015' :
+          central: +6.910
+          min:     +6.910
+          max:     +6.910
+          latex:   '$m_{B_c^*}[1]^\mathrm{BSZ}$'
+          unit:    'GeV'
+      'mass::B_c^*[2]@BSZ2015' :
+          central: +7.020
+          min:     +7.020
+          max:     +7.020
+          latex:   '$m_{B_c^*}[2]^\mathrm{BSZ}$'
+          unit:    'GeV'
+      'mass::B_c^*[3]@BSZ2015' :
+          central: +7.280
+          min:     +7.280
+          max:     +7.280
+          latex:   '$m_{B_c^*}[3]^\mathrm{BSZ}$'
+          unit:    'GeV'
       'mass::D_s,0@BSZ2015' :
           central: +2.318
           min:     +2.318
@@ -221,6 +254,13 @@ groups:
           max:     +6.420
           latex:   '$m_{B_{c,0}}^\mathrm{BSZ}$'
           unit:     'GeV'
+      # B_c,0 higher order taken from [BGS:2017A]
+      'mass::B_c,0[1]@BSZ2015' :
+          central: +7.122
+          min:     +7.122
+          max:     +7.122
+          latex:   '$m_{B_{c,0}}[1]^\mathrm{BSZ}$'
+          unit:    'GeV'
       'mass::D_s,1@BSZ2015' :
           central: +2.460
           min:     +2.460
@@ -249,8 +289,27 @@ groups:
           central: +6.7671
           min:     +6.7671
           max:     +6.7671
-          latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,1}}^\mathrm{BSZ}$'
           unit:     'GeV'
+      # B_c,1 higher order taken from [BGS:2017A]
+      'mass::B_c,1[1]@BSZ2015' :
+          central: +6.750
+          min:     +6.750
+          max:     +6.750
+          latex:   '$m_{B_{c,1}}[1]^\mathrm{BSZ}$'
+          unit:    'GeV'
+      'mass::B_c,1[2]@BSZ2015' :
+          central: +7.145
+          min:     +7.145
+          max:     +7.145
+          latex:   '$m_{B_{c,1}}[2]^\mathrm{BSZ}$'
+          unit:    'GeV'
+      'mass::B_c,1[3]@BSZ2015' :
+          central: +7.150
+          min:     +7.150
+          max:     +7.150
+          latex:   '$m_{B_{c,1}}[3]^\mathrm{BSZ}$'
+          unit:    'GeV'
       'mass::Lambda@BMRvD2022' :
           central: +1.115683
           min:     +1.115683
@@ -3893,6 +3952,50 @@ groups:
           min:      4.24e-04
           max:      4.24e-04
           latex:    '$\chi_{T_5}^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+  # }}}
+
+  # Dispersive bounds in b -> c currents
+  # {{{
+  - title: 'Dispersive bounds in the OPE for b -> c currents'
+    description: ''
+    parameters:
+      # reference: [BGS:2017A]
+      'b->c::chiOPE[1^-_V]' :
+          central:  5.131e-04
+          min:      5.131e-04
+          max:      5.131e-04
+          latex:    '$\chi^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->c::chiOPE[0^+_V]' :
+          central:  6.204e-03
+          min:      6.204e-03
+          max:      6.204e-03
+          latex:    '$\chi^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->c::chiOPE[1^+_A]' :
+          central:  3.894e-04
+          min:      3.894e-04
+          max:      3.894e-04
+          latex:    '$\chi^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->c::chiOPE[0^-_A]' :
+          central:  19.421e-03
+          min:      19.421e-03
+          max:      19.421e-03
+          latex:    '$\chi^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->c::chiOPE[1^-_T]' :
+          central:  4.898e-04
+          min:      4.898e-04
+          max:      4.898e-04
+          latex:    '$\chi_T^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->c::chiOPE[1^+_T5]' :
+          central:  2.715e-04
+          min:      2.715e-04
+          max:      2.715e-04
+          latex:    '$\chi_{T}^{J=1}|{}_\textrm{OPE}$'
           unit:     'GeV^-2'
   # }}}
 

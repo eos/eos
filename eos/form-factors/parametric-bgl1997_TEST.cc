@@ -49,10 +49,30 @@ class BGL1997FormFactorsTest :
 
             /* Outer function: t_0 = t_0,opt */
             {
-                BGL1997FormFactors<BToDstar> ff(p, Options{ });
+                BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
                 const double m_B(BToDstar::m_B);
                 const double m_V(BToDstar::m_V);
                 const double t_0((m_B + m_V)* power_of<2>(std::sqrt(m_B) - std::sqrt(m_V)));
+
+                p["mass::B_c^*@BSZ2015"] = 6.329;
+                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
+                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
+                p["mass::B_c,1@BSZ2015"] = 6.739;
+                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
+                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
+                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
+                p["mass::B_c@BSZ2015"] = 6.275;
+                p["mass::B_c[1]@BSZ2015"] = 6.871;
+                p["mass::B_c[2]@BSZ2015"] = 7.250;
+                p["mass::B_c,0@BSZ2015"] = 6.704;
+                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+
+                p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
+                p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
+                p["b->c::chiOPE[1^+_A]"] = 3.894e-04;
+                p["b->c::chiOPE[0^-_A]"] = 19.421e-03;
+                p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
+                p["b->c::chiOPE[1^+_T5]"] = 0.0002715419501133787;
 
                 //TEST_CHECK_NEARLY_EQUAL(ff._z(1.0, 2.0), 0.0535063, eps);
 
@@ -81,7 +101,27 @@ class BGL1997FormFactorsTest :
                 const double t_m = (mB - mV) * (mB - mV);
                 const double r   = mV / mB, wmax = (mB * mB + mV * mV) / (2.0 * mB * mV);
                 const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);
-                BGL1997FormFactors<BToDstar> ff(p, Options{ });
+                BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
+
+                p["mass::B_c^*@BSZ2015"] = 6.329;
+                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
+                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
+                p["mass::B_c,1@BSZ2015"] = 6.739;
+                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
+                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
+                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
+                p["mass::B_c@BSZ2015"] = 6.275;
+                p["mass::B_c[1]@BSZ2015"] = 6.871;
+                p["mass::B_c[2]@BSZ2015"] = 7.250;
+                p["mass::B_c,0@BSZ2015"] = 6.704;
+                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+
+                p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
+                p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
+                p["b->c::chiOPE[1^+_A]"] = 3.894e-04;
+                p["b->c::chiOPE[0^-_A]"] = 19.421e-03;
+                p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
+                p["b->c::chiOPE[1^+_T5]"] = 0.0002715419501133787;
 
                 p["B->D^*::a^g_0@BGL1997"] = 0.1e-02;
                 p["B->D^*::a^g_1@BGL1997"] = 0.2e-02;
@@ -233,7 +273,19 @@ class BGL1997FormFactorsTest :
 
             /* B -> D FFs*/
             {
-                BGL1997FormFactors<BToD> ff(p, Options{ });
+                BGL1997FormFactors<BToD, PToP> ff(p, Options{ });
+
+                p["mass::B_c^*@BSZ2015"] = 6.329;
+                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
+                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
+                p["mass::B_c,0@BSZ2015"] = 6.704;
+                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+
+                p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
+                p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
+                p["b->c::chiOPE[1^-_T]"] = 0.0004897959184;
+
+                p["mass::D_u@BSZ2015"] = 1.870;
 
                 p["B->D::a^f+_0@BGL1997"] = 0.1e-02;
                 p["B->D::a^f+_1@BGL1997"] = 0.2e-02;
@@ -296,8 +348,28 @@ class BGL1997FormFactorsTest :
 
             /* Outer function: t_0 = t_- */
             {
-                BGL1997FormFactors<BToDstar> ff(p, Options{ });
+                BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
                 const double t_0(10.684);
+
+                p["mass::B_c^*@BSZ2015"] = 6.329;
+                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
+                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
+                p["mass::B_c,1@BSZ2015"] = 6.739;
+                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
+                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
+                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
+                p["mass::B_c@BSZ2015"] = 6.275;
+                p["mass::B_c[1]@BSZ2015"] = 6.871;
+                p["mass::B_c[2]@BSZ2015"] = 7.250;
+                p["mass::B_c,0@BSZ2015"] = 6.704;
+                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+
+                p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
+                p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
+                p["b->c::chiOPE[1^+_A]"] = 3.894e-04;
+                p["b->c::chiOPE[0^-_A]"] = 19.421e-03;
+                p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
+                p["b->c::chiOPE[1^+_T5]"] = 0.0002715419501133787;
 
                 //_phi(s, t_0, K, a, b, c, chi);
                 TEST_CHECK_NEARLY_EQUAL(ff._phi(-2.0, t_0, 48, 3, 3, 2, 3.1e-03),                  0.0332310,   eps);
@@ -324,7 +396,27 @@ class BGL1997FormFactorsTest :
                 const double t_m = (mB - mV) * (mB - mV);
                 const double r   = mV / mB, wmax = (mB * mB + mV * mV) / (2.0 * mB * mV);
                 const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);
-                BGL1997FormFactors<BToDstar> ff(p, Options{ });
+                BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
+
+                p["mass::B_c^*@BSZ2015"] = 6.329;
+                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
+                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
+                p["mass::B_c,1@BSZ2015"] = 6.739;
+                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
+                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
+                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
+                p["mass::B_c@BSZ2015"] = 6.275;
+                p["mass::B_c[1]@BSZ2015"] = 6.871;
+                p["mass::B_c[2]@BSZ2015"] = 7.250;
+                p["mass::B_c,0@BSZ2015"] = 6.704;
+                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+
+                p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
+                p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
+                p["b->c::chiOPE[1^+_A]"] = 3.894e-04;
+                p["b->c::chiOPE[0^-_A]"] = 19.421e-03;
+                p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
+                p["b->c::chiOPE[1^+_T5]"] = 0.0002715419501133787;
 
                 p["B->D^*::a^g_0@BGL1997"] = 0.1e-02;
                 p["B->D^*::a^g_1@BGL1997"] = 0.2e-02;
@@ -476,7 +568,19 @@ class BGL1997FormFactorsTest :
 
             /* B -> D FFs*/
             {
-                BGL1997FormFactors<BToD> ff(p, Options{ });
+                BGL1997FormFactors<BToD, PToP> ff(p, Options{ });
+
+                p["mass::B_c^*@BSZ2015"] = 6.329;
+                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
+                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
+                p["mass::B_c,0@BSZ2015"] = 6.704;
+                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+
+                p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
+                p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
+                p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
+
+                p["mass::D_u@BSZ2015"] = 1.870;
 
                 p["B->D::a^f+_0@BGL1997"] = 0.1e-02;
                 p["B->D::a^f+_1@BGL1997"] = 0.2e-02;
