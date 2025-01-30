@@ -61,7 +61,7 @@ namespace eos
         { "B->K^*::BFW2010",      &BFW2010FormFactors<BToKstar,   PToV>::make         },
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
         { "B->D^*::BGJvD2019",    &HQETFormFactors<BToDstar,      PToV>::make         },
-        { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar>::make                 },
+        { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar,   PToV>::make         },
         { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
         { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
         { "B_s->D_s^*::BGJvD2019",&HQETFormFactors<BsToDsstar,    PToV>::make         },
@@ -345,7 +345,7 @@ namespace eos
         { "B->D::BCL2008",       &BCL2008FormFactors<BToD, 3u>::make                                                                                          },
         { "B->D::BSZ2015",       &BSZ2015FormFactors<BToD,   PToP>::make                                                                                      },
         { "B->D::BGJvD2019",     &HQETFormFactors<BToD,      PToP>::make                                                                                      },
-        { "B->D::BGL1997",       &BGL1997FormFactors<BToD>::make                                                                                              },
+        { "B->D::BGL1997",       &BGL1997FormFactors<BToD,   PToP>::make                                                                                              },
         { "B_s->D_s::BSZ2015",   &BSZ2015FormFactors<BsToDs, PToP>::make                                                                                      },
         { "B_s->D_s::BGJvD2019", &HQETFormFactors<BsToDs,    PToP>::make                                                                                      },
         // c -> d

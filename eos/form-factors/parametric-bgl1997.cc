@@ -23,29 +23,7 @@
 
 namespace eos
 {
-    const std::set<ReferenceName>
-    BGL1997FormFactors<BToDstar>::references
-    {
-        "BGL:1997A"_rn
-    };
-
-    const std::vector<OptionSpecification>
-    BGL1997FormFactors<BToDstar>::_options
-    {
-    };
-
-    template class BGL1997FormFactors<BToDstar>;
-
-    const std::set<ReferenceName>
-    BGL1997FormFactors<BToD>::references
-    {
-        "BGL:1997A"_rn
-    };
-
-    const std::vector<OptionSpecification>
-    BGL1997FormFactors<BToD>::_options
-    {
-    };
-
-    template class BGL1997FormFactors<BToD>;
+    // b -> c
+    template class BGL1997FormFactors<BToDstar, PToV>;
+    template class BGL1997FormFactors<BToD, PToP>;
 }

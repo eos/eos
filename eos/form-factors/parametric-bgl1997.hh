@@ -4,6 +4,7 @@
  * Copyright (c) 2020 Danny van Dyk
  * Copyright (c) 2020 Nico Gubernari
  * Copyright (c) 2020 Christoph Bobeth
+ * Copyright (c) 2025 Maximilian Hoverath
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,30 +28,243 @@
 #include <eos/form-factors/mesonic-processes.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/reference-name.hh>
+#include <eos/maths/power-of.hh>
+#include <eos/maths/szego-polynomial.hh>
+#include <eos/utils/kinematic.hh>
+#include <eos/utils/diagnostics.hh>
+#include <eos/utils/options.hh>
+
+#include <array>
 
 namespace eos
 {
-    class BGL1997FormFactorBase
+    template <typename Process_, typename Transition_> class BGL1997FormFactorTraits;
+
+    template <typename Process_, typename Transition_> class BGL1997FormFactors;
+
+
+    template <typename Process_>
+    class BGL1997FormFactorTraits<Process_, PToV> :
+        public virtual ParameterUser
     {
-        protected:
-            const double _t_p, _t_m;
-            const double _chi_1m, _chi_0p;
-            const double _chi_1p, _chi_0m;
-            const double _chi_T_1m, _chi_T_1p;
-
         public:
-            double _z(const double & t, const double & t_0) const;
-            double _phi(const double & s, const double & t_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const;
+            UsedParameter m_B, m_V;
+            std::array<UsedParameter, 4> masses_1m;
+            std::array<UsedParameter, 4> masses_1p;
+            std::array<UsedParameter, 3> masses_0m;
+            std::array<UsedParameter, 2> masses_0p;
+            UsedParameter chi_1m, chi_0p;
+            UsedParameter chi_1p, chi_0m;
+            UsedParameter chi_T_1m, chi_T_1p;
+            UsedParameter t_0;
 
-            BGL1997FormFactorBase(const Parameters &, const Options &, ParameterUser &, const double t_p, const double t_m);
-            ~BGL1997FormFactorBase();
+            SpecifiedOption n_bound_states_1m;
+            SpecifiedOption n_bound_states_1p;
+            SpecifiedOption n_bound_states_0m;
+            SpecifiedOption n_bound_states_0p;
+
+            BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
+                masses_1m{{ UsedParameter(p["mass::B_c^*@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c^*[1]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c^*[2]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c^*[3]@BSZ2015"], *this)
+                }},
+                masses_1p{{ UsedParameter(p["mass::B_c,1@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c,1[1]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c,1[2]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c,1[3]@BSZ2015"], *this)
+                }},
+                masses_0m{{ UsedParameter(p["mass::B_c@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c[1]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c[2]@BSZ2015"], *this)
+                }},
+                masses_0p{{ UsedParameter(p["mass::B_c,0@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c,0[1]@BSZ2015"], *this)
+                }},
+                chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
+                chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
+                chi_1p(UsedParameter(p["b->c::chiOPE[1^+_A]"], *this)),
+                chi_0m(UsedParameter(p["b->c::chiOPE[0^-_A]"], *this)),
+                chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
+                chi_T_1p(UsedParameter(p["b->c::chiOPE[1^+_T5]"], *this)),
+                t_0(UsedParameter(p["B->D^*::t_0@BGL1997"], *this)),
+                n_bound_states_1m(o, options, "n-bound-states-1m"),
+                n_bound_states_1p(o, options, "n-bound-states-1p"),
+                n_bound_states_0m(o, options, "n-bound-states-0m"),
+                n_bound_states_0p(o, options, "n-bound-states-0p")
+            {
+            }
+
+            double tp() const
+            {
+                return power_of<2>(m_B + m_V);
+            }
+
+            double tm() const
+            {
+                return power_of<2>(m_B - m_V);
+            }
+
+            complex<double> _z(const complex<double> & s, const complex<double> & s_0, const complex<double> & s_p) const
+            {
+                return (std::sqrt(s_p - s) - std::sqrt(s_p - s_0)) / (std::sqrt(s_p - s) + std::sqrt(s_p - s_0));
+            }
+
+            double _z(const double & s, const double & s_0, const double & s_p) const
+            {
+                if (s > s_p)
+                    throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(s_p));
+
+                return real(_z(complex<double>(s, 0.0), complex<double>(s_0, 0.0), complex<double>(s_p, 0.0)));
+            }
+
+            double blaschke_1m(const double & s) const
+            {
+                // bound states for 1^-
+                double blaschke = 1.0;
+                for (int i = 0; i < stoi(n_bound_states_1m.value()); ++i)
+                {
+                    if (masses_1m[i]() * masses_1m[i]() <= tp())
+                    {
+                        blaschke *= _z(s, masses_1m[i]() * masses_1m[i](), tp());
+                    }
+                }
+                return blaschke;
+            }
+
+            double blaschke_1p(const double & s) const
+            {
+                // bound states for 1^+
+                double blaschke = 1.0;
+                for (int i = 0; i < stoi(n_bound_states_1p.value()); ++i)
+                {
+                    if (masses_1p[i]() * masses_1p[i]() <= tp())
+                    {
+                        blaschke *= _z(s, masses_1p[i]() * masses_1p[i](), tp());
+                    }
+                }
+                return blaschke;
+            }
+
+            double blaschke_0m(const double & s) const
+            {
+                // bound states for 0^-
+                double blaschke = 1.0;
+                for (int i = 0; i < stoi(n_bound_states_0m.value()); ++i)
+                {
+                    if (masses_0m[i]() * masses_0m[i]() <= tp())
+                    {
+                        blaschke *= _z(s, masses_0m[i]() * masses_0m[i](), tp());
+                    }
+                }
+                return blaschke;
+            }
+
+            double blaschke_0p(const double & s) const
+            {
+                // bound states for 0^+
+                double blaschke = 1.0;
+                for (int i = 0; i < stoi(n_bound_states_0p.value()); ++i)
+                {
+                    if (masses_0p[i]() * masses_0p[i]() <= tp())
+                    {
+                        blaschke *= _z(s, masses_0p[i]() * masses_0p[i](), tp());
+                    }
+                }
+                return blaschke;
+            }
     };
 
-    template <typename Process_> class BGL1997FormFactors;
+    template <typename Process_>
+    class BGL1997FormFactorTraits<Process_, PToP> :
+        public virtual ParameterUser
+    {
+        public:
+            UsedParameter m_B, m_P;
+            std::array<UsedParameter, 4> masses_1m;
+            std::array<UsedParameter, 2> masses_0p;
+            UsedParameter chi_1m, chi_0p;
+            UsedParameter chi_T_1m;
+            UsedParameter t_0;
 
-    template <>
-    class BGL1997FormFactors<BToDstar> :
-        public BGL1997FormFactorBase,
+            SpecifiedOption n_bound_states_1m;
+            SpecifiedOption n_bound_states_0p;
+
+            BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
+                m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
+                masses_1m{{ UsedParameter(p["mass::B_c^*@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c^*[1]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c^*[2]@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c^*[3]@BSZ2015"], *this)
+                }},
+                masses_0p{{ UsedParameter(p["mass::B_c,0@BSZ2015"], *this),
+                            UsedParameter(p["mass::B_c,0[1]@BSZ2015"], *this)
+                }},
+                chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
+                chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
+                chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
+                t_0(UsedParameter(p["B->D::t_0@BGL1997"], *this)),
+                n_bound_states_1m(o, options, "n-bound-states-1m"),
+                n_bound_states_0p(o, options, "n-bound-states-0p")
+            {
+            }
+
+            double tp() const
+            {
+                return power_of<2>(m_B + m_P);
+            }
+
+            double tm() const
+            {
+                return power_of<2>(m_B - m_P);
+            }
+
+            complex<double> _z(const complex<double> & s, const complex<double> & s_0, const complex<double> & s_p) const
+            {
+                return (std::sqrt(s_p - s) - std::sqrt(s_p - s_0)) / (std::sqrt(s_p - s) + std::sqrt(s_p - s_0));
+            }
+
+            double _z(const double & s, const double & s_0, const double & s_p) const
+            {
+                if (s > s_p)
+                    throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(s_p));
+
+                return real(_z(complex<double>(s, 0.0), complex<double>(s_0, 0.0), complex<double>(s_p, 0.0)));
+            }
+
+            double blaschke_1m(const double & s) const
+            {
+                // bound states for 1^-
+                double blaschke = 1.0;
+                for (int i = 0; i < stoi(n_bound_states_1m.value()); ++i)
+                {
+                    if (masses_1m[i]() * masses_1m[i]() <= tp())
+                    {
+                        blaschke *= _z(s, masses_1m[i]() * masses_1m[i](), tp());
+                    }
+                }
+                return blaschke;
+            }
+
+            double blaschke_0p(const double & s) const
+            {
+                // bound states for 0^+
+                double blaschke = 1.0;
+                for (int i = 0; i < stoi(n_bound_states_0p.value()); ++i)
+                {
+                    if (masses_0p[i]() * masses_0p[i]() <= tp())
+                    {
+                        blaschke *= _z(s, masses_0p[i]() * masses_0p[i](), tp());
+                    }
+                }
+                return blaschke;
+            }
+    };
+
+    template <typename Process_> class BGL1997FormFactors<Process_, PToV> :
         public FormFactors<PToV>
     {
         private:
@@ -59,18 +273,21 @@ namespace eos
             std::array<UsedParameter, 4> _a_T1;
             std::array<UsedParameter, 3> _a_T2, _a_T23;
 
-            const double _mB, _mB2, _mV, _mV2;
-            UsedParameter _t_0;
+            const BGL1997FormFactorTraits<Process_, PToV> _traits;
+
+            const UsedParameter & _mB;
+            const UsedParameter & _mV;
+            const UsedParameter & t_0;
 
             static std::string _par_name(const std::string & ff_name);
-
-            static const std::vector<OptionSpecification> _options;
 
         public:
             BGL1997FormFactors(const Parameters &, const Options &);
             ~BGL1997FormFactors();
 
             static FormFactors<PToV> * make(const Parameters & parameters, const Options & options);
+
+            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const                      double & chi) const;
 
             double g(const double & s) const;
             double f(const double & s) const;
@@ -100,6 +317,10 @@ namespace eos
             virtual double f_para_T(const double & s) const;
             virtual double f_long_T(const double & s) const;
 
+            Diagnostics diagnostics() const;
+
+            static const std::vector<OptionSpecification> _options;
+
             /*!
              * References used in the computation of our (pseudo)observables.
              */
@@ -110,24 +331,23 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
+            static const std::vector<OptionSpecification> options;
     };
+    extern template class BGL1997FormFactors<BToDstar, PToV>;
 
-
-
-    template <>
-    class BGL1997FormFactors<BToD> :
-        public BGL1997FormFactorBase,
+    template <typename Process_> class BGL1997FormFactors<Process_, PToP> :
         public FormFactors<PToP>
     {
         private:
             std::array<UsedParameter, 4> _a_f_p, _a_f_0, _a_f_t;
 
-            const double _mB, _mB2, _mP, _mP2;
-            UsedParameter _t_0;
+            const BGL1997FormFactorTraits<Process_, PToP> _traits;
+
+            const UsedParameter & _mB;
+            const UsedParameter & _mP;
+            const UsedParameter & t_0;
 
             static std::string _par_name(const std::string & ff_name);
-
-            static const std::vector<OptionSpecification> _options;
 
         public:
             BGL1997FormFactors(const Parameters &, const Options &);
@@ -135,11 +355,17 @@ namespace eos
 
             static FormFactors<PToP> * make(const Parameters & parameters, const Options & options);
 
+            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const                       double & chi) const;
+
             virtual double f_p(const double & s) const;
             virtual double f_0(const double & s) const;
             virtual double f_t(const double & s) const;
 
             virtual double f_plus_T(const double & s) const;
+
+            Diagnostics diagnostics() const;
+
+            static const std::vector<OptionSpecification> _options;
 
             /*!
              * References used in the computation of our (pseudo)observables.
@@ -151,7 +377,9 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
+            static const std::vector<OptionSpecification> options;
     };
+    extern template class BGL1997FormFactors<BToD, PToP>;
 }
 
 #endif

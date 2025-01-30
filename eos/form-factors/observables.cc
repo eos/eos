@@ -1274,19 +1274,19 @@ namespace eos
 
                 make_observable("B->D^*::a_0[F_1]@BGL", R"(a_0^{F_1})",
                         Unit::None(),
-                        &BGL1997FormFactors<BToDstar>::a_F1_0),
+                        &BGL1997FormFactors<BToDstar, PToV>::a_F1_0),
 
                 make_observable("B->D^*::a_0[F_2]@BGL", R"(a_0^{F_2})",
                         Unit::None(),
-                        &BGL1997FormFactors<BToDstar>::a_F2_0),
+                        &BGL1997FormFactors<BToDstar, PToV>::a_F2_0),
 
                 make_observable("B->D^*::a_0[T_2]@BGL", R"(a_0^{T_2})",
                         Unit::None(),
-                        &BGL1997FormFactors<BToDstar>::a_T2_0),
+                        &BGL1997FormFactors<BToDstar, PToV>::a_T2_0),
 
                 make_observable("B->D^*::a_0[T_23]@BGL", R"(a_0^{T_{23}})",
                         Unit::None(),
-                        &BGL1997FormFactors<BToDstar>::a_T23_0),
+                        &BGL1997FormFactors<BToDstar, PToV>::a_T23_0),
 
                 make_observable("B->D^*::h_A1(q2)", R"(h_{A_1}^{\bar{B}\to D^*}(q^2))",
                         Unit::None(),
