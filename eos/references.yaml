@@ -826,6 +826,13 @@ CBHKSS:1995A:
   inspire-id: Chung:1995dx
   journal: Ann.Physik 4 (1995) 404-430
   title: Partial wave analysis in K-matrix formalism
+CCH:2017A:
+  authors: Cirigliano, V. and Crivellin, A. and Hoferichter, M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1712.06595
+  inspire-id: Cirigliano:2017tqn
+  title: No go theorem for nonstandard explanations of the $\tau \to K \pi \nu_\tau$ CP asymmetry'
 CDF:2011A:
   authors: Aaltonen, T. et al.
   collaboration: CDF
