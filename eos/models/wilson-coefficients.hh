@@ -52,7 +52,7 @@ namespace eos
              * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_Ub, where U=u,c.
              *
              * We also use this class for semileptonic operators of type Dcnul,
-             * i.e., scnul or dcnul. In this case, the normalization uses V_cD,
+             * i.e., scnul or dcnul. In this case, the normalization uses V_cD^*,
              * where D=d,s.
              */
 
