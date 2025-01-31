@@ -46,6 +46,9 @@ namespace eos
 
         namespace WET
         {
+            // Charged-current semileptonic sectors (Delta S = 1)
+            struct USLNu;
+
             // Charged-current semileptonic sectors (Delta C = 1)
             struct DCNuL;
             struct SCNuL;
@@ -114,6 +117,15 @@ namespace eos
             virtual double m_ud_msbar(const double & mu) const         = 0;
             virtual double m_u_msbar(const double & mu) const          = 0;
             virtual double m_d_msbar(const double & mu) const          = 0;
+    };
+
+    /* Charged-current semileptonic sectors (Delta C = 1) */
+    // Base class for the UBLNu WET sector
+    template <> class ModelComponent<components::WET::USLNu>
+    {
+        public:
+            // [ubar s] [lbar nu] Wilson coefficients
+            virtual WilsonCoefficients<ChargedCurrent> wet_uslnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
     };
 
     /* Charged-current semileptonic sectors (Delta C = 1) */
@@ -209,6 +221,8 @@ namespace eos
         public ParameterUser,
         public virtual ModelComponent<components::CKM>,
         public virtual ModelComponent<components::QCD>,
+        // Charged-current semileptonic sectors (Delta S = 1)
+        public virtual ModelComponent<components::WET::USLNu>,
         // Charged-current semileptonic sectors (Delta C = 1)
         public virtual ModelComponent<components::WET::DCNuL>,
         public virtual ModelComponent<components::WET::SCNuL>,

@@ -75,6 +75,8 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
+        // Charged-current semileptonic sectors (Delta S = 1)
+        public SMComponent<components::WET::USLNu>,
         // Charged-current semileptonic sectors (Delta C = 1)
         public SMComponent<components::WET::DCNuL>,
         public SMComponent<components::WET::SCNuL>,
