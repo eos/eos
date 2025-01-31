@@ -884,15 +884,21 @@ namespace eos
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
-        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
+        // Charged-current semileptonic sectors (Delta C = 1)
+        WilsonScanComponent<components::WET::DCNuL>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
+        // Charged-current semileptonic sectors (Delta B = 1)
         WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
+        // Neutral-current semileptonic sectors (Delta B = 1)
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
+        // Hadronic sectors (Delta B = 1)
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
-        WilsonScanComponent<components::WET::DCNuL>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
+        // Hadronic sectors (Delta B = 2)
+        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
+        // Old-style WET sectors
+        WilsonScanComponent<components::DeltaBS1>(parameters, options, *this)
     {
     }
 
@@ -907,15 +913,21 @@ namespace eos
     ConstrainedWilsonScanModel::ConstrainedWilsonScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
-        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
-        ConstrainedWilsonScanComponent(parameters, options, *this),
+        // Charged-current semileptonic sectors (Delta C = 1)
+        WilsonScanComponent<components::WET::DCNuL>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
+        // Charged-current semileptonic sectors (Delta B = 1)
         WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
         WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
+        // Neutral-current semileptonic sectors (Delta B = 1)
         WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
+        // Hadronic sectors (Delta B = 1)
         WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
-        WilsonScanComponent<components::WET::DCNuL>(parameters, options, *this)
+        WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
+        // Hadronic sectors (Delta B = 2)
+        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
+        // Old-style WET sectors
+        ConstrainedWilsonScanComponent(parameters, options, *this)
     {
     }
 
