@@ -759,7 +759,7 @@ namespace eos
         // SM Wilson coefficients are real so cp conjugation has no effect
 
         // RGE
-        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge{
+        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge{
             // gamma_0: eigenvalues
             (2.0 / 3.0) * std::array<double, 10u>{ { -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0)) } },
             // gamma_0: V
@@ -854,7 +854,7 @@ namespace eos
         // SM Wilson coefficients are real so cp conjugation has no effect
 
         // RGE
-        static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge{
+        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 10u> rge{
             // gamma_0: eigenvalues
             (2.0 / 3.0) * std::array<double, 10u>{ { -24.0, -12.0, 6.0, 3.0, (-17.0 - sqrt(241.0)), -24.0, (+1.0 + sqrt(241.0)), (+1.0 - sqrt(241.0)), 3.0, (-17 + sqrt(241.0)) } },
             // gamma_0: V
