@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018, 2021 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
@@ -575,6 +575,24 @@ namespace eos
 
             throw InternalError("SMComponent<components::QCD>::m_d_msbar: Running of m_d_MSbar to mu < 1.0 GeV not yet implemented");
         }
+    }
+
+    /* Charged-current semileptonic sectors (Delta S = 1) */
+
+    SMComponent<components::WET::USLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */) {}
+
+    WilsonCoefficients<ChargedCurrent>
+    SMComponent<components::WET::USLNu>::wet_uslnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
+    {
+        // universal electroweak correction, cf. [S1982]
+        // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
+        const double etaEW = 1.009653; // cf. sqrt(S_EW = 1.0194) in [CCH:2017A], p. 2, below eq. (13)
+
+        WilsonCoefficients<ChargedCurrent> wc;
+        wc._coefficients.fill(complex<double>(0.0));
+        wc._coefficients[0] = complex<double>(etaEW);
+
+        return wc;
     }
 
     /* Charged-current semileptonic sectors (Delta C = 1) */
@@ -1240,6 +1258,8 @@ namespace eos
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
+        // Charged-current semileptonic sectors (Delta S = 1)
+        SMComponent<components::WET::USLNu>(p, *this),
         // Charged-current semileptonic sectors (Delta C = 1)
         SMComponent<components::WET::DCNuL>(p, *this),
         SMComponent<components::WET::SCNuL>(p, *this),

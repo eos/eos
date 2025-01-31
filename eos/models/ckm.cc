@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2024 Danny van Dyk
+ * Copyright (c) 2014-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -111,6 +111,8 @@ namespace eos
     CKMScanModel::CKMScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
+        // Charged-current semileptonic sectors (Delta S = 1)
+        SMComponent<components::WET::USLNu>(parameters, *this),
         // Charged-current semileptonic sectors (Delta C = 1)
         SMComponent<components::WET::DCNuL>(parameters, *this),
         SMComponent<components::WET::SCNuL>(parameters, *this),

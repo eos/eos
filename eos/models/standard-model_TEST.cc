@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -447,6 +447,38 @@ class WilsonCoefficientsBToSTest : public TestCase
             }
         }
 } wilson_coefficients_b_to_s_test;
+
+class WilsonCoefficientsUSLNUTest : public TestCase
+{
+    public:
+        WilsonCoefficientsUSLNUTest() :
+            TestCase("wilson_coefficients_uslnu_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            {
+                static const double eps = 1e-8;
+
+                Parameters    parameters = reference_parameters(); // set scale usmunumu::mu
+                StandardModel model(parameters);
+
+                WilsonCoefficients<ChargedCurrent> wc = model.wet_uslnu(LeptonFlavor::muon, false);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.cvl()), +1.009653, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.cvl()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.cvr()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.cvr()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.csl()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.csl()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.csr()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.csr()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.ct()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.ct()), 0.0, eps);
+            }
+        }
+} wilson_coefficients_uslnu_test;
 
 class WilsonCoefficientsSBSBTest : public TestCase
 {
