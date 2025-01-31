@@ -614,6 +614,13 @@ groups:
     description: ''
     parameters:
       # Mean life times
+      'life_time::K_u' :
+          central: +1.238e-8
+          min:     +1.236e-8
+          max:     +1.240e-8
+          unit:     's'
+          latex:    '$\tau_{K^\pm}$'
+          comments: 'cf. [PDG2012], p. 39'
       'life_time::D_d' :
           central: +1.033e-12
           min:     +1.028e-12
