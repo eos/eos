@@ -219,12 +219,6 @@ namespace eos
             double im_f_para(const double & q2, const double & k2, const double & z) const { return std::imag(f_para(q2, k2, z)); }
             double im_f_long(const double & q2, const double & k2, const double & z) const { return std::imag(f_long(q2, k2, z)); }
             double im_f_time(const double & q2, const double & k2, const double & z) const { return std::imag(f_time(q2, k2, z)); }
-
-            // residues
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const = 0;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const = 0;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const = 0;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const = 0;
     };
 
     template <>

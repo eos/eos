@@ -32,7 +32,6 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
-#include <eos/form-factors/parametric-fvdv2018.hh>
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
@@ -442,8 +441,6 @@ namespace eos
     {
         // analytic computations
         { "B->pipi::BFvD2016",            &AnalyticFormFactorBToPiPiBFvD2016::make   },
-        { "B->pipi::FvDV2018-Dispersive", &AnalyticFormFactorBToPiPiFvDV2018::make   },
-        { "B->pipi::FvDV2018",            &FvDV2018FormFactors<BToPiPi>::make        },
     };
 
     std::shared_ptr<FormFactors<PToPP>>

@@ -264,34 +264,3 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
             }
         }
 } analytic_form_factor_b_to_pi_pi_BFvD2016_test;
-
-class AnalyticFormFactorBToPiPiFvDV2018Test :
-    public TestCase
-{
-    public:
-        AnalyticFormFactorBToPiPiFvDV2018Test() :
-            TestCase("analytic_form_factor_b_to_pi_pi_FvDV2018_test")
-        {
-        }
-
-        virtual void run() const
-        {
-            static const double eps = 1.0e-5;
-
-            /* Factory */
-            {
-                Parameters p = Parameters::Defaults();
-                p["mass::B_d"] = 5.27958;
-                p["mass::B_d^*"] = 5.32465;
-
-                std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi::FvDV2018-Dispersive", p, Options{ });
-
-                TEST_CHECK(0 != ff.get());
-
-                TEST_CHECK_RELATIVE_ERROR(ff->f_time_im_res_qhat2(0.05, 13.0), 2910.308, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_long_im_res_qhat2(0.05, 13.0), 2927.843, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_im_res_qhat2(0.05, 13.0),  -46.067, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_para_im_res_qhat2(0.05, 13.0),  129.103, eps);
-            }
-        }
-} analytic_form_factor_b_to_pi_pi_FvDV2018_test;

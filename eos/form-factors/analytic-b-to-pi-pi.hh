@@ -57,45 +57,6 @@ namespace eos
             double re_f_time(const double & q2, const double & k2, const double & z) const;
             double im_f_time(const double & q2, const double & k2, const double & z) const;
 
-            /* Form factors */
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const override;
-
-            /* Diagnostics for unit tests */
-            Diagnostics diagnostics() const;
-
-            /*!
-             * Options used in the computation of our observables.
-             */
-            static std::vector<OptionSpecification>::const_iterator begin_options();
-            static std::vector<OptionSpecification>::const_iterator end_options();
-    };
-
-    class AnalyticFormFactorBToPiPiFvDV2018 :
-        public FormFactors<PToPP>,
-        PrivateImplementationPattern<AnalyticFormFactorBToPiPiFvDV2018>
-    {
-        public:
-            AnalyticFormFactorBToPiPiFvDV2018(const Parameters &, const Options &);
-
-            ~AnalyticFormFactorBToPiPiFvDV2018();
-
-            static FormFactors<PToPP> * make(const Parameters &, const Options &);
-
-            /* Form factors */
-            virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const;
-            virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const;
-            virtual complex<double> f_long(const double & q2, const double & k2, const double & z) const;
-            virtual complex<double> f_time(const double & q2, const double & k2, const double & z) const;
-
-            /* Form factor residues */
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const;
-
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
 
