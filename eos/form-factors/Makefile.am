@@ -45,6 +45,7 @@ libeosformfactors_la_SOURCES = \
 	parametric-kkrvd2024.hh parametric-kkrvd2024.cc \
 	parametric-kkvdz2022.hh parametric-kkvdz2022.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
+	parametric-mpv2025.hh parametric-mpv2025.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	psd-lcdas.cc psd-lcdas.hh \
 	rho-lcdas.cc rho-lcdas.hh \
@@ -82,6 +83,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-dm2016.hh \
 	parametric-kkrvd2024.hh \
 	parametric-kmpw2010.hh \
+	parametric-mpv2025.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -117,6 +119,7 @@ TESTS = \
 	parametric-kkrvd2024_TEST \
 	parametric-kkvdz2022_TEST \
 	parametric-kmpw2010_TEST \
+	parametric-mpv2025_TEST \
 	pi-lcdas_TEST \
 	psd-lcdas_TEST \
 	rho-lcdas_TEST \
@@ -190,6 +193,8 @@ parametric_kkrvd2024_TEST_SOURCES = parametric-kkrvd2024_TEST.cc
 parametric_kkvdz2022_TEST_SOURCES = parametric-kkvdz2022_TEST.cc
 
 parametric_kmpw2010_TEST_SOURCES = parametric-kmpw2010_TEST.cc
+
+parametric_mpv2025_TEST_SOURCES = parametric-mpv2025_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 

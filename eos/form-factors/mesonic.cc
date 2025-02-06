@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2019 Nico Gubernari
@@ -35,6 +35,7 @@
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
+#include <eos/form-factors/parametric-mpv2025.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -441,6 +442,7 @@ namespace eos
     {
         // analytic computations
         { "B->pipi::BFvD2016",            &AnalyticFormFactorBToPiPiBFvD2016::make   },
+        { "D->Kpi::MPV2025",              &MPV2025FormFactors::make                  },
     };
 
     std::shared_ptr<FormFactors<PToPP>>
