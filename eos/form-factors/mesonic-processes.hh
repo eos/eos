@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2023 Danny van Dyk
+ * Copyright (c) 2020-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -427,6 +427,13 @@ namespace eos
         using Transition = VacuumToPP;
 
         static constexpr const char * label = "0->pipi";
+    };
+
+    struct VacuumToKPi
+    {
+        using Transition = VacuumToPP;
+
+        static constexpr const char * label = "0->Kpi";
     };
 }
 
