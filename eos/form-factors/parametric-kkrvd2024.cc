@@ -222,6 +222,18 @@ namespace eos
     }
 
     complex<double>
+    KKRvD2024FormFactors<VacuumToPiPi>::f_0(const double & /*q2*/) const
+    {
+        return 0.0; // vanishes in our approximation
+    }
+
+    complex<double>
+    KKRvD2024FormFactors<VacuumToPiPi>::f_0(const complex<double> & /*q2*/) const
+    {
+        return 0.0; // vanishes in our approximation
+    }
+
+    complex<double>
     KKRvD2024FormFactors<VacuumToPiPi>::f_t(const double & /*q2*/) const
     {
         throw InternalError("Not implemented!");
@@ -229,9 +241,10 @@ namespace eos
     }
 
     complex<double>
-    KKRvD2024FormFactors<VacuumToPiPi>::f_0(const double & /*q2*/) const
+    KKRvD2024FormFactors<VacuumToPiPi>::f_t(const complex<double> & /*q2*/) const
     {
-        return 0.0; // vanishes in our approximation
+        throw InternalError("Not implemented!");
+        return 0.0;
     }
 
     double
