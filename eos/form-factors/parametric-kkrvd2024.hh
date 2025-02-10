@@ -99,11 +99,13 @@ namespace eos
 
             /* form factors on the real axis */
             virtual complex<double> f_p(const double & q2) const override;
-            virtual complex<double> f_t(const double & q2) const override;
             virtual complex<double> f_0(const double & q2) const override;
+            virtual complex<double> f_t(const double & q2) const override;
 
             /* form factor in the complex q2 plane */
             virtual complex<double> f_p(const complex<double> & q2) const override;
+            virtual complex<double> f_0(const complex<double> & q2) const override;
+            virtual complex<double> f_t(const complex<double> & q2) const override;
 
             /* auxiliary observables */
             double r_pi_squared() const; // squared charge radius of the pion
