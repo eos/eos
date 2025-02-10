@@ -46,6 +46,7 @@ libeosformfactors_la_SOURCES = \
 	parametric-kkrvd2024.hh parametric-kkrvd2024.cc \
 	parametric-kkvdz2022.hh parametric-kkvdz2022.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
+	parametric-ksvd2025.hh parametric-ksvd2025.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	psd-lcdas.cc psd-lcdas.hh \
 	rho-lcdas.cc rho-lcdas.hh \
