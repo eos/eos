@@ -36,6 +36,7 @@
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
+#include <eos/form-factors/parametric-ksvd2025.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -683,6 +684,7 @@ namespace eos
     FormFactorFactory<VacuumToPP>::form_factors
     {
         { "0->pipi::KKRvD2024",     &KKRvD2024FormFactors<VacuumToPiPi>::make },
+        { "0->Kpi::KSvD2025",       &KSvD2025FormFactors<VacuumToKPi>::make   },
     };
 
     std::shared_ptr<FormFactors<VacuumToPP>>
