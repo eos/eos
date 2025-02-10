@@ -46,6 +46,7 @@ libeosformfactors_la_SOURCES = \
 	parametric-kkrvd2024.hh parametric-kkrvd2024.cc \
 	parametric-kkvdz2022.hh parametric-kkvdz2022.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
+	parametric-ksvd2025.hh parametric-ksvd2025.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	psd-lcdas.cc psd-lcdas.hh \
 	rho-lcdas.cc rho-lcdas.hh \
@@ -118,6 +119,7 @@ TESTS = \
 	parametric-dm2016_TEST \
 	parametric-fvdv2018_TEST \
 	parametric-kkrvd2024_TEST \
+	parametric-ksvd2025_TEST \
 	parametric-kkvdz2022_TEST \
 	parametric-kmpw2010_TEST \
 	pi-lcdas_TEST \
@@ -191,6 +193,8 @@ parametric_dm2016_TEST_SOURCES = parametric-dm2016_TEST.cc
 parametric_fvdv2018_TEST_SOURCES = parametric-fvdv2018_TEST.cc
 
 parametric_kkrvd2024_TEST_SOURCES = parametric-kkrvd2024_TEST.cc
+
+parametric_ksvd2025_TEST_SOURCES = parametric-ksvd2025_TEST.cc
 
 parametric_kkvdz2022_TEST_SOURCES = parametric-kkvdz2022_TEST.cc
 

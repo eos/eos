@@ -6131,6 +6131,69 @@ groups:
           unit:     'GeV^2'
           latex:    '$t_0^\textrm{KKRvD2024}$'
           comments: ''
+      '0->Kpi::b_%1%^%2%@KSvD2025':
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$b^%1%_%2%$'
+            map: {}
+          matrix:
+            - ["+", "0"]
+            - [1, 2, 3, 4, 5, 6, 7, 8, 9]
+          comments: ''
+      '0->Kpi::M_(+,%1%)@KSvD2025':
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     'GeV'
+          latex:
+            template: '$M_{(+,%1%)}$'
+            map: {}
+          matrix:
+            - [0, 1, 2]
+          comments: ''
+      '0->Kpi::Gamma_(+,%1%)@KSvD2025':
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     'GeV'
+          latex:
+            template: '$\Gamma_{(+,%1%)}$'
+            map: {}
+          matrix:
+            - [0, 1, 2]
+          comments: ''
+      '0->Kpi::M_(0,%1%)@KSvD2025':
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     'GeV'
+          latex:
+            template: '$M_{(0,%1%)}$'
+            map: {}
+          matrix:
+            - [0, 1]
+          comments: ''
+      '0->Kpi::Gamma_(0,%1%)@KSvD2025':
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     'GeV'
+          latex:
+            template: '$\Gamma_{(0,%1%)}$'
+            map: {}
+          matrix:
+            - [0, 1]
+          comments: ''
+      '0->Kpi::t_0@KSvD2025' :
+          central:  0.0
+          min:     -2.0
+          max:     +0.0
+          unit:    'GeV^2'
+          latex:    '$t_0^\textrm{KSvDvD2025}$'
+          comments: ''
   # }}}
 
   # Nonleptonic Amplitudes Parameters
