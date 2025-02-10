@@ -325,9 +325,21 @@ namespace eos
 
             // scalar form factor
             virtual complex<double> f_0(const double & q2) const = 0;
+            virtual double abs2_f_0(const double & q2) const;
+            virtual double arg_f_0(const double & q2) const;
+
+            virtual complex<double> f_0(const complex<double> & q2) const = 0;
+            virtual double re_f_0(const double & re_q2, const double & im_q2) const;
+            virtual double im_f_0(const double & re_q2, const double & im_q2) const;
 
             // tensor form factor
             virtual complex<double> f_t(const double & q2) const = 0;
+            virtual double abs2_f_t(const double & q2) const;
+            virtual double arg_f_t(const double & q2) const;
+
+            virtual complex<double> f_t(const complex<double> & q2) const = 0;
+            virtual double re_f_t(const double & re_q2, const double & im_q2) const;
+            virtual double im_f_t(const double & re_q2, const double & im_q2) const;
     };
 
     template <>

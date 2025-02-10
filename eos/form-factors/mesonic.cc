@@ -623,6 +623,62 @@ namespace eos
         return std::imag(this->f_p(complex<double>(re_q2, im_q2)));
     }
 
+    double
+    FormFactors<VacuumToPP>::abs2_f_0(const double & q2) const
+    {
+        return std::norm(this->f_0(q2));
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_0(const double & q2) const
+    {
+        const double arg = std::arg(this->f_0(q2));
+        if (arg < 0.0) {
+            return arg + 2.0 * M_PI;
+        }
+        return arg;
+    }
+
+    double
+    FormFactors<VacuumToPP>::re_f_0(const double & re_q2, const double & im_q2) const
+    {
+        return std::real(this->f_0(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::im_f_0(const double & re_q2, const double & im_q2) const
+    {
+        return std::imag(this->f_0(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::abs2_f_t(const double & q2) const
+    {
+        return std::norm(this->f_t(q2));
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_t(const double & q2) const
+    {
+        const double arg = std::arg(this->f_t(q2));
+        if (arg < 0.0) {
+            return arg + 2.0 * M_PI;
+        }
+        return arg;
+    }
+
+    double
+    FormFactors<VacuumToPP>::re_f_t(const double & re_q2, const double & im_q2) const
+    {
+        return std::real(this->f_t(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::im_f_t(const double & re_q2, const double & im_q2) const
+    {
+        return std::imag(this->f_t(complex<double>(re_q2, im_q2)));
+    }
+
     const std::map<FormFactorFactory<VacuumToPP>::KeyType, FormFactorFactory<VacuumToPP>::ValueType>
     FormFactorFactory<VacuumToPP>::form_factors
     {
