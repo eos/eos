@@ -21,7 +21,7 @@ jobs:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:26605c04dc7409908fec23d012b416f18f4d846c
         steps:
@@ -87,7 +87,7 @@ jobs:
                 cfg:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Documentation on ${{ matrix.cfg.os }}
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:26605c04dc7409908fec23d012b416f18f4d846c
         steps:
@@ -136,7 +136,7 @@ jobs:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:26605c04dc7409908fec23d012b416f18f4d846c
         steps:
@@ -167,7 +167,7 @@ jobs:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:26605c04dc7409908fec23d012b416f18f4d846c
         steps:
@@ -208,7 +208,7 @@ jobs:
                 cfg:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:26605c04dc7409908fec23d012b416f18f4d846c
         steps:
@@ -296,7 +296,7 @@ jobs:
                 cfg:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy documentation on ${{ matrix.cfg.os }}
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:26605c04dc7409908fec23d012b416f18f4d846c
         steps:
