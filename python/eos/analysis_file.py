@@ -102,7 +102,7 @@ class AnalysisFile:
                         for aliased_qn in p.alias_of:
                             eos.Parameters.redirect(eos.QualifiedName(aliased_qn), id)
                             eos.info(f'Created parameter alias: {aliased_qn} -> {qn}')
-                except eos.Exception as e:
+                except RuntimeError as e:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
