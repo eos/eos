@@ -1055,6 +1055,13 @@ DDS:2014A:
     id: oai:arXiv.org:1405.3719
   inpire-id: Duraisamy:2014sna
   title: Azimuthal $B \to D^{*} \tau^{-} \bar{\nu_\tau}$ angular distribution with tensor operators
+DHK:2015A:
+  authors: Daub, J. T. and Hanhart, C. and Kubis, B.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1508.06841
+  inspire-id: Daub:2015xja
+  title: A model-independent analysis of final-state interactions in $ {\overline{B}}_{d/s}^0\to J/\psi \pi \pi $
 DHMV:2015A:
   authors: Descotes-Genon, Sebastien and Hofer, Lars and Matias, Joaquim and Virto, Javier
   eprint:
@@ -2000,6 +2007,13 @@ RBC+UKQCD:2023A:
     id: oai:arXiv.org:2303.11280
   inspire-id: Flynn:2023nhi
   journal: Phys. Rev. D 107 114512 (2023)
+RHK:2018A:
+  authors: Ropertz, S. and Hanhart, C. and Kubis, B.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1809.06867
+  inspire-id: Ropertz:2018stk
+  title: A new parametrization for the scalar pion form factors
 S:1982A:
   authors: Sirlin, A.
   journal: Nucl.Phys. B196 (1982) 83-92
