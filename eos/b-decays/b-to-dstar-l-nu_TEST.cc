@@ -87,9 +87,8 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",                  "c"         },
+                    { "V",                  "D^*"       },
                     { "q",                  "d"         },
-                    { "I",                  "1/2"       },
                     { "l",                  "e"         },
                     { "model",              "CKM"       },
                     { "z-order-lp",         "3"         },
@@ -164,9 +163,8 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",                  "c"         },
+                    { "V",                  "D^*"       },
                     { "q",                  "d"         },
-                    { "I",                  "1/2"       },
                     { "l",                  "tau"       },
                     { "model",              "CKM"       },
                     { "z-order-lp",         "3"         },
@@ -253,9 +251,8 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",                  "c"         },
+                    { "V",                  "D^*"       },
                     { "q",                  "d"         },
-                    { "I",                  "1/2"       },
                     { "l",                  "mu"        },
                     { "model",              "WET"       },
                     { "z-order-lp",         "3"         },
@@ -320,12 +317,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "model",         "WET" },
-                    { "form-factors",  "BSZ2015" },
-                    { "integration-points",    "4096"    }
+                    { "V",                  "D^*"     },
+                    { "q",                  "d"       },
+                    { "model",              "WET"     },
+                    { "form-factors",       "BSZ2015" },
+                    { "integration-points", "4096"    }
                 };
 
                 BToVectorLeptonNeutrino d(p1, oo);
@@ -420,12 +416,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "U",             "c"       },
-                    { "q",             "d"       },
-                    { "I",             "1/2"     },
-                    { "model",         "WET" },
-                    { "form-factors",  "BSZ2015" },
-                    { "integration-points",    "4096"    }
+                    { "V",                  "D^*"     },
+                    { "q",                  "d"       },
+                    { "model",              "WET"     },
+                    { "form-factors",       "BSZ2015" },
+                    { "integration-points", "4096"    }
                 };
 
                 BToVectorLeptonNeutrino d(p3, oo);
@@ -465,8 +460,7 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "U",             "c"         },
-                    { "I",             "1/2"       },
+                    { "V",             "D^*"       },
                     { "q",             "d"         },
                     { "model",         "CKM"       },
                     { "z-order-lp",    "3"         },

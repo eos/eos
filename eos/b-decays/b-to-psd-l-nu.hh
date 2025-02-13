@@ -4,6 +4,7 @@
  * Copyright (c) 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2019 Christoph Bobeth
+ * Copyright (c) 2025 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General

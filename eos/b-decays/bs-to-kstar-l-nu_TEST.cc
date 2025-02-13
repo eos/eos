@@ -66,8 +66,7 @@ class BsToKstarLeptonNeutrinoTest :
                 {
                     { "model",        "WET"     },
                     { "form-factors", "BSZ2015" },
-                    { "U",            "u"       },
-                    { "I",            "1/2"     },
+                    { "V",            "K^*"     },
                     { "q",            "s"       },
                     { "l",            "mu"      }
                 };
