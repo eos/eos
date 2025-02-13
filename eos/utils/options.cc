@@ -267,6 +267,26 @@ namespace eos
         return _value;
     }
 
+    IntegerOption::IntegerOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
+        SpecifiedOption(options, specifications, key),
+        _int_value(destringify<int>(_value))
+    {
+    }
+
+    IntegerOption::~IntegerOption() = default;
+
+    double
+    IntegerOption::value() const
+    {
+        return _int_value;
+    }
+
+    const std::string &
+    IntegerOption::str() const
+    {
+        return _value;
+    }
+
     FloatOption::FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key),
         _float_value(destringify<double>(_value))
