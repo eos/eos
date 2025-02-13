@@ -63,7 +63,7 @@ class ParametricKKvDZ2022FormFactorTest :
 
             {
                 KKvDZ2022FormFactors kkvdz2022(p, Options{ });
-                KKvDZ2022FormFactors kkvdz2022_sub(sub_p, Options{ {"subtracted"_ok, "on"} });
+                KKvDZ2022FormFactors kkvdz2022_sub(sub_p, Options{ {"subtracted"_ok, "true"} });
 
                 // Tested against an IPython/Jupyter notebook implementation of Stephan Kürten
                 TEST_CHECK_NEARLY_EQUAL( complex<double>( 0.0713            , 0.0               ),  kkvdz2022.F_1(0.0, 0.0),  eps);
