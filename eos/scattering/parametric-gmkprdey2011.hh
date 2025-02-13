@@ -23,9 +23,9 @@
 #include <eos/scattering/single-channel.hh>
 #include <eos/scattering/single-channel-processes.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/omnes-factor.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/omnes-factor.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/reference-name.hh>
