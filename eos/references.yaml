@@ -870,6 +870,13 @@ CERN:2003A:
   inspire-id: Battaglia:2003in
   title: 'The CKM matrix and the unitarity triangle. Workshop, CERN, Geneva, Switzerland,
     13-16 Feb 2002: Proceedings'
+CHS:2018A:
+  authors: Colangelo, G. and Hoferichter, M. and Stoffer, P.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1810.00007
+  inspire-id: Colangelo:2018mtw
+  title: Two-pion contribution to hadronic vacuum polarization
 CKMfitter:2004A:
   authors: Charles, J. and Hocker, Andreas and Lacker, H. and Laplace, S. and Le Diberder,
     F.R. and Malcles, J. and Ocariz, J. and Pivk, M. and Roos, L.
