@@ -490,6 +490,61 @@ namespace eos
         return result;
     }
 
+    /* P -> PP (2) Processes */
+
+    FormFactors<PToPP2>::~FormFactors()
+    {
+    }
+
+    const std::map<FormFactorFactory<PToPP2>::KeyType, FormFactorFactory<PToPP2>::ValueType>
+    FormFactorFactory<PToPP2>::form_factors
+    {
+    };
+
+    std::shared_ptr<FormFactors<PToPP2>>
+    FormFactorFactory<PToPP2>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        Context ctx("When creating a P->PP (2) form factor");
+
+        std::shared_ptr<FormFactors<PToPP2>> result;
+
+        auto i = FormFactorFactory<PToPP2>::form_factors.find(name);
+        if (FormFactorFactory<PToPP2>::form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+            return result;
+        }
+
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToPP2>::option_specification(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<PToPP2>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToPP2>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<PToPP2>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        return result;
+    }
+
     /* V -> P Processes */
 
     FormFactors<VToP>::~FormFactors()
