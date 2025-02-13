@@ -1393,6 +1393,13 @@ HFLAV:2019A:
     id: oai:arXiv.org:1909.12524
   inspire-id: Amhis:2019ckw
   title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018
+HKvT:2025A:
+  authors: Herren, F. and Kubis, B. and van Tonder, R.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2502.xxxxx
+  inspire-id: Herren:2025xxx
+  title: A model-independent parameterization of $B\rightarrow\pi\pi\ell\nu$ decays
 HLMW:2005A:
   authors: Huber, Tobias and Lunghi, Enrico and Misiak, Mikolaj and Wyler, Daniel
   eprint:
