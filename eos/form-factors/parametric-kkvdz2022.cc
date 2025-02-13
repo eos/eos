@@ -25,7 +25,7 @@ using namespace std::literals::complex_literals;
 namespace eos
 {
     KKvDZ2022FormFactors::KKvDZ2022FormFactors(const Parameters & p, const Options & o) :
-        opt_subtracted(o, "subtracted"_ok, { "off", "on" }, "off"),
+        opt_subtracted(o, options, "subtracted"_ok),
         switch_subtracted(0.0),
         _a_omega{{{ UsedParameter(p[_par_name("N^omega_1_0")],  *this),
                    UsedParameter(p[_par_name("N^omega_1_1")],  *this),
@@ -65,7 +65,7 @@ namespace eos
                          UsedParameter(p[_par_name("c_4_2")],  *this) }}},
         _s_0(p[_par_name("s_0")],  *this)
     {
-        if (opt_subtracted.value() == "on")
+        if (opt_subtracted.value())
         {
             switch_subtracted = 1.0;
         }
@@ -225,6 +225,7 @@ namespace eos
 
     const std::vector<OptionSpecification> KKvDZ2022FormFactors::options
     {
+        { "subtracted"_ok, { "true", "false" }, "false" }
     };
 
     std::vector<OptionSpecification>::const_iterator

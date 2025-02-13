@@ -39,7 +39,7 @@ namespace eos
         public FormFactors<PToGammaOffShell>
     {
         private:
-            SwitchOption opt_subtracted;
+            BooleanOption opt_subtracted;
             double switch_subtracted;
             UsedParameter _s_0;
             static std::string _par_name(const std::string & ff_name);

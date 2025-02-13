@@ -28,7 +28,7 @@ namespace eos
         if ("B(*)->D(*)" == prefix)
             return prefix;
 
-        if ("1" == _opt_sslp_limit.value())
+        if (_opt_sslp_limit.value())
             return "B(*)->D(*)";
 
         return prefix;
@@ -39,16 +39,16 @@ namespace eos
         _mBar(p[prefix + "::mBar@HQET"], *this),
         _a(p[prefix + "::a@HQET"], *this),
         _opt_lp_model(o, "model-lp"_ok, { "power-series", "exponential" }, "power-series"),
-        _opt_lp_zorder(o, "z-order-lp"_ok, { "2", "3", "4", "5" }, "3"),
-        _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
-        _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
-        _enable_lp_z5(1.0 ? _opt_lp_zorder.value() >= "5" : 0.0),
-        _opt_slp_zorder(o, "z-order-slp"_ok, { "1", "2" }, "2"),
-        _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
-        _opt_sslp_zorder(o, "z-order-sslp"_ok, { "0", "1", "2" }, "1"),
-        _enable_sslp_z1(1.0 ? _opt_sslp_zorder.value() >= "1" : 0.0),
-        _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= "2" : 0.0),
-        _opt_sslp_limit(o, "SU3F-limit-sslp"_ok, { "0", "1" }, "0"),
+        _opt_lp_zorder(o, option_specifications, "z-order-lp"_ok),
+        _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= 3 : 0.0),
+        _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= 4 : 0.0),
+        _enable_lp_z5(1.0 ? _opt_lp_zorder.value() >= 5 : 0.0),
+        _opt_slp_zorder(o, option_specifications, "z-order-slp"_ok),
+        _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= 2 : 0.0),
+        _opt_sslp_zorder(o, option_specifications, "z-order-sslp"_ok),
+        _enable_sslp_z1(1.0 ? _opt_sslp_zorder.value() >= 1 : 0.0),
+        _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= 2 : 0.0),
+        _opt_sslp_limit(o, option_specifications, "SU3F-limit-sslp"_ok),
         _xipone(p[prefix + "::xi'(1)@HQET"], *this),
         _xippone(p[prefix + "::xi''(1)@HQET"], *this),
         _xipppone(p[prefix + "::xi'''(1)@HQET"], *this),
@@ -113,6 +113,10 @@ namespace eos
     const std::vector<OptionSpecification>
     HQETFormFactorBase::option_specifications
     {
+        { "z-order-lp"_ok,      { "2", "3", "4", "5" }, "3"     },
+        { "z-order-slp"_ok,     { "1", "2" },           "2"     },
+        { "z-order-sslp"_ok,    { "0", "1", "2" },      "1"     },
+        { "SU3F-limit-sslp"_ok, { "true", "false" },    "false" }
     };
 
     // uses a power series ansatz
