@@ -20,10 +20,10 @@
 #ifndef EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_QCDF_AMPLITUDES_HH
 #define EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_QCDF_AMPLITUDES_HH 1
 
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
 #include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
 #include <eos/utils/parameters.hh>
 
 #include <array>
@@ -33,23 +33,21 @@ namespace eos
 {
     template <typename Transition_> class QCDFRepresentation;
 
-    template <>
-    class QCDFRepresentation<PToPP> :
-        public NonleptonicAmplitudes<PToPP>
+    template <> class QCDFRepresentation<PToPP> : public NonleptonicAmplitudes<PToPP>
     {
         private:
             std::shared_ptr<Model> model;
-            QuarkFlavorOption opt_q;
-            LightMesonOption opt_p1;
-            LightMesonOption opt_p2;
-            BooleanOption opt_cp_conjugate;
-            BooleanOption opt_B_bar;
+            QuarkFlavorOption      opt_q;
+            LightMesonOption       opt_p1;
+            LightMesonOption       opt_p2;
+            BooleanOption          opt_cp_conjugate;
+            BooleanOption          opt_B_bar;
 
             UsedParameter theta_18;
 
-            su3f::rank1 B;
+            su3f::rank1                    B;
             std::array<complex<double>, 6> Lambda_u, Lambda_c;
-            mutable su3f::rank2 P1, P2, U, I;
+            mutable su3f::rank2            P1, P2, U, I;
 
             UsedParameter Gfermi;
             UsedParameter mB;
@@ -95,9 +93,10 @@ namespace eos
         public:
             QCDFRepresentation(const Parameters & p, const Options & o);
 
-            ~QCDFRepresentation() {};
+            ~QCDFRepresentation() {}
 
-            inline void update() const
+            inline void
+            update() const
             {
                 const double theta_18 = this->theta_18.evaluate();
                 su3f::psd_octet.find(opt_p1.value())->second(theta_18, P1);
@@ -111,13 +110,24 @@ namespace eos
             complex<double> b_amplitude(su3f::rank2 & p1, su3f::rank2 & p2) const;
 
             // Diagnostic functions
-            complex<double> alpha_amplitude() const { update(); return alpha_amplitude(P1, P2); }
-            complex<double> b_amplitude() const { update(); return b_amplitude(P1, P2); };
+            complex<double>
+            alpha_amplitude() const
+            {
+                update();
+                return alpha_amplitude(P1, P2);
+            }
+
+            complex<double>
+            b_amplitude() const
+            {
+                update();
+                return b_amplitude(P1, P2);
+            }
 
             // Amplitude for B -> P1 P2
             complex<double> ordered_amplitude() const;
             // Amplitude for B -> P2 P1
             complex<double> inverse_amplitude() const;
     };
-}
+} // namespace eos
 #endif

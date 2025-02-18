@@ -22,11 +22,9 @@
 
 namespace eos
 {
-    template <typename Transition_>
-    class NonleptonicAmplitudes;
+    template <typename Transition_> class NonleptonicAmplitudes;
 
-    template <typename Transition_>
-    class NonleptonicAmplitudeFactory;
-}
+    template <typename Transition_> class NonleptonicAmplitudeFactory;
+} // namespace eos
 
 #endif

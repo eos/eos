@@ -30,9 +30,7 @@
 namespace eos
 {
     /* Amplitude adapter class for interfacing Observable */
-    template <typename Transition_, typename ... Args_>
-    class NonleptonicAmplitudesAdapter :
-        public Observable
+    template <typename Transition_, typename... Args_> class NonleptonicAmplitudesAdapter : public Observable
     {
         private:
             QualifiedName _name;
@@ -47,20 +45,17 @@ namespace eos
 
             std::shared_ptr<NonleptonicAmplitudes<Transition_>> _nonleptonic_amplitudes;
 
-            std::function<double (const NonleptonicAmplitudes<Transition_> *, const Args_ & ...)> _nonleptonic_amplitudes_function;
+            std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> _nonleptonic_amplitudes_function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
-            std::tuple<const NonleptonicAmplitudes<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
+            std::tuple<const NonleptonicAmplitudes<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type...> _argument_tuple;
 
         public:
-            NonleptonicAmplitudesAdapter(const QualifiedName & name,
-                    const qnp::Prefix & process,
-                    const Parameters & parameters,
-                    const Kinematics & kinematics,
-                    const Options & options,
-                    const std::function<double (const NonleptonicAmplitudes<Transition_> *, const Args_ & ...)> & nonleptonic_amplitudes_function,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+            NonleptonicAmplitudesAdapter(const QualifiedName & name, const qnp::Prefix & process, const Parameters & parameters, const Kinematics & kinematics,
+                                         const Options &                                                                             options,
+                                         const std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> & nonleptonic_amplitudes_function,
+                                         const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> &                  kinematics_names) :
                 _name(name),
                 _process(process),
                 _parameters(parameters),
@@ -72,55 +67,66 @@ namespace eos
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _nonleptonic_amplitudes.get()))
             {
                 if (! _options.has("representation"))
+                {
                     throw UnknownOptionError("representation");
+                }
 
                 if (! _nonleptonic_amplitudes)
+                {
                     throw NoSuchNonleptonicAmplitudeError(process.str(), options["representation"]);
+                }
 
                 uses(*_nonleptonic_amplitudes);
             }
 
-            virtual const QualifiedName & name() const
+            virtual const QualifiedName &
+            name() const
             {
                 return _name;
             }
 
-            virtual double evaluate() const
+            virtual double
+            evaluate() const
             {
-                std::tuple<const NonleptonicAmplitudes<Transition_> *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+                std::tuple<const NonleptonicAmplitudes<Transition_> *, typename impl::ConvertTo<Args_, double>::Type...> values = _argument_tuple;
 
                 return std::apply(_nonleptonic_amplitudes_function, values);
-            };
+            }
 
-            virtual Parameters parameters()
+            virtual Parameters
+            parameters()
             {
                 return _parameters;
-            };
+            }
 
-            virtual Kinematics kinematics()
+            virtual Kinematics
+            kinematics()
             {
                 return _kinematics;
-            };
+            }
 
-            virtual Options options()
+            virtual Options
+            options()
             {
                 return _options;
             }
 
-            virtual ObservablePtr clone() const
+            virtual ObservablePtr
+            clone() const
             {
-                return ObservablePtr(new NonleptonicAmplitudesAdapter(_name, _process, _parameters.clone(), _kinematics.clone(), _options, _nonleptonic_amplitudes_function, _kinematics_names));
+                return ObservablePtr(
+                        new NonleptonicAmplitudesAdapter(_name, _process, _parameters.clone(), _kinematics.clone(), _options, _nonleptonic_amplitudes_function, _kinematics_names));
             }
 
-            virtual ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr
+            clone(const Parameters & parameters) const
             {
-                return ObservablePtr(new NonleptonicAmplitudesAdapter(_name, _process, parameters, _kinematics.clone(), _options, _nonleptonic_amplitudes_function, _kinematics_names));
+                return ObservablePtr(
+                        new NonleptonicAmplitudesAdapter(_name, _process, parameters, _kinematics.clone(), _options, _nonleptonic_amplitudes_function, _kinematics_names));
             }
     };
 
-    template <typename Transition_, typename ... Args_>
-    class NonleptonicAmplitudesAdapterEntry :
-        public ObservableEntry
+    template <typename Transition_, typename... Args_> class NonleptonicAmplitudesAdapterEntry : public ObservableEntry
     {
         private:
             QualifiedName _name;
@@ -131,21 +137,18 @@ namespace eos
 
             qnp::Prefix _process;
 
-            std::function<double (const NonleptonicAmplitudes<Transition_> *, const Args_ & ...)> _nonleptonic_amplitudes_function;
+            std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> _nonleptonic_amplitudes_function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
             std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
 
             const std::vector<OptionSpecification> _options;
 
         public:
-            NonleptonicAmplitudesAdapterEntry(const QualifiedName & name,
-                    const std::string & latex,
-                    const Unit & unit,
-                    const qnp::Prefix & process,
-                    const std::function<double (const NonleptonicAmplitudes<Transition_> *, const Args_ & ...)> & nonleptonic_amplitudes_function,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+            NonleptonicAmplitudesAdapterEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const qnp::Prefix & process,
+                                              const std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> & nonleptonic_amplitudes_function,
+                                              const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> &                  kinematics_names) :
                 _name(name),
                 _latex(latex),
                 _unit(unit),
@@ -157,57 +160,66 @@ namespace eos
             {
             }
 
-            ~NonleptonicAmplitudesAdapterEntry()
-            {
-            }
+            ~NonleptonicAmplitudesAdapterEntry() {}
 
-            virtual const QualifiedName & name() const
+            virtual const QualifiedName &
+            name() const
             {
                 return _name;
             }
 
-            virtual const std::string & latex() const
+            virtual const std::string &
+            latex() const
             {
                 return _latex;
             }
 
-            virtual const Unit & unit() const
+            virtual const Unit &
+            unit() const
             {
                 return _unit;
             }
 
-            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            virtual ObservableEntry::KinematicVariableIterator
+            begin_kinematic_variables() const
             {
                 return _kinematics_names_array.begin();
             }
 
-            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            virtual ObservableEntry::KinematicVariableIterator
+            end_kinematic_variables() const
             {
                 return _kinematics_names_array.end();
             }
 
-            virtual ObservableEntry::OptionIterator begin_options() const
+            virtual ObservableEntry::OptionIterator
+            begin_options() const
             {
                 return _options.begin();
             }
 
-            virtual ObservableEntry::OptionIterator end_options() const
+            virtual ObservableEntry::OptionIterator
+            end_options() const
             {
                 return _options.end();
             }
 
-            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
+            virtual ObservablePtr
+            make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
-                return ObservablePtr(new NonleptonicAmplitudesAdapter<Transition_, Args_ ...>(_name, _process, parameters, kinematics, options, _nonleptonic_amplitudes_function, _kinematics_names));
+                return ObservablePtr(
+                        new NonleptonicAmplitudesAdapter<Transition_,
+                                                         Args_...>(_name, _process, parameters, kinematics, options, _nonleptonic_amplitudes_function, _kinematics_names));
             }
 
-            virtual std::ostream & insert(std::ostream & os) const
+            virtual std::ostream &
+            insert(std::ostream & os) const
             {
                 os << "    type: adapter for one nonloeptonic amplitude" << std::endl;
 
                 return os;
             }
     };
-}
+} // namespace eos
 
 #endif

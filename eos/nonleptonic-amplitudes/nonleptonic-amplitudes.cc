@@ -17,11 +17,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
-#include <eos/nonleptonic-amplitudes/topological-amplitudes.hh>
-#include <eos/nonleptonic-amplitudes/su3f-amplitudes.hh>
-#include <eos/nonleptonic-amplitudes/qcdf-amplitudes.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
+#include <eos/nonleptonic-amplitudes/qcdf-amplitudes.hh>
+#include <eos/nonleptonic-amplitudes/su3f-amplitudes.hh>
+#include <eos/nonleptonic-amplitudes/topological-amplitudes.hh>
 #include <eos/utils/options-impl.hh>
 
 #include <map>
@@ -35,7 +35,8 @@ namespace eos
 
     namespace su3f
     {
-        void transpose(rank2 & M)
+        void
+        transpose(rank2 & M)
         {
             for (size_t i = 0; i < 3; ++i)
             {
@@ -47,6 +48,7 @@ namespace eos
         }
 
         // Note that this matrix is transposed w.r.t [HTX:2021A] to follow the convention M^i_j = M[i][j]
+        // clang-format off
         const std::map<LightMeson, std::function<void (const double &, rank2 &)>>
         psd_octet
         {
@@ -79,16 +81,15 @@ namespace eos
                                         }};
                                     } }
         };
-    }
+        // clang-format on
+    } // namespace su3f
 
-    NonleptonicAmplitudes<PToPP>::~NonleptonicAmplitudes() {};
+    NonleptonicAmplitudes<PToPP>::~NonleptonicAmplitudes(){};
 
-    const std::map<NonleptonicAmplitudeFactory<PToPP>::KeyType, NonleptonicAmplitudeFactory<PToPP>::ValueType>
-    NonleptonicAmplitudeFactory<PToPP>::amplitudes
-    {
-        { "B->PP::topological",         &TopologicalRepresentation<PToPP>::make},
-        { "B->PP::SU3F",                &SU3FRepresentation<PToPP>::make},
-        { "B->PP::QCDF",                &QCDFRepresentation<PToPP>::make}
+    const std::map<NonleptonicAmplitudeFactory<PToPP>::KeyType, NonleptonicAmplitudeFactory<PToPP>::ValueType> NonleptonicAmplitudeFactory<PToPP>::amplitudes{
+        { "B->PP::topological", &TopologicalRepresentation<PToPP>::make },
+        {        "B->PP::SU3F",        &SU3FRepresentation<PToPP>::make },
+        {        "B->PP::QCDF",        &QCDFRepresentation<PToPP>::make }
     };
 
     std::shared_ptr<NonleptonicAmplitudes<PToPP>>
@@ -112,11 +113,13 @@ namespace eos
     OptionSpecification
     NonleptonicAmplitudeFactory<PToPP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "representation", {}, "" };
+        OptionSpecification result{ "representation", {}, "" };
         for (const auto & ff : NonleptonicAmplitudeFactory<PToPP>::amplitudes)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return result;
@@ -131,8 +134,12 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "representation", { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result{
+            "representation",
+            { allowed_values.cbegin(), allowed_values.cend() },
+            ""
+        };
         return result;
     }
 
-}
+} // namespace eos
