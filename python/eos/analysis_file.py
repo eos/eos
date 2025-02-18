@@ -26,7 +26,7 @@ from collections import Counter
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
-                                       StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent
+                                       StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent, MaskNamedComponent
 
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
@@ -127,6 +127,9 @@ class AnalysisFile:
                     if isinstance(d, MaskExpressionComponent):
                         eos.Observables().insert(d.name, "", eos.Unit("1"), eos.Options(), d.expression)
                         eos.info(f'Inserted observable: {d.name}')
+                    if isinstance(d, MaskNamedComponent):
+                        if d.name not in self._masks:
+                            raise ValueError(f"Mask {mc.name} references unknown mask {d.name}")
 
 
     def analysis(self, _posterior):
@@ -264,6 +267,8 @@ class AnalysisFile:
             parameters.set(p, v)
 
         for o in mask.description:
+            if isinstance(o, MaskNamedComponent):
+                continue
             options_part = eos.QualifiedName(o.name).options_part()
             for key, value in options_part:
                 if key in global_options and global_options[key] != value:
@@ -271,12 +276,15 @@ class AnalysisFile:
 
         observables = []
         for o in mask.description:
-            observables.append(eos.Observable.make(
-                o.name,
-                parameters,
-                eos.Kinematics(),
-                eos.Options(**global_options)
-            ))
+            if isinstance(o, MaskNamedComponent):
+                observables.append(self.mask_observables(_posterior, o.name, parameters))
+            else:
+                observables.append(eos.Observable.make(
+                    o.name,
+                    parameters,
+                    eos.Kinematics(),
+                    eos.Options(**global_options)
+                ))
 
         if None in observables:
             unknown_observables = set()
@@ -408,6 +416,12 @@ class AnalysisFile:
         """Returns a list of all predictions recorded in the analysis file."""
 
         return self._predictions
+
+    @property
+    def masks(self):
+        """Returns a list of all masks recorded in the analysis file."""
+
+        return self._masks
 
     def dump(self):
         """Dumps the contents of the analysis file in YAML format."""

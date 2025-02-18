@@ -873,7 +873,12 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
             eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
-    mask = _np.all(observable_samples > 0, axis=1)
+    mask_logical_combination = analysis_file.masks[mask_name].logical_combination
+    if mask_logical_combination == "and":
+        mask_combination_function = _np.all
+    elif mask_logical_combination == "or":
+        mask_combination_function = _np.any
+    mask = mask_combination_function(observable_samples > 0, axis=1)
 
     eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
 
