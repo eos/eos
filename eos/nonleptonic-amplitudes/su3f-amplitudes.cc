@@ -18,8 +18,8 @@
  */
 
 
-#include <eos/nonleptonic-amplitudes/su3f-amplitudes.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/nonleptonic-amplitudes/su3f-amplitudes.hh>
 #include <eos/utils/options-impl.hh>
 
 #include <map>
@@ -34,7 +34,7 @@ namespace eos
         return new SU3FRepresentation<PToPP>(p, o);
     }
 
-    SU3FRepresentation<PToPP>::SU3FRepresentation(const Parameters & p, const Options & o):
+    SU3FRepresentation<PToPP>::SU3FRepresentation(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model", "SM"), p, o)),
         opt_q(o, options, "q"),
         opt_p1(o, options, "P1"),
@@ -45,53 +45,53 @@ namespace eos
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
         H3bar({}),
         H3tilde({}),
-        P1{{}},
-        P2{{}},
+        P1{ {} },
+        P2{ {} },
         H6bar({}),
         H6tilde({}),
         H15bar({}),
         H15tilde({}),
         Gfermi(p["WET::G_Fermi"], *this),
-        re_AT3( p["nonleptonic::Re{AT3}@SU3F"] , *this),
-        im_AT3( p["nonleptonic::Im{AT3}@SU3F"] , *this),
-        re_CT3( p["nonleptonic::Re{CT3}@SU3F"] , *this),
-        im_CT3( p["nonleptonic::Im{CT3}@SU3F"] , *this),
-        re_AT6( p["nonleptonic::Re{AT6}@SU3F"] , *this),
-        im_AT6( p["nonleptonic::Im{AT6}@SU3F"] , *this),
-        re_CT6( p["nonleptonic::Re{CT6}@SU3F"] , *this),
-        im_CT6( p["nonleptonic::Im{CT6}@SU3F"] , *this),
+        re_AT3(p["nonleptonic::Re{AT3}@SU3F"], *this),
+        im_AT3(p["nonleptonic::Im{AT3}@SU3F"], *this),
+        re_CT3(p["nonleptonic::Re{CT3}@SU3F"], *this),
+        im_CT3(p["nonleptonic::Im{CT3}@SU3F"], *this),
+        re_AT6(p["nonleptonic::Re{AT6}@SU3F"], *this),
+        im_AT6(p["nonleptonic::Im{AT6}@SU3F"], *this),
+        re_CT6(p["nonleptonic::Re{CT6}@SU3F"], *this),
+        im_CT6(p["nonleptonic::Im{CT6}@SU3F"], *this),
         re_AT15(p["nonleptonic::Re{AT15}@SU3F"], *this),
         im_AT15(p["nonleptonic::Im{AT15}@SU3F"], *this),
         re_CT15(p["nonleptonic::Re{CT15}@SU3F"], *this),
         im_CT15(p["nonleptonic::Im{CT15}@SU3F"], *this),
-        re_BT3( p["nonleptonic::Re{BT3}@SU3F"] , *this),
-        im_BT3( p["nonleptonic::Im{BT3}@SU3F"] , *this),
-        re_BT6( p["nonleptonic::Re{BT6}@SU3F"] , *this),
-        im_BT6( p["nonleptonic::Im{BT6}@SU3F"] , *this),
+        re_BT3(p["nonleptonic::Re{BT3}@SU3F"], *this),
+        im_BT3(p["nonleptonic::Im{BT3}@SU3F"], *this),
+        re_BT6(p["nonleptonic::Re{BT6}@SU3F"], *this),
+        im_BT6(p["nonleptonic::Im{BT6}@SU3F"], *this),
         re_BT15(p["nonleptonic::Re{BT15}@SU3F"], *this),
         im_BT15(p["nonleptonic::Im{BT15}@SU3F"], *this),
-        re_DT3( p["nonleptonic::Re{DT3}@SU3F"] , *this),
-        im_DT3( p["nonleptonic::Im{DT3}@SU3F"] , *this),
-        re_AP3( p["nonleptonic::Re{AP3}@SU3F"] , *this),
-        im_AP3( p["nonleptonic::Im{AP3}@SU3F"] , *this),
-        re_CP3( p["nonleptonic::Re{CP3}@SU3F"] , *this),
-        im_CP3( p["nonleptonic::Im{CP3}@SU3F"] , *this),
-        re_AP6( p["nonleptonic::Re{AP6}@SU3F"] , *this),
-        im_AP6( p["nonleptonic::Im{AP6}@SU3F"] , *this),
-        re_CP6( p["nonleptonic::Re{CP6}@SU3F"] , *this),
-        im_CP6( p["nonleptonic::Im{CP6}@SU3F"] , *this),
+        re_DT3(p["nonleptonic::Re{DT3}@SU3F"], *this),
+        im_DT3(p["nonleptonic::Im{DT3}@SU3F"], *this),
+        re_AP3(p["nonleptonic::Re{AP3}@SU3F"], *this),
+        im_AP3(p["nonleptonic::Im{AP3}@SU3F"], *this),
+        re_CP3(p["nonleptonic::Re{CP3}@SU3F"], *this),
+        im_CP3(p["nonleptonic::Im{CP3}@SU3F"], *this),
+        re_AP6(p["nonleptonic::Re{AP6}@SU3F"], *this),
+        im_AP6(p["nonleptonic::Im{AP6}@SU3F"], *this),
+        re_CP6(p["nonleptonic::Re{CP6}@SU3F"], *this),
+        im_CP6(p["nonleptonic::Im{CP6}@SU3F"], *this),
         re_AP15(p["nonleptonic::Re{AP15}@SU3F"], *this),
         im_AP15(p["nonleptonic::Im{AP15}@SU3F"], *this),
         re_CP15(p["nonleptonic::Re{CP15}@SU3F"], *this),
         im_CP15(p["nonleptonic::Im{CP15}@SU3F"], *this),
-        re_BP3( p["nonleptonic::Re{BP3}@SU3F"] , *this),
-        im_BP3( p["nonleptonic::Im{BP3}@SU3F"] , *this),
-        re_BP6( p["nonleptonic::Re{BP6}@SU3F"] , *this),
-        im_BP6( p["nonleptonic::Im{BP6}@SU3F"] , *this),
+        re_BP3(p["nonleptonic::Re{BP3}@SU3F"], *this),
+        im_BP3(p["nonleptonic::Im{BP3}@SU3F"], *this),
+        re_BP6(p["nonleptonic::Re{BP6}@SU3F"], *this),
+        im_BP6(p["nonleptonic::Im{BP6}@SU3F"], *this),
         re_BP15(p["nonleptonic::Re{BP15}@SU3F"], *this),
         im_BP15(p["nonleptonic::Im{BP15}@SU3F"], *this),
-        re_DP3( p["nonleptonic::Re{DP3}@SU3F"] , *this),
-        im_DP3( p["nonleptonic::Im{DP3}@SU3F"] , *this)
+        re_DP3(p["nonleptonic::Re{DP3}@SU3F"], *this),
+        im_DP3(p["nonleptonic::Im{DP3}@SU3F"], *this)
     {
         Context ctx("When constructing B->PP SU3 amplitudes");
 
@@ -160,33 +160,26 @@ namespace eos
         H15tilde[2][2][2] = -2.0 * lamst;
         H15tilde[2][1][1] = -lamst; // Corrected with respect to typo in [HTX:2021A]
         H15tilde[1][2][1] = -lamst; // Corrected with respect to typo in [HTX:2021A]
-    };
+    }
 
-    const std::vector<OptionSpecification>
-    SU3FRepresentation<PToPP>::options
-    {
+    const std::vector<OptionSpecification> SU3FRepresentation<PToPP>::options{
         Model::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "B_bar", { "true", "false"},  "false" },
-        { "q", { "u", "d", "s" }, "" },
-        { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "cp-conjugate",                                                                     { "true", "false" }, "false" },
+        {        "B_bar",                                                                     { "true", "false" }, "false" },
+        {            "q",                                                                       { "u", "d", "s" },      "" },
+        {           "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
+        {           "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
     };
 
     complex<double>
     SU3FRepresentation<PToPP>::tree_amplitude(su3f::rank2 & p1, su3f::rank2 & p2) const
     {
-        complex<double> T_ira = 0.0;
-        const complex<double> AT3  = complex<double>(this->re_AT3(),  this->im_AT3()),
-                              CT3  = complex<double>(this->re_CT3(),  this->im_CT3()),
-                              AT6  = complex<double>(this->re_AT6(),  this->im_AT6()),
-                              CT6  = complex<double>(this->re_CT6(),  this->im_CT6()),
-                              AT15 = complex<double>(this->re_AT15(), this->im_AT15()),
-                              CT15 = complex<double>(this->re_CT15(), this->im_CT15()),
-                              BT3  = complex<double>(this->re_BT3(),  this->im_BT3()),
-                              BT6  = complex<double>(this->re_BT6(),  this->im_BT6()),
-                              BT15 = complex<double>(this->re_BT15(), this->im_BT15()),
-                              DT3  = complex<double>(this->re_DT3(),  this->im_DT3());
+        complex<double>       T_ira = 0.0;
+        const complex<double> AT3 = complex<double>(this->re_AT3(), this->im_AT3()), CT3 = complex<double>(this->re_CT3(), this->im_CT3()),
+                              AT6 = complex<double>(this->re_AT6(), this->im_AT6()), CT6 = complex<double>(this->re_CT6(), this->im_CT6()),
+                              AT15 = complex<double>(this->re_AT15(), this->im_AT15()), CT15 = complex<double>(this->re_CT15(), this->im_CT15()),
+                              BT3 = complex<double>(this->re_BT3(), this->im_BT3()), BT6 = complex<double>(this->re_BT6(), this->im_BT6()),
+                              BT15 = complex<double>(this->re_BT15(), this->im_BT15()), DT3 = complex<double>(this->re_DT3(), this->im_DT3());
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -219,17 +212,12 @@ namespace eos
     complex<double>
     SU3FRepresentation<PToPP>::penguin_amplitude(su3f::rank2 & p1, su3f::rank2 & p2) const
     {
-        complex<double> P_ira = 0.0;
-        const complex<double> AP3  = complex<double>(this->re_AP3(),  this->im_AP3()),
-                              CP3  = complex<double>(this->re_CP3(),  this->im_CP3()),
-                              AP6  = complex<double>(this->re_AP6(),  this->im_AP6()),
-                              CP6  = complex<double>(this->re_CP6(),  this->im_CP6()),
-                              AP15 = complex<double>(this->re_AP15(), this->im_AP15()),
-                              CP15 = complex<double>(this->re_CP15(), this->im_CP15()),
-                              BP3  = complex<double>(this->re_BP3(),  this->im_BP3()),
-                              BP6  = complex<double>(this->re_BP6(),  this->im_BP6()),
-                              BP15 = complex<double>(this->re_BP15(), this->im_BP15()),
-                              DP3  = complex<double>(this->re_DP3(),  this->im_DP3());
+        complex<double>       P_ira = 0.0;
+        const complex<double> AP3 = complex<double>(this->re_AP3(), this->im_AP3()), CP3 = complex<double>(this->re_CP3(), this->im_CP3()),
+                              AP6 = complex<double>(this->re_AP6(), this->im_AP6()), CP6 = complex<double>(this->re_CP6(), this->im_CP6()),
+                              AP15 = complex<double>(this->re_AP15(), this->im_AP15()), CP15 = complex<double>(this->re_CP15(), this->im_CP15()),
+                              BP3 = complex<double>(this->re_BP3(), this->im_BP3()), BP6 = complex<double>(this->re_BP6(), this->im_BP6()),
+                              BP15 = complex<double>(this->re_BP15(), this->im_BP15()), DP3 = complex<double>(this->re_DP3(), this->im_DP3());
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -270,9 +258,7 @@ namespace eos
             su3f::transpose(P2);
         }
 
-        return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
-            this->tree_amplitude(P1, P2) + this->penguin_amplitude(P1, P2)
-        );
+        return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (this->tree_amplitude(P1, P2) + this->penguin_amplitude(P1, P2));
     }
 
     complex<double>
@@ -286,9 +272,7 @@ namespace eos
             su3f::transpose(P2);
         }
 
-        return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (
-            this->tree_amplitude(P2, P1) + this->penguin_amplitude(P2, P1)
-        );
+        return complex<double>(0.0, 1.0) * Gfermi() / sqrt(2.0) * (this->tree_amplitude(P2, P1) + this->penguin_amplitude(P2, P1));
     }
 
     complex<double>
@@ -297,8 +281,8 @@ namespace eos
         this->update();
 
         auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt;
-        auto tree = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu;
+        auto tree    = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu;
 
-        return - penguin / (tree - penguin);
+        return -penguin / (tree - penguin);
     }
-}
+} // namespace eos

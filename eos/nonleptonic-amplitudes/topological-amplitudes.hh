@@ -20,10 +20,10 @@
 #ifndef EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_TOPOLOGICAL_AMPLITUDES_HH
 #define EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_TOPOLOGICAL_AMPLITUDES_HH 1
 
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
 #include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
 #include <eos/utils/parameters.hh>
 
 #include <array>
@@ -33,21 +33,19 @@ namespace eos
 {
     template <typename Transition_> class TopologicalRepresentation;
 
-    template <>
-    class TopologicalRepresentation<PToPP> :
-        public NonleptonicAmplitudes<PToPP>
+    template <> class TopologicalRepresentation<PToPP> : public NonleptonicAmplitudes<PToPP>
     {
         private:
             std::shared_ptr<Model> model;
-            QuarkFlavorOption opt_q;
-            LightMesonOption opt_p1;
-            LightMesonOption opt_p2;
-            BooleanOption opt_cp_conjugate;
-            BooleanOption opt_B_bar;
+            QuarkFlavorOption      opt_q;
+            LightMesonOption       opt_p1;
+            LightMesonOption       opt_p2;
+            BooleanOption          opt_cp_conjugate;
+            BooleanOption          opt_B_bar;
 
             UsedParameter theta_18;
 
-            su3f::rank1 B;
+            su3f::rank1         B;
             mutable su3f::rank1 H1tilde;
             mutable su3f::rank2 P1, P2;
             mutable su3f::rank3 Hbar, H3tilde;
@@ -86,9 +84,10 @@ namespace eos
         public:
             TopologicalRepresentation(const Parameters & p, const Options & o);
 
-            ~TopologicalRepresentation() {};
+            ~TopologicalRepresentation() {}
 
-            inline void update() const
+            inline void
+            update() const
             {
                 const double theta_18 = this->theta_18.evaluate();
                 su3f::psd_octet.find(opt_p1.value())->second(theta_18, P1);
@@ -102,8 +101,19 @@ namespace eos
             complex<double> penguin_amplitude(su3f::rank2 & p1, su3f::rank2 & p2) const;
 
             // Diagnostic functions
-            complex<double> tree_amplitude() const { update(); return tree_amplitude(P1, P2); }
-            complex<double> penguin_amplitude() const { update(); return penguin_amplitude(P1, P2); };
+            complex<double>
+            tree_amplitude() const
+            {
+                update();
+                return tree_amplitude(P1, P2);
+            }
+
+            complex<double>
+            penguin_amplitude() const
+            {
+                update();
+                return penguin_amplitude(P1, P2);
+            }
 
             // Amplitude for B -> P1 P2
             complex<double> ordered_amplitude() const;
@@ -112,5 +122,5 @@ namespace eos
             // CP-conserving penguin vs tree correction defined as - |(Vub Vud*) / (Vcb Vcd*)| penguin / (tree - penguin), cf. [FJV:2016A]
             complex<double> penguin_correction() const override;
     };
-}
+} // namespace eos
 #endif

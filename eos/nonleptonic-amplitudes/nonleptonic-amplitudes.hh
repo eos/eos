@@ -20,9 +20,9 @@
 #ifndef EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_NONLEPTONIC_AMPLITUDES_HH
 #define EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_NONLEPTONIC_AMPLITUDES_HH 1
 
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
 #include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/transitions.hh>
 
@@ -33,8 +33,7 @@ namespace eos
 {
     using std::sqrt;
 
-    class NoSuchNonleptonicAmplitudeError :
-        public Exception
+    class NoSuchNonleptonicAmplitudeError : public Exception
     {
         public:
             NoSuchNonleptonicAmplitudeError(const std::string & process, const std::string & tag);
@@ -44,25 +43,22 @@ namespace eos
     {
         // Meson SU(3)_F structures
         typedef std::array<std::array<std::array<complex<double>, 3>, 3>, 3> rank3;
-        typedef std::array<std::array<complex<double>, 3>, 3> rank2;
-        typedef std::array<complex<double>, 3> rank1;
+        typedef std::array<std::array<complex<double>, 3>, 3>                rank2;
+        typedef std::array<complex<double>, 3>                               rank1;
 
         void transpose(rank2 &);
 
-        const std::map<QuarkFlavor, rank1> psd_b_triplet
-        {
-            { QuarkFlavor::up,      {{1.0, 0.0, 0.0}}},
-            { QuarkFlavor::down,    {{0.0, 1.0, 0.0}}},
-            { QuarkFlavor::strange, {{0.0, 0.0, 1.0}}},
+        const std::map<QuarkFlavor, rank1> psd_b_triplet{
+            {      QuarkFlavor::up, { { 1.0, 0.0, 0.0 } } },
+            {    QuarkFlavor::down, { { 0.0, 1.0, 0.0 } } },
+            { QuarkFlavor::strange, { { 0.0, 0.0, 1.0 } } },
         };
 
-        extern const std::map<LightMeson, std::function<void (const double &, rank2 &)>> psd_octet;
-    }
+        extern const std::map<LightMeson, std::function<void(const double &, rank2 &)>> psd_octet;
+    } // namespace su3f
 
     /* P -> PP transitions */
-    template <>
-    class NonleptonicAmplitudes<PToPP> :
-        public virtual ParameterUser
+    template <> class NonleptonicAmplitudes<PToPP> : public virtual ParameterUser
     {
         public:
             virtual ~NonleptonicAmplitudes();
@@ -71,40 +67,71 @@ namespace eos
             virtual complex<double> ordered_amplitude() const = 0;
             // Amplitude for B -> P2 P1
             virtual complex<double> inverse_amplitude() const = 0;
+
             // Amplitude for B -> [P2 P1 + P1 P2]
-            complex<double> amplitude() const
+            complex<double>
+            amplitude() const
             {
                 return ordered_amplitude() + inverse_amplitude();
             }
 
             // CP-conserving penguin vs tree correction defined as - |(Vub Vud*) / (Vcb Vcd*)| penguin / (tree - penguin), cf. [FJV:2016A]
-            virtual complex<double> penguin_correction() const
+            virtual complex<double>
+            penguin_correction() const
             {
                 throw InternalError("Not implemented");
                 return 0.0;
             }
 
             // Pseudo-observables given for testing purposes
-            double re_amplitude() const { return real(amplitude()); }
-            double im_amplitude() const { return imag(amplitude()); }
-            double abs_amplitude() const { return abs(amplitude()); }
-            double arg_amplitude() const { return arg(amplitude()); }
-            double abs_penguin_correction() const {return abs(penguin_correction()); }
-            double arg_penguin_correction() const {return arg(penguin_correction()); }
+            double
+            re_amplitude() const
+            {
+                return real(amplitude());
+            }
+
+            double
+            im_amplitude() const
+            {
+                return imag(amplitude());
+            }
+
+            double
+            abs_amplitude() const
+            {
+                return abs(amplitude());
+            }
+
+            double
+            arg_amplitude() const
+            {
+                return arg(amplitude());
+            }
+
+            double
+            abs_penguin_correction() const
+            {
+                return abs(penguin_correction());
+            }
+
+            double
+            arg_penguin_correction() const
+            {
+                return arg(penguin_correction());
+            }
     };
 
-    template <>
-    class NonleptonicAmplitudeFactory<PToPP>
+    template <> class NonleptonicAmplitudeFactory<PToPP>
     {
         public:
-            using KeyType = QualifiedName;
-            using ValueType = std::function<NonleptonicAmplitudes<PToPP> * (const Parameters &, const Options &)>;
+            using KeyType   = QualifiedName;
+            using ValueType = std::function<NonleptonicAmplitudes<PToPP> *(const Parameters &, const Options &)>;
 
             static const std::map<KeyType, ValueType> amplitudes;
 
-            static std::shared_ptr<NonleptonicAmplitudes<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static OptionSpecification option_specification(const qnp::Prefix & process);
-            static OptionSpecification option_specification();
+            static std::shared_ptr<NonleptonicAmplitudes<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{});
+            static OptionSpecification                           option_specification(const qnp::Prefix & process);
+            static OptionSpecification                           option_specification();
     };
-}
+} // namespace eos
 #endif

@@ -17,42 +17,40 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/observable-impl.hh>
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
 #include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-adapter.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
+#include <eos/observable-impl.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
 {
     /* nonleptonic amplitude as observables */
-    template <typename Transition_, typename Tuple_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_nonleptonic_amplitudes_adapter(const char * name,
-            const char * latex,
-            double (NonleptonicAmplitudes<Transition_>::* _function)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names)
+    template <typename Transition_, typename Tuple_, typename... Args_>
+    std::pair<QualifiedName, ObservableEntryPtr>
+    make_nonleptonic_amplitudes_adapter(const char * name, const char * latex, double (NonleptonicAmplitudes<Transition_>::*_function)(const Args_ &...) const,
+                                        const Tuple_ & kinematics_names)
     {
-        QualifiedName qn(name);
-        qnp::Prefix pp = qn.prefix_part();
-        std::function<double (const NonleptonicAmplitudes<Transition_> *, const Args_ & ...)> function(_function);
+        QualifiedName                                                                       qn(name);
+        qnp::Prefix                                                                         pp = qn.prefix_part();
+        std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> function(_function);
 
-        auto result = std::make_pair(qn, std::make_shared<NonleptonicAmplitudesAdapterEntry<Transition_, Args_ ...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
+        auto result = std::make_pair(qn, std::make_shared<NonleptonicAmplitudesAdapterEntry<Transition_, Args_...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
 
         impl::observable_entries.insert(result);
 
         return result;
     }
 
-    template <typename Transition_, typename Tuple_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_nonleptonic_amplitudes_adapter(const char * name,
-            double (NonleptonicAmplitudes<Transition_>::* _function)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names)
+    template <typename Transition_, typename Tuple_, typename... Args_>
+    std::pair<QualifiedName, ObservableEntryPtr>
+    make_nonleptonic_amplitudes_adapter(const char * name, double (NonleptonicAmplitudes<Transition_>::*_function)(const Args_ &...) const, const Tuple_ & kinematics_names)
     {
-        QualifiedName qn(name);
-        qnp::Prefix pp = qn.prefix_part();
-        std::function<double (const NonleptonicAmplitudes<Transition_> *, const Args_ & ...)> function(_function);
+        QualifiedName                                                                       qn(name);
+        qnp::Prefix                                                                         pp = qn.prefix_part();
+        std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> function(_function);
 
-        auto result = std::make_pair(qn, std::make_shared<NonleptonicAmplitudesAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
+        auto result = std::make_pair(qn, std::make_shared<NonleptonicAmplitudesAdapterEntry<Transition_, Args_...>>(qn, "", Unit::None(), pp, function, kinematics_names));
 
         impl::observable_entries.insert(result);
 
@@ -65,40 +63,32 @@ namespace eos
     make_p_to_p_p_amplitudes_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Pseudo-observables related to the $B\to PP$ amplitudes)",
-            R"()",
-            {
-                make_nonleptonic_amplitudes_adapter("B->PP::Re{amplitude}", R"(|\mathcal{A}^{B\to PP}|)",
-                        &NonleptonicAmplitudes<PToPP>::re_amplitude, std::make_tuple()),
-                make_nonleptonic_amplitudes_adapter("B->PP::Im{amplitude}", R"(|\mathcal{A}^{B\to PP}|)",
-                        &NonleptonicAmplitudes<PToPP>::im_amplitude, std::make_tuple()),
-                make_nonleptonic_amplitudes_adapter("B->PP::Abs{amplitude}", R"(|\mathcal{A}^{B\to PP}|)",
-                        &NonleptonicAmplitudes<PToPP>::abs_amplitude, std::make_tuple()),
-                make_nonleptonic_amplitudes_adapter("B->PP::Arg{amplitude}", R"(|\mathcal{A}^{B\to PP}|)",
-                        &NonleptonicAmplitudes<PToPP>::arg_amplitude, std::make_tuple()),
-                make_nonleptonic_amplitudes_adapter("B->PP::r_q", R"(r_q)",
-                        &NonleptonicAmplitudes<PToPP>::abs_penguin_correction, std::make_tuple()),
-                make_nonleptonic_amplitudes_adapter("B->PP::theta_q", R"(\theta_q)",
-                        &NonleptonicAmplitudes<PToPP>::arg_penguin_correction, std::make_tuple()),
-            }
-        );
+                R"(Pseudo-observables related to the $B\to PP$ amplitudes)",
+                R"()",
+                {
+                    make_nonleptonic_amplitudes_adapter("B->PP::Re{amplitude}", R"(|\mathcal{A}^{B\to PP}|)", &NonleptonicAmplitudes<PToPP>::re_amplitude, std::make_tuple()),
+                    make_nonleptonic_amplitudes_adapter("B->PP::Im{amplitude}", R"(|\mathcal{A}^{B\to PP}|)", &NonleptonicAmplitudes<PToPP>::im_amplitude, std::make_tuple()),
+                    make_nonleptonic_amplitudes_adapter("B->PP::Abs{amplitude}", R"(|\mathcal{A}^{B\to PP}|)", &NonleptonicAmplitudes<PToPP>::abs_amplitude, std::make_tuple()),
+                    make_nonleptonic_amplitudes_adapter("B->PP::Arg{amplitude}", R"(|\mathcal{A}^{B\to PP}|)", &NonleptonicAmplitudes<PToPP>::arg_amplitude, std::make_tuple()),
+                    make_nonleptonic_amplitudes_adapter("B->PP::r_q", R"(r_q)", &NonleptonicAmplitudes<PToPP>::abs_penguin_correction, std::make_tuple()),
+                    make_nonleptonic_amplitudes_adapter("B->PP::theta_q", R"(\theta_q)", &NonleptonicAmplitudes<PToPP>::arg_penguin_correction, std::make_tuple()),
+                });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     ObservableSection
     make_nonleptonic_amplitudes_section()
     {
-        auto imp = new Implementation<ObservableSection>(
-            "Pseudo-observables in nonleptonic amplitudes",
-            "",
-            {
-                // P -> PP amplitudes
-                make_p_to_p_p_amplitudes_group(),
-            }
-        );
+        auto imp = new Implementation<ObservableSection>("Pseudo-observables in nonleptonic amplitudes",
+                                                         "",
+                                                         {
+                                                             // P -> PP amplitudes
+                                                             make_p_to_p_p_amplitudes_group(),
+                                                         });
 
         return ObservableSection(imp);
     }
-}
+} // namespace eos
