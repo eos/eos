@@ -1395,6 +1395,23 @@ namespace eos
                                 std::make_tuple("q2"),
                                 Options{ { "U", "c" }, {"q", "s"}, {"I", "0"} }),
 
+                // q^2 - integrated
+
+                make_observable("B_s->D_s^*lnu::normGamma_CP_specific", R"(\Gamma(B_s\to \bar{D}_s^*\ell^-\bar\nu)_{|V_{cb}|=1})",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_decay_width,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"}, {"I", "0"} }),
+
+                make_expression_observable("B_s->D_s^*lnu::normGamma", R"(\bar{\Gamma}(B_s\to \bar{D}_s^*\ell^-\bar\nu)_{|V_{cb}|=1})",
+                                Unit::None(),
+                                R"(
+                                0.5 * <<B_s->D_s^*lnu::normGamma_CP_specific;cp-conjugate=false>>
+                                +
+                                0.5 * <<B_s->D_s^*lnu::normGamma_CP_specific;cp-conjugate=true>>
+                                )"),
+
+
                 make_observable("B_s->D_s^*lnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::integrated_branching_ratio,
@@ -1582,6 +1599,107 @@ namespace eos
                                 &BToVectorLeptonNeutrino::integrated_pdf_w,
                                 std::make_tuple("w_min", "w_max"),
                                 { { "U", "c" }, {"q", "s"}, {"I", "0"} }),
+
+                /*  CP-symmetric normalized observables
+                *
+                *    S_i ~ (J_i + barJ_i) / (Gam_i + barGam_i)
+                */
+
+                make_expression_observable("B_s->D_s^*lnu::S_1c", R"(S_{1c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_1c;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_1c;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_1s", R"(S_{1s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_1s;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_1s;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_2c", R"(S_{2c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_2c;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_2c;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_2s", R"(S_{2s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_2s;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_2s;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_3", R"(S_{3}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_3;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_3;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_4", R"(S_{4}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_4;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_4;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_5", R"(S_{5}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_5;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_5;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_6c", R"(S_{6c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_6c;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_6c;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_6s", R"(S_{6s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_6s;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_6s;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_7", R"(S_{7}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_7;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_7;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_8", R"(S_{8}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_8;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_8;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
+
+                make_expression_observable("B_s->D_s^*lnu::S_9", R"(S_{9}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (<<B_s->D_s^*lnu::J_9;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_9;cp-conjugate=true>>)
+                        /
+                        <<B_s->D_s^*lnu::normGamma>>
+                        )"),
             }
         );
 
