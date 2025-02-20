@@ -1,0 +1,18 @@
+# vim: set sts=2 et tw=150 fdm=marker :
+title: 'Lepton Property Parameters'
+description: ''
+groups:
+  # Lepton Lifetimes
+  # {{{
+  - title: 'Lepton Lifetimes'
+    description: ''
+    parameters:
+      # Mean life times
+      'life_time::tau' :
+          central: +290.3e-15
+          min:     +289.8e-15
+          max:     +290.8e-15
+          unit:     's'
+          latex:    '$\tau_{\tau^\pm}$'
+          comments: 'cf. [PDG2024], p. 28'
+  # }}}
