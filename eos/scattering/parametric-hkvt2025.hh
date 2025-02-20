@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024-2025 Florian Herren
+ * Copyright (c) 2025, Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,12 +17,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_SCATTERING_PARAMETRIC_GMKPRDEY2011_HH
-#define EOS_GUARD_EOS_SCATTERING_PARAMETRIC_GMKPRDEY2011_HH 1
+#ifndef EOS_GUARD_EOS_SCATTERING_PARAMETRIC_HKVT2025_HH
+#define EOS_GUARD_EOS_SCATTERING_PARAMETRIC_HKVT2025_HH 1
 
 #include <eos/scattering/single-channel.hh>
 #include <eos/scattering/single-channel-processes.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/interpolation.hh>
 #include <eos/maths/omnes-factor.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/diagnostics.hh>
@@ -34,26 +35,53 @@
 
 namespace eos
 {
-    class GMKPRDEY2011ScatteringAmplitudes :
+    class PhaseInterpolation
+    {
+        private:
+        const CSplineInterpolation phase;
+
+        public:
+        PhaseInterpolation(std::vector<double> x, std::vector<double> y):
+            phase(x, y)
+        {}
+        ~PhaseInterpolation() = default;
+
+        double operator()(const double & s) const { return phase(s); };
+    };
+
+    class OmnesInterpolation
+    {
+        private:
+        const CSplineInterpolation real;
+        const CSplineInterpolation imag;
+
+        public:
+        OmnesInterpolation(std::vector<double> x, std::vector<double> y_real, std::vector<double> y_imag):
+            real(x, y_real), imag(x, y_imag)
+        {}
+        ~OmnesInterpolation() = default;
+
+        complex<double> operator()(const double & s) const { return complex<double>(real(s), imag(s)); };
+    };
+
+    class HKVT2025ScatteringAmplitudes :
         public ScatteringAmplitudes<PPToPP>
     {
         private:
-            // S0-wave has 9 parameters aside from masses
-            std::array<UsedParameter, 9> _params_S0;
-            // P-wave has 4 parameters aside from masses
-            std::array<UsedParameter, 4> _params_P1;
             // D0-wave has 4 parameters aside from masses
             std::array<UsedParameter, 3> _params_D0;
 
             // Masses
-            const UsedParameter _mPi, _mK, _mEta, _mRho, _mF2;
+            const UsedParameter _mPi, _mF2;
             const UsedParameter _mOmega, _GammaOmega, _kappa;
             // Parameters for conformal mappings
-            const UsedParameter _sM_S0, _s0_P1, _s0_D0, _sh_D0;
+            const UsedParameter _s0_D0, _sh_D0;
             // Parameters controlling evolution of phases above \sqrt{s} = 1.42 GeV
-            const UsedParameter _cont_pow_S0, _cont_pow_P1, _cont_pow_D0;
+            const UsedParameter _cont_pow_P1, _cont_pow_D0;
+            // Parameters controlling couple channel S-wave
+            UsedParameter _Gamma_pi_0, _Gamma_K_0;
 
-            // Omnes factors, we do not have the S0 wave since we need a two-channel treatment
+            // Omnes factors, we do not have the S0 wave here since we need a two-channel treatment
             std::array<double, 4> _intervals_P1;
             std::array<double, 5> _intervals_D0;
             std::function<double(const double &)> _f_phase_P1, _f_phase_D0;
@@ -67,15 +95,16 @@ namespace eos
             double _calc_s(const complex<double> & z, const double & sp, const double & s0) const;
             complex<double> _calc_z(const double & s, const double & sp, const double & s0) const;
 
+            // S-wave Omnes factor
+            complex<double> _omnes_S0(const double & s) const;
             // Scattering phases
-            double _phase_S0(const double & s) const;
             double _phase_P1(const double & s) const;
             double _phase_D0(const double & s) const;
 
         public:
-            GMKPRDEY2011ScatteringAmplitudes(const Parameters & p, const Options &);
+            HKVT2025ScatteringAmplitudes(const Parameters & p, const Options &);
 
-            ~GMKPRDEY2011ScatteringAmplitudes();
+            ~HKVT2025ScatteringAmplitudes();
 
             static ScatteringAmplitudes<PPToPP> * make(const Parameters & parameters, const Options & options);
 

@@ -870,6 +870,13 @@ CERN:2003A:
   inspire-id: Battaglia:2003in
   title: 'The CKM matrix and the unitarity triangle. Workshop, CERN, Geneva, Switzerland,
     13-16 Feb 2002: Proceedings'
+CHS:2018A:
+  authors: Colangelo, G. and Hoferichter, M. and Stoffer, P.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1810.00007
+  inspire-id: Colangelo:2018mtw
+  title: Two-pion contribution to hadronic vacuum polarization
 CKMfitter:2004A:
   authors: Charles, J. and Hocker, Andreas and Lacker, H. and Laplace, S. and Le Diberder,
     F.R. and Malcles, J. and Ocariz, J. and Pivk, M. and Roos, L.
@@ -1048,6 +1055,13 @@ DDS:2014A:
     id: oai:arXiv.org:1405.3719
   inpire-id: Duraisamy:2014sna
   title: Azimuthal $B \to D^{*} \tau^{-} \bar{\nu_\tau}$ angular distribution with tensor operators
+DHK:2015A:
+  authors: Daub, J. T. and Hanhart, C. and Kubis, B.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1508.06841
+  inspire-id: Daub:2015xja
+  title: A model-independent analysis of final-state interactions in $ {\overline{B}}_{d/s}^0\to J/\psi \pi \pi $
 DHMV:2015A:
   authors: Descotes-Genon, Sebastien and Hofer, Lars and Matias, Joaquim and Virto, Javier
   eprint:
@@ -1379,6 +1393,13 @@ HFLAV:2019A:
     id: oai:arXiv.org:1909.12524
   inspire-id: Amhis:2019ckw
   title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018
+HKvT:2025A:
+  authors: Herren, F. and Kubis, B. and van Tonder, R.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2502.xxxxx
+  inspire-id: Herren:2025xxx
+  title: A model-independent parameterization of $B\rightarrow\pi\pi\ell\nu$ decays
 HLMW:2005A:
   authors: Huber, Tobias and Lunghi, Enrico and Misiak, Mikolaj and Wyler, Daniel
   eprint:
@@ -1993,6 +2014,13 @@ RBC+UKQCD:2023A:
     id: oai:arXiv.org:2303.11280
   inspire-id: Flynn:2023nhi
   journal: Phys. Rev. D 107 114512 (2023)
+RHK:2018A:
+  authors: Ropertz, S. and Hanhart, C. and Kubis, B.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1809.06867
+  inspire-id: Ropertz:2018stk
+  title: A new parametrization for the scalar pion form factors
 S:1982A:
   authors: Sirlin, A.
   journal: Nucl.Phys. B196 (1982) 83-92

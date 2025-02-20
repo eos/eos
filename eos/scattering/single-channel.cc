@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025, Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +19,7 @@
 
 #include <eos/scattering/scattering-amplitudes.hh>
 #include <eos/scattering/parametric-gmkprdey2011.hh>
+#include <eos/scattering/parametric-hkvt2025.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -37,7 +38,8 @@ namespace eos
     const std::map<ScatteringAmplitudeFactory<PPToPP>::KeyType, ScatteringAmplitudeFactory<PPToPP>::ValueType>
     ScatteringAmplitudeFactory<PPToPP>::scattering_amplitudes
     {
-        { "pipi->pipi::GMKPRDEY2011",    &GMKPRDEY2011ScatteringAmplitudes::make    }
+        { "pipi->pipi::GMKPRDEY2011",   &GMKPRDEY2011ScatteringAmplitudes::make    },
+        { "pipi->pipi::HKvT2025",       &HKVT2025ScatteringAmplitudes::make    }
     };
 
     std::shared_ptr<ScatteringAmplitudes<PPToPP>>
