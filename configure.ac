@@ -418,6 +418,7 @@ AC_CONFIG_FILES([Makefile
 	eos/b-decays/Makefile
 	eos/c-decays/Makefile
 	eos/s-decays/Makefile
+	eos/tau-decays/Makefile
 	eos/constraints/Makefile
 	eos/form-factors/Makefile
 	eos/maths/Makefile
