@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2020-2023 Danny van Dyk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +20,8 @@
 
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH 1
+
+#include <array>
 
 namespace eos
 {
@@ -288,6 +291,9 @@ namespace eos
     struct BToPiPi {
         using Transition = PToPP;
         static constexpr const char * label = "B->pipi";
+        static constexpr const char * name_P1 = "mass::B_u";
+        static constexpr const char * name_P2 = "mass::pi^+";
+        static constexpr const char * name_P3 = "mass::pi^+";
         static constexpr double m_B  = 5.2795;
         static constexpr double m_P1 = 0.13957;
         static constexpr double m_P2 = 0.13957;
@@ -299,6 +305,18 @@ namespace eos
         static constexpr double mR2_1m = 5.32465;
         static constexpr double mR2_1p = 5.72590;
         static constexpr double mR2_0m = 5.27932;
+
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up);
+
+        // Number of partial waves considered
+        static constexpr unsigned num_waves = 3;
+        // Isospin-degeneracy factors
+        static constexpr std::array<double, 3> eta_1  = { 1.0/4.0 , 0.0 , 1.0/4.0 };
+        static constexpr std::array<double, 3> eta_2  = { 0.0 , 3.0/4.0 , 0.0 };
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0m_a  = 1.516e-2;
+        static constexpr double chi_1m_v  = 5.742e-4;
+        static constexpr double chi_1p_a  = 5.742e-4;
     };
 
     /* P -> gamma Processes */

@@ -242,6 +242,40 @@ namespace eos
     };
 
     template <>
+    class FormFactors<PToPP2> :
+        public virtual ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual complex<double> v_perp(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+
+            virtual complex<double> a_t(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual complex<double> a_0(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual complex<double> a_par(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+
+            virtual unsigned numWaves() const = 0;
+
+            virtual double unitarity_integrand_0m(const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual double unitarity_integrand_1p(const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual double unitarity_integrand_1m(const double & s, const unsigned & l, const bool & iso) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<PToPP2>
+    {
+        public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<PToPP2> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
+            static std::shared_ptr<FormFactors<PToPP2>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static OptionSpecification option_specification(const qnp::Prefix & process);
+            static OptionSpecification option_specification();
+    };
+
+    template <>
     class FormFactors<VToP> :
         public virtual ParameterUser
     {

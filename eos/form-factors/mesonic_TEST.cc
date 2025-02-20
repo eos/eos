@@ -69,6 +69,28 @@ class PToPPFormFactorsTest :
         }
 } p_to_pp_form_factor_test;
 
+class PToPP2FormFactorsTest :
+    public TestCase
+{
+    public:
+        PToPP2FormFactorsTest() :
+            TestCase("p_to_pp2_form_factor_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // creation
+            {
+                auto parameter = Parameters::Defaults();
+                auto options   = Options();
+
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToPP2>::create("Foo->BarBaz::FvDV2018", parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToPP2>::create("B->pipi::BazBar",       parameter, options));
+            }
+        }
+} p_to_pp2_form_factor_test;
+
 class PToVFormFactorsTest :
     public TestCase
 {

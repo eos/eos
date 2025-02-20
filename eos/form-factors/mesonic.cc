@@ -6,6 +6,7 @@
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2019 Nico Gubernari
  * Copyright (c) 2024 Matthew J. Kirk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,6 +34,7 @@
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/form-factors/parametric-hkvt2025.hh>
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
@@ -482,6 +484,62 @@ namespace eos
     {
         std::set<std::string> allowed_values;
         for (const auto & ff : FormFactorFactory<PToPP>::form_factors)
+        {
+            allowed_values.insert(std::get<0>(ff).name_part().str());
+        }
+
+        OptionSpecification result { "form-factors", { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        return result;
+    }
+
+    /* P -> PP (2) Processes */
+
+    FormFactors<PToPP2>::~FormFactors()
+    {
+    }
+
+    const std::map<FormFactorFactory<PToPP2>::KeyType, FormFactorFactory<PToPP2>::ValueType>
+    FormFactorFactory<PToPP2>::form_factors
+    {
+        { "B->pipi::HKvT2025",            &HKVT2025FormFactors<BToPiPi, PToPP2>::make        }
+    };
+
+    std::shared_ptr<FormFactors<PToPP2>>
+    FormFactorFactory<PToPP2>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        Context ctx("When creating a P->PP (2) form factor");
+
+        std::shared_ptr<FormFactors<PToPP2>> result;
+
+        auto i = FormFactorFactory<PToPP2>::form_factors.find(name);
+        if (FormFactorFactory<PToPP2>::form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+            return result;
+        }
+
+        throw NoSuchFormFactorError(name.prefix_part().str(), name.name_part().str());
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToPP2>::option_specification(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<PToPP2>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<PToPP2>::option_specification()
+    {
+        std::set<std::string> allowed_values;
+        for (const auto & ff : FormFactorFactory<PToPP2>::form_factors)
         {
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
