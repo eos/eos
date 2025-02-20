@@ -52,9 +52,59 @@ namespace eos
             double a4perp(const double & mu) const override;
             double fperp(const double & mu) const override;
 
+            /* Twist 3 LCDA parameters */
+            double kappa3para(const double & mu) const override;
+            double omega3para(const double & mu) const override;
+            double lambda3para(const double & mu) const override;
+            double zeta3para(const double & mu) const override;
+            double lambda3paratilde(const double & mu) const override;
+            double omega3paratilde(const double & mu) const override;
+            double kappa3perp(const double & mu) const override;
+            double omega3perp(const double & mu) const override;
+            double lambda3perp(const double & mu) const override;
+
+            /* Twist 4 LCDA parameters */
+            double zeta4para(const double & mu) const override;
+            double omega4paratilde(const double & mu) const override;
+            double zeta4perp(const double & mu) const override;
+            double zeta4perptilde(const double & mu) const override;
+            double kappa4para(const double & mu) const override;
+            double kappa4perp(const double & mu) const override;
+
             /* Twist 2 LCDAs */
             double phipara(const double & u, const double & mu) const override;
             double phiperp(const double & u, const double & mu) const override;
+
+            /* Twist 3 two particle LCDAs */
+            virtual double phi3para(const double & u, const double & mu) const override;
+            virtual double phi3perp(const double & u, const double & mu) const override;
+            virtual double psi3para(const double & u, const double & mu) const override;
+            virtual double psi3perp(const double & u, const double & mu) const override;
+
+            /* Twist 3 three particle LCDAs */
+            double Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+
+            /* Twist 4 three particle chiral even LCDAs */
+            double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+
+            /* Twist 4 three particle chiral odd LCDAs */
+            double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perptilde1(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
@@ -84,9 +134,59 @@ namespace eos
             double a4perp(const double & mu) const override;
             double fperp(const double & mu) const override;
 
+            /* Twist 3 LCDA parameters */
+            double kappa3para(const double & mu) const override;
+            double omega3para(const double & mu) const override;
+            double lambda3para(const double & mu) const override;
+            double zeta3para(const double & mu) const override;
+            double lambda3paratilde(const double & mu) const override;
+            double omega3paratilde(const double & mu) const override;
+            double kappa3perp(const double & mu) const override;
+            double omega3perp(const double & mu) const override;
+            double lambda3perp(const double & mu) const override;
+
+            /* Twist 4 LCDA parameters */
+            double zeta4para(const double & mu) const override;
+            double omega4paratilde(const double & mu) const override;
+            double zeta4perp(const double & mu) const override;
+            double zeta4perptilde(const double & mu) const override;
+            double kappa4para(const double & mu) const override;
+            double kappa4perp(const double & mu) const override;
+
             /* Twist 2 LCDAs */
             double phipara(const double & u, const double & mu) const override;
             double phiperp(const double & u, const double & mu) const override;
+
+            /* Twist 3 two particle LCDAs */
+            virtual double phi3para(const double & u, const double & mu) const override;
+            virtual double phi3perp(const double & u, const double & mu) const override;
+            virtual double psi3para(const double & u, const double & mu) const override;
+            virtual double psi3perp(const double & u, const double & mu) const override;
+
+            /* Twist 3 three particle LCDAs */
+            double Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+            double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
+
+            /* Twist 4 three particle chiral even LCDAs */
+            double Phi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4paratilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Xi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+
+            /* Twist 4 three particle chiral odd LCDAs */
+            double Psi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Psi4perptilde(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp1(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp2(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp3(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perp4(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde1(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde2(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde3(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Phi4perptilde4(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+            double Xi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
