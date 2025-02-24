@@ -41,8 +41,7 @@ class ReferencesTest : public TestCase
             {
                 std::cout << "# References :" << std::endl;
 
-                auto     references = References();
-                unsigned n          = 0;
+                auto references = References();
 
                 for (const auto & r : references)
                 {
