@@ -83,7 +83,6 @@ namespace eos
                 {
                     // This hardcodes the RGE for single-heavy hadrons containing a b quark
                     const double C_A = 3.0;
-                    const double C_F = 4.0 / 3.0;
                     const double T_F = 1.0 / 2.0;
                     const double n_f = 5.0;
                     const double LambdaQCD = 0.213;
@@ -136,7 +135,6 @@ namespace eos
                 const double C_F = 4.0 / 3.0;
                 const double T_F = 1.0 / 2.0;
                 const double n_f = 5.0;
-                const double LambdaQCD = 0.213;
 
                 auto gamma_cusp = [&](const double & alpha_s)
                 {
