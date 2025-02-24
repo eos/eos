@@ -46,10 +46,10 @@ class LogPosteriorTest :
                 auto clone2 = log_posterior.clone();
 
                 // make sure observable's value is not equal to central value
-                Parameter p = (*clone1)[0];
-                p.set(4.3); //posterior mode
-                p = (*clone2)[0];
-                p.set(4.4); //log_prior mode
+                Parameter p1 = (*clone1)[0];
+                p1.set(4.3); //posterior mode
+                Parameter p2 = (*clone2)[0];
+                p2.set(4.4); //log_prior mode
 
                 // for comparison used ipython's log(scipy.stats.norm.pdf(4.3, loc=4.4, scale=0.1))
                 // value at center of both Gaussian distributions. so pdf the same
