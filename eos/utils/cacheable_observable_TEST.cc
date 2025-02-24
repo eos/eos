@@ -80,7 +80,7 @@ namespace eos
 
         IntermediateResult _intermediate_result;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+        Implementation(const Parameters & p, const Options & /* o */, ParameterUser & u) :
             m_B(p["mass::B_u"], u)
         {
         }
@@ -168,7 +168,7 @@ namespace eos
         double a;
         double b;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+        Implementation(const Parameters & p, const Options & /* o */, ParameterUser & u) :
             m_B(p["mass::B_u"], u)
         {
             a = 2.0;
