@@ -33,6 +33,7 @@ namespace eos
     template <>
     struct Implementation<BToPseudoscalarPseudoscalar>
     {
+        std::shared_ptr<Model> model;
         QuarkFlavorOption opt_q;
         LightMesonOption opt_p1;
         LightMesonOption opt_p2;
@@ -45,7 +46,6 @@ namespace eos
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> Bbar_nl_amplitudes;
-        std::shared_ptr<Model> model;
 
         // B mixing
         std::shared_ptr<UsedParameter> life_time_difference;
