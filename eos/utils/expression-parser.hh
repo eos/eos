@@ -20,7 +20,7 @@
 #define EOS_GUARD_EOS_UTILS_EXPRESSION_PARSER_HH 1
 
 #include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix.hpp>
+#include <boost/phoenix.hpp>
 #include <boost/fusion/adapted.hpp>
 
 #include <eos/utils/expression.hh>
