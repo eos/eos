@@ -824,7 +824,7 @@ def validate(analysis_file:str):
 @task('create-mask', '{posterior}/mask-{mask_name}')
 def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
     """
-    Create a sample mask based on the observables.
+    Create a sample mask based on observables.
 
     The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mask-LABEL.
@@ -878,6 +878,8 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
         mask_combination_function = _np.all
     elif mask_logical_combination == "or":
         mask_combination_function = _np.any
+    else:
+        raise ValueError(f"Logical combination {mask_logical_combination} not supported")
     mask = mask_combination_function(observable_samples > 0, axis=1)
 
     eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
