@@ -383,6 +383,78 @@ namespace eos
 
         return result;
     }
+
+    template <typename Process_>
+    complex<double>
+    FvDV2018FormFactors<Process_>::v_perp(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    template <typename Process_>
+    complex<double>
+    FvDV2018FormFactors<Process_>::a_par(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    template <typename Process_>
+    complex<double>
+    FvDV2018FormFactors<Process_>::a_0(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    template <typename Process_>
+    complex<double>
+    FvDV2018FormFactors<Process_>::a_t(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    template <typename Process_>
+    unsigned
+    FvDV2018FormFactors<Process_>::numWaves() const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0;
+    }
+
+    template <typename Process_>
+    double
+    FvDV2018FormFactors<Process_>::unitarity_integrand_0m(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    FvDV2018FormFactors<Process_>::unitarity_integrand_1p(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    template <typename Process_>
+    double
+    FvDV2018FormFactors<Process_>::unitarity_integrand_1m(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
 }
 
 #endif

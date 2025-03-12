@@ -592,6 +592,70 @@ namespace eos
         return 0.0;
     }
 
+    complex<double>
+    AnalyticFormFactorBToPiPiBFvD2016::v_perp(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiBFvD2016::a_par(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiBFvD2016::a_0(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiBFvD2016::a_t(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    unsigned
+    AnalyticFormFactorBToPiPiBFvD2016::numWaves() const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::unitarity_integrand_0m(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::unitarity_integrand_1p(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::unitarity_integrand_1m(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
     Diagnostics
     AnalyticFormFactorBToPiPiBFvD2016::diagnostics() const
     {
@@ -763,6 +827,70 @@ namespace eos
     AnalyticFormFactorBToPiPiFvDV2018::f_time_im_res_qhat2(const double & q2, const double & k2) const
     {
         return _imp->f_time_im_res_qhat2(q2, k2);
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::v_perp(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::a_par(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::a_0(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::a_t(const double & /* q2 */, const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    unsigned
+    AnalyticFormFactorBToPiPiFvDV2018::numWaves() const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::unitarity_integrand_0m(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::unitarity_integrand_1p(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::unitarity_integrand_1m(const double & /* s */, const unsigned & /* l */, const bool & /* iso */) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
     }
 
     Diagnostics

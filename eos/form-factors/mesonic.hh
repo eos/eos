@@ -7,6 +7,7 @@
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  * Copyright (c) 2024 Matthew J. Kirk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -209,7 +210,7 @@ namespace eos
         public:
             virtual ~FormFactors();
 
-            // form factors
+            // form factors - BFvD2016 & FvDV2018 normalization
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const = 0;
             virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const = 0;
             virtual complex<double> f_long(const double & q2, const double & k2, const double & z) const = 0;
@@ -220,11 +221,25 @@ namespace eos
             double im_f_long(const double & q2, const double & k2, const double & z) const { return std::imag(f_long(q2, k2, z)); }
             double im_f_time(const double & q2, const double & k2, const double & z) const { return std::imag(f_time(q2, k2, z)); }
 
+            // form factors - HKvT2025 normalization
+            virtual complex<double> v_perp(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual complex<double> a_par(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual complex<double> a_0(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual complex<double> a_t(const double & q2, const double & s, const unsigned & l, const bool & iso) const = 0;
+
             // residues
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const = 0;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const = 0;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const = 0;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const = 0;
+            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const  = 0;
+            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const  = 0;
+            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const  = 0;
+            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const  = 0;
+
+            // number of partial waves implemented
+            virtual unsigned numWaves() const = 0;
+
+            // integrands for three-body contributions to unitarity bounds
+            virtual double unitarity_integrand_0m(const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual double unitarity_integrand_1p(const double & s, const unsigned & l, const bool & iso) const = 0;
+            virtual double unitarity_integrand_1m(const double & s, const unsigned & l, const bool & iso) const = 0;
     };
 
     template <>

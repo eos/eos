@@ -63,6 +63,18 @@ namespace eos
             virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const override;
             virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const override;
 
+            /* Placeholders */
+            virtual complex<double> v_perp(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+            virtual complex<double> a_par(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+            virtual complex<double> a_0(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+            virtual complex<double> a_t(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+
+            virtual unsigned numWaves() const override;
+
+            virtual double unitarity_integrand_0m(const double & s, const unsigned & l, const bool & iso) const override;
+            virtual double unitarity_integrand_1p(const double & s, const unsigned & l, const bool & iso) const override;
+            virtual double unitarity_integrand_1m(const double & s, const unsigned & l, const bool & iso) const override;
+
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
 
@@ -95,6 +107,18 @@ namespace eos
             virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const;
             virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const;
             virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const;
+
+            /* Placeholders */
+            virtual complex<double> v_perp(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+            virtual complex<double> a_par(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+            virtual complex<double> a_0(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+            virtual complex<double> a_t(const double & q2, const double & s, const unsigned & l, const bool & iso) const override;
+
+            virtual unsigned numWaves() const override;
+
+            virtual double unitarity_integrand_0m(const double & s, const unsigned & l, const bool & iso) const override;
+            virtual double unitarity_integrand_1p(const double & s, const unsigned & l, const bool & iso) const override;
+            virtual double unitarity_integrand_1m(const double & s, const unsigned & l, const bool & iso) const override;
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
