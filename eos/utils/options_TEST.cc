@@ -501,3 +501,183 @@ class RestrictedOptionTest :
             }
         }
 } restricted_option_test;
+
+class IsospinOptionTest :
+    public TestCase
+{
+    public:
+        IsospinOptionTest() :
+            TestCase("isospin_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // specify permitted options
+            std::vector<OptionSpecification> specifications
+            {
+                { "I"_ok,              { "0|2" }, "0" },
+            };
+
+            // Creation of option with valid default value, with value = default value
+            {
+                IsospinOption so
+                {
+                    Options{
+                        { "I"_ok, "0" }
+                    },
+                    specifications,
+                    "I"_ok
+                };
+                TEST_CHECK_EQUAL(so.value(), Isospin::zero);
+            }
+
+            // Creation of option with valid default value, with value != default value
+            {
+                IsospinOption so
+                {
+                    Options{
+                        { "I"_ok, "2" }
+                    },
+                    specifications,
+                    "I"_ok
+                };
+                TEST_CHECK_EQUAL(so.value(), Isospin::two);
+            }
+
+            // Creation of option with valid default value, with value != default value but containing default value
+            {
+                IsospinOption so
+                {
+                    Options{
+                        { "I"_ok, "0|2" }
+                    },
+                    specifications,
+                    "I"_ok
+                };
+                TEST_CHECK_EQUAL(so.value(), Isospin::zero | Isospin::two);
+            }
+
+            // Creation with invalid value
+            {
+                auto test = [specifications] ()
+                {
+                    IsospinOption so
+                    {
+                        Options{
+                            { "I"_ok, "1"}
+                        },
+                        specifications,
+                        "I"_ok
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+
+            // Creation with invalid value but containing a valid value
+            {
+                auto test = [specifications] ()
+                {
+                    IsospinOption so
+                    {
+                        Options{
+                            { "I"_ok, "0|1"}
+                        },
+                        specifications,
+                        "I"_ok
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+        }
+} isospin_option_test;
+
+class PartialWaveOptionTest :
+    public TestCase
+{
+    public:
+        PartialWaveOptionTest() :
+            TestCase("partial_wave_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // specify permitted options
+            std::vector<OptionSpecification> specifications
+            {
+                { "L"_ok,              { "S|P|D" }, "S|P" },
+            };
+
+            // Creation of option with valid default value, with value = default value
+            {
+                PartialWaveOption so
+                {
+                    Options{
+                        { "L"_ok, "S|P" }
+                    },
+                    specifications,
+                    "L"_ok
+                };
+                TEST_CHECK_EQUAL(so.value(), PartialWave::S | PartialWave::P);
+            }
+
+            // Creation of option with valid default value, with value != default value but part of default value
+            {
+                PartialWaveOption so
+                {
+                    Options{
+                        { "L"_ok, "P" }
+                    },
+                    specifications,
+                    "L"_ok
+                };
+                TEST_CHECK_EQUAL(so.value(), PartialWave::P);
+            }
+
+            // Creation of option with valid default value, with value != default value but containing default value
+            {
+                PartialWaveOption so
+                {
+                    Options{
+                        { "L"_ok, "S|P|D" }
+                    },
+                    specifications,
+                    "L"_ok
+                };
+                TEST_CHECK_EQUAL(so.value(), PartialWave::S | PartialWave::P | PartialWave::D);
+            }
+
+            // Creation with invalid value
+            {
+                auto test = [specifications] ()
+                {
+                    PartialWaveOption so
+                    {
+                        Options{
+                            { "L"_ok, "F"}
+                        },
+                        specifications,
+                        "L"_ok
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+
+            // Creation with invalid value but containing a valid value
+            {
+                auto test = [specifications] ()
+                {
+                    PartialWaveOption so
+                    {
+                        Options{
+                            { "L"_ok, "P|F"}
+                        },
+                        specifications,
+                        "L"_ok
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+        }
+} partial_wave_option_test;

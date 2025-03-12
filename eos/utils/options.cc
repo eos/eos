@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -431,6 +432,50 @@ namespace eos
 
     const std::string &
     LightMesonOption::str() const
+    {
+        return _value;
+    }
+
+    IsospinOption::IsospinOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
+        SpecifiedOption(options, specifications, key),
+        _isospin_value(destringify<Isospin>(_value))
+    {
+        if (((_isospin_value ^ destringify<Isospin>(this->_specification.allowed_values.front())) & _isospin_value) != Isospin::none)
+            throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+    }
+
+    IsospinOption::~IsospinOption() = default;
+
+    Isospin
+    IsospinOption::value() const
+    {
+        return _isospin_value;
+    }
+
+    const std::string &
+    IsospinOption::str() const
+    {
+        return _value;
+    }
+
+    PartialWaveOption::PartialWaveOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
+        SpecifiedOption(options, specifications, key),
+        _partial_wave_value(destringify<PartialWave>(_value))
+    {
+        if (((_partial_wave_value ^ destringify<PartialWave>(this->_specification.allowed_values.front())) & _partial_wave_value) != PartialWave::none)
+            throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+    }
+
+    PartialWaveOption::~PartialWaveOption() = default;
+
+    PartialWave
+    PartialWaveOption::value() const
+    {
+        return _partial_wave_value;
+    }
+
+    const std::string &
+    PartialWaveOption::str() const
     {
         return _value;
     }
