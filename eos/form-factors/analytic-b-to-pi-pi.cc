@@ -57,6 +57,10 @@ namespace eos
         // further hadronic inputs
         PionLCDAs pi;
 
+        // isospin combination
+        IsospinOption opt_I;
+        PartialWaveOption opt_L;
+
         // routine to determine renormlization scale
         std::function<double (const double &)> mu;
 
@@ -68,7 +72,9 @@ namespace eos
             m_B(p["mass::B_d"], u),
             f_pi(p["decay-constant::pi"], u),
             _mu(p["B->pipi::mu@BFvD2016"], u),
-            pi(p, o)
+            pi(p, o),
+            opt_I(o, options, "I"),
+            opt_L(o, options, "L")
         {
             std::string scale = o.get("scale", "fixed");
 
@@ -84,6 +90,7 @@ namespace eos
             {
                 throw InvalidOptionValueError("scale", scale, "fixed, variable");
             }
+
 #if 0
             static const double q2 = 0.6, k2 = 18.6;
             std::cout << "q2 = " << q2 << std::endl;
@@ -464,6 +471,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options
     {
+        { "I", { "0 & 1" }, "0 & 1" },
+        { "L", { "S & P & D" }, "S & P & D"}
     };
 
     AnalyticFormFactorBToPiPiBFvD2016::AnalyticFormFactorBToPiPiBFvD2016(const Parameters & p, const Options & o) :
@@ -730,6 +739,10 @@ namespace eos
         UsedParameter m_Bst;
         UsedParameter g_BstBpi;
 
+        // isospin combination
+        IsospinOption opt_I;
+        PartialWaveOption opt_L;
+
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -737,7 +750,9 @@ namespace eos
             b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p)),
             m_B(p["mass::B_d"], u),
             m_Bst(p["mass::B_d^*"], u),
-            g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u)
+            g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u),
+            opt_I(o, options, "I"),
+            opt_L(o, options, "L")
         {
         }
 
@@ -812,7 +827,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options
     {
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l", { "e", "mu", "tau" }, "mu" },
+        { "I", { "0 & 1" }, "0 & 1" },
+        { "L", { "S & P & D" }, "S & P & D"}
     };
 
     AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :
