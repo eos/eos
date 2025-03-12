@@ -23,7 +23,9 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/utils/options.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -64,10 +66,22 @@ namespace eos
             virtual complex<double> f_long(const double & q2, const double & k2, const double & ctheta) const override;
             virtual complex<double> f_time(const double & q2, const double & k2, const double & ctheta) const override;
 
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const override;
+            double f_perp_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_para_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_long_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_time_im_res_qhat2(const double & q2, const double & k2) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
+            static const std::vector<OptionSpecification> options;
     };
 
     extern template class FvDV2018FormFactors<BToPiPi>;
