@@ -2,7 +2,8 @@
 
 /*
  * Copyright (c) 2010-2022 Danny van Dyk
- * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2018      Keri Vos
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +23,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_FVDV2018_IMPL_HH 1
 
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/utils/kinematic.hh>
 
 namespace eos
@@ -96,7 +98,7 @@ namespace eos
     }
 
     template <typename Process_>
-    FvDV2018FormFactors<Process_>::FvDV2018FormFactors(const Parameters & p, const Options &) :
+    FvDV2018FormFactors<Process_>::FvDV2018FormFactors(const Parameters & p, const Options & o) :
         // perp
         _a_Fperp_0_0(p["B->pipi::a^Fperp_0_0@FvDV2018"], *this),
         _a_Fperp_0_1(p["B->pipi::a^Fperp_0_1@FvDV2018"], *this),
@@ -184,7 +186,13 @@ namespace eos
         _c_Ftime_0_3(p["B->pipi::c^Ftime_0_3@FvDV2018"], *this),
         _c_Ftime_1_0(p["B->pipi::c^Ftime_1_0@FvDV2018"], *this),
         _c_Ftime_1_1(p["B->pipi::c^Ftime_1_1@FvDV2018"], *this),
-        _c_Ftime_1_2(p["B->pipi::c^Ftime_1_2@FvDV2018"], *this)
+        _c_Ftime_1_2(p["B->pipi::c^Ftime_1_2@FvDV2018"], *this),
+        // Partial waves
+        opt_L(o, options, "L"_ok),
+        _S_switch(opt_L.value() && PartialWave::S),
+        _P_switch(opt_L.value() && PartialWave::P),
+        _D_switch(opt_L.value() && PartialWave::D),
+        _F_switch(opt_L.value() && PartialWave::F)
     {
     }
 
@@ -196,6 +204,34 @@ namespace eos
     FvDV2018FormFactors<Process_>::make(const Parameters & parameters, const Options & options)
     {
         return new FvDV2018FormFactors(parameters, options);
+    }
+
+    template <typename Process_>
+    std::array<complex<double>, 4>
+    FvDV2018FormFactors<Process_>::f_perp(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_perp(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_perp(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
+        {
+            return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_perp(q2, k2, x);
+        };
+
+        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
+        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
+        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+
+        return res;
     }
 
     template <typename Process_>
@@ -246,6 +282,34 @@ namespace eos
     }
 
     template <typename Process_>
+    std::array<complex<double>, 4>
+    FvDV2018FormFactors<Process_>::f_para(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_para(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_para(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
+        {
+            return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_para(q2, k2, x);
+        };
+
+        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
+        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
+        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+
+        return res;
+    }
+
+    template <typename Process_>
     complex<double>
     FvDV2018FormFactors<Process_>::f_para(const double & q2, const double & k2, const double & ctheta) const
     {
@@ -289,6 +353,40 @@ namespace eos
         double result = blaschke_res_qhat2 * (a + b * (mB2 - k2) / mB2 + c * pow((mB2 - k2) / mB2, 2)) * mB / std::sqrt(k2);
 
         return result;
+    }
+
+    template <typename Process_>
+    std::array<complex<double>, 4>
+    FvDV2018FormFactors<Process_>::f_long(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_long(q2, k2, x);
+        };
+
+        res[0] = integrate1D(integrandS, 1024, -1.0, +1.0) * this->_S_switch;
+        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
+        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
+        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+
+        return res;
     }
 
     template <typename Process_>
@@ -336,6 +434,40 @@ namespace eos
         double result = blaschke_res_qhat2 * (a + b * (mB2 - k2) / mB2 + c * pow((mB2 - k2) / mB2, 2)) * mB / std::sqrt(q2) * mB2 / std::sqrt(lambda) * mB2 / k2;
 
         return result;
+    }
+
+    template <typename Process_>
+    std::array<complex<double>, 4>
+    FvDV2018FormFactors<Process_>::f_time(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_time(q2, k2, x);
+        };
+
+        res[0] = integrate1D(integrandS, 1024, -1.0, +1.0) * this->_S_switch;
+        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
+        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
+        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+
+        return res;
     }
 
     template <typename Process_>
@@ -393,6 +525,7 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options
     {
+        { "L"_ok, { "S|P|D|F" }, "S|P|D|F" },
     };
 
     template<typename Process_>
