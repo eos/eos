@@ -57,6 +57,8 @@ class BToPiPiLeptonNeutrinoTest :
                 Options oo;
                 oo.declare("model"_ok, "CKM");
                 oo.declare("form-factors"_ok, "BFvD2016");
+                oo.declare("I"_ok, "0|1");
+                oo.declare("L"_ok, "S|P|D|F");
 
                 BToPiPiLeptonNeutrino d(p, oo);
 
