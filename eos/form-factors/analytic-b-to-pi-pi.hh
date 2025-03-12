@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,6 +44,12 @@ namespace eos
             complex<double> F_perp_lo_tw2(const double & q2, const double & k2, const double & z) const;
             complex<double> F_perp_lo_tw3(const double & q2, const double & k2, const double & z) const;
 
+            // Partial waves
+            virtual std::array<complex<double>, 4> f_perp(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 4> f_para(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 4> f_long(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 4> f_time(const double & q2, const double & k2) const override;
+
             /* Form factors */
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const override;
             virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const override;
@@ -78,6 +85,12 @@ namespace eos
             ~AnalyticFormFactorBToPiPiFvDV2018();
 
             static FormFactors<PToPP> * make(const Parameters &, const Options &);
+
+            // Partial waves
+            virtual std::array<complex<double>, 4> f_perp(const double & q2, const double & k2) const;
+            virtual std::array<complex<double>, 4> f_para(const double & q2, const double & k2) const;
+            virtual std::array<complex<double>, 4> f_long(const double & q2, const double & k2) const;
+            virtual std::array<complex<double>, 4> f_time(const double & q2, const double & k2) const;
 
             /* Form factors */
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const;
