@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2015, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -383,6 +384,43 @@ namespace eos
 
     const std::string &
     LightMesonOption::str() const
+    {
+        return _value;
+    }
+
+    IsospinOption::IsospinOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key)
+    {
+    }
+
+    IsospinOption::~IsospinOption() = default;
+
+    uint8_t
+    IsospinOption::value() const
+    {
+        static const std::map<std::string, uint8_t> map
+        {
+            { "0",          1     },
+            { "1",          2     },
+            { "0 & 1",      3     },
+            { "2",          4     },
+            { "0 & 2",      5     },
+            { "1 & 2",      6     },
+            { "0 & 1 & 2",  7     },
+            { "1/2",        8     },
+            { "3/2",        16    },
+            { "1/2 & 3/2",  24    }
+        };
+
+        const auto i = map.find(_value);
+        if (map.cend() == i)
+            throw InternalError("Invalid combination of isospin '" + _value + "' encountered in IsospinOption::value()");
+
+        return i->second;
+    }
+
+    const std::string &
+    IsospinOption::str() const
     {
         return _value;
     }

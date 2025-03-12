@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2016, 2018 Danny van Dyk
  * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,6 +57,9 @@ namespace eos
         // further hadronic inputs
         PionLCDAs pi;
 
+        // isospin combination
+        IsospinOption opt_I;
+                
         // routine to determine renormlization scale
         std::function<double (const double &)> mu;
 
@@ -67,7 +71,8 @@ namespace eos
             m_B(p["mass::B_d"], u),
             f_pi(p["decay-constant::pi"], u),
             _mu(p["B->pipi::mu@BFvD2016"], u),
-            pi(p, o)
+            pi(p, o),
+            opt_I(o, options, "I")
         {
             std::string scale = o.get("scale", "fixed");
 
@@ -83,6 +88,7 @@ namespace eos
             {
                 throw InvalidOptionValueError("scale", scale, "fixed, variable");
             }
+
 #if 0
             static const double q2 = 0.6, k2 = 18.6;
             std::cout << "q2 = " << q2 << std::endl;
@@ -463,6 +469,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options
     {
+        { "I", { "0 & 1" }, "0 & 1" }
     };
 
     AnalyticFormFactorBToPiPiBFvD2016::AnalyticFormFactorBToPiPiBFvD2016(const Parameters & p, const Options & o) :
@@ -528,6 +535,107 @@ namespace eos
         return std::imag(this->f_time(q2, k2, z));
     }
 
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_perp(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_perp(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_perp(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = 0.0;
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_para(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_para(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_para(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = 0.0;
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_long(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_long(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = integrate1D(integrandS, npoints, -1.0, 1.0);
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_time(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_time(q2, k2, x);
+        };
+        unsigned npoints = 1000;
+        res[0] = integrate1D(integrandS, npoints, -1.0, 1.0);
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
+    }
+
     complex<double>
     AnalyticFormFactorBToPiPiBFvD2016::f_perp(const double & q2, const double & k2, const double & z) const
     {
@@ -560,38 +668,6 @@ namespace eos
         return _imp->ff_lo_tw2(tr, q2, k2, z) + _imp->ff_lo_tw3(tr, q2, k2, z);
     }
 
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_perp_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_para_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_long_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_time_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
     Diagnostics
     AnalyticFormFactorBToPiPiBFvD2016::diagnostics() const
     {
@@ -622,6 +698,9 @@ namespace eos
         UsedParameter m_Bst;
         UsedParameter g_BstBpi;
 
+        // isospin combination
+        IsospinOption opt_I;
+
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -629,7 +708,8 @@ namespace eos
             b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p)),
             m_B(p["mass::B_d"], u),
             m_Bst(p["mass::B_d^*"], u),
-            g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u)
+            g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u),
+            opt_I(o, options, "I")
         {
         }
 
@@ -692,6 +772,11 @@ namespace eos
         {
             Diagnostics results;
 
+            results.add({ f_time_im_res_qhat2(0.05, 13.0),   "f_time_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+            results.add({ f_long_im_res_qhat2(0.05, 13.0),   "f_long_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+            results.add({ f_perp_im_res_qhat2(0.05, 13.0),   "f_perp_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+            results.add({ f_para_im_res_qhat2(0.05, 13.0),   "f_para_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+
             return results;
         }
     };
@@ -699,7 +784,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options
     {
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l", { "e", "mu", "tau" }, "mu" },
+        { "I", { "0 & 1" }, "0 & 1" }
     };
 
     AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :
@@ -715,6 +801,30 @@ namespace eos
     AnalyticFormFactorBToPiPiFvDV2018::make(const Parameters & p, const Options & o)
     {
         return new AnalyticFormFactorBToPiPiFvDV2018(p, o);
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_perp(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_para(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_long(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_time(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
     }
 
     complex<double>
@@ -771,6 +881,11 @@ namespace eos
         return _imp->diagnostics();
     }
 
+    const std::set<ReferenceName> AnalyticFormFactorBToPiPiFvDV2018::references
+    {
+        "FvDV:2018A"_rn
+    };
+
     std::vector<OptionSpecification>::const_iterator
     AnalyticFormFactorBToPiPiFvDV2018::begin_options()
     {
@@ -782,4 +897,8 @@ namespace eos
     {
         return Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options.cend();
     }
+
+    const std::vector<OptionSpecification> AnalyticFormFactorBToPiPiFvDV2018::options
+    {
+    };
 }
