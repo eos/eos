@@ -383,6 +383,31 @@ namespace eos
 
         return result;
     }
+
+    template<typename Process_>
+    const std::set<ReferenceName> FvDV2018FormFactors<Process_>::references
+    {
+        "FvDV:2018A"_rn
+    };
+
+    template<typename Process_>
+    const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options
+    {
+    };
+
+    template<typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    FvDV2018FormFactors<Process_>::begin_options()
+    {
+        return options.cbegin();
+    }
+
+    template<typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    FvDV2018FormFactors<Process_>::end_options()
+    {
+        return options.cend();
+    }
 }
 
 #endif

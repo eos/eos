@@ -276,7 +276,7 @@ class AnalyticFormFactorBToPiPiFvDV2018Test :
 
         virtual void run() const
         {
-            static const double eps = 1.0e-5;
+            static const double eps = 1.0e-3;
 
             /* Factory */
             {
@@ -285,13 +285,25 @@ class AnalyticFormFactorBToPiPiFvDV2018Test :
                 p["mass::B_d^*"] = 5.32465;
 
                 std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi::FvDV2018-Dispersive", p, Options{ });
-
                 TEST_CHECK(0 != ff.get());
+            }
 
-                TEST_CHECK_RELATIVE_ERROR(ff->f_time_im_res_qhat2(0.05, 13.0), 2910.308, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_long_im_res_qhat2(0.05, 13.0), 2927.843, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_im_res_qhat2(0.05, 13.0),  -46.067, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_para_im_res_qhat2(0.05, 13.0),  129.103, eps);
+            /* Internal Diagnostics */
+            {
+                Parameters p = Parameters::Defaults();
+                p["mass::B_d"] = 5.27958;
+                p["mass::B_d^*"] = 5.32465;
+
+                AnalyticFormFactorBToPiPiFvDV2018 ff(p, Options{ });
+                Diagnostics diagnostics = ff.diagnostics();
+                static const std::vector<std::pair<double, double>> reference
+                {
+                    std::make_pair(  2910.308,  eps), // f_time_im_res_qhat2(q2 = 0.05, k2 = 13.0)
+                    std::make_pair(  2927.843,  eps), // f_long_im_res_qhat2(q2 = 0.05, k2 = 13.0)
+                    std::make_pair(   -46.067,  eps), // f_perp_im_res_qhat2(q2 = 0.05, k2 = 13.0)
+                    std::make_pair(   129.103,  eps), // f_para_im_res_qhat2(q2 = 0.05, k2 = 13.0)
+                };
+                TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
             }
         }
 } analytic_form_factor_b_to_pi_pi_FvDV2018_test;

@@ -560,38 +560,6 @@ namespace eos
         return _imp->ff_lo_tw2(tr, q2, k2, z) + _imp->ff_lo_tw3(tr, q2, k2, z);
     }
 
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_perp_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_para_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_long_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
-    double
-    AnalyticFormFactorBToPiPiBFvD2016::f_time_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
-    {
-        throw InternalError("Not yet implemented");
-
-        return 0.0;
-    }
-
     Diagnostics
     AnalyticFormFactorBToPiPiBFvD2016::diagnostics() const
     {
@@ -692,6 +660,11 @@ namespace eos
         {
             Diagnostics results;
 
+            results.add({ f_time_im_res_qhat2(0.05, 13.0),   "f_time_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+            results.add({ f_long_im_res_qhat2(0.05, 13.0),   "f_long_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+            results.add({ f_perp_im_res_qhat2(0.05, 13.0),   "f_perp_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+            results.add({ f_para_im_res_qhat2(0.05, 13.0),   "f_para_im_res_qhat2(q2 = 0.05, k2 = 13.0)" });
+
             return results;
         }
     };
@@ -770,6 +743,11 @@ namespace eos
         return _imp->diagnostics();
     }
 
+    const std::set<ReferenceName> AnalyticFormFactorBToPiPiFvDV2018::references
+    {
+        "FvDV:2018A"_rn
+    };
+
     std::vector<OptionSpecification>::const_iterator
     AnalyticFormFactorBToPiPiFvDV2018::begin_options()
     {
@@ -781,4 +759,8 @@ namespace eos
     {
         return Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options.cend();
     }
+
+    const std::vector<OptionSpecification> AnalyticFormFactorBToPiPiFvDV2018::options
+    {
+    };
 }
