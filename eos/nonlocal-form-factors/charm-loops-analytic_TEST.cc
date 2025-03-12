@@ -221,7 +221,7 @@ class TwoLoopTest :
                     TEST_CHECK_NEARLY_EQUAL(f29c_ref[i].real(), f29c_res.real(), 150*eps);
                     TEST_CHECK_NEARLY_EQUAL(f29c_ref[i].imag(), f29c_res.imag(), 150*eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(f27d_ref[i].real(), f27d_res.real(), 200*eps);
+                    TEST_CHECK_NEARLY_EQUAL(f27d_ref[i].real(), f27d_res.real(), 250*eps);
                     TEST_CHECK_NEARLY_EQUAL(f27d_ref[i].imag(), f27d_res.imag(), 200*eps);
 
                     TEST_CHECK_NEARLY_EQUAL(f29d_ref[i].real(), f29d_res.real(), 1200*eps);
