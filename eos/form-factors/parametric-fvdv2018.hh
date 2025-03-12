@@ -50,6 +50,8 @@ namespace eos
             UsedParameter _b_Ftime_0_0, _b_Ftime_0_1, _b_Ftime_0_2, _b_Ftime_0_3, _b_Ftime_1_0, _b_Ftime_1_1, _b_Ftime_1_2;
             UsedParameter _c_Ftime_0_0, _c_Ftime_0_1, _c_Ftime_0_2, _c_Ftime_0_3, _c_Ftime_1_0, _c_Ftime_1_1, _c_Ftime_1_2;
 
+            IsospinOption opt_I;
+
             static double _calc_z(const double & t, const double & t_p, const double & t_0);
             inline double _z(const double & t) const;
             inline double _zhat(const double & that) const;
@@ -57,7 +59,7 @@ namespace eos
             inline double _blaschke_res_qhat2(const double & z) const;
 
           public:
-            FvDV2018FormFactors(const Parameters & p, const Options &);
+            FvDV2018FormFactors(const Parameters & p, const Options & o);
             ~FvDV2018FormFactors();
 
             static FormFactors<PToPP> * make(const Parameters & parameters, const Options & options);

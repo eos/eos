@@ -98,7 +98,7 @@ namespace eos
     }
 
     template <typename Process_>
-    FvDV2018FormFactors<Process_>::FvDV2018FormFactors(const Parameters & p, const Options &) :
+    FvDV2018FormFactors<Process_>::FvDV2018FormFactors(const Parameters & p, const Options & o) :
         // perp
         _a_Fperp_0_0(p["B->pipi::a^Fperp_0_0@FvDV2018"], *this),
         _a_Fperp_0_1(p["B->pipi::a^Fperp_0_1@FvDV2018"], *this),
@@ -186,7 +186,9 @@ namespace eos
         _c_Ftime_0_3(p["B->pipi::c^Ftime_0_3@FvDV2018"], *this),
         _c_Ftime_1_0(p["B->pipi::c^Ftime_1_0@FvDV2018"], *this),
         _c_Ftime_1_1(p["B->pipi::c^Ftime_1_1@FvDV2018"], *this),
-        _c_Ftime_1_2(p["B->pipi::c^Ftime_1_2@FvDV2018"], *this)
+        _c_Ftime_1_2(p["B->pipi::c^Ftime_1_2@FvDV2018"], *this),
+        // Isospin
+        opt_I(o, options, "I")
     {
     }
 
@@ -501,6 +503,7 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options
     {
+        { "I", { "0 & 1" }, "0 & 1" }
     };
 
     template<typename Process_>
