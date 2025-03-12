@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010-2022 Danny van Dyk
  * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -60,6 +61,11 @@ namespace eos
             ~FvDV2018FormFactors();
 
             static FormFactors<PToPP> * make(const Parameters & parameters, const Options & options);
+
+            virtual std::array<complex<double>, 3> f_perp(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 3> f_para(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 3> f_long(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 3> f_time(const double & q2, const double & k2) const override;
 
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & ctheta) const override;
             virtual complex<double> f_para(const double & q2, const double & k2, const double & ctheta) const override;

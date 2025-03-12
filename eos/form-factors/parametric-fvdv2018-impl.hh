@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010-2022 Danny van Dyk
  * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +23,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_FVDV2018_IMPL_HH 1
 
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/utils/kinematic.hh>
 
 namespace eos
@@ -199,6 +201,30 @@ namespace eos
     }
 
     template <typename Process_>
+    std::array<complex<double>, 3>
+    FvDV2018FormFactors<Process_>::f_perp(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_perp(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_perp(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = 0.0;
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
+    }
+
+    template <typename Process_>
     complex<double>
     FvDV2018FormFactors<Process_>::f_perp(const double & q2, const double & k2, const double & ctheta) const
     {
@@ -243,6 +269,30 @@ namespace eos
         double result = blaschke_res_qhat2 * (a + b * (mB2 - k2) / mB2 + c * pow((mB2 - k2) / mB2, 2)) * std::sqrt(lambda) / (mB * std::sqrt(k2));
 
         return result;
+    }
+
+    template <typename Process_>
+    std::array<complex<double>, 3>
+    FvDV2018FormFactors<Process_>::f_para(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_para(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_para(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = 0.0;
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
     }
 
     template <typename Process_>
@@ -292,6 +342,35 @@ namespace eos
     }
 
     template <typename Process_>
+    std::array<complex<double>, 3>
+    FvDV2018FormFactors<Process_>::f_long(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_long(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = integrate1D(integrandS, npoints, -1.0, 1.0);
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
+    }
+
+    template <typename Process_>
     complex<double>
     FvDV2018FormFactors<Process_>::f_long(const double & q2, const double & k2, const double & ctheta) const
     {
@@ -336,6 +415,35 @@ namespace eos
         double result = blaschke_res_qhat2 * (a + b * (mB2 - k2) / mB2 + c * pow((mB2 - k2) / mB2, 2)) * mB / std::sqrt(q2) * mB2 / std::sqrt(lambda) * mB2 / k2;
 
         return result;
+    }
+
+    template <typename Process_>
+    std::array<complex<double>, 3>
+    FvDV2018FormFactors<Process_>::f_time(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_time(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+        res[0] = integrate1D(integrandS, npoints, -1.0, 1.0);
+        res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+
+        return res;
     }
 
     template <typename Process_>
