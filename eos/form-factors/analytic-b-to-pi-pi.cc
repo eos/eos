@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2016, 2018 Danny van Dyk
  * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -528,6 +529,145 @@ namespace eos
         return std::imag(this->f_time(q2, k2, z));
     }
 
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_perp(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_perp(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_perp(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+
+        if (_imp->opt_L.value() & 2)
+        {
+            res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        }
+
+        if (_imp->opt_L.value() & 4)
+        {
+            res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+        }
+
+        return res;
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_para(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(3.0) * this->f_para(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.5 / std::sqrt(5.0) * x * this->f_para(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+
+        if (_imp->opt_L.value() & 2)
+        {
+            res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        }
+
+        if (_imp->opt_L.value() & 4)
+        {
+            res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+        }
+
+        return res;
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_long(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_long(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_long(q2, k2, x);
+        };
+
+        unsigned npoints = 1000;
+
+        if (_imp->opt_L.value() & 1)
+        {
+            res[0] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        }
+
+        if (_imp->opt_L.value() & 2)
+        {
+            res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        }
+
+        if (_imp->opt_L.value() & 4)
+        {
+            res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+        }
+
+        return res;
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiBFvD2016::f_time(const double & q2, const double & k2) const
+    {
+        std::array<complex<double>, 3> res;
+
+        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
+        {
+            return 0.5 * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
+        {
+            return 0.5 * std::sqrt(3.0) * x * this->f_time(q2, k2, x);
+        };
+
+        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
+        {
+            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_time(q2, k2, x);
+        };
+        unsigned npoints = 1000;
+
+        if (_imp->opt_L.value() & 1)
+        {
+            res[0] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        }
+
+        if (_imp->opt_L.value() & 2)
+        {
+            res[1] = integrate1D(integrandP, npoints, -1.0, 1.0);
+        }
+
+        if (_imp->opt_L.value() & 4)
+        {
+            res[2] = integrate1D(integrandD, npoints, -1.0, 1.0);
+        }
+
+        return res;
+    }
+
     complex<double>
     AnalyticFormFactorBToPiPiBFvD2016::f_perp(const double & q2, const double & k2, const double & z) const
     {
@@ -688,6 +828,30 @@ namespace eos
     AnalyticFormFactorBToPiPiFvDV2018::make(const Parameters & p, const Options & o)
     {
         return new AnalyticFormFactorBToPiPiFvDV2018(p, o);
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_perp(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_para(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_long(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    std::array<complex<double>, 3>
+    AnalyticFormFactorBToPiPiFvDV2018::f_time(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not available");
     }
 
     complex<double>
