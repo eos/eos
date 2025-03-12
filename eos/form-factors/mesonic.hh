@@ -7,6 +7,7 @@
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  * Copyright (c) 2024 Matthew J. Kirk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +33,7 @@
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/transitions.hh>
 
+#include <array>
 #include <map>
 #include <memory>
 #include <string>
@@ -208,6 +210,12 @@ namespace eos
     {
         public:
             virtual ~FormFactors();
+
+            // Partial waves
+            virtual std::array<complex<double>, 4> f_perp(const double & q2, const double & k2) const = 0;
+            virtual std::array<complex<double>, 4> f_para(const double & q2, const double & k2) const = 0;
+            virtual std::array<complex<double>, 4> f_long(const double & q2, const double & k2) const = 0;
+            virtual std::array<complex<double>, 4> f_time(const double & q2, const double & k2) const = 0;
 
             // form factors
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const = 0;
