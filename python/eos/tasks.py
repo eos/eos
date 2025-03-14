@@ -820,30 +820,33 @@ def validate(analysis_file:str):
     """
     analysis_file.validate()
 
+
+def _calculate_mask(observable, analysis_parameters, data):
+    try:
+        from tqdm.auto import tqdm
+        progressbar = tqdm
+    except ImportError:
+        progressbar = lambda x: x
+
+    parameters = [analysis_parameters[p['name']] for p in data.varied_parameters]
+    nsamples = len(data.samples)
+    observable_samples = _np.zeros(nsamples)
+    eos.inprogress(f'Predicting observable \'{observable.name()}\' for {nsamples} samples')
+    for i, sample in enumerate(progressbar(data.samples)):
+        for p, v in zip(parameters, sample):
+            p.set(v)
+        try:
+            observable_samples[i] = observable.evaluate()
+        except RuntimeError as e:
+            eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
+            observable_samples[i] = _np.nan
+    return observable_samples > 0
+
 # Create mask
 @task('create-mask', '{posterior}/mask-{mask_name}')
 def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
-    """
-    Create a sample mask based on observables.
-
-    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
-    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mask-LABEL.
-
-    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
-    :type analysis_file: str or `eos.AnalysisFile`
-    :param posterior: The name of the posterior.
-    :type posterior: str
-    :param mask_name: The name of mask to create.
-    :type mask_name: str
-    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
-    :type base_directory: str, optional
-    """
     _analysis = analysis_file.analysis(posterior)
-    _parameters    = _analysis.parameters
-    cache          = eos.ObservableCache(_parameters)
-    observables    = analysis_file.mask_observables(posterior, mask_name, _parameters)
-    observable_ids = [cache.add(o) for o in observables]
-
+    _parameters = _analysis.parameters
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
     # TODO: Should we refactor this check into a separate function ???
@@ -853,36 +856,28 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
     if analysis_varied_params != samples_varied_params:
         raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
 
-    try:
-        from tqdm.auto import tqdm
-        progressbar = tqdm
-    except ImportError:
-        progressbar = lambda x: x
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
-    parameters = [_parameters[p['name']] for p in data.varied_parameters]
-    observable_samples = []
-    nsamples = len(data.samples)
-    eos.inprogress(f'Predicting observables from mask \'{mask_name}\' for {nsamples} samples')
-    for i, sample in enumerate(progressbar(data.samples)):
-        for p, v in zip(parameters, sample):
-            p.set(v)
-        try:
-            cache.update()
-            observable_samples.append([cache[id] for id in observable_ids])
-        except RuntimeError as e:
-            eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
-            observable_samples.append([_np.nan for _ in observable_ids])
-    observable_samples = _np.array(observable_samples)
-    mask_logical_combination = analysis_file.masks[mask_name].logical_combination
+    mask_component = analysis_file._masks[mask_name]
+
+    mask_logical_combination = mask_component.logical_combination
     if mask_logical_combination == "and":
         mask_combination_function = _np.all
     elif mask_logical_combination == "or":
         mask_combination_function = _np.any
-    else:
-        raise ValueError(f"Logical combination {mask_logical_combination} not supported")
-    mask = mask_combination_function(observable_samples > 0, axis=1)
 
+    masks = []
+    observables = []
+    for d in mask_component.description:
+        try:
+            masks.append(create_mask(analysis_file, posterior, d.mask_name, base_directory))
+            observables.append(d.mask_name)
+        except AttributeError: # Not a mask but an observable
+            masks.append(_calculate_mask(analysis_file.mask_observable(posterior, d.name, _parameters), _parameters, data))
+            observables.append(d.name)
+    mask = mask_combination_function(_np.stack(masks), axis=0)
     eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
+    return mask
 
 
 @task('list-steps', '', logfile=False)

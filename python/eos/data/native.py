@@ -740,7 +740,7 @@ class SampleMask:
         description = {}
         description['version'] = eos.__version__
         description['type'] = 'Mask'
-        description['observables'] = [ ";".join(map(str, [o.name(), o.options(), o.kinematics()])) for o in observables]
+        description['observables'] = observables
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:

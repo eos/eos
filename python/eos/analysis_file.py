@@ -250,50 +250,34 @@ class AnalysisFile:
         return observables
 
 
-    def mask_observables(self, _posterior, _mask_name, parameters):
-        """Creates a list of eos.Observable objects for the named posterior and mask."""
+    def observable(self, _posterior, observable_name, analysis_parameters):
+        """Creates an eos.Observable for the named posterior with the given parameter set."""
         if _posterior not in self._posteriors:
             raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_posterior}\'')
-        if _mask_name not in self._masks:
-            raise RuntimeError(f'Cannot create mask for unknown mask name: \'{_mask_name}\'')
 
         posterior = self._posteriors[_posterior]
-        mask = self._masks[_mask_name]
 
         global_options = posterior.global_options
         fixed_parameters = posterior.fixed_parameters
 
         for (p, v) in fixed_parameters.items():
-            parameters.set(p, v)
+            analysis_parameters.set(p, v)
 
-        for o in mask.description:
-            if isinstance(o, MaskNamedComponent):
-                continue
-            options_part = eos.QualifiedName(o.name).options_part()
-            for key, value in options_part:
-                if key in global_options and global_options[key] != value:
-                    eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} in mask {_mask_name} when using posterior {_posterior}.')
+        options_part = eos.QualifiedName(observable_name).options_part()
+        for key, value in options_part:
+            if key in global_options and global_options[key] != value:
+                eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} when using posterior {_posterior}.')
 
-        observables = []
-        for o in mask.description:
-            if isinstance(o, MaskNamedComponent):
-                observables.extend(self.mask_observables(_posterior, o.mask_name, parameters))
-            else:
-                observables.append(eos.Observable.make(
-                    o.name,
-                    parameters,
-                    eos.Kinematics(),
-                    eos.Options(**global_options)
-                ))
+        observable = eos.Observable.make(
+            observable_name,
+            analysis_parameters,
+            eos.Kinematics(),
+            eos.Options(**global_options)
+        )
 
-        if None in observables:
-            unknown_observables = set()
-            for p, o in zip(mask.description, observables):
-                if o is None:
-                    unknown_observables.add(p.name)
-            raise RuntimeError(f'Mask \'{_mask_name}\' contains unknown observable names: {unknown_observables}')
-
-        return observables
+        if not observable:
+            raise RuntimeError(f'Unknown observable name: {observable_name}')
+        return observable
 
 
     def validate(self):
