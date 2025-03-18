@@ -64,10 +64,9 @@ class DToKLeptonNeutrinoTest :
                 {
                     { "model",        "CKM"     },
                     { "form-factors", "BSZ2015" },
-                    { "Q",            "s"       },
+                    { "P",            "K"       },
                     { "q",            "u"       },
                     { "l",            "e"       },
-                    { "I",            "1/2"     }
                 };
 
                 DToPseudoscalarLeptonNeutrino d(p, oo);
