@@ -353,6 +353,8 @@ namespace eos
     extern template class BFW2010FormFactors<BToEtaPrime, PToP>;
     extern template class BFW2010FormFactors<BsToEta, PToP>;
     extern template class BFW2010FormFactors<BsToEtaPrime, PToP>;
+    extern template class BFW2010FormFactors<DsToEta, PToP>;
+    extern template class BFW2010FormFactors<DsToEtaPrime, PToP>;
 }
 
 #endif
