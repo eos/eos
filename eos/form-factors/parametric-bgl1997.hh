@@ -58,10 +58,10 @@ namespace eos
             UsedParameter chi_T_1m, chi_T_1p;
             UsedParameter t_0;
 
-            SpecifiedOption n_bound_states_1m;
-            SpecifiedOption n_bound_states_1p;
-            SpecifiedOption n_bound_states_0m;
-            SpecifiedOption n_bound_states_0p;
+            IntegerOption n_bound_states_1m;
+            IntegerOption n_bound_states_1p;
+            IntegerOption n_bound_states_0m;
+            IntegerOption n_bound_states_0p;
 
             BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
                 m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
@@ -124,7 +124,7 @@ namespace eos
             {
                 // bound states for 1^-
                 double blaschke = 1.0;
-                for (int i = 0; i < stoi(n_bound_states_1m.value()); ++i)
+                for (int i = 0; i < n_bound_states_1m.value(); ++i)
                 {
                     if (masses_1m[i]() * masses_1m[i]() <= tp())
                     {
@@ -138,7 +138,7 @@ namespace eos
             {
                 // bound states for 1^+
                 double blaschke = 1.0;
-                for (int i = 0; i < stoi(n_bound_states_1p.value()); ++i)
+                for (int i = 0; i < n_bound_states_1p.value(); ++i)
                 {
                     if (masses_1p[i]() * masses_1p[i]() <= tp())
                     {
@@ -152,7 +152,7 @@ namespace eos
             {
                 // bound states for 0^-
                 double blaschke = 1.0;
-                for (int i = 0; i < stoi(n_bound_states_0m.value()); ++i)
+                for (int i = 0; i < n_bound_states_0m.value(); ++i)
                 {
                     if (masses_0m[i]() * masses_0m[i]() <= tp())
                     {
@@ -166,7 +166,7 @@ namespace eos
             {
                 // bound states for 0^+
                 double blaschke = 1.0;
-                for (int i = 0; i < stoi(n_bound_states_0p.value()); ++i)
+                for (int i = 0; i < n_bound_states_0p.value(); ++i)
                 {
                     if (masses_0p[i]() * masses_0p[i]() <= tp())
                     {
@@ -189,8 +189,8 @@ namespace eos
             UsedParameter chi_T_1m;
             UsedParameter t_0;
 
-            SpecifiedOption n_bound_states_1m;
-            SpecifiedOption n_bound_states_0p;
+            IntegerOption n_bound_states_1m;
+            IntegerOption n_bound_states_0p;
 
             BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
                 m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
@@ -239,7 +239,7 @@ namespace eos
             {
                 // bound states for 1^-
                 double blaschke = 1.0;
-                for (int i = 0; i < stoi(n_bound_states_1m.value()); ++i)
+                for (int i = 0; i < n_bound_states_1m.value(); ++i)
                 {
                     if (masses_1m[i]() * masses_1m[i]() <= tp())
                     {
@@ -253,7 +253,7 @@ namespace eos
             {
                 // bound states for 0^+
                 double blaschke = 1.0;
-                for (int i = 0; i < stoi(n_bound_states_0p.value()); ++i)
+                for (int i = 0; i < n_bound_states_0p.value(); ++i)
                 {
                     if (masses_0p[i]() * masses_0p[i]() <= tp())
                     {
@@ -317,10 +317,6 @@ namespace eos
             virtual double f_para_T(const double & s) const;
             virtual double f_long_T(const double & s) const;
 
-            Diagnostics diagnostics() const;
-
-            static const std::vector<OptionSpecification> _options;
-
             /*!
              * References used in the computation of our (pseudo)observables.
              */
@@ -331,7 +327,7 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> _options;
     };
     extern template class BGL1997FormFactors<BToDstar, PToV>;
 
@@ -363,10 +359,6 @@ namespace eos
 
             virtual double f_plus_T(const double & s) const;
 
-            Diagnostics diagnostics() const;
-
-            static const std::vector<OptionSpecification> _options;
-
             /*!
              * References used in the computation of our (pseudo)observables.
              */
@@ -377,7 +369,7 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> _options;
     };
     extern template class BGL1997FormFactors<BToD, PToP>;
 }

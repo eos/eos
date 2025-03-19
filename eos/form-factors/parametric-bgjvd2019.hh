@@ -57,22 +57,22 @@ namespace eos
             std::function<double (const double &)> _xi;
 
             // option to determine if we use z^3 terms in the leading-power IW function
-            SwitchOption _opt_lp_zorder;
+            IntegerOption _opt_lp_zorder;
             double _enable_lp_z3;
             double _enable_lp_z4;
             double _enable_lp_z5;
 
             // option to determine if we use z^2 terms in the subleading-power IW function
-            SwitchOption _opt_slp_zorder;
+            IntegerOption _opt_slp_zorder;
             double _enable_slp_z2;
 
             // option to determine if we use z^2 terms in the subsubleading-power IW function
-            SwitchOption _opt_sslp_zorder;
+            IntegerOption _opt_sslp_zorder;
             double _enable_sslp_z1;
             double _enable_sslp_z2;
 
             // option to determine if we use the SU3_F-symmetry limit for the subsubleading-power IW functions
-            SwitchOption _opt_sslp_limit;
+            BooleanOption _opt_sslp_limit;
 
             // parameters for the leading Isgur-Wise function xi
             UsedParameter _xipone, _xippone, _xipppone, _xippppone, _xipppppone;
@@ -105,12 +105,12 @@ namespace eos
             ~HQETFormFactorBase();
 
             /*!
-             * References used in the computation of our observables.
+             * References used in the computation of our (pseudo)observables.
              */
             static const std::set<ReferenceName> references;
 
             /*!
-             * Options specifications for the HQETFormFactorBase class.
+             * Options used in the computation of our (pseudo)observables.
              */
             static const std::vector<OptionSpecification> option_specifications;
 
