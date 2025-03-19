@@ -343,6 +343,10 @@ EOS_BASE_DIRECTORY/posterior/mode-LABEL.
         help = 'The label used for the generated data file.',
         dest = 'label', action = 'store', type = str, default = 'default'
     )
+    parser_find_mode.add_argument('-M', '--mask-name', metavar = 'MASK-NAME',
+        help = 'The name of the mask to apply to the importance samples.',
+        dest = 'mask_name', action = 'store', type = str
+    )
     parser_find_mode.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
@@ -436,6 +440,10 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
         help = 'The index beyond the last sample to use for the predictions.',
         dest = 'end', action = 'store', type = int, default = None
     )
+    parser_predict_observables.add_argument('-M', '--mask-name', metavar = 'MASK-NAME',
+        help = 'The name of the mask to apply to the samples.',
+        dest = 'mask_name', action = 'store', type = str
+    )
     parser_predict_observables.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
@@ -469,6 +477,10 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
     parser_corner_plot.add_argument('-F', '--format',
         help = 'The plot output format. Can be a comma separated list of formats.',
         dest = 'format', action = 'store', type = lambda s: s.split(','), default = 'pdf'
+    )
+    parser_corner_plot.add_argument('-M', '--mask-name', metavar = 'MASK-NAME',
+        help = 'The name of the mask to apply to the samples.',
+        dest = 'mask_name', action = 'store', type = str
     )
     parser_corner_plot.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
@@ -514,6 +526,29 @@ Lists the dependencies of a step defined within the analysis file.
         help = 'The id of the step for which to list the dependencies.'
     )
     parser_list_step_dependencies.set_defaults(cmd = cmd_list_step_dependencies)
+
+
+    # create-mask
+    parser_create_mask = subparsers.add_parser('create-mask',
+        parents = [common_subparser],
+        description =
+'''
+Create a mask that can be applied to samples from a named posterior based on a set of observables.
+''',
+        help = 'Filters samples from a posterior.'
+    )
+    parser_create_mask.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
+    )
+    parser_create_mask.add_argument('mask_name', metavar = 'MASK-NAME',
+        help = 'The name of the mask to create.',
+        action = 'store', type = str
+    )
+    parser_create_mask.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_create_mask.set_defaults(cmd = cmd_create_mask)
 
 
     # report
@@ -773,6 +808,11 @@ def cmd_list_step_dependencies(args):
         print('\n'.join(result))
     elif isinstance(result, str):
         print(result)
+
+
+# Filter samples
+def cmd_create_mask(args):
+    return eos.create_mask(**args_to_dict(args))
 
 
 # Report

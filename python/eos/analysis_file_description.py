@@ -325,6 +325,47 @@ class StepComponent(Deserializable):
         return Deserializable.make(cls, **_kwargs)
 
 
+class MaskDescription(Deserializable):
+    @staticmethod
+    def from_dict(**kwargs):
+        if 'expression' in kwargs:
+            return Deserializable.make(MaskExpressionComponent, **kwargs)
+        if 'mask_name' in kwargs:
+            return Deserializable.make(MaskNamedComponent, **kwargs)
+        else:
+            return Deserializable.make(MaskObservableComponent, **kwargs)
+
+@dataclass
+class MaskExpressionComponent(Deserializable):
+    expression:str
+    name:str
+
+@dataclass
+class MaskObservableComponent(Deserializable):
+    name:str
+
+@dataclass
+class MaskNamedComponent(Deserializable):
+    mask_name:str
+
+@dataclass
+class MaskComponent(Deserializable):
+    name:str
+    description:dict
+    logical_combination: str = "and"
+
+    def __post_init__(self):
+        if self.logical_combination not in ['and', 'or']:
+            raise ValueError(f'Invalid logical combination \'{self.logical_combination}\' for mask \'{self.name}\'')
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        if len(kwargs['description']) > 1 and 'logical_combination' not in kwargs:
+            raise ValueError(f'Mask \'{kwargs["name"]}\' has more than one observable and no logical combination (\'and\' or \'or\') specified')
+        _kwargs['description'] = [MaskDescription.from_dict(**d) for d in kwargs['description']]
+        return Deserializable.make(cls, **_kwargs)
+
 # AnalysisFile schema
 
 # dict with keys:
@@ -335,6 +376,7 @@ class StepComponent(Deserializable):
 #   predictions (optional)
 #   parameters (optional)
 #   steps (optional)
+#   masks (optional)
 
 
 # priors schema:
@@ -408,3 +450,19 @@ class StepComponent(Deserializable):
 #  tasks (mandatory): list of dicts, each with keys:
     #  task (mandatory) : string
     #  arguments (optional): dict, whose keys are arguments for the task
+#  iterations (optional): list of dicts
+#  depends-on (optional): list of strings ???????
+#  ???????
+
+# masks schema:
+# list of dicts, each with keys:
+#  name (mandatory): unique string
+#  logical_combination (mandatory if more than one observable in mask): str, either 'and' or 'or'
+#  description (mandatory): list of dicts, with keys:
+#    either:
+#      name: str, valid EOS observable name
+#    or:
+#      name: str, valid EOS observable name
+#      expression: str, valid EOS observable expression
+#    or:
+#      mask_name: a previously defined mask name
