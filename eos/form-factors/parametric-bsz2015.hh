@@ -261,8 +261,12 @@ namespace eos
     extern template class BSZ2015FormFactors<BsToEtaPrime, PToP>;
     extern template class BSZ2015FormFactors<BsToK, PToP>;
     extern template class BSZ2015FormFactors<DToK, PToP>;
+    extern template class BSZ2015FormFactors<DToEta, PToP>;
+    extern template class BSZ2015FormFactors<DToEtaPrime, PToP>;
     extern template class BSZ2015FormFactors<DToPi, PToP>;
     extern template class BSZ2015FormFactors<DsToK, PToP>;
+    extern template class BSZ2015FormFactors<DsToEta, PToP>;
+    extern template class BSZ2015FormFactors<DsToEtaPrime, PToP>;
 }
 
 #endif
