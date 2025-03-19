@@ -38,7 +38,11 @@ namespace eos
     template class BSZ2015FormFactors<BsToEta, PToP>;
     template class BSZ2015FormFactors<BsToEtaPrime, PToP>;
     template class BSZ2015FormFactors<BsToK, PToP>;
+    template class BSZ2015FormFactors<DToEta, PToP>;
+    template class BSZ2015FormFactors<DToEtaPrime, PToP>;
     template class BSZ2015FormFactors<DToK, PToP>;
     template class BSZ2015FormFactors<DToPi, PToP>;
+    template class BSZ2015FormFactors<DsToEta, PToP>;
+    template class BSZ2015FormFactors<DsToEtaPrime, PToP>;
     template class BSZ2015FormFactors<DsToK, PToP>;
 }

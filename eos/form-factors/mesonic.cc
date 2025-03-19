@@ -360,11 +360,17 @@ namespace eos
         { "B_s->D_s::BSZ2015",       &BSZ2015FormFactors<BsToDs, PToP>::make                                                                                      },
         { "B_s->D_s::BGJvD2019",     &HQETFormFactors<BsToDs,    PToP>::make                                                                                      },
         // c -> d
-        { "D->pi::BSZ2015",          &BSZ2015FormFactors<DToPi,  PToP>::make                                                                                      },
-        { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,  PToP>::make                                                                                      },
+        { "D->eta::BSZ2015",         &BSZ2015FormFactors<DToEta,      PToP>::make                                                                                 },
+        { "D->eta_prime::BSZ2015",   &BSZ2015FormFactors<DToEtaPrime, PToP>::make                                                                                 },
+        { "D->pi::BSZ2015",          &BSZ2015FormFactors<DToPi,       PToP>::make                                                                                 },
+        { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,       PToP>::make                                                                                 },
         // c -> s
-        { "D->K::BSZ2015",           &BSZ2015FormFactors<DToK,   PToP>::make                                                                                      },
-        { "D->K::BFW2010",           &BFW2010FormFactors<DToK,   PToP>::make                                                                                      },
+        { "D_s->eta::BSZ2015",       &BSZ2015FormFactors<DsToEta,      PToP>::make                                                                                },
+        { "D_s->eta::BFW2010",       &BFW2010FormFactors<DsToEta,      PToP>::make                                                                                },
+        { "D_s->eta_prime::BSZ2015", &BSZ2015FormFactors<DsToEtaPrime, PToP>::make                                                                                },
+        { "D_s->eta_prime::BFW2010", &BFW2010FormFactors<DsToEtaPrime, PToP>::make                                                                                },
+        { "D->K::BSZ2015",           &BSZ2015FormFactors<DToK,         PToP>::make                                                                                },
+        { "D->K::BFW2010",           &BFW2010FormFactors<DToK,         PToP>::make                                                                                },
         // analytic computations
         { "B->pi::DKMMO2008",        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
         { "B_s->K::DKMMO2008",       &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },

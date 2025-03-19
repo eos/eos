@@ -216,6 +216,54 @@ namespace eos
         static constexpr const bool uses_tensor_form_factors = true;
     };
 
+    struct DToEta {
+        using Transition = PToP;
+        static constexpr const char * label = "D->eta";
+        static constexpr const char * name_B = "mass::D_d";
+        static constexpr const char * name_P = "mass::eta";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+    };
+
+    struct DToEtaPrime {
+        using Transition = PToP;
+        static constexpr const char * label = "D->eta_prime";
+        static constexpr const char * name_B = "mass::D_d";
+        static constexpr const char * name_P = "mass::eta_prime";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+    };
+
+    struct DsToEta {
+        using Transition = PToP;
+        static constexpr const char * label = "D_s->eta";
+        static constexpr const char * name_B = "mass::D_s";
+        static constexpr const char * name_P = "mass::eta";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange);
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+        // OPE results for the unitarity bounds (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
+    };
+
+    struct DsToEtaPrime {
+        using Transition = PToP;
+        static constexpr const char * label = "D_s->eta'";
+        static constexpr const char * name_B = "mass::D_s";
+        static constexpr const char * name_P = "mass::eta'";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange);
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+        // OPE results for the unitarity bounds (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
+    };
+
     /* P -> V Processes */
 
     struct BToDstar {
