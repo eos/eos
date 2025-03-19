@@ -1,0 +1,71 @@
+# vim: set fdm=marker :
+
+###########
+# BES III #
+###########
+#
+# 2024
+#
+# {{{
+D^+->eta_primelnu::KinematicalDistribution[q2]@BES:2024A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+      [ 'D->eta_primelnu::P(q2_min,q2_max)', 'D->eta_primelnu::P(q2_min,q2_max)', 'D->eta_primelnu::P(q2_min,q2_max)',
+        'D->eta_primelnu::P(q2_min,q2_max)', 'D->eta_primelnu::P(q2_min,q2_max)', 'D->eta_primelnu::P(q2_min,q2_max)' ]
+    kinematics:
+      [ {q2_min: 0.0112, q2_max: 0.2}, {q2_min: 0.2, q2_max: 0.4}, {q2_min: 0.4, q2_max: 0.6},
+        {q2_min: 1e-5,   q2_max: 0.2}, {q2_min: 0.2, q2_max: 0.4}, {q2_min: 0.4, q2_max: 0.6} ]
+    options:
+      [ {q: d, l: mu}, {q: d, l: mu}, {q: d, l: mu}, {q: d, l: e}, {q: d, l: e}, {q: d, l: e} ]
+    means:
+      [ 0.22075, 0.385459, 0.264815, 0.367151, 0.367597, 0.209078]
+    covariance:
+      - [ 0.00480168, -0.00225106, -0.0016005, 6.26458e-6, -8.52963e-8, -3.07597e-6]
+      - [-0.00225106, 0.00578381, -0.0023079, -8.07071e-7, 3.05899e-7, -2.59689e-7]
+      - [-0.0016005, -0.0023079, 0.00517312, -3.2606e-6, -2.13929e-6, 2.07125e-6]
+      - [ 6.26458e-6, -8.07071e-7, -3.2606e-6, 0.00273759, -0.00159278, -0.000803608]
+      - [-8.52963e-8, 3.05899e-7, -2.13929e-6, -0.00159278, 0.00285549, -0.00095097]
+      - [-3.07597e-6, -2.59689e-7, 2.07125e-6, -0.000803608, -0.00095097, 0.00205586]
+# }}}
+
+#######
+# PDG #
+#######
+#
+# 2024
+#
+# {{{
+D^+->etae^+nu::BR@PDG:2024A:
+    type: Gaussian
+    observable: D->etalnu::BR
+    kinematics: {q2_min: 1e-5, q2_max: 1.747}
+    options: {q: d, l: e}
+    mean: 11.1e-04
+    sigma-stat: {hi: 0.7e-04, lo: -0.7e-04}
+    sigma-sys: {hi: 0., lo: 0.}
+D^+->etamu^+nu::BR@PDG:2024A:
+    type: Gaussian
+    observable: D->etalnu::BR
+    kinematics: {q2_min: 0.0112, q2_max: 1.747}
+    options: {q: d, l: mu}
+    mean: 10.41e-04
+    sigma-stat: {hi: 1.12e-04, lo: -1.12e-04}
+    sigma-sys: {hi: 0.05e-04, lo: -0.05e-04}
+D^+->eta_primemu^+nu::BR@PDG:2024A:
+    type: Gaussian
+    observable: D->eta_primelnu::BR
+    kinematics: {q2_min: 0.0112, q2_max: 0.831}
+    options: {q: d, l: mu}
+    mean: 1.92e-04
+    sigma-stat: {hi: 0.28e-04, lo: -0.28e-04}
+    sigma-sys: {hi: 0.08e-04, lo: -0.08e-04}
+# Not yet in PDG, averages of BES:2024A, BES:2020A, CLEO:2011A
+D^+->eta_primee^+nu::BR@MR:2025A:
+    type: Gaussian
+    observable: D->eta_primelnu::BR
+    kinematics: {q2_min: 1e-5, q2_max: 0.831}
+    options: {q: d, l: e}
+    mean: 1.84e-04
+    sigma-stat: {hi: 1.8e-05, lo: -1.8e-05}
+    sigma-sys: {hi: 0., lo: 0.}
+# }}}

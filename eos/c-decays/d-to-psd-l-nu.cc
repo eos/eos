@@ -190,7 +190,10 @@ namespace eos
                     wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_scnul(l, cp); };
                     break;
                 case QuarkFlavor::down:
-                    throw InternalError("c -> d nu_l l decays are not yet implemented.");
+                    m_Q_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
+                    v_cQ      = [this]() -> complex<double> { return model->ckm_cd(); };
+                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
+                    break;
                 default:
                     throw InternalError("Invalid quark flavor: " + stringify(_Q()));
             }
@@ -419,11 +422,16 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>>
     Implementation<DToPseudoscalarLeptonNeutrino>::Implementation::process_map
     {
-        { { QuarkFlavor::up,      "pi" }, { "D->pi",  QuarkFlavor::down,    "D_u", "pi^+", 1.0                   } },
-        { { QuarkFlavor::down,    "pi" }, { "D->pi",  QuarkFlavor::down,    "D_d", "pi^0", 1.0 / std::sqrt(2.0)  } },
-        { { QuarkFlavor::strange, "K"  }, { "D_s->K", QuarkFlavor::down,    "D_s", "K_d",  1.0                   } },
-        { { QuarkFlavor::up,      "K"  }, { "D->K",   QuarkFlavor::strange, "D_u", "K_u",  1.0                   } },
-        { { QuarkFlavor::down,    "K"  }, { "D->K",   QuarkFlavor::strange, "D_d", "K_d",  1.0                   } },
+        { { QuarkFlavor::up,      "pi"        }, { "D->pi",          QuarkFlavor::down,    "D_u", "pi^+",      1.0                  } },
+        { { QuarkFlavor::down,    "pi"        }, { "D->pi",          QuarkFlavor::down,    "D_d", "pi^0",      1.0 / std::sqrt(2.0) } },
+        { { QuarkFlavor::strange, "K"         }, { "D_s->K",         QuarkFlavor::down,    "D_s", "K_d",       1.0                  } },
+        { { QuarkFlavor::up,      "K"         }, { "D->K",           QuarkFlavor::strange, "D_u", "K_u",       1.0                  } },
+        { { QuarkFlavor::down,    "K"         }, { "D->K",           QuarkFlavor::strange, "D_d", "K_d",       1.0                  } },
+        // Due to eta-eta' mixing, we implement all the isospin factors at the level of the form-factors.
+        { { QuarkFlavor::down,    "eta"       }, { "D->eta",         QuarkFlavor::down,    "D_d", "eta",       1.0                  } },
+        { { QuarkFlavor::down,    "eta_prime" }, { "D->eta_prime",   QuarkFlavor::down,    "D_d", "eta_prime", 1.0                  } },
+        { { QuarkFlavor::strange, "eta"       }, { "D_s->eta",       QuarkFlavor::strange, "D_s", "eta",       1.0                  } },
+        { { QuarkFlavor::strange, "eta_prime" }, { "D_s->eta_prime", QuarkFlavor::strange, "D_s", "eta_prime", 1.0                  } },
     };
 
     const std::vector<OptionSpecification>

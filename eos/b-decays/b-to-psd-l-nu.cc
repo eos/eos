@@ -441,7 +441,7 @@ namespace eos
         { { QuarkFlavor::up,      "pi"        }, { "B->pi",          QuarkFlavor::up,      "B_u", "pi^0",      1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::down,    "pi"        }, { "B->pi",          QuarkFlavor::up,      "B_d", "pi^+",      1.0                  } },
         { { QuarkFlavor::strange, "K"         }, { "B_s->K",         QuarkFlavor::up,      "B_s", "K_u",       1.0                  } },
-        // We work here in the flavour eta basis. The conversion to the eta - eta' basis is done at the level of the form factors.
+        // Due to eta-eta' mixing, we implement all the isospin factors at the level of the form-factors.
         { { QuarkFlavor::up,      "eta"       }, { "B->eta",         QuarkFlavor::up,      "B_u", "eta",       1.0                  } },
         { { QuarkFlavor::up,      "eta_prime" }, { "B->eta_prime",   QuarkFlavor::up,      "B_u", "eta_prime", 1.0                  } },
         { { QuarkFlavor::down,    "eta"       }, { "B->eta",         QuarkFlavor::down,    "B_d", "eta",       1.0                  } },
