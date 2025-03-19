@@ -235,6 +235,15 @@ BES:2017A:
   collaboration: BES
   inspire-id: Julin:2017jcl
   title: Measurement of $D\overline{D}$ Decays from the psi(3770) Resonance
+BES:2017B:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1709.03680
+  inspire-id: BESIII:2017ikf
+  title: Measurements of the branching fractions for the semi-leptonic decays $D^+_s\to\phi e^{+}\nu_{e}$,
+    $\phi \mu^{+}\nu_{\mu}$, $\eta \mu^{+}\nu_{\mu}$ and $\eta'\mu^{+}\nu_{\mu}$
 BES:2021A:
   authors: Ablikim, M. et al.
   collaboration: BESIII
@@ -244,6 +253,31 @@ BES:2021A:
   inspire-id: BESIII:2021yvc
   title: Cross section measurements of the $e^+e^-\to D^{*+}D^{*-}$ and $e^+e^-\to D^{*+}D^{-}$
     processes at center-of-mass energies from 4.085 to 4.600 GeV
+BES:2023A:
+  authors: Ablikim, M. et al.
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2306.05194
+  inspire-id: BESIII:2023ajr
+  title: Precision measurements of $D_s^+\to\eta e^+ \nu_e$ and $D_s^+\to\eta'e^+\nu_e$
+BES:2023B:
+  authors: Ablikim, M. et al.
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2307.12852
+  inspire-id: BESIII:2023gbn
+  title: Observation of $D_s^+\to\eta'\mu^+\nu_\mu$, Precision Test of Lepton Flavor Universality with $D_s^+\to\eta^{(\prime)}\ell^+\nu_l$,
+    and First Measurements of $D_s^+\to\eta^{(\prime)}\mu^+\nu_\mu$ Decay Dynamics
+BES:2024A:
+  authors: Ablikim, M. et al.
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2410.08603
+  inspire-id: BESIII:2024njj
+  title: Observation of $D^+\to\eta'\mu^+\nu_\mu$ and First Experimental Study of $D^+\to\eta'\ell^+\nu_\ell$ Decay Dynamics
 BF:2001A:
   authors: Beneke, M. and Feldmann, T.
   eprint:
@@ -551,7 +585,10 @@ BaBar:2012C:
 BaBar:2012D:
   authors: Lees, J.P. et al.
   collaboration: BaBar
-  inspire-id: Lees:2012vv
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1208.1253
+  inspire-id: BaBar:2012thb
   title: Branching fraction and form-factor shape measurements of exclusive charmless
     semileptonic B decays, and determination of $|V_{ub}|$
 BaBar:2013A:
@@ -1062,6 +1099,13 @@ DDS:2014A:
     id: oai:arXiv.org:1405.3719
   inpire-id: Duraisamy:2014sna
   title: Azimuthal $B \to D^{*} \tau^{-} \bar{\nu_\tau}$ angular distribution with tensor operators
+DGHKM:2020A:
+  authors: Du, Meng-Lin and Guo, Feng-Kun and Hanhart, Christoph and Kubis, Bastian and Meissner, Ulf-G.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2012.04599
+  inspire-id: Du:2020pui
+  title: Where is the lightest charmed scalar meson?
 DHK:2015A:
   authors: Daub, J. T. and Hanhart, C. and Kubis, B.
   eprint:
