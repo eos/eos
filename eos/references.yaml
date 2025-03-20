@@ -588,6 +588,14 @@ Belle:2006B:
     id: oai:arXiv.org:hep-ex/0608049
   inspire-id: Ushiroda:2006uzg
   title: Observation of B decays to two kaons
+Belle:2007A:
+  authors: Epifanov, D. and others
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0706.2231
+  inspire-id: Belle:2007goc
+  title: Study of $\tau^- \to K_S \pi^- \nu_\tau$ decay at Belle
 Belle:2008A:
   authors: Schwanda, C. et al.
   collaboration: Belle
