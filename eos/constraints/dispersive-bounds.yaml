@@ -1,4 +1,27 @@
 ###########################
+# b -> u unitarity bounds #
+###########################
+# {{{
+b->u::MesonicBound[1^-_V]:
+    type: UniformBound
+    observables:
+        - 'B_u^*::Saturation[1^-_V]'
+        - 'B->pipi::Saturation[1^-_V]'
+    kinematics: [ {}, {} ]
+    options: [ {}, { C: +- } ]
+    bound: 1.0
+    uncertainty: 0.05
+b->u::MesonicBound[1^+_A]:
+    type: UniformBound
+    observables:
+        - 'B->pipi::Saturation[1^+_A]'
+    kinematics: [ {} ]
+    options: [ { C: +- } ]
+    bound: 1.0
+    uncertainty: 0.05
+# }}}
+
+###########################
 # b -> c unitarity bounds #
 ###########################
 # {{{
