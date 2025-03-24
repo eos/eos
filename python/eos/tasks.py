@@ -108,7 +108,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
 
 @task('find-mode', '{posterior}/mode-{label}')
 def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
-              importance_samples:bool=None, seed:int=None, label:str='default'):
+              importance_samples:bool=None, seed:int=None, label:str='default', mask_name:str=None):
     '''
     Finds the mode of the named posterior.
 
@@ -156,6 +156,15 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     if not chain is None and not importance_samples is None:
         raise ValueError('The arguments importance_samples and chain are mutually exclusive')
 
+    if mask_name is not None and importance_samples is None:
+        raise ValueError('The argument mask-name can only be used with importance_samples')
+
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
+        label += f'_mask-{mask_name}'
+    else:
+        mask = slice(None) # Equivalent to mask = : but allowed
+
     analysis = analysis_file.analysis(posterior)
     min_chi2 = sys.float_info.max
     gof = None
@@ -191,15 +200,15 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _file = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
         if _file.posterior_values is None:
             FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
-        idx_mode = _np.argmax(_file.posterior_values)
+        idx_mode = _np.argmax(_file.posterior_values[mask])
         # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
         analysis_varied_params = [p.name() for p in analysis.varied_parameters]
         samples_varied_params = [p["name"] for p in _file.varied_parameters]
         if analysis_varied_params != samples_varied_params:
             raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
-        mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[idx_mode]]) + ' ]'
+        mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[mask][idx_mode]]) + ' ]'
         eos.info(f'Using starting point {mode}')
-        for p, v in zip(analysis.varied_parameters, _file.samples[idx_mode]):
+        for p, v in zip(analysis.varied_parameters, _file.samples[mask][idx_mode]):
             p.set(v)
 
         _bfp = analysis.optimize()
@@ -456,7 +465,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
-def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None):
+def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name:str=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
@@ -475,12 +484,19 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :type begin: int
     :param end: The index beyond the last sample to use for the predictions. Defaults to None.
     :type begin: int
+    :param mask_name: The label of the mask to apply to the observables. Defaults to None.
+    :type mask_name: str, optional
     '''
     _analysis      = analysis_file.analysis(posterior)
     _parameters    = _analysis.parameters
     cache          = eos.ObservableCache(_parameters)
     observables    = analysis_file.observables(posterior, prediction, _parameters)
     observable_ids = [cache.add(o) for o in observables]
+
+    if mask_name is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
 
@@ -510,10 +526,19 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
             eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
             observable_samples.append([_np.nan for _ in observable_ids])
     observable_samples = _np.array(observable_samples)
+    if mask_name is not None:
+        eos.info(f'Applying mask {mask_name} to the observables')
+        observable_samples = observable_samples[mask]
     eos.completed(f'... done')
 
-    output_path = os.path.join(base_directory, posterior, f'pred-{prediction}')
-    eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[begin:end])
+    filename = f'pred-{prediction}'
+    if mask_name is not None:
+        filename += f'_mask-{mask_name}'
+        weights = data.weights[mask]
+    else:
+        weights = data.weights[begin:end]
+    output_path = os.path.join(base_directory, posterior, filename)
+    eos.data.Prediction.create(output_path, observables, observable_samples, weights)
 
 
 # Run one analysis step
@@ -665,7 +690,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', output
 
 # Corner plot
 @task('corner-plot', '{posterior}/plots')
-def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior', begin:int=0, end:int=None):
+def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior', begin:int=0, end:int=None, mask_name=None):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
@@ -686,10 +711,17 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     :type begin: int, optional
     :param end: The index beyond the last parameter to plot. Defaults to ``None``.
     :type end: int or NoneType, optional
+    :param mask_name: The label of the mask to apply to the observables. Defaults to None.
+    :type mask_name: str, optional
     """
     import matplotlib.pyplot as _plt
 
     analysis = analysis_file.analysis(posterior)
+
+    if mask_name is not None and (begin != 0 or end is not None):
+        raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
+    if mask_name is not None:
+        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
 
     # Provide file with distribution samples and LaTeX labels for either parameters or observables
     if distribution == 'posterior':
@@ -722,6 +754,10 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     samples = f.samples[:, begin:end]
     weights = f.weights[:]
     labels = labels[begin:end]
+    # Apply mask if specified
+    if mask_name is not None:
+        samples = samples[mask]
+        weights = weights[mask]
     size = samples.shape[-1]
 
     fig, axes = _plt.subplots(size, size, figsize=(3.0 * size, 3.0 * size), dpi=100)
@@ -767,8 +803,11 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     _format = _copy.copy(format)
     if isinstance(_format, str):
         _format = [ _format ]
+    filename = 'corner-plot'
+    if mask_name is not None:
+        filename += f'-mask-{mask_name}'
     for f in _format:
-        fig.savefig(os.path.join(base_directory, posterior, 'plots', f'corner-plot.{f}'))
+        fig.savefig(os.path.join(base_directory, posterior, 'plots', f'{filename}.{f}'))
 
 
 @task('validate', '', logfile=False)
@@ -780,6 +819,63 @@ def validate(analysis_file:str):
     :type analysis_file: str or :class:`eos.AnalysisFile`
     """
     analysis_file.validate()
+
+
+def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Parameters, data: eos.data.ImportanceSamples):
+    try:
+        from tqdm.auto import tqdm
+        progressbar = tqdm
+    except ImportError:
+        progressbar = lambda x: x
+
+    parameters = [analysis_parameters[p['name']] for p in data.varied_parameters]
+    nsamples = len(data.samples)
+    observable_samples = _np.zeros(nsamples)
+    eos.inprogress(f'Predicting observable \'{observable.name()}\' for {nsamples} samples')
+    for i, sample in enumerate(progressbar(data.samples)):
+        for p, v in zip(parameters, sample):
+            p.set(v)
+        try:
+            observable_samples[i] = observable.evaluate()
+        except RuntimeError as e:
+            eos.error(f'skipping prediction for sample {i} due to runtime error ({e}): {sample}')
+            observable_samples[i] = _np.nan
+    return observable_samples > 0
+
+# Create mask
+@task('create-mask', '{posterior}/mask-{mask_name}')
+def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
+    _analysis = analysis_file.analysis(posterior)
+    _parameters = _analysis.parameters
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+
+    # TODO: Should we refactor this check into a separate function ???
+    # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
+    analysis_varied_params = [p.name() for p in _analysis.varied_parameters]
+    samples_varied_params = [p["name"] for p in data.varied_parameters]
+    if analysis_varied_params != samples_varied_params:
+        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+
+
+    mask_component = analysis_file._masks[mask_name]
+    mask_logical_combination = mask_component.logical_combination
+    if mask_logical_combination == "and":
+        mask_combination_function = _np.all
+    elif mask_logical_combination == "or":
+        mask_combination_function = _np.any
+
+    masks = []
+    observables = []
+    for d in mask_component.description:
+        try:
+            masks.append(create_mask(analysis_file, posterior, d.mask_name, base_directory))
+            observables.append(d.mask_name)
+        except AttributeError: # Not a mask but an observable
+            masks.append(_calculate_mask(analysis_file.observable(posterior, d.name, _parameters), _parameters, data))
+            observables.append(d.name)
+    mask = mask_combination_function(_np.stack(masks), axis=0)
+    eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
+    return mask
 
 
 @task('list-steps', '', logfile=False)
