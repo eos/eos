@@ -106,6 +106,14 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
     return _task
 
 
+def _check_varied_parameters_match(analysis: eos.Analysis, data):
+    # Check the parameters varied in the analysis match those of the loaded samples
+    analysis_varied_params = [p.name() for p in analysis.varied_parameters]
+    samples_varied_params = [p["name"] for p in data.varied_parameters]
+    if analysis_varied_params != samples_varied_params:
+        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+
+
 @task('find-mode', '{posterior}/mode-{label}')
 def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
               importance_samples:bool=None, seed:int=None, label:str='default', mask_name:str=None):
@@ -182,7 +190,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         eos.info(f'Using a starting point based on the existing MCMC data file (chain {chain:04})')
         _chain = eos.data.MarkovChain(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'))
         idx_mode = _np.argmax(_chain.weights)
-        # Check the parameters varied in the analysis file match those of the loaded MCMC sample
+        _check_varied_parameters_match(analysis, _chain)
         analysis_varied_params = [p.name() for p in analysis.varied_parameters]
         samples_varied_params = [p["name"] for p in _chain.varied_parameters]
         if analysis_varied_params != samples_varied_params:
@@ -201,11 +209,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         if _file.posterior_values is None:
             FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
         idx_mode = _np.argmax(_file.posterior_values[mask])
-        # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
-        analysis_varied_params = [p.name() for p in analysis.varied_parameters]
-        samples_varied_params = [p["name"] for p in _file.varied_parameters]
-        if analysis_varied_params != samples_varied_params:
-            raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+        _check_varied_parameters_match(analysis, _file)
         mode = '[ ' + ', '.join([f'{v:.4g}' for v in _file.samples[mask][idx_mode]]) + ' ]'
         eos.info(f'Using starting point {mode}')
         for p, v in zip(analysis.varied_parameters, _file.samples[mask][idx_mode]):
@@ -499,12 +503,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
-
-    # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
-    analysis_varied_params = [p.name() for p in _analysis.varied_parameters]
-    samples_varied_params = [p["name"] for p in data.varied_parameters]
-    if analysis_varied_params != samples_varied_params:
-        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+    _check_varied_parameters_match(_analysis, data)
 
     try:
         from tqdm.auto import tqdm
@@ -726,13 +725,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     # Provide file with distribution samples and LaTeX labels for either parameters or observables
     if distribution == 'posterior':
         f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
-
-        # Check the parameters varied in the analysis file match those of the loaded sample
-        analysis_varied_params = [p.name() for p in analysis.varied_parameters]
-        samples_varied_params = [p["name"] for p in f.varied_parameters]
-        if analysis_varied_params != samples_varied_params:
-            raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
-
+        _check_varied_parameters_match(analysis, f)
         labels = [p.latex() for p in analysis.varied_parameters]
 
     elif isinstance(distribution, str):
@@ -848,14 +841,7 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
     _analysis = analysis_file.analysis(posterior)
     _parameters = _analysis.parameters
     data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
-
-    # TODO: Should we refactor this check into a separate function ???
-    # Check the parameters varied in the analysis file match those of the loaded ImportanceSamples
-    analysis_varied_params = [p.name() for p in _analysis.varied_parameters]
-    samples_varied_params = [p["name"] for p in data.varied_parameters]
-    if analysis_varied_params != samples_varied_params:
-        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
-
+    _check_varied_parameters_match(_analysis, data)
 
     mask_component = analysis_file._masks[mask_name]
     mask_logical_combination = mask_component.logical_combination
