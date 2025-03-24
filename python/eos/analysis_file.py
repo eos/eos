@@ -231,6 +231,36 @@ class AnalysisFile:
         return observables
 
 
+    def observable(self, _posterior, observable_name, analysis_parameters):
+        """Creates an eos.Observable for the named posterior with the given parameter set."""
+        if _posterior not in self._posteriors:
+            raise RuntimeError(f'Cannot create observables for unknown posterior: \'{_posterior}\'')
+
+        posterior = self._posteriors[_posterior]
+
+        global_options = posterior.global_options
+        fixed_parameters = posterior.fixed_parameters
+
+        for (p, v) in fixed_parameters.items():
+            analysis_parameters.set(p, v)
+
+        options_part = eos.QualifiedName(observable_name).options_part()
+        for key, value in options_part:
+            if key in global_options and global_options[key] != value:
+                eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} when using posterior {_posterior}.')
+
+        observable = eos.Observable.make(
+            observable_name,
+            analysis_parameters,
+            eos.Kinematics(),
+            eos.Options(**global_options)
+        )
+
+        if not observable:
+            raise RuntimeError(f'Unknown observable name: {observable_name}')
+        return observable
+
+
     def validate(self):
         """Validates the analysis file."""
         messages = []
