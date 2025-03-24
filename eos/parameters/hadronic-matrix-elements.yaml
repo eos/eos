@@ -4043,6 +4043,37 @@ groups:
           unit:     'GeV^-2'
   # }}}
 
+  # Dispersive bounds in b -> u currents
+  # {{{
+  - title: 'Dispersive bounds in the OPE for b -> u currents'
+    description: ''
+    parameters:
+      'b->u::chiOPE[0^+_V]' :
+          central:  1.516e-02
+          min:      1.516e-02
+          max:      1.516e-02
+          latex:    '$\chi_V^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->u::chiOPE[1^-_V]' :
+          central:  5.742e-04
+          min:      5.742e-04
+          max:      5.742e-04
+          latex:    '$\chi_V^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+      'b->u::chiOPE[0^-_A]' :
+          central:  1.516e-02
+          min:      1.516e-02
+          max:      1.516e-02
+          latex:    '$\chi_A^{J=0}|{}_\textrm{OPE}$'
+          unit:     '1'
+      'b->u::chiOPE[1^+_A]' :
+          central:  5.742e-04
+          min:      5.742e-04
+          max:      5.742e-04
+          latex:    '$\chi_A^{J=1}|{}_\textrm{OPE}$'
+          unit:     'GeV^-2'
+  # }}}
+
   # Dispersive bounds in b -> c currents
   # {{{
   - title: 'Dispersive bounds in the OPE for b -> c currents'
