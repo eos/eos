@@ -7,6 +7,7 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosmaths.la
 libeosmaths_la_SOURCES = \
+	angular-integrals.cc angular-integrals.hh \
 	complex.hh \
 	derivative.cc derivative.hh \
 	gegenbauer-polynomial.cc gegenbauer-polynomial.hh \
@@ -40,6 +41,7 @@ EXTRA_DIST = \
 
 include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
+    angular-integrals.hh \
 	complex.hh \
 	derivative.hh \
 	gegenbauer-polynomial.hh \
@@ -62,6 +64,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
+    angular-integrals_TEST \
 	derivative_TEST \
 	gegenbauer-polynomial_TEST \
 	gsl-interface_TEST \
@@ -84,6 +87,8 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+
+angular_integrals_TEST_SOURCES = angular-integrals_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
 
