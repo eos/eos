@@ -61,6 +61,9 @@ namespace eos
             // Error of approximation
             double _err;
 
+            // Range for numerical differentiation
+            double _eps;
+
             // Phase input
             std::function<double(const double &)> _scattering_phase;
 
@@ -83,6 +86,7 @@ namespace eos
             std::array<double, nints_ * order_> solve_sys(const double & bc_pos);
 
             // Evaluate results
+            double omnes_abs(const double & s) const;
             complex<double> evaluate_omnes(const double & s) const;
 
         public:

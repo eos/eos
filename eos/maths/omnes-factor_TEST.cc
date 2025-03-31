@@ -60,20 +60,21 @@ class OmnesFactorTest :
                 OmnesFactor<50, 4> O(intervals, test_phase, 1.0);
                 OmnesFactor<50, 4> O2(intervals, test_phase, O.get_weights());
 
-                TEST_CHECK_NEARLY_EQUAL(O(-25.0),       0.360719866,    eps);
-                TEST_CHECK_NEARLY_EQUAL(O(-12.5),       0.5138517463,   eps);
-                TEST_CHECK_NEARLY_EQUAL(O(-1.5),        0.8431280076,   eps);
-                TEST_CHECK_NEARLY_EQUAL(O(1.0),         1.0,            eps);
-                TEST_CHECK_NEARLY_EQUAL(O(2.5),         1.136321985,    eps);
-                TEST_CHECK_NEARLY_EQUAL(O(3.9),         1.347596573,    eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O(4.1)),    1.405558535,    eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O(8.0)),    2.029059135,    eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O(12.0)),   3.415415415,    eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O(16.1)),   4.808139781,    eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O(25.01)),  1.655178151,    eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O(30.0)),   1.122981676,    eps);
-                TEST_CHECK_NEARLY_EQUAL(O2(1.0),        1.0,            eps);
-                TEST_CHECK_NEARLY_EQUAL(abs(O2(16.1)),  4.808139781,    eps);
+                TEST_CHECK_NEARLY_EQUAL(O(-25.0),       0.36072,    eps);
+                TEST_CHECK_NEARLY_EQUAL(O(-12.5),       0.51385,    eps);
+                TEST_CHECK_NEARLY_EQUAL(O(-1.5),        0.84313,    eps);
+                TEST_CHECK_NEARLY_EQUAL(O(1.0),         1.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(O(2.5),         1.13632,    eps);
+                TEST_CHECK_NEARLY_EQUAL(O(3.9),         1.34760,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(4.1)),    1.40556,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(8.0)),    2.02906,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(12.0)),   3.41542,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(16.0)),   4.83013,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(16.1)),   4.80814,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(25.01)),  1.65518,    eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O(30.0)),   1.12298,    eps);
+                TEST_CHECK_NEARLY_EQUAL(O2(1.0),        1.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(abs(O2(16.1)),  4.80814,    eps);
             }
     }
 } omnes_factor_test;
