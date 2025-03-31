@@ -83,6 +83,7 @@ namespace eos
                 Context ctx("When constructing tau^-->[K pi]^- nubar observable");
 
                 u.uses(*model);
+                u.uses(*form_factors);
             }
 
             double
