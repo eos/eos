@@ -45,6 +45,7 @@ namespace eos
         _x(gsl_vector_calloc(nints_ * order_)),
         _b(gsl_vector_calloc(nints_ * order_ + 1)),
         _err(-1.0),
+        _eps(1.0e-5),
         _scattering_phase(scattering_phase)
     {
         // Perform pointer check
@@ -266,15 +267,9 @@ namespace eos
     }
 
     template <unsigned order_, unsigned nints_>
-    complex<double> OmnesFactor<order_, nints_>::evaluate_omnes(const double & s) const
+    double OmnesFactor<order_, nints_>::omnes_abs(const double & s) const
     {
         double res = 0.0;
-
-        // TODO: We can avoid this by approximating the absolute value of the purely imaginary Omega here...
-        if (std::abs(_scattering_phase(s) - M_PI / 2.0) < 1e-7)
-        {
-            throw InternalError("Tried to evaluate Omnes factor too close to delta(s) = Pi/2!");
-        }
 
         for (unsigned i = 0 ; i < nints_ - 1 ; i++)
         {
@@ -291,13 +286,31 @@ namespace eos
             res += pinf[j] * _tanvals[nints_ - 1][j] * _sol[(nints_ - 1) * order_ + j];
         }
 
+        return res;
+    }
+
+    template <unsigned order_, unsigned nints_>
+    complex<double> OmnesFactor<order_, nints_>::evaluate_omnes(const double & s) const
+    {
         if (s > _intervals[0])
         {
-            return complex<double>(res, res * std::tan(_scattering_phase(s)));
+            // TODO: Can we do better?
+            if (std::abs(_scattering_phase(s) - M_PI / 2.0) < 1e-8)
+            {
+                // Here we use that omnes_abs crosses 0 when delta becomes Pi/2 and cancel the simple pole from the tangent with the s-dependence of the derivative
+                // We drop the denominators (12 * _eps) of abs_deriv and phase_deriv since they anyways cancel
+                double abs_deriv = (-omnes_abs(s + 2.0 * _eps) + 8.0 * omnes_abs(s + _eps) - 8.0 * omnes_abs(s - _eps) + omnes_abs(s - 2.0 * _eps));
+                double phase_deriv = (- _scattering_phase(s + 2.0 * _eps) + 8.0 * _scattering_phase(s + _eps) - 8.0 * _scattering_phase(s - _eps) + _scattering_phase(s - 2.0 * _eps));
+                return complex<double>(0.0, -abs_deriv / phase_deriv);
+            }
+            else
+            {
+                return omnes_abs(s) * complex<double>(1.0, std::tan(_scattering_phase(s)));
+            }
         }
         else
         {
-            return complex<double>(res, 0);
+            return complex<double>(omnes_abs(s), 0);
         }
     }
 }
