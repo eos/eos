@@ -586,7 +586,7 @@ class DynestyResultLogger:
             return
 
         fn_args = _dynesty.utils.get_print_fn_args(results, niter, ncall, add_live_it=add_live_it, dlogz=dlogz, stop_val=stop_val, nbatch=nbatch, logl_min=logl_min, logl_max=logl_max)
-        eos.info(f'iteration {fn_args.niter} | {" | ".join(fn_args.long_str)}')
+        eos.inprogress(f'iteration {fn_args.niter} | {" | ".join(fn_args.long_str)}')
 
 
 # Nested sampling
