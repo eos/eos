@@ -43,11 +43,8 @@ namespace eos
         opt_B_bar(o, options, "B_bar"),
         theta_18(p["eta::theta_18"], *this),
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
-        H1tilde({}),
         P1({}),
         P2({}),
-        Hbar({}),
-        H3tilde({}),
         Gfermi(p["WET::G_Fermi"], *this),
         re_T(p["nonleptonic::Re{T}@Topological"], *this),
         im_T(p["nonleptonic::Im{T}@Topological"], *this),
@@ -94,26 +91,37 @@ namespace eos
 
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
-            lamdu = model->ckm_ub() * conj(model->ckm_ud());
-            lamsu = model->ckm_ub() * conj(model->ckm_us());
-            lamdt = model->ckm_tb() * conj(model->ckm_td());
-            lamst = model->ckm_tb() * conj(model->ckm_ts());
+            lamdu = [this]() { return model->ckm_ub() * conj(model->ckm_ud());};
+            lamsu = [this]() { return model->ckm_ub() * conj(model->ckm_us());};
+            lamdt = [this]() { return model->ckm_tb() * conj(model->ckm_td());};
+            lamst = [this]() { return model->ckm_tb() * conj(model->ckm_ts());};
         }
         else
         {
-            lamdu = conj(model->ckm_ub()) * model->ckm_ud();
-            lamsu = conj(model->ckm_ub()) * model->ckm_us();
-            lamdt = conj(model->ckm_tb()) * model->ckm_td();
-            lamst = conj(model->ckm_tb()) * model->ckm_ts();
+            lamdu = [this]() { return conj(model->ckm_ub()) * model->ckm_ud();};
+            lamsu = [this]() { return conj(model->ckm_ub()) * model->ckm_us();};
+            lamdt = [this]() { return conj(model->ckm_tb()) * model->ckm_td();};
+            lamst = [this]() { return conj(model->ckm_tb()) * model->ckm_ts();};
         }
 
-        H1tilde[1]       = lamdt;
-        H1tilde[2]       = lamst;
-        Hbar[0][1][0]    = lamdu;
-        Hbar[0][2][0]    = lamsu;
-        H3tilde[0][1][0] = lamdt;
-        H3tilde[0][2][0] = lamst;
-    }
+        H1tilde = [this]() { return su3f::rank1{{0.0, lamdt(), lamst()}};};
+
+        Hbar = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = lamdu();
+            result[0][2][0] = lamsu();
+            return result;
+        };
+
+        H3tilde = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = lamdt();
+            result[0][2][0] = lamst();
+            return result;
+        };
+    };
 
     const std::vector<OptionSpecification> TopologicalRepresentation<PToPP>::options{
         Model::option_specification(),
@@ -142,16 +150,16 @@ namespace eos
                 {
                     for (unsigned l = 0; l < 3; l++)
                     {
-                        T_tda += T * B[i] * p1[i][j] * Hbar[j][l][k] * p2[k][l];
-                        T_tda += C * B[i] * p1[i][j] * Hbar[l][j][k] * p2[k][l];
-                        T_tda += A * B[i] * Hbar[i][l][j] * p1[j][k] * p2[k][l];
-                        T_tda += E * B[i] * Hbar[l][i][j] * p1[j][k] * p2[k][l];
-                        T_tda += TES * B[i] * Hbar[i][j][l] * p1[l][j] * p2[k][k];
-                        T_tda += TAS * B[i] * Hbar[j][i][l] * p1[l][j] * p2[k][k];
-                        T_tda += TS * B[i] * p1[i][j] * Hbar[l][j][l] * p2[k][k];
-                        T_tda += TPA * B[i] * Hbar[l][i][l] * p1[j][k] * p2[k][j];
-                        T_tda += TP * B[i] * p1[i][j] * p2[j][k] * Hbar[l][k][l];
-                        T_tda += TSS * B[i] * Hbar[l][i][l] * p1[j][j] * p2[k][k];
+                        T_tda += T * B[i] * p1[i][j] * Hbar()[j][l][k] * p2[k][l];
+                        T_tda += C * B[i] * p1[i][j] * Hbar()[l][j][k] * p2[k][l];
+                        T_tda += A * B[i] * Hbar()[i][l][j] * p1[j][k] * p2[k][l];
+                        T_tda += E * B[i] * Hbar()[l][i][j] * p1[j][k] * p2[k][l];
+                        T_tda += TES * B[i] * Hbar()[i][j][l] * p1[l][j] * p2[k][k];
+                        T_tda += TAS * B[i] * Hbar()[j][i][l] * p1[l][j] * p2[k][k];
+                        T_tda += TS * B[i] * p1[i][j] * Hbar()[l][j][l] * p2[k][k];
+                        T_tda += TPA * B[i] * Hbar()[l][i][l] * p1[j][k] * p2[k][j];
+                        T_tda += TP * B[i] * p1[i][j] * p2[j][k] * Hbar()[l][k][l];
+                        T_tda += TSS * B[i] * Hbar()[l][i][l] * p1[j][j] * p2[k][k];
                     }
                 }
             }
@@ -176,19 +184,19 @@ namespace eos
             {
                 for (unsigned k = 0; k < 3; k++)
                 {
-                    P_tda += P * B[i] * p1[i][j] * p2[j][k] * H1tilde[k];
-                    P_tda += S * B[i] * p1[i][j] * H1tilde[j] * p2[k][k];
-                    P_tda += PA * B[i] * H1tilde[i] * p1[j][k] * p2[k][j];
-                    P_tda += PSS * B[i] * H1tilde[i] * p1[j][j] * p2[k][k];
+                    P_tda += P * B[i] * p1[i][j] * p2[j][k] * H1tilde()[k];
+                    P_tda += S * B[i] * p1[i][j] * H1tilde()[j] * p2[k][k];
+                    P_tda += PA * B[i] * H1tilde()[i] * p1[j][k] * p2[k][j];
+                    P_tda += PSS * B[i] * H1tilde()[i] * p1[j][j] * p2[k][k];
 
                     for (unsigned l = 0; l < 3; l++)
                     {
-                        P_tda += PT * B[i] * p1[i][j] * H3tilde[j][l][k] * p2[k][l];
-                        P_tda += PC * B[i] * p1[i][j] * H3tilde[l][j][k] * p2[k][l];
-                        P_tda += PTA * B[i] * H3tilde[i][l][j] * p1[j][k] * p2[k][l];
-                        P_tda += PTE * B[i] * H3tilde[j][i][k] * p1[k][l] * p2[l][j];
-                        P_tda += PAS * B[i] * H3tilde[j][i][l] * p1[l][j] * p2[k][k];
-                        P_tda += PES * B[i] * H3tilde[i][j][l] * p1[l][j] * p2[k][k];
+                        P_tda += PT * B[i] * p1[i][j] * H3tilde()[j][l][k] * p2[k][l];
+                        P_tda += PC * B[i] * p1[i][j] * H3tilde()[l][j][k] * p2[k][l];
+                        P_tda += PTA * B[i] * H3tilde()[i][l][j] * p1[j][k] * p2[k][l];
+                        P_tda += PTE * B[i] * H3tilde()[j][i][k] * p1[k][l] * p2[l][j];
+                        P_tda += PAS * B[i] * H3tilde()[j][i][l] * p1[l][j] * p2[k][k];
+                        P_tda += PES * B[i] * H3tilde()[i][j][l] * p1[l][j] * p2[k][k];
                     }
                 }
             }
@@ -230,8 +238,8 @@ namespace eos
     {
         this->update();
 
-        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt;
-        auto tree    = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu;
+        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt();
+        auto tree = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu();
 
         return -penguin / (tree - penguin);
     }

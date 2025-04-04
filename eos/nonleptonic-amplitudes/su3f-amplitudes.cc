@@ -43,14 +43,8 @@ namespace eos
         opt_B_bar(o, options, "B_bar"),
         theta_18(p["eta::theta_18"], *this),
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
-        H3bar({}),
-        H3tilde({}),
-        P1{ {} },
-        P2{ {} },
-        H6bar({}),
-        H6tilde({}),
-        H15bar({}),
-        H15tilde({}),
+        P1{{}},
+        P2{{}},
         Gfermi(p["WET::G_Fermi"], *this),
         re_AT3(p["nonleptonic::Re{AT3}@SU3F"], *this),
         im_AT3(p["nonleptonic::Im{AT3}@SU3F"], *this),
@@ -97,70 +91,82 @@ namespace eos
 
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
-            lamdu = model->ckm_ub() * conj(model->ckm_ud());
-            lamsu = model->ckm_ub() * conj(model->ckm_us());
-            lamdt = model->ckm_tb() * conj(model->ckm_td());
-            lamst = model->ckm_tb() * conj(model->ckm_ts());
+            lamdu = [this]() { return model->ckm_ub() * conj(model->ckm_ud());};
+            lamsu = [this]() { return model->ckm_ub() * conj(model->ckm_us());};
+            lamdt = [this]() { return model->ckm_tb() * conj(model->ckm_td());};
+            lamst = [this]() { return model->ckm_tb() * conj(model->ckm_ts());};
         }
         else
         {
-            lamdu = conj(model->ckm_ub()) * model->ckm_ud();
-            lamsu = conj(model->ckm_ub()) * model->ckm_us();
-            lamdt = conj(model->ckm_tb()) * model->ckm_td();
-            lamst = conj(model->ckm_tb()) * model->ckm_ts();
+            lamdu = [this]() { return conj(model->ckm_ub()) * model->ckm_ud();};
+            lamsu = [this]() { return conj(model->ckm_ub()) * model->ckm_us();};
+            lamdt = [this]() { return conj(model->ckm_tb()) * model->ckm_td();};
+            lamst = [this]() { return conj(model->ckm_tb()) * model->ckm_ts();};
         }
 
-        H3bar[1] = +lamdu;
-        H3bar[2] = +lamsu;
+        H3bar   = [this]() { return su3f::rank1{{0.0, lamdu(), lamsu()}};};
+        H3tilde = [this]() { return su3f::rank1{{0.0, lamdt(), lamst()}};};
 
-        H6bar[0][1][0] = +lamdu;
-        H6bar[1][0][0] = -lamdu;
-        H6bar[1][2][2] = +lamdu;
-        H6bar[2][1][2] = -lamdu;
+        H6bar = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = +lamdu();
+            result[1][0][0] = -lamdu();
+            result[1][2][2] = +lamdu();
+            result[2][1][2] = -lamdu();
+            result[0][2][0] = +lamsu();
+            result[2][0][0] = -lamsu();
+            result[2][1][1] = +lamsu(); // Corrected with respect to typo in [HTX:2021A]
+            result[1][2][1] = -lamsu(); // Corrected with respect to typo in [HTX:2021A]
+            return result;
+        };
 
-        H6bar[0][2][0] = +lamsu;
-        H6bar[2][0][0] = -lamsu;
-        H6bar[2][1][1] = +lamsu; // Corrected with respect to typo in [HTX:2021A]
-        H6bar[1][2][1] = -lamsu; // Corrected with respect to typo in [HTX:2021A]
+        H15bar = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = +3.0 * lamdu();
+            result[1][0][0] = +3.0 * lamdu();
+            result[1][1][1] = -2.0 * lamdu();
+            result[1][2][2] = -lamdu();
+            result[2][1][2] = -lamdu();
+            result[0][2][0] = +3.0 * lamsu();
+            result[2][0][0] = +3.0 * lamsu();
+            result[2][2][2] = -2.0 * lamsu();
+            result[2][1][1] = -lamsu(); // Corrected with respect to typo in [HTX:2021A]
+            result[1][2][1] = -lamsu(); // Corrected with respect to typo in [HTX:2021A]
+            return result;
+        };
 
-        H15bar[0][1][0] = +3.0 * lamdu;
-        H15bar[1][0][0] = +3.0 * lamdu;
-        H15bar[1][1][1] = -2.0 * lamdu;
-        H15bar[1][2][2] = -lamdu;
-        H15bar[2][1][2] = -lamdu;
+        H6tilde = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = +lamdt();
+            result[1][0][0] = -lamdt();
+            result[1][2][2] = +lamdt();
+            result[2][1][2] = -lamdt();
+            result[0][2][0] = +lamst();
+            result[2][0][0] = -lamst();
+            result[2][1][1] = +lamst(); // Corrected with respect to typo in [HTX:2021A]
+            result[1][2][1] = -lamst(); // Corrected with respect to typo in [HTX:2021A]
+            return result;
+        };
 
-        H15bar[0][2][0] = +3.0 * lamsu;
-        H15bar[2][0][0] = +3.0 * lamsu;
-        H15bar[2][2][2] = -2.0 * lamsu;
-        H15bar[2][1][1] = -lamsu; // Corrected with respect to typo in [HTX:2021A]
-        H15bar[1][2][1] = -lamsu; // Corrected with respect to typo in [HTX:2021A]
-
-
-        H3tilde[1] = +lamdt;
-        H3tilde[2] = +lamst;
-
-        H6tilde[0][1][0] = +lamdt;
-        H6tilde[1][0][0] = -lamdt;
-        H6tilde[1][2][2] = +lamdt;
-        H6tilde[2][1][2] = -lamdt;
-
-        H6tilde[0][2][0] = +lamst;
-        H6tilde[2][0][0] = -lamst;
-        H6tilde[2][1][1] = +lamst; // Corrected with respect to typo in [HTX:2021A]
-        H6tilde[1][2][1] = -lamst; // Corrected with respect to typo in [HTX:2021A]
-
-        H15tilde[0][1][0] = +3.0 * lamdt;
-        H15tilde[1][0][0] = +3.0 * lamdt;
-        H15tilde[1][1][1] = -2.0 * lamdt;
-        H15tilde[1][2][2] = -lamdt;
-        H15tilde[2][1][2] = -lamdt;
-
-        H15tilde[0][2][0] = +3.0 * lamst;
-        H15tilde[2][0][0] = +3.0 * lamst;
-        H15tilde[2][2][2] = -2.0 * lamst;
-        H15tilde[2][1][1] = -lamst; // Corrected with respect to typo in [HTX:2021A]
-        H15tilde[1][2][1] = -lamst; // Corrected with respect to typo in [HTX:2021A]
-    }
+        H15tilde = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = +3.0 * lamdt();
+            result[1][0][0] = +3.0 * lamdt();
+            result[1][1][1] = -2.0 * lamdt();
+            result[1][2][2] = -lamdt();
+            result[2][1][2] = -lamdt();
+            result[0][2][0] = +3.0 * lamst();
+            result[2][0][0] = +3.0 * lamst();
+            result[2][2][2] = -2.0 * lamst();
+            result[2][1][1] = -lamst(); // Corrected with respect to typo in [HTX:2021A]
+            result[1][2][1] = -lamst(); // Corrected with respect to typo in [HTX:2021A]
+            return result;
+        };
+    };
 
     const std::vector<OptionSpecification> SU3FRepresentation<PToPP>::options{
         Model::option_specification(),
@@ -187,20 +193,20 @@ namespace eos
             {
                 for (unsigned k = 0; k < 3; k++)
                 {
-                    T_ira += AT3 * B[i] * H3bar[i] * p1[j][k] * p2[k][j];
-                    T_ira += CT3 * B[i] * p1[i][j] * p2[j][k] * H3bar[k];
-                    T_ira += BT3 * B[i] * H3bar[i] * p1[k][k] * p2[j][j];
-                    T_ira += DT3 * B[i] * p1[i][j] * H3bar[j] * p2[k][k];
+                    T_ira += AT3 * B[i] * H3bar()[i] * p1[j][k] * p2[k][j];
+                    T_ira += CT3 * B[i] * p1[i][j] * p2[j][k] * H3bar()[k];
+                    T_ira += BT3 * B[i] * H3bar()[i] * p1[k][k] * p2[j][j];
+                    T_ira += DT3 * B[i] * p1[i][j] * H3bar()[j] * p2[k][k];
 
                     for (unsigned l = 0; l < 3; l++)
                     {
-                        T_ira += AT6 * B[i] * H6bar[i][j][k] * p1[l][j] * p2[k][l];
-                        T_ira += CT6 * B[i] * p1[i][j] * H6bar[j][l][k] * p2[k][l];
-                        T_ira += BT6 * B[i] * H6bar[i][j][k] * p1[k][j] * p2[l][l];
+                        T_ira += AT6 * B[i] * H6bar()[i][j][k] * p1[l][j] * p2[k][l];
+                        T_ira += CT6 * B[i] * p1[i][j] * H6bar()[j][l][k] * p2[k][l];
+                        T_ira += BT6 * B[i] * H6bar()[i][j][k] * p1[k][j] * p2[l][l];
 
-                        T_ira += AT15 * B[i] * H15bar[i][j][k] * p1[l][j] * p2[k][l];
-                        T_ira += CT15 * B[i] * p1[i][j] * H15bar[j][k][l] * p2[l][k];
-                        T_ira += BT15 * B[i] * H15bar[i][j][k] * p1[k][j] * p2[l][l];
+                        T_ira += AT15 * B[i] * H15bar()[i][j][k] * p1[l][j] * p2[k][l];
+                        T_ira += CT15 * B[i] * p1[i][j] * H15bar()[j][k][l] * p2[l][k];
+                        T_ira += BT15 * B[i] * H15bar()[i][j][k] * p1[k][j] * p2[l][l];
                     }
                 }
             }
@@ -225,20 +231,20 @@ namespace eos
             {
                 for (unsigned k = 0; k < 3; k++)
                 {
-                    P_ira += AP3 * B[i] * H3tilde[i] * p1[j][k] * p2[k][j];
-                    P_ira += CP3 * B[i] * p1[i][j] * p2[j][k] * H3tilde[k];
-                    P_ira += BP3 * B[i] * H3tilde[i] * p1[k][k] * p2[j][j];
-                    P_ira += DP3 * B[i] * p1[i][j] * H3tilde[j] * p2[k][k];
+                    P_ira += AP3 * B[i] * H3tilde()[i] * p1[j][k] * p2[k][j];
+                    P_ira += CP3 * B[i] * p1[i][j] * p2[j][k] * H3tilde()[k];
+                    P_ira += BP3 * B[i] * H3tilde()[i] * p1[k][k] * p2[j][j];
+                    P_ira += DP3 * B[i] * p1[i][j] * H3tilde()[j] * p2[k][k];
 
                     for (unsigned l = 0; l < 3; l++)
                     {
-                        P_ira += AP6 * B[i] * H6tilde[i][j][k] * p1[l][j] * p2[k][l];
-                        P_ira += CP6 * B[i] * p1[i][j] * H6tilde[j][l][k] * p2[k][l];
-                        P_ira += BP6 * B[i] * H6tilde[i][j][k] * p1[k][j] * p2[l][l];
+                        P_ira += AP6 * B[i] * H6tilde()[i][j][k] * p1[l][j] * p2[k][l];
+                        P_ira += CP6 * B[i] * p1[i][j] * H6tilde()[j][l][k] * p2[k][l];
+                        P_ira += BP6 * B[i] * H6tilde()[i][j][k] * p1[k][j] * p2[l][l];
 
-                        P_ira += AP15 * B[i] * H15tilde[i][j][k] * p1[l][j] * p2[k][l];
-                        P_ira += CP15 * B[i] * p1[i][j] * H15tilde[j][k][l] * p2[l][k];
-                        P_ira += BP15 * B[i] * H15tilde[i][j][k] * p1[k][j] * p2[l][l];
+                        P_ira += AP15 * B[i] * H15tilde()[i][j][k] * p1[l][j] * p2[k][l];
+                        P_ira += CP15 * B[i] * p1[i][j] * H15tilde()[j][k][l] * p2[l][k];
+                        P_ira += BP15 * B[i] * H15tilde()[i][j][k] * p1[k][j] * p2[l][l];
                     }
                 }
             }
@@ -280,8 +286,8 @@ namespace eos
     {
         this->update();
 
-        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt;
-        auto tree    = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu;
+        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt();
+        auto tree = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu();
 
         return -penguin / (tree - penguin);
     }

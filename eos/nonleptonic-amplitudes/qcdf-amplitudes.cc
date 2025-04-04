@@ -103,17 +103,17 @@ namespace eos
 
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
-            lamdu = model->ckm_ub() * conj(model->ckm_ud());
-            lamsu = model->ckm_ub() * conj(model->ckm_us());
-            lamdc = model->ckm_cb() * conj(model->ckm_cd());
-            lamsc = model->ckm_cb() * conj(model->ckm_cs());
+            lamdu = [this]() { return model->ckm_ub() * conj(model->ckm_ud());};
+            lamsu = [this]() { return model->ckm_ub() * conj(model->ckm_us());};
+            lamdc = [this]() { return model->ckm_cb() * conj(model->ckm_cd());};
+            lamsc = [this]() { return model->ckm_cb() * conj(model->ckm_cs());};
         }
         else
         {
-            lamdu = conj(model->ckm_ub()) * model->ckm_ud();
-            lamsu = conj(model->ckm_ub()) * model->ckm_us();
-            lamdc = conj(model->ckm_cb()) * model->ckm_cd();
-            lamsc = conj(model->ckm_cb()) * model->ckm_cs();
+            lamdu = [this]() { return conj(model->ckm_ub()) * model->ckm_ud();};
+            lamsu = [this]() { return conj(model->ckm_ub()) * model->ckm_us();};
+            lamdc = [this]() { return conj(model->ckm_cb()) * model->ckm_cd();};
+            lamsc = [this]() { return conj(model->ckm_cb()) * model->ckm_cs();};
         }
 
         U[0][0] = 1;
@@ -121,11 +121,9 @@ namespace eos
         I[1][1] = 1;
         I[2][2] = 1;
 
-        Lambda_u[1] = lamdu;
-        Lambda_u[2] = lamsu;
-        Lambda_c[1] = lamdc;
-        Lambda_c[2] = lamsc;
-    }
+        Lambda_u = [this]() { return su3f::rank1{{0.0, lamdu(), lamsu()}};};
+        Lambda_c = [this]() { return su3f::rank1{{0.0, lamdc(), lamsc()}};};
+    };
 
     const std::vector<OptionSpecification> QCDFRepresentation<PToPP>::options{
         Model::option_specification(),
@@ -141,18 +139,18 @@ namespace eos
     {
         complex<double> A_alpha_qcdf = 0.0;
 
-        complex<double> alpha1 = complex<double>(this->re_alpha1(), this->im_alpha1()), alpha2 = complex<double>(this->re_alpha2(), this->im_alpha2()),
-                        b1 = complex<double>(this->re_b1(), this->im_b1()), b2 = complex<double>(this->re_b2(), this->im_b2()),
-                        bS1 = complex<double>(this->re_bS1(), this->im_bS1()), bS2 = complex<double>(this->re_bS2(), this->im_bS2()),
+        const complex<double> alpha1 = complex<double>(this->re_alpha1(), this->im_alpha1()), alpha2 = complex<double>(this->re_alpha2(), this->im_alpha2()),
+                              b1 = complex<double>(this->re_b1(), this->im_b1()), b2 = complex<double>(this->re_b2(), this->im_b2()),
+                              bS1 = complex<double>(this->re_bS1(), this->im_bS1()), bS2 = complex<double>(this->re_bS2(), this->im_bS2()),
 
-                        alpha3_u = complex<double>(this->re_alpha3_u(), this->im_alpha3_u()), alpha3_c = complex<double>(this->re_alpha3_c(), this->im_alpha3_c()),
-                        alpha4_u = complex<double>(this->re_alpha4_u(), this->im_alpha4_u()), alpha4_c = complex<double>(this->re_alpha4_c(), this->im_alpha4_c()),
-                        b4_u = complex<double>(this->re_b4_u(), this->im_b4_u()), b4_c = complex<double>(this->re_b4_c(), this->im_b4_c()),
-                        bS4_u = complex<double>(this->re_bS4_u(), this->im_bS4_u()), bS4_c = complex<double>(this->re_bS4_c(), this->im_bS4_c()),
+                              alpha3_u = complex<double>(this->re_alpha3_u(), this->im_alpha3_u()), alpha3_c = complex<double>(this->re_alpha3_c(), this->im_alpha3_c()),
+                              alpha4_u = complex<double>(this->re_alpha4_u(), this->im_alpha4_u()), alpha4_c = complex<double>(this->re_alpha4_c(), this->im_alpha4_c()),
+                              b4_u = complex<double>(this->re_b4_u(), this->im_b4_u()), b4_c = complex<double>(this->re_b4_c(), this->im_b4_c()),
+                              bS4_u = complex<double>(this->re_bS4_u(), this->im_bS4_u()), bS4_c = complex<double>(this->re_bS4_c(), this->im_bS4_c()),
 
-                        alpha3EW_c = complex<double>(this->re_alpha3EW_c(), this->im_alpha3EW_c()), alpha4EW_c = complex<double>(this->re_alpha4EW_c(), this->im_alpha4EW_c()),
-                        b3EW_c = complex<double>(this->re_b3EW_c(), this->im_b3EW_c()), bS3EW_c = complex<double>(this->re_bS3EW_c(), this->im_bS3EW_c()),
-                        b4EW_c = complex<double>(this->re_b4EW_c(), this->im_b4EW_c()), bS4EW_c = complex<double>(this->re_bS4EW_c(), this->im_bS4EW_c());
+                              alpha3EW_c = complex<double>(this->re_alpha3EW_c(), this->im_alpha3EW_c()), alpha4EW_c = complex<double>(this->re_alpha4EW_c(), this->im_alpha4EW_c()),
+                              b3EW_c = complex<double>(this->re_b3EW_c(), this->im_b3EW_c()), bS3EW_c = complex<double>(this->re_bS3EW_c(), this->im_bS3EW_c()),
+                              b4EW_c = complex<double>(this->re_b4EW_c(), this->im_b4EW_c()), bS4EW_c = complex<double>(this->re_bS4EW_c(), this->im_bS4EW_c());
 
         std::array<complex<double>, 6> T, P1_c, P1_u, P2_c;
 
@@ -202,11 +200,11 @@ namespace eos
                 {
                     for (unsigned l = 0; l < 3; l++)
                     {
-                        A_alpha_qcdf += B[i] * p1[i][j] * C_u[0][j][k] * p2[k][l] * Lambda_u[l];
-                        A_alpha_qcdf += B[i] * p1[i][j] * Lambda_u[j] * C_u[1][l][k] * p2[k][l];
+                        A_alpha_qcdf += B[i] * p1[i][j] * C_u[0][j][k] * p2[k][l] * Lambda_u()[l];
+                        A_alpha_qcdf += B[i] * p1[i][j] * Lambda_u()[j] * C_u[1][l][k] * p2[k][l];
 
-                        A_alpha_qcdf += B[i] * p1[i][j] * C_c[0][j][k] * p2[k][l] * Lambda_c[l];
-                        A_alpha_qcdf += B[i] * p1[i][j] * Lambda_c[j] * C_c[1][l][k] * p2[k][l];
+                        A_alpha_qcdf += B[i] * p1[i][j] * C_c[0][j][k] * p2[k][l] * Lambda_c()[l];
+                        A_alpha_qcdf += B[i] * p1[i][j] * Lambda_c()[j] * C_c[1][l][k] * p2[k][l];
                     }
                 }
             }
@@ -220,18 +218,18 @@ namespace eos
     {
         complex<double> A_b_qcdf = 0.0;
 
-        complex<double> alpha1 = complex<double>(this->re_alpha1(), this->im_alpha1()), alpha2 = complex<double>(this->re_alpha2(), this->im_alpha2()),
-                        b1 = complex<double>(this->re_b1(), this->im_b1()), b2 = complex<double>(this->re_b2(), this->im_b2()),
-                        bS1 = complex<double>(this->re_bS1(), this->im_bS1()), bS2 = complex<double>(this->re_bS2(), this->im_bS2()),
+        const complex<double> alpha1 = complex<double>(this->re_alpha1(), this->im_alpha1()), alpha2 = complex<double>(this->re_alpha2(), this->im_alpha2()),
+                              b1 = complex<double>(this->re_b1(), this->im_b1()), b2 = complex<double>(this->re_b2(), this->im_b2()),
+                              bS1 = complex<double>(this->re_bS1(), this->im_bS1()), bS2 = complex<double>(this->re_bS2(), this->im_bS2()),
 
-                        alpha3_u = complex<double>(this->re_alpha3_u(), this->im_alpha3_u()), alpha3_c = complex<double>(this->re_alpha3_c(), this->im_alpha3_c()),
-                        alpha4_u = complex<double>(this->re_alpha4_u(), this->im_alpha4_u()), alpha4_c = complex<double>(this->re_alpha4_c(), this->im_alpha4_c()),
-                        b4_u = complex<double>(this->re_b4_u(), this->im_b4_u()), b4_c = complex<double>(this->re_b4_c(), this->im_b4_c()),
-                        bS4_u = complex<double>(this->re_bS4_u(), this->im_bS4_u()), bS4_c = complex<double>(this->re_bS4_c(), this->im_bS4_c()),
+                              alpha3_u = complex<double>(this->re_alpha3_u(), this->im_alpha3_u()), alpha3_c = complex<double>(this->re_alpha3_c(), this->im_alpha3_c()),
+                              alpha4_u = complex<double>(this->re_alpha4_u(), this->im_alpha4_u()), alpha4_c = complex<double>(this->re_alpha4_c(), this->im_alpha4_c()),
+                              b4_u = complex<double>(this->re_b4_u(), this->im_b4_u()), b4_c = complex<double>(this->re_b4_c(), this->im_b4_c()),
+                              bS4_u = complex<double>(this->re_bS4_u(), this->im_bS4_u()), bS4_c = complex<double>(this->re_bS4_c(), this->im_bS4_c()),
 
-                        alpha3EW_c = complex<double>(this->re_alpha3EW_c(), this->im_alpha3EW_c()), alpha4EW_c = complex<double>(this->re_alpha4EW_c(), this->im_alpha4EW_c()),
-                        b3EW_c = complex<double>(this->re_b3EW_c(), this->im_b3EW_c()), bS3EW_c = complex<double>(this->re_bS3EW_c(), this->im_bS3EW_c()),
-                        b4EW_c = complex<double>(this->re_b4EW_c(), this->im_b4EW_c()), bS4EW_c = complex<double>(this->re_bS4EW_c(), this->im_bS4EW_c());
+                              alpha3EW_c = complex<double>(this->re_alpha3EW_c(), this->im_alpha3EW_c()), alpha4EW_c = complex<double>(this->re_alpha4EW_c(), this->im_alpha4EW_c()),
+                              b3EW_c = complex<double>(this->re_b3EW_c(), this->im_b3EW_c()), bS3EW_c = complex<double>(this->re_bS3EW_c(), this->im_bS3EW_c()),
+                              b4EW_c = complex<double>(this->re_b4EW_c(), this->im_b4EW_c()), bS4EW_c = complex<double>(this->re_bS4EW_c(), this->im_bS4EW_c());
 
         std::array<complex<double>, 6> T, P1_c, P1_u, P2_c;
 
@@ -281,15 +279,15 @@ namespace eos
                 {
                     for (unsigned l = 0; l < 3; l++)
                     {
-                        A_b_qcdf += B[i] * C_u[2][i][k] * p1[k][l] * p2[l][j] * Lambda_u[j];
-                        A_b_qcdf += B[i] * Lambda_u[i] * C_u[3][l][k] * p1[k][j] * p2[j][l];
-                        A_b_qcdf += B[i] * C_u[4][i][k] * p1[k][j] * Lambda_u[j] * p2[l][l];
-                        A_b_qcdf += B[i] * Lambda_u[i] * C_u[5][j][k] * p1[k][j] * p2[l][l];
+                        A_b_qcdf += B[i] * C_u[2][i][k] * p1[k][l] * p2[l][j] * Lambda_u()[j];
+                        A_b_qcdf += B[i] * Lambda_u()[i] * C_u[3][l][k] * p1[k][j] * p2[j][l];
+                        A_b_qcdf += B[i] * C_u[4][i][k] * p1[k][j] * Lambda_u()[j] * p2[l][l];
+                        A_b_qcdf += B[i] * Lambda_u()[i] * C_u[5][j][k] * p1[k][j] * p2[l][l];
 
-                        A_b_qcdf += B[i] * C_c[2][i][k] * p1[k][l] * p2[l][j] * Lambda_c[j];
-                        A_b_qcdf += B[i] * Lambda_c[i] * C_c[3][l][k] * p1[k][j] * p2[j][l];
-                        A_b_qcdf += B[i] * C_c[4][i][k] * p1[k][j] * Lambda_c[j] * p2[l][l];
-                        A_b_qcdf += B[i] * Lambda_c[i] * C_c[5][j][k] * p1[k][j] * p2[l][l];
+                        A_b_qcdf += B[i] * C_c[2][i][k] * p1[k][l] * p2[l][j] * Lambda_c()[j];
+                        A_b_qcdf += B[i] * Lambda_c()[i] * C_c[3][l][k] * p1[k][j] * p2[j][l];
+                        A_b_qcdf += B[i] * C_c[4][i][k] * p1[k][j] * Lambda_c()[j] * p2[l][l];
+                        A_b_qcdf += B[i] * Lambda_c()[i] * C_c[5][j][k] * p1[k][j] * p2[l][l];
                     }
                 }
             }
