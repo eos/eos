@@ -45,10 +45,10 @@ namespace eos
 
             UsedParameter theta_18;
 
-            su3f::rank1         B;
-            mutable su3f::rank1 H1tilde;
-            mutable su3f::rank2 P1, P2;
-            mutable su3f::rank3 Hbar, H3tilde;
+            su3f::rank1                  B;
+            mutable su3f::rank2          P1, P2;
+            std::function<su3f::rank1()> H1tilde;
+            std::function<su3f::rank3()> Hbar, H3tilde;
 
             UsedParameter Gfermi;
 
@@ -76,10 +76,10 @@ namespace eos
 
             static const std::vector<OptionSpecification> options;
 
-            complex<double> lamdu;
-            complex<double> lamsu;
-            complex<double> lamdt;
-            complex<double> lamst;
+            std::function<complex<double>()> lamdu;
+            std::function<complex<double>()> lamsu;
+            std::function<complex<double>()> lamdt;
+            std::function<complex<double>()> lamst;
 
         public:
             TopologicalRepresentation(const Parameters & p, const Options & o);

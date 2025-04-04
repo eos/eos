@@ -45,9 +45,9 @@ namespace eos
 
             UsedParameter theta_18;
 
-            su3f::rank1                    B;
-            std::array<complex<double>, 6> Lambda_u, Lambda_c;
-            mutable su3f::rank2            P1, P2, U, I;
+            su3f::rank1                  B;
+            std::function<su3f::rank1()> Lambda_u, Lambda_c;
+            mutable su3f::rank2          P1, P2, U, I;
 
             UsedParameter Gfermi;
             UsedParameter mB;
@@ -85,10 +85,10 @@ namespace eos
 
             static const std::vector<OptionSpecification> options;
 
-            complex<double> lamdu;
-            complex<double> lamsu;
-            complex<double> lamdc;
-            complex<double> lamsc;
+            std::function<complex<double>()> lamdu;
+            std::function<complex<double>()> lamsu;
+            std::function<complex<double>()> lamdc;
+            std::function<complex<double>()> lamsc;
 
         public:
             QCDFRepresentation(const Parameters & p, const Options & o);
