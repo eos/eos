@@ -43,11 +43,8 @@ namespace eos
         opt_B_bar(o, options, "B_bar"),
         theta_18(p["eta::theta_18"], *this),
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
-        H1tilde({}),
         P1({}),
         P2({}),
-        Hbar({}),
-        H3tilde({}),
         Gfermi(p["WET::G_Fermi"], *this),
         re_T(p["nonleptonic::Re{T}@Topological"], *this),
         im_T(p["nonleptonic::Im{T}@Topological"], *this),
@@ -94,25 +91,41 @@ namespace eos
 
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
-            lamdu = model->ckm_ub() * conj(model->ckm_ud());
-            lamsu = model->ckm_ub() * conj(model->ckm_us());
-            lamdt = model->ckm_tb() * conj(model->ckm_td());
-            lamst = model->ckm_tb() * conj(model->ckm_ts());
+            lamdu = [this]() { return model->ckm_ub() * conj(model->ckm_ud()); };
+            lamsu = [this]() { return model->ckm_ub() * conj(model->ckm_us()); };
+            lamdt = [this]() { return model->ckm_tb() * conj(model->ckm_td()); };
+            lamst = [this]() { return model->ckm_tb() * conj(model->ckm_ts()); };
         }
         else
         {
-            lamdu = conj(model->ckm_ub()) * model->ckm_ud();
-            lamsu = conj(model->ckm_ub()) * model->ckm_us();
-            lamdt = conj(model->ckm_tb()) * model->ckm_td();
-            lamst = conj(model->ckm_tb()) * model->ckm_ts();
+            lamdu = [this]() { return conj(model->ckm_ub()) * model->ckm_ud(); };
+            lamsu = [this]() { return conj(model->ckm_ub()) * model->ckm_us(); };
+            lamdt = [this]() { return conj(model->ckm_tb()) * model->ckm_td(); };
+            lamst = [this]() { return conj(model->ckm_tb()) * model->ckm_ts(); };
         }
 
-        H1tilde[1]       = lamdt;
-        H1tilde[2]       = lamst;
-        Hbar[0][1][0]    = lamdu;
-        Hbar[0][2][0]    = lamsu;
-        H3tilde[0][1][0] = lamdt;
-        H3tilde[0][2][0] = lamst;
+        H1tilde = [this]()
+        {
+            return su3f::rank1{
+                { 0.0, lamdt(), lamst() }
+            };
+        };
+
+        Hbar = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = lamdu();
+            result[0][2][0] = lamsu();
+            return result;
+        };
+
+        H3tilde = [this]()
+        {
+            su3f::rank3 result;
+            result[0][1][0] = lamdt();
+            result[0][2][0] = lamst();
+            return result;
+        };
     }
 
     const std::vector<OptionSpecification> TopologicalRepresentation<PToPP>::options{
@@ -133,6 +146,8 @@ namespace eos
                               TAS = complex<double>(this->re_TAS(), this->im_TAS()), TS = complex<double>(this->re_TS(), this->im_TS()),
                               TPA = complex<double>(this->re_TPA(), this->im_TPA()), TP = complex<double>(this->re_TP(), this->im_TP()),
                               TSS = complex<double>(this->re_TSS(), this->im_TSS());
+
+        const auto & Hbar = this->Hbar();
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -169,6 +184,10 @@ namespace eos
                               PA = complex<double>(this->re_PA(), this->im_PA()), PTE = complex<double>(this->re_PTE(), this->im_PTE()),
                               PAS = complex<double>(this->re_PAS(), this->im_PAS()), PSS = complex<double>(this->re_PSS(), this->im_PSS()),
                               PES = complex<double>(this->re_PES(), this->im_PES());
+
+
+        const auto & H1tilde = this->H1tilde();
+        const auto & H3tilde = this->H3tilde();
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -230,8 +249,8 @@ namespace eos
     {
         this->update();
 
-        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt;
-        auto tree    = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu;
+        auto penguin = (this->penguin_amplitude(P1, P2) + this->penguin_amplitude(P2, P1)) / lamdt();
+        auto tree    = (this->tree_amplitude(P1, P2) + this->tree_amplitude(P2, P1)) / lamdu();
 
         return -penguin / (tree - penguin);
     }
