@@ -116,6 +116,47 @@ namespace eos
     };
 
     std::ostream& operator<< (std::ostream & os, LightMeson qf);
+
+    enum class PartialWave : uint8_t
+    {
+        none = 0,
+        S    = 1 << 0,
+        P    = 1 << 1,
+        D    = 1 << 2,
+        F    = 1 << 3
+    };
+
+    inline PartialWave operator | (PartialWave lhs, PartialWave rhs)
+    {
+        using T = std::underlying_type_t<PartialWave>;
+        return static_cast<PartialWave>(static_cast<T>(lhs) | static_cast<T>(rhs));
+    }
+
+    inline PartialWave & operator |= (PartialWave & lhs, PartialWave rhs)
+    {
+        lhs = lhs | rhs;
+        return lhs;
+    }
+
+    inline PartialWave operator & (PartialWave lhs, PartialWave rhs)
+    {
+        using T = std::underlying_type_t<PartialWave>;
+        return static_cast<PartialWave>(static_cast<T>(lhs) & static_cast<T>(rhs));
+    }
+
+    inline PartialWave & operator &= (PartialWave & lhs, PartialWave rhs)
+    {
+        lhs = lhs & rhs;
+        return lhs;
+    }
+
+    inline bool operator && (PartialWave lhs, PartialWave rhs)
+    {
+        return (lhs & rhs) != PartialWave::none;
+    }
+
+    std::ostream & operator<< (std::ostream & os, PartialWave i);
+
 }
 
 #endif

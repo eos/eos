@@ -133,3 +133,30 @@ class LightMesonTest :
 
         }
 } light_meson_test;
+
+class PartialWaveTest :
+    public TestCase
+{
+    public:
+        PartialWaveTest() :
+            TestCase("partial_wave_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            TEST_CHECK_EQUAL_STR("",     stringify(PartialWave::none));
+            TEST_CHECK_EQUAL_STR("S",    stringify(PartialWave::S));
+            TEST_CHECK_EQUAL_STR("P",    stringify(PartialWave::P));
+            TEST_CHECK_EQUAL_STR("D",    stringify(PartialWave::D));
+            TEST_CHECK_EQUAL_STR("F",    stringify(PartialWave::F));
+
+            TEST_CHECK_EQUAL_STR("S|D",  stringify(PartialWave::S | PartialWave::D));
+            TEST_CHECK_EQUAL_STR("S|P",  stringify(PartialWave::S | PartialWave::P));
+            TEST_CHECK_EQUAL_STR("P|F",  stringify(PartialWave::P | PartialWave::F));
+
+            TEST_CHECK_EQUAL(destringify<PartialWave>("S|D"), PartialWave::S | PartialWave::D);
+            TEST_CHECK_EQUAL(destringify<PartialWave>("S|P"), PartialWave::S | PartialWave::P);
+            TEST_CHECK_EQUAL(destringify<PartialWave>("P|F"), PartialWave::P | PartialWave::F);
+        }
+} partial_wave_test;

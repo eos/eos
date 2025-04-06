@@ -114,6 +114,47 @@ namespace eos
                 return result;
             }
         };
+
+        template <> struct DoDestringify<PartialWave>
+        {
+            static PartialWave destringify(const std::string & input)
+            {
+                static const std::map<std::string, PartialWave> partial_waves
+                {
+                    { "S", PartialWave::S },
+                    { "P", PartialWave::P },
+                    { "D", PartialWave::D },
+                    { "F", PartialWave::F }
+                };
+
+                PartialWave result = PartialWave::none;
+
+                std::string::size_type i = 0, j = input.find('|');
+                do
+                {
+                    const auto value = input.substr(i, j);
+
+                    const auto k = partial_waves.find(value);
+                    if (partial_waves.cend() == k)
+                        throw DestringifyError(std::string("'") + value + "' is not a valid PartialWave value");
+
+                    result |= k->second;
+
+                    if (std::string::npos != j)
+                    {
+                        i = j + 1;
+                        j = input.find('|', i);
+                    }
+                    else
+                    {
+                        i = std::string::npos;
+                    }
+                }
+                while (std::string::npos != i);
+
+                return result;
+            }
+        };
     }
 
     template <typename T_>
