@@ -96,4 +96,25 @@ namespace eos
 
         return os;
     }
+
+    std::ostream &
+    operator<< (std::ostream & os, PartialWave pw)
+    {
+        static const std::array<std::string, 4u> names
+        {
+            "S", "P", "D", "F"
+        };
+
+        std::vector<std::string> tmp;
+        for (unsigned shift = 0 ; shift < 4 ; ++shift)
+        {
+            if (pw && static_cast<PartialWave>(1 << shift))
+                tmp.push_back(names[shift]);
+        }
+
+        os << join(tmp.begin(), tmp.end(), "|");
+
+        return os;
+    }
+
 }
