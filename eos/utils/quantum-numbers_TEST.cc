@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -87,6 +88,7 @@ class IsospinTest :
             TEST_CHECK_EQUAL(destringify<Isospin>("0|1"),   Isospin::zero | Isospin::one);
             TEST_CHECK_EQUAL(destringify<Isospin>("0|3/2"), Isospin::zero | Isospin::threehalves);
             TEST_CHECK_EQUAL(destringify<Isospin>("1|2"),   Isospin::one | Isospin::two);
+            TEST_CHECK_EQUAL(destringify<Isospin>("0|1|2"), Isospin::zero | Isospin::one | Isospin::two);
         }
 } isospin_test;
 
@@ -151,12 +153,14 @@ class PartialWaveTest :
             TEST_CHECK_EQUAL_STR("D",    stringify(PartialWave::D));
             TEST_CHECK_EQUAL_STR("F",    stringify(PartialWave::F));
 
-            TEST_CHECK_EQUAL_STR("S|D",  stringify(PartialWave::S | PartialWave::D));
-            TEST_CHECK_EQUAL_STR("S|P",  stringify(PartialWave::S | PartialWave::P));
-            TEST_CHECK_EQUAL_STR("P|F",  stringify(PartialWave::P | PartialWave::F));
+            TEST_CHECK_EQUAL_STR("S|D",    stringify(PartialWave::S | PartialWave::D));
+            TEST_CHECK_EQUAL_STR("S|P",    stringify(PartialWave::S | PartialWave::P));
+            TEST_CHECK_EQUAL_STR("P|F",    stringify(PartialWave::P | PartialWave::F));
+            TEST_CHECK_EQUAL_STR("S|P|D",  stringify(PartialWave::S | PartialWave::P | PartialWave::D));
 
-            TEST_CHECK_EQUAL(destringify<PartialWave>("S|D"), PartialWave::S | PartialWave::D);
-            TEST_CHECK_EQUAL(destringify<PartialWave>("S|P"), PartialWave::S | PartialWave::P);
-            TEST_CHECK_EQUAL(destringify<PartialWave>("P|F"), PartialWave::P | PartialWave::F);
+            TEST_CHECK_EQUAL(destringify<PartialWave>("S|D"),     PartialWave::S | PartialWave::D);
+            TEST_CHECK_EQUAL(destringify<PartialWave>("S|P"),     PartialWave::S | PartialWave::P);
+            TEST_CHECK_EQUAL(destringify<PartialWave>("P|F"),     PartialWave::P | PartialWave::F);
+            TEST_CHECK_EQUAL(destringify<PartialWave>("S|P|D|F"), PartialWave::S | PartialWave::P | PartialWave::D | PartialWave::F);
         }
 } partial_wave_test;
