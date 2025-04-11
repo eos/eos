@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +25,7 @@
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -42,6 +44,12 @@ namespace eos
             complex<double> F_perp_lo_tw2(const double & q2, const double & k2, const double & z) const;
             complex<double> F_perp_lo_tw3(const double & q2, const double & k2, const double & z) const;
 
+            // Partial waves
+            virtual std::array<complex<double>, 3> f_perp(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 3> f_para(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 3> f_long(const double & q2, const double & k2) const override;
+            virtual std::array<complex<double>, 3> f_time(const double & q2, const double & k2) const override;
+
             /* Form factors */
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const override;
             virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const override;
@@ -56,12 +64,6 @@ namespace eos
             double im_f_long(const double & q2, const double & k2, const double & z) const;
             double re_f_time(const double & q2, const double & k2, const double & z) const;
             double im_f_time(const double & q2, const double & k2, const double & z) const;
-
-            /* Form factors */
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const override;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const override;
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
@@ -84,6 +86,12 @@ namespace eos
 
             static FormFactors<PToPP> * make(const Parameters &, const Options &);
 
+            // Partial waves
+            virtual std::array<complex<double>, 3> f_perp(const double & q2, const double & k2) const;
+            virtual std::array<complex<double>, 3> f_para(const double & q2, const double & k2) const;
+            virtual std::array<complex<double>, 3> f_long(const double & q2, const double & k2) const;
+            virtual std::array<complex<double>, 3> f_time(const double & q2, const double & k2) const;
+
             /* Form factors */
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const;
             virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const;
@@ -91,19 +99,25 @@ namespace eos
             virtual complex<double> f_time(const double & q2, const double & k2, const double & z) const;
 
             /* Form factor residues */
-            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const;
-            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const;
-            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const;
-            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_perp_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_para_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_long_im_res_qhat2(const double & q2, const double & k2) const;
+            double f_time_im_res_qhat2(const double & q2, const double & k2) const;
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
 
             /*!
              * Options used in the computation of our observables.
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
+            static const std::vector<OptionSpecification> options;
     };
 }
 
