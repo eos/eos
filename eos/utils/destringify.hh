@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -94,7 +95,7 @@ namespace eos
                 std::string::size_type i = 0, j = input.find('|');
                 do
                 {
-                    const auto value = input.substr(i, j);
+                    const auto value = input.substr(i, j - i);
 
                     const auto k = isospins.find(value);
                     if (isospins.cend() == k)
@@ -135,7 +136,7 @@ namespace eos
                 std::string::size_type i = 0, j = input.find('|');
                 do
                 {
-                    const auto value = input.substr(i, j);
+                    const auto value = input.substr(i, j - i);
 
                     const auto k = partial_waves.find(value);
                     if (partial_waves.cend() == k)
