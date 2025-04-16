@@ -159,6 +159,20 @@ namespace eos
             const std::string & str() const;
     };
 
+    class IntegerOption :
+        public SpecifiedOption
+    {
+        private:
+            double _int_value;
+
+        public:
+            IntegerOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            ~IntegerOption();
+
+            double value() const;
+            const std::string & str() const;
+    };
+
     class FloatOption :
         public SpecifiedOption
     {
