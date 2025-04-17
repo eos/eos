@@ -197,9 +197,9 @@ namespace eos
                               BT3 = complex<double>(this->re_BT3(), this->im_BT3()), BT6 = complex<double>(this->re_BT6(), this->im_BT6()),
                               BT15 = complex<double>(this->re_BT15(), this->im_BT15()), DT3 = complex<double>(this->re_DT3(), this->im_DT3());
 
-        const auto & H3bar  = this->H3bar();
-        const auto & H6bar  = this->H6bar();
-        const auto & H15bar = this->H15bar();
+        const auto H3bar  = this->H3bar();
+        const auto H6bar  = this->H6bar();
+        const auto H15bar = this->H15bar();
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -239,9 +239,9 @@ namespace eos
                               BP3 = complex<double>(this->re_BP3(), this->im_BP3()), BP6 = complex<double>(this->re_BP6(), this->im_BP6()),
                               BP15 = complex<double>(this->re_BP15(), this->im_BP15()), DP3 = complex<double>(this->re_DP3(), this->im_DP3());
 
-        const auto & H3tilde  = this->H3tilde();
-        const auto & H6tilde  = this->H6tilde();
-        const auto & H15tilde = this->H15tilde();
+        const auto H3tilde  = this->H3tilde();
+        const auto H6tilde  = this->H6tilde();
+        const auto H15tilde = this->H15tilde();
 
         for (unsigned i = 0; i < 3; i++)
         {
