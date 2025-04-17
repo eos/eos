@@ -203,8 +203,8 @@ namespace eos
             }
         }
 
-        const auto & Lambda_u = this->Lambda_u();
-        const auto & Lambda_c = this->Lambda_c();
+        const auto Lambda_u = this->Lambda_u();
+        const auto Lambda_c = this->Lambda_c();
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -286,8 +286,8 @@ namespace eos
             }
         }
 
-        const auto & Lambda_u = this->Lambda_u();
-        const auto & Lambda_c = this->Lambda_c();
+        const auto Lambda_u = this->Lambda_u();
+        const auto Lambda_c = this->Lambda_c();
 
         for (unsigned i = 0; i < 3; i++)
         {

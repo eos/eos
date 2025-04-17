@@ -147,7 +147,7 @@ namespace eos
                               TPA = complex<double>(this->re_TPA(), this->im_TPA()), TP = complex<double>(this->re_TP(), this->im_TP()),
                               TSS = complex<double>(this->re_TSS(), this->im_TSS());
 
-        const auto & Hbar = this->Hbar();
+        const auto Hbar = this->Hbar();
 
         for (unsigned i = 0; i < 3; i++)
         {
@@ -186,8 +186,8 @@ namespace eos
                               PES = complex<double>(this->re_PES(), this->im_PES());
 
 
-        const auto & H1tilde = this->H1tilde();
-        const auto & H3tilde = this->H3tilde();
+        const auto H1tilde = this->H1tilde();
+        const auto H3tilde = this->H3tilde();
 
         for (unsigned i = 0; i < 3; i++)
         {
