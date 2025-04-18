@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -134,7 +134,11 @@ namespace eos
 
     class SpecifiedOption
     {
+        private:
+            SpecifiedOption & operator= (const SpecifiedOption &);
+
         protected:
+            OptionSpecification _specification;
             std::string _value;
 
         public:
@@ -143,6 +147,14 @@ namespace eos
             ~SpecifiedOption();
 
             const std::string & value() const;
+    };
+
+    class RestrictedOption :
+        public SpecifiedOption
+    {
+        public:
+            RestrictedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            ~RestrictedOption();
     };
 
     class BooleanOption :
@@ -174,7 +186,7 @@ namespace eos
     };
 
     class LeptonFlavorOption :
-        public SpecifiedOption
+        public RestrictedOption
     {
         public:
             LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "l");
@@ -185,7 +197,7 @@ namespace eos
     };
 
     class QuarkFlavorOption :
-        public SpecifiedOption
+        public RestrictedOption
     {
         public:
             QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "q");
@@ -196,7 +208,7 @@ namespace eos
     };
 
     class LightMesonOption :
-        public SpecifiedOption
+        public RestrictedOption
     {
         public:
             LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);

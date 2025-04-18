@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2011-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -316,3 +316,188 @@ class SwitchOptionTest :
             }
         }
 } switch_option_test;
+
+class SpecifiedOptionTest :
+    public TestCase
+{
+    public:
+        SpecifiedOptionTest() :
+            TestCase("specified_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // specify permitted options
+            std::vector<OptionSpecification> specifications
+            {
+                { "key-with-full-specification",   { "value1", "value2", "value4" }, "value1" },
+                { "key-without-default",           { "value1", "value2", "value4" }           }
+            };
+
+            // Creation of fully specified option, with value
+            {
+                SpecifiedOption so
+                {
+                    Options{
+                        { "key-with-full-specification", "value1" }, { "unused", "foo" }
+                    },
+                    specifications,
+                    "key-with-full-specification"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value1");
+            }
+
+            // Creation of fully specified option, without value
+            {
+                SpecifiedOption so
+                {
+                    Options{
+                        { "unused", "foo" }
+                    },
+                    specifications,
+                    "key-with-full-specification"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value1");
+            }
+
+            // Creation of specified option without default value, with value
+            {
+                SpecifiedOption so
+                {
+                    Options{
+                        { "key-without-default", "value4" }, { "unused", "foo" }
+                    },
+                    specifications,
+                    "key-without-default"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value4");
+            }
+            // Creation of specified option without default value, without value
+            {
+                auto test = [specifications] ()
+                {
+                    SpecifiedOption so
+                    {
+                        Options{
+                            { "unused", "foo" }
+                        },
+                        specifications,
+                        "key-without-default"
+                    };
+                };
+                TEST_CHECK_THROWS(UnspecifiedOptionError, test());
+            }
+        }
+} specified_option_test;
+
+class RestrictedOptionTest :
+    public TestCase
+{
+    public:
+        RestrictedOptionTest() :
+            TestCase("restricted_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // specify permitted options
+            std::vector<OptionSpecification> specifications
+            {
+                { "key-with-default",              { "value1", "value2", "value4" }, "value1" },
+                { "key-without-value",             { "foo", "bar" },                 "foo"    },
+                { "key-without-default",           { "value1", "value2", "value4" }           },
+                { "key-without-value-and-default", { "foo", "bar" }                           },
+                { "key-with-invalid-default",      { "value1", "value2", "value4" }, "value3" },
+                { "key-with-invalid-value",        { "value1", "value2", "value4" }, "value1" },
+            };
+
+            // Creation of option with valid default value, with value = default value
+            {
+                RestrictedOption so
+                {
+                    Options{
+                        { "key-with-default", "value1" }, { "unused", "foo" }
+                    },
+                    specifications,
+                    "key-with-default"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value1");
+            }
+
+            // Creation of option with valid default value, with unspecified value
+            {
+                RestrictedOption so
+                {
+                    Options{
+                        { "unused", "foo" }
+                    },
+                    specifications,
+                    "key-without-value"
+                };
+                TEST_CHECK_EQUAL(so.value(), "foo");
+            }
+
+            // Creation of option without default valuee, with valid value
+            {
+                RestrictedOption so
+                {
+                    Options{
+                        { "key-without-default", "value4" }, { "unused", "foo" }
+                    },
+                    specifications,
+                    "key-without-default"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value4");
+            }
+
+            // Creation of option without default value, with unspecified valu
+            {
+                auto test = [specifications] ()
+                {
+                    RestrictedOption so
+                    {
+                        Options{
+                            { "unused", "foo" }
+                        },
+                        specifications,
+                        "key-without-value-and-default"
+                    };
+                };
+                TEST_CHECK_THROWS(UnspecifiedOptionError, test());
+            }
+
+            // Creation with invalid value
+            {
+                auto test = [specifications] ()
+                {
+                    RestrictedOption so
+                    {
+                        Options{
+                            { "unused", "foo" }
+                        },
+                        specifications,
+                        "key-with-invalid-default"
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+
+            // Creation with invalid value
+            {
+                auto test = [specifications] ()
+                {
+                    RestrictedOption so
+                    {
+                        Options{
+                            { "key-with-invalid-value", "value3"}, { "unused", "foo" }
+                        },
+                        specifications,
+                        "key-with-invalid-value"
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+        }
+} restricted_option_test;

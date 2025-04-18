@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -207,7 +207,8 @@ namespace eos
         return result;
     }
 
-    SpecifiedOption::SpecifiedOption(const Options & options, const OptionSpecification & specification)
+    SpecifiedOption::SpecifiedOption(const Options & options, const OptionSpecification & specification) :
+        _specification(specification)
     {
         if (! options.has(specification.key))
         {
@@ -219,11 +220,6 @@ namespace eos
         else
         {
             _value = options[specification.key];
-
-            if (std::find(specification.allowed_values.cbegin(), specification.allowed_values.cend(), _value) == specification.allowed_values.cend())
-            {
-                throw InvalidOptionValueError(specification.key, _value, join(specification.allowed_values.cbegin(), specification.allowed_values.cend()));
-            }
         }
     }
 
@@ -241,11 +237,25 @@ namespace eos
 
     SpecifiedOption::~SpecifiedOption() = default;
 
+    SpecifiedOption &
+    SpecifiedOption::operator= (const SpecifiedOption & other) = default;
+
     const std::string &
     SpecifiedOption::value() const
     {
         return _value;
     }
+
+    RestrictedOption::RestrictedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key)
+    {
+        if (std::find(_specification.allowed_values.cbegin(), _specification.allowed_values.cend(), _value) == _specification.allowed_values.cend())
+        {
+            throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+        }
+    }
+
+    RestrictedOption::~RestrictedOption() = default;
 
     BooleanOption::BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
         SpecifiedOption(options, specifications, key),
@@ -288,7 +298,7 @@ namespace eos
     }
 
     LeptonFlavorOption::LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
-        SpecifiedOption(options, specifications, key)
+        RestrictedOption(options, specifications, key)
     {
     }
 
@@ -318,7 +328,7 @@ namespace eos
     }
 
     QuarkFlavorOption::QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
-        SpecifiedOption(options, specifications, key)
+        RestrictedOption(options, specifications, key)
     {
     }
 
@@ -351,7 +361,7 @@ namespace eos
     }
 
     LightMesonOption::LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
-        SpecifiedOption(options, specifications, key)
+        RestrictedOption(options, specifications, key)
     {
     }
 
