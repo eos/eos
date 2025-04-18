@@ -128,6 +128,10 @@ namespace eos
      */
     struct OptionSpecification
     {
+        OptionSpecification(const OptionSpecification &);
+        OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in);
+        OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in, const std::string & default_value_in);
+
         qnp::OptionKey key;
         std::vector<std::string> allowed_values;
         std::string default_value;
@@ -135,15 +139,28 @@ namespace eos
 
     class SpecifiedOption
     {
+        private:
+            SpecifiedOption & operator= (const SpecifiedOption &);
+
         protected:
+            OptionSpecification _specification;
             std::string _value;
 
         public:
+            SpecifiedOption(const SpecifiedOption &);
             SpecifiedOption(const Options & options, const OptionSpecification & specification);
             SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~SpecifiedOption();
 
             const std::string & value() const;
+    };
+
+    class RestrictedOption :
+        public SpecifiedOption
+    {
+        public:
+            RestrictedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
+            ~RestrictedOption();
     };
 
     class BooleanOption :
@@ -189,7 +206,7 @@ namespace eos
     };
 
     class LeptonFlavorOption :
-        public SpecifiedOption
+        public RestrictedOption
     {
         public:
             LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "l"_ok);
@@ -200,7 +217,7 @@ namespace eos
     };
 
     class QuarkFlavorOption :
-        public SpecifiedOption
+        public RestrictedOption
     {
         public:
             QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "q"_ok);
@@ -211,7 +228,7 @@ namespace eos
     };
 
     class LightMesonOption :
-        public SpecifiedOption
+        public RestrictedOption
     {
         public:
             LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
