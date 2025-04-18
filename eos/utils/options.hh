@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -203,6 +204,34 @@ namespace eos
             ~LightMesonOption();
 
             LightMeson value() const;
+            const std::string & str() const;
+    };
+
+    class IsospinOption :
+        public SpecifiedOption
+    {
+        private:
+            Isospin _isospin_value;
+
+        public:
+            IsospinOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            ~IsospinOption();
+
+            Isospin value() const;
+            const std::string & str() const;
+    };
+
+    class PartialWaveOption :
+        public SpecifiedOption
+    {
+        private:
+            PartialWave _partial_wave_value;
+
+        public:
+            PartialWaveOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            ~PartialWaveOption();
+
+            PartialWave value() const;
             const std::string & str() const;
     };
 }

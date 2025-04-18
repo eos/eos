@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010-2022 Danny van Dyk
  * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -152,5 +153,18 @@ class BToPiPiFvDV2018FormFactorsTest :
             TEST_CHECK_NEARLY_EQUAL(imag(ff->f_perp(0.60, 19.0, +0.5)), 0.001048, eps);
             TEST_CHECK_NEARLY_EQUAL(real(ff->f_perp(0.05, 16.0, -0.5)), 0.0,      eps);
             TEST_CHECK_NEARLY_EQUAL(imag(ff->f_perp(0.05, 16.0, -0.5)), 0.001215, eps);
+
+            // partial waves
+            auto time_pw = ff->f_time(0.60, 19.0);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_time(0.60, 19.0, 1.0)) - imag(time_pw[0] + std::sqrt(3.0) * time_pw[1] + std::sqrt(5.0) * time_pw[2] + std::sqrt(7.0) * time_pw[3]), 0.0, eps);
+
+            auto long_pw = ff->f_long(0.60, 19.0);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_long(0.60, 19.0, 1.0)) - imag(long_pw[0] + std::sqrt(3.0) * long_pw[1] + std::sqrt(5.0) * long_pw[2] + std::sqrt(7.0) * long_pw[3]), 0.0, eps);
+
+            auto perp_pw = ff->f_perp(0.60, 19.0);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_perp(0.60, 19.0, 0.0)) - imag(std::sqrt(3.0) * perp_pw[1] - 1.5 * std::sqrt(7.0) * perp_pw[3]), 0.0, eps);
+
+            auto para_pw = ff->f_para(0.60, 19.0);
+            TEST_CHECK_NEARLY_EQUAL(imag(ff->f_para(0.60, 19.0, 0.0)) - imag(std::sqrt(3.0) * para_pw[1] - 1.5 * std::sqrt(7.0) * para_pw[3]), 0.0, eps);
         }
 } b_to_pi_pi_fvdv2018_form_factors_test;

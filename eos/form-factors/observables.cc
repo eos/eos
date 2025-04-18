@@ -31,6 +31,7 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-fvdv2018.hh>
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-ksvd2025.hh>
@@ -1924,17 +1925,53 @@ namespace eos
                 make_form_factor_adapter("B->pipi::Im{F_time}(q2,k2,z)", R"(\mathrm{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::im_f_time, std::make_tuple("q2", "k2", "z")),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_perp}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
-                        &FormFactors<PToPP>::f_perp_im_res_qhat2, std::make_tuple("q2", "k2")),
+                make_observable("B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A", R"(\mathrm{Res}\,\mathrm{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &AnalyticFormFactorBToPiPiFvDV2018::f_perp_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_para}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
-                        &FormFactors<PToPP>::f_para_im_res_qhat2, std::make_tuple("q2", "k2")),
+                make_observable("B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A", R"(\mathrm{Res}\,\mathrm{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &AnalyticFormFactorBToPiPiFvDV2018::f_para_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_long}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
-                        &FormFactors<PToPP>::f_long_im_res_qhat2, std::make_tuple("q2", "k2")),
+                make_observable("B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A", R"(\mathrm{Res}\,\mathrm{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &AnalyticFormFactorBToPiPiFvDV2018::f_long_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_time}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
-                        &FormFactors<PToPP>::f_time_im_res_qhat2, std::make_tuple("q2", "k2")),
+                make_observable("B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A", R"(\mathrm{Res}\,\mathrm{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &AnalyticFormFactorBToPiPiFvDV2018::f_time_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
+
+                make_observable("B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018D", R"(\mathrm{Res}\,\mathrm{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &FvDV2018FormFactors<BToPiPi>::f_perp_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
+
+                make_observable("B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018D", R"(\mathrm{Res}\,\mathrm{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &FvDV2018FormFactors<BToPiPi>::f_para_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
+
+                make_observable("B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018D", R"(\mathrm{Res}\,\mathrm{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &FvDV2018FormFactors<BToPiPi>::f_long_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
+
+                make_observable("B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018D", R"(\mathrm{Res}\,\mathrm{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
+                        Unit::None(),
+                        &FvDV2018FormFactors<BToPiPi>::f_time_im_res_qhat2,
+                        std::make_tuple("q2", "k2")
+                        ),
             }
         );
 
