@@ -19,7 +19,6 @@
  */
 
 #include <eos/observable-impl.hh>
-#include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-3l-nu.hh>
