@@ -4247,51 +4247,51 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
-    #   # form factor parameters for D->eta' for [BSZ:2015A] parametrization
-    #   'D->eta_prime::alpha^%1%_%2%@BSZ2015' :
-    #       central:  0.
-    #       min:     -1.0
-    #       max:     +1.0
-    #       unit:     '1'
-    #       latex:
-    #         template: '$\alpha_{%2%, %1%}^{D \to \eta^\prime,\mathrm{BSZ2015}}$'
-    #         map:
-    #             "f+": "+"
-    #             "f0": "0"
-    #             "fT": "T"
-    #       matrix:
-    #         - ["f+", "f0", "fT"]
-    #         - [0, 1, 2, 3]
-    #   # form factor parameters for D_s->eta for [BSZ:2015A] parametrization
-    #   'D_s->eta::alpha^%1%_%2%@BSZ2015' :
-    #       central:  0.
-    #       min:     -1.0
-    #       max:     +1.0
-    #       unit:     '1'
-    #       latex:
-    #         template: '$\alpha_{%2%, %1%}^{D_s \to \eta,\mathrm{BSZ2015}}$'
-    #         map:
-    #             "f+": "+"
-    #             "f0": "0"
-    #             "fT": "T"
-    #       matrix:
-    #         - ["f+", "f0", "fT"]
-    #         - [0, 1, 2, 3]
-    #   # form factor parameters for D_s->eta' for [BSZ:2015A] parametrization
-    #   'D_s->eta_prime::alpha^%1%_%2%@BSZ2015' :
-    #       central:  0.
-    #       min:     -1.0
-    #       max:     +1.0
-    #       unit:     '1'
-    #       latex:
-    #         template: '$\alpha_{%2%, %1%}^{D_s \to \eta^\prime,\mathrm{BSZ2015}}$'
-    #         map:
-    #             "f+": "+"
-    #             "f0": "0"
-    #             "fT": "T"
-    #       matrix:
-    #         - ["f+", "f0", "fT"]
-    #         - [0, 1, 2, 3]
+      # form factor parameters for D->eta' for [BSZ:2015A] parametrization
+      'D->eta_prime::alpha^%1%_%2%@BSZ2015' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\alpha_{%2%, %1%}^{D \to \eta^\prime,\mathrm{BSZ2015}}$'
+            map:
+                "f+": "+"
+                "f0": "0"
+                "fT": "T"
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3]
+      # form factor parameters for D_s->eta for [BSZ:2015A] parametrization
+      'D_s->eta::alpha^%1%_%2%@BSZ2015' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\alpha_{%2%, %1%}^{D_s \to \eta,\mathrm{BSZ2015}}$'
+            map:
+                "f+": "+"
+                "f0": "0"
+                "fT": "T"
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3]
+      # form factor parameters for D_s->eta' for [BSZ:2015A] parametrization
+      'D_s->eta_prime::alpha^%1%_%2%@BSZ2015' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:
+            template: '$\alpha_{%2%, %1%}^{D_s \to \eta^\prime,\mathrm{BSZ2015}}$'
+            map:
+                "f+": "+"
+                "f0": "0"
+                "fT": "T"
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3]
   # }}}
 
   # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
