@@ -378,7 +378,7 @@ namespace eos
     {
         const auto z        = this->z(q2);
         const auto chi_1m   = 3.446e-3;
-        const auto chi_0p   = 6e-5;
+        const auto chi_0p   = 2.07e-4;
         const auto phitilde = this->phitilde_z(z, chi_0p);
 
         const auto Pi_z = this->resonance_product_z(z);
@@ -440,7 +440,7 @@ namespace eos
         const complex<double> w = this->w_z(z);
 
         const auto chi_1m = 3.446e-3;
-        const auto chi_0p = 6e-5;
+        const auto chi_0p = 2.07e-4;
 
         const auto resonance_product = this->resonance_product_z(z);
 
@@ -470,7 +470,7 @@ namespace eos
     double KSvD2025FormFactors<VacuumToKPi>::b0_f0() const
     {
         const auto chi_1m = 3.446e-3;
-        const auto chi_0p = 6e-5;
+        const auto chi_0p = 2.07e-4;
         return _b0_fz(chi_1m, chi_0p);
     }
 
