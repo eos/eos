@@ -49,6 +49,7 @@ libeosutils_la_SOURCES = \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
 	qualified-name.cc qualified-name.hh \
+	qualified-name-parts.hh \
 	quantum-numbers.cc quantum-numbers.hh \
 	reference-name.cc reference-name.hh \
 	stringify.hh \
