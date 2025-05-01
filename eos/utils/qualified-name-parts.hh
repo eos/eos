@@ -92,6 +92,16 @@ namespace eos
                 const std::string & str() const { return _value; };
         };
     }
+
+    inline qnp::OptionKey operator ""_ok(const char * str, size_t len)
+    {
+        return qnp::OptionKey(std::string(str, len));
+    }
+
+    inline qnp::OptionValue operator ""_ov(const char * str, size_t len)
+    {
+        return qnp::OptionValue(std::string(str, len));
+    }
 }
 
 #endif
