@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016, 2018 Danny van Dyk
- * Copyright (c) 2018 Keri Vos
+ * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2018      Keri Vos
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -699,7 +699,6 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options
     {
-        { "l", { "e", "mu", "tau" }, "mu" }
     };
 
     AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :
