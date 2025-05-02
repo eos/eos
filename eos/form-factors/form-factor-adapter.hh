@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013-2024 Danny van Dyk
+ * Copyright (c) 2013-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -75,7 +75,7 @@ namespace eos
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors.get()))
             {
                 if (! _form_factors)
-                    throw NoSuchFormFactorError(process.str(), options["form-factors"]);
+                    throw NoSuchFormFactorError(process.str(), options["form-factors"_ok]);
 
                 uses(*_form_factors);
             }

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -60,10 +60,10 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            form_factors(FormFactorFactory<PToPP>::create("B->pipi::" + o.get("form-factors", "BFvD2016"), p, o)),
-            opt_l(o, options, "l"),
-            opt_q(o, options, "q"),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            form_factors(FormFactorFactory<PToPP>::create("B->pipi::" + o.get("form-factors"_ok, "BFvD2016"), p, o)),
+            opt_l(o, options, "l"_ok),
+            opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             m_pi(p["mass::pi^" + std::string(opt_q.value() == QuarkFlavor::down ? "+" : "0")], u),
@@ -185,8 +185,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToPP>::option_specification(),
-        { "l", { "e", "mu" }, "mu" },
-        { "q", { "d", "u" }, "d" }
+        { "l"_ok, { "e", "mu" }, "mu" },
+        { "q"_ok, { "d", "u" }, "d" }
     };
 
     BToPiPiLeptonNeutrino::BToPiPiLeptonNeutrino(const Parameters & parameters, const Options & options) :

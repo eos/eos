@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2015 Danny van Dyk
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
+ * Copyright (c) 2011-2025 Danny van Dyk
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2014      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -85,9 +85,9 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model", "WET");
-                    oo.declare("q", "s");
-                    oo.declare("l", "mu");
+                    oo.declare("model"_ok, "WET");
+                    oo.declare("q"_ok, "s");
+                    oo.declare("l"_ok, "mu");
 
                     BToDilepton d(p, oo);
 
@@ -100,9 +100,9 @@ class BToDileptonTest :
                 // B_s -> e^+ e^-
                 {
                     Options oo;
-                    oo.declare("model", "WET");
-                    oo.declare("q", "s");
-                    oo.declare("l", "e");
+                    oo.declare("model"_ok, "WET");
+                    oo.declare("q"_ok, "s");
+                    oo.declare("l"_ok, "e");
 
                     BToDilepton d(p, oo);
 
@@ -158,10 +158,10 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model", "WET");
-                    oo.declare("scan-mode", "cartesian");
-                    oo.declare("q", "s");
-                    oo.declare("l", "mu");
+                    oo.declare("model"_ok, "WET");
+                    oo.declare("scan-mode"_ok, "cartesian");
+                    oo.declare("q"_ok, "s");
+                    oo.declare("l"_ok, "mu");
 
                     BToDilepton d(p, oo);
 

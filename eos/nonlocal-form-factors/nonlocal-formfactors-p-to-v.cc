@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2019 Danny van Dyk
+ * Copyright (c) 2017-2025 Danny van Dyk
  * Copyright (c) 2019 Nico Gubernari
  * Copyright (c) 2021 Méril Reboud
  *
@@ -306,8 +306,8 @@ namespace eos
 
             public:
                 GvDV2020(const Parameters & p, const Options & o) :
-                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
-                    opt_q(o, "q", { "u", "d", "s" }),
+                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors"_ok, "BSZ2015"), p)),
+                    opt_q(o, "q"_ok, { "u", "d", "s" }),
 
                     re_alpha_0_perp(p[stringify(Process_::label) + "ccbar::Re{alpha_0^perp}@GvDV2020"], *this),
                     im_alpha_0_perp(p[stringify(Process_::label) + "ccbar::Im{alpha_0^perp}@GvDV2020"], *this),
@@ -958,8 +958,8 @@ namespace eos
 
             public:
                 GRvDV2022order5(const Parameters & p, const Options & o) :
-                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
-                    opt_q(o, "q", { "u", "d", "s" }),
+                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors"_ok, "BSZ2015"), p)),
+                    opt_q(o, "q"_ok, { "u", "d", "s" }),
 
                     re_at_m7_perp(p[stringify(Process_::label) + "ccbar::Re_Hhat_at_m7_perp@GRvDV2022"], *this),
                     im_at_m7_perp(p[stringify(Process_::label) + "ccbar::Im_Hhat_at_m7_perp@GRvDV2022"], *this),
@@ -1677,7 +1677,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_formfactor(o, "nonlocal-formfactor", qnp::Name("GvDV2020")),
+            opt_formfactor(o, "nonlocal-formfactor"_ok, qnp::Name("GvDV2020")),
             nff(NonlocalFormFactor<PToV>::make(QualifiedName(qnp::Prefix(Process_::label), opt_formfactor.value()), p, o))
         {
             u.uses(*nff);

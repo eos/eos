@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,11 +39,11 @@ namespace eos
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q", "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
-        q(o, options, "q"),
-        opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
+        q(o, options, "q"_ok),
+        opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
         nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B->K^*::" + opt_nonlocal_formfactor.value(), p, o))
     {
         Context ctx("When constructing B->K^*ll GVdV2020 amplitudes");
@@ -51,8 +52,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "q", { "d", "u" },  "d" },
-        { "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020" }
+        { "q"_ok, { "d", "u" },  "d" },
+        { "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020" }
     };
 
     BToKstarDilepton::FormFactorCorrections

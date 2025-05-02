@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et tw=120 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020 Danny van Dyk
- * Copyright (c) 2020 Nico Gubernari
- * Copyright (c) 2020 Christoph Bobeth
- * Copyright (c) 2025 Maximilian Hoverath
+ * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020      Nico Gubernari
+ * Copyright (c) 2020      Christoph Bobeth
+ * Copyright (c) 2025      Maximilian Hoverath
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -90,10 +90,10 @@ namespace eos
                 chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
                 chi_T_1p(UsedParameter(p["b->c::chiOPE[1^+_T5]"], *this)),
                 t_0(UsedParameter(p["B->D^*::t_0@BGL1997"], *this)),
-                n_bound_states_1m(o, options, "n-bound-states-1m"),
-                n_bound_states_1p(o, options, "n-bound-states-1p"),
-                n_bound_states_0m(o, options, "n-bound-states-0m"),
-                n_bound_states_0p(o, options, "n-bound-states-0p")
+                n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
+                n_bound_states_1p(o, options, "n-bound-states-1p"_ok),
+                n_bound_states_0m(o, options, "n-bound-states-0m"_ok),
+                n_bound_states_0p(o, options, "n-bound-states-0p"_ok)
             {
             }
 
@@ -207,8 +207,8 @@ namespace eos
                 chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
                 chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
                 t_0(UsedParameter(p["B->D::t_0@BGL1997"], *this)),
-                n_bound_states_1m(o, options, "n-bound-states-1m"),
-                n_bound_states_0p(o, options, "n-bound-states-0p")
+                n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
+                n_bound_states_0p(o, options, "n-bound-states-0p"_ok)
             {
             }
 

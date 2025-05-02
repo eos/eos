@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2016, 2019, 2020 Danny van Dyk
- * Copyright (c) 2017 Thomas Blake
+ * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2017      Thomas Blake
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -328,18 +328,18 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["WET::G_Fermi"], u),
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda(p["mass::Lambda"], u),
             alpha(p["Lambda::alpha"], u),
-            polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
+            polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation"_ok,"unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
-            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o))
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"), p, o))
         {
             Context ctx("When constructing L_b->Lll observables");
 
@@ -517,7 +517,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<LambdaBToLambdaDilepton<LargeRecoil>>::options
     {
-        { "l", {"e", "mu", "tau"}, "mu" }
+        { "l"_ok, {"e", "mu", "tau"}, "mu" }
     };
 
     /* q^2-differential observables */
@@ -869,22 +869,22 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, options, "l"),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            opt_l(o, options, "l"_ok),
             hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["WET::G_Fermi"], u),
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda(p["mass::Lambda"], u),
             alpha(p["Lambda::alpha"], u),
-            polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
+            polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation"_ok,"unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
             r_perp_0(p["Lambda_b->Lambdall::r_perp_0@MvD2016"], u),
             r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
             r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u),
-            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o))
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "DM2016"), p, o))
         {
             u.uses(*form_factors);
             u.uses(*model);
@@ -987,7 +987,7 @@ namespace eos
     Implementation<LambdaBToLambdaDilepton<LowRecoil>>::options
     {
         Model::option_specification(),
-        { "l", {"e", "mu", "tau"}, "mu" }
+        { "l"_ok, {"e", "mu", "tau"}, "mu" }
     };
 
     /* q^2-differential observables */

@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -111,10 +112,10 @@ class LambdaBToLambda1520DileptonNaiveTest :
 
             Options oo
             {
-                { "model", "WET" },
-                { "tag", "Naive" },
-                { "form-factors", "ABR2022" },
-                { "l", "mu" },
+                { "model"_ok, "WET" },
+                { "tag"_ok, "Naive" },
+                { "form-factors"_ok, "ABR2022" },
+                { "l"_ok, "mu" },
             };
 
             static const double eps = 1e-5;

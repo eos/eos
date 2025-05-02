@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -48,13 +49,13 @@ class BsToPhiDileptonBFS2004NaiveTest :
 
             Options oo
             {
-                { "model", "WET" },
-                { "scan-mode", "cartesian" },
-                { "tag", "BFS2004" },
-                { "qcdf-integrals", "mixed" },
-                { "form-factors", "BSZ2015" },
-                { "l", "mu" },
-                { "q", "s" }
+                { "model"_ok, "WET" },
+                { "scan-mode"_ok, "cartesian" },
+                { "tag"_ok, "BFS2004" },
+                { "qcdf-integrals"_ok, "mixed" },
+                { "form-factors"_ok, "BSZ2015" },
+                { "l"_ok, "mu" },
+                { "q"_ok, "s" }
             };
 
             static const double eps = 1e-3;

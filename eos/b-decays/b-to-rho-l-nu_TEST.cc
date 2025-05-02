@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,11 +63,11 @@ class BToRhoLeptonNeutrinoTest :
 
                 Options ooplus
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BSZ2015" },
-                    { "V",            "rho"     },
-                    { "q",            "d"       },
-                    { "l",            "e"       },
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BSZ2015" },
+                    { "V"_ok,            "rho"     },
+                    { "q"_ok,            "d"       },
+                    { "l"_ok,            "e"       },
                 };
 
                 BToVectorLeptonNeutrino dplus(p, ooplus);
@@ -82,11 +83,11 @@ class BToRhoLeptonNeutrinoTest :
 
                 Options oozero
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BSZ2015" },
-                    { "V",            "rho"     },
-                    { "q",            "u"       },
-                    { "l",            "e"       },
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BSZ2015" },
+                    { "V"_ok,            "rho"     },
+                    { "q"_ok,            "u"       },
+                    { "l"_ok,            "e"       },
                 };
 
                 BToVectorLeptonNeutrino dzero(p, oozero);

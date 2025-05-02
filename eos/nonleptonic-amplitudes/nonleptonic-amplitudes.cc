@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -113,7 +114,7 @@ namespace eos
     OptionSpecification
     NonleptonicAmplitudeFactory<PToPP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result{ "representation", {}, "" };
+        OptionSpecification result{ "representation"_ok, {}, "" };
         for (const auto & ff : NonleptonicAmplitudeFactory<PToPP>::amplitudes)
         {
             if (process == std::get<0>(ff).prefix_part())
@@ -135,7 +136,7 @@ namespace eos
         }
 
         OptionSpecification result{
-            "representation",
+            "representation"_ok,
             { allowed_values.cbegin(), allowed_values.cend() },
             ""
         };

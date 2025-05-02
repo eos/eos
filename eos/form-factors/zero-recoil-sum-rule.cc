@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2017 Danny van Dyk
+ * Copyright (c) 2015-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,13 +62,13 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             mu(p["Lambda_b->Lambda_c::mu@ZRSR"], u),
             wM(p["Lambda_b->Lambda_c::wM@ZRSR"], u),
             mu2_pi(p["Lambda_b->Lambda_b::mu_pi^2@1GeV"], u),
             rho3_D(p["Lambda_b->Lambda_b::rho_D^3@1GeV"], u),
-            ff_2595(FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)@" + o.get("form-factors", "BBGIOvD2017"), p)),
-            ff_2625(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)@" + o.get("form-factors", "BBGIOvD2017"), p)),
+            ff_2595(FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)@" + o.get("form-factors"_ok, "BBGIOvD2017"), p)),
+            ff_2625(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)@" + o.get("form-factors"_ok, "BBGIOvD2017"), p)),
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda_c_2595(p["mass::Lambda_c(2595)"], u),
             m_Lambda_c_2625(p["mass::Lambda_c(2625)"], u)

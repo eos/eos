@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,20 +31,20 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Options::OptionIteratorTag>
     {
-        using UnderlyingIterator = std::map<std::string, std::string>::const_iterator;
+        using UnderlyingIterator = std::map<qnp::OptionKey, std::string>::const_iterator;
     };
-    template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const std::string, std::string>>;
+    template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
 
     template <>
     struct Implementation<Options>
     {
-        std::map<std::string, std::string> options;
+        std::map<qnp::OptionKey, std::string> options;
 
         Implementation()
         {
         }
 
-        Implementation(const std::initializer_list<std::pair<std::string, std::string>> & _options)
+        Implementation(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & _options)
         {
             for (const auto & _option : _options)
             {
@@ -58,7 +58,7 @@ namespace eos
     {
     }
 
-    Options::Options(const std::initializer_list<std::pair<std::string, std::string>> & options) :
+    Options::Options(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & options) :
         PrivateImplementationPattern<Options>(new Implementation<Options>(options))
     {
     }
@@ -89,7 +89,7 @@ namespace eos
     }
 
     const std::string &
-    Options::operator[] (const std::string & key) const
+    Options::operator[] (const qnp::OptionKey & key) const
     {
         auto i(_imp->options.find(key));
         if (_imp->options.end() == i)
@@ -99,13 +99,13 @@ namespace eos
     }
 
     bool
-    Options::has(const std::string & key) const
+    Options::has(const qnp::OptionKey & key) const
     {
         return _imp->options.end() != _imp->options.find(key);
     }
 
     void
-    Options::declare(const std::string & key, const std::string & value)
+    Options::declare(const qnp::OptionKey & key, const std::string & value)
     {
         auto i(_imp->options.find(key));
         if (_imp->options.end() != i)
@@ -119,7 +119,7 @@ namespace eos
     }
 
     std::string
-    Options::get(const std::string & key, const std::string & default_value) const
+    Options::get(const qnp::OptionKey & key, const std::string & default_value) const
     {
         auto i(_imp->options.find(key));
 
@@ -138,13 +138,13 @@ namespace eos
 
         if (i != i_end)
         {
-            result += i->first + '=' + i->second;
+            result += i->first.str() + '=' + i->second;
             ++i;
         }
 
         for ( ; i != i_end ; ++i)
         {
-            result += ',' + i->first + '=' + i->second;
+            result += ',' + i->first.str() + '=' + i->second;
         }
 
         return result;
@@ -168,18 +168,18 @@ namespace eos
         return _imp->options.empty();
     }
 
-    UnknownOptionError::UnknownOptionError(const std::string & key) throw () :
-        Exception("Unknown option: '" + key + "'")
+    UnknownOptionError::UnknownOptionError(const qnp::OptionKey & key) throw () :
+        Exception("Unknown option: '" + key.str() + "'")
     {
     }
 
-    InvalidOptionValueError::InvalidOptionValueError(const std::string & key, const std::string & value, const std::string & allowed) throw () :
-        Exception("Invalid value '" + value + "' for option: '" + key + "'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
+    InvalidOptionValueError::InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed) throw () :
+        Exception("Invalid value '" + value + "' for option: '" + key.str() + "'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
     {
     }
 
-    UnspecifiedOptionError::UnspecifiedOptionError(const std::string & key, const std::string & allowed) throw () :
-        Exception("Mandatory option '" + key + "' not specified'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
+    UnspecifiedOptionError::UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed) throw () :
+        Exception("Mandatory option '" + key.str() + "' not specified'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
     {
     }
 
@@ -227,14 +227,14 @@ namespace eos
         }
     }
 
-    SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key)
+    SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key)
     {
         const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&] (const auto & e) -> bool {
             return e.key == key;
         });
 
         if (specifications.cend() == s)
-            throw UnspecifiedOptionError("Options key '" + key + "' is not specified in the options specifications");
+            throw UnspecifiedOptionError("Options key '" + key.str() + "' is not specified in the options specifications");
 
         *this = SpecifiedOption(options, *s);
     }
@@ -247,7 +247,7 @@ namespace eos
         return _value;
     }
 
-    BooleanOption::BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+    BooleanOption::BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key),
         boolean_value(destringify<bool>(_value))
     {
@@ -267,7 +267,7 @@ namespace eos
         return _value;
     }
 
-    FloatOption::FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+    FloatOption::FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key),
         _float_value(destringify<double>(_value))
     {
@@ -287,7 +287,7 @@ namespace eos
         return _value;
     }
 
-    LeptonFlavorOption::LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+    LeptonFlavorOption::LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key)
     {
     }
@@ -317,7 +317,7 @@ namespace eos
         return _value;
     }
 
-    QuarkFlavorOption::QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+    QuarkFlavorOption::QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key)
     {
     }
@@ -350,7 +350,7 @@ namespace eos
         return _value;
     }
 
-    LightMesonOption::LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+    LightMesonOption::LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key)
     {
     }

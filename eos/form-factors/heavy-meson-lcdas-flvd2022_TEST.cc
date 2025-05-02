@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2025 Danny van Dyk
  * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -44,7 +44,7 @@ class FLvD2022Test :
                 Parameters p = Parameters::Defaults();
                 Options o
                 {
-                    { "alpha_s", "naive" }
+                    { "alpha-s"_ok, "naive" }
                 };
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
@@ -70,7 +70,7 @@ class FLvD2022Test :
                 Parameters p = Parameters::Defaults();
                 Options o
                 {
-                    { "alpha_s", "naive" }
+                    { "alpha-s"_ok, "naive" }
                 };
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
@@ -110,7 +110,7 @@ class FLvD2022Test :
                 Kinematics k = Kinematics({ { "tau", 0.4 }, {"mu", p["B_u::mu_0@FLvD2022"]} });
                 Options o
                 {
-                    { "alpha_s", "naive" }
+                    { "alpha-s"_ok, "naive" }
                 };
 
                 auto phitilde = Observable::make("B::phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
@@ -138,7 +138,7 @@ class FLvD2022Test :
                 Kinematics k = Kinematics({ {"mu", 1.0} });
                 Options o
                 {
-                    { "alpha_s", "naive" }
+                    { "alpha-s"_ok, "naive" }
                 };
 
                 auto L0 = Observable::make("B::L0@FLvD2022", p, k, o);

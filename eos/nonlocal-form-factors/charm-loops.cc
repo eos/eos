@@ -1,11 +1,11 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Méril Reboud
- * Copyright (c) 2022 Philip Lüghausen
- * Copyright (c) 2010, 2011, 2014, 2017 Danny van Dyk
- * Copyright (c) 2010 Christoph Bobeth
- * Copyright (c) 2010, 2011 Christian Wacker
+ * Copyright (c) 2023      Méril Reboud
+ * Copyright (c) 2022      Philip Lüghausen
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010      Christoph Bobeth
+ * Copyright (c) 2010-2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1507,7 +1507,7 @@ namespace eos
                flag_ctQb = 0.0;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_contribution(o, options, "contribution"),
+            opt_contribution(o, options, "contribution"_ok),
             m_b(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
             mu(p["sb::mu"], u)
@@ -1579,7 +1579,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<CharmLoopsAdapter>::options
     {
-        { "contribution", { "0", "Qc", "Qsb", "a", "b", "c", "d", "e", "ctQc", "ctQs", "ctQb", "all" }, "all" },
+        { "contribution"_ok, { "0", "Qc", "Qsb", "a", "b", "c", "d", "e", "ctQc", "ctQs", "ctQb", "all" }, "all" },
     };
 
     const std::map<std::string, std::tuple<double, double, double, double, double, double, double, double, double>>

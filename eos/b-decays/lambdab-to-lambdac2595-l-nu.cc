@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Elena Graverini
- * Copyright (c) 2017-2024 Danny van Dyk
+ * Copyright (c) 2017      Elena Graverini
+ * Copyright (c) 2017-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -55,13 +55,13 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            form_factors(FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)::" + o.get("form-factors","HQET"), p)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)::" + o.get("form-factors"_ok,"HQET"), p)),
             parameters(p),
             m_LambdaB(p["mass::Lambda_b"], u),
             tau_LambdaB(p["life_time::Lambda_b"], u),
             m_LambdaC2595(p["mass::Lambda_c(2595)"], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
@@ -203,7 +203,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToOneHalfMinus>::option_specification(),
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e", "mu", "tau" }, "mu" }
     };
 
     LambdaBToLambdaC2595LeptonNeutrino::LambdaBToLambdaC2595LeptonNeutrino(const Parameters & parameters, const Options & options) :

@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2019 Nico Gubernari
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -67,8 +68,8 @@ class NonlocalFormFactorGvDV2020Test :
                 p["B->K^*ccbar::Im{alpha_2^long}@GvDV2020"]  = 19.0;
 
                 Options o = {
-                    { "model", "WET" },
-                    { "q", "d" }
+                    { "model"_ok, "WET" },
+                    { "q"_ok, "d" }
                 };
 
                 auto nff = NonlocalFormFactor<PToV>::make("B->K^*::GvDV2020", p, o);

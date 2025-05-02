@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023-2024 Stefan Meiser
+ * Copyright (c) 2025      Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -75,9 +76,9 @@ class BqToDstarqPSDTest :
                 p["sbcu::Im{c4}" ] = 0.0;
                 Options oo
                 {
-                    { "accuracy",     "LO+NLO" },
-                    { "q",            "d"      },
-                    { "model",        "WET"    }
+                    { "accuracy"_ok,     "LO+NLO" },
+                    { "q"_ok,            "d"      },
+                    { "model"_ok,        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
                 {
@@ -127,9 +128,9 @@ class BqToDstarqPSDTest :
                 p["sbcu::Im{c4}" ] = 0;
                 Options oo
                 {
-                    { "accuracy",     "NLP"    },
-                    { "q",            "d"      },
-                    { "model",        "WET"    }
+                    { "accuracy"_ok,     "NLP"    },
+                    { "q"_ok,            "d"      },
+                    { "model"_ok,        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
                 {
@@ -210,9 +211,9 @@ class BqToDstarqPSDTest :
 
                 Options oo
                 {
-                    { "accuracy",     "LO+NLO" },
-                    { "q",            "d"      },
-                    { "model",        "WET"    }
+                    { "accuracy"_ok,     "LO+NLO" },
+                    { "q"_ok,            "d"      },
+                    { "model"_ok,        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
 
@@ -296,9 +297,9 @@ class BqToDstarqPSDTest :
 
                 Options oo
                 {
-                    { "accuracy",     "NLP" },
-                    { "q",            "d"      },
-                    { "model",        "WET"    }
+                    { "accuracy"_ok,     "NLP" },
+                    { "q"_ok,            "d"      },
+                    { "model"_ok,        "WET"    }
                 };
                 BqToDstarqPseudoscalar d(p, oo);
 

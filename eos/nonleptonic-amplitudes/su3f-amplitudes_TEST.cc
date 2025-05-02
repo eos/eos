@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Marta Burgos
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,11 +65,11 @@ class SU3AmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o{
-                    {            "q",    "u" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^+" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "u" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^+" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> d(p, o);
@@ -80,11 +81,11 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d.amplitude(), complex<double>(1.540367927e-7, -6.478633261e-7), eps);
 
                 Options oo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^+" },
-                    {           "P2", "pi^-" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^+" },
+                    {           "P2"_ok, "pi^-" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> dd(p, oo);
@@ -96,11 +97,11 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(dd.amplitude(), complex<double>(8.168063496e-8, -3.591822664e-7), eps);
 
                 Options ooo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^0" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^0" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> ddd(p, ooo);
@@ -112,11 +113,11 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.amplitude(), complex<double>(-1.361602864e-7, 5.570348360e-7), eps);
 
                 Options oooo{
-                    {            "q",      "s" },
-                    {           "P1",    "eta" },
-                    {           "P2", "Kbar_d" },
-                    {        "model",    "CKM" },
-                    { "cp-conjugate",   "true" }
+                    {            "q"_ok,      "s" },
+                    {           "P1"_ok,    "eta" },
+                    {           "P2"_ok, "Kbar_d" },
+                    {        "model"_ok,    "CKM" },
+                    { "cp-conjugate"_ok,   "true" }
                 };
 
                 SU3FRepresentation<PToPP> dddd(p, oooo);
@@ -176,11 +177,11 @@ class SU3AmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o{
-                    {            "q",    "u" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^+" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "u" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^+" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> d(p, o);
@@ -192,11 +193,11 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d.amplitude(), complex<double>(-7.161131800e-7, -2.051808113e-7), eps);
 
                 Options oo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^+" },
-                    {           "P2", "pi^-" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^+" },
+                    {           "P2"_ok, "pi^-" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> dd(p, oo);
@@ -208,11 +209,11 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(dd.amplitude(), complex<double>(-7.101078106e-7, -2.235251727e-7), eps);
 
                 Options ooo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^0" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^0" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> ddd(p, ooo);
@@ -224,11 +225,11 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.amplitude(), complex<double>(3.026291608e-7, 6.664431346e-8), eps);
 
                 Options oooo{
-                    {            "q",      "s" },
-                    {           "P1",    "eta" },
-                    {           "P2", "Kbar_d" },
-                    {        "model",    "CKM" },
-                    { "cp-conjugate",   "true" }
+                    {            "q"_ok,      "s" },
+                    {           "P1"_ok,    "eta" },
+                    {           "P2"_ok, "Kbar_d" },
+                    {        "model"_ok,    "CKM" },
+                    { "cp-conjugate"_ok,   "true" }
                 };
 
                 SU3FRepresentation<PToPP> dddd(p, oooo);
@@ -289,11 +290,11 @@ class SU3AmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o{
-                    {            "q",    "u" },
-                    {           "P1",  "eta" },
-                    {           "P2", "pi^+" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "u" },
+                    {           "P1"_ok,  "eta" },
+                    {           "P2"_ok, "pi^+" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> d(p, o);
@@ -307,11 +308,11 @@ class SU3AmplitudesTest : public TestCase
 
 
                 Options oo{
-                    {            "q",         "d" },
-                    {           "P1", "eta_prime" },
-                    {           "P2",       "K_d" },
-                    {        "model",       "CKM" },
-                    { "cp-conjugate",      "true" }
+                    {            "q"_ok,         "d" },
+                    {           "P1"_ok, "eta_prime" },
+                    {           "P2"_ok,       "K_d" },
+                    {        "model"_ok,       "CKM" },
+                    { "cp-conjugate"_ok,      "true" }
                 };
 
                 SU3FRepresentation<PToPP> dd(p, oo);
@@ -325,11 +326,11 @@ class SU3AmplitudesTest : public TestCase
 
 
                 Options ooo{
-                    {            "q",    "d" },
-                    {           "P1",  "eta" },
-                    {           "P2",  "eta" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok,  "eta" },
+                    {           "P2"_ok,  "eta" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> ddd(p, ooo);
@@ -342,24 +343,24 @@ class SU3AmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.amplitude(), complex<double>(-7.954812813802883e-7, -2.7323931112216412e-8), eps);
 
                 Options o4{
-                    { "representation",  "SU3F" },
-                    {              "q",     "d" },
-                    {             "P1",  "pi^+" },
-                    {             "P2",  "pi^-" },
-                    {          "model",   "CKM" },
-                    {   "cp-conjugate", "false" }
+                    { "representation"_ok,  "SU3F" },
+                    {              "q"_ok,     "d" },
+                    {             "P1"_ok,  "pi^+" },
+                    {             "P2"_ok,  "pi^-" },
+                    {          "model"_ok,   "CKM" },
+                    {   "cp-conjugate"_ok, "false" }
                 };
 
                 SU3FRepresentation<PToPP> d4(p, o4);
 
 
                 Options o5{
-                    { "representation", "SU3F" },
-                    {              "q",    "d" },
-                    {             "P1", "pi^+" },
-                    {             "P2", "pi^-" },
-                    {          "model",  "CKM" },
-                    {   "cp-conjugate", "true" }
+                    { "representation"_ok, "SU3F" },
+                    {              "q"_ok,    "d" },
+                    {             "P1"_ok, "pi^+" },
+                    {             "P2"_ok, "pi^-" },
+                    {          "model"_ok,  "CKM" },
+                    {   "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> d5(p, o5);
@@ -371,24 +372,24 @@ class SU3AmplitudesTest : public TestCase
 
 
                 Options o6{
-                    { "representation",   "SU3F" },
-                    {              "q",      "d" },
-                    {             "P1",    "K_d" },
-                    {             "P2", "Kbar_d" },
-                    {          "model",    "CKM" },
-                    {   "cp-conjugate",  "false" }
+                    { "representation"_ok,   "SU3F" },
+                    {              "q"_ok,      "d" },
+                    {             "P1"_ok,    "K_d" },
+                    {             "P2"_ok, "Kbar_d" },
+                    {          "model"_ok,    "CKM" },
+                    {   "cp-conjugate"_ok,  "false" }
                 };
 
                 SU3FRepresentation<PToPP> d6(p, o6);
 
 
                 Options o7{
-                    { "representation",   "SU3F" },
-                    {              "q",      "d" },
-                    {             "P1",    "K_d" },
-                    {             "P2", "Kbar_d" },
-                    {          "model",    "CKM" },
-                    {   "cp-conjugate",   "true" }
+                    { "representation"_ok,   "SU3F" },
+                    {              "q"_ok,      "d" },
+                    {             "P1"_ok,    "K_d" },
+                    {             "P2"_ok, "Kbar_d" },
+                    {          "model"_ok,    "CKM" },
+                    {   "cp-conjugate"_ok,   "true" }
                 };
 
                 SU3FRepresentation<PToPP> d7(p, o7);
@@ -449,24 +450,24 @@ class SU3AmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o1{
-                    { "representation",  "SU3F" },
-                    {              "q",     "d" },
-                    {             "P1",  "pi^+" },
-                    {             "P2",  "pi^-" },
-                    {          "model",   "CKM" },
-                    {   "cp-conjugate", "false" }
+                    { "representation"_ok,  "SU3F" },
+                    {              "q"_ok,     "d" },
+                    {             "P1"_ok,  "pi^+" },
+                    {             "P2"_ok,  "pi^-" },
+                    {          "model"_ok,   "CKM" },
+                    {   "cp-conjugate"_ok, "false" }
                 };
 
                 SU3FRepresentation<PToPP> d1(p, o1);
 
 
                 Options o2{
-                    { "representation", "SU3F" },
-                    {              "q",    "d" },
-                    {             "P1", "pi^-" },
-                    {             "P2", "pi^+" },
-                    {          "model",  "CKM" },
-                    {   "cp-conjugate", "true" }
+                    { "representation"_ok, "SU3F" },
+                    {              "q"_ok,    "d" },
+                    {             "P1"_ok, "pi^-" },
+                    {             "P2"_ok, "pi^+" },
+                    {          "model"_ok,  "CKM" },
+                    {   "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> d2(p, o2);
@@ -478,24 +479,24 @@ class SU3AmplitudesTest : public TestCase
 
 
                 Options o3{
-                    { "representation",  "SU3F" },
-                    {              "q",     "d" },
-                    {             "P1",  "pi^0" },
-                    {             "P2",   "K_d" },
-                    {          "model",   "CKM" },
-                    {   "cp-conjugate", "false" }
+                    { "representation"_ok,  "SU3F" },
+                    {              "q"_ok,     "d" },
+                    {             "P1"_ok,  "pi^0" },
+                    {             "P2"_ok,   "K_d" },
+                    {          "model"_ok,   "CKM" },
+                    {   "cp-conjugate"_ok, "false" }
                 };
 
                 SU3FRepresentation<PToPP> d3(p, o3);
 
 
                 Options o4{
-                    { "representation", "SU3F" },
-                    {              "q",    "d" },
-                    {             "P1",  "K_d" },
-                    {             "P2", "pi^0" },
-                    {          "model",  "CKM" },
-                    {   "cp-conjugate", "true" }
+                    { "representation"_ok, "SU3F" },
+                    {              "q"_ok,    "d" },
+                    {             "P1"_ok,  "K_d" },
+                    {             "P2"_ok, "pi^0" },
+                    {          "model"_ok,  "CKM" },
+                    {   "cp-conjugate"_ok, "true" }
                 };
 
                 SU3FRepresentation<PToPP> d4(p, o4);
@@ -506,24 +507,24 @@ class SU3AmplitudesTest : public TestCase
                                         eps);
 
                 Options o5{
-                    { "representation",   "SU3F" },
-                    {              "q",      "d" },
-                    {             "P1",    "K_d" },
-                    {             "P2", "Kbar_d" },
-                    {          "model",    "CKM" },
-                    {   "cp-conjugate",  "false" }
+                    { "representation"_ok,   "SU3F" },
+                    {              "q"_ok,      "d" },
+                    {             "P1"_ok,    "K_d" },
+                    {             "P2"_ok, "Kbar_d" },
+                    {          "model"_ok,    "CKM" },
+                    {   "cp-conjugate"_ok,  "false" }
                 };
 
                 SU3FRepresentation<PToPP> d5(p, o5);
 
 
                 Options o6{
-                    { "representation",   "SU3F" },
-                    {              "q",      "d" },
-                    {             "P1", "Kbar_d" },
-                    {             "P2",    "K_d" },
-                    {          "model",    "CKM" },
-                    {   "cp-conjugate",   "true" }
+                    { "representation"_ok,   "SU3F" },
+                    {              "q"_ok,      "d" },
+                    {             "P1"_ok, "Kbar_d" },
+                    {             "P2"_ok,    "K_d" },
+                    {          "model"_ok,    "CKM" },
+                    {   "cp-conjugate"_ok,   "true" }
                 };
 
                 SU3FRepresentation<PToPP> d6(p, o6);
@@ -534,24 +535,24 @@ class SU3AmplitudesTest : public TestCase
                                         eps);
 
                 Options o7{
-                    { "representation",   "SU3F" },
-                    {              "q",      "s" },
-                    {             "P1",    "K_u" },
-                    {             "P2", "Kbar_u" },
-                    {          "model",    "CKM" },
-                    {   "cp-conjugate",  "false" }
+                    { "representation"_ok,   "SU3F" },
+                    {              "q"_ok,      "s" },
+                    {             "P1"_ok,    "K_u" },
+                    {             "P2"_ok, "Kbar_u" },
+                    {          "model"_ok,    "CKM" },
+                    {   "cp-conjugate"_ok,  "false" }
                 };
 
                 SU3FRepresentation<PToPP> d7(p, o7);
 
 
                 Options o8{
-                    { "representation",   "SU3F" },
-                    {              "q",      "s" },
-                    {             "P1", "Kbar_u" },
-                    {             "P2",    "K_u" },
-                    {          "model",    "CKM" },
-                    {   "cp-conjugate",   "true" }
+                    { "representation"_ok,   "SU3F" },
+                    {              "q"_ok,      "s" },
+                    {             "P1"_ok, "Kbar_u" },
+                    {             "P2"_ok,    "K_u" },
+                    {          "model"_ok,    "CKM" },
+                    {   "cp-conjugate"_ok,   "true" }
                 };
 
                 SU3FRepresentation<PToPP> d8(p, o8);

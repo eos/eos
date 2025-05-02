@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -52,15 +53,15 @@ namespace eos
         uncertainty_long(p["B_s->phill::A_long_uncertainty@LargeRecoil"], *this),
         uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], *this),
         uncertainty_xi_par(p["formfactors::xi_par_uncertainty"], *this),
-        opt_ccbar_resonance(o, options, "ccbar-resonance"),
-        opt_use_nlo(o, options, "nlo"),
+        opt_ccbar_resonance(o, options, "ccbar-resonance"_ok),
+        opt_use_nlo(o, options, "nlo"_ok),
         ccbar_resonance(opt_ccbar_resonance.value()),
         use_nlo(opt_use_nlo.value())
     {
         Context ctx("When constructing Bs->Phill BFS2004 amplitudes");
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
         if ("mixed" == qcdf_integrals)
         {
             qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case,
@@ -90,7 +91,7 @@ namespace eos
         }
         else
         {
-            throw InvalidOptionValueError("qcdf-integrals", qcdf_integrals, "mixed, numerical, analytical");
+            throw InvalidOptionValueError("qcdf-integrals"_ok, qcdf_integrals, "mixed, numerical, analytical");
         }
     }
 
@@ -101,8 +102,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BsToPhiDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "ccbar-resonance", { "true", "false" },  "false" },
-        { "nlo", { "true", "false" },  "true" },
+        { "ccbar-resonance"_ok, { "true", "false" },  "false" },
+        { "nlo"_ok, { "true", "false" },  "true" },
     };
 
     BsToPhiDilepton::DipoleFormFactors

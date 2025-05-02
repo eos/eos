@@ -51,7 +51,7 @@ namespace eos
     OptionSpecification
     Model::option_specification()
     {
-        OptionSpecification result{ "model", {}, "SM" };
+        OptionSpecification result{ "model"_ok, {}, "SM" };
 
         for (const auto & m : Model::models)
         {

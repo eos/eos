@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
- * Copyright (c) 2022 Stephan Kürten
+ * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022      Stephan Kürten
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -66,17 +66,17 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            form_factors(FormFactorFactory<PToGammaOffShell>::create("B->gamma^*::" + o.get("form-factors", "KKvDZ2022"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            form_factors(FormFactorFactory<PToGammaOffShell>::create("B->gamma^*::" + o.get("form-factors"_ok, "KKvDZ2022"), p, o)),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
             m_B(p["mass::B_u"], u),
             f_B(p["decay-constant::B_u"], u),
             tau_B(p["life_time::B_u"], u),
             alpha_qed(p["QED::alpha_e(m_b)"],u),
-            opt_lprime(o, options, "lprime"),
+            opt_lprime(o, options, "lprime"_ok),
             m_lprime(p["mass::" + opt_lprime.str()], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u)
         {
             Context ctx("When constructing B->l'l'lnu observable");
@@ -86,7 +86,7 @@ namespace eos
 
             if (opt_l.str() == opt_lprime.str())
             {
-                throw InvalidOptionValueError("opt_lprime", opt_l.str(), "e, mu, tau if it is not the value of l_prime");
+                throw InvalidOptionValueError("lprime"_ok, opt_l.str(), "e, mu, tau (but may not be the value of l)");
             }
         }
 
@@ -862,8 +862,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToGammaOffShell>::option_specification(),
-        { "lprime", { "e", "mu", "tau" }, "mu" },
-        { "l", { "e", "mu", "tau" }, "e" },
+        { "lprime"_ok, { "e", "mu", "tau" }, "mu" },
+        { "l"_ok, { "e", "mu", "tau" }, "e" },
     };
 
     BToThreeLeptonsNeutrino::BToThreeLeptonsNeutrino(const Parameters & parameters, const Options & options) :

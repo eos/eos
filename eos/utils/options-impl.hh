@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017, 2018 Danny van Dyk
- * Copyright (c) 2018 Ahmet Kokulu
- * Copyright (c) 2018 Christoph Bobeth
+ * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2018      Ahmet Kokulu
+ * Copyright (c) 2018      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@ namespace eos
             std::unique_ptr<qnp::Name> _value;
 
         public:
-            NameOption(const Options & options, const std::string & key) :
+            NameOption(const Options & options, const qnp::OptionKey & key) :
                 _value(nullptr)
             {
                 if (! options.has(key))
@@ -53,7 +53,7 @@ namespace eos
                 }
             }
 
-            NameOption(const Options & options, const std::string & key, const qnp::Name & default_value) :
+            NameOption(const Options & options, const qnp::OptionKey & key, const qnp::Name & default_value) :
                 _value(std::make_unique<qnp::Name>(default_value))
             {
                 if (options.has(key))
@@ -79,7 +79,7 @@ namespace eos
             std::string _value;
 
         public:
-            SwitchOption(const Options & options, const std::string & key,
+            SwitchOption(const Options & options, const qnp::OptionKey & key,
                     const std::initializer_list<std::string> & allowed_values)
             {
                 if (allowed_values.begin() == allowed_values.end())
@@ -100,7 +100,7 @@ namespace eos
                 }
             }
 
-            SwitchOption(const Options & options, const std::string & key,
+            SwitchOption(const Options & options, const qnp::OptionKey & key,
                     const std::initializer_list<std::string> & allowed_values,
                     const std::string & default_value) :
                 _value(options.get(key, default_value))

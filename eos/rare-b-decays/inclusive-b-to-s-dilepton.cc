@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * Credit goes to Christoph Bobeth for proofreading and
  * extensive checks.
@@ -82,11 +82,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, options, "l"),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            opt_l(o, options, "l"_ok),
             gfermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u),
+            tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture"_ok, "true")) ? ("@Y(4S)") : ("_" + o.get("q"_ok, "d")))], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_tau(p["mass::tau"], u),
@@ -555,8 +555,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToXsDilepton<HLMW2005>>::options
     {
-        { "l", { "e", "mu", "tau" }, "mu" },
-        { "q", { "d", "u" }, "d" }
+        { "l"_ok, { "e", "mu", "tau" }, "mu" },
+        { "q"_ok, { "d", "u" }, "d" }
     };
 
     double

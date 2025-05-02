@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -236,7 +237,7 @@ namespace eos
             m_eff(p["ee->ccbar::effective_mass"], u),
             m_D0(p["mass::D^0"], u),
             m_Dp(p["mass::D^+"], u),
-            assume_isospin(destringify<bool>(o.get("assume_isospin", "false"))),
+            assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"))),
             m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
             g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
             q(_channel_effective_momentum(p, u, std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -412,7 +413,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<EEToCCBar>::options
     {
-        {"assume_isospin", { "true", "false" }, "false"},
+        {"assume-isospin"_ok, { "true", "false" }, "false"},
     };
 
     const EEToCCBar::IntermediateResult *

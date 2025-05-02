@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Danny van Dyk
+ * Copyright (c) 2018-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -74,12 +74,12 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "l",             "tau"       },
-                    { "q",             "d"         },
-                    { "z-order-lp",    "3"         },
-                    { "z-order-slp",   "2"         },
-                    { "z-order-sslp",  "1"         },
-                    { "form-factors",  "BGJvD2019" }
+                    { "l"_ok,             "tau"       },
+                    { "q"_ok,             "d"         },
+                    { "z-order-lp"_ok,    "3"         },
+                    { "z-order-slp"_ok,   "2"         },
+                    { "z-order-sslp"_ok,  "1"         },
+                    { "form-factors"_ok,  "BGJvD2019" }
                 };
 
                 BToDPiLeptonNeutrino d(p, o);
@@ -124,12 +124,12 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "l",             "mu"        },
-                    { "q",             "d"         },
-                    { "z-order-lp",    "2"         },
-                    { "z-order-slp",   "1"         },
-                    { "z-order-sslp",  "0"         },
-                    { "form-factors",  "BGJvD2019" }
+                    { "l"_ok,             "mu"        },
+                    { "q"_ok,             "d"         },
+                    { "z-order-lp"_ok,    "2"         },
+                    { "z-order-slp"_ok,   "1"         },
+                    { "z-order-sslp"_ok,  "0"         },
+                    { "form-factors"_ok,  "BGJvD2019" }
                 };
 
                 BToDPiLeptonNeutrino d(p, o);

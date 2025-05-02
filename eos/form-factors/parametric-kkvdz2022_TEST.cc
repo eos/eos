@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
- * Copyright (c) 2022 Stephan Kürten
+ * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022      Stephan Kürten
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -63,7 +63,7 @@ class ParametricKKvDZ2022FormFactorTest :
 
             {
                 KKvDZ2022FormFactors kkvdz2022(p, Options{ });
-                KKvDZ2022FormFactors kkvdz2022_sub(sub_p, Options{ {"subtracted","on"} });
+                KKvDZ2022FormFactors kkvdz2022_sub(sub_p, Options{ {"subtracted"_ok, "on"} });
 
                 // Tested against an IPython/Jupyter notebook implementation of Stephan Kürten
                 TEST_CHECK_NEARLY_EQUAL( complex<double>( 0.0713            , 0.0               ),  kkvdz2022.F_1(0.0, 0.0),  eps);

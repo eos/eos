@@ -106,7 +106,10 @@ main(int, char ** argv)
 
     // Set up the observable test environment
     auto test_function = [](const eos::Parameters & p, const std::vector<eos::KinematicVariable> & kv, const eos::Options & o)
-    { return p["mass::c"] * std::stoi(o.get("multiplier", "1")) * (kv[1] - kv[0]); };
+    {
+        using namespace eos;
+        return p["mass::c"] * std::stoi(o.get("multiplier"_ok, "1")) * (kv[1] - kv[0]);
+    };
 
     std::shared_ptr<const eos::TestObservableEntry> obs_entry =
             std::make_shared<const eos::TestObservableEntry>("test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{ "q2_min", "q2_max" });

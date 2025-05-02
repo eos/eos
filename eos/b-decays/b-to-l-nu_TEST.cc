@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2019 Danny van Dyk
+ * Copyright (c) 2014-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -63,9 +63,9 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model", "CKM" },
-                    { "l",     "e"       },
-                    { "q",     "u"       }
+                    { "model"_ok, "CKM" },
+                    { "l"_ok,     "e"   },
+                    { "q"_ok,     "u"   }
                 };
 
                 BToLeptonNeutrino d(p, oo);
@@ -95,9 +95,9 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model", "CKM" },
-                    { "l",     "e"       },
-                    { "q",     "c"       }
+                    { "model"_ok, "CKM" },
+                    { "l"_ok,     "e"   },
+                    { "q"_ok,     "c"   }
                 };
 
                 BToLeptonNeutrino d(p, oo);
@@ -128,9 +128,9 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model", "WET" },
-                    { "l",     "e"          },
-                    { "q",     "u"          }
+                    { "model"_ok, "WET" },
+                    { "l"_ok,     "e"   },
+                    { "q"_ok,     "u"   }
                 };
 
                 BToLeptonNeutrino d(p, oo);

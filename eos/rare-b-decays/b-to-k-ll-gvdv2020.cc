@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020 Danny van Dyk
- * Copyright (c) 2011 Christian Wacker
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2011      Christian Wacker
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,11 +37,11 @@ namespace eos
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q", "d")], *this),
-        f_K(p["decay-constant::K_" + o.get("q", "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
+        f_K(p["decay-constant::K_" + o.get("q"_ok, "d")], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
-        q(o, options, "q"),
-        opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
+        q(o, options, "q"_ok),
+        opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
         nonlocal_formfactor(NonlocalFormFactor<PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o))
     {
         Context ctx("When constructing B->Kll GVdV2020 amplitudes");
@@ -54,8 +54,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "q", { "d", "u" },  "d" },
-        { "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020" }
+        { "q"_ok, { "d", "u" },  "d" },
+        { "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020" }
     };
 
     BToKDilepton::DipoleFormFactors

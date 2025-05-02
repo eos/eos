@@ -135,7 +135,7 @@ class ParametricKSvD2025Test :
 
                 /* f_0 at timelike q2 > 0.0 */
                 {
-                    KSvD2025FormFactors<VacuumToKPi> ff(p, Options{ {"n-resonances-0p", "1"} });
+                    KSvD2025FormFactors<VacuumToKPi> ff(p, Options{ {"n-resonances-0p"_ok, "1"} });
 
                     const auto chi_0p = 6e-5;
 

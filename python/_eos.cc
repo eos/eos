@@ -423,7 +423,7 @@ BOOST_PYTHON_MODULE(_eos)
             .def("evaluate", &KinematicVariable::evaluate);
 
     // Options
-    ::impl::std_pair_to_python_converter<const std::string, std::string> converter_options_iter;
+    ::impl::std_pair_to_python_converter<const qnp::OptionKey, std::string> converter_options_iter;
     class_<Options>("Options", R"(
             Represents the set of options provided to an observable.
 

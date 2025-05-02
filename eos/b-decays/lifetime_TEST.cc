@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
- * Copyright (c) 2024 Stefan Meiser
+ * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2024      Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -67,8 +67,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "CKM" },
-                        { "q",     "s"   }
+                        { "model"_ok, "CKM" },
+                        { "q"_ok,     "s"   }
                     };
 
                     Lifetime d(p, oo);
@@ -83,8 +83,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "CKM" },
-                        { "q",     "u"   }
+                        { "model"_ok, "CKM" },
+                        { "q"_ok,     "u"   }
                     };
 
                     Lifetime d(p, oo);
@@ -101,8 +101,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "CKM" },
-                        { "q",     "d"   }
+                        { "model"_ok, "CKM" },
+                        { "q"_ok,     "d"   }
                     };
 
                     Lifetime d(p, oo);
@@ -119,8 +119,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "CKM" },
-                        { "q",     "s"   }
+                        { "model"_ok, "CKM" },
+                        { "q"_ok,     "s"   }
                     };
 
                     Lifetime d(p, oo);
@@ -234,8 +234,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "WET" },
-                        { "q",     "s"   }
+                        { "model"_ok, "WET" },
+                        { "q"_ok,     "s"   }
                     };
 
                     Lifetime d(p, oo);
@@ -250,8 +250,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "WET" },
-                        { "q",     "u"   }
+                        { "model"_ok, "WET" },
+                        { "q"_ok,     "u"   }
                     };
 
                     Lifetime d(p, oo);
@@ -266,8 +266,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "WET" },
-                        { "q",     "d"   }
+                        { "model"_ok, "WET" },
+                        { "q"_ok,     "d"   }
                     };
 
                     Lifetime d(p, oo);
@@ -282,8 +282,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model", "WET" },
-                        { "q",     "s"   }
+                        { "model"_ok, "WET" },
+                        { "q"_ok,     "s"   }
                     };
 
                     Lifetime d(p, oo);

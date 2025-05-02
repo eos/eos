@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2024 Danny van Dyk
- * Copyright (c) 2018 Nico Gubernari
- * Copyright (c) 2018 Ahmet Kokulu
- * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2018      Nico Gubernari
+ * Copyright (c) 2018      Ahmet Kokulu
+ * Copyright (c) 2022      Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,15 +37,15 @@ namespace eos
     {
         const std::vector<OptionSpecification> Exponential::options
         {
-            { "Q",      { "b" },                "b"        },
-            { "q",      { "u", "d", "s" },      "u"        },
-            { "gminus", { "zero", "WW-limit" }, "WW-limit" }
+            { "Q"_ok,      { "b" },                "b"        },
+            { "q"_ok,      { "u", "d", "s" },      "u"        },
+            { "gminus"_ok, { "zero", "WW-limit" }, "WW-limit" }
         };
 
         Exponential::Exponential(const Parameters & p, const Options & o) :
-            opt_Q(o, options, "Q"),
-            opt_q(o, options, "q"),
-            opt_gminus(o, options, "gminus"),
+            opt_Q(o, options, "Q"_ok),
+            opt_q(o, options, "q"_ok),
+            opt_gminus(o, options, "gminus"_ok),
             lambda_B_inv(p[parameter("1/lambda_B_p")], *this),
             lambda_E2(p[parameter("lambda_E^2")], *this),
             lambda_H2(p[parameter("lambda_H^2")], *this),

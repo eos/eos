@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             br_bcsl(p["exp::BR(B->X_clnu)"], u),
@@ -61,7 +61,7 @@ namespace eos
         {
             Context ctx("When constructing B->X_sgamma observables");
 
-            if ("SM" != o.get("model", "SM"))
+            if ("SM" != o.get("model"_ok, "SM"))
             {
                 Log::instance()->message("B->X_sgamma.model", ll_error)
                     << "B->X_sgamma is not yet capable to handle models beyond SM, e.g. for helicity flipped operators; use it carefully";
@@ -170,7 +170,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             hbar(p["QM::hbar"], u),
             mu(p["sb::mu"], u),
             m_B(p["mass::B_d"], u),
@@ -179,7 +179,7 @@ namespace eos
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             gfermi(p["WET::G_Fermi"], u),
-            tau(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u)
+            tau(p["life_time::B" + (destringify<bool>(o.get("admixture"_ok, "true")) ? ("@Y(4S)") : ("_" + o.get("q"_ok, "d")))], u)
         {
             u.uses(*model);
         }

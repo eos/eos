@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2025 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -87,7 +87,7 @@ namespace eos
         s_0(p[QualifiedName(Traits::process, qnp::Name("s_0"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h1(p[QualifiedName(Traits::process, qnp::Name("mu_h1"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h2(p[QualifiedName(Traits::process, qnp::Name("mu_h2"), qnp::Suffix("FLvD2022QCDF"))], *this),
-        opt_contributions(o, "contributions", { "all", "ht", "soft", "partial-soft-tw-3,4", "none"}, "all"),
+        opt_contributions(o, "contributions"_ok, { "all", "ht", "soft", "partial-soft-tw-3,4", "none"}, "all"),
         switch_ht(0.0),
         switch_soft(0.0),
         switch_soft_tw_3_4(0.0)

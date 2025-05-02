@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Danny van Dyk
- * Copyright (c) 2018 Nico Gubernari
+ * Copyright (c) 2018-2025 Danny van Dyk
+ * Copyright (c) 2018      Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -61,9 +61,9 @@ class LCSRFormFactorsTest :
                 p["B->pi::M^2@B-LCSR"]        = 1.0;
 
                 Options o = {
-                    { "2pt",    "all"  },
-                    { "3pt",    "all"  },
-                    { "gminus", "zero" }
+                    { "2pt"_ok,    "all"  },
+                    { "3pt"_ok,    "all"  },
+                    { "gminus"_ok, "zero" }
                 };
 
                 AnalyticFormFactorBToPLCSR<lcsr::BToPi> ff{ p, o };
@@ -1176,9 +1176,9 @@ class LCSRFormFactorsTest :
                 p["B->pi::M^2@B-LCSR"]        = 1.0;
 
                 Options o = {
-                    { "2pt",    "all"  },
-                    { "3pt",    "all"  },
-                    { "gminus", "zero" }
+                    { "2pt"_ok,    "all"  },
+                    { "3pt"_ok,    "all"  },
+                    { "gminus"_ok, "zero" }
                 };
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::B-LCSR", p, o);
@@ -1220,9 +1220,9 @@ class LCSRFormFactorsTest :
                 p["B->K::M^2@B-LCSR"]         = 1.0;
 
                 Options o = {
-                    { "2pt",    "all"  },
-                    { "3pt",    "all"  },
-                    { "gminus", "WW-limit" }
+                    { "2pt"_ok,    "all"  },
+                    { "3pt"_ok,    "all"  },
+                    { "gminus"_ok, "WW-limit" }
                 };
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::B-LCSR", p, o);
@@ -1265,9 +1265,9 @@ class LCSRFormFactorsTest :
                 p["B->D::M^2@B-LCSR"]         = 4.5;
 
                 Options o = {
-                    { "2pt",    "all"  },
-                    { "3pt",    "all"  },
-                    { "gminus", "WW-limit" }
+                    { "2pt"_ok,    "all"  },
+                    { "3pt"_ok,    "all"  },
+                    { "gminus"_ok, "WW-limit" }
                 };
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->D::B-LCSR", p, o);
@@ -1309,9 +1309,9 @@ class LCSRFormFactorsTest :
                 p["B_s->K::M^2@B-LCSR"]         = 1.0;
 
                 Options o = {
-                    { "2pt",    "all"  },
-                    { "3pt",    "all"  },
-                    { "gminus", "WW-limit" }
+                    { "2pt"_ok,    "all"  },
+                    { "3pt"_ok,    "all"  },
+                    { "gminus"_ok, "WW-limit" }
                 };
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->K::B-LCSR", p, o);
@@ -1354,9 +1354,9 @@ class LCSRFormFactorsTest :
                 p["B_s->D_s::M^2@B-LCSR"]         = 4.5;
 
                 Options o = {
-                    { "2pt",    "all"  },
-                    { "3pt",    "all"  },
-                    { "gminus", "WW-limit" }
+                    { "2pt"_ok,    "all"  },
+                    { "3pt"_ok,    "all"  },
+                    { "gminus"_ok, "WW-limit" }
                 };
 
                 std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->D_s::B-LCSR", p, o);

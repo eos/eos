@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2023 Carolina Bolognani
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -156,24 +157,24 @@ namespace eos
 
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             parameters(p),
-            opt_Q(o, options, "Q"),
-            opt_q(o, options, "q"),
-            opt_I(o, "I", { "1", "0", "1/2" }),
+            opt_Q(o, options, "Q"_ok),
+            opt_q(o, options, "q"_ok),
+            opt_I(o, "I"_ok, { "1", "0", "1/2" }),
             m_D(p["mass::" + _D()], u),
             tau_D(p["life_time::" + _D()], u),
             m_P(p["mass::" + _P()], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             isospin_factor(_isospin_factor()),
             mu(p[opt_Q.str() + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
-            opt_cp_conjugate(o, options, "cp-conjugate"),
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
-            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
+            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
             Context ctx("When constructing D->Plnu observable");
 
@@ -426,11 +427,11 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "l", { "e", "mu", "tau" }, "mu" },
-        { "Q", { "d", "s" }, "s" },
-        { "q", { "u", "d", "s" }, "u" },
-        { "I", { "1", "0", "1/2" }, "1" },
+        { "cp-conjugate"_ok, { "true", "false" },  "false" },
+        { "l"_ok, { "e", "mu", "tau" }, "mu" },
+        { "Q"_ok, { "d", "s" }, "s" },
+        { "q"_ok, { "u", "d", "s" }, "u" },
+        { "I"_ok, { "1", "0", "1/2" }, "1" },
     };
 
     DToPseudoscalarLeptonNeutrino::DToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :

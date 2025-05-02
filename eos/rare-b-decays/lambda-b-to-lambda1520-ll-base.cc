@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,9 +25,9 @@
 namespace eos
 {
     LambdaBToLambda1520Dilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model", "SM"), p, o)),
-        form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda(1520)::" + o.get("form-factors", "ABR2022"), p)),
-        opt_l(o, options, "l"),
+        model(Model::make(o.get("model"_ok, "SM"), p, o)),
+        form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda(1520)::" + o.get("form-factors"_ok, "ABR2022"), p)),
+        opt_l(o, options, "l"_ok),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
@@ -34,7 +35,7 @@ namespace eos
         m_l(p["mass::" + opt_l.str()], *this),
         m_Lb(p["mass::Lambda_b"], *this),
         m_Lstar(p["mass::Lambda(1520)"], *this),
-        opt_cp_conjugate(o, options, "cp-conjugate"),
+        opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         cp_conjugate(opt_cp_conjugate.value()),
         lepton_flavor(opt_l.value())
     {
@@ -53,8 +54,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "l", { "e", "mu", "tau" }, "mu" },
+        { "cp-conjugate"_ok, { "true", "false" },  "false" },
+        { "l"_ok, { "e", "mu", "tau" }, "mu" },
     };
 
     double

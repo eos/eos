@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2023 Danny van Dyk
+ * Copyright (c) 2014-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             {
                 Parameters p = Parameters::Defaults();
                 Options o{
-                    { "decay-constant", "sum-rule" }
+                    { "decay-constant"_ok, "sum-rule" }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, o);
                 p["mass::B_d"] = 5.2795;
@@ -135,7 +135,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["QCD::alpha_s(MZ)"] = 0.1184;
 
                 Options o{
-                    { "decay-constant", "sum-rule" }
+                    { "decay-constant"_ok, "sum-rule" }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, o);
 
@@ -181,8 +181,8 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(10.0),        0.5346, 10 * eps);
 
                 o = Options{
-                    { "decay-constant", "sum-rule" },
-                    { "rescale-borel",  "0"        }
+                    { "decay-constant"_ok, "sum-rule" },
+                    { "rescale-borel"_ok,  "0"        }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
@@ -309,8 +309,8 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["QCD::alpha_s(MZ)"] = 0.1176;
 
                 Options o{
-                    { "decay-constant", "sum-rule" },
-                    { "rescale-borel",  "0"        }
+                    { "decay-constant"_ok, "sum-rule" },
+                    { "rescale-borel"_ok,  "0"        }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 

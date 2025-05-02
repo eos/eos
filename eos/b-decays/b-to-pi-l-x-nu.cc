@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -51,8 +51,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors", "BCL2008"), p, o)),
-            opt_q(o, options, "q"),
+            form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors"_ok, "BCL2008"), p, o)),
+            opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             m_pi(p["mass::pi^" + std::string(opt_q.value() == QuarkFlavor::down ? "+" : "0")], u),
@@ -143,7 +143,7 @@ namespace eos
     Implementation<BToPiLeptonInclusiveNeutrinos>::options
     {
         FormFactorFactory<PToP>::option_specification(),
-        { "q", { "d", "u" }, "d" }
+        { "q"_ok, { "d", "u" }, "d" }
     };
 
     BToPiLeptonInclusiveNeutrinos::BToPiLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :

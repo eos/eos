@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2024 Danny van Dyk
- * Copyright (c) 2019, 2020 Domagoj Leljak
- * Copyright (c) 2023 Carolina Bolognani
+ * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2019-2020 Domagoj Leljak
+ * Copyright (c) 2023      Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -335,7 +335,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             DKMMO2008Base<q1_, q2_, qs_>(p, o, u),
-            opt_rescale_borel(o, "rescale-borel", { "1", "0" }, "1"),
+            opt_rescale_borel(o, "rescale-borel"_ok, { "1", "0" }, "1"),
             M2(p[prefix + "::M^2@DKMMO2008"], u),
             _s0_plus(p[prefix + "::s_0^+(0)@DKMMO2008"], u),
             _s0_plus_p(p[prefix + "::s_0^+'(0)@DKMMO2008"], u),
@@ -346,7 +346,7 @@ namespace eos
             _s0_T(p[prefix + "::s_0^T(0)@DKMMO2008"], u),
             _s0_T_p(p[prefix + "::s_0^T'(0)@DKMMO2008"], u),
             _s0_T_pp(p[prefix + "::s_0^T''(0)@DKMMO2008"], u),
-            opt_decay_constant(o, options, "decay-constant"),
+            opt_decay_constant(o, options, "decay-constant"_ok),
             zeta_nnlo(p[prefix + "::zeta(NNLO)@DKMMO2008"], u)
         {
             using namespace std::placeholders;
@@ -2222,8 +2222,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>::options
     {
-        { "rescale-borel",  { "1", "0" },                "1"         },
-        { "decay-constant", { "parameter", "sum-rule" }, "parameter" }
+        { "rescale-borel"_ok,  { "1", "0" },                "1"         },
+        { "decay-constant"_ok, { "parameter", "sum-rule" }, "parameter" }
     };
 
     template <QuarkFlavor q1_, QuarkFlavor q2_, QuarkFlavor qs_>

@@ -1,7 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2022      Philip Lüghausen
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,8 +57,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            form_factors(FormFactorFactory<PToGamma>::create("B->gamma::" + o.get("form-factors", "FLvD2022QCDF"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            form_factors(FormFactorFactory<PToGamma>::create("B->gamma::" + o.get("form-factors"_ok, "FLvD2022QCDF"), p, o)),
             alpha_qed(p["QED::alpha_e(m_b)"] ,u),
             g_fermi(p["WET::G_Fermi"], u),
             v_ub_abs(p["CKM::abs(V_ub)"], u),

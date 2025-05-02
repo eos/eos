@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -80,8 +81,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "WET"), p, o)),
-            opt_l(o, options, "l"),
+            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            opt_l(o, options, "l"_ok),
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.str()], u),
             tau(p["life_time::B_s"], u),
@@ -90,7 +91,7 @@ namespace eos
         {
             Context ctx("When constructing Bs->Phill observables");
 
-            std::string tag = o.get("tag", "");
+            std::string tag = o.get("tag"_ok, "");
 
             if ("BFS2004" == tag)
             {
@@ -305,7 +306,7 @@ namespace eos
     Implementation<BsToPhiDilepton>::options
     {
         Model::option_specification(),
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e", "mu", "tau" }, "mu" }
     };
 
     double
@@ -912,8 +913,8 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
 
 
     BsToPhiDileptonAndConjugate::BsToPhiDileptonAndConjugate(const Parameters & parameters, const Options & options):
-        bstophidilepton(parameters, options + Options{{"cp-conjugate", "true"}}),
-        bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate", "false"}})
+        bstophidilepton(parameters, options + Options{{"cp-conjugate"_ok, "true"}}),
+        bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate"_ok, "false"}})
     {
     }
 

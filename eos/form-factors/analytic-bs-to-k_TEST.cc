@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2023 Danny van Dyk
+ * Copyright (c) 2014-2025 Danny van Dyk
  * Copyright (c) 2023 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -135,7 +135,7 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
                 p["QCD::r_vac"] = 1.0;
                 p["QCD::alpha_s(MZ)"] = 0.1184;
 
-                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ { "decay-constant", "sum-rule" } });
+                AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, Options{ { "decay-constant"_ok, "sum-rule" } });
 
                 // LO, tw2
                 TEST_CHECK_NEARLY_EQUAL(ff.F_lo_tw2(-5.0), 0.1167663129, eps);
@@ -180,8 +180,8 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
 
                 Options o
                 {
-                    { "rescale-borel",  "0"        },
-                    { "decay-constant", "sum-rule" }
+                    { "rescale-borel"_ok,  "0"        },
+                    { "decay-constant"_ok, "sum-rule" }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
@@ -308,8 +308,8 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
                 p["QCD::alpha_s(MZ)"] = 0.1176;
 
                 Options o{
-                    { "rescale-borel",  "0"        },
-                    { "decay-constant", "sum-rule" }
+                    { "rescale-borel"_ok,  "0"        },
+                    { "decay-constant"_ok, "sum-rule" }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 

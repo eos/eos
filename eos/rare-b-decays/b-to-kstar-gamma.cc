@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             hbar(p["QM::hbar"], u),
-            q(o, options, "q"),
+            q(o, options, "q"_ok),
             tau(p["life_time::B_" + q.str()], u),
-            tag(o, "tag", { "BFS2004"})
+            tag(o, "tag"_ok, { "BFS2004"})
         {
             Context ctx("When constructing B->K^*gamma observables");
 
@@ -113,7 +113,7 @@ namespace eos
     Implementation<BToKstarGamma>::options
     {
         Model::option_specification(),
-        {"q", { "d", "u" }, "d"}
+        {"q"_ok, { "d", "u" }, "d"}
     };
 
     double

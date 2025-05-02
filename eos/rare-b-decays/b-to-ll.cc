@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2015 Danny van Dyk
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2014      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -67,9 +67,9 @@ namespace eos
         using xi_t = std::array<complex<double>, 4>;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, options, "l"),
-            opt_q(o, options, "q"),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            opt_l(o, options, "l"_ok),
+            opt_q(o, options, "q"_ok),
             f_B(p["decay-constant::B_" + opt_q.str()], u),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
@@ -183,8 +183,8 @@ namespace eos
     Implementation<BToDilepton>::options
     {
         Model::option_specification(),
-        {"l", { "e", "mu", "tau" }, "mu"},
-        {"q", { "s" }, "s"}
+        {"l"_ok, { "e", "mu", "tau" }, "mu"},
+        {"q"_ok, { "s" }, "s"}
     };
 
     double

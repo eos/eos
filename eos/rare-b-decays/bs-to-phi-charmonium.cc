@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -73,13 +74,13 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             m_Bs(p["mass::B_s"], u),
             tau_Bs(p["life_time::B_s"], u),
             m_phi(p["mass::phi"], u),
-            opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
+            opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
             nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o)),
-            opt_psi(o, "psi", { "J/psi", "psi(2S)" }, "J/psi"),
+            opt_psi(o, "psi"_ok, { "J/psi", "psi(2S)" }, "J/psi"),
             m_psi(p["mass::" + opt_psi.value()], u),
             f_psi(p["decay-constant::" + opt_psi.value()], u)
         {
@@ -171,7 +172,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BsToPhiCharmonium>::options
     {
-        {"psi", { "J/psi", "psi(2S)" }, "J/psi"}
+        {"psi"_ok, { "J/psi", "psi(2S)" }, "J/psi"}
     };
 
     double

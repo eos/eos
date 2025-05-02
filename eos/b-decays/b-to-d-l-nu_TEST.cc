@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019 Danny van Dyk
- * Copyright (c) 2021 Christoph Bobeth
+ * Copyright (c) 2018-2019 Ahmet Kokulu
+ * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2021      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -85,14 +85,14 @@ class BToDLeptonNeutrinoTest :
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
-                    { "l",             "e"         },
-                    { "model",         "CKM"       },
-                    { "P",             "D"         },
-                    { "q",             "d"         },
-                    { "z-order-lp",    "3"         },
-                    { "z-order-slp",   "2"         },
-                    { "z-order-sslp",  "1"         },
-                    { "form-factors",  "BGJvD2019" }
+                    { "l"_ok,             "e"         },
+                    { "model"_ok,         "CKM"       },
+                    { "P"_ok,             "D"         },
+                    { "q"_ok,             "d"         },
+                    { "z-order-lp"_ok,    "3"         },
+                    { "z-order-slp"_ok,   "2"         },
+                    { "z-order-sslp"_ok,  "1"         },
+                    { "form-factors"_ok,  "BGJvD2019" }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, o);
@@ -138,14 +138,14 @@ class BToDLeptonNeutrinoTest :
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
-                    { "l",             "tau"       },
-                    { "model",         "CKM"       },
-                    { "P",             "D"         },
-                    { "q",             "d"         },
-                    { "z-order-lp",    "3"         },
-                    { "z-order-slp",   "2"         },
-                    { "z-order-sslp",  "1"         },
-                    { "form-factors",  "BGJvD2019" }
+                    { "l"_ok,             "tau"       },
+                    { "model"_ok,         "CKM"       },
+                    { "P"_ok,             "D"         },
+                    { "q"_ok,             "d"         },
+                    { "z-order-lp"_ok,    "3"         },
+                    { "z-order-slp"_ok,   "2"         },
+                    { "z-order-sslp"_ok,  "1"         },
+                    { "form-factors"_ok,  "BGJvD2019" }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, o);
@@ -174,11 +174,11 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET"        },
-                    { "form-factors", "BCL2008"    },
-                    { "P",            "D"          },
-                    { "q",            "d"          },
-                    { "l",            "mu"         }
+                    { "model"_ok,        "WET"        },
+                    { "form-factors"_ok, "BCL2008"    },
+                    { "P"_ok,            "D"          },
+                    { "q"_ok,            "d"          },
+                    { "l"_ok,            "mu"         }
                 };
 
 
@@ -189,7 +189,7 @@ class BToDLeptonNeutrinoTest :
                     TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
 
-                    oo.declare("l", "tau");
+                    oo.declare("l"_ok, "tau");
                     auto k_tau = Kinematics{
                         { "q2_min",  3.15702  },
                         { "q2_max", 11.62     }
@@ -198,7 +198,7 @@ class BToDLeptonNeutrinoTest :
                     TEST_CHECK(obs_BRtau.get() != nullptr);
                     TEST_CHECK_RELATIVE_ERROR(obs_BRtau->evaluate(), 0.0069634, eps);
 
-                    oo.declare("l", "mu");
+                    oo.declare("l"_ok, "mu");
                     auto k_mu = Kinematics{
                         { "q2_min",   0.011164 },
                         { "q2_max",  11.62     },
@@ -209,10 +209,10 @@ class BToDLeptonNeutrinoTest :
 
                     oo =
                     {
-                        { "model",        "WET"        },
-                        { "form-factors", "BCL2008"    },
-                        { "P",            "D"          },
-                        { "q",            "d"          }
+                        { "model"_ok,        "WET"        },
+                        { "form-factors"_ok, "BCL2008"    },
+                        { "P"_ok,            "D"          },
+                        { "q"_ok,            "d"          }
                     };
                     auto k = Kinematics{
                         { "q2_mu_min",   0.011164 },
@@ -273,11 +273,11 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET"        },
-                    { "form-factors", "BCL2008"    },
-                    { "P",            "D"          },
-                    { "q",            "d"          },
-                    { "l",            "mu"         }
+                    { "model"_ok,        "WET"        },
+                    { "form-factors"_ok, "BCL2008"    },
+                    { "P"_ok,            "D"          },
+                    { "q"_ok,            "d"          },
+                    { "l"_ok,            "mu"         }
                 };
 
                 const double eps = 1e-3;
@@ -295,10 +295,10 @@ class BToDLeptonNeutrinoTest :
                     };
                     oo =
                     {
-                        { "model",        "WET"        },
-                        { "form-factors", "BCL2008"    },
-                        { "P",            "D"          },
-                        { "q",            "d"          }
+                        { "model"_ok,        "WET"        },
+                        { "form-factors"_ok, "BCL2008"    },
+                        { "P"_ok,            "D"          },
+                        { "q"_ok,            "d"          }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 

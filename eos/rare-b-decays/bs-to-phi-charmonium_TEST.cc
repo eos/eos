@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -78,10 +79,10 @@ class BsToPhiCharmoniumGvDV2020Test :
 
             Options oo
             {
-                {"model",               "WET"},
-                {"nonlocal-formfactor", "GvDV2020"},
-                {"psi",                 "J/psi"},
-                {"q",                   "s"}
+                {"model"_ok,               "WET"},
+                {"nonlocal-formfactor"_ok, "GvDV2020"},
+                {"psi"_ok,                 "J/psi"},
+                {"q"_ok,                   "s"}
             };
 
             BsToPhiCharmonium c(p, oo);

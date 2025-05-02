@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -51,14 +52,14 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "WET"), p, o)),
+            model(Model::make(o.get("model"_ok, "WET"), p, o)),
             hbar(p["QM::hbar"], u),
             tau(p["life_time::Lambda_b"], u),
             mu(p["sb::mu"], u)
         {
             Context ctx("When constructing Lb->L(1520)gamma observables");
 
-            std::string tag = o.get("tag", "");
+            std::string tag = o.get("tag"_ok, "");
 
             if ("Naive" == tag)
             {

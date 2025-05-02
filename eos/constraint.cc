@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -231,7 +231,7 @@ namespace eos
                 }
 
                 double min = 0.0, max = 0.0;
-                if ("asymmetric+quadratic" == options.get("uncertainty", "asymmetric+quadratic"))
+                if ("asymmetric+quadratic" == options.get("uncertainty"_ok, "asymmetric+quadratic"))
                 {
                     min = this->central - std::sqrt(power_of<2>(this->sigma_lo_stat) + power_of<2>(this->sigma_lo_sys));
                     max = this->central + std::sqrt(power_of<2>(this->sigma_hi_stat) + power_of<2>(this->sigma_hi_sys));
@@ -275,7 +275,7 @@ namespace eos
                 out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
                 for (const auto & o : options)
                 {
-                    out << YAML::Key << o.first << YAML::Value << o.second;
+                    out << YAML::Key << o.first.str() << YAML::Value << o.second;
                 }
                 out << YAML::EndMap;
                 out << YAML::Key << "mean" << YAML::Value << central;
@@ -505,7 +505,7 @@ namespace eos
                 out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
                 for (const auto & o : options)
                 {
-                    out << YAML::Key << o.first << YAML::Value << o.second;
+                    out << YAML::Key << o.first.str() << YAML::Value << o.second;
                 }
                 out << YAML::EndMap;
                 out << YAML::Key << "mode" << YAML::Value << central;
@@ -720,7 +720,7 @@ namespace eos
                 out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
                 for (const auto & o : options)
                 {
-                    out << YAML::Key << o.first << YAML::Value << o.second;
+                    out << YAML::Key << o.first.str() << YAML::Value << o.second;
                 }
                 out << YAML::EndMap;
                 out << YAML::Key << "physical-limit" << YAML::Value << physical_limit;
@@ -941,21 +941,17 @@ namespace eos
                 ObservableCache cache(parameters);
 
                 // If specified, these options allow to specify a subset of the measurements
-                const unsigned begin = destringify<unsigned>(options.get("begin", "0"));
-                const unsigned end   = destringify<unsigned>(options.get("end", stringify(dim)));
+                const unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"));
+                const unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim)));
 
                 if (end > dim)
                 {
-                    throw InvalidOptionValueError("End of the measurements sub-sample: end",
-                                                  options.get("end", stringify(dim)),
-                                                  "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("First measurement of the sub-sample: begin",
-                                                  options.get("begin", "0"),
-                                                  "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 const unsigned subdim_meas = end - begin;
@@ -982,7 +978,7 @@ namespace eos
                 }
 
                 std::vector<double> variances(subdim_meas, 0.0);
-                if ("symmetric+quadratic" == options.get("uncertainty", "symmetric+quadratic"))
+                if ("symmetric+quadratic" == options.get("uncertainty"_ok, "symmetric+quadratic"))
                 {
                     for (auto i = begin; i < end; ++i)
                     {
@@ -1031,21 +1027,17 @@ namespace eos
             make_prior(const Parameters & parameters, const Options & options) const
             {
                 // If specified, these options allow to specify a subset of the measurements
-                unsigned begin = destringify<unsigned>(options.get("begin", "0"));
-                unsigned end   = destringify<unsigned>(options.get("end", stringify(dim)));
+                unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"));
+                unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim)));
 
                 if (end > dim)
                 {
-                    throw InvalidOptionValueError("End of the measurements sub-sample: end",
-                                                  options.get("end", stringify(dim)),
-                                                  "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("First measurement of the sub-sample: begin",
-                                                  options.get("begin", "0"),
-                                                  "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 unsigned subdim = end - begin;
@@ -1058,7 +1050,7 @@ namespace eos
                 }
 
                 std::vector<double> variances(subdim, 0.0);
-                if ("symmetric+quadratic" == options.get("uncertainty", "symmetric+quadratic"))
+                if ("symmetric+quadratic" == options.get("uncertainty"_ok, "symmetric+quadratic"))
                 {
                     for (auto i = begin; i < end; ++i)
                     {
@@ -1121,7 +1113,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
                     }
                     out << YAML::EndMap;
                 }
@@ -1241,13 +1233,13 @@ namespace eos
                         // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
                         // by sorting the entries lexicographically.
                         options_nodes.sort(&impl::less);
-                        std::set<std::string> options_keys;
+                        std::set<qnp::OptionKey> options_keys;
                         for (auto && o : options_nodes)
                         {
-                            std::string key = o.first.as<std::string>();
+                            qnp::OptionKey key(o.first.as<std::string>());
                             if (! options_keys.insert(key).second)
                             {
-                                throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+                                throw ConstraintDeserializationError(name, "options key '" + key.str() + "' encountered more than once");
                             }
 
                             options.back().declare(key, o.second.as<std::string>());
@@ -1449,23 +1441,19 @@ namespace eos
                 }
 
                 // If specified, these options allow to specify a subset of the measurements
-                unsigned begin          = destringify<unsigned>(options.get("begin", "0"));
-                unsigned end            = destringify<unsigned>(options.get("end", stringify(dim_meas)));
+                unsigned begin          = destringify<unsigned>(options.get("begin"_ok, "0"));
+                unsigned end            = destringify<unsigned>(options.get("end"_ok, stringify(dim_meas)));
                 // If specified, this option allows to rescale the covariance matrix by a factor
-                double   rescale_factor = destringify<double>(options.get("rescale-factor", "1.0"));
+                double   rescale_factor = destringify<double>(options.get("rescale-factor"_ok, "1.0"));
 
                 if (end > dim_meas)
                 {
-                    throw InvalidOptionValueError("End of the measurements sub-sample: end",
-                                                  options.get("end", stringify(dim_meas)),
-                                                  "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim_meas)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("First measurement of the sub-sample: begin",
-                                                  options.get("begin", "0"),
-                                                  "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 if ((nullptr != this->response) && (end != dim_meas))
@@ -1529,21 +1517,17 @@ namespace eos
             make_prior(const Parameters & parameters, const Options & options) const
             {
                 // If specified, these options allow to specify a subset of the measurements
-                unsigned begin = destringify<unsigned>(options.get("begin", "0"));
-                unsigned end   = destringify<unsigned>(options.get("end", stringify(dim_meas)));
+                unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"));
+                unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim_meas)));
 
                 if (end > dim_meas)
                 {
-                    throw InvalidOptionValueError("End of the measurements sub-sample: end",
-                                                  options.get("end", stringify(dim_meas)),
-                                                  "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim_meas)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("First measurement of the sub-sample: begin",
-                                                  options.get("begin", "0"),
-                                                  "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 unsigned subdim_meas = end - begin;
@@ -1599,7 +1583,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
                     }
                     out << YAML::EndMap;
                 }
@@ -1715,13 +1699,13 @@ namespace eos
                         // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
                         // by sorting the entries lexicographically.
                         options_nodes.sort(&impl::less);
-                        std::set<std::string> options_keys;
+                        std::set<qnp::OptionKey> options_keys;
                         for (auto && o : options_nodes)
                         {
-                            std::string key = o.first.as<std::string>();
+                            qnp::OptionKey key(o.first.as<std::string>());
                             if (! options_keys.insert(key).second)
                             {
-                                throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+                                throw ConstraintDeserializationError(name, "options key '" + key.str() + "' encountered more than once");
                             }
 
                             options.back().declare(key, o.second.as<std::string>());
@@ -1966,7 +1950,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
                     }
                     out << YAML::EndMap;
                 }
@@ -2303,7 +2287,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
                     }
                     out << YAML::EndMap;
                 }

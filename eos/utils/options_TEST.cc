@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2011-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,59 +41,59 @@ class OptionsTest :
             {
                 Options options
                 {
-                    { "q", "d"  },
-                    { "l", "mu" },
+                    { "q"_ok, "d"  },
+                    { "l"_ok, "mu" },
                 };
 
-                TEST_CHECK_EQUAL("d",  options.get("q", "s"));
-                TEST_CHECK_EQUAL("mu", options.get("l", "tau"));
+                TEST_CHECK_EQUAL("d",  options.get("q"_ok, "s"));
+                TEST_CHECK_EQUAL("mu", options.get("l"_ok, "tau"));
             }
 
             // Access
             {
                 Options options;
-                options.declare("foo", "bar");
+                options.declare("foo"_ok, "bar");
 
-                TEST_CHECK(options.has("foo"));
-                TEST_CHECK(! options.has("baz"));
-                TEST_CHECK_EQUAL("bar", options.get("foo", ""));
+                TEST_CHECK(options.has("foo"_ok));
+                TEST_CHECK(! options.has("baz"_ok));
+                TEST_CHECK_EQUAL("bar", options.get("foo"_ok, ""));
             }
 
             // Merging w/o duplicates
             {
                 Options o1
                 {
-                    { "q", "d" }
+                    { "q"_ok, "d" }
                 };
 
                 Options o2
                 {
-                    { "l", "mu" }
+                    { "l"_ok, "mu" }
                 };
 
                 Options o3 = o1 + o2;
 
-                TEST_CHECK_EQUAL("d",  o3.get("q", "s"));
-                TEST_CHECK_EQUAL("mu", o3.get("l", "tau"));
+                TEST_CHECK_EQUAL("d"_ok,  o3.get("q"_ok, "s"));
+                TEST_CHECK_EQUAL("mu"_ok, o3.get("l"_ok, "tau"));
             }
 
             // Merging w/ duplicates
             {
                 Options o1
                 {
-                    { "q", "d" }
+                    { "q"_ok, "d" }
                 };
 
                 Options o2
                 {
-                    { "q", "s" },
-                    { "l", "mu" }
+                    { "q"_ok, "s" },
+                    { "l"_ok, "mu" }
                 };
 
                 Options o3 = o1 + o2;
 
-                TEST_CHECK_EQUAL("s",  o3.get("q", "foo"));
-                TEST_CHECK_EQUAL("mu", o3.get("l", "tau"));
+                TEST_CHECK_EQUAL("s"_ok,  o3.get("q"_ok, "foo"));
+                TEST_CHECK_EQUAL("mu"_ok, o3.get("l"_ok, "tau"));
             }
 
             // Equality/Inequality
@@ -108,16 +108,16 @@ class OptionsTest :
                 TEST_CHECK(a == b);
 
                 // populate a
-                a.declare("foo", "bar");
+                a.declare("foo"_ok, "bar");
                 TEST_CHECK(! (a == b));
                 TEST_CHECK(a != b);
 
                 // populate b false
-                b.declare("foo", "baz");
+                b.declare("foo"_ok, "baz");
                 TEST_CHECK(! (a == b));
 
                 // populate b correctly
-                b.declare("foo", "bar");
+                b.declare("foo"_ok, "bar");
                 TEST_CHECK(a == b);
 
                 // copy
@@ -130,21 +130,21 @@ class OptionsTest :
             {
                 Options o
                 {
-                    { "l",     "tau"     },
-                    { "q",     "u"       },
-                    { "model", "CKM" },
+                    { "l"_ok,     "tau"     },
+                    { "q"_ok,     "u"       },
+                    { "model"_ok, "CKM" },
                 };
 
                 auto i = o.begin();
-                TEST_CHECK("l" == i->first);
+                TEST_CHECK("l"_ok == i->first);
                 TEST_CHECK("tau" == i->second);
 
                 ++i;
-                TEST_CHECK("model" == i->first);
+                TEST_CHECK("model"_ok == i->first);
                 TEST_CHECK("CKM" == i->second);
 
                 ++i;
-                TEST_CHECK("q" == i->first);
+                TEST_CHECK("q"_ok == i->first);
                 TEST_CHECK("u" == i->second);
 
                 ++i;
@@ -168,8 +168,8 @@ class NameOptionTest :
             {
                 NameOption no
                 {
-                    Options{ { "key", "value1" }, { "unused", "foo" } },
-                    "key",
+                    Options{ { "key"_ok, "value1" }, { "unused"_ok, "foo" } },
+                    "key"_ok,
                     qnp::Name("value1")
                 };
                 TEST_CHECK_EQUAL(no.value(), qnp::Name("value1"));
@@ -179,8 +179,8 @@ class NameOptionTest :
             {
                 NameOption no
                 {
-                    Options{ { "unused", "foo" } },
-                    "key",
+                    Options{ { "unused"_ok, "foo" } },
+                    "key"_ok,
                     qnp::Name("value1")
                 };
                 TEST_CHECK_EQUAL(no.value(), qnp::Name("value1"));
@@ -190,8 +190,8 @@ class NameOptionTest :
             {
                 NameOption no
                 {
-                    Options{ { "key", "value4" }, { "unused", "foo" } },
-                    "key",
+                    Options{ { "key"_ok, "value4" }, { "unused"_ok, "foo" } },
+                    "key"_ok,
                 };
                 TEST_CHECK_EQUAL(no.value(), qnp::Name("value4"));
             }
@@ -202,8 +202,8 @@ class NameOptionTest :
                 {
                     NameOption no
                     {
-                        Options{ { "unused", "foo" } },
-                        "key"
+                        Options{ { "unused"_ok, "foo" } },
+                        "key"_ok
                     };
                 };
                 TEST_CHECK_THROWS(UnspecifiedOptionError, test());
@@ -215,8 +215,8 @@ class NameOptionTest :
                 {
                     NameOption so
                     {
-                        Options{ { "key", "invalid@value"}, { "unused", "foo" } },
-                        "key",
+                        Options{ { "key"_ok, "invalid@value"}, { "unused"_ok, "foo" } },
+                        "key"_ok,
                         qnp::Name("value1")
                     };
                 };
@@ -240,8 +240,8 @@ class SwitchOptionTest :
             {
                 SwitchOption so
                 {
-                    Options{ { "key", "value1" }, { "unused", "foo" } },
-                    "key",
+                    Options{ { "key"_ok, "value1" }, { "unused"_ok, "foo" } },
+                    "key"_ok,
                     { "value1", "value2", "value4" },
                     "value1"
                 };
@@ -252,8 +252,8 @@ class SwitchOptionTest :
             {
                 SwitchOption so
                 {
-                    Options{ { "unused", "foo" } },
-                    "key",
+                    Options{ { "unused"_ok, "foo" } },
+                    "key"_ok,
                     { "value1", "value2", "value4" },
                     "value1"
                 };
@@ -264,8 +264,8 @@ class SwitchOptionTest :
             {
                 SwitchOption so
                 {
-                    Options{ { "key", "value4" }, { "unused", "foo" } },
-                    "key",
+                    Options{ { "key"_ok, "value4" }, { "unused"_ok, "foo" } },
+                    "key"_ok,
                     { "value1", "value2", "value4" }
                 };
                 TEST_CHECK_EQUAL(so.value(), "value4");
@@ -277,8 +277,8 @@ class SwitchOptionTest :
                 {
                     SwitchOption so
                     {
-                        Options{ { "unused", "foo" } },
-                        "key",
+                        Options{ { "unused"_ok, "foo" } },
+                        "key"_ok,
                         { "value1", "value2", "value4" }
                     };
                 };
@@ -291,8 +291,8 @@ class SwitchOptionTest :
                 {
                     SwitchOption so
                     {
-                        Options{ { "key", "value3"}, { "unused", "foo" } },
-                        "key",
+                        Options{ { "key"_ok, "value3"}, { "unused"_ok, "foo" } },
+                        "key"_ok,
                         { "value1", "value2", "value4" },
                         "value1"
                     };
@@ -306,8 +306,8 @@ class SwitchOptionTest :
                 {
                     SwitchOption so
                     {
-                        Options{ { "key", "value1" }, { "unused", "foo" } },
-                        "key",
+                        Options{ { "key"_ok, "value1" }, { "unused"_ok, "foo" } },
+                        "key"_ok,
                         { },
                         "value1"
                     };

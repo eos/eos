@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
- * Copyright (c) 2022 Stephan Kürten
+ * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022      Stephan Kürten
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,7 +25,7 @@ using namespace std::literals::complex_literals;
 namespace eos
 {
     KKvDZ2022FormFactors::KKvDZ2022FormFactors(const Parameters & p, const Options & o) :
-        opt_subtracted(o, "subtracted", { "off", "on" }, "off"),
+        opt_subtracted(o, "subtracted"_ok, { "off", "on" }, "off"),
         switch_subtracted(0.0),
         _a_omega{{{ UsedParameter(p[_par_name("N^omega_1_0")],  *this),
                    UsedParameter(p[_par_name("N^omega_1_1")],  *this),

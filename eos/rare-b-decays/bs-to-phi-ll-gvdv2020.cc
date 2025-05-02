@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -40,7 +41,7 @@ namespace eos
         f_B(p["decay-constant::B_s"], *this),
         f_phi_par(p["decay-constant::phi"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
-        opt_nonlocal_formfactor(o, "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
+        opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
         nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B_s->phi::" + opt_nonlocal_formfactor.value(), p, o))
     {
         Context ctx("When constructing Bs->Phill GVdV2020 amplitudes");
@@ -49,7 +50,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BsToPhiDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "nonlocal-formfactor", { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020" }
+        { "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020" }
     };
 
 

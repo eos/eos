@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -79,10 +80,10 @@ class BToKstarCharmoniumGvDV2020Test :
 
             Options oo
             {
-                {"model",               "WET"},
-                {"q",                   "d"},
-                {"nonlocal-formfactor", "GvDV2020"},
-                {"psi",                 "J/psi"}
+                {"model"_ok,               "WET"},
+                {"q"_ok,                   "d"},
+                {"nonlocal-formfactor"_ok, "GvDV2020"},
+                {"psi"_ok,                 "J/psi"}
             };
 
             BToKstarCharmonium c(p, oo);

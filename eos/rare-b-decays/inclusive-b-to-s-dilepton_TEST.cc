@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2015, 2017 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -76,12 +76,12 @@ class BToXsDileptonLargeRecoilTest :
                 p["mass::c"] = 1.27;
 
                 Options oo;
-                oo.declare("model", "WET");
-                oo.declare("l", "mu");
+                oo.declare("model"_ok, "WET");
+                oo.declare("l"_ok, "mu");
 
                 BToXsDilepton<HLMW2005> d_mu(p, oo);
 
-                oo.declare("l", "e");
+                oo.declare("l"_ok, "e");
                 BToXsDilepton<HLMW2005> d_e(p, oo);
 
                 {
@@ -138,12 +138,12 @@ class BToXsDileptonLargeRecoilTest :
                 p["mass::c"] = 1.27;
 
                 Options oo;
-                oo.declare("model", "WET");
-                oo.declare("l", "mu");
+                oo.declare("model"_ok, "WET");
+                oo.declare("l"_ok, "mu");
 
                 BToXsDilepton<HLMW2005> d_mu(p, oo);
 
-                oo.declare("l", "e");
+                oo.declare("l"_ok, "e");
                 BToXsDilepton<HLMW2005> d_e(p, oo);
 
                 const double eps = 1e-11;

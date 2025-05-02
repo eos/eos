@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016, 2017 Danny van Dyk
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2015-2025 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,16 +25,16 @@
 namespace eos
 {
     BToKstarDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model", "SM"), p, o)),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
-        opt_l(o, options, "l"),
-        opt_cp_conjugate(o, options, "cp-conjugate"),
+        model(Model::make(o.get("model"_ok, "SM"), p, o)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"), p)),
+        opt_l(o, options, "l"_ok),
+        opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         hbar(p["QM::hbar"], *this),
-        tau(p["life_time::B_" + o.get("q", "d")], *this),
-        m_B(p["mass::B_" + o.get("q", "d")], *this),
+        tau(p["life_time::B_" + o.get("q"_ok, "d")], *this),
+        m_B(p["mass::B_" + o.get("q"_ok, "d")], *this),
         m_Kstar(p["mass::K_d^*"], *this),
         m_l(p["mass::" + opt_l.str()], *this),
         cp_conjugate(opt_cp_conjugate.value()),
@@ -60,8 +60,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "l", { "e", "mu", "tau" }, "mu" },
+        { "cp-conjugate"_ok, { "true", "false" },  "false" },
+        { "l"_ok, { "e", "mu", "tau" }, "mu" },
     };
 
     double
