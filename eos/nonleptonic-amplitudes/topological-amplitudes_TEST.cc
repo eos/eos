@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,11 +65,11 @@ class TopologicalAmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o{
-                    {            "q",    "u" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^+" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "u" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^+" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> d(p, o);
@@ -80,11 +81,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d.amplitude(), complex<double>(4.818456257e-8, -1.252370068e-7), eps);
 
                 Options oo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^+" },
-                    {           "P2", "pi^-" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^+" },
+                    {           "P2"_ok, "pi^-" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> dd(p, oo);
@@ -96,11 +97,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(dd.amplitude(), complex<double>(1.630699530e-8, -1.186390123e-7), eps);
 
                 Options ooo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^0" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^0" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> ddd(p, ooo);
@@ -112,11 +113,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.amplitude(), complex<double>(-5.183626659e-8, 5.847286120e-8), eps);
 
                 Options oooo{
-                    {            "q",      "s" },
-                    {           "P1",    "eta" },
-                    {           "P2", "Kbar_d" },
-                    {        "model",    "CKM" },
-                    { "cp-conjugate",   "true" }
+                    {            "q"_ok,      "s" },
+                    {           "P1"_ok,    "eta" },
+                    {           "P2"_ok, "Kbar_d" },
+                    {        "model"_ok,    "CKM" },
+                    { "cp-conjugate"_ok,   "true" }
                 };
 
                 TopologicalRepresentation<PToPP> dddd(p, oooo);
@@ -176,11 +177,11 @@ class TopologicalAmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o{
-                    {            "q",    "u" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^+" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "u" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^+" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> d(p, o);
@@ -192,11 +193,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d.amplitude(), complex<double>(-1.088861333e-7, -8.011103022e-8), eps);
 
                 Options oo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^+" },
-                    {           "P2", "pi^-" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^+" },
+                    {           "P2"_ok, "pi^-" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> dd(p, oo);
@@ -208,11 +209,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(dd.amplitude(), complex<double>(-5.145183319e-7, -1.478723453e-7), eps);
 
                 Options ooo{
-                    {            "q",    "d" },
-                    {           "P1", "pi^0" },
-                    {           "P2", "pi^0" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok, "pi^0" },
+                    {           "P2"_ok, "pi^0" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> ddd(p, ooo);
@@ -224,11 +225,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(ddd.amplitude(), complex<double>(-3.605300854e-7, -3.457823985e-8), eps);
 
                 Options oooo{
-                    {            "q",      "s" },
-                    {           "P1",    "eta" },
-                    {           "P2", "Kbar_d" },
-                    {        "model",    "CKM" },
-                    { "cp-conjugate",   "true" }
+                    {            "q"_ok,      "s" },
+                    {           "P1"_ok,    "eta" },
+                    {           "P2"_ok, "Kbar_d" },
+                    {        "model"_ok,    "CKM" },
+                    { "cp-conjugate"_ok,   "true" }
                 };
 
                 TopologicalRepresentation<PToPP> dddd(p, oooo);
@@ -288,11 +289,11 @@ class TopologicalAmplitudesTest : public TestCase
                 static const double eps = 1.0e-6;
 
                 Options o{
-                    {            "q",    "u" },
-                    {           "P1",  "eta" },
-                    {           "P2", "pi^+" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "u" },
+                    {           "P1"_ok,  "eta" },
+                    {           "P2"_ok, "pi^+" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> d(p, o);
@@ -305,11 +306,11 @@ class TopologicalAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d.amplitude(), complex<double>(4.5224998612750857e-7, -8.529164486387376e-9), eps);
 
                 Options oo{
-                    {            "q",         "d" },
-                    {           "P1", "eta_prime" },
-                    {           "P2",       "K_d" },
-                    {        "model",       "CKM" },
-                    { "cp-conjugate",      "true" }
+                    {            "q"_ok,         "d" },
+                    {           "P1"_ok, "eta_prime" },
+                    {           "P2"_ok,       "K_d" },
+                    {        "model"_ok,       "CKM" },
+                    { "cp-conjugate"_ok,      "true" }
                 };
 
                 TopologicalRepresentation<PToPP> dd(p, oo);
@@ -323,11 +324,11 @@ class TopologicalAmplitudesTest : public TestCase
 
 
                 Options ooo{
-                    {            "q",    "d" },
-                    {           "P1",  "eta" },
-                    {           "P2",  "eta" },
-                    {        "model",  "CKM" },
-                    { "cp-conjugate", "true" }
+                    {            "q"_ok,    "d" },
+                    {           "P1"_ok,  "eta" },
+                    {           "P2"_ok,  "eta" },
+                    {        "model"_ok,  "CKM" },
+                    { "cp-conjugate"_ok, "true" }
                 };
 
                 TopologicalRepresentation<PToPP> ddd(p, ooo);

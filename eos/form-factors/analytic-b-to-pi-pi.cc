@@ -63,13 +63,13 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
-            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p, o)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor"_ok, "BCL2008"), p, o)),
             m_B(p["mass::B_d"], u),
             f_pi(p["decay-constant::pi"], u),
             _mu(p["B->pipi::mu@BFvD2016"], u),
             pi(p, o)
         {
-            std::string scale = o.get("scale", "fixed");
+            std::string scale = o.get("scale"_ok, "fixed");
 
             if ("fixed" == scale)
             {
@@ -81,7 +81,7 @@ namespace eos
             }
             else
             {
-                throw InvalidOptionValueError("scale", scale, "fixed, variable");
+                throw InvalidOptionValueError("scale"_ok, scale, "fixed, variable");
             }
 #if 0
             static const double q2 = 0.6, k2 = 18.6;
@@ -626,7 +626,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
-            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor"_ok, "BCL2008"), p)),
             m_B(p["mass::B_d"], u),
             m_Bst(p["mass::B_d^*"], u),
             g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u)

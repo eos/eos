@@ -1,4 +1,21 @@
-/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+/* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
+
+/*
+ * Copyright (c) 2019-2025 Danny van Dyk
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-v-l-nu.hh>
@@ -38,13 +55,13 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, "model", { "SM", "CKMScan" }, "SM"),
+            opt_model(o, "model"_ok, { "SM", "CKMScan" }, "SM"),
             model(Model::make(opt_model.value(), p, o)),
             m_B(p["mass::B_d"], u),
             m_Dstar(p["mass::D_d^*"], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
-            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "BGJvD2019"), p, o))
+            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors"_ok, "BGJvD2019"), p, o))
         {
             Context ctx("When constructing B->Dpilnu observable");
 
@@ -448,7 +465,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e", "mu", "tau" }, "mu" }
     };
 
     BToDPiLeptonNeutrino::BToDPiLeptonNeutrino(const Parameters & parameters, const Options & options) :

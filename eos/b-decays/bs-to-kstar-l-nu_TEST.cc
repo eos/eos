@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2015 Danny van Dyk
- * Copyright (c) 2024 Carolina Bolognani
+ * Copyright (c) 2013-2025 Danny van Dyk
+ * Copyright (c) 2024      Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,11 +64,11 @@ class BsToKstarLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET"     },
-                    { "form-factors", "BSZ2015" },
-                    { "V",            "K^*"     },
-                    { "q",            "s"       },
-                    { "l",            "mu"      }
+                    { "model"_ok,        "WET"     },
+                    { "form-factors"_ok, "BSZ2015" },
+                    { "V"_ok,            "K^*"     },
+                    { "q"_ok,            "s"       },
+                    { "l"_ok,            "mu"      }
                 };
 
                 BToVectorLeptonNeutrino d(p, oo);

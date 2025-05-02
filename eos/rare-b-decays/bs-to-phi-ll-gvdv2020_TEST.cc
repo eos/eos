@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -97,12 +98,12 @@ class BsToPhiDileptonGvDV2020Test :
 
             Options oo
             {
-                {"model",                   "WET"},
-                {"tag",                     "GvDV2020"},
-                {"nonlocal-formfactors",    "GvDV2020"},
-                {"form-factors",            "BSZ2015"},
-                {"l",                       "mu"},
-                {"q",                       "s"}
+                {"model"_ok,                   "WET"},
+                {"tag"_ok,                     "GvDV2020"},
+                {"nonlocal-formfactors"_ok,    "GvDV2020"},
+                {"form-factors"_ok,            "BSZ2015"},
+                {"l"_ok,                       "mu"},
+                {"q"_ok,                       "s"}
             };
 
             static const double eps = 1e-5;

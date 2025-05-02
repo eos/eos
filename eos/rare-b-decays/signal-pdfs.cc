@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@ namespace eos
             {
                 // B -> K nubar nu
                 make_signal_pdf("B^-->K^-nunu::dGamma/dq2",
-                    Options{ { "q", "u" }, { "I", "1/2" }, { "D", "s" } },
+                    Options{ { "q"_ok, "u" }, { "I"_ok, "1/2" }, { "D"_ok, "s" } },
                     &BToPseudoscalarDineutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 22.90, BToPseudoscalarDineutrino::kinematics_description_q2 }
@@ -51,7 +51,7 @@ namespace eos
 
                 // B -> K l^+ l^-
                 make_signal_pdf("B->Kll::d^2Gamma@LargeRecoil",
-                    Options{ {"tag", "BFS2004"} },
+                    Options{ {"tag"_ok, "BFS2004"} },
                     &BToKDilepton::two_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "s",                  1.00,  6.00, BToKDilepton::kinematics_description_s },
@@ -65,7 +65,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B->Kll::d^2Gamma@LowRecoil",
-                    Options{ {"tag", "GP2004" }},
+                    Options{ {"tag"_ok, "GP2004" }},
                     &BToKDilepton::two_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "s",                 15.00, 22.87, BToKDilepton::kinematics_description_s },
@@ -95,7 +95,7 @@ namespace eos
             {
                 // B -> K^* nu nu
                 make_signal_pdf("B^-->K^*-nunu::dGamma/dq2",
-                    Options{ { "q", "u" }, { "I", "1/2" }, { "D", "s" } },
+                    Options{ { "q"_ok, "u" }, { "I"_ok, "1/2" }, { "D"_ok, "s" } },
                     &BToVectorDineutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 19.25, BToVectorDineutrino::kinematics_description_q2 }
@@ -109,7 +109,7 @@ namespace eos
 
                 // B -> K^* l^+ l^-
                 make_signal_pdf("B->K^*ll::d^4Gamma@LargeRecoil",
-                    Options{ {"tag", "BFS2004"} },
+                    Options{ {"tag"_ok, "BFS2004"} },
                     &BToKstarDilepton::decay_width_LHCb,
                     std::make_tuple(
                         KinematicRange{ "s",                  1.00,  6.00,       BToKstarDilepton::kinematics_description_s         },
@@ -127,7 +127,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B->K^*ll::d^4Gamma@LowRecoil",
-                    Options{ {"tag", "GP2004" }},
+                    Options{ {"tag"_ok, "GP2004" }},
                     &BToKstarDilepton::decay_width_LHCb,
                     std::make_tuple(
                         KinematicRange{ "s",                  15.00,  19.21,      BToKstarDilepton::kinematics_description_s },

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ namespace eos
 
                 // B -> 3l nu
                 make_signal_pdf("B_u->enumumu::d^5Gamma",
-                    Options{ { "l", "e" }, { "lprime", "mu" } },
+                    Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } },
                     &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0447, 27.8714, BToThreeLeptonsNeutrino::kinematics_description_q2 },
@@ -75,7 +75,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B_u->munuee::d^5Gamma",
-                    Options{ { "l", "mu" }, { "lprime", "e" } },
+                    Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } },
                     &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 1.0e-6, 26.767, BToThreeLeptonsNeutrino::kinematics_description_q2 },
@@ -111,7 +111,7 @@ namespace eos
             {
                 // B -> pi l nu
                 make_signal_pdf("B->pilnu::dGamma/dq2",
-                    Options{ { "P", "pi" } },
+                    Options{ { "P"_ok, "pi" } },
                     &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
@@ -124,7 +124,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B->pilnu::d^2Gamma/dq2/dcos(theta_l)",
-                    Options{ { "P", "pi" } },
+                    Options{ { "P"_ok, "pi" } },
                     &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
@@ -171,7 +171,7 @@ namespace eos
 
                 // B -> D l nu
                 make_signal_pdf("B->Dlnu::dGamma/dq2",
-                    Options{ { "P", "D" } },
+                    Options{ { "P"_ok, "D" } },
                     &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
@@ -184,7 +184,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B->Dlnu::d^2Gamma/dq2/dcos(theta_l)",
-                    Options{ { "P", "D" } },
+                    Options{ { "P"_ok, "D" } },
                     &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
@@ -247,7 +247,7 @@ namespace eos
 
                 // B -> D^* l nu
                 make_signal_pdf("B->D^*lnu::dBR",
-                    Options{ { "V", "D^*" } },
+                    Options{ { "V"_ok, "D^*" } },
                     &BToVectorLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 10.68, BToVectorLeptonNeutrino::kinematics_description_q2 }
@@ -260,7 +260,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B->D^*lnu::d^4Gamma",
-                    Options{ { "V", "D^*" } },
+                    Options{ { "V"_ok, "D^*" } },
                     &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2",            0.0,  10.68,      BToVectorLeptonNeutrino::kinematics_description_q2        },
@@ -277,7 +277,7 @@ namespace eos
 
                 // B_s -> K^* l nu
                 make_signal_pdf("B_s->K^*lnu::dBR",
-                    Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } },
+                    Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, { "I"_ok, "1/2" } },
                     &BToVectorLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 10.68, BToVectorLeptonNeutrino::kinematics_description_q2 }
@@ -290,7 +290,7 @@ namespace eos
                 ),
 
                 make_signal_pdf("B_s->K^*lnu::d^4Gamma",
-                    Options{ { "U", "u" }, {"q", "s"}, { "I", "1/2" } },
+                    Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, { "I"_ok, "1/2" } },
                     &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2",            0.0,  10.68,      BToVectorLeptonNeutrino::kinematics_description_q2        },

@@ -105,13 +105,13 @@ namespace eos
             s0_1_t(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^T,1@B-LCSR"], u),
             M2(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::M^2@B-LCSR"], u),
             mu(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::mu@B-LCSR"], u),
-            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q", stringify(Process_::q_s) } })), // operator+ is ordered!
-            opt_2pt(o, "2pt", { "tw2+3", "all", "off" }, "all"),
-            opt_3pt(o, "3pt", { "tw3+4", "all", "off" }, "all"),
+            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q"_ok, stringify(Process_::q_s) } })), // operator+ is ordered!
+            opt_2pt(o, "2pt"_ok, { "tw2+3", "all", "off" }, "all"),
+            opt_3pt(o, "3pt"_ok, { "tw3+4", "all", "off" }, "all"),
             switch_2pt_phi(1.0),
             switch_2pt_g(1.0),
             switch_3pt(1.0),
-            opt_method(o, "method", { "borel", "dispersive" }, "borel"),
+            opt_method(o, "method"_ok, { "borel", "dispersive" }, "borel"),
             switch_borel(opt_method.value() == "borel")
         {
             u.uses(*b_lcdas);
@@ -9495,9 +9495,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPLCSR<Process_>>::options
     {
-        { "2pt",    { "tw2+3", "all", "off" }, "all"   },
-        { "3pt",    { "tw3+4", "all", "off" }, "all"   },
-        { "method", { "borel", "dispersive" }, "borel" }
+        { "2pt"_ok,    { "tw2+3", "all", "off" }, "all"   },
+        { "3pt"_ok,    { "tw3+4", "all", "off" }, "all"   },
+        { "method"_ok, { "borel", "dispersive" }, "borel" }
     };
 
     template <typename Process_>

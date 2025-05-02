@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2024 Danny van Dyk
+ * Copyright (c) 2017-2025 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Philip Lüghausen
@@ -57,7 +57,7 @@ class ExponentialTest :
 
                 /* Two-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q"_ok, "u" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.phi_plus(1.0),    0.537484,   eps);
@@ -132,7 +132,7 @@ class ExponentialTest :
 
                 /* Three-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q"_ok, "u" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.phi_3(1.0, 0.1), 0.0         ,  eps);
@@ -291,7 +291,7 @@ class ExponentialTest :
                     TEST_CHECK_NEARLY_EQUAL(B.chi_bar_bar_4(3.0, 0.5), 3.0990400e-2, eps);
                 }
                 {
-                    Exponential B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q"_ok, "u" } });
 
                     // psi_A at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.psi_A(1.0, 0.1), 1.0811700e-3, eps);
@@ -348,7 +348,7 @@ class ExponentialTest :
 
                 /* Auxiliary functions to three-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q"_ok, "u" } });
 
                     // Xbar_A at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.Xbar_A(1.0, 0.1), 2.1832900e-2, eps);
@@ -387,7 +387,7 @@ class ExponentialTest :
 
                 /* Two-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q"_ok, "u" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.phi_plus(1.0),    0.537484,   eps);
@@ -462,7 +462,7 @@ class ExponentialTest :
 
                 /* Three-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "u" } });
+                    Exponential B(p, Options{ { "q"_ok, "u" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.phi_3(1.0, 0.1),-7.0511100e-3, eps);
@@ -631,7 +631,7 @@ class ExponentialTest :
 
                 /* Two-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "s" } });
+                    Exponential B(p, Options{ { "q"_ok, "s" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.phi_plus(1.0),   0.527341,   eps);
@@ -686,7 +686,7 @@ class ExponentialTest :
 
                 /* Three-particle LCDAs */
                 {
-                    Exponential B(p, Options{ { "q", "s" } });
+                    Exponential B(p, Options{ { "q"_ok, "s" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(B.phi_3(1.0, 0.1), -1.0810700e-3, eps);
@@ -763,7 +763,7 @@ class ExponentialTest :
             /* coefficient interface */
             {
                 Parameters p = Parameters::Defaults();
-                Exponential B(p, Options{ { "q", "u" } });
+                Exponential B(p, Options{ { "q"_ok, "u" } });
                 auto [c, c_end] = B.coefficient_range(1.0);
 
                 std::array<double, 9> ref = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};

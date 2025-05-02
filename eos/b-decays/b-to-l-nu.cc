@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2024 Danny van Dyk
+ * Copyright (c) 2015-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -69,17 +69,17 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, options, "model"),
+            opt_model(o, options, "model"_ok),
             model(Model::make(opt_model.value(), p, o)),
-            opt_q(o, options, "q"),
+            opt_q(o, options, "q"_ok),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
             m_B(p["mass::B_" + opt_q.str()], u),
             f_B(p["decay-constant::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
-            opt_cp_conjugate(o, options, "cp-conjugate"),
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             mu(p[opt_q.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
         {
             Context ctx("When constructing B_q->lnu observable");
@@ -138,9 +138,9 @@ namespace eos
     Implementation<BToLeptonNeutrino>::options
     {
         Model::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "l",            { "e", "mu", "tau" }, "mu"    },
-        { "q",            { "c", "u" },         "c"     }
+        { "cp-conjugate"_ok, { "true", "false" },  "false" },
+        { "l"_ok,            { "e", "mu", "tau" }, "mu"    },
+        { "q"_ok,            { "c", "u" },         "c"     }
     };
 
     BToLeptonNeutrino::BToLeptonNeutrino(const Parameters & parameters, const Options & options) :

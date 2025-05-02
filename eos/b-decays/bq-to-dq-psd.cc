@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023-2024 Danny van Dyk
- * Copyright (c) 2023 Stefan Meiser
+ * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023      Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -86,19 +86,19 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, options, "model"),
+            opt_model(o, options, "model"_ok),
             model(Model::make(opt_model.value(), p, o)),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_q(o, options, "q"),
+            opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             m_D(p["mass::D_" + opt_q.str()], u),
             m_P(p["mass::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi^+")], u),
             f_P(p["decay-constant::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi")], u),
-            opt_cp_conjugate(o, options, "cp-conjugate"),
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u),
-            opt_accuracy(o, options, "accuracy")
+            opt_accuracy(o, options, "accuracy"_ok)
         {
             Context ctx("When constructing B_q->D_q P observable");
 
@@ -361,9 +361,9 @@ namespace eos
     Implementation<BqToDqPseudoscalar>::options
     {
         Model::option_specification(),
-        { "accuracy",     { "LO", "NLO", "NLP", "LO+NLO", "all" }, "all"   },
-        { "cp-conjugate", { "true", "false" },                     "false" },
-        { "q",            { "s", "d" },                            ""      }
+        { "accuracy"_ok,     { "LO", "NLO", "NLP", "LO+NLO", "all" }, "all"   },
+        { "cp-conjugate"_ok, { "true", "false" },                     "false" },
+        { "q"_ok,            { "s", "d" },                            ""      }
     };
 
     BqToDqPseudoscalar::BqToDqPseudoscalar(const Parameters & parameters, const Options & options) :

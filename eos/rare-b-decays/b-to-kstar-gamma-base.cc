@@ -6,19 +6,19 @@
 namespace eos
 {
     BToKstarGamma::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model", "SM"), p, o)),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
+        model(Model::make(o.get("model"_ok, "SM"), p, o)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"), p)),
         hbar(p["QM::hbar"], *this),
         mu(p["sb::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
-        q(o, options, "q"),
+        q(o, options, "q"_ok),
         tau(p["life_time::B_" + q.str()], *this),
         m_B(p["mass::B_" + q.str()], *this),
         m_Kstar(p["mass::K_d^*"], *this),
-        l(o, options, "l"),
+        l(o, options, "l"_ok),
         m_l(p["mass::" + l.str()], *this),
-        opt_cp_conjugate(o, options, "cp-conjugate"),
+        opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         cp_conjugate(opt_cp_conjugate.value())
     {
         Context ctx("When constructing B->K^*gamma amplitudes");
@@ -48,8 +48,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "l", { "e", "mu" }, "mu" },
-        { "q", { "d", "u" }, "d" },
-        { "cp-conjugate", { "true", "false" }, "false" }
+        { "l"_ok, { "e", "mu" }, "mu" },
+        { "q"_ok, { "d", "u" }, "d" },
+        { "cp-conjugate"_ok, { "true", "false" }, "false" }
     };
 }

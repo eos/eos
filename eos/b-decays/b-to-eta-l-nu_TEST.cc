@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2025 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -58,11 +59,11 @@ class BToEtaLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BSZ2015" },
-                    { "P",            "eta"     },
-                    { "q",            "u"       },
-                    { "l",            "e"       },
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BSZ2015" },
+                    { "P"_ok,            "eta"     },
+                    { "q"_ok,            "u"       },
+                    { "l"_ok,            "e"       },
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);

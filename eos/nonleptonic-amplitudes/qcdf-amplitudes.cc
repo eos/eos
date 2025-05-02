@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Marta Burgos
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,12 +36,12 @@ namespace eos
     }
 
     QCDFRepresentation<PToPP>::QCDFRepresentation(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model", "SM"), p, o)),
-        opt_q(o, options, "q"),
-        opt_p1(o, options, "P1"),
-        opt_p2(o, options, "P2"),
-        opt_cp_conjugate(o, options, "cp-conjugate"),
-        opt_B_bar(o, options, "B_bar"),
+        model(Model::make(o.get("model"_ok, "SM"), p, o)),
+        opt_q(o, options, "q"_ok),
+        opt_p1(o, options, "P1"_ok),
+        opt_p2(o, options, "P2"_ok),
+        opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+        opt_B_bar(o, options, "B-bar"_ok),
         theta_18(p["eta::theta_18"], *this),
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
         P1{ {} },
@@ -137,11 +138,11 @@ namespace eos
 
     const std::vector<OptionSpecification> QCDFRepresentation<PToPP>::options{
         Model::option_specification(),
-        { "cp-conjugate",                                                                     { "true", "false" }, "false" },
-        {        "B_bar",                                                                     { "true", "false" }, "false" },
-        {            "q",                                                                       { "u", "d", "s" },      "" },
-        {           "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
-        {           "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
+        { "cp-conjugate"_ok,                                                                     { "true", "false" }, "false" },
+        {        "B-bar"_ok,                                                                     { "true", "false" }, "false" },
+        {            "q"_ok,                                                                       { "u", "d", "s" },      "" },
+        {           "P1"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
+        {           "P2"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
     };
 
     complex<double>

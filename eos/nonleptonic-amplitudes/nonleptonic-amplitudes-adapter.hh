@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -61,19 +62,19 @@ namespace eos
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _nonleptonic_amplitudes(NonleptonicAmplitudeFactory<Transition_>::create(process.str() + "::" + options["representation"], _parameters, _options)),
+                _nonleptonic_amplitudes(NonleptonicAmplitudeFactory<Transition_>::create(process.str() + "::" + options["representation"_ok], _parameters, _options)),
                 _nonleptonic_amplitudes_function(nonleptonic_amplitudes_function),
                 _kinematics_names(kinematics_names),
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _nonleptonic_amplitudes.get()))
             {
-                if (! _options.has("representation"))
+                if (! _options.has("representation"_ok))
                 {
-                    throw UnknownOptionError("representation");
+                    throw UnknownOptionError("representation"_ok);
                 }
 
                 if (! _nonleptonic_amplitudes)
                 {
-                    throw NoSuchNonleptonicAmplitudeError(process.str(), options["representation"]);
+                    throw NoSuchNonleptonicAmplitudeError(process.str(), options["representation"_ok]);
                 }
 
                 uses(*_nonleptonic_amplitudes);

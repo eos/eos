@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2021-2023 Danny van Dyk
- * Copyright (c) 2024 Lorenz Gärtner
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2024      Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -88,7 +88,7 @@ class ObservableTest : public TestCase
                 auto observable = Observable::make("B->D^*lnu::2*S_1c", p, k, o);
                 TEST_CHECK_NO_THROW(observable->evaluate());
 
-                o.declare("l", "mu");
+                o.declare("l"_ok, "mu");
                 auto obs_S1c = Observable::make("B->D^*lnu::S_1c", p, k, o);
                 TEST_CHECK_EQUAL(observable->evaluate(), 2 * obs_S1c->evaluate());
             }

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2025 Danny van Dyk
  * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -39,11 +39,11 @@ namespace eos
     {
         FLvD2022::FLvD2022(const Parameters & p, const Options & o) :
             model(Model::make("SM", p, o)),
-            opt_Q(o, options, "Q"),
-            opt_q(o, options, "q"),
-            opt_gminus(o, options, "gminus"),
+            opt_Q(o, options, "Q"_ok),
+            opt_q(o, options, "q"_ok),
+            opt_gminus(o, options, "gminus"_ok),
             switch_gminus(1.0),
-            opt_alpha_s(o, options, "alpha_s"),
+            opt_alpha_s(o, options, "alpha-s"_ok),
             mu_0(p[parameter("mu_0")], *this),
             omega_0(p[parameter("omega_0")], *this),
             a({
@@ -548,10 +548,10 @@ namespace eos
         const std::vector<OptionSpecification>
         FLvD2022::options
         {
-            { "Q",       { "b" },                "b"        },
-            { "q",       { "u", "s" },           "u"        },
-            { "gminus",  { "zero", "WW-limit" }, "WW-limit" },
-            { "alpha_s", { "naive", "full"  },   "full"     },
+            { "Q"_ok,       { "b" },                "b"        },
+            { "q"_ok,       { "u", "s" },           "u"        },
+            { "gminus"_ok,  { "zero", "WW-limit" }, "WW-limit" },
+            { "alpha-s"_ok, { "naive", "full"  },   "full"     },
         };
 
         std::vector<OptionSpecification>::const_iterator

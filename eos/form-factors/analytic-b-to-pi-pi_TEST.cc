@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
- * Copyright (c) 2018 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2018      Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -187,7 +187,7 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
 
             /* F_long, variable scale */
             {
-                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale", "variable" } });
+                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale"_ok, "variable" } });
 
                 TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60, -1.0)),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60, -1.0)), +0.157064905, eps);
@@ -205,7 +205,7 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
 
             /* F_time, variable scale */
             {
-                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale", "variable" } });
+                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale"_ok, "variable" } });
 
                 TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60, -1.0)),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60, -1.0)), +0.167697744, eps);

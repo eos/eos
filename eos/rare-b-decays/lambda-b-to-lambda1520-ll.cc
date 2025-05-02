@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -46,8 +47,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "WET"), p, o)),
-            opt_l(o, options, "l"),
+            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            opt_l(o, options, "l"_ok),
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.str()], u),
             tau(p["life_time::Lambda_b"], u),
@@ -55,7 +56,7 @@ namespace eos
         {
             Context ctx("When constructing Lb->L(1520)ll observables");
 
-            std::string tag = o.get("tag", "");
+            std::string tag = o.get("tag"_ok, "");
 
             if ("Naive" == tag)
             {
@@ -314,7 +315,7 @@ namespace eos
     Implementation<LambdaBToLambda1520Dilepton>::options
     {
         Model::option_specification(),
-        {"l", { "e", "mu", "tau" }, "mu"}
+        {"l"_ok, { "e", "mu", "tau" }, "mu"}
     };
 
     double

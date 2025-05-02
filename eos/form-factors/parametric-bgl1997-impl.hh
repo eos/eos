@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020 Danny van Dyk
- * Copyright (c) 2020 Nico Gubernari
- * Copyright (c) 2020 Christoph Bobeth
- * Copyright (c) 2025 Maximilian Hoverath
+ * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020      Nico Gubernari
+ * Copyright (c) 2020      Christoph Bobeth
+ * Copyright (c) 2025      Maximilian Hoverath
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -344,10 +344,10 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> BGL1997FormFactors<Process_, PToV>::_options
     {
-        { "n-bound-states-1m", { "1", "2", "3", "4" }, "3" },
-        { "n-bound-states-1p", { "1", "2", "3", "4" }, "4" },
-        { "n-bound-states-0m", { "1", "2", "3"      }, "3" },
-        { "n-bound-states-0p", { "1", "2"           }, "2" }
+        { "n-bound-states-1m"_ok, { "1", "2", "3", "4" }, "3" },
+        { "n-bound-states-1p"_ok, { "1", "2", "3", "4" }, "4" },
+        { "n-bound-states-0m"_ok, { "1", "2", "3"      }, "3" },
+        { "n-bound-states-0p"_ok, { "1", "2"           }, "2" }
     };
 
     template<typename Process_>
@@ -469,8 +469,8 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> BGL1997FormFactors<Process_, PToP>::_options
     {
-        { "n-bound-states-1m", { "1", "2", "3", "4" }, "3" },
-        { "n-bound-states-0p", { "1", "2"           }, "2" }
+        { "n-bound-states-1m"_ok, { "1", "2", "3", "4" }, "3" },
+        { "n-bound-states-0p"_ok, { "1", "2"           }, "2" }
     };
 
     template<typename Process_>

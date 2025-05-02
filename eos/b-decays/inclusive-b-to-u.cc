@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
- * Copyright (c) 2018 Ahmet Kokulu
- * Copyright (c) 2018 Christoph Bobeth
+ * Copyright (c) 2015-2025 Danny van Dyk
+ * Copyright (c) 2018      Ahmet Kokulu
+ * Copyright (c) 2018      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,8 +37,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, options, "l")
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            opt_l(o, options, "l"_ok)
         {
             Context ctx("When constructing B->X_ulnu observable");
 
@@ -64,7 +64,7 @@ namespace eos
     Implementation<BToXuLeptonNeutrino<Naive>>::options
     {
         Model::option_specification(),
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e", "mu", "tau" }, "mu" }
     };
 
     BToXuLeptonNeutrino<Naive>::BToXuLeptonNeutrino(const Parameters & parameters, const Options & options) :

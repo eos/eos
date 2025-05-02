@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,7 @@
 
 #include <eos/utils/exception.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/qualified-name-parts.hh>
 #include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
@@ -36,7 +37,7 @@ namespace eos
     struct UnknownOptionError :
         public Exception
     {
-        UnknownOptionError(const std::string & key) throw ();
+        UnknownOptionError(const qnp::OptionKey & key) throw ();
     };
 
     /*!
@@ -45,7 +46,7 @@ namespace eos
     struct InvalidOptionValueError :
         public Exception
     {
-        InvalidOptionValueError(const std::string & key, const std::string & value, const std::string & allowed = "") throw ();
+        InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed = "") throw ();
     };
 
     /*!
@@ -54,7 +55,7 @@ namespace eos
     struct UnspecifiedOptionError :
         public Exception
     {
-        UnspecifiedOptionError(const std::string & key, const std::string & allowed = "") throw ();
+        UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed = "") throw ();
     };
 
     /*!
@@ -80,7 +81,7 @@ namespace eos
              *
              * @param options The set of initial options from which this object shall be constructed.
              */
-            Options(const std::initializer_list<std::pair<std::string, std::string>> & options);
+            Options(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & options);
 
             /// Destructor.
             ~Options();
@@ -94,13 +95,13 @@ namespace eos
 
             ///@name Access
             ///@{
-            const std::string & operator[] (const std::string & key) const;
+            const std::string & operator[] (const qnp::OptionKey & key) const;
 
-            bool has(const std::string & key) const;
+            bool has(const qnp::OptionKey & key) const;
 
-            void declare(const std::string & key, const std::string & value = "");
+            void declare(const qnp::OptionKey & key, const std::string & value = "");
 
-            std::string get(const std::string & key, const std::string & default_value = "") const;
+            std::string get(const qnp::OptionKey & key, const std::string & default_value = "") const;
 
             std::string as_string() const;
 
@@ -110,14 +111,14 @@ namespace eos
             ///@name Iteration over our options
             ///@{
             struct OptionIteratorTag;
-            using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const std::pair<const std::string, std::string>>;
+            using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
 
             OptionIterator begin() const;
             OptionIterator end() const;
             ///@}
     };
 
-    extern template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const std::string, std::string>>;
+    extern template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
 
     /// Merge operator.
     Options operator+ (const Options & lhs, const Options & rhs);
@@ -127,7 +128,7 @@ namespace eos
      */
     struct OptionSpecification
     {
-        std::string key;
+        qnp::OptionKey key;
         std::vector<std::string> allowed_values;
         std::string default_value;
     };
@@ -139,7 +140,7 @@ namespace eos
 
         public:
             SpecifiedOption(const Options & options, const OptionSpecification & specification);
-            SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~SpecifiedOption();
 
             const std::string & value() const;
@@ -152,7 +153,7 @@ namespace eos
             bool boolean_value;
 
         public:
-            BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "true");
+            BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "true"_ok);
             ~BooleanOption();
 
             bool value() const;
@@ -166,7 +167,7 @@ namespace eos
             double _float_value;
 
         public:
-            FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~FloatOption();
 
             double value() const;
@@ -177,7 +178,7 @@ namespace eos
         public SpecifiedOption
     {
         public:
-            LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "l");
+            LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "l"_ok);
             ~LeptonFlavorOption();
 
             LeptonFlavor value() const;
@@ -188,7 +189,7 @@ namespace eos
         public SpecifiedOption
     {
         public:
-            QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "q");
+            QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "q"_ok);
             ~QuarkFlavorOption();
 
             QuarkFlavor value() const;
@@ -199,7 +200,7 @@ namespace eos
         public SpecifiedOption
     {
         public:
-            LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~LightMesonOption();
 
             LightMeson value() const;

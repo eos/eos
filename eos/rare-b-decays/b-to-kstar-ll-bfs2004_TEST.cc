@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016, 2017 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -87,13 +87,13 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
 
             Options oo
             {
-                {"model", "WET"},
-                {"scan-mode", "cartesian"},
-                {"tag", "BFS2004"},
-                {"qcdf-integrals", "mixed"},
-                {"form-factors", "KMPW2010"},
-                {"l", "mu"},
-                {"q", "d"}
+                {"model"_ok, "WET"},
+                {"scan-mode"_ok, "cartesian"},
+                {"tag"_ok, "BFS2004"},
+                {"qcdf-integrals"_ok, "mixed"},
+                {"form-factors"_ok, "KMPW2010"},
+                {"l"_ok, "mu"},
+                {"q"_ok, "d"}
             };
 
             static const double eps = 0.72e-2;
@@ -164,12 +164,12 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
 
             Options oo
             {
-                {"model", "WET"},
-                {"scan-mode", "cartesian"},
-                {"tag", "BFS2004"},
-                {"form-factors", "KMPW2010"},
-                {"l", "mu"},
-                {"q", "u"}
+                {"model"_ok, "WET"},
+                {"scan-mode"_ok, "cartesian"},
+                {"tag"_ok, "BFS2004"},
+                {"form-factors"_ok, "KMPW2010"},
+                {"l"_ok, "mu"},
+                {"q"_ok, "u"}
             };
 
             BToKstarDilepton d(p, oo);

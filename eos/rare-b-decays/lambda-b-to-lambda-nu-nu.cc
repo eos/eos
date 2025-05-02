@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,7 +63,7 @@ namespace eos
         bool cp_conjugate;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             m_Lambda_b(p["mass::Lambda_b"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             m_Lambda(p["mass::Lambda"], u),
@@ -70,12 +71,12 @@ namespace eos
             alpha_e(p["QED::alpha_e(m_b)"], u),
             hbar(p["QM::hbar"], u),
             mu(p["sbnunu::mu"], u),
-            opt_cp_conjugate(o, options, "cp-conjugate"),
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             cp_conjugate(opt_cp_conjugate.value())
         {
             Context ctx("When constructing Lb->Lnunu observables");
 
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
+            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"), p, o);
 
             lambda_t  = [*this] () { return model->ckm_tb() * std::conj(model->ckm_ts()); };
             wc        = [*this] () { return model->wet_sbnunu(cp_conjugate); };
@@ -152,7 +153,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" }
+        { "cp-conjugate"_ok, { "true", "false" },  "false" }
     };
 
 

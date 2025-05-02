@@ -34,8 +34,8 @@ namespace eos
 {
     /* Vacuum -> pi pi */
     KSvD2025FormFactors<VacuumToKPi>::KSvD2025FormFactors(const Parameters & p, const Options & o) :
-        n_resonances_1m(o, option_specifications, "n-resonances-1m"),
-        n_resonances_0p(o, option_specifications, "n-resonances-0p"),
+        n_resonances_1m(o, option_specifications, "n-resonances-1m"_ok),
+        n_resonances_0p(o, option_specifications, "n-resonances-0p"_ok),
         _b_fp{{
             UsedParameter(p[_coeff_name("+", "1")], *this),
             UsedParameter(p[_coeff_name("+", "2")], *this),
@@ -482,8 +482,8 @@ namespace eos
     const std::vector<OptionSpecification>
     KSvD2025FormFactors<VacuumToKPi>::option_specifications
     {
-        { "n-resonances-1m", { "1", "2", "3" }, "2" },
-        { "n-resonances-0p", { "1", "2"      }, "2" }
+        { "n-resonances-1m"_ok, { "1", "2", "3" }, "2" },
+        { "n-resonances-0p"_ok, { "1", "2"      }, "2" }
     };
 
     std::vector<OptionSpecification>::const_iterator

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@ namespace eos
                         Unit::InversePicoSecond(),
                         &BMixing::delta_m,
                         std::make_tuple(),
-                        Options{ { "q", "s" } }),
+                        Options{ { "q"_ok, "s" } }),
             }
         );
 

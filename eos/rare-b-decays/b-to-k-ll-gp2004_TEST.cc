@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2014      Christoph Bobeth
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -94,9 +94,9 @@ class BToKDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model", "WET"},
-                    {"tag", "GP2004"},
-                    {"form-factors", "BSZ2015"}
+                    {"model"_ok, "WET"},
+                    {"tag"_ok, "GP2004"},
+                    {"form-factors"_ok, "BSZ2015"}
                 };
 
                 BToKDilepton d(p, oo);
@@ -170,10 +170,10 @@ class BToKDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model", "WET"},
-                    {"tag", "GP2004"},
-                    {"l", "mu"},
-                    {"form-factors", "BSZ2015"}
+                    {"model"_ok, "WET"},
+                    {"tag"_ok, "GP2004"},
+                    {"l"_ok, "mu"},
+                    {"form-factors"_ok, "BSZ2015"}
                 };
 
                 BToKDilepton d(p, oo);
@@ -230,11 +230,11 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
 
             Options o
             {
-                {"model", "WET"},
-                {"tag", "GP2004"},
-                {"l", "mu"},
-                {"q", "u"},
-                {"form-factors", "KMPW2010"}
+                {"model"_ok, "WET"},
+                {"tag"_ok, "GP2004"},
+                {"l"_ok, "mu"},
+                {"q"_ok, "u"},
+                {"form-factors"_ok, "KMPW2010"}
             };
 
             std::vector<Parameter> variations;

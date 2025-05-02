@@ -1,7 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024-2025, Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
+ * Copyright (c) 2025      Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -63,7 +64,7 @@ namespace eos
     OptionSpecification
     ScatteringAmplitudeFactory<PPToPP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "scattering-amplitudes", {}, "" };
+        OptionSpecification result { "scattering-amplitudes"_ok, {}, "" };
         for (const auto & t : ScatteringAmplitudeFactory<PPToPP>::scattering_amplitudes)
         {
             if (process == std::get<0>(t).prefix_part())
@@ -82,7 +83,7 @@ namespace eos
             allowed_values.insert(std::get<0>(t).name_part().str());
         }
 
-        OptionSpecification result { "scattering-amplitudes", { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "scattering-amplitudes"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
         return result;
     }
 

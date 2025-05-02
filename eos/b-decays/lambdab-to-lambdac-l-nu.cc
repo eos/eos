@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Ahmet Kokulu
- * Copyright (c) 2019,2021 Danny van Dyk
+ * Copyright (c) 2019      Ahmet Kokulu
+ * Copyright (c) 2019-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -279,18 +279,18 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             parameters(p),
             hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda_c(p["mass::Lambda_c"], u),
             alpha(p["Lambda_c::alpha"], u),
             mu(p["cb" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors", "DKMR2017"), p, o))
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors"_ok, "DKMR2017"), p, o))
         {
             Context ctx("When constructing L_b->L_c lnu observable");
 
@@ -399,7 +399,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
-        { "l", { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e", "mu", "tau" }, "mu" }
     };
 
     LambdaBToLambdaCLeptonNeutrino::LambdaBToLambdaCLeptonNeutrino(const Parameters & p, const Options & o) :

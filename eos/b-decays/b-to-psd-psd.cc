@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -54,19 +55,19 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_q(o, options, "q"),
-            opt_p1(o, options, "P1"),
-            opt_p2(o, options, "P2"),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            opt_q(o, options, "q"_ok),
+            opt_p1(o, options, "P1"_ok),
+            opt_p2(o, options, "P2"_ok),
             hbar(p["QM::hbar"], u),
             tau(p["life_time::B_" + opt_q.str()], u),
             mB(p["mass::B_" + opt_q.str()], u),
             mP1(p["mass::" + opt_p1.str()], u),
             mP2(p["mass::" + opt_p2.str()], u),
-            opt_rep(o, options, "representation"),
-            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate", "false"}})),
-            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate", "true"}})),
-            Bbar_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate", "false"}} + Options{{"B_bar", "true"}}))
+            opt_rep(o, options, "representation"_ok),
+            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"}})),
+            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "true"}})),
+            Bbar_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"}} + Options{{"B-bar"_ok, "true"}}))
         {
             Context ctx("When constructing B->PP observable");
 
@@ -164,10 +165,10 @@ namespace eos
     {
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-        { "q",              { "u", "d", "s" },                                                                       "" },
-        { "P1",             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "P2",             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "representation", { "topological", "SU3F", "QCDF" },                                                       "" }
+        { "q"_ok,              { "u", "d", "s" },                                                                       "" },
+        { "P1"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "P2"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
+        { "representation"_ok, { "topological", "SU3F", "QCDF" },                                                       "" }
     };
 
     BToPseudoscalarPseudoscalar::BToPseudoscalarPseudoscalar(const Parameters & parameters, const Options & options) :

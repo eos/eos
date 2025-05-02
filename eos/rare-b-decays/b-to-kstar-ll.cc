@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Christian Wacker
- * Copyright (c) 2014 Christoph Bobeth
- * Copyright (c) 2016, 2017 Danny van Dyk
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2011      Christian Wacker
+ * Copyright (c) 2014      Christoph Bobeth
+ * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,16 +56,16 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "WET"), p, o)),
-            opt_l(o, options, "l"),
+            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            opt_l(o, options, "l"_ok),
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.str()], u),
-            tau(p["life_time::B_" + o.get("q", "d")], u),
+            tau(p["life_time::B_" + o.get("q"_ok, "d")], u),
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
         {
             Context ctx("When constructing B->K^*ll observables");
 
-            std::string tag = o.get("tag", "");
+            std::string tag = o.get("tag"_ok, "");
 
             if ("BFS2004" == tag)
             {
@@ -285,8 +285,8 @@ namespace eos
     Implementation<BToKstarDilepton>::options
     {
         Model::option_specification(),
-        {"l", { "e", "mu", "tau" }, "mu"},
-        {"q", { "d", "u" }, "d"}
+        {"l"_ok, { "e", "mu", "tau" }, "mu"},
+        {"q"_ok, { "d", "u" }, "d"}
     };
 
     double

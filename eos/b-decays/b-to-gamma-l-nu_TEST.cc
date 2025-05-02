@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -73,7 +74,7 @@ class BToGammaLeptonNeutrinoTest :
 
             Options oo
             {
-                { "form-factors", "FLvD2022QCDF" },
+                { "form-factors"_ok, "FLvD2022QCDF" },
             };
 
             // Branching ratio tests

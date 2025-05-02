@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,12 +63,12 @@ class DToKLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BSZ2015" },
-                    { "Q",            "s"       },
-                    { "q",            "u"       },
-                    { "l",            "e"       },
-                    { "I",            "1/2"     }
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BSZ2015" },
+                    { "Q"_ok,            "s"       },
+                    { "q"_ok,            "u"       },
+                    { "l"_ok,            "e"       },
+                    { "I"_ok,            "1/2"     }
                 };
 
                 DToPseudoscalarLeptonNeutrino d(p, oo);

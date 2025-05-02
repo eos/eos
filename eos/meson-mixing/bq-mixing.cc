@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,11 +56,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             mu(p["sbsb::mu"], u),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_q(o, "q", {"s"}),
+            opt_q(o, "q"_ok, {"s"}),
             m_B(p["mass::B_" + opt_q.value()], u),
             f_B(p["decay-constant::B_" + opt_q.value()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),

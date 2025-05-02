@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -55,8 +55,8 @@ class BToPiPiLeptonNeutrinoTest :
                 p["pi::a4@1GeV"]           = +0.04;
                 p["B->pipi::mu@BFvD2016"]  = +1.5;
                 Options oo;
-                oo.declare("model", "CKM");
-                oo.declare("form-factors", "BFvD2016");
+                oo.declare("model"_ok, "CKM");
+                oo.declare("form-factors"_ok, "BFvD2016");
 
                 BToPiPiLeptonNeutrino d(p, oo);
 

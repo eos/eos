@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2012-2024 Danny van Dyk
+ * Copyright (c) 2012-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,8 +41,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
-            opt_q(o, options, "q"),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            opt_q(o, options, "q"_ok),
             mu2_g(p["B->B::mu_G^2@1GeV"], u)
         {
             Context ctx("When constructing the B meson properties");
@@ -72,7 +72,7 @@ namespace eos
     Implementation<BMesonProperties>::options
     {
         Model::option_specification(),
-        { "q", { "u", "d", "s", "c"}, "d" }
+        { "q"_ok, { "u", "d", "s", "c"}, "d" }
     };
 
     BMesonProperties::BMesonProperties(const Parameters & parameters, const Options & options) :

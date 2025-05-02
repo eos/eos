@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -138,11 +138,11 @@ namespace eos
 
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             parameters(p),
-            opt_D(o, options, "D"),
-            opt_q(o, options, "q"),
-            opt_I(o, options, "I"),
+            opt_D(o, options, "D"_ok),
+            opt_q(o, options, "q"_ok),
+            opt_I(o, options, "I"_ok),
             m_B(p["mass::" + _B()], u),
             tau_B(p["life_time::" + _B()], u),
             m_P(p["mass::" + _P()], u),
@@ -152,9 +152,9 @@ namespace eos
             isospin_factor(_isospin_factor()),
             mu(p[opt_D.str() + "b" + "nunu::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
-            opt_cp_conjugate(o, options, "cp-conjugate"),
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             cp_conjugate(opt_cp_conjugate.value()),
-            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
+            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
             Context ctx("When constructing B->Pnunu observables");
 
@@ -230,10 +230,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate", { "true", "false" },  "false" },
-        { "D", { "s" },             "s" },
-        { "q", { "u", "d" },        "u" },
-        { "I", { "1", "0", "1/2" }, ""  },
+        { "cp-conjugate"_ok, { "true", "false" },  "false" },
+        { "D"_ok, { "s" },             "s" },
+        { "q"_ok, { "u", "d" },        "u" },
+        { "I"_ok, { "1", "0", "1/2" }, ""  },
     };
 
     BToPseudoscalarDineutrino::BToPseudoscalarDineutrino(const Parameters & parameters, const Options & options) :

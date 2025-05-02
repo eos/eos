@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Ahmet Kokulu
- * Copyright (c) 2019,2021 Danny van Dyk
+ * Copyright (c) 2019      Ahmet Kokulu
+ * Copyright (c) 2019-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -58,9 +58,9 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
-                    { "form-factors", "DKMR2017"   },
-                    { "l",            "mu"         }
+                    { "model"_ok,        "WET" },
+                    { "form-factors"_ok, "DKMR2017"   },
+                    { "l"_ok,            "mu"         }
                 };
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
@@ -86,9 +86,9 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
-                    { "form-factors", "DKMR2017"   },
-                    { "l",            "tau"        }
+                    { "model"_ok,        "WET" },
+                    { "form-factors"_ok, "DKMR2017"   },
+                    { "l"_ok,            "tau"        }
                 };
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
@@ -112,19 +112,19 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WET" },
-                    { "form-factors", "DKMR2017"   },
-                    { "l",            "mu"        }
+                    { "model"_ok,        "WET" },
+                    { "form-factors"_ok, "DKMR2017"   },
+                    { "l"_ok,            "mu"        }
                 };
                 LambdaBToLambdaCLeptonNeutrino dmu(p, oo);
 
-                oo.declare("l", "tau");
+                oo.declare("l"_ok, "tau");
                 LambdaBToLambdaCLeptonNeutrino dtau(p, oo);
 
                 oo =
                 {
-                    { "model",        "WET" },
-                    { "form-factors", "DKMR2017"   },
+                    { "model"_ok,        "WET" },
+                    { "form-factors"_ok, "DKMR2017"   },
                 };
                 Kinematics k
                 {
@@ -165,9 +165,9 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
-                oo.declare("model", "WET");
-                oo.declare("form-factors", "DKMR2017");
-                oo.declare("l", "mu");
+                oo.declare("model"_ok, "WET");
+                oo.declare("form-factors"_ok, "DKMR2017");
+                oo.declare("l"_ok, "mu");
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
 
@@ -204,9 +204,9 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
-                oo.declare("model", "WET");
-                oo.declare("form-factors", "DKMR2017");
-                oo.declare("l", "mu");
+                oo.declare("model"_ok, "WET");
+                oo.declare("form-factors"_ok, "DKMR2017");
+                oo.declare("l"_ok, "mu");
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
 

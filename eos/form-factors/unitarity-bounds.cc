@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=140 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2024 Danny van Dyk
+ * Copyright (c) 2019-2025 Danny van Dyk
  * Copyright (c) 2019-2024 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
@@ -129,7 +129,7 @@ namespace eos
             l6one(p["B(*)->D(*)::l_6(1)@HQET"], u),
             l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], u),
             l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], u),
-            opt_sslp_limit(o, "SU3F-limit-sslp", { "0", "1" }, "0"),
+            opt_sslp_limit(o, "SU3F-limit-sslp"_ok, { "0", "1" }, "0"),
             xispone(p["B_s(*)->D_s(*)::xi'(1)@HQET"], u),
             xisppone(p["B_s(*)->D_s(*)::xi''(1)@HQET"], u),
             xispppone(p["B_s(*)->D_s(*)::xi'''(1)@HQET"], u),
@@ -2222,7 +2222,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BGLCoefficients>::options
     {
-        { "SU3F-limit-sslp", { "0", "1" }, "0" }
+        { "SU3F-limit-sslp"_ok, { "0", "1" }, "0" }
     };
 
     BGLCoefficients::BGLCoefficients(const Parameters & p, const Options & o) :
@@ -2501,7 +2501,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_zorder_bound(o, "z-order-bound", { "1", "2" }, "2"),
+            opt_zorder_bound(o, "z-order-bound"_ok, { "1", "2" }, "2"),
             nf(p["B(*)->D(*)::n_f@HQET"], u),
             ns(p["B_s(*)->D_s(*)::n_s@HQET"], u),
             bgl(new BGLCoefficients(p, o))
@@ -2870,8 +2870,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<HQETUnitarityBounds>::options
     {
-        { "SU3F-limit-sslp", { "0", "1" }, "0" },
-        { "z-order-bound",   { "1", "2" }, "2" }
+        { "SU3F-limit-sslp"_ok, { "0", "1" }, "0" },
+        { "z-order-bound"_ok,   { "1", "2" }, "2" }
     };
 
     HQETUnitarityBounds::HQETUnitarityBounds(const Parameters & p, const Options & o) :
@@ -3162,7 +3162,7 @@ namespace eos
                      UsedParameter(p[_par_name_d("fT_2")], u),
                      UsedParameter(p[_par_name_d("fT_3")], u) }},
             // further parameters
-            opt_zorder_bound(o, "z-order-bound", { "1", "2" }, "2"),
+            opt_zorder_bound(o, "z-order-bound"_ok, { "1", "2" }, "2"),
             nf(p["B(*)->D(*)::n_f@BGL1997"], u)
         {
             if ("1" == opt_zorder_bound.value())
@@ -3238,7 +3238,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BGLUnitarityBounds>::options
     {
-        { "z-order-bound", { "1", "2" }, "2" }
+        { "z-order-bound"_ok, { "1", "2" }, "2" }
     };
 
     BGLUnitarityBounds::BGLUnitarityBounds(const Parameters & p, const Options & o) :

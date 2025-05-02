@@ -1,11 +1,11 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
- * Copyright (c) 2010, 2011 Christian Wacker
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2011 Christian Wacker
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2014      Christoph Bobeth
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,8 +39,8 @@ namespace eos
         m_s(p["mass::s(2GeV)"], *this),
         lambda_psd(p["B->Pll::Lambda_pseudo@LargeRecoil"], *this),
         sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], *this),
-        opt_ccbar_resonance(o, options, "ccbar-resonance"),
-        opt_use_nlo(o, options, "nlo"),
+        opt_ccbar_resonance(o, options, "ccbar-resonance"_ok),
+        opt_use_nlo(o, options, "nlo"_ok),
         ccbar_resonance(opt_ccbar_resonance.value()),
         use_nlo(opt_use_nlo.value())
     {
@@ -54,8 +54,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::GP2004>::options
     {
-        { "ccbar-resonance", { "true", "false" },  "false" },
-        { "nlo", { "true", "false" },  "true" },
+        { "ccbar-resonance"_ok, { "true", "false" },  "false" },
+        { "nlo"_ok, { "true", "false" },  "true" },
     };
 
     // We use the PS mass except for kappa

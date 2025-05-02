@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2025 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -94,7 +94,7 @@ class AnalyticFormFactorBToGammaQCDFTest :
                 // Integration test: observable evaluation
 
                 Kinematics k = Kinematics({ { "E_gamma", 2.16 } });
-                Options o { {"form-factors", "FLvD2022QCDF"} };
+                Options o { {"form-factors"_ok, "FLvD2022QCDF"} };
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 

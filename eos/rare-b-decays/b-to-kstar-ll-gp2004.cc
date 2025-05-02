@@ -1,11 +1,11 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
- * Copyright (c) 2010, 2011 Christian Wacker
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2011 Christian Wacker
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2014      Christoph Bobeth
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,14 +39,14 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c_MSbar(p["mass::c"], *this),
         m_s(p["mass::s(2GeV)"], *this),
-        lambda_long(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_0") + "@LowRecoil"], *this),
-        lambda_par(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pa") + "@LowRecoil"], *this),
-        lambda_perp(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pp") + "@LowRecoil"], *this),
-        sl_phase_long(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_0") + "@LowRecoil"], *this),
-        sl_phase_par(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pa") + "@LowRecoil"], *this),
-        sl_phase_perp(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pp") + "@LowRecoil"], *this),
-        opt_ccbar_resonance(o, options, "ccbar-resonance"),
-        opt_use_nlo(o, options, "nlo"),
+        lambda_long(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_0") + "@LowRecoil"], *this),
+        lambda_par(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pa") + "@LowRecoil"], *this),
+        lambda_perp(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pp") + "@LowRecoil"], *this),
+        sl_phase_long(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_0") + "@LowRecoil"], *this),
+        sl_phase_par(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pa") + "@LowRecoil"], *this),
+        sl_phase_perp(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pp") + "@LowRecoil"], *this),
+        opt_ccbar_resonance(o, options, "ccbar-resonance"_ok),
+        opt_use_nlo(o, options, "nlo"_ok),
         ccbar_resonance(opt_ccbar_resonance.value()),
         use_nlo(opt_use_nlo.value())
     {
@@ -60,8 +60,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::GP2004>::options
     {
-        { "ccbar-resonance", { "true", "false" },  "false" },
-        { "nlo", { "true", "false" },  "true" },
+        { "ccbar-resonance"_ok, { "true", "false" },  "false" },
+        { "nlo"_ok, { "true", "false" },  "true" },
     };
 
     // cf. [GP2004], Eq. (56)

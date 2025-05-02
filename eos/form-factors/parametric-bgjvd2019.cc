@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2023 Danny van Dyk
+ * Copyright (c) 2022-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,17 +38,17 @@ namespace eos
         _model(Model::make("SM", p, o)),
         _mBar(p[prefix + "::mBar@HQET"], *this),
         _a(p[prefix + "::a@HQET"], *this),
-        _opt_lp_model(o, "model-lp", { "power-series", "exponential" }, "power-series"),
-        _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4", "5" }, "3"),
+        _opt_lp_model(o, "model-lp"_ok, { "power-series", "exponential" }, "power-series"),
+        _opt_lp_zorder(o, "z-order-lp"_ok, { "2", "3", "4", "5" }, "3"),
         _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
         _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= "4" : 0.0),
         _enable_lp_z5(1.0 ? _opt_lp_zorder.value() >= "5" : 0.0),
-        _opt_slp_zorder(o, "z-order-slp", { "1", "2" }, "2"),
+        _opt_slp_zorder(o, "z-order-slp"_ok, { "1", "2" }, "2"),
         _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
-        _opt_sslp_zorder(o, "z-order-sslp", { "0", "1", "2" }, "1"),
+        _opt_sslp_zorder(o, "z-order-sslp"_ok, { "0", "1", "2" }, "1"),
         _enable_sslp_z1(1.0 ? _opt_sslp_zorder.value() >= "1" : 0.0),
         _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= "2" : 0.0),
-        _opt_sslp_limit(o, "SU3F-limit-sslp", { "0", "1" }, "0"),
+        _opt_sslp_limit(o, "SU3F-limit-sslp"_ok, { "0", "1" }, "0"),
         _xipone(p[prefix + "::xi'(1)@HQET"], *this),
         _xippone(p[prefix + "::xi''(1)@HQET"], *this),
         _xipppone(p[prefix + "::xi'''(1)@HQET"], *this),

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012, 2013, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2011-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -97,9 +97,9 @@ class BToKstarGammaTest :
 
                 Options oo
                 {
-                    {"model", "WET"},
-                    {"tag", "BFS2004"},
-                    {"form-factors", "KMPW2010"}
+                    {"model"_ok, "WET"},
+                    {"tag"_ok, "BFS2004"},
+                    {"form-factors"_ok, "KMPW2010"}
                 };
 
                 BToKstarGamma d(p, oo);
@@ -158,9 +158,9 @@ class BToKstarGammaTest :
 
                 Options oo
                 {
-                    {"model", "WET"},
-                    {"tag", "BFS2004"},
-                    {"form-factors", "KMPW2010"}
+                    {"model"_ok, "WET"},
+                    {"tag"_ok, "BFS2004"},
+                    {"form-factors"_ok, "KMPW2010"}
                 };
 
                 BToKstarGamma d(p, oo);
@@ -218,9 +218,9 @@ class BToKstarGammaBobethCompatibilityTest :
 
             Options o
             {
-                {"model", "WET"},
-                {"tag", "BFS2004"},
-                {"form-factors", "KMPW2010"}
+                {"model"_ok, "WET"},
+                {"tag"_ok, "BFS2004"},
+                {"form-factors"_ok, "KMPW2010"}
             };
 
             std::vector<Parameter> variations;

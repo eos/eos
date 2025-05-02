@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@ class BToXsGammaNLOTest :
                 p["B->B::mu_pi^2@1GeV"] = 0.4;
                 p["B->B::mu_G^2@1GeV"] = 0.36;
 
-                Options oo { {"model", "WET"} };
+                Options oo { {"model"_ok, "WET"} };
 
                 const double eps = 1e-9;
                 BToXsGamma<NLO> decay(p, oo);

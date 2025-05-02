@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2019 Danny van Dyk
+ * Copyright (c) 2014-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -59,11 +59,11 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BCL2008" },
-                    { "P",            "pi"      },
-                    { "q",            "d"       },
-                    { "l",            "e"       },
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BCL2008" },
+                    { "P"_ok,            "pi"      },
+                    { "q"_ok,            "d"       },
+                    { "l"_ok,            "e"       },
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);
@@ -93,23 +93,23 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BCL2008" },
-                    { "P",            "pi"      },
-                    { "q",            "d"       },
-                    { "l",            "tau"     }
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BCL2008" },
+                    { "P"_ok,            "pi"      },
+                    { "q"_ok,            "d"       },
+                    { "l"_ok,            "tau"     }
                 };
                 BToPseudoscalarLeptonNeutrino dtau(p, oo);
 
-                oo.declare("l", "mu");
+                oo.declare("l"_ok, "mu");
                 BToPseudoscalarLeptonNeutrino dmu(p, oo);
 
                 oo =
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BCL2008" },
-                    { "P",            "pi"      },
-                    { "q",            "d"       },
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BCL2008" },
+                    { "P"_ok,            "pi"      },
+                    { "q"_ok,            "d"       },
                 };
                 Kinematics k
                 {
@@ -145,11 +145,11 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKM"     },
-                    { "form-factors", "BCL2008" },
-                    { "P",            "pi"      },
-                    { "q",            "u"       },
-                    { "l",            "e"       },
+                    { "model"_ok,        "CKM"     },
+                    { "form-factors"_ok, "BCL2008" },
+                    { "P"_ok,            "pi"      },
+                    { "q"_ok,            "u"       },
+                    { "l"_ok,            "e"       },
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);

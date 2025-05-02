@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -90,11 +91,11 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o
                 {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "K_d" },
-                    { "model", "CKM" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "eta" },
+                    { "P2"_ok, "K_d" },
+                    { "model"_ok, "CKM" },
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
@@ -104,11 +105,11 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o2
                 {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
-                    { "model", "CKM" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "pi^+" },
+                    { "P2"_ok, "pi^-" },
+                    { "model"_ok, "CKM" },
                 };
 
                 BToPseudoscalarPseudoscalar d2(p, o2);
@@ -168,10 +169,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o
                 {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "pi^+" },
+                    { "P2"_ok, "pi^-" },
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
@@ -181,10 +182,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options oo
                 {
-                    { "representation", "topological" },
-                    { "q", "s" },
-                    { "P1", "pi^0" },
-                    { "P2", "Kbar_d" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "pi^0" },
+                    { "P2"_ok, "Kbar_d" },
                 };
 
                 BToPseudoscalarPseudoscalar dd(p, oo);
@@ -194,10 +195,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o3
                 {
-                    { "representation", "topological" },
-                    { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "eta" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d3(p, o3);
@@ -208,10 +209,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o4
                 {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "eta_prime" },
-                    { "P2", "K_d" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "eta_prime" },
+                    { "P2"_ok, "K_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d4(p, o4);
@@ -222,10 +223,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o5
                 {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "eta" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "eta" },
+                    { "P2"_ok, "eta" },
                 };
 
                 BToPseudoscalarPseudoscalar d5(p, o5);
@@ -235,10 +236,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o6
                 {
-                    { "representation", "topological" },
-                    { "q", "u" },
-                    { "P1", "K_u" },
-                    { "P2", "Kbar_d" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "K_u" },
+                    { "P2"_ok, "Kbar_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d6(p, o6);
@@ -247,10 +248,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o7
                 {
-                    { "representation", "topological" },
-                    { "q", "u" },
-                    { "P1", "pi^0" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "pi^0" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d7(p, o7);
@@ -260,10 +261,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o8
                 {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "K_d" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "K_d" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d8(p, o8);
@@ -273,10 +274,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o9
                 {
-                    { "representation", "topological" },
-                    { "q", "d" },
-                    { "P1", "K_S" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "K_S" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d9(p, o9);
@@ -287,10 +288,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o10
                 {
-                    { "representation", "topological" },
-                    { "q", "s" },
-                    { "P1", "Kbar_d" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "Kbar_d" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d10(p, o10);
@@ -300,10 +301,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o11
                 {
-                    { "representation", "topological" },
-                    { "q", "s" },
-                    { "P1", "K_S" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "K_S" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d11(p, o11);
@@ -314,10 +315,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o12
                 {
-                    { "representation", "topological" },
-                    { "q", "s" },
-                    { "P1", "Kbar_u" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "topological" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "Kbar_u" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d12(p, o12);
@@ -377,11 +378,11 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o
                 {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
-                    { "model", "CKM" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "pi^+" },
+                    { "P2"_ok, "pi^-" },
+                    { "model"_ok, "CKM" },
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
@@ -391,10 +392,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o2
                 {
-                    { "representation", "SU3F" },
-                    { "q", "s" },
-                    { "P1", "pi^0" },
-                    { "P2", "Kbar_d" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "pi^0" },
+                    { "P2"_ok, "Kbar_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d2(p, o2);
@@ -405,10 +406,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o3
                 {
-                    { "representation", "SU3F" },
-                    { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "eta" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d3(p, o3);
@@ -418,10 +419,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o4
                 {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta_prime" },
-                    { "P2", "K_d" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "eta_prime" },
+                    { "P2"_ok, "K_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d4(p, o4);
@@ -431,10 +432,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o5
                 {
-                    { "representation", "SU3F" },
-                    { "q", "d" },
-                    { "P1", "eta" },
-                    { "P2", "eta" },
+                    { "representation"_ok, "SU3F" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "eta" },
+                    { "P2"_ok, "eta" },
                 };
 
                 BToPseudoscalarPseudoscalar d5(p, o5);
@@ -496,10 +497,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o
                 {
-                    { "representation", "QCDF" },
-                    { "q", "d" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "pi^+" },
+                    { "P2"_ok, "pi^-" },
                 };
 
                 BToPseudoscalarPseudoscalar d(p, o);
@@ -509,10 +510,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o2
                 {
-                    { "representation", "QCDF" },
-                    { "q", "s" },
-                    { "P1", "pi^0" },
-                    { "P2", "Kbar_d" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "pi^0" },
+                    { "P2"_ok, "Kbar_d" },
                 };
 
                 BToPseudoscalarPseudoscalar d2(p, o2);
@@ -523,10 +524,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o3
                 {
-                    { "representation", "QCDF" },
-                    { "q", "u" },
-                    { "P1", "eta" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "eta" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d3(p, o3);
@@ -536,10 +537,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o7
                 {
-                    { "representation", "QCDF" },
-                    { "q", "u" },
-                    { "P1", "pi^0" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "pi^0" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d7(p, o7);
@@ -549,10 +550,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o8
                 {
-                    { "representation", "QCDF" },
-                    { "q", "d" },
-                    { "P1", "K_d" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "K_d" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d8(p, o8);
@@ -562,10 +563,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o9
                 {
-                    { "representation", "QCDF" },
-                    { "q", "d" },
-                    { "P1", "K_S" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "K_S" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d9(p, o9);
@@ -577,10 +578,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o10
                 {
-                    { "representation", "QCDF" },
-                    { "q", "s" },
-                    { "P1", "Kbar_d" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "Kbar_d" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d10(p, o10);
@@ -590,10 +591,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o11
                 {
-                    { "representation", "QCDF" },
-                    { "q", "s" },
-                    { "P1", "K_S" },
-                    { "P2", "pi^0" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "K_S" },
+                    { "P2"_ok, "pi^0" },
                 };
 
                 BToPseudoscalarPseudoscalar d11(p, o11);
@@ -605,10 +606,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o12
                 {
-                    { "representation", "QCDF" },
-                    { "q", "s" },
-                    { "P1", "Kbar_u" },
-                    { "P2", "pi^+" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "Kbar_u" },
+                    { "P2"_ok, "pi^+" },
                 };
 
                 BToPseudoscalarPseudoscalar d12(p, o12);
@@ -620,10 +621,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 Options o13
                 {
-                    { "representation", "QCDF" },
-                    { "q", "s" },
-                    { "P1", "pi^+" },
-                    { "P2", "pi^-" },
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "s" },
+                    { "P1"_ok, "pi^+" },
+                    { "P2"_ok, "pi^-" },
                 };
 
                 BToPseudoscalarPseudoscalar d13(p, o13);

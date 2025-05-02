@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
- * Copyright (c) 2024 Stefan Meiser
+ * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2024      Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, options, "model"),
+            opt_model(o, options, "model"_ok),
             model(Model::make(opt_model.value(), p, o)),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_q(o, options, "q"),
+            opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             f_B(p["decay-constant::B_" + opt_q.str()], u),
             mu_dbcu(p["dbcu::mu"], u),
@@ -462,7 +462,7 @@ namespace eos
     Implementation<Lifetime>::options
     {
         Model::option_specification(),
-        { "q", { "u", "d", "s" }, "" }
+        { "q"_ok, { "u", "d", "s" }, "" }
     };
 
     Lifetime::Lifetime(const Parameters & parameters, const Options & options) :

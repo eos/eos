@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c(p["mass::c"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q", "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
@@ -56,7 +56,7 @@ namespace eos
         a_2_perp(p["K^*::a_2_perp@1GeV"], *this),
         uncertainty_para(p["B->K^*ll::A_para_uncertainty@LargeRecoil"], *this),
         uncertainty_perp(p["B->K^*ll::A_perp_uncertainty@LargeRecoil"], *this),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "BSZ2015"), p)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"), p)),
         mu(p["sb::mu"], *this)
     {
         Context ctx("When constructing B->K^*gamma BFS2004 amplitudes");
@@ -65,7 +65,7 @@ namespace eos
         this->uses(*form_factors);
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
         if ("mixed" == qcdf_integrals)
         {
             qcdf_photon_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_massless_case,
@@ -86,7 +86,7 @@ namespace eos
         }
         else
         {
-            throw InvalidOptionValueError("qcdf-integrals", qcdf_integrals, "mixed, analytical");
+            throw InvalidOptionValueError("qcdf-integrals"_ok, qcdf_integrals, "mixed, analytical");
         }
     }
 

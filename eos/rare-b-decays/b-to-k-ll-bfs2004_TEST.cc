@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2014      Christoph Bobeth
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -101,13 +101,13 @@ class BToKDileptonBFS2004BobethCompatibilityTest :
 
             Options oo
             {
-                {"model", "WET"},
-                {"scan-mode", "cartesian"},
-                {"tag", "BFS2004"},
-                {"qcdf-integrals", "mixed"},
-                {"form-factors", "KMPW2010"},
-                {"l", "mu"},
-                {"q", "u"}
+                {"model"_ok, "WET"},
+                {"scan-mode"_ok, "cartesian"},
+                {"tag"_ok, "BFS2004"},
+                {"qcdf-integrals"_ok, "mixed"},
+                {"form-factors"_ok, "KMPW2010"},
+                {"l"_ok, "mu"},
+                {"q"_ok, "u"}
             };
 
             double eps = 1e-3;

@@ -1,11 +1,11 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2024 Danny van Dyk
- * Copyright (c) 2015 Marzia Bordone
- * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2021 Christoph Bobeth
- * Copyright (c) 2025 Méril Reboud
+ * Copyright (c) 2015-2025 Danny van Dyk
+ * Copyright (c) 2015      Marzia Bordone
+ * Copyright (c) 2018-2019 Ahmet Kokulu
+ * Copyright (c) 2021      Christoph Bobeth
+ * Copyright (c) 2025      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -163,22 +163,22 @@ namespace eos
         }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"), p, o)),
             parameters(p),
-            opt_q(o, options, "q"),
-            opt_P(o, options, "P"),
+            opt_q(o, options, "q"_ok),
+            opt_P(o, options, "P"_ok),
             m_B(p["mass::" + _B()], u),
             tau_B(p["life_time::" + _B()], u),
             m_P(p["mass::" + _P()], u),
-            opt_l(o, options, "l"),
+            opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             isospin_factor(_isospin_factor()),
             mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
-            opt_cp_conjugate(o, options, "cp-conjugate"),
-            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o))
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
             Context ctx("When constructing B->Plnu observable");
 
@@ -455,10 +455,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "P",            { "D", "pi", "K", "eta", "eta_prime" },  ""      },
-        { "cp-conjugate", { "true", "false" },                     "false" },
-        { "l",            { "e", "mu", "tau" },                    "mu"    },
-        { "q",            { "u", "d", "s" },                       "d"     },
+        { "P"_ok,            { "D", "pi", "K", "eta", "eta_prime" },  ""      },
+        { "cp-conjugate"_ok, { "true", "false" },                     "false" },
+        { "l"_ok,            { "e", "mu", "tau" },                    "mu"    },
+        { "q"_ok,            { "u", "d", "s" },                       "d"     },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :

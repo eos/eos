@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2019 Nico Gubernari
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -54,7 +55,7 @@ class NonlocalFormFactorGvDV2020Test :
                 p["B->Kccbar::Re{alpha_2^plus}@GvDV2020"]    = 6.0;
                 p["B->Kccbar::Im{alpha_2^plus}@GvDV2020"]    = 7.0;
 
-                Options o = { { "model", "WET" } };
+                Options o = { { "model"_ok, "WET" } };
 
                 auto nff = NonlocalFormFactor<PToP>::make("B->K::GvDV2020", p, o);
 
@@ -122,7 +123,7 @@ class NonlocalFormFactorGvDV2020Test :
                 p["B->Kccbar::Arg_Hhat_at_psi2S_plus@GRvDV2022"] = -0.12;
 
 
-                Options o = { { "model", "WET" } };
+                Options o = { { "model"_ok, "WET" } };
 
                 auto nff = NonlocalFormFactor<PToP>::make("B->K::GRvDV2022order5", p, o);
 

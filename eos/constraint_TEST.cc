@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2011, 2013, 2014, 2015, 2017 Danny van Dyk
+ * Copyright (c) 2011-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -634,8 +634,8 @@ class ConstraintDeserializationTest : public TestCase
 
                 Constraint                         c = entry->make("Test::MultivariateGaussian",
                                            Options{
-                                                                       { "begin", "0" },
-                                                                       {   "end", "2" }
+                                                                       { "begin"_ok, "0" },
+                                                                       {   "end"_ok, "2" }
                 });
                 std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
                 TEST_CHECK_EQUAL(1, blocks.size());
@@ -1000,8 +1000,8 @@ class ConstraintDeserializationTest : public TestCase
 
                 Constraint                         c = entry->make("Test::MultivariateGaussian(Covariance)",
                                            Options{
-                                                                       { "begin", "0" },
-                                                                       {   "end", "2" }
+                                                                       { "begin"_ok, "0" },
+                                                                       {   "end"_ok, "2" }
                 });
                 std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
                 TEST_CHECK_EQUAL(1, blocks.size());

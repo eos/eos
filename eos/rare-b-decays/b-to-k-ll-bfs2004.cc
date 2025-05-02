@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020 Danny van Dyk
- * Copyright (c) 2011 Christian Wacker
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2011      Christian Wacker
+ * Copyright (c) 2014      Frederik Beaujean
+ * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,14 +38,14 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c(p["mass::c"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q", "d")], *this),
-        f_K(p["decay-constant::K_" + o.get("q", "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
+        f_K(p["decay-constant::K_" + o.get("q"_ok, "d")], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         a_1(p["K::a_1@1GeV"], *this),
         a_2(p["K::a_2@1GeV"], *this),
         lambda_psd(p["B->Pll::Lambda_pseudo@LargeRecoil"], *this),
         sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], *this),
-        q(o, options, "q")
+        q(o, options, "q"_ok)
     {
         Context ctx("When constructing B->Kll BFS2004 amplitudes");
 
@@ -64,7 +64,7 @@ namespace eos
         }
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals", "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
         if ("mixed" == qcdf_integrals)
         {
             qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case,
@@ -94,7 +94,7 @@ namespace eos
         }
         else
         {
-            throw InvalidOptionValueError("qcdf-integrals", qcdf_integrals, "mixed, numerical, analytical");
+            throw InvalidOptionValueError("qcdf-integrals"_ok, qcdf_integrals, "mixed, numerical, analytical");
         }
     }
 
@@ -105,7 +105,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "q", { "d", "u" }, "d" },
+        { "q"_ok, { "d", "u" }, "d" },
     };
 
     BToKDilepton::DipoleFormFactors

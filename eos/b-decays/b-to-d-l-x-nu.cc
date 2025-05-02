@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016 Danny van Dyk
+ * Copyright (c) 2015-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -58,8 +58,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            form_factors(FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors", "BCL2008"), p, o)),
-            opt_q(o, options, "q"),
+            form_factors(FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors"_ok, "BCL2008"), p, o)),
+            opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             m_D(p["mass::D_" + opt_q.str()], u),
@@ -67,7 +67,7 @@ namespace eos
             m_tau(p["mass::tau"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            opt_model(o, "model", {"SM"}, "SM"),
+            opt_model(o, "model"_ok, {"SM"}, "SM"),
             model(Model::make(opt_model.value(), p, o))
         {
             Context ctx("When constructing B->DlX observable");
@@ -154,7 +154,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "q", { "d", "u" }, "d" }
+        { "q"_ok, { "d", "u" }, "d" }
     };
 
     BToDLeptonInclusiveNeutrinos::BToDLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :
