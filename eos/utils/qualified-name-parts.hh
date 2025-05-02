@@ -79,6 +79,10 @@ namespace eos
                 OptionKey(const std::string &);
 
                 const std::string & str() const { return _key; };
+
+                inline auto operator<=> (const OptionKey & rhs) const = default;
+                inline bool operator== (const OptionKey & rhs) const = default;
+                inline bool operator< (const OptionKey & rhs) const = default;
         };
 
         class OptionValue
