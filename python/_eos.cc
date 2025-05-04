@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2024 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
- * Copyright (c) 2024 Lorenz Gärtner
+ * Copyright (c) 2024      Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -197,6 +197,18 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__repr__", &qnp::Suffix::str, return_value_policy<copy_const_reference>())
             .def("__str__", &qnp::Suffix::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &qnp::Suffix::operator<);
+
+    // qnp::OptionKey
+    class_<qnp::OptionKey>("qnpOptionKey", init<std::string>())
+            .def("__repr__", &qnp::OptionKey::str, return_value_policy<copy_const_reference>())
+            .def("__str__", &qnp::OptionKey::str, return_value_policy<copy_const_reference>());
+    implicitly_convertible<std::string, qnp::OptionKey>();
+
+    // qnp::OptionValue
+    class_<qnp::OptionValue>("qnpOptionValue", init<std::string>())
+            .def("__repr__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>())
+            .def("__str__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>());
+    implicitly_convertible<std::string, qnp::OptionValue>();
 
     // QualifiedName
     class_<QualifiedName>("QualifiedName", R"(
