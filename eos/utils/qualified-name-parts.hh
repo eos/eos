@@ -21,6 +21,8 @@
 #ifndef EOS_GUARD_EOS_UTILS_QUALIFIED_NAME_PARTS_HH
 #define EOS_GUARD_EOS_UTILS_QUALIFIED_NAME_PARTS_HH 1
 
+#include <eos/utils/stringify.hh>
+
 #include <string>
 
 namespace eos
@@ -105,6 +107,54 @@ namespace eos
     inline qnp::OptionValue operator ""_ov(const char * str, size_t len)
     {
         return qnp::OptionValue(std::string(str, len));
+    }
+
+    namespace implementation
+    {
+        template <>
+        struct DoStringify<qnp::Prefix>
+        {
+            static std::string stringify(const qnp::Prefix & x, unsigned)
+            {
+                return x.str();
+            }
+        };
+
+        template <>
+        struct DoStringify<qnp::Name>
+        {
+            static std::string stringify(const qnp::Name & x, unsigned)
+            {
+                return x.str();
+            }
+        };
+
+        template <>
+        struct DoStringify<qnp::Suffix>
+        {
+            static std::string stringify(const qnp::Suffix & x, unsigned)
+            {
+                return x.str();
+            }
+        };
+
+        template <>
+        struct DoStringify<qnp::OptionKey>
+        {
+            static std::string stringify(const qnp::OptionKey & x, unsigned)
+            {
+                return x.str();
+            }
+        };
+
+        template <>
+        struct DoStringify<qnp::OptionValue>
+        {
+            static std::string stringify(const qnp::OptionValue & x, unsigned)
+            {
+                return x.str();
+            }
+        };
     }
 }
 
