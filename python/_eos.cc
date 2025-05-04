@@ -446,7 +446,7 @@ BOOST_PYTHON_MODULE(_eos)
 
     // OptionSpecification
     ::impl::std_vector_to_python_converter<std::string> converter_option_specifications;
-    class_<OptionSpecification>("OptionSpecification")
+    class_<OptionSpecification>("OptionSpecification", no_init)
             .def_readonly("key", &OptionSpecification::key)
             .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()))
             .def_readonly("default_value", &OptionSpecification::default_value);
