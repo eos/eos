@@ -1632,6 +1632,8 @@ namespace eos
             static ConstraintEntry *
             deserialize(const QualifiedName & name, const YAML::Node & n)
             {
+                Context ctx("When deserializing constraint '" + name.str() + "' of type 'MultivariateGaussianCovariance'");
+
                 static const std::string required_keys[] = { "observables", "kinematics", "options", "means", "covariance" };
 
                 for (auto && k : required_keys)
@@ -1652,176 +1654,182 @@ namespace eos
                     }
                 }
 
+                std::vector<QualifiedName> observables;
+                std::string                current_observable;
                 try
                 {
-                    std::vector<QualifiedName> observables;
                     for (auto && o : n["observables"])
                     {
-                        observables.push_back(QualifiedName(o.as<std::string>()));
+                        if (YAML::NodeType::Scalar != o.Type())
+                        {
+                            throw ConstraintDeserializationError(name, "non-scalar entry encountered in observables sequence");
+                        }
+                        current_observable = o.as<std::string>();
+                        observables.push_back(QualifiedName(current_observable));
+                    }
+                }
+                catch (QualifiedNameSyntaxError & e)
+                {
+                    throw ConstraintDeserializationError(name, "'" + current_observable + "' is not a valid observable name (" + e.what() + ")");
+                }
+
+                std::vector<Kinematics> kinematics;
+                for (auto && entry : n["kinematics"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in kinematics sequence");
                     }
 
-                    std::vector<Kinematics> kinematics;
-                    for (auto && entry : n["kinematics"])
+                    kinematics.push_back(Kinematics{});
+                    std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    kinematics_nodes.sort(&impl::less);
+                    std::set<std::string> kinematics_keys;
+                    for (auto && k : kinematics_nodes)
                     {
-                        if (! n.IsMap())
+                        std::string key = k.first.as<std::string>();
+                        if (! kinematics_keys.insert(key).second)
                         {
-                            throw ConstraintDeserializationError(name, "non-map entry encountered in kinematics sequence");
+                            throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
                         }
 
-                        kinematics.push_back(Kinematics{});
-                        std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(entry.begin(), entry.end());
-                        // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
-                        // by sorting the entries lexicographically.
-                        kinematics_nodes.sort(&impl::less);
-                        std::set<std::string> kinematics_keys;
-                        for (auto && k : kinematics_nodes)
+                        kinematics.back().declare(key, k.second.as<double>());
+                    }
+                }
+
+                std::vector<Options> options;
+                for (auto && entry : n["options"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in options sequence");
+                    }
+
+                    options.push_back(Options{});
+                    std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    options_nodes.sort(&impl::less);
+                    std::set<qnp::OptionKey> options_keys;
+                    for (auto && o : options_nodes)
+                    {
+                        qnp::OptionKey key(o.first.as<std::string>());
+                        if (! options_keys.insert(key).second)
                         {
-                            std::string key = k.first.as<std::string>();
-                            if (! kinematics_keys.insert(key).second)
-                            {
-                                throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
-                            }
-
-                            kinematics.back().declare(key, k.second.as<double>());
-                        }
-                    }
-
-                    std::vector<Options> options;
-                    for (auto && entry : n["options"])
-                    {
-                        if (! n.IsMap())
-                        {
-                            throw ConstraintDeserializationError(name, "non-map entry encountered in options sequence");
+                            throw ConstraintDeserializationError(name, "options key '" + key.str() + "' encountered more than once");
                         }
 
-                        options.push_back(Options{});
-                        std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(entry.begin(), entry.end());
-                        // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
-                        // by sorting the entries lexicographically.
-                        options_nodes.sort(&impl::less);
-                        std::set<qnp::OptionKey> options_keys;
-                        for (auto && o : options_nodes)
-                        {
-                            qnp::OptionKey key(o.first.as<std::string>());
-                            if (! options_keys.insert(key).second)
-                            {
-                                throw ConstraintDeserializationError(name, "options key '" + key.str() + "' encountered more than once");
-                            }
+                        options.back().declare(key, o.second.as<std::string>());
+                    }
+                }
 
-                            options.back().declare(key, o.second.as<std::string>());
-                        }
+                std::vector<double> _means;
+                for (auto && v : n["means"])
+                {
+                    _means.push_back(v.as<double>());
+                }
+                gsl_vector * means = gsl_vector_alloc(_means.size());
+                for (auto i = 0u; i < _means.size(); ++i)
+                {
+                    gsl_vector_set(means, i, _means[i]);
+                }
+
+                // Test for the presence of the optional "dof" parameter
+                unsigned dof;
+                if (n["dof"])
+                {
+                    if (YAML::NodeType::Scalar != n["dof"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "optonal key 'dof' not mapped to a scalar value");
+                    }
+                    dof = n["dof"].as<unsigned>();
+                }
+                else
+                {
+                    dof = _means.size();
+                }
+
+                std::vector<std::vector<double>> _covariance;
+                for (auto && row : n["covariance"])
+                {
+                    _covariance.push_back(std::vector<double>());
+
+                    for (auto && v : row)
+                    {
+                        _covariance.back().push_back(v.as<double>());
+                    }
+                }
+                gsl_matrix * covariance = gsl_matrix_alloc(_covariance.size(), _covariance.size());
+                for (auto i = 0u; i < _covariance.size(); ++i)
+                {
+                    const auto & _row = _covariance[i];
+
+                    if (_row.size() != _covariance.size())
+                    {
+                        throw ConstraintDeserializationError(name,
+                                                             "covariance matrix is not square; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected "
+                                                                     + stringify(_covariance.size()));
                     }
 
-                    std::vector<double> _means;
-                    for (auto && v : n["means"])
+                    for (auto j = 0u; j < _row.size(); ++j)
                     {
-                        _means.push_back(v.as<double>());
+                        gsl_matrix_set(covariance, i, j, _row[j]);
                     }
-                    gsl_vector * means = gsl_vector_alloc(_means.size());
-                    for (auto i = 0u; i < _means.size(); ++i)
-                    {
-                        gsl_vector_set(means, i, _means[i]);
-                    }
+                }
 
-                    // Test for the presence of the optional "dof" parameter
-                    unsigned dof;
-                    if (n["dof"])
+                gsl_matrix * response = nullptr;
+                if (n["response"].IsDefined())
+                {
+                    std::vector<std::vector<double>> _response;
+                    for (auto && row : n["response"])
                     {
-                        if (YAML::NodeType::Scalar != n["dof"].Type())
-                        {
-                            throw ConstraintDeserializationError(name, "optonal key 'dof' not mapped to a scalar value");
-                        }
-                        dof = n["dof"].as<unsigned>();
-                    }
-                    else
-                    {
-                        dof = _means.size();
-                    }
-
-                    std::vector<std::vector<double>> _covariance;
-                    for (auto && row : n["covariance"])
-                    {
-                        _covariance.push_back(std::vector<double>());
+                        _response.push_back(std::vector<double>());
 
                         for (auto && v : row)
                         {
-                            _covariance.back().push_back(v.as<double>());
+                            _response.back().push_back(v.as<double>());
                         }
                     }
-                    gsl_matrix * covariance = gsl_matrix_alloc(_covariance.size(), _covariance.size());
-                    for (auto i = 0u; i < _covariance.size(); ++i)
-                    {
-                        const auto & _row = _covariance[i];
 
-                        if (_row.size() != _covariance.size())
+                    unsigned _response_rows = _response.size();
+                    unsigned _response_cols = _response[0].size();
+
+                    response = gsl_matrix_alloc(_response_rows, _response_cols);
+                    for (auto i = 0u; i < _response_rows; ++i)
+                    {
+                        const auto & _row = _response[i];
+
+                        if (_row.size() != _response_cols)
                         {
                             throw ConstraintDeserializationError(name,
-                                                                 "covariance matrix is not square; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected "
-                                                                         + stringify(_covariance.size()));
+                                                                 "response matrix is invalid; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected "
+                                                                         + stringify(_response_cols));
                         }
 
                         for (auto j = 0u; j < _row.size(); ++j)
                         {
-                            gsl_matrix_set(covariance, i, j, _row[j]);
+                            gsl_matrix_set(response, i, j, _row[j]);
                         }
                     }
-
-                    gsl_matrix * response = nullptr;
-                    if (n["response"].IsDefined())
-                    {
-                        std::vector<std::vector<double>> _response;
-                        for (auto && row : n["response"])
-                        {
-                            _response.push_back(std::vector<double>());
-
-                            for (auto && v : row)
-                            {
-                                _response.back().push_back(v.as<double>());
-                            }
-                        }
-
-                        unsigned _response_rows = _response.size();
-                        unsigned _response_cols = _response[0].size();
-
-                        response = gsl_matrix_alloc(_response_rows, _response_cols);
-                        for (auto i = 0u; i < _response_rows; ++i)
-                        {
-                            const auto & _row = _response[i];
-
-                            if (_row.size() != _response_cols)
-                            {
-                                throw ConstraintDeserializationError(name,
-                                                                     "response matrix is invalid; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected "
-                                                                             + stringify(_response_cols));
-                            }
-
-                            for (auto j = 0u; j < _row.size(); ++j)
-                            {
-                                gsl_matrix_set(response, i, j, _row[j]);
-                            }
-                        }
-                    }
-
-                    std::vector<ReferenceName> reference_names;
-                    if (n["references"].IsDefined())
-                    {
-                        if (YAML::NodeType::Sequence != n["references"].Type())
-                        {
-                            throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
-                        }
-
-                        for (auto && rn : n["references"])
-                        {
-                            reference_names.push_back(ReferenceName(rn.as<std::string>()));
-                        }
-                    }
-
-                    return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, response, reference_names, dof);
                 }
-                catch (QualifiedNameSyntaxError & e)
+
+                std::vector<ReferenceName> reference_names;
+                if (n["references"].IsDefined())
                 {
-                    throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+                    if (YAML::NodeType::Sequence != n["references"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "references key not mapped to a sequence");
+                    }
+
+                    for (auto && rn : n["references"])
+                    {
+                        reference_names.push_back(ReferenceName(rn.as<std::string>()));
+                    }
                 }
+
+                return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, response, reference_names, dof);
             }
     };
 
@@ -2574,6 +2582,8 @@ namespace eos
     ConstraintEntry *
     ConstraintEntry::FromYAML(const QualifiedName & name, const std::string & s)
     {
+        Context ctx("When deserializing the constraint entry " + name.str() + " from a string");
+
         // valid ASCII characters are limited to 0 <= c <= 0x7f (127)
         if (s.cend() != std::find_if(s.cbegin(), s.cend(), [&](unsigned char c) -> bool { return (c > 0x7f); }))
         {
@@ -2588,6 +2598,8 @@ namespace eos
     ConstraintEntry *
     ConstraintEntry::FromYAML(const QualifiedName & name, const YAML::Node & n)
     {
+        Context ctx("When deserializing the constraint entry " + name.str() + " from a YAML node");
+
         // make sure we deserialize from a map
         if (YAML::NodeType::Map != n.Type())
         {
@@ -2618,7 +2630,25 @@ namespace eos
             throw ConstraintDeserializationError(name, "unsupported type '" + type + "'");
         }
 
-        return i->second(name, n);
+        ConstraintEntry * result;
+        {
+            Context ctx("When deserializing the constraint entry " + name.str() + " of type '" + type + "'");
+
+            try
+            {
+                result = i->second(name, n);
+            }
+            catch (YAML::InvalidNode & e)
+            {
+                throw ConstraintDeserializationError(name, "failed to deserialize constraint entry of type '" + type + "' (" + e.what() + ")");
+            }
+            catch (YAML::ParserException & e)
+            {
+                throw ConstraintDeserializationError(name, "failed to deserialize constraint entry of type '" + type + "' (" + e.what() + ")");
+            }
+        }
+
+        return result;
     }
 
     std::string
@@ -2766,6 +2796,10 @@ namespace eos
                 try
                 {
                     node = YAML::LoadFile(file);
+                }
+                catch (YAML::InvalidNode & e)
+                {
+                    throw ConstraintInputFileParseError(file, e.what());
                 }
                 catch (YAML::ParserException & e)
                 {
