@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2015, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -383,6 +384,46 @@ namespace eos
 
     const std::string &
     LightMesonOption::str() const
+    {
+        return _value;
+    }
+
+    IsospinOption::IsospinOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key),
+        _isospin_value(destringify<Isospin>(_value))
+    {
+    }
+
+    IsospinOption::~IsospinOption() = default;
+
+    Isospin
+    IsospinOption::value() const
+    {
+        return _isospin_value;
+    }
+
+    const std::string &
+    IsospinOption::str() const
+    {
+        return _value;
+    }
+
+    PartialWaveOption::PartialWaveOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key),
+        _partial_wave_value(destringify<PartialWave>(_value))
+    {
+    }
+
+    PartialWaveOption::~PartialWaveOption() = default;
+
+    PartialWave
+    PartialWaveOption::value() const
+    {
+        return _partial_wave_value;
+    }
+
+    const std::string &
+    PartialWaveOption::str() const
     {
         return _value;
     }
