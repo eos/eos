@@ -1,6 +1,6 @@
-# Copyright (c) 2018 Frederik Beaujean
-# Copyright (c) 2017, 2018, 2020 Danny van Dyk
-# Copyright (c) 2021 Philip Lueghausen
+# Copyright (c) 2018      Frederik Beaujean
+# Copyright (c) 2017-2025 Danny van Dyk
+# Copyright (c) 2021      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -60,7 +60,13 @@ setattr(logging, 'COMPLETED', logging.INFO + 2)
 logging.addLevelName(logging.WARNING - 1, 'SUCCESS')
 setattr(logging, 'SUCCESS', logging.WARNING - 1)
 logger = logging.getLogger('EOS')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
+logger.propagate = False
+# log to stderr by default
+stderr_handler = logging.StreamHandler(stream=sys.stderr)
+stderr_handler.setLevel(logging.INFO)
+logger.addHandler(stderr_handler)
+
 from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel
 _set_native_log_level(_NativeLogLevel.INFO) # default native log level
 
@@ -123,13 +129,6 @@ def _log_callback(id, level, msg):
         raise RuntimeError(f'Cannot handle log level: {level}. Log message: {full_msg}')
 
 _register_log_callback(_log_callback)
-
-# log to stderr by default in non-interactive Python code
-if not __ipython__:
-    import logging
-    logger = logging.getLogger('EOS')
-    logger.setLevel(logging.INFO)
-    logger.addHandler(logging.StreamHandler(stream=sys.stderr))
 
 import time as _time
 import os as _os
