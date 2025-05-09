@@ -696,11 +696,8 @@ def main():
                 5: logging.DEBUG
             }
 
-            eos.logger.setLevel(levels[args.verbose])
-            eos.logger.removeHandler(eos.logger.handlers[0])
-            handler = logging.StreamHandler(stream=sys.stderr)
-            handler.setFormatter(CustomLogFormatter())
-            eos.logger.addHandler(handler)
+            eos.stderr_handler.setLevel(levels[args.verbose])
+            eos.stderr_handler.setFormatter(CustomLogFormatter())
 
             args.cmd(args)
     except Exception as e:
