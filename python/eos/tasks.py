@@ -41,6 +41,7 @@ class LogfileHandler:
         self.mode = mode
         self.formatter = logging.Formatter('%(asctime)-15s %(levelname)-10s %(message)s')
         self.handler = logging.FileHandler(os.path.join(path, name), mode=mode)
+        self.handler.setLevel(logging.DEBUG)
         self.handler.setFormatter(self.formatter)
 
     def __enter__(self):
