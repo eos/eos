@@ -556,15 +556,15 @@ namespace eos
 
                 make_observable("B_s->D_s::a_0[S_1]@HQE", R"(a_0^{S_1})",
                         Unit::None(),
-                        &BGLCoefficients::S1_a0),
+                        &BGLCoefficients::S1s_a0),
 
                 make_observable("B_s->D_s::a_1[S_1]@HQE", R"(a_1^{S_1})",
                         Unit::None(),
-                        &BGLCoefficients::S1_a1),
+                        &BGLCoefficients::S1s_a1),
 
                 make_observable("B_s->D_s::a_2[S_1]@HQE", R"(a_2^{S_1})",
                         Unit::None(),
-                        &BGLCoefficients::S1_a2),
+                        &BGLCoefficients::S1s_a2),
 
                 make_expression_observable("B_s->D_s::a_1/a_0[S_1]@HQE", R"(a_1^{S_1}/a_0^{S_1})",
                         Unit::None(),
@@ -584,15 +584,15 @@ namespace eos
 
                 make_observable("B_s->D_s::a_0[V_1]@HQE", R"(a_0^{V_1})",
                         Unit::None(),
-                        &BGLCoefficients::V1_a0),
+                        &BGLCoefficients::V1s_a0),
 
                 make_observable("B_s->D_s::a_1[V_1]@HQE", R"(a_1^{V_1})",
                         Unit::None(),
-                        &BGLCoefficients::V1_a1),
+                        &BGLCoefficients::V1s_a1),
 
                 make_observable("B_s->D_s::a_2[V_1]@HQE", R"(a_2^{V_1})",
                         Unit::None(),
-                        &BGLCoefficients::V1_a2),
+                        &BGLCoefficients::V1s_a2),
 
                 make_expression_observable("B_s->D_s::a_1/a_0[V_1]@HQE", R"(a_1^{V_1}/a_0^{V_1})",
                         Unit::None(),
@@ -612,15 +612,15 @@ namespace eos
 
                 make_observable("B_s->D_s::a_0[f_T]@HQE", R"(a_0^{f_T})",
                         Unit::None(),
-                        &BGLCoefficients::fT_a0),
+                        &BGLCoefficients::fTs_a0),
 
                 make_observable("B_s->D_s::a_1[f_T]@HQE", R"(a_1^{f_T})",
                         Unit::None(),
-                        &BGLCoefficients::fT_a1),
+                        &BGLCoefficients::fTs_a1),
 
                 make_observable("B_s->D_s::a_2[f_T]@HQE", R"(a_2^{f_T})",
                         Unit::None(),
-                        &BGLCoefficients::fT_a2),
+                        &BGLCoefficients::fTs_a2),
 
                 make_expression_observable("B_s->D_s::a_1/a_0[f_T]@HQE", R"(a_1^{f_T}/a_0^{f_T})",
                         Unit::None(),
@@ -1697,15 +1697,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[A_1]@HQE", R"(a_0^{A_1})",
                         Unit::None(),
-                        &BGLCoefficients::A1_a0),
+                        &BGLCoefficients::A1s_a0),
 
                 make_observable("B_s->D_s^*::a_1[A_1]@HQE", R"(a_1^{A_1})",
                         Unit::None(),
-                        &BGLCoefficients::A1_a1),
+                        &BGLCoefficients::A1s_a1),
 
                 make_observable("B_s->D_s^*::a_2[A_1]@HQE", R"(a_2^{A_1})",
                         Unit::None(),
-                        &BGLCoefficients::A1_a2),
+                        &BGLCoefficients::A1s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
                         Unit::None(),
@@ -1725,15 +1725,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[A_5]@HQE", R"(a_0^{A_5})",
                         Unit::None(),
-                        &BGLCoefficients::A5_a0),
+                        &BGLCoefficients::A5s_a0),
 
                 make_observable("B_s->D_s^*::a_1[A_5]@HQE", R"(a_1^{A_5})",
                         Unit::None(),
-                        &BGLCoefficients::A5_a1),
+                        &BGLCoefficients::A5s_a1),
 
                 make_observable("B_s->D_s^*::a_2[A_5]@HQE", R"(a_2^{A_5})",
                         Unit::None(),
-                        &BGLCoefficients::A5_a2),
+                        &BGLCoefficients::A5s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
                         Unit::None(),
@@ -1753,15 +1753,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[P_1]@HQE", R"(a_0^{P_1})",
                         Unit::None(),
-                        &BGLCoefficients::P1_a0),
+                        &BGLCoefficients::P1s_a0),
 
                 make_observable("B_s->D_s^*::a_1[P_1]@HQE", R"(a_1^{P_1})",
                         Unit::None(),
-                        &BGLCoefficients::P1_a1),
+                        &BGLCoefficients::P1s_a1),
 
                 make_observable("B_s->D_s^*::a_2[P_1]@HQE", R"(a_2^{P_1})",
                         Unit::None(),
-                        &BGLCoefficients::P1_a2),
+                        &BGLCoefficients::P1s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
                         Unit::None(),
@@ -1781,15 +1781,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[V_4]@HQE", R"(a_0^{V_4})",
                         Unit::None(),
-                        &BGLCoefficients::V4_a0),
+                        &BGLCoefficients::V4s_a0),
 
                 make_observable("B_s->D_s^*::a_1[V_4]@HQE", R"(a_1^{V_4})",
                         Unit::None(),
-                        &BGLCoefficients::V4_a1),
+                        &BGLCoefficients::V4s_a1),
 
                 make_observable("B_s->D_s^*::a_2[V_4]@HQE", R"(a_2^{V_4})",
                         Unit::None(),
-                        &BGLCoefficients::V4_a2),
+                        &BGLCoefficients::V4s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
                         Unit::None(),
@@ -1809,15 +1809,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[T_1]@HQE", R"(a_0^{T_1})",
                         Unit::None(),
-                        &BGLCoefficients::T1_a0),
+                        &BGLCoefficients::T1s_a0),
 
                 make_observable("B_s->D_s^*::a_1[T_1]@HQE", R"(a_1^{T_1})",
                         Unit::None(),
-                        &BGLCoefficients::T1_a1),
+                        &BGLCoefficients::T1s_a1),
 
                 make_observable("B_s->D_s^*::a_2[T_1]@HQE", R"(a_2^{T_1})",
                         Unit::None(),
-                        &BGLCoefficients::T1_a2),
+                        &BGLCoefficients::T1s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[T_1]@HQE", R"(a_1^{T_1}/a_0^{T_1})",
                         Unit::None(),
@@ -1837,15 +1837,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[T_2]@HQE", R"(a_0^{T_2})",
                         Unit::None(),
-                        &BGLCoefficients::T2_a0),
+                        &BGLCoefficients::T2s_a0),
 
                 make_observable("B_s->D_s^*::a_1[T_2]@HQE", R"(a_1^{T_2})",
                         Unit::None(),
-                        &BGLCoefficients::T2_a1),
+                        &BGLCoefficients::T2s_a1),
 
                 make_observable("B_s->D_s^*::a_2[T_2]@HQE", R"(a_2^{T_2})",
                         Unit::None(),
-                        &BGLCoefficients::T2_a2),
+                        &BGLCoefficients::T2s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[T_2]@HQE", R"(a_1^{T_2}/a_0^{T_2})",
                         Unit::None(),
@@ -1865,15 +1865,15 @@ namespace eos
 
                 make_observable("B_s->D_s^*::a_0[T_23]@HQE", R"(a_0^{T_{23}})",
                         Unit::None(),
-                        &BGLCoefficients::T23_a0),
+                        &BGLCoefficients::T23s_a0),
 
                 make_observable("B_s->D_s^*::a_1[T_23]@HQE", R"(a_1^{T_{23}})",
                         Unit::None(),
-                        &BGLCoefficients::T23_a1),
+                        &BGLCoefficients::T23s_a1),
 
                 make_observable("B_s->D_s^*::a_2[T_23]@HQE", R"(a_2^{T_{23}})",
                         Unit::None(),
-                        &BGLCoefficients::T23_a2),
+                        &BGLCoefficients::T23s_a2),
 
                 make_expression_observable("B_s->D_s^*::a_1/a_0[T_23]@HQE", R"(a_1^{T_{23}}/a_0^{T_{23}})",
                         Unit::None(),
