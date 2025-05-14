@@ -348,7 +348,7 @@ namespace eos
     {
         { { QuarkFlavor::up,      "D^*"   }, { "B->D^*",     QuarkFlavor::charm, "B_u", "D_u^*", 1.0                  } },
         { { QuarkFlavor::down,    "D^*"   }, { "B->D^*",     QuarkFlavor::charm, "B_d", "D_d^*", 1.0                  } },
-        { { QuarkFlavor::strange, "D^*"   }, { "B_s->D_s^*", QuarkFlavor::charm, "B_s", "D_s^*", 1.0                  } },
+        { { QuarkFlavor::strange, "D_s^*" }, { "B_s->D_s^*", QuarkFlavor::charm, "B_s", "D_s^*", 1.0                  } },
         { { QuarkFlavor::up,      "rho"   }, { "B->rho",     QuarkFlavor::up,    "B_u", "rho^0", 1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::up,      "omega" }, { "B->omega",   QuarkFlavor::up,    "B_u", "omega", 1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::down,    "rho"   }, { "B->rho",     QuarkFlavor::up,    "B_d", "rho^+", 1.0                  } },
@@ -360,10 +360,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "V"_ok,            { "D^*", "rho", "omega", "K^*" }, ""      },
-        { "cp-conjugate"_ok, { "true", "false" },              "false" },
-        { "l"_ok,            { "e", "mu", "tau" },             "mu"    },
-        { "q"_ok,            { "u", "d", "s" },                "d"     },
+        { "V"_ok,            { "D^*", "D_s^*", "rho", "omega", "K^*" }, ""      },
+        { "cp-conjugate"_ok, { "true", "false" },                       "false" },
+        { "l"_ok,            { "e", "mu", "tau" },                      "mu"    },
+        { "q"_ok,            { "u", "d", "s" },                         "d"     },
     };
 
     BToVectorLeptonNeutrino::BToVectorLeptonNeutrino(const Parameters & p, const Options & o) :

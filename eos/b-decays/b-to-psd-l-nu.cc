@@ -437,7 +437,7 @@ namespace eos
     {
         { { QuarkFlavor::up,      "D"         }, { "B->D",           QuarkFlavor::charm,   "B_u", "D_u",       1.0                  } },
         { { QuarkFlavor::down,    "D"         }, { "B->D",           QuarkFlavor::charm,   "B_d", "D_d",       1.0                  } },
-        { { QuarkFlavor::strange, "D"         }, { "B_s->D_s",       QuarkFlavor::charm,   "B_s", "D_s",       1.0                  } },
+        { { QuarkFlavor::strange, "D_s"       }, { "B_s->D_s",       QuarkFlavor::charm,   "B_s", "D_s",       1.0                  } },
         { { QuarkFlavor::up,      "pi"        }, { "B->pi",          QuarkFlavor::up,      "B_u", "pi^0",      1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::down,    "pi"        }, { "B->pi",          QuarkFlavor::up,      "B_d", "pi^+",      1.0                  } },
         { { QuarkFlavor::strange, "K"         }, { "B_s->K",         QuarkFlavor::up,      "B_s", "K_u",       1.0                  } },
@@ -455,10 +455,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "P"_ok,            { "D", "pi", "K", "eta", "eta_prime" },  ""      },
-        { "cp-conjugate"_ok, { "true", "false" },                     "false" },
-        { "l"_ok,            { "e", "mu", "tau" },                    "mu"    },
-        { "q"_ok,            { "u", "d", "s" },                       "d"     },
+        { "P"_ok,            { "D", "D_s", "pi", "K", "eta", "eta_prime" },  ""      },
+        { "cp-conjugate"_ok, { "true", "false" },                            "false" },
+        { "l"_ok,            { "e", "mu", "tau" },                           "mu"    },
+        { "q"_ok,            { "u", "d", "s" },                              "d"     },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
