@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
 
-# Copyright (c) 2020-2024 Danny van Dyk
+# Copyright (c) 2020-2025 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -661,11 +661,8 @@ def main():
                 5: logging.DEBUG
             }
 
-            eos.logger.setLevel(levels[args.verbose])
-            eos.logger.removeHandler(eos.logger.handlers[0])
-            handler = logging.StreamHandler(stream=sys.stderr)
-            handler.setFormatter(CustomLogFormatter())
-            eos.logger.addHandler(handler)
+            eos.stderr_handler.setLevel(levels[args.verbose])
+            eos.stderr_handler.setFormatter(CustomLogFormatter())
 
             args.cmd(args)
     except Exception as e:
