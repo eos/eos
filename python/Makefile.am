@@ -80,6 +80,7 @@ eosplot_SCRIPTS = \
 eosfiguredir = $(pkgpythondir)/figure
 eosfigure_SCRIPTS = \
 	eos/figure/__init__.py \
+	eos/figure/common.py \
 	eos/figure/config.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
@@ -104,6 +105,9 @@ TESTS = \
 	eos/data/native_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
+	eos/figure/figure_TEST.py \
+	eos/figure/item_TEST.py \
+	eos/figure/plot_TEST.py \
 	eos/plot/plotter_TEST.py
 
 EXTRA_DIST += $(TESTS)

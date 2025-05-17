@@ -88,3 +88,27 @@ predictions:
         kinematics: { q2: 10.00 }
       - name: B->pilnu::dBR/dq2
         kinematics: { q2: 12.00 }
+
+figures:
+  - name: CKM-Vub
+    type: single
+    plot:
+      legend:
+        position: 'lower left'
+      xaxis:
+        label: '$|V_{ub}|$'
+      yaxis:
+        label: 'Posterior Density'
+      items:
+      - type: 'histogram1D'
+        datafile: 'th+exp/samples'
+        variable: 'CKM::abs(V_ub)'
+      - type: 'kde1D'
+        datafile: 'th+exp/samples'
+        variable: 'CKM::abs(V_ub)'
+  - name: CKM-Vub-v-FF
+    type: 'corner'
+    contents:
+      - path: 'th+exp/samples'
+        label: 'th+exp'
+    variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
