@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
 
-# Copyright (c) 2020-2024 Danny van Dyk
+# Copyright (c) 2020-2025 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -609,6 +609,29 @@ Runs one out of a list of steps recorded within an analysis file.
     parser_run.set_defaults(cmd = cmd_run)
 
 
+    # draw-figure
+    parser_draw_figure = subparsers.add_parser('draw-figure',
+        parents = [common_subparser],
+        description =
+'''
+Draws a figure based on the specification in the analysis file and the recorded results.
+''',
+        help = 'Draws a figure of the analysis.'
+    )
+    parser_draw_figure.add_argument('figure_name', metavar='FIGURE',
+        help = 'The name of the figure that shall be drawn.'
+    )
+    parser_draw_figure.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_draw_figure.add_argument('-F', '--format',
+        help = 'The additional formats in which the figure should be saved. Defaults to PDF only.',
+        dest = 'format', action = 'extend', default = ['pdf']
+    )
+    parser_draw_figure.set_defaults(cmd = cmd_draw_figure)
+
+
     # init
     parser_init = subparsers.add_parser('init',
         parents = [common_subparser],
@@ -842,6 +865,11 @@ def cmd_report(args):
 # Run steps
 def cmd_run(args):
     return eos.run(**args_to_dict(args))
+
+
+# Draw figure
+def cmd_draw_figure(args):
+    return eos.draw_figure(**args_to_dict(args))
 
 
 # List priors
