@@ -96,19 +96,12 @@ figures:
       - type: 'kde1D'
         datafile: 'CKM+FF/samples'
         variable: 'CKM::abs(V_ub)'
-  - name: Vub-v-FF
-    type: single
-    plot:
-      legend:
-        position: 'lower left'
-      xaxis:
-        label: '$|V_{ub}|$'
-      yaxis:
-        label: '$f_+(0)^{B\to \pi}$'
-      items:
-      - type: 'kde2D'
-        datafile: 'CKM+FF/samples'
-        variables: [ 'CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008' ]
+  - name: CKM-Vub-v-FF
+    type: 'corner'
+    contents:
+      - path: 'CKM+FF/samples'
+        label: 'CKM+FF'
+    variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
 
 predictions:
   - name: PDF
