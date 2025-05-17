@@ -10,7 +10,8 @@ LINUX_EXAMPLES = \
     btopilnu-sample-pmc.bash \
     btopilnu-plot-samples.bash \
     btopilnu-predict-observables.bash \
-    btopilnu-plot.bash
+    btopilnu-plot.bash \
+    btopilnu-draw-figure.bash
 
 MACOSX_EXAMPLES = \
     btopilnu-evaluate.bash \
