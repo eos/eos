@@ -109,6 +109,20 @@ echo running prediction tests ... >&2
         -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
+##################
+## Draw figures ##
+##################
+echo running draw-figure tests ... >&2
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        draw-figure \
+        CKM-Vub \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        draw-figure \
+        CKM-Vub-v-FF \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+echo ... success >&2
+
 ####################
 ## Listing things ##
 ####################
