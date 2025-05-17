@@ -1,7 +1,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020-2023 Danny van Dyk
-# Copyright (c) 2023 Philip Lüghausen
+# Copyright (c) 2020-2025 Danny van Dyk
+# Copyright (c) 2023      Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,7 @@ import functools
 import glob
 import inspect
 import logging
+import eos.analysis_file_description
 import numpy as _np
 import os
 import pypmc
@@ -685,6 +686,43 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', output
             f.write(result)
 
     return result
+
+
+# Draw figures
+@task('draw-figure', 'figures', mode=lambda **kwargs: 'a')
+def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', format:str|list[str]='pdf'):
+    """
+    Draws figures from the analysis file.
+
+    The output files will be stored in EOS_BASE_DIRECTORY/figures/.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param figure_name: The name of the figure to draw.
+    :type figure_name: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param format: The file extension of the data files. Can also be a list of file extensions.
+    :type format: str or list of str, optional
+    """
+    if figure_name not in analysis_file._figures.keys():
+        raise ValueError(f'Figure with name \'{figure_name}\' not found in analysis file')
+
+    if isinstance(format, str):
+        format = [format]
+
+    SUPPORTED_FORMATS = ['pdf', 'png', 'svg']
+    for fmt in format:
+        if fmt not in SUPPORTED_FORMATS:
+            raise ValueError(f'Figure format \'{fmt}\' not supported. Supported formats are: {",".join(SUPPORTED_FORMATS)}')
+
+    eos.inprogress(f'Drawing figure {figure_name}')
+    context = eos.analysis_file_description.AnalysisFileContext(base_directory=base_directory)
+    figure = analysis_file._figures[figure_name]
+    for fmt in format:
+        eos.info(f'Drawing figure {figure_name} in \'{fmt}\' format')
+        figure.draw(context, output=os.path.join(base_directory, 'figures', f'{figure_name}.{fmt}'))
+    eos.completed(f'... drawing finished')
 
 
 # Corner plot
