@@ -58,6 +58,9 @@ namespace eos
             // parameter for zero point of z
             UsedParameter _t_0;
 
+            const double _chi_1m = 3.446e-3;
+            const double _chi_0p = 2.07e-4;
+
             inline std::string _coeff_name(const std::string & ff, const std::string & index) const
             {
                 return "0->Kpi::b_" + ff + "^" + index + "@KSvD2025";
