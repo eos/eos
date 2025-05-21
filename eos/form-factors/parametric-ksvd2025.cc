@@ -350,7 +350,7 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::f_p(const complex<double> & q2) const
     {
         const auto z        = this->z(q2);
-        const auto chi_1m   = 3.446e-3;
+        const auto chi_1m   = this->_chi_1m;
         const auto phitilde = this->phitilde_p(z, chi_1m);
 
         const auto Pi_p = this->resonance_product_p(z);
@@ -377,8 +377,8 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::f_0(const complex<double> & q2) const
     {
         const auto z        = this->z(q2);
-        const auto chi_1m   = 3.446e-3;
-        const auto chi_0p   = 2.07e-4;
+        const auto chi_1m   = this->_chi_1m;
+        const auto chi_0p   = this->_chi_0p;
         const auto phitilde = this->phitilde_z(z, chi_0p);
 
         const auto Pi_z = this->resonance_product_z(z);
@@ -413,7 +413,7 @@ namespace eos
         const complex<double> z = std::polar(1.0, alpha);
         const complex<double> w = this->w_p(z);
 
-        const auto chi_1m = 3.446e-3;
+        const auto chi_1m = this->_chi_1m;
 
         const auto resonance_product = this->resonance_product_p(z);
 
@@ -439,8 +439,8 @@ namespace eos
         const complex<double> z = std::polar(1.0, alpha);
         const complex<double> w = this->w_z(z);
 
-        const auto chi_1m = 3.446e-3;
-        const auto chi_0p = 2.07e-4;
+        const auto chi_1m = this->_chi_1m;
+        const auto chi_0p = this->_chi_0p;
 
         const auto resonance_product = this->resonance_product_z(z);
 
@@ -463,14 +463,14 @@ namespace eos
 
     double KSvD2025FormFactors<VacuumToKPi>::b0_fp() const
     {
-        const auto chi_1m = 3.446e-3;
+        const auto chi_1m = this->_chi_1m;
         return _b0_fp(chi_1m);
     }
 
     double KSvD2025FormFactors<VacuumToKPi>::b0_f0() const
     {
-        const auto chi_1m = 3.446e-3;
-        const auto chi_0p = 2.07e-4;
+        const auto chi_1m = this->_chi_1m;
+        const auto chi_0p = this->_chi_0p;
         return _b0_fz(chi_1m, chi_0p);
     }
 
