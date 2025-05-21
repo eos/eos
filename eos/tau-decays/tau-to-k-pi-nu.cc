@@ -108,7 +108,7 @@ namespace eos
                 // alone, and is taken care of by our RG
 
                 // Compare EOS basis with [CCH:2017A], page 2, eq. (9)
-                const WilsonCoefficients<ChargedCurrent> wc  = model->wet_uslnu(LeptonFlavor::tauon, false);
+                const WilsonCoefficients<ChargedCurrent> wc  = model->wet_uslnu(LeptonFlavor::tauon, false); // Check CP conjugation
                 const complex<double>                    cV  = std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cA  = -std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cS  = std::conj(wc.csl() + wc.csr());
@@ -119,8 +119,11 @@ namespace eos
                 const auto m_K2   = power_of<2>(m_K);
                 const auto m_pi2  = power_of<2>(m_pi);
 
+                // TODO: Check complex conjugation of vector/scalar form factors vs CCH:2017A
                 const auto fp = form_factors->f_p(k2);
                 const auto f0 = form_factors->f_0(k2);
+                // TODO: Check normalisation and complex conjugation of tensor form factor vs CCH:2017A
+                // I think normalisation different by factor of 2 (mK+mpi)/mK !
                 // const auto BT = form_factors->f_t(k2);
                 const auto BT = 0.0; // neglect tensor form factor as not implemented yet!
 
