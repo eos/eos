@@ -179,23 +179,15 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::resonance_productprime_p(const complex<double> & z) const
     {
         const std::size_t num_resonances = stoi(n_resonances_1m.value());
+        complex<double> tmp = 0.0;
 
-        // factors f in the resonance product, such that result = prod_r f[r]
-        std::vector<complex<double>> f(num_resonances);
         for (auto i = 0u; i < num_resonances; i++)
         {
             complex<double> zr = this->_zr(_M_fp[i], _G_fp[i]);
-            f[i] = 1.0 / (z - zr) / (z - std::conj(zr));
+            tmp += 2.0 * (zr.real() - z) / (z - zr) / (z - std::conj(zr));
         }
-        const auto prod_f = std::accumulate(f.cbegin(), f.cend(), complex<double>(1.0), std::multiplies<complex<double>>());
 
-        std::vector<complex<double>> fprime(num_resonances); // such that Pi' = prod_r fprime[r]
-        for (auto i = 0u; i < num_resonances; i++)
-        {
-            complex<double> zr = this->_zr(_M_fp[i], _G_fp[i]);
-            fprime[i] =  (-2.0 * (z - zr.real()) / power_of<2>(z - zr) / power_of<2>(z - std::conj(zr)) ) * prod_f / f[i];
-        }
-        return std::accumulate(fprime.cbegin(), fprime.cend(), complex<double>(0.0));
+        return resonance_product_p(z) * tmp;
     }
 
     complex<double>
