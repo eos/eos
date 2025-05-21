@@ -32,7 +32,7 @@
 
 namespace eos
 {
-    /* Vacuum -> pi pi */
+    /* Vacuum -> K^0 pi^+ */
     KSvD2025FormFactors<VacuumToKPi>::KSvD2025FormFactors(const Parameters & p, const Options & o) :
         n_resonances_1m(o, option_specifications, "n-resonances-1m"_ok),
         n_resonances_0p(o, option_specifications, "n-resonances-0p"_ok),
