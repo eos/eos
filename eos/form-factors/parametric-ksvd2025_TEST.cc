@@ -93,21 +93,19 @@ class ParametricKSvD2025Test :
                 {
                     KSvD2025FormFactors<VacuumToKPi> ff(p, Options{ });
 
-                    const auto chi_1m = 3.446e-3;
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_p(ff.z( 0.0))),  0.0462214083,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_p(ff.z( 0.0))),  0.0,           eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_p(ff.z(+0.1))),  0.0401071876,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_p(ff.z(+0.1))),  0.0,           eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_p(ff.z(+0.5))),  0.00904454996, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_p(ff.z(+0.5))), -0.01029258129, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_p(ff.z( 0.0), chi_1m)),  0.0462214083,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_p(ff.z( 0.0), chi_1m)),  0.0,           eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_p(ff.z(+0.1), chi_1m)),  0.0401071876,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_p(ff.z(+0.1), chi_1m)),  0.0,           eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_p(ff.z(+0.5), chi_1m)),  0.00904454996, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_p(ff.z(+0.5), chi_1m)), -0.01029258129, eps);
-
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_p(ff.z( 0.0), chi_1m)),  0.106199235,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_p(ff.z( 0.0), chi_1m)),  0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_p(ff.z(+0.1), chi_1m)),  0.0889911105, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_p(ff.z(+0.1), chi_1m)),  0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_p(ff.z(+0.5), chi_1m)),  0.0125456956, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_p(ff.z(+0.5), chi_1m)), -0.0196693995, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_p(ff.z( 0.0))),  0.106199235,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_p(ff.z( 0.0))),  0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_p(ff.z(+0.1))),  0.0889911105, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_p(ff.z(+0.1))),  0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_p(ff.z(+0.5))),  0.0125456956, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_p(ff.z(+0.5))), -0.0196693995, eps);
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.resonance_product_p(ff.z( 0.0))),  1.04722073,  eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.resonance_product_p(ff.z( 0.0))),  0.0,         eps);
@@ -137,21 +135,19 @@ class ParametricKSvD2025Test :
                 {
                     KSvD2025FormFactors<VacuumToKPi> ff(p, Options{ {"n-resonances-0p"_ok, "1"} });
 
-                    const auto chi_0p = 2.07e-4;
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z( 0.0))),  0.147701097,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z( 0.0))),  0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z(+0.1))),  0.133889107,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z(+0.1))),  0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z(+0.5))),  0.0578428721, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z(+0.5))), -0.0292395743, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z( 0.0), chi_0p)),  0.147701097,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z( 0.0), chi_0p)),  0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z(+0.1), chi_0p)),  0.133889107,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z(+0.1), chi_0p)),  0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z(+0.5), chi_0p)),  0.0578428721, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z(+0.5), chi_0p)), -0.0292395743, eps);
-
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_z(ff.z( 0.0), chi_0p)),  0.237232712,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_z(ff.z( 0.0), chi_0p)),  0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_z(ff.z(+0.1), chi_0p)),  0.203408483,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_z(ff.z(+0.1), chi_0p)),  0.0,          eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_z(ff.z(+0.5), chi_0p)),  0.0421748976, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_z(ff.z(+0.5), chi_0p)), -0.0494017539, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_z(ff.z( 0.0))),  0.237232712,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_z(ff.z( 0.0))),  0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_z(ff.z(+0.1))),  0.203408483,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_z(ff.z(+0.1))),  0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phitildeprime_z(ff.z(+0.5))),  0.0421748976, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phitildeprime_z(ff.z(+0.5))), -0.0494017539, eps);
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.resonance_product_z(ff.z( 0.0))),  0.547815118, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.resonance_product_z(ff.z( 0.0))),  0.0,         eps);

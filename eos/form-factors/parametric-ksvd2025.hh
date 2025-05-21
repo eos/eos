@@ -58,6 +58,10 @@ namespace eos
             // parameter for zero point of z
             UsedParameter _t_0;
 
+            // susceptibilities
+            UsedParameter _chi_1m;
+            UsedParameter _chi_0p;
+
             inline std::string _coeff_name(const std::string & ff, const std::string & index) const
             {
                 return "0->Kpi::b_" + ff + "^" + index + "@KSvD2025";
@@ -85,8 +89,8 @@ namespace eos
                 return 1.0 / _z(power_of<2>(complex<double>(M, -Gamma/2)), _t_0());
             }
 
-            double _b0_fp(const double & chi_1m) const;
-            double _b0_fz(const double & chi_1m, const double & chi_0p) const;
+            double _b0_fp() const;
+            double _b0_fz() const;
 
         public:
             KSvD2025FormFactors(const Parameters & p, const Options & o);
@@ -102,15 +106,15 @@ namespace eos
 
             /* functions pertaining to f_p */
             complex<double> w_p(const complex<double> & z) const;
-            complex<double> phitilde_p(const complex<double> & z, const double & chi_1m) const;
-            complex<double> phitildeprime_p(const complex<double> & z, const double & chi_1m) const;
+            complex<double> phitilde_p(const complex<double> & z) const;
+            complex<double> phitildeprime_p(const complex<double> & z) const;
             complex<double> resonance_product_p(const complex<double> & z) const;
             complex<double> resonance_productprime_p(const complex<double> & z) const;
 
             /* functions pertaining to f_z */
             complex<double> w_z(const complex<double> & z) const;
-            complex<double> phitilde_z(const complex<double> & z, const double & chi_0p) const;
-            complex<double> phitildeprime_z(const complex<double> & z, const double & chi_0p) const;
+            complex<double> phitilde_z(const complex<double> & z) const;
+            complex<double> phitildeprime_z(const complex<double> & z) const;
             complex<double> resonance_product_z(const complex<double> & z) const;
 
             /* form factors on the real axis */
