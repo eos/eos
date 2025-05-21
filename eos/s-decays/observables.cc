@@ -19,6 +19,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/s-decays/k-to-l-nu.hh>
+#include <eos/s-decays/k-to-pi-l-nu.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -41,6 +42,30 @@ namespace eos
     }
 
     // }}}
+
+    // K -> pi l nu
+    // {{{
+    ObservableGroup
+    make_k_to_pi_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $K \to pi \ell^+ \nu_\ell$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
+                                                       R"(The option "form-factors" selects the form factor parametrization.)",
+                                                       { make_observable("K->pilnu::dBR/dq2",
+                                                                         R"(d\mathcal{B}(K \to \pi \ell^+ \nu_\ell)/dq^2)",
+                                                                         Unit::InverseGeV2(),
+                                                                         &KToPiLeptonNeutrino::differential_branching_ratio,
+                                                                         std::make_tuple("q2")),
+                                                         make_observable("K->pilnu::BR",
+                                                                         R"(\mathcal{B}(K \to \pi \ell^+ \nu_\ell))",
+                                                                         Unit::None(),
+                                                                         &KToPiLeptonNeutrino::integrated_branching_ratio,
+                                                                         std::make_tuple("q2_min", "q2_max")) });
+
+        return ObservableGroup(imp);
+    }
+
+    // }}}
     // }}}
 
     ObservableSection
@@ -49,7 +74,9 @@ namespace eos
         auto imp = new Implementation<ObservableSection>("Observables in (semi)leptonic $s$-hadron decays",
                                                          "",
                                                          { // K -> l^- nubar
-                                                           make_k_to_l_nu_group() });
+                                                           make_k_to_l_nu_group(),
+                                                           // K -> pi l nubar
+                                                           make_k_to_pi_l_nu_group() });
 
         return ObservableSection(imp);
     }
