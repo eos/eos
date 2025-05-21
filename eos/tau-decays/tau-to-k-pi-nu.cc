@@ -105,8 +105,11 @@ namespace eos
                 const auto m_K2   = power_of<2>(m_K);
                 const auto m_pi2  = power_of<2>(m_pi);
 
+                // TODO: Check complex conjugation of vector/scalar form factors vs CCH:2017A
                 const auto fp = form_factors->f_p(k2);
                 const auto f0 = form_factors->f_0(k2);
+                // TODO: Check normalisation and complex conjugation of tensor form factor vs CCH:2017A
+                // I think normalisation different by factor of 2 (mK+mpi)/mK !
                 // const auto BT = form_factors->f_t(k2);
                 const auto BT = 0.0; // neglect tensor form factor as not implemented yet!
 
