@@ -1539,6 +1539,14 @@ KKVDZ:2022A:
     id: oai:arXiv.org:2210.09832
   inspire-id: Kurten:2022zuy
   title: Dispersion relations for $B^- \to \ell^- \bar{\nu}_\ell \ell^{\prime-} \ell^{\prime+}$ form factors
+KLOE:2008A:
+  authors: Ambrosino, F. et al.
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0712.3841
+  inspire-id: KLOE:2007jte
+  title: Measurement of the absolute branching ratios for semileptonic $K^\pm$ decays with the KLOE detector
 KM:2005A:
   authors: Kruger, F. and Matias, J.
   eprint:
