@@ -6083,7 +6083,7 @@ groups:
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$b^{(+,I+1)}_1$'
+          latex:    '$b^{(+,I=1)}_1$'
           comments: ''
       '0->pipi::b_(+,1)^2@KKRvD2024' :
           central: +0.0
