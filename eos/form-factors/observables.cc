@@ -2670,7 +2670,7 @@ namespace eos
                 make_form_factor_adapter("0->Kpi::Im{f_+}(Re{q2},Im{q2})", R"(\textrm{Im}(f_+^{0\to K\pi}(q^2)))",
                         &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
 
-                make_observable("0->pKi::b0_f+@KKRvD2024", R"(b_0^{+, 0 \to K\pi})", Unit::None(),
+                make_observable("0->Kpi::b0_f+@KKRvD2024", R"(b_0^{+, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_fp),
 
                 make_observable("0->Kpi::Saturation_f+@KKRvD2024", R"(\textrm{Saturation})", Unit::None(),
