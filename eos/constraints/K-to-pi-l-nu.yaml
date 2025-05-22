@@ -1,0 +1,20 @@
+###################
+# K -> pi l nu #
+###################
+#
+# [KLOE:2008A]
+K^+-->pi^0l^+-nu::BR[0.0,q2max]@KLOE:2008A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K->pilnu::BR
+        - K->pilnu::BR
+    kinematics:
+        - {q2_min: 2.61119978001e-7, q2_max: 0.12866583348004}
+        - {q2_min: 0.011163612964, q2_max: 0.12866583348004}
+    options:
+        - {q: u, l: e}
+        - {q: u, l: mu}
+    means: [ 4.965e-2, 3.233e-2 ]
+    covariance:
+        - [ 0.2780e-6, 0.1268e-6 ]
+        - [ 0.1268e-6, 0.1510e-6 ]
