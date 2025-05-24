@@ -593,7 +593,7 @@ class DynestyResultLogger:
 
 # Nested sampling
 @task('sample-nested', '{posterior}/nested')
-def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, seed:int=10, sample:str='auto'):
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto'):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
@@ -614,6 +614,8 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type dlogz: float, optional
     :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
     :type maxiter: int, optional
+    :param miniter: The minimum number of iterations. If not provided, the sampler will run until the termination condition is reached. Defaults to 0.
+    :type miniter: int, optional
     :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
     :type seed: int, optional
     :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
@@ -621,7 +623,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     """
     analysis = analysis_file.analysis(posterior)
     logger = DynestyResultLogger()
-    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, print_function=logger.print_function, seed=seed, sample=sample)
+    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]
     weights = _np.exp(posterior_values)
