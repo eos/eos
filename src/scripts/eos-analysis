@@ -260,6 +260,10 @@ In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTE
         help = 'The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.',
         dest = 'maxiter', action = 'store', type = int, default = None
     )
+    parser_sample_nested.add_argument('-l', '--min-number-iterations',
+        help = 'The minimum number of iterations. If not provided, the sampler will run until the termination condition is reached.',
+        dest = 'miniter', action = 'store', type = int, default = 0
+    )
     parser_sample_nested.add_argument('-s', '--use-random-seed',
         help = 'The seed used to initialize the Mersenne Twister pseudo-random number generator.',
         dest = 'seed', action = 'store', type = int, default = 10
