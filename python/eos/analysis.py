@@ -175,7 +175,7 @@ class Analysis:
 
                 p = self.parameters[parameter]
                 if p.name() in self.varied_parameter_names:
-                    raise ValueError(f'Parameter {p} is repeated in a univariate prior.')
+                    raise ValueError(f'Parameter \'{p.name()}\' is repeated in a univariate prior.')
                 self.varied_parameters.append(p)
                 self.varied_parameter_names.append(p.name())
             elif 'parameters' in prior:
@@ -183,7 +183,7 @@ class Analysis:
                 parameters = prior['parameters']
                 for p in parameters:
                     if p in self.varied_parameter_names:
-                        raise ValueError(f'Parameter {p} is repeated in a multivariate prior.')
+                        raise ValueError(f'Parameter \'{p}\' is repeated in a multivariate prior.')
                     self.varied_parameters.append(self.parameters[p])
                     self.varied_parameter_names.append(p)
 
@@ -202,7 +202,7 @@ class Analysis:
                 self._log_posterior.add(log_prior, False)
                 for p in log_prior.varied_parameters():
                     if p.name() in self.varied_parameter_names:
-                        raise ValueError(f'Parameter {p} is repeated in a prior using constraint {constraint_name}')
+                        raise ValueError(f'Parameter \'{p.name()}\' is repeated in a prior using constraint {constraint_name}')
                     self.varied_parameters.append(p)
                     self.varied_parameter_names.append(p.name())
             else:
