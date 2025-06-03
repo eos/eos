@@ -2725,10 +2725,10 @@ namespace eos
                 make_form_factor_adapter("0->Kpi::Im{f_+}(Re{q2},Im{q2})", R"(\textrm{Im}(f_+^{0\to K\pi}(q^2)))",
                         &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
 
-                make_observable("0->pKi::b0_f+@KKRvD2024", R"(b_0^{+, 0 \to K\pi})", Unit::None(),
+                make_observable("0->Kpi::b0_f+@KSvD2025", R"(b_0^{+, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_fp),
 
-                make_observable("0->Kpi::Saturation_f+@KKRvD2024", R"(\textrm{Saturation})", Unit::None(),
+                make_observable("0->Kpi::Saturation_f+@KSvD2025", R"(\textrm{Saturation})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::saturation_p),
 
                 make_form_factor_adapter("0->Kpi::Abs{f_0}^2(q2)", R"(|f_0^{0\to K\pi}(q^2)|^2)",
@@ -2743,10 +2743,10 @@ namespace eos
                 make_form_factor_adapter("0->Kpi::Im{f_0}(Re{q2},Im{q2})", R"(\textrm{Im}(f_0^{0\to K\pi}(q^2)))",
                         &FormFactors<VacuumToPP>::im_f_0, std::make_tuple("Re{q2}", "Im{q2}")),
 
-                make_observable("0->Kpi::b0_f0@KKRvD2024", R"(b_0^{0, 0 \to K\pi})", Unit::None(),
+                make_observable("0->Kpi::b0_f0@KSvD2025", R"(b_0^{0, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_f0),
 
-                make_observable("0->Kpi::Saturation_f0@KKRvD2024", R"(\textrm{Saturation})", Unit::None(),
+                make_observable("0->Kpi::Saturation_f0@KSvD2025", R"(\textrm{Saturation})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::saturation_z)
             }
         };
