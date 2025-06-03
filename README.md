@@ -62,6 +62,7 @@ The main authors are:
  * Christoph Bobeth,
  * Carolina Bolognani <carolinabolognani@gmail.com>,
  * Nico Gubernari <nicogubernari@gmail.com>,
+ * Florian Herren <florian.s.herren@gmail.com>,
  * Meril Reboud <merilreboud@gmail.com>,
 
 with further code contributions by:
