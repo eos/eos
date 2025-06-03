@@ -38,8 +38,8 @@ namespace eos
         public FormFactors<VacuumToPP>
     {
         private:
-            SpecifiedOption n_resonances_1m;
-            SpecifiedOption n_resonances_0p;
+            RestrictedOption n_resonances_1m;
+            RestrictedOption n_resonances_0p;
 
             // parameters for form factor f_+
             std::array<UsedParameter, 9u> _b_fp;
