@@ -1486,7 +1486,7 @@ namespace eos
     template <>
     struct Implementation<CharmLoopsAdapter>
     {
-        SpecifiedOption opt_contribution;
+        RestrictedOption opt_contribution;
 
         UsedParameter m_b;
         UsedParameter m_c;
