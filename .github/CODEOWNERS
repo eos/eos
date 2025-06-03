@@ -14,3 +14,8 @@ eos/scattering      @mreboud
 
 # @lorenzennio should review commits to pyhf code
 python/eos/*pyhf*   @lorenzennio
+
+# @herren should review commits to:
+eos/b-decays        @Herren
+eos/form-factors    @Herren
+eos/scattering      @Herren
