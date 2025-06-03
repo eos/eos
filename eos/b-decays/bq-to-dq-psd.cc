@@ -75,7 +75,7 @@ namespace eos
 
         UsedParameter mu;
 
-        SpecifiedOption opt_accuracy;
+        RestrictedOption opt_accuracy;
         double switch_lo;
         double switch_nlo;
         double switch_nlp;
