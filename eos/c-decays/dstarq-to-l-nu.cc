@@ -58,7 +58,7 @@ namespace eos
 
         UsedParameter m_l;
 
-        SpecifiedOption opt_cp_conjugate;
+        BooleanOption opt_cp_conjugate;
 
         bool cp_conjugate;
 
@@ -83,7 +83,7 @@ namespace eos
             opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
+            cp_conjugate(opt_cp_conjugate.value()),
             mu(p[opt_q.str() + "c" + "nu" + opt_l.str() + opt_l.str() + "::mu"], u)
         {
             Context ctx("When constructing D_q^*+->l^+nu observable");
