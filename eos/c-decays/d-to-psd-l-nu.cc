@@ -87,7 +87,7 @@ namespace eos
 
         GSL::QAGS::Config int_config;
 
-        SpecifiedOption opt_cp_conjugate;
+        BooleanOption opt_cp_conjugate;
 
         bool cp_conjugate;
 
@@ -173,7 +173,7 @@ namespace eos
             mu(p[opt_Q.str() + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            cp_conjugate(destringify<bool>(opt_cp_conjugate.value())),
+            cp_conjugate(opt_cp_conjugate.value()),
             form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
             Context ctx("When constructing D->Plnu observable");
