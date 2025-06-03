@@ -51,10 +51,10 @@ namespace eos
 
                 QuarkFlavorOption opt_Q;
                 QuarkFlavorOption opt_q;
-                SpecifiedOption opt_gminus;
+                RestrictedOption opt_gminus;
                 double switch_gminus;
 
-                SpecifiedOption opt_alpha_s;
+                RestrictedOption opt_alpha_s;
                 std::function<double(const double &)> alpha_s;
 
                 UsedParameter mu_0;

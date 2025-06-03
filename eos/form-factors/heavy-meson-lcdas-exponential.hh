@@ -52,7 +52,7 @@ namespace eos
             private:
                 QuarkFlavorOption opt_Q;
                 QuarkFlavorOption opt_q;
-                SpecifiedOption opt_gminus;
+                RestrictedOption opt_gminus;
 
                 UsedParameter lambda_B_inv;
                 UsedParameter lambda_E2;

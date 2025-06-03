@@ -327,7 +327,7 @@ namespace eos
         UsedParameter _s0_zero, _s0_zero_p, _s0_zero_pp;
         UsedParameter _s0_T,    _s0_T_p,    _s0_T_pp;
         // Decays constant: option govens whether to use the QCDSR or a parameter for the decay constant
-        SpecifiedOption opt_decay_constant;
+        RestrictedOption opt_decay_constant;
         std::function<double ()> decay_constant;
 
         // Parameter for the estimation of NNLO corrections
