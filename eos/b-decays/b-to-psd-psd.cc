@@ -43,7 +43,7 @@ namespace eos
         UsedParameter mB;
         UsedParameter mP1;
         UsedParameter mP2;
-        SpecifiedOption opt_rep;
+        RestrictedOption opt_rep;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
         std::shared_ptr<NonleptonicAmplitudes<PToPP>> Bbar_nl_amplitudes;

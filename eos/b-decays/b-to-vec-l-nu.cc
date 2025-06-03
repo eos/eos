@@ -50,7 +50,7 @@ namespace eos
         Parameters parameters;
 
         QuarkFlavorOption opt_q;
-        SpecifiedOption opt_V;
+        RestrictedOption opt_V;
 
         UsedParameter hbar;
 
