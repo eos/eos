@@ -44,7 +44,7 @@ namespace eos
 
         QuarkFlavorOption opt_D;
         QuarkFlavorOption opt_q;
-        SpecifiedOption opt_I;
+        RestrictedOption opt_I;
 
         UsedParameter m_B;
 
