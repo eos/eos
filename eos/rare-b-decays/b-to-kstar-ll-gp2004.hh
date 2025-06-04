@@ -49,9 +49,11 @@ namespace eos
 
             BooleanOption opt_ccbar_resonance;
             BooleanOption opt_use_nlo;
+            BooleanOption opt_use_simple_sl;
 
             bool ccbar_resonance;
             bool use_nlo;
+            bool use_simple_sl;
 
             static const std::vector<OptionSpecification> options;
 

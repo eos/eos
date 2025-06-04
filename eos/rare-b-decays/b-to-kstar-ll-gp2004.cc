@@ -39,12 +39,14 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c_MSbar(p["mass::c"], *this),
         m_s(p["mass::s(2GeV)"], *this),
-        lambda_long(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_0") + "@LowRecoil"], *this),
-        lambda_par(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pa") + "@LowRecoil"], *this),
-        lambda_perp(p["B->Vll::Lambda" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pp") + "@LowRecoil"], *this),
-        sl_phase_long(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_0") + "@LowRecoil"], *this),
-        sl_phase_par(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pa") + "@LowRecoil"], *this),
-        sl_phase_perp(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl"_ok)) ? "" : "_pp") + "@LowRecoil"], *this),
+        opt_use_simple_sl(o, options, "simple-sl"_ok),
+        use_simple_sl(opt_use_simple_sl.value()),
+        lambda_long(p["B->Vll::Lambda" + std::string(use_simple_sl ? "" : "_0") + "@LowRecoil"], *this),
+        lambda_par(p["B->Vll::Lambda" + std::string(use_simple_sl ? "" : "_pa") + "@LowRecoil"], *this),
+        lambda_perp(p["B->Vll::Lambda" + std::string(use_simple_sl ? "" : "_pp") + "@LowRecoil"], *this),
+        sl_phase_long(p["B->Vll::sl_phase" + std::string(use_simple_sl ? "" : "_0") + "@LowRecoil"], *this),
+        sl_phase_par(p["B->Vll::sl_phase" + std::string(use_simple_sl ? "" : "_pa") + "@LowRecoil"], *this),
+        sl_phase_perp(p["B->Vll::sl_phase" + std::string(use_simple_sl ? "" : "_pp") + "@LowRecoil"], *this),
         opt_ccbar_resonance(o, options, "ccbar-resonance"_ok),
         opt_use_nlo(o, options, "nlo"_ok),
         ccbar_resonance(opt_ccbar_resonance.value()),
@@ -61,7 +63,8 @@ namespace eos
     BToKstarDileptonAmplitudes<tag::GP2004>::options
     {
         { "ccbar-resonance"_ok, { "true", "false" },  "false" },
-        { "nlo"_ok, { "true", "false" },  "true" },
+        { "nlo"_ok,             { "true", "false" },  "true"  },
+        { "simple-sl"_ok,       { "true", "false" },  "false" }
     };
 
     // cf. [GP2004], Eq. (56)

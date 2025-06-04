@@ -98,10 +98,10 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "GP2004"},
-                    {"l"_ok, "mu"},
-                    {"form-factors"_ok, "BSZ2015"}
+                    {"model"_ok,        "WET"     },
+                    {"tag"_ok,          "GP2004"  },
+                    {"l"_ok,            "mu"      },
+                    {"form-factors"_ok, "BSZ2015" }
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -221,10 +221,10 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "GP2004"},
-                    {"l"_ok, "mu"},
-                    {"form-factors"_ok, "BSZ2015"}
+                    {"model"_ok,        "WET"     },
+                    {"tag"_ok,          "GP2004"  },
+                    {"l"_ok,            "mu"      },
+                    {"form-factors"_ok, "BSZ2015" }
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -315,10 +315,10 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "GP2004"},
-                    {"l"_ok, "mu"},
-                    {"form-factors"_ok, "BSZ2015"}
+                    {"model"_ok,        "WET"     },
+                    {"tag"_ok,          "GP2004"  },
+                    {"l"_ok,            "mu"      },
+                    {"form-factors"_ok, "BSZ2015" }
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -418,10 +418,10 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 };
                 Options options
                 {
-                    { "model"_ok,        "WET" },
-                    { "l"_ok,            "mu"         },
-                    { "tag"_ok,          "GP2004"     },
-                    { "form-factors"_ok, "BSZ2015"     }
+                    { "model"_ok,        "WET"     },
+                    { "l"_ok,            "mu"      },
+                    { "tag"_ok,          "GP2004"  },
+                    { "form-factors"_ok, "BSZ2015" }
                 };
 
                 for (const auto & name : names)
