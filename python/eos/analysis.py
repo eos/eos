@@ -738,7 +738,7 @@ class Analysis:
         sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
         while sampler.results['niter'] < miniter:
             # using mode='full' ensures sampling from the entire posterior
-            sampler.add_batch(mode='full', dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
+            sampler.add_batch(mode='full', dlogz=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
         return sampler.results
 
 
