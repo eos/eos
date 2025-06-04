@@ -69,7 +69,10 @@ namespace eos
                 if ("true" == input)
                     return true;
 
-                return false;
+                if ("false" == input)
+                    return false;
+
+                throw DestringifyError(input + ": 'true' or 'false' was expected");
             }
         };
 
