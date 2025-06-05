@@ -31,7 +31,7 @@ setup(
     url='https://eos.github.io/',
     license='GPLv2',
     install_requires=[
-        'argcomplete', 'dynesty', 'matplotlib', 'numpy>=1.13', 'pypmc>=1.1.4', 'pyyaml', 'scipy'
+        'argcomplete', 'dynesty', 'matplotlib', 'numpy>=1.13', 'pypmc>=1.1.4', 'pyyaml', 'scipy', 'tqdm'
     ],
     packages=['eos', 'eos.data', 'eos.plot', 'eos.figure', '_eos_libs', '_eos_data'],
     package_dir={
