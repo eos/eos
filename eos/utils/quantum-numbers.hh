@@ -83,6 +83,18 @@ namespace eos
         return lhs;
     }
 
+    inline Isospin operator ^ (Isospin lhs, Isospin rhs)
+    {
+        using T = std::underlying_type_t<Isospin>;
+        return static_cast<Isospin>(static_cast<T>(lhs) ^ static_cast<T>(rhs));
+    }
+
+    inline Isospin & operator ^= (Isospin & lhs, Isospin rhs)
+    {
+        lhs = lhs ^ rhs;
+        return lhs;
+    }
+
     inline bool operator && (Isospin lhs, Isospin rhs)
     {
         return (lhs & rhs) != Isospin::none;
@@ -147,6 +159,18 @@ namespace eos
     inline PartialWave & operator &= (PartialWave & lhs, PartialWave rhs)
     {
         lhs = lhs & rhs;
+        return lhs;
+    }
+
+    inline PartialWave operator ^ (PartialWave lhs, PartialWave rhs)
+    {
+        using T = std::underlying_type_t<PartialWave>;
+        return static_cast<PartialWave>(static_cast<T>(lhs) ^ static_cast<T>(rhs));
+    }
+
+    inline PartialWave & operator ^= (PartialWave & lhs, PartialWave rhs)
+    {
+        lhs = lhs ^ rhs;
         return lhs;
     }
 
