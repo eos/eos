@@ -1,0 +1,50 @@
+on:
+  pull_request:
+    branches:
+      - master
+
+name: Check if the commit messages are well-formed
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          fetch-depth: 0 # download all history across all branches
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install gitlint
+      - name: Run gitlint
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          export BASE_SHA=$(git merge-base origin/master $GITHUB_SHA)
+          echo "Examining commits from $BASE_SHA to $GITHUB_SHA"
+          for sha in $(git rev-list $BASE_SHA..$GITHUB_SHA) ; do \
+            export MESSAGE=$(git show --no-patch --no-notes --pretty=format:%s $sha) ; \
+            echo "Checking commit $sha with message: $MESSAGE" ; \
+            gitlint --commit $sha 2> gitlint-output || ( \
+              echo "Gitlint found issues with commit $sha" ; \
+              echo "- $sha: $MESSAGE" >> comment-body ; \
+              echo '```' >> comment-body ; \
+              cat gitlint-output >> comment-body ; \
+              echo '```' >> comment-body ; \
+              echo "" >> comment-body ; \
+            ) ; \
+          done
+          if [[ -f comment-body ]] ; then \
+            echo "Commenting on PR with gitlint output" ; \
+            gh pr comment ${{ github.event.pull_request.number }} \
+              --body-file comment-body ; \
+            cat comment-body ; \
+          else \
+            echo "No gitlint issues found, not commenting" ; \
+            exit 0 ; \
+          fi
