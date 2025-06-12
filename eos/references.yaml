@@ -680,6 +680,14 @@ Belle:2014A:
     id: oai:arXiv.org:1409.5269
   inspire-id: Belle:2014eud
   title: Measurement of the branching fraction of $B^+ \to \tau^+ \nu_\tau$ decays with the semileptonic tagging method and the full Belle data sample
+Belle:2014B:
+  authors: Ryu, S. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1402.5213
+  inspire-id: Belle:2014mfl
+  title: Measurements of Branching Fractions of $\tau$ Lepton Decays with one or more $K^0_S$
 Belle:2015A:
   authors: Glattauer, R. et al.
   collaboration: Belle

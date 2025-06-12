@@ -18,6 +18,7 @@
  */
 
 #include <eos/form-factors/form-factors.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/tau-decays/tau-to-k-pi-nu.hh>
@@ -63,6 +64,8 @@ namespace eos
 
             UsedParameter mu;
 
+            GSL::QAGS::Config int_config;
+
             static const std::vector<OptionSpecification> options;
 
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -78,7 +81,8 @@ namespace eos
                 m_s(p["mass::s(2GeV)"], u),
                 m_u(p["mass::u(2GeV)"], u),
                 tau_tau(p["life_time::tau"], u),
-                mu(p["ustaunutau::mu"], u)
+                mu(p["ustaunutau::mu"], u),
+                int_config(GSL::QAGS::Config().epsrel(0.5e-3))
             {
                 Context ctx("When constructing tau^-->[K pi]^- nubar observable");
 
@@ -156,6 +160,21 @@ namespace eos
     TauToKPiNeutrino::differential_decay_width(const double & k2) const
     {
         return _imp->differential_decay_width(k2);
+    }
+
+    double
+    TauToKPiNeutrino::decay_width(const double & q2_min, const double & q2_max) const
+    {
+        // Integrate the differential decay width over the specified kinematic range
+        std::function<double(const double &)> f = std::bind(&Implementation<TauToKPiNeutrino>::differential_decay_width, _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
+    }
+
+    double
+    TauToKPiNeutrino::branching_ratio(const double & q2_min, const double & q2_max) const
+    {
+        return decay_width(q2_min, q2_max) * _imp->tau_tau / _imp->hbar;
     }
 
     const std::set<ReferenceName> TauToKPiNeutrino::references{ "CCH:2017A"_rn };
