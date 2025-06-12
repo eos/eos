@@ -32,6 +32,7 @@
 #include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/form-factors/parametric-hkvt2025.hh>
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-ksvd2025.hh>
@@ -1972,6 +1973,15 @@ namespace eos
                         &FvDV2018FormFactors<BToPiPi>::f_time_im_res_qhat2,
                         std::make_tuple("q2", "k2")
                         ),
+
+                make_observable("B->pipi::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &HKVT2025FormFactors<BToPiPi, PToPP>::saturation_1m_v),
+
+                make_observable("B->pipi::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &HKVT2025FormFactors<BToPiPi, PToPP>::saturation_0m_a),
+
+                make_observable("B->pipi::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &HKVT2025FormFactors<BToPiPi, PToPP>::saturation_1p_a)
             }
         );
 
@@ -2496,6 +2506,14 @@ namespace eos
                         Unit::None(),
                         R"(<<decay-constant::D_s,1^T>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_T5]>>)"),
 
+                // ub states
+                make_expression_observable("B_u^*::Saturation[1^-_V]", R"(\textrm{Saturation}_{B_u^*}[1^-_{V}])",
+                        Unit::None(),
+                        R"(<<decay-constant::B_u^*>>^2 / <<mass::B_u^*>>^4 / <<b->u::chiOPE[1^-_V]>>)"),
+
+                make_expression_observable("B_u::Saturation[0^-_A]", R"(\textrm{Saturation}_{B_u}[0^-_A])",
+                        Unit::None(),
+                        R"(<<decay-constant::B_u>>^2 / <<mass::B_u>>^2 / <<b->u::chiOPE[0^-_A]>>)")
             }
         );
 
