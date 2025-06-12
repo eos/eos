@@ -20,7 +20,7 @@
 
 #include <eos/maths/complex.hh>
 #include <eos/observable.hh>
-#include <eos/s-decays/k-to-l-nu.hh>
+#include <eos/tau-decays/tau-to-k-pi-nu.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <test/test.hh>
@@ -37,11 +37,11 @@
 using namespace test;
 using namespace eos;
 
-class KToLeptonNeutrinoTest : public TestCase
+class TauToKPiNeutrinoTest : public TestCase
 {
     public:
-        KToLeptonNeutrinoTest() :
-            TestCase("k_to_l_nu_test")
+        TauToKPiNeutrinoTest() :
+            TestCase("tau_to_k_pi_nu_test")
         {
         }
 
@@ -49,75 +49,25 @@ class KToLeptonNeutrinoTest : public TestCase
         run() const
         {
             {
-                Parameters p             = Parameters::Defaults();
-                p["WET::G_Fermi"]        = 1.000;
-                p["CKM::abs(V_us)"]      = 1.000;
-                p["mass::K_u"]           = 2.000;
-                p["decay-constant::K_u"] = 1.000;
-                p["mass::e"]             = 1.000;
-                p["QM::hbar"]            = 1.000;
-                p["life_time::K_u"]      = 1.000;
+                Parameters p                      = Parameters::Defaults();
+                p["0->Kpi::t_0@KSvD2025"]         = -4.0;
+                p["0->Kpi::M_(+,0)@KSvD2025"]     = 0.890;
+                p["0->Kpi::Gamma_(+,0)@KSvD2025"] = 0.026;
+                p["0->Kpi::M_(0,0)@KSvD2025"]     = 0.680;
+                p["0->Kpi::Gamma_(0,0)@KSvD2025"] = 0.300;
+                p["0->Kpi::M_(+,1)@KSvD2025"]     = 1.368;
+                p["0->Kpi::Gamma_(+,1)@KSvD2025"] = 0.106;
+                p["0->Kpi::M_(0,1)@KSvD2025"]     = 1.431;
+                p["0->Kpi::Gamma_(0,1)@KSvD2025"] = 0.110;
+                p["0->Kpi::b_+^1@KSvD2025"]       = 0.05;
+                p["0->Kpi::b_0^1@KSvD2025"]       = 0.1;
 
-                Options oo{
-                    { "model"_ok, "CKM" },
-                    {     "l"_ok,   "e" },
-                };
+                TauToKPiNeutrino d(p, Options{});
 
-                KToLeptonNeutrino d(p, oo);
+                const double eps = 1e-8;
 
-                const double eps = 1e-12;
-
-                TEST_CHECK_NEARLY_EQUAL(std::pow(1.009653 * 1., 2) * std::pow((1. - std::pow(1. / 2., 2)), 2) * 2. / (8. * M_PI), d.branching_ratio(), eps);
-            }
-
-            {
-                Parameters p             = Parameters::Defaults();
-                p["WET::G_Fermi"]        = 1.000;
-                p["CKM::abs(V_us)"]      = 2.000;
-                p["mass::K_u"]           = 3.000;
-                p["decay-constant::K_u"] = 1.500;
-                p["mass::e"]             = 1.000;
-                p["QM::hbar"]            = 1.000;
-                p["life_time::K_u"]      = 0.100;
-
-                Options oo{
-                    { "model"_ok, "CKM" },
-                    {     "l"_ok,   "e" },
-                };
-
-                KToLeptonNeutrino d(p, oo);
-
-                const double eps = 1e-12;
-
-                TEST_CHECK_NEARLY_EQUAL(std::pow(1.009653 * 1., 2) * 3. / (8. * M_PI) * 0.1 * std::pow(1.5 * 2. * (1. - std::pow(1. / 3., 2)), 2), d.branching_ratio(), eps);
-            }
-
-            {
-                Parameters p             = Parameters::Defaults();
-                p["WET::G_Fermi"]        = 1.000;
-                p["CKM::abs(V_us)"]      = 1.000;
-                p["mass::K_u"]           = 2.000;
-                p["decay-constant::K_u"] = 1.000;
-                p["mass::e"]             = 1.000;
-                p["QM::hbar"]            = 1.000;
-                p["life_time::K_u"]      = 1.000;
-                p["usenue::Re{cVL}"]     = 1.000;
-                p["usenue::Re{cVR}"]     = 0.500;
-                p["usenue::Re{cSL}"]     = 0.000;
-                p["usenue::Re{cSR}"]     = 0.000;
-
-
-                Options oo{
-                    { "model"_ok, "WET" },
-                    {     "l"_ok,   "e" },
-                };
-
-                KToLeptonNeutrino d(p, oo);
-
-                const double eps = 1e-12;
-
-                // eta factor corrections not yet implemented
-                TEST_CHECK_NEARLY_EQUAL(std::pow(0.5, 2) * std::pow((1. - std::pow(1. / 2., 2)), 2) * 2. / (8. * M_PI), d.branching_ratio(), eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_branching_ratio(1.0), 0.01475307, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.branching_ratio(0.4060, 3.1574802249), 0.05127342, eps);
             }
         }
-} k_to_l_nu_test;
+} tau_to_k_pi_nu_test;
