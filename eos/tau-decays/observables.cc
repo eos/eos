@@ -43,7 +43,12 @@ namespace eos
                                                                          R"(d\Gamma(tau^- \to K \pi^- \nu_\ell)/dq^2)",
                                                                          Unit::InverseGeV(),
                                                                          &TauToKPiNeutrino::differential_decay_width,
-                                                                         std::make_tuple("q2")) });
+                                                                         std::make_tuple("q2")),
+                                                         make_observable("tau->K_Spinu::BR",
+                                                                         R"(\mathcal{B}(tau^- \to K \pi \nu_\ell))",
+                                                                         Unit::None(),
+                                                                         &TauToKPiNeutrino::branching_ratio,
+                                                                         std::make_tuple("q2_min", "q2_max")) });
 
         return ObservableGroup(imp);
     }

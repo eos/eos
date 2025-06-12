@@ -38,6 +38,10 @@ namespace eos
             double differential_branching_ratio(const double & k2) const;
             double differential_decay_width(const double & k2) const;
 
+            // Integrated Observables
+            double branching_ratio(const double & q2_min, const double & q2_max) const;
+            double decay_width(const double & q2_min, const double & q2_max) const;
+
             /*!
              * References used in the computation of our observables.
              */
