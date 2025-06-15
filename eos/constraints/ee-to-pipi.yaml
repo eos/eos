@@ -20,10 +20,17 @@
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)",
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)" ]
     options:
-        [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
+        [ {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"} ]
     kinematics:
         [ {q2: 0.106916}, {q2: 0.120284}, {q2: 0.134440}, {q2: 0.149398}, {q2: 0.165128}, {q2: 0.181646}, {q2: 0.198970}, {q2: 0.217063},
           {q2: 0.235963}, {q2: 0.255229}, {q2: 0.275795}, {q2: 0.297126}, {q2: 0.319393}, {q2: 0.342239}, {q2: 0.365870}, {q2: 0.390349},
@@ -151,21 +158,21 @@
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)",
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)" ]
     options:
-        [ {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {}, {}, {},
-          {}, {} ]
+        [ {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"} ]
     kinematics:
         [ {q2: 0.300067}, {q2: 0.313883}, {q2: 0.325139}, {q2: 0.336554}, {q2: 0.348297}, {q2: 0.360173}, {q2: 0.372178}, {q2: 0.384610},
           {q2: 0.397005}, {q2: 0.409596}, {q2: 0.423275}, {q2: 0.436095}, {q2: 0.449173}, {q2: 0.461970}, {q2: 0.462646}, {q2: 0.475518},
@@ -317,8 +324,9 @@
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)",
           "0->pipi::Abs{f_+}^2(q2)" ]
     options:
-        [ {}, {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {} ]
+        [ {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"},
+          {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"}, {"form-factors": "KKRvD2024"} ]
     kinematics:
         [ {q2: 0.129854}, {q2: 0.145137}, {q2: 0.160047}, {q2: 0.176434}, {q2: 0.194005},
           {q2: 0.212030}, {q2: 0.231260}, {q2: 0.249440}, {q2: 0.271045}, {q2: 0.291780},
