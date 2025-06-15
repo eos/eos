@@ -19,17 +19,17 @@
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)",
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)" ]
     options:
-        [ {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {}, {},
-          {}, {} ]
+        [ { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" } ]
     kinematics:
         [{q2: 0.08769}, {q2: 0.125}, {q2: 0.175}, {q2: 0.225}, {q2: 0.275}, {q2: 0.325}, {q2: 0.375}, {q2: 0.425}, {q2: 0.475},
          {q2: 0.525}  , {q2: 0.575}, {q2: 0.625}, {q2: 0.675}, {q2: 0.725}, {q2: 0.775}, {q2: 0.825}, {q2: 0.875}, {q2: 0.925},
@@ -130,15 +130,15 @@
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)",
           "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)", "0->pipi::Abs{f_+}^2(q2)" ]
     options:
-        [ {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {}, {}, {},
-          {}, {}, {} ]
+        [ { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+          { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" } ]
     kinematics:
         [ {'q2': 0.08265625}, {'q2': 0.09765625}, {'q2': 0.11390625}, {'q2': 0.13140625}, {'q2': 0.15015625},
           {'q2': 0.17015625}, {'q2': 0.19140625}, {'q2': 0.21390625}, {'q2': 0.23765625}, {'q2': 0.26265625},
