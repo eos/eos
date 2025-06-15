@@ -20,12 +20,12 @@
         {'q2': -0.137},{'q2': -0.144},{'q2': -0.153},{'q2': -0.163},{'q2': -0.173},{'q2': -0.183},{'q2': -0.193},{'q2': -0.203},
         {'q2': -0.213},{'q2': -0.223},{'q2': -0.233},{'q2': -0.243},{'q2': -0.253}]
     options:
-      [ {},{},{},{},{},{},{},{},
-        {},{},{},{},{},{},{},{},
-        {},{},{},{},{},{},{},{},
-        {},{},{},{},{},{},{},{},
-        {},{},{},{},{},{},{},{},
-        {},{},{},{},{} ]
+      [ { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+        { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+        { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+        { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+        { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" },
+        { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" }, { "form-factors": "KKRvD2024" } ]
     means:
       [ 0.944,0.921,0.933,0.926,0.914,0.905,0.898,0.884,
         0.884,0.89,0.866,0.876,0.857,0.849,0.837,0.83,
