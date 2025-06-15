@@ -1,5 +1,5 @@
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - master
 
@@ -13,6 +13,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
           fetch-depth: 0 # download all history across all branches
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10.13"
@@ -22,12 +23,13 @@ jobs:
           pip install gitlint
       - name: Run gitlint
         env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          export BASE_SHA=$(git merge-base origin/master $GITHUB_SHA)
-          echo "Examining commits from $BASE_SHA to $GITHUB_SHA"
-          for sha in $(git rev-list $BASE_SHA..$GITHUB_SHA) ; do \
+          echo "Examining commits from $BASE_SHA to $HEAD_SHA"
+          for sha in $(git rev-list $BASE_SHA..$HEAD_SHA) ; do \
             export MESSAGE=$(git show --no-patch --no-notes --pretty=format:%s $sha) ; \
             echo "Checking commit $sha with message: $MESSAGE" ; \
             gitlint --commit $sha 2> gitlint-output || ( \
