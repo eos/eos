@@ -23,6 +23,7 @@ from .item import ItemFactory, ItemColorCycler
 
 import copy as _copy
 import eos
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml as _yaml
@@ -60,6 +61,7 @@ class Grid(Deserializable):
 class XTicks(Deserializable):
     r""""Represents the x axis ticks properties in a plot."""
 
+    minor:bool=field(default=True)
     visible:bool=field(default=True)
 
     def __post_init__(self):
@@ -68,7 +70,11 @@ class XTicks(Deserializable):
     def draw(self, ax):
         if not self.visible:
             ax.xaxis.set_major_formatter(plt.NullFormatter())
-        ax.xaxis.set_tick_params(bottom=self.visible, top=self.visible)
+        else:
+            ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            if self.minor:
+                ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+            ax.xaxis.set_tick_params(bottom=self.visible, top=self.visible)
 
 
 @dataclass
@@ -100,6 +106,7 @@ class XAxis(Deserializable):
 class YTicks(Deserializable):
     r""""Represents the y axis ticks properties in a plot."""
 
+    minor:bool=field(default=True)
     visible:bool=field(default=True)
 
     def __post_init__(self):
@@ -108,8 +115,11 @@ class YTicks(Deserializable):
     def draw(self, ax):
         if not self.visible:
             ax.yaxis.set_major_formatter(plt.NullFormatter())
-        ax.yaxis.set_tick_params(left=self.visible, right=self.visible)
-
+        else:
+            ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            if self.minor:
+                ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+            ax.yaxis.set_tick_params(bottom=self.visible, top=self.visible)
 
 @dataclass
 class YAxis(Deserializable):
