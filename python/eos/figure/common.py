@@ -15,5 +15,51 @@
 
 from dataclasses import dataclass, field
 from eos.deserializable import Deserializable
+from _eos import __version__ as eos_version
 
 import numpy as np
+
+
+@dataclass(kw_only=True)
+class Watermark(Deserializable):
+    r"""Inserts an EOS watermark into a figure
+
+    """
+    position:str=field(default='upper right')
+    preliminary:bool=field(default=False)
+
+    def __post_init__(self):
+        xdelta, ydelta = (0.04, 0.04)
+        vpos, hpos = self.position.split(' ')
+
+        if hpos == 'right':
+            self._x = 1 - xdelta
+        elif hpos == 'left':
+            self._x = xdelta
+        elif hpos == 'center':
+            self._x = 0.5
+        else:
+            raise ValueError(f'invalid horizontal position \'{hpos}\'')
+        self._halign = hpos
+
+        if vpos == 'lower':
+            self._y = 0 + ydelta
+            self._valign = 'bottom'
+        elif vpos == 'upper':
+            self._y = 1 - ydelta
+            self._valign = 'top'
+        else:
+            raise ValueError(f'invalid vertical position \'{vpos}\'')
+
+        if self.preliminary:
+            self._color = 'red'
+            self._version = 'Preliminary'
+        else:
+            self._color = 'OrangeRed'
+            self._version = f'v{eos_version}'
+
+    def draw(self, ax):
+        ax.text(self._x, self._y, fr'\textsf{{\textbf{{EOS {self._version}}}}}',
+                transform=ax.transAxes,
+                color=self._color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
+                horizontalalignment=self._halign, verticalalignment=self._valign, zorder=+5)
