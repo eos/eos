@@ -93,7 +93,8 @@ class ObservableItem(Item):
 
     observable:eos.QualifiedName
     variable:str
-    xvalues:list[float]
+    range:tuple[float,float]
+    resolution:int=field(default=100)
     fixed_kinematics:dict=None
     fixed_parameters:dict=None
     fixed_parameters_from_file:str=None
@@ -151,19 +152,21 @@ class ObservableItem(Item):
 
         self._observable = eos.Observable.make(self.observable, self._parameters, self._kinematics, self._options)
 
+        self._xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
+
 
     def prepare(self, context:AnalysisFileContext=None):
         "Evaluate the observable at the sample points"
         context = AnalysisFileContext() if context is None else context
-        self.yvalues = _np.empty((len(self.xvalues),))
-        for i, x in enumerate(self.xvalues):
+        self._yvalues = _np.empty((len(self._xvalues),))
+        for i, x in enumerate(self._xvalues):
             self._variable.set(x)
-            self.yvalues[i] = self._observable.evaluate()
+            self._yvalues[i] = self._observable.evaluate()
 
 
     def draw(self, ax, **kwargs):
         "Draw a line plot of the observable"
-        ax.plot(self.xvalues, self.yvalues, label=self.label, **kwargs)
+        ax.plot(self._xvalues, self._yvalues, label=self.label, **kwargs)
 
 
 @dataclass(kw_only=True)

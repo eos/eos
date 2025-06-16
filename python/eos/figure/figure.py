@@ -20,7 +20,7 @@ from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 from .plot import Plot, PlotFactory
-from .common import DataFile
+from .data import DataFile
 
 import os
 import copy as _copy
@@ -129,6 +129,18 @@ class CornerFigure(Figure):
         else:
             self._variables = list(self.contents[0].variables)
 
+        # determine useful ranges empirically
+        absmin, absmax = np.array([+np.inf] * len(self._variables)), np.array([-np.inf] * len(self._variables))
+        for content in self.contents:
+            indices = [content._datafile.lookup_table[v] for v in self._variables]
+            cmin, cmax = content.empirical_range
+            for idx, cidx in enumerate(indices):
+                absmin[idx] = cmin[cidx] if cmin[cidx] < absmin[idx] else absmin[idx]
+                absmax[idx] = cmax[cidx] if cmax[cidx] > absmax[idx] else absmax[idx]
+
+        for idx, v in enumerate(self._variables):
+            print(f"variable {v}: [{absmin[idx]}, {absmax[idx]}]")
+
         # Check that the variables of the data files match
         for content in self.contents:
             unknown_variables = set(self._variables) - set(content.variables)
@@ -152,13 +164,16 @@ class CornerFigure(Figure):
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
                             'ticks': { 'visible': True },
-                            'label': self._labels[i]
+                            'label': self._labels[i],
+                            'range': [ absmin[i], absmax[i] ]
                         }
                         if (i == size - 1) else
                         {
                             'ticks': { 'visible': False }
                         },
-                        'yaxis': { 'ticks': { 'visible': False } },
+                        'yaxis': {
+                            'ticks': { 'visible': False },
+                        },
                         'grid': { 'visible': True, 'axis': 'x' },
                         'items': [
                             {
@@ -174,7 +189,8 @@ class CornerFigure(Figure):
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
                             'ticks': { 'visible': True },
-                            'label': self._labels[j]
+                            'label': self._labels[j],
+                            'range': [ absmin[j], absmax[j] ]
                         }
                         if (i == size - 1) else
                         {
@@ -182,7 +198,8 @@ class CornerFigure(Figure):
                         },
                         'yaxis': {
                             'ticks': { 'visible': True },
-                            'label': self._labels[i]
+                            'label': self._labels[i],
+                            'range': [ absmin[i], absmax[i] ]
                         }
                         if (j == 0) else
                         {
