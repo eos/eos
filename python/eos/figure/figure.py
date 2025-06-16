@@ -47,10 +47,11 @@ class SingleFigure(Figure):
     :type plot: :py:class:`eos.figure.Plot`
     """
     type:str=field(repr=False, init=False, default='single')
+    size:tuple[float, float]=field(default=(6.4, 4.8))
     plot:Deserializable
 
     def __post_init__(self):
-        self._figure, self._ax = plt.subplots(figsize=(6, 4))
+        self._figure, self._ax = plt.subplots(figsize=self.size)
 
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
         context = AnalysisFileContext() if context is None else context
