@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	eos/figure/__init__.py \
 	eos/figure/common.py \
 	eos/figure/config.py \
+	eos/figure/data.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
 	eos/figure/plot.py \
@@ -83,6 +84,7 @@ eosfigure_SCRIPTS = \
 	eos/figure/__init__.py \
 	eos/figure/common.py \
 	eos/figure/config.py \
+	eos/figure/data.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
 	eos/figure/plot.py
