@@ -20,7 +20,7 @@ from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 from .plot import Plot, PlotFactory
-from .common import DataFile
+from .data import DataFile
 
 import os
 import copy as _copy

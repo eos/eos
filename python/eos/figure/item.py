@@ -18,6 +18,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
+from eos.figure.common import Range
 
 import copy as _copy
 import eos
@@ -93,7 +94,7 @@ class ObservableItem(Item):
 
     observable:eos.QualifiedName
     variable:str
-    xvalues:list[float]
+    range:list[float]|Range
     fixed_kinematics:dict=None
     fixed_parameters:dict=None
     fixed_parameters_from_file:str=None
@@ -151,19 +152,32 @@ class ObservableItem(Item):
 
         self._observable = eos.Observable.make(self.observable, self._parameters, self._kinematics, self._options)
 
+        if isinstance(self.range, Range):
+            self._xvalues = self.range.values
+        else:
+            self._xvalues = [float(x) for x in self.range]
+
 
     def prepare(self, context:AnalysisFileContext=None):
         "Evaluate the observable at the sample points"
         context = AnalysisFileContext() if context is None else context
-        self.yvalues = _np.empty((len(self.xvalues),))
-        for i, x in enumerate(self.xvalues):
+        self._yvalues = _np.empty((len(self._xvalues),))
+        for i, x in enumerate(self._xvalues):
             self._variable.set(x)
-            self.yvalues[i] = self._observable.evaluate()
+            self._yvalues[i] = self._observable.evaluate()
 
 
     def draw(self, ax, **kwargs):
         "Draw a line plot of the observable"
-        ax.plot(self.xvalues, self.yvalues, label=self.label, **kwargs)
+        ax.plot(self._xvalues, self._yvalues, label=self.label, **kwargs)
+
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        if 'range' in kwargs and isinstance(kwargs['range'], dict):
+            _kwargs['range'] = Range(**kwargs['range'])
+        return Deserializable.make(cls, **_kwargs)
 
 
 @dataclass(kw_only=True)
