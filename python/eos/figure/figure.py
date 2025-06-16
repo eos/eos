@@ -20,6 +20,7 @@ from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 from .plot import Plot, PlotFactory
+from .common import Watermark
 from .data import DataFile
 
 import os
@@ -49,6 +50,7 @@ class SingleFigure(Figure):
     type:str=field(repr=False, init=False, default='single')
     size:tuple[float, float]=field(default=(6.4, 4.8))
     plot:Deserializable
+    watermark:Watermark=field(default_factory=Watermark)
 
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=self.size)
@@ -57,6 +59,7 @@ class SingleFigure(Figure):
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
         self.plot.draw(self._ax)
+        self.watermark.draw(self._ax)
         if output is not None:
             self._figure.savefig(output, bbox_inches='tight')
 
@@ -64,6 +67,8 @@ class SingleFigure(Figure):
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
+        if 'watermark' in kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**kwargs['watermark'])
         return Deserializable.make(cls, **_kwargs)
 
 
