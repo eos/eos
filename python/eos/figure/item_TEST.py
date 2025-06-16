@@ -15,7 +15,8 @@ class ObservableItemTests(unittest.TestCase):
             type: observable
             observable: 'B->Dlnu::dBR/dq2'
             variable: q2
-            xvalues: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
+            range: [0.1, 1.0]
+            resolution: 100
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare()
