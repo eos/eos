@@ -178,7 +178,7 @@ class TwoDimensionalPlot(Plot):
     legend:Legend=field(default=None)
     xaxis:XAxis=field(default_factory=XAxis)
     yaxis:YAxis=field(default_factory=YAxis)
-    aspect:float=field(default=1.0)
+    aspect:float|None=field(default=None)
 
     def __post_init__(self):
         pass
@@ -200,7 +200,8 @@ class TwoDimensionalPlot(Plot):
         self.grid.draw(ax)
 
         # Set aspect ratio
-        ax.set_box_aspect(self.aspect)
+        if self.aspect is not None:
+            ax.set_box_aspect(self.aspect)
 
         # Draw all items
         for item in self.items:
