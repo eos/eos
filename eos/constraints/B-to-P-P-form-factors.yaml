@@ -11,9 +11,9 @@ B->pipi::F_time[sys=0.30]@FvDV:2018A:
     'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)',
     'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)',
     'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{F_time}(q2,k2,z)',
-    'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{Res{F_time}}(q2,k2)', 'B->pipi::Im{Res{F_time}}(q2,k2)',
-    'B->pipi::Im{Res{F_time}}(q2,k2)', 'B->pipi::Im{Res{F_time}}(q2,k2)', 'B->pipi::Im{Res{F_time}}(q2,k2)',
-    'B->pipi::Im{Res{F_time}}(q2,k2)', 'B->pipi::Im{Res{F_time}}(q2,k2)']
+    'B->pipi::Im{F_time}(q2,k2,z)', 'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_time}}(q2,k2)@FvDV2018A']
   kinematics:
   - {k2: 25.0, q2: 0.05, z: -1.0}
   - {k2: 25.0, q2: 0.05, z: -0.5}
@@ -566,9 +566,9 @@ B->pipi::F_long[sys=0.30]@FvDV:2018A:
     'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)',
     'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)',
     'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{F_long}(q2,k2,z)',
-    'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{Res{F_long}}(q2,k2)', 'B->pipi::Im{Res{F_long}}(q2,k2)',
-    'B->pipi::Im{Res{F_long}}(q2,k2)', 'B->pipi::Im{Res{F_long}}(q2,k2)', 'B->pipi::Im{Res{F_long}}(q2,k2)',
-    'B->pipi::Im{Res{F_long}}(q2,k2)', 'B->pipi::Im{Res{F_long}}(q2,k2)']
+    'B->pipi::Im{F_long}(q2,k2,z)', 'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_long}}(q2,k2)@FvDV2018A']
   kinematics:
   - {k2: 25.0, q2: 0.05, z: -1.0}
   - {k2: 25.0, q2: 0.05, z: -0.5}
@@ -1120,9 +1120,9 @@ B->pipi::F_perp[sys=0.30]@FvDV:2018A:
     'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)',
     'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)',
     'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{F_perp}(q2,k2,z)',
-    'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{Res{F_perp}}(q2,k2)', 'B->pipi::Im{Res{F_perp}}(q2,k2)',
-    'B->pipi::Im{Res{F_perp}}(q2,k2)', 'B->pipi::Im{Res{F_perp}}(q2,k2)', 'B->pipi::Im{Res{F_perp}}(q2,k2)',
-    'B->pipi::Im{Res{F_perp}}(q2,k2)', 'B->pipi::Im{Res{F_perp}}(q2,k2)']
+    'B->pipi::Im{F_perp}(q2,k2,z)', 'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_perp}}(q2,k2)@FvDV2018A']
   kinematics:
   - {k2: 25.0, q2: 0.05, z: -1.0}
   - {k2: 25.0, q2: 0.05, z: -0.5}
@@ -1680,9 +1680,9 @@ B->pipi::F_para[sys=0.30]@FvDV:2018A:
     'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)',
     'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)',
     'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{F_para}(q2,k2,z)',
-    'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{Res{F_para}}(q2,k2)', 'B->pipi::Im{Res{F_para}}(q2,k2)',
-    'B->pipi::Im{Res{F_para}}(q2,k2)', 'B->pipi::Im{Res{F_para}}(q2,k2)', 'B->pipi::Im{Res{F_para}}(q2,k2)',
-    'B->pipi::Im{Res{F_para}}(q2,k2)', 'B->pipi::Im{Res{F_para}}(q2,k2)']
+    'B->pipi::Im{F_para}(q2,k2,z)', 'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A',
+    'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A', 'B->pipi::Im{Res{F_para}}(q2,k2)@FvDV2018A']
   kinematics:
   - {k2: 25.0, q2: 0.05, z: -1.0}
   - {k2: 25.0, q2: 0.05, z: -0.5}
