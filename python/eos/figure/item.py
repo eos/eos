@@ -382,7 +382,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             raise ValueError(f"Bandwidth factor '{self.bandwidth}' is not positive")
 
         for contour_type in self.contours:
-            if contour_type not in ['lines', 'filled']:
+            if contour_type not in ['lines', 'areas', 'labels']:
                 raise ValueError(f"Contour type '{contour_type}' is not supported")
 
     def prepare(self, context:AnalysisFileContext=None):
@@ -408,48 +408,48 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         if self.variables[1] not in self._datafile.lookup_table:
             raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[1]}'")
 
-        self.xidx = self._datafile.lookup_table[self.variables[0]]
-        self.yidx = self._datafile.lookup_table[self.variables[1]]
+        self._xidx = self._datafile.lookup_table[self.variables[0]]
+        self._yidx = self._datafile.lookup_table[self.variables[1]]
 
-        if self.xrange is None:
-            self.xrange = (self._datafile.samples[:, self.xidx].min(), self._datafile.samples[:, self.xidx].max())
+        samples = self._datafile.samples[:, (self._xidx, self._yidx)]
+        weights = self._datafile.weights
 
-        if self.yrange is None:
-            self.yrange = (self._datafile.samples[:, self.yidx].min(), self._datafile.samples[:, self.yidx].max())
-
-        samples = self._datafile.samples[:, (self.xidx, self.yidx)]
-        weights = self._datafile.weights[:]
-
-        self.kde = _scipy.stats.gaussian_kde(samples.T, weights=weights)
-        self.kde.set_bandwidth(bw_method='silverman')
+        self._kde = _scipy.stats.gaussian_kde(samples.T, weights=weights)
+        self._kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
-            self.kde.set_bandwidth(bw_method=self.kde.factor * self.bandwidth)
-
-        xx,yy = _np.mgrid[self.xrange[0]:self.xrange[1]:100j, self.yrange[0]:self.yrange[1]:100j]
-        self.positions = _np.vstack([xx.ravel(), yy.ravel()])
-        self.pdf = _np.reshape(self.kde(self.positions).T, xx.shape)
-        self.pdf /= self.pdf.sum()
+            self._kde.set_bandwidth(bw_method=self._kde.factor * self.bandwidth)
 
     def draw(self, ax):
         "Draw the histogram"
+
+        # determine the extent of the plot
+        xrange = ax.get_xlim() if self.xrange is None else self.xrange
+        yrange = ax.get_ylim() if self.yrange is None else self.yrange
+
+        # compute the PDF on a grid
+        xx,yy = _np.mgrid[xrange[0]:xrange[1]:100j, yrange[0]:yrange[1]:100j]
+        self._positions = _np.vstack([xx.ravel(), yy.ravel()])
+        self._pdf = _np.reshape(self._kde(self._positions).T, xx.shape)
+        self._pdf /= self._pdf.sum()
+
         # find the PDF value corresponding to a given cummulative probability
         plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
         plevels = []
         labels = []
         for level in self.levels:
-            plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self.pdf, level / 100.0)))
+            plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
             labels.append(f'{level}%')
 
         if 'areas' in self.contours:
             colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
-            ax.contourf(self.pdf.transpose(),
+            ax.contourf(self._pdf.transpose(),
                         colors=colors,
-                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                        extent=[xrange[0], xrange[1], yrange[0], yrange[1]],
                         levels=plevels[::-1])
 
-        CS = ax.contour(self.pdf.transpose(),
+        CS = ax.contour(self._pdf.transpose(),
                         colors=self.color,
-                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                        extent=[xrange[0], xrange[1], yrange[0], yrange[1]],
                         levels=plevels[::-1],
                         linestyles=self.linestyle)
 
