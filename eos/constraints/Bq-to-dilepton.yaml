@@ -68,15 +68,6 @@ B^0_s->mu^+mu^-::BR@CMS:2019A:
 # 2014
 #
 # {{{
-B^0_d->mu^+mu^-::BR@CMS+LHCb:2014A:
-    type: Amoroso
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: d}
-    physical-limit: 0
-    theta: 3.09469e-10
-    alpha: 2.08667
-    beta: 1.98708
 B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A:
     type: Amoroso
     observable: B_q->ll::BR@Untagged
@@ -103,14 +94,6 @@ B^0_s->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
     mean: 2.69e-9
     sigma-stat: { hi: 0., lo: 0. }
     sigma-sys: { hi: 0.37e-9, lo: 0.35e-9 }
-B^0_d->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: d}
-    mean: 0.6e-9
-    sigma-stat: { hi: 0.e-9, lo: 0.e-9 }
-    sigma-sys: { hi: 0.7e-9, lo: 0.7e-9 }
 # }}}
 
 ########
