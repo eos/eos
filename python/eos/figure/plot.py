@@ -86,7 +86,11 @@ class XAxis(Deserializable):
     ticks:XTicks=field(default_factory=XTicks)
 
     def __post_init__(self):
-        pass
+        if self.range is not None and len(self.range) != 2:
+            raise ValueError("Range must be a tuple of two values (min, max)")
+
+        if self.range is not None:
+            self.range = tuple(float(x) for x in self.range)
 
     def draw(self, ax):
         ax.set_xlabel(self.label)
@@ -130,7 +134,11 @@ class YAxis(Deserializable):
     ticks:YTicks=field(default_factory=YTicks)
 
     def __post_init__(self):
-        pass
+        if self.range is not None and len(self.range) != 2:
+            raise ValueError("Range must be a tuple of two values (min, max)")
+
+        if self.range is not None:
+            self.range = tuple(float(y) for y in self.range)
 
     def draw(self, ax):
         ax.set_ylabel(self.label)
