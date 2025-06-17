@@ -211,13 +211,13 @@ class TwoDimensionalPlot(Plot):
         if self.aspect is not None:
             ax.set_box_aspect(self.aspect)
 
-        # Draw all items
-        for item in self.items:
-            item.draw(ax)
-
         # Handle axes
         self.xaxis.draw(ax)
         self.yaxis.draw(ax)
+
+        # Draw all items
+        for item in self.items:
+            item.draw(ax)
 
         # Draw legend
         if self.legend is not None:
