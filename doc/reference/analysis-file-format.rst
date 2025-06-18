@@ -321,7 +321,7 @@ The ``masks`` key contains a list of *named* masks. Each mask contains two manda
   - ``logical_combination`` (**optional**) --- The logical combination to take of the expressions in the mask. The options are ``and`` and ``or``, defaults to ``and``.
 
 
-The ``descriptions`` block contains a list of either existing EOS observable names, ,new observable names and valid expressions, or the name of a previously defined mask.
+The ``descriptions`` block contains a list of either existing EOS observable names, new observable names and valid expressions, or the name of a previously defined mask.
 An example is shown below:
 
 .. code-block:: yaml
