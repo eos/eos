@@ -20,6 +20,7 @@ from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 import copy as _copy
+import inspect
 import eos
 import matplotlib as _matplotlib
 import numpy as _np
@@ -462,13 +463,244 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
 
             ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
+@dataclass(kw_only=True)
+class ConstraintItem(Item):
+    """Show constraints from the EOS library of experimental and theoretical likelihoods"""
+
+    constraints:eos.QualifiedName|list[eos.QualifiedName]
+    variable:str
+    observable:eos.QualifiedName|None=None
+    range:tuple[int, int]|None=field(default=None)
+    rescale_by_width:bool=False
+
+    _api_doc = inspect.cleandoc("""\
+    Plotting Constraints
+    --------------------
+
+    Plot items of type ``constraints`` are used to display one of the built-in `experimental or theoretical constraints <../reference/constraints.html>`_.
+    The following keys are mandatory:
+
+        * ``constraints`` (:class:`QualifiedName <eos.QualifiedName>` or iterable thereof) -- The name or the list of names of the constraints
+        that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../reference/constraints.html>`_.
+        * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
+
+    When plotting multivariate constraints, the following key is also mandatory:
+
+        * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable whose constraints will be plotted.
+        Must identify one of the observables known to EOS; see `the complete list of observables <../reference/observables.html>`_.
+        This is only mandatory in multivariate constraints, since these can constrain more than one observable simultaneously.
+
+    The following keys are optional:
+
+        * ``range`` (list of int) -- The interval in which the observable is plotted in the case of a multivariate constraint.
+        * ``rescale_by_width`` (*bool*) -- Rescales binned constraints by the inverse of the bin width. This is often required
+        to compare theory (integrated) predictions and experimental (averaged) measurements. Defaults to false.
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          legend: { position: 'lower left' }
+          items:
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2;l=e,q=d', label: '$\\ell=e$',
+                variable: 'q2', range: { min: 0.02, max: 11.63, num: 100}, color: 'black'
+              }
+            - { type: 'constraint', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=e,\\, q=d$',
+                variable: 'q2', rescale_by_width: true
+              }
+            - { type: 'constraint', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=\\mu,\\, q=d$',
+                variable: 'q2', rescale_by_width: true
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+
+    """)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if type(self.constraints) == str:
+            self.constraints = [eos.QualifiedName(self.constraints)]
+        elif type(self.constraints) == eos.QualifiedName:
+            self.constraints = [self.constraints]
+        elif type(self.constraints) is not list:
+            raise TypeError(f'constraints must be a QualifiedName or a list of QualifiedNames, not {type(self.constraints)}')
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the constraint for drawing"""
+        context = AnalysisFileContext() if context is None else context
+
+        import yaml
+
+        constraints = eos.Constraints()
+        obs_kinematics = eos.Kinematics()
+
+        self._xvalues = []
+        self._xerrors = []
+        self._yvalues = []
+        self._yerrors = []
+
+        for constraint_name in self.constraints:
+            entry = constraints[constraint_name]
+            if not entry:
+                raise ValueError(f'unknown constraint {constraint_name}')
+
+            constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+
+            xvalues = None
+            xerrors = None
+            yvalues = None
+            yerrors = None
+
+            if constraint['type'] == 'Gaussian':
+                kinematics = constraint['kinematics']
+                width = 1
+                if self.variable in kinematics:
+                    xvalues = [kinematics[self.variable]]
+                    xerrors = [None]
+
+                elif (self.variable + '_min' in kinematics) and (self.variable + '_max' in kinematics):
+                    xvalues = [(kinematics[self.variable + '_max'] + kinematics[self.variable + '_min']) / 2]
+                    xerrors = [(kinematics[self.variable + '_max'] - kinematics[self.variable + '_min']) / 2]
+                    if self.rescale_by_width:
+                        width = (kinematics[self.variable + '_max'] - kinematics[self.variable + '_min'])
+
+                yvalues = [float(constraint['mean']) / width]
+                sigma_hi = _np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
+                sigma_lo = _np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2) / width
+                yerrors = [(sigma_hi, sigma_lo)]
+            elif constraint['type'] == 'MultivariateGaussian(Covariance)':
+                if not self.observable:
+                    raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
+
+                covariance = _np.array(constraint['covariance'])
+                observables = constraint['observables']
+                means = constraint['means']
+                dim = len(means)
+                kinematics = constraint['kinematics']
+
+                xvalues = []
+                xerrors = []
+                yvalues = []
+                yerrors = []
+                for i in range(0, dim):
+                    width = 1
+
+                    if not observables[i] == self.observable:
+                        continue
+                    _kinematics = kinematics[i]
+                    if self.variable in _kinematics:
+                        xvalues.append(_kinematics[self.variable])
+                        xerrors.append(None)
+                        if self.plot_residues:
+                            obs_kinematics.declare(self.variable, _kinematics[self.variable])
+                            obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate())
+
+                    elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
+                        var_max = float(_kinematics[self.variable + '_max'])
+                        var_min = float(_kinematics[self.variable + '_min'])
+                        xvalues.append((var_max + var_min) / 2)
+                        xerrors.append((var_max - var_min) / 2)
+                        if self.rescale_by_width:
+                            width = (var_max - var_min)
+
+                    yvalues.append(_np.double(means[i]) / width)
+                    yerrors.append(_np.sqrt(_np.double(covariance[i, i])) / width)
+            elif constraint['type'] == 'MultivariateGaussian':
+                if not self.observable:
+                    raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
+                sigma_stat_hi = _np.array(constraint['sigma-stat-hi'])
+                sigma_stat_lo = _np.array(constraint['sigma-stat-lo'])
+                sigma_sys = _np.array(constraint['sigma-sys'])
+                sigma = _np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
+                observables = constraint['observables']
+                means = constraint['means']
+                dim = len(means)
+                kinematics = constraint['kinematics']
+
+                xvalues = []
+                xerrors = []
+                yvalues = []
+                yerrors = []
+                for i in range(0, dim):
+                    width = 1
+
+                    if not observables[i] == self.observable:
+                        continue
+                    _kinematics = kinematics[i]
+                    if self.variable in _kinematics:
+                        xvalues.append(_kinematics[self.variable])
+                        xerrors.append(None)
+                        if self.plot_residues:
+                            obs_values = []
+                            for x in xvalues:
+                                obs_kinematics.declare(self.variable, x)
+                                obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate())
+
+                    elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
+                        xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
+                        xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
+                        if self.rescale_by_width:
+                            width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
+                        if self.plot_residues:
+                            obs_values = []
+                            for xmax, xmin in zip(kinematics[self.variable + '_max'], kinematics[self.variable + '_min']):
+                                obs_kinematics.declare(self.variable + '_max', xmax)
+                                obs_kinematics.declare(self.variable + '_min', xmin)
+                                obs_values.append(eos.Observable.make(self.observable, self.parameters, obs_kinematics, self.options).evaluate() / width)
+
+                    yvalues.append(means[i] / width)
+                    yerrors.append(sigma[i] / width)
+            else:
+                raise ValueError(f'constraint type {constraint["type"]} presently not supported')
+
+            if len(xvalues) == 0:
+                eos.info(f'   skipping plot for constraint {name} since it does not contain the requested observable')
+                return
+
+        self._xvalues = _np.array(xvalues)
+        self._xerrors = _np.array(xerrors)
+        self._yvalues = _np.array(yvalues)
+        self._yerrors = _np.array(yerrors)
+
+        if self.range:
+            self._mask = _np.logical_and(self._xvalues > min(self.range), self._xvalues < max(self.range))
+        else:
+            self._mask = _np.array([True] * len(self._xvalues))
+
+    def draw(self, ax):
+        "Draw the constraint on the axes"
+
+        xvalues = self._xvalues[self._mask]
+        yvalues = self._yvalues[self._mask]
+        xerrors = self._xerrors[self._mask]
+        yerrors = self._yerrors[self._mask]
+
+        label = self.label
+        for xv, xerr, yv, yerr in zip(xvalues, xerrors, yvalues, yerrors):
+            if xerr is not None:
+                ax.errorbar(x=xv, y=yv, xerr=xerr, yerr=yerr, color=self.color,
+                                         elinewidth=1.0, fmt='_', linestyle='none', label=label)
+            else:
+                ax.errorbar(x=xv, y=yv, yerr=yerr, color=self.color,
+                                         elinewidth=1.0, fmt='_', linestyle='none', label=label)
+
+            # disable the label for subsequent plots
+            label = None
+
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
         'histogram1D': OneDimensionalHistogramItem,
         'histogram2D': TwoDimensionalHistogramItem,
         'kde1D': OneDimensionalKernelDensityEstimateItem,
-        'kde2D': TwoDimensionalKernelDensityEstimateItem
+        'kde2D': TwoDimensionalKernelDensityEstimateItem,
+        'constraint': ConstraintItem,
     }
 
     @staticmethod
