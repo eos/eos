@@ -167,7 +167,7 @@ class ObservableItem(Item):
 
     def draw(self, ax, **kwargs):
         "Draw a line plot of the observable"
-        ax.plot(self._xvalues, self._yvalues, label=self.label, **kwargs)
+        ax.plot(self._xvalues, self._yvalues, label=self.label, color=self.color, **kwargs)
 
 
 @dataclass(kw_only=True)
