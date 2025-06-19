@@ -766,13 +766,13 @@ B_s->D_s^*::FormFactors@HPQCD:2023A:
                                    { q2: 5.2971 },              { q2: 7.9457 },              { q2: 10.5929 },
       { q2: 0.0 },                 { q2: 5.2971 },              { q2: 7.9457 }                                ]
   options:
-    [ { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-                                   { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-                                   { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }                               ]
+    [ { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+                                   { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+                                   { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }                               ]
   means:
     [ 0.8141678336761221,          1.021214900259331,           1.1848143080214109,          1.4067711167254189,
       0.5712683960866848,          0.6834373998384655,          0.7419819220109544,          0.8017121647646706,
@@ -980,13 +980,13 @@ B_(s)->D_(s)^*::FormFactors[TraditionalBasis]@HPQCD:2023A:
       { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
                                    { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
       { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-                                   { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-                                   { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' },
-      { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }, { form-factors: 'BGL1997' }                               ]
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+                                   { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+                                   { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' },
+      { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }, { form-factors: 'BSZ2015' }                               ]
   means:
     [ 0.7127476820306017,          0.949182793755805,           1.127381102251054,           1.3685124493460707,
       0.603549081783794,           0.6994713656417199,          0.7521236473733206,          0.8073781946338591,
