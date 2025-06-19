@@ -6,7 +6,7 @@
 B^+->pi^+pi^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->pi^+pi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 5.31e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -14,7 +14,7 @@ B^+->pi^+pi^0::BR_exp@PDG:2024A:
 B^+->pi^+pi^0::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->pi^+pi^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 1.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -23,7 +23,7 @@ B^+->pi^+pi^0::A_CP@PDG:2024A:
 B^+->K^+Kbar^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->K^+Kbar^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 1.32e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -31,7 +31,7 @@ B^+->K^+Kbar^0::BR_exp@PDG:2024A:
 B^+->K^+Kbar^0::A_CP@BRV:2024A:
     type: Gaussian
     observable: B^+->K^+Kbar^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 9.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -40,7 +40,7 @@ B^+->K^+Kbar^0::A_CP@BRV:2024A:
 B^0->pi^+pi^-::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->pi^+pi^-::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 5.37e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -48,7 +48,7 @@ B^0->pi^+pi^-::BR_exp@PDG:2024A:
 B^0->pi^+pi^-::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->pi^+pi^-::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -31.4e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -56,7 +56,7 @@ B^0->pi^+pi^-::A_CP@PDG:2024A:
 B^0->pi^+pi^-::S_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->pi^+pi^-::S_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 67.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -65,7 +65,7 @@ B^0->pi^+pi^-::S_CP@PDG:2024A:
 B^0->pi^0pi^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->pi^0pi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 1.55e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -73,7 +73,7 @@ B^0->pi^0pi^0::BR_exp@PDG:2024A:
 B^0->pi^0pi^0::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->pi^0pi^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -30.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -82,7 +82,7 @@ B^0->pi^0pi^0::A_CP@PDG:2024A:
 B^0->K^+K^-::BR_exp@LHCb:2016C:
     type: Gaussian
     observable: B^0->K^+K^-::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 0.078e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -91,7 +91,7 @@ B^0->K^+K^-::BR_exp@LHCb:2016C:
 B^0->K^0Kbar^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->K^0Kbar^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 1.21e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -99,7 +99,7 @@ B^0->K^0Kbar^0::BR_exp@PDG:2024A:
 B^0->K^0Kbar^0::A_CP@BRV:2024A:
     type: Gaussian
     observable: B^0->K^0Kbar^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 7.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -107,7 +107,7 @@ B^0->K^0Kbar^0::A_CP@BRV:2024A:
 B^0->K^0Kbar^0::S_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->K^0Kbar^0::S_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 80.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -116,7 +116,7 @@ B^0->K^0Kbar^0::S_CP@PDG:2024A:
 B_s^0->K^-pi^+::A_CP@PDG:2024A:
     type: Gaussian
     observable: B_s^0->K^-pi^+::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -22.4e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -125,7 +125,7 @@ B_s^0->K^-pi^+::A_CP@PDG:2024A:
 B^+->K^+pi^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->K^+pi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 13.2e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -133,7 +133,7 @@ B^+->K^+pi^0::BR_exp@PDG:2024A:
 B^+->K^+pi^0::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->K^+pi^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -2.7e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -142,7 +142,7 @@ B^+->K^+pi^0::A_CP@PDG:2024A:
 B^+->K^0pi^+::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->K^0pi^+::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 23.9e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -150,7 +150,7 @@ B^+->K^0pi^+::BR_exp@PDG:2024A:
 B^+->K^0pi^+::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->K^0pi^+::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 0.3e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -159,7 +159,7 @@ B^+->K^0pi^+::A_CP@PDG:2024A:
 B^0->K^+pi^-::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->K^+pi^-::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 20.0e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -167,7 +167,7 @@ B^0->K^+pi^-::BR_exp@PDG:2024A:
 B^0->K^+pi^-::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->K^+pi^-::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 8.31e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -176,7 +176,7 @@ B^0->K^+pi^-::A_CP@PDG:2024A:
 B^0->K^0pi^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->K^0pi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 10.1e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -184,7 +184,7 @@ B^0->K^0pi^0::BR_exp@PDG:2024A:
 B^0->K^0pi^0::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->K^0pi^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 0.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -192,7 +192,7 @@ B^0->K^0pi^0::A_CP@PDG:2024A:
 B^0->K_Spi^0::S_CP@PDG:2024A:
     type: Gaussian
     observable: B^0->K_Spi^0::S_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -64.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -201,7 +201,7 @@ B^0->K_Spi^0::S_CP@PDG:2024A:
 B_s^0->pi^0pi^0::BR_exp@Belle-II:2023D:
     type: Gaussian
     observable: B_s^0->pi^0pi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 2.8e-06
     sigma-stat: {hi: 2.8e-06, lo: 2.8e-06}
@@ -210,7 +210,7 @@ B_s^0->pi^0pi^0::BR_exp@Belle-II:2023D:
 B_s^0->K^+K^-::BR_exp@Belle:2010C:
     type: Gaussian
     observable: B_s^0->K^+K^-::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 38.0e-06
     sigma-stat: {hi: 10.0e-06, lo: 9.0e-06}
@@ -220,7 +220,7 @@ B_s^0->K^+K^-::CP_Observables@LHCb:2020B:
     observables:
         [ "B_s^0->K^+K^-::A_CP", "B_s^0->K^+K^-::S_CP", "B_s^0->K^+K^-::A_DG"]
     options:
-        [{}, {}, {}]
+        [{representation: topological}, {representation: topological}, {representation: topological}]
     kinematics:
         [{}, {}, {}]
     means:
@@ -232,7 +232,7 @@ B_s^0->K^+K^-::CP_Observables@LHCb:2020B:
 B_s^0->K^+K^-::S_CP@LHCb:2020B:
     type: Gaussian
     observable: B_s^0->K^+K^-::S_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -12.3e-02
     sigma-stat: {hi: 3.4e-02, lo: 3.4e-02}
@@ -241,7 +241,7 @@ B_s^0->K^+K^-::S_CP@LHCb:2020B:
 B_s^0->K^0Kbar^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B_s^0->K^0Kbar^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 17.6e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -256,7 +256,7 @@ B_s^0->K^0Kbar^0::BR_exp@PDG:2024A:
 B^+->etapi^+::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->etapi^+::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 4.02e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -264,7 +264,7 @@ B^+->etapi^+::BR_exp@PDG:2024A:
 B^+->etapi^+::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->etapi^+::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 14.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -273,7 +273,7 @@ B^+->etapi^+::A_CP@PDG:2024A:
 B^0->etapi^0::BR_exp@Belle:2015B:
     type: Gaussian
     observable: B^0->etapi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 4.1e-07
     sigma-stat: {hi: 1.7e-06, lo: 1.5e-06}
@@ -282,7 +282,7 @@ B^0->etapi^0::BR_exp@Belle:2015B:
 B^+->etaK^+::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->etaK^+::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 2.4e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -290,7 +290,7 @@ B^+->etaK^+::BR_exp@PDG:2024A:
 B^+->etaK^+::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->etaK^+::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 37.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -299,7 +299,7 @@ B^+->etaK^+::A_CP@PDG:2024A:
 B^0->etaK^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->etaK^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 1.23e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -308,7 +308,7 @@ B^0->etaK^0::BR_exp@PDG:2024A:
 B^0->etaeta::BR_exp@BaBar:2009B:
     type: Gaussian
     observable: B^0->etaeta::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 0.5e-06
     sigma-stat: {hi: 0.3e-06, lo: 0.3e-06}
@@ -317,7 +317,7 @@ B^0->etaeta::BR_exp@BaBar:2009B:
 B_s^0->etaeta::BR_exp@Belle:2021A:
     type: Gaussian
     observable: B_s^0->etaeta::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 100.0e-06
     sigma-stat: {hi: 105.0e-06, lo: 105.0e-06}
@@ -332,7 +332,7 @@ B_s^0->etaeta::BR_exp@Belle:2021A:
 B^+->eta^primepi^+::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->eta^primepi^+::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 2.7e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -340,7 +340,7 @@ B^+->eta^primepi^+::BR_exp@PDG:2024A:
 B^+->eta^primepi^+::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->etapi^+::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -6.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -349,7 +349,7 @@ B^+->eta^primepi^+::A_CP@PDG:2024A:
 B^0->eta^primepi^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->eta^primepi^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 1.2e-06
     sigma-stat: {hi: 0.0, lo: 0.0}
@@ -358,7 +358,7 @@ B^0->eta^primepi^0::BR_exp@PDG:2024A:
 B^+->eta^primeK^+::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^+->eta^primeK^+::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 70.4e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -366,7 +366,7 @@ B^+->eta^primeK^+::BR_exp@PDG:2024A:
 B^+->eta^primeK^+::A_CP@PDG:2024A:
     type: Gaussian
     observable: B^+->eta^primeK^+::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -0.4e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -375,7 +375,7 @@ B^+->eta^primeK^+::A_CP@PDG:2024A:
 B^0->eta^primeK^0::BR_exp@PDG:2024A:
     type: Gaussian
     observable: B^0->eta^primeK^0::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 66.0e-06
     sigma-stat: {hi: 0., lo: 0.}
@@ -383,7 +383,7 @@ B^0->eta^primeK^0::BR_exp@PDG:2024A:
 B^0->eta^primeK^0::A_CP@PDG:2024A: # this is for K0
     type: Gaussian
     observable: B^0->eta^primeK^0::A_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -6.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -391,7 +391,7 @@ B^0->eta^primeK^0::A_CP@PDG:2024A: # this is for K0
 B^0->eta^primeK^0::S_CP@PDG:2024A: # this is for K0
     type: Gaussian
     observable: B^0->eta^primeK^0::S_CP
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: -63.0e-02
     sigma-stat: {hi: 0., lo: 0.}
@@ -400,7 +400,7 @@ B^0->eta^primeK^0::S_CP@PDG:2024A: # this is for K0
 B^0->eta^primeeta^prime::BR_exp@BaBar:2009B:
     type: Gaussian
     observable: B^0->eta^primeeta^prime::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 0.6e-06
     sigma-stat: {hi: 0.5e-06, lo: 0.4e-06}
@@ -409,7 +409,7 @@ B^0->eta^primeeta^prime::BR_exp@BaBar:2009B:
 B^0->eta^primeeta::BR_exp@BaBar:2008B:
     type: Gaussian
     observable: B^0->eta^primeeta::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 0.5e-06
     sigma-stat: {hi: 0.4e-06, lo: 0.4e-06}
@@ -418,7 +418,7 @@ B^0->eta^primeeta::BR_exp@BaBar:2008B:
 B_s^0->eta^primeeta::BR_exp@Belle:2021B:
     type: Gaussian
     observable: B_s^0->eta^primeeta::BR_exp
-    options: {}
+    options: { representation: topological }
     kinematics: {}
     mean: 25.0e-06
     sigma-stat: {hi: 22.0e-06, lo: 22.0e-06}
