@@ -55,7 +55,7 @@ class Item(Deserializable):
     linestyle:str=field(default='solid')
 
     def __post_init__(self):
-        if not self.color:
+        if self.color is None:
             self.color = ItemColorCycler.next_color()
 
     @abstractmethod
