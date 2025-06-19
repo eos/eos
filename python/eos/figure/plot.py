@@ -84,6 +84,7 @@ class XAxis(Deserializable):
     label:str=field(default=None)
     range:tuple[float, float]=field(default=None)
     ticks:XTicks=field(default_factory=XTicks)
+    unit:str=None
 
     def __post_init__(self):
         if self.range is not None and len(self.range) != 2:
@@ -93,7 +94,11 @@ class XAxis(Deserializable):
             self.range = tuple(float(x) for x in self.range)
 
     def draw(self, ax):
-        ax.set_xlabel(self.label)
+        if self.label is not None and self.unit is not None:
+            ax.set_xlabel(f'{self.label} [{self.unit}]')
+        elif self.label is not None:
+            ax.set_xlabel(self.label)
+
         if self.range is not None:
             ax.set_xlim(self.range)
         self.ticks.draw(ax)
@@ -132,6 +137,7 @@ class YAxis(Deserializable):
     label:str=None
     range:tuple[float, float]=None
     ticks:YTicks=field(default_factory=YTicks)
+    unit:str=None
 
     def __post_init__(self):
         if self.range is not None and len(self.range) != 2:
@@ -141,7 +147,11 @@ class YAxis(Deserializable):
             self.range = tuple(float(y) for y in self.range)
 
     def draw(self, ax):
-        ax.set_ylabel(self.label)
+        if self.label is not None and self.unit is not None:
+            ax.set_ylabel(f'{self.label} [{self.unit}]')
+        elif self.label is not None:
+            ax.set_ylabel(self.label)
+
         if self.range is not None:
             ax.set_ylim(self.range)
         self.ticks.draw(ax)
