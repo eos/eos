@@ -184,7 +184,7 @@ class OneDimensionalHistogramItem(Item):
 
     datafile:str
     variable:str
-    bins:int=field(default=50)
+    bins:int=field(default=100)
 
     def __post_init__(self):
         super().__post_init__()
@@ -217,7 +217,8 @@ class OneDimensionalHistogramItem(Item):
     def draw(self, ax):
         "Draw the histogram"
         idx = self._datafile.lookup_table[self.variable]
-        ax.hist(self._datafile.samples[:, idx], weights=self._datafile.weights, bins=self.bins, label=self.label)
+        ax.hist(self._datafile.samples[:, idx], weights=self._datafile.weights,
+                alpha=self.alpha, bins=self.bins, color=self.color, density=True, label=self.label)
 
 @dataclass
 class TwoDimensionalHistogramItem(Item):
