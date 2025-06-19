@@ -49,6 +49,7 @@ class ItemColorCycler:
 class Item(Deserializable):
     r"""Base class for items to be drawn in a figure."""
 
+    alpha:float=field(default=0.5)
     color:str=field(default=None)
     label:str=field(default=None)
     linestyle:str=field(default='solid')
