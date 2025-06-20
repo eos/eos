@@ -1294,9 +1294,9 @@ class ConstraintTest : public TestCase
             {
                 std::cout << "# Constraints :" << std::endl;
 
-                Options o;
-                auto constraints = Constraints();
-                unsigned n = 0;
+                Options  o;
+                auto     constraints = Constraints();
+                unsigned n           = 0;
 
                 for (auto cf = constraints.begin(); cf != constraints.end(); ++cf, ++n)
                 {
@@ -1313,13 +1313,11 @@ class ConstraintTest : public TestCase
                     TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
                     TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
 
-                    for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
+                    for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end; ++o)
                     {
-                        std::cout << (**o).name() << '['
-                                << (**o).kinematics().as_string() << ']'
-                                << " with options: " << (**o).options().as_string();
+                        std::cout << (**o).name() << '[' << (**o).kinematics().as_string() << ']' << " with options: " << (**o).options().as_string();
                     }
-                    for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end ; ++b)
+                    for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end; ++b)
                     {
                         std::cout << ", " << (**b).as_string();
                     }
