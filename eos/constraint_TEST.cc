@@ -1291,7 +1291,7 @@ class ConstraintTest : public TestCase
         run() const
         {
             /* Test making constraints */
-            /*{
+            {
                 std::cout << "# Constraints :" << std::endl;
 
                 Options o;
@@ -1327,7 +1327,7 @@ class ConstraintTest : public TestCase
                 }
                 std::cout << std::endl;
                 std::cout << "# Found " << n << " constraints" << std::endl;
-            }*/
+            }
 
             /* Test retrieving ConstraintEntry by name */
             {
