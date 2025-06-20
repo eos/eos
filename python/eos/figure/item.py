@@ -173,6 +173,158 @@ class ObservableItem(Item):
 
 
 @dataclass(kw_only=True)
+class UncertaintyBandItem(Item):
+    """Plots an uncertainty band as a function of one kinematic variable
+
+    This routine expects the uncertainty propagation to have produced an EOS data file"""
+
+    band:set[str]|list[str]|str=field(default_factory=lambda : {'area', 'outer', 'median'})
+    datafile:str
+    interpolation:str=field(default='linear')
+    range:tuple[float, float]|None=field(default=None)
+    resolution:int=field(default=100)
+    variable:str|None=field(default=None)
+
+    _api_doc = inspect.cleandoc("""\
+    Plotting Uncertainty Bands
+    --------------------------
+
+    Plot items of type ``uncertainty`` are used to display uncertainty bands at 68% probability
+    for one of the built-in `observables <../reference/observables.html>`_. This item type requires that
+    a predictive distribution of the observables has been previously produced.
+
+    The following key is mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.Prediction*) -- The path to
+        a data file that was generated with the ``predict-observables`` task.
+
+    The following keys are optional:
+
+        * ``band`` (a *list* or *set* containing any combination of ``'area'``, ``'outer'``, or ``'median'``) -- The setting for the illustration of the uncertainty band.
+        If ``'area'`` is provided, the band's areas are filled.
+        If ``'outer'`` is provided, the band's outer lines are drawn.
+        If ``'median'`` is provided, the band's median line is drawn.
+        Defaults to ``{'area', 'outer', 'median'}``.
+        * ``interpolation`` (*str*) -- The type of interpolation to be used for the band. Can be either ``linear`` (default) or ``cubic``.
+        * ``range`` (*tuple* of two *float* values) -- The range of the kinematic variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``resolution`` (*int*) -- The number of points to be used for the interpolation of the band. Defaults to 100.
+        * ``variable`` (*str*) -- The name of the kinematic variable that is plotted on the x-axis. Defaults to the first kinematic variable in the data file.
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          legend: { position: 'upper center' }
+          items:
+            - { type: 'uncertainty', label: '$\\ell=\\mu$',
+                variable: 'q2', range: [0.02, 11.63],
+                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu'
+              }
+            - { type: 'uncertainty', label: '$\\ell=\\tau$',
+                variable: 'q2', range: [3.17, 11.63], resolution: 1000,
+                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-tau-nu'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if isinstance(self.band, str):
+            self.band = {self.band}
+        elif isinstance(self.band, list):
+            self.band = set(self.band)
+        elif not isinstance(self.band, set):
+            raise TypeError(f"Parameter 'band' must be a string, list of string, or a set of strings, not {type(self.band).__name__}")
+
+        for band_type in self.band:
+            if band_type not in ['area', 'outer', 'median']:
+                raise ValueError(f"Unrecognized band type '{band_type}'; must be one of 'area', 'outer', or 'median'")
+
+        if self.interpolation not in ['linear', 'cubic']:
+            raise ValueError(f"Unrecognized interpolation type '{self.interpolation}'; must be either 'linear' or 'cubic'")
+
+        if self.range is not None and len(self.range) != 2:
+            raise ValueError(f"Range must be a tuple of two values (min, max), not {self.range}")
+
+        if self.range is not None:
+            self.range = tuple(float(x) for x in self.range)
+            if self.range[0] >= self.range[1]:
+                raise ValueError(f"Range must be a tuple of two values (min, max) with max > min, not {self.range}")
+
+
+    def prepare(self, context:AnalysisFileContext=None):
+        context = AnalysisFileContext() if context is None else context
+
+        self._datafile = eos.data.Prediction(context.data_path(self.datafile))
+        if len(self._datafile.varied_parameters) < 1:
+            raise ValueError(f"Data file '{self.datafile}' does not contain any predictions")
+
+        self._variable = self.variable
+        if self._variable is not None:
+            # assume that the first prediction has only one kinematic variable,
+            # which we adopt as the variable to plot
+            kinematics = self._datafile.varied_parameters[0]['kinematics']
+            if len(kinematics) > 1:
+                raise ValueError(f"Data file '{self.datafile}' contains more than one kinematic variable; specify 'variable' to determine which is supposed to be used")
+            self._variable = list(kinematics.keys())[0]
+
+        _xvalues = []
+        for idx, vp in enumerate(self._datafile.varied_parameters):
+            kinematics = vp['kinematics']
+            if self._variable not in kinematics:
+                raise ValueError(f"Prediction #{idx} in data file '{self.datafile}' does not depend on the chosen kinematic variable '{self._variable}'")
+            _xvalues.append(kinematics[self._variable])
+
+        _xvalues = _np.array(_xvalues)
+        _samples = self._datafile.samples
+        _weights = self._datafile.weights
+
+        _ovalues_lower   = []
+        _ovalues_central = []
+        _ovalues_higher  = []
+        INTERVAL = [0.15865, 0.5, 0.84135]  # central 68% interval
+        for i in range(len(_samples[0])):
+            lower, central, higher = eos.plot.Plotter._weighted_quantiles(_samples[:, i], INTERVAL, _weights)
+            _ovalues_lower.append(lower)
+            _ovalues_central.append(central)
+            _ovalues_higher.append(higher)
+
+        self._xvalues = _np.linspace(_np.min(_xvalues), _np.max(_xvalues), self.resolution)
+
+        if self.interpolation == "linear":
+            interpolate = lambda x, y, xv: _np.interp(xv, x, y)
+        elif self.interpolation == "cubic":
+            from scipy.interpolate import CubicSpline
+            interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
+
+        self._ovalues_lower   = interpolate(_xvalues, _ovalues_lower,   self._xvalues)
+        self._ovalues_central = interpolate(_xvalues, _ovalues_central, self._xvalues)
+        self._ovalues_higher  = interpolate(_xvalues, _ovalues_higher,  self._xvalues)
+
+        if self.range is not None:
+            self._xvalues         = _np.ma.masked_outside(self._xvalues,         self.range[0], self.range[1])
+
+    def draw(self, ax):
+        label = self.label
+        if 'area' in self.band:
+            ax.fill_between(self._xvalues, self._ovalues_lower, self._ovalues_higher, alpha=self.alpha, color=self.color, label=label, lw=0)
+            label = None # do not label anything else if we fill the band area
+        if 'outer' in self.band:
+            ax.plot(self._xvalues, self._ovalues_lower,                               alpha=self.alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
+            ax.plot(self._xvalues, self._ovalues_higher,                              alpha=self.alpha, color=self.color,              lw=self.linewidth, ls=self.linestyle)
+            label = None # do not label anything else if we plot the outer lines
+        if 'median' in self.band:
+            ax.plot(self._xvalues, self._ovalues_central,                             alpha=self.alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
+
+
+@dataclass(kw_only=True)
 class OneDimensionalHistogramItem(Item):
     r"""Represents a one-dimensional histogram.
 
@@ -702,6 +854,7 @@ class ItemFactory:
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
         'constraint': ConstraintItem,
+        'uncertainty': UncertaintyBandItem,
     }
 
     @staticmethod
