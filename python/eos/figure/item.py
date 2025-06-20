@@ -347,20 +347,42 @@ class UncertaintyBandItem(Item):
 
 @dataclass(kw_only=True)
 class OneDimensionalHistogramItem(Item):
-    r"""Represents a one-dimensional histogram.
+    """Represents a one-dimensional histogram."""
 
-    :param datafile: Path to the file that contains the histogram data.
-    :type datafile: str
-    :param variable: Name of the datafile's variable that shall be histogrammed.
-    :type variable: str
-    :param bins: Number of histogram bins.
-    :type bins: int
-    """
-
+    bins:int=field(default=100)
     datafile:str
     variable:str
-    bins:int=field(default=100)
 
+    _api_doc = inspect.cleandoc("""\
+    Plotting One-Dimensional Histograms
+    -----------------------------------
+
+    Plot items of type ``histogram1D`` are used to display samples of a probability density, be it a prior, a posterior, or a signal PDF.
+    The following key is mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.ImportanceSamples* or *eos.data.Prediction*) -- The path to
+        a data file that was generated with one of the ``sample-nested`` or ``predict-observables`` tasks.
+
+    The following keys are optional:
+
+        * ``bins`` (*int*) -- The number of histogram bins. Defaults to 100.
+        * ``variable`` (*str*) -- The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
+          legend: { position: 'upper left' }
+          items:
+            - { type: 'histogram1D', variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0' }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+
+    """)
     def __post_init__(self):
         super().__post_init__()
         if self.bins < 2:
