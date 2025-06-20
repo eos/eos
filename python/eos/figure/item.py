@@ -54,6 +54,7 @@ class Item(Deserializable):
     color:str=field(default=None)
     label:str=field(default=None)
     linestyle:str=field(default='solid')
+    linewidth:float=field(default=1.0)
 
     def __post_init__(self):
         if self.color is None:
