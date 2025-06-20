@@ -22,7 +22,7 @@ ABGW:2003A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0312063
   inspire-id: Asatrian:2003vq
-  title: Virtual corrections and bremsstrahlung corrections to $b \to d \ell^+ \ell^- in the
+  title: Virtual corrections and bremsstrahlung corrections to $b \to d \ell^+ \ell^-$ in the
     standard model
 ABHH:1999A:
   authors: Ali, Ahmed and Ball, Patricia and Handoko, L.T. and Hiller, G.
@@ -400,7 +400,7 @@ BPR:2021A:
     archive: arXiv
     id: oai:arXiv.org:2104.05739
   inspire-id: Bernlochner:2021rel
-  title: '$B\to \rho \ell \bar{\nu}$ and $\omega\to \ell \bar{\nu}$ in and beyond the Standard Model: Improved predictions and $\abs{V_{ub}}$'
+  title: '$B\to \rho \ell \bar{\nu}$ and $\omega\to \ell \bar{\nu}$ in and beyond the Standard Model: Improved predictions and $|V_{ub}|$'
 BR:2011A:
   authors: Beneke, M. and Rohrwild, J.
   eprint:
@@ -612,7 +612,7 @@ Belle:2008C:
     archive: arXiv
     id: oai:arXiv.org:0805.3773
   inspire-id: Belle:2008xpe
-  title: High-Statistics Study of the $\tau^- \to \pi^- \pi^0 \nu_\tau Decay
+  title: High-Statistics Study of the $\tau^- \to \pi^- \pi^0 \nu_\tau$ Decay
 Belle:2009A:
   authors: Wei, J.-T. et al.
   collaboration: Belle
@@ -688,7 +688,7 @@ Belle:2015B:
     archive: arXiv
     id: oai:arXiv.org:1504.00957
   inspire-id: Belle:2015eny
-  title: Evidence for the decay $B^{0} \to \eta \pi^0$}
+  title: Evidence for the decay $B^{0} \to \eta \pi^0$
 Belle:2016A:
   authors: Wehle, S. et al.
   collaboration: Belle
@@ -832,7 +832,7 @@ CCH:2017A:
     archive: arXiv
     id: oai:arXiv.org:1712.06595
   inspire-id: Cirigliano:2017tqn
-  title: No go theorem for nonstandard explanations of the $\tau \to K \pi \nu_\tau$ CP asymmetry'
+  title: No go theorem for nonstandard explanations of the $\tau \to K \pi \nu_\tau$ CP asymmetry
 CDF:2011A:
   authors: Aaltonen, T. et al.
   collaboration: CDF
@@ -910,7 +910,7 @@ CLEO:2000B:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/9910046
   inspire-id: CLEO:1999dln
-  title: 'Hadronic structure in the decay $\tau \to \pi^- \pi^0 \nu_\tau'
+  title: 'Hadronic structure in the decay $\tau \to \pi^- \pi^0 \nu_\tau$'
 CLEO:2008A:
   authors: Cronin-Hennessy, D. et al.
   collaboration: CLEO
@@ -1326,7 +1326,7 @@ FY:2011A:
     archive: arXiv
     id: oai:arXiv.org:1111.1844
   inspire-id: Feldmann:2011xf
-  title: Form Factors for $Lambda_b \to \Lambda$ Transitions in {SCET}
+  title: Form Factors for $\Lambda_b \to \Lambda$ Transitions in {SCET}
 GKPR:2013A:
   authors: Gelhausen, Patrick and Khodjamirian, Alexander and Pivovarov, Alexei A.
     and Rosenthal, Denis
