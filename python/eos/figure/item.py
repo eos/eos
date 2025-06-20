@@ -73,36 +73,57 @@ class Item(Deserializable):
 
 @dataclass(kw_only=True)
 class ObservableItem(Item):
-    r"""Represents an observable as a function of a variable.
-    The variable can be either a kinematic variable or a parameter.
-
-    :param observable: EOS qualified name of an observable
-    :type observable: str
-    :param variable: Name of a kinematic variable or of a parameter
-    :type variable: str
-    :param xvalues: Values to be used as sampling points
-    :type xvalues: list of float numbers
-    :param fixed_kinematics: Names and values of fixed kinematic variables
-    :type fixed_kinematics: dict
-    :param fixed_parameters: Names and values of fixed parameters
-    :type fixed_parameters: dict
-    :param fixed_parameters_from_file: Path to file that contains names and values of fixed parameters in the YAML format
-    :type fixed_parameters_from_file: str
-    :param options: Names and values of options passed to the EOS observable
-    :type options: dict
-    :param label: Label used in the legend
-    :type label: str
-    """
+    """Show observables from the EOS library of builtin observables"""
 
     observable:eos.QualifiedName
-    variable:str
-    range:tuple[float,float]
-    resolution:int=field(default=100)
     fixed_kinematics:dict=None
     fixed_parameters:dict=None
     fixed_parameters_from_file:str=None
-    options:dict=None
     label:str=None
+    options:dict=None
+    range:tuple[float,float]
+    resolution:int=field(default=100)
+    variable:str
+
+    _api_doc = inspect.cleandoc("""\
+    Plotting Observables
+    --------------------
+
+    Plot items of type ``observable`` are used to display one of the built-in `observables <../reference/observables.html>`_.
+    The following keys are mandatory:
+
+        * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable that will be plotted.
+        Must identify one of the observables known to EOS; see `the complete list of observables <../reference/observables.html>`_.
+        * ``range`` (*list* or *tuple* of two *float*) --The tuple of [minimal, maximal] values of the specified kinematic variable
+        for which the observable will be evaluated.
+        * ``variable`` (*str*) -- The name of the kinematic or parameter variable to which the x-axis will be mapped; see
+        `the complete list of parameters <../reference/parameters.html>`_.
+
+    The following keys are optional:
+
+        * ``fixed_kinematics`` (*dict[str, float]*) -- A dictionary of additional kinematic variables and the values to which they shall be fixed.
+        * ``fixed_parameters`` (*dict[eos.QualifiedName, float]*) -- A dictionary of EOS parameters and the values to which they shall be fixed.
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          legend: { position: 'upper center' }
+          xaxis: { label: '$q^2$',                range: [0.0, 11.6]   }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$', range: [0.0, 5.0e-3] }
+          items:
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: '$\\ell = \\mu$',
+                variable: 'q2', range: { min: 0.02, max: 11.6, num: 5800 }
+              }
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: '$\\ell = \\tau$',
+                variable: 'q2', range: { min: 3.17, max: 11.6, num: 421 }
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """)
 
     def __post_init__(self):
         super().__post_init__()
