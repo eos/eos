@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +20,9 @@
 
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH 1
+
+#include <array>
+#include <numbers>
 
 namespace eos
 {
@@ -344,6 +348,9 @@ namespace eos
     struct BToPiPi {
         using Transition = PToPP;
         static constexpr const char * label = "B->pipi";
+        static constexpr const char * name_B = "mass::B_u";
+        static constexpr const char * name_P1 = "mass::pi^+";
+        static constexpr const char * name_P2 = "mass::pi^+";
         static constexpr double m_B  = 5.2795;
         static constexpr double m_P1 = 0.13957;
         static constexpr double m_P2 = 0.13957;
@@ -355,6 +362,18 @@ namespace eos
         static constexpr double mR2_1m = 5.32465;
         static constexpr double mR2_1p = 5.72590;
         static constexpr double mR2_0m = 5.27932;
+
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up);
+
+        // Isospin-degeneracy factors entering outer functions
+        static constexpr std::array<std::array<double, 3>, 2> eta  = {{ { 1.0/4.0 , 0.0 , 1.0/4.0 }, { 0.0 , 3.0/4.0 , 0.0 } }};
+        // Isospin-decomposition factors entering amplitudes of definite isospin
+        static constexpr std::array<std::array<double, 3>, 2> lambda  = {{ { -std::numbers::inv_sqrt3 / std::numbers::sqrt2 , 0.0 , -std::numbers::inv_sqrt3 / std::numbers::sqrt2 },
+                                                                        { 0.0 , 1.0 / std::numbers::sqrt2 , 0.0 } }};
+        // Isospin factors relating amplitudes of definite isospin to physical ones: +-, 00, +0
+        static constexpr std::array<std::array<double, 2>, 3> IsoToPhys = {{ { -1.0, 1.0 / std::numbers::sqrt2 }, { 1.0, 0.0 }, { 0.0, 1.0 } }};
+        // Possible Isospin-Representation occuring in B -> pi pi l nu
+        static constexpr std::array<IsospinRepresentation, 2> rep = {IsospinRepresentation::zero, IsospinRepresentation::one};
     };
 
     /* P -> gamma Processes */

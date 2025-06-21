@@ -6,6 +6,7 @@
  * Copyright (c) 2018      Ahmet Kokulu
  * Copyright (c) 2019      Nico Gubernari
  * Copyright (c) 2024      Matthew J. Kirk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,6 +34,7 @@
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/form-factors/parametric-hkvt2025.hh>
 #include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
@@ -453,6 +455,7 @@ namespace eos
         { "B->pipi::BFvD2016",            &AnalyticFormFactorBToPiPiBFvD2016::make   },
         { "B->pipi::FvDV2018-Dispersive", &AnalyticFormFactorBToPiPiFvDV2018::make   },
         { "B->pipi::FvDV2018",            &FvDV2018FormFactors<BToPiPi>::make        },
+        { "B->pipi::HKvT2025",            &HKVT2025FormFactors<BToPiPi, PToPP>::make },
     };
 
     std::shared_ptr<FormFactors<PToPP>>

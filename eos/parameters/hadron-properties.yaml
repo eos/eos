@@ -221,6 +221,14 @@ groups:
           latex:   '$m_{B^*}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
+      # B^* meson masses
+      'mass::B_u^*' :
+          central: +5.32470
+          min:     +5.32449
+          max:     +5.32491
+          latex:   '$m_{B^*}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::B_s^*' :
           central: +5.4154
           min:     +5.4139
@@ -366,6 +374,13 @@ groups:
           unit:     'GeV'
           comments: 'cf. [HPQCD2015B], eq. (20)'
       'decay-constant::B_d^*' :
+          central: +0.1864
+          min:     +0.1793
+          max:     +0.1935
+          latex:    '$f_{\bar{B}^*}$'
+          unit:     'GeV'
+          comments: 'cf. [ETM:2017A]'
+      'decay-constant::B_u^*' :
           central: +0.1864
           min:     +0.1793
           max:     +0.1935
