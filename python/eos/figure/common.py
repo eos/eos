@@ -22,8 +22,14 @@ import numpy as np
 
 @dataclass(kw_only=True)
 class Watermark(Deserializable):
-    r"""Inserts an EOS watermark into a figure
+    r"""Inserts an EOS watermark into a figure.
 
+    :param position: The position of the watermark as ``'<vpos> <hpos>'``.
+        The vertical position can be any of ``'right'``, ``'left'`` and ``'center'``.
+        The horizontal position can be any of ``'upper'``, ``'lower'``, and ``'center'``.
+    :type position: str
+    :param preliminary: If true, marks the figure as a preliminary version.
+    :type preliminary: bool
     """
     position:str=field(default='upper right')
     preliminary:bool=field(default=False)

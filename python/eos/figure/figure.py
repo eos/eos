@@ -37,23 +37,38 @@ class Figure(ABC, Deserializable):
 
     @abstractmethod
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
-        "Draw the figure"
+        """Draw the figure.
+
+        :param context: The analysis file context, which contains the paths to the data files and other relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
+        :type output: str | None
+        """
+
         raise NotImplementedError
 
 
 @dataclass(kw_only=True)
 class SingleFigure(Figure):
-    """Produces a figure with a single plot."""
+    """Produces a figure with a single plot.
+
+    :param plot: The plot to be drawn in the figure. This can be any of the :class:`Plot <eos.figure.plot.Plot>` descendants.
+    :type plot: :class:`Plot <eos.figure.plot.Plot>`
+    :param size: The size of the figure in inches. Defaults to (6.4, 4.8).
+    :type size: tuple[float, float]
+    :param watermark: The optional specification where and how to draw the EOS watermark. For the default specification, see :class:`Watermark <eos.figure.Watermark>`.
+    :type watermark: :class:`Watermark <eos.figure.Watermark>`
+    """
 
     type:str=field(repr=False, init=False, default='single')
 
-    plot:Deserializable
+    plot:Plot
     size:tuple[float, float]=field(default=(6.4, 4.8))
     watermark:Watermark=field(default_factory=Watermark)
 
     _api_doc = inspect.cleandoc("""
-    Producing a Figure with one Set of Plots
-    ----------------------------------------
+    Producing a Figure with a single Plot
+    -------------------------------------
 
     This figure's type is ``single``, which is the default type of figure. It displays a single plot.
 
@@ -91,9 +106,17 @@ class SingleFigure(Figure):
 
 @dataclass(kw_only=True)
 class Inset(Deserializable):
-    """Represents the inset properties for an `InsetFigure`."""
+    """Represents the inset properties for an `InsetFigure`.
 
-    plot:Deserializable
+    :param plot: The inset plot to be drawn in the figure. This can be any of the :class:`Plot <eos.figure.plot.Plot>` descendants.
+    :type plot: :class:`Plot <eos.figure.plot.Plot>`
+    :param position: The position of the bottom left corner of the inset plot in the figure, specified as a tuple of (x, y) coordinates in normalized figure coordinates (0 to 1).
+    :type position: tuple[float, float]
+    :param size: The size of the inset plot, specified as a tuple of (width, height) in normalized figure coordinates (0 to 1).
+    :type size: tuple[float, float]
+    """
+
+    plot:Plot
     position:tuple[float, float]
     size:tuple[float, float]
 
@@ -106,6 +129,7 @@ class Inset(Deserializable):
         self.plot.prepare(context)
 
     def draw(self, ax):
+        """Draw the inset plot on the provided axes."""
         self.plot.draw(self._inset_ax)
         ax.indicate_inset_zoom(self._inset_ax, edgecolor="black")
 
@@ -118,12 +142,22 @@ class Inset(Deserializable):
 
 @dataclass(kw_only=True)
 class InsetFigure(Figure):
-    """Produces an inset figure with a main plot and a smaller inset plot."""
+    """Produces an inset figure with a main plot and a smaller inset plot.
+
+    :param plot: The main plot to be drawn in the figure. This can be any of the :class:`Plot <eos.figure.Plot>` descendants.
+    :type plot: :class:`Plot <eos.figure.Plot>`
+    :param inset: The inset plot to be drawn in the figure. This should be an instance of :class:`Inset <eos.figure.Inset>`.
+    :type inset: :class:`Inset <eos.figure.Inset>`
+    :param size: The size of the figure in inches. Defaults to (6.4, 4.8).
+    :type size: tuple[float, float]
+    :param watermark: The optional specification where and how to draw the EOS watermark.
+    :type watermark: :class:`Watermark <eos.figure.Watermark>`
+    """
 
     type:str=field(repr=False, init=False, default='inset')
 
-    plot:Deserializable
-    inset:Deserializable
+    plot:Plot
+    inset:Plot
     size:tuple[float, float]=field(default=(6.4, 4.8))
     watermark:Watermark=field(default_factory=Watermark)
 
@@ -149,6 +183,13 @@ class InsetFigure(Figure):
         self._figure, self._ax = plt.subplots(figsize=self.size)
 
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+        """Draw the inset figure.
+
+        :param context: The analysis file context, which contains the paths to the data files and other relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
+        :type output: str | None
+        """
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
         self.plot.draw(self._ax)
@@ -170,7 +211,16 @@ class InsetFigure(Figure):
 
 @dataclass(kw_only=True)
 class GridFigure(Figure):
-    """Produces a figure with a configurable number of plots, arranged in a grid."""
+    """Produces a figure with a configurable number of plots, arranged in a grid.
+
+    The list of plots are assigned to the grid positions in row-major order, i.e. the first plot is assigned to the first row
+    and first column, the second plot to the first row and second column, and so on.
+
+    :param plots: The list of :class:`Plot <eos.figure.Plot>` objects to be drawn in the figure.
+    :type plots: list[:class:`Plot <eos.figure.Plot>`]
+    :param shape: The tuple specifying the shape of the figure's grid, specifying the number of rows and columns in that order.
+    :type shape: tuple[int, int]
+    """
 
     type:str=field(repr=False, init=False, default='grid')
 
@@ -199,6 +249,13 @@ class GridFigure(Figure):
         self._axes = axes.flatten('C') # flatten to row-major style
 
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+        """Draw the grid figure.
+
+        :param context: The analysis file context, which contains the paths to the data files and other relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
+        :type output: str | None
+        """
         context = AnalysisFileContext() if context is None else context
         for idx, plot in enumerate(self.plots):
             plot.prepare()
@@ -219,7 +276,13 @@ class GridFigure(Figure):
 class CornerFigure(Figure):
     r"""Produces a corner figure, i.e., a figure with a triangular arrangement of 1D and 2D marginal PDFs.
 
-    Distributions of the variables are shown on the diagonal, while correlations are plotted on the lower-left corner."""
+    Distributions of the variables are shown on the diagonal, while correlations are plotted on the lower-left corner.
+
+    :param contents: The list of :class:`DataFile <eos.figure.DataFile>` objects to be used, each containing the path to the data file, its label, and optionally its color.
+    :type contents: list[:class:`DataFile <eos.figure.DataFile>`]
+    :param variables: The list of variable names to be shown. If not provided, all variables contained in the first data file are shown.
+    :type variables: list[str] | None
+    """
 
     type:str=field(repr=False, init=False, default='corner')
 
@@ -246,6 +309,13 @@ class CornerFigure(Figure):
             raise ValueError("Contents must include at least one item to be plotted.")
 
     def prepare(self, context:AnalysisFileContext=None, output:str|None=None):
+        """Prepare the corner figure for drawing.
+
+        :param context: The analysis file context, which contains the paths to the data files and other relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
+        :type output: str | None
+        """
         context = AnalysisFileContext() if context is None else context
         for content in self.contents:
             content.prepare(context=context)
@@ -346,6 +416,13 @@ class CornerFigure(Figure):
 
 
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+        """Draw the corner figure.
+
+        :param context: The analysis file context, which contains the paths to the data files and other relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
+        :type output: str | None
+        """
         context = AnalysisFileContext() if context is None else context
         if not hasattr(self, '_figure'):
             self.prepare(context=context, output=output)
@@ -362,6 +439,17 @@ class CornerFigure(Figure):
 
 
 class FigureFactory:
+    r"""Factory class to create figures from a dictionary description.
+
+    This class provides a convenient way to create figures from a dictionary description, which can be used to deserialize figures.
+    The factory method :py:meth:`from_dict` should be used to create a figure from a dictionary description.
+    The description contains the arguments used for initializing objects of classes within the :py:mod:`eos.figure` module.
+
+    A figure can contain one or more individual plots. Each plot contains one or more plottable items, such as a data series from the evaluation of an observable or a kernel density estimate to visualize a set of statistical samples.
+
+    The factory method :py:meth:`from_yaml` can be used to create a figure from a YAML description.
+    """
+
     # Also build the documentation based on ordered registry
     # Initializer is well-defined for python version >= 3.6
     registry = {
@@ -373,6 +461,16 @@ class FigureFactory:
 
     @staticmethod
     def from_yaml(yaml_data:str):
+        """Factory method to create a figure from a YAML description.
+
+        This method takes a YAML description of a figure, turns it into a `dict`,
+        and forwards it to the :py:meth:`from_dict` method.
+
+        :param yaml_data: A YAML description of the figure.
+        :type yaml_data: str
+        :returns: A descendant of the :py:class:`eos.figure.Figure` class
+        :rtype: :py:class:`eos.figure.Figure`
+        """
         kwargs = _yaml.safe_load(yaml_data)
         return FigureFactory.from_dict(**kwargs)
 
@@ -390,7 +488,7 @@ class FigureFactory:
         items, such as a data series from the evaluation of an observable or a kernel density estimate to
         visualize a set of statistical samples.
 
-        :param description: A figure description as required by any of the descendant classes of :py:`eos.figure.Figure`.
+        :param description: A figure description as required by any of the descendant classes of :py:class:`eos.figure.Figure`.
         :type description: dict
         :returns: A descendant of the :py:class:`eos.figure.Figure` class
         :rtype: :py:class:`eos.figure.Figure`

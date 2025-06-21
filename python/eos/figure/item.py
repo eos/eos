@@ -73,7 +73,51 @@ class Item(Deserializable):
 
 @dataclass(kw_only=True)
 class ObservableItem(Item):
-    """Plots an observables from the EOS library of builtin observables"""
+    """Plots an observables from the EOS library of builtin observables.
+
+    This item type is used to plot observables as a function of one kinematic variable or one parameter.
+
+    :param observable: The name of the observable to be plotted.
+    :type observable: :class:`eos.QualifiedName`
+    :param fixed_kinematics: A dictionary of additional kinematic variables and the values to which they shall be fixed.
+    :type fixed_kinematics: dict[str, float] | None
+    :param fixed_parameters: A dictionary of EOS parameters and the values to which they shall be fixed.
+    :type fixed_parameters: dict[eos.QualifiedName, float] | None
+    :param fixed_parameters_from_file: Path to a file containing EOS parameters to be used for the observable.
+    :type fixed_parameters_from_file: str | None
+    :param label: The label for the observable, which will be used in the plot legend.
+    :type label: str | None
+    :param options: A dictionary of options to be passed to the observable.
+    :type options: dict[str, str] | None
+    :param range: A tuple of two float values (min, max) representing the range of the kinematic variable to be plotted on the x-axis.
+    :type range: tuple[float, float]
+    :param resolution: The number of points to be used for the evaluation of the observable. Defaults to 100.
+    :type resolution: int
+    :param variable: The name of the kinematic or parameter variable to which the x-axis will be mapped; see
+        `the complete list of observables <../reference/observables.html>`_ and
+        `the complete list of parameters <../reference/parameters.html>`_.
+    :type variable: str | :class:`eos.QualifiedName`
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          legend: { position: 'upper center' }
+          xaxis: { label: '$q^2$',                range: [0.0, 11.6]   }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$', range: [0.0, 5.0e-3] }
+          items:
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: '$\\ell = \\mu$',
+                variable: 'q2', range: { min: 0.02, max: 11.6, num: 5800 }
+              }
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: '$\\ell = \\tau$',
+                variable: 'q2', range: { min: 3.17, max: 11.6, num: 421 }
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
 
     observable:eos.QualifiedName
     fixed_kinematics:dict=None
@@ -181,7 +225,7 @@ class ObservableItem(Item):
 
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Evaluate the observable at the sample points"
+        "Prepare the drawing by evaluating the observable at the sample points."
         context = AnalysisFileContext() if context is None else context
         self._yvalues = _np.empty((len(self._xvalues),))
         for i, x in enumerate(self._xvalues):
@@ -190,15 +234,54 @@ class ObservableItem(Item):
 
 
     def draw(self, ax, **kwargs):
-        "Draw a line plot of the observable"
+        "Draw a curve of the observable."
         ax.plot(self._xvalues, self._yvalues, label=self.label, color=self.color, **kwargs)
 
 
 @dataclass(kw_only=True)
 class UncertaintyBandItem(Item):
-    """Plots an uncertainty band as a function of one kinematic variable or one parameter.
+    """Plots the 68% uncertainty band as a function of one kinematic variable or one parameter.
 
-    This routine expects the uncertainty propagation to have produced an EOS data file"""
+    This routine requires EOS data file to have been produced, typically by running ``predict-observables`` task.
+
+    :param band: A set of strings that determines which parts of the uncertainty band to draw. Can be any combination of ``'area'``, ``'outer'``, or ``'median'``.
+        Defaults to ``{'area', 'outer', 'median'}``.
+        ``'area'`` fills the area between the lower and upper bounds of the uncertainty band,
+        ``'outer'`` draws the outer lines of the uncertainty band, and ``'median'`` draws the median line of the uncertainty band.
+    :type band: set[str] | list[str] | str
+    :param datafile: The path to an existing data file of type :class:`eos.data.Prediction` that contains the uncertainty estimates.
+    :type datafile: str
+    :param interpolation: The type of interpolation to be used for the band. Can be either ``linear`` (default) or ``cubic``.
+    :type interpolation: str
+    :param range: A tuple of two float values (min, max) representing the range of the kinematic variable to be plotted on the x-axis.
+    :type range: tuple[float, float] | None
+    :param resolution: The number of points to be used for the interpolation of the band. Defaults to 100.
+    :type resolution: int
+    :param variable: The name of the kinematic variable that is plotted on the x-axis. Defaults to the first kinematic variable recorded in the data file.
+    :type variable: str | None
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          legend: { position: 'upper center' }
+          items:
+            - { type: 'uncertainty', label: '$\\ell=\\mu$',
+                variable: 'q2', range: [0.02, 11.63],
+                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu'
+              }
+            - { type: 'uncertainty', label: '$\\ell=\\tau$',
+                variable: 'q2', range: [3.17, 11.63], resolution: 1000,
+                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-tau-nu'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
 
     band:set[str]|list[str]|str=field(default_factory=lambda : {'area', 'outer', 'median'})
     datafile:str
@@ -348,7 +431,29 @@ class UncertaintyBandItem(Item):
 
 @dataclass(kw_only=True)
 class OneDimensionalHistogramItem(Item):
-    """Plots a one-dimensional histogram."""
+    """Plots a one-dimensional histogram.
+
+    :param bins: The number of histogram bins. Defaults to 100.
+    :type bins: int
+    :param datafile: The path to an existing data file of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction` that contains the samples.
+    :type datafile: str
+    :param variable: The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
+    :type variable: str
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
+          legend: { position: 'upper left' }
+          items:
+            - { type: 'histogram1D', variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0' }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
 
     bins:int=field(default=100)
     datafile:str
@@ -420,15 +525,19 @@ class OneDimensionalHistogramItem(Item):
 
 @dataclass
 class TwoDimensionalHistogramItem(Item):
-    """Plots a two-dimensional histogram."""
+    """Plots a two-dimensional histogram.
 
-#    :param datafile: Path to the file that contains the histogram data.
-#    :type datafile: str
-#    :param variables: Names of two of the datafile's variables that shall be histogrammed.
-#    :type variables: tuple[str, str]
-#    :param bins: Number of histogram bins.
-#    :type bins: int
-#    """
+    :param datafile: The path to an existing data file of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction` that contains the histogram data.
+    :type datafile: str
+    :param variables: The tuple of names of the two variables that shall be histogrammed on the x- and y-axis, respectively.
+    :type variables: tuple[str, str]
+    :param bins: Number of histogram bins. Defaults to 50.
+    :type bins: int
+    """
+
+    datafile:str
+    variables:tuple[str, str]
+    bins:int=field(default=50)
 
     _api_doc = inspect.cleandoc("""
     Plotting Two-Dimensional Histograms
@@ -446,17 +555,13 @@ class TwoDimensionalHistogramItem(Item):
         * ``bins`` (*int*) -- The number of histogram bins. Defaults to 50.
     """)
 
-    datafile:str
-    variables:tuple[str, str]
-    bins:int=field(default=50)
-
     def __post_init__(self):
         super().__post_init__()
         if self.bins < 2:
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the histogram for drawing"
+        "Prepare the histogram for drawing."
 
         context = AnalysisFileContext() if context is None else context
 
@@ -478,6 +583,7 @@ class TwoDimensionalHistogramItem(Item):
                 raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{v}'")
 
     def draw(self, ax):
+        "Draw the two-dimensional histogram."
         xidx = self._datafile.lookup_table[self.variables[0]]
         yidx = self._datafile.lookup_table[self.variables[1]]
         ax.hist2d(self._datafile.samples[:, xidx], self._datafile.samples[:, yidx],
@@ -486,21 +592,43 @@ class TwoDimensionalHistogramItem(Item):
 
 @dataclass(kw_only=True)
 class OneDimensionalKernelDensityEstimateItem(Item):
-    """Plotting a one-dimensional kernel density estimate (KDE)."""
+    """Plotting a one-dimensional kernel density estimate (KDE).
 
-#    :param datafile: Path to the file that contains the KDE data.
-#    :type datafile: str
-#    :param variable: Name of the datafile's variable that shall be visualized.
-#    :type variable: str
-#    :param level: Credibility level that shall be visualized in percent (optional).
-#    :type level: float
-#    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-#    :type bandwidth: float
+    This item type is used to display a one-dimensional kernel density estimate (KDE) of a variable, be it a prior, a posterior, or a prediction.
 
-    bandwidth:float=field(default=None)
+    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE. Defaults to None, which means that the default bandwidth is used.
+    :type bandwidth: float | None
+    :param datafile: Path to the file that contains the KDE data, which must be of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`.
+    :type datafile: str
+    :param level: Credibility level that shall be visualized in percent (optional). Defaults to None, which means that no credibility level is visualized.
+    :type level: float | None
+    :param range: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type range: tuple[float, float] | None
+    :param variable: Name of the datafile's variable that shall be displayed.
+    :type variable: str
+    :param xsamples: The number of samples to be used for the x-axis. Defaults to 100.
+    :type xsamples: int
+
+    Example:
+
+    .. code-block::
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
+          legend: { position: 'upper left' }
+          items:
+            - { type: 'kde1D',       variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0',
+                label: 'posterior'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    bandwidth:float|None=field(default=None)
     datafile:str
-    level:float=field(default=None)
-    range:tuple[float, float]=field(default=None)
+    level:float|None=field(default=None)
+    range:tuple[float, float]|None=field(default=None)
     variable:str
     xsamples:int=field(default=100)
 
@@ -534,7 +662,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
             raise ValueError(f"Bandwidth factor '{self.bandwidth}' is not positive")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the KDE for drawing"
+        "Prepare the KDE for drawing."
 
         context = AnalysisFileContext() if context is None else context
 
@@ -569,7 +697,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         self.pdf_norm = self.pdf.sum()
 
     def draw(self, ax):
-        "Draw the histogram"
+        "Draw the KDE."
         # find the PDF value corresponding to a given cummulative probability
         if self.level is not None:
             plevelf = lambda x, pdf, P: self.pdf[self.pdf > x * self.pdf_norm].sum() - P * self.pdf_norm
@@ -582,24 +710,51 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
 @dataclass(kw_only=True)
 class TwoDimensionalKernelDensityEstimateItem(Item):
-    """Plots a two-dimensional kernel density estimate (KDE)."""
+    """Plots a two-dimensional kernel density estimate (KDE).
 
-#    :param datafile: Path to the file that contains the KDE data.
-#    :type datafile: str
-#    :param variables: Name of the datafile's variable that shall be visualized.
-#    :type variables: str
-#    :param level: Credibility level that shall be visualized in percent (optional).
-#    :type level: float
-#    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-#    :type bandwidth: float
+    This item type is used to display a two-dimensional kernel density estimate (KDE) of two variables, be it a prior, a posterior, or a prediction.
 
-    bandwidth:float=field(default=None)
+    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE. Defaults to None, which means that the default bandwidth is used.
+    :type bandwidth: float | None
+    :param contours: The types of contours to be drawn. Can be any combination of ``'lines'``, ``'areas'``, or ``'labels'``. Defaults to ``{'lines'}``.
+    :type contours: set[str]
+    :param datafile: Path to the file that contains the KDE data, which must be of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`.
+    :type datafile: str
+    :param levels: The credibility levels that shall be visualized in percent. Defaults to ``[0, 68, 95]``.
+    :type levels: list[float] | None
+    :param variables: The tuple of names of the two variables that shall be displayed on the x- and y-axis, respectively.
+    :type variables: tuple[str, str]
+    :param xrange: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type xrange: tuple[float, float] | None
+    :param yrange: The range of the variable to be plotted on the y-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type yrange: tuple[float, float] | None
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38e-3, 47e-3] }
+          yaxis: { label: '$f_+(0)$',   range: [0.6, 0.75]    }
+          items:
+            - { type: 'kde2D', label: 'posterior', color: 'C1',
+                levels: [68, 95], contours: ['lines', 'areas'], bandwidth: 3.0,
+                datafile: './inference-data/CKM/samples',
+                variables: ['CKM::abs(V_cb)', 'B->D::alpha^f+_0@BSZ2015']
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    bandwidth:float|None=field(default=None)
     contours:set[str]=field(default_factory=lambda : {'lines'})
     datafile:str
-    levels:list[float]=field(default=None)
+    levels:list[float]|None=field(default=None)
     variables:tuple[str,str]
-    xrange:tuple[float,float]=field(default=None)
-    yrange:tuple[float,float]=field(default=None)
+    xrange:tuple[float,float]|None=field(default=None)
+    yrange:tuple[float,float]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Plotting Two-Dimensional Kernel Density Estimates
@@ -642,7 +797,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
                 raise ValueError(f"Contour type '{contour_type}' is not supported")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the KDE for drawing"
+        "Prepare the KDE for drawing."
 
         context = AnalysisFileContext() if context is None else context
 
@@ -676,7 +831,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             self._kde.set_bandwidth(bw_method=self._kde.factor * self.bandwidth)
 
     def draw(self, ax):
-        "Draw the histogram"
+        "Draw the KDE."
 
         # determine the extent of the plot
         xrange = ax.get_xlim() if self.xrange is None else self.xrange
@@ -718,7 +873,43 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
 
 @dataclass(kw_only=True)
 class ConstraintItem(Item):
-    """Plots statistical constraints from the EOS library of experimental and theoretical likelihoods"""
+    """Plots statistical constraints from the EOS library of experimental and theoretical likelihoods.
+
+    :param constraints: The name or the list of names of the constraints that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../reference/constraints.html>`_.
+    :type constraints: eos.QualifiedName | list[eos.QualifiedName]
+    :param variable: The name of the kinematic variable to which the x axis will be mapped.
+    :type variable: str
+    :param observable: The name of the observable whose constraints will be plotted. Must identify one of the observables known to EOS; see `the complete list of observables <../reference/observables.html>`_. This is only mandatory in multivariate constraints, since these can constrain more than one observable simultaneously.
+    :type observable: eos.QualifiedName | None
+    :param range: The interval in which the observable is plotted in the case of a multivariate constraint.
+    :type range: tuple[int, int] | None
+    :param rescale_by_width: Rescales binned constraints by the inverse of the bin width. This is often required to compare theory (integrated) predictions and experimental (averaged) measurements. Defaults to false.
+    :type rescale_by_width: bool
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          legend: { position: 'lower left' }
+          items:
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2;l=e,q=d', label: '$\\ell=e$',
+                variable: 'q2', range: { min: 0.02, max: 11.63, num: 100}, color: 'black'
+              }
+            - { type: 'constraint', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=e,\\, q=d$',
+                variable: 'q2', rescale_by_width: true
+              }
+            - { type: 'constraint', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=\\mu,\\, q=d$',
+                variable: 'q2', rescale_by_width: true
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+
+    """
 
     constraints:eos.QualifiedName|list[eos.QualifiedName]
     variable:str
@@ -785,7 +976,7 @@ class ConstraintItem(Item):
             raise TypeError(f'constraints must be a QualifiedName or a list of QualifiedNames, not {type(self.constraints)}')
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the constraint for drawing"""
+        """Prepare the constraint for drawing."""
         context = AnalysisFileContext() if context is None else context
 
         import yaml
@@ -927,7 +1118,7 @@ class ConstraintItem(Item):
             self._mask = _np.array([True] * len(self._xvalues))
 
     def draw(self, ax):
-        "Draw the constraint on the axes"
+        "Draw the constraint on the axes."
 
         xvalues = self._xvalues[self._mask]
         yvalues = self._yvalues[self._mask]

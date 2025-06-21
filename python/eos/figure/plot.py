@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
-from .item import ItemFactory, ItemColorCycler
+from .item import Item, ItemFactory, ItemColorCycler
 
 import copy as _copy
 import eos
@@ -32,7 +32,11 @@ import yaml as _yaml
 
 @dataclass
 class Legend(Deserializable):
-    r"""Represents the legend properties in a plot."""
+    r"""Represents the legend properties in a plot.
+
+    :param position: The position of the legend in the plot. Defaults to 'best', which automatically places the legend in the best location.
+    :type position: str
+    """
 
     position:str=field(default='best')
 
@@ -45,7 +49,13 @@ class Legend(Deserializable):
 
 @dataclass
 class Grid(Deserializable):
-    r"""Represents the grid properties in a plot."""
+    r"""Represents the grid properties in a plot.
+
+    :param visible: Whether the grid is visible. Defaults to False.
+    :type visible: bool
+    :param axis: The axis on which the grid is drawn. Can be 'both', 'x', or 'y'. Defaults to 'both'.
+    :type axis: str
+    """
 
     visible:bool=field(default=False)
     axis:str=field(default='both')
@@ -60,7 +70,13 @@ class Grid(Deserializable):
 
 @dataclass
 class XTicks(Deserializable):
-    r""""Represents the x axis ticks properties in a plot."""
+    r"""Represents the x axis ticks properties in a plot.
+
+    :param minor: Whether to show minor ticks. Defaults to True.
+    :type minor: bool
+    :param visible: Whether the ticks are visible. Defaults to True.
+    :type visible: bool
+    """
 
     minor:bool=field(default=True)
     visible:bool=field(default=True)
@@ -80,7 +96,17 @@ class XTicks(Deserializable):
 
 @dataclass
 class XAxis(Deserializable):
-    r""""Represents the x axis properties in a plot."""
+    r"""Represents the x axis properties in a plot.
+
+    :param label: The label for the x axis.
+    :type label: str
+    :param range: The range of the x axis as a tuple (min, max). Defaults to None, which means the range is determined empirically.
+    :type range: tuple[float, float] | None
+    :param ticks: The x axis ticks properties. Defaults to an instance of :class:`XTicks <eos.figure.XTicks>`.
+    :type ticks: :class:`XTicks <eos.figure.XTicks>`
+    :param unit: The unit of the x axis, e.g., 'GeV'. Defaults to None.
+    :type unit: str | None
+    """
 
     label:str=field(default=None)
     range:tuple[float, float]=field(default=None)
@@ -114,7 +140,13 @@ class XAxis(Deserializable):
 
 @dataclass
 class YTicks(Deserializable):
-    r""""Represents the y axis ticks properties in a plot."""
+    r"""Represents the y axis ticks properties in a plot.
+
+    :param minor: Whether to show minor ticks. Defaults to True.
+    :type minor: bool
+    :param visible: Whether the ticks are visible. Defaults to True.
+    :type visible: bool
+    """
 
     minor:bool=field(default=True)
     visible:bool=field(default=True)
@@ -133,7 +165,17 @@ class YTicks(Deserializable):
 
 @dataclass
 class YAxis(Deserializable):
-    r""""Represents the y axis properties in a plot."""
+    r"""Represents the y axis properties in a plot.
+
+    :param label: The label for the y axis.
+    :type label: str
+    :param range: The range of the y axis as a tuple (min, max). Defaults to None, which means the range is determined empirically.
+    :type range: tuple[float, float] | None
+    :param ticks: The y axis ticks properties. Defaults to an instance of :class:`YTicks <eos.figure.YTicks>`.
+    :type ticks: :class:`YTicks <eos.figure.YTicks>`
+    :param unit: The unit of the y axis, e.g., 'GeV'. Defaults to None.
+    :type unit: str | None
+    """
 
     label:str=None
     range:tuple[float, float]=None
@@ -181,11 +223,27 @@ class Plot(ABC, Deserializable):
 
 @dataclass(kw_only=True)
 class TwoDimensionalPlot(Plot):
-    """Draws a 2D plot along a single set of axes."""
+    """Draws a 2D plot along a single set of axes.
+
+    :param aspect: The aspect ratio of the plot. If None, the aspect ratio defaults to matplotlib's default.
+    :type aspect: float | None
+    :param grid: The grid properties of the plot. For the default properties, see :class:`Grid <eos.figure.Grid>`.
+    :type grid: :class:`Grid <eos.figure.Grid>`
+    :param items: A list of items to be drawn in the plot.
+    :type items: list[:class:`Item <eos.figure.Item>`]
+    :param legend: The legend properties of the plot. For the default properties, see :class:`Legend <eos.figure.Legend>`.
+    :type legend: :class:`Legend <eos.figure.Legend>`
+    :param title: The title of the plot. Defaults to None, which means no title is displayed.
+    :type title: str | None
+    :param xaxis: The x axis properties of the plot. For the default properties, see :class:`XAxis <eos.figure.XAxis>`.
+    :type xaxis: :class:`XAxis <eos.figure.XAxis>`
+    :param yaxis: The y axis properties of the plot. For the default properties, see :class:`YAxis <eos.figure.YAxis>`.
+    :type yaxis: :class:`YAxis <eos.figure.YAxis>`
+    """
 
     aspect:float|None=field(default=None)
     grid:Grid=field(default_factory=Grid)
-    items:list
+    items:list[Item]
     legend:Legend=field(default=None)
     title:str=None
     xaxis:XAxis=field(default_factory=XAxis)
@@ -268,7 +326,8 @@ class TwoDimensionalPlot(Plot):
 class EmptyPlot(Plot):
     """Draws an empty plot.
 
-    Can be used in a grid as empty space instead of a plot."""
+    Can be used in a grid as empty space instead of a plot. It does not accept any parameters.
+    """
 
     _api_doc = inspect.cleandoc("""
     Drawing an Empty Plot
@@ -303,7 +362,7 @@ class PlotFactory:
 
     @staticmethod
     def from_dict(**kwargs):
-        "Factory method to create a plot from a dictionary"
+        """Factory method to create a plot from a dictionary."""
 
         if 'type' not in kwargs:
             plot_type = '2D'

@@ -16,25 +16,29 @@ for key, PlotterClass in eos.plot.Plotter.plot_types.items():
     })
 
 
-# Get item types
-figure_item_types = [] # tuple of (key, class, description)
-reg = eos.figure.item.ItemFactory.registry
-for item_key, item_class in reg.items():
-    description = item_class.__doc__.splitlines()[0] # First line of docstring
-    figure_item_types.append((item_key, f"eos.figure.item.{item_class.__name__}", description))
+# Get figure types
+figure_figure_types = [] # tuple of (key, class, description)
+reg = eos.figure.figure.FigureFactory.registry
+for figure_key, figure_class in reg.items():
+    description = figure_class.__doc__.splitlines()[0] # First line of docstring
+    figure_figure_types.append((figure_key, f"{figure_class.__name__}", description))
 
 
 # Get plot types
 figure_plot_types = [] # tuple of (key, class, description)
 reg = eos.figure.plot.PlotFactory.registry
 for plot_key, plot_class in reg.items():
-    doc = plot_class.__doc__
-    if doc is not None:
-        description = doc.splitlines()[0] # First line of docstring
-        figure_plot_types.append((plot_key, f"eos.figure.plot.{plot_class.__name__}", description))
-    else:
-        # Do not show in docs when no doc string is present
-        pass
+    description = plot_class.__doc__.splitlines()[0] # First line of docstring
+    figure_plot_types.append((plot_key, f"{plot_class.__name__}", description))
+
+
+# Get item types
+figure_item_types = [] # tuple of (key, class, description)
+reg = eos.figure.item.ItemFactory.registry
+for item_key, item_class in reg.items():
+    description = item_class.__doc__.splitlines()[0] # First line of docstring
+    figure_item_types.append((item_key, f"{item_class.__name__}", description))
+
 
 # Document eos.tasks automatically
 excluded_tasks = ['run']
@@ -43,6 +47,7 @@ task_names = sorted(task_names)
 
 print_template(__file__,
     plot_types = plot_types,
+    figure_figure_types = figure_figure_types,
     figure_item_types = figure_item_types,
     figure_plot_types = figure_plot_types,
     task_names = task_names
