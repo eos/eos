@@ -73,7 +73,7 @@ class Item(Deserializable):
 
 @dataclass(kw_only=True)
 class ObservableItem(Item):
-    """Show observables from the EOS library of builtin observables"""
+    """Plots an observables from the EOS library of builtin observables"""
 
     observable:eos.QualifiedName
     fixed_kinematics:dict=None
@@ -90,6 +90,7 @@ class ObservableItem(Item):
     --------------------
 
     Plot items of type ``observable`` are used to display one of the built-in `observables <../reference/observables.html>`_.
+
     The following keys are mandatory:
 
         * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable that will be plotted.
@@ -195,7 +196,7 @@ class ObservableItem(Item):
 
 @dataclass(kw_only=True)
 class UncertaintyBandItem(Item):
-    """Plots an uncertainty band as a function of one kinematic variable
+    """Plots an uncertainty band as a function of one kinematic variable or one parameter.
 
     This routine expects the uncertainty propagation to have produced an EOS data file"""
 
@@ -347,7 +348,7 @@ class UncertaintyBandItem(Item):
 
 @dataclass(kw_only=True)
 class OneDimensionalHistogramItem(Item):
-    """Represents a one-dimensional histogram."""
+    """Plots a one-dimensional histogram."""
 
     bins:int=field(default=100)
     datafile:str
@@ -419,15 +420,31 @@ class OneDimensionalHistogramItem(Item):
 
 @dataclass
 class TwoDimensionalHistogramItem(Item):
-    r"""Represents a two-dimensional histogram.
+    """Plots a two-dimensional histogram."""
 
-    :param datafile: Path to the file that contains the histogram data.
-    :type datafile: str
-    :param variables: Names of two of the datafile's variables that shall be histogrammed.
-    :type variables: tuple[str, str]
-    :param bins: Number of histogram bins.
-    :type bins: int
-    """
+#    :param datafile: Path to the file that contains the histogram data.
+#    :type datafile: str
+#    :param variables: Names of two of the datafile's variables that shall be histogrammed.
+#    :type variables: tuple[str, str]
+#    :param bins: Number of histogram bins.
+#    :type bins: int
+#    """
+
+    _api_doc = inspect.cleandoc("""
+    Plotting Two-Dimensional Histograms
+    ------------------------------------
+
+    Plot items of type ``histogram2D`` are used to display samples of a two-dimensional probability density, be it a prior, a posterior, or a prediction.
+
+    The following keys are mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.ImportanceSamples* or *eos.data.Prediction*) -- The path to
+          a data file that was generated with one of the ``sample-nested`` or ``predict-observables`` tasks.
+        * ``variables`` (*tuple* of two *str*) -- The names of the two variables that are plotted on the x- and y-axis, respectively.
+
+    The following keys are optional:
+        * ``bins`` (*int*) -- The number of histogram bins. Defaults to 50.
+    """)
 
     datafile:str
     variables:tuple[str, str]
@@ -469,24 +486,44 @@ class TwoDimensionalHistogramItem(Item):
 
 @dataclass(kw_only=True)
 class OneDimensionalKernelDensityEstimateItem(Item):
-    r"""Represents a one-dimensional kernel density estimate (KDE).
+    """Plotting a one-dimensional kernel density estimate (KDE)."""
 
-    :param datafile: Path to the file that contains the KDE data.
-    :type datafile: str
-    :param variable: Name of the datafile's variable that shall be visualized.
-    :type variable: str
-    :param level: Credibility level that shall be visualized in percent (optional).
-    :type level: float
-    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-    :type bandwidth: float
-    """
+#    :param datafile: Path to the file that contains the KDE data.
+#    :type datafile: str
+#    :param variable: Name of the datafile's variable that shall be visualized.
+#    :type variable: str
+#    :param level: Credibility level that shall be visualized in percent (optional).
+#    :type level: float
+#    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
+#    :type bandwidth: float
 
-    datafile:str
-    variable:str
-    range:tuple[float, float]=field(default=None)
-    xsamples:int=field(default=100)
-    level:float=field(default=None)
     bandwidth:float=field(default=None)
+    datafile:str
+    level:float=field(default=None)
+    range:tuple[float, float]=field(default=None)
+    variable:str
+    xsamples:int=field(default=100)
+
+    _api_doc = inspect.cleandoc("""
+    Plotting One-Dimensional Kernel Density Estimates
+    -------------------------------------------------
+
+    Plot items of type ``kde1D`` are used to display a one-dimensional kernel density estimate (KDE) of a variable, be it a prior, a posterior, or a prediction.
+
+    The following keys are mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.ImportanceSamples* or *eos.data.Prediction*) -- The path to
+          a data file that was generated with one of the ``sample-nested`` or ``predict-observables`` tasks.
+        * ``variable`` (*str*) -- The name of the variable that is plotted on the x-axis.
+
+    The following keys are optional:
+
+        * ``bandwidth`` (*float*) -- The relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
+        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional).
+        * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``xsamples`` (*int*) -- The number of samples to be used for the x-axis. Defaults to 100.
+
+    """)
 
     def __post_init__(self):
         super().__post_init__()
@@ -545,25 +582,45 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
 @dataclass(kw_only=True)
 class TwoDimensionalKernelDensityEstimateItem(Item):
-    r"""Represents a two-dimensional kernel density estimate (KDE).
+    """Plots a two-dimensional kernel density estimate (KDE)."""
 
-    :param datafile: Path to the file that contains the KDE data.
-    :type datafile: str
-    :param variables: Name of the datafile's variable that shall be visualized.
-    :type variables: str
-    :param level: Credibility level that shall be visualized in percent (optional).
-    :type level: float
-    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-    :type bandwidth: float
-    """
+#    :param datafile: Path to the file that contains the KDE data.
+#    :type datafile: str
+#    :param variables: Name of the datafile's variable that shall be visualized.
+#    :type variables: str
+#    :param level: Credibility level that shall be visualized in percent (optional).
+#    :type level: float
+#    :param bandwidth: Relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
+#    :type bandwidth: float
 
-    datafile:str
-    variables:tuple[str,str]
-    levels:list[float]=field(default=None)
     bandwidth:float=field(default=None)
     contours:set[str]=field(default_factory=lambda : {'lines'})
+    datafile:str
+    levels:list[float]=field(default=None)
+    variables:tuple[str,str]
     xrange:tuple[float,float]=field(default=None)
     yrange:tuple[float,float]=field(default=None)
+
+    _api_doc = inspect.cleandoc("""
+    Plotting Two-Dimensional Kernel Density Estimates
+    -------------------------------------------------
+
+    Plot items of type ``kde2D`` are used to display a two-dimensional kernel density estimate (KDE) of two variables, be it a prior, a posterior, or a prediction.
+
+    The following keys are mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.ImportanceSamples* or *eos.data.Prediction*) -- The path to
+          a data file that was generated with one of the ``sample-nested`` or ``predict-observables`` tasks.
+        * ``variables`` (*tuple* of two *str*) -- The names of the two variables that are plotted on the x- and y-axis, respectively.
+
+    The following keys are optional:
+
+        * ``bandwidth`` (*float*) -- The relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
+        * ``contours`` (*set* of *str*) -- The types of contours to be drawn. Can be any combination of ``'lines'``, ``'areas'``, or ``'labels'``. Defaults to ``{'lines'}``.
+        * ``levels`` (*list* of *float*) -- The credibility levels that shall be visualized in percent (optional). Defaults to ``[0, 68, 95]``.
+        * ``xrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``yrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the y-axis. Defaults to the full range of the variable in the data file.
+    """)
 
     def __post_init__(self):
         super().__post_init__()
@@ -661,7 +718,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
 
 @dataclass(kw_only=True)
 class ConstraintItem(Item):
-    """Show constraints from the EOS library of experimental and theoretical likelihoods"""
+    """Plots statistical constraints from the EOS library of experimental and theoretical likelihoods"""
 
     constraints:eos.QualifiedName|list[eos.QualifiedName]
     variable:str
@@ -892,12 +949,12 @@ class ConstraintItem(Item):
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
+        'uncertainty': UncertaintyBandItem,
+        'constraint': ConstraintItem,
         'histogram1D': OneDimensionalHistogramItem,
         'histogram2D': TwoDimensionalHistogramItem,
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
-        'constraint': ConstraintItem,
-        'uncertainty': UncertaintyBandItem,
     }
 
     @staticmethod
