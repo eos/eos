@@ -286,11 +286,8 @@ All item types recognize the following optional keys:
 
 
 ****************
-Creating Figures
+Plotting Classes
 ****************
-
-EOS also provides a new plotting framework with a different interface, which will replace
-the existing framework as soon as it is feature complete.
 
 .. note::
 
@@ -302,61 +299,173 @@ the existing framework as soon as it is feature complete.
    so for this to work latex needs to be available on your system.
 
 
-Figures
-=======
+EOS also provides a new plotting framework with a different interface, which will replace
+the existing framework as soon as it is feature complete. Within the new framework, Figures
+are created using the :py:class:`eos.figure.FigureFactory` class, which returns an object
+of a class descended by :py:class:`eos.figure.Figure`. The figure is responsible for creating
+and managing the `matplotlib <https://matplotlib.org/>`_ figure object. It also creates the
+plot or plots that are contained in the figure as objects of classes descended from
+:py:class:`eos.figure.plot.Plot`. These objects manage the axes of the figure and
+the individual plot items that are contained in the plot. The actual contents are created using
+the :py:class:`eos.figure.ItemFactory` class, which returns an object of a class descended from
+:py:class:`eos.figure.items.Item`. The item is responsible for creating the actual
+plot item, such as the curve of an EOS observable, a scatter plot of parameters, a histogram
+or a kernel density estimate, to name some of the options.
 
-.. automodule:: eos.figure
+
+`Figure` and Related Classes
+============================
+
+
+.. autoclass:: eos.figure.Figure
+   :members:
+
+   .. note::
+
+      The :py:class:`eos.figure.plot.Plot` class is the base class for all plot items.
+      It is not intended to be used directly. To create a a concrete plot, use the :class:`PlotFactory <eos.figure.PlotFactory>` class.
+
+
+.. autoclass:: eos.figure.FigureFactory
+   :members:
+
+   The list of available figure types is as follows:
+
+
+   .. list-table::
+      :widths: auto
+      :header-rows: 1
+
+      * - figure type
+        - Python class
+        - description
+      {% for key, class, description in figure_figure_types %}
+      * - ``{{ key }}``
+        - :py:class:`eos.figure.{{ class }}`
+        - {{ description }}
+      {% endfor %}
+
+{% for _, class, _ in figure_figure_types %}
+.. autoclass:: eos.figure.{{ class }}
+   :members:
+
+{% endfor %}
+
+
+.. autoclass:: eos.figure.Inset
    :members:
 
 
-Plot types
-----------
+`Plot` and Related Classes
+==========================
 
-Below we list the available plot types.
-Each key ``plot_type`` corresponds to a class which is instantiated in the background.
-The user can supply keyword arguments which are documented under :py:mod:`eos.figure.plot`.
 
-.. list-table::
-   :widths: auto
-   :header-rows: 1
+.. autoclass:: eos.figure.Plot
+   :members:
 
-   * - ``plot_type``
-     - class
-     - description
-   {% for key, class, description in figure_plot_types %}
-   * - ``{{ key }}``
-     - :py:class:`{{ class }}`
-     - {{ description }}
-   {% endfor %}
+   .. note::
 
-The classes including the arguments the user can pass are documented in detail below.
+      The :py:class:`eos.figure.Plot` class is the base class for all plot items.
+      It is not intended to be used directly. To create a a concrete plot, use the :class:`PlotFactory <eos.figure.PlotFactory>` class.
 
-.. automodule:: eos.figure.plot
+
+.. autoclass:: eos.figure.PlotFactory
    :members:
 
 
-Item types
-----------
+   The list of available plot types is as follows:
 
-Below we list the available item types.
-Each key ``item_type`` corresponds to a class which is instantiated in the background.
-The user can supply keyword arguments which are documented under :py:mod:`eos.figure.item`.
+   .. list-table::
+      :widths: auto
+      :header-rows: 1
 
-.. list-table::
-   :widths: auto
-   :header-rows: 1
+      * - plot type
+        - Python class
+        - description
+      {% for key, class, description in figure_plot_types %}
+      * - ``{{ key }}``
+        - :py:class:`eos.figure.{{ class }}`
+        - {{ description }}
+      {% endfor %}
 
-   * - ``item_type``
-     - class
-     - description
-   {% for key, class, description in figure_item_types %}
-   * - ``{{ key }}``
-     - :py:class:`{{ class }}`
-     - {{ description }}
-   {% endfor %}
 
-The classes including the arguments the user can pass are documented in detail below.
+{% for _, class, _ in figure_plot_types %}
+.. autoclass:: eos.figure.{{ class }}
+   :members:
 
-.. automodule:: eos.figure.item
-   :exclude-members: Item
+{% endfor %}
+
+
+.. autoclass:: eos.figure.Grid
+   :members:
+
+
+.. autoclass:: eos.figure.Legend
+   :members:
+
+
+.. autoclass:: eos.figure.XAxis
+   :members:
+
+
+.. autoclass:: eos.figure.XTicks
+   :members:
+
+
+.. autoclass:: eos.figure.YAxis
+   :members:
+
+
+.. autoclass:: eos.figure.YTicks
+
+
+`Item` and Related Classes
+==========================
+
+
+.. autoclass:: eos.figure.item.Item
+   :members:
+
+   .. note::
+
+      The :py:class:`eos.figure.item.Item` class is the base class for all plot items.
+      It is not intended to be used directly. To create a a concrete plot item, use the :class:`ItemFactory <eos.figure.ItemFactory>` class.
+
+
+.. autoclass:: eos.figure.item.ItemFactory
+   :members:
+
+   The list of available item types is as follows:
+
+
+   .. list-table::
+      :widths: auto
+      :header-rows: 1
+
+      * - item type
+        - Python class
+        - description
+      {% for key, class, description in figure_item_types %}
+      * - ``{{ key }}``
+        - :py:class:`{{ class }}`
+        - {{ description }}
+      {% endfor %}
+
+
+{% for _, class, _ in figure_item_types %}
+.. autoclass:: eos.figure.item.{{ class }}
+   :members:
+
+{% endfor %}
+
+
+Utility Classes
+===============
+
+
+.. autoclass:: eos.figure.DataFile
+   :members:
+
+
+.. autoclass:: eos.figure.Watermark
    :members:

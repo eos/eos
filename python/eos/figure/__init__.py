@@ -42,3 +42,5 @@ from . import config
 from .figure import *
 from .plot import *
 from .item import *
+from .common import Watermark
+from .data import DataFile
