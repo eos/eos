@@ -23,6 +23,7 @@ from .item import ItemFactory, ItemColorCycler
 
 import copy as _copy
 import eos
+import inspect
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -178,25 +179,38 @@ class Plot(ABC, Deserializable):
         raise NotImplementedError
 
 
-@dataclass
+@dataclass(kw_only=True)
 class TwoDimensionalPlot(Plot):
-    r"""Represents a 2D plot along a single set of axes.
+    """Draws a 2D plot along a single set of axes."""
 
-    :param items: List of content items displayed in this plot
-    :type items: list[dict] or iterable[dict]
-    :param title: Title of the plot
-    :type title: str or NoneType (optional)
-    :param legend: Keyword arguments to pass to ``matplotlib.pyplot.legend``
-    :type legend: dict
-    """
+#    :param items: List of content items displayed in this plot
+#    :type items: list[dict] or iterable[dict]
+#    :param title: Title of the plot
+#    :type title: str or NoneType (optional)
+#    :param legend: Keyword arguments to pass to ``matplotlib.pyplot.legend``
+#    :type legend: dict
+#    """
 
-    items:list
-    title:str=None
+    aspect:float|None=field(default=None)
     grid:Grid=field(default_factory=Grid)
+    items:list
     legend:Legend=field(default=None)
+    title:str=None
     xaxis:XAxis=field(default_factory=XAxis)
     yaxis:YAxis=field(default_factory=YAxis)
-    aspect:float|None=field(default=None)
+
+    _api_doc = inspect.cleandoc("""
+    Drawing a 2D Plot Along a Single Set of Axes
+    --------------------------------------------
+
+    This plot's type is ``2D``, which is the default plot type. It produces a two-dimensional plot
+    along a single set of axes. The plot can contain multiple plot items.
+
+    The following keys are mandatory:
+
+        * ``items``: A list of items to be drawn in the plot.
+
+    """)
 
     def __post_init__(self):
         pass
@@ -251,10 +265,17 @@ class TwoDimensionalPlot(Plot):
 
 @dataclass
 class EmptyPlot(Plot):
-    r"""Represents and empty plot.
+    """Draws an empty plot.
 
-    Can be used in a grid as empty space instead of a plot.
-    """
+    Can be used in a grid as empty space instead of a plot."""
+
+    _api_doc = inspect.cleandoc("""
+    Drawing an Empty Plot
+    ---------------------
+
+    This plot's type is ``empty``. It produces an empty plot, which can be used in a grid as empty space.
+
+    """)
 
     def __post_init__(self):
         pass
