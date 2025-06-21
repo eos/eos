@@ -25,6 +25,7 @@ from .data import DataFile
 
 import os
 import copy as _copy
+import inspect
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml as _yaml
@@ -42,15 +43,31 @@ class Figure(ABC, Deserializable):
 
 @dataclass(kw_only=True)
 class SingleFigure(Figure):
-    r"""Represents a figure with a single set of axes.
+    """Produces a figure with a single plot."""
 
-    :param plot: A representation of the various plot types created by :py:class:`eos.figure.PlotFactory`.
-    :type plot: :py:class:`eos.figure.Plot`
-    """
     type:str=field(repr=False, init=False, default='single')
-    size:tuple[float, float]=field(default=(6.4, 4.8))
+
     plot:Deserializable
+    size:tuple[float, float]=field(default=(6.4, 4.8))
     watermark:Watermark=field(default_factory=Watermark)
+
+    _api_doc = inspect.cleandoc("""
+    Producing a Figure with one Set of Plots
+    ----------------------------------------
+
+    This figure's type is ``single``, which is the default type of figure. It displays a single plot.
+
+    The following keys are mandatory:
+
+        * ``plot`` (:class:`Plot <eos.figure.plot.Plot>`) -- The plot to be drawn in the figure. This can be any of the
+            :class:`Plot <eos.figure.plot.Plot>` descendants.
+
+    The following keys are optional:
+
+        * ``size`` (*tuple[float, float]*) -- The size of the figure in inches. Defaults to (6.4, 4.8).
+
+
+    """)
 
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=self.size)
@@ -74,17 +91,29 @@ class SingleFigure(Figure):
 
 @dataclass(kw_only=True)
 class GridFigure(Figure):
-    r"""Represents a figure with several axes arranged in a grid.
+    """Produces a figure with a configurable number of plots, arranged in a grid."""
 
-    :param shape: The shape of the grid, i.e. the number of rows and columns.
-    :type shape: tuple[int, int]
-    :param plots: The flattened list of plots (row-major style).
-    :type plots: list[Plot] or iterable[Plot]
-    """
     type:str=field(repr=False, init=False, default='grid')
-    shape:tuple[int, int]
-    plots:list[Plot]
 
+    plots:list[Plot]
+    shape:tuple[int, int]
+
+    _api_doc = inspect.cleandoc("""
+    Producing a Figure with a Grid of Plots
+    ---------------------------------------
+
+    This figure's type is ``grid``. It produces a grid of plots.
+
+    The following keys are mandatory:
+
+        * ``plots`` (*list* of :class:`Plot <eos.figure.plot.Plot>`) -- The list of plots to be drawn in the figure. Each plot can be any of the
+            :class:`Plot <eos.figure.plot.Plot>` descendants. The list of plots are assigned to the grid positions in row-major order, i.e. the
+            first plot is assigned to the first row and first column, the second plot to the first row and second column, etc.
+
+        * ``shape`` (*tuple[int, int]*) -- The shape of the figure's grid, specifying the number of rows and columns in that order.
+
+
+    """)
     def __post_init__(self):
         nrow, ncol = self.shape
         self._figure, axes = plt.subplots(nrow, ncol, figsize=(3.0 * nrow, 3.0 * ncol))
@@ -109,17 +138,29 @@ class GridFigure(Figure):
 
 @dataclass(kw_only=True)
 class CornerFigure(Figure):
-    r"""Produces a grid figure representing the variables described by one or several datafiles.
-    Distributions of the variables are shown on the diagonal, while correlations are plotted on the lower-left corner.
+    r"""Produces a corner figure, i.e., a figure with a triangular arrangement of 1D and 2D marginal PDFs.
 
-    :param contents: List of contents to be drawn. Contents should be dictionaries containing the path to the data file, a label and optionally a color.
-    :type contents: list[eos.figure.DataFile] or iterable[eos.figure.DataFile]
-    :param variables: List of the names of the variables to be considered. Defaults to None, in this case all variables are shown.
-    :type variables: list[str] (optional)
-    """
+    Distributions of the variables are shown on the diagonal, while correlations are plotted on the lower-left corner."""
+
     type:str=field(repr=False, init=False, default='corner')
+
     contents:list[DataFile]
     variables:list[str]=None
+
+    _api_doc = inspect.cleandoc("""
+    Producing a Corner Figure
+    -------------------------
+
+    This figure's type is ``corner``. It produces a corner figure, i.e., a figure with a triangular arrangement of 1D and 2D marginal PDFs.
+
+    The following keys are mandatory:
+        * ``contents`` (*list* of :class:`DataFile <eos.figure.data.DataFile>`) -- The list of data files to be drawn in the figure.
+          Each data file should be a dictionary containing the path to the data file, a label and optionally a color.
+
+    The following keys are optional:
+        * ``variables`` (*list[str]*) -- The list of variable names to be considered. Defaults to None, in which case all variables contained in the first data file are shown.
+
+    """)
 
     def __post_init__(self):
         if not self.contents:
