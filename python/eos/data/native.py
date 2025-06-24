@@ -531,9 +531,9 @@ class Prediction:
         self.lookup_table = {}
         for idx, item in enumerate(self.varied_parameters):
             id = item['name']
-            if item['options']:
+            if 'options' in item:
                 id += ';' + str(eos.Options(item['options'])).replace(" ", "")
-            if item['kinematics']:
+            if 'kinematics' in item:
                 id += '[' + str(eos.Kinematics(item['kinematics'])).replace(" ", "") + ']'
             self.lookup_table[id] = idx
 
