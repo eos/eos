@@ -90,6 +90,85 @@ class SingleFigure(Figure):
 
 
 @dataclass(kw_only=True)
+class Inset(Deserializable):
+    """Represents the inset properties for an `InsetFigure`."""
+
+    plot:Deserializable
+    position:tuple[float, float]
+    size:tuple[float, float]
+
+    def __post_init__(self):
+        pass
+
+    def prepare(self, context, ax):
+        """Prepare the inset plot for drawing."""
+        self._inset_ax = ax.inset_axes([self.position[0], self.position[1], self.size[0], self.size[1]])
+        self.plot.prepare(context)
+
+    def draw(self, ax):
+        self.plot.draw(self._inset_ax)
+        ax.indicate_inset_zoom(self._inset_ax, edgecolor="black")
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
+        return Deserializable.make(cls, **_kwargs)
+
+
+@dataclass(kw_only=True)
+class InsetFigure(Figure):
+    """Produces an inset figure with a main plot and a smaller inset plot."""
+
+    type:str=field(repr=False, init=False, default='inset')
+
+    plot:Deserializable
+    inset:Deserializable
+    size:tuple[float, float]=field(default=(6.4, 4.8))
+    watermark:Watermark=field(default_factory=Watermark)
+
+    _api_doc = inspect.cleandoc("""
+    Producing a Figure with an Inset Plot
+    -------------------------------------
+
+    This figure's type is `inset`. It display a main plot covering the full area of the figure, and a smaller inset plot in one corner.
+
+    The following keys are mandatory:
+
+        * ``plot`` (:class:`Plot <eos.figure.plot.Plot>`) -- The main plot to be drawn in the figure. This can be any of the
+            :class:`Plot <eos.figure.plot.Plot>` descendants.
+        * ``inset`` (:class:`Inset <eos.figure.common.Inset>`) -- The inset plot to be drawn in the figure. This should be an instance of
+            :class:`Inset <eos.figure.common.Inset>`.
+
+    The following keys are optional:
+
+        * ``size`` (*tuple[float, float]*) -- The size of the figure in inches. Defaults to (6.4, 4.8).
+    """)
+
+    def __post_init__(self):
+        self._figure, self._ax = plt.subplots(figsize=self.size)
+
+    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+        context = AnalysisFileContext() if context is None else context
+        self.plot.prepare(context)
+        self.plot.draw(self._ax)
+        self.watermark.draw(self._ax)
+        self.inset.prepare(context, self._ax)
+        self.inset.draw(self._ax)
+        if output is not None:
+            self._figure.savefig(output, bbox_inches='tight')
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
+        _kwargs['inset'] = Inset.from_dict(**kwargs['inset'])
+        if 'watermark' in kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**kwargs['watermark'])
+        return Deserializable.make(cls, **_kwargs)
+
+
+@dataclass(kw_only=True)
 class GridFigure(Figure):
     """Produces a figure with a configurable number of plots, arranged in a grid."""
 
@@ -287,6 +366,7 @@ class FigureFactory:
     # Initializer is well-defined for python version >= 3.6
     registry = {
         'single': SingleFigure, # default
+        'inset':  InsetFigure,
         'grid':   GridFigure,
         'corner': CornerFigure,
     }
