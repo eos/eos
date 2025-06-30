@@ -57,13 +57,14 @@ Authors and Contributors
 
 The main authors are:
 
- * Danny van Dyk <danny.van.dyk@gmail.com>,
  * Frederik Beaujean,
  * Christoph Bobeth,
  * Carolina Bolognani <carolinabolognani@gmail.com>,
  * Nico Gubernari <nicogubernari@gmail.com>,
  * Florian Herren <florian.s.herren@gmail.com>,
+ * Matthew J. Kirk <matthew.j.kirk@durham.ac.uk>,
  * Meril Reboud <merilreboud@gmail.com>,
+ * Danny van Dyk <danny.van.dyk@gmail.com>,
 
 with further code contributions by:
 
