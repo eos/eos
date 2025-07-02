@@ -121,17 +121,17 @@ namespace eos
     namespace cubature
     {
 
-        template <size_t dim_>
+        template <size_t ndim_>
         int scalar_integrand(unsigned ndim , const double *x, void *data,
                       unsigned fdim , double *fval)
         {
-            assert(ndim == dim_);
+            assert(ndim == ndim_);
             assert(fdim == 1);
 
-            auto& f = *static_cast<cubature::fdd<dim_> *>(data);
+            auto& f = *static_cast<cubature::fdd<ndim_> *>(data);
             // TODO use std::array_view once available
-            std::array<double, dim_> args;
-            std::copy(x, x + dim_, args.data());
+            std::array<double, ndim_> args;
+            std::copy(x, x + ndim_, args.data());
             *fval = f(args);
 
             return 0;
@@ -139,18 +139,18 @@ namespace eos
 
     }
 
-    template <size_t dim_>
-    double integrate(const cubature::fdd<dim_> & f,
-                     const std::array<double, dim_> &a,
-                     const std::array<double, dim_> &b,
+    template <size_t ndim_>
+    double integrate(const cubature::fdd<ndim_> & f,
+                     const std::array<double, ndim_> &a,
+                     const std::array<double, ndim_> &b,
                      const cubature::Config &config)
     {
         // TODO Support infinite intervals by param trafo? Not for now.
         constexpr unsigned nintegrands = 1;
         double res;
         double err;
-        if (hcubature(nintegrands, &cubature::scalar_integrand<dim_>,
-                      &const_cast<cubature::fdd<dim_>&>(f), dim_, a.data(), b.data(),
+        if (hcubature(nintegrands, &cubature::scalar_integrand<ndim_>,
+                      &const_cast<cubature::fdd<ndim_>&>(f), ndim_, a.data(), b.data(),
                       config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
         {
             throw IntegrationError("hcubature failed");
