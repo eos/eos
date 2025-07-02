@@ -40,17 +40,53 @@ class SingleFigureTests(unittest.TestCase):
                 observable: 'B->Dlnu::dBR/dq2'
                 options: { 'l': 'e' }
                 variable: 'q2'
-                xvalues: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
+                range: { min: 0.1, max: 1.0, num: 9 }
               - type: 'observable'
                 observable: 'B->Dlnu::dBR/dq2'
                 options: { 'l': 'mu' }
                 variable: 'q2'
-                xvalues: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
+                range: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
             """
             figure = eos.figure.FigureFactory.from_yaml(input)
             figure.draw()
         except Exception as e:
             self.fail(f"Error when testing figure of type 'single': {e}")
+
+
+class InsetFigureTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: inset
+            plot:
+              xaxis: { label: '$q^2$',                range: [0.0, 11.6]   }
+              yaxis: { label: '$d\\mathcal{B}/dq^2$', range: [0.0, 5.4e-3] }
+              items:
+                - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: '$\\ell = \\mu$',
+                    variable: 'q2', range: { min: 0.02, max: 11.6, num: 5800 }
+                  }
+                - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: '$\\ell = \\tau$',
+                    variable: 'q2', range: { min: 3.17, max: 11.6, num: 421 }
+                  }
+            inset:
+              position: [0.5, 0.5]
+              size: [0.485, 0.48]
+              plot:
+                xaxis: { range: [0.0, 0.25],   ticks: { visible: false } }
+                yaxis: { range: [0.0, 4.4e-3], ticks: { visible: false } }
+                items:
+                  - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: '$\\ell = \\mu$',
+                      variable: 'q2', range: { min: 0.01, max: 0.25, num: 230 }
+                    }
+            watermark:
+              position: 'upper left'
+            """
+            figure = eos.figure.FigureFactory.from_yaml(input)
+            figure.draw()
+        except Exception as e:
+            self.fail(f"Error when testing figure of type 'inset': {e}")
 
 
 class CornerFigureTests(unittest.TestCase):

@@ -1,5 +1,4 @@
-# Copyright (c) 2024-2025 Danny van Dyk
-# Copyright (c) 2024      Méril Reboud
+# Copyright (c) 2025 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -15,71 +14,81 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 from dataclasses import dataclass, field
-from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
-from eos.figure.item import ItemColorCycler
+from _eos import __version__ as eos_version
 
-import eos
-import os
+import numpy as np
 
 @dataclass(kw_only=True)
-class DataFile(Deserializable):
-    r""" Collects the relevant information to load a data file, to extract data, variables, and labels from it.
+class Range(Deserializable):
+    r""" Collects the relevant information to generate a range of floating point values.
 
-    :param path: Path to the data file (either in eos.Prediction or eos.ImportanceSample format) that will be used.
-    :type path: str
-    :param label: Title to appear in a figure's legend in association with this data file.
-    :type label: str
-    :param color: Color to be used in the plot.
-    :type color: str (optional)
+    :param min: Minimal value.
+    :type min: float
+    :param max: Maximal value.
+    :type max: float
+    :param num: Number of values to generate in the range.
+    :type num: int
     """
-    path:str
-    label:str
-    color:str=None
+    min:float
+    max:float
+    num:int
 
     def __post_init__(self):
-        if self.color is None:
-            self.color = ItemColorCycler.next_color()
-
-    def prepare(self, context:AnalysisFileContext=None):
-        context = AnalysisFileContext() if context is None else context
-
-        if hasattr(self, '_datafile'):
-            return self._datafile
-
-        path = context.data_path(self.path)
-        os.path.exists(path) or eos.error(f"Data file '{path}' does not exist")
-        name = os.path.split(path)[-1]
-
-        if name == 'samples':
-            # The datafile refers to importance (parameter) samples
-            self._datafile = eos.data.ImportanceSamples(path)
-            self._type = 'samples'
-        elif name.startswith('pred-'):
-            # The datafile refers to observable predictions
-            self._datafile = eos.data.Prediction(path)
-            self._type = 'prediction'
-        else:
-            eos.error(f"Data file '{path}' has an unsupported format")
-            raise NotImplementedError
-
-        self._variables = set(self._datafile.lookup_table.keys())
-        return self._datafile
+        if self.min >= self.max:
+            eos.error(f"Range min ({self.min}) must be smaller than max ({self.max})")
+            raise ValueError("Invalid range")
 
     @property
-    def variables(self):
-        self.prepare()
-        return self._variables
+    def values(self):
+        r""" Generate the range of values.
 
-    def labels(self, variables):
-        self.prepare()
+        :return: List of floating point values.
+        :rtype: list[float]
+        """
+        return np.linspace(self.min, self.max, self.num).tolist()
 
-        if self._type == 'samples':
-            p = eos.Parameters()
-            return [p[dist].latex() for dist in variables]
-        elif self._type == 'prediction':
-            o = eos.Observables()
-            return ["$" + o[dist].latex() + "$" for dist in variables]
+
+@dataclass(kw_only=True)
+class Watermark(Deserializable):
+    r"""Inserts an EOS watermark into a figure
+
+    """
+    position:str=field(default='upper right')
+    preliminary:bool=field(default=False)
+
+    def __post_init__(self):
+        xdelta, ydelta = (0.04, 0.04)
+        vpos, hpos = self.position.split(' ')
+
+        if hpos == 'right':
+            self._x = 1 - xdelta
+        elif hpos == 'left':
+            self._x = xdelta
+        elif hpos == 'center':
+            self._x = 0.5
         else:
-            eos.error(f"Data file '{self.path}' has an unsupported format")
-            raise NotImplementedError
+            raise ValueError(f'invalid horizontal position \'{hpos}\'')
+        self._halign = hpos
+
+        if vpos == 'lower':
+            self._y = 0 + ydelta
+            self._valign = 'bottom'
+        elif vpos == 'upper':
+            self._y = 1 - ydelta
+            self._valign = 'top'
+        else:
+            raise ValueError(f'invalid vertical position \'{vpos}\'')
+
+        if self.preliminary:
+            self._color = 'red'
+            self._version = 'Preliminary'
+        else:
+            self._color = 'OrangeRed'
+            self._version = f'v{eos_version}'
+
+    def draw(self, ax):
+        ax.text(self._x, self._y, fr'\textsf{{\textbf{{EOS {self._version}}}}}',
+                transform=ax.transAxes,
+                color=self._color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
+                horizontalalignment=self._halign, verticalalignment=self._valign, zorder=+5)

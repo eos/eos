@@ -32,12 +32,12 @@ class PlotTests(unittest.TestCase):
                 observable: 'B->Dlnu::dBR/dq2'
                 options: { 'l': 'e' }
                 variable: 'q2'
-                xvalues: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
+                range: { min: 0.1, max: 1.0, num: 9 }
               - type: 'observable'
                 observable: 'B->Dlnu::dBR/dq2'
                 options: { 'l': 'mu' }
                 variable: 'q2'
-                xvalues: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
+                range: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0]
             """
             plot = eos.figure.PlotFactory.from_yaml(input)
             plot.prepare()

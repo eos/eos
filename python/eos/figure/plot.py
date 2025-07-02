@@ -23,6 +23,8 @@ from .item import ItemFactory, ItemColorCycler
 
 import copy as _copy
 import eos
+import inspect
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml as _yaml
@@ -60,6 +62,7 @@ class Grid(Deserializable):
 class XTicks(Deserializable):
     r""""Represents the x axis ticks properties in a plot."""
 
+    minor:bool=field(default=True)
     visible:bool=field(default=True)
 
     def __post_init__(self):
@@ -68,7 +71,11 @@ class XTicks(Deserializable):
     def draw(self, ax):
         if not self.visible:
             ax.xaxis.set_major_formatter(plt.NullFormatter())
-        ax.xaxis.set_tick_params(bottom=self.visible, top=self.visible)
+        else:
+            ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            if self.minor:
+                ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+            ax.xaxis.set_tick_params(bottom=self.visible, top=self.visible)
 
 
 @dataclass
@@ -78,12 +85,21 @@ class XAxis(Deserializable):
     label:str=field(default=None)
     range:tuple[float, float]=field(default=None)
     ticks:XTicks=field(default_factory=XTicks)
+    unit:str=None
 
     def __post_init__(self):
-        pass
+        if self.range is not None and len(self.range) != 2:
+            raise ValueError("Range must be a tuple of two values (min, max)")
+
+        if self.range is not None:
+            self.range = tuple(float(x) for x in self.range)
 
     def draw(self, ax):
-        ax.set_xlabel(self.label)
+        if self.label is not None and self.unit is not None:
+            ax.set_xlabel(f'{self.label} [{self.unit}]')
+        elif self.label is not None:
+            ax.set_xlabel(self.label)
+
         if self.range is not None:
             ax.set_xlim(self.range)
         self.ticks.draw(ax)
@@ -100,6 +116,7 @@ class XAxis(Deserializable):
 class YTicks(Deserializable):
     r""""Represents the y axis ticks properties in a plot."""
 
+    minor:bool=field(default=True)
     visible:bool=field(default=True)
 
     def __post_init__(self):
@@ -108,8 +125,11 @@ class YTicks(Deserializable):
     def draw(self, ax):
         if not self.visible:
             ax.yaxis.set_major_formatter(plt.NullFormatter())
-        ax.yaxis.set_tick_params(left=self.visible, right=self.visible)
-
+        else:
+            ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            if self.minor:
+                ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+            ax.yaxis.set_tick_params(bottom=self.visible, top=self.visible)
 
 @dataclass
 class YAxis(Deserializable):
@@ -118,12 +138,21 @@ class YAxis(Deserializable):
     label:str=None
     range:tuple[float, float]=None
     ticks:YTicks=field(default_factory=YTicks)
+    unit:str=None
 
     def __post_init__(self):
-        pass
+        if self.range is not None and len(self.range) != 2:
+            raise ValueError("Range must be a tuple of two values (min, max)")
+
+        if self.range is not None:
+            self.range = tuple(float(y) for y in self.range)
 
     def draw(self, ax):
-        ax.set_ylabel(self.label)
+        if self.label is not None and self.unit is not None:
+            ax.set_ylabel(f'{self.label} [{self.unit}]')
+        elif self.label is not None:
+            ax.set_ylabel(self.label)
+
         if self.range is not None:
             ax.set_ylim(self.range)
         self.ticks.draw(ax)
@@ -150,25 +179,38 @@ class Plot(ABC, Deserializable):
         raise NotImplementedError
 
 
-@dataclass
+@dataclass(kw_only=True)
 class TwoDimensionalPlot(Plot):
-    r"""Represents a 2D plot along a single set of axes.
+    """Draws a 2D plot along a single set of axes."""
 
-    :param items: List of content items displayed in this plot
-    :type items: list[dict] or iterable[dict]
-    :param title: Title of the plot
-    :type title: str or NoneType (optional)
-    :param legend: Keyword arguments to pass to ``matplotlib.pyplot.legend``
-    :type legend: dict
-    """
+#    :param items: List of content items displayed in this plot
+#    :type items: list[dict] or iterable[dict]
+#    :param title: Title of the plot
+#    :type title: str or NoneType (optional)
+#    :param legend: Keyword arguments to pass to ``matplotlib.pyplot.legend``
+#    :type legend: dict
+#    """
 
-    items:list
-    title:str=None
+    aspect:float|None=field(default=None)
     grid:Grid=field(default_factory=Grid)
+    items:list
     legend:Legend=field(default=None)
+    title:str=None
     xaxis:XAxis=field(default_factory=XAxis)
     yaxis:YAxis=field(default_factory=YAxis)
-    aspect:float=field(default=1.0)
+
+    _api_doc = inspect.cleandoc("""
+    Drawing a 2D Plot Along a Single Set of Axes
+    --------------------------------------------
+
+    This plot's type is ``2D``, which is the default plot type. It produces a two-dimensional plot
+    along a single set of axes. The plot can contain multiple plot items.
+
+    The following keys are mandatory:
+
+        * ``items``: A list of items to be drawn in the plot.
+
+    """)
 
     def __post_init__(self):
         pass
@@ -190,15 +232,16 @@ class TwoDimensionalPlot(Plot):
         self.grid.draw(ax)
 
         # Set aspect ratio
-        ax.set_box_aspect(self.aspect)
-
-        # Draw all items
-        for item in self.items:
-            item.draw(ax)
+        if self.aspect is not None:
+            ax.set_box_aspect(self.aspect)
 
         # Handle axes
         self.xaxis.draw(ax)
         self.yaxis.draw(ax)
+
+        # Draw all items
+        for item in self.items:
+            item.draw(ax)
 
         # Draw legend
         if self.legend is not None:
@@ -222,10 +265,17 @@ class TwoDimensionalPlot(Plot):
 
 @dataclass
 class EmptyPlot(Plot):
-    r"""Represents and empty plot.
+    """Draws an empty plot.
 
-    Can be used in a grid as empty space instead of a plot.
-    """
+    Can be used in a grid as empty space instead of a plot."""
+
+    _api_doc = inspect.cleandoc("""
+    Drawing an Empty Plot
+    ---------------------
+
+    This plot's type is ``empty``. It produces an empty plot, which can be used in a grid as empty space.
+
+    """)
 
     def __post_init__(self):
         pass
