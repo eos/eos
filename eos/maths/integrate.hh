@@ -126,8 +126,8 @@ namespace GSL
 
 namespace cubature
 {
-    template <size_t dim_>
-    using fdd = std::function<double(const std::array<double, dim_> &)>;
+    template <size_t ndim_>
+    using fdd = std::function<double(const std::array<double, ndim_> &)>;
 
     class Config
     {
@@ -152,10 +152,10 @@ namespace cubature
      * Numerically integrate functions of one or more than one variable with
      * cubature methods.
      */
-    template <size_t dim_>
-    double integrate(const std::function<double(const std::array<double, dim_> &)> & f,
-                     const std::array<double, dim_> &a,
-                     const std::array<double, dim_> &b,
+    template <size_t ndim_>
+    double integrate(const std::function<double(const std::array<double, ndim_> &)> & f,
+                     const std::array<double, ndim_> &a,
+                     const std::array<double, ndim_> &b,
                      const cubature::Config &config = cubature::Config());
 
     class IntegrationError :
