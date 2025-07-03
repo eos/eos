@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2018 Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +20,7 @@
  */
 
 #include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/matrix.hh>
 
 #include <gsl/gsl_errno.h>

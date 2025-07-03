@@ -24,6 +24,7 @@
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/destringify.hh>
@@ -542,7 +543,7 @@ namespace eos
 
         static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
 
-        return integrate(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
+        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
                          config);
     }
 

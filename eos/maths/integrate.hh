@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010 Danny van Dyk
  * Copyright (c) 2018 Danny van Dyk and Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -126,8 +127,86 @@ namespace GSL
 
 namespace cubature
 {
-    template <size_t ndim_>
-    using fdd = std::function<double(const std::array<double, ndim_> &)>;
+    template <size_t ndim_, size_t fdim_> struct integrand_traits
+    {
+        // argument type for the integrand function
+        using argument_type = std::array<double, ndim_>;
+
+        // result type for the integrand function
+        using result_type = std::array<double, fdim_>;
+
+        // helpers to copy data between C-style arrays and C++ types
+        static void copy_arguments(const double * from, argument_type & to) { std::copy(from, from + ndim_, to.begin()); };
+        static void copy_result(result_type & from, double * to) { std::copy(from.cbegin(), from.cend(), to); };
+        static const double * pointer_from_arguments(const argument_type & arguments) { return arguments.data(); };
+        static double * pointer_from_result(result_type & result) { return result.data(); };
+
+        // type of the integrand function
+        using function_type = std::function<result_type (const argument_type &)>;
+    };
+
+    template <size_t ndim_> struct integrand_traits<ndim_, 1>
+    {
+        // argument type for the integrand function
+        using argument_type = std::array<double, ndim_>;
+
+        // result type for the integrand function
+        using result_type = double;
+
+        // helpers to copy data between C-style arrays and C++ types
+        static void copy_arguments(const double * from, argument_type & to) { std::copy(from, from + ndim_, to.data()); };
+        static void copy_result(result_type & from, double * to) { *to = from; };
+        static double * pointer_from_result(result_type & result) { return &result; };
+        static const double * pointer_from_arguments(const argument_type & arguments) { return arguments.data(); };
+
+        // function type of the integrand function
+        using function_type = std::function<result_type (const argument_type &)>;
+    };
+
+    template <size_t fdim_> struct integrand_traits<1, fdim_>
+    {
+        // argument type for the integrand function
+        using argument_type = double;
+
+        // result type for the integrand function
+        using result_type = std::array<double, fdim_>;
+
+        // helpers to copy data between C-style arrays and C++ types
+        static void copy_arguments(const double * from, argument_type & to) { to = *from; };
+        static void copy_result(result_type & from, double * to)
+        {
+            for (unsigned i = 0 ; i < fdim_ ; i++)
+            {
+                to[i] = from[i];
+            }
+        };
+        static const double * pointer_from_arguments(const argument_type & arguments) { return &arguments; };
+        static double * pointer_from_result(result_type & result) { return result.data(); };
+
+        // function type of the integrand function
+        using function_type = std::function<result_type (const argument_type &)>;
+    };
+
+    template <> struct integrand_traits<1, 1>
+    {
+        // argument type for the integrand function
+        using argument_type = double;
+
+        // result type for the integrand function
+        using result_type = double;
+
+        // helpers to copy data between C-style arrays and C++ types
+        static void copy_arguments(const double * from, argument_type & to) { to = *from; };
+        static void copy_result(result_type & from, double * to) { *to = from; };
+        static const double * pointer_from_arguments(const argument_type & arguments) { return &arguments; };
+        static double * pointer_from_result(result_type & result) { return &result; };
+
+        // function type of the integrand function
+        using function_type = std::function<result_type (const argument_type &)>;
+    };
+
+    template <size_t ndim_, size_t fdim_ = 1> using integrand = typename integrand_traits<ndim_, fdim_>::function_type;
+
 
     class Config
     {
@@ -152,11 +231,12 @@ namespace cubature
      * Numerically integrate functions of one or more than one variable with
      * cubature methods.
      */
-    template <size_t ndim_>
-    double integrate(const std::function<double(const std::array<double, ndim_> &)> & f,
-                     const std::array<double, ndim_> &a,
-                     const std::array<double, ndim_> &b,
-                     const cubature::Config &config = cubature::Config());
+    template <size_t ndim_, size_t fdim_ = 1>
+    typename cubature::integrand_traits<ndim_, fdim_>::result_type integrate(const cubature::integrand<ndim_, fdim_> & f,
+                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & a,
+                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & b,
+                                                                             const cubature::Config &config = cubature::Config());
+
 
     class IntegrationError :
         public Exception
