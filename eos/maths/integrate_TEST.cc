@@ -58,9 +58,14 @@ class IntegrateTest :
             return std::log(x);
         }
 
-        std::function<std::array<double, 2> (const std::array<double, 1> &)> f6 = [&] (const std::array<double, 1> & x)
+        std::function<std::array<double, 4> (const std::array<double, 1> &)> f6 = [&] (const std::array<double, 1> & x)
         {
-            return std::array<double, 2>{f4(x[0]), f4(x[0])};
+            return std::array<double, 4>{f4(x[0]), f4(x[0]), f4(x[0]), f4(x[0])};
+        };
+
+        std::function<std::array<double, 4> (const double &)> f7 = [&] (const double & x)
+        {
+            return std::array<double, 4>{std::log(x), 2 * std::log(x), 3 * std::log(x), 4 * std::log(x)};
         };
 
         virtual void run() const
@@ -100,7 +105,7 @@ class IntegrateTest :
             };
             constexpr std::array<double, 1> a_4 { 1.0 };
             static const std::array<double, 1> b_4 { std::exp(1) }; // std::exp isn't constexpr (yet)
-            q4 = integrate(cubature::fdd<1>(f4lam), a_4, b_4, config_cubature);
+            q4 = integrate(cubature::fdd_s_v<1>(f4lam), a_4, b_4, config_cubature);
             TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
 
             // Morokoff test function
@@ -115,11 +120,20 @@ class IntegrateTest :
                     prod *= pow(args[i], p);
                 return prod;
             };
-            auto q5 = integrate(cubature::fdd<dim>(f5lam), a_5, b_5, config_cubature);
+            auto q5 = integrate(cubature::fdd_s_v<dim>(f5lam), a_5, b_5, config_cubature);
             TEST_CHECK_RELATIVE_ERROR(q5, 1.0, eps);
 
-            std::array<double, 2> q6 = integrate(f6, std::array<double, 1>{1.0}, std::array<double, 1>{std::exp(1)}, config_cubature);
+            std::array<double, 4> q6 = integrate(f6, std::array<double, 1>{1.0}, std::array<double, 1>{std::exp(1)}, config_cubature);
             TEST_CHECK_RELATIVE_ERROR(i4, q6[0], eps);
             TEST_CHECK_RELATIVE_ERROR(i4, q6[1], eps);
+
+            std::array<double, 4> q7 = integrate(f7, 1.0, std::exp(1), config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(    i4, q7[0], eps);
+            TEST_CHECK_RELATIVE_ERROR(2 * i4, q7[1], eps);
+            TEST_CHECK_RELATIVE_ERROR(3 * i4, q7[2], eps);
+            TEST_CHECK_RELATIVE_ERROR(4 * i4, q7[3], eps);
+
+            double q8 = integrate(f4, 1.0, std::exp(1), config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(i4, q8, eps);
         }
 } model_test;

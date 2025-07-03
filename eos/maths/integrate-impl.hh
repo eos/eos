@@ -129,7 +129,7 @@ namespace eos
             assert(ndim == ndim_);
             assert(fdim == 1);
 
-            auto& f = *static_cast<cubature::fdd<ndim_> *>(data);
+            auto& f = *static_cast<cubature::fdd_s_v<ndim_> *>(data);
             // TODO use std::array_view once available
             std::array<double, ndim_> args;
             std::copy(x, x + ndim_, args.data());
@@ -145,7 +145,7 @@ namespace eos
             assert(ndim == ndim_);
             assert(fdim == fdim_);
 
-            auto& f = *static_cast<cubature::fdd_v<ndim_, fdim_> *>(data);
+            auto& f = *static_cast<cubature::fdd_v_v<ndim_, fdim_> *>(data);
             // TODO use std::array_view once available
             std::array<double, ndim_> args;
             std::copy(x, x + ndim_, args.data());
@@ -165,7 +165,7 @@ namespace eos
     }
 
     template <size_t ndim_>
-    double integrate(const cubature::fdd<ndim_> & f,
+    double integrate(const cubature::fdd_s_v<ndim_> & f,
                      const std::array<double, ndim_> &a,
                      const std::array<double, ndim_> &b,
                      const cubature::Config &config)
@@ -175,7 +175,7 @@ namespace eos
         double res;
         double err;
         if (hcubature(nintegrands, &cubature::scalar_integrand<ndim_>,
-                      &const_cast<cubature::fdd<ndim_>&>(f), ndim_, a.data(), b.data(),
+                      &const_cast<cubature::fdd_s_v<ndim_>&>(f), ndim_, a.data(), b.data(),
                       config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
         {
             throw IntegrationError("hcubature failed");
@@ -184,8 +184,27 @@ namespace eos
         return res;
     }
 
+    template <size_t fdim_>
+    std::array<double, fdim_> integrate(const cubature::fdd_v_s<fdim_> & f,
+                                        const double &a,
+                                        const double &b,
+                                        const cubature::Config &config)
+    {
+        constexpr unsigned nintegrands = fdim_;
+        std::array<double, fdim_> res;
+        double err;
+        if (hcubature(nintegrands, &cubature::vector_integrand<1, fdim_>,
+                      &const_cast<cubature::fdd_v_s<fdim_>&>(f), 1, &a, &b,
+                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, res.data(), &err))
+        {
+            throw IntegrationError("hcubature failed");
+        }
+
+        return res;
+    }
+
     template <size_t ndim_, size_t fdim_>
-    std::array<double, fdim_> integrate(const cubature::fdd_v<ndim_, fdim_> & f,
+    std::array<double, fdim_> integrate(const cubature::fdd_v_v<ndim_, fdim_> & f,
                                         const std::array<double, ndim_> &a,
                                         const std::array<double, ndim_> &b,
                                         const cubature::Config &config)
@@ -194,7 +213,7 @@ namespace eos
         std::array<double, fdim_> res;
         double err;
         if (hcubature(nintegrands, &cubature::vector_integrand<ndim_, fdim_>,
-                      &const_cast<cubature::fdd_v<ndim_, fdim_>&>(f), ndim_, a.data(), b.data(),
+                      &const_cast<cubature::fdd_v_v<ndim_, fdim_>&>(f), ndim_, a.data(), b.data(),
                       config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, res.data(), &err))
         {
             throw IntegrationError("hcubature failed");

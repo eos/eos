@@ -127,11 +127,16 @@ namespace GSL
 
 namespace cubature
 {
+    using fdd_s_s = std::function<double(const double &)>;
+
     template <size_t ndim_>
-    using fdd = std::function<double(const std::array<double, ndim_> &)>;
+    using fdd_s_v = std::function<double(const std::array<double, ndim_> &)>;
+
+    template <size_t fdim_>
+    using fdd_v_s = std::function<std::array<double, fdim_>(const double &)>;
 
     template <size_t ndim_, size_t fdim_>
-    using fdd_v = std::function<std::array<double, fdim_>(const std::array<double, ndim_> &)>;
+    using fdd_v_v = std::function<std::array<double, fdim_>(const std::array<double, ndim_> &)>;
 
     class Config
     {
@@ -156,11 +161,22 @@ namespace cubature
      * Numerically integrate functions of one or more than one variable with
      * cubature methods.
      */
+    double integrate(const std::function<double(const double &)> & f,
+                     const double &a,
+                     const double &b,
+                     const cubature::Config &config = cubature::Config());
+
     template <size_t ndim_>
     double integrate(const std::function<double(const std::array<double, ndim_> &)> & f,
                      const std::array<double, ndim_> &a,
                      const std::array<double, ndim_> &b,
                      const cubature::Config &config = cubature::Config());
+
+    template <size_t fdim_>
+    std::array<double, fdim_> integrate(const std::function<std::array<double, fdim_>(const double &)> & f,
+                                        const double &a,
+                                        const double &b,
+                                        const cubature::Config &config = cubature::Config());
 
     template <size_t ndim_, size_t fdim_>
     std::array<double, fdim_> integrate(const std::function<std::array<double, fdim_>(const std::array<double, ndim_> &)> & f,
