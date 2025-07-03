@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -121,37 +122,80 @@ namespace eos
     namespace cubature
     {
 
-        template <size_t dim_>
+        template <size_t ndim_>
         int scalar_integrand(unsigned ndim , const double *x, void *data,
                       unsigned fdim , double *fval)
         {
-            assert(ndim == dim_);
+            assert(ndim == ndim_);
             assert(fdim == 1);
 
-            auto& f = *static_cast<cubature::fdd<dim_> *>(data);
+            auto& f = *static_cast<cubature::fdd<ndim_> *>(data);
             // TODO use std::array_view once available
-            std::array<double, dim_> args;
-            std::copy(x, x + dim_, args.data());
+            std::array<double, ndim_> args;
+            std::copy(x, x + ndim_, args.data());
             *fval = f(args);
+
+            return 0;
+        }
+
+        template <size_t ndim_, size_t fdim_>
+        int vector_integrand(unsigned ndim , const double *x, void *data,
+                      unsigned fdim , double *fval)
+        {
+            assert(ndim == ndim_);
+            assert(fdim == fdim_);
+
+            auto& f = *static_cast<cubature::fdd_v<ndim_, fdim_> *>(data);
+            // TODO use std::array_view once available
+            std::array<double, ndim_> args;
+            std::copy(x, x + ndim_, args.data());
+
+            // I am really confuse here... I thought the following should work:
+            // fval = f(args).data();
+            // But it does not...
+            auto res = f(args);
+            for(unsigned i = 0; i < fdim_; i++)
+            {
+                fval[i] = res[i];
+            }
 
             return 0;
         }
 
     }
 
-    template <size_t dim_>
-    double integrate(const cubature::fdd<dim_> & f,
-                     const std::array<double, dim_> &a,
-                     const std::array<double, dim_> &b,
+    template <size_t ndim_>
+    double integrate(const cubature::fdd<ndim_> & f,
+                     const std::array<double, ndim_> &a,
+                     const std::array<double, ndim_> &b,
                      const cubature::Config &config)
     {
         // TODO Support infinite intervals by param trafo? Not for now.
         constexpr unsigned nintegrands = 1;
         double res;
         double err;
-        if (hcubature(nintegrands, &cubature::scalar_integrand<dim_>,
-                      &const_cast<cubature::fdd<dim_>&>(f), dim_, a.data(), b.data(),
+        if (hcubature(nintegrands, &cubature::scalar_integrand<ndim_>,
+                      &const_cast<cubature::fdd<ndim_>&>(f), ndim_, a.data(), b.data(),
                       config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
+        {
+            throw IntegrationError("hcubature failed");
+        }
+
+        return res;
+    }
+
+    template <size_t ndim_, size_t fdim_>
+    std::array<double, fdim_> integrate(const cubature::fdd_v<ndim_, fdim_> & f,
+                                        const std::array<double, ndim_> &a,
+                                        const std::array<double, ndim_> &b,
+                                        const cubature::Config &config)
+    {
+        constexpr unsigned nintegrands = fdim_;
+        std::array<double, fdim_> res;
+        double err;
+        if (hcubature(nintegrands, &cubature::vector_integrand<ndim_, fdim_>,
+                      &const_cast<cubature::fdd_v<ndim_, fdim_>&>(f), ndim_, a.data(), b.data(),
+                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, res.data(), &err))
         {
             throw IntegrationError("hcubature failed");
         }
