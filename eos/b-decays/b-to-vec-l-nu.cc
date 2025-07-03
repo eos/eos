@@ -528,7 +528,7 @@ namespace eos
 
         static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
 
-        return integrate(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
+        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
                          config);
     }
 

@@ -19,6 +19,8 @@
  */
 
 #include <eos/b-decays/b-to-3l-nu.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos
@@ -745,7 +747,7 @@ namespace eos
             std::array<double, 2> x_min{ q2_min, k2_min };
             std::array<double, 2> x_max{ q2_max, k2_max };
 
-            return integrate(integrand, x_min, x_max, config_cubature);
+            return integrate<2>(integrand, x_min, x_max, config_cubature);
         }
 
         double _asymmetry_numerator(const double & q2,const double & k2) const
@@ -852,7 +854,7 @@ namespace eos
             std::array<double, 2> x_min{ q2_min, k2_min };
             std::array<double, 2> x_max{ q2_max, k2_max };
 
-            return integrate(integrand, x_min, x_max, config_cubature)
+            return integrate<2>(integrand, x_min, x_max, config_cubature)
                 / ((hbar/tau_B) * integrated_branching_ratio(q2_min, q2_max, k2_min, k2_max));
         }
     };

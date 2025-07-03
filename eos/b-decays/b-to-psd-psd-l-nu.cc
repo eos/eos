@@ -354,7 +354,7 @@ namespace eos
         std::array<double, 2> x_min{ q2_min, sqrt_k2_min };
         std::array<double, 2> x_max{ q2_max, sqrt_k2_max };
 
-        double res = integrate(integrand, x_min, x_max, config_cubature);
+        double res = integrate<2>(integrand, x_min, x_max, config_cubature);
         return res;
     }
 
@@ -371,7 +371,7 @@ namespace eos
         std::array<double, 2> x_min{ q2_min, sqrt_k2_min };
         std::array<double, 2> x_max{ q2_max, sqrt_k2_max };
 
-        double res = integrate(integrand, x_min, x_max, config_cubature);
+        double res = integrate<2>(integrand, x_min, x_max, config_cubature);
         return res;
     }
 

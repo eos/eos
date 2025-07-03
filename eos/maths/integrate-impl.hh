@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -120,45 +121,47 @@ namespace eos
 
     namespace cubature
     {
-
-        template <size_t ndim_>
-        int scalar_integrand(unsigned ndim , const double *x, void *data,
+        template <size_t ndim_, size_t fdim_>
+        int integrand_wrapper(unsigned ndim , const double *x, void *data,
                       unsigned fdim , double *fval)
         {
             assert(ndim == ndim_);
-            assert(fdim == 1);
+            assert(fdim == fdim_);
 
-            auto& f = *static_cast<cubature::fdd<ndim_> *>(data);
-            // TODO use std::array_view once available
-            std::array<double, ndim_> args;
-            std::copy(x, x + ndim_, args.data());
-            *fval = f(args);
+            auto & f = *static_cast<cubature::integrand<ndim_, fdim_> *>(data);
+            typename cubature::integrand_traits<ndim_, fdim_>::argument_type arguments;
+            cubature::integrand_traits<ndim_, fdim_>::copy_arguments(x, arguments);
+            typename cubature::integrand_traits<ndim_, fdim_>::result_type res = f(arguments);
+            cubature::integrand_traits<ndim_, fdim_>::copy_result(res, fval);
 
             return 0;
         }
-
     }
 
-    template <size_t ndim_>
-    double integrate(const cubature::fdd<ndim_> & f,
-                     const std::array<double, ndim_> &a,
-                     const std::array<double, ndim_> &b,
-                     const cubature::Config &config)
+    template <size_t ndim_, size_t fdim_>
+    typename cubature::integrand_traits<ndim_, fdim_>::result_type integrate(const cubature::integrand<ndim_, fdim_> & f,
+                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & a,
+                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & b,
+                                                                             const cubature::Config & config)
     {
-        // TODO Support infinite intervals by param trafo? Not for now.
-        constexpr unsigned nintegrands = 1;
-        double res;
-        double err;
-        if (hcubature(nintegrands, &cubature::scalar_integrand<ndim_>,
-                      &const_cast<cubature::fdd<ndim_>&>(f), ndim_, a.data(), b.data(),
-                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
+        using integrand = cubature::integrand<ndim_, fdim_>;
+        using integrand_traits = cubature::integrand_traits<ndim_, fdim_>;
+        using cubature::integrand_wrapper;
+
+        constexpr unsigned nintegrands = fdim_;
+        typename integrand_traits::result_type result;
+        typename integrand_traits::result_type error;
+        if (hcubature(nintegrands, &integrand_wrapper<ndim_, fdim_>,
+                    &const_cast<integrand&>(f), ndim_, integrand_traits::pointer_from_arguments(a),
+                    integrand_traits::pointer_from_arguments(b),
+                    config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, integrand_traits::pointer_from_result(result),
+                    integrand_traits::pointer_from_result(error)))
         {
             throw IntegrationError("hcubature failed");
         }
 
-        return res;
+        return typename integrand_traits::result_type(result);
     }
-
 }
 
 #endif
