@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -137,6 +138,30 @@ namespace eos
             return 0;
         }
 
+        template <size_t ndim_, size_t fdim_>
+        int vector_integrand(unsigned ndim , const double *x, void *data,
+                      unsigned fdim , double *fval)
+        {
+            assert(ndim == ndim_);
+            assert(fdim == fdim_);
+
+            auto& f = *static_cast<cubature::fdd_v<ndim_, fdim_> *>(data);
+            // TODO use std::array_view once available
+            std::array<double, ndim_> args;
+            std::copy(x, x + ndim_, args.data());
+
+            // I am really confuse here... I thought the following should work:
+            // fval = f(args).data();
+            // But it does not...
+            auto res = f(args);
+            for(unsigned i = 0; i < fdim_; i++)
+            {
+                fval[i] = res[i];
+            }
+
+            return 0;
+        }
+
     }
 
     template <size_t ndim_>
@@ -152,6 +177,25 @@ namespace eos
         if (hcubature(nintegrands, &cubature::scalar_integrand<ndim_>,
                       &const_cast<cubature::fdd<ndim_>&>(f), ndim_, a.data(), b.data(),
                       config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
+        {
+            throw IntegrationError("hcubature failed");
+        }
+
+        return res;
+    }
+
+    template <size_t ndim_, size_t fdim_>
+    std::array<double, fdim_> integrate(const cubature::fdd_v<ndim_, fdim_> & f,
+                                        const std::array<double, ndim_> &a,
+                                        const std::array<double, ndim_> &b,
+                                        const cubature::Config &config)
+    {
+        constexpr unsigned nintegrands = fdim_;
+        std::array<double, fdim_> res;
+        double err;
+        if (hcubature(nintegrands, &cubature::vector_integrand<ndim_, fdim_>,
+                      &const_cast<cubature::fdd_v<ndim_, fdim_>&>(f), ndim_, a.data(), b.data(),
+                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, res.data(), &err))
         {
             throw IntegrationError("hcubature failed");
         }
