@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2018 Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +20,7 @@
  */
 
 #include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/matrix.hh>
 
 #include <gsl/gsl_errno.h>
@@ -322,6 +324,24 @@ namespace eos
             _maxeval = x;
             return *this;
         }
+    }
+
+    double integrate(const cubature::fdd_s_s & f,
+                     const double &a,
+                     const double &b,
+                     const cubature::Config &config)
+    {
+        constexpr unsigned nintegrands = 1;
+        double res;
+        double err;
+        if (hcubature(nintegrands, &cubature::scalar_integrand<1>,
+                      &const_cast<cubature::fdd_s_s&>(f), 1, &a, &b,
+                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
+        {
+            throw IntegrationError("hcubature failed");
+        }
+
+        return res;
     }
 
     IntegrationError::IntegrationError(const std::string & message) throw () :
