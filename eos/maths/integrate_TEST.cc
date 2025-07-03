@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -57,6 +58,11 @@ class IntegrateTest :
             return std::log(x);
         }
 
+        std::function<std::array<double, 2> (const std::array<double, 1> &)> f6 = [&] (const std::array<double, 1> & x)
+        {
+            return std::array<double, 2>{f4(x[0]), f4(x[0])};
+        };
+
         virtual void run() const
         {
             constexpr double eps = 0.01;
@@ -111,5 +117,9 @@ class IntegrateTest :
             };
             auto q5 = integrate(cubature::fdd<dim>(f5lam), a_5, b_5, config_cubature);
             TEST_CHECK_RELATIVE_ERROR(q5, 1.0, eps);
+
+            std::array<double, 2> q6 = integrate(f6, std::array<double, 1>{1.0}, std::array<double, 1>{std::exp(1)}, config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(i4, q6[0], eps);
+            TEST_CHECK_RELATIVE_ERROR(i4, q6[1], eps);
         }
 } model_test;

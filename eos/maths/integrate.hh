@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010 Danny van Dyk
  * Copyright (c) 2018 Danny van Dyk and Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -129,6 +130,9 @@ namespace cubature
     template <size_t ndim_>
     using fdd = std::function<double(const std::array<double, ndim_> &)>;
 
+    template <size_t ndim_, size_t fdim_>
+    using fdd_v = std::function<std::array<double, fdim_>(const std::array<double, ndim_> &)>;
+
     class Config
     {
     public:
@@ -157,6 +161,12 @@ namespace cubature
                      const std::array<double, ndim_> &a,
                      const std::array<double, ndim_> &b,
                      const cubature::Config &config = cubature::Config());
+
+    template <size_t ndim_, size_t fdim_>
+    std::array<double, fdim_> integrate(const std::function<std::array<double, fdim_>(const std::array<double, ndim_> &)> & f,
+                                        const std::array<double, ndim_> &a,
+                                        const std::array<double, ndim_> &b,
+                                        const cubature::Config &config = cubature::Config());
 
     class IntegrationError :
         public Exception
