@@ -22,7 +22,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_HKVT2025_IMPL_HH 1
 
 #include <eos/form-factors/parametric-hkvt2025.hh>
-#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/diagnostics.hh>
@@ -154,6 +154,7 @@ namespace eos
         opt_L(o, options, "L"_ok),
         opt_C(o, "C"_ok, { "+-", "+0", "00" }),
         opt_int_points(o, options, "integration-points"_ok),
+        cub_conf(cubature::Config().epsrel(1e-5)),
         scattering_amplitudes(ScatteringAmplitudeFactory<PPToPP>::create("pipi->pipi::" + o.get("scattering-amplitudes"_ok, "HKvT2025"), p, o)),
         charge(traits.charge_map.at(opt_C.value()))
     {
@@ -446,7 +447,7 @@ namespace eos
             return contrib / power_of<2>(t);
         };
 
-        double res = integrate1D(integrand, opt_int_points.value(), 1e-5, 1.0 / power_of<2>(mP1 + mP2));
+        double res = integrate<1>(integrand, 1e-5, 1.0 / power_of<2>(mP1 + mP2), cub_conf);
 
         return res;
     }
@@ -489,7 +490,7 @@ namespace eos
             return contrib / power_of<2>(t);
         };
 
-        double res = integrate1D(integrand, opt_int_points.value(), 1e-5, 1.0 / power_of<2>(mP1 + mP2));
+        double res = integrate<1>(integrand, 1e-5, 1.0 / power_of<2>(mP1 + mP2), cub_conf);
 
         return res;
     }
@@ -529,7 +530,7 @@ namespace eos
             return contrib / power_of<2>(t);
         };
 
-        double res = integrate1D(integrand, opt_int_points.value(), 1e-5, 1.0 / power_of<2>(mP1 + mP2));
+        double res = integrate<1>(integrand, 1e-5, 1.0 / power_of<2>(mP1 + mP2), cub_conf);
 
         return res;
     }
