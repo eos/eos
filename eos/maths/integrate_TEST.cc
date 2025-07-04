@@ -68,6 +68,11 @@ class IntegrateTest :
             return std::array<double, 4>{std::log(x), 2 * std::log(x), 3 * std::log(x), 4 * std::log(x)};
         };
 
+        std::function<std::array<double, 4> (const std::array<double, 2> &)> f8 = [&] (const std::array<double, 2> & x)
+        {
+            return std::array<double, 4>{std::log(x[0] * x[1]), 2 * std::log(x[0] * x[1]), 3 * std::log(x[0] * x[1]), 4 * std::log(x[0] * x[1])};
+        };
+
         virtual void run() const
         {
             constexpr double eps = 0.01;
@@ -135,5 +140,11 @@ class IntegrateTest :
 
             double q8 = integrate(cubature::fdd_s_s(f4), 1.0, std::exp(1), config_cubature);
             TEST_CHECK_RELATIVE_ERROR(i4, q8, eps);
+
+            std::array<double, 4> q9 = integrate(f8, std::array<double, 2>{1.0, 1.0}, std::array<double, 2>{std::exp(1), std::exp(1)}, config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(1 * 3.43656, q9[0], eps);
+            TEST_CHECK_RELATIVE_ERROR(2 * 3.43656, q9[1], eps);
+            TEST_CHECK_RELATIVE_ERROR(3 * 3.43656, q9[2], eps);
+            TEST_CHECK_RELATIVE_ERROR(4 * 3.43656, q9[3], eps);
         }
 } model_test;
