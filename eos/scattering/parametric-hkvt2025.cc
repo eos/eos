@@ -242,7 +242,7 @@ namespace eos
     }
 
     // Note: all our omnes factors go like 1/s for large s. Thus we need to take out a factor of (1 - z)^2 which would cause issues with the integration
-    complex<double> HKVT2025ScatteringAmplitudes::omnes_outer_function(const double & s, const double & sp, const double & s0, const unsigned & npoints, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double> HKVT2025ScatteringAmplitudes::omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l, const IsospinRepresentation & i) const
     {
         // Point to extract asymptotic behaviour at
         const double sM = 1000000.0;
@@ -267,7 +267,7 @@ namespace eos
                 }
             };
 
-            return power_of<2>(zeval - 1.0) * outer(integrand, zeval, npoints);
+            return power_of<2>(zeval - 1.0) * outer(integrand, zeval, prec);
         }
         else if ((s < sp) && (s0 < sp) && (l == 1) && (i == IsospinRepresentation::one))
         {
@@ -289,7 +289,7 @@ namespace eos
                 }
             };
 
-            return power_of<2>(zeval - 1.0) * outer(integrand, zeval, npoints);
+            return power_of<2>(zeval - 1.0) * outer(integrand, zeval, prec);
         }
         else if ((s < sp) && (s0 < sp) && (l == 2) && (i == IsospinRepresentation::zero))
         {
@@ -311,7 +311,7 @@ namespace eos
                 }
             };
 
-            return power_of<2>(zeval - 1.0) * outer(integrand, zeval, npoints);
+            return power_of<2>(zeval - 1.0) * outer(integrand, zeval, prec);
         }
         else
         {
