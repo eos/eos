@@ -78,6 +78,7 @@ namespace eos
         std::function<complex<double> ()> v_Ub;
 
         IntegerOption opt_int_points;
+        cubature::Config cub_conf;
 
         b_to_psd_psd_l_nu::AngularIntegrals ints;
 
@@ -216,6 +217,7 @@ namespace eos
             cp_conjugate(opt_cp_conjugate.value()),
             mu(p[opt_U.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             opt_int_points(o, options, "integration-points"_ok),
+            cub_conf(cubature::Config().epsrel(5e-3)),
             form_factors(FormFactorFactory<PToPP>::create(_process() + "::" + o.get("form-factors"_ok, "HKvT2025"), p, o))
         {
             Context ctx("When constructing B->PPlnu observable");
@@ -347,12 +349,10 @@ namespace eos
             return 2.0 * x[1] * this->double_differential_branching_ratio(x[0], x[1] * x[1]);
         };
 
-        auto config_cubature = cubature::Config().epsrel(5e-3);
-
         std::array<double, 2> x_min{ q2_min, sqrt_k2_min };
         std::array<double, 2> x_max{ q2_max, sqrt_k2_max };
 
-        double res = integrate(integrand, x_min, x_max, config_cubature);
+        double res = integrate(integrand, x_min, x_max, _imp->cub_conf);
         return res;
     }
 
@@ -364,12 +364,10 @@ namespace eos
             return 2.0 * x[1] * this->double_differential_mesonic_afb(x[0], x[1] * x[1]);
         };
 
-        auto config_cubature = cubature::Config().epsrel(5e-3);
-
         std::array<double, 2> x_min{ q2_min, sqrt_k2_min };
         std::array<double, 2> x_max{ q2_max, sqrt_k2_max };
 
-        double res = integrate(integrand, x_min, x_max, config_cubature);
+        double res = integrate(integrand, x_min, x_max, _imp->cub_conf);
         return res;
     }
 
@@ -413,7 +411,7 @@ namespace eos
             return this->double_differential_branching_ratio(q2, k2);
         };
 
-        double res = integrate1D(integrand, _imp->opt_int_points.value(), k2_min, k2_max);
+        double res = integrate(integrand, k2_min, k2_max, _imp->cub_conf);
         return res;
     }
 
@@ -427,7 +425,7 @@ namespace eos
             return this->double_differential_mesonic_afb(q2, k2);
         };
 
-        double res = integrate1D(integrand, _imp->opt_int_points.value(), k2_min, k2_max);
+        double res = integrate(integrand, k2_min, k2_max, _imp->cub_conf);
         return res;
     }
 
@@ -441,7 +439,7 @@ namespace eos
             return 2 * sqrt_k2 * this->double_differential_branching_ratio(q2, sqrt_k2 * sqrt_k2);
         };
 
-        double res = integrate1D(integrand, _imp->opt_int_points.value(), q2_min, q2_max);
+        double res = integrate(integrand, q2_min, q2_max, _imp->cub_conf);
         return res;
     }
 
@@ -455,7 +453,7 @@ namespace eos
             return 2 * sqrt_k2 * this->double_differential_mesonic_afb(q2, sqrt_k2 * sqrt_k2);
         };
 
-        double res = integrate1D(integrand, _imp->opt_int_points.value(), q2_min, q2_max);
+        double res = integrate(integrand, q2_min, q2_max, _imp->cub_conf);
         return res;
     }
 
