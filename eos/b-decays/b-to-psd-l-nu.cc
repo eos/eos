@@ -89,7 +89,8 @@ namespace eos
         std::function<complex<double> ()> v_Ub;
         std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
 
-        GSL::QAGS::Config int_config;
+        // integration config
+        cubature::Config cub_conf;
 
         BooleanOption opt_cp_conjugate;
 
@@ -179,7 +180,7 @@ namespace eos
             hbar(p["QM::hbar"], u),
             isospin_factor(_isospin_factor()),
             mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-            int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
+            cub_conf(cubature::Config().epsrel(1e-5).epsabs(1.0e-9)),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
@@ -398,7 +399,7 @@ namespace eos
 
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
             const double num   = normalized_differential_branching_ratio(q2);
-            const double denom = integrate<GSL::QAGS>(f, q2_min, q2_max, int_config);
+            const double denom = integrate<1, 1>(f, q2_min, q2_max, cub_conf);
 
             return num / denom;
         }
@@ -418,8 +419,8 @@ namespace eos
             const double q2_abs_max = power_of<2>(m_B() - m_P());
 
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
-            const double num   = integrate<GSL::QAGS>(f, q2_min,     q2_max,     int_config);
-            const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max, int_config);
+            const double num   = integrate<1, 1>(f, q2_min,     q2_max,     cub_conf);
+            const double denom = integrate<1, 1>(f, q2_abs_min, q2_abs_max, cub_conf);
 
             return num / denom / (q2_max - q2_min);
         }
@@ -509,9 +510,7 @@ namespace eos
             return this->_imp->differential_branching_ratio(q2) * jacobian / 2.0;
         };
 
-        static const GSL::QAGS::Config config = GSL::QAGS::Config().epsrel(0.5e-3).epsabs(1.0e-9);
-
-        return integrate<GSL::QAGS>(integrand, -1.0, +1.0, config);
+        return integrate<1, 1>(integrand, -1.0, +1.0, _imp->cub_conf);
     }
 
     double
@@ -520,7 +519,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -541,10 +540,7 @@ namespace eos
             return this->_imp->differential_branching_ratio(q2) * jacobian / 2.0;
         };
 
-        static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
-
-        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
-                         config);
+        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0}, _imp->cub_conf);
     }
 
     // normalized_differential_branching_ratio (|V_Ub|=1)
@@ -561,7 +557,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     // normalized (|V_Ub|=1) integrated decay_width
@@ -571,7 +567,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_p,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -580,7 +576,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_0,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -589,7 +585,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -605,14 +601,14 @@ namespace eos
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::numerator_differential_a_fb_leptonic,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_numerator = integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
         }
 
         double integrated_denominator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_denominator = integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
         }
 
         return integrated_numerator / integrated_denominator;
@@ -631,14 +627,14 @@ namespace eos
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::numerator_differential_flat_term,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_numerator = integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
         }
 
         double integrated_denominator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_denominator = integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
         }
 
         return integrated_numerator / integrated_denominator;
@@ -657,14 +653,14 @@ namespace eos
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::numerator_differential_lepton_polarization,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_numerator = integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
         }
 
         double integrated_denominator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_denominator = integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
         }
 
         return integrated_numerator / integrated_denominator;

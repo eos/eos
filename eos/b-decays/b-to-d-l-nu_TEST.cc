@@ -186,8 +186,8 @@ class BToDLeptonNeutrinoTest :
                 {
                     BToPseudoscalarLeptonNeutrino d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62),    13.1988,      eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62),                 -0.014345031, eps);
 
                     oo.declare("l"_ok, "tau");
                     auto k_tau = Kinematics{
