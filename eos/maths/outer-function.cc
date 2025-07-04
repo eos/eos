@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,7 +24,7 @@
 namespace eos
 {
 
-    complex<double> outer(const std::function<complex<double> (const complex<double> &)> & f, complex<double> z, unsigned npoints)
+    complex<double> outer(const std::function<complex<double> (const complex<double> &)> & f, complex<double> z, double relative_precision)
     {
         if (std::abs(z) >= 1.0)
             throw InternalError("Trying to evaluate outer function outside of unit disk. This is not yet supported.");
@@ -43,7 +43,7 @@ namespace eos
             return (std::exp(complex<double>(0, t)) + z) / (std::exp(complex<double>(0, t)) - z) * std::log(x);
         };
 
-        return std::exp(integrate1D(integrand, npoints, 0.0, 2 * M_PI) / 2.0 / M_PI );
+        return std::exp(integrate(integrand, 0.0, 2 * M_PI, cubature::Config().epsrel(relative_precision)) / 2.0 / M_PI );
     }
 
 }

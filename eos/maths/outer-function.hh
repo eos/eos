@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@
 namespace eos
 {
     /* Computes the outer function of a given function f numerically using the integral representation */
-    complex<double> outer(const std::function<complex<double> (const complex<double> &)> & f, complex<double> z, unsigned npoints);
+    complex<double> outer(const std::function<complex<double> (const complex<double> &)> & f, complex<double> z, double relative_precision);
 
 }
 
