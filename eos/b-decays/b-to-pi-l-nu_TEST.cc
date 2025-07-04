@@ -128,8 +128,8 @@ class BToPiLeptonNeutrinoTest :
                     eps
                 );
                 TEST_CHECK_RELATIVE_ERROR(obs_Rpi->evaluate(),  0.352166, eps);
-                TEST_CHECK_RELATIVE_ERROR(obs_Rpip->evaluate(), 0.204647, eps);
-                TEST_CHECK_RELATIVE_ERROR(obs_Rpi0->evaluate(), 0.147519, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpip->evaluate(), 0.204492, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpi0->evaluate(), 0.147407, eps);
             }
 
             // Consistency check for isospin

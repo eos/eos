@@ -77,9 +77,8 @@ namespace eos
         std::function<complex<double> ()> v_Ub;
         std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
 
-        SwitchOption opt_int_points;
-
-        int int_points;
+        // integration config
+        cubature::Config cub_conf;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
@@ -174,8 +173,7 @@ namespace eos
             isospin_factor(_isospin_factor()),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-            opt_int_points(o, "integration-points"_ok, {"256", "4096"}, "256"),
-            int_points(destringify<int>(opt_int_points.value())),
+            cub_conf(cubature::Config().epsrel(1e-5).epsabs(1.0e-9)),
             form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
             Context ctx("When constructing B->Vlnu observable");
@@ -296,8 +294,7 @@ namespace eos
         std::array<double, 12> _integrated_angular_observables(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 12> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
-            // second argument of integrate1D is some power of 2
-            return integrate1D(integrand, int_points, q2_min, q2_max);
+            return integrate<1, 12>(integrand, q2_min, q2_max, cub_conf);
         }
 
         inline b_to_vec_l_nu::AngularObservables differential_angular_observables(const double & q2) const
@@ -526,10 +523,7 @@ namespace eos
             return this->differential_branching_ratio(q2) * jacobian / 2.0;
         };
 
-        static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
-
-        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
-                         config);
+        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0}, _imp->cub_conf);
     }
 
     double
