@@ -138,6 +138,24 @@ namespace eos
             return 0;
         }
 
+        template <size_t ndim_>
+        int complex_integrand(unsigned ndim , const double *x, void *data,
+                      unsigned fdim , double *fval)
+        {
+            assert(ndim == ndim_);
+            assert(fdim == 2);
+
+            auto& f = *static_cast<cubature::fdd_s_v_c<ndim_> *>(data);
+            // TODO use std::array_view once available
+            std::array<double, ndim_> args;
+            std::copy(x, x + ndim_, args.data());
+            auto res = f(args);
+            fval[0] = res.real();
+            fval[1] = res.imag();
+
+            return 0;
+        }
+
         template <size_t ndim_, size_t fdim_>
         int vector_integrand(unsigned ndim , const double *x, void *data,
                       unsigned fdim , double *fval)

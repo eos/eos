@@ -133,7 +133,7 @@ class IntegrateTest :
             TEST_CHECK_RELATIVE_ERROR(3 * i4, q7[2], eps);
             TEST_CHECK_RELATIVE_ERROR(4 * i4, q7[3], eps);
 
-            double q8 = integrate(f4, 1.0, std::exp(1), config_cubature);
+            double q8 = integrate(cubature::fdd_s_s(f4), 1.0, std::exp(1), config_cubature);
             TEST_CHECK_RELATIVE_ERROR(i4, q8, eps);
         }
 } model_test;
