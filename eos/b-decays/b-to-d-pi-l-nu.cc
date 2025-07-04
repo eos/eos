@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -49,6 +50,9 @@ namespace eos
         LeptonFlavorOption opt_l;
         UsedParameter m_l;
 
+        // cubature config
+        cubature::Config cub_conf;
+
         // form factors
         std::shared_ptr<FormFactors<PToV>> ff;
 
@@ -61,6 +65,7 @@ namespace eos
             m_Dstar(p["mass::D_d^*"], u),
             opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
+            cub_conf(cubature::Config().epsrel(1e-5)),
             ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors"_ok, "BGJvD2019"), p, o))
         {
             Context ctx("When constructing B->Dpilnu observable");
@@ -231,7 +236,7 @@ namespace eos
 
             std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::dist_q2, this, std::placeholders::_1);
             const double num   = dist_q2(q2);
-            const double denom = integrate1D(f, 32, q2_min, q2_max);
+            const double denom = integrate(f, q2_min, q2_max, cub_conf);
 
             return num / denom;
         }
@@ -298,7 +303,7 @@ namespace eos
             const double q2_max = 10.68;
 
             std::function<std::array<double, 2> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2d, this, std::placeholders::_1);
-            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+            const auto coeffs = integrate(f, q2_min, q2_max, cub_conf);
 
             const double num   = 3.0 / 2.0 * (coeffs[0] + coeffs[1] * c_d * c_d);
             const double denom = 3.0 * coeffs[0] + coeffs[1];
@@ -315,7 +320,7 @@ namespace eos
             const double c_d_min3 = power_of<3>(c_d_min);
 
             std::function<std::array<double, 2> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2d, this, std::placeholders::_1);
-            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+            const auto coeffs = integrate(f, q2_min, q2_max, cub_conf);
 
             const double num   = 3.0 / 2.0 * (coeffs[0] * (c_d_max - c_d_min) + coeffs[1] * (c_d_max3 - c_d_min3) / 3.0);
             const double denom = 3.0 * coeffs[0] + coeffs[1];
@@ -363,7 +368,7 @@ namespace eos
             const double q2_max = 10.68;
 
             std::function<std::array<double, 3> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2l, this, std::placeholders::_1);
-            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+            const auto coeffs = integrate(f, q2_min, q2_max, cub_conf);
 
             const double num   = 3.0 / 4.0 * (coeffs[0] + coeffs[1] * c_l + coeffs[2] * c_l * c_l);
             const double denom = (3.0 * coeffs[0] + coeffs[2]) / 2.0;
@@ -377,7 +382,7 @@ namespace eos
             const double q2_max = 10.68;
 
             std::function<std::array<double, 3> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2l, this, std::placeholders::_1);
-            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+            const auto coeffs = integrate(f, q2_min, q2_max, cub_conf);
 
             double num         = coeffs[0] * (c_l_max - c_l_min);
             num               += coeffs[1] * (c_l_max * c_l_max - c_l_min * c_l_min) / 2.0;
@@ -429,7 +434,7 @@ namespace eos
             const double q2_max = 10.68;
 
             std::function<std::array<double, 3> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2chi, this, std::placeholders::_1);
-            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+            const auto coeffs = integrate(f, q2_min, q2_max, cub_conf);
 
             const double c_chi = cos(chi);
 
@@ -445,7 +450,7 @@ namespace eos
             const double q2_max = 10.68;
 
             std::function<std::array<double, 3> (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_coefficients_q2chi, this, std::placeholders::_1);
-            const auto coeffs = integrate1D(f, 32, q2_min, q2_max);
+            const auto coeffs = integrate(f, q2_min, q2_max, cub_conf);
 
             const double c_chi_min = cos(chi_min), c_chi_max = cos(chi_max);
             const double s_chi_min = sin(chi_min), s_chi_max = sin(chi_max);
