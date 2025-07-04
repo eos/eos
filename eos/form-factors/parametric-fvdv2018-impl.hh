@@ -23,7 +23,6 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_FVDV2018_IMPL_HH 1
 
 #include <eos/form-factors/parametric-fvdv2018.hh>
-#include <eos/maths/integrate.hh>
 #include <eos/utils/kinematic.hh>
 
 namespace eos
@@ -192,7 +191,8 @@ namespace eos
         _S_switch(opt_L.value() && PartialWave::S),
         _P_switch(opt_L.value() && PartialWave::P),
         _D_switch(opt_L.value() && PartialWave::D),
-        _F_switch(opt_L.value() && PartialWave::F)
+        _F_switch(opt_L.value() && PartialWave::F),
+        cub_conf(cubature::Config().epsrel(5e-3))
     {
     }
 
@@ -227,9 +227,9 @@ namespace eos
             return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_perp(q2, k2, x);
         };
 
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+        res[1] = integrate(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
+        res[2] = integrate(integrandD, -1.0, 1.0, this->cub_conf) * this->_D_switch;
+        res[3] = integrate(integrandF, -1.0, 1.0, this->cub_conf) * this->_F_switch;
 
         return res;
     }
@@ -302,9 +302,9 @@ namespace eos
             return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_para(q2, k2, x);
         };
 
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+        res[1] = integrate(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
+        res[2] = integrate(integrandD, -1.0, 1.0, this->cub_conf) * this->_D_switch;
+        res[3] = integrate(integrandF, -1.0, 1.0, this->cub_conf) * this->_F_switch;
 
         return res;
     }
@@ -381,10 +381,10 @@ namespace eos
             return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_long(q2, k2, x);
         };
 
-        res[0] = integrate1D(integrandS, 1024, -1.0, +1.0) * this->_S_switch;
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+        res[0] = integrate(integrandS, -1.0, 1.0, this->cub_conf) * this->_S_switch;
+        res[1] = integrate(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
+        res[2] = integrate(integrandD, -1.0, 1.0, this->cub_conf) * this->_D_switch;
+        res[3] = integrate(integrandF, -1.0, 1.0, this->cub_conf) * this->_F_switch;
 
         return res;
     }
@@ -462,10 +462,10 @@ namespace eos
             return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_time(q2, k2, x);
         };
 
-        res[0] = integrate1D(integrandS, 1024, -1.0, +1.0) * this->_S_switch;
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * this->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * this->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * this->_F_switch;
+        res[0] = integrate(integrandS, -1.0, 1.0, this->cub_conf) * this->_S_switch;
+        res[1] = integrate(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
+        res[2] = integrate(integrandD, -1.0, 1.0, this->cub_conf) * this->_D_switch;
+        res[3] = integrate(integrandF, -1.0, 1.0, this->cub_conf) * this->_F_switch;
 
         return res;
     }
