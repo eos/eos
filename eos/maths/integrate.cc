@@ -344,6 +344,24 @@ namespace eos
         return res;
     }
 
+    complex<double> integrate(const cubature::fdd_s_s_c & f,
+                              const double &a,
+                              const double &b,
+                              const cubature::Config &config)
+    {
+        constexpr unsigned nintegrands = 2;
+        std::array<double, 2> res;
+        double err;
+        if (hcubature(nintegrands, &cubature::complex_integrand<1>,
+                      &const_cast<cubature::fdd_s_s_c&>(f), 1, &a, &b,
+                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, res.data(), &err))
+        {
+            throw IntegrationError("hcubature failed");
+        }
+
+        return complex<double>(res[0], res[1]);
+    }
+
     IntegrationError::IntegrationError(const std::string & message) throw () :
         Exception(message)
     {

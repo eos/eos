@@ -128,9 +128,12 @@ namespace GSL
 namespace cubature
 {
     using fdd_s_s = std::function<double(const double &)>;
+    using fdd_s_s_c = std::function<complex<double>(const double &)>;
 
     template <size_t ndim_>
     using fdd_s_v = std::function<double(const std::array<double, ndim_> &)>;
+    template <size_t ndim_>
+    using fdd_s_v_c = std::function<complex<double>(const std::array<double, ndim_> &)>;
 
     template <size_t fdim_>
     using fdd_v_s = std::function<std::array<double, fdim_>(const double &)>;
@@ -165,6 +168,11 @@ namespace cubature
                      const double &a,
                      const double &b,
                      const cubature::Config &config = cubature::Config());
+
+    complex<double> integrate(const std::function<complex<double>(const double &)> & f,
+                              const double &a,
+                              const double &b,
+                              const cubature::Config &config = cubature::Config());
 
     template <size_t ndim_>
     double integrate(const std::function<double(const std::array<double, ndim_> &)> & f,
