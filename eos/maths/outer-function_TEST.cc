@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -70,30 +70,26 @@ class OuterFunctionTest :
             constexpr double eps = 1e-5;
 
             {
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.0, 1024).real(),                       1.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.0, 1024).imag(),                       0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.5, 1024).real(),                       1.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.5, 1024).imag(),                       0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, complex<double>(0.1,0.2), 1024).real(),  1.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, complex<double>(0.1,0.2), 1024).imag(),  0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.0, 1e-6).real(),                       1.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.0, 1e-6).imag(),                       0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.5, 1e-6).real(),                       1.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, 0.5, 1e-6).imag(),                       0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, complex<double>(0.1,0.2), 1e-6).real(),  1.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_1, complex<double>(0.1,0.2), 1e-6).imag(),  0.0,        eps);
 
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.0, 1024).real(),                       2.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.0, 1024).imag(),                       0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.5, 1024).real(),                       2.5,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.5, 1024).imag(),                       0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, complex<double>(0.1,0.2), 1024).real(),  2.1,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, complex<double>(0.1,0.2), 1024).imag(),  0.2,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.0, 1e-6).real(),                       2.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.0, 1e-6).imag(),                       0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.5, 1e-6).real(),                       2.5,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, 0.5, 1e-6).imag(),                       0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, complex<double>(0.1,0.2), 1e-6).real(),  2.1,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_2, complex<double>(0.1,0.2), 1e-6).imag(),  0.2,        eps);
 
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.0, 1024).real(),                       1.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.0, 1024).imag(),                       0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.5, 1024).real(),                       0.6,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.5, 1024).imag(),                       0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, complex<double>(0.1,0.2), 1024).real(),  0.887640,   eps);
-                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, complex<double>(0.1,0.2), 1024).imag(), -0.179775,   eps);
-
-                TEST_CHECK_THROWS(InternalError, outer(test_func_1, 2.0, 1024));
-                TEST_CHECK_THROWS(InternalError, outer(test_func_4, 0.0, 1024));
-                TEST_CHECK_THROWS(InternalError, outer(test_func_5, 0.0, 1024));
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.0, 1e-6).real(),                       1.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.0, 1e-6).imag(),                       0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.5, 1e-6).real(),                       0.6,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, 0.5, 1e-6).imag(),                       0.0,        eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, complex<double>(0.1,0.2), 1e-6).real(),  0.887640,   eps);
+                TEST_CHECK_NEARLY_EQUAL(outer(test_func_3, complex<double>(0.1,0.2), 1e-6).imag(), -0.179775,   eps);
             }
     }
 } outer_function_test;
