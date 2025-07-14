@@ -79,6 +79,8 @@ namespace eos
 
         IntegerOption opt_int_points;
 
+        b_to_psd_psd_l_nu::AngularIntegrals ints;
+
         std::shared_ptr<FormFactors<PToPP>> form_factors;
 
         static const std::vector<OptionSpecification> options;
@@ -276,12 +278,12 @@ namespace eos
 
         std::array<std::array<double, 5>, 9> _differential_angular_observables(const double & q2, const double & k2) const
         {
-            return b_to_psd_psd_l_nu::AngularObservables(this->amplitudes(q2, k2))._M;
+            return b_to_psd_psd_l_nu::AngularObservables(this->amplitudes(q2, k2), this->ints)._M;
         }
 
         inline b_to_psd_psd_l_nu::AngularObservables differential_angular_observables(const double & q2, const double & k2) const
         {
-            return b_to_psd_psd_l_nu::AngularObservables{ _differential_angular_observables(q2, k2) };
+            return b_to_psd_psd_l_nu::AngularObservables(_differential_angular_observables(q2, k2), this->ints);
         }
     };
 
