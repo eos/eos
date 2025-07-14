@@ -45,22 +45,44 @@ namespace eos
             double pref;
         };
 
+        struct AngularIntegrals
+        {
+            // Arrays to hold integrals over 3 Legendre polynomials of the form P_l1^m1 * P_l2^m2 * P_l3^0
+            // The labels 00, 01 and 11 refer to the values of m1 and m2
+            std::array<std::array<std::array<double, 5>, 4>, 4> _int_00, _int_11, _int_01;
+
+            AngularIntegrals ()
+            {
+                for (unsigned l = 0; l < 4; l++)
+                {
+                    for (unsigned m = 0; m < 4; m++)
+                    {
+                        double pref = std::sqrt((2 * l + 1) * (2 * m + 1));
+                        for (unsigned i = 0; i < 5; i++)
+                        {
+                            _int_00[l][m][i] = pref * three_legendre_integral(l, 0, m, 0, i, 0);
+                            _int_11[l][m][i] = pref * three_legendre_integral(l, 1, m, 1, i, 0);
+                            _int_01[l][m][i] = pref * three_legendre_integral(l, 0, m, 1, i, 0);
+                        }
+                    }
+                }
+            }
+        };
+
         class AngularObservables
         {
             private:
                 std::array<std::array<double, 5>, 9> _M;
-                // Arrays to hold integrals over 3 Legendre polynomials of the form P_l1^m1 * P_l2^m2 * P_l3^0
-                // The labels 00, 01 and 11 refer to the values of m1 and m2
-                std::array<std::array<std::array<double, 5>, 4>, 4> _int_00, _int_11, _int_01;
+                AngularIntegrals _ints;
 
             public:
                 friend class BToPPLeptonNeutrino;
                 friend class Implementation<BToPPLeptonNeutrino>;
 
-                AngularObservables(const Amplitudes & a)
+                AngularObservables(const Amplitudes & a, const AngularIntegrals & ints) :
+                  _ints(ints)
                 {
                     _M.fill({0.0, 0.0, 0.0, 0.0, 0.0});
-                    init_Mats();
 
                     for (unsigned l = 0; l < 4; l++)
                     {
@@ -71,8 +93,8 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[0][i] += amppm * _int_11[l][m][i];
-                                _M[0][i] += amp00 * _int_00[l][m][i];
+                                _M[0][i] += amppm * _ints._int_11[l][m][i];
+                                _M[0][i] += amp00 * _ints._int_00[l][m][i];
                             }
                         }
                     }
@@ -86,8 +108,8 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[1][i] += amppm * _int_11[l][m][i];
-                                _M[1][i] += amp00 * _int_00[l][m][i];
+                                _M[1][i] += amppm * _ints._int_11[l][m][i];
+                                _M[1][i] += amp00 * _ints._int_00[l][m][i];
                             }
                         }
                     }
@@ -100,7 +122,7 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[2][i] += amppm * _int_11[l][m][i];
+                                _M[2][i] += amppm * _ints._int_11[l][m][i];
                             }
                         }
                     }
@@ -114,7 +136,7 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[3][i] -= ampmix * _int_01[l][m][i];
+                                _M[3][i] -= ampmix * _ints._int_01[l][m][i];
                             }
                         }
                     }
@@ -127,7 +149,7 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[4][i] -= ampmix * _int_01[l][m][i];
+                                _M[4][i] -= ampmix * _ints._int_01[l][m][i];
                             }
                         }
                     }
@@ -141,8 +163,8 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[5][i] += amppm * _int_11[l][m][i];
-                                _M[5][i] += amp00 * _int_00[l][m][i];
+                                _M[5][i] += amppm * _ints._int_11[l][m][i];
+                                _M[5][i] += amp00 * _ints._int_00[l][m][i];
                             }
                         }
                     }
@@ -155,7 +177,7 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[6][i] -= ampmix * _int_01[l][m][i];
+                                _M[6][i] -= ampmix * _ints._int_01[l][m][i];
                             }
                         }
                     }
@@ -168,7 +190,7 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[7][i] -= ampmix * _int_01[l][m][i];
+                                _M[7][i] -= ampmix * _ints._int_01[l][m][i];
                             }
                         }
                     }
@@ -181,7 +203,7 @@ namespace eos
 
                             for (unsigned i = 0; i < 5; i++)
                             {
-                                _M[8][i] += amppm * _int_11[l][m][i];
+                                _M[8][i] += amppm * _ints._int_11[l][m][i];
                             }
                         }
                     }
@@ -193,33 +215,9 @@ namespace eos
                     }
                 }
 
-                AngularObservables()
+                AngularObservables(const std::array<std::array<double, 5>, 9> & m, const AngularIntegrals & ints) :
+                    _M(m), _ints(ints)
                 {
-                    _M.fill({0.0, 0.0, 0.0, 0.0, 0.0});
-                    init_Mats();
-                }
-
-                AngularObservables(const std::array<std::array<double, 5>, 9> & m) :
-                    _M(m)
-                {
-                    init_Mats();
-                }
-
-                inline void init_Mats()
-                {
-                    for (unsigned l = 0; l < 4; l++)
-                    {
-                        for (unsigned m = 0; m < 4; m++)
-                        {
-                            double pref = std::sqrt((2 * l + 1) * (2 * m + 1));
-                            for (unsigned i = 0; i < 5; i++)
-                            {
-                                _int_00[l][m][i] = pref * three_legendre_integral(l, 0, m, 0, i, 0);
-                                _int_11[l][m][i] = pref * three_legendre_integral(l, 1, m, 1, i, 0);
-                                _int_01[l][m][i] = pref * three_legendre_integral(l, 0, m, 1, i, 0);
-                            }
-                        }
-                    }
                 }
 
                 inline double M1(unsigned i) const  { return _M[0][i]; }
