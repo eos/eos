@@ -191,6 +191,24 @@ namespace eos
 
                 make_form_factor_adapter("B->eta_prime::f_0(q2)", R"(f_0^{B\to\eta'}(q^2))",
                         &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+
+                make_observable("B->eta::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<BToEta, PToP>::saturation_0p_v),
+
+                make_observable("B->eta::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<BToEta, PToP>::saturation_0m_a),
+
+                make_observable("B->eta::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<BToEta, PToP>::saturation_1m_v),
+
+                make_observable("B->eta::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<BToEta, PToP>::saturation_1p_a),
+
+                make_observable("B->eta::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<BToEta, PToP>::saturation_1m_t),
+
+                make_observable("B->eta::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T5}])", Unit::None(),
+                        &BFW2010FormFactors<BToEta, PToP>::saturation_1p_t5),
             }
         );
 
