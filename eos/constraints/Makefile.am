@@ -11,6 +11,7 @@ CONSTRAINTS_FILES = \
 	B-to-Kstar-ll.yaml \
 	B-to-D-l-nu.yaml \
 	B-to-D-pi-l-nu.yaml \
+	B-to-eta-l-nu.yaml \
 	B-to-pi-l-nu.yaml \
 	B-to-pi-pi-l-nu.yaml \
 	B-to-psd-psd.yaml \
