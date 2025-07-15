@@ -535,8 +535,6 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
-<<<<<<< Updated upstream
-=======
 
                 make_observable("B->etalnu::P(q2)", R"(dP(B^- \to \eta \ell^-\bar\nu)/dq^2)",
                         Unit::InverseGeV2(),
@@ -549,7 +547,6 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
->>>>>>> Stashed changes
             }
         );
 
