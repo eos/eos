@@ -1,0 +1,67 @@
+# vim: set fdm=marker :
+
+#########
+# BaBar #
+#########
+#
+# 2012
+#
+# {{{
+B^+->etalnu::KinematicalDistribution[q2]@BaBar:2012D:
+    type: MultivariateGaussian(Covariance)
+    observables:
+      [ 'B->etalnu::P(q2_min,q2_max)', 'B->etalnu::P(q2_min,q2_max)', 'B->etalnu::P(q2_min,q2_max)', 'B->etalnu::P(q2_min,q2_max)']
+    kinematics:
+      [ {q2_min: 0, q2_max: 4}, {q2_min: 4, q2_max: 8}, {q2_min: 8, q2_max: 12}, {q2_min: 12, q2_max: 16}]
+    options:
+      [ {q: u}, {q: u}, {q: u}, {q: u}]
+    means:
+      [ 0.0615512, 0.0718629, 0.0567434, 0.0439979]
+    covariance:
+      - [ 0.000274429, 0.0000270737, -6.00015e-6, -0.0000680875]
+      - [0.0000270737, 0.000322168, 0.0000164984, -0.0000291091]
+      - [-6.00015e-6, 0.0000164984, 0.000275031, -0.000083796]
+      - [-0.0000680875, -0.0000291091, -0.000083796, 0.00034565]
+B^+->etalnu::BR@BaBar:2012D:
+    type: Gaussian
+    observable: B->etalnu::BR
+    kinematics: {q2_min: 0, q2_max: 22.38}
+    options: {q: u}
+    mean: 3.8e-05
+    sigma-stat: {hi: 0.52e-05, lo: -0.52e-05}
+    sigma-sys: {hi: 0.50e-05, lo: -0.50e-05}
+B^+->eta_primelnu::BR@BaBar:2012D:
+    type: Gaussian
+    observable: B->eta_primelnu::BR
+    kinematics: {q2_min: 0, q2_max: 18.67}
+    options: {q: u}
+    mean: 2.4e-05
+    sigma-stat: {hi: 0.84e-05, lo: -0.84e-05}
+    sigma-sys: {hi: 0.28e-05, lo: -0.28e-05}
+# }}}
+
+
+#########
+# HFLAV #
+#########
+#
+# 2024
+#
+# {{{
+B^+->etalnu::BR@HFLAV:2024A:
+    type: Gaussian
+    observable: B->etalnu::BR
+    kinematics: {q2_min: 0, q2_max: 22.38}
+    options: {q: u}
+    mean: 3.44e-05
+    sigma-stat: {hi: 0., lo: 0.}
+    sigma-sys: {hi: 0.43e-05, lo: -0.43e-05}
+B^+->eta_primelnu::BR@HFLAV:2024A:
+    type: Gaussian
+    observable: B->eta_primelnu::BR
+    kinematics: {q2_min: 0, q2_max: 18.67}
+    options: {q: u}
+    mean: 2.49e-05
+    sigma-stat: {hi: 0., lo: 0.}
+    sigma-sys: {hi: 0.67e-05, lo: -0.67e-05}
+# }}}

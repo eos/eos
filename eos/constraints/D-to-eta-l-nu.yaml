@@ -18,15 +18,41 @@ D^+->eta_primelnu::KinematicalDistribution[q2]@BES:2024A:
     options:
       [ {q: d, l: mu}, {q: d, l: mu}, {q: d, l: mu}, {q: d, l: e}, {q: d, l: e}, {q: d, l: e} ]
     means:
-      [ 0.22075, 0.385459, 0.264815, 0.367151, 0.367597, 0.209078]
+      [ 1.16932, 1.92715, 1.32418, 1.83582, 1.83804, 1.0453]
     covariance:
-      - [ 0.00480168, -0.00225106, -0.0016005, 6.26458e-6, -8.52963e-8, -3.07597e-6]
-      - [-0.00225106, 0.00578381, -0.0023079, -8.07071e-7, 3.05899e-7, -2.59689e-7]
-      - [-0.0016005, -0.0023079, 0.00517312, -3.2606e-6, -2.13929e-6, 2.07125e-6]
-      - [ 6.26458e-6, -8.07071e-7, -3.2606e-6, 0.00273759, -0.00159278, -0.000803608]
-      - [-8.52963e-8, 3.05899e-7, -2.13929e-6, -0.00159278, 0.00285549, -0.00095097]
-      - [-3.07597e-6, -2.59689e-7, 2.07125e-6, -0.000803608, -0.00095097, 0.00205586]
+      - [ 0.134631, -0.0595924, -0.0424294, 0.000171412, 0.0000276199, -0.000123771]
+      - [-0.0595924, 0.144446, -0.0575962, -8.2168e-6, 9.23585e-6, -0.0000192604]
+      - [-0.0424294, -0.0575962, 0.129341, -0.000171358, 6.04164e-6, 0.000108124]
+      - [0.000171412, -8.2168e-6, -0.000171358, 0.0684037, -0.0397381, -0.0201025]
+      - [0.0000276199, 9.23585e-6, 6.04164e-6, -0.0397381, 0.0712794, -0.0237822]
+      - [-0.000123771, -0.0000192604, 0.000108124, -0.0201025, -0.0237822, 0.0514284]
 # }}}
+#
+# 2025
+#
+# {{{
+# The experimental paper doesn't provide enough information to fully reconstruct the covariance matrix
+D^+->etalnu::KinematicalDistribution[q2]@BES:2025A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+      [ 'D->etalnu::P(q2_min,q2_max)', 'D->etalnu::P(q2_min,q2_max)', 'D->etalnu::P(q2_min,q2_max)',
+        'D->etalnu::P(q2_min,q2_max)', 'D->etalnu::P(q2_min,q2_max)', 'D->etalnu::P(q2_min,q2_max)' ]
+    kinematics:
+      [ {q2_min: 0.0112, q2_max: 0.3}, {q2_min: 0.3, q2_max: 0.7}, {q2_min: 0.7, q2_max: 1.3},
+        {q2_min: 1e-5,   q2_max: 0.3}, {q2_min: 0.3, q2_max: 0.7}, {q2_min: 0.7, q2_max: 1.3} ]
+    options:
+      [ {q: d, l: mu}, {q: d, l: mu}, {q: d, l: mu}, {q: d, l: e}, {q: d, l: e}, {q: d, l: e} ]
+    means:
+      [ 1.04299, 0.853953, 0.516913, 1.09173, 0.790144, 0.49652]
+    covariance:
+      - [0.00424084, -0.00147834, -0.0009922, 0., 0., 0.]
+      - [-0.00147834, 0.0020197, -0.000627902, 0., 0., 0.]
+      - [-0.0009922, -0.000627902, 0.000936247, 0., 0., 0.]
+      - [0., 0., 0., 0.00217318, -0.000755372, -0.00046315]
+      - [0., 0., 0., -0.000755372, 0.00132761, -0.000421541]
+      - [0., 0., 0., -0.00046315, -0.000421541, 0.000597439]
+# }}}
+
 
 #######
 # PDG #
@@ -35,22 +61,23 @@ D^+->eta_primelnu::KinematicalDistribution[q2]@BES:2024A:
 # 2024
 #
 # {{{
-D^+->etae^+nu::BR@PDG:2024A:
+# Not yet in PDG, averages of BES:2025A and CLEO:2011A, with a PDG scaling factor of 1.55
+D^+->etae^+nu::BR@MR:2025A:
     type: Gaussian
     observable: D->etalnu::BR
     kinematics: {q2_min: 1e-5, q2_max: 1.747}
     options: {q: d, l: e}
-    mean: 11.1e-04
-    sigma-stat: {hi: 0.7e-04, lo: -0.7e-04}
+    mean: 9.99e-04
+    sigma-stat: {hi: 0.58e-04, lo: -0.58e-04}
     sigma-sys: {hi: 0., lo: 0.}
-D^+->etamu^+nu::BR@PDG:2024A:
+D^+->etamu^+nu::BR@BES:2025A:
     type: Gaussian
     observable: D->etalnu::BR
     kinematics: {q2_min: 0.0112, q2_max: 1.747}
     options: {q: d, l: mu}
-    mean: 10.41e-04
-    sigma-stat: {hi: 1.12e-04, lo: -1.12e-04}
-    sigma-sys: {hi: 0.05e-04, lo: -0.05e-04}
+    mean: 9.08e-04
+    sigma-stat: {hi: 0.35e-04, lo: -0.35e-04}
+    sigma-sys: {hi: 0.23e-04, lo: -0.23e-04}
 D^+->eta_primemu^+nu::BR@PDG:2024A:
     type: Gaussian
     observable: D->eta_primelnu::BR
