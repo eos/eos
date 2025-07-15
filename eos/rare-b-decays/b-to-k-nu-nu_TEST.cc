@@ -60,9 +60,8 @@ class BToKDineutrinoTest :
                 {
                     { "model"_ok,        "CKM"     },
                     { "form-factors"_ok, "BSZ2015" },
-                    { "D"_ok,            "s"       },
-                    { "q"_ok,            "u"       },
-                    { "I"_ok,            "1/2"     }
+                    { "P"_ok,            "K"       },
+                    { "q"_ok,            "u"       }
                 };
 
                 BToPseudoscalarDineutrino d(p, oo);
