@@ -2560,12 +2560,48 @@ namespace eos
                         Unit::InverseGeV2(),
                         &BToPseudoscalarDineutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
-                        Options{ { "D"_ok, "s" }, { "I"_ok, "1/2" } }),
+                        Options{ { "q"_ok, "u" }, { "P"_ok, "K" } }),
                 make_observable("B->Knunu::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}\nu\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "D"_ok, "s" }, { "I"_ok, "1/2" } })
+                        Options{ { "q"_ok, "u" }, { "P"_ok, "K" } })
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // B_s -> eta nu nu
+    // {{{
+    ObservableGroup
+    make_bs_to_eta_nu_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_s\to \eta \nu\bar\nu$ decays)",
+            R"()",
+            {
+                make_observable("B_s->etanunu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to\bar{\eta}\nu\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "q"_ok, "s" }, { "P"_ok, "eta" } }),
+                make_observable("B_s->etanunu::BR", R"(\mathcal{B}(\bar{B}_s\to\bar{\eta}\nu\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q"_ok, "s" }, { "P"_ok, "eta" } }),
+                make_observable("B_s->eta_primenunu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to\bar{\eta_prime}\nu\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "q"_ok, "s" }, { "P"_ok, "eta_prime" } }),
+                make_observable("B_s->eta_primenunu::BR", R"(\mathcal{B}(\bar{B}_s\to\bar{\eta_prime}\nu\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q"_ok, "s" }, { "P"_ok, "eta_prime" } })
             }
         );
 
@@ -2713,8 +2749,9 @@ namespace eos
                 // B -> X_s {gamma, l^+ l^-}
                 make_b_to_xs_group(),
 
-                // B_{u,d} -> P nu nubar
+                // B_{u,d,s} -> P nu nubar
                 make_b_to_k_nu_nu_group(),
+                make_bs_to_eta_nu_nu_group(),
 
                 // B_{u,d} -> V nu nubar
                 make_b_to_kstar_nu_nu_group(),
