@@ -164,6 +164,40 @@ namespace eos
     }
     // }}}
 
+    // B -> eta
+    // {{{
+    ObservableGroup
+    make_b_to_eta_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $B\to \eta$ transitions)",
+            R"(Pseudo observables representing the full basis of $B\to \eta$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("B->eta::f_+(q2)", R"(f_+^{B\to\eta}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->eta::f_T(q2)", R"(f_T^{B\to\eta}(q^2))",
+                        &FormFactors<PToP>::f_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->eta::f_0(q2)", R"(f_0^{B\to\eta}(q^2))",
+                        &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->eta_prime::f_+(q2)", R"(f_+^{B\to\eta'}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->eta_prime::f_T(q2)", R"(f_T^{B\to\eta'}(q^2))",
+                        &FormFactors<PToP>::f_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->eta_prime::f_0(q2)", R"(f_0^{B\to\eta'}(q^2))",
+                        &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // B -> K
     // {{{
     ObservableGroup
@@ -2877,6 +2911,7 @@ namespace eos
             {
                 // B -> P
                 make_b_to_pi_form_factors_group(),
+                make_b_to_eta_form_factors_group(),
                 make_b_to_k_form_factors_group(),
                 make_b_to_d_form_factors_group(),
 
