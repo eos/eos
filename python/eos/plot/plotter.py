@@ -923,6 +923,7 @@ class Plotter:
                         raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
                     covariance = np.array(constraint['covariance'])
                     observables = constraint['observables']
+                    options = constraint['options']
                     means = constraint['means']
                     dim = len(means)
                     kinematics = constraint['kinematics']
@@ -935,7 +936,8 @@ class Plotter:
                     for i in range(0, dim):
                         width = 1
 
-                        if not observables[i] == self.observable:
+                        if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
+                               str(eos.Options(options[i])) == str(eos.QualifiedName(self.observable).options_part())):
                             continue
                         _kinematics = kinematics[i]
                         if self.variable in _kinematics:
