@@ -1125,6 +1125,7 @@ class ConstraintItem(Item):
                 covariance = _np.array(constraint['covariance'])
                 observables = constraint['observables']
                 means = constraint['means']
+                options = constraint['options']
                 dim = len(means)
                 kinematics = constraint['kinematics']
 
@@ -1135,7 +1136,9 @@ class ConstraintItem(Item):
                 for i in range(0, dim):
                     width = 1
 
-                    if not observables[i] == self.observable:
+                    # Check that the observable match and that the provided options match with those of the constraint
+                    if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
+                               _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
