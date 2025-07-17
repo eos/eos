@@ -1,0 +1,165 @@
+/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+
+/*
+ * Copyright (c) 2025 Marta Burgos
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#ifndef EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_QCDF_COEFFICIENTS_HH
+#define EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_QCDF_COEFFICIENTS_HH 1
+
+#include <eos/maths/complex.hh>
+#include <eos/utils/parameters.hh>
+#include <eos/models/wilson-coefficients.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
+#include <eos/models/model.hh>
+#include <eos/form-factors/psd-lcdas.hh>
+
+#include <array>
+#include <cmath>
+
+namespace eos
+{
+    template <typename Transition_> class QCDFCoefficients;
+
+    template <>
+    class QCDFCoefficients<PToPP> :
+        public NonleptonicAmplitudes<PToPP>
+    {
+        private:
+            QuarkFlavorOption opt_q;
+            LightMesonOption opt_p1;
+            LightMesonOption opt_p2;
+
+
+            UsedParameter mB;
+            UsedParameter mb;
+            UsedParameter mu;
+            UsedParameter mus;
+            UsedParameter mB_q_0;
+            UsedParameter mP1;
+            UsedParameter mP2;
+            UsedParameter FP1;
+            UsedParameter FP2;
+            UsedParameter fB;
+            UsedParameter fP1;
+            UsedParameter fP2;
+
+            std::shared_ptr<PseudoscalarLCDAs> lcdasP1;
+            std::shared_ptr<PseudoscalarLCDAs> lcdasP2;
+
+            complex<double> lcda;
+
+            complex<double> a1();
+            complex<double> a2();
+            complex<double> a3();
+            complex<double> a4();
+            complex<double> a5();
+            complex<double> a6();
+            complex<double> a7();
+            complex<double> a8();
+            complex<double> a9();
+            complex<double> a10();
+
+
+            complex<double> b1();
+            complex<double> b2();
+            complex<double> b3u();
+            complex<double> b3c();
+            complex<double> b4u();
+            complex<double> b4c();
+            complex<double> b3EWu();
+            complex<double> b3EWc();
+            complex<double> b4EWu();
+            complex<double> b4EWc();
+
+            static const std::vector<OptionSpecification> options;
+
+        public:
+
+            QCDFCoefficients(const Parameters & p, const Options & o, ParameterUser & u):
+                opt_q(o, options, "q"),
+                opt_p1(o, options, "P1"),
+                opt_p2(o, options, "P2"),
+                mB(p["mass::B_" + opt_q.str()], *this),
+                mB_q_0(p["mass::B_" + opt_q.str() + ",0@BSZ2015"], *this),
+                mP1(p["mass::" + opt_p1.str()], *this),
+                mP2(p["mass::" + opt_p2.str()], *this),
+                FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),
+                FP2(p["B_" + opt_q.str() + "->" + opt_p2.str() + "::f_+(0)"], *this),
+                fB(p["decay-constant::B_" + opt_q.str()], *this),
+                fP1(p["decay-constant::" + opt_p1.str()], *this),
+                mb(p["mass::b(MSbar)"], *this),
+                mus(p["mass::b(MSbar)"], *this),
+                mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u), //what is this? do I need u for this?
+                fP2(p["decay-constant::" + opt_p2.str()], *this)
+            {
+                if (opt_p1.str() == "pi^0" || opt_p1.str() == "pi^+" || opt_p1.str() == "pi^-")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("pi", p, o);
+                }
+                else if (opt_p1.str() == "K_d" || opt_p1.str() == "K_u")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("K", p, o);
+                }
+                else if (opt_p1.str() == "Kbar_d" ||  opt_p1.str() == "Kbar_u")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("Kbar", p, o);
+                }
+
+
+                if (opt_p2.str() == "pi^0" || opt_p2.str() == "pi^+" || opt_p2.str() == "pi^-")
+                {
+                    lcdasP2 = PseudoscalarLCDAs::make("pi", p, o);
+                }
+                else if (opt_p2.str() == "K_d" || opt_p2.str() == "K_u")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("K", p, o);
+                }
+                else if (opt_p2.str() == "Kbar_d" ||  opt_p2.str() == "Kbar_u")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("Kbar", p, o);
+                }
+
+
+            }
+
+
+            ~QCDFCoefficients() {};
+
+            // Helper functions
+
+            //Veretex functions
+            complex<double> gvertex(const double & x) const;
+            std::array<complex<double>, 11> Vertex(const double & x) const;
+
+            // Hard scattering functions
+            std::array<complex<double>, 11> HardSpec(const double & x, const double & y) const;
+
+            // Penguin functions
+            complex<double> GM2(const double & s) const;
+            complex<double> GM2hat(const double & s) const;
+            complex<double> Gsx(const double & s,const double & x) const;
+            std::array<complex<double>, 11> Penguin(const double & x) const;
+
+            //wilson coefficients: erase later
+            std::array<complex<double>, 11> WilsonCoefficients(const double & x) const;
+
+    };
+
+}
+
+#endif
