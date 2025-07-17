@@ -63,24 +63,26 @@ namespace eos
             { LightMeson::Kminus,   [](const double &, rank2 & res) { res = {{{0.0,             0.0, 0.0}, {0.0,  0.0,             0.0}, {1.0, 0.0, 0.0}}}; } },
             { LightMeson::eta,      [](const double & theta_18, rank2 & res)
                                     {
-                                        const double c = std::cos(theta_18),
-                                                     s = std::sin(theta_18);
+                                        const double c18 = std::cos(theta_18),
+                                                     s18 = std::sin(theta_18);
                                         res = {{
-                                                {c / sqrt(6.0) - s / sqrt(3.0), 0.0,                            0.0},
-                                                {0.0,                           c / sqrt(6.0) - s / sqrt(3.0),  0.0},
-                                                {0.0,                           0.0,                           -2.0 * c / sqrt(6.0) - s / sqrt(3.0)}
+                                                {c18 / sqrt(6.0) - s18 / sqrt(3.0), 0.0,                            0.0},
+                                                {0.0,                           c18 / sqrt(6.0) - s18 / sqrt(3.0) ,  0.0},
+                                                {0.0,                           0.0,                           -2.0 * c18 / sqrt(6.0) - s18 / sqrt(3.0)}
                                         }};
                                     } },
             { LightMeson::etap,     [](const double & theta_18, rank2 & res)
                                     {
-                                        const double c = std::cos(theta_18),
-                                                     s = std::sin(theta_18);
+                                        const double c18 = std::cos(theta_18),
+                                                     s18 = std::sin(theta_18);
                                         res = {{
-                                                {s / sqrt(6.0) + c / sqrt(3.0), 0.0,                            0.0},
-                                                {0.0,                           s / sqrt(6.0) + c / sqrt(3.0),  0.0},
-                                                {0.0,                           0.0,                           -2.0 * s / sqrt(6.0) + c / sqrt(3.0)}
+                                                {s18 / sqrt(6.0) + c18 / sqrt(3.0), 0.0,                            0.0},
+                                                {0.0,                           s18 / sqrt(6.0) + c18 / sqrt(3.0),  0.0},
+                                                {0.0,                           0.0,                           -2.0 * s18 / sqrt(6.0) + c18 / sqrt(3.0)}
                                         }};
-                                    } }
+                                    } },
+            { LightMeson::etaq,      [](const double &, rank2 & res) { res = {{{1.0 / sqrt(2.0), 0.0, 0.0}, {0.0, 1.0 / sqrt(2.0), 0.0}, {0.0, 0.0, 0.0}}}; } },
+            { LightMeson::etas,      [](const double &, rank2 & res) { res = {{{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}}}; } }
         };
         // clang-format on
     } // namespace su3f
