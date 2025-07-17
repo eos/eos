@@ -165,17 +165,10 @@ namespace eos
     {
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-<<<<<<< HEAD
-        { "q"_ok,              { "u"_ov, "d"_ov, "s"_ov } },
-        { "P1"_ok,             { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
-        { "P2"_ok,             { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
-        { "representation"_ok, { "topological"_ov, "SU3F"_ov, "QCDF"_ov } }
-=======
         { "q"_ok,              { "u", "d", "s" },                                                                                         "" },
         { "P1"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" }, "" },
         { "P2"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" }, "" },
         { "representation"_ok, { "topological", "SU3F", "QCDF" },                                                                         "" }
->>>>>>> b72119d0 ([b-decays] Add meson options etaq and etas)
     };
 
     BToPseudoscalarPseudoscalar::BToPseudoscalarPseudoscalar(const Parameters & parameters, const Options & options) :
