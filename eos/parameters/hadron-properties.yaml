@@ -24,12 +24,13 @@ groups:
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::eta' :
+          alias_of: [ 'mass::eta_q', 'mass::eta_s' ]
           central: +0.547862
           min:     +0.547845
           max:     +0.547879
           latex:   '$m_{\eta}$'
           unit:     'GeV'
-          comments: "cf. [PDG-Live], December 2024"
+          comments: "cf. [PDG-Live], December 2024, UPDATE etaq and etas"
       'mass::eta_prime' :
           central: +0.95778
           min:     +0.95772
@@ -481,6 +482,20 @@ groups:
           latex:    '$f_{\eta^\prime}$'
           unit:     'GeV'
           comments: 'calculated from 2106.05398, maybe update'
+      'decay-constant::eta_q' :
+          central: +0.139
+          min:     +0.0437
+          max:     +0.0543
+          latex:    '$f_{\eta_q}$'
+          unit:     'GeV'
+          comments: 'UPDATE'
+      'decay-constant::eta_s' :
+          central: +0.1745
+          min:     +0.0437
+          max:     +0.0543
+          latex:    '$f_{\eta_s}$'
+          unit:     'GeV'
+          comments: 'UPDATE'
       'decay-constant::J/psi' :
           central: +0.2773
           min:     +0.2733
@@ -764,6 +779,14 @@ groups:
           max:     +3.14
           unit:     '1'
           latex:    '$\theta_{18}$'
+          comments: 'cf. [FK:2002A] eq. (1)'
+      # Mixing angle of the eta meson in Flavor scheme
+      'eta::theta_FKS' :
+          central: +0.0
+          min:     -3.14
+          max:     +3.14
+          unit:     '1'
+          latex:    '$\theta_{FKS}$'
           comments: 'cf. [FK:2002A] eq. (1)'
   # }}}
 

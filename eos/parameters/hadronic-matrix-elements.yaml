@@ -508,21 +508,22 @@ groups:
           comments: "not the real values, update"
       # form factor parameters for B->eta
       'B->eta::f_+(0)' :
-          alias_of: [ 'B_u->eta::f_+(0)', 'B_d->eta::f_+(0)' ]
+          alias_of: [ 'B_u->eta::f_+(0)', 'B_d->eta::f_+(0)','B_u->eta_q::f_+(0)' , 'B_u->eta_s::f_+(0)', 'B_d->eta_q::f_+(0)', 'B_d->eta_s::f_+(0)' ]
           central:  0.168
           min:      0.121
           max:      0.210
           latex:    '$f_+^{B\to \eta}(0)$'
           unit:     '1'
-          comments: 'from 1508.05287'
+          comments: 'from 1508.05287, UPDATE for etaq etas'
       # form factor parameters for B_s->eta
       'B_s->eta::f_+(0)' :
+          alias_of: [ 'B_s->eta_q::f_+(0)', 'B_s->eta_s::f_+(0)' ]
           central:  0.212
           min:      0.199
           max:      0.227
           latex:    '$f_+^{B_s\to \eta}(0)$'
           unit:     '1'
-          comments: 'from 1508.05287'
+          comments: 'from 1508.05287, UPDATE for etaq etas'
       # form factor parameters for B->eta'
       'B->eta_prime::f_+(0)' :
           alias_of: [ 'B_u->eta_prime::f_+(0)', 'B_d->eta_prime::f_+(0)' ]
