@@ -125,6 +125,8 @@ namespace eos
         Kminus   = 7,
         eta      = 8,
         etap     = 9,
+        etas     = 10,
+        etaq     = 11
     };
 
     std::ostream& operator<< (std::ostream & os, LightMeson qf);

@@ -420,7 +420,9 @@ namespace eos
             { "K_u",       LightMeson::Kplus   },
             { "Kbar_u",    LightMeson::Kminus  },
             { "eta",       LightMeson::eta     },
-            { "eta_prime", LightMeson::etap    }
+            { "eta_prime", LightMeson::etap    },
+            { "eta_q",     LightMeson::etaq     },
+            { "eta_s",     LightMeson::etas    }
         };
 
         const auto i = map.find(_value);
