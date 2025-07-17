@@ -84,6 +84,7 @@ class QCDFAmplitudesTest : public TestCase
                 p["nonleptonic::Re{bS4_c}@QCDF"]    = -2.0 * std::cos(-2.0);
                 p["nonleptonic::Im{bS4_c}@QCDF"]    = -2.0 * std::sin(-2.0);
                 p["eta::theta_18"]                  = 0.0;
+                p["eta::theta_FKS"]                 = 0.5;
 
 
                 static const double eps = 0.1e-6;
@@ -155,34 +156,48 @@ class QCDFAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d5.inverse_amplitude(), complex<double>(-7.822191406502231e-7, -1.036958299899132e-7), eps);
                 TEST_CHECK_RELATIVE_ERROR_C(d5.amplitude(), complex<double>(-7.856562527665976e-7, -1.0487749219766184e-7), eps);
 
-
                 Options o6{
-                    {     "q"_ok,      "s" },
-                    {    "P1"_ok, "Kbar_d" },
-                    {    "P2"_ok,    "eta" },
-                    { "model"_ok,    "CKM" },
+                    {     "q"_ok,    "u" },
+                    {    "P1"_ok,  "eta" },
+                    {    "P2"_ok, "pi^+" },
+                    { "model"_ok,  "CKM" },
                 };
 
                 QCDFRepresentation<PToPP> d6(p, o6);
 
+                TEST_CHECK_RELATIVE_ERROR_C(d6.ordered_amplitude(), complex<double>(8.514846665318583e-8,-1.7954455928104048e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d6.inverse_amplitude(), complex<double>(2.9765205217285947e-7,2.4141259077360335e-9), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d6.amplitude(), complex<double>(3.828005188260453e-7,-1.554033002036801e-8), eps);
 
-                TEST_CHECK_RELATIVE_ERROR_C(d6.ordered_amplitude(), complex<double>(1.0387328442424082e-7, 2.4381522005734528e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d6.inverse_amplitude(), complex<double>(-8.803841392611456e-8, -8.123373428047469e-9), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d6.amplitude(), complex<double>(1.5834870498126266e-8, 1.625814857768706e-8), eps);
 
                 Options o7{
-                    {     "q"_ok,         "d" },
-                    {    "P1"_ok,       "K_d" },
+                    {     "q"_ok,    "s" },
+                    {    "P1"_ok,  "Kbar_d" },
                     {    "P2"_ok, "eta_prime" },
-                    { "model"_ok,       "CKM" },
+                    { "model"_ok,  "CKM" },
                 };
 
                 QCDFRepresentation<PToPP> d7(p, o7);
 
 
-                TEST_CHECK_RELATIVE_ERROR_C(d7.ordered_amplitude(), complex<double>(-7.836971891724648e-7, 2.7757074325068556e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d7.inverse_amplitude(), complex<double>(-1.886061740105515e-7, -2.4826978870673098e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d7.amplitude(), complex<double>(-9.723033631830163e-7, 2.930095454395456e-9), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d7.ordered_amplitude(), complex<double>(4.171934263013258e-7,-9.091638605649977e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d7.inverse_amplitude(), complex<double>(9.462498514109957e-8,8.731121514407307e-9), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d7.amplitude(), complex<double>(5.118184114424253e-7,-8.218526454209247e-8), eps);
+
+
+                Options o8{
+                    {     "q"_ok,    "d" },
+                    {    "P1"_ok,  "eta" },
+                    {    "P2"_ok, "eta_prime" },
+                    { "model"_ok,  "CKM" },
+                };
+
+                QCDFRepresentation<PToPP> d8(p, o8);
+
+                TEST_CHECK_RELATIVE_ERROR_C(d8.ordered_amplitude(), complex<double>(1.4179406004499472e-7,-3.107117030386428e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d8.inverse_amplitude(), complex<double>(5.5908981533771356e-8,4.7527739167367734e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d8.amplitude(), complex<double>(1.9770304157876612e-7,-3.102364256469691e-8), eps);
+
             }
         }
 } qcdf_amplitudes_test;
