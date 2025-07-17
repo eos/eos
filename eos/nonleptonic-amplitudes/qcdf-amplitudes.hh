@@ -21,6 +21,7 @@
 #define EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_QCDF_AMPLITUDES_HH 1
 
 #include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
 #include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
@@ -44,6 +45,7 @@ namespace eos
             BooleanOption          opt_B_bar;
 
             UsedParameter theta_18;
+            UsedParameter theta_FKS;
 
             su3f::rank1                  B;
             std::function<su3f::rank1()> Lambda_u, Lambda_c;
@@ -59,6 +61,13 @@ namespace eos
             UsedParameter fB;
             UsedParameter fP1;
             UsedParameter fP2;
+
+            UsedParameter Fetaq;
+            UsedParameter Fetas;
+            UsedParameter fetaq;
+            UsedParameter fetas;
+            UsedParameter metaq;
+            UsedParameter metas;
 
             UsedParameter re_alpha1, im_alpha1;
             UsedParameter re_alpha2, im_alpha2;
@@ -101,6 +110,7 @@ namespace eos
                 const double theta_18 = this->theta_18.evaluate();
                 su3f::psd_octet.find(opt_p1.value())->second(theta_18, P1);
                 su3f::psd_octet.find(opt_p2.value())->second(theta_18, P2);
+                const double theta_FKS = this->theta_FKS.evaluate();
             }
 
             static NonleptonicAmplitudes<PToPP> * make(const Parameters &, const Options &);
@@ -108,6 +118,14 @@ namespace eos
             // Helper functions
             complex<double> alpha_amplitude(su3f::rank2 & p1, su3f::rank2 & p2) const;
             complex<double> b_amplitude(su3f::rank2 & p1, su3f::rank2 & p2) const;
+
+            complex<double> ordered_amplitude_aux(LightMeson, LightMeson) const;
+            complex<double> inverse_amplitude_aux(LightMeson, LightMeson) const;
+
+
+            const double cFKS = cos(theta_FKS);
+            const double sFKS = sin(theta_FKS);
+
 
             // Diagnostic functions
             complex<double>

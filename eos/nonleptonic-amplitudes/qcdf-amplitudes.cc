@@ -43,6 +43,7 @@ namespace eos
         opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         opt_B_bar(o, options, "B-bar"_ok),
         theta_18(p["eta::theta_18"], *this),
+        theta_FKS(p["eta::theta_FKS"], *this),
         B(su3f::psd_b_triplet.find(opt_q.value())->second),
         P1{ {} },
         P2{ {} },
@@ -56,6 +57,12 @@ namespace eos
         fB(p["decay-constant::B_" + opt_q.str()], *this),
         fP1(p["decay-constant::" + opt_p1.str()], *this),
         fP2(p["decay-constant::" + opt_p2.str()], *this),
+        Fetaq(p["B_" + opt_q.str() + "->eta_q::f_+(0)"], *this),
+        Fetas(p["B_" + opt_q.str() + "->eta_s::f_+(0)"], *this),
+        fetaq(p["decay-constant::eta_q"], *this),
+        fetas(p["decay-constant::eta_s"], *this),
+        metaq(p["mass::eta_q"], *this),
+        metas(p["mass::eta_s"], *this),
 
         re_alpha1(p["nonleptonic::Re{alpha1}@QCDF"], *this),
         im_alpha1(p["nonleptonic::Im{alpha1}@QCDF"], *this),
@@ -138,11 +145,11 @@ namespace eos
 
     const std::vector<OptionSpecification> QCDFRepresentation<PToPP>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok,                                                                     { "true", "false" }, "false" },
-        {        "B-bar"_ok,                                                                     { "true", "false" }, "false" },
-        {            "q"_ok,                                                                       { "u", "d", "s" },      "" },
-        {           "P1"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
-        {           "P2"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
+        { "cp-conjugate"_ok,                                                                            { "true", "false" }, "false" },
+        {        "B-bar"_ok,                                                                            { "true", "false" }, "false" },
+        {            "q"_ok,                                                                              { "u", "d", "s" },      "" },
+        {           "P1"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" },      "" },
+        {           "P2"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" },      "" },
     };
 
     complex<double>
@@ -316,30 +323,233 @@ namespace eos
     }
 
     complex<double>
-    QCDFRepresentation<PToPP>::ordered_amplitude() const
+    QCDFRepresentation<PToPP>::ordered_amplitude_aux(LightMeson optp1, LightMeson optp2) const
     {
+        this->update();
+        double Fp1;
+        double fp1;
+        double fp2;
+        double mp2;
+
+        switch (optp1)
+        {
+            case LightMeson::etaq:
+            {
+                Fp1 = Fetaq();
+                fp1 = fetaq();
+                break;
+            }
+            case LightMeson::etas:
+            {
+                Fp1 = Fetas();
+                fp1 = fetas();
+                break;
+            }
+            default:
+            {
+                Fp1 = FP1();
+                fp1 = fP1();
+                break;
+            }
+        }
+        switch (optp2)
+        {
+            case LightMeson::etaq:
+            {
+                mp2 = metaq();
+                fp2 = fetaq();
+                break;
+            }
+            case LightMeson::etas:
+            {
+                mp2 = metas();
+                fp2 = fetas();
+                break;
+            }
+            default:
+            {
+                mp2 = mP2();
+                fp2 = fP2();
+                break;
+            }
+        }
+
+        su3f::rank2 p1;
+        su3f::psd_octet.at(optp1)(0.0, p1);
+
+        su3f::rank2 p2;
+        su3f::psd_octet.at(optp2)(0.0, p2);
+
         this->update();
 
         if (opt_B_bar.value())
         {
-            su3f::transpose(P1);
-            su3f::transpose(P2);
+            su3f::transpose(p1);
+            su3f::transpose(p2);
         }
 
-        return power_of<2>(mB()) * FP1() * fP2() / (1 - power_of<2>(mP2() / mB_q_0())) * this->alpha_amplitude(P1, P2) + fB() * fP1() * fP2() * this->b_amplitude(P1, P2);
+
+        return power_of<2>(mB()) * Fp1 * fp2 / (1 - power_of<2>(mp2 / mB_q_0())) * this->alpha_amplitude(p1, p2) + fB() * fp1 * fp2 * this->b_amplitude(p1, p2);
+    }
+
+
+    complex<double>
+    QCDFRepresentation<PToPP>::ordered_amplitude() const
+    {
+
+        this->update();
+
+        switch (opt_p1.value())
+        {
+            case LightMeson::eta:
+                switch (opt_p2.value())
+                {
+                    case LightMeson::eta:
+                        return this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etaq)* power_of<2>(cFKS) + this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etas) * power_of<2>(sFKS)
+                        - (this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etas) + this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etaq)) * cFKS * sFKS;
+                    case LightMeson::etap:
+                        return this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etas) * power_of<2>(cFKS)
+                        - this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etaq) * power_of<2>(sFKS)
+                        + (this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etaq) - this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etas)) * cFKS * sFKS;
+                    default:
+                        return  this->ordered_amplitude_aux(LightMeson::etaq, opt_p2.value()) * cFKS - this->ordered_amplitude_aux(LightMeson::etas, opt_p2.value()) * sFKS;
+                }
+            case LightMeson::etap:
+                switch (opt_p2.value())
+                {
+                    case LightMeson::eta:
+                        return this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etaq) * power_of<2>(cFKS) - this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etas) * power_of<2>(sFKS)
+                        + (this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etaq) - this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etas)) * cFKS * sFKS;
+                    case LightMeson::etap:
+                        return this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etas)* power_of<2>(cFKS) + this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etaq) * power_of<2>(sFKS)
+                        + (this->ordered_amplitude_aux(LightMeson::etas, LightMeson::etaq) + this->ordered_amplitude_aux(LightMeson::etaq, LightMeson::etas)) * cFKS * sFKS;
+                    default:
+                        return this->ordered_amplitude_aux(LightMeson::etas, opt_p2.value()) * cFKS + this->ordered_amplitude_aux(LightMeson::etaq, opt_p2.value()) * sFKS;
+                }
+            default:
+                switch (opt_p2.value())
+                {
+                    case LightMeson::eta:
+                        return this->ordered_amplitude_aux(opt_p1.value(), LightMeson::etaq) * cFKS - this->ordered_amplitude_aux(opt_p1.value(), LightMeson::etas) * sFKS;
+                    case LightMeson::etap:
+                        return this->ordered_amplitude_aux(opt_p1.value(), LightMeson::etas) * cFKS + this->ordered_amplitude_aux(opt_p1.value(), LightMeson::etaq) * sFKS;
+                    default:
+                        return this->ordered_amplitude_aux(opt_p1.value(), opt_p2.value());
+                }
+            }
+    }
+
+    complex<double>
+    QCDFRepresentation<PToPP>::inverse_amplitude_aux(LightMeson optp1, LightMeson optp2) const
+    {
+        this->update();
+        double Fp2;
+        double fp1;
+        double fp2;
+        double mp1;
+
+        switch (optp2)
+        {
+            case LightMeson::etaq:
+            {
+                Fp2 = Fetaq();
+                fp2 = fetaq();
+                break;
+            }
+            case LightMeson::etas:
+            {
+                Fp2 = Fetas();
+                fp2 = fetas();
+                break;
+            }
+            default:
+            {
+                Fp2 = FP2();
+                fp2 = fP2();
+                break;
+            }
+        }
+        switch (optp1)
+        {
+            case LightMeson::etaq:
+            {
+                mp1 = metaq();
+                fp1 = fetaq();
+                break;
+            }
+            case LightMeson::etas:
+            {
+                mp1 = metas();
+                fp1 = fetas();
+                break;
+            }
+            default:
+            {
+                mp1 = mP1();
+                fp1 = fP1();
+                break;
+            }
+        }
+
+        su3f::rank2 p1;
+        su3f::psd_octet.at(optp1)(0.0, p1);
+
+        su3f::rank2 p2;
+        su3f::psd_octet.at(optp2)(0.0, p2);
+
+        this->update();
+
+        if (opt_B_bar.value())
+        {
+            su3f::transpose(p1);
+            su3f::transpose(p2);
+        }
+
+
+        return power_of<2>(mB()) * Fp2 * fp1 / (1 - power_of<2>(mp1 / mB_q_0())) * this->alpha_amplitude(p2, p1) + fB() * fp1 * fp2 * this->b_amplitude(p2, p1);
     }
 
     complex<double>
     QCDFRepresentation<PToPP>::inverse_amplitude() const
     {
-        this->update();
-
-        if (opt_B_bar.value())
+        switch (opt_p1.value())
         {
-            su3f::transpose(P1);
-            su3f::transpose(P2);
-        }
-
-        return power_of<2>(mB()) * FP2() * fP1() / (1 - power_of<2>(mP1() / mB_q_0())) * this->alpha_amplitude(P2, P1) + fB() * fP1() * fP2() * this->b_amplitude(P2, P1);
+            case LightMeson::eta:
+                switch (opt_p2.value())
+                {
+                    case LightMeson::eta:
+                        return this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etaq)* power_of<2>(cFKS) + this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etas) * power_of<2>(sFKS)
+                        - (this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etas) + this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etaq)) * cFKS * sFKS;
+                    case LightMeson::etap:
+                        return this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etas) * power_of<2>(cFKS) - this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etaq) * power_of<2>(sFKS)
+                        + (this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etaq) - this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etas)) * cFKS * sFKS;
+                    default:
+                        return  this->inverse_amplitude_aux(LightMeson::etaq, opt_p2.value()) * cFKS - this->inverse_amplitude_aux(LightMeson::etas, opt_p2.value()) * sFKS;
+                }
+            case LightMeson::etap:
+                switch (opt_p2.value())
+                {
+                    case LightMeson::eta:
+                        return this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etaq) * power_of<2>(cFKS) - this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etas) * power_of<2>(sFKS)
+                        + (this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etaq) - this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etas)) * cFKS * sFKS;
+                    case LightMeson::etap:
+                        return this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etas)* power_of<2>(cFKS) + this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etaq) * power_of<2>(sFKS)
+                        + (this->inverse_amplitude_aux(LightMeson::etas, LightMeson::etaq) + this->inverse_amplitude_aux(LightMeson::etaq, LightMeson::etas)) * cFKS * sFKS;
+                    default:
+                        return this->inverse_amplitude_aux(LightMeson::etas, opt_p2.value()) * cFKS + this->inverse_amplitude_aux(LightMeson::etaq, opt_p2.value()) * sFKS;
+                }
+            default:
+                switch (opt_p2.value())
+                {
+                    case LightMeson::eta:
+                        return this->inverse_amplitude_aux(opt_p1.value(), LightMeson::etaq) * cFKS - this->inverse_amplitude_aux(opt_p1.value(), LightMeson::etas) * sFKS;
+                    case LightMeson::etap:
+                        return this->inverse_amplitude_aux(opt_p1.value(), LightMeson::etas) * cFKS + this->inverse_amplitude_aux(opt_p1.value(), LightMeson::etaq) * sFKS;
+                    default:
+                        return this->inverse_amplitude_aux(opt_p1.value(), opt_p2.value());
+                }
+            }
     }
+
+
 } // namespace eos
