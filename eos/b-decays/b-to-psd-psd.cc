@@ -165,10 +165,10 @@ namespace eos
     {
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-        { "q"_ok,              { "u", "d", "s" },                                                                       "" },
-        { "P1"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "P2"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "representation"_ok, { "topological", "SU3F", "QCDF" },                                                       "" }
+        { "q"_ok,              { "u", "d", "s" },                                                                                         "" },
+        { "P1"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" }, "" },
+        { "P2"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" }, "" },
+        { "representation"_ok, { "topological", "SU3F", "QCDF" },                                                                         "" }
     };
 
     BToPseudoscalarPseudoscalar::BToPseudoscalarPseudoscalar(const Parameters & parameters, const Options & options) :
