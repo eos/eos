@@ -122,16 +122,18 @@ namespace eos
 
     enum class LightMeson : uint8_t
     {
-        pi0     = 0,
-        piplus  = 1,
-        piminus = 2,
-        K0      = 3,
-        K0bar   = 4,
-        KS      = 5,
-        Kplus   = 6,
-        Kminus  = 7,
-        eta     = 8,
-        etap    = 9,
+        pi0      = 0,
+        piplus   = 1,
+        piminus  = 2,
+        K0       = 3,
+        K0bar    = 4,
+        KS       = 5,
+        Kplus    = 6,
+        Kminus   = 7,
+        eta      = 8,
+        etap     = 9,
+        etas     = 10,
+        etaq     = 11
     };
 
     std::ostream & operator<< (std::ostream & os, LightMeson qf);
