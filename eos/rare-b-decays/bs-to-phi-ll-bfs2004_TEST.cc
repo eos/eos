@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2021 Méril Reboud
  * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,12 +65,12 @@ class BsToPhiDileptonBFS2004NaiveTest :
             BsToPhiDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-1.23979e-10,3.78483e-15)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>(7.05843e-12,3.78483e-15)   , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-5.56392e-11,1.80598e-12)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>(2.50889e-11,1.80598e-12)   , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>(4.85643e-11,-1.66461e-12)  , eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>(-2.31595e-11,-1.66461e-12) , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-1.23979e-10,5.8767e-15)  , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>(7.05843e-12,5.8767e-15)   , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-5.56392e-11,1.80190e-12)  , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>(2.50889e-11,1.80190e-12)   , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>(4.85643e-11,-1.66085e-12)  , eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>(-2.31595e-11,-1.66085e-12) , eps);
        }
     }
 } bs_to_phi_dilepton_BFS2004_naive_test;

@@ -79,6 +79,8 @@ namespace eos
 
         UsedParameter alpha_e;
 
+        cubature::Config cub_conf;
+
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -95,7 +97,8 @@ namespace eos
             mu2_g(p["B->B::mu_G^2@1GeV"], u),
             mu2_pi(p["B->B::mu_pi^2@1GeV"], u),
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
-            alpha_e(p["QED::alpha_e(m_b)"], u)
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            cub_conf(cubature::Config().epsrel(1e-4))
         {
             Context ctx("When constructing B->X_sll observables");
 
@@ -568,9 +571,9 @@ namespace eos
     double
     BToXsDilepton<HLMW2005>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        return integrate1D(std::function<double (const double &)>(
+        return integrate(std::function<double (const double &)>(
                     std::bind(&BToXsDilepton<HLMW2005>::differential_branching_ratio, this, std::placeholders::_1)),
-                32, s_min, s_max);
+                    s_min, s_max, _imp->cub_conf);
     }
 
     Diagnostics
