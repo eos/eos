@@ -167,7 +167,7 @@ namespace eos
     };
 
     template <typename Process_> class HKVT2025FormFactors<Process_, PToPP> :
-        public FormFactors<PToPP>
+        public FormFactors<PToPP>, public virtual ParameterUser
     {
         private:
             // Switches for enabled partial waves and isospin configurations

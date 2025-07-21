@@ -162,6 +162,8 @@ namespace eos
         // Half-integer isospins are required for future applications to D pi or K pi final states
         switch_I[0] = (opt_I.value() && Isospin::zero) | (opt_I.value() && Isospin::onehalf);
         switch_I[1] = (opt_I.value() && Isospin::one) | (opt_I.value() && Isospin::threehalves);
+
+        this->uses(*scattering_amplitudes);
     }
 
     template<typename Process_>
