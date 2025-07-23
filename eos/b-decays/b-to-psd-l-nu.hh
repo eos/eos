@@ -61,6 +61,7 @@ namespace eos
             double integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
             double integrated_flat_term(const double & q2_min, const double & q2_max) const;
             double integrated_lepton_polarization(const double & q2_min, const double & q2_max) const;
+            double integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
@@ -81,6 +82,7 @@ namespace eos
             static const std::string kinematics_description_q2;
             static const std::string kinematics_description_w;
             static const std::string kinematics_description_c_theta_l;
+            static const std::string kinematics_description_kperp;
 
             /*!
              * References used in the computation of our observables.

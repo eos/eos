@@ -499,6 +499,30 @@ namespace eos
         return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
     }
 
+    double
+    BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const
+    {
+        std::function<double (const std::array<double, 2> &)> integrand = [this](const std::array<double, 2> & kinematics) -> double
+        {
+            const auto & [kperp, z_B] = kinematics;
+
+            const double m_B = this->_imp->m_B(), m_P = this->_imp->m_P();
+            const double kvec2 = kperp * kperp / (1.0 - z_B * z_B);
+            const double q2 = m_B * m_B + m_P * m_P - 2 * m_B * sqrt(m_P * m_P + kvec2);
+
+            const double jacobian1 = m_B / ((1 - z_B * z_B) * sqrt(m_P * m_P + kvec2));
+            const double jacobian2 = 2.0 * kperp;
+            const double jacobian  = jacobian1 * jacobian2;
+
+            return this->_imp->differential_branching_ratio(q2) * jacobian / 2.0;
+        };
+
+        static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
+
+        return integrate(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
+                         config);
+    }
+
     // normalized_differential_branching_ratio (|V_Ub|=1)
     double
     BToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio(const double & s) const
@@ -661,6 +685,10 @@ namespace eos
     const std::string
     BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l = "\
     The cosine of the polar angle theta_l between the charged lepton and the direction opposite to P(seudoscalar) meson in the l-nubar rest frame.";
+
+    const std::string
+    BToPseudoscalarLeptonNeutrino::kinematics_description_kperp = "\
+    The transverse momentum of the final-state hadron, i.e. the pseudoscalar meson P, in GeV.";
 
     const std::set<ReferenceName>
     BToPseudoscalarLeptonNeutrino::references

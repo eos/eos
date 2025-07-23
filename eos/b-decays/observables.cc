@@ -438,6 +438,12 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
+                make_observable("B_s->D_slnu::BR(kperp_min,kperp_max)", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                        Unit::InverseGeV(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
+                        std::make_tuple("kperp_min", "kperp_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
                 make_observable("B_s->D_slnu::normdBR/ds",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio,
