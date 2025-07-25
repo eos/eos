@@ -49,7 +49,8 @@ class DataFile(Deserializable):
         context = AnalysisFileContext() if context is None else context
 
         path = context.data_path(self.path)
-        os.path.exists(path) or eos.error(f"Data file '{path}' does not exist")
+        if not os.path.exists(path):
+            raise ValueError(f"Data file '{path}' does not exist")
         name = os.path.split(path)[-1]
 
         if name == 'samples':
