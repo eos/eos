@@ -23,6 +23,7 @@
 #include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
+#include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <array>
@@ -355,7 +356,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
         {
         }
 
-        void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
+        void run_one(const ObservablePtr & o, const exp::Expression & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
             Parameter abs_c7(parameters["b->s::Re{c7}"]);
@@ -373,7 +374,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
             arg_c10 = values[5];
 
             static const double eps = 3e-14;
-            WilsonPolynomialEvaluator evaluator;
+            exp::ExpressionEvaluator evaluator;
             TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }
 
@@ -427,7 +428,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 for (const auto & name : names)
                 {
                     ObservablePtr observable = Observable::make(name, parameters, kinematics, options);
-                    WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
+                    auto polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
                     for (const auto & input : inputs)
                     {
@@ -482,47 +483,37 @@ class BToKstarDileptonLowRecoilPolynomialTest :
 
                 // central ratio
                 {
-                    ObservablePtr ratio = make_polynomial_ratio(
-                            make_polynomial(numerator, coefficients),
-                            make_polynomial(denominator, coefficients),
-                            parameters);
-                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                    auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
+                    exp::ExpressionEvaluator evaluator;
+                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
                 }
 
                 // lambda ratios
                 {
                     lambda = lambda.max();
-                    ObservablePtr ratio = make_polynomial_ratio(
-                            make_polynomial(numerator, coefficients),
-                            make_polynomial(denominator, coefficients),
-                            parameters);
-                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                    auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
+                    exp::ExpressionEvaluator evaluator;
+                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
                 }
                 {
                     lambda = lambda.min();
-                    ObservablePtr ratio = make_polynomial_ratio(
-                            make_polynomial(numerator, coefficients),
-                            make_polynomial(denominator, coefficients),
-                            parameters);
-                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                    auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
+                    exp::ExpressionEvaluator evaluator;
+                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
                 }
 
                 // A ratios
                 {
                     A = A.max();
-                    ObservablePtr ratio = make_polynomial_ratio(
-                            make_polynomial(numerator, coefficients),
-                            make_polynomial(denominator, coefficients),
-                            parameters);
-                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                    auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
+                    exp::ExpressionEvaluator evaluator;
+                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
                 }
                 {
                     A = A.min();
-                    ObservablePtr ratio = make_polynomial_ratio(
-                            make_polynomial(numerator, coefficients),
-                            make_polynomial(denominator, coefficients),
-                            parameters);
-                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                    auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
+                    exp::ExpressionEvaluator evaluator;
+                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
                 }
             }
         }
