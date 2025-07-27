@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017, 2019 Danny van Dyk
+ * Copyright (c) 2017-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,10 +20,9 @@
 #ifndef EOS_GUARD_EOS_STATISTICS_TEST_STATISTIC_HH
 #define EOS_GUARD_EOS_STATISTICS_TEST_STATISTIC_HH 1
 
-#include <eos/utils/one-of.hh>
-
 #include <memory>
 #include <ostream>
+#include <variant>
 
 namespace eos
 {
@@ -34,7 +33,7 @@ namespace eos
         class ChiSquare;
     }
 
-    using TestStatistic = OneOf<test_statistics::Empty, test_statistics::ChiSquare>;
+    using TestStatistic = std::variant<test_statistics::Empty, test_statistics::ChiSquare>;
 }
 
 #endif
