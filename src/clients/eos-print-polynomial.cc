@@ -19,9 +19,10 @@
 
 #include <eos/observable.hh>
 #include <eos/utils/destringify.hh>
+#include <eos/utils/expression-evaluator.hh>
+#include <eos/utils/expression-printer.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/one-of.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -153,11 +154,11 @@ main(int argc, char * argv[])
             throw DoUsage("No input specified");
         }
 
-        WilsonPolynomialEvaluator evaluator;
-        WilsonPolynomialPrinter   printer;
+        exp::ExpressionEvaluator evaluator;
+        exp::ExpressionPrinter   printer(std::cout);
         for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend(); i != i_end; ++i)
         {
-            WilsonPolynomial polynomial = make_polynomial(i->observable, CommandLine::instance()->coefficients);
+            exp::Expression polynomial = make_polynomial(i->observable, CommandLine::instance()->coefficients);
 
             std::cout << i->observable->name() << "[";
 
@@ -172,7 +173,9 @@ main(int argc, char * argv[])
             {
                 std::cout << ", " << *c;
             }
-            std::cout << "] = " << polynomial.accept_returning<std::string>(printer) << std::endl;
+            std::cout << "] = ";
+            polynomial.accept(printer);
+            std::cout << std::endl;
             std::cout << "polynomial = " << polynomial.accept_returning<double>(evaluator) << std::endl;
             std::cout << "direct     = " << i->observable->evaluate() << std::endl;
         }

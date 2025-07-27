@@ -20,6 +20,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
+#include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <array>
@@ -175,7 +176,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
         {
         }
 
-        void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
+        void run_one(const ObservablePtr & o, const exp::Expression & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
             Parameter re_c7(parameters["b->s::Re{c7}"]);
@@ -193,7 +194,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
             im_c10 = values[5];
 
             static const double eps = 5e-8;
-            WilsonPolynomialEvaluator evaluator;
+            exp::ExpressionEvaluator evaluator;
             TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }
 
@@ -239,7 +240,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
                 ObservablePtr observable = Observable::make(name, parameters, kinematics, Options());
                 TEST_CHECK(ObservablePtr() != observable);
 
-                WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
+                auto polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
                 for (const auto & input : inputs)
                 {
