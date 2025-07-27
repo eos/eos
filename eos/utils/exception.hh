@@ -50,13 +50,12 @@ namespace eos
             std::string backtrace(const std::string & delimiter) const;
     };
 
-    class Exception :
-        public std::exception
+    class Exception : public std::exception
     {
         private:
             class ContextData;
 
-            std::string _message;
+            std::string                        _message;
             const std::unique_ptr<ContextData> _context_data;
 
         protected:
@@ -71,33 +70,29 @@ namespace eos
             virtual const char * what() const noexcept override;
     };
 
-    class InternalError :
-        public Exception
+    class InternalError : public Exception
     {
         public:
-            InternalError(const std::string & message) throw ();
+            InternalError(const std::string & message) throw();
     };
 
-    class UnknownObservableError :
-        public Exception
+    class UnknownObservableError : public Exception
     {
         public:
-            UnknownObservableError(const std::string & message) throw ();
+            UnknownObservableError(const std::string & message) throw();
     };
 
-    class GSLError :
-        public Exception
+    class GSLError : public Exception
     {
         public:
-            GSLError(const std::string & message) throw ();
+            GSLError(const std::string & message) throw();
     };
 
-    class ParsingError :
-        public Exception
+    class ParsingError : public Exception
     {
         public:
-            ParsingError(const std::string & message) throw ();
+            ParsingError(const std::string & message) throw();
     };
-}
+} // namespace eos
 
 #endif

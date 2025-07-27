@@ -17,14 +17,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/observable_stub.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class ObservableStubTest :
-    public TestCase
+class ObservableStubTest : public TestCase
 {
     public:
         ObservableStubTest() :
@@ -32,13 +32,14 @@ class ObservableStubTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // Setting and retrieval
             {
-                Parameters parameters = Parameters::Defaults();
-                Parameter p = parameters["mass::c"];
-                ObservablePtr o = ObservablePtr(new ObservableStub(parameters, "mass::c"));
+                Parameters    parameters = Parameters::Defaults();
+                Parameter     p          = parameters["mass::c"];
+                ObservablePtr o          = ObservablePtr(new ObservableStub(parameters, "mass::c"));
 
                 TEST_CHECK_EQUAL(p(), o->evaluate());
 
@@ -51,10 +52,10 @@ class ObservableStubTest :
 
             // Cloning w/ anonymous parameters
             {
-                Parameters parameters = Parameters::Defaults();
-                Parameter p = parameters["mass::c"];
-                ObservablePtr o1 = ObservablePtr(new ObservableStub(parameters, "mass::c"));
-                ObservablePtr o2 = o1->clone();
+                Parameters    parameters = Parameters::Defaults();
+                Parameter     p          = parameters["mass::c"];
+                ObservablePtr o1         = ObservablePtr(new ObservableStub(parameters, "mass::c"));
+                ObservablePtr o2         = o1->clone();
 
                 TEST_CHECK_EQUAL(o1->evaluate(), o2->evaluate());
 
@@ -67,13 +68,13 @@ class ObservableStubTest :
 
             // Check name, kinematics, options after cloning
             {
-                Parameters parameters = Parameters::Defaults();
-                ObservablePtr o1 = ObservablePtr(new ObservableStub(parameters, "mass::c"));
-                ObservablePtr o2 = o1->clone();
+                Parameters    parameters = Parameters::Defaults();
+                ObservablePtr o1         = ObservablePtr(new ObservableStub(parameters, "mass::c"));
+                ObservablePtr o2         = o1->clone();
 
                 TEST_CHECK_EQUAL(o1->name().full(), o2->name().full());
-                TEST_CHECK_EQUAL(o1->kinematics(),  o2->kinematics());
-                TEST_CHECK_EQUAL(o1->options(),     o2->options());
+                TEST_CHECK_EQUAL(o1->kinematics(), o2->kinematics());
+                TEST_CHECK_EQUAL(o1->options(), o2->options());
             }
         }
 } observable_stub_test;

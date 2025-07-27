@@ -30,7 +30,7 @@ namespace eos::exp
         public:
             std::set<Parameter::Id> parameter_ids;
 
-            ExpressionUsedParameterReader() = default;
+            ExpressionUsedParameterReader()  = default;
             ~ExpressionUsedParameterReader() = default;
 
             void visit(const BinaryExpression & e);
@@ -53,6 +53,6 @@ namespace eos::exp
 
             void visit(const CachedObservableExpression & e);
     };
-}
+} // namespace eos::exp
 
 #endif

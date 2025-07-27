@@ -31,8 +31,7 @@ namespace eos
 {
     using eos::exp::Expression;
 
-    class ExpressionObservable :
-        public Observable
+    class ExpressionObservable : public Observable
     {
         private:
             QualifiedName _name;
@@ -46,54 +45,48 @@ namespace eos
             Expression _expression;
 
         public:
-            ExpressionObservable(const QualifiedName & name,
-                    const Parameters & parameters,
-                    const Kinematics & kinematics,
-                    const Options & options,
-                    const Expression & expression);
+            ExpressionObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options, const Expression & expression);
 
-            ExpressionObservable(const QualifiedName & name,
-                    const ObservableCache & cache,
-                    const Kinematics & kinematics,
-                    const Options & options,
-                    const Expression & expression);
+            ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options, const Expression & expression);
 
-            ~ExpressionObservable()
-            {
-            }
+            ~ExpressionObservable() {}
 
-            virtual double evaluate() const;
+            virtual double        evaluate() const;
             virtual ObservablePtr clone() const;
             virtual ObservablePtr clone(const Parameters & parameters) const;
 
-            virtual const QualifiedName & name() const
+            virtual const QualifiedName &
+            name() const
             {
                 return _name;
             }
 
-            virtual Parameters parameters()
+            virtual Parameters
+            parameters()
             {
                 return _parameters;
-            };
+            }
 
-            virtual Kinematics kinematics()
+            virtual Kinematics
+            kinematics()
             {
                 return _kinematics;
-            };
+            }
 
-            virtual Options options()
+            virtual Options
+            options()
             {
                 return _options;
             }
 
-            const Expression & expression() const
+            const Expression &
+            expression() const
             {
                 return _expression;
             }
     };
 
-    class ExpressionObservableEntry :
-        public ObservableEntry
+    class ExpressionObservableEntry : public ObservableEntry
     {
         private:
             QualifiedName _name;
@@ -111,14 +104,9 @@ namespace eos
             std::vector<OptionSpecification> _option_specifications;
 
         public:
-            ExpressionObservableEntry(const QualifiedName & name, const std::string & latex,
-                    const Unit & unit,
-                    const Expression & expression,
-                    const Options & forced_options);
+            ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const Expression & expression, const Options & forced_options);
 
-            ~ExpressionObservableEntry()
-            {
-            }
+            ~ExpressionObservableEntry() {}
 
             virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const;
             virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const;
@@ -128,21 +116,24 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
 
-            virtual const QualifiedName & name() const
+            virtual const QualifiedName &
+            name() const
             {
                 return _name;
             }
 
-            virtual const std::string & latex() const
+            virtual const std::string &
+            latex() const
             {
                 return _latex;
             }
 
-            virtual const Unit & unit() const
+            virtual const Unit &
+            unit() const
             {
                 return _unit;
             }
     };
-}
+} // namespace eos
 
 #endif

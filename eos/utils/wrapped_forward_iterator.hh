@@ -26,8 +26,8 @@
 #include <eos/utils/wrapped_forward_iterator-fwd.hh>
 
 #include <functional>
-#include <type_traits>
 #include <iterator>
+#include <type_traits>
 
 namespace eos
 {
@@ -35,11 +35,10 @@ namespace eos
      * A WrappedForwardIterator is a generic wrapper around a forward iterator,
      * hiding the underlying base iterator.
      */
-    template <typename Tag_, typename Value_>
-    class WrappedForwardIterator
+    template <typename Tag_, typename Value_> class WrappedForwardIterator
     {
         private:
-             WrappedForwardIteratorUnderlyingIteratorHolder * _iter;
+            WrappedForwardIteratorUnderlyingIteratorHolder * _iter;
 
         public:
             using Tag = Tag_;
@@ -51,8 +50,7 @@ namespace eos
             ~WrappedForwardIterator();
             WrappedForwardIterator(const WrappedForwardIterator &);
 
-            template <typename T_>
-            WrappedForwardIterator(const T_ &);
+            template <typename T_> WrappedForwardIterator(const T_ &);
 
             WrappedForwardIterator & operator= (const WrappedForwardIterator &);
 
@@ -61,10 +59,10 @@ namespace eos
             ///@name Standard library typedefs
             ///@{
 
-            using value_type = typename std::remove_reference<Value_>::type &;
-            using reference = typename std::remove_reference<Value_>::type &;
-            using pointer = typename std::remove_reference<Value_>::type *;
-            using difference_type = std::ptrdiff_t;
+            using value_type        = typename std::remove_reference<Value_>::type &;
+            using reference         = typename std::remove_reference<Value_>::type &;
+            using pointer           = typename std::remove_reference<Value_>::type *;
+            using difference_type   = std::ptrdiff_t;
             using iterator_category = std::forward_iterator_tag;
 
             ///@}
@@ -73,14 +71,14 @@ namespace eos
             ///@{
 
             WrappedForwardIterator & operator++ ();
-            WrappedForwardIterator operator++ (int);
+            WrappedForwardIterator   operator++ (int);
 
             ///@}
 
             ///@name Dereference
             ///@{
 
-            pointer operator-> () const;
+            pointer   operator->() const;
             reference operator* () const;
 
             ///@}
@@ -96,11 +94,11 @@ namespace eos
             ///@name Underlying iterator
             ///@{
 
-            template <typename T_> T_ & underlying_iterator();
+            template <typename T_> T_ &       underlying_iterator();
             template <typename T_> const T_ & underlying_iterator() const;
 
             ///@}
     };
-}
+} // namespace eos
 
 #endif

@@ -18,14 +18,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/verify.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class VerifiedRangeTest :
-    public TestCase
+class VerifiedRangeTest : public TestCase
 {
     public:
         VerifiedRangeTest() :
@@ -33,7 +33,8 @@ class VerifiedRangeTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // proper construction
             TEST_CHECK_NO_THROW(VerifiedRange<double> test_range(0.0, 1.0, 0.5));

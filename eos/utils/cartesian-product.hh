@@ -21,8 +21,8 @@
 #ifndef EOS_GUARD_EOS_UTILS_CARTESIAN_PRODUCT_HH
 #define EOS_GUARD_EOS_UTILS_CARTESIAN_PRODUCT_HH 1
 
-#include <vector>
 #include <cstddef>
+#include <vector>
 
 namespace eos
 {
@@ -52,14 +52,12 @@ namespace eos
                 private:
                     using IteratorState = std::vector<typename U_::const_iterator>;
 
-                    IteratorState _state;
-                    Sizes _sizes;
-                    bool _at_end;
+                    IteratorState     _state;
+                    Sizes             _sizes;
+                    bool              _at_end;
                     std::vector<long> _values;
 
-                    _Iterator(const IteratorState & state,
-                              const Sizes& sizes,
-                              bool  atEnd) :
+                    _Iterator(const IteratorState & state, const Sizes & sizes, bool atEnd) :
                         _state(state),
                         _sizes(sizes),
                         _at_end(atEnd),
@@ -70,62 +68,76 @@ namespace eos
                 public:
                     friend class CartesianProduct<U_>;
 
-                    bool operator== (const _Iterator & other) const
+                    bool
+                    operator== (const _Iterator & other) const
                     {
                         if (_at_end && other._at_end)
+                        {
                             return true;
+                        }
 
                         // compare each element
                         auto i = _state.cbegin();
                         auto j = other._state.cbegin();
-                        for ( ; i != _state.end(); ++i, ++j)
+                        for (; i != _state.end(); ++i, ++j)
                         {
                             if (*i != *j)
+                            {
                                 return false;
+                            }
                         }
 
                         return true;
                     }
 
-                    bool operator!= (const _Iterator& other) const
+                    bool
+                    operator!= (const _Iterator & other) const
                     {
-                        return !(*this == other);
+                        return ! (*this == other);
                     }
 
-                    _Iterator & operator+= (long increment)
+                    _Iterator &
+                    operator+= (long increment)
                     {
                         // Already at the last element?
                         if (_at_end)
+                        {
                             return *this;
+                        }
 
-                        auto size_it = _sizes.rbegin();
+                        auto size_it  = _sizes.rbegin();
                         auto state_it = _state.rbegin();
                         auto value_it = _values.rbegin();
-                        for ( ; size_it != _sizes.rend(); ++size_it, ++state_it, ++value_it)
+                        for (; size_it != _sizes.rend(); ++size_it, ++state_it, ++value_it)
                         {
-                            long new_value = (*value_it + increment) % *size_it;;
-                            long difference = new_value - *value_it;
-                            *value_it = new_value;
-                            increment -= difference;
-                            increment /= *size_it;
-                            *state_it += difference;
+                            long new_value = (*value_it + increment) % *size_it;
+                            ;
+                            long difference  = new_value - *value_it;
+                            *value_it        = new_value;
+                            increment       -= difference;
+                            increment       /= *size_it;
+                            *state_it       += difference;
                         }
 
                         if (increment != 0)
+                        {
                             _at_end = true;
+                        }
 
                         return *this;
                     }
 
-                    _Iterator & operator++ ()
+                    _Iterator &
+                    operator++ ()
                     {
                         return (*this += 1);
                     }
 
-                    std::vector<typename U_::value_type> operator* () const
+                    std::vector<typename U_::value_type>
+                    operator* () const
                     {
                         std::vector<typename U_::value_type> result;
-                        for (auto i = _state.begin() ; _state.end() != i ; ++i)
+                        for (auto i = _state.begin(); _state.end() != i; ++i)
                         {
                             result.push_back(*(*i));
                         }
@@ -153,7 +165,8 @@ namespace eos
              * with new_container.
              * @param new_container The new container to be added.
              */
-            void over(const T_ & new_container)
+            void
+            over(const T_ & new_container)
             {
                 // Store the new container and its iterators
                 _data.push_back(new_container);
@@ -162,9 +175,13 @@ namespace eos
 
                 // Update the size of CartesianProduct
                 if (0 == _size)
+                {
                     _size = new_container.size();
+                }
                 else
+                {
                     _size *= new_container.size();
+                }
 
                 _sizes.push_back(new_container.size());
             }
@@ -172,7 +189,8 @@ namespace eos
             /*!
              * Returns an iterator for the first element.
              */
-            Iterator begin() const
+            Iterator
+            begin() const
             {
                 return Iterator(_begin, _sizes, false);
             }
@@ -180,7 +198,8 @@ namespace eos
             /*!
              * Returns an iterator for the position after the last element.
              */
-            Iterator end() const
+            Iterator
+            end() const
             {
                 return Iterator(_end, _sizes, true);
             }
@@ -189,11 +208,12 @@ namespace eos
              * Returns the number of elements stored in CartesianProduct. This is the product of the
              * sizes of each stored container.
              */
-            size_t size() const
+            size_t
+            size() const
             {
                 return _size;
             }
     };
-}
+} // namespace eos
 
 #endif

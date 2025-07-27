@@ -36,7 +36,7 @@ namespace eos
         tauon    = 2
     };
 
-    std::ostream& operator<< (std::ostream & os, LeptonFlavor lf);
+    std::ostream & operator<< (std::ostream & os, LeptonFlavor lf);
 
     enum class QuarkFlavor : uint8_t
     {
@@ -47,7 +47,7 @@ namespace eos
         bottom  = 4,
         top     = 5
     };
-    std::ostream& operator<< (std::ostream & os, QuarkFlavor qf);
+    std::ostream & operator<< (std::ostream & os, QuarkFlavor qf);
 
     enum class Isospin : uint16_t
     {
@@ -59,43 +59,50 @@ namespace eos
         two         = 1 << 4
     };
 
-    inline Isospin operator | (Isospin lhs, Isospin rhs)
+    inline Isospin
+    operator| (Isospin lhs, Isospin rhs)
     {
         using T = std::underlying_type_t<Isospin>;
         return static_cast<Isospin>(static_cast<T>(lhs) | static_cast<T>(rhs));
     }
 
-    inline Isospin & operator |= (Isospin & lhs, Isospin rhs)
+    inline Isospin &
+    operator|= (Isospin & lhs, Isospin rhs)
     {
         lhs = lhs | rhs;
         return lhs;
     }
 
-    inline Isospin operator & (Isospin lhs, Isospin rhs)
+    inline Isospin
+    operator& (Isospin lhs, Isospin rhs)
     {
         using T = std::underlying_type_t<Isospin>;
         return static_cast<Isospin>(static_cast<T>(lhs) & static_cast<T>(rhs));
     }
 
-    inline Isospin & operator &= (Isospin & lhs, Isospin rhs)
+    inline Isospin &
+    operator&= (Isospin & lhs, Isospin rhs)
     {
         lhs = lhs & rhs;
         return lhs;
     }
 
-    inline Isospin operator ^ (Isospin lhs, Isospin rhs)
+    inline Isospin
+    operator^ (Isospin lhs, Isospin rhs)
     {
         using T = std::underlying_type_t<Isospin>;
         return static_cast<Isospin>(static_cast<T>(lhs) ^ static_cast<T>(rhs));
     }
 
-    inline Isospin & operator ^= (Isospin & lhs, Isospin rhs)
+    inline Isospin &
+    operator^= (Isospin & lhs, Isospin rhs)
     {
         lhs = lhs ^ rhs;
         return lhs;
     }
 
-    inline bool operator && (Isospin lhs, Isospin rhs)
+    inline bool
+    operator&& (Isospin lhs, Isospin rhs)
     {
         return (lhs & rhs) != Isospin::none;
     }
@@ -111,23 +118,23 @@ namespace eos
         threehalves = 4
     };
 
-    std::ostream& operator<< (std::ostream & os, IsospinRepresentation ir);
+    std::ostream & operator<< (std::ostream & os, IsospinRepresentation ir);
 
     enum class LightMeson : uint8_t
     {
-        pi0      = 0,
-        piplus   = 1,
-        piminus  = 2,
-        K0       = 3,
-        K0bar    = 4,
-        KS       = 5,
-        Kplus    = 6,
-        Kminus   = 7,
-        eta      = 8,
-        etap     = 9,
+        pi0     = 0,
+        piplus  = 1,
+        piminus = 2,
+        K0      = 3,
+        K0bar   = 4,
+        KS      = 5,
+        Kplus   = 6,
+        Kminus  = 7,
+        eta     = 8,
+        etap    = 9,
     };
 
-    std::ostream& operator<< (std::ostream & os, LightMeson qf);
+    std::ostream & operator<< (std::ostream & os, LightMeson qf);
 
     enum class PartialWave : uint8_t
     {
@@ -138,49 +145,56 @@ namespace eos
         F    = 1 << 3
     };
 
-    inline PartialWave operator | (PartialWave lhs, PartialWave rhs)
+    inline PartialWave
+    operator| (PartialWave lhs, PartialWave rhs)
     {
         using T = std::underlying_type_t<PartialWave>;
         return static_cast<PartialWave>(static_cast<T>(lhs) | static_cast<T>(rhs));
     }
 
-    inline PartialWave & operator |= (PartialWave & lhs, PartialWave rhs)
+    inline PartialWave &
+    operator|= (PartialWave & lhs, PartialWave rhs)
     {
         lhs = lhs | rhs;
         return lhs;
     }
 
-    inline PartialWave operator & (PartialWave lhs, PartialWave rhs)
+    inline PartialWave
+    operator& (PartialWave lhs, PartialWave rhs)
     {
         using T = std::underlying_type_t<PartialWave>;
         return static_cast<PartialWave>(static_cast<T>(lhs) & static_cast<T>(rhs));
     }
 
-    inline PartialWave & operator &= (PartialWave & lhs, PartialWave rhs)
+    inline PartialWave &
+    operator&= (PartialWave & lhs, PartialWave rhs)
     {
         lhs = lhs & rhs;
         return lhs;
     }
 
-    inline PartialWave operator ^ (PartialWave lhs, PartialWave rhs)
+    inline PartialWave
+    operator^ (PartialWave lhs, PartialWave rhs)
     {
         using T = std::underlying_type_t<PartialWave>;
         return static_cast<PartialWave>(static_cast<T>(lhs) ^ static_cast<T>(rhs));
     }
 
-    inline PartialWave & operator ^= (PartialWave & lhs, PartialWave rhs)
+    inline PartialWave &
+    operator^= (PartialWave & lhs, PartialWave rhs)
     {
         lhs = lhs ^ rhs;
         return lhs;
     }
 
-    inline bool operator && (PartialWave lhs, PartialWave rhs)
+    inline bool
+    operator&& (PartialWave lhs, PartialWave rhs)
     {
         return (lhs & rhs) != PartialWave::none;
     }
 
     std::ostream & operator<< (std::ostream & os, PartialWave i);
 
-}
+} // namespace eos
 
 #endif

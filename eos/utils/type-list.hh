@@ -28,63 +28,62 @@
 namespace eos
 {
     struct TypeListTail
+    {};
+
+    template <typename Item_, typename Tail_> struct TypeListEntry
     {
+            using Item = Item_;
+            using Tail = Tail_;
     };
 
-    template <typename Item_, typename Tail_>
-    struct TypeListEntry
+    template <> struct MakeTypeList<>
     {
-        using Item = Item_;
-        using Tail = Tail_;
+            using Type = TypeListTail;
     };
 
-    template <>
-    struct MakeTypeList<>
+    template <typename H_, typename... T_> struct MakeTypeList<H_, T_...>
     {
-        using Type = TypeListTail;
+            using Type = TypeListEntry<H_, typename MakeTypeList<T_...>::Type>;
     };
 
-    template <typename H_, typename... T_>
-    struct MakeTypeList<H_, T_...>
+    template <> struct MakeTypeListConstEntry<TypeListTail>
     {
-        using Type = TypeListEntry<H_, typename MakeTypeList<T_...>::Type>;
+            using Type = TypeListTail;
     };
 
-    template <>
-    struct MakeTypeListConstEntry<TypeListTail>
+    template <typename Item_, typename Tail_> struct MakeTypeListConstEntry<TypeListEntry<Item_, Tail_>>
     {
-        using Type = TypeListTail;
+            using Type = TypeListEntry<const Item_, typename MakeTypeListConstEntry<Tail_>::Type>;
     };
 
-    template <typename Item_, typename Tail_>
-    struct MakeTypeListConstEntry<TypeListEntry<Item_, Tail_> >
+    template <typename TypeList_> struct MakeTypeListConst
     {
-        using Type = TypeListEntry<const Item_, typename MakeTypeListConstEntry<Tail_>::Type>;
+            using Type = typename MakeTypeListConstEntry<TypeList_>::Type;
     };
 
-    template <typename TypeList_>
-    struct MakeTypeListConst
+    template <typename Item_> struct TypeListContains<TypeListTail, Item_>
     {
-        using Type = typename MakeTypeListConstEntry<TypeList_>::Type;
+            enum
+            {
+                value = 0
+            };
     };
 
-    template <typename Item_>
-    struct TypeListContains<TypeListTail, Item_>
+    template <typename Item_, typename Tail_> struct TypeListContains<TypeListEntry<Item_, Tail_>, Item_>
     {
-        enum { value = 0 };
+            enum
+            {
+                value = 1
+            };
     };
 
-    template <typename Item_, typename Tail_>
-    struct TypeListContains<TypeListEntry<Item_, Tail_>, Item_>
+    template <typename NotItem_, typename Item_, typename Tail_> struct TypeListContains<TypeListEntry<NotItem_, Tail_>, Item_>
     {
-        enum { value = 1 };
+            enum
+            {
+                value = TypeListContains<Tail_, Item_>::value
+            };
     };
-
-    template <typename NotItem_, typename Item_, typename Tail_>
-    struct TypeListContains<TypeListEntry<NotItem_, Tail_>, Item_>
-    {
-        enum { value = TypeListContains<Tail_, Item_>::value };
-    };
-}
+} // namespace eos
 
 #endif

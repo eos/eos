@@ -36,9 +36,17 @@ namespace eos
             public:
                 Name(const std::string &);
 
-                const std::string & str() const { return _name; };
+                const std::string &
+                str() const
+                {
+                    return _name;
+                }
 
-                inline bool operator<  (const Name & rhs) const { return this->_name <  rhs._name; };
+                inline bool
+                operator< (const Name & rhs) const
+                {
+                    return this->_name < rhs._name;
+                }
         };
 
         class Year
@@ -49,9 +57,17 @@ namespace eos
             public:
                 Year(const std::string &);
 
-                const std::string & str() const { return _year; };
+                const std::string &
+                str() const
+                {
+                    return _year;
+                }
 
-                inline bool operator<  (const Year & rhs) const { return this->_year <  rhs._year; };
+                inline bool
+                operator< (const Year & rhs) const
+                {
+                    return this->_year < rhs._year;
+                }
         };
 
         class Index
@@ -62,12 +78,25 @@ namespace eos
             public:
                 Index(const std::string &);
 
-                const std::string & str() const { return _index; };
-                bool empty() const { return _index.empty(); };
+                const std::string &
+                str() const
+                {
+                    return _index;
+                }
 
-                inline bool operator<  (const Index & rhs) const { return this->_index <  rhs._index; };
+                bool
+                empty() const
+                {
+                    return _index.empty();
+                }
+
+                inline bool
+                operator< (const Index & rhs) const
+                {
+                    return this->_index < rhs._index;
+                }
         };
-    }
+    } // namespace rnp
 
     /*
      * Holds a syntactically-correct reference name.
@@ -84,7 +113,7 @@ namespace eos
      */
     class ReferenceName
     {
-        friend std::ostream & operator<< (std::ostream &, const ReferenceName &);
+            friend std::ostream & operator<< (std::ostream &, const ReferenceName &);
 
         private:
             std::string _str;
@@ -98,31 +127,68 @@ namespace eos
             ReferenceName(const ReferenceName & other);
             ~ReferenceName();
 
-            inline const std::string & str() const { return _str; };
-            inline const rnp::Name & name_part() const { return _name; };
-            inline const rnp::Year & year_part() const { return _year; };
-            inline const rnp::Index & index_part() const { return _index; };
+            inline const std::string &
+            str() const
+            {
+                return _str;
+            }
 
-            inline bool operator<  (const ReferenceName & rhs) const { return this->_str <  rhs._str; };
-            inline bool operator== (const ReferenceName & rhs) const { return this->_str == rhs._str; };
-            inline bool operator!= (const ReferenceName & rhs) const { return this->_str != rhs._str; };
+            inline const rnp::Name &
+            name_part() const
+            {
+                return _name;
+            }
+
+            inline const rnp::Year &
+            year_part() const
+            {
+                return _year;
+            }
+
+            inline const rnp::Index &
+            index_part() const
+            {
+                return _index;
+            }
+
+            inline bool
+            operator< (const ReferenceName & rhs) const
+            {
+                return this->_str < rhs._str;
+            }
+
+            inline bool
+            operator== (const ReferenceName & rhs) const
+            {
+                return this->_str == rhs._str;
+            }
+
+            inline bool
+            operator!= (const ReferenceName & rhs) const
+            {
+                return this->_str != rhs._str;
+            }
     };
 
-    inline ReferenceName operator ""_rn(const char * c, size_t) { return ReferenceName(c); }
+    inline ReferenceName
+    operator""_rn (const char * c, size_t)
+    {
+        return ReferenceName(c);
+    }
 
-    class ReferenceNameSyntaxError :
-        public Exception
+    class ReferenceNameSyntaxError : public Exception
     {
         public:
             ReferenceNameSyntaxError(const std::string & msg);
     };
 
-    inline std::ostream & operator<< (std::ostream & lhs, const ReferenceName & rhs)
+    inline std::ostream &
+    operator<< (std::ostream & lhs, const ReferenceName & rhs)
     {
         lhs << rhs._str;
 
         return lhs;
     }
-}
+} // namespace eos
 
 #endif

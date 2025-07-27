@@ -27,27 +27,19 @@
 
 namespace eos
 {
-    template <typename>
-    struct IndirectIteratorValueType;
+    template <typename> struct IndirectIteratorValueType;
 
-    template <typename Iter_, typename Value_ = typename IndirectIteratorValueType<
-        typename std::iterator_traits<Iter_>::value_type>::Type>
-    class IndirectIterator;
+    template <typename Iter_, typename Value_ = typename IndirectIteratorValueType<typename std::iterator_traits<Iter_>::value_type>::Type> class IndirectIterator;
 
-    template <typename Iter_>
-    IndirectIterator<Iter_> indirect_iterator(const Iter_ &);
+    template <typename Iter_> IndirectIterator<Iter_> indirect_iterator(const Iter_ &);
 
-    template <typename Iter_, typename Value_>
-    bool operator== (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
+    template <typename Iter_, typename Value_> bool operator== (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
 
-    template <typename Iter_, typename Value_>
-    bool operator!= (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
+    template <typename Iter_, typename Value_> bool operator!= (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
 
-    template <typename Iter_, typename Value_>
-    bool operator< (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
+    template <typename Iter_, typename Value_> bool operator< (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
 
-    template <typename Iter_, typename Value_>
-    bool operator> (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
-}
+    template <typename Iter_, typename Value_> bool operator> (const IndirectIterator<Iter_, Value_> &, const IndirectIterator<Iter_, Value_> &);
+} // namespace eos
 
 #endif

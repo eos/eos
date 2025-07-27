@@ -26,9 +26,7 @@
 
 namespace eos
 {
-    class ObservableStub :
-        public Observable,
-        public PrivateImplementationPattern<ObservableStub>
+    class ObservableStub : public Observable, public PrivateImplementationPattern<ObservableStub>
     {
         public:
             ObservableStub(const Parameters & parameters, const QualifiedName & name, const Kinematics & kinematics = Kinematics());
@@ -49,6 +47,6 @@ namespace eos
 
             virtual ObservablePtr clone(const Parameters & parameters) const;
     };
-}
+} // namespace eos
 
 #endif

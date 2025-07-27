@@ -31,7 +31,7 @@ namespace eos
     }
 
     void
-    MemoisationControl::register_clear_function(const std::function<void ()> & clear_function)
+    MemoisationControl::register_clear_function(const std::function<void()> & clear_function)
     {
         Lock l(*_mutex);
 
@@ -48,4 +48,4 @@ namespace eos
             _clear_function();
         }
     }
-}
+} // namespace eos

@@ -33,11 +33,8 @@ namespace eos
 {
     using eos::exp::Expression;
 
-    ExpressionObservable::ExpressionObservable(const QualifiedName & name,
-            const Parameters & parameters,
-            const Kinematics & kinematics,
-            const Options & options,
-            const Expression & expression) :
+    ExpressionObservable::ExpressionObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
+                                               const Expression & expression) :
         _name(name),
         _parameters(parameters),
         _kinematics(kinematics),
@@ -60,12 +57,8 @@ namespace eos
         }
     }
 
-    ExpressionObservable::ExpressionObservable(const QualifiedName & name,
-            const ObservableCache & cache,
-            const Kinematics & kinematics,
-            const Options & options,
-            const Expression & expression
-            ) :
+    ExpressionObservable::ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options,
+                                               const Expression & expression) :
         _name(name),
         _parameters(cache.parameters()),
         _kinematics(kinematics),
@@ -101,7 +94,6 @@ namespace eos
         return _expression.accept_returning<double>(evaluator);
     }
 
-
     ObservablePtr
     ExpressionObservable::clone() const
     {
@@ -123,11 +115,8 @@ namespace eos
         return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, _expression.accept_returning<Expression>(cloner)));
     }
 
-
-    ExpressionObservableEntry::ExpressionObservableEntry(const QualifiedName & name, const std::string & latex,
-            const Unit & unit,
-            const Expression & expression,
-            const Options & forced_options) :
+    ExpressionObservableEntry::ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const Expression & expression,
+                                                         const Options & forced_options) :
         _name(name),
         _latex(latex),
         _unit(unit),
@@ -145,11 +134,11 @@ namespace eos
 
         // Check the absence of overlap between the used kinematic variables and the aliased variables
         std::set<std::string> intersection;
-        std::set_intersection(
-            kinematic_reader.kinematics.begin(), kinematic_reader.kinematics.end(),
-            kinematic_reader.aliases.begin(), kinematic_reader.aliases.end(),
-            std::inserter(intersection, intersection.begin())
-        );
+        std::set_intersection(kinematic_reader.kinematics.begin(),
+                              kinematic_reader.kinematics.end(),
+                              kinematic_reader.aliases.begin(),
+                              kinematic_reader.aliases.end(),
+                              std::inserter(intersection, intersection.begin()));
 
         if (! intersection.empty())
         {
@@ -196,11 +185,11 @@ namespace eos
             const auto & key = std::get<0>(fo);
             if (options.has(key))
             {
-                Log::instance()->message("[ExpressionObservableEntry.make]", ll_warning)
-                    << "Observable '" << _name << "' forces option key '" << key << "' to value '" << _forced_options[key] << "', overriding user-provided value '" << options[key] << "'";
+                Log::instance()->message("[ExpressionObservableEntry.make]", ll_warning) << "Observable '" << _name << "' forces option key '" << key << "' to value '"
+                                                                                         << _forced_options[key] << "', overriding user-provided value '" << options[key] << "'";
             }
         }
 
         return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, options + _forced_options, _expression));
     }
-}
+} // namespace eos

@@ -54,15 +54,15 @@ namespace eos
      */
     class QualifiedName
     {
-        friend std::ostream & operator<< (std::ostream &, const QualifiedName &);
+            friend std::ostream & operator<< (std::ostream &, const QualifiedName &);
 
         private:
-            std::string  _str;     // short hand name, excluding possible options
-            std::string  _full;    // full name, including all given options
-            qnp::Prefix  _prefix;
-            qnp::Name    _name;
-            qnp::Suffix  _suffix;
-            Options      _options;
+            std::string _str;  // short hand name, excluding possible options
+            std::string _full; // full name, including all given options
+            qnp::Prefix _prefix;
+            qnp::Name   _name;
+            qnp::Suffix _suffix;
+            Options     _options;
 
         public:
             QualifiedName(const std::string & name);
@@ -71,36 +71,79 @@ namespace eos
             QualifiedName(const qnp::Prefix & prefix, const qnp::Name & name, const qnp::Suffix & suffix = qnp::Suffix());
             ~QualifiedName();
 
-            inline const std::string & str() const { return _str; };
-            inline const std::string & full() const { return _full; };
-            inline const qnp::Prefix & prefix_part() const { return _prefix; };
-            inline const qnp::Name & name_part() const { return _name; };
-            inline const qnp::Suffix & suffix_part() const { return _suffix; };
-            inline const Options & options() const { return _options; };
+            inline const std::string &
+            str() const
+            {
+                return _str;
+            }
+
+            inline const std::string &
+            full() const
+            {
+                return _full;
+            }
+
+            inline const qnp::Prefix &
+            prefix_part() const
+            {
+                return _prefix;
+            }
+
+            inline const qnp::Name &
+            name_part() const
+            {
+                return _name;
+            }
+
+            inline const qnp::Suffix &
+            suffix_part() const
+            {
+                return _suffix;
+            }
+
+            inline const Options &
+            options() const
+            {
+                return _options;
+            }
 
             /*
              * Two qualified names are compared based on their short names only.
              * As a consequence, two qualified names can be identical, even if their
              * full names aren't.
              */
-            inline bool operator<  (const QualifiedName & rhs) const { return this->_str <  rhs._str; };
-            inline bool operator== (const QualifiedName & rhs) const { return this->_str == rhs._str; };
-            inline bool operator!= (const QualifiedName & rhs) const { return this->_str != rhs._str; };
+            inline bool
+            operator< (const QualifiedName & rhs) const
+            {
+                return this->_str < rhs._str;
+            }
+
+            inline bool
+            operator== (const QualifiedName & rhs) const
+            {
+                return this->_str == rhs._str;
+            }
+
+            inline bool
+            operator!= (const QualifiedName & rhs) const
+            {
+                return this->_str != rhs._str;
+            }
     };
 
-    class QualifiedNameSyntaxError :
-        public Exception
+    class QualifiedNameSyntaxError : public Exception
     {
         public:
             QualifiedNameSyntaxError(const std::string & msg);
     };
 
-    inline std::ostream & operator<< (std::ostream & lhs, const QualifiedName & rhs)
+    inline std::ostream &
+    operator<< (std::ostream & lhs, const QualifiedName & rhs)
     {
         lhs << rhs._str;
 
         return lhs;
     }
-}
+} // namespace eos
 
 #endif

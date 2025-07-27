@@ -30,11 +30,10 @@ namespace eos::exp
     class ExpressionKinematicReader
     {
         public:
-
             std::set<std::string> kinematics;
             std::set<std::string> aliases;
 
-            ExpressionKinematicReader() = default;
+            ExpressionKinematicReader()  = default;
             ~ExpressionKinematicReader() = default;
 
             // Clear the sets of kinematics and aliases
@@ -60,6 +59,6 @@ namespace eos::exp
 
             void visit(const CachedObservableExpression & e);
     };
-}
+} // namespace eos::exp
 
 #endif

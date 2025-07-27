@@ -25,9 +25,7 @@
 
 namespace eos
 {
-    Density::~Density()
-    {
-    }
+    Density::~Density() {}
 
     template class WrappedForwardIterator<Density::IteratorTag, const ParameterDescription>;
-}
+} // namespace eos

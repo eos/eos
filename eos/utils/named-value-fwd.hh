@@ -26,11 +26,9 @@
 
 namespace eos
 {
-    template <typename K_, typename V_>
-    class NamedValue;
+    template <typename K_, typename V_> class NamedValue;
 
-    template <typename T_>
-    class Name;
-}
+    template <typename T_> class Name;
+} // namespace eos
 
 #endif

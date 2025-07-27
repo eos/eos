@@ -30,8 +30,7 @@
 
 namespace eos
 {
-    class ConditionVariable :
-        public InstantiationPolicy<ConditionVariable, NonCopyable>
+    class ConditionVariable : public InstantiationPolicy<ConditionVariable, NonCopyable>
     {
         private:
             /// Our pthread condition variable.
@@ -56,6 +55,6 @@ namespace eos
             /// Wait until condition is met.
             void wait(Mutex &);
     };
-}
+} // namespace eos
 
 #endif

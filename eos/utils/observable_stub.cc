@@ -22,27 +22,26 @@
 
 namespace eos
 {
-    template <>
-    struct Implementation<ObservableStub>
+    template <> struct Implementation<ObservableStub>
     {
-        Parameters parameters;
+            Parameters parameters;
 
-        Kinematics kinematics;
+            Kinematics kinematics;
 
-        Options options;
+            Options options;
 
-        QualifiedName name;
+            QualifiedName name;
 
-        UsedParameter parameter;
+            UsedParameter parameter;
 
-        Implementation(const Parameters & p, const QualifiedName & n, const Kinematics & k, ParameterUser & u) :
-            parameters(p),
-            kinematics(k),
-            options(n.options()),
-            name(n),
-            parameter(p[n.str()], u)
-        {
-        }
+            Implementation(const Parameters & p, const QualifiedName & n, const Kinematics & k, ParameterUser & u) :
+                parameters(p),
+                kinematics(k),
+                options(n.options()),
+                name(n),
+                parameter(p[n.str()], u)
+            {
+            }
     };
 
     ObservableStub::ObservableStub(const Parameters & parameters, const QualifiedName & name, const Kinematics & kinematics) :
@@ -50,9 +49,7 @@ namespace eos
     {
     }
 
-    ObservableStub::~ObservableStub()
-    {
-    }
+    ObservableStub::~ObservableStub() {}
 
     const QualifiedName &
     ObservableStub::name() const
@@ -95,4 +92,4 @@ namespace eos
     {
         return ObservablePtr(new ObservableStub(parameters, _imp->name, _imp->kinematics));
     }
-}
+} // namespace eos

@@ -32,15 +32,13 @@ namespace eos
                 throw ReferenceNameSyntaxError("A reference name's name part must not be empty");
             }
 
-            static const std::string valid_characters_begin =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789";
+            static const std::string valid_characters_begin = "abcdefghijklmnopqrstuvwxyz"
+                                                              "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                              "0123456789";
 
-            static const std::string valid_characters_all =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789-+";
+            static const std::string valid_characters_all = "abcdefghijklmnopqrstuvwxyz"
+                                                            "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                            "0123456789-+";
 
             auto pos = valid_characters_begin.find_first_of(name[0]);
             if (std::string::npos == pos)
@@ -69,8 +67,7 @@ namespace eos
             }
 
             // YEAR          := ['0'-'9'] ['0'-'9'] ['0'-'9'] ['0'-'9']
-            static const char * valid_digits =
-                    "0123456789";
+            static const char * valid_digits = "0123456789";
 
             auto pos = year.find_first_not_of(valid_digits);
             if (std::string::npos != pos)
@@ -82,8 +79,7 @@ namespace eos
         Index::Index(const std::string & index) :
             _index(index)
         {
-            static const char * valid_index_characters =
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ";
+            static const char * valid_index_characters = "ABCDEFGHIJKLMNOPQRTSUVWXYZ";
 
             auto pos = index.find_first_not_of(valid_index_characters);
 
@@ -97,7 +93,7 @@ namespace eos
                 throw ReferenceNameSyntaxError("'" + index + "' is not a valid index part: character '" + index[pos] + "' may not be used");
             }
         }
-    }
+    } // namespace rnp
 
     ReferenceName::ReferenceName(const std::string & input) :
         _str(input),
@@ -126,8 +122,8 @@ namespace eos
             throw ReferenceNameSyntaxError("A reference name must contain exactly one ':'");
         }
 
-        static const char * valid_digits = "0123456789";
-        const auto pos_non_digit = input.find_first_not_of(valid_digits, pos_colon + 1);
+        static const char * valid_digits  = "0123456789";
+        const auto          pos_non_digit = input.find_first_not_of(valid_digits, pos_colon + 1);
         if (std::string::npos == pos_non_digit)
         {
             throw ReferenceNameSyntaxError("A reference name must contain an index part");
@@ -151,12 +147,10 @@ namespace eos
     {
     }
 
-    ReferenceName::~ReferenceName()
-    {
-    }
+    ReferenceName::~ReferenceName() {}
 
     ReferenceNameSyntaxError::ReferenceNameSyntaxError(const std::string & msg) :
         Exception(msg)
     {
     }
-}
+} // namespace eos

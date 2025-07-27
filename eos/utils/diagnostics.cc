@@ -25,17 +25,15 @@
 
 namespace eos
 {
-    template <>
-    struct WrappedForwardIteratorTraits<Diagnostics::IteratorTag>
+    template <> struct WrappedForwardIteratorTraits<Diagnostics::IteratorTag>
     {
-        using UnderlyingIterator = std::vector<Diagnostics::Entry>::const_iterator;
+            using UnderlyingIterator = std::vector<Diagnostics::Entry>::const_iterator;
     };
     template class WrappedForwardIterator<Diagnostics::IteratorTag, const Diagnostics::Entry>;
 
-    template <>
-    struct Implementation<Diagnostics>
+    template <> struct Implementation<Diagnostics>
     {
-        std::vector<Diagnostics::Entry> entries;
+            std::vector<Diagnostics::Entry> entries;
     };
 
     Diagnostics::Diagnostics() :
@@ -43,9 +41,7 @@ namespace eos
     {
     }
 
-    Diagnostics::~Diagnostics()
-    {
-    }
+    Diagnostics::~Diagnostics() {}
 
     void
     Diagnostics::add(const Entry & entry)
@@ -70,4 +66,4 @@ namespace eos
     {
         return _imp->entries.size();
     }
-}
+} // namespace eos

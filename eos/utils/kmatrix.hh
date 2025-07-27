@@ -36,18 +36,16 @@
 
 namespace eos
 {
-    template <unsigned nchannels_, unsigned nresonances_>
-    class KMatrix
+    template <unsigned nchannels_, unsigned nresonances_> class KMatrix
     {
         public:
-
             struct Channel;
             struct Resonance;
 
-            std::array<std::shared_ptr<KMatrix::Channel>, nchannels_> _channels;
+            std::array<std::shared_ptr<KMatrix::Channel>, nchannels_>     _channels;
             std::array<std::shared_ptr<KMatrix::Resonance>, nresonances_> _resonances;
             // The non-resonant contribution is described with a set of constants
-            std::array<std::array<Parameter, nchannels_>, nchannels_> _bkgcst;
+            std::array<std::array<Parameter, nchannels_>, nchannels_>     _bkgcst;
 
             const std::string & _prefix;
 
@@ -61,13 +59,11 @@ namespace eos
             gsl_matrix_complex * _tmp_1;
             gsl_matrix_complex * _tmp_2;
             gsl_matrix_complex * _tmp_3;
-            gsl_permutation * _perm;
+            gsl_permutation *    _perm;
 
             // Constructor
-            KMatrix(std::array<std::shared_ptr<KMatrix::Channel>, nchannels_> channels,
-                std::array<std::shared_ptr<KMatrix::Resonance>, nresonances_> resonances,
-                std::array<std::array<Parameter, nchannels_>, nchannels_> bkgcst,
-                const std::string & prefix);
+            KMatrix(std::array<std::shared_ptr<KMatrix::Channel>, nchannels_> channels, std::array<std::shared_ptr<KMatrix::Resonance>, nresonances_> resonances,
+                    std::array<std::array<Parameter, nchannels_>, nchannels_> bkgcst, const std::string & prefix);
 
             // Destructor
             ~KMatrix();
@@ -91,65 +87,67 @@ namespace eos
             double spectral_function(unsigned resonance, const double & s) const;
     };
 
-
-    template <unsigned nchannels_, unsigned nresonances_>
-    struct KMatrix<nchannels_, nresonances_>::Channel
+    template <unsigned nchannels_, unsigned nresonances_> struct KMatrix<nchannels_, nresonances_>::Channel
     {
-        std::string _name;
-        //Masses of the two final state particles
-        Parameter _m1;
-        Parameter _m2;
+            std::string _name;
+            // Masses of the two final state particles
+            Parameter   _m1;
+            Parameter   _m2;
 
-        // Properties of the centrifugal barrier factors, cf (50.26)
-        unsigned _l_orbital;
-        Parameter _q0;
+            // Properties of the centrifugal barrier factors, cf (50.26)
+            unsigned  _l_orbital;
+            Parameter _q0;
 
-        std::array<Parameter, nresonances_> _g0s;
+            std::array<Parameter, nresonances_> _g0s;
 
-        Channel(std::string name, Parameter m1, Parameter m2, unsigned l_orbital, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-            _name(name),
-            _m1(m1),
-            _m2(m2),
-            _l_orbital(l_orbital),
-            _q0(q0),
-            _g0s(g0s)
-        {
-            if (m1.evaluate() < 0 || m2.evaluate() < 0)
-                throw InternalError("Masses of channel '" + _name + "' must be positive");
-            if (q0.evaluate() < 0)
-                throw InternalError("Scale parameter of the channel'" + _name + "' must be positive");
-        };
+            Channel(std::string name, Parameter m1, Parameter m2, unsigned l_orbital, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+                _name(name),
+                _m1(m1),
+                _m2(m2),
+                _l_orbital(l_orbital),
+                _q0(q0),
+                _g0s(g0s)
+            {
+                if (m1.evaluate() < 0 || m2.evaluate() < 0)
+                {
+                    throw InternalError("Masses of channel '" + _name + "' must be positive");
+                }
+                if (q0.evaluate() < 0)
+                {
+                    throw InternalError("Scale parameter of the channel'" + _name + "' must be positive");
+                }
+            }
 
-        // Phase space factor
-        virtual complex<double> rho(const complex<double> & s) = 0;
+            // Phase space factor
+            virtual complex<double> rho(const complex<double> & s) = 0;
 
-        // Analytic continuation of the phase space factor
-        virtual complex<double> chew_mandelstam(const complex<double> & s) = 0;
+            // Analytic continuation of the phase space factor
+            virtual complex<double> chew_mandelstam(const complex<double> & s) = 0;
     };
 
-
-    template <unsigned nchannels_, unsigned nresonances_>
-    struct KMatrix<nchannels_, nresonances_>::Resonance
+    template <unsigned nchannels_, unsigned nresonances_> struct KMatrix<nchannels_, nresonances_>::Resonance
     {
-        std::string _name;
+            std::string _name;
 
-        // Mass of the resonance
-        Parameter _m;
+            // Mass of the resonance
+            Parameter _m;
 
-        Resonance(std::string name, Parameter m) :
-            _name(name),
-            _m(m)
-        {
-            if (m.evaluate() < 0)
-                throw InternalError("Mass of resonance '" + _name + "' must be positive");
-        };
+            Resonance(std::string name, Parameter m) :
+                _name(name),
+                _m(m)
+            {
+                if (m.evaluate() < 0)
+                {
+                    throw InternalError("Mass of resonance '" + _name + "' must be positive");
+                }
+            }
     };
 
     namespace kmatrix_utils
     {
         // We follow the notation of the PDG's resonance review, i.e. z = (q / q0)
         complex<double> blatt_weisskopf_factor(const unsigned & l, const complex<double> & z);
-    }
-}
+    } // namespace kmatrix_utils
+} // namespace eos
 
 #endif

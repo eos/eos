@@ -34,11 +34,13 @@ namespace eos
         private:
             Id _id;
 
-            Unit(const Id & id) : _id(id) {}
+            Unit(const Id & id) :
+                _id(id)
+            {
+            }
 
         public:
-            enum class Id :
-                int
+            enum class Id : int
             {
                 undefined = 0,
                 none,
@@ -57,8 +59,8 @@ namespace eos
 
             Unit(const std::string &);
             Unit(const Unit &) = default;
-            Unit(Unit &&) = default;
-            ~Unit() = default;
+            Unit(Unit &&)      = default;
+            ~Unit()            = default;
 
             const std::string & latex() const;
 
@@ -76,9 +78,9 @@ namespace eos
             static Unit GeVSecond();
             static Unit Femtometer2();
 
-            bool operator== (const Unit &) const;
+            bool   operator== (const Unit &) const;
             Unit & operator= (const Unit &) = default;
     };
-}
+} // namespace eos
 
 #endif

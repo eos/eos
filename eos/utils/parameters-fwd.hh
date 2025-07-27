@@ -26,6 +26,6 @@ namespace eos
     class Parameter;
     class ParameterGroup;
     class ParameterSection;
-}
+} // namespace eos
 
 #endif

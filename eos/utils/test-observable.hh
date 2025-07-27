@@ -24,8 +24,7 @@
 
 namespace eos
 {
-    struct TestObservable :
-        public Observable
+    struct TestObservable : public Observable
     {
             Parameters p;
 
@@ -37,12 +36,11 @@ namespace eos
 
             const QualifiedName & observable_name;
 
-            const std::function<double (const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function;
+            const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function;
 
-            TestObservable(const Parameters & p, const Kinematics & k, const Options & o,
-            const QualifiedName & observable_name,
-            const std::vector<std::string> & kinematic_variable_names,
-            const std::function<double (const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function);
+            TestObservable(const Parameters & p, const Kinematics & k, const Options & o, const QualifiedName & observable_name,
+                           const std::vector<std::string> &                                                                           kinematic_variable_names,
+                           const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function);
 
             virtual ~TestObservable();
 
@@ -61,8 +59,7 @@ namespace eos
             const QualifiedName & name() const;
     };
 
-    class TestObservableEntry :
-        public ObservableEntry
+    class TestObservableEntry : public ObservableEntry
     {
         private:
             QualifiedName _name;
@@ -71,7 +68,7 @@ namespace eos
 
             Unit _unit;
 
-            std::function<double (const Parameters &, const std::vector<KinematicVariable> &, const Options &)> _function;
+            std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> _function;
 
             std::vector<std::string> _kinematics_names;
 
@@ -79,8 +76,8 @@ namespace eos
 
         public:
             TestObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
-                const std::function<double (const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function,
-                const std::vector<std::string> & kinematics_names);
+                                const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function,
+                                const std::vector<std::string> &                                                                           kinematics_names);
 
             virtual ~TestObservableEntry();
 
@@ -102,4 +99,4 @@ namespace eos
 
             virtual std::ostream & insert(std::ostream & os) const;
     };
-}
+} // namespace eos

@@ -40,12 +40,16 @@ namespace eos
         _mutex(&m)
     {
         if (0 != pthread_mutex_trylock(_mutex->mutex()))
+        {
             _mutex = 0;
+        }
     }
 
     TryLock::~TryLock()
     {
         if (_mutex)
+        {
             pthread_mutex_unlock(_mutex->mutex());
+        }
     }
-}
+} // namespace eos

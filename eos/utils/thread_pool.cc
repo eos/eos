@@ -27,140 +27,147 @@
 #include <eos/utils/thread_pool.hh>
 
 #include <list>
-
 #include <unistd.h>
 
 namespace eos
 {
-    template <>
-    struct Implementation<ThreadPool>
+    template <> struct Implementation<ThreadPool>
     {
-        unsigned number_of_threads;
-        unsigned long nominal_capacity;
-        unsigned long stop_capacity;
+            unsigned      number_of_threads;
+            unsigned long nominal_capacity;
+            unsigned long stop_capacity;
 
-        // Thread termination
-        Mutex * const terminate_mutex;
+            // Thread termination
+            Mutex * const terminate_mutex;
 
-        bool terminate;
+            bool terminate;
 
-        // Job handling
-        Mutex * const job_mutex;
+            // Job handling
+            Mutex * const job_mutex;
 
-        ConditionVariable * const job_arrival;
-        ConditionVariable * const job_capacity;
+            ConditionVariable * const job_arrival;
+            ConditionVariable * const job_capacity;
 
-        unsigned long waiting_for_jobs;
-        unsigned long pending_jobs;
+            unsigned long waiting_for_jobs;
+            unsigned long pending_jobs;
 
-        std::list<std::pair<Ticket, std::function<void (void)> *>> queue;
+            std::list<std::pair<Ticket, std::function<void(void)> *>> queue;
 
-        std::list<Thread *> threads;
+            std::list<Thread *> threads;
 
-        void thread_function()
-        {
-            std::function<void (void)> * job;
-            Ticket ticket;
-
-            do
+            void
+            thread_function()
             {
+                std::function<void(void)> * job;
+                Ticket                      ticket;
+
+                do
                 {
-                    Lock l(*terminate_mutex);
-                    if (terminate)
-                        break;
-                }
-
-                job = 0;
-
-                {
-                    Lock l(*job_mutex);
-
-                    if (queue.empty())
-                    {
-                        waiting_for_jobs += 1;
-                        job_arrival->wait(*job_mutex);
-                        waiting_for_jobs -= 1;
-                    }
-
-                    if (queue.empty())
                     {
                         Lock l(*terminate_mutex);
                         if (terminate)
+                        {
                             break;
-                        else
-                            continue;
+                        }
                     }
 
-                    ticket = queue.front().first;
-                    job = queue.front().second;
-                    queue.pop_front();
+                    job = 0;
+
+                    {
+                        Lock l(*job_mutex);
+
+                        if (queue.empty())
+                        {
+                            waiting_for_jobs += 1;
+                            job_arrival->wait(*job_mutex);
+                            waiting_for_jobs -= 1;
+                        }
+
+                        if (queue.empty())
+                        {
+                            Lock l(*terminate_mutex);
+                            if (terminate)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+
+                        ticket = queue.front().first;
+                        job    = queue.front().second;
+                        queue.pop_front();
+                    }
+
+                    (*job)();
+                    {
+                        Lock l(*job_mutex);
+                        pending_jobs -= 1;
+
+                        if (pending_jobs == nominal_capacity)
+                        {
+                            job_capacity->signal();
+                        }
+                    }
+                    ticket.mark();
+                }
+                while (true);
+            }
+
+            static unsigned
+            _number_of_threads()
+            {
+                // by default, use as many threads as configured processors available to the system
+                unsigned result = sysconf(_SC_NPROCESSORS_CONF);
+
+                // limit number of threads to user configured value
+                const char * env_max_threads = std::getenv("EOS_MAX_THREADS");
+                if (env_max_threads)
+                {
+                    unsigned max_threads = destringify<unsigned>(env_max_threads);
+                    result               = std::min(result, max_threads);
                 }
 
-                (*job)();
+                return result;
+            }
+
+            Implementation() :
+                number_of_threads(_number_of_threads()),
+                nominal_capacity(number_of_threads * 10),
+                stop_capacity(nominal_capacity * 2),
+                terminate_mutex(new Mutex),
+                terminate(false),
+                job_mutex(new Mutex),
+                job_arrival(new ConditionVariable),
+                job_capacity(new ConditionVariable),
+                waiting_for_jobs(0),
+                pending_jobs(0)
+            {
+                for (unsigned i(0); i < number_of_threads; ++i)
+                {
+                    threads.push_back(new Thread(std::bind(&Implementation<ThreadPool>::thread_function, this)));
+                }
+            }
+
+            ~Implementation()
+            {
+                {
+                    Lock l(*terminate_mutex);
+                    terminate = true;
+                }
+
                 {
                     Lock l(*job_mutex);
-                    pending_jobs -= 1;
-
-                    if (pending_jobs == nominal_capacity)
-                        job_capacity->signal();
-
+                    job_arrival->broadcast();
                 }
-                ticket.mark();
+
+                for (auto & thread : threads)
+                {
+                    delete thread;
+                }
             }
-            while (true);
-        }
-
-        static unsigned _number_of_threads()
-        {
-            // by default, use as many threads as configured processors available to the system
-            unsigned result = sysconf(_SC_NPROCESSORS_CONF);
-
-            // limit number of threads to user configured value
-            const char * env_max_threads = std::getenv("EOS_MAX_THREADS");
-            if (env_max_threads)
-            {
-                unsigned max_threads = destringify<unsigned>(env_max_threads);
-                result = std::min(result, max_threads);
-            }
-
-            return result;
-        }
-
-        Implementation() :
-            number_of_threads(_number_of_threads()),
-            nominal_capacity(number_of_threads * 10),
-            stop_capacity(nominal_capacity * 2),
-            terminate_mutex(new Mutex),
-            terminate(false),
-            job_mutex(new Mutex),
-            job_arrival(new ConditionVariable),
-            job_capacity(new ConditionVariable),
-            waiting_for_jobs(0),
-            pending_jobs(0)
-        {
-            for (unsigned i(0) ; i < number_of_threads ; ++i)
-            {
-                threads.push_back(new Thread(std::bind(&Implementation<ThreadPool>::thread_function, this)));
-            }
-        }
-
-        ~Implementation()
-        {
-            {
-                Lock l(*terminate_mutex);
-                terminate = true;
-            }
-
-            {
-                Lock l(*job_mutex);
-                job_arrival->broadcast();
-            }
-
-            for (auto & thread : threads)
-            {
-                delete thread;
-            }
-        }
     };
 
     ThreadPool::ThreadPool() :
@@ -169,14 +176,12 @@ namespace eos
     {
     }
 
-    ThreadPool::~ThreadPool()
-    {
-    }
+    ThreadPool::~ThreadPool() {}
 
     Ticket
-    ThreadPool::enqueue(const std::function<void (void)> & job)
+    ThreadPool::enqueue(const std::function<void(void)> & job)
     {
-        std::pair<Ticket, std::function<void (void)> *> item(Ticket(), new std::function<void (void)>(job));
+        std::pair<Ticket, std::function<void(void)> *> item(Ticket(), new std::function<void(void)>(job));
 
         {
             Lock l(*_imp->job_mutex);
@@ -184,7 +189,9 @@ namespace eos
             _imp->pending_jobs += 1;
 
             if (_imp->waiting_for_jobs > 0)
+            {
                 _imp->job_arrival->signal();
+            }
         }
 
         return item.first;
@@ -202,7 +209,9 @@ namespace eos
         Lock l(*_imp->job_mutex);
 
         if (_imp->pending_jobs < _imp->stop_capacity)
+        {
             return;
+        }
 
         _imp->job_capacity->wait(*_imp->job_mutex);
     }
@@ -212,4 +221,4 @@ namespace eos
     {
         return _imp->number_of_threads;
     }
-}
+} // namespace eos

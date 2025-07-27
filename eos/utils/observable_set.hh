@@ -31,8 +31,7 @@ namespace eos
      * i.e. they differ by at least one of the following:
      * name, kinematics, or options.
      */
-    class ObservableSet :
-        public PrivateImplementationPattern<ObservableSet>
+    class ObservableSet : public PrivateImplementationPattern<ObservableSet>
     {
         public:
             ///@name Basic Functions
@@ -83,6 +82,6 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<ObservableSet::IteratorTag, ObservablePtr>;
-}
+} // namespace eos
 
 #endif

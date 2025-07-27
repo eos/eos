@@ -26,14 +26,13 @@
 #include <eos/utils/qualified-name.hh>
 
 #include <cassert>
-#include <memory>
 #include <iostream>
 #include <map>
+#include <memory>
 
 namespace eos::exp
 {
-    class ExpressionError :
-        public eos::Exception
+    class ExpressionError : public eos::Exception
     {
         public:
             ExpressionError(const std::string & msg);
@@ -42,10 +41,10 @@ namespace eos::exp
     class BinaryExpression
     {
         public:
-            char op;
+            char       op;
             Expression lhs, rhs;
 
-            using func = double(*)(const double &, const double &);
+            using func = double (*)(const double &, const double &);
 
             static double sum(const double &, const double &);
             static double difference(const double &, const double &);
@@ -58,7 +57,9 @@ namespace eos::exp
             BinaryExpression() {}
 
             BinaryExpression(char op, const Expression & l, const Expression & r) :
-                op(op), lhs(l), rhs(r)
+                op(op),
+                lhs(l),
+                rhs(r)
             {
             }
     };
@@ -66,13 +67,13 @@ namespace eos::exp
     class FunctionExpression
     {
         public:
-            using FunctionType = double(*)(const double &);
+            using FunctionType = double (*)(const double &);
 
             FunctionType f;
-            std::string fname;
-            Expression arg;
+            std::string  fname;
+            Expression   arg;
 
-            FunctionExpression() {};
+            FunctionExpression() {}
 
             FunctionExpression(const std::string & f, const Expression & arg);
     };
@@ -82,7 +83,7 @@ namespace eos::exp
         public:
             double value;
 
-            ConstantExpression(const double& v = 0) :
+            ConstantExpression(const double & v = 0) :
                 value(v)
             {
             }
@@ -91,11 +92,20 @@ namespace eos::exp
     class KinematicsSpecification
     {
         public:
-            std::map<std::string, double> values;
+            std::map<std::string, double>      values;
             std::map<std::string, std::string> aliases;
 
-            void operator() (const std::pair<std::string, double> & value) { values.insert(value); }
-            void operator() (const std::pair<std::string, std::string> & alias) { aliases.insert(alias); }
+            void
+            operator() (const std::pair<std::string, double> & value)
+            {
+                values.insert(value);
+            }
+
+            void
+            operator() (const std::pair<std::string, std::string> & alias)
+            {
+                aliases.insert(alias);
+            }
     };
 
     class KinematicVariableNameExpression
@@ -104,7 +114,7 @@ namespace eos::exp
             std::string variable_name;
 
             KinematicVariableNameExpression(const std::string & variable_name) :
-                 variable_name(variable_name)
+                variable_name(variable_name)
             {
             }
     };
@@ -123,12 +133,12 @@ namespace eos::exp
     class ObservableNameExpression
     {
         public:
-            QualifiedName observable_name;
+            QualifiedName           observable_name;
             KinematicsSpecification kinematics_specification;
 
             ObservableNameExpression(const QualifiedName & observable_name, const KinematicsSpecification & kinematics_specification) :
-                 observable_name(observable_name),
-                 kinematics_specification(kinematics_specification)
+                observable_name(observable_name),
+                kinematics_specification(kinematics_specification)
             {
             }
     };
@@ -136,12 +146,12 @@ namespace eos::exp
     class ObservableExpression
     {
         public:
-            ObservablePtr observable;
+            ObservablePtr           observable;
             KinematicsSpecification kinematics_specification;
 
             ObservableExpression(ObservablePtr observable, const KinematicsSpecification & kinematics_specification) :
-                 observable(observable),
-                 kinematics_specification(kinematics_specification)
+                observable(observable),
+                kinematics_specification(kinematics_specification)
             {
             }
     };
@@ -149,8 +159,8 @@ namespace eos::exp
     class CachedObservableExpression
     {
         public:
-            ObservableCache cache;
-            ObservableCache::Id id;
+            ObservableCache         cache;
+            ObservableCache::Id     id;
             KinematicsSpecification kinematics_specification;
 
             CachedObservableExpression(const ObservableCache & cache, const ObservableCache::Id & id, const KinematicsSpecification & kinematics_specification) :
@@ -182,6 +192,6 @@ namespace eos::exp
             {
             }
     };
-}
+} // namespace eos::exp
 
 #endif

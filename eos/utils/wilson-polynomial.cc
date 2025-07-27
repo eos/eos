@@ -28,73 +28,73 @@ namespace eos
     /* WilsonPolynomial elements */
     struct Constant
     {
-        double value;
+            double value;
 
-        Constant(const double & value) :
-            value(value)
-        {
-        }
+            Constant(const double & value) :
+                value(value)
+            {
+            }
     };
 
     struct Sum
     {
-        std::list<WilsonPolynomial> summands;
+            std::list<WilsonPolynomial> summands;
 
-        Sum()
-        {
-        }
+            Sum() {}
 
-        Sum(const WilsonPolynomial & x, const WilsonPolynomial & y)
-        {
-            add(x);
-            add(y);
-        }
+            Sum(const WilsonPolynomial & x, const WilsonPolynomial & y)
+            {
+                add(x);
+                add(y);
+            }
 
-        void add(const WilsonPolynomial & summand)
-        {
-            summands.push_back(summand);
-        }
+            void
+            add(const WilsonPolynomial & summand)
+            {
+                summands.push_back(summand);
+            }
     };
 
     struct Product
     {
-        WilsonPolynomial x, y;
+            WilsonPolynomial x, y;
 
-        Product() :
-            x(Constant(0)),
-            y(Constant(0))
-        {
-        }
+            Product() :
+                x(Constant(0)),
+                y(Constant(0))
+            {
+            }
 
-        Product(const WilsonPolynomial & x, const WilsonPolynomial & y) :
-            x(x),
-            y(y)
-        {
-        };
+            Product(const WilsonPolynomial & x, const WilsonPolynomial & y) :
+                x(x),
+                y(y)
+            {
+            }
     };
 
     struct Sine
     {
-        WilsonPolynomial phi;
+            WilsonPolynomial phi;
 
-        Sine(const WilsonPolynomial & phi) :
-            phi(phi)
-        {
-        }
+            Sine(const WilsonPolynomial & phi) :
+                phi(phi)
+            {
+            }
     };
 
     struct Cosine
     {
-        WilsonPolynomial phi;
+            WilsonPolynomial phi;
 
-        Cosine(const WilsonPolynomial & phi) :
-            phi(phi)
-        {
-        }
+            Cosine(const WilsonPolynomial & phi) :
+                phi(phi)
+            {
+            }
     };
 
     /* Build a WilsonPolynomial from an observable */
-    WilsonPolynomial make_polynomial(const ObservablePtr & o, const std::list<std::string> & _coefficients)
+    WilsonPolynomial
+    make_polynomial(const ObservablePtr & o, const std::list<std::string> & _coefficients)
     {
         Sum result;
 
@@ -129,10 +129,10 @@ namespace eos
 
 
             // calculate observables
-            p_i = +1.0;
+            p_i               = +1.0;
             double o_plus_one = o->evaluate();
 
-            p_i = -1.0;
+            p_i                = -1.0;
             double o_minus_one = o->evaluate();
 
             double q_i = 0.5 * ((o_plus_one + o_minus_one) - 2.0 * n);
@@ -148,20 +148,22 @@ namespace eos
         }
 
         // Determine the bilinear terms 'b_{ij}'
-        for (auto i = coefficients.begin(), i_end = coefficients.end() ; i != i_end ; ++i)
+        for (auto i = coefficients.begin(), i_end = coefficients.end(); i != i_end; ++i)
         {
             Parameter p_i = std::get<0>(*i);
-            double q_i = std::get<1>(*i), l_i = std::get<2>(*i);
+            double    q_i = std::get<1>(*i), l_i = std::get<2>(*i);
             p_i = 1.0;
 
             auto j = i;
             if (j != i_end)
+            {
                 ++j;
+            }
 
-            for ( ; j != i_end; ++j)
+            for (; j != i_end; ++j)
             {
                 Parameter p_j = std::get<0>(*j);
-                double q_j = std::get<1>(*j), l_j = std::get<2>(*j);
+                double    q_j = std::get<1>(*j), l_j = std::get<2>(*j);
                 p_j = 1.0;
 
                 // extract bilinear term
@@ -186,8 +188,7 @@ namespace eos
         return result;
     }
 
-    class WilsonPolynomialRatio :
-        public Observable
+    class WilsonPolynomialRatio : public Observable
     {
         private:
             WilsonPolynomial _numerator, _denominator;
@@ -201,8 +202,7 @@ namespace eos
             QualifiedName _name;
 
         public:
-            WilsonPolynomialRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator,
-                    const Parameters & parameters):
+            WilsonPolynomialRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator, const Parameters & parameters) :
                 _numerator(numerator),
                 _denominator(denominator),
                 _parameters(parameters),
@@ -210,36 +210,57 @@ namespace eos
             {
             }
 
-            ~WilsonPolynomialRatio()
+            ~WilsonPolynomialRatio() {}
+
+            virtual const QualifiedName &
+            name() const
             {
+                return _name;
             }
 
-            virtual const QualifiedName & name() const { return _name; }
-            virtual Kinematics kinematics() { return _kinematics; }
-            virtual Parameters parameters() { return _parameters; }
-            virtual Options options() { return _options; }
-            virtual ObservablePtr clone() const { throw InternalError("Cloning WilsonPolynomialRatio without external parameters"); }
+            virtual Kinematics
+            kinematics()
+            {
+                return _kinematics;
+            }
 
-            virtual double evaluate() const
+            virtual Parameters
+            parameters()
+            {
+                return _parameters;
+            }
+
+            virtual Options
+            options()
+            {
+                return _options;
+            }
+
+            virtual ObservablePtr
+            clone() const
+            {
+                throw InternalError("Cloning WilsonPolynomialRatio without external parameters");
+            }
+
+            virtual double
+            evaluate() const
             {
                 WilsonPolynomialEvaluator evaluator;
 
-                return _numerator.accept_returning<double>(evaluator)
-                    / _denominator.accept_returning<double>(evaluator);
+                return _numerator.accept_returning<double>(evaluator) / _denominator.accept_returning<double>(evaluator);
             }
 
-            virtual ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr
+            clone(const Parameters & parameters) const
             {
                 WilsonPolynomialCloner cloner(parameters);
 
-                return ObservablePtr(new WilsonPolynomialRatio(_numerator.accept_returning<WilsonPolynomial>(cloner),
-                            _denominator.accept_returning<WilsonPolynomial>(cloner),
-                            parameters));
+                return ObservablePtr(
+                        new WilsonPolynomialRatio(_numerator.accept_returning<WilsonPolynomial>(cloner), _denominator.accept_returning<WilsonPolynomial>(cloner), parameters));
             }
     };
 
-    class WilsonPolynomialHTLikeRatio :
-        public Observable
+    class WilsonPolynomialHTLikeRatio : public Observable
     {
         private:
             WilsonPolynomial _numerator, _denominator1, _denominator2;
@@ -253,8 +274,8 @@ namespace eos
             QualifiedName _name;
 
         public:
-            WilsonPolynomialHTLikeRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator1,
-                    const WilsonPolynomial & denominator2, const Parameters & parameters):
+            WilsonPolynomialHTLikeRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator1, const WilsonPolynomial & denominator2,
+                                        const Parameters & parameters) :
                 _numerator(numerator),
                 _denominator1(denominator1),
                 _denominator2(denominator2),
@@ -263,32 +284,56 @@ namespace eos
             {
             }
 
-            ~WilsonPolynomialHTLikeRatio()
+            ~WilsonPolynomialHTLikeRatio() {}
+
+            virtual const QualifiedName &
+            name() const
             {
+                return _name;
             }
 
-            virtual const QualifiedName & name() const { return _name; }
-            virtual Kinematics kinematics() { return _kinematics; }
-            virtual Parameters parameters() { return _parameters; }
-            virtual Options options() { return _options; }
-            virtual ObservablePtr clone() const { throw InternalError("Cloning WilsonPolynomialHTLikeRatio without external parameters"); }
+            virtual Kinematics
+            kinematics()
+            {
+                return _kinematics;
+            }
 
-            virtual double evaluate() const
+            virtual Parameters
+            parameters()
+            {
+                return _parameters;
+            }
+
+            virtual Options
+            options()
+            {
+                return _options;
+            }
+
+            virtual ObservablePtr
+            clone() const
+            {
+                throw InternalError("Cloning WilsonPolynomialHTLikeRatio without external parameters");
+            }
+
+            virtual double
+            evaluate() const
             {
                 WilsonPolynomialEvaluator evaluator;
 
                 return _numerator.accept_returning<double>(evaluator)
-                    / std::sqrt(_denominator1.accept_returning<double>(evaluator) * _denominator2.accept_returning<double>(evaluator));
+                       / std::sqrt(_denominator1.accept_returning<double>(evaluator) * _denominator2.accept_returning<double>(evaluator));
             }
 
-            virtual ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr
+            clone(const Parameters & parameters) const
             {
                 WilsonPolynomialCloner cloner(parameters);
 
                 return ObservablePtr(new WilsonPolynomialHTLikeRatio(_numerator.accept_returning<WilsonPolynomial>(cloner),
-                            _denominator1.accept_returning<WilsonPolynomial>(cloner),
-                            _denominator2.accept_returning<WilsonPolynomial>(cloner),
-                            parameters));
+                                                                     _denominator1.accept_returning<WilsonPolynomial>(cloner),
+                                                                     _denominator2.accept_returning<WilsonPolynomial>(cloner),
+                                                                     parameters));
             }
     };
 
@@ -305,8 +350,7 @@ namespace eos
     }
 
     ObservablePtr
-    make_polynomial_ht_like_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator1,
-            const WilsonPolynomial & denominator2, const Parameters & parameters)
+    make_polynomial_ht_like_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator1, const WilsonPolynomial & denominator2, const Parameters & parameters)
     {
         return ObservablePtr(new WilsonPolynomialHTLikeRatio(numerator, denominator1, denominator2, parameters));
     }
@@ -339,8 +383,7 @@ namespace eos
     WilsonPolynomial
     WilsonPolynomialCloner::visit(const Product & p)
     {
-        return WilsonPolynomial(Product(p.x.accept_returning<WilsonPolynomial>(*this),
-                    p.y.accept_returning<WilsonPolynomial>(*this)));
+        return WilsonPolynomial(Product(p.x.accept_returning<WilsonPolynomial>(*this), p.y.accept_returning<WilsonPolynomial>(*this)));
     }
 
     WilsonPolynomial
@@ -379,7 +422,9 @@ namespace eos
         std::string result = "(";
 
         if (_pretty)
+        {
             result += "\n   ";
+        }
 
         auto i = s.summands.cbegin(), i_end = s.summands.cend();
 
@@ -389,13 +434,15 @@ namespace eos
             ++i;
         }
 
-        for ( ; i != i_end ; ++i)
+        for (; i != i_end; ++i)
         {
             result += std::string(_pretty ? "\n" : "") + " + " + (*i).accept_returning<std::string>(*this);
         }
 
         if (_pretty)
+        {
             result += "\n";
+        }
 
         result += ")";
 
@@ -432,9 +479,16 @@ namespace eos
 
     /* WilsonPolynomialEvaluator */
     double
-    WilsonPolynomialEvaluator::visit(const Constant & c) { return c.value; }
+    WilsonPolynomialEvaluator::visit(const Constant & c)
+    {
+        return c.value;
+    }
+
     double
-    WilsonPolynomialEvaluator::visit(const Parameter & p) { return p(); }
+    WilsonPolynomialEvaluator::visit(const Parameter & p)
+    {
+        return p();
+    }
 
     double
     WilsonPolynomialEvaluator::visit(const Sum & s)
@@ -466,4 +520,4 @@ namespace eos
     {
         return std::cos(c.phi.accept_returning<double>(*this));
     }
-}
+} // namespace eos

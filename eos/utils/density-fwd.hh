@@ -29,6 +29,6 @@ namespace eos
     class Density;
 
     using DensityPtr = std::shared_ptr<Density>;
-}
+} // namespace eos
 
 #endif

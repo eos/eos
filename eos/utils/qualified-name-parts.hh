@@ -37,10 +37,23 @@ namespace eos
             public:
                 Prefix(const std::string &);
 
-                const std::string & str() const { return _prefix; };
+                const std::string &
+                str() const
+                {
+                    return _prefix;
+                }
 
-                inline bool operator<  (const Prefix & rhs) const { return this->_prefix <  rhs._prefix; };
-                inline bool operator== (const Prefix & rhs) const { return this->_prefix == rhs._prefix; };
+                inline bool
+                operator< (const Prefix & rhs) const
+                {
+                    return this->_prefix < rhs._prefix;
+                }
+
+                inline bool
+                operator== (const Prefix & rhs) const
+                {
+                    return this->_prefix == rhs._prefix;
+                }
         };
 
         class Name
@@ -51,10 +64,23 @@ namespace eos
             public:
                 Name(const std::string &);
 
-                const std::string & str() const { return _name; };
+                const std::string &
+                str() const
+                {
+                    return _name;
+                }
 
-                inline bool operator<  (const Name & rhs) const { return this->_name <  rhs._name; };
-                inline bool operator== (const Name & rhs) const { return this->_name == rhs._name; };
+                inline bool
+                operator< (const Name & rhs) const
+                {
+                    return this->_name < rhs._name;
+                }
+
+                inline bool
+                operator== (const Name & rhs) const
+                {
+                    return this->_name == rhs._name;
+                }
         };
 
         class Suffix
@@ -66,10 +92,23 @@ namespace eos
                 Suffix();
                 Suffix(const std::string &);
 
-                const std::string & str() const { return _suffix; };
-                bool empty() const { return _suffix.empty(); };
+                const std::string &
+                str() const
+                {
+                    return _suffix;
+                }
 
-                inline bool operator<  (const Suffix & rhs) const { return this->_suffix <  rhs._suffix; };
+                bool
+                empty() const
+                {
+                    return _suffix.empty();
+                }
+
+                inline bool
+                operator< (const Suffix & rhs) const
+                {
+                    return this->_suffix < rhs._suffix;
+                }
         };
 
         class OptionKey
@@ -80,11 +119,15 @@ namespace eos
             public:
                 OptionKey(const std::string &);
 
-                const std::string & str() const { return _key; };
+                const std::string &
+                str() const
+                {
+                    return _key;
+                }
 
                 inline auto operator<=> (const OptionKey & rhs) const = default;
-                inline bool operator== (const OptionKey & rhs) const = default;
-                inline bool operator< (const OptionKey & rhs) const = default;
+                inline bool operator== (const OptionKey & rhs) const  = default;
+                inline bool operator< (const OptionKey & rhs) const   = default;
         };
 
         class OptionValue
@@ -95,67 +138,73 @@ namespace eos
             public:
                 OptionValue(const std::string &);
 
-                const std::string & str() const { return _value; };
+                const std::string &
+                str() const
+                {
+                    return _value;
+                }
         };
-    }
+    } // namespace qnp
 
-    inline qnp::OptionKey operator ""_ok(const char * str, size_t len)
+    inline qnp::OptionKey
+    operator""_ok (const char * str, size_t len)
     {
         return qnp::OptionKey(std::string(str, len));
     }
 
-    inline qnp::OptionValue operator ""_ov(const char * str, size_t len)
+    inline qnp::OptionValue
+    operator""_ov (const char * str, size_t len)
     {
         return qnp::OptionValue(std::string(str, len));
     }
 
     namespace implementation
     {
-        template <>
-        struct DoStringify<qnp::Prefix>
+        template <> struct DoStringify<qnp::Prefix>
         {
-            static std::string stringify(const qnp::Prefix & x, unsigned)
-            {
-                return x.str();
-            }
+                static std::string
+                stringify(const qnp::Prefix & x, unsigned)
+                {
+                    return x.str();
+                }
         };
 
-        template <>
-        struct DoStringify<qnp::Name>
+        template <> struct DoStringify<qnp::Name>
         {
-            static std::string stringify(const qnp::Name & x, unsigned)
-            {
-                return x.str();
-            }
+                static std::string
+                stringify(const qnp::Name & x, unsigned)
+                {
+                    return x.str();
+                }
         };
 
-        template <>
-        struct DoStringify<qnp::Suffix>
+        template <> struct DoStringify<qnp::Suffix>
         {
-            static std::string stringify(const qnp::Suffix & x, unsigned)
-            {
-                return x.str();
-            }
+                static std::string
+                stringify(const qnp::Suffix & x, unsigned)
+                {
+                    return x.str();
+                }
         };
 
-        template <>
-        struct DoStringify<qnp::OptionKey>
+        template <> struct DoStringify<qnp::OptionKey>
         {
-            static std::string stringify(const qnp::OptionKey & x, unsigned)
-            {
-                return x.str();
-            }
+                static std::string
+                stringify(const qnp::OptionKey & x, unsigned)
+                {
+                    return x.str();
+                }
         };
 
-        template <>
-        struct DoStringify<qnp::OptionValue>
+        template <> struct DoStringify<qnp::OptionValue>
         {
-            static std::string stringify(const qnp::OptionValue & x, unsigned)
-            {
-                return x.str();
-            }
+                static std::string
+                stringify(const qnp::OptionValue & x, unsigned)
+                {
+                    return x.str();
+                }
         };
-    }
-}
+    } // namespace implementation
+} // namespace eos
 
 #endif

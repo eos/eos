@@ -28,16 +28,14 @@
 
 namespace eos
 {
-    class ThreadPool :
-        public InstantiationPolicy<ThreadPool, Singleton>,
-        public PrivateImplementationPattern<ThreadPool>
+    class ThreadPool : public InstantiationPolicy<ThreadPool, Singleton>, public PrivateImplementationPattern<ThreadPool>
     {
         public:
             ThreadPool();
 
             ~ThreadPool();
 
-            Ticket enqueue(const std::function<void (void)> & work);
+            Ticket enqueue(const std::function<void(void)> & work);
 
             static ThreadPool * instance();
 
@@ -45,6 +43,6 @@ namespace eos
 
             unsigned number_of_threads() const;
     };
-}
+} // namespace eos
 
 #endif

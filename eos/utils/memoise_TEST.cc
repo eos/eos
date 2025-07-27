@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/memoise.hh>
+
+#include <test/test.hh>
 
 #include <complex>
 
 using namespace test;
 using namespace eos;
 
-class MemoiseTest :
-    public TestCase
+class MemoiseTest : public TestCase
 {
     public:
         MemoiseTest() :
@@ -34,17 +34,20 @@ class MemoiseTest :
         {
         }
 
-        static double f1(const double & x, const double & y)
+        static double
+        f1(const double & x, const double & y)
         {
             return x / y;
         }
 
-        static std::complex<double> f2(const double & x, const double & y)
+        static std::complex<double>
+        f2(const double & x, const double & y)
         {
             return std::complex<double>(x, y);
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             /* f1 */
             {

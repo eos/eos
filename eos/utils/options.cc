@@ -24,34 +24,30 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
-#include <map>
 #include <algorithm>
+#include <map>
 
 namespace eos
 {
-    template <>
-    struct WrappedForwardIteratorTraits<Options::OptionIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<Options::OptionIteratorTag>
     {
-        using UnderlyingIterator = std::map<qnp::OptionKey, std::string>::const_iterator;
+            using UnderlyingIterator = std::map<qnp::OptionKey, std::string>::const_iterator;
     };
     template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
 
-    template <>
-    struct Implementation<Options>
+    template <> struct Implementation<Options>
     {
-        std::map<qnp::OptionKey, std::string> options;
+            std::map<qnp::OptionKey, std::string> options;
 
-        Implementation()
-        {
-        }
+            Implementation() {}
 
-        Implementation(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & _options)
-        {
-            for (const auto & _option : _options)
+            Implementation(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & _options)
             {
-                options.insert(_option);
+                for (const auto & _option : _options)
+                {
+                    options.insert(_option);
+                }
             }
-        }
     };
 
     Options::Options() :
@@ -64,20 +60,22 @@ namespace eos
     {
     }
 
-    Options::~Options()
-    {
-    }
+    Options::~Options() {}
 
     bool
     Options::operator== (const Options & rhs) const
     {
         if (_imp->options.size() != rhs._imp->options.size())
+        {
             return false;
+        }
 
-        for (auto l = _imp->options.cbegin(), l_end = _imp->options.cend(), r = rhs._imp->options.cbegin() ; l != l_end ; ++l, ++r)
+        for (auto l = _imp->options.cbegin(), l_end = _imp->options.cend(), r = rhs._imp->options.cbegin(); l != l_end; ++l, ++r)
         {
             if (*l != *r)
+            {
                 return false;
+            }
         }
 
         return true;
@@ -94,7 +92,9 @@ namespace eos
     {
         auto i(_imp->options.find(key));
         if (_imp->options.end() == i)
+        {
             throw UnknownOptionError(key);
+        }
 
         return i->second;
     }
@@ -125,7 +125,9 @@ namespace eos
         auto i(_imp->options.find(key));
 
         if (_imp->options.end() == i)
+        {
             return default_value;
+        }
 
         return i->second;
     }
@@ -143,7 +145,7 @@ namespace eos
             ++i;
         }
 
-        for ( ; i != i_end ; ++i)
+        for (; i != i_end; ++i)
         {
             result += ',' + i->first.str() + '=' + i->second;
         }
@@ -169,17 +171,17 @@ namespace eos
         return _imp->options.empty();
     }
 
-    UnknownOptionError::UnknownOptionError(const qnp::OptionKey & key) throw () :
+    UnknownOptionError::UnknownOptionError(const qnp::OptionKey & key) throw() :
         Exception("Unknown option: '" + key.str() + "'")
     {
     }
 
-    InvalidOptionValueError::InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed) throw () :
+    InvalidOptionValueError::InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed) throw() :
         Exception("Invalid value '" + value + "' for option: '" + key.str() + "'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
     {
     }
 
-    UnspecifiedOptionError::UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed) throw () :
+    UnspecifiedOptionError::UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed) throw() :
         Exception("Mandatory option '" + key.str() + "' not specified'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
     {
     }
@@ -231,7 +233,9 @@ namespace eos
         if (! options.has(specification.key))
         {
             if ("" == specification.default_value)
+            {
                 throw UnspecifiedOptionError(specification.key, join(specification.allowed_values.cbegin(), specification.allowed_values.cend()));
+            }
 
             _value = specification.default_value;
         }
@@ -244,20 +248,19 @@ namespace eos
     SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         _specification("dummy"_ok, {}, "")
     {
-        const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&] (const auto & e) -> bool {
-            return e.key == key;
-        });
+        const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&](const auto & e) -> bool { return e.key == key; });
 
         if (specifications.cend() == s)
+        {
             throw UnspecifiedOptionError("Options key '" + key.str() + "' is not specified in the options specifications");
+        }
 
         *this = SpecifiedOption(options, *s);
     }
 
     SpecifiedOption::~SpecifiedOption() = default;
 
-    SpecifiedOption &
-    SpecifiedOption::operator= (const SpecifiedOption & other) = default;
+    SpecifiedOption & SpecifiedOption::operator= (const SpecifiedOption & other) = default;
 
     const std::string &
     SpecifiedOption::value() const
@@ -346,16 +349,17 @@ namespace eos
     LeptonFlavor
     LeptonFlavorOption::value() const
     {
-        static const std::map<std::string, LeptonFlavor> map
-        {
-            { "e",   LeptonFlavor::electron },
-            { "mu",  LeptonFlavor::muon     },
-            { "tau", LeptonFlavor::tauon    }
+        static const std::map<std::string, LeptonFlavor> map{
+            {   "e", LeptonFlavor::electron },
+            {  "mu",     LeptonFlavor::muon },
+            { "tau",    LeptonFlavor::tauon }
         };
 
         const auto i = map.find(_value);
         if (map.cend() == i)
+        {
             throw InternalError("Invalid lepton flavor '" + _value + "' encountered in LeptonFlavorOption::value()");
+        }
 
         return i->second;
     }
@@ -376,19 +380,20 @@ namespace eos
     QuarkFlavor
     QuarkFlavorOption::value() const
     {
-        static const std::map<std::string, QuarkFlavor> map
-        {
-            { "u", QuarkFlavor::up      },
-            { "d", QuarkFlavor::down    },
+        static const std::map<std::string, QuarkFlavor> map{
+            { "u",      QuarkFlavor::up },
+            { "d",    QuarkFlavor::down },
             { "s", QuarkFlavor::strange },
-            { "c", QuarkFlavor::charm   },
-            { "b", QuarkFlavor::bottom  },
-            { "t", QuarkFlavor::top     }
+            { "c",   QuarkFlavor::charm },
+            { "b",  QuarkFlavor::bottom },
+            { "t",     QuarkFlavor::top }
         };
 
         const auto i = map.find(_value);
         if (map.cend() == i)
+        {
             throw InternalError("Invalid quark flavor '" + _value + "' encountered in QuarkFlavorOption::value()");
+        }
 
         return i->second;
     }
@@ -409,23 +414,24 @@ namespace eos
     LightMeson
     LightMesonOption::value() const
     {
-        static const std::map<std::string, LightMeson> map
-        {
-            { "pi^0",      LightMeson::pi0     },
-            { "pi^+",      LightMeson::piplus  },
-            { "pi^-",      LightMeson::piminus },
-            { "K_d",       LightMeson::K0      },
-            { "Kbar_d",    LightMeson::K0bar   },
-            { "K_S",       LightMeson::KS      },
-            { "K_u",       LightMeson::Kplus   },
-            { "Kbar_u",    LightMeson::Kminus  },
-            { "eta",       LightMeson::eta     },
-            { "eta_prime", LightMeson::etap    }
+        static const std::map<std::string, LightMeson> map{
+            {      "pi^0",     LightMeson::pi0 },
+            {      "pi^+",  LightMeson::piplus },
+            {      "pi^-", LightMeson::piminus },
+            {       "K_d",      LightMeson::K0 },
+            {    "Kbar_d",   LightMeson::K0bar },
+            {       "K_S",      LightMeson::KS },
+            {       "K_u",   LightMeson::Kplus },
+            {    "Kbar_u",  LightMeson::Kminus },
+            {       "eta",     LightMeson::eta },
+            { "eta_prime",    LightMeson::etap }
         };
 
         const auto i = map.find(_value);
         if (map.cend() == i)
+        {
             throw InternalError("Invalid light meson '" + _value + "' encountered in LightMesonOption::value()");
+        }
 
         return i->second;
     }
@@ -441,7 +447,9 @@ namespace eos
         _isospin_value(destringify<Isospin>(_value))
     {
         if (((_isospin_value ^ destringify<Isospin>(this->_specification.allowed_values.front())) & _isospin_value) != Isospin::none)
+        {
             throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+        }
     }
 
     IsospinOption::~IsospinOption() = default;
@@ -463,7 +471,9 @@ namespace eos
         _partial_wave_value(destringify<PartialWave>(_value))
     {
         if (((_partial_wave_value ^ destringify<PartialWave>(this->_specification.allowed_values.front())) & _partial_wave_value) != PartialWave::none)
+        {
             throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+        }
     }
 
     PartialWaveOption::~PartialWaveOption() = default;
@@ -479,4 +489,4 @@ namespace eos
     {
         return _value;
     }
-}
+} // namespace eos

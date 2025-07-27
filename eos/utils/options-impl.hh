@@ -40,7 +40,9 @@ namespace eos
                 _value(nullptr)
             {
                 if (! options.has(key))
+                {
                     throw UnspecifiedOptionError(key);
+                }
 
                 std::string raw_value(options[key]);
                 try
@@ -70,7 +72,11 @@ namespace eos
                 }
             }
 
-            const qnp::Name & value() const { return *_value; };
+            const qnp::Name &
+            value() const
+            {
+                return *_value;
+            }
     };
 
     class SwitchOption
@@ -79,8 +85,7 @@ namespace eos
             std::string _value;
 
         public:
-            SwitchOption(const Options & options, const qnp::OptionKey & key,
-                    const std::initializer_list<std::string> & allowed_values)
+            SwitchOption(const Options & options, const qnp::OptionKey & key, const std::initializer_list<std::string> & allowed_values)
             {
                 if (allowed_values.begin() == allowed_values.end())
                 {
@@ -100,9 +105,7 @@ namespace eos
                 }
             }
 
-            SwitchOption(const Options & options, const qnp::OptionKey & key,
-                    const std::initializer_list<std::string> & allowed_values,
-                    const std::string & default_value) :
+            SwitchOption(const Options & options, const qnp::OptionKey & key, const std::initializer_list<std::string> & allowed_values, const std::string & default_value) :
                 _value(options.get(key, default_value))
             {
                 if (allowed_values.begin() == allowed_values.end())
@@ -112,7 +115,8 @@ namespace eos
 
                 if (std::find(allowed_values.begin(), allowed_values.end(), default_value) == allowed_values.end())
                 {
-                    throw InternalError("SwitchOption: The default value '" + default_value + "'is not in the list of allowed values: '" + join(allowed_values.begin(), allowed_values.end()) + "'");
+                    throw InternalError("SwitchOption: The default value '" + default_value + "'is not in the list of allowed values: '"
+                                        + join(allowed_values.begin(), allowed_values.end()) + "'");
                 }
 
                 if (std::find(allowed_values.begin(), allowed_values.end(), _value) == allowed_values.end())
@@ -123,8 +127,12 @@ namespace eos
 
             ~SwitchOption() = default;
 
-            const std::string & value() const { return _value; };
+            const std::string &
+            value() const
+            {
+                return _value;
+            }
     };
-}
+} // namespace eos
 
 #endif

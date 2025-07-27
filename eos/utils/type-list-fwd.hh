@@ -27,25 +27,18 @@ namespace eos
 {
     struct TypeListTail;
 
-    template <typename Item_, typename Tail_>
-    struct TypeListEntry;
+    template <typename Item_, typename Tail_> struct TypeListEntry;
 
-    template <typename...>
-    struct MakeTypeList;
+    template <typename...> struct MakeTypeList;
 
-    template <>
-    struct MakeTypeList<>;
+    template <> struct MakeTypeList<>;
 
-    template <typename H_, typename... T_>
-    struct MakeTypeList<H_, T_...>;
+    template <typename H_, typename... T_> struct MakeTypeList<H_, T_...>;
 
-    template <typename TypeList_>
-    struct MakeTypeListConst;
+    template <typename TypeList_> struct MakeTypeListConst;
 
-    template <typename Item_>
-    struct MakeTypeListConstEntry;
+    template <typename Item_> struct MakeTypeListConstEntry;
 
-    template <typename TypeList_, typename Item_>
-    struct TypeListContains;
-}
+    template <typename TypeList_, typename Item_> struct TypeListContains;
+} // namespace eos
 #endif

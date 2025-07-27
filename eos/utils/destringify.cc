@@ -25,4 +25,4 @@ namespace eos
         Exception("Could not destringify '" + str + "'")
     {
     }
-}
+} // namespace eos

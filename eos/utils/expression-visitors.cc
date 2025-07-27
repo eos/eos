@@ -16,10 +16,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/observable.hh>
 #include <eos/observable-impl.hh>
+#include <eos/observable.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/expression.hh>
 #include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
@@ -27,6 +26,7 @@
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-printer.hh>
 #include <eos/utils/expression-used-parameter-reader.hh>
+#include <eos/utils/expression.hh>
 #include <eos/utils/join.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -47,7 +47,8 @@ namespace eos::exp
     {
     }
 
-    void ExpressionPrinter::visit(BinaryExpression & e)
+    void
+    ExpressionPrinter::visit(BinaryExpression & e)
     {
         _os << "BinaryExpression(";
         e.lhs.accept(*this);
@@ -56,7 +57,8 @@ namespace eos::exp
         _os << ")";
     }
 
-    void ExpressionPrinter::visit(FunctionExpression & e)
+    void
+    ExpressionPrinter::visit(FunctionExpression & e)
     {
         _os << "FunctionExpression(";
         _os << e.fname << ", ";
@@ -64,12 +66,14 @@ namespace eos::exp
         _os << ")";
     }
 
-    void ExpressionPrinter::visit(ConstantExpression & e)
+    void
+    ExpressionPrinter::visit(ConstantExpression & e)
     {
         _os << "ConstantExpression(" << e.value << ")";
     }
 
-    void ExpressionPrinter::visit(ObservableNameExpression & e)
+    void
+    ExpressionPrinter::visit(ObservableNameExpression & e)
     {
         _os << "ObservableNameExpression(" << e.observable_name.full();
         if (! e.kinematics_specification.aliases.empty())
@@ -77,7 +81,7 @@ namespace eos::exp
             auto a = e.kinematics_specification.aliases.cbegin();
             _os << ", aliases=[" << a->first << "=>" << a->second;
             ++a;
-            for (auto a_end = e.kinematics_specification.aliases.cend() ; a != a_end ; ++a)
+            for (auto a_end = e.kinematics_specification.aliases.cend(); a != a_end; ++a)
             {
                 _os << "," << a->first << "=>" << a->second;
             }
@@ -88,7 +92,7 @@ namespace eos::exp
             auto v = e.kinematics_specification.values.cbegin();
             _os << ", values=[" << v->first << "=" << v->second;
             ++v;
-            for (auto v_end = e.kinematics_specification.values.cend() ; v != v_end ; ++v)
+            for (auto v_end = e.kinematics_specification.values.cend(); v != v_end; ++v)
             {
                 _os << "," << v->first << "=" << v->second;
             }
@@ -97,7 +101,8 @@ namespace eos::exp
         _os << ")";
     }
 
-    void ExpressionPrinter::visit(ObservableExpression & e)
+    void
+    ExpressionPrinter::visit(ObservableExpression & e)
     {
         _os << "ObservableExpression(" << e.observable->name() << ")";
         if (! e.kinematics_specification.aliases.empty())
@@ -105,7 +110,7 @@ namespace eos::exp
             auto a = e.kinematics_specification.aliases.cbegin();
             _os << ", aliases=[" << a->first << "=>" << a->second;
             ++a;
-            for (auto a_end = e.kinematics_specification.aliases.cend() ; a != a_end ; ++a)
+            for (auto a_end = e.kinematics_specification.aliases.cend(); a != a_end; ++a)
             {
                 _os << "," << a->first << "=>" << a->second;
             }
@@ -116,7 +121,7 @@ namespace eos::exp
             auto v = e.kinematics_specification.values.cbegin();
             _os << ", values=[" << v->first << "=" << v->second;
             ++v;
-            for (auto v_end = e.kinematics_specification.values.cend() ; v != v_end ; ++v)
+            for (auto v_end = e.kinematics_specification.values.cend(); v != v_end; ++v)
             {
                 _os << "," << v->first << "=" << v->second;
             }
@@ -125,27 +130,32 @@ namespace eos::exp
         _os << ")";
     }
 
-    void ExpressionPrinter::visit(ParameterNameExpression & e)
+    void
+    ExpressionPrinter::visit(ParameterNameExpression & e)
     {
         _os << "ParameterNameExpression(" << e.parameter_name.full() << ")";
     }
 
-    void ExpressionPrinter::visit(ParameterExpression & e)
+    void
+    ExpressionPrinter::visit(ParameterExpression & e)
     {
         _os << "ParameterExpression(" << e.parameter.name() << ")";
     }
 
-    void ExpressionPrinter::visit(KinematicVariableNameExpression & e)
+    void
+    ExpressionPrinter::visit(KinematicVariableNameExpression & e)
     {
         _os << "KinematicVariableNameExpression(" << e.variable_name << ")";
     }
 
-    void ExpressionPrinter::visit(KinematicVariableExpression & e)
+    void
+    ExpressionPrinter::visit(KinematicVariableExpression & e)
     {
         _os << "KinematicVariableExpression(" << e.kinematic_variable.name() << ")";
     }
 
-    void ExpressionPrinter::visit(CachedObservableExpression & e)
+    void
+    ExpressionPrinter::visit(CachedObservableExpression & e)
     {
         _os << "CachedObservableExpression(id=" << e.id;
         _os << ", name='" << e.cache.observable(e.id)->name().full() << "'";
@@ -262,7 +272,7 @@ namespace eos::exp
     Expression
     ExpressionCloner::visit(const ObservableExpression & e)
     {
-        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
@@ -276,12 +286,7 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(
-            e.observable->name(),
-            this->_parameters,
-            this->_kinematics,
-            this->_options + e.observable->options()
-            );
+        auto observable = Observable::make(e.observable->name(), this->_parameters, this->_kinematics, this->_options + e.observable->options());
         // Clear alias map
         _kinematics.clear_aliases();
 
@@ -317,7 +322,7 @@ namespace eos::exp
     Expression
     ExpressionCloner::visit(const CachedObservableExpression & e)
     {
-        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
@@ -331,12 +336,7 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(
-            e.cache.observable(e.id)->name(),
-            this->_parameters,
-            this->_kinematics,
-            this->_options + e.cache.observable(e.id)->options()
-            );
+        auto observable = Observable::make(e.cache.observable(e.id)->name(), this->_parameters, this->_kinematics, this->_options + e.cache.observable(e.id)->options());
         // Clear alias map
         _kinematics.clear_aliases();
 
@@ -376,7 +376,7 @@ namespace eos::exp
     Expression
     ExpressionMaker::visit(const ObservableNameExpression & e)
     {
-        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
@@ -390,15 +390,10 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(
-            e.observable_name,
-            this->_parameters,
-            this->_kinematics,
-            this->_options
-            );
+        auto observable = Observable::make(e.observable_name, this->_parameters, this->_kinematics, this->_options);
 
         // Clear aliases installed as part of this expression
-        for (const auto & alias: kinematics_aliases)
+        for (const auto & alias : kinematics_aliases)
         {
             _kinematics.remove_alias(alias.first);
         }
@@ -417,7 +412,7 @@ namespace eos::exp
     {
         // Rebuild the observable expression with the local set of parameters
 
-        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
@@ -431,15 +426,10 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(
-            e.observable->name(),
-            this->_parameters,
-            this->_kinematics,
-            this->_options + e.observable->options()
-            );
+        auto observable = Observable::make(e.observable->name(), this->_parameters, this->_kinematics, this->_options + e.observable->options());
 
         // Clear aliases installed as part of this expression
-        for (const auto & alias: kinematics_aliases)
+        for (const auto & alias : kinematics_aliases)
         {
             _kinematics.remove_alias(alias.first);
         }
@@ -539,7 +529,7 @@ namespace eos::exp
         std::set<std::string> alias_set;
 
         const auto & entries = impl::observable_entries;
-        const auto & it = entries.find(e.observable_name);
+        const auto & it      = entries.find(e.observable_name);
 
         // check if 'e' matches the name of a known observable
         if (it != entries.end())
@@ -548,7 +538,7 @@ namespace eos::exp
 
             kinematic_set.insert(entry->begin_kinematic_variables(), entry->end_kinematic_variables());
 
-            const auto & kinematics_values = e.kinematics_specification.values;
+            const auto & kinematics_values  = e.kinematics_specification.values;
             const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
             // Set or alias kinematic specifications
@@ -576,7 +566,7 @@ namespace eos::exp
             auto parameters = eos::Parameters::Defaults();
 
             // observable_name.full() is used below because if the observable has options, it cannot be a parameter
-            auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == e.observable_name.full(); });
+            auto i = std::find_if(parameters.begin(), parameters.end(), [&](const Parameter & p) { return p.name() == e.observable_name.full(); });
             if (parameters.end() != i)
             {
                 return;
@@ -592,7 +582,7 @@ namespace eos::exp
         std::set<std::string> kinematic_set;
         std::set<std::string> alias_set;
 
-        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
@@ -640,7 +630,7 @@ namespace eos::exp
         std::set<std::string> kinematic_set;
         std::set<std::string> alias_set;
 
-        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
@@ -805,4 +795,4 @@ namespace eos::exp
             this->parameter_ids.insert(parameter_id);
         }
     }
-}
+} // namespace eos::exp

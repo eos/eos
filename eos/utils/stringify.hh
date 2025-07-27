@@ -20,35 +20,35 @@
 #ifndef EOS_GUARD_EOS_UTILS_STRINGIFY_HH
 #define EOS_GUARD_EOS_UTILS_STRINGIFY_HH 1
 
-#include <string>
 #include <sstream>
+#include <string>
 
 namespace eos
 {
     namespace implementation
     {
-        template <typename T_>
-        struct DoStringify
+        template <typename T_> struct DoStringify
         {
-            static std::string stringify(const T_ & x, unsigned precision)
-            {
-                std::stringstream ss;
-                ss.precision(precision);
-                ss << x;
+                static std::string
+                stringify(const T_ & x, unsigned precision)
+                {
+                    std::stringstream ss;
+                    ss.precision(precision);
+                    ss << x;
 
-                return ss.str();
-            }
+                    return ss.str();
+                }
         };
 
-        template <>
-        struct DoStringify<std::string>
+        template <> struct DoStringify<std::string>
         {
-            static std::string stringify(const std::string & x, unsigned)
-            {
-                return x;
-            }
+                static std::string
+                stringify(const std::string & x, unsigned)
+                {
+                    return x;
+                }
         };
-    }
+    } // namespace implementation
 
     /*!
      * Stringify an arbritrary (scalar) data type.
@@ -57,7 +57,8 @@ namespace eos
      * @param precision (Optional) floating point precision for the stringification.
      */
     template <typename T_>
-    std::string stringify(const T_ & x, const unsigned & precision = 10)
+    std::string
+    stringify(const T_ & x, const unsigned & precision = 10)
     {
         return implementation::DoStringify<T_>::stringify(x, precision);
     }
@@ -70,13 +71,14 @@ namespace eos
      * @param precision (Optional) floating point precision for the stringification.
      */
     template <typename Iterator_>
-    std::string stringify(const Iterator_ & begin, const Iterator_ & end, const unsigned & precision  = 10)
+    std::string
+    stringify(const Iterator_ & begin, const Iterator_ & end, const unsigned & precision = 10)
     {
         std::stringstream ss;
         ss.precision(precision);
         ss << '(';
 
-        for (Iterator_ i = begin ; i != end ; ++i)
+        for (Iterator_ i = begin; i != end; ++i)
         {
             ss << ' ' << *i;
         }
@@ -94,17 +96,18 @@ namespace eos
      * @param precision (Optional) floating point precision for the stringification.
      */
     template <typename T_>
-    std::string stringify(const T_ * m, const unsigned & dim, const unsigned & precision = 10)
+    std::string
+    stringify(const T_ * m, const unsigned & dim, const unsigned & precision = 10)
     {
         std::stringstream ss;
         ss.precision(precision);
         ss << "\n(";
 
-        for (unsigned i = 0 ; i < dim ; ++i)
+        for (unsigned i = 0; i < dim; ++i)
         {
             ss << '(';
 
-            for (unsigned j = 0 ; j < dim ; ++j)
+            for (unsigned j = 0; j < dim; ++j)
             {
                 ss << m[i * dim + j];
 
@@ -123,10 +126,11 @@ namespace eos
     }
 
     template <typename Container_>
-    std::string stringify_container(const Container_ & container, unsigned precision = 10)
+    std::string
+    stringify_container(const Container_ & container, unsigned precision = 10)
     {
         return stringify(container.begin(), container.end(), precision);
     }
-}
+} // namespace eos
 
 #endif

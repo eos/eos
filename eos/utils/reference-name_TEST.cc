@@ -17,8 +17,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/reference-name.hh>
+
+#include <test/test.hh>
 
 #include <cmath>
 #include <iostream>
@@ -26,8 +27,7 @@
 using namespace test;
 using namespace eos;
 
-class NameTest :
-    public TestCase
+class NameTest : public TestCase
 {
     public:
         NameTest() :
@@ -35,7 +35,8 @@ class NameTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK_NO_THROW(auto p = rnp::Name("IKMvD"));
             TEST_CHECK_NO_THROW(auto p = rnp::Name("KMPW"));
@@ -51,8 +52,7 @@ class NameTest :
         }
 } name_test;
 
-class YearTest :
-    public TestCase
+class YearTest : public TestCase
 {
     public:
         YearTest() :
@@ -60,7 +60,8 @@ class YearTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK_NO_THROW(auto n = rnp::Year("0000"));
             TEST_CHECK_NO_THROW(auto n = rnp::Year("1905"));
@@ -75,8 +76,7 @@ class YearTest :
         }
 } year_test;
 
-class IndexTest :
-    public TestCase
+class IndexTest : public TestCase
 {
     public:
         IndexTest() :
@@ -84,7 +84,8 @@ class IndexTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK_NO_THROW(auto p = rnp::Index("A"));
             TEST_CHECK_NO_THROW(auto p = rnp::Index("Z"));
@@ -96,8 +97,7 @@ class IndexTest :
         }
 } index_test;
 
-class ReferenceNameTest :
-    public TestCase
+class ReferenceNameTest : public TestCase
 {
     public:
         ReferenceNameTest() :
@@ -105,7 +105,8 @@ class ReferenceNameTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK_NO_THROW(auto qn = ReferenceName("A:2010A"));
             TEST_CHECK_NO_THROW(auto qn = ReferenceName("IKMvD:2014A"));

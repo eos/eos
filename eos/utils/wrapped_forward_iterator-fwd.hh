@@ -25,13 +25,11 @@
 
 namespace eos
 {
-    template <typename Tag_, typename Value_>
-    class WrappedForwardIterator;
+    template <typename Tag_, typename Value_> class WrappedForwardIterator;
 
-    template <typename Tag_>
-    struct WrappedForwardIteratorTraits;
+    template <typename Tag_> struct WrappedForwardIteratorTraits;
 
     struct WrappedForwardIteratorUnderlyingIteratorHolder;
-}
+} // namespace eos
 
 #endif

@@ -19,6 +19,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/stringify.hh>
+
 #include <math.h>
 
 namespace eos::exp
@@ -28,24 +29,47 @@ namespace eos::exp
     {
     }
 
-    double BinaryExpression::sum(const double & a, const double & b)        { return a + b; }
-    double BinaryExpression::difference(const double & a, const double & b) { return a - b; }
-    double BinaryExpression::product(const double & a, const double & b)    { return a * b; }
-    double BinaryExpression::ratio(const double & a, const double & b)      { return a / b; }
-    double BinaryExpression::power(const double & a, const double & b)      { return pow(a, b); }
+    double
+    BinaryExpression::sum(const double & a, const double & b)
+    {
+        return a + b;
+    }
+
+    double
+    BinaryExpression::difference(const double & a, const double & b)
+    {
+        return a - b;
+    }
+
+    double
+    BinaryExpression::product(const double & a, const double & b)
+    {
+        return a * b;
+    }
+
+    double
+    BinaryExpression::ratio(const double & a, const double & b)
+    {
+        return a / b;
+    }
+
+    double
+    BinaryExpression::power(const double & a, const double & b)
+    {
+        return pow(a, b);
+    }
 
     BinaryExpression::func
     BinaryExpression::Method(char op)
     {
-        switch(op) {
+        switch (op)
+        {
             case '+': return BinaryExpression::sum;
             case '-': return BinaryExpression::difference;
             case '*': return BinaryExpression::product;
             case '/': return BinaryExpression::ratio;
             case '^': return BinaryExpression::power;
-            default:
-                InternalError("Unknown binary operator '" + stringify(op) + "' encountered");
-                return nullptr;
+            default:  InternalError("Unknown binary operator '" + stringify(op) + "' encountered"); return nullptr;
         }
     }
 
@@ -54,17 +78,18 @@ namespace eos::exp
         fname(f),
         arg(arg)
     {
-        static const std::map<std::string, FunctionType> function_table
-        {
-            { std::string("exp"), FunctionType([] (const double & x) -> double { return std::exp(x); }) },
-            { std::string("sin"), FunctionType([] (const double & x) -> double { return std::sin(x); }) },
-            { std::string("cos"), FunctionType([] (const double & x) -> double { return std::cos(x); }) }
+        static const std::map<std::string, FunctionType> function_table{
+            { std::string("exp"), FunctionType([](const double & x) -> double { return std::exp(x); }) },
+            { std::string("sin"), FunctionType([](const double & x) -> double { return std::sin(x); }) },
+            { std::string("cos"), FunctionType([](const double & x) -> double { return std::cos(x); }) }
         };
 
         auto it = function_table.find(f);
         if (function_table.end() == it)
+        {
             throw ExpressionError("unknown function name " + f);
+        }
 
         this->f = it->second;
     }
-}
+} // namespace eos::exp

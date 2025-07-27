@@ -17,19 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/join.hh>
 
-#include <list>
-#include <vector>
+#include <test/test.hh>
 
 #include <iostream>
+#include <list>
+#include <vector>
 
 using namespace test;
 using namespace eos;
 
-class JoinTest :
-    public TestCase
+class JoinTest : public TestCase
 {
     public:
         JoinTest() :
@@ -37,7 +36,8 @@ class JoinTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // filled vector
             {
@@ -46,7 +46,7 @@ class JoinTest :
                 std::cout << join(items.begin(), items.end()) << std::endl;
                 TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end()));
                 TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end(), ", "));
-                TEST_CHECK_EQUAL("1:4:7",   join(items.begin(), items.end(), ":"));
+                TEST_CHECK_EQUAL("1:4:7", join(items.begin(), items.end(), ":"));
             }
 
             // empty list

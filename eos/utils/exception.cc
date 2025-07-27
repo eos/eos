@@ -35,13 +35,14 @@ namespace eos
 
     Context::Context(const Context & other) = default;
 
-    Context &
-    Context::operator= (const Context & other) = default;
+    Context & Context::operator= (const Context & other) = default;
 
     Context::~Context() noexcept(false)
     {
         if (impl::context.empty())
+        {
             throw InternalError("empty context");
+        }
 
         impl::context.pop_back();
     }
@@ -50,17 +51,20 @@ namespace eos
     Context::backtrace(const std::string & delimiter) const
     {
         if (impl::context.empty())
+        {
             return "";
+        }
 
         std::string result;
 
         auto append = [&](const std::tuple<source_location, std::string> & entry)
         {
-            result += std::get<1>(entry) + "[" + std::get<0>(entry).file_name() + ":" + std::to_string(std::get<0>(entry).line()) + " -> " + std::get<0>(entry).function_name() + "]";
+            result +=
+                    std::get<1>(entry) + "[" + std::get<0>(entry).file_name() + ":" + std::to_string(std::get<0>(entry).line()) + " -> " + std::get<0>(entry).function_name() + "]";
             result += delimiter;
         };
 
-        for (auto c = impl::context.cbegin(), c_end = impl::context.cend() ; c != c_end ; ++c)
+        for (auto c = impl::context.cbegin(), c_end = impl::context.cend(); c != c_end; ++c)
         {
             append(*c);
         }
@@ -80,7 +84,7 @@ namespace eos
             }
 
             ContextData(const ContextData &) = default;
-            ~ContextData() = default;
+            ~ContextData()                   = default;
     };
 
     Exception::Exception(const std::string & message) noexcept :
@@ -96,25 +100,26 @@ namespace eos
     {
     }
 
-    Exception::~Exception() noexcept
-    {
-    }
+    Exception::~Exception() noexcept {}
 
     std::string
     Exception::backtrace(const std::string & delimiter) const
     {
         if (_context_data->local_context.empty())
+        {
             return "";
+        }
 
         std::string result;
 
         auto append = [&](const std::tuple<source_location, std::string> & entry)
         {
-            result += std::get<1>(entry) + " [" + std::get<0>(entry).file_name() + ":" + std::to_string(std::get<0>(entry).line()) + " -> " + std::get<0>(entry).function_name() + "]";
+            result += std::get<1>(entry) + " [" + std::get<0>(entry).file_name() + ":" + std::to_string(std::get<0>(entry).line()) + " -> " + std::get<0>(entry).function_name()
+                      + "]";
             result += delimiter;
         };
 
-        for (auto c = _context_data->local_context.cbegin(), c_end = _context_data->local_context.cend() ; c != c_end ; ++c)
+        for (auto c = _context_data->local_context.cbegin(), c_end = _context_data->local_context.cend(); c != c_end; ++c)
         {
             append(*c);
         }
@@ -123,28 +128,28 @@ namespace eos
     }
 
     const char *
-    Exception::what() const throw ()
+    Exception::what() const throw()
     {
         return _message.c_str();
     }
 
-    InternalError::InternalError(const std::string & message) throw () :
+    InternalError::InternalError(const std::string & message) throw() :
         Exception("Internal Error: " + message)
     {
     }
 
-    UnknownObservableError::UnknownObservableError(const std::string & message) throw () :
+    UnknownObservableError::UnknownObservableError(const std::string & message) throw() :
         Exception("Unknown Observable Error: " + message)
     {
     }
 
-    GSLError::GSLError(const std::string & message) throw () :
+    GSLError::GSLError(const std::string & message) throw() :
         Exception("GSL Error: " + message)
     {
     }
 
-    ParsingError::ParsingError(const std::string & message) throw () :
+    ParsingError::ParsingError(const std::string & message) throw() :
         Exception("Parsing Error: " + message)
     {
     }
-}
+} // namespace eos

@@ -28,10 +28,7 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, LeptonFlavor lf)
     {
-        static const std::array<std::string, 3u> names
-        {
-            "e", "mu", "tau"
-        };
+        static const std::array<std::string, 3u> names{ "e", "mu", "tau" };
 
         os << names[static_cast<unsigned>(lf)];
 
@@ -41,10 +38,7 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, QuarkFlavor qf)
     {
-        static const std::array<std::string, 6u> names
-        {
-            "u", "d", "s", "c", "b", "t"
-        };
+        static const std::array<std::string, 6u> names{ "u", "d", "s", "c", "b", "t" };
 
         os << names[static_cast<unsigned>(qf)];
 
@@ -54,16 +48,15 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, Isospin i)
     {
-        static const std::array<std::string, 5u> names
-        {
-            "0", "1/2", "1", "3/2", "2"
-        };
+        static const std::array<std::string, 5u> names{ "0", "1/2", "1", "3/2", "2" };
 
         std::vector<std::string> tmp;
-        for (unsigned shift = 0 ; shift < 5 ; ++shift)
+        for (unsigned shift = 0; shift < 5; ++shift)
         {
             if (i && static_cast<Isospin>(1 << shift))
+            {
                 tmp.push_back(names[shift]);
+            }
         }
 
         os << join(tmp.begin(), tmp.end(), "|");
@@ -74,10 +67,7 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, IsospinRepresentation ir)
     {
-        static const std::array<std::string, 5u> names
-        {
-            "0", "1", "2", "1/2", "3/2"
-        };
+        static const std::array<std::string, 5u> names{ "0", "1", "2", "1/2", "3/2" };
 
         os << names[static_cast<unsigned>(ir)];
 
@@ -87,10 +77,7 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, LightMeson qf)
     {
-        static const std::array<std::string, 10u> names
-        {
-            "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime"
-        };
+        static const std::array<std::string, 10u> names{ "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" };
 
         os << names[static_cast<unsigned>(qf)];
 
@@ -100,16 +87,15 @@ namespace eos
     std::ostream &
     operator<< (std::ostream & os, PartialWave pw)
     {
-        static const std::array<std::string, 4u> names
-        {
-            "S", "P", "D", "F"
-        };
+        static const std::array<std::string, 4u> names{ "S", "P", "D", "F" };
 
         std::vector<std::string> tmp;
-        for (unsigned shift = 0 ; shift < 4 ; ++shift)
+        for (unsigned shift = 0; shift < 4; ++shift)
         {
             if (pw && static_cast<PartialWave>(1 << shift))
+            {
                 tmp.push_back(names[shift]);
+            }
         }
 
         os << join(tmp.begin(), tmp.end(), "|");
@@ -117,4 +103,4 @@ namespace eos
         return os;
     }
 
-}
+} // namespace eos

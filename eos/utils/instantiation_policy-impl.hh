@@ -36,14 +36,13 @@ namespace eos
         delete ptr;
     }
 
-    template <typename T_>
-    class InstantiationPolicy<T_, Singleton>::DeleteOnDestruction
+    template <typename T_> class InstantiationPolicy<T_, Singleton>::DeleteOnDestruction
     {
         private:
-            T_ * * const _ptr;
+            T_ ** const _ptr;
 
         public:
-            DeleteOnDestruction(T_ * * const ptr) :
+            DeleteOnDestruction(T_ ** const ptr) :
                 _ptr(ptr)
             {
             }
@@ -57,10 +56,10 @@ namespace eos
     };
 
     template <typename T_>
-    T_ * *
+    T_ **
     InstantiationPolicy<T_, Singleton>::_instance_ptr()
     {
-        static T_ * instance(0);
+        static T_ *                instance(0);
         static DeleteOnDestruction delete_instance(&instance);
 
         return &instance;
@@ -70,12 +69,12 @@ namespace eos
     T_ *
     InstantiationPolicy<T_, Singleton>::instance()
     {
-        T_ * * instance_ptr(_instance_ptr());
+        T_ ** instance_ptr(_instance_ptr());
 
         if (0 == *instance_ptr)
         {
             static Mutex m;
-            Lock l(m);
+            Lock         l(m);
 
             instance_ptr = _instance_ptr();
 
@@ -87,6 +86,6 @@ namespace eos
 
         return *instance_ptr;
     }
-}
+} // namespace eos
 
 #endif

@@ -19,7 +19,7 @@
 
 #include <string>
 
- namespace eos
- {
-     template struct ExpressionParser<std::string::const_iterator>;
- }
+namespace eos
+{
+    template struct ExpressionParser<std::string::const_iterator>;
+}

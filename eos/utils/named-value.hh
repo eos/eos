@@ -25,9 +25,9 @@
 
 #include <eos/utils/named-value-fwd.hh>
 
-#include <utility>
-#include <type_traits>
 #include <string>
+#include <type_traits>
+#include <utility>
 
 namespace eos
 {
@@ -47,16 +47,15 @@ namespace eos
      * In all cases, NamedValue members are listed in name-sorted order, and
      * the same name is used for K_ and the member name.
      */
-    template <typename K_, typename V_>
-    class NamedValue
+    template <typename K_, typename V_> class NamedValue
     {
-        static_assert(! std::is_reference<V_>::value, "Tried to make a NamedValue hold a reference");
+            static_assert(! std::is_reference<V_>::value, "Tried to make a NamedValue hold a reference");
 
         private:
             V_ _value;
 
         public:
-            using KeyType = K_;
+            using KeyType   = K_;
             using ValueType = V_;
 
             template <typename T_>
@@ -91,18 +90,21 @@ namespace eos
             {
             }
 
-            NamedValue & operator=(const NamedValue & v)
+            NamedValue &
+            operator= (const NamedValue & v)
             {
                 _value = v._value;
                 return *this;
             }
 
-            V_ & operator() ()
+            V_ &
+            operator() ()
             {
                 return _value;
             }
 
-            const V_ & operator() () const
+            const V_ &
+            operator() () const
             {
                 return _value;
             }
@@ -111,23 +113,25 @@ namespace eos
     /**
      * A Name is used to make the assignment for NamedValue keys work.
      */
-    template <typename T_>
-    class Name
+    template <typename T_> class Name
     {
         public:
             template <typename V_>
-            NamedValue<Name<T_>, V_> operator= (const V_ & v) const
+            NamedValue<Name<T_>, V_>
+            operator= (const V_ & v) const
             {
                 return NamedValue<Name<T_>, V_>(v);
             }
 
             template <typename V_>
-            NamedValue<Name<T_>, typename std::remove_reference<V_>::type> operator= (V_ && v) const
+            NamedValue<Name<T_>, typename std::remove_reference<V_>::type>
+            operator= (V_ && v) const
             {
                 return NamedValue<Name<T_>, typename std::remove_reference<V_>::type>(v);
             }
 
-            NamedValue<Name<T_>, std::string> operator= (const char * const v) const
+            NamedValue<Name<T_>, std::string>
+            operator= (const char * const v) const
             {
                 return NamedValue<Name<T_>, std::string>(std::string(v));
             }
@@ -139,11 +143,12 @@ namespace eos
      * 4.4 is buggy, so for now we can't use braces directly...
      */
     template <typename R_, typename... T_>
-    R_ make_named_values(T_ && ... a)
+    R_
+    make_named_values(T_ &&... a)
     {
         R_ result = { std::forward<T_>(a)... };
         return result;
     }
-}
+} // namespace eos
 
 #endif

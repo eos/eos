@@ -17,17 +17,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/observable_stub.hh>
+
+#include <test/test.hh>
 
 #include <vector>
 
 using namespace test;
 using namespace eos;
 
-class ObservableSetTest :
-    public TestCase
+class ObservableSetTest : public TestCase
 {
     public:
         ObservableSetTest() :
@@ -35,19 +35,20 @@ class ObservableSetTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // create simple observables vector
             {
                 ObservableSet o;
-                Parameters p = Parameters::Defaults();
+                Parameters    p = Parameters::Defaults();
                 o.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)")));
                 o.add(ObservablePtr(new ObservableStub(p, "mass::c")));
                 o.add(ObservablePtr(new ObservableStub(p, "mass::s(2GeV)")));
 
                 p["mass::b(MSbar)"] = 4.5;
-                p["mass::c"] = 1.5;
-                p["mass::s(2GeV)"] = 0.1;
+                p["mass::c"]        = 1.5;
+                p["mass::s(2GeV)"]  = 0.1;
 
                 // evaluate the observables
                 std::vector<double> results;
@@ -62,8 +63,10 @@ class ObservableSetTest :
 
                 // check iterator
                 unsigned counter = 0;
-                for (auto i = o.begin(), i_end = o.end(); i != i_end ; ++i)
+                for (auto i = o.begin(), i_end = o.end(); i != i_end; ++i)
+                {
                     counter++;
+                }
                 TEST_CHECK_EQUAL(counter, 3);
 
                 // random access
@@ -73,7 +76,7 @@ class ObservableSetTest :
             // name, options and kinematics need to differ
             {
                 ObservableSet o;
-                Parameters p = Parameters::Defaults();
+                Parameters    p = Parameters::Defaults();
 
                 // adding to empty container should always work
                 TEST_CHECK(o.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)"))).second);

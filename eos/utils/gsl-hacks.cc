@@ -35,7 +35,8 @@ namespace eos
 
     namespace gsl_cblas_hack
     {
-        void gsl_cblas_hack()
+        void
+        gsl_cblas_hack()
         {
             int lda = 3;
 
@@ -51,7 +52,7 @@ namespace eos
 
             cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 3, 1.0, A, lda, B, ldb, 0.0, C, ldc);
         }
-    }
+    } // namespace gsl_cblas_hack
 
     /*
      * Disable GSL default error handler and register our own handler, which
@@ -59,16 +60,18 @@ namespace eos
      */
     namespace gsl_error_handler
     {
-        void gsl_error_handler(const char * reason, const char * /*file*/, int /*line*/, int gsl_errno)
+        void
+        gsl_error_handler(const char * reason, const char * /*file*/, int /*line*/, int gsl_errno)
         {
             throw GSLError(stringify(reason) + " (error code: " + stringify(gsl_errno) + ")");
         }
 
         void gsl_error_handler_hack() __attribute__((constructor));
 
-        void gsl_error_handler_hack()
+        void
+        gsl_error_handler_hack()
         {
-            gsl_error_handler_t * previous_gsl_error_handler __attribute__ ((unused)) = gsl_set_error_handler(&gsl_error_handler);
+            gsl_error_handler_t * previous_gsl_error_handler __attribute__((unused)) = gsl_set_error_handler(&gsl_error_handler);
         }
-    }
-}
+    } // namespace gsl_error_handler
+} // namespace eos

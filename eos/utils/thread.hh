@@ -37,13 +37,11 @@ namespace eos
      * Thread uses POSIX threads internally and allows minimal synchronisation.
      * Thread guarantees that its function is finalised after destruction.
      */
-    class Thread :
-        public InstantiationPolicy<Thread, NonCopyable>,
-        public PrivateImplementationPattern<Thread>
+    class Thread : public InstantiationPolicy<Thread, NonCopyable>, public PrivateImplementationPattern<Thread>
     {
         public:
             /// Our function type.
-            using Function = std::function<void ()>;
+            using Function = std::function<void()>;
 
             /// \name Constructor and destructor
             /// \{
@@ -63,6 +61,6 @@ namespace eos
             /// Return wether we have yet completed executing our function.
             bool completed() const;
     };
-}
+} // namespace eos
 
 #endif

@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/kinematic.hh>
+
+#include <test/test.hh>
 
 #include <cmath>
 
 using namespace test;
 using namespace eos;
 
-class KinematicsTest :
-    public TestCase
+class KinematicsTest : public TestCase
 {
     public:
         KinematicsTest() :
@@ -34,12 +34,12 @@ class KinematicsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // Creation from initializer list
             {
-                Kinematics kinematics
-                {
+                Kinematics kinematics{
                     { "s_min", 1.0 },
                     { "s_max", 6.0 },
                 };
@@ -50,8 +50,7 @@ class KinematicsTest :
 
             // Creation from initializer list and aliasing
             {
-                Kinematics kinematics
-                {
+                Kinematics kinematics{
                     { "s_min", 1.0 },
                     { "s_max", 6.0 },
                 };
@@ -125,10 +124,9 @@ class KinematicsTest :
 
             // Iteration (check for names, values, and order)
             {
-                Kinematics k
-                {
-                    { "s_min",       1.0 },
-                    { "s_max",       6.0 },
+                Kinematics k{
+                    {      "s_min",  1.0 },
+                    {      "s_max",  6.0 },
                     { "cos(theta)", -0.5 },
                 };
 
@@ -150,10 +148,9 @@ class KinematicsTest :
 
             // Iteration (check for names, values, and order, in presence of an alias)
             {
-                Kinematics k
-                {
-                    { "s_min",       1.0 },
-                    { "s_max",       6.0 },
+                Kinematics k{
+                    {      "s_min",  1.0 },
+                    {      "s_max",  6.0 },
                     { "cos(theta)", -0.5 },
                 };
                 k.alias("z", "cos(theta)");
