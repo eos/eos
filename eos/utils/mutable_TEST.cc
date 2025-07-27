@@ -17,15 +17,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/mutable.hh>
 #include <eos/utils/parameters.hh>
+
+#include <test/test.hh>
 
 using namespace eos;
 using namespace test;
 
-class MutableAccessTest :
-    public TestCase
+class MutableAccessTest : public TestCase
 {
     public:
         MutableAccessTest() :
@@ -33,35 +33,36 @@ class MutableAccessTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // Test Parameter
             {
                 Parameters parameters = Parameters::Defaults();
-                Parameter p = parameters["mass::b(MSbar)"];
+                Parameter  p          = parameters["mass::b(MSbar)"];
 
                 Mutable & m = p;
 
                 TEST_CHECK_EQUAL(static_cast<double>(m), static_cast<double>(p));
-                TEST_CHECK_EQUAL(m(),                    p());
-                TEST_CHECK_EQUAL(m.name(),               p.name());
+                TEST_CHECK_EQUAL(m(), p());
+                TEST_CHECK_EQUAL(m.name(), p.name());
             }
 
             // Test Parameter Clone
             {
                 Parameters parameters = Parameters::Defaults();
-                Parameter p = parameters["mass::b(MSbar)"];
+                Parameter  p          = parameters["mass::b(MSbar)"];
 
                 MutablePtr m1(new Parameter(p));
                 MutablePtr m2(m1->clone());
 
                 TEST_CHECK_EQUAL(static_cast<double>(*m1), static_cast<double>(p));
-                TEST_CHECK_EQUAL((*m1)(),                  p());
-                TEST_CHECK_EQUAL(m1->name(),               p.name());
+                TEST_CHECK_EQUAL((*m1)(), p());
+                TEST_CHECK_EQUAL(m1->name(), p.name());
 
                 TEST_CHECK_EQUAL(static_cast<double>(*m2), static_cast<double>(p));
-                TEST_CHECK_EQUAL((*m2)(),                  p());
-                TEST_CHECK_EQUAL(m2->name(),               p.name());
+                TEST_CHECK_EQUAL((*m2)(), p());
+                TEST_CHECK_EQUAL(m2->name(), p.name());
             }
         }
 } mutable_access_test;

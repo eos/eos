@@ -21,13 +21,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/indirect-iterator-impl.hh>
 #include <eos/utils/stringify.hh>
 
+#include <test/test.hh>
+
 #include <algorithm>
-#include <vector>
 #include <list>
+#include <vector>
 
 using namespace test;
 using namespace eos;
@@ -36,17 +37,16 @@ namespace
 {
     struct Deleter
     {
-        template <typename T_>
-        void operator() (T_ t)
-        {
-            delete t;
-        }
+            template <typename T_>
+            void
+            operator() (T_ t)
+            {
+                delete t;
+            }
     };
-}
+} // namespace
 
-
-class IndirectIteratorTest :
-    public TestCase
+class IndirectIteratorTest : public TestCase
 {
     public:
         IndirectIteratorTest() :
@@ -54,14 +54,15 @@ class IndirectIteratorTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
-            //TEST(IndirectIterator, VectorSharedInt)
+            // TEST(IndirectIterator, VectorSharedInt)
             {
-                std::vector<std::shared_ptr<int> > v;
+                std::vector<std::shared_ptr<int>> v;
                 v.push_back(std::shared_ptr<int>(std::make_shared<int>(5)));
                 v.push_back(std::shared_ptr<int>(std::make_shared<int>(10)));
-                IndirectIterator<std::vector<std::shared_ptr<int> >::iterator, int> vi(v.begin()), vi_end(v.end());
+                IndirectIterator<std::vector<std::shared_ptr<int>>::iterator, int> vi(v.begin()), vi_end(v.end());
                 TEST_CHECK(vi != vi_end);
                 TEST_CHECK(vi < vi_end);
                 TEST_CHECK(! (vi > vi_end));
@@ -73,12 +74,12 @@ class IndirectIteratorTest :
                 TEST_CHECK(++vi == vi_end);
             }
 
-            //TEST(IndirectIterator, ListSharedInt)
+            // TEST(IndirectIterator, ListSharedInt)
             {
-                std::list<std::shared_ptr<int> > v;
+                std::list<std::shared_ptr<int>> v;
                 v.push_back(std::shared_ptr<int>(std::make_shared<int>(5)));
                 v.push_back(std::shared_ptr<int>(std::make_shared<int>(10)));
-                IndirectIterator<std::list<std::shared_ptr<int> >::iterator> vi(v.begin()), vi_end(v.end());
+                IndirectIterator<std::list<std::shared_ptr<int>>::iterator> vi(v.begin()), vi_end(v.end());
                 TEST_CHECK(vi != vi_end);
                 TEST_CHECK_EQUAL(5, *vi);
                 TEST_CHECK(++vi != vi_end);
@@ -86,7 +87,7 @@ class IndirectIteratorTest :
                 TEST_CHECK(++vi == vi_end);
             }
 
-            //TEST(IndirectIterator, VectorIntStar)
+            // TEST(IndirectIterator, VectorIntStar)
             {
                 std::vector<int *> v;
                 v.push_back(new int(5));
@@ -105,7 +106,7 @@ class IndirectIteratorTest :
                 std::for_each(v.begin(), v.end(), Deleter());
             }
 
-            //TEST(IndirectIterator, ListIntStar)
+            // TEST(IndirectIterator, ListIntStar)
             {
                 std::list<int *> v;
                 v.push_back(new int(5));
@@ -120,7 +121,7 @@ class IndirectIteratorTest :
                 std::for_each(v.begin(), v.end(), Deleter());
             }
 
-            //TEST(IndirectIterator, ListIntListIterator)
+            // TEST(IndirectIterator, ListIntListIterator)
             {
                 std::list<int> v;
                 v.push_back(5);

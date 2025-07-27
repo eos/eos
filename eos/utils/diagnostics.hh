@@ -31,8 +31,7 @@ namespace eos
      * Container for diagnostic values and corresponding metadata.
      * Used as part of the unit tests.
      */
-    class Diagnostics :
-        public PrivateImplementationPattern<Diagnostics>
+    class Diagnostics : public PrivateImplementationPattern<Diagnostics>
     {
         public:
             struct Entry;
@@ -74,12 +73,12 @@ namespace eos
      */
     struct Diagnostics::Entry
     {
-        /// Numeric value for this entry.
-        double value;
+            /// Numeric value for this entry.
+            double value;
 
-        /// Description for this entry, e.g. a reference to the underlying formula.
-        std::string description;
+            /// Description for this entry, e.g. a reference to the underlying formula.
+            std::string description;
     };
-}
+} // namespace eos
 
 #endif

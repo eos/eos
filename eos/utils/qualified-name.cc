@@ -33,11 +33,10 @@ namespace eos
             }
 
             // PREFIX := ['a'-'z', 'A'-'Z', '0'-'9', '<', '>', '^', '_', '*', '+', '-', '(', ')']
-            static const char * valid_prefix_characters =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789"
-                    "<>^_*+-()";
+            static const char * valid_prefix_characters = "abcdefghijklmnopqrstuvwxyz"
+                                                          "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                          "0123456789"
+                                                          "<>^_*+-()";
 
             auto pos = prefix.find_first_not_of(valid_prefix_characters);
 
@@ -65,11 +64,10 @@ namespace eos
 
             // NAME := ['a'-'z', 'A'-'Z', '0'-'9', '(', ')', '[', ']', '{', '}', '|'
             //          '\'', ',', '.', '/', '^', '_', '*', '+', '-', '=']
-            static const char * valid_name_characters =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789"
-                    "()[]{}|',./^_*+-=";
+            static const char * valid_name_characters = "abcdefghijklmnopqrstuvwxyz"
+                                                        "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                        "0123456789"
+                                                        "()[]{}|',./^_*+-=";
 
             auto pos = name.find_first_not_of(valid_name_characters);
 
@@ -96,11 +94,10 @@ namespace eos
             _suffix(suffix)
         {
             // SUFFIX := ['a'-'z', 'A'-'Z', '0'-'9', '.', ':', '-', '(', ')']
-            static const char * valid_suffix_characters =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789"
-                    ".:-+()";
+            static const char * valid_suffix_characters = "abcdefghijklmnopqrstuvwxyz"
+                                                          "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                          "0123456789"
+                                                          ".:-+()";
 
             auto pos = suffix.find_first_not_of(valid_suffix_characters);
 
@@ -119,11 +116,10 @@ namespace eos
             }
 
             // KEY := ['a'-'z', 'A'-'Z', '0'-'9', '-']
-            static const char * valid_option_key_characters =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789"
-                    "-";
+            static const char * valid_option_key_characters = "abcdefghijklmnopqrstuvwxyz"
+                                                              "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                              "0123456789"
+                                                              "-";
 
             auto pos = key.find_first_not_of(valid_option_key_characters);
 
@@ -142,11 +138,10 @@ namespace eos
             }
 
             // VALUE := ['a'-'z', 'A'-'Z', '0'-'9', '+', '-', '/', '.', '^', '_']
-            static const char * valid_option_value_characters =
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789"
-                    "+-/.^_";
+            static const char * valid_option_value_characters = "abcdefghijklmnopqrstuvwxyz"
+                                                                "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                                                                "0123456789"
+                                                                "+-/.^_";
 
             auto pos = value.find_first_not_of(valid_option_value_characters);
 
@@ -155,7 +150,7 @@ namespace eos
                 throw QualifiedNameSyntaxError("'" + value + "' is not a valid option value part: Character '" + value[pos] + "' may not be used");
             }
         }
-    }
+    } // namespace qnp
 
     QualifiedName::QualifiedName(const std::string & input) :
         _full(input),
@@ -226,7 +221,7 @@ namespace eos
 
             auto pos_next_comma = input.find(',', pos_equal + 1);
 
-            qnp::OptionKey key(input.substr(pos_option_start + 1, pos_equal - pos_option_start - 1));
+            qnp::OptionKey   key(input.substr(pos_option_start + 1, pos_equal - pos_option_start - 1));
             qnp::OptionValue value(input.substr(pos_equal + 1, pos_next_comma - pos_equal - 1));
 
             _options.declare(key.str(), value.str());
@@ -260,12 +255,10 @@ namespace eos
     {
     }
 
-    QualifiedName::~QualifiedName()
-    {
-    }
+    QualifiedName::~QualifiedName() {}
 
     QualifiedNameSyntaxError::QualifiedNameSyntaxError(const std::string & msg) :
         Exception(msg)
     {
     }
-}
+} // namespace eos

@@ -26,70 +26,71 @@
 
 namespace eos
 {
-    template <>
-    struct Implementation<ObservableSet>
+    template <> struct Implementation<ObservableSet>
     {
-        // The list of observables
-        std::vector<ObservablePtr> observables;
+            // The list of observables
+            std::vector<ObservablePtr> observables;
 
-        // <observable name, index>
-        std::map<QualifiedName, unsigned> observable_names;
+            // <observable name, index>
+            std::map<QualifiedName, unsigned> observable_names;
 
-        Implementation()
-        {
-        }
+            Implementation() {}
 
-        std::pair<unsigned, bool> add(const ObservablePtr & observable)
-        {
-            if (! observables.empty() && (observable->parameters() != observables.front()->parameters()))
-                throw InternalError("ObservableSet::add(): Mismatch of Parameters between different observables detected.");
-
-            // compare each observable for options, kinematics and name
-            unsigned index = 0;
-            for (auto i = observables.begin(), i_end = observables.end() ; i != i_end ; ++i, ++index)
+            std::pair<unsigned, bool>
+            add(const ObservablePtr & observable)
             {
-                if (identical_observables(*i, observable))
-                    return std::make_pair(index, false);
+                if (! observables.empty() && (observable->parameters() != observables.front()->parameters()))
+                {
+                    throw InternalError("ObservableSet::add(): Mismatch of Parameters between different observables detected.");
+                }
+
+                // compare each observable for options, kinematics and name
+                unsigned index = 0;
+                for (auto i = observables.begin(), i_end = observables.end(); i != i_end; ++i, ++index)
+                {
+                    if (identical_observables(*i, observable))
+                    {
+                        return std::make_pair(index, false);
+                    }
+                }
+
+                // new observable
+                observables.push_back(observable);
+
+                return std::make_pair(index, true);
             }
 
-            // new observable
-            observables.push_back(observable);
-
-            return std::make_pair(index, true);
-        }
-
-        static bool identical_observables(const ObservablePtr & lhs, const ObservablePtr & rhs)
-        {
-            // compare name
-            if (lhs->name() != rhs->name())
+            static bool
+            identical_observables(const ObservablePtr & lhs, const ObservablePtr & rhs)
             {
-                return false;
-            }
+                // compare name
+                if (lhs->name() != rhs->name())
+                {
+                    return false;
+                }
 
-            // compare kinematics
-            if( lhs->kinematics() != rhs->kinematics())
-            {
-                return false;
-            }
+                // compare kinematics
+                if (lhs->kinematics() != rhs->kinematics())
+                {
+                    return false;
+                }
 
-            // compare options
-            if (lhs->options() != rhs->options())
-            {
-                return false;
-            }
+                // compare options
+                if (lhs->options() != rhs->options())
+                {
+                    return false;
+                }
 
-            return true;
-        }
+                return true;
+            }
     };
 
     ObservableSet::ObservableSet() :
-    PrivateImplementationPattern<ObservableSet>(new Implementation<ObservableSet>())
+        PrivateImplementationPattern<ObservableSet>(new Implementation<ObservableSet>())
     {
     }
 
-    ObservableSet::~ObservableSet()
-    {
-    }
+    ObservableSet::~ObservableSet() {}
 
     std::pair<unsigned, bool>
     ObservableSet::add(const ObservablePtr & observable)
@@ -97,10 +98,9 @@ namespace eos
         return _imp->add(observable);
     }
 
-    template <>
-    struct WrappedForwardIteratorTraits<ObservableSet::IteratorTag>
+    template <> struct WrappedForwardIteratorTraits<ObservableSet::IteratorTag>
     {
-        using UnderlyingIterator = std::vector<ObservablePtr>::iterator;
+            using UnderlyingIterator = std::vector<ObservablePtr>::iterator;
     };
     template class WrappedForwardIterator<ObservableSet::IteratorTag, ObservablePtr>;
 
@@ -133,4 +133,4 @@ namespace eos
     {
         return _imp->observables.size();
     }
-}
+} // namespace eos

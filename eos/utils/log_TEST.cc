@@ -17,15 +17,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class LogLevelTest :
-    public TestCase
+class LogLevelTest : public TestCase
 {
     public:
         LogLevelTest() :
@@ -33,19 +33,20 @@ class LogLevelTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // stringification
             {
-                TEST_CHECK_EQUAL("silent",        stringify(ll_silent));
-                TEST_CHECK_EQUAL("error",         stringify(ll_error));
-                TEST_CHECK_EQUAL("warning",       stringify(ll_warning));
-                TEST_CHECK_EQUAL("success",       stringify(ll_success));
-                TEST_CHECK_EQUAL("completed",     stringify(ll_completed));
-                TEST_CHECK_EQUAL("inprogress",    stringify(ll_inprogress));
+                TEST_CHECK_EQUAL("silent", stringify(ll_silent));
+                TEST_CHECK_EQUAL("error", stringify(ll_error));
+                TEST_CHECK_EQUAL("warning", stringify(ll_warning));
+                TEST_CHECK_EQUAL("success", stringify(ll_success));
+                TEST_CHECK_EQUAL("completed", stringify(ll_completed));
+                TEST_CHECK_EQUAL("inprogress", stringify(ll_inprogress));
                 TEST_CHECK_EQUAL("informational", stringify(ll_informational));
-                TEST_CHECK_EQUAL("debug",         stringify(ll_debug));
-                TEST_CHECK_THROWS(InternalError,  stringify(ll_last));
+                TEST_CHECK_EQUAL("debug", stringify(ll_debug));
+                TEST_CHECK_THROWS(InternalError, stringify(ll_last));
             }
 
             // destringification
@@ -53,7 +54,7 @@ class LogLevelTest :
                 // silent
                 {
                     std::stringstream ss("silent");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -63,7 +64,7 @@ class LogLevelTest :
                 // error
                 {
                     std::stringstream ss("error");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -73,7 +74,7 @@ class LogLevelTest :
                 // warning
                 {
                     std::stringstream ss("warning");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -83,7 +84,7 @@ class LogLevelTest :
                 // success
                 {
                     std::stringstream ss("success");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -93,7 +94,7 @@ class LogLevelTest :
                 // completed
                 {
                     std::stringstream ss("completed");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -103,7 +104,7 @@ class LogLevelTest :
                 // inprogress
                 {
                     std::stringstream ss("inprogress");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -113,7 +114,7 @@ class LogLevelTest :
                 // informational
                 {
                     std::stringstream ss("informational");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -123,7 +124,7 @@ class LogLevelTest :
                 // debug
                 {
                     std::stringstream ss("debug");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     ss >> log_level;
 
@@ -133,7 +134,7 @@ class LogLevelTest :
                 // last
                 {
                     std::stringstream ss("last");
-                    LogLevel log_level;
+                    LogLevel          log_level;
 
                     TEST_CHECK_THROWS(InternalError, ss >> log_level);
                 }
@@ -141,9 +142,7 @@ class LogLevelTest :
         }
 } log_level_test;
 
-
-class LogOneTimeMessageTest :
-    public TestCase
+class LogOneTimeMessageTest : public TestCase
 {
     public:
         LogOneTimeMessageTest() :
@@ -151,14 +150,14 @@ class LogOneTimeMessageTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             std::vector<std::tuple<std::string, LogLevel, std::string>> messages;
 
             // register callback
-            std::function<void(const std::string &, const LogLevel &, const std::string &)> callback = [&messages](const std::string & id, const LogLevel & level, const std::string & message) {
-                messages.push_back(std::make_tuple(id, level, message));
-            };
+            std::function<void(const std::string &, const LogLevel &, const std::string &)> callback =
+                    [&messages](const std::string & id, const LogLevel & level, const std::string & message) { messages.push_back(std::make_tuple(id, level, message)); };
             Log::instance()->register_callback(callback);
 
             // first message

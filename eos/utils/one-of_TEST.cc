@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/one-of.hh>
+
+#include <test/test.hh>
 
 #include <array>
 
 using namespace test;
 using namespace eos;
 
-class OneOfTest :
-    public TestCase
+class OneOfTest : public TestCase
 {
     public:
         OneOfTest() :
@@ -34,7 +34,8 @@ class OneOfTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             using Type = OneOf<int, std::string>;
 
@@ -44,33 +45,40 @@ class OneOfTest :
         }
 } one_of_test;
 
-struct Foo {};
-struct Bar {};
-struct Baz {};
+struct Foo
+{};
+
+struct Bar
+{};
+
+struct Baz
+{};
 
 class TestVisitorReturningVoid
 {
     public:
         std::string result;
 
-        void visit(const Foo &)
+        void
+        visit(const Foo &)
         {
             result += "Foo";
         }
 
-        void visit(Bar &)
+        void
+        visit(Bar &)
         {
             result += "Bar";
         }
 
-        void visit(Baz)
+        void
+        visit(Baz)
         {
             result += "Baz";
         }
 };
 
-class OneOfVisitorReturningVoidTest :
-    public TestCase
+class OneOfVisitorReturningVoidTest : public TestCase
 {
     public:
         OneOfVisitorReturningVoidTest() :
@@ -78,17 +86,13 @@ class OneOfVisitorReturningVoidTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             using Type = OneOf<Foo, Bar, Baz>;
-            std::array<Type, 5> items
-            {{
-                Type{Foo()},
-                Type{Bar()},
-                Type{Bar()},
-                Type{Foo()},
-                Type{Baz()}
-            }};
+            std::array<Type, 5> items{
+                { Type{ Foo() }, Type{ Bar() }, Type{ Bar() }, Type{ Foo() }, Type{ Baz() } }
+            };
 
             TestVisitorReturningVoid visitor;
             for (const auto & item : items)
@@ -103,24 +107,26 @@ class OneOfVisitorReturningVoidTest :
 class TestVisitorReturningString
 {
     public:
-        std::string visit(const Foo &)
+        std::string
+        visit(const Foo &)
         {
             return "Foo";
         }
 
-        std::string visit(Bar &)
+        std::string
+        visit(Bar &)
         {
             return "Bar";
         }
 
-        std::string visit(Baz)
+        std::string
+        visit(Baz)
         {
             return "Baz";
         }
 };
 
-class OneOfVisitorReturningStringTest :
-    public TestCase
+class OneOfVisitorReturningStringTest : public TestCase
 {
     public:
         OneOfVisitorReturningStringTest() :
@@ -128,20 +134,16 @@ class OneOfVisitorReturningStringTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             using Type = OneOf<Foo, Bar, Baz>;
-            std::array<Type, 5> items
-            {{
-                Type{Foo()},
-                Type{Bar()},
-                Type{Bar()},
-                Type{Foo()},
-                Type{Baz()}
-            }};
+            std::array<Type, 5> items{
+                { Type{ Foo() }, Type{ Bar() }, Type{ Bar() }, Type{ Foo() }, Type{ Baz() } }
+            };
 
             TestVisitorReturningString visitor;
-            std::string result;
+            std::string                result;
             for (const auto & item : items)
             {
                 result += item.accept_returning<std::string>(visitor);

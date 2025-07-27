@@ -29,8 +29,7 @@
 
 namespace eos
 {
-    class Mutex :
-        public InstantiationPolicy<Mutex, NonCopyable>
+    class Mutex : public InstantiationPolicy<Mutex, NonCopyable>
     {
         private:
             /// Our attributes.
@@ -47,11 +46,12 @@ namespace eos
             ~Mutex();
 
             /// Returns a pointer to our underlying posix mutex.
-            pthread_mutex_t * mutex()
+            pthread_mutex_t *
+            mutex()
             {
                 return _mutex;
             }
     };
-}
+} // namespace eos
 
 #endif

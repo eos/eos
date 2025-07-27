@@ -69,9 +69,7 @@ namespace eos
 
         public:
             /// Default constructor.
-            InstantiationPolicy()
-            {
-            }
+            InstantiationPolicy() {}
     };
 
     template <typename T_> class InstantiationPolicy<T_, NonInstantiable>
@@ -95,7 +93,7 @@ namespace eos
             friend class DeleteOnDestruction;
 
             /// Returns a pointer to our instance pointer.
-            static T_ * * _instance_ptr();
+            static T_ ** _instance_ptr();
 
             /// Deletes the object of T_ that is pointed at by ptr.
             static void _delete(T_ * const ptr);
@@ -108,17 +106,14 @@ namespace eos
 
         protected:
             /// Default constructor.
-            InstantiationPolicy()
-            {
-            }
+            InstantiationPolicy() {}
 
         public:
             /// Returns the instance.
             static T_ * instance();
-
     };
 
     /// \}
-}
+} // namespace eos
 
 #endif

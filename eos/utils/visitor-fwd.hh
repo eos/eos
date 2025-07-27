@@ -7,33 +7,24 @@
 
 namespace eos
 {
-    template <typename TypeList_>
-    class DeclareAbstractVisitMethods;
+    template <typename TypeList_> class DeclareAbstractVisitMethods;
 
-    template <>
-    class DeclareAbstractVisitMethods<TypeListTail>;
+    template <> class DeclareAbstractVisitMethods<TypeListTail>;
 
-    template <typename TypeList_>
-    class WrappedVisitorBase;
+    template <typename TypeList_> class WrappedVisitorBase;
 
-    template <typename RealClass_, typename TypeList_>
-    class ImplementVisitMethods;
+    template <typename RealClass_, typename TypeList_> class ImplementVisitMethods;
 
-    template <typename RealClass_>
-    class ImplementVisitMethods<RealClass_, TypeListTail>;
+    template <typename RealClass_> class ImplementVisitMethods<RealClass_, TypeListTail>;
 
-    template <typename TypeList_, typename UnwrappedVisitor_>
-    class WrappedVoidResultVisitor;
+    template <typename TypeList_, typename UnwrappedVisitor_> class WrappedVoidResultVisitor;
 
-    template <typename TypeList_, typename Result_, typename UnwrappedVisitor_>
-    class WrappedNonVoidResultVisitor;
+    template <typename TypeList_, typename Result_, typename UnwrappedVisitor_> class WrappedNonVoidResultVisitor;
 
-    template <typename BaseClass_, typename VisitableTypeList_>
-    class DeclareAbstractAcceptMethods;
+    template <typename BaseClass_, typename VisitableTypeList_> class DeclareAbstractAcceptMethods;
 
-    template <typename BaseClass_, typename RealClass_>
-    class ImplementAcceptMethods;
+    template <typename BaseClass_, typename RealClass_> class ImplementAcceptMethods;
 
     template <unsigned u_> class NoType;
-}
+} // namespace eos
 #endif

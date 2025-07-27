@@ -27,7 +27,7 @@ namespace eos::exp
     class ExpressionEvaluator
     {
         public:
-            ExpressionEvaluator() = default;
+            ExpressionEvaluator()  = default;
             ~ExpressionEvaluator() = default;
 
             double visit(BinaryExpression & e);
@@ -49,8 +49,7 @@ namespace eos::exp
             double visit(KinematicVariableExpression & e);
 
             double visit(CachedObservableExpression & e);
-
     };
-}
+} // namespace eos::exp
 
 #endif

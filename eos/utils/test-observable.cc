@@ -24,24 +24,21 @@
 
 namespace eos
 {
-    TestObservable::TestObservable(const Parameters & p, const Kinematics & k, const Options & o,
-            const QualifiedName & observable_name,
-            const std::vector<std::string> & kinematic_variable_names,
-            const std::function<double (const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function) :
+    TestObservable::TestObservable(const Parameters & p, const Kinematics & k, const Options & o, const QualifiedName & observable_name,
+                                   const std::vector<std::string> &                                                                           kinematic_variable_names,
+                                   const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function) :
         p(p),
         o(o),
         observable_name(observable_name),
         function(function)
     {
-        for (auto kvn: kinematic_variable_names)
+        for (auto kvn : kinematic_variable_names)
         {
             kv.emplace_back(std::move(k[kvn]));
         }
     }
 
-    TestObservable::~TestObservable()
-    {
-    }
+    TestObservable::~TestObservable() {}
 
     double
     TestObservable::evaluate() const
@@ -79,16 +76,15 @@ namespace eos
         return o;
     }
 
-    const
-    QualifiedName &
+    const QualifiedName &
     TestObservable::name() const
     {
         return observable_name;
     }
 
     TestObservableEntry::TestObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
-                const std::function<double (const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function,
-                const std::vector<std::string> & kinematics_names) :
+                                             const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function,
+                                             const std::vector<std::string> &                                                                           kinematics_names) :
         _name(name),
         _latex(latex),
         _unit(unit),
@@ -97,9 +93,7 @@ namespace eos
     {
     }
 
-    TestObservableEntry::~TestObservableEntry()
-    {
-    }
+    TestObservableEntry::~TestObservableEntry() {}
 
     const QualifiedName &
     TestObservableEntry::name() const
@@ -158,4 +152,4 @@ namespace eos
 
         return os;
     }
-}
+} // namespace eos

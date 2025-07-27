@@ -35,4 +35,4 @@ namespace eos
         VerifiedRangeError("'" + value + "' smaller than minimum of '" + maximum + "'")
     {
     }
-}
+} // namespace eos

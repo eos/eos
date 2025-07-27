@@ -54,4 +54,4 @@ namespace eos
     {
         pthread_cond_wait(_cond, m.mutex());
     }
-}
+} // namespace eos

@@ -25,22 +25,20 @@
 namespace eos
 {
 
-    template <typename Accuracy_, unsigned nf_, unsigned dim_>
-    class MultiplicativeRenormalizationGroupEvolution;
+    template <typename Accuracy_, unsigned nf_, unsigned dim_> class MultiplicativeRenormalizationGroupEvolution;
 
     namespace accuracy
     {
         struct LL;
         struct NLL;
-    }
+    } // namespace accuracy
 
-    template <unsigned nf_, unsigned dim_>
-    class MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>
+    template <unsigned nf_, unsigned dim_> class MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>
     {
         private:
             // gamma_0 = V^-1,T . diag(gamma_0_ev) . V^T, see [BBL:1995A], p. 34, eq. (III.95)
             std::array<double, dim_> _gamma_0_ev;
-            GSLMatrixPtr _V, _Vinv;
+            GSLMatrixPtr             _V, _Vinv;
 
             // evolution matrix
             GSLMatrixPtr _U_0;
@@ -85,13 +83,12 @@ namespace eos
     };
 
     // Next-to-leading logarithmic accuracy, see [BBL:1995A], p. 34, eq. (III.93)
-    template <unsigned nf_, unsigned dim_>
-    class MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, nf_, dim_>
+    template <unsigned nf_, unsigned dim_> class MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, nf_, dim_>
     {
         private:
             // gamma_0 = V^-1,T . diag(gamma_0_ev) . V^T, see [BBL:1995A], p. 34, eq. (III.95)
             std::array<double, dim_> _gamma_0_ev;
-            GSLMatrixPtr _V, _Vinv;
+            GSLMatrixPtr             _V, _Vinv;
 
             // gamma_1 = V^-1,T . G . V^T, see [BBL:1995A], p. 34, eq. (III.96)
             GSLMatrixPtr _G;
@@ -126,7 +123,7 @@ namespace eos
              * @param gamma_1 The NLO term for the anomalous dimension matrix.
              */
             MultiplicativeRenormalizationGroupEvolution(const std::array<double, dim_> & gamma_0_ev, const std::array<std::array<double, dim_>, dim_> & V,
-                    const std::array<std::array<double, dim_>, dim_> & gamma_1);
+                                                        const std::array<std::array<double, dim_>, dim_> & gamma_1);
 
             /*!
              * Evolve the Wilson coefficients from the scale mu_0 to the scale mu at next-to-leading logarithmic accuracy.
@@ -142,8 +139,8 @@ namespace eos
              *              reduced by r^T . c_0_0, cf. [BBL:1995A], p. 34, eqs. (III.84) & (III.99).
              */
             std::array<double, dim_> evolve(const double & alpha_s_mu, const double & alpha_s_0, const std::array<double, dim_> & c_0_0,
-                    const std::array<double, dim_> & c_0_1) const;
+                                            const std::array<double, dim_> & c_0_1) const;
     };
-}
+} // namespace eos
 
 #endif /* EOS_GUARD_EOS_UTILS_RGE_HH */

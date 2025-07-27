@@ -35,35 +35,31 @@ namespace eos
     /*!
      * UnknownOptionError is thrown when an Options object does not contain a value for a given option key.
      */
-    struct UnknownOptionError :
-        public Exception
+    struct UnknownOptionError : public Exception
     {
-        UnknownOptionError(const qnp::OptionKey & key) throw ();
+            UnknownOptionError(const qnp::OptionKey & key) throw();
     };
 
     /*!
      * InvalidOptionValueError is thrown when the value passed to a known option is invalid.
      */
-    struct InvalidOptionValueError :
-        public Exception
+    struct InvalidOptionValueError : public Exception
     {
-        InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed = "") throw ();
+            InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed = "") throw();
     };
 
     /*!
      * UnspecifiedOptionError is thrown by an observable provider or similar when a mandatory option is not specified.
      */
-    struct UnspecifiedOptionError :
-        public Exception
+    struct UnspecifiedOptionError : public Exception
     {
-        UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed = "") throw ();
+            UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed = "") throw();
     };
 
     /*!
      * Options keeps the set of all string options for any Observable.
      */
-    class Options :
-        public PrivateImplementationPattern<Options>
+    class Options : public PrivateImplementationPattern<Options>
     {
         public:
             friend Options operator+ (const Options &, const Options &);
@@ -129,13 +125,13 @@ namespace eos
      */
     struct OptionSpecification
     {
-        OptionSpecification(const OptionSpecification &);
-        OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in);
-        OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in, const std::string & default_value_in);
+            OptionSpecification(const OptionSpecification &);
+            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in, const std::string & default_value_in);
 
-        qnp::OptionKey key;
-        std::vector<std::string> allowed_values;
-        std::string default_value;
+            qnp::OptionKey           key;
+            std::vector<std::string> allowed_values;
+            std::string              default_value;
     };
 
     class SpecifiedOption
@@ -145,7 +141,7 @@ namespace eos
 
         protected:
             OptionSpecification _specification;
-            std::string _value;
+            std::string         _value;
 
         public:
             SpecifiedOption(const SpecifiedOption &);
@@ -156,16 +152,14 @@ namespace eos
             const std::string & value() const;
     };
 
-    class RestrictedOption :
-        public SpecifiedOption
+    class RestrictedOption : public SpecifiedOption
     {
         public:
             RestrictedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~RestrictedOption();
     };
 
-    class BooleanOption :
-        public SpecifiedOption
+    class BooleanOption : public SpecifiedOption
     {
         private:
             bool boolean_value;
@@ -174,12 +168,11 @@ namespace eos
             BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "true"_ok);
             ~BooleanOption();
 
-            bool value() const;
+            bool                value() const;
             const std::string & str() const;
     };
 
-    class IntegerOption :
-        public SpecifiedOption
+    class IntegerOption : public SpecifiedOption
     {
         private:
             double _int_value;
@@ -188,12 +181,11 @@ namespace eos
             IntegerOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~IntegerOption();
 
-            double value() const;
+            double              value() const;
             const std::string & str() const;
     };
 
-    class FloatOption :
-        public SpecifiedOption
+    class FloatOption : public SpecifiedOption
     {
         private:
             double _float_value;
@@ -202,45 +194,41 @@ namespace eos
             FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~FloatOption();
 
-            double value() const;
+            double              value() const;
             const std::string & str() const;
     };
 
-    class LeptonFlavorOption :
-        public RestrictedOption
+    class LeptonFlavorOption : public RestrictedOption
     {
         public:
             LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "l"_ok);
             ~LeptonFlavorOption();
 
-            LeptonFlavor value() const;
+            LeptonFlavor        value() const;
             const std::string & str() const;
     };
 
-    class QuarkFlavorOption :
-        public RestrictedOption
+    class QuarkFlavorOption : public RestrictedOption
     {
         public:
             QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "q"_ok);
             ~QuarkFlavorOption();
 
-            QuarkFlavor value() const;
+            QuarkFlavor         value() const;
             const std::string & str() const;
     };
 
-    class LightMesonOption :
-        public RestrictedOption
+    class LightMesonOption : public RestrictedOption
     {
         public:
             LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~LightMesonOption();
 
-            LightMeson value() const;
+            LightMeson          value() const;
             const std::string & str() const;
     };
 
-    class IsospinOption :
-        public SpecifiedOption
+    class IsospinOption : public SpecifiedOption
     {
         private:
             Isospin _isospin_value;
@@ -249,12 +237,11 @@ namespace eos
             IsospinOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "I"_ok);
             ~IsospinOption();
 
-            Isospin value() const;
+            Isospin             value() const;
             const std::string & str() const;
     };
 
-    class PartialWaveOption :
-        public SpecifiedOption
+    class PartialWaveOption : public SpecifiedOption
     {
         private:
             PartialWave _partial_wave_value;
@@ -263,9 +250,9 @@ namespace eos
             PartialWaveOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "L"_ok);
             ~PartialWaveOption();
 
-            PartialWave value() const;
+            PartialWave         value() const;
             const std::string & str() const;
     };
-}
+} // namespace eos
 
 #endif

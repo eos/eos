@@ -50,7 +50,7 @@ namespace eos
             virtual double operator() () const = 0;
 
             /// Retrieve a Mutable's numeric value.
-            //TODO: evaluate -> get
+            // TODO: evaluate -> get
             virtual double evaluate() const = 0;
 
             /// Set a Mutable's numeric value.
@@ -66,6 +66,6 @@ namespace eos
             virtual const std::string & name() const = 0;
             ///@}
     };
-}
+} // namespace eos
 
 #endif

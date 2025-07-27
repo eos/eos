@@ -29,6 +29,6 @@ namespace eos
     class Mutable;
 
     using MutablePtr = std::shared_ptr<Mutable>;
-}
+} // namespace eos
 
 #endif

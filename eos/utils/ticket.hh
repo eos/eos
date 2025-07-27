@@ -31,8 +31,7 @@ namespace eos
      * Ticket is used by all asynchronous function calls to relay/query
      * information on a function's completion status.
      */
-    class Ticket :
-        public PrivateImplementationPattern<Ticket>
+    class Ticket : public PrivateImplementationPattern<Ticket>
     {
         public:
             /// \name Friends of Ticket
@@ -63,9 +62,7 @@ namespace eos
     /**
      * TicketList is used when multiple tickets are needed.
      */
-    class TicketList :
-        public InstantiationPolicy<TicketList, NonCopyable>,
-        public PrivateImplementationPattern<TicketList>
+    class TicketList : public InstantiationPolicy<TicketList, NonCopyable>, public PrivateImplementationPattern<TicketList>
     {
         public:
             /// \name Basic Operations
@@ -85,6 +82,6 @@ namespace eos
             /// Wait for ticket completion.
             void wait() const;
     };
-}
+} // namespace eos
 
 #endif

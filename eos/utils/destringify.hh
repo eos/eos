@@ -34,8 +34,7 @@ namespace eos
     /**
      * Exception thrown when destringification fails.
      */
-    class DestringifyError :
-        public Exception
+    class DestringifyError : public Exception
     {
         public:
             DestringifyError(const std::string & str);
@@ -43,123 +42,133 @@ namespace eos
 
     namespace impl
     {
-        template <typename T_>
-        struct SimpleDestringify
+        template <typename T_> struct SimpleDestringify
         {
-            static T_ destringify(const std::string & input)
-            {
-                std::stringstream ss(input);
-                T_ value;
-
-                ss >> value;
-                if (! ss.eof() || ss.fail())
+                static T_
+                destringify(const std::string & input)
                 {
-                    throw DestringifyError(input);
-                }
+                    std::stringstream ss(input);
+                    T_                value;
 
-                return value;
-            }
+                    ss >> value;
+                    if (! ss.eof() || ss.fail())
+                    {
+                        throw DestringifyError(input);
+                    }
+
+                    return value;
+                }
         };
 
-        template <typename T_> struct DoDestringify : public SimpleDestringify<T_> {};
+        template <typename T_> struct DoDestringify : public SimpleDestringify<T_>
+        {};
 
         template <> struct DoDestringify<bool>
         {
-            static bool destringify(const std::string & input)
-            {
-                if ("true" == input)
-                    return true;
+                static bool
+                destringify(const std::string & input)
+                {
+                    if ("true" == input)
+                    {
+                        return true;
+                    }
 
-                if ("false" == input)
-                    return false;
+                    if ("false" == input)
+                    {
+                        return false;
+                    }
 
-                throw DestringifyError(input + ": 'true' or 'false' was expected");
-            }
+                    throw DestringifyError(input + ": 'true' or 'false' was expected");
+                }
         };
 
         template <> struct DoDestringify<Isospin>
         {
-            static Isospin destringify(const std::string & input)
-            {
-                static const std::map<std::string, Isospin> isospins
+                static Isospin
+                destringify(const std::string & input)
                 {
-                    { "0",   Isospin::zero        },
-                    { "1",   Isospin::one         },
-                    { "1/2", Isospin::onehalf     },
-                    { "2",   Isospin::two         },
-                    { "3/2", Isospin::threehalves }
-                };
+                    static const std::map<std::string, Isospin> isospins{
+                        {   "0",        Isospin::zero },
+                        {   "1",         Isospin::one },
+                        { "1/2",     Isospin::onehalf },
+                        {   "2",         Isospin::two },
+                        { "3/2", Isospin::threehalves }
+                    };
 
-                Isospin result = Isospin::none;
+                    Isospin result = Isospin::none;
 
-                std::string::size_type i = 0, j = input.find('|');
-                do
-                {
-                    const auto value = input.substr(i, j - i);
-
-                    const auto k = isospins.find(value);
-                    if (isospins.cend() == k)
-                        throw DestringifyError(std::string("'") + value + "' is not a valid Isospin value");
-
-                    result |= k->second;
-
-                    if (std::string::npos != j)
+                    std::string::size_type i = 0, j = input.find('|');
+                    do
                     {
-                        i = j + 1;
-                        j = input.find('|', i);
+                        const auto value = input.substr(i, j - i);
+
+                        const auto k = isospins.find(value);
+                        if (isospins.cend() == k)
+                        {
+                            throw DestringifyError(std::string("'") + value + "' is not a valid Isospin value");
+                        }
+
+                        result |= k->second;
+
+                        if (std::string::npos != j)
+                        {
+                            i = j + 1;
+                            j = input.find('|', i);
+                        }
+                        else
+                        {
+                            i = std::string::npos;
+                        }
                     }
-                    else
-                    {
-                        i = std::string::npos;
-                    }
+                    while (std::string::npos != i);
+
+                    return result;
                 }
-                while (std::string::npos != i);
-
-                return result;
-            }
         };
 
         template <> struct DoDestringify<PartialWave>
         {
-            static PartialWave destringify(const std::string & input)
-            {
-                static const std::map<std::string, PartialWave> partial_waves
+                static PartialWave
+                destringify(const std::string & input)
                 {
-                    { "S", PartialWave::S },
-                    { "P", PartialWave::P },
-                    { "D", PartialWave::D },
-                    { "F", PartialWave::F }
-                };
+                    static const std::map<std::string, PartialWave> partial_waves{
+                        { "S", PartialWave::S },
+                        { "P", PartialWave::P },
+                        { "D", PartialWave::D },
+                        { "F", PartialWave::F }
+                    };
 
-                PartialWave result = PartialWave::none;
+                    PartialWave result = PartialWave::none;
 
-                std::string::size_type i = 0, j = input.find('|');
-                do
-                {
-                    const auto value = input.substr(i, j - i);
-
-                    const auto k = partial_waves.find(value);
-                    if (partial_waves.cend() == k)
-                        throw DestringifyError(std::string("'") + value + "' is not a valid PartialWave value");
-
-                    result |= k->second;
-
-                    if (std::string::npos != j)
+                    std::string::size_type i = 0, j = input.find('|');
+                    do
                     {
-                        i = j + 1;
-                        j = input.find('|', i);
+                        const auto value = input.substr(i, j - i);
+
+                        const auto k = partial_waves.find(value);
+                        if (partial_waves.cend() == k)
+                        {
+                            throw DestringifyError(std::string("'") + value + "' is not a valid PartialWave value");
+                        }
+
+                        result |= k->second;
+
+                        if (std::string::npos != j)
+                        {
+                            i = j + 1;
+                            j = input.find('|', i);
+                        }
+                        else
+                        {
+                            i = std::string::npos;
+                        }
                     }
-                    else
-                    {
-                        i = std::string::npos;
-                    }
+                    while (std::string::npos != i);
+
+                    return result;
                 }
-                while (std::string::npos != i);
-
-                return result;
-            }
         };
-    }
+    } // namespace impl
 
     template <typename T_>
     T_
@@ -167,6 +176,6 @@ namespace eos
     {
         return impl::DoDestringify<T_>::destringify(input);
     }
-}
+} // namespace eos
 
 #endif

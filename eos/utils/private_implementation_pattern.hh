@@ -29,13 +29,13 @@ namespace eos
     template <typename T_> class PrivateImplementationPattern
     {
         protected:
-            std::shared_ptr<Implementation<T_> > _imp;
+            std::shared_ptr<Implementation<T_>> _imp;
 
         public:
             explicit PrivateImplementationPattern(Implementation<T_> * imp);
 
             ~PrivateImplementationPattern();
     };
-}
+} // namespace eos
 
 #endif

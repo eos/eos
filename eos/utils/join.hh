@@ -28,8 +28,8 @@ namespace eos
      * Join a range of iterators [it, end) with the separator sep.
      */
     template <typename Iter_>
-    std::string join(Iter_ it, const Iter_ & end,
-            const std::string & sep = ", ")
+    std::string
+    join(Iter_ it, const Iter_ & end, const std::string & sep = ", ")
     {
         if (it == end)
         {
@@ -40,13 +40,13 @@ namespace eos
 
         ss << *(it++);
 
-        for ( ; it != end ; ++it)
+        for (; it != end; ++it)
         {
             ss << sep << *it;
         }
 
         return ss.str();
     }
-}
+} // namespace eos
 
 #endif

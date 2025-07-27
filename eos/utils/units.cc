@@ -31,20 +31,13 @@ namespace eos
     const std::string &
     Unit::latex() const
     {
-        static const std::vector<std::string> representations
-        {
-            R"(\textrm{undefined})",
-            "1",
-            R"(\textrm{GeV})",
-            R"(\textrm{GeV}^2)",
-            R"(\textrm{GeV}^3)",
-            R"(\textrm{GeV}^{-1})",
-            R"(\textrm{GeV}^{-2})",
-            R"(\textrm{GeV}^{-4})",
-            R"(\textrm{s})",
-            R"(\textrm{s}^{-1})",
-            R"(\textrm{ps}^{-1})",
-            R"(\textrm{GeV}\,\textrm{s})",
+        static const std::vector<std::string> representations{
+            R"(\textrm{undefined})", "1",
+            R"(\textrm{GeV})",       R"(\textrm{GeV}^2)",
+            R"(\textrm{GeV}^3)",     R"(\textrm{GeV}^{-1})",
+            R"(\textrm{GeV}^{-2})",  R"(\textrm{GeV}^{-4})",
+            R"(\textrm{s})",         R"(\textrm{s}^{-1})",
+            R"(\textrm{ps}^{-1})",   R"(\textrm{GeV}\,\textrm{s})",
             R"(\textrm{fm}^2)",
         };
 
@@ -54,27 +47,25 @@ namespace eos
     Unit::Unit(const std::string & s) :
         Unit(Id::undefined)
     {
-        static const std::map<std::string, Id> map
-        {
-            { "1",       Id::none         },
-            { "GeV",     Id::gev          },
-            { "GeV^2",   Id::gev2         },
-            { "GeV^3",   Id::gev3         },
-            { "GeV^-2",  Id::inverse_gev2 },
-            { "GeV^-1",  Id::inverse_gev  },
-            { "GeV^-4",  Id::inverse_gev4 },
-            { "s",       Id::s            },
-            { "s^-1",    Id::inverse_s    },
-            { "ps^-1",   Id::inverse_ps   },
-            { "GeV s",   Id::gev_s        },
-            { "fm^2",    Id::fm2          },
+        static const std::map<std::string, Id> map{
+            {      "1",         Id::none },
+            {    "GeV",          Id::gev },
+            {  "GeV^2",         Id::gev2 },
+            {  "GeV^3",         Id::gev3 },
+            { "GeV^-2", Id::inverse_gev2 },
+            { "GeV^-1",  Id::inverse_gev },
+            { "GeV^-4", Id::inverse_gev4 },
+            {      "s",            Id::s },
+            {   "s^-1",    Id::inverse_s },
+            {  "ps^-1",   Id::inverse_ps },
+            {  "GeV s",        Id::gev_s },
+            {   "fm^2",          Id::fm2 },
         };
 
         const auto i = map.find(s);
         if (map.cend() == i)
         {
-            Log::instance()->message("Unit", ll_error)
-                << "Unrecognized unit '" << s << "' encountered";
+            Log::instance()->message("Unit", ll_error) << "Unrecognized unit '" << s << "' encountered";
         }
         else
         {
@@ -165,4 +156,4 @@ namespace eos
     {
         return this->_id == rhs._id;
     }
-}
+} // namespace eos

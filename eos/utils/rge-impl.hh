@@ -29,17 +29,15 @@ namespace eos
 {
     template <unsigned nf_> struct QCDBetaFunction;
 
-    template <>
-    struct QCDBetaFunction<5u>
+    template <> struct QCDBetaFunction<5u>
     {
-        static constexpr double beta_0 =  23.0 / 3.0;
-        static constexpr double beta_1 = 116.0 / 3.0;
+            static constexpr double beta_0 = 23.0 / 3.0;
+            static constexpr double beta_1 = 116.0 / 3.0;
     };
 
     template <unsigned nf_, unsigned dim_>
-    MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>::MultiplicativeRenormalizationGroupEvolution(
-            const std::array<double, dim_> & gamma_0_ev,
-            const std::array<std::array<double, dim_>, dim_> & V):
+    MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>::MultiplicativeRenormalizationGroupEvolution(const std::array<double, dim_> &                   gamma_0_ev,
+                                                                                                                      const std::array<std::array<double, dim_>, dim_> & V) :
         _gamma_0_ev(gamma_0_ev),
         _V(make_gsl_matrix(dim_, dim_)),
         _Vinv(make_gsl_matrix(dim_, dim_)),
@@ -60,7 +58,7 @@ namespace eos
         gsl_matrix_memcpy(_tmp_matrix.get(), _V.get());
 
         gsl_permutation * p = gsl_permutation_alloc(dim_);
-        int signum;
+        int               signum;
         // tmp_matrix stores L, U from LU decomposition: P * V = L * U
         gsl_linalg_LU_decomp(_tmp_matrix.get(), p, &signum);
         // Vinv <- V^-1
@@ -71,8 +69,7 @@ namespace eos
 
     template <unsigned nf_, unsigned dim_>
     std::array<double, dim_>
-    MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>::evolve(const double & alpha_s_mu, const double & alpha_s_0,
-            const std::array<double, dim_> & c_0_0) const
+    MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>::evolve(const double & alpha_s_mu, const double & alpha_s_0, const std::array<double, dim_> & c_0_0) const
     {
         // LL evolution:
         //   c(mu) = U_0 . c(mu_0),
@@ -111,10 +108,9 @@ namespace eos
     }
 
     template <unsigned nf_, unsigned dim_>
-    MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, nf_, dim_>::MultiplicativeRenormalizationGroupEvolution(
-            const std::array<double, dim_> & gamma_0_ev,
-            const std::array<std::array<double, dim_>, dim_> & V,
-            const std::array<std::array<double, dim_>, dim_> & gamma_1) :
+    MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, nf_, dim_>::MultiplicativeRenormalizationGroupEvolution(const std::array<double, dim_> & gamma_0_ev,
+                                                                                                                       const std::array<std::array<double, dim_>, dim_> & V,
+                                                                                                                       const std::array<std::array<double, dim_>, dim_> & gamma_1) :
         _gamma_0_ev(gamma_0_ev),
         _V(make_gsl_matrix(dim_, dim_)),
         _Vinv(make_gsl_matrix(dim_, dim_)),
@@ -143,7 +139,7 @@ namespace eos
         gsl_matrix_memcpy(_tmp_matrix.get(), _V.get());
 
         gsl_permutation * p = gsl_permutation_alloc(dim_);
-        int signum;
+        int               signum;
         // tmp_matrix stores L, U from LU decomposition: P . V = L . U
         gsl_linalg_LU_decomp(_tmp_matrix.get(), p, &signum);
         // Vinv <- V^-1
@@ -163,7 +159,7 @@ namespace eos
         const double beta_0 = QCDBetaFunction<nf_>::beta_0;
         const double beta_1 = QCDBetaFunction<nf_>::beta_1;
 
-        for (unsigned i = 0 ; i < dim_; ++i)
+        for (unsigned i = 0; i < dim_; ++i)
         {
             for (unsigned j = 0; j < dim_; ++j)
             {
@@ -179,13 +175,12 @@ namespace eos
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, _J.get(), _Vinv.get(), 0.0, _tmp_matrix.get());
         // J <- V . tmp
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, _V.get(), _tmp_matrix.get(), 0.0, _J.get());
-
     }
 
     template <unsigned nf_, unsigned dim_>
     std::array<double, dim_>
-    MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, nf_, dim_>::evolve(const double & alpha_s_mu, const double & alpha_s_0,
-            const std::array<double, dim_> & c_0_0, const std::array<double, dim_> & c_0_1) const
+    MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, nf_, dim_>::evolve(const double & alpha_s_mu, const double & alpha_s_0, const std::array<double, dim_> & c_0_0,
+                                                                                  const std::array<double, dim_> & c_0_1) const
     {
         // NLL evolution:
         //   U = (1 + a_s_mu J) . U_0 . (1 - a_s_0 J)
@@ -247,6 +242,6 @@ namespace eos
 
         return result;
     }
-}
+} // namespace eos
 
 #endif /* EOS_GUARD_EOS_UTILS_RGE_IMPL_HH */

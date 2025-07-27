@@ -30,9 +30,8 @@
 
 #include <iostream>
 #include <set>
-#include <vector>
-
 #include <time.h>
+#include <vector>
 
 namespace eos
 {
@@ -45,40 +44,23 @@ namespace eos
         {
             switch (rhs)
             {
-                case ll_silent:
-                    lhs << "silent";
-                    continue;
+                case ll_silent: lhs << "silent"; continue;
 
-                case ll_error:
-                    lhs << "error";
-                    continue;
+                case ll_error: lhs << "error"; continue;
 
-                case ll_warning:
-                    lhs << "warning";
-                    continue;
+                case ll_warning: lhs << "warning"; continue;
 
-                case ll_success:
-                    lhs << "success";
-                    continue;
+                case ll_success: lhs << "success"; continue;
 
-                case ll_completed:
-                    lhs << "completed";
-                    continue;
+                case ll_completed: lhs << "completed"; continue;
 
-                case ll_inprogress:
-                    lhs << "inprogress";
-                    continue;
+                case ll_inprogress: lhs << "inprogress"; continue;
 
-                case ll_informational:
-                    lhs << "informational";
-                    continue;
+                case ll_informational: lhs << "informational"; continue;
 
-                case ll_debug:
-                    lhs << "debug";
-                    continue;
+                case ll_debug: lhs << "debug"; continue;
 
-                case ll_last:
-                    break;
+                case ll_last: break;
             }
 
             throw InternalError("LogLevel::operator<<: Bad value for log_level");
@@ -148,85 +130,74 @@ namespace eos
 
     template <> struct Implementation<Log>
     {
-        Mutex mutex;
+            Mutex mutex;
 
-        LogLevel log_level;
+            LogLevel log_level;
 
-        std::ostream * stream;
+            std::ostream * stream;
 
-        std::string program_name;
+            std::string program_name;
 
-        std::vector<std::function<void (const std::string &, const LogLevel &, const std::string &)>> callbacks;
+            std::vector<std::function<void(const std::string &, const LogLevel &, const std::string &)>> callbacks;
 
-        std::set<std::string> one_time_messages;
+            std::set<std::string> one_time_messages;
 
-        Implementation() :
-            log_level(ll_error),
-            stream(nullptr)
-        {
-        }
-
-        void message(const std::string & id, const LogLevel & l, const std::string & m)
-        {
-            if (l > log_level)
-                return;
-
-            // forward message to all callbacks
-            for (auto & c : callbacks)
+            Implementation() :
+                log_level(ll_error),
+                stream(nullptr)
             {
-                c(id, l, m);
             }
 
-            if (! stream)
-                return;
-
-            *stream << program_name << '@' << ::time(0) << ": ";
-
-            do
+            void
+            message(const std::string & id, const LogLevel & l, const std::string & m)
             {
-                switch (l)
+                if (l > log_level)
                 {
-                    case ll_error:
-                        *stream << "[ERROR " << id << "] ";
-                        continue;
-
-                    case ll_warning:
-                        *stream << "[WARNING " << id << "] ";
-                        continue;
-
-                    case ll_informational:
-                        *stream << "[INFO " << id << "] ";
-                        continue;
-
-                    case ll_success:
-                        *stream << "[SUCCESS " << id << "] ";
-                        continue;
-
-                    case ll_completed:
-                        *stream << "[COMPLETED " << id << "] ";
-                        continue;
-
-                    case ll_inprogress:
-                        *stream << "[INPROGRESS " << id << "] ";
-                        continue;
-
-                    case ll_debug:
-                        *stream << "[DEBUG " << id << "] ";
-                        continue;
-
-                    case ll_silent:
-                        throw InternalError("Implementation<Log>::message: ll_silent used for a message");
-
-                    case ll_last:
-                        break;
+                    return;
                 }
 
-                throw InternalError("Implementation<Log>::message: Bad value for log_level");
-            }
-            while (false);
+                // forward message to all callbacks
+                for (auto & c : callbacks)
+                {
+                    c(id, l, m);
+                }
 
-            *stream << m << std::endl;
-        }
+                if (! stream)
+                {
+                    return;
+                }
+
+                *stream << program_name << '@' << ::time(0) << ": ";
+
+                do
+                {
+                    switch (l)
+                    {
+                        case ll_error: *stream << "[ERROR " << id << "] "; continue;
+
+                        case ll_warning: *stream << "[WARNING " << id << "] "; continue;
+
+                        case ll_informational: *stream << "[INFO " << id << "] "; continue;
+
+                        case ll_success: *stream << "[SUCCESS " << id << "] "; continue;
+
+                        case ll_completed: *stream << "[COMPLETED " << id << "] "; continue;
+
+                        case ll_inprogress: *stream << "[INPROGRESS " << id << "] "; continue;
+
+                        case ll_debug: *stream << "[DEBUG " << id << "] "; continue;
+
+                        case ll_silent: throw InternalError("Implementation<Log>::message: ll_silent used for a message");
+
+                        case ll_last: break;
+                    }
+
+                    throw InternalError("Implementation<Log>::message: Bad value for log_level");
+                }
+                while (false);
+
+                *stream << m << std::endl;
+            }
     };
 
     template class InstantiationPolicy<Log, Singleton>;
@@ -236,9 +207,7 @@ namespace eos
     {
     }
 
-    Log::~Log()
-    {
-    }
+    Log::~Log() {}
 
     const LogLevel &
     Log::get_log_level() const
@@ -273,7 +242,7 @@ namespace eos
     }
 
     void
-    Log::register_callback(const std::function<void (const std::string &, const LogLevel &, const std::string&)> & callback)
+    Log::register_callback(const std::function<void(const std::string &, const LogLevel &, const std::string &)> & callback)
     {
         Lock l(_imp->mutex);
 
@@ -327,4 +296,4 @@ namespace eos
     {
         _message.append(s);
     }
-}
+} // namespace eos

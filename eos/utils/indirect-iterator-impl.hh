@@ -72,7 +72,7 @@ namespace eos
 
     template <typename Iter_, typename Value_>
     typename IndirectIterator<Iter_, Value_>::pointer
-    IndirectIterator<Iter_, Value_>::operator-> () const
+    IndirectIterator<Iter_, Value_>::operator->() const
     {
         return &**_iter;
     }
@@ -92,25 +92,29 @@ namespace eos
     }
 
     template <typename Iter_, typename Value_>
-    bool operator== (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
+    bool
+    operator== (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
     {
         return lhs._iter == rhs._iter;
     }
 
     template <typename Iter_, typename Value_>
-    bool operator!= (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
+    bool
+    operator!= (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
     {
         return lhs._iter != rhs._iter;
     }
 
     template <typename Iter_, typename Value_>
-    bool operator< (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
+    bool
+    operator< (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
     {
         return lhs._iter < rhs._iter;
     }
 
     template <typename Iter_, typename Value_>
-    bool operator> (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
+    bool
+    operator> (const IndirectIterator<Iter_, Value_> & lhs, const IndirectIterator<Iter_, Value_> & rhs)
     {
         return rhs._iter < lhs._iter;
     }
@@ -121,6 +125,6 @@ namespace eos
     {
         return IndirectIterator<Iter_>(i);
     }
-}
+} // namespace eos
 
 #endif

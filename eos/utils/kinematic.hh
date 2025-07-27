@@ -31,29 +31,26 @@ namespace eos
      * UnknownKinematicVariableError is thrown when no parameter of a given
      * name could be found.
      */
-    struct UnknownKinematicVariableError :
-        public Exception
+    struct UnknownKinematicVariableError : public Exception
     {
-        UnknownKinematicVariableError(const std::string & variable) throw ();
+            UnknownKinematicVariableError(const std::string & variable) throw();
     };
 
     /*!
      * DuplicateKinematicAliasError is thrown when an alias is defined twice.
      */
-    struct DuplicateKinematicAliasError :
-        public Exception
+    struct DuplicateKinematicAliasError : public Exception
     {
-        DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw ();
+            DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw();
     };
 
     /*!
      * UnknownKinematicAliasError is thrown when no alias of a given
      * name could be found.
      */
-    struct UnknownKinematicAliasError :
-        public Exception
+    struct UnknownKinematicAliasError : public Exception
     {
-        UnknownKinematicAliasError(const std::string & alias) throw ();
+            UnknownKinematicAliasError(const std::string & alias) throw();
     };
 
     // Forward declaration.
@@ -66,8 +63,7 @@ namespace eos
      * a KinematicVariable object will propagate to every other object with the same
      * parent Kinematics and which handle the same variable by name.
      */
-    class Kinematics :
-        public PrivateImplementationPattern<Kinematics>
+    class Kinematics : public PrivateImplementationPattern<Kinematics>
     {
         public:
             ///@name Basic Functions
@@ -93,7 +89,7 @@ namespace eos
              */
             Kinematics clone() const;
 
-            Kinematics operator+(const Kinematics & rhs) const;
+            Kinematics operator+ (const Kinematics & rhs) const;
 
             /// Equality comparison operator.
             bool operator== (const Kinematics & rhs) const;
@@ -173,8 +169,7 @@ namespace eos
     /*!
      * KinematicVariable is the class that holds all information of one of KinematicVariables' parameters.
      */
-    class KinematicVariable :
-        public Mutable
+    class KinematicVariable : public Mutable
     {
         private:
             ///@name Internal Data
@@ -226,14 +221,14 @@ namespace eos
             /// Retrieve the Parameter's name.
             virtual const std::string & name() const;
             ///@}
-
     };
 
     template <typename T>
-    inline T lambda(const T & a, const T & b, const T & c)
+    inline T
+    lambda(const T & a, const T & b, const T & c)
     {
         return a * a + b * b + c * c - 2.0 * (a * b + a * c + b * c);
     }
-}
+} // namespace eos
 
 #endif

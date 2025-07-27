@@ -34,18 +34,8 @@ namespace eos::exp
     class ParameterNameExpression;
     class ParameterExpression;
 
-    using Expression = OneOf<
-        BinaryExpression,
-        FunctionExpression,
-        ConstantExpression,
-        ObservableNameExpression,
-        ObservableExpression,
-        KinematicVariableNameExpression,
-        KinematicVariableExpression,
-        CachedObservableExpression,
-        ParameterNameExpression,
-        ParameterExpression
-    >;
-}
+    using Expression = OneOf<BinaryExpression, FunctionExpression, ConstantExpression, ObservableNameExpression, ObservableExpression, KinematicVariableNameExpression,
+                             KinematicVariableExpression, CachedObservableExpression, ParameterNameExpression, ParameterExpression>;
+} // namespace eos::exp
 
 #endif

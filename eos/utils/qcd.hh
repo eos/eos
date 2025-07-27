@@ -56,7 +56,8 @@ namespace eos
              * @param beta        parameters of QCD beta function that control the running
              * @param gamma_m     parameters of QCD anomalous mass dimension that control the running
              */
-            static double m_q_msbar(const double & m_q, const double & alpha_s_0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m, unsigned int loop_order = 4);
+            static double m_q_msbar(const double & m_q, const double & alpha_s_0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m,
+                                    unsigned int loop_order = 4);
 
             /*!
              * Calculate the shift from pole mass scheme to MSbar.
@@ -126,7 +127,7 @@ namespace eos
              * The 5-flavor-QCD constants.
              */
             ///@{
-            static const BetaFunction beta_function_nf_5;
+            static const BetaFunction           beta_function_nf_5;
             static const AnomalousMassDimension gamma_m_nf_5;
             ///@}
 
@@ -134,7 +135,7 @@ namespace eos
              * The 4-flavor-QCD constants.
              */
             ///@{
-            static const BetaFunction beta_function_nf_4;
+            static const BetaFunction           beta_function_nf_4;
             static const AnomalousMassDimension gamma_m_nf_4;
             ///@}
 
@@ -142,10 +143,10 @@ namespace eos
              * The 3-flavor QCD constants.
              */
             ///@{
-            static const BetaFunction beta_function_nf_3;
+            static const BetaFunction           beta_function_nf_3;
             static const AnomalousMassDimension gamma_m_nf_3;
             ///@}
     };
-}
+} // namespace eos
 
 #endif

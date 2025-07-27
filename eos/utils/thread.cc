@@ -27,74 +27,76 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/thread.hh>
 
-#include <cstring>
 #include <cerrno>
-
+#include <cstring>
 #include <pthread.h>
 
 namespace eos
 {
     template <> struct Implementation<Thread>
     {
-        /// Our thread function.
-        const Thread::Function function;
+            /// Our thread function.
+            const Thread::Function function;
 
-        /// Our thread.
-        pthread_t * const thread;
+            /// Our thread.
+            pthread_t * const thread;
 
-        /// Our mutex.
-        Mutex * const mutex;
+            /// Our mutex.
+            Mutex * const mutex;
 
-        /// Our completion state.
-        bool completed;
+            /// Our completion state.
+            bool completed;
 
-        static void * thread_function(void * argument)
-        {
-            Implementation * imp(static_cast<Implementation *>(argument));
-
-            /// \todo Implement exception handling for the call to function.
-            try
+            static void *
+            thread_function(void * argument)
             {
-                imp->function();
+                Implementation * imp(static_cast<Implementation *>(argument));
+
+                /// \todo Implement exception handling for the call to function.
+                try
+                {
+                    imp->function();
+                }
+                catch (Exception & e)
+                {
+                    throw InternalError("Exception in Thread: " + std::string(e.what()));
+                }
+                catch (std::exception & e)
+                {
+                    throw InternalError("Caught std::exception: " + std::string(e.what()));
+                }
+                catch (...)
+                {
+                    throw InternalError("Unexpected exception or similar in Thread!");
+                }
+
+                Lock l(*imp->mutex);
+                imp->completed = true;
+
+                pthread_exit(0);
             }
-            catch (Exception & e)
+
+            Implementation(const Thread::Function & f) :
+                function(f),
+                thread(new pthread_t),
+                mutex(new Mutex),
+                completed(false)
             {
-                throw InternalError("Exception in Thread: " + std::string(e.what()));
+                int retval;
+
+                if (0 != (retval = pthread_create(thread, 0, &thread_function, this)))
+                {
+                    throw InternalError("pthread_create failed, " + std::string(strerror(retval)));
+                }
             }
-            catch (std::exception & e)
+
+            ~Implementation()
             {
-                throw InternalError("Caught std::exception: " + std::string(e.what()));
+                pthread_join(*thread, 0);
+
+                delete thread;
+                delete mutex;
             }
-            catch (...)
-            {
-                throw InternalError("Unexpected exception or similar in Thread!");
-            }
-
-            Lock l(*imp->mutex);
-            imp->completed = true;
-
-            pthread_exit(0);
-        }
-
-        Implementation(const Thread::Function & f) :
-            function(f),
-            thread(new pthread_t),
-            mutex(new Mutex),
-            completed(false)
-        {
-            int retval;
-
-            if (0 != (retval = pthread_create(thread, 0, &thread_function, this)))
-                throw InternalError("pthread_create failed, " + std::string(strerror(retval)));
-        }
-
-        ~Implementation()
-        {
-            pthread_join(*thread, 0);
-
-            delete thread;
-            delete mutex;
-        }
     };
 
     Thread::Thread(const Function & function) :
@@ -102,14 +104,13 @@ namespace eos
     {
     }
 
-    Thread::~Thread()
-    {
-    }
+    Thread::~Thread() {}
 
-    bool Thread::completed() const
+    bool
+    Thread::completed() const
     {
         Lock l(*_imp->mutex);
 
         return _imp->completed;
     }
-}
+} // namespace eos

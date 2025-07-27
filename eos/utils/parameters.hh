@@ -29,8 +29,8 @@
 #include <eos/utils/units.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
-#include <set>
 #include <limits>
+#include <set>
 
 namespace eos
 {
@@ -41,40 +41,36 @@ namespace eos
      * UnknownParameterError is thrown when no parameter of a given
      * name could be found.
      */
-    struct UnknownParameterError :
-        public Exception
+    struct UnknownParameterError : public Exception
     {
-        UnknownParameterError(const QualifiedName & variable) throw ();
+            UnknownParameterError(const QualifiedName & variable) throw();
     };
 
     /*!
      * ParameterInputFileParseError is thrown when a malformed parameter input
      * file cannot be parsed by libyaml-cpp.
      */
-    struct ParameterInputFileParseError :
-        public Exception
+    struct ParameterInputFileParseError : public Exception
     {
-        ParameterInputFileParseError(const std::string & file, const std::string & msg) throw ();
+            ParameterInputFileParseError(const std::string & file, const std::string & msg) throw();
     };
 
     /*!
      * ParameterInputFileNodeError is thrown when a malformed node is encountered
      * within a parameter input file.
      */
-    struct ParameterInputFileNodeError :
-        public Exception
+    struct ParameterInputFileNodeError : public Exception
     {
-        ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw ();
+            ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw();
     };
 
     /*!
      * ParameterInputDuplicateError is thrown when a duplicate parameter entry is encountered when parsing
      * several input files.
      */
-    struct ParameterInputDuplicateError :
-        public Exception
+    struct ParameterInputDuplicateError : public Exception
     {
-        ParameterInputDuplicateError(const std::string & file, const std::string & msg) throw ();
+            ParameterInputDuplicateError(const std::string & file, const std::string & msg) throw();
     };
 
     /*!
@@ -84,8 +80,7 @@ namespace eos
      * a Parameter object will propagate to every other object with the same
      * parent Parameters and which handle the same parameter by name.
      */
-    class Parameters :
-        public PrivateImplementationPattern<Parameters>
+    class Parameters : public PrivateImplementationPattern<Parameters>
     {
         private:
             ///@name Internal Data
@@ -158,10 +153,8 @@ namespace eos
              * @param min   (Optional) minimal value for the new parameter.
              * @param max   (Optional) maximal value for the new parameter.
              */
-            static unsigned declare(const QualifiedName & name, const std::string & latex, Unit unit,
-                const double & value = 0.0,
-                const double & min = -std::numeric_limits<double>::max(),
-                const double & max = +std::numeric_limits<double>::max());
+            static unsigned declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value = 0.0,
+                                    const double & min = -std::numeric_limits<double>::max(), const double & max = +std::numeric_limits<double>::max());
 
             /*!
              * Redirect a parameter name to a different parameter id in the default set of parameters.
@@ -189,10 +182,8 @@ namespace eos
              * @param min   (Optional) minimal value for the new parameter.
              * @param max   (Optional) maximal value for the new parameter.
              */
-            Parameter declare_and_insert(const QualifiedName & name, const std::string & latex, Unit unit,
-                const double & value = 0.0,
-                const double & min = -std::numeric_limits<double>::max(),
-                const double & max = +std::numeric_limits<double>::max());
+            Parameter declare_and_insert(const QualifiedName & name, const std::string & latex, Unit unit, const double & value = 0.0,
+                                         const double & min = -std::numeric_limits<double>::max(), const double & max = +std::numeric_limits<double>::max());
 
             /*!
              * Redirect a parameter name to a different parameter id in the default set of parameters
@@ -258,8 +249,7 @@ namespace eos
     /*!
      * Parameter is the class that holds all information of one of Parameters' parameters.
      */
-    class Parameter :
-        public Mutable
+    class Parameter : public Mutable
     {
         private:
             struct Data;
@@ -359,8 +349,7 @@ namespace eos
      * them together under a common name. Examples of observable sections include SM & EFT parameters,
      * and form factor parameters.
      */
-    class ParameterSection :
-        public PrivateImplementationPattern<ParameterSection>
+    class ParameterSection : public PrivateImplementationPattern<ParameterSection>
     {
         public:
             ParameterSection(Implementation<ParameterSection> *);
@@ -389,8 +378,7 @@ namespace eos
      * them together under a common name and description. Examples of Parameter Groups
      * include fermion mass parameters and B->D form factors parameters.
      */
-    class ParameterGroup :
-        public PrivateImplementationPattern<ParameterGroup>
+    class ParameterGroup : public PrivateImplementationPattern<ParameterGroup>
     {
         public:
             ParameterGroup(Implementation<ParameterGroup> *);
@@ -460,8 +448,7 @@ namespace eos
     /*!
      * Wrapper class to automate usage tracking of Parameter objects.
      */
-    class UsedParameter :
-        public Parameter
+    class UsedParameter : public Parameter
     {
         public:
             /*!
@@ -479,16 +466,16 @@ namespace eos
 
     struct ParameterDescription
     {
-        MutablePtr parameter;
+            MutablePtr parameter;
 
-        double min;
+            double min;
 
-        double max;
+            double max;
 
-        bool nuisance;
+            bool nuisance;
     };
 
     bool operator== (const ParameterDescription & lhs, const ParameterDescription & rhs);
-}
+} // namespace eos
 
 #endif

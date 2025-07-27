@@ -41,9 +41,18 @@ namespace eos
 
             ~IteratorRange() = default;
 
-            Iterator_ begin() { return _begin; }
-            Iterator_ end() { return _end; }
+            Iterator_
+            begin()
+            {
+                return _begin;
+            }
+
+            Iterator_
+            end()
+            {
+                return _end;
+            }
     };
-}
+} // namespace eos
 
 #endif

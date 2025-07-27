@@ -30,8 +30,7 @@ namespace eos
      * VerifiedRangeError is thrown whenever a VerifiedRange is assigned a value
      * that exceeds its allowed range.
      */
-    class VerifiedRangeError :
-        public Exception
+    class VerifiedRangeError : public Exception
     {
         protected:
             VerifiedRangeError(const std::string & message);
@@ -41,20 +40,18 @@ namespace eos
      * VerifiedRangeOverflow is thrown whenever a VerifiedRange is assigned a value
      * that is larger than its allowed maximum.
      */
-    struct VerifiedRangeOverflow :
-        public VerifiedRangeError
+    struct VerifiedRangeOverflow : public VerifiedRangeError
     {
-        VerifiedRangeOverflow(const std::string & value, const std::string & maximum);
+            VerifiedRangeOverflow(const std::string & value, const std::string & maximum);
     };
 
     /*!
      * VerifiedRangeUnderflow is thrown whenever a VerifiedRange is assigned a value
      * that is smaller than its allowed minimum.
      */
-    struct VerifiedRangeUnderflow :
-        public VerifiedRangeError
+    struct VerifiedRangeUnderflow : public VerifiedRangeError
     {
-        VerifiedRangeUnderflow(const std::string & value, const std::string & minimum);
+            VerifiedRangeUnderflow(const std::string & value, const std::string & minimum);
     };
 
     /*!
@@ -67,8 +64,7 @@ namespace eos
      * test_range = -10; // not allowed, throws a VerifiedRangeUnderflow
      * @endcode
      */
-    template <typename T_>
-    class VerifiedRange
+    template <typename T_> class VerifiedRange
     {
         private:
             T_ _min;
@@ -77,13 +73,18 @@ namespace eos
 
             T_ _value;
 
-            const T_ & _verify(const T_ & t)
+            const T_ &
+            _verify(const T_ & t)
             {
                 if (t < _min)
+                {
                     throw VerifiedRangeUnderflow(stringify(t), stringify(_min));
+                }
 
                 if (t > _max)
+                {
                     throw VerifiedRangeOverflow(stringify(t), stringify(_max));
+                }
 
                 return t;
             }
@@ -104,40 +105,42 @@ namespace eos
                 _value(_verify(value))
             {
             }
+
             ///@}
 
             ///@name Operations
             ///@{
             /// Conversion operator its native type T_
-            operator T_ () const
-            {
-                return _value;
-            }
+            operator T_ () const { return _value; }
 
             /*!
              * Assignment operator.
              *
              * @param rhs Right-hand-side of an assignment to this object.
              */
-            const T_ & operator= (const T_ & rhs)
+            const T_ &
+            operator= (const T_ & rhs)
             {
                 _value = _verify(rhs);
                 return _value;
             }
 
             /// Retrieve the minimal value that is allowed for this object.
-            T_ min() const
+            T_
+            min() const
             {
                 return _min;
             }
 
             /// Retrieve the maximal value that is allowed for this object.
-            T_ max() const
+            T_
+            max() const
             {
                 return _max;
             }
+
             ///@}
     };
-}
+} // namespace eos
 
 #endif

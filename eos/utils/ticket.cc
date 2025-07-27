@@ -31,16 +31,16 @@ namespace eos
 {
     template <> struct Implementation<Ticket>
     {
-        Mutex mutex;
+            Mutex mutex;
 
-        ConditionVariable completion;
+            ConditionVariable completion;
 
-        bool completed;
+            bool completed;
 
-        Implementation() :
-            completed(false)
-        {
-        }
+            Implementation() :
+                completed(false)
+            {
+            }
     };
 
     Ticket::Ticket() :
@@ -48,9 +48,7 @@ namespace eos
     {
     }
 
-    Ticket::~Ticket()
-    {
-    }
+    Ticket::~Ticket() {}
 
     void
     Ticket::mark()
@@ -74,7 +72,7 @@ namespace eos
 
     template <> struct Implementation<TicketList>
     {
-        std::list<std::shared_ptr<Implementation<Ticket> > > tickets;
+            std::list<std::shared_ptr<Implementation<Ticket>>> tickets;
     };
 
     TicketList::TicketList() :
@@ -82,9 +80,7 @@ namespace eos
     {
     }
 
-    TicketList::~TicketList()
-    {
-    }
+    TicketList::~TicketList() {}
 
     void
     TicketList::push_back(const Ticket & ticket)
@@ -97,7 +93,7 @@ namespace eos
     {
         while (! _imp->tickets.empty())
         {
-            std::shared_ptr<Implementation<Ticket> > ticket(_imp->tickets.front());
+            std::shared_ptr<Implementation<Ticket>> ticket(_imp->tickets.front());
 
             {
                 Lock l(ticket->mutex);
@@ -111,4 +107,4 @@ namespace eos
             _imp->tickets.pop_front();
         }
     }
-}
+} // namespace eos

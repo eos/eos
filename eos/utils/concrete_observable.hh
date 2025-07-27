@@ -34,12 +34,9 @@
 
 namespace eos
 {
-    template <typename Decay_, typename ... Args_>
-    class ConcreteObservable :
-        public Observable
+    template <typename Decay_, typename... Args_> class ConcreteObservable : public Observable
     {
         public:
-
         private:
             QualifiedName _name;
 
@@ -51,19 +48,16 @@ namespace eos
 
             Decay_ _decay;
 
-            std::function<double (const Decay_ *, const Args_ & ...)> _function;
+            std::function<double(const Decay_ *, const Args_ &...)> _function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
-            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
+            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type...> _argument_tuple;
 
         public:
-            ConcreteObservable(const QualifiedName & name,
-                    const Parameters & parameters,
-                    const Kinematics & kinematics,
-                    const Options & options,
-                    const std::function<double (const Decay_ *, const Args_ & ...)> & function,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+            ConcreteObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
+                               const std::function<double(const Decay_ *, const Args_ &...)> &            function,
+                               const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names) :
                 _name(name),
                 _parameters(parameters),
                 _kinematics(kinematics),
@@ -77,47 +71,52 @@ namespace eos
                 uses(Decay_::references);
             }
 
-            virtual const QualifiedName & name() const
+            virtual const QualifiedName &
+            name() const
             {
                 return _name;
             }
 
-            virtual double evaluate() const
+            virtual double
+            evaluate() const
             {
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type...> values = _argument_tuple;
 
                 return std::apply(_function, values);
-            };
+            }
 
-            virtual Parameters parameters()
+            virtual Parameters
+            parameters()
             {
                 return _parameters;
-            };
+            }
 
-            virtual Kinematics kinematics()
+            virtual Kinematics
+            kinematics()
             {
                 return _kinematics;
-            };
+            }
 
-            virtual Options options()
+            virtual Options
+            options()
             {
                 return _options;
             }
 
-            virtual ObservablePtr clone() const
+            virtual ObservablePtr
+            clone() const
             {
                 return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _kinematics.clone(), _options, _function, _kinematics_names));
             }
 
-            virtual ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr
+            clone(const Parameters & parameters) const
             {
                 return ObservablePtr(new ConcreteObservable(_name, parameters, _kinematics.clone(), _options, _function, _kinematics_names));
             }
     };
 
-    template <typename Decay_, typename ... Args_>
-    class ConcreteObservableEntry :
-        public ObservableEntry
+    template <typename Decay_, typename... Args_> class ConcreteObservableEntry : public ObservableEntry
     {
         private:
             QualifiedName _name;
@@ -126,20 +125,18 @@ namespace eos
 
             Unit _unit;
 
-            std::function<double (const Decay_ *, const Args_ & ...)> _function;
+            std::function<double(const Decay_ *, const Args_ &...)> _function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
             std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
 
             Options _forced_options;
 
         public:
-            ConcreteObservableEntry(const QualifiedName & name, const std::string & latex,
-                    const Unit & unit,
-                    const std::function<double (const Decay_ *, const Args_ & ...)> & function,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names,
-                    const Options & forced_options) :
+            ConcreteObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
+                                    const std::function<double(const Decay_ *, const Args_ &...)> &            function,
+                                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names, const Options & forced_options) :
                 _name(name),
                 _latex(latex),
                 _unit(unit),
@@ -150,74 +147,80 @@ namespace eos
             {
             }
 
-            ~ConcreteObservableEntry()
-            {
-            }
+            ~ConcreteObservableEntry() {}
 
-            virtual const QualifiedName & name() const
+            virtual const QualifiedName &
+            name() const
             {
                 return _name;
             }
 
-            virtual const std::string & latex() const
+            virtual const std::string &
+            latex() const
             {
                 return _latex;
             }
 
-            virtual const Unit & unit() const
+            virtual const Unit &
+            unit() const
             {
                 return _unit;
             }
 
-            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            virtual ObservableEntry::KinematicVariableIterator
+            begin_kinematic_variables() const
             {
                 return _kinematics_names_array.begin();
             }
 
-            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            virtual ObservableEntry::KinematicVariableIterator
+            end_kinematic_variables() const
             {
                 return _kinematics_names_array.end();
             }
 
-            virtual ObservableEntry::OptionIterator begin_options() const
+            virtual ObservableEntry::OptionIterator
+            begin_options() const
             {
                 return Decay_::begin_options();
             }
 
-            virtual ObservableEntry::OptionIterator end_options() const
+            virtual ObservableEntry::OptionIterator
+            end_options() const
             {
                 return Decay_::end_options();
             }
 
-            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
+            virtual ObservablePtr
+            make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
                 for (const auto & [key, forced_value] : _forced_options)
                 {
                     if (options.has(key) && (options[key] != forced_value))
                     {
-                        Log::instance()->message("[ConcreteObservableEntry.make]", ll_error)
-                            << "Observable '" << _name << "' forces option key '" << key << "' to value '" << forced_value << "', overriding user-provided value '" << options[key] << "'";
+                        Log::instance()->message("[ConcreteObservableEntry.make]", ll_error) << "Observable '" << _name << "' forces option key '" << key << "' to value '"
+                                                                                             << forced_value << "', overriding user-provided value '" << options[key] << "'";
                     }
                 }
-                return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options + _forced_options, _function, _kinematics_names));
+                return ObservablePtr(new ConcreteObservable<Decay_, Args_...>(_name, parameters, kinematics, options + _forced_options, _function, _kinematics_names));
             }
     };
 
-    template <typename Decay_, typename Tuple_, typename ... Args_>
-    ObservableEntryPtr make_concrete_observable_entry(const QualifiedName & name, const std::string & latex,
-            const Unit & unit,
-            double (Decay_::* function)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names,
-            const Options & forced_options)
+    template <typename Decay_, typename Tuple_, typename... Args_>
+    ObservableEntryPtr
+    make_concrete_observable_entry(const QualifiedName & name, const std::string & latex, const Unit & unit, double (Decay_::*function)(const Args_ &...) const,
+                                   const Tuple_ & kinematics_names, const Options & forced_options)
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
-        return std::make_shared<ConcreteObservableEntry<Decay_, Args_ ...>>(name, latex,
-                unit,
-                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
-                kinematics_names, forced_options);
+        return std::make_shared<ConcreteObservableEntry<Decay_, Args_...>>(name,
+                                                                           latex,
+                                                                           unit,
+                                                                           std::function<double(const Decay_ *, const Args_ &...)>(std::mem_fn(function)),
+                                                                           kinematics_names,
+                                                                           forced_options);
     }
-}
+} // namespace eos
 
 
 #endif

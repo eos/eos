@@ -24,25 +24,46 @@ namespace eos
 {
     /* Mesonic Tags */
 
-    struct PToV { };
-    struct PToGamma { };
-    struct PToGammaOffShell { };
-    struct PToP { };
-    struct PToPP { };
-    struct VToP { };
-    struct VToV { };
-    struct VacuumToPP { };
+    struct PToV
+    {};
+
+    struct PToGamma
+    {};
+
+    struct PToGammaOffShell
+    {};
+
+    struct PToP
+    {};
+
+    struct PToPP
+    {};
+
+    struct VToP
+    {};
+
+    struct VToV
+    {};
+
+    struct VacuumToPP
+    {};
 
     /* Baryonic Tags */
 
     // J=1/2^+ -> J=1/2^+ transitions
-    struct OneHalfPlusToOneHalfPlus { };
+    struct OneHalfPlusToOneHalfPlus
+    {};
+
     // J=1/2^+ -> J=1/2^- transitions
-    struct OneHalfPlusToOneHalfMinus { };
+    struct OneHalfPlusToOneHalfMinus
+    {};
+
     // J=1/2^+ -> J=3/2^- transitions
-    struct OneHalfPlusToThreeHalfMinus { };
+    struct OneHalfPlusToThreeHalfMinus
+    {};
 
     /* Scattering Tags */
-    struct PPToPP {};
-}
+    struct PPToPP
+    {};
+} // namespace eos
 #endif

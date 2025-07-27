@@ -48,11 +48,11 @@ namespace eos
             using Iterator = WrappedForwardIterator<IteratorTag, const ParameterDescription>;
 
             virtual Iterator begin() const = 0;
-            virtual Iterator end() const = 0;
+            virtual Iterator end() const   = 0;
             ///@}
     };
 
     extern template class WrappedForwardIterator<Density::IteratorTag, const ParameterDescription>;
-}
+} // namespace eos
 
 #endif

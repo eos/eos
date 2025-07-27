@@ -28,8 +28,7 @@
 
 namespace eos
 {
-    class ObservableCache :
-        public PrivateImplementationPattern<ObservableCache>
+    class ObservableCache : public PrivateImplementationPattern<ObservableCache>
     {
         public:
             ///@name Basic Functions
@@ -90,6 +89,6 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<ObservableCache::IteratorTag, ObservablePtr>;
-}
+} // namespace eos
 
 #endif

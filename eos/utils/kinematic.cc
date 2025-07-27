@@ -27,25 +27,23 @@
 
 namespace eos
 {
-    template <>
-    struct WrappedForwardIteratorTraits<Kinematics::KinematicVariableIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<Kinematics::KinematicVariableIteratorTag>
     {
-        using UnderlyingIterator = std::vector<KinematicVariable>::iterator;
+            using UnderlyingIterator = std::vector<KinematicVariable>::iterator;
     };
     template class WrappedForwardIterator<Kinematics::KinematicVariableIteratorTag, const KinematicVariable>;
 
-    template <>
-    struct Implementation<Kinematics>
+    template <> struct Implementation<Kinematics>
     {
-        std::vector<double> variables_data;
+            std::vector<double> variables_data;
 
-        std::map<std::string, unsigned> variables_map;
+            std::map<std::string, unsigned> variables_map;
 
-        std::vector<std::string> variables_names;
+            std::vector<std::string> variables_names;
 
-        std::map<std::string, unsigned> alias_map;
+            std::map<std::string, unsigned> alias_map;
 
-        std::vector<KinematicVariable> variables;
+            std::vector<KinematicVariable> variables;
     };
 
     Kinematics::Kinematics() :
@@ -62,7 +60,7 @@ namespace eos
 
             if (_imp->variables_map.end() == i)
             {
-                int index = _imp->variables_data.size();
+                int index                    = _imp->variables_data.size();
                 _imp->variables_map[v.first] = index;
                 _imp->variables_data.push_back(v.second);
                 _imp->variables_names.push_back(v.first);
@@ -70,15 +68,13 @@ namespace eos
             }
             else
             {
-                _imp->variables_data[i->second] = v.second;
+                _imp->variables_data[i->second]  = v.second;
                 _imp->variables_names[i->second] = v.first;
             }
         }
     }
 
-    Kinematics::~Kinematics()
-    {
-    }
+    Kinematics::~Kinematics() {}
 
     Kinematics
     Kinematics::clone() const
@@ -91,7 +87,7 @@ namespace eos
     }
 
     Kinematics
-    Kinematics::operator+(const Kinematics & rhs) const
+    Kinematics::operator+ (const Kinematics & rhs) const
     {
         Kinematics result = this->clone();
 
@@ -112,24 +108,34 @@ namespace eos
     Kinematics::operator== (const Kinematics & rhs) const
     {
         if (_imp->variables_map.size() != rhs._imp->variables_map.size())
+        {
             return false;
+        }
 
-        for (auto l = _imp->variables_map.cbegin(), l_end = _imp->variables_map.cend(), r = rhs._imp->variables_map.cbegin() ; l != l_end ; ++l, ++r)
+        for (auto l = _imp->variables_map.cbegin(), l_end = _imp->variables_map.cend(), r = rhs._imp->variables_map.cbegin(); l != l_end; ++l, ++r)
         {
             if (l->first != r->first)
+            {
                 return false;
+            }
 
             if (_imp->variables_data[l->second] != rhs._imp->variables_data[r->second])
+            {
                 return false;
+            }
         }
 
         if (_imp->alias_map.size() != rhs._imp->alias_map.size())
+        {
             return false;
+        }
 
-        for (auto l = _imp->alias_map.cbegin() , l_end = _imp->alias_map.cend(), r = rhs._imp->alias_map.cbegin() ; l != l_end ; ++l, ++r)
+        for (auto l = _imp->alias_map.cbegin(), l_end = _imp->alias_map.cend(), r = rhs._imp->alias_map.cbegin(); l != l_end; ++l, ++r)
         {
             if (l->first != r->first)
+            {
                 return false;
+            }
         }
 
         return true;
@@ -147,18 +153,22 @@ namespace eos
         auto i(_imp->variables_map.find(name));
 
         if (_imp->variables_map.end() != i)
+        {
             return KinematicVariable(_imp, i->second, false);
+        }
 
         auto j(_imp->alias_map.find(name));
 
         if (_imp->alias_map.end() != j)
+        {
             return KinematicVariable(_imp, j->second, true);
+        }
 
         throw UnknownKinematicVariableError(name);
     }
 
     std::string
-    Kinematics::as_string () const
+    Kinematics::as_string() const
     {
         std::string result;
 
@@ -169,13 +179,13 @@ namespace eos
             ++i;
         }
 
-        for ( ; i != i_end ; ++i)
+        for (; i != i_end; ++i)
         {
             result += ", " + i->first + '=' + stringify(_imp->variables_data[i->second]);
         }
 
         auto j(_imp->alias_map.cbegin()), j_end(_imp->alias_map.cend());
-        for ( ; j != j_end ; ++j)
+        for (; j != j_end; ++j)
         {
             result += ", " + j->first + "->" + _imp->variables_names[j->second];
         }
@@ -189,11 +199,13 @@ namespace eos
     {
         const auto i(_imp->variables_map.find(name));
         const auto j(_imp->alias_map.find(name));
-        bool name_exists  = (_imp->variables_map.end() != i);
-        bool alias_exists = (_imp->alias_map.end() != j);
+        bool       name_exists  = (_imp->variables_map.end() != i);
+        bool       alias_exists = (_imp->alias_map.end() != j);
 
         if (! name_exists)
+        {
             throw UnknownKinematicVariableError(name);
+        }
 
         if (alias_exists)
         {
@@ -209,7 +221,9 @@ namespace eos
         const auto i(_imp->alias_map.find(alias));
 
         if (_imp->alias_map.end() == i)
+        {
             throw UnknownKinematicAliasError(alias);
+        }
 
         _imp->alias_map.erase(i);
     }
@@ -225,13 +239,13 @@ namespace eos
     {
         const auto i(_imp->variables_map.find(name));
         const auto j(_imp->alias_map.find(name));
-        bool regular    = (_imp->variables_map.end() != i);
-        bool alias      = (_imp->alias_map.end() != j);
-        bool undeclared = (! regular) && (! alias);
+        bool       regular    = (_imp->variables_map.end() != i);
+        bool       alias      = (_imp->alias_map.end() != j);
+        bool       undeclared = (! regular) && (! alias);
 
         if (undeclared)
         {
-            int index = _imp->variables_data.size();
+            int index                 = _imp->variables_data.size();
             _imp->variables_map[name] = index;
             _imp->variables_data.push_back(value);
             _imp->variables_names.push_back(name);
@@ -258,17 +272,23 @@ namespace eos
     {
         const auto i(_imp->variables_map.find(name));
         const auto j(_imp->alias_map.find(name));
-        bool regular    = (_imp->variables_map.end() != i);
-        bool alias      = (_imp->alias_map.end() == j);
-        bool undeclared = (! regular) && (! alias);
+        bool       regular    = (_imp->variables_map.end() != i);
+        bool       alias      = (_imp->alias_map.end() == j);
+        bool       undeclared = (! regular) && (! alias);
 
         if (undeclared)
+        {
             throw UnknownKinematicVariableError(name);
+        }
 
         if (regular)
+        {
             _imp->variables_data[i->second] = value;
+        }
         else // alias
+        {
             _imp->variables_data[j->second] = value;
+        }
     }
 
     Kinematics::KinematicVariableIterator
@@ -290,9 +310,7 @@ namespace eos
     {
     }
 
-    KinematicVariable::~KinematicVariable()
-    {
-    }
+    KinematicVariable::~KinematicVariable() {}
 
     MutablePtr
     KinematicVariable::clone() const
@@ -337,18 +355,18 @@ namespace eos
         return _imp->variables_names[_index];
     }
 
-    UnknownKinematicVariableError::UnknownKinematicVariableError(const std::string & variable) throw () :
+    UnknownKinematicVariableError::UnknownKinematicVariableError(const std::string & variable) throw() :
         Exception("Unknown kinematic variable: '" + variable + "'")
     {
     }
 
-    DuplicateKinematicAliasError::DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw () :
+    DuplicateKinematicAliasError::DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw() :
         Exception("Alias: '" + alias + "' cannot be used for variable: '" + variable + "' since it was already defined")
     {
     }
 
-    UnknownKinematicAliasError::UnknownKinematicAliasError(const std::string & alias) throw () :
+    UnknownKinematicAliasError::UnknownKinematicAliasError(const std::string & alias) throw() :
         Exception("Unknown kinematic alias: '" + alias + "'")
     {
     }
-}
+} // namespace eos

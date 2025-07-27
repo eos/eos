@@ -18,14 +18,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/parameters.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class ParametersTest :
-    public TestCase
+class ParametersTest : public TestCase
 {
     public:
         ParametersTest() :
@@ -33,12 +33,13 @@ class ParametersTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // Setting and retrieval
             {
                 Parameters original = Parameters::Defaults();
-                Parameter m_c = original["mass::c"];
+                Parameter  m_c      = original["mass::c"];
 
                 TEST_CHECK_EQUAL(m_c(), m_c.central());
 
@@ -52,24 +53,24 @@ class ParametersTest :
             // Declaring a new parameter
             {
                 Parameters::declare("mass::boeing747", R"(\text{Boeing 747})", Unit::Undefined(), 100000.0, 90000.0, 110000.0);
-                Parameters parameters = Parameters::Defaults();
-                Parameter new_parameter = parameters["mass::boeing747"];
+                Parameters parameters    = Parameters::Defaults();
+                Parameter  new_parameter = parameters["mass::boeing747"];
 
-                TEST_CHECK_EQUAL(new_parameter.name(),      "mass::boeing747");
-                TEST_CHECK_EQUAL(new_parameter.latex(),     R"(\text{Boeing 747})");
-                TEST_CHECK_EQUAL(new_parameter.unit(),      Unit::Undefined());
-                TEST_CHECK_EQUAL(new_parameter.evaluate(),  100000.0);
-                TEST_CHECK_EQUAL(new_parameter.min(),        90000.0);
-                TEST_CHECK_EQUAL(new_parameter.max(),       110000.0);
+                TEST_CHECK_EQUAL(new_parameter.name(), "mass::boeing747");
+                TEST_CHECK_EQUAL(new_parameter.latex(), R"(\text{Boeing 747})");
+                TEST_CHECK_EQUAL(new_parameter.unit(), Unit::Undefined());
+                TEST_CHECK_EQUAL(new_parameter.evaluate(), 100000.0);
+                TEST_CHECK_EQUAL(new_parameter.min(), 90000.0);
+                TEST_CHECK_EQUAL(new_parameter.max(), 110000.0);
             }
 
             // Cloning
             {
                 Parameters original = Parameters::Defaults();
-                Parameters clone = original.clone();
+                Parameters clone    = original.clone();
 
                 Parameter m_c_original = original["mass::c"];
-                Parameter m_c_clone = clone["mass::c"];
+                Parameter m_c_clone    = clone["mass::c"];
 
                 TEST_CHECK_EQUAL(m_c_original(), m_c_original.central());
                 TEST_CHECK_EQUAL(m_c_clone(), m_c_clone.central());
@@ -110,13 +111,13 @@ class ParametersTest :
             {
                 Parameters p = Parameters::Defaults();
 
-                Parameter p_tau = p["ubtaunutau::Re{cVL}"];
+                Parameter     p_tau  = p["ubtaunutau::Re{cVL}"];
                 Parameter::Id id_tau = p_tau.id();
                 p_tau.set(-9.87);
 
                 TEST_CHECK_NEARLY_EQUAL(p_tau.evaluate(), -9.87, 1e-12);
 
-                Parameter p_ell = p.declare_and_insert("ublnul::Re{cVL}", R"(\text{Re} C_{V_L}^{ub\ell\nu_\ell})", Unit::None(), 1.23, -1.0, 1.0);
+                Parameter     p_ell  = p.declare_and_insert("ublnul::Re{cVL}", R"(\text{Re} C_{V_L}^{ub\ell\nu_\ell})", Unit::None(), 1.23, -1.0, 1.0);
                 Parameter::Id id_ell = p_ell.id();
 
                 TEST_CHECK_NEARLY_EQUAL(p_ell.evaluate(), +1.23, 1e-12);
@@ -136,8 +137,8 @@ class ParametersTest :
 
                 // check a new Parameters object
                 {
-                    Parameters p2 = Parameters::Defaults();
-                    Parameter p2_tau = p2["ubtaunutau::Re{cVL}"];
+                    Parameters p2     = Parameters::Defaults();
+                    Parameter  p2_tau = p2["ubtaunutau::Re{cVL}"];
                     TEST_CHECK_NEARLY_EQUAL(p2_tau.evaluate(), +1.23, 1e-12);
                 }
 
@@ -153,11 +154,10 @@ class ParametersTest :
 
                 // check a new Parameters object
                 {
-                    Parameters p2 = Parameters::Defaults();
-                    Parameter p2_tau = p2["ubtaunutau::Re{cVL}"];
+                    Parameters p2     = Parameters::Defaults();
+                    Parameter  p2_tau = p2["ubtaunutau::Re{cVL}"];
                     TEST_CHECK_NEARLY_EQUAL(p2_tau.evaluate(), +1.00, 1e-12); // default value
                 }
-
             }
         }
 } parameters_test;

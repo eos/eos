@@ -23,7 +23,5 @@
 
 namespace eos
 {
-    Mutable::~Mutable()
-    {
-    }
-}
+    Mutable::~Mutable() {}
+} // namespace eos

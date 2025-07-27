@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/exception.hh>
+
+#include <test/test.hh>
 
 #include <gsl/gsl_sf.h>
 
 using namespace test;
 using namespace eos;
 
-class GSLErrorHandlerTest :
-    public TestCase
+class GSLErrorHandlerTest : public TestCase
 {
     public:
         GSLErrorHandlerTest() :
@@ -34,14 +34,12 @@ class GSLErrorHandlerTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
-	    gsl_sf_result result;
-	    int status;
+            gsl_sf_result result;
+            int           status;
 
-	    TEST_CHECK_THROWS(GSLError,
-	    {
-            status = gsl_sf_expint_3_e(-1.0, &result);
-	    });
+            TEST_CHECK_THROWS(GSLError, { status = gsl_sf_expint_3_e(-1.0, &result); });
         }
 } gsl_error_handler_test;

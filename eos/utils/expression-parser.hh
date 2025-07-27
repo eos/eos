@@ -19,11 +19,11 @@
 #ifndef EOS_GUARD_EOS_UTILS_EXPRESSION_PARSER_HH
 #define EOS_GUARD_EOS_UTILS_EXPRESSION_PARSER_HH 1
 
-#include <boost/spirit/include/qi.hpp>
-#include <boost/phoenix.hpp>
-#include <boost/fusion/adapted.hpp>
-
 #include <eos/utils/expression.hh>
+
+#include <boost/fusion/adapted.hpp>
+#include <boost/phoenix.hpp>
+#include <boost/spirit/include/qi.hpp>
 
 namespace eos
 {
@@ -31,37 +31,35 @@ namespace eos
     namespace ascii = boost::spirit::ascii;
     namespace phx   = boost::phoenix;
 
-    template <typename Iterator>
-    struct ExpressionParser :
-        qi::grammar<Iterator, eos::exp::Expression(), ascii::space_type>
+    template <typename Iterator> struct ExpressionParser : qi::grammar<Iterator, eos::exp::Expression(), ascii::space_type>
     {
-        // Constructor
-        ExpressionParser();
+            // Constructor
+            ExpressionParser();
 
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> expression;
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> additive_expr;
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> multiplicative_expr;
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> exponential_expr;
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> function_expr;
+            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> expression;
+            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> additive_expr;
+            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> multiplicative_expr;
+            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> exponential_expr;
+            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> function_expr;
 
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> primary_expr;
-        qi::rule<Iterator, eos::exp::ConstantExpression()       , ascii::space_type> constant;
-        qi::rule<Iterator, std::string()                        , ascii::space_type> observable_name;
-        qi::rule<Iterator, std::string()                        , ascii::space_type> parameter_name;
-        qi::rule<Iterator, std::string()                        , ascii::space_type> kinematic_variable_name;
-        qi::rule<Iterator, std::string()                        , ascii::space_type> function_name;
+            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type>         primary_expr;
+            qi::rule<Iterator, eos::exp::ConstantExpression(), ascii::space_type> constant;
+            qi::rule<Iterator, std::string(), ascii::space_type>                  observable_name;
+            qi::rule<Iterator, std::string(), ascii::space_type>                  parameter_name;
+            qi::rule<Iterator, std::string(), ascii::space_type>                  kinematic_variable_name;
+            qi::rule<Iterator, std::string(), ascii::space_type>                  function_name;
 
-        using KinematicsSpecification = eos::exp::KinematicsSpecification;
+            using KinematicsSpecification = eos::exp::KinematicsSpecification;
 
-        qi::rule<Iterator, KinematicsSpecification()            , ascii::space_type> kinematics;
-        qi::rule<Iterator, std::pair<std::string, std::string>(), ascii::space_type> kinematics_alias;
-        qi::rule<Iterator, std::pair<std::string, double>       , ascii::space_type> kinematics_value;
+            qi::rule<Iterator, KinematicsSpecification(), ascii::space_type>             kinematics;
+            qi::rule<Iterator, std::pair<std::string, std::string>(), ascii::space_type> kinematics_alias;
+            qi::rule<Iterator, std::pair<std::string, double>, ascii::space_type>        kinematics_value;
 
-        // Destuctor
-        ~ExpressionParser();
+            // Destuctor
+            ~ExpressionParser();
     };
 
     extern template struct ExpressionParser<std::string::const_iterator>;
-}
+} // namespace eos
 
 #endif

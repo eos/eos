@@ -28,8 +28,7 @@
 
 namespace eos
 {
-    class Lock :
-        public InstantiationPolicy<Lock, NonCopyable>
+    class Lock : public InstantiationPolicy<Lock, NonCopyable>
     {
         private:
             /// Our mutex.
@@ -43,8 +42,7 @@ namespace eos
             ~Lock();
     };
 
-    class TryLock :
-        public InstantiationPolicy<TryLock, NonCopyable>
+    class TryLock : public InstantiationPolicy<TryLock, NonCopyable>
     {
         private:
             /// Our mutex.
@@ -58,11 +56,12 @@ namespace eos
             ~TryLock();
 
             /// Return true if the lock worked.
-            bool operator() () const
+            bool
+            operator() () const
             {
                 return 0 != _mutex;
             }
     };
-}
+} // namespace eos
 
 #endif

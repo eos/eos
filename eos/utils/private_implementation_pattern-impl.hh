@@ -30,10 +30,7 @@ namespace eos
     {
     }
 
-    template <typename T_>
-    PrivateImplementationPattern<T_>::~PrivateImplementationPattern()
-    {
-    }
-}
+    template <typename T_> PrivateImplementationPattern<T_>::~PrivateImplementationPattern() {}
+} // namespace eos
 
 #endif

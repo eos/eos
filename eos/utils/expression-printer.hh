@@ -54,6 +54,6 @@ namespace eos::exp
 
             void visit(CachedObservableExpression & e);
     };
-}
+} // namespace eos::exp
 
 #endif

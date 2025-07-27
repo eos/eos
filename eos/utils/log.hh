@@ -37,14 +37,14 @@ namespace eos
      */
     enum LogLevel
     {
-        ll_silent,             ///< do not print any error message
-        ll_error,              ///< only print error messages
-        ll_warning,            ///< also print warning messages
-        ll_success,            ///< also print success messages
-        ll_completed,          ///< also print completion messages
-        ll_inprogress,         ///< also print in-progress messages
-        ll_informational,      ///< also print informational messages
-        ll_debug,              ///< also print debug messages
+        ll_silent,        ///< do not print any error message
+        ll_error,         ///< only print error messages
+        ll_warning,       ///< also print warning messages
+        ll_success,       ///< also print success messages
+        ll_completed,     ///< also print completion messages
+        ll_inprogress,    ///< also print in-progress messages
+        ll_informational, ///< also print informational messages
+        ll_debug,         ///< also print debug messages
         ll_last
     };
 
@@ -63,9 +63,7 @@ namespace eos
      * Facility to emit messages to the user, with a filter according to interest and urgency
      * of the messages at hand.
      */
-    class Log :
-        public InstantiationPolicy<Log, Singleton>,
-        public PrivateImplementationPattern<Log>
+    class Log : public InstantiationPolicy<Log, Singleton>, public PrivateImplementationPattern<Log>
     {
         private:
             ///@name Basic Functions
@@ -110,7 +108,7 @@ namespace eos
             /*!
              * Register a callback hook with the Log class.
              */
-            void register_callback(const std::function<void (const std::string &, const LogLevel &, const std::string &)> &);
+            void register_callback(const std::function<void(const std::string &, const LogLevel &, const std::string &)> &);
 
             /*!
              * Return a stream-like object to which message parts can be
@@ -140,8 +138,8 @@ namespace eos
     class LogMessageHandler
     {
         private:
-            Log * _log;
-            LogLevel _log_level;
+            Log *       _log;
+            LogLevel    _log_level;
             std::string _id;
             std::string _message;
 
@@ -166,18 +164,21 @@ namespace eos
             ///@{
             /// Destructor.
             ~LogMessageHandler();
+
             ///@}
 
             /*!
              * Append to our message.
              */
-            template <typename T_> LogMessageHandler & operator<< (const T_ & t)
+            template <typename T_>
+            LogMessageHandler &
+            operator<< (const T_ & t)
             {
                 _append(stringify(t));
 
                 return *this;
             }
     };
-}
+} // namespace eos
 
 #endif

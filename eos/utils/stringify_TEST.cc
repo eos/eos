@@ -17,14 +17,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/utils/stringify.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class StringifyTest :
-    public TestCase
+class StringifyTest : public TestCase
 {
     public:
         StringifyTest() :
@@ -32,7 +32,8 @@ class StringifyTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             TEST_CHECK("foo" == stringify("foo"));
             TEST_CHECK("foobar" == stringify(std::string("foobar")));

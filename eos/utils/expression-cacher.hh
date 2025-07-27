@@ -53,6 +53,6 @@ namespace eos::exp
 
             Expression visit(const CachedObservableExpression & e);
     };
-}
+} // namespace eos::exp
 
 #endif
