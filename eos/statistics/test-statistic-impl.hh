@@ -23,8 +23,7 @@ namespace eos
 {
     namespace test_statistics
     {
-        class Empty :
-            public TestStatistic
+        class Empty
         {
             public:
                 Empty();
@@ -34,8 +33,7 @@ namespace eos
                 virtual void output(std::ostream & stream) const;
         };
 
-        class ChiSquare :
-            public TestStatistic
+        class ChiSquare
         {
             public:
                 double chi2;

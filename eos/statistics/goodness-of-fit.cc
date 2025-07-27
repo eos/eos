@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +24,15 @@
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <map>
+
+namespace
+{
+    template <class... T_> struct overloads : T_... { using T_::operator()...; };
+    // the following is strictly only necessary for C++17, but clang-14 fails to perform
+    // Class Template Argument Deduction (CTAD) for the overloads struct even in C++20 mode.
+    // Minimum clang version for CTAD support in C++20 mode is clang-17.
+    template <class... T_> overloads(T_...) -> overloads<T_...>;
+}
 
 namespace eos
 {
@@ -66,18 +75,20 @@ namespace eos
                 {
                     auto test_statistic = (*b)->primary_test_statistic();
 
-                    // apply special treatsments based on its type
-                    test_statistic.accept(*this);
+                    // apply special treatments based on its type
+                    const auto visitor = overloads
+                    {
+                        [this] (const test_statistics::Empty &) { },
+                        [this] (const test_statistics::ChiSquare & c)
+                        {
+                            total_chi_square += c.chi2;
+                            total_degrees_of_freedom += c.dof;
+                            chi_squares.insert(std::make_pair(current_constraint->name(), c));
+                        }
+                    };
+                    std::visit(visitor, test_statistic);
                 }
             }
-        }
-
-        void visit(const test_statistics::Empty &) { }
-        void visit(const test_statistics::ChiSquare & c)
-        {
-            total_chi_square += c.chi2;
-            total_degrees_of_freedom += c.dof;
-            chi_squares.insert(std::make_pair(current_constraint->name(), c));
         }
     };
 
