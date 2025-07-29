@@ -138,7 +138,7 @@ class WilsonPolynomialTest : public TestCase
 
             static const double      eps = 1e-10;
             exp::ExpressionEvaluator evaluator;
-            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
+            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), std::visit(evaluator, p), eps);
         }
 
         virtual void
@@ -147,12 +147,11 @@ class WilsonPolynomialTest : public TestCase
             Parameters parameters = Parameters::Defaults();
             Kinematics kinematics;
 
-            ObservablePtr   o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            exp::Expression p =
-                    make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
+            auto o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
+            auto p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
             exp::ExpressionPrinter printer(std::cout);
-            p.accept(printer);
+            std::visit(printer, p);
 
             static const std::vector<std::array<double, 6>> inputs{
                 std::array<double, 6>{ { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } },
@@ -186,35 +185,35 @@ class WilsonPolynomialClonerTest : public TestCase
             Parameters parameters = Parameters::Defaults();
             Kinematics kinematics;
 
-            ObservablePtr   o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            exp::Expression p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->smumu::Re{c9}", "b->smumu::Re{c10}" });
+            auto o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
+            auto p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->smumu::Re{c9}", "b->smumu::Re{c10}" });
 
             Parameters            clone_parameters = Parameters::Defaults();
             exp::ExpressionCloner cloner(clone_parameters, kinematics, Options());
-            exp::Expression       c = p.accept_returning<exp::Expression>(cloner);
+            exp::Expression       c = std::visit(cloner, p);
 
             std::string rep_original, rep_clone;
             TEST_CHECK_NO_THROW({
                 std::stringstream      output;
                 exp::ExpressionPrinter printer(output);
-                p.accept(printer);
+                std::visit(printer, p);
                 rep_original = output.str();
             });
             TEST_CHECK_NO_THROW({
                 std::stringstream      output;
                 exp::ExpressionPrinter printer(output);
-                c.accept(printer);
+                std::visit(printer, c);
                 rep_clone = output.str();
             });
             TEST_CHECK_EQUAL(rep_original, rep_clone);
 
             exp::ExpressionEvaluator evaluator;
-            TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
+            TEST_CHECK_EQUAL(std::visit(evaluator, p), std::visit(evaluator, c));
 
             parameters["b->smumu::Re{c10}"] = 10;
-            TEST_CHECK(p.accept_returning<double>(evaluator) != c.accept_returning<double>(evaluator));
+            TEST_CHECK(std::visit(evaluator, p) != std::visit(evaluator, c));
 
             clone_parameters["b->smumu::Re{c10}"] = 10;
-            TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
+            TEST_CHECK_EQUAL(std::visit(evaluator, p), std::visit(evaluator, c));
         }
 } wilson_polynomial_cloner_test;

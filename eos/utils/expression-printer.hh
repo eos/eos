@@ -34,25 +34,25 @@ namespace eos::exp
         public:
             ExpressionPrinter(std::ostream & ostream);
 
-            void visit(BinaryExpression & e);
+            void operator() (BinaryExpression & e);
 
-            void visit(FunctionExpression & e);
+            void operator() (FunctionExpression & e);
 
-            void visit(ConstantExpression & e);
+            void operator() (ConstantExpression & e);
 
-            void visit(ObservableNameExpression & e);
+            void operator() (ObservableNameExpression & e);
 
-            void visit(ObservableExpression & e);
+            void operator() (ObservableExpression & e);
 
-            void visit(ParameterNameExpression & e);
+            void operator() (ParameterNameExpression & e);
 
-            void visit(ParameterExpression & e);
+            void operator() (ParameterExpression & e);
 
-            void visit(KinematicVariableNameExpression & e);
+            void operator() (KinematicVariableNameExpression & e);
 
-            void visit(KinematicVariableExpression & e);
+            void operator() (KinematicVariableExpression & e);
 
-            void visit(CachedObservableExpression & e);
+            void operator() (CachedObservableExpression & e);
     };
 } // namespace eos::exp
 

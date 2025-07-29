@@ -29,8 +29,6 @@
 
 namespace eos
 {
-    using eos::exp::Expression;
-
     class ExpressionObservable : public Observable
     {
         private:
@@ -42,12 +40,14 @@ namespace eos
 
             Options _options;
 
-            Expression _expression;
+            eos::exp::ExpressionPtr _expression;
 
         public:
-            ExpressionObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options, const Expression & expression);
+            ExpressionObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
+                                 const eos::exp::ExpressionPtr & expression);
 
-            ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options, const Expression & expression);
+            ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options,
+                                 const eos::exp::ExpressionPtr & expression);
 
             ~ExpressionObservable() {}
 
@@ -79,7 +79,7 @@ namespace eos
                 return _options;
             }
 
-            const Expression &
+            const eos::exp::ExpressionPtr &
             expression() const
             {
                 return _expression;
@@ -95,7 +95,7 @@ namespace eos
 
             Unit _unit;
 
-            const Expression _expression;
+            const eos::exp::ExpressionPtr _expression;
 
             std::vector<std::string> _kinematics_names;
 
@@ -104,7 +104,8 @@ namespace eos
             std::vector<OptionSpecification> _option_specifications;
 
         public:
-            ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const Expression & expression, const Options & forced_options);
+            ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const eos::exp::ExpressionPtr & expression,
+                                      const Options & forced_options);
 
             ~ExpressionObservableEntry() {}
 

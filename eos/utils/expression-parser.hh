@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,23 +31,23 @@ namespace eos
     namespace ascii = boost::spirit::ascii;
     namespace phx   = boost::phoenix;
 
-    template <typename Iterator> struct ExpressionParser : qi::grammar<Iterator, eos::exp::Expression(), ascii::space_type>
+    template <typename Iterator> struct ExpressionParser : qi::grammar<Iterator, eos::exp::ExpressionPtr(), ascii::space_type>
     {
             // Constructor
             ExpressionParser();
 
-            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> expression;
-            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> additive_expr;
-            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> multiplicative_expr;
-            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> exponential_expr;
-            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type> function_expr;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> expression;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> additive_expr;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> multiplicative_expr;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> exponential_expr;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> function_expr;
 
-            qi::rule<Iterator, eos::exp::Expression(), ascii::space_type>         primary_expr;
-            qi::rule<Iterator, eos::exp::ConstantExpression(), ascii::space_type> constant;
-            qi::rule<Iterator, std::string(), ascii::space_type>                  observable_name;
-            qi::rule<Iterator, std::string(), ascii::space_type>                  parameter_name;
-            qi::rule<Iterator, std::string(), ascii::space_type>                  kinematic_variable_name;
-            qi::rule<Iterator, std::string(), ascii::space_type>                  function_name;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> primary_expr;
+            qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> constant;
+            qi::rule<Iterator, std::string(), ascii::space_type>             observable_name;
+            qi::rule<Iterator, std::string(), ascii::space_type>             parameter_name;
+            qi::rule<Iterator, std::string(), ascii::space_type>             kinematic_variable_name;
+            qi::rule<Iterator, std::string(), ascii::space_type>             function_name;
 
             using KinematicsSpecification = eos::exp::KinematicsSpecification;
 

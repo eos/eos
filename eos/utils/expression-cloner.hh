@@ -37,25 +37,25 @@ namespace eos::exp
         public:
             ExpressionCloner(const Parameters & parameters, const Kinematics & kinematics, const Options & options);
 
-            Expression visit(const BinaryExpression & e);
+            Expression operator() (const BinaryExpression & e);
 
-            Expression visit(const FunctionExpression & e);
+            Expression operator() (const FunctionExpression & e);
 
-            Expression visit(const ConstantExpression & e);
+            Expression operator() (const ConstantExpression & e);
 
-            Expression visit(const ObservableNameExpression & e);
+            Expression operator() (const ObservableNameExpression & e);
 
-            Expression visit(const ObservableExpression & e);
+            Expression operator() (const ObservableExpression & e);
 
-            Expression visit(const ParameterNameExpression & e);
+            Expression operator() (const ParameterNameExpression & e);
 
-            Expression visit(const ParameterExpression & e);
+            Expression operator() (const ParameterExpression & e);
 
-            Expression visit(const KinematicVariableNameExpression & e);
+            Expression operator() (const KinematicVariableNameExpression & e);
 
-            Expression visit(const KinematicVariableExpression & e);
+            Expression operator() (const KinematicVariableExpression & e);
 
-            Expression visit(const CachedObservableExpression & e);
+            Expression operator() (const CachedObservableExpression & e);
     };
 } // namespace eos::exp
 

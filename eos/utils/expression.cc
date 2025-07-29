@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -73,7 +73,7 @@ namespace eos::exp
         }
     }
 
-    FunctionExpression::FunctionExpression(const std::string & f, const Expression & arg) :
+    FunctionExpression::FunctionExpression(const std::string & f, const ExpressionPtr & arg) :
         f(nullptr),
         fname(f),
         arg(arg)

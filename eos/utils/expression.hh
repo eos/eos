@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,8 +41,8 @@ namespace eos::exp
     class BinaryExpression
     {
         public:
-            char       op;
-            Expression lhs, rhs;
+            char          op;
+            ExpressionPtr lhs, rhs;
 
             using func = double (*)(const double &, const double &);
 
@@ -56,7 +56,7 @@ namespace eos::exp
 
             BinaryExpression() {}
 
-            BinaryExpression(char op, const Expression & l, const Expression & r) :
+            BinaryExpression(char op, const ExpressionPtr & l, const ExpressionPtr & r) :
                 op(op),
                 lhs(l),
                 rhs(r)
@@ -69,13 +69,13 @@ namespace eos::exp
         public:
             using FunctionType = double (*)(const double &);
 
-            FunctionType f;
-            std::string  fname;
-            Expression   arg;
+            FunctionType  f;
+            std::string   fname;
+            ExpressionPtr arg;
 
             FunctionExpression() {}
 
-            FunctionExpression(const std::string & f, const Expression & arg);
+            FunctionExpression(const std::string & f, const ExpressionPtr & arg);
     };
 
     class ConstantExpression

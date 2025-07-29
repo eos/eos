@@ -195,7 +195,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
 
             static const double eps = 5e-8;
             exp::ExpressionEvaluator evaluator;
-            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
+            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), std::visit(evaluator, p), eps);
         }
 
         virtual void run() const

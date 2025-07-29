@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +19,8 @@
 #ifndef EOS_GUARD_EOS_UTILS_EXPRESSION_FWD_HH
 #define EOS_GUARD_EOS_UTILS_EXPRESSION_FWD_HH 1
 
-#include <eos/utils/one-of.hh>
+#include <memory>
+#include <variant>
 
 namespace eos::exp
 {
@@ -34,8 +35,10 @@ namespace eos::exp
     class ParameterNameExpression;
     class ParameterExpression;
 
-    using Expression = OneOf<BinaryExpression, FunctionExpression, ConstantExpression, ObservableNameExpression, ObservableExpression, KinematicVariableNameExpression,
-                             KinematicVariableExpression, CachedObservableExpression, ParameterNameExpression, ParameterExpression>;
+    using Expression = std::variant<BinaryExpression, FunctionExpression, ConstantExpression, ObservableNameExpression, ObservableExpression, KinematicVariableNameExpression,
+                                    KinematicVariableExpression, CachedObservableExpression, ParameterNameExpression, ParameterExpression>;
+
+    using ExpressionPtr = std::shared_ptr<Expression>;
 } // namespace eos::exp
 
 #endif

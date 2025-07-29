@@ -375,7 +375,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
 
             static const double eps = 3e-14;
             exp::ExpressionEvaluator evaluator;
-            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
+            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), std::visit(evaluator, p), eps);
         }
 
         virtual void run() const
@@ -485,7 +485,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 {
                     auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
                     exp::ExpressionEvaluator evaluator;
-                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, ratio), observable->evaluate(), eps);
                 }
 
                 // lambda ratios
@@ -493,13 +493,13 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                     lambda = lambda.max();
                     auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
                     exp::ExpressionEvaluator evaluator;
-                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, ratio), observable->evaluate(), eps);
                 }
                 {
                     lambda = lambda.min();
                     auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
                     exp::ExpressionEvaluator evaluator;
-                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, ratio), observable->evaluate(), eps);
                 }
 
                 // A ratios
@@ -507,13 +507,13 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                     A = A.max();
                     auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
                     exp::ExpressionEvaluator evaluator;
-                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, ratio), observable->evaluate(), eps);
                 }
                 {
                     A = A.min();
                     auto ratio = make_polynomial_ratio(numerator, denominator, coefficients);
                     exp::ExpressionEvaluator evaluator;
-                    TEST_CHECK_NEARLY_EQUAL(ratio.accept_returning<double>(evaluator), observable->evaluate(), eps);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, ratio), observable->evaluate(), eps);
                 }
             }
         }
