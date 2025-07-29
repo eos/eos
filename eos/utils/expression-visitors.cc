@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023-2024 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -48,32 +48,32 @@ namespace eos::exp
     }
 
     void
-    ExpressionPrinter::visit(BinaryExpression & e)
+    ExpressionPrinter::operator() (BinaryExpression & e)
     {
         _os << "BinaryExpression(";
-        e.lhs.accept(*this);
+        std::visit(*this, *e.lhs);
         _os << " " << e.op << " ";
-        e.rhs.accept(*this);
+        std::visit(*this, *e.rhs);
         _os << ")";
     }
 
     void
-    ExpressionPrinter::visit(FunctionExpression & e)
+    ExpressionPrinter::operator() (FunctionExpression & e)
     {
         _os << "FunctionExpression(";
         _os << e.fname << ", ";
-        e.arg.accept(*this);
+        std::visit(*this, *e.arg);
         _os << ")";
     }
 
     void
-    ExpressionPrinter::visit(ConstantExpression & e)
+    ExpressionPrinter::operator() (ConstantExpression & e)
     {
         _os << "ConstantExpression(" << e.value << ")";
     }
 
     void
-    ExpressionPrinter::visit(ObservableNameExpression & e)
+    ExpressionPrinter::operator() (ObservableNameExpression & e)
     {
         _os << "ObservableNameExpression(" << e.observable_name.full();
         if (! e.kinematics_specification.aliases.empty())
@@ -102,7 +102,7 @@ namespace eos::exp
     }
 
     void
-    ExpressionPrinter::visit(ObservableExpression & e)
+    ExpressionPrinter::operator() (ObservableExpression & e)
     {
         _os << "ObservableExpression(" << e.observable->name() << ")";
         if (! e.kinematics_specification.aliases.empty())
@@ -131,31 +131,31 @@ namespace eos::exp
     }
 
     void
-    ExpressionPrinter::visit(ParameterNameExpression & e)
+    ExpressionPrinter::operator() (ParameterNameExpression & e)
     {
         _os << "ParameterNameExpression(" << e.parameter_name.full() << ")";
     }
 
     void
-    ExpressionPrinter::visit(ParameterExpression & e)
+    ExpressionPrinter::operator() (ParameterExpression & e)
     {
         _os << "ParameterExpression(" << e.parameter.name() << ")";
     }
 
     void
-    ExpressionPrinter::visit(KinematicVariableNameExpression & e)
+    ExpressionPrinter::operator() (KinematicVariableNameExpression & e)
     {
         _os << "KinematicVariableNameExpression(" << e.variable_name << ")";
     }
 
     void
-    ExpressionPrinter::visit(KinematicVariableExpression & e)
+    ExpressionPrinter::operator() (KinematicVariableExpression & e)
     {
         _os << "KinematicVariableExpression(" << e.kinematic_variable.name() << ")";
     }
 
     void
-    ExpressionPrinter::visit(CachedObservableExpression & e)
+    ExpressionPrinter::operator() (CachedObservableExpression & e)
     {
         _os << "CachedObservableExpression(id=" << e.id;
         _os << ", name='" << e.cache.observable(e.id)->name().full() << "'";
@@ -167,69 +167,69 @@ namespace eos::exp
      */
 
     double
-    ExpressionEvaluator::visit(BinaryExpression & e)
+    ExpressionEvaluator::operator() (const BinaryExpression & e)
     {
         BinaryExpression::func f = BinaryExpression::Method(e.op);
 
-        return f(e.lhs.accept_returning<double>(*this), e.rhs.accept_returning<double>(*this));
+        return f(std::visit(*this, *e.lhs), std::visit(*this, *e.rhs));
     }
 
     double
-    ExpressionEvaluator::visit(FunctionExpression & e)
+    ExpressionEvaluator::operator() (const FunctionExpression & e)
     {
-        return e.f(e.arg.accept_returning<double>(*this));
+        return e.f(std::visit(*this, *e.arg));
     }
 
     double
-    ExpressionEvaluator::visit(ConstantExpression & e)
+    ExpressionEvaluator::operator() (const ConstantExpression & e)
     {
         return e.value;
     }
 
     double
-    ExpressionEvaluator::visit(ObservableNameExpression &)
+    ExpressionEvaluator::operator() (const ObservableNameExpression &)
     {
-        throw InternalError("Encountered ObserableNameExpression in ExpressionEvaluator::visit");
+        throw InternalError("Encountered ObserableNameExpression in ExpressionEvaluator::operator() ");
 
         return 0.0;
     }
 
     double
-    ExpressionEvaluator::visit(ObservableExpression & e)
+    ExpressionEvaluator::operator() (const ObservableExpression & e)
     {
         return e.observable->evaluate();
     }
 
     double
-    ExpressionEvaluator::visit(ParameterNameExpression &)
+    ExpressionEvaluator::operator() (const ParameterNameExpression &)
     {
-        throw InternalError("Encountered ParameterNameExpression in ExpressionEvaluator::visit");
+        throw InternalError("Encountered ParameterNameExpression in ExpressionEvaluator::operator() ");
 
         return 0.0;
     }
 
     double
-    ExpressionEvaluator::visit(ParameterExpression & e)
+    ExpressionEvaluator::operator() (const ParameterExpression & e)
     {
         return e.parameter.evaluate();
     }
 
     double
-    ExpressionEvaluator::visit(KinematicVariableNameExpression &)
+    ExpressionEvaluator::operator() (const KinematicVariableNameExpression &)
     {
-        throw InternalError("Encountered KinematicVariableNameExpression in ExpressionEvaluator::visit");
+        throw InternalError("Encountered KinematicVariableNameExpression in ExpressionEvaluator::operator() ");
 
         return 0.0;
     }
 
     double
-    ExpressionEvaluator::visit(KinematicVariableExpression & e)
+    ExpressionEvaluator::operator() (const KinematicVariableExpression & e)
     {
         return e.kinematic_variable.evaluate();
     }
 
     double
-    ExpressionEvaluator::visit(CachedObservableExpression & e)
+    ExpressionEvaluator::operator() (const CachedObservableExpression & e)
     {
         return e.cache[e.id];
     }
@@ -246,31 +246,31 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionCloner::visit(const BinaryExpression & e)
+    ExpressionCloner::operator() (const BinaryExpression & e)
     {
-        return BinaryExpression(e.op, e.lhs.accept_returning<Expression>(*this), e.rhs.accept_returning<Expression>(*this));
+        return BinaryExpression(e.op, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.lhs)))), ExpressionPtr(new Expression(std::move(std::visit(*this, *e.rhs)))));
     }
 
     Expression
-    ExpressionCloner::visit(const FunctionExpression & e)
+    ExpressionCloner::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, e.arg.accept_returning<Expression>(*this));
+        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
     }
 
     Expression
-    ExpressionCloner::visit(const ConstantExpression & e)
+    ExpressionCloner::operator() (const ConstantExpression & e)
     {
         return ConstantExpression(e);
     }
 
     Expression
-    ExpressionCloner::visit(const ObservableNameExpression & e)
+    ExpressionCloner::operator() (const ObservableNameExpression & e)
     {
         return ObservableNameExpression(e);
     }
 
     Expression
-    ExpressionCloner::visit(const ObservableExpression & e)
+    ExpressionCloner::operator() (const ObservableExpression & e)
     {
         const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
@@ -294,25 +294,25 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionCloner::visit(const ParameterNameExpression & e)
+    ExpressionCloner::operator() (const ParameterNameExpression & e)
     {
         return ParameterNameExpression(e);
     }
 
     Expression
-    ExpressionCloner::visit(const ParameterExpression & e)
+    ExpressionCloner::operator() (const ParameterExpression & e)
     {
         return ParameterExpression(this->_parameters[e.parameter.name()]);
     }
 
     Expression
-    ExpressionCloner::visit(const KinematicVariableNameExpression & e)
+    ExpressionCloner::operator() (const KinematicVariableNameExpression & e)
     {
         return KinematicVariableNameExpression(e);
     }
 
     Expression
-    ExpressionCloner::visit(const KinematicVariableExpression & e)
+    ExpressionCloner::operator() (const KinematicVariableExpression & e)
     {
         auto kinematic_variable = this->_kinematics[e.kinematic_variable.name()];
 
@@ -320,7 +320,7 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionCloner::visit(const CachedObservableExpression & e)
+    ExpressionCloner::operator() (const CachedObservableExpression & e)
     {
         const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
@@ -356,25 +356,25 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionMaker::visit(const BinaryExpression & e)
+    ExpressionMaker::operator() (const BinaryExpression & e)
     {
-        return BinaryExpression(e.op, e.lhs.accept_returning<Expression>(*this), e.rhs.accept_returning<Expression>(*this));
+        return BinaryExpression(e.op, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.lhs)))), ExpressionPtr(new Expression(std::move(std::visit(*this, *e.rhs)))));
     }
 
     Expression
-    ExpressionMaker::visit(const FunctionExpression & e)
+    ExpressionMaker::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, e.arg.accept_returning<Expression>(*this));
+        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
     }
 
     Expression
-    ExpressionMaker::visit(const ConstantExpression & e)
+    ExpressionMaker::operator() (const ConstantExpression & e)
     {
         return ConstantExpression(e);
     }
 
     Expression
-    ExpressionMaker::visit(const ObservableNameExpression & e)
+    ExpressionMaker::operator() (const ObservableNameExpression & e)
     {
         const auto & kinematics_values  = e.kinematics_specification.values;
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
@@ -408,7 +408,7 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionMaker::visit(const ObservableExpression & e)
+    ExpressionMaker::operator() (const ObservableExpression & e)
     {
         // Rebuild the observable expression with the local set of parameters
 
@@ -444,7 +444,7 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionMaker::visit(const ParameterNameExpression & e)
+    ExpressionMaker::operator() (const ParameterNameExpression & e)
     {
         Parameter parameter = this->_parameters[e.parameter_name];
 
@@ -458,7 +458,7 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionMaker::visit(const ParameterExpression & e)
+    ExpressionMaker::operator() (const ParameterExpression & e)
     {
         // Rebuild the parameter expression with the local set of parameters
         Parameter parameter = this->_parameters[e.parameter.name()];
@@ -473,7 +473,7 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionMaker::visit(const KinematicVariableNameExpression & e)
+    ExpressionMaker::operator() (const KinematicVariableNameExpression & e)
     {
         KinematicVariable kinematic_variable = this->_kinematics[e.variable_name];
 
@@ -481,15 +481,15 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionMaker::visit(const KinematicVariableExpression & e)
+    ExpressionMaker::operator() (const KinematicVariableExpression & e)
     {
         return KinematicVariableExpression(e.kinematic_variable);
     }
 
     Expression
-    ExpressionMaker::visit(const CachedObservableExpression & e)
+    ExpressionMaker::operator() (const CachedObservableExpression & e)
     {
-        throw InternalError("Encountered CachedObservableExpression in ExpressionMaker::visit");
+        throw InternalError("Encountered CachedObservableExpression in ExpressionMaker::operator() ");
 
         return e;
     }
@@ -505,25 +505,25 @@ namespace eos::exp
     }
 
     void
-    ExpressionKinematicReader::visit(const BinaryExpression & e)
+    ExpressionKinematicReader::operator() (const BinaryExpression & e)
     {
-        e.lhs.accept(*this);
-        e.rhs.accept(*this);
+        std::visit(*this, *e.lhs);
+        std::visit(*this, *e.rhs);
     }
 
     void
-    ExpressionKinematicReader::visit(const FunctionExpression & e)
+    ExpressionKinematicReader::operator() (const FunctionExpression & e)
     {
-        e.arg.accept(*this);
+        std::visit(*this, *e.arg);
     }
 
     void
-    ExpressionKinematicReader::visit(const ConstantExpression &)
+    ExpressionKinematicReader::operator() (const ConstantExpression &)
     {
     }
 
     void
-    ExpressionKinematicReader::visit(const ObservableNameExpression & e)
+    ExpressionKinematicReader::operator() (const ObservableNameExpression & e)
     {
         std::set<std::string> kinematic_set;
         std::set<std::string> alias_set;
@@ -577,7 +577,7 @@ namespace eos::exp
     }
 
     void
-    ExpressionKinematicReader::visit(const ObservableExpression & e)
+    ExpressionKinematicReader::operator() (const ObservableExpression & e)
     {
         std::set<std::string> kinematic_set;
         std::set<std::string> alias_set;
@@ -603,29 +603,29 @@ namespace eos::exp
     }
 
     void
-    ExpressionKinematicReader::visit(const ParameterNameExpression &)
+    ExpressionKinematicReader::operator() (const ParameterNameExpression &)
     {
     }
 
     void
-    ExpressionKinematicReader::visit(const ParameterExpression &)
+    ExpressionKinematicReader::operator() (const ParameterExpression &)
     {
     }
 
     void
-    ExpressionKinematicReader::visit(const KinematicVariableNameExpression & e)
+    ExpressionKinematicReader::operator() (const KinematicVariableNameExpression & e)
     {
         this->kinematics.insert(e.variable_name);
     }
 
     void
-    ExpressionKinematicReader::visit(const KinematicVariableExpression & e)
+    ExpressionKinematicReader::operator() (const KinematicVariableExpression & e)
     {
         this->kinematics.insert(e.kinematic_variable.name());
     }
 
     void
-    ExpressionKinematicReader::visit(const CachedObservableExpression & e)
+    ExpressionKinematicReader::operator() (const CachedObservableExpression & e)
     {
         std::set<std::string> kinematic_set;
         std::set<std::string> alias_set;
@@ -660,33 +660,33 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionCacher::visit(const BinaryExpression & e)
+    ExpressionCacher::operator() (const BinaryExpression & e)
     {
-        return BinaryExpression(e.op, e.lhs.accept_returning<Expression>(*this), e.rhs.accept_returning<Expression>(*this));
+        return BinaryExpression(e.op, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.lhs)))), ExpressionPtr(new Expression(std::move(std::visit(*this, *e.rhs)))));
     }
 
     Expression
-    ExpressionCacher::visit(const FunctionExpression & e)
+    ExpressionCacher::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, e.arg.accept_returning<Expression>(*this));
+        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
     }
 
     Expression
-    ExpressionCacher::visit(const ConstantExpression & e)
+    ExpressionCacher::operator() (const ConstantExpression & e)
     {
         return ConstantExpression(e);
     }
 
     Expression
-    ExpressionCacher::visit(const ObservableNameExpression & e)
+    ExpressionCacher::operator() (const ObservableNameExpression & e)
     {
-        throw InternalError("Encountered ObservableNameExpression in ExpressionCacher::visit()");
+        throw InternalError("Encountered ObservableNameExpression in ExpressionCacher::operator() ()");
 
         return e;
     }
 
     Expression
-    ExpressionCacher::visit(const ObservableExpression & e)
+    ExpressionCacher::operator() (const ObservableExpression & e)
     {
         auto id = _cache.add(e.observable);
 
@@ -694,37 +694,37 @@ namespace eos::exp
     }
 
     Expression
-    ExpressionCacher::visit(const ParameterNameExpression & e)
+    ExpressionCacher::operator() (const ParameterNameExpression & e)
     {
-        throw InternalError("Encountered ParameterNameExpression in ExpressionCacher::visit()");
+        throw InternalError("Encountered ParameterNameExpression in ExpressionCacher::operator() ()");
 
         return e;
     }
 
     Expression
-    ExpressionCacher::visit(const ParameterExpression & e)
+    ExpressionCacher::operator() (const ParameterExpression & e)
     {
         return ParameterExpression(e);
     }
 
     Expression
-    ExpressionCacher::visit(const KinematicVariableNameExpression & e)
+    ExpressionCacher::operator() (const KinematicVariableNameExpression & e)
     {
-        throw InternalError("Encountered KinematicVariableNameExpression in ExpressionCacher::visit()");
+        throw InternalError("Encountered KinematicVariableNameExpression in ExpressionCacher::operator() ()");
 
         return e;
     }
 
     Expression
-    ExpressionCacher::visit(const KinematicVariableExpression & e)
+    ExpressionCacher::operator() (const KinematicVariableExpression & e)
     {
         return KinematicVariableExpression(e);
     }
 
     Expression
-    ExpressionCacher::visit(const CachedObservableExpression & e)
+    ExpressionCacher::operator() (const CachedObservableExpression & e)
     {
-        throw InternalError("Encountered CachedObservableExpression in ExpressionCacher::visit");
+        throw InternalError("Encountered CachedObservableExpression in ExpressionCacher::operator() ");
 
         return e;
     }
@@ -733,30 +733,30 @@ namespace eos::exp
      * ExpressionUsedParameterReader
      */
     void
-    ExpressionUsedParameterReader::visit(const BinaryExpression & e)
+    ExpressionUsedParameterReader::operator() (const BinaryExpression & e)
     {
-        e.lhs.accept(*this);
-        e.rhs.accept(*this);
+        std::visit(*this, *e.lhs);
+        std::visit(*this, *e.rhs);
     }
 
     void
-    ExpressionUsedParameterReader::visit(const FunctionExpression & e)
+    ExpressionUsedParameterReader::operator() (const FunctionExpression & e)
     {
-        e.arg.accept(*this);
+        std::visit(*this, *e.arg);
     }
 
     void
-    ExpressionUsedParameterReader::visit(const ConstantExpression &)
-    {
-    }
-
-    void
-    ExpressionUsedParameterReader::visit(const ObservableNameExpression &)
+    ExpressionUsedParameterReader::operator() (const ConstantExpression &)
     {
     }
 
     void
-    ExpressionUsedParameterReader::visit(const ObservableExpression & e)
+    ExpressionUsedParameterReader::operator() (const ObservableNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedParameterReader::operator() (const ObservableExpression & e)
     {
         const ParameterUser & parameter_user = static_cast<const ParameterUser &>(*e.observable);
         for (const auto & parameter_id : parameter_user)
@@ -766,28 +766,28 @@ namespace eos::exp
     }
 
     void
-    ExpressionUsedParameterReader::visit(const ParameterNameExpression &)
+    ExpressionUsedParameterReader::operator() (const ParameterNameExpression &)
     {
     }
 
     void
-    ExpressionUsedParameterReader::visit(const ParameterExpression & e)
+    ExpressionUsedParameterReader::operator() (const ParameterExpression & e)
     {
         this->parameter_ids.insert(e.parameter.id());
     }
 
     void
-    ExpressionUsedParameterReader::visit(const KinematicVariableNameExpression &)
+    ExpressionUsedParameterReader::operator() (const KinematicVariableNameExpression &)
     {
     }
 
     void
-    ExpressionUsedParameterReader::visit(const KinematicVariableExpression &)
+    ExpressionUsedParameterReader::operator() (const KinematicVariableExpression &)
     {
     }
 
     void
-    ExpressionUsedParameterReader::visit(const CachedObservableExpression & e)
+    ExpressionUsedParameterReader::operator() (const CachedObservableExpression & e)
     {
         const ParameterUser & parameter_user = static_cast<const ParameterUser &>(*e.cache.observable(e.id));
         for (const auto & parameter_id : parameter_user)

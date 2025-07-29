@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023-2024 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,25 +33,25 @@ namespace eos::exp
             ExpressionUsedParameterReader()  = default;
             ~ExpressionUsedParameterReader() = default;
 
-            void visit(const BinaryExpression & e);
+            void operator() (const BinaryExpression & e);
 
-            void visit(const FunctionExpression & e);
+            void operator() (const FunctionExpression & e);
 
-            void visit(const ConstantExpression &);
+            void operator() (const ConstantExpression &);
 
-            void visit(const ObservableNameExpression & e);
+            void operator() (const ObservableNameExpression & e);
 
-            void visit(const ObservableExpression & e);
+            void operator() (const ObservableExpression & e);
 
-            void visit(const ParameterNameExpression &);
+            void operator() (const ParameterNameExpression &);
 
-            void visit(const ParameterExpression &);
+            void operator() (const ParameterExpression &);
 
-            void visit(const KinematicVariableNameExpression & e);
+            void operator() (const KinematicVariableNameExpression & e);
 
-            void visit(const KinematicVariableExpression & e);
+            void operator() (const KinematicVariableExpression & e);
 
-            void visit(const CachedObservableExpression & e);
+            void operator() (const CachedObservableExpression & e);
     };
 } // namespace eos::exp
 

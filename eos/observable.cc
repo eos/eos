@@ -305,7 +305,7 @@ namespace eos
     void
     Observables::insert(const QualifiedName & name, const std::string & latex, const Unit & unit, const Options & forced_options, const std::string & input) const
     {
-        eos::exp::Expression expression;
+        eos::exp::ExpressionPtr expression(nullptr);
 
         using It = std::string::const_iterator;
         ExpressionParser<It> parser;
@@ -313,7 +313,7 @@ namespace eos
         It   first(input.begin()), last(input.end());
         bool completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
 
-        if ((! completed) || expression.empty())
+        if ((! completed) || (! expression))
         {
             throw ParsingError("Could not parse expression '" + input + "'");
         }
@@ -350,7 +350,7 @@ namespace eos
 
         const QualifiedName qn(name);
         const std::string   input(_expression);
-        Expression          expression;
+        ExpressionPtr       expression(nullptr);
 
         {
             bool completed;
@@ -361,7 +361,7 @@ namespace eos
             It first(input.begin()), last(input.end());
             completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
 
-            if (! completed)
+            if ((! completed) || (! expression))
             {
                 throw InternalError("Error when parsing expression " + std::string(name) + " in make_expression_observable");
             }

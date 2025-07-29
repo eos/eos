@@ -32,24 +32,25 @@
 namespace eos
 {
     using eos::exp::Expression;
+    using eos::exp::ExpressionPtr;
 
     ExpressionObservable::ExpressionObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
-                                               const Expression & expression) :
+                                               const ExpressionPtr & expression) :
         _name(name),
         _parameters(parameters),
         _kinematics(kinematics),
         _options(options)
     {
-        if (expression.empty())
+        if (expression == nullptr)
         {
             throw InternalError("Empty expression encountered in ExpressionObservable!");
         }
 
         exp::ExpressionMaker maker(parameters, kinematics, options, this);
-        _expression = expression.accept_returning<Expression>(maker);
+        _expression = eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(std::visit(maker, *expression))));
 
         exp::ExpressionUsedParameterReader reader;
-        _expression.accept(reader);
+        std::visit(reader, *_expression);
 
         for (Parameter::Id id : reader.parameter_ids)
         {
@@ -58,22 +59,22 @@ namespace eos
     }
 
     ExpressionObservable::ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options,
-                                               const Expression & expression) :
+                                               const ExpressionPtr & expression) :
         _name(name),
         _parameters(cache.parameters()),
         _kinematics(kinematics),
         _options(options)
     {
-        if (expression.empty())
+        if (expression == nullptr)
         {
             throw InternalError("Empty expression encountered in ExpressionObservable!");
         }
 
         exp::ExpressionCacher cacher(cache);
-        _expression = expression.accept_returning<Expression>(cacher);
+        _expression = eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(std::visit(cacher, *expression))));
 
         exp::ExpressionUsedParameterReader reader;
-        _expression.accept(reader);
+        std::visit(reader, *_expression);
 
         for (Parameter::Id id : reader.parameter_ids)
         {
@@ -84,14 +85,9 @@ namespace eos
     double
     ExpressionObservable::evaluate() const
     {
-        if (_expression.empty())
-        {
-            throw InternalError("Empty expression encountered in ExpressionObservable::evaluate!");
-        }
-
         exp::ExpressionEvaluator evaluator;
 
-        return _expression.accept_returning<double>(evaluator);
+        return std::visit(evaluator, *_expression);
     }
 
     ObservablePtr
@@ -102,7 +98,7 @@ namespace eos
 
         exp::ExpressionCloner cloner(parameters, kinematics, _options);
 
-        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, _expression.accept_returning<Expression>(cloner)));
+        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, ExpressionPtr(new Expression(std::move(std::visit(cloner, *_expression))))));
     }
 
     ObservablePtr
@@ -112,10 +108,10 @@ namespace eos
 
         exp::ExpressionCloner cloner(parameters, kinematics, _options);
 
-        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, _expression.accept_returning<Expression>(cloner)));
+        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, ExpressionPtr(new Expression(std::move(std::visit(cloner, *_expression))))));
     }
 
-    ExpressionObservableEntry::ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const Expression & expression,
+    ExpressionObservableEntry::ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const ExpressionPtr & expression,
                                                          const Options & forced_options) :
         _name(name),
         _latex(latex),
@@ -123,14 +119,14 @@ namespace eos
         _expression(expression),
         _forced_options(forced_options)
     {
-        if (_expression.empty())
+        if (_expression == nullptr)
         {
             throw InternalError("Empty expression encountered in ExpressionObservableEntry!");
         }
 
         // Read kinematic variables
         exp::ExpressionKinematicReader kinematic_reader;
-        expression.accept(kinematic_reader);
+        std::visit(kinematic_reader, *_expression);
 
         // Check the absence of overlap between the used kinematic variables and the aliased variables
         std::set<std::string> intersection;
@@ -175,7 +171,7 @@ namespace eos
     ObservablePtr
     ExpressionObservableEntry::make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
     {
-        if (_expression.empty())
+        if (_expression == nullptr)
         {
             throw InternalError("Empty expression encountered in ExpressionObservableEntry::make!");
         }
