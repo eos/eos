@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -30,25 +30,25 @@ namespace eos::exp
             ExpressionEvaluator()  = default;
             ~ExpressionEvaluator() = default;
 
-            double visit(BinaryExpression & e);
+            double operator() (const BinaryExpression & e);
 
-            double visit(FunctionExpression & e);
+            double operator() (const FunctionExpression & e);
 
-            double visit(ConstantExpression & e);
+            double operator() (const ConstantExpression & e);
 
-            double visit(ObservableNameExpression &);
+            double operator() (const ObservableNameExpression & e);
 
-            double visit(ObservableExpression & e);
+            double operator() (const ObservableExpression & e);
 
-            double visit(ParameterNameExpression &);
+            double operator() (const ParameterNameExpression & e);
 
-            double visit(ParameterExpression & e);
+            double operator() (const ParameterExpression & e);
 
-            double visit(KinematicVariableNameExpression & e);
+            double operator() (const KinematicVariableNameExpression & e);
 
-            double visit(KinematicVariableExpression & e);
+            double operator() (const KinematicVariableExpression & e);
 
-            double visit(CachedObservableExpression & e);
+            double operator() (const CachedObservableExpression & e);
     };
 } // namespace eos::exp
 

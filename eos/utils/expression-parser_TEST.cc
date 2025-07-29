@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023-2024 Danny van Dyk
+ * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,8 +43,8 @@ class ExpressionTest
         const std::string _input;
 
     public:
-        Expression e;
-        bool       completed;
+        ExpressionPtr e;
+        bool          completed;
 
         using It = std::string::const_iterator;
         ExpressionParser<It> parser;
@@ -81,32 +81,32 @@ class ExpressionParserTest : public TestCase
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
 
                 ExpressionEvaluator evaluator;
 
                 TEST_CHECK(test.completed);
-                TEST_CHECK_EQUAL(test.e.accept_returning<double>(evaluator), 7.0);
+                TEST_CHECK_EQUAL(std::visit(evaluator, *test.e), 7.0);
                 TEST_CHECK_EQUAL_STR("BinaryExpression(ConstantExpression(1) + BinaryExpression(ConstantExpression(2) * ConstantExpression(3)))", out.str());
 
                 // Simple exponentiation
                 ExpressionTest test2("1+2^2*3");
                 TEST_CHECK(test2.completed);
-                TEST_CHECK_EQUAL(test2.e.accept_returning<double>(evaluator), 13.0);
+                TEST_CHECK_EQUAL(std::visit(evaluator, *test2.e), 13.0);
 
                 // Non interger exponentiation
                 ExpressionTest test3("2^(1+3.5)+3");
                 TEST_CHECK(test3.completed);
-                TEST_CHECK_RELATIVE_ERROR(test3.e.accept_returning<double>(evaluator), 25.627416998, 1e-5);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, *test3.e), 25.627416998, 1e-5);
 
                 // Function evaluation for built-in functions
                 ExpressionTest test4("exp(0.0)");
                 TEST_CHECK(test4.completed);
-                TEST_CHECK_RELATIVE_ERROR(test4.e.accept_returning<double>(evaluator), 1.0, 1e-16);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, *test4.e), 1.0, 1e-16);
 
                 ExpressionTest test5("sin(0.0)");
                 TEST_CHECK(test5.completed);
-                TEST_CHECK_NEARLY_EQUAL(test5.e.accept_returning<double>(evaluator), 0.0, 1e-16);
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *test5.e), 0.0, 1e-16);
             }
 
             // testing parsing of an expression containing kinematic variables
@@ -115,7 +115,7 @@ class ExpressionParserTest : public TestCase
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
 
                 ExpressionEvaluator evaluator;
 
@@ -126,11 +126,11 @@ class ExpressionParserTest : public TestCase
                                      out.str());
 
                 // Cannot evaluate expression with KinematicVariableNameExpression objects
-                TEST_CHECK_THROWS(InternalError, test.e.accept_returning<double>(evaluator));
+                TEST_CHECK_THROWS(InternalError, std::visit(evaluator, *test.e));
 
                 // Extract kinematic variables from an expression
                 ExpressionKinematicReader kinematic_reader;
-                test.e.accept(kinematic_reader);
+                std::visit(kinematic_reader, *test.e);
 
                 std::set<std::string> expected_kinematic{ "q2_mu", "q2_e" };
                 TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
@@ -141,18 +141,18 @@ class ExpressionParserTest : public TestCase
                     {  "q2_e", 3.0 }
                 });
                 ExpressionMaker maker(Parameters::Defaults(), k, Options());
-                Expression      assessable_test = test.e.accept_returning<Expression>(maker);
+                Expression      assessable_test = std::visit(maker, *test.e);
 
                 std::stringstream out2;
                 ExpressionPrinter printer2(out2);
-                assessable_test.accept(printer2);
+                std::visit(printer2, assessable_test);
 
                 TEST_CHECK_EQUAL_STR("BinaryExpression(KinematicVariableExpression(q2_mu)"
                                      " - "
                                      "KinematicVariableExpression(q2_e))",
                                      out2.str());
 
-                TEST_CHECK_EQUAL(assessable_test.accept_returning<double>(evaluator), 1.0);
+                TEST_CHECK_EQUAL(std::visit(evaluator, assessable_test), 1.0);
             }
 
             // testing parsing and evaluation of observables
@@ -163,7 +163,7 @@ class ExpressionParserTest : public TestCase
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
 
                 ExpressionEvaluator evaluator;
 
@@ -174,11 +174,11 @@ class ExpressionParserTest : public TestCase
                                      out.str());
 
                 // Cannot evaluate expression with ObservableNameExpression objects
-                TEST_CHECK_THROWS(InternalError, test.e.accept_returning<double>(evaluator));
+                TEST_CHECK_THROWS(InternalError, std::visit(evaluator, *test.e));
 
                 // Extract kinematic variables from an expression
                 ExpressionKinematicReader kinematic_reader;
-                test.e.accept(kinematic_reader);
+                std::visit(kinematic_reader, *test.e);
 
                 std::set<std::string> expected_kinematic{ "q2_max", "q2_min_num" };
                 TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
@@ -196,7 +196,7 @@ class ExpressionParserTest : public TestCase
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
 
                 ExpressionEvaluator evaluator;
 
@@ -207,11 +207,11 @@ class ExpressionParserTest : public TestCase
                                      out.str());
 
                 // Cannot evaluate expression with ObservableNameExpression objects
-                TEST_CHECK_THROWS(InternalError, test.e.accept_returning<double>(evaluator));
+                TEST_CHECK_THROWS(InternalError, std::visit(evaluator, *test.e));
 
                 // Extract kinematic variables from an expression
                 ExpressionKinematicReader kinematic_reader;
-                test.e.accept(kinematic_reader);
+                std::visit(kinematic_reader, *test.e);
 
                 std::set<std::string> expected_kinematic{};
                 TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
@@ -219,11 +219,11 @@ class ExpressionParserTest : public TestCase
                 // Create a usable expression
                 Parameters      p = Parameters::Defaults();
                 ExpressionMaker maker(p, Kinematics(), Options());
-                Expression      e = test.e.accept_returning<Expression>(maker);
+                Expression      e = std::visit(maker, *test.e);
 
                 // Extract used parameters from an expression
                 ExpressionUsedParameterReader used_parameter_reader;
-                e.accept(used_parameter_reader);
+                std::visit(used_parameter_reader, e);
 
                 std::set<Parameter::Id> expected_used_parameters{ p["mass::c"].id(), p["mass::b(MSbar)"].id() };
                 TEST_CHECK_EQUAL(expected_used_parameters, used_parameter_reader.parameter_ids);
@@ -258,19 +258,19 @@ class ExpressionParserTest : public TestCase
 
                 // Make and evaluate expression
                 ExpressionMaker maker(p, k, Options());
-                Expression      assessable_test = test.e.accept_returning<Expression>(maker);
+                Expression      assessable_test = std::visit(maker, *test.e);
 
                 ExpressionEvaluator evaluator;
 
-                TEST_CHECK_RELATIVE_ERROR(assessable_test.accept_returning<double>(evaluator), obs_num->evaluate() / obs_denom->evaluate(), 1e-3);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, assessable_test), obs_num->evaluate() / obs_denom->evaluate(), 1e-3);
 
 
                 // Observable with exponentiation
                 ExpressionTest test2("[[mass::tau]]^2 - <<mass::mu>>^2");
-                Expression     assessable_test2 = test2.e.accept_returning<Expression>(maker);
+                Expression     assessable_test2 = std::visit(maker, *test2.e);
 
                 TEST_CHECK(test2.completed);
-                TEST_CHECK_RELATIVE_ERROR(assessable_test2.accept_returning<double>(evaluator), 3.14592, 1e-3);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, assessable_test2), 3.14592, 1e-3);
             }
 
             // testing cloning and usage of parameters
@@ -279,7 +279,7 @@ class ExpressionParserTest : public TestCase
 
                 std::stringstream out;
                 ExpressionPrinter printer(out);
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
 
                 TEST_CHECK(test.completed);
                 TEST_CHECK_EQUAL_STR("BinaryExpression("
@@ -300,7 +300,7 @@ class ExpressionParserTest : public TestCase
                 p["mass::tau"] = 2.0;
 
                 ExpressionMaker maker(p, k, o);
-                Expression      assessable_test = test.e.accept_returning<Expression>(maker);
+                Expression      assessable_test = std::visit(maker, *test.e);
 
                 Kinematics k2   = Kinematics({
                     { "q2", 20.0 }
@@ -310,17 +310,17 @@ class ExpressionParserTest : public TestCase
                 p2["mass::tau"] = 2.0;
 
                 ExpressionCloner cloner(p2, k2, o);
-                Expression       cloned_test = assessable_test.accept_returning<Expression>(cloner);
+                Expression       cloned_test = std::visit(cloner, assessable_test);
 
                 ExpressionEvaluator evaluator;
 
-                TEST_CHECK_EQUAL(assessable_test.accept_returning<double>(evaluator), 2.0);
-                TEST_CHECK_EQUAL(cloned_test.accept_returning<double>(evaluator), 4.0);
+                TEST_CHECK_EQUAL(std::visit(evaluator, assessable_test), 2.0);
+                TEST_CHECK_EQUAL(std::visit(evaluator, cloned_test), 4.0);
 
                 // Test that parameters are considered as used
                 ParameterUser   parameter_user;
                 ExpressionMaker maker_user(p, k, o, &parameter_user);
-                assessable_test = test.e.accept_returning<Expression>(maker_user);
+                assessable_test = std::visit(maker_user, *test.e);
                 std::set<Parameter::Id> used_ids(parameter_user.begin(), parameter_user.end());
                 std::set<Parameter::Id> expected_ids{ p["mass::mu"].id(), p["mass::tau"].id() };
 
@@ -336,7 +336,7 @@ class ExpressionParserTest : public TestCase
                 ExpressionTest    test("<<test::obs1{}>>");
                 std::stringstream out;
                 ExpressionPrinter printer(out);
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
 
                 TEST_CHECK_EQUAL_STR("ObservableNameExpression(test::obs1{})", out.str());
 
@@ -346,7 +346,7 @@ class ExpressionParserTest : public TestCase
 
                 std::stringstream out2;
                 ExpressionPrinter printer2(out2);
-                test2.e.accept(printer2);
+                std::visit(printer2, *test2.e);
                 TEST_CHECK_EQUAL_STR("KinematicVariableNameExpression(<<test::obs1>>)", out2.str());
             }
 
@@ -355,7 +355,7 @@ class ExpressionParserTest : public TestCase
                 // Simple case, no conflict
                 ExpressionTest            test("<<test::obs1>>[q2_min=>q2_min_num] * {q2_min_num}");
                 ExpressionKinematicReader kinematic_reader;
-                test.e.accept(kinematic_reader);
+                std::visit(kinematic_reader, *test.e);
                 std::set<std::string> expected_kinematic{ "q2_max", "q2_min_num" };
 
                 TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
@@ -372,7 +372,7 @@ class ExpressionParserTest : public TestCase
                 // Problematic case, conflict between the alias and the kinematic variable
                 ExpressionTest test2("<<test::obs1>>[q2_min=>q2_min_num] * {q2_min}");
                 kinematic_reader.clear();
-                test2.e.accept(kinematic_reader);
+                std::visit(kinematic_reader, *test2.e);
 
                 intersection.clear();
                 std::set_intersection(kinematic_reader.kinematics.begin(),
@@ -390,7 +390,7 @@ class ExpressionParserTest : public TestCase
                 std::stringstream out;
                 ExpressionPrinter printer(out);
 
-                test.e.accept(printer);
+                std::visit(printer, *test.e);
                 TEST_CHECK_EQUAL(out.str(), "ParameterNameExpression(undeclared::parameter)");
 
                 // test with default parameters as stored on disk
@@ -398,7 +398,7 @@ class ExpressionParserTest : public TestCase
                     Parameters      p = Parameters::Defaults();
                     ExpressionMaker maker(p, Kinematics(), Options());
 
-                    TEST_CHECK_THROWS(UnknownParameterError, test.e.accept_returning<Expression>(maker));
+                    TEST_CHECK_THROWS(UnknownParameterError, std::visit(maker, *test.e));
                 }
 
                 // test after declaring "undeclared::parameter"
@@ -408,10 +408,10 @@ class ExpressionParserTest : public TestCase
                     ExpressionMaker maker(p, Kinematics(), Options());
 
                     Expression e;
-                    TEST_CHECK_NO_THROW(e = test.e.accept_returning<Expression>(maker));
+                    TEST_CHECK_NO_THROW(e = std::visit(maker, *test.e));
 
                     ExpressionEvaluator evaluator;
-                    TEST_CHECK_NEARLY_EQUAL(e.accept_returning<double>(evaluator), 1.0, 1e-10);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e), 1.0, 1e-10);
                 }
             }
         }

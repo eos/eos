@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2016 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -174,9 +174,9 @@ main(int argc, char * argv[])
                 std::cout << ", " << *c;
             }
             std::cout << "] = ";
-            polynomial.accept(printer);
+            std::visit(printer, polynomial);
             std::cout << std::endl;
-            std::cout << "polynomial = " << polynomial.accept_returning<double>(evaluator) << std::endl;
+            std::cout << "polynomial = " << std::visit(evaluator, polynomial) << std::endl;
             std::cout << "direct     = " << i->observable->evaluate() << std::endl;
         }
     }

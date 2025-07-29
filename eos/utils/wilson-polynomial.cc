@@ -29,7 +29,7 @@ namespace eos
     exp::Expression
     make_polynomial(const ObservablePtr & o, const std::list<std::string> & _coefficients)
     {
-        exp::Expression result;
+        exp::ExpressionPtr result;
 
         std::list<std::tuple<Parameter, double, double>> coefficients; // <p_i, q_i, l_i>
         for (const auto & _coefficient : _coefficients)
@@ -53,7 +53,7 @@ namespace eos
 
         // Determine the constant part 'n'
         double n = o->evaluate();
-        result   = exp::ConstantExpression(n);
+        result   = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(n))));
 
         // Determine the true quadratic terms 'q_i' and linear terms 'l_i'
         for (auto & coefficient : coefficients)
@@ -70,15 +70,17 @@ namespace eos
 
             double q_i = 0.5 * ((o_plus_one + o_minus_one) - 2.0 * n);
 
-            exp::Expression p_i_expr         = exp::ParameterExpression(p_i);
-            exp::Expression q_i_expr         = exp::ConstantExpression(q_i);
-            exp::Expression p_i_squared_expr = exp::BinaryExpression('*', p_i_expr, p_i_expr);
-            result                           = exp::BinaryExpression('+', result, exp::BinaryExpression('*', q_i_expr, p_i_squared_expr));
-            std::get<1>(coefficient)         = q_i;
+            auto p_i_expr            = exp::ExpressionPtr(new exp::Expression(std::move(exp::ParameterExpression(p_i))));
+            auto q_i_expr            = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(q_i))));
+            auto p_i_squared_expr    = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', p_i_expr, p_i_expr))));
+            auto square_term_expr    = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', q_i_expr, p_i_squared_expr))));
+            result                   = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('+', result, square_term_expr))));
+            std::get<1>(coefficient) = q_i;
 
-            double          l_i      = 0.5 * (o_plus_one - o_minus_one);
-            exp::Expression l_i_expr = exp::ConstantExpression(l_i);
-            result                   = exp::BinaryExpression('+', result, exp::BinaryExpression('*', l_i_expr, p_i_expr));
+            double l_i               = 0.5 * (o_plus_one - o_minus_one);
+            auto   l_i_expr          = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(l_i))));
+            auto   linear_term_expr  = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', l_i_expr, p_i_expr))));
+            result                   = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('+', result, linear_term_expr))));
             std::get<2>(coefficient) = l_i;
 
             // reset parameter to zero
@@ -107,11 +109,12 @@ namespace eos
                 // extract bilinear term
                 double b_ij = o->evaluate() - n - q_i - l_i - q_j - l_j;
 
-                exp::Expression p_i_expr  = exp::ParameterExpression(p_i);
-                exp::Expression p_j_expr  = exp::ParameterExpression(p_j);
-                exp::Expression b_ij_expr = exp::ConstantExpression(b_ij);
-                exp::Expression p_ij_expr = exp::BinaryExpression('*', p_i_expr, p_j_expr);
-                result                    = exp::BinaryExpression('+', result, exp::BinaryExpression('*', b_ij_expr, p_ij_expr));
+                auto p_i_expr           = exp::ExpressionPtr(new exp::Expression(std::move(exp::ParameterExpression(p_i))));
+                auto p_j_expr           = exp::ExpressionPtr(new exp::Expression(std::move(exp::ParameterExpression(p_j))));
+                auto b_ij_expr          = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(b_ij))));
+                auto p_ij_expr          = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', p_i_expr, p_j_expr))));
+                auto bilinear_term_expr = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', b_ij_expr, p_ij_expr))));
+                result                  = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('+', result, bilinear_term_expr))));
 
                 p_j = 0.0;
             }
@@ -127,14 +130,14 @@ namespace eos
             p_i = p_i.central();
         }
 
-        return result;
+        return *result;
     }
 
     exp::Expression
     make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::list<std::string> & coefficients)
     {
-        const auto numerator_exp   = make_polynomial(numerator, coefficients);
-        const auto denominator_exp = make_polynomial(denominator, coefficients);
+        const auto numerator_exp   = exp::ExpressionPtr(new exp::Expression(std::move(make_polynomial(numerator, coefficients))));
+        const auto denominator_exp = exp::ExpressionPtr(new exp::Expression(std::move(make_polynomial(denominator, coefficients))));
 
         return exp::BinaryExpression('/', numerator_exp, denominator_exp);
     }
