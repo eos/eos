@@ -43,7 +43,6 @@ libeosutils_la_SOURCES = \
 	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
 	observable_stub.cc observable_stub.hh \
-	one-of.hh \
 	options.cc options.hh options-impl.hh \
 	parameters.cc parameters.hh parameters-fwd.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
@@ -101,7 +100,6 @@ include_eos_utils_HEADERS = \
 	mutable.hh mutable-fwd.hh \
 	observable_cache.hh \
 	observable_set.hh \
-	one-of.hh \
 	options.hh \
 	parameters.hh parameters-fwd.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
@@ -139,7 +137,6 @@ TESTS = \
 	observable_set_TEST \
 	observable_stub_TEST \
 	options_TEST \
-	one-of_TEST \
 	parameters_TEST \
 	qcd_TEST \
 	qualified-name_TEST \
@@ -185,8 +182,6 @@ mutable_TEST_SOURCES = mutable_TEST.cc
 observable_set_TEST_SOURCES = observable_set_TEST.cc
 
 observable_stub_TEST_SOURCES = observable_stub_TEST.cc
-
-one_of_TEST_SOURCES = one-of_TEST.cc
 
 options_TEST_SOURCES = options_TEST.cc
 
