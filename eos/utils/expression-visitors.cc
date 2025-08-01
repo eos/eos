@@ -688,8 +688,44 @@ namespace eos::exp
     Expression
     ExpressionCacher::visit(const ObservableExpression & e)
     {
-        auto id = _cache.add(e.observable);
+        // Clone the kinematics of the expression and apply aliases
+        auto updated_kinematics = e.observable->kinematics().clone();
+        for (const auto & alias : e.kinematics_specification.aliases)
+        {
+            updated_kinematics.alias(alias.first, alias.second);
+        }
 
+        // get kinematic variables of observable
+        std::set<std::string> kinematic_set;
+        const auto & entries = impl::observable_entries;
+        const auto & it      = entries.find(e.observable->name());
+
+        auto _updated_kinematics = Kinematics();
+
+        // check if 'e' matches the name of a known observable
+        if (it != entries.end())
+        {
+            // Create kinematics for updated observable
+            const auto entry = it->second;    
+
+            kinematic_set.insert(entry->begin_kinematic_variables(), entry->end_kinematic_variables());
+
+            for (const auto & kinematic_name : kinematic_set)
+            {
+                _updated_kinematics.declare(kinematic_name, updated_kinematics[kinematic_name] );
+            }
+        }
+        else 
+        {
+            _updated_kinematics = e.observable->kinematics().clone();
+        }
+
+        // Create a new observable with updated kinematics
+        auto updated_observable = Observable::make(e.observable->name(), e.observable->parameters(), _updated_kinematics, e.observable->options());
+
+        // Add the updated observable to the cache
+        auto id = _cache.add(updated_observable);
+        
         return CachedObservableExpression(_cache, id, e.kinematics_specification);
     }
 
