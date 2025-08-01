@@ -136,6 +136,10 @@ namespace eos
             {
                 return false;
             }
+            if (_imp->alias_map[l->first] != rhs._imp->alias_map[r->first])
+            {
+                return false;
+            }
         }
 
         return true;
