@@ -25,6 +25,8 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <set>
+
 namespace eos
 {
     /*!
@@ -190,6 +192,11 @@ namespace eos
             friend class Kinematics;
             friend struct Implementation<Kinematics>;
 
+            /*!
+             * A unique number that identifies this parameter at run time.
+             */
+            using Id = unsigned;
+
             ///@name Basic Functions
             ///@{
             ~KinematicVariable();
@@ -212,6 +219,9 @@ namespace eos
             /// Set a KinematicVariable's numeric value.
             const KinematicVariable & operator= (const double &);
 
+            /// Retrieve the Parameter's id.
+            Id id() const;
+
             /// Set a KinematicVariable's numeric value.
             virtual void set(const double &);
             ///@}
@@ -221,6 +231,68 @@ namespace eos
             /// Retrieve the Parameter's name.
             virtual const std::string & name() const;
             ///@}
+    };
+
+    /*!
+     * Base class for all users of Kinematics objects.
+     */
+    class KinematicUser
+    {
+        protected:
+            std::set<KinematicVariable::Id> _ids;
+
+        public:
+            ///@name Iteration over ids
+            ///@{
+            struct ConstIteratorTag;
+            using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const KinematicVariable::Id>;
+
+            ConstIterator begin_kinematics() const;
+            ConstIterator end_kinematics() const;
+            ///@}
+
+            ///@name Access
+            ///@{
+            /*!
+             * Remove a kinematics variable from the set of used ids.
+             */
+            void drop(const KinematicVariable::Id & id);
+
+            /*!
+             * Add a given kinematics variable id to our list of used ids.
+             *
+             * @param id   The kinematics variable id that we use.
+             */
+            void uses_kinematic(const KinematicVariable::Id & id);
+
+            /*!
+             * Copy parameter ids of another KinematicUser to our list of used ids.
+             *
+             * @param user The other ParameterUser whose ids we are going to copy.
+             */
+            void uses_kinematic(const KinematicUser & user);
+            ///@}
+    };
+
+    extern template class WrappedForwardIterator<KinematicUser::ConstIteratorTag, const KinematicVariable::Id>;
+
+    /*!
+     * Wrapper class to automate usage tracking of Kinematics objects.
+     */
+    class UsedKinematicVariable : public KinematicVariable
+    {
+        public:
+            /*!
+             * Constructor.
+             *
+             * Constructs a KinematicVariable object and registers its usage with a KinematicUser.
+             *
+             * @param variable The kinematics variable which is used.
+             * @param user      The user of above kinematics variable.
+             */
+            UsedKinematicVariable(const KinematicVariable & variable, KinematicUser & user);
+
+            using KinematicVariable::operator=;
     };
 
     template <typename T>
