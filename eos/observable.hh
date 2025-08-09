@@ -40,7 +40,7 @@ namespace eos
      * Observable is internally used to handle the creation,
      * evaluation and cloning of any (pseudo)observable quantities.
      */
-    class Observable : public ParameterUser, public ReferenceUser
+    class Observable : public ParameterUser, public ReferenceUser, public KinematicUser
     {
         public:
             virtual const QualifiedName & name() const = 0;
@@ -59,6 +59,7 @@ namespace eos
 
             static ObservablePtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
 
+            using KinematicUser::uses_kinematic;
             using ParameterUser::uses;
             using ReferenceUser::uses;
     };
