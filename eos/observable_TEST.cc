@@ -18,6 +18,7 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/utils/observable_cache.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/units.hh>
 
@@ -122,7 +123,52 @@ class ObservableTest : public TestCase
                 TEST_CHECK_EQUAL(observable->evaluate(), 2 * obs_2S1c->evaluate());
             }
 
-            /* Test inserion of a problematic observable */
+            /* Test insertion of nested multiple cacheable observables with different kinematics */
+            {
+                auto observables = Observables();
+                std::printf("\n\n Starting insertion of nested \n");
+                observables.insert("B->D^*lnu::S_1c_q2_min_num/S_1c_q2_min_denom",
+                                   R"()",
+                                   Unit::Undefined(),
+                                   Options(),
+                                   R"(
+                                <<B->D^*lnu::S_1c;l=mu>>[q2_min=>q2_min_num] / <<B->D^*lnu::S_1c;l=mu>>[q2_min=>q2_min_denom]
+                                )");
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k{
+                    {   "q2_min_num",  4.00 },
+                    { "q2_min_denom",  8.00 },
+                    {       "q2_max", 10.68 }
+                };
+                Kinematics k_num{
+                    { "q2_min",  4.00 },
+                    { "q2_max", 10.68 }
+                };
+                Kinematics k_denom{
+                    { "q2_min",  8.00 },
+                    { "q2_max", 10.68 }
+                };
+                Options o;
+
+                auto obs_num   = Observable::make("B->D^*lnu::S_1c", p, k_num, o);
+                auto obs_denom = Observable::make("B->D^*lnu::S_1c", p, k_denom, o);
+                auto obs       = Observable::make("B->D^*lnu::S_1c_q2_min_num/S_1c_q2_min_denom", p, k, o);
+
+                ObservableCache cache(p);
+                TEST_CHECK_NO_THROW(cache.add(obs_num));
+                TEST_CHECK_NO_THROW(cache.add(obs_denom));
+
+                TEST_CHECK_RELATIVE_ERROR(obs->evaluate(), obs_num->evaluate() / obs_denom->evaluate(), 1e-3);
+
+                ObservableCache::Id obs_id;
+                TEST_CHECK_NO_THROW(obs_id = cache.add(obs));
+
+                TEST_CHECK_NO_THROW(cache.update());
+                TEST_CHECK_RELATIVE_ERROR(obs->evaluate(), cache[obs_id], 1e-3);
+            }
+
+            /* Test insertion of a problematic observable */
             {
                 auto observables = Observables();
 
