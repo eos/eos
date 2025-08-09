@@ -32,6 +32,7 @@
 #include <map>
 #include <tuple>
 #include <typeindex>
+#include <unordered_set>
 #include <vector>
 
 namespace eos
@@ -75,6 +76,17 @@ namespace eos
             static bool
             identical_observables(const ObservablePtr & lhs, const ObservablePtr & rhs)
             {
+                const KinematicUser &                     kinematic_user_lhs = static_cast<const KinematicUser &>(*lhs);
+                const KinematicUser &                     kinematic_user_rhs = static_cast<const KinematicUser &>(*rhs);
+                std::unordered_set<KinematicVariable::Id> kinematic_ids_lhs(kinematic_user_lhs.begin_kinematics(), kinematic_user_lhs.end_kinematics());
+                std::unordered_set<KinematicVariable::Id> kinematic_ids_rhs(kinematic_user_rhs.begin_kinematics(), kinematic_user_rhs.end_kinematics());
+
+                // compare used_kinematics
+                if (kinematic_ids_lhs != kinematic_ids_rhs)
+                {
+                    return false;
+                }
+
                 // compare name
                 if (lhs->name() != rhs->name())
                 {
@@ -149,6 +161,16 @@ namespace eos
                         }
 
                         if (std::get<0>(c->second)->options() != cacheable_observable->options())
+                        {
+                            continue;
+                        }
+                        const KinematicUser &                     kinematic_user_cacheable_obs = static_cast<const KinematicUser &>(*cacheable_observable);
+                        const KinematicUser &                     kinematic_user_cached_obs    = static_cast<const KinematicUser &>(*std::get<0>(c->second));
+                        std::unordered_set<KinematicVariable::Id> kinematic_ids_cacheable_obs(kinematic_user_cacheable_obs.begin_kinematics(),
+                                                                                              kinematic_user_cacheable_obs.end_kinematics());
+                        std::unordered_set<KinematicVariable::Id> kinematic_ids_cached_obs(kinematic_user_cached_obs.begin_kinematics(),
+                                                                                           kinematic_user_cached_obs.end_kinematics());
+                        if (kinematic_ids_cacheable_obs != kinematic_ids_cached_obs)
                         {
                             continue;
                         }
