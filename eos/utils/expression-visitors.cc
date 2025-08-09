@@ -689,7 +689,20 @@ namespace eos::exp
     Expression
     ExpressionCacher::operator() (const ObservableExpression & e)
     {
+        const auto & kinematics_aliases = e.kinematics_specification.aliases;
+
+        for (const auto & alias : kinematics_aliases)
+        {
+            e.observable->kinematics().alias(alias.first, alias.second);
+        }
+
         auto id = _cache.add(e.observable);
+
+        // Clear aliases installed as part of this expression
+        for (const auto & alias : kinematics_aliases)
+        {
+            e.observable->kinematics().remove_alias(alias.first);
+        }
 
         return CachedObservableExpression(_cache, id, e.kinematics_specification);
     }
