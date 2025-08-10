@@ -70,6 +70,10 @@ class Item(Deserializable):
         "Draw the item on the axes"
         raise NotImplementedError
 
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return ()
+
 
 @dataclass(kw_only=True)
 class ObservableItem(Item):
@@ -870,6 +874,21 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
                 fmt[level] = label
 
             ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        entries = []
+
+        if self.label:
+            handle = None
+            if 'areas' in self.contours:
+                handle = _matplotlib.pyplot.Rectangle((0,0),1,1, color=self.color)
+            else:
+                handle = _matplotlib.pyplot.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
+
+            entries.append((handle, self.label))
+
+        return entries
 
 @dataclass(kw_only=True)
 class ConstraintItem(Item):
