@@ -1156,6 +1156,91 @@ class ConstraintItem(Item):
             # disable the label for subsequent plots
             label = None
 
+
+@dataclass(kw_only=True)
+class BandItem(Item):
+    """Plots a shaded band.
+
+    This item type is used to display a shaded band, which can be used to represent uncertainties or confidence intervals.
+
+    :param x: The size of the band in the x direction, given as a tuple of two float values (min, max).
+    :type x: tuple[float, float] | None
+    :param y: The size of the band in the y direction, given as a tuple of two float values (min, max).
+    :type y: tuple[float, float] | None
+
+    Either of ``x`` or ``y`` must be specified to define the band.
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$x$', range: [0, 10] }
+          yaxis: { label: '$y$', range: [0, 10] }
+          items:
+            - { type: 'band', x: [2, 8], color: 'black', alpha: 0.5 }
+            - { type: 'band', y: [2, 8], color: 'blue',  alpha: 0.5 }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    x:tuple[float,float]|None=field(default=None)
+    y:tuple[float,float]|None=field(default=None)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.x is None and self.y is None:
+            raise ValueError("Either 'x' or 'y' must be specified to define the band")
+
+        if self.x is not None:
+            if len(self.x) != 2:
+                raise ValueError("'x' must be a tuple of two float values (min, max)")
+
+            if self.x[0] >= self.x[1]:
+                raise ValueError(f"Invalid 'x' range: {self.x}. The first value must be less than the second value.")
+
+        if self.y is not None:
+            if len(self.y) != 2:
+                raise ValueError("'y' must be a tuple of two float values (min, max)")
+
+            if self.y[0] >= self.y[1]:
+                raise ValueError(f"Invalid 'y' range: {self.y}. The first value must be less than the second value.")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the band for drawing."""
+        pass
+
+    def draw(self, ax):
+        "Draw the band on the axes."
+
+        if self.x is not None:
+            _xmin, _xmax = tuple(self.x)
+        else:
+            _xmin, _xmax = ax.get_xlim()
+
+        if self.y is not None:
+            _ymin, _ymax = tuple(self.y)
+        else:
+            _ymin, _ymax = ax.get_ylim()
+
+        rect = _matplotlib.pyplot.Rectangle((_xmin, _ymin), _xmax - _xmin, _ymax - _ymin,
+                                            alpha=self.alpha, color=self.color,
+                                            linewidth=0, fill=True)
+        ax.add_patch(rect)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        entries = []
+
+        if self.label:
+            handle = _matplotlib.pyplot.Rectangle((0,0),1,1, alpha=self.alpha, color=self.color)
+            entries.append((handle, self.label))
+
+        return entries
+
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
@@ -1165,6 +1250,7 @@ class ItemFactory:
         'histogram2D': TwoDimensionalHistogramItem,
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
+        'band': BandItem,
     }
 
     @staticmethod
