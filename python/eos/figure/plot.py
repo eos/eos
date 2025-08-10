@@ -43,8 +43,20 @@ class Legend(Deserializable):
     def __post_init__(self):
         pass
 
-    def draw(self, ax):
-        ax.legend(loc=self.position)
+    def draw(self, ax, entries=None):
+        """Draw the legend on the axes.
+
+        :param ax: The axes to draw the legend on.
+        :type ax: matplotlib.axes.Axes
+        :param entries: A list of tuples (handle, label) for the legend entries. If None, uses the entries from the items.
+        :type entries: list[tuple[matplotlib.artist.Artist, str]] | None
+        """
+        if entries is not None:
+            handles = [entry[0] for entry in entries]
+            labels = [entry[1] for entry in entries]
+            ax.legend(loc=self.position, handles=handles, labels=labels)
+        else:
+            ax.legend(loc=self.position)
 
 
 @dataclass
@@ -299,12 +311,14 @@ class TwoDimensionalPlot(Plot):
         self.yaxis.draw(ax)
 
         # Draw all items
+        legend_entries = []
         for item in self.items:
             item.draw(ax)
+            legend_entries.extend(item.legend())
 
         # Draw legend
         if self.legend is not None:
-            self.legend.draw(ax)
+            self.legend.draw(ax=ax, entries=legend_entries)
 
 
     @classmethod

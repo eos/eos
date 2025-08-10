@@ -884,7 +884,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             if 'areas' in self.contours:
                 handle = _matplotlib.pyplot.Rectangle((0,0),1,1, color=self.color)
             else:
-                handle = _matplotlib.pyplot.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
+                handle = _matplotlib.pyplot.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.linestyle)
 
             entries.append((handle, self.label))
 
