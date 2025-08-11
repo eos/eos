@@ -1827,6 +1827,14 @@ LHCb:2020B:
     id: oai:arXiv.org:2012.05319
   inspire-id: LHCb:2020byh
   title: Observation of $CP$ violation in two-body $ {B}_{(s)}^0 $-meson decays to charged pions and kaons
+LHCb:2020C:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2001.03225
+  inspire-id: LHCb:2020cyw
+  title: Measurement of $|V_{cb}|$ with $B^0_s \to D^{(*)-}_s\mu^+\nu_\mu$ decays
 LHCb:2021A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
