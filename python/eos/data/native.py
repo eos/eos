@@ -484,8 +484,8 @@ class ImportanceSamples:
         description['type'] = 'ImportanceSamples'
         description['parameters'] = [{
             'name': p.name(),
-            'min': p.min(),
-            'max': p.max()
+            'min': p.min() if 'min' in dir(p) else -_np.inf,
+            'max': p.max() if 'max' in dir(p) else +_np.inf
         } for p in parameters]
 
         if not samples.shape[1] == len(parameters):
