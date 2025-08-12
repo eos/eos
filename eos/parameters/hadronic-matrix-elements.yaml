@@ -6383,13 +6383,13 @@ groups:
           central: +5.742e-4
           min:     +5.742e-4
           max:     +5.742e-4
-          unit:     'GeV^{-2}'
+          unit:     'GeV^-2'
           latex:    '$\chi^{A}_{T}(0)$'
       'B->pipi::chi_1m_v@HKvT2025' :
           central: +5.742e-4
           min:     +5.742e-4
           max:     +5.742e-4
-          unit:     'GeV^{-2}'
+          unit:     'GeV^-2'
           latex:    '$\chi^{V}_{T}(0)$'
       # Input for the conformal mappings
       'B->pipi::tp_a@HKvT2025' :
