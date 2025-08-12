@@ -1241,6 +1241,117 @@ class BandItem(Item):
 
         return entries
 
+@dataclass(kw_only=True)
+class SignalPDFItem(Item):
+    """Plots a single EOS signal PDF w/o uncertainties as a function of one kinematic variable
+
+    :param kinematics: The set of optional kinematic variables, given as a dictionary mapping variable names to their values.
+    :type kinematics: dict[str,float] | None
+    :param options: The set of optional options for the signal PDF, given as a dictionary mapping option names to their values.
+    :type options: dict[str,str] | None
+    :param pdf: The name of the signal PDF to be plotted.
+    :type pdf: eos.QualifiedName
+    :param parameters: The set of optional parameters for the signal PDF, given as a dictionary mapping parameter names to their values.
+    :type parameters: dict[eos.QualifiedName,float] | None
+    :param parameters_from_file: The path to a parameter file containing the optional parameters of the signal PDF.
+    :type parameters_from_file: str | None
+    :param range: The range of the variable to be plotted, given as a tuple of two float values (min, max).
+    :type range: tuple[float,float]
+    :param resolution: The number of points to be used for plotting the signal PDF. Defaults to 100.
+    :type resolution: int
+    :param variable: The name of the kinematic variable to which the x axis will be mapped.
+    :type variable: str
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          legend: { position: 'lower left' }
+          items:
+            - { type: 'signal-pdf', pdf: 'B->Dlnu::dBR/dq2;l=e,q=d', label: 'Signal PDF',
+                variable: 'q2', range: [0.02, 11.63], color: 'black', resolution: 100,
+                kinematics: { q2_min: 0.02, q2_max: 11.63 },
+                parameters: { B->Dlnu::dBR/dq2;l=e,q=d@BSZ2015:alpha^f+_0@BSZ2015:0.75 }
+              }
+    """
+
+    kinematics:dict[str,float]|None=field(default=None)
+    options:dict[str,str]|None=field(default=None)
+    pdf:eos.QualifiedName
+    parameters:dict[eos.QualifiedName,float]|None=field(default=None)
+    parameters_from_file:str|None=field(default=None)
+    range:tuple[float,float]
+    resolution:int=field(default=100)
+    variable:str
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.range is None or len(self.range) != 2:
+            raise ValueError(f"Invalid range '{self.range}'. It must be a tuple of two float values (min, max).")
+
+        if self.range[0] >= self.range[1]:
+            raise ValueError(f"Invalid range '{self.range}'. The first value must be less than the second value.")
+
+        if self.resolution <= 0:
+            raise ValueError(f"Invalid resolution '{self.resolution}'. It must be a positive integer.")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the signal PDF for plotting."""
+        context = AnalysisFileContext() if context is None else context
+
+        self._parameters = eos.Parameters.Defaults()
+        # create parameters
+        if type(self.parameters_from_file) is str:
+            eos.warn('    overriding parameters from file')
+            self._parameters.override_from_file(context.data_path(self.parameters_from_file))
+
+        if self.parameters is not None and self.parameters_from_file is not None:
+            eos.warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+
+        if self.parameters is not None and type(self.parameters) is dict:
+            for key, value in self.parameters.items():
+                self._parameters.set(key, value)
+
+        # create kinematics
+        self._kinematics = eos.Kinematics()
+        if self.variable is None:
+            raise ValueError('no kinematic variable specified; do not know how to map x to a variable')
+        else:
+            self._variable = self._kinematics.declare(self.variable, _np.nan)
+
+        if type(self.kinematics) is dict:
+            for k, v in self.kinematics.items():
+                self._kinematics.declare(k, v)
+
+        # create options
+        self._options = eos.Options()
+        if self.options is not None and type(self.options) is dict:
+            for key, value in self.options.items():
+                self._options.declare(key, value)
+
+        # create PDF
+        self._pdf = eos.SignalPDF.make(self.pdf, self._parameters, self._kinematics, self._options)
+        if self._pdf is None:
+            raise ValueError(f"Signal PDF '{self.pdf}' could not be created. Please check the PDF name, the parameters, the kinematics and the options.")
+
+        self._norm = self._pdf.normalization()
+
+    def draw(self, ax):
+        """Draw the signal PDF on the axes."""
+
+        xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
+        pvalues = _np.full(xvalues.shape, -self._norm)
+        for i, xvalue in enumerate(xvalues):
+            self._variable.set(xvalue)
+            pvalues[i] += self._pdf.evaluate()
+
+        ax.plot(xvalues, _np.exp(pvalues), alpha=self.alpha, color=self.color, label=self.label, ls=self.linestyle)
+
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
@@ -1251,6 +1362,7 @@ class ItemFactory:
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
         'band': BandItem,
+        'signal-pdf': SignalPDFItem,
     }
 
     @staticmethod

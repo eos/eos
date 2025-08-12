@@ -60,5 +60,29 @@ class BandItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'band': {e}")
 
+class SignalPDFItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: signal-pdf
+            label: 'PDF ($\\ell=\\mu$)'
+            pdf: 'B->Dlnu::dGamma/dq2;l=mu'
+            variable: 'q2'
+            range: [0.02, 11.60]
+            resolution: 100
+            kinematics:
+              q2_min:  0.02
+              q2_max: 11.60
+            color: 'C0'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            fig, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'signal-pdf': {e}")
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)
