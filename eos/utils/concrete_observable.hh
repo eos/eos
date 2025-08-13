@@ -68,6 +68,15 @@ namespace eos
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, &_decay))
             {
                 uses(_decay);
+                auto _register_kinematics = [this](const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type... args)
+                {
+                    std::array<const KinematicVariable, sizeof...(Args_)> kinematics_array = { args... };
+                    for (const auto & kinematic_variable : kinematics_array)
+                    {
+                        this->uses_kinematic(kinematic_variable.id());
+                    }
+                };
+                std::apply(_register_kinematics, _argument_tuple);
                 uses(Decay_::references);
             }
 
