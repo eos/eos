@@ -25,7 +25,7 @@ libeosutils_la_SOURCES = \
 	expression-observable.cc expression-observable.hh \
 	expression-parser.cc expression-parser.hh expression-parser-impl.hh \
 	expression-printer.hh \
-	expression-used-parameter-reader.hh \
+	expression-used-kinematics-reader.hh expression-used-parameter-reader.hh \
 	expression-visitors.cc \
 	gsl-hacks.cc \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
