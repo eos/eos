@@ -78,6 +78,15 @@ namespace eos
                     throw NoSuchFormFactorError(process.str(), options["form-factors"_ok]);
 
                 uses(*_form_factors);
+                auto _register_kinematics = [this](const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type... args)
+                {
+                    std::array<const KinematicVariable, sizeof...(Args_)> kinematics_array = { args... };
+                    for (const auto & kinematic_variable : kinematics_array)
+                    {
+                        this->uses_kinematic(kinematic_variable.id());
+                    }
+                };
+                std::apply(_register_kinematics, _argument_tuple);
             }
 
             virtual const QualifiedName & name() const
