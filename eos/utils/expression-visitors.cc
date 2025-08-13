@@ -25,6 +25,7 @@
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-printer.hh>
+#include <eos/utils/expression-used-kinematics-reader.hh>
 #include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/join.hh>
@@ -793,6 +794,73 @@ namespace eos::exp
         for (const auto & parameter_id : parameter_user)
         {
             this->parameter_ids.insert(parameter_id);
+        }
+    }
+
+    /*
+     * ExpressionUsedKinematicsReader
+     */
+    void
+    ExpressionUsedKinematicsReader::operator() (const BinaryExpression & e)
+    {
+        std::visit(*this, *e.lhs);
+        std::visit(*this, *e.rhs);
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const FunctionExpression & e)
+    {
+        std::visit(*this, *e.arg);
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const ConstantExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const ObservableNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const ObservableExpression & e)
+    {
+        const KinematicUser & kinematic_user = static_cast<const KinematicUser &>(*e.observable);
+        for (auto k = kinematic_user.begin_kinematics(), k_end = kinematic_user.end_kinematics(); k != k_end; ++k)
+        {
+            this->kinematic_variable_ids.insert(*k);
+        }
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const ParameterNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const ParameterExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const KinematicVariableNameExpression &)
+    {
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const KinematicVariableExpression & e)
+    {
+        kinematic_variable_ids.insert(e.kinematic_variable.id());
+    }
+
+    void
+    ExpressionUsedKinematicsReader::operator() (const CachedObservableExpression & e)
+    {
+        const KinematicUser & kinematic_user = static_cast<const KinematicUser &>(*e.cache.observable(e.id));
+        for (auto k = kinematic_user.begin_kinematics(), k_end = kinematic_user.end_kinematics(); k != k_end; ++k)
+        {
+            this->kinematic_variable_ids.insert(*k);
         }
     }
 } // namespace eos::exp
