@@ -35,6 +35,7 @@ namespace eos
         for (auto kvn : kinematic_variable_names)
         {
             kv.emplace_back(std::move(k[kvn]));
+            this->uses_kinematic(kv.back().id());
         }
     }
 
