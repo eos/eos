@@ -24,6 +24,7 @@
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser.hh>
+#include <eos/utils/expression-used-kinematics-reader.hh>
 #include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/log.hh>
 
@@ -56,6 +57,14 @@ namespace eos
         {
             this->uses(id);
         }
+
+        exp::ExpressionUsedKinematicsReader used_kinematic_reader;
+        std::visit(used_kinematic_reader, *_expression);
+
+        for (KinematicVariable::Id id : used_kinematic_reader.kinematic_variable_ids)
+        {
+            this->uses_kinematic(id);
+        }
     }
 
     ExpressionObservable::ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options,
@@ -79,6 +88,14 @@ namespace eos
         for (Parameter::Id id : reader.parameter_ids)
         {
             this->uses(id);
+        }
+
+        exp::ExpressionUsedKinematicsReader used_kinematic_reader;
+        std::visit(used_kinematic_reader, *_expression);
+
+        for (KinematicVariable::Id id : used_kinematic_reader.kinematic_variable_ids)
+        {
+            this->uses_kinematic(id);
         }
     }
 
