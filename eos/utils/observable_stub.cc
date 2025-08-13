@@ -41,12 +41,14 @@ namespace eos
                 name(n),
                 parameter(p[n.str()], u)
             {
+                // does not need to register the used kinematic variables, since parameters do not depend on kinematic variables
             }
     };
 
     ObservableStub::ObservableStub(const Parameters & parameters, const QualifiedName & name, const Kinematics & kinematics) :
         PrivateImplementationPattern<ObservableStub>(new Implementation<ObservableStub>(parameters, name, kinematics, *this))
     {
+        uses(_imp->parameter.id());
     }
 
     ObservableStub::~ObservableStub() {}
