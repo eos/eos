@@ -56,6 +56,8 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
+            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type...> _argument_tuple;
+
         public:
             ConcreteCachedObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
                                      const std::shared_ptr<Decay_> & decay, const typename Decay_::IntermediateResult * intermediate_result,
@@ -70,9 +72,19 @@ namespace eos
                 _intermediate_result(intermediate_result),
                 _prepare_fn(prepare_fn),
                 _evaluate_fn(evaluate_fn),
-                _kinematics_names(kinematics_names)
+                _kinematics_names(kinematics_names),
+                _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _decay.get()))
             {
                 uses(*_decay);
+                auto _register_kinematics = [this](const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type... args)
+                {
+                    std::array<const KinematicVariable, sizeof...(Args_)> kinematics_array = { args... };
+                    for (const auto & kinematic_variable : kinematics_array)
+                    {
+                        this->uses_kinematic(kinematic_variable.id());
+                    }
+                };
+                std::apply(_register_kinematics, _argument_tuple);
                 uses(Decay_::references);
             }
 
