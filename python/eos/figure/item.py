@@ -434,6 +434,87 @@ class UncertaintyBandItem(Item):
 
 
 @dataclass(kw_only=True)
+class BinnedUncertaintyItem(Item):
+    """Plots one or more uncertainty band integrated over one kinematic variable.
+
+    This routine expects the uncertainty propagation to have produced a data file.
+
+    :param datafile: The path to an existing data file of type :class:`eos.data.Prediction` that contains the uncertainty estimates.
+    :type datafile: str
+    :param range: A tuple of two float values (min, max) representing the range of the kinematic variable to be plotted on the x-axis.
+    :type range: tuple[float, float] | None
+    :param rescale_by_width: If set to ``True``, the uncertainty band will be rescaled by the inverse of the width of the bin. Defaults to ``False``.
+    :type rescale_by_width: bool
+    :param variable: The name of the kinematic variable that is plotted on the x-axis.
+    :type variable: str
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+        xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+        yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+        legend: { position: 'upper center' }
+        items:
+            - { type: 'uncertainty-binned', label: '$\\ell=\\mu$',
+                variable: 'q2', range: [0.00, 11.63],
+                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu-binned'
+            }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    datafile:str
+    range:tuple[float, float]|None=field(default=None)
+    rescale_by_width:bool=field(default=False)
+    variable:str
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the item for drawing."""
+        context = AnalysisFileContext() if context is None else context
+
+        self._datafile = eos.data.Prediction(context.data_path(self.datafile))
+
+        try:
+            self._xvalues = _np.array([(p['kinematics'][self.variable + '_min'], p['kinematics'][self.variable + '_max']) for p in self._datafile.varied_parameters])
+        except KeyError as e:
+            raise RuntimeError(f'both \'{self.variable}_min\' and \'{self.variable}_max\' must be present in the kinematics of each prediction in the data file') from e
+
+        if self.range is not None:
+            xmin, xmax   = self.range
+            self._xvalues = _np.ma.masked_outside(self._xvalues, xmin, xmax)
+
+    def draw(self, ax):
+        """Draw the uncertainty band."""
+
+        ovalues_lower   = []
+        ovalues_central = []
+        ovalues_higher  = []
+        for i in range(len(self._xvalues)):
+            lower, central, higher = _np.quantile(self._datafile.samples[:, i], [0.15865, 0.5, 0.84135], weights=self._datafile.weights, method='inverted_cdf')
+            ovalues_lower.append(lower)
+            ovalues_central.append(central)
+            ovalues_higher.append(higher)
+
+        label = self.label
+
+        for [xmin, xmax], olo, ocentral, ohi in zip(self._xvalues, ovalues_lower, ovalues_central, ovalues_higher):
+            width = (xmax - xmin) if self.rescale_by_width else 1
+            olo      /= width
+            ocentral /= width
+            ohi      /= width
+            eos.debug(f"{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}")
+            ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=label)
+            ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha)
+            ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha)
+            ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha)
+            label = None
+
+
+@dataclass(kw_only=True)
 class OneDimensionalHistogramItem(Item):
     """Plots a one-dimensional histogram.
 
@@ -1356,6 +1437,7 @@ class ItemFactory:
     registry = {
         'observable': ObservableItem,
         'uncertainty': UncertaintyBandItem,
+        'uncertainty-binned': BinnedUncertaintyItem,
         'constraint': ConstraintItem,
         'histogram1D': OneDimensionalHistogramItem,
         'histogram2D': TwoDimensionalHistogramItem,
