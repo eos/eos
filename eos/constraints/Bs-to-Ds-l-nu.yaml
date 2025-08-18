@@ -1,0 +1,98 @@
+# vim: set fdm=marker :
+
+########
+# LHCb #
+########
+#
+# 2020
+#
+# {{{
+B_s^0->D_s^+mu^-nu::KinematicalDistribution[kperp]@LHCb:2020C:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+        - B_s->D_slnu::BR(kperp_min,kperp_max)
+    kinematics:
+        - {kperp_min: 0.200, kperp_max: 0.315}
+        - {kperp_min: 0.315, kperp_max: 0.430}
+        - {kperp_min: 0.430, kperp_max: 0.545}
+        - {kperp_min: 0.545, kperp_max: 0.660}
+        - {kperp_min: 0.660, kperp_max: 0.775}
+        - {kperp_min: 0.775, kperp_max: 0.890}
+        - {kperp_min: 0.890, kperp_max: 1.005}
+        - {kperp_min: 1.005, kperp_max: 1.120}
+        - {kperp_min: 1.120, kperp_max: 1.235}
+        - {kperp_min: 1.235, kperp_max: 1.350}
+        - {kperp_min: 1.350, kperp_max: 1.465}
+        - {kperp_min: 1.465, kperp_max: 1.580}
+        - {kperp_min: 1.580, kperp_max: 1.695}
+        - {kperp_min: 1.695, kperp_max: 1.810}
+        - {kperp_min: 1.810, kperp_max: 1.925}
+        - {kperp_min: 1.925, kperp_max: 2.040}
+        - {kperp_min: 2.040, kperp_max: 2.155}
+        - {kperp_min: 2.155, kperp_max: 2.270}
+        - {kperp_min: 2.270, kperp_max: 2.385}
+        - {kperp_min: 2.385, kperp_max: 2.500}
+    options:
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+        - { }
+    means:
+        [0.0000433224,0.000173645,0.000277739,0.000421546,0.000496743,0.000693898,0.000982078,0.000891119,0.00120714,0.00144009,0.00155545,0.00178657,0.00211459,0.0021568,0.00223807,0.00229734,0.00211118,0.00164113,0.000725352,0.000182421]
+    covariance: # 20x20 diagonal matrix, squared of BR uncertainties
+        - [7.08929e-10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 2.0136e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 3.82387e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 7.13871e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 9.61475e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 1.63752e-8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 2.95227e-8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 2.56658e-8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 4.32423e-8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 5.94894e-8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.86133e-8, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8.86213e-8, 0, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.21703e-7, 0, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.26016e-7, 0, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.34699e-7, 0, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.41066e-7, 0, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.19044e-7, 0, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7.23945e-8, 0, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.46465e-8, 0]
+        - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.14172e-9]
+# }}}
