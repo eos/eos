@@ -22,6 +22,7 @@ CONSTRAINTS_FILES = \
 	B-to-P-P-form-factors.yaml \
 	B-to-V-form-factors.yaml \
 	Bs-to-Ds-gamma-l-nu.yaml \
+	Bs-to-Ds-l-nu.yaml \
 	Bs-to-phi-charmonium.yaml \
 	Bs-to-phi-ll.yaml \
 	D-to-K-l-nu.yaml \
