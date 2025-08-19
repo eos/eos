@@ -1,0 +1,36 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'EOS: A Software for Flavor Physics Phenomenology'
+message: >-
+  If you use EOS in your publication, we ask you to cite the following publication(s):
+type: software
+authors:
+  - name: The EOS Authors Collaboration
+  - given-names: Danny
+    family-names: van Dyk
+  - name: and others
+identifiers:
+  - type: doi
+    value: 10.1140/epjc/s10052-022-10177-4
+repository-code: 'https://github.com/eos/eos'
+url: 'https://eoshep.org'
+abstract: >-
+  EOS is an open-source software for a variety of
+  computational tasks in flavor physics. Its use cases
+  include theory predictions within and beyond the Standard
+  Model of particle physics, Bayesian inference of theory
+  parameters from experimental and theoretical likelihoods,
+  and simulation of pseudo events for a number of signal
+  processes. EOS ensures high-performance computations
+  through a C++ back-end and ease of usability through a
+  Python front-end. To achieve this flexibility, EOS enables
+  the user to select from a variety of implementations of
+  the relevant decay processes and hadronic matrix elements
+  at run time. In this article, we describe the general
+  structure of the software framework and provide basic
+  examples. Further details and in-depth interactive
+  examples are provided as part of the EOS online
+  documentation.
+license: GPL-2.0-only
