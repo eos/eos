@@ -414,5 +414,33 @@ class ExpressionParserTest : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e), 1.0, 1e-10);
                 }
             }
+
+            // testing that a kinematic variable can be fixed twice via aliasing
+            {
+                // test::obs1 is a test observable that requires two kinematic specifications, q2_min and q2_max
+                // it returns p[mass::c] * multiplier * (q2_max - q2_min)
+                ExpressionTest test("<<test::obs1>>[q2_min=>first_q2_min,first_q2_min=1.0] + <<test::obs1>>[q2_min=>second_q2_min,second_q2_min=0.0]");
+
+                Parameters p = Parameters::Defaults();
+                p.set("mass::c", 1.0);
+                Kinematics k = Kinematics({
+                    { "q2_max", 3 }
+                });
+
+                ExpressionMaker maker(p, k, Options());
+                Expression      e;
+                TEST_CHECK_NO_THROW(e = std::visit(maker, *test.e));
+
+                std::stringstream out;
+                ExpressionPrinter printer(out);
+                std::visit(printer, e);
+                TEST_CHECK_EQUAL_STR("BinaryExpression(ObservableExpression(test::obs1, aliases=[q2_min=>first_q2_min], values=[first_q2_min=1])"
+                                     " + "
+                                     "ObservableExpression(test::obs1, aliases=[q2_min=>second_q2_min], values=[second_q2_min=0]))",
+                                     out.str());
+
+                ExpressionEvaluator evaluator;
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e), 5.0, 1e-10);
+            }
         }
 } expression_parser_test;

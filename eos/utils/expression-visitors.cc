@@ -546,7 +546,6 @@ namespace eos::exp
             for (const auto & value : kinematics_values)
             {
                 kinematic_set.erase(value.first);
-                alias_set.insert(value.first);
             }
             for (const auto & alias : kinematics_aliases)
             {
