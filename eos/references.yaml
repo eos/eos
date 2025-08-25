@@ -153,6 +153,13 @@ BBL:2006A:
     id: oai:arXiv.org:hep-ph/0603063
   inspire-id: Ball:2006wn
   title: Higher-twist distribution amplitudes of the K meson in QCD
+BBL:2007A:
+  authors: Ball, Patricia and Braun, V.M. and Lenz, A.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0707.1201
+  inspire-id: Ball:2007zt
+  title: Twist-4 distribution amplitudes of the K* and phi mesons in QCD
 BBMU:2003A:
   authors: Benson, D and Bigi, I.I. and Mannel, T. and Uraltsev, N.
   eprint:
