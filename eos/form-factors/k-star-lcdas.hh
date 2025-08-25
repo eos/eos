@@ -114,6 +114,10 @@ namespace eos
             double psi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
             double phi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
 
+            /* Twist 5 chiral odd two particle LCDAs */
+            double psi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double phi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
@@ -203,6 +207,10 @@ namespace eos
             /* Twist 4 chiral odd two particle LCDAs */
             double psi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
             double phi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+
+            /* Twist 5 chiral odd two particle LCDAs */
+            double psi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double phi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
