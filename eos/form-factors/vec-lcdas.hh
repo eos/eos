@@ -103,6 +103,10 @@ namespace eos
             virtual double psi4para(const double & u, const double & mu) const = 0;
             virtual double phi4para(const double & u, const double & mu) const = 0;
 
+            /* Twist 4 chiral odd two particle LCDAs */
+            virtual double psi4perp(const double & u, const double & mu) const = 0;
+            virtual double phi4perp(const double & u, const double & mu) const = 0;
+
             static std::shared_ptr<VectorLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
 }
