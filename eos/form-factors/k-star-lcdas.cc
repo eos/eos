@@ -577,6 +577,87 @@ namespace eos
                 theta2perp(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
                 (u1 - u2) * (psi0perp(mu) + u3 * psi1perp(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * psi2perp(mu)));
         }
+
+        // inline functions for chriral even two-particle twist 4 LCDAs
+        inline double psi4paraT4(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_2_1o2(2, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_3_1o2(3, 1.0 / 2.0);
+            const double x = 2.0 * u - 1.0;
+            const double c2 = gp_2_1o2.evaluate(x);
+            const double c3 = gp_3_1o2.evaluate(x);
+
+            return -20.0 / 3.0 * zeta4para(mu) * c2 + (10.0 * theta1para(mu) - 5.0 * theta2para(mu)) * c3;
+        }
+        inline double psi4paraWW(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_1_1o2(1, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_2_1o2(2, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_3_1o2(3, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_4_1o2(4, 1.0 / 2.0);
+            const double x   = 2.0 * u - 1.0;
+            const double c1  = gp_1_1o2.evaluate(x);
+            const double c2  = gp_2_1o2.evaluate(x);
+            const double c3  = gp_3_1o2.evaluate(x);
+            const double c4  = gp_4_1o2.evaluate(x);
+            const double ms  = model->m_s_msbar(mu);
+            const double mud = model->m_ud_msbar(mu) / 2.0;
+
+            return 1.0 +
+                (12.0 * kappa4para(mu) + 9.0 / 5.0 * a1para(mu)) * c1 +
+                (-1.0 - 2.0 / 7.0 * a2para(mu) + 40.0 / 3.0 * zeta3para(mu)) * c2 +
+                (-9.0 / 5.0 * a1para(mu) - 20.0 / 3.0 * kappa3para(mu) - 16.0 / 3.0 * kappa4para(mu)) * c3 +
+                (-27.0 / 28.0 * a2para(mu) + 5.0 / 4.0 * zeta3para(mu) - 15.0 / 8.0 * omega3para(mu) - 15.0 / 16.0 * omega3paratilde(mu)) * c4 +
+                6.0 * (ms - mud) / M_V * fperp(mu) / fpara * (x + a1perp(mu) / 2.0 * (3.0 * x * x - 1.0) +
+                a2perp(mu) / 2.0 * x * (5.0 * x * x - 3.0) + 5.0 / 2.0 * kappa3perp(mu) * (3.0 * x * x - 1.0) +
+                5.0 / 6.0 * omega3perp(mu) * x * (5.0 * x * x - 3.0) - 1.0 / 16.0 * lambda3perp(mu) * (35.0 * power_of<4>(x) - 30.0 * x * x + 3.0));
+        }
+        inline double phi4paraT4(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_1_5o2(1, 5.0 / 2.0);
+            const double x   = 2.0 * u - 1.0;
+            const double c1  = gp_1_5o2.evaluate(x);
+
+            return 30.0 * u * u * (1.0 - u) * (1.0 - u) * (20.0 / 9.0 * zeta4para(mu) + (-8.0 / 15.0 * theta1para(mu) + 2.0 / 3.0 * theta2para(mu)) * c1) -
+                84.0 * omega4paratilde(mu) * (1.0 / 8.0 * u * (1.0 - u) * (21.0 - 13.0 * x * x) +
+                power_of<3>(u) * (10.0 - 15.0 * u + 6.0 * u * u) * log(u) +
+                power_of<3>(1.0 - u) * (10.0 - 15.0 * (1.0 - u) + 6.0 * power_of<2>(1.0 - u)) * log(1.0 - u)) +
+                80.0 * psi2para(mu) * (power_of<3>(u) * (2.0 - u) * log(u) - power_of<3>(1.0 - u) * (2.0 - (1.0 - u)) * log(1.0 - u) + u * (1.0 - u) * (-1.0 + u / 2.0 + 9.0 / 2.0 * u * u - 3.0 * u * u * u));
+        }
+        inline double phi4paraWW(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_1_3o2(1, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_2_3o2(2, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_3_3o2(3, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_4_3o2(4, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_1_5o2(1, 5.0 / 2.0);
+            static const GegenbauerPolynomial gp_2_5o2(2, 5.0 / 2.0);
+            const double x  = 2.0 * u - 1.0;
+            const double c1_3 = gp_1_3o2.evaluate(x);
+            const double c2_3 = gp_2_3o2.evaluate(x);
+            const double c3_3 = gp_3_3o2.evaluate(x);
+            const double c4_3 = gp_4_3o2.evaluate(x);
+            const double c1_5 = gp_1_5o2.evaluate(x);
+            const double c2_5 = gp_2_5o2.evaluate(x);
+            const double ms  = model->m_s_msbar(mu);
+            const double mud = model->m_ud_msbar(mu) / 2.0;
+
+            return 30.0 * u * u * (1.0 - u) * (1.0 - u) * (4.0 / 5.0 * (1.0 + 1.0 / 21.0 * a2para(mu) + 10.0 / 9.0 * zeta3para(mu)) +
+                (17.0 / 50.0 * a1para(mu) + 2.0 / 5.0 * lambda3paratilde(mu) - 1.0 / 5.0 * lambda3para(mu)) * c1_5 +
+                1.0 / 10.0 * (9.0 / 7.0 * a2para(mu) + 1.0 / 9.0 * zeta3para(mu) + 7.0 / 6.0 * omega3para(mu) - 3.0 / 4.0 * omega3paratilde(mu)) * c2_5) +
+                2.0 * (-2.0 * a2para(mu) - 14.0 / 3.0 * zeta3para(mu) + 3.0 * omega3para(mu)) * (1.0 / 8.0 * u * (1.0 - u) * (21.0 - 13.0 * x * x) +
+                power_of<3>(u) * (10.0 - 15.0 * u + 6.0 * u * u) * log(u) + power_of<3>(1.0 - u) * (10.0 - 15.0 * (1.0 - u) + 6.0 * power_of<2>(1.0 - u)) * log(1.0 - u)) +
+                4.0 * (a1para(mu) - 40.0 / 3.0 * kappa3para(mu)) * (power_of<3>(u) * (2.0 - u) * log(u) - power_of<3>(1.0 - u) * (2.0 - (1.0 - u)) * log(1.0 - u) - u * (1.0 - u) * (1.0 - 19.0 / 4.0 * u + 33.0 / 4.0 * u * u - 11.0 / 2.0 * u * u * u)) +
+                (ms + mud) / M_V * fperp(mu) / fpara * 6.0 * u * (1.0 - u) * (2.0 * (3.0 + 16.0 * a2perp(mu)) + 10.0 / 3.0 * (kappa3perp(mu) - a1perp(mu)) * c1_3 +
+                (5.0 / 9.0 * omega3perp(mu) - a2perp(mu)) * c2_3 - 1.0 / 10.0 * lambda3perp(mu) * c3_3) +
+                24.0 * (ms + mud) / M_V * fperp(mu) / fpara * ((1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * u * u * log(u) +
+                (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * (1.0 - u) * (1.0 - u) * log(1.0 - u)) +
+                (ms - mud) / M_V * fperp(mu) / fpara * 6.0 * u * (1.0 - u) * (-(10.0 * kappa3perp(mu) + 82.0 / 5.0 * a1perp(mu)) +
+                20.0 * (10.0 / 189.0 + a2perp(mu) / 3.0 - 1.0 / 21.0 * omega3perp(mu)) * c1_3 + (7.0 / 54.0 * lambda3perp(mu) + 2.0 / 5.0 * a1perp(mu)) * c2_3 +
+                (1.0 / 5.0 * a2perp(mu) - 2.0 / 315.0 - 1.0 / 21.0 * omega3perp(mu)) * c3_3 + 2.0 / 135.0 * lambda3perp(mu) * c4_3) +
+                (ms - mud) / M_V * fperp(mu) / fpara * (4.0 / 3.0 * power_of<2>(1.0 - u) * (5.0 * u * u - 23.0 - 54.0 * a1perp(mu) - 108.0 * a2perp(mu)) * log(1.0 - u) -
+                4.0 / 3.0 * u * u * (5.0 * (1.0 - u) * (1.0 - u) - 23.0 + 54.0 * a1perp(mu) - 108.0 * a2perp(mu)) * log(u));
+        }
     };
 
     AntiKStarLCDAs::AntiKStarLCDAs(const Parameters & p, const Options & o) :
@@ -916,6 +997,17 @@ namespace eos
         return 840.0 * u1 * u2 * u3 * u3 * _imp->xi0perp(mu);
     }
 
+    double
+    AntiKStarLCDAs::psi4para(const double & u, const double & mu) const
+    {
+        return _imp->psi4paraT4(u, mu) + _imp->psi4paraWW(u, mu);
+    }
+
+    double
+    AntiKStarLCDAs::phi4para(const double & u, const double & mu) const
+    {
+        return _imp->phi4paraT4(u, mu) + _imp->phi4paraWW(u, mu);
+    }
 
     Diagnostics
     AntiKStarLCDAs::diagnostics() const
@@ -1484,6 +1576,87 @@ namespace eos
                 theta2perp(mu) * (u3 * (1.0 - u3) - 3.0 / 2.0 * (u1 * u1 + u2 * u2)) -
                 (u1 - u2) * (psi0perp(mu) + u3 * psi1perp(mu) + 1.0 / 2.0 * (5.0 * u3 - 3.0) * psi2perp(mu)));
         }
+
+        // inline functions for chriral even two-particle twist 4 LCDAs (exchange m_s <-> m_ud with respect to AntiKStar case)
+        inline double psi4paraT4(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_2_1o2(2, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_3_1o2(3, 1.0 / 2.0);
+            const double x = 2.0 * u - 1.0;
+            const double c2 = gp_2_1o2.evaluate(x);
+            const double c3 = gp_3_1o2.evaluate(x);
+
+            return -20.0 / 3.0 * zeta4para(mu) * c2 + (10.0 * theta1para(mu) - 5.0 * theta2para(mu)) * c3;
+        }
+        inline double psi4paraWW(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_1_1o2(1, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_2_1o2(2, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_3_1o2(3, 1.0 / 2.0);
+            static const GegenbauerPolynomial gp_4_1o2(4, 1.0 / 2.0);
+            const double x   = 2.0 * u - 1.0;
+            const double c1  = gp_1_1o2.evaluate(x);
+            const double c2  = gp_2_1o2.evaluate(x);
+            const double c3  = gp_3_1o2.evaluate(x);
+            const double c4  = gp_4_1o2.evaluate(x);
+            const double ms  = model->m_s_msbar(mu);
+            const double mud = model->m_ud_msbar(mu) / 2.0;
+
+            return 1.0 +
+                (12.0 * kappa4para(mu) + 9.0 / 5.0 * a1para(mu)) * c1 +
+                (-1.0 - 2.0 / 7.0 * a2para(mu) + 40.0 / 3.0 * zeta3para(mu)) * c2 +
+                (-9.0 / 5.0 * a1para(mu) - 20.0 / 3.0 * kappa3para(mu) - 16.0 / 3.0 * kappa4para(mu)) * c3 +
+                (-27.0 / 28.0 * a2para(mu) + 5.0 / 4.0 * zeta3para(mu) - 15.0 / 8.0 * omega3para(mu) - 15.0 / 16.0 * omega3paratilde(mu)) * c4 +
+                6.0 * (-1.0) * (ms - mud) / M_V * fperp(mu) / fpara * (x + a1perp(mu) / 2.0 * (3.0 * x * x - 1.0) +
+                a2perp(mu) / 2.0 * x * (5.0 * x * x - 3.0) + 5.0 / 2.0 * kappa3perp(mu) * (3.0 * x * x - 1.0) +
+                5.0 / 6.0 * omega3perp(mu) * x * (5.0 * x * x - 3.0) - 1.0 / 16.0 * lambda3perp(mu) * (35.0 * power_of<4>(x) - 30.0 * x * x + 3.0));
+        }
+        inline double phi4paraT4(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_1_5o2(1, 5.0 / 2.0);
+            const double x   = 2.0 * u - 1.0;
+            const double c1  = gp_1_5o2.evaluate(x);
+
+            return 30.0 * u * u * (1.0 - u) * (1.0 - u) * (20.0 / 9.0 * zeta4para(mu) + (-8.0 / 15.0 * theta1para(mu) + 2.0 / 3.0 * theta2para(mu)) * c1) -
+                84.0 * omega4paratilde(mu) * (1.0 / 8.0 * u * (1.0 - u) * (21.0 - 13.0 * x * x) +
+                power_of<3>(u) * (10.0 - 15.0 * u + 6.0 * u * u) * log(u) +
+                power_of<3>(1.0 - u) * (10.0 - 15.0 * (1.0 - u) + 6.0 * power_of<2>(1.0 - u)) * log(1.0 - u)) +
+                80.0 * psi2para(mu) * (power_of<3>(u) * (2.0 - u) * log(u) - power_of<3>(1.0 - u) * (2.0 - (1.0 - u)) * log(1.0 - u) + u * (1.0 - u) * (-1.0 + u / 2.0 + 9.0 / 2.0 * u * u - 3.0 * u * u * u));
+        }
+        inline double phi4paraWW(const double & u, const double & mu) const
+        {
+            static const GegenbauerPolynomial gp_1_3o2(1, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_2_3o2(2, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_3_3o2(3, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_4_3o2(4, 3.0 / 2.0);
+            static const GegenbauerPolynomial gp_1_5o2(1, 5.0 / 2.0);
+            static const GegenbauerPolynomial gp_2_5o2(2, 5.0 / 2.0);
+            const double x  = 2.0 * u - 1.0;
+            const double c1_3 = gp_1_3o2.evaluate(x);
+            const double c2_3 = gp_2_3o2.evaluate(x);
+            const double c3_3 = gp_3_3o2.evaluate(x);
+            const double c4_3 = gp_4_3o2.evaluate(x);
+            const double c1_5 = gp_1_5o2.evaluate(x);
+            const double c2_5 = gp_2_5o2.evaluate(x);
+            const double ms  = model->m_s_msbar(mu);
+            const double mud = model->m_ud_msbar(mu) / 2.0;
+
+            return 30.0 * u * u * (1.0 - u) * (1.0 - u) * (4.0 / 5.0 * (1.0 + 1.0 / 21.0 * a2para(mu) + 10.0 / 9.0 * zeta3para(mu)) +
+                (17.0 / 50.0 * a1para(mu) + 2.0 / 5.0 * lambda3paratilde(mu) - 1.0 / 5.0 * lambda3para(mu)) * c1_5 +
+                1.0 / 10.0 * (9.0 / 7.0 * a2para(mu) + 1.0 / 9.0 * zeta3para(mu) + 7.0 / 6.0 * omega3para(mu) - 3.0 / 4.0 * omega3paratilde(mu)) * c2_5) +
+                2.0 * (-2.0 * a2para(mu) - 14.0 / 3.0 * zeta3para(mu) + 3.0 * omega3para(mu)) * (1.0 / 8.0 * u * (1.0 - u) * (21.0 - 13.0 * x * x) +
+                power_of<3>(u) * (10.0 - 15.0 * u + 6.0 * u * u) * log(u) + power_of<3>(1.0 - u) * (10.0 - 15.0 * (1.0 - u) + 6.0 * power_of<2>(1.0 - u)) * log(1.0 - u)) +
+                4.0 * (a1para(mu) - 40.0 / 3.0 * kappa3para(mu)) * (power_of<3>(u) * (2.0 - u) * log(u) - power_of<3>(1.0 - u) * (2.0 - (1.0 - u)) * log(1.0 - u) - u * (1.0 - u) * (1.0 - 19.0 / 4.0 * u + 33.0 / 4.0 * u * u - 11.0 / 2.0 * u * u * u)) +
+                (ms + mud) / M_V * fperp(mu) / fpara * 6.0 * u * (1.0 - u) * (2.0 * (3.0 + 16.0 * a2perp(mu)) + 10.0 / 3.0 * (kappa3perp(mu) - a1perp(mu)) * c1_3 +
+                (5.0 / 9.0 * omega3perp(mu) - a2perp(mu)) * c2_3 - 1.0 / 10.0 * lambda3perp(mu) * c3_3) +
+                24.0 * (ms + mud) / M_V * fperp(mu) / fpara * ((1.0 - 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * u * u * log(u) +
+                (1.0 + 3.0 * a1perp(mu) + 6.0 * a2perp(mu)) * (1.0 - u) * (1.0 - u) * log(1.0 - u)) +
+                (-1.0) * (ms - mud) / M_V * fperp(mu) / fpara * 6.0 * u * (1.0 - u) * (-(10.0 * kappa3perp(mu) + 82.0 / 5.0 * a1perp(mu)) +
+                20.0 * (10.0 / 189.0 + a2perp(mu) / 3.0 - 1.0 / 21.0 * omega3perp(mu)) * c1_3 + (7.0 / 54.0 * lambda3perp(mu) + 2.0 / 5.0 * a1perp(mu)) * c2_3 +
+                (1.0 / 5.0 * a2perp(mu) - 2.0 / 315.0 - 1.0 / 21.0 * omega3perp(mu)) * c3_3 + 2.0 / 135.0 * lambda3perp(mu) * c4_3) +
+                (-1.0) * (ms - mud) / M_V * fperp(mu) / fpara * (4.0 / 3.0 * power_of<2>(1.0 - u) * (5.0 * u * u - 23.0 - 54.0 * a1perp(mu) - 108.0 * a2perp(mu)) * log(1.0 - u) -
+                4.0 / 3.0 * u * u * (5.0 * (1.0 - u) * (1.0 - u) - 23.0 + 54.0 * a1perp(mu) - 108.0 * a2perp(mu)) * log(u));
+        }
     };
 
     KStarLCDAs::KStarLCDAs(const Parameters & p, const Options & o) :
@@ -1821,6 +1994,18 @@ namespace eos
     KStarLCDAs::Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const
     {
         return 840.0 * u1 * u2 * u3 * u3 * _imp->xi0perp(mu);
+    }
+
+    double
+    KStarLCDAs::psi4para(const double & u, const double & mu) const
+    {
+        return _imp->psi4paraT4(u, mu) + _imp->psi4paraWW(u, mu);
+    }
+
+    double
+    KStarLCDAs::phi4para(const double & u, const double & mu) const
+    {
+        return _imp->phi4paraT4(u, mu) + _imp->phi4paraWW(u, mu);
     }
 
     Diagnostics
