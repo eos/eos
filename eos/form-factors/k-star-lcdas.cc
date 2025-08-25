@@ -826,7 +826,7 @@ namespace eos
     }
 
     double
-    AntiKStarLCDAs::phipara(const double & u, const double & mu) const
+    AntiKStarLCDAs::phi2para(const double & u, const double & mu) const
     {
          // Gegenbauer polynomials C_n^(3/2)
         static const GegenbauerPolynomial gp_1(1, 3.0 / 2.0);
@@ -844,7 +844,7 @@ namespace eos
     }
 
     double
-    AntiKStarLCDAs::phiperp(const double & u, const double & mu) const
+    AntiKStarLCDAs::phi2perp(const double & u, const double & mu) const
     {
          // Gegenbauer polynomials C_n^(3/2)
         static const GegenbauerPolynomial gp_1(1, 3.0 / 2.0);
@@ -1825,7 +1825,7 @@ namespace eos
     }
 
     double
-    KStarLCDAs::phipara(const double & u, const double & mu) const
+    KStarLCDAs::phi2para(const double & u, const double & mu) const
     {
          // Gegenbauer polynomials C_n^(3/2)
         static const GegenbauerPolynomial gp_1(1, 3.0 / 2.0);
@@ -1843,7 +1843,7 @@ namespace eos
     }
 
     double
-    KStarLCDAs::phiperp(const double & u, const double & mu) const
+    KStarLCDAs::phi2perp(const double & u, const double & mu) const
     {
          // Gegenbauer polynomials C_n^(3/2)
         static const GegenbauerPolynomial gp_1(1, 3.0 / 2.0);

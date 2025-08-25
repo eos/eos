@@ -113,32 +113,32 @@ class AntiKStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.fperp(2.0),  0.14818, eps);
 
                 // phipara LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 1.0), 0.45242, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.3, 1.0), 1.43819, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.5, 1.0), 1.64625, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.7, 1.0), 0.53401, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.9, 1.0), 1.20151, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.1, 1.0), 0.45242, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.3, 1.0), 1.43819, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.5, 1.0), 1.64625, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.7, 1.0), 0.53401, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.9, 1.0), 1.20151, eps);
 
                 // phipara LCDA at various u values for mu = 2.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 2.0), 0.48111, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.3, 2.0), 1.38391, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.5, 2.0), 1.57223, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.7, 2.0), 0.77114, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.9, 2.0), 1.00975, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.1, 2.0), 0.48111, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.3, 2.0), 1.38391, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.5, 2.0), 1.57223, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.7, 2.0), 0.77114, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.9, 2.0), 1.00975, eps);
 
                 // phiperp LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 1.0), 0.55003, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 1.0), 1.20175, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 1.0), 1.80938, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 1.0), 0.61207, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 1.0), 1.13323, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.1, 1.0), 0.55003, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.3, 1.0), 1.20175, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.5, 1.0), 1.80938, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.7, 1.0), 0.61207, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.9, 1.0), 1.13323, eps);
 
                 // phiperp LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 2.0), 0.54481, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 2.0), 1.22256, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 2.0), 1.68102, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 2.0), 0.83252, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 2.0), 0.95797, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.1, 2.0), 0.54481, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.3, 2.0), 1.22256, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.5, 2.0), 1.68102, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.7, 2.0), 0.83252, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.9, 2.0), 0.95797, eps);
             }
 
             /* Twist 3 */
@@ -1042,32 +1042,32 @@ class KStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.fperp(2.0),  0.14818, eps);
 
                 // phipara LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 1.0), 0.45242, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.3, 1.0), 1.43819, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.5, 1.0), 1.64625, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.7, 1.0), 0.53401, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.9, 1.0), 1.20151, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.1, 1.0), 0.45242, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.3, 1.0), 1.43819, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.5, 1.0), 1.64625, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.7, 1.0), 0.53401, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.9, 1.0), 1.20151, eps);
 
                 // phipara LCDA at various u values for mu = 2.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.1, 2.0), 0.48111, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.3, 2.0), 1.38391, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.5, 2.0), 1.57223, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.7, 2.0), 0.77114, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phipara(0.9, 2.0), 1.00975, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.1, 2.0), 0.48111, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.3, 2.0), 1.38391, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.5, 2.0), 1.57223, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.7, 2.0), 0.77114, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2para(0.9, 2.0), 1.00975, eps);
 
                 // phiperp LCDA at various u values for mu = 1.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 1.0), 0.55003, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 1.0), 1.20175, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 1.0), 1.80938, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 1.0), 0.61207, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 1.0), 1.13323, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.1, 1.0), 0.55003, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.3, 1.0), 1.20175, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.5, 1.0), 1.80938, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.7, 1.0), 0.61207, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.9, 1.0), 1.13323, eps);
 
                 // phiperp LCDA at various u values for mu = 2.0
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.1, 2.0), 0.54481, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.3, 2.0), 1.22256, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.5, 2.0), 1.68102, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.7, 2.0), 0.83252, eps);
-                TEST_CHECK_NEARLY_EQUAL(kstar.phiperp(0.9, 2.0), 0.95797, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.1, 2.0), 0.54481, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.3, 2.0), 1.22256, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.5, 2.0), 1.68102, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.7, 2.0), 0.83252, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi2perp(0.9, 2.0), 0.95797, eps);
             }
 
             /* Twist 3 */

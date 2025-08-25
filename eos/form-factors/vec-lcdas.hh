@@ -46,8 +46,8 @@ namespace eos
             virtual double fperp(const double & mu) const = 0;
 
             /* Twist 2 LCDAs */
-            virtual double phipara(const double & u, const double & mu) const = 0;
-            virtual double phiperp(const double & u, const double & mu) const = 0;
+            virtual double phi2para(const double & u, const double & mu) const = 0;
+            virtual double phi2perp(const double & u, const double & mu) const = 0;
 
             /* Twist 3 parameters */
             virtual double kappa3para(const double & mu) const = 0;
