@@ -130,28 +130,28 @@ class RhoLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(rho.fperp(5.0),   0.140873,    eps);
 
                 // scale mu = 1.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.0, 1.0), 0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.3, 1.0), 0.911333, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.5, 1.0), 1.455,    eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.7, 1.0), 0.911333, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(1.0, 1.0), 0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.0, 1.0), 0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.3, 1.0), 0.792225, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.5, 1.0), 1.88813,  eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.7, 1.0), 0.792225, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(1.0, 1.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.0, 1.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.3, 1.0), 0.911333, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.5, 1.0), 1.455,    eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.7, 1.0), 0.911333, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(1.0, 1.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.0, 1.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.3, 1.0), 0.792225, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.5, 1.0), 1.88813,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.7, 1.0), 0.792225, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(1.0, 1.0), 0.0,      eps);
 
                 // scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.0, 2.0), 0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.3, 2.0), 1.02489,  eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.5, 2.0), 1.4244,   eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(0.7, 2.0), 1.02489,  eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phipara(1.0, 2.0), 0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.0, 2.0), 0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.3, 2.0), 0.951784, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.5, 2.0), 1.72422,  eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(0.7, 2.0), 0.951784, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phiperp(1.0, 2.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.0, 2.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.3, 2.0), 1.02489,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.5, 2.0), 1.4244,   eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.7, 2.0), 1.02489,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2para(1.0, 2.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.0, 2.0), 0.0,      eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.3, 2.0), 0.951784, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.5, 2.0), 1.72422,  eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.7, 2.0), 0.951784, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(1.0, 2.0), 0.0,      eps);
             }
 
             /* Twist 3 */
