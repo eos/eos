@@ -469,7 +469,7 @@ namespace eos
     }
 
     double
-    RhoLCDAs::phipara(const double & u, const double & mu) const
+    RhoLCDAs::phi2para(const double & u, const double & mu) const
     {
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_3o2.evaluate(x);
@@ -479,7 +479,7 @@ namespace eos
     }
 
     double
-    RhoLCDAs::phiperp(const double & u, const double & mu) const
+    RhoLCDAs::phi2perp(const double & u, const double & mu) const
     {
         const double x = 2.0 * u - 1.0;
         const double c2 = gp_2_3o2.evaluate(x);

@@ -76,8 +76,8 @@ namespace eos
             double kappa4perp(const double & /*mu*/) const override { return 0.0; }
 
             /* Twist 2 LCDAs */
-            double phipara(const double & u, const double & mu) const override;
-            double phiperp(const double & u, const double & mu) const override;
+            double phi2para(const double & u, const double & mu) const override;
+            double phi2perp(const double & u, const double & mu) const override;
 
             /* Twist 3 two particle LCDAs */
             virtual double phi3para(const double & u, const double & mu) const override;
