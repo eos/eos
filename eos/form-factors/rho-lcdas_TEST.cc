@@ -361,6 +361,32 @@ class RhoLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(4.0),  -0.0483689, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.zeta4perptilde(5.0),  -0.0459306, eps);
 
+                // Two-particle LCDAs at mu = 1 GeV
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.1, 1.0), 0.56698, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.3, 1.0), 1.33566, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.5, 1.0), 1.42544, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.7, 1.0), 1.33566, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.9, 1.0), 0.56698, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.1, 1.0), 0.39426, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.3, 1.0), 1.33561, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.5, 1.0), 1.52617, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.7, 1.0), 1.33561, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.9, 1.0), 0.39426, eps);
+
+                // Two-particle LCDAs at mu = 2 GeV
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.1, 2.0), 0.51937, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.3, 2.0), 1.33651, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.5, 2.0), 1.49017, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.7, 2.0), 1.33651, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi4para(0.9, 2.0), 0.51937, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.1, 2.0), 0.32926, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.3, 2.0), 1.27599, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.5, 2.0), 1.57309, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.7, 2.0), 1.27599, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi4para(0.9, 2.0), 0.32926, eps);
+
                 // Three-particle LCDAs at mu = 1 GeV
                 TEST_CHECK_NEARLY_EQUAL(rho.Psi4para(0.1, 0.1, 0.8, 1.0),  0.0,     eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.Psi4para(0.1, 0.3, 0.6, 1.0), -0.01764, eps);
