@@ -107,8 +107,8 @@ namespace eos
             double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Twist 4 chiral even two particle LCDAs */
-            double psi4para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi4para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double psi4para(const double & u, const double & mu) const override;
+            double phi4para(const double & u, const double & mu) const override;
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
@@ -193,8 +193,8 @@ namespace eos
             double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
 
             /* Twist 4 chiral even two particle LCDAs */
-            double psi4para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi4para(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double psi4para(const double & u, const double & mu) const override;
+            double phi4para(const double & u, const double & mu) const override;
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
