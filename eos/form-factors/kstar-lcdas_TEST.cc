@@ -383,6 +383,32 @@ class AntiKStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(4.0),       0.0122315,  eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.kappa4perp(5.0),       0.0120558,  eps);
 
+                // Two-particle LCDAs at mu = 1 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.1, 1.0), 0.28291, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.3, 1.0), 1.25101, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.5, 1.0), 1.33987, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.7, 1.0), 1.22027, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.9, 1.0), 1.04889, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.1, 1.0), 0.495447, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.3, 1.0), 1.28886,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.5, 1.0), 1.45501,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.7, 1.0), 1.18741,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.9, 1.0), 0.321297, eps);
+
+                // Two-particle LCDAs at mu = 2 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.1, 2.0), 0.36423, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.3, 2.0), 1.24723, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.5, 2.0), 1.40274, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.7, 2.0), 1.26091, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.9, 2.0), 0.86226, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.1, 2.0), 0.394524, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.3, 2.0), 1.23415,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.5, 2.0), 1.50325,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.7, 2.0), 1.15925,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.9, 2.0), 0.277749, eps);
+
                 // Three-particle LCDAs at mu = 1 GeV
                 TEST_CHECK_NEARLY_EQUAL(kstar.Psi4para(0.1, 0.1, 0.8, 1.0), -0.00028224, eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.Psi4para(0.1, 0.3, 0.6, 1.0), -0.00540288, eps);
@@ -1831,6 +1857,32 @@ class KStarLCDAsTest :
                 TEST_CHECK_NEARLY_EQUAL(kstar.Xi4perp(0.7, 0.3, 0.0, 2.0),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.Xi4perp(0.9, 0.0, 0.1, 2.0),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(kstar.Xi4perp(0.9, 0.1, 0.0, 2.0),  0.0,         eps);
+
+                // Two-particle LCDAs at mu = 1 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.1, 1.0), 0.28291, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.3, 1.0), 1.25101, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.5, 1.0), 1.33987, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.7, 1.0), 1.22027, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.9, 1.0), 1.04889, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.1, 1.0), 0.495447, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.3, 1.0), 1.28886,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.5, 1.0), 1.45501,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.7, 1.0), 1.18741,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.9, 1.0), 0.321297, eps);
+
+                // Two-particle LCDAs at mu = 2 GeV
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.1, 2.0), 0.36423, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.3, 2.0), 1.24723, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.5, 2.0), 1.40274, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.7, 2.0), 1.26091, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.psi4para(0.9, 2.0), 0.86226, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.1, 2.0), 0.394524, eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.3, 2.0), 1.23415,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.5, 2.0), 1.50325,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.7, 2.0), 1.15925,  eps);
+                TEST_CHECK_NEARLY_EQUAL(kstar.phi4para(0.9, 2.0), 0.277749, eps);
             }
         }
 } kstar_lcdas_test;
