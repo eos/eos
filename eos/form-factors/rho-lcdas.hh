@@ -114,6 +114,10 @@ namespace eos
             double psi4para(const double & u, const double & mu) const override;
             double phi4para(const double & u, const double & mu) const override;
 
+            /* Twist 4 chiral odd two particle LCDAs */
+            double psi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double phi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
