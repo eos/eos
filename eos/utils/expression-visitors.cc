@@ -105,7 +105,7 @@ namespace eos::exp
     void
     ExpressionPrinter::operator() (ObservableExpression & e)
     {
-        _os << "ObservableExpression(" << e.observable->name() << ")";
+        _os << "ObservableExpression(" << e.observable->name();
         if (! e.kinematics_specification.aliases.empty())
         {
             auto a = e.kinematics_specification.aliases.cbegin();
@@ -546,7 +546,6 @@ namespace eos::exp
             for (const auto & value : kinematics_values)
             {
                 kinematic_set.erase(value.first);
-                alias_set.insert(value.first);
             }
             for (const auto & alias : kinematics_aliases)
             {
