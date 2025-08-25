@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-Contributors to the EOS software pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+Contributors to the EOS software pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible illness or disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
@@ -18,8 +18,9 @@ Examples of behavior that we would like to see include:
 
 Examples of unacceptable behavior include:
 
-- The use of sexualized language or imagery, and sexual attention or advances of any kind
-- Trolling, insulting or derogatory comments, and personal or political attacks
+- Sexual harassment, such as the use of sexualized language or imagery, and sexual attention or advances of any kind
+- Discrimination based on the protected characteristics listed in our pledge
+- Insulting or derogatory comments, and personal or political attacks
 - Public or private harassment
 - Publishing others' private information, such as a physical or email address, without their explicit permission
 - Other conduct which could reasonably be considered inappropriate in a professional setting
@@ -44,7 +45,7 @@ We will follow these Community Impact Guidelines in determining the consequences
 
 ### 1. Correction
 
-**Community Impact**: Use of inappropriate language or other behavior deemed unprofessional or unwelcome in the community.
+**Community Impact**: Behavior deemed unprofessional or unwelcome in the community.
 
 **Consequence**: A private, written warning, providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate. A public apology may be requested.
 
@@ -62,7 +63,7 @@ We will follow these Community Impact Guidelines in determining the consequences
 
 ### 4. Permanent Ban
 
-**Community Impact**: Demonstrating a pattern of violation of community standards, including sustained inappropriate behavior, harassment of an individual, or aggression toward or disparagement of classes of individuals.
+**Community Impact**: Demonstrating a dangerous single violation or a pattern of violation of community standards, including sustained inappropriate behavior, harassment of an individual, or aggression toward or disparagement of classes of individuals.
 
 **Consequence**: A permanent ban from any sort of public interaction within the community.
 
