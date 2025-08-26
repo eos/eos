@@ -450,6 +450,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
 
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
+    eos.inprogress('Beginning sampling...')
     if initial_proposal == 'clusters':
         initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
     elif initial_proposal == 'pmc':
@@ -473,7 +474,8 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
                                sigma_test_stat=sigma_test_stat, samples=samples, weights=weights)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
-
+    eos.completed('...finished!')
+    eos.info(f'Finished sampling with {len(samples)} samples.')
 
 # Predict observables
 @task('predict-observables', '{posterior}/pred-{prediction}')
