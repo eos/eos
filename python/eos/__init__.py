@@ -67,7 +67,7 @@ stderr_handler = logging.StreamHandler(stream=sys.stderr)
 stderr_handler.setLevel(logging.INFO)
 logger.addHandler(stderr_handler)
 
-from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel, _clear_cache
+from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel, _clear_all_caches
 _set_native_log_level(_NativeLogLevel.INFO) # default native log level
 
 _MAP_PYTHON_TO_NATIVE_LOG_LEVEL = {
@@ -130,15 +130,19 @@ def _log_callback(id, level, msg):
 
 _register_log_callback(_log_callback)
 
-def clear_cache():
+def clear_all_caches():
     """
-    Clear the EOS memoization cache.
+    Clear all EOS memoization caches including Observable evaluation caches.
 
-    This function clears all cached computations in EOS, freeing memory
-    that was used to store memoized results. This is automatically called
-    when Analysis objects are destroyed.
+    This function clears both the registered Analysis caches and the separate
+    Observable evaluation memoization caches used for heavy physics calculations
+    like charm loops and bremsstrahlung. This solves the Observable memory leak
+    issue by clearing caches that are not registered with the standard system.
+
+    Use this instead of the old clear_cache() when you want to free all cached memory,
+    including from Observable.make() and obs.evaluate() calls.
     """
-    _clear_cache()
+    _clear_all_caches()
 
 import time as _time
 import os as _os
