@@ -629,12 +629,14 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
     :type sample: str, optional
     """
+    eos.inprogress('Beginning sampling...')
     analysis = analysis_file.analysis(posterior)
     logger = DynestyResultLogger()
     results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]
     weights = _np.exp(posterior_values)
+    eos.completed('...finished!')
     eos.info(f'Finished sampling with {len(samples)} samples and evidence estimate {results.logz[-1]:.2f} +/- {results.logzerr[-1]:.2f}')
     eos.data.DynestyResults.create(os.path.join(base_directory, posterior, 'nested'), analysis.varied_parameters, results)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
