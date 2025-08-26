@@ -32,10 +32,13 @@ namespace eos::exp
             Kinematics      _kinematics;
             Options         _options;
             ParameterUser * _parameter_user;
+            unsigned        _hidden_alias_index;
 
         public:
             ExpressionMaker(const Parameters & parameters, const Kinematics & kinematics, const Options & options, ParameterUser * parameter_user = nullptr);
             ~ExpressionMaker() = default;
+
+            std::string next_hidden_alias();
 
             Expression operator() (const BinaryExpression & e);
 
