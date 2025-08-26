@@ -498,6 +498,7 @@ BOOST_PYTHON_MODULE(_eos)
             .def("Femtometer2", &Unit::Femtometer2)
             .staticmethod("Femtometer2")
             .def("latex", &Unit::latex, return_value_policy<copy_const_reference>())
+            .def("__str__", &Unit::string, return_value_policy<copy_const_reference>())
             .def("__eq__", &Unit::operator==);
 
     // WilsonCoefficients
