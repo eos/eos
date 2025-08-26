@@ -120,12 +120,12 @@ def _check_varied_parameters_match(analysis: eos.Analysis, data):
 def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
               importance_samples:bool=None, seed:int=None, label:str='default', mask_name:str=None):
     '''
-    Finds the mode of the named posterior.
+    Finds the mode of the named posterior using scipy SLSQP method by default.
 
     The optimization process can be initialized either with a random point,
     a provided parameter point, or by extracting the point with the largest posterior
-    from among previously obtained MCMC or importance samples. The optimization can be iterated to
-    increase the accuracy of the result.
+    from among previously obtained MCMC or importance samples. The latter possibility usually gives the better performence.
+    The optimization can also be iterated to increase the accuracy of the result.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
