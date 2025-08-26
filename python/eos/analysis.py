@@ -368,9 +368,15 @@ class Analysis:
         # Update default values. If no keyword arguments are passed, kwargs is an empty dict
         scipy_opt_kwargs.update(kwargs)
 
+        # Check that all starting parameters lie in their respective ranges
+        start_point_in_u = self._par_to_u(_start_point)
+        for i, p in enumerate(start_point_in_u):
+            if p > 1 or p < 0:
+                eos.error(f'The {i}th starting parameter of this analysis is outside its defined range.')
+
         res = scipy.optimize.minimize(
             self.negative_log_pdf,
-            self._par_to_u(_start_point),
+            start_point_in_u,
             args=None,
             bounds=[(0.0, 1.0) for _ in self.varied_parameters],
             **scipy_opt_kwargs)
