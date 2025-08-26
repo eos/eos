@@ -75,7 +75,8 @@ Two types of kinematics specification are supported
   * the ``=`` operator fixes a kinematic variable to a given value.
     For example, the expression ``<<B->pilnu::BR>>[q2_min=0.1]`` expects only one kinematic variable ``q2_max``.
     The kinematic variable ``q2_min`` that the references observable ``B->pilnu::BR`` also depends on is
-    fixed to the value ``0.1``.
+    fixed to the value ``0.1``. The same kinematic variable can be set to different values in a single expression, i.e.
+    ``<<B->pi::f_+(q2)>>[q2=1.0] +  <<B->pi::f_0(q2)>>[q2=2.0]`` is also a valid expression.
 
 Note that both types of specifications can be combined in comma-separated list in an arbitrary order, for example ``[q2_min=1.0,q2_max=>q2_max_mu]``.
 
@@ -90,8 +91,7 @@ This can be done using the :meth:`eos.Observables.insert` method.
     eos.Observables().insert(name, latex, unit, options, expression)
 
 Here the arguments ``name``, ``latex`` and ``unit`` are the qualified name, the latex representation, and the unit of the new observable, respectively.
-Known units include:
-
+For the list of valid units, see `here <physics-conventions.html#units>`_.
 
 The argument ``options`` takes an :class:`eos.Options` object and allows to specify *global* options (i.e. applied to all observables in the expression),
 for the newly defined observable.
