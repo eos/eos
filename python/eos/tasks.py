@@ -300,6 +300,8 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     :type start_point: list-like, optional
     """
 
+    eos.inprogress(f'Beginning sampling...')
+
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
@@ -309,7 +311,8 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
         eos.error(f'encountered run time error ({e}) in parameter point:')
         for p in analysis.varied_parameters:
             eos.error(f' - {p.name()}: {p.evaluate()}')
-
+    eos.completed(f'...finished!')
+    eos.info(f'Generated {N} samples from posterior {posterior}.')
 
 @task('sample-prior', '{posterior}/samples')
 def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:int=1000, seed:int=1701):
