@@ -336,6 +336,10 @@ class Analysis:
     def optimize(self, start_point=None, rng=np.random.mtrand, **kwargs):
         r"""
         Optimize the log(posterior) and returns a best-fit-point summary.
+        Optimization is performed using the scipy SLSQP method by default since the varied parameters are usually bounded.
+        However, other bounded algorithms (such as Nelder-Mead, L-BFGS-B, TNC, SLSQP, Powell or trust-constr) sometimes perform better.
+        The most significant performance improvement is usually achieved by selecting an appropriate initial point,
+        for example, one taken from importance samples.
 
         :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters.
                             If set to "random", optimization starts at the random point in the space of the priors.
