@@ -335,10 +335,12 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
 
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(seed)
+    eos.inprogress(f'Beginning prior sampling...')
     samples = analysis.sample_prior(N=N, rng=rng)
     weights =  _np.ones(N) / N
     eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
-
+    eos.completed('...finished!')
+    eos.info(f'Generated {N} samples of prior PDF for posterior {posterior}.')
 
 @task('find-clusters', '{posterior}/clusters')
 def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K_g:int=1, analysis_file:str=None):
