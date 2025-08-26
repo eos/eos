@@ -16,6 +16,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/expression-fwd.hh>
@@ -463,6 +464,33 @@ class ExpressionParserTest : public TestCase
                 ExpressionEvaluator evaluator;
                 TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e), 5.0, 1e-10);
                 TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e2), 10.0, 1e-10);
+            }
+
+            // testing caching an observable
+            {
+                // test::obs1 is a test observable that requires two kinematic specifications, q2_min and q2_max
+                // it returns p[mass::c] * multiplier * (q2_max - q2_min)
+                ExpressionTest test("<<test::obs1>>[q2_min=1.0] + <<test::obs1>>[q2_min=0.0]");
+
+                Parameters p = Parameters::Defaults();
+                p.set("mass::c", 1.0);
+                Kinematics k = Kinematics({
+                    { "q2_max", 3 },
+                });
+
+                ExpressionMaker maker(p, k, Options());
+                Expression      e;
+                TEST_CHECK_NO_THROW(e = std::visit(maker, *test.e));
+
+                ObservableCache  c(p);
+                ExpressionCacher cacher(c);
+                Expression       cached_e;
+                TEST_CHECK_NO_THROW(cached_e = std::visit(cacher, e));
+
+                // Test evaluating
+                c.update();
+                ExpressionEvaluator evaluator;
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, cached_e), 5.0, 1e-10);
             }
         }
 } expression_parser_test;
