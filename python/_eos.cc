@@ -32,6 +32,7 @@
 #include "eos/statistics/test-statistic-impl.hh"
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/log.hh"
+#include "eos/utils/memoise.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/qualified-name.hh"
@@ -151,6 +152,51 @@ namespace impl
                 data->convertible = storage;
             }
     };
+
+    // comprehensive function for clearing all caches including Observable evaluation memoizers
+    void
+    clear_all_caches()
+    {
+        // Clear the registered MemoisationControl caches (Analysis caches)
+        MemoisationControl::instance()->clear();
+
+        // Clear common Observable evaluation memoizers that are not registered
+        // These are the most memory-intensive physics calculations
+
+        try
+        {
+            // CharmLoops memoizers - most common in rare B decays
+            // These have different parameter signatures
+
+            // Complex double return with 5 double parameters (F19_massive, F29_massive, F27_massive, F17_massive)
+            Memoiser<std::complex<double>, double, double, double, double, double>::instance()->clear();
+
+            // Complex double return with 1 double parameter (F19_massive_Qsb, F29_massive_Qsb, F27_massive_Qsb)
+            Memoiser<std::complex<double>, double>::instance()->clear();
+
+            // Bremsstrahlung memoizers
+            // Complex double return with 2 double parameters (itau_XX functions)
+            Memoiser<std::complex<double>, double, double>::instance()->clear();
+
+            // Double return with 1 double parameter (tau_XX functions)
+            Memoiser<double, double>::instance()->clear();
+
+            // Additional common signatures found in physics calculations
+            Memoiser<double, double, double>::instance()->clear();                         // 2-parameter functions
+            Memoiser<double, double, double, double>::instance()->clear();                 // 3-parameter functions
+            Memoiser<double, double, double, double, double>::instance()->clear();         // 4-parameter functions
+            Memoiser<double, double, double, double, double, double>::instance()->clear(); // 5-parameter functions
+
+            // Complex calculations with more parameters
+            Memoiser<std::complex<double>, double, double, double>::instance()->clear();                 // 2-parameter complex
+            Memoiser<std::complex<double>, double, double, double, double>::instance()->clear();         // 3-parameter complex
+            Memoiser<std::complex<double>, double, double, double, double, double>::instance()->clear(); // 4-parameter complex
+        }
+        catch (...)
+        {
+            // Some memoizers might not exist yet - that's fine
+        }
+    }
 } // namespace impl
 
 BOOST_PYTHON_MODULE(_eos)
@@ -178,6 +224,16 @@ BOOST_PYTHON_MODULE(_eos)
             .value("INPROGRESS", ll_inprogress)
             .value("INFO", ll_informational)
             .value("DEBUG", ll_debug);
+
+    // memory management
+    def("_clear_all_caches", &::impl::clear_all_caches, R"(
+        Clear all memoization caches including Observable evaluation caches.
+
+        This function clears both the registered Analysis caches and the separate
+        Observable evaluation memoization caches that are used for heavy physics
+        calculations like charm loops and bremsstrahlung. This is more comprehensive
+        than clear_cache() and solves the Observable memory leak issue.
+    )");
 
     // {{{ eos/utils
     // qnp::Prefix

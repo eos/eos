@@ -67,7 +67,7 @@ stderr_handler = logging.StreamHandler(stream=sys.stderr)
 stderr_handler.setLevel(logging.INFO)
 logger.addHandler(stderr_handler)
 
-from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel
+from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel, _clear_cache
 _set_native_log_level(_NativeLogLevel.INFO) # default native log level
 
 _MAP_PYTHON_TO_NATIVE_LOG_LEVEL = {
@@ -129,6 +129,16 @@ def _log_callback(id, level, msg):
         raise RuntimeError(f'Cannot handle log level: {level}. Log message: {full_msg}')
 
 _register_log_callback(_log_callback)
+
+def clear_cache():
+    """
+    Clear the EOS memoization cache.
+
+    This function clears all cached computations in EOS, freeing memory
+    that was used to store memoized results. This is automatically called
+    when Analysis objects are destroyed.
+    """
+    _clear_cache()
 
 import time as _time
 import os as _os

@@ -256,6 +256,17 @@ class Analysis:
             eos.warn(f'likelihood does not depend on parameter \'{n}\'; remove from prior or check options!')
 
 
+    def __del__(self):
+        """Destructor that clears the memoization cache when the Analysis object is destroyed."""
+        try:
+            # Clear the cache when this Analysis object goes out of scope
+            eos.debug('Analysis.__del__: clearing memoization cache')
+            eos.clear_cache()
+        except:
+            # Ignore any errors during cleanup to avoid issues during garbage collection
+            pass
+
+
     def _u_to_par(self, u):
         """Internal function that uses the inverse prior transform to translate from u ∈ [0, 1)^D to the parameter space"""
         for p, uv in zip(self.varied_parameters, u):
