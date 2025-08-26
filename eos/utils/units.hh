@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,6 +34,10 @@ namespace eos
         private:
             Id _id;
 
+            static const std::vector<std::string> _latex_representations;
+
+            static const std::vector<std::string> _internal_representations;
+
             Unit(const Id & id) :
                 _id(id)
             {
@@ -63,6 +67,7 @@ namespace eos
             ~Unit()            = default;
 
             const std::string & latex() const;
+            const std::string & string() const;
 
             static Unit Undefined();
             static Unit None();

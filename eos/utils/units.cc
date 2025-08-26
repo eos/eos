@@ -2,7 +2,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -28,38 +28,49 @@
 
 namespace eos
 {
+    const std::vector<std::string> Unit::_latex_representations{
+        R"(\textrm{undefined})", "1",
+        R"(\textrm{GeV})",       R"(\textrm{GeV}^2)",
+        R"(\textrm{GeV}^3)",     R"(\textrm{GeV}^{-1})",
+        R"(\textrm{GeV}^{-2})",  R"(\textrm{GeV}^{-4})",
+        R"(\textrm{s})",         R"(\textrm{s}^{-1})",
+        R"(\textrm{ps}^{-1})",   R"(\textrm{GeV}\,\textrm{s})",
+        R"(\textrm{fm}^2)",
+    };
+
+    const std::vector<std::string> Unit::_internal_representations{
+        "undefined", "1", "GeV", "GeV^2", "GeV^3", "GeV^-1", "GeV^-2", "GeV^-4", "s", "s^-1", "ps^-1", "GeV s", "fm^2",
+    };
+
     const std::string &
     Unit::latex() const
     {
-        static const std::vector<std::string> representations{
-            R"(\textrm{undefined})", "1",
-            R"(\textrm{GeV})",       R"(\textrm{GeV}^2)",
-            R"(\textrm{GeV}^3)",     R"(\textrm{GeV}^{-1})",
-            R"(\textrm{GeV}^{-2})",  R"(\textrm{GeV}^{-4})",
-            R"(\textrm{s})",         R"(\textrm{s}^{-1})",
-            R"(\textrm{ps}^{-1})",   R"(\textrm{GeV}\,\textrm{s})",
-            R"(\textrm{fm}^2)",
-        };
+        return _latex_representations[static_cast<int>(_id)];
+    }
 
-        return representations[static_cast<int>(_id)];
+    const std::string &
+    Unit::string() const
+    {
+        return _internal_representations[static_cast<int>(_id)];
     }
 
     Unit::Unit(const std::string & s) :
         Unit(Id::undefined)
     {
         static const std::map<std::string, Id> map{
-            {      "1",         Id::none },
-            {    "GeV",          Id::gev },
-            {  "GeV^2",         Id::gev2 },
-            {  "GeV^3",         Id::gev3 },
-            { "GeV^-2", Id::inverse_gev2 },
-            { "GeV^-1",  Id::inverse_gev },
-            { "GeV^-4", Id::inverse_gev4 },
-            {      "s",            Id::s },
-            {   "s^-1",    Id::inverse_s },
-            {  "ps^-1",   Id::inverse_ps },
-            {  "GeV s",        Id::gev_s },
-            {   "fm^2",          Id::fm2 },
+            {    _internal_representations[static_cast<unsigned>(Id::undefined)],    Id::undefined },
+            {         _internal_representations[static_cast<unsigned>(Id::none)],         Id::none },
+            {          _internal_representations[static_cast<unsigned>(Id::gev)],          Id::gev },
+            {         _internal_representations[static_cast<unsigned>(Id::gev2)],         Id::gev2 },
+            {         _internal_representations[static_cast<unsigned>(Id::gev3)],         Id::gev3 },
+            {  _internal_representations[static_cast<unsigned>(Id::inverse_gev)],  Id::inverse_gev },
+            { _internal_representations[static_cast<unsigned>(Id::inverse_gev2)], Id::inverse_gev2 },
+            { _internal_representations[static_cast<unsigned>(Id::inverse_gev4)], Id::inverse_gev4 },
+            {            _internal_representations[static_cast<unsigned>(Id::s)],            Id::s },
+            {    _internal_representations[static_cast<unsigned>(Id::inverse_s)],    Id::inverse_s },
+            {   _internal_representations[static_cast<unsigned>(Id::inverse_ps)],   Id::inverse_ps },
+            {        _internal_representations[static_cast<unsigned>(Id::gev_s)],        Id::gev_s },
+            {          _internal_representations[static_cast<unsigned>(Id::fm2)],          Id::fm2 },
         };
 
         const auto i = map.find(s);
