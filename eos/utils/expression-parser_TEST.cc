@@ -419,7 +419,7 @@ class ExpressionParserTest : public TestCase
             {
                 // test::obs1 is a test observable that requires two kinematic specifications, q2_min and q2_max
                 // it returns p[mass::c] * multiplier * (q2_max - q2_min)
-                ExpressionTest test("<<test::obs1>>[q2_min=>first_q2_min,first_q2_min=1.0] + <<test::obs1>>[q2_min=>second_q2_min,second_q2_min=0.0]");
+                ExpressionTest test("<<test::obs1>>[q2_min=1.0] + <<test::obs1>>[q2_min=0.0]");
 
                 Parameters p = Parameters::Defaults();
                 p.set("mass::c", 1.0);
@@ -427,20 +427,42 @@ class ExpressionParserTest : public TestCase
                     { "q2_max", 3 }
                 });
 
+                // Test making
                 ExpressionMaker maker(p, k, Options());
                 Expression      e;
                 TEST_CHECK_NO_THROW(e = std::visit(maker, *test.e));
 
+                // Test printing
                 std::stringstream out;
                 ExpressionPrinter printer(out);
                 std::visit(printer, e);
-                TEST_CHECK_EQUAL_STR("BinaryExpression(ObservableExpression(test::obs1, aliases=[q2_min=>first_q2_min], values=[first_q2_min=1])"
+                TEST_CHECK_EQUAL_STR("BinaryExpression(ObservableExpression(test::obs1, values=[q2_min=1])"
                                      " + "
-                                     "ObservableExpression(test::obs1, aliases=[q2_min=>second_q2_min], values=[second_q2_min=0]))",
+                                     "ObservableExpression(test::obs1, values=[q2_min=0]))",
                                      out.str());
 
+                // Test kinematic dependence
+                ExpressionKinematicReader kinematic_reader;
+                std::visit(kinematic_reader, *test.e);
+                std::set<std::string> expected_kinematic{ "q2_max" };
+                TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
+
+                ExpressionTest test2("<<test::obs1>>[q2_min=1.0] + <<test::obs1>>");
+                std::visit(kinematic_reader, *test2.e);
+                std::set<std::string> expected_kinematic2{ "q2_max", "q2_min" };
+                TEST_CHECK_EQUAL(expected_kinematic2, kinematic_reader.kinematics);
+
+                // Test cloning
+                Parameters p2 = Parameters::Defaults();
+                p2.set("mass::c", 2.0);
+                ExpressionCloner cloner(p2, k, Options());
+                Expression       e2;
+                TEST_CHECK_NO_THROW(e2 = std::visit(cloner, e));
+
+                // Test evaluating
                 ExpressionEvaluator evaluator;
                 TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e), 5.0, 1e-10);
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, e2), 10.0, 1e-10);
             }
         }
 } expression_parser_test;

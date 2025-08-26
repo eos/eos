@@ -33,9 +33,12 @@ namespace eos::exp
             Parameters _parameters;
             Kinematics _kinematics;
             Options    _options;
+            unsigned   _hidden_alias_index;
 
         public:
             ExpressionCloner(const Parameters & parameters, const Kinematics & kinematics, const Options & options);
+
+            std::string next_hidden_alias();
 
             Expression operator() (const BinaryExpression & e);
 
