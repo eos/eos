@@ -393,10 +393,11 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     :type base_directory: str, optional
     """
 
+    eos.inprogress('Beginning computation.')
     densities = [eos.data.PMCSampler(os.path.join(base_directory, p, 'pmc')).density() for p in posteriors]
     output_path = os.path.join(base_directory, posterior, 'product')
     eos.data.MixtureDensity.create(output_path, eos.data.MixtureDensity.cartesian_product(densities))
-
+    eos.completed('...finished!')
 
 # Sample PMC
 @task('sample-pmc', '{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
