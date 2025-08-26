@@ -257,11 +257,12 @@ class Analysis:
 
 
     def __del__(self):
-        """Destructor that clears the memoization cache when the Analysis object is destroyed."""
+        """Destructor that clears all memoization caches when the Analysis object is destroyed."""
         try:
-            # Clear the cache when this Analysis object goes out of scope
-            eos.debug('Analysis.__del__: clearing memoization cache')
-            eos.clear_cache()
+            # Clear ALL caches when this Analysis object goes out of scope
+            # This includes both Analysis caches and Observable evaluation caches
+            eos.debug('Analysis.__del__: clearing all memoization caches (Analysis + Observable)')
+            eos.clear_all_caches()
         except:
             # Ignore any errors during cleanup to avoid issues during garbage collection
             pass
