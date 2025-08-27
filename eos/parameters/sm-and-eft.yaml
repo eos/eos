@@ -2191,7 +2191,7 @@ groups:
   # scnul WET Parameters
   # {{{
   - title: '$\bar{s}c\bar{\nu}\ell$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the Wilson coefficients of $\bar{s}c\bar{\nu}\ell$ operators in the effective Lagrangian
         \begin{equation}
           \mathcal{H}^{\bar{s}c\bar{\nu}\ell}_\mathrm{eff}
@@ -2203,7 +2203,6 @@ groups:
           \mathcal{O}_{S_{L(R)}} & = [\bar{s} P_{L(R)} c]\, [\bar{\nu}_\ell P_L \ell]\\
           \mathcal{O}_{T}        & = [\bar{s} \sigma^{\mu\nu} c]\, [\bar{\nu}_\ell \sigma_{\mu\nu} P_L \ell]
         \end{align}
-
     wcxf-relevant: true
     parameters:
       # scnul Wilson coefficients - electron
@@ -2414,7 +2413,7 @@ groups:
   # dcnul WET Parameters
   # {{{
   - title: '$\bar{d}c\bar{\nu}\ell$ WET Parameters'
-    description: >
+    description: |
         The list of parameters describing the Wilson coefficients of $\bar{d}c\bar{\nu}\ell$ operators in the effective Lagrangian
         \begin{equation}
           \mathcal{H}^{\bar{d}c\bar{\nu}\ell}_\mathrm{eff}
