@@ -5074,7 +5074,7 @@ groups:
 
   # Parameters in 1/2^+ -> 3/2^- Form Factor Parametrizations
   # {{{
-  - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
+  - title: 'Parameters in ${}^1/_2{}^+ \to {}^3/_2{}^+$ Form Factor Parametrizations'
     description: ''
     parameters:
       'Lambda_b->Lambda(1520)::a^(%1%,%2%)_%3%@ABR2022' :
