@@ -3,6 +3,7 @@
 import unittest
 import inspect
 import os
+import numpy as _np
 
 class TestFailedError(BaseException):
     def __init__(self, msg):
@@ -87,6 +88,9 @@ class PythonTests:
             par = Parameters.Defaults()
         except:
             raise TestFailedError('cannot initialize default Parameters')
+
+        if _np.any([p.unit().__str__()=='undefined' for p in par]):
+            raise TestFailedError('some parameters have undefined units')
 
         try:
             electron_mass = par['mass::e']
