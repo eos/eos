@@ -971,9 +971,10 @@ groups:
       # form factor parameters for B->D for [BGL:1997A]
       'B(*)->D(*)::n_f@BGL1997' :
           central: 2.0
-          min: 2.0
-          max: 2.0
-          latex: '$n_f$'
+          min:     2.0
+          max:     2.0
+          latex:   '$n_f$'
+          unit:    '1'
       'B->D::t_0@BGL1997' :
           central:  6.1848725
           min:     0.0
@@ -1307,6 +1308,7 @@ groups:
           min:      9.64299
           max:      9.64299
           latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
       # form-factor parameters for B->omega
       # note that no lattice results exists for B->omega FFs yet
       # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
@@ -1423,6 +1425,7 @@ groups:
           min:     +0.27794
           max:     +4.66106
           latex:    '$\alpha_{T_{23},2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
       # form-factor parameters for B->rho
       # new updated results based on LCSR-only fit from the GKvD2018 calculation
       # note that no lattice results exists for B->rho FFs yet
@@ -1540,6 +1543,7 @@ groups:
           min:     -0.617057014268725
           max:     -0.617057014268725
           latex:    '$\alpha_{T_{23},2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
       # form-factor parameters for B->K*
       # new updated results based on a combined LQCD+LCSR fit from the GKvD2018 calculation
       # Use (D.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
@@ -1801,6 +1805,7 @@ groups:
           min:      4.93525
           max:      4.93525
           latex:    '$\alpha_{T_{23},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
       # form factor parameters for B_s->phi for [BFW:2010A] parametrization
       'B_s->phi::a^%1%_%2%@BFW2010' :
           central:  0.
@@ -2514,437 +2519,23 @@ groups:
     description: ''
     parameters:
       # form factor parameters for parametrization according to [FvDV2018]
-      # para
-      'B->pipi::a^Fperp_0_0@FvDV2018' :
+      'B->pipi::%3%^F%4%_%1%_%2%@FvDV2018' :
           central: 0.0
           min:     0.0
           max:     0.0
           unit:     '1'
-          latex:    '$a_{\perp,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fperp_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          unit:     '1'
-          latex:    '$a_{\perp,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fperp_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          unit:     '1'
-          latex:    '$a_{\perp,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fperp_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          unit:     '1'
-          latex:    '$a_{\perp,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fperp_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          unit:     '1'
-          latex:    '$a_{\perp,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fperp_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          unit:     '1'
-          latex:    '$a_{\perp,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fperp_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          unit:     '1'
-          latex:    '$a_{\perp,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fperp_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$b_{\perp,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$c_{\perp,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$c_{\perp,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:    '$c_{\perp,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\perp,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\perp,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\perp,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fperp_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\perp,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      # para
-      'B->pipi::a^Fpara_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fpara_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fpara_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fpara_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fpara_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fpara_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Fpara_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{\parallel,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Fpara_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{\parallel,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Fpara_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{\parallel,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      # long
-      'B->pipi::a^Flong_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Flong_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Flong_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Flong_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Flong_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Flong_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Flong_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{0,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Flong_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{0,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Flong_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{0,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      # time
-      'B->pipi::a^Ftime_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Ftime_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Ftime_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Ftime_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Ftime_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Ftime_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::a^Ftime_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$a_{t,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::b^Ftime_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$b_{t,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_0_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,0,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_0_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,0,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_0_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,0,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_0_3@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,0,3}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_1_0@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,1,0}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_1_1@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,1,1}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
-      'B->pipi::c^Ftime_1_2@FvDV2018' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$c_{t,1,2}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
+          latex:
+            template: '$%3%_{%4%,%1%,%2%}^{B \to \pi\pi,\mathrm{FvDV2018}}$'
+            map:
+              'perp': '\perp'
+              'para': '\parallel'
+              'long': '0'
+              'time': 't'
+          matrix:
+            - [0, 1]
+            - [0, 1, 2, 3]
+            - ['a', 'b', 'c']
+            - ['perp', 'para', 'long', 'time']
   # }}}
 
   # Parameters in LCSR Calculations with Light-Meson LCDAs
@@ -4241,56 +3832,67 @@ groups:
           min:     -19.00
           max:     -6.00
           latex:    '$b_{1,0}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::f_0^A(0)@BFvD2014' :
           central: +0.27
           min:     +0.21
           max:     +0.33
           latex:    '$f_0^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
+          unit:     '1'
       'Lambda_b->Lambda::b_1_0^A@BFvD2014' :
           central: -8.00
           min:     -16.00
           max:     -5.00
           latex:    '$b_{1,0}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::f_perp^V(0)@BFvD2014' :
           central: +0.28
           min:     +0.22
           max:     +0.34
           latex:    '$f_{\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
+          unit:     '1'
       'Lambda_b->Lambda::b_1_perp^V@BFvD2014' :
           central: -11.00
           min:     -19.00
           max:     -6.00
           latex:    '$b_{1,\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::f_perp^A(0)@BFvD2014' :
           central: +0.30
           min:     +0.24
           max:     +0.36
           latex:    '$f_{\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
+          unit:     '1'
       'Lambda_b->Lambda::b_1_perp^A@BFvD2014' :
           central: -6.00
           min:     -12.00
           max:     -3.00
           latex:    '$b_{1,\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::sigma_perp^V@BFvD2014' :
           central: 0.00
           min:     -0.20
           max:     +0.20
           latex:    '$\sigma_{\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::sigma_perp^A@BFvD2014' :
           central: 0.00
           min:     -0.30
           max:     +0.30
           latex:    '$\sigma_{\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::sigma_long^V@BFvD2014' :
           central: 0.00
           min:     -0.21
           max:     +0.21
           latex:    '$\sigma_{0}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       'Lambda_b->Lambda::sigma_long^A@BFvD2014' :
           central: 0.00
           min:     -0.30
           max:     +0.30
           latex:    '$\sigma_{0}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
+          unit:     '1'
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [DM2016], table ?, p. ??
       'Lambda_b->Lambda::a_0_time^V@DM2016' :
@@ -5035,365 +4637,438 @@ groups:
           min: 2.0
           max: 2.0
           latex: '$n_f$'
+          unit: '1'
       "B(*)->D(*)::mBar@HQET" :
           central: 5.313
           min: 5.313
           max: 5.313
+          latex: '$\bar{m}$'
+          unit: 'GeV'
       "B(*)->D(*)::a@HQET" :
           central: 1.0
           min: 1.0
           max: 2.0
           latex: '$a$'
+          unit: '1'
       "B(*)->D(*)::xi'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(1)}(1)$'
+          unit: '1'
       "B(*)->D(*)::xi''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(2)}(1)$'
+          unit: '1'
       "B(*)->D(*)::xi'''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(3)}(1)$'
+          unit: '1'
       "B(*)->D(*)::xi''''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(4)}(1)$'
+          unit: '1'
       "B(*)->D(*)::xi'''''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(5)}(1)$'
+          unit: '1'
       "B(*)->D(*)::chi_2(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi_2(1)$'
+          unit: '1'
       "B(*)->D(*)::chi_2'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(1)}_2(1)$'
+          unit: '1'
       "B(*)->D(*)::chi_2''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(2)}_2(1)$'
+          unit: '1'
       "B(*)->D(*)::chi_3'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(1)}_3(1)$'
+          unit: '1'
       "B(*)->D(*)::chi_3''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(2)}_3(1)$'
+          unit: '1'
       "B(*)->D(*)::eta(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\eta(1)$'
+          unit: '1'
       "B(*)->D(*)::eta'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\eta^{(1)}(1)$'
+          unit: '1'
       "B(*)->D(*)::eta''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\eta^{(2)}(1)$'
+          unit: '1'
       "B(*)->D(*)::l_1(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l_1(1)$'
+          unit: '1'
       "B(*)->D(*)::l_1'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(1)}_1(1)$'
+          unit: '1'
       "B(*)->D(*)::l_1''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(2)}_1(1)$'
+          unit: '1'
       "B(*)->D(*)::l_2(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l_2(1)$'
+          unit: '1'
       "B(*)->D(*)::l_2'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(1)}_2(1)$'
+          unit: '1'
       "B(*)->D(*)::l_2''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(2)}_2(1)$'
+          unit: '1'
       "B(*)->D(*)::l_3(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l_3(1)$'
+          unit: '1'
       "B(*)->D(*)::l_3'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(1)}_3(1)$'
+          unit: '1'
       "B(*)->D(*)::l_3''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(2)}_3(1)$'
+          unit: '1'
       "B(*)->D(*)::l_4(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l_4(1)$'
+          unit: '1'
       "B(*)->D(*)::l_4'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(1)}_4(1)$'
+          unit: '1'
       "B(*)->D(*)::l_4''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(2)}_4(1)$'
+          unit: '1'
       "B(*)->D(*)::l_5(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l_5(1)$'
+          unit: '1'
       "B(*)->D(*)::l_5'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(1)}_5(1)$'
+          unit: '1'
       "B(*)->D(*)::l_5''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(2)}_5(1)$'
+          unit: '1'
       "B(*)->D(*)::l_6(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l_6(1)$'
+          unit: '1'
       "B(*)->D(*)::l_6'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(1)}_6(1)$'
+          unit: '1'
       "B(*)->D(*)::l_6''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(2)}_6(1)$'
+          unit: '1'
       # Parameters for B_s*->D_s* form factors in the Heavy-Quark Expansion (HQE)
       "B_s(*)->D_s(*)::n_s@HQET" :
           central: 1.0
           min: 1.0
           max: 1.0
           latex: '$n_s$'
+          unit: '1'
       "B_s(*)->D_s(*)::mBar@HQET" :
           central: 5.403
           min: 5.403
           max: 5.403
-          latex: '$a$'
+          latex: '$\bar{m}$'
+          unit: 'GeV'
       "B_s(*)->D_s(*)::a@HQET" :
           central: 1.0
           min: 1.0
           max: 2.0
           latex: '$a$'
+          unit: '1'
       "B_s(*)->D_s(*)::xi'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(s,1)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::xi''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(s,2)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::xi'''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(s,3)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::xi''''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(s,4)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::xi'''''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\xi^{(s,5)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::chi_2(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(s)}_2(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::chi_2'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(s,1)}_2(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::chi_2''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(s,2)}_2(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::chi_3'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(s,1)}_3(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::chi_3''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\chi^{(s,2)}_3(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::eta(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\eta^{(s)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::eta'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\eta^{(s,1)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::eta''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$\eta^{(s,2)}(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_1(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s)}_1(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_1'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,1)}_1(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_1''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,2)}_1(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_2(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s)}_2(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_2'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,1)}_2(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_2''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,2)}_2(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_3(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s)}_3(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_3'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,1)}_3(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_3''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,2)}_3(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_4(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s)}_4(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_4'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,1)}_4(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_4''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,2)}_4(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_5(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s)}_5(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_5'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,1)}_5(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_5''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,2)}_5(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_6(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s)}_6(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_6'(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,1)}_6(1)$'
+          unit: '1'
       "B_s(*)->D_s(*)::l_6''(1)@HQET" :
           central: 0.0
           min:  0.0
           max:  0.0
           latex: '$l^{(s,2)}_6(1)$'
+          unit: '1'
       # Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in HQET parametrisation from [BBGORvD2018]
       "Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET" :
           central: 0.013054
           min:     0.000537
           max:     0.023296
           latex:    '$\zeta(q^2_{\mathrm{max}})$'
+          unit: '1'
           comments: "Normalisation of the LO IW function at zero recoil, [-1.0, 1.0]"
       "Lambda_b->Lambda_c^*::rho@HQET" :
           central: 0.05
           min:     -1.05
           max:     +1.05
           latex:    '$\rho$'
+          unit: '1'
           comments: "Slope of the LO IW function, [-1.0, 1.0]"
       "Lambda_b->Lambda_c^*::delta_3b@HQET" :
           central: 0.007087
           min:     0.000384
           max:     0.013604
           latex:    '$\delta_{3b}$'
+          unit: '1'
           comments: "Constant part of of the NLO IW function, [-1.0, 1.0]"
       "Lambda_b->Lambda_c^*::rho_3b@HQET" :
           central: 0.05
           min:     -1.05
           max:     +1.05
           latex:    '$\rho_{3b}$'
+          unit: '1'
           comments: "Slope of the NLO IW function, [-1.0, 1.0]"
   # }}}
 
@@ -5457,18 +5132,21 @@ groups:
           central: +1.0
           min:     +1.0
           max:     +1.0
+          unit:     '1'
           latex:    '$\mathcal{B}(b\to sc\bar{c})$'
           comments: 'Normalized dispersive bound'
       'b->sccbar::bound_uncertainty@GvDV2020' :
           central: +0.1
           min:     +0.1
           max:     +0.1
+          unit:     '1'
           latex:    '$\delta\mathcal{B}(b\to sc\bar{c})$'
           comments: 'Uncertainty of the normalized dispersive bound'
       'B->K^*ccbar::%1%{alpha_%2%^perp}@GvDV2020' :
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{\perp,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5477,6 +5155,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{\parallel,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5485,6 +5164,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{0,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5493,6 +5173,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\perp^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5501,6 +5182,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\parallel^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5509,6 +5191,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_0^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5517,6 +5200,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\perp^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5525,6 +5209,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\parallel^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5533,6 +5218,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_0^{B\to K^*c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5541,6 +5227,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\perp 0}^{B\to K^*c\bar{c}}(%1%)$'
           matrix:
               - [ "Jpsi", "psi2S" ]
@@ -5548,6 +5235,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\parallel 0}^{B\to K^*c\bar{c}}(%1%)$'
           matrix:
               - [ "Jpsi", "psi2S" ]
@@ -5555,6 +5243,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{\perp,%2%}^{B_s\to \phi c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5563,6 +5252,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{\parallel,%2%}^{B_s\to \phi c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5571,6 +5261,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{0,%2%}^{B_s\to \phi c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5579,6 +5270,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\perp^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5587,6 +5279,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_\parallel^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5595,6 +5288,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_0^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5603,6 +5297,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\perp^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5611,6 +5306,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_\parallel^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5619,6 +5315,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_0^{B_s\to \phi c\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5627,6 +5324,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\perp 0}^{B_s\to phic\bar{c}}(%1%)$'
           matrix:
               - [ "Jpsi", "psi2S" ]
@@ -5634,6 +5332,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{Arg}\, \hat{\mathcal{H}}_{\parallel 0}^{B_s\to phic\bar{c}}(%1%)$'
           matrix:
               - [ "Jpsi", "psi2S" ]
@@ -5641,6 +5340,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \alpha_{+,%2%}^{B\to Kc\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
@@ -5649,6 +5349,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{%1%}\, \hat{\mathcal{H}}_+^{B\to Kc\bar{c}}(%2%)$'
           matrix:
               - [ "Re", "Im" ]
@@ -5657,6 +5358,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:   '$\mathrm{A%1%}\, \hat{\mathcal{H}}_+^{B\to Kc\bar{c}}(%2%)$'
           matrix:
               - [ "bs", "rg" ]
@@ -5673,24 +5375,28 @@ groups:
           central: 0.672
           min:     0.661
           max:     0.683
+          unit:    '1'
           latex:   '$f_0^{B \to D}(q^2 = M_K^2)$'
       # B->D^*K
       'B->D^*K::A_0(MK2)' :
           central: 0.708
           min:     0.670
           max:     0.746
+          unit:    '1'
           latex:   '$A_0^{B \to D}(q^2 = M_K^2)$'
       # B_s->D_spi
       'B_s->D_spi::f_0(Mpi2)' :
           central: 0.673
           min:     0.662
           max:     0.684
+          unit:    '1'
           latex:   '$f_0^{B_s \to D_s}(q^2 = M_\pi^2)$'
       # B_s->D_s^*pi
       'B_s->D_s^*pi::A_0(Mpi2)' :
           central: 0.689
           min:     0.625
           max:     0.753
+          unit:    '1'
           latex:   '$A_0^{B_s \to D_s^*}(q^2 = M_\pi^2)$'
   # }}}
 
@@ -5726,32 +5432,38 @@ groups:
           central: 0.00
           min:     -0.03
           max:     +0.03
+          unit:    '1'
           latex:    '$r_{\perp,0}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
       'Lambda_b->Lambdall::r_perp_1@MvD2016' :
           central: 0.00
           min:     -0.03
           max:     +0.03
+          unit:    '1'
           latex:    '$r_{\perp,1}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
       'Lambda_b->Lambdall::r_para_0@MvD2016' :
           central: 0.00
           min:     -0.03
           max:     +0.03
+          unit:    '1'
           latex:    '$r_{\parallel,0}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
       'Lambda_b->Lambdall::r_para_1@MvD2016' :
           central: 0.00
           min:     -0.03
           max:     +0.03
+          unit:    '1'
           latex:    '$r_{\parallel,1}^{\Lambda_b \to \Lambda \ell^+\ell^- , \mathrm{MvD2016}}$'
       # Zero-Recoil Sum Rule for Lambda_b -> Lambda_c form factor
       'Lambda_b->Lambda_c::mu@ZRSR' :
           central: +0.75
           min:     +0.75
           max:     +0.75
+          unit:    'GeV'
           latex:    '$\mu^{\Lambda_b \to \Lambda_c , \mathrm{ZRSR}}$'
       'Lambda_b->Lambda_c::wM@ZRSR' :
           central: +0.75
           min:     +0.75
           max:     +0.75
+          unit:    'GeV'
           latex:    '$wM^{\Lambda_b \to \Lambda_c , \mathrm{ZRSR}}$'
       # B->K^*ll uncertainties from subleading terms for Large Recoil
       'B->K^*ll::A_long_uncertainty@LargeRecoil' :
@@ -5800,63 +5512,75 @@ groups:
           central: +0.0
           min:     -0.5
           max:     +0.5
+          unit:    '1'
           latex:    '$\Lambda_P^{B \to P \ell^+\ell^- , \mathrm{LargeRecoil}}$'
       'B->Pll::sl_phase_pseudo@LargeRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
+          unit:    '1'
           latex:    '$sl_P^{B \to P \ell^+\ell^- , \mathrm{LargeRecoil}}$'
       # B->Pll uncertainties at subleading order at Low Recoil
       'B->Pll::Lambda_pseudo@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
+          unit:    '1'
           latex:    '$\Lambda_P^{B \to P \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Pll::sl_phase_pseudo@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
+          unit:    '1'
           latex:    '$sl_P^{B \to P \ell^+\ell^- , \mathrm{LowRecoil}}$'
       # B->Vll uncertainties at subleading order at Low Recoil
       'B->Vll::Lambda@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
+          unit:    '1'
           latex:    '$\Lambda^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::Lambda_0@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
+          unit:    '1'
           latex:    '$\Lambda_0^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::Lambda_pa@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
+          unit:    '1'
           latex:    '$\Lambda_{\parallel}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::Lambda_pp@LowRecoil' :
           central: +0.0
           min:     -0.5
           max:     +0.5
+          unit:    '1'
           latex:    '$\Lambda_{\perp}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::sl_phase@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
+          unit:    '1'
           latex:    '$sl^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::sl_phase_0@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
+          unit:    '1'
           latex:    '$sl_0^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::sl_phase_pa@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
+          unit:    '1'
           latex:    '$sl_{\parallel}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
       'B->Vll::sl_phase_pp@LowRecoil' :
           central: +0.0
           min:     -1.57079632679490
           max:     +1.57079632679490
+          unit:    '1'
           latex:    '$sl_{\perp}^{B \to V \ell^+\ell^- , \mathrm{LowRecoil}}$'
   # }}}
 
