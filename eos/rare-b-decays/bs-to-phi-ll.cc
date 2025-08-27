@@ -91,7 +91,7 @@ namespace eos
         {
             Context ctx("When constructing Bs->Phill observables");
 
-            std::string tag = o.get("tag"_ok, "GvDV2020");
+            std::string tag = o.get("tag"_ok, "");
 
             if ("BFS2004" == tag)
             {
@@ -118,7 +118,7 @@ namespace eos
         {
         }
 
-        std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & s) const
+        inline std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & s) const
         {
             // cf. [BHvD2010], p. 26, eqs. (A1)-(A11)
             // cf. [BHvD2012], app B, eqs. (B1)-(B12)
@@ -130,7 +130,7 @@ namespace eos
             double beta = std::sqrt(beta2);
 
             // j1s
-            result[0] = (
+            result[0] = 3.0 / 4.0 * (
                   (2.0 + beta2) / 4.0 * (norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right))
                   + z * real(A.a_perp_left * conj(A.a_perp_right) + A.a_para_left * conj(A.a_para_right))
                   + 4.0 * beta2 * (norm(A.a_long_perp) + norm(A.a_long_para))
@@ -141,7 +141,7 @@ namespace eos
                   )
                );
             // j1c
-            result[1] = (
+            result[1] = 3.0 / 4.0 * (
                   norm(A.a_long_left) + norm(A.a_long_right)
                   + z * (norm(A.a_time) + 2.0 * real(A.a_long_left * conj(A.a_long_right)))
                   + beta2 * norm(A.a_scal)
@@ -150,27 +150,27 @@ namespace eos
                   + 16.0 * y * real((A.a_long_left + A.a_long_right) * conj(A.a_time_long))
                );
             // j2s
-            result[2] = beta2 / 4.0 * (
+            result[2] = 3.0 * beta2 / 16.0 * (
                   norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right)
                   - 16.0 * (norm(A.a_time_perp) + norm(A.a_time_para) + norm(A.a_long_perp) + norm(A.a_long_para))
                );
             // j2c
-            result[3] = -beta2 * (
+            result[3] = -3.0 / 4.0 * beta2 * (
                   norm(A.a_long_left) + norm(A.a_long_right)
                   - 8.0 * (norm(A.a_time_long) + norm(A.a_para_perp))
                );
             // j3
-            result[4] = 1.0 / 2.0 * beta2 * (
+            result[4] = 3.0 / 8.0 * beta2 * (
                   norm(A.a_perp_left) + norm(A.a_perp_right) - norm(A.a_para_left) - norm(A.a_para_right)
                   + 16.0 * (norm(A.a_time_para) - norm(A.a_time_perp) + norm(A.a_long_para) - norm(A.a_long_perp))
                );
             // j4
-            result[5] = 1.0 / (std::sqrt(2.0)) * beta2 * real(
+            result[5] = 3.0 / 4.0 / (std::sqrt(2.0)) * beta2 * real(
                   A.a_long_left * conj(A.a_para_left) + A.a_long_right * conj(A.a_para_right)
                   - 8.0 * std::sqrt(2.0) * (A.a_time_long * conj(A.a_time_para) + A.a_para_perp * conj(A.a_long_para))
                );
             // j5
-            result[6] = std::sqrt(2.0) * beta * real(
+            result[6] = 3.0 / 4.0 * std::sqrt(2.0) * beta * real(
                   A.a_long_left * conj(A.a_perp_left) - A.a_long_right * conj(A.a_perp_right)
                   - 2.0 * std::sqrt(2.0) * A.a_time_para * conj(A.a_scal)
                   - y * (
@@ -181,7 +181,7 @@ namespace eos
                   )
                );
             // j6s
-            result[7] = 2.0 * beta * real(
+            result[7] = 6.0 / 4.0 * beta * real(
                   A.a_para_left * conj(A.a_perp_left) - A.a_para_right * conj(A.a_perp_right)
                   + 4.0 * std::sqrt(2.0) * y * (
                        (A.a_perp_left - A.a_perp_right) * conj(A.a_time_para)
@@ -189,7 +189,7 @@ namespace eos
                   )
                );
             // j6c
-            result[8] = 4.0 * beta * real(
+            result[8] = 3.0 * beta * real(
                   2.0 * A.a_time_long * conj(A.a_scal)
                   + y * (
                      (A.a_long_left + A.a_long_right) * conj(A.a_scal)
@@ -197,7 +197,7 @@ namespace eos
                   )
                );
             // j7
-            result[9] = std::sqrt(2.0) * beta * imag(
+            result[9] = 3.0 / 4.0 * std::sqrt(2.0) * beta * imag(
                   A.a_long_left * conj(A.a_para_left) - A.a_long_right * conj(A.a_para_right)
                   + 2.0 * std::sqrt(2.0) * A.a_time_perp * conj(A.a_scal)
                   + y * (
@@ -208,11 +208,11 @@ namespace eos
                   )
                );
             // j8
-            result[10] = 1.0 / std::sqrt(2.0) * beta2 * imag(
+            result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(
                   A.a_long_left * conj(A.a_perp_left) + A.a_long_right * conj(A.a_perp_right)
                );
             // j9
-            result[11] = beta2 * imag(
+            result[11] = 3.0 / 4.0 * beta2 * imag(
                   conj(A.a_para_left) * A.a_perp_left + conj(A.a_para_right) * A.a_perp_right
                );
 
@@ -241,7 +241,7 @@ namespace eos
         inline double decay_width(const BsToPhiDilepton::AngularCoefficients & a_c)
         {
             // cf. [BHvD2010], p. 6, eq. (2.7)
-            return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 4.0 * (2.0 * a_c.j2s + a_c.j2c);
+            return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
         inline double beta_l(const double & s) const
@@ -353,7 +353,7 @@ namespace eos
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         double Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00)); // this will be off as its missing the h_i
 
-        double result = 9.0 / 32.0 / M_PI * (
+        double result = 3.0 / 8.0 / M_PI * (
                  a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
                 +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
                 +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
@@ -1434,8 +1434,8 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
                                                     const BsToPhiDileptonAndConjugate::AngularhCoefficients & a_h) const
     {
         // cf. [DV2015], eq. (48), additional 1/(1 - y^2) is to get normalisation for the S_i and A_i right. 
-        return (3.0/4.0 * ( 2.0 * ( a_c.j1s + a_cc.j1s - m_y * a_h.h1s ) + ( a_c.j1c + a_cc.j1c - m_y * a_h.h1c ) )
-                - 1.0/4.0 * ( 2.0 * ( a_c.j2s + a_cc.j2s - m_y * a_h.h2s ) + ( a_c.j2c + a_cc.j2c - m_y * a_h.h2c ) )) / (1.0 - m_y * m_y);
+        return (3.0/4.0 * ( 2.0 * ( 4.0 / 3.0 * (a_c.j1s + a_cc.j1s) - m_y * a_h.h1s ) + ( 4.0 / 3.0 * (a_c.j1c + a_cc.j1c) - m_y * a_h.h1c ) )
+                - 1.0/4.0 * ( 2.0 * ( 4.0 / 3.0 * (a_c.j2s + a_cc.j2s) - m_y * a_h.h2s ) + ( 4.0 / 3.0 * (a_c.j2c + a_cc.j2c) - m_y * a_h.h2c ) )) / (1.0 - m_y * m_y);
     }
     double
     BsToPhiDileptonAndConjugate::differential_decay_width(const double & s) const
@@ -1493,46 +1493,48 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         else throw InternalError("BsToPhiDileptonAndConjugate::differential_Z: unknown coefficient name '" + name + "'");
     }
 
-    double BsToPhiDileptonAndConjugate::differential_S(const double & s, const std::string & name) const
+    double BsToPhiDileptonAndConjugate::differential_S(const double & s, const CoefficientIndex & name) const
     {
         BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::differential_angular_s_coefficients(s);
         BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::differential_angular_h_coefficients(s);
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
-
-        if (name == "1s") return  1.0/(1.0-m_y*m_y) * ((a_c.j1s + a_cc.j1s) - m_y * a_h.h1s);
-        if (name == "1c") return  1.0/(1.0-m_y*m_y) * ((a_c.j1c + a_cc.j1c) - m_y * a_h.h1c);
-        if (name == "2s") return  1.0/(1.0-m_y*m_y) * ((a_c.j2s + a_cc.j2s) - m_y * a_h.h2s);
-        if (name == "2c") return  1.0/(1.0-m_y*m_y) * ((a_c.j2c + a_cc.j2c) - m_y * a_h.h2c);
-        if (name == "3")  return  1.0/(1.0-m_y*m_y) * ((a_c.j3 + a_cc.j3)   - m_y * a_h.h3) ;
-        if (name == "4")  return  1.0/(1.0-m_y*m_y) * ((a_c.j4 + a_cc.j4)   - m_y * a_h.h4) ;
-        if (name == "5")  return  1.0/(1.0+m_x*m_x) * ((a_c.j5 + a_cc.j5)   - m_x * a_s.s5) ;
-        if (name == "6s") return  1.0/(1.0+m_x*m_x) * ((a_c.j6s + a_cc.j6s) - m_x * a_s.s6s);
-        if (name == "6c") return  1.0/(1.0+m_x*m_x) * ((a_c.j6c + a_cc.j6c) - m_x * a_s.s6c);
-        if (name == "7")  return  1.0/(1.0-m_y*m_y) * ((a_c.j7 + a_cc.j7)   - m_y * a_h.h7) ;
-        if (name == "8")  return  1.0/(1.0+m_x*m_x) * ((a_c.j8 + a_cc.j8)   - m_x * a_s.s8) ;
-        if (name == "9")  return  1.0/(1.0+m_x*m_x) * ((a_c.j9 + a_cc.j9)   - m_x * a_s.s9) ;
+        switch(name) {
+            case _1s: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j1s + a_cc.j1s) - m_y * a_h.h1s);
+            case _1c: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j1c + a_cc.j1c) - m_y * a_h.h1c);
+            case _2s: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j2s + a_cc.j2s) - m_y * a_h.h2s);
+            case _2c: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j2c + a_cc.j2c) - m_y * a_h.h2c);
+            case _3 : return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j3 + a_cc.j3)   - m_y * a_h.h3) ;
+            case _4 : return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j4 + a_cc.j4)   - m_y * a_h.h4) ;
+            case _5 : return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j5 + a_cc.j5)   - m_x * a_s.s5) ;
+            case _6s: return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j6s + a_cc.j6s) - m_x * a_s.s6s);
+            case _6c: return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j6c + a_cc.j6c) - m_x * a_s.s6c);
+            case _7 : return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j7 + a_cc.j7)   - m_y * a_h.h7) ;
+            case _8 : return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j8 + a_cc.j8)   - m_x * a_s.s8) ;
+            case _9 : return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j9 + a_cc.j9)   - m_x * a_s.s9) ;
+        }
     }
 
-    double BsToPhiDileptonAndConjugate::integrated_S(const double & s_min, const double & s_max, const std::string & name) const
+    double BsToPhiDileptonAndConjugate::integrated_S(const double & s_min, const double & s_max, const CoefficientIndex & name) const
     {
         BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::integrated_angular_s_coefficients(s_min, s_max);
         BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(s_min, s_max);
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
-
-        if (name == "1s") return  1.0/(1.0-m_y*m_y) * ((a_c.j1s + a_cc.j1s) - m_y * a_h.h1s);
-        if (name == "1c") return  1.0/(1.0-m_y*m_y) * ((a_c.j1c + a_cc.j1c) - m_y * a_h.h1c);
-        if (name == "2s") return  1.0/(1.0-m_y*m_y) * ((a_c.j2s + a_cc.j2s) - m_y * a_h.h2s);
-        if (name == "2c") return  1.0/(1.0-m_y*m_y) * ((a_c.j2c + a_cc.j2c) - m_y * a_h.h2c);
-        if (name == "3")  return  1.0/(1.0-m_y*m_y) * ((a_c.j3 + a_cc.j3)   - m_y * a_h.h3) ;
-        if (name == "4")  return  1.0/(1.0-m_y*m_y) * ((a_c.j4 + a_cc.j4)   - m_y * a_h.h4) ;
-        if (name == "5")  return  1.0/(1.0+m_x*m_x) * ((a_c.j5 + a_cc.j5)   - m_x * a_s.s5) ;
-        if (name == "6s") return  1.0/(1.0+m_x*m_x) * ((a_c.j6s + a_cc.j6s) - m_x * a_s.s6s);
-        if (name == "6c") return  1.0/(1.0+m_x*m_x) * ((a_c.j6c + a_cc.j6c) - m_x * a_s.s6c);
-        if (name == "7")  return  1.0/(1.0-m_y*m_y) * ((a_c.j7 + a_cc.j7)   - m_y * a_h.h7) ;
-        if (name == "8")  return  1.0/(1.0+m_x*m_x) * ((a_c.j8 + a_cc.j8)   - m_x * a_s.s8) ;
-        if (name == "9")  return  1.0/(1.0+m_x*m_x) * ((a_c.j9 + a_cc.j9)   - m_x * a_s.s9) ;
+        switch(name) {
+            case _1s: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j1s + a_cc.j1s) - m_y * a_h.h1s);
+            case _1c: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j1c + a_cc.j1c) - m_y * a_h.h1c);
+            case _2s: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j2s + a_cc.j2s) - m_y * a_h.h2s);
+            case _2c: return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j2c + a_cc.j2c) - m_y * a_h.h2c);
+            case _3:  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j3 + a_cc.j3)   - m_y * a_h.h3) ;
+            case _4:  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j4 + a_cc.j4)   - m_y * a_h.h4) ;
+            case _5:  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j5 + a_cc.j5)   - m_x * a_s.s5) ;
+            case _6s: return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j6s + a_cc.j6s) - m_x * a_s.s6s);
+            case _6c: return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j6c + a_cc.j6c) - m_x * a_s.s6c);
+            case _7:  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j7 + a_cc.j7)   - m_y * a_h.h7) ;
+            case _8:  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j8 + a_cc.j8)   - m_x * a_s.s8) ;
+            case _9:  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j9 + a_cc.j9)   - m_x * a_s.s9) ;
+        }
     }
 
     double BsToPhiDileptonAndConjugate::differential_K(const double & s, const std::string & name) const
@@ -1542,18 +1544,18 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
 
-        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s + a_cc.j1s);
-        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c + a_cc.j1c);
-        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s + a_cc.j2s);
-        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c + a_cc.j2c);
-        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 + a_cc.j3)  ;
-        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 + a_cc.j4)  ;
-        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 + a_cc.j5)  ;
-        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s + a_cc.j6s);
-        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c + a_cc.j6c);
-        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 + a_cc.j7)  ;
-        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 + a_cc.j8)  ;
-        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 + a_cc.j9)  ;
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s + a_cc.j1s) * 4.0 / 3.0;
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c + a_cc.j1c) * 4.0 / 3.0;
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s + a_cc.j2s) * 4.0 / 3.0;
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c + a_cc.j2c) * 4.0 / 3.0;
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 + a_cc.j3)   * 4.0 / 3.0;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 + a_cc.j4)   * 4.0 / 3.0;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 + a_cc.j5)   * 4.0 / 3.0;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s + a_cc.j6s) * 4.0 / 3.0;
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c + a_cc.j6c) * 4.0 / 3.0;
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 + a_cc.j7)   * 4.0 / 3.0;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 + a_cc.j8)   * 4.0 / 3.0;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 + a_cc.j9)   * 4.0 / 3.0;
     }
 
     double BsToPhiDileptonAndConjugate::integrated_K(const double & s_min, const double & s_max, const std::string & name) const
@@ -1563,18 +1565,18 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
 
-        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s + a_cc.j1s);
-        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c + a_cc.j1c);
-        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s + a_cc.j2s);
-        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c + a_cc.j2c);
-        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 + a_cc.j3)  ;
-        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 + a_cc.j4)  ;
-        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 + a_cc.j5)  ;
-        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s + a_cc.j6s);
-        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c + a_cc.j6c);
-        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 + a_cc.j7)  ;
-        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 + a_cc.j8)  ;
-        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 + a_cc.j9)  ;
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s + a_cc.j1s) * 4.0 / 3.0;
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c + a_cc.j1c) * 4.0 / 3.0;
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s + a_cc.j2s) * 4.0 / 3.0;
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c + a_cc.j2c) * 4.0 / 3.0;
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 + a_cc.j3)   * 4.0 / 3.0;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 + a_cc.j4)   * 4.0 / 3.0;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 + a_cc.j5)   * 4.0 / 3.0;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s + a_cc.j6s) * 4.0 / 3.0;
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c + a_cc.j6c) * 4.0 / 3.0;
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 + a_cc.j7)   * 4.0 / 3.0;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 + a_cc.j8)   * 4.0 / 3.0;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 + a_cc.j9)   * 4.0 / 3.0;
     }
 
     double BsToPhiDileptonAndConjugate::differential_A(const double & s, const std::string & name) const
@@ -1584,18 +1586,18 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
 
-        if (name == "1s") return  1.0/(1.0+m_x*m_x) * ((a_c.j1s - a_cc.j1s) - m_x * a_s.s1s);
-        if (name == "1c") return  1.0/(1.0+m_x*m_x) * ((a_c.j1c - a_cc.j1c) - m_x * a_s.s1c);
-        if (name == "2s") return  1.0/(1.0+m_x*m_x) * ((a_c.j2s - a_cc.j2s) - m_x * a_s.s2s);
-        if (name == "2c") return  1.0/(1.0+m_x*m_x) * ((a_c.j2c - a_cc.j2c) - m_x * a_s.s2c);
-        if (name == "3")  return  1.0/(1.0+m_x*m_x) * ((a_c.j3 - a_cc.j3)   - m_x * a_s.s3) ;
-        if (name == "4")  return  1.0/(1.0+m_x*m_x) * ((a_c.j4 - a_cc.j4)   - m_x * a_s.s4) ;
-        if (name == "5")  return  1.0/(1.0-m_y*m_y) * ((a_c.j5 - a_cc.j5)   - m_y * a_h.h5) ;
-        if (name == "6s") return  1.0/(1.0-m_y*m_y) * ((a_c.j6s - a_cc.j6s) - m_y * a_h.h6s);
-        if (name == "6c") return  1.0/(1.0-m_y*m_y) * ((a_c.j6c - a_cc.j6c) - m_y * a_h.h6c);
-        if (name == "7")  return  1.0/(1.0+m_x*m_x) * ((a_c.j7 - a_cc.j7)   - m_x * a_s.s7) ;
-        if (name == "8")  return  1.0/(1.0-m_y*m_y) * ((a_c.j8 - a_cc.j8)   - m_y * a_h.h8) ;
-        if (name == "9")  return  1.0/(1.0-m_y*m_y) * ((a_c.j9 - a_cc.j9)   - m_y * a_h.h9) ;
+        if (name == "1s") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j1s - a_cc.j1s) - m_x * a_s.s1s);
+        if (name == "1c") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j1c - a_cc.j1c) - m_x * a_s.s1c);
+        if (name == "2s") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j2s - a_cc.j2s) - m_x * a_s.s2s);
+        if (name == "2c") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j2c - a_cc.j2c) - m_x * a_s.s2c);
+        if (name == "3")  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j3 - a_cc.j3)   - m_x * a_s.s3) ;
+        if (name == "4")  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j4 - a_cc.j4)   - m_x * a_s.s4) ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j5 - a_cc.j5)   - m_y * a_h.h5) ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j6s - a_cc.j6s) - m_y * a_h.h6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j6c - a_cc.j6c) - m_y * a_h.h6c);
+        if (name == "7")  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j7 - a_cc.j7)   - m_x * a_s.s7) ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j8 - a_cc.j8)   - m_y * a_h.h8) ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j9 - a_cc.j9)   - m_y * a_h.h9) ;
     }
 
     double BsToPhiDileptonAndConjugate::integrated_A(const double & s_min, const double & s_max, const std::string & name) const
@@ -1605,18 +1607,18 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
 
-        if (name == "1s") return  1.0/(1.0+m_x*m_x) * ((a_c.j1s - a_cc.j1s) - m_x * a_s.s1s);
-        if (name == "1c") return  1.0/(1.0+m_x*m_x) * ((a_c.j1c - a_cc.j1c) - m_x * a_s.s1c);
-        if (name == "2s") return  1.0/(1.0+m_x*m_x) * ((a_c.j2s - a_cc.j2s) - m_x * a_s.s2s);
-        if (name == "2c") return  1.0/(1.0+m_x*m_x) * ((a_c.j2c - a_cc.j2c) - m_x * a_s.s2c);
-        if (name == "3")  return  1.0/(1.0+m_x*m_x) * ((a_c.j3 - a_cc.j3)   - m_x * a_s.s3) ;
-        if (name == "4")  return  1.0/(1.0+m_x*m_x) * ((a_c.j4 - a_cc.j4)   - m_x * a_s.s4) ;
-        if (name == "5")  return  1.0/(1.0-m_y*m_y) * ((a_c.j5 - a_cc.j5)   - m_y * a_h.h5) ;
-        if (name == "6s") return  1.0/(1.0-m_y*m_y) * ((a_c.j6s - a_cc.j6s) - m_y * a_h.h6s);
-        if (name == "6c") return  1.0/(1.0-m_y*m_y) * ((a_c.j6c - a_cc.j6c) - m_y * a_h.h6c);
-        if (name == "7")  return  1.0/(1.0+m_x*m_x) * ((a_c.j7 - a_cc.j7)   - m_x * a_s.s7) ;
-        if (name == "8")  return  1.0/(1.0-m_y*m_y) * ((a_c.j8 - a_cc.j8)   - m_y * a_h.h8) ;
-        if (name == "9")  return  1.0/(1.0-m_y*m_y) * ((a_c.j9 - a_cc.j9)   - m_y * a_h.h9) ;
+        if (name == "1s") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j1s - a_cc.j1s) - m_x * a_s.s1s);
+        if (name == "1c") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j1c - a_cc.j1c) - m_x * a_s.s1c);
+        if (name == "2s") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j2s - a_cc.j2s) - m_x * a_s.s2s);
+        if (name == "2c") return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j2c - a_cc.j2c) - m_x * a_s.s2c);
+        if (name == "3")  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j3 - a_cc.j3)   - m_x * a_s.s3) ;
+        if (name == "4")  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j4 - a_cc.j4)   - m_x * a_s.s4) ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j5 - a_cc.j5)   - m_y * a_h.h5) ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j6s - a_cc.j6s) - m_y * a_h.h6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j6c - a_cc.j6c) - m_y * a_h.h6c);
+        if (name == "7")  return  1.0/(1.0+m_x*m_x) * (4.0 / 3.0 * (a_c.j7 - a_cc.j7)   - m_x * a_s.s7) ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j8 - a_cc.j8)   - m_y * a_h.h8) ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (4.0 / 3.0 * (a_c.j9 - a_cc.j9)   - m_y * a_h.h9) ;
     }
 
     double BsToPhiDileptonAndConjugate::differential_W(const double & s, const std::string & name) const
@@ -1626,18 +1628,18 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
 
-        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s - a_cc.j1s);
-        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c - a_cc.j1c);
-        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s - a_cc.j2s);
-        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c - a_cc.j2c);
-        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 - a_cc.j3)  ;
-        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 - a_cc.j4)  ;
-        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 - a_cc.j5)  ;
-        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s - a_cc.j6s);
-        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c - a_cc.j6c);
-        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 - a_cc.j7)  ;
-        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 - a_cc.j8)  ;
-        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 - a_cc.j9)  ;
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s - a_cc.j1s) * 4.0 / 3.0;
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c - a_cc.j1c) * 4.0 / 3.0;
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s - a_cc.j2s) * 4.0 / 3.0;
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c - a_cc.j2c) * 4.0 / 3.0;
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 - a_cc.j3)   * 4.0 / 3.0;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 - a_cc.j4)   * 4.0 / 3.0;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 - a_cc.j5)   * 4.0 / 3.0;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s - a_cc.j6s) * 4.0 / 3.0;
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c - a_cc.j6c) * 4.0 / 3.0;
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 - a_cc.j7)   * 4.0 / 3.0;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 - a_cc.j8)   * 4.0 / 3.0;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 - a_cc.j9)   * 4.0 / 3.0;
     }
 
     double BsToPhiDileptonAndConjugate::integrated_W(const double & s_min, const double & s_max, const std::string & name) const
@@ -1647,18 +1649,18 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
         BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
 
-        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s - a_cc.j1s);
-        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c - a_cc.j1c);
-        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s - a_cc.j2s);
-        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c - a_cc.j2c);
-        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 - a_cc.j3)  ;
-        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 - a_cc.j4)  ;
-        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 - a_cc.j5)  ;
-        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s - a_cc.j6s);
-        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c - a_cc.j6c);
-        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 - a_cc.j7)  ;
-        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 - a_cc.j8)  ;
-        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 - a_cc.j9)  ;
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s - a_cc.j1s) * 4.0 / 3.0;
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c - a_cc.j1c) * 4.0 / 3.0;
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s - a_cc.j2s) * 4.0 / 3.0;
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c - a_cc.j2c) * 4.0 / 3.0;
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 - a_cc.j3)   * 4.0 / 3.0;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 - a_cc.j4)   * 4.0 / 3.0;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 - a_cc.j5)   * 4.0 / 3.0;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s - a_cc.j6s) * 4.0 / 3.0;
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c - a_cc.j6c) * 4.0 / 3.0;
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 - a_cc.j7)   * 4.0 / 3.0;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 - a_cc.j8)   * 4.0 / 3.0;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 - a_cc.j9)   * 4.0 / 3.0;
     }
 
 

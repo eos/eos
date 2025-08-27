@@ -40,11 +40,11 @@
 
 #define DECLARE_DIFFERENTIAL_S_FUNCTION(suffix) \
     double differential_S_##suffix(const double & s) const { \
-        return differential_S(s, #suffix); \
+        return differential_S(s, CoefficientIndex::_##suffix); \
     }
 #define DECLARE_INTEGRATED_S_FUNCTION(suffix) \
     double integrated_S_##suffix(const double & s_min, const double & s_max) const { \
-        return integrated_S(s_min, s_max, #suffix); \
+        return integrated_S(s_min, s_max, CoefficientIndex::_##suffix); \
     }
 
 #define DECLARE_DIFFERENTIAL_K_FUNCTION(suffix) \
@@ -321,6 +321,7 @@ namespace eos
 
             struct AngularhCoefficients;
             struct AngularsCoefficients;
+            enum CoefficientIndex{_1s, _1c, _2s, _2c, _3, _4, _5, _6s, _6c, _7, _8, _9};
 
             // Parameters related to mixing
             inline double decay_width(const BsToPhiDilepton::AngularCoefficients & a_c,
@@ -366,7 +367,7 @@ namespace eos
             double a_time_imag(const double & s) const;
             double a_scal_imag(const double & s) const;
 
-            double integrated_S(const double & s_min, const double & s_max, const std::string & name) const;
+            double integrated_S(const double & s_min, const double & s_max, const CoefficientIndex & name) const;
             DECLARE_INTEGRATED_S_FUNCTION(1s)
             DECLARE_INTEGRATED_S_FUNCTION(1c)
             DECLARE_INTEGRATED_S_FUNCTION(2s)
@@ -380,7 +381,7 @@ namespace eos
             DECLARE_INTEGRATED_S_FUNCTION(8)
             DECLARE_INTEGRATED_S_FUNCTION(9)
 
-            double differential_S(const double & s, const std::string & name) const;
+            double differential_S(const double & s, const CoefficientIndex & name) const;
             DECLARE_DIFFERENTIAL_S_FUNCTION(1s)
             DECLARE_DIFFERENTIAL_S_FUNCTION(1c)
             DECLARE_DIFFERENTIAL_S_FUNCTION(2s)
