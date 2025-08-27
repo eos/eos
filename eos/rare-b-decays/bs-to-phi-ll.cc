@@ -91,7 +91,7 @@ namespace eos
         {
             Context ctx("When constructing Bs->Phill observables");
 
-            std::string tag = o.get("tag"_ok, "");
+            std::string tag = o.get("tag"_ok, "GvDV2020");
 
             if ("BFS2004" == tag)
             {
@@ -118,7 +118,7 @@ namespace eos
         {
         }
 
-        inline std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & s) const
+        std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & s) const
         {
             // cf. [BHvD2010], p. 26, eqs. (A1)-(A11)
             // cf. [BHvD2012], app B, eqs. (B1)-(B12)
@@ -130,7 +130,7 @@ namespace eos
             double beta = std::sqrt(beta2);
 
             // j1s
-            result[0] = 3.0 / 4.0 * (
+            result[0] = (
                   (2.0 + beta2) / 4.0 * (norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right))
                   + z * real(A.a_perp_left * conj(A.a_perp_right) + A.a_para_left * conj(A.a_para_right))
                   + 4.0 * beta2 * (norm(A.a_long_perp) + norm(A.a_long_para))
@@ -141,7 +141,7 @@ namespace eos
                   )
                );
             // j1c
-            result[1] = 3.0 / 4.0 * (
+            result[1] = (
                   norm(A.a_long_left) + norm(A.a_long_right)
                   + z * (norm(A.a_time) + 2.0 * real(A.a_long_left * conj(A.a_long_right)))
                   + beta2 * norm(A.a_scal)
@@ -150,27 +150,27 @@ namespace eos
                   + 16.0 * y * real((A.a_long_left + A.a_long_right) * conj(A.a_time_long))
                );
             // j2s
-            result[2] = 3.0 * beta2 / 16.0 * (
+            result[2] = beta2 / 4.0 * (
                   norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right)
                   - 16.0 * (norm(A.a_time_perp) + norm(A.a_time_para) + norm(A.a_long_perp) + norm(A.a_long_para))
                );
             // j2c
-            result[3] = -3.0 * beta2 / 4.0 * (
+            result[3] = -beta2 * (
                   norm(A.a_long_left) + norm(A.a_long_right)
                   - 8.0 * (norm(A.a_time_long) + norm(A.a_para_perp))
                );
             // j3
-            result[4] = 3.0 / 8.0 * beta2 * (
+            result[4] = 1.0 / 2.0 * beta2 * (
                   norm(A.a_perp_left) + norm(A.a_perp_right) - norm(A.a_para_left) - norm(A.a_para_right)
                   + 16.0 * (norm(A.a_time_para) - norm(A.a_time_perp) + norm(A.a_long_para) - norm(A.a_long_perp))
                );
             // j4
-            result[5] = 3.0 / (4.0 * std::sqrt(2.0)) * beta2 * real(
+            result[5] = 1.0 / (std::sqrt(2.0)) * beta2 * real(
                   A.a_long_left * conj(A.a_para_left) + A.a_long_right * conj(A.a_para_right)
                   - 8.0 * std::sqrt(2.0) * (A.a_time_long * conj(A.a_time_para) + A.a_para_perp * conj(A.a_long_para))
                );
             // j5
-            result[6] = 3.0 * std::sqrt(2.0) / 4.0 * beta * real(
+            result[6] = std::sqrt(2.0) * beta * real(
                   A.a_long_left * conj(A.a_perp_left) - A.a_long_right * conj(A.a_perp_right)
                   - 2.0 * std::sqrt(2.0) * A.a_time_para * conj(A.a_scal)
                   - y * (
@@ -181,7 +181,7 @@ namespace eos
                   )
                );
             // j6s
-            result[7] = 3.0 / 2.0 * beta * real(
+            result[7] = 2.0 * beta * real(
                   A.a_para_left * conj(A.a_perp_left) - A.a_para_right * conj(A.a_perp_right)
                   + 4.0 * std::sqrt(2.0) * y * (
                        (A.a_perp_left - A.a_perp_right) * conj(A.a_time_para)
@@ -189,7 +189,7 @@ namespace eos
                   )
                );
             // j6c
-            result[8] = 3.0 * beta * real(
+            result[8] = 4.0 * beta * real(
                   2.0 * A.a_time_long * conj(A.a_scal)
                   + y * (
                      (A.a_long_left + A.a_long_right) * conj(A.a_scal)
@@ -197,7 +197,7 @@ namespace eos
                   )
                );
             // j7
-            result[9] = 3.0 * std::sqrt(2.0) / 4.0 * beta * imag(
+            result[9] = std::sqrt(2.0) * beta * imag(
                   A.a_long_left * conj(A.a_para_left) - A.a_long_right * conj(A.a_para_right)
                   + 2.0 * std::sqrt(2.0) * A.a_time_perp * conj(A.a_scal)
                   + y * (
@@ -208,11 +208,11 @@ namespace eos
                   )
                );
             // j8
-            result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(
+            result[10] = 1.0 / std::sqrt(2.0) * beta2 * imag(
                   A.a_long_left * conj(A.a_perp_left) + A.a_long_right * conj(A.a_perp_right)
                );
             // j9
-            result[11] = 3.0 / 4.0 * beta2 * imag(
+            result[11] = beta2 * imag(
                   conj(A.a_para_left) * A.a_perp_left + conj(A.a_para_right) * A.a_perp_right
                );
 
@@ -241,7 +241,7 @@ namespace eos
         inline double decay_width(const BsToPhiDilepton::AngularCoefficients & a_c)
         {
             // cf. [BHvD2010], p. 6, eq. (2.7)
-            return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
+            return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 4.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
         inline double beta_l(const double & s) const
@@ -293,6 +293,17 @@ namespace eos
         }
     };
 
+    BsToPhiDilepton::AngularCoefficients 
+    BsToPhiDilepton::pub_integrated_angular_coefficients(const double & s_min, const double & s_max) const
+    {
+        return _imp->integrated_angular_coefficients(s_min, s_max);
+    }
+    BsToPhiDilepton::AngularCoefficients 
+    BsToPhiDilepton::pub_differential_angular_coefficients(const double & s) const
+    {
+        return _imp->differential_angular_coefficients(s);
+    }
+
     BsToPhiDilepton::BsToPhiDilepton(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BsToPhiDilepton>(new Implementation<BsToPhiDilepton>(parameters, options, *this))
     {
@@ -340,9 +351,9 @@ namespace eos
         double s_2_phi = sin(2.0 * phi);
 
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        double Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
+        double Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00)); // this will be off as its missing the h_i
 
-        double result = 3.0 / 8.0 / M_PI * (
+        double result = 9.0 / 32.0 / M_PI * (
                  a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
                 +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
                 +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
@@ -913,8 +924,9 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
 
 
     BsToPhiDileptonAndConjugate::BsToPhiDileptonAndConjugate(const Parameters & parameters, const Options & options):
-        bstophidilepton(parameters, options + Options{{"cp-conjugate"_ok, "true"}}),
-        bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate"_ok, "false"}})
+        bstophidilepton(parameters, options + Options{{"cp-conjugate"_ok, "false"}}),
+        bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate"_ok, "true"}}),
+        m_y(0.129), m_x(26.79), m_gamma_s(0.6578428049823233)
     {
     }
 
@@ -953,7 +965,6 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         }
     };
 
-
     inline std::array<double, 12>
     BsToPhiDileptonAndConjugate::angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A,
                                                               const BsToPhiDilepton::Amplitudes & Atilda,
@@ -970,10 +981,10 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         double beta2 = 1.0 - z;
         double beta = std::sqrt(beta2);
 
-        const complex<double> expiphi(cos(phiBs), sin(phiBs));
+        const complex<double> expiphi(cos(phiBs), -1.0 * sin(phiBs)); // e^iphi is the phase of -q/p
 
         // h1s
-        result[0] = 3.0 / 4.0 * (
+        result[0] = (
             (2.0 + beta2) / 2.0 * real( expiphi * (
                 Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
                 + Atilda.a_para_left * conj(A.a_para_left) + Atilda.a_para_right * conj(A.a_para_right)
@@ -983,7 +994,7 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
                 )
         );
         // h1c
-        result[1] = 3.0 / 2.0 * ( real(
+        result[1] = 2.0 * ( real(
             expiphi * (
                 Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
             ))
@@ -993,28 +1004,28 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
             + beta2 * real( expiphi * Atilda.a_scal * conj(A.a_scal)))
         );
         // h2s
-        result[2] = 3.0 * beta2 / 8.0 * real( expiphi * (
+        result[2] = beta2 / 2.0 * real( expiphi * (
             Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
             + Atilda.a_para_left * conj(A.a_para_left) + Atilda.a_para_right * conj(A.a_para_right)
         ));
         // h2c
-        result[3] = -3.0 * beta2 / 2.0 * real( expiphi * (
+        result[3] = -2.0 * beta2 * real( expiphi * (
             Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
         ));
         // h3
-        result[4] = 3.0 / 4.0 * beta2 * real( expiphi * (
+        result[4] = beta2 * real( expiphi * (
             Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
             - Atilda.a_para_left * conj(A.a_para_left) - Atilda.a_para_right * conj(A.a_para_right)
         ));
         // h4
-        result[5] = 3.0 / (4.0 * std::sqrt(2.0)) * beta2 * real(
+        result[5] = 1.0 / std::sqrt(2.0) * beta2 * real(
             expiphi * (
                 Atilda.a_long_left * conj(A.a_para_left) + Atilda.a_long_right * conj(A.a_para_right)
             ) + conj(expiphi) * (
                 A.a_long_left * conj(Atilda.a_para_left) + A.a_long_right * conj(Atilda.a_para_right)
             ));
         // h5
-        result[6] = 3.0 * std::sqrt(2.0) / 4.0 * beta * (real(
+        result[6] = std::sqrt(2.0) * beta * (real(
             expiphi * (
                 Atilda.a_long_left * conj(A.a_perp_left) - Atilda.a_long_right * conj(A.a_perp_right)
             ) + conj(expiphi) * (
@@ -1027,21 +1038,21 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
                 A.a_para_left * conj(Atilda.a_scal) + A.a_para_right * conj(Atilda.a_scal)
             )));
         // h6s
-        result[7] = 3.0 / 2.0 * beta * real(
+        result[7] = 2.0 * beta * real(
             expiphi * (
                 Atilda.a_para_left * conj(A.a_perp_left) - Atilda.a_para_right * conj(A.a_perp_right)
             ) + conj(expiphi) * (
                 A.a_para_left * conj(Atilda.a_perp_left) - A.a_para_right * conj(Atilda.a_perp_right)
             ));
         // h6c
-        result[8] = 3.0 * beta * y * real(
+        result[8] = 4.0 * beta * y * real(
             expiphi * (
                 Atilda.a_long_left * conj(A.a_scal) + Atilda.a_long_right * conj(A.a_scal)
             ) + conj(expiphi) * (
                 A.a_long_left * conj(Atilda.a_scal) + A.a_long_right * conj(Atilda.a_scal)
             ));
         // h7
-        result[9] = 3.0 * std::sqrt(2.0) / 4.0 * beta * (imag(
+        result[9] = std::sqrt(2.0) * beta * (imag(
             expiphi * (
                 Atilda.a_long_left * conj(A.a_para_left) - Atilda.a_long_right * conj(A.a_para_right)
             ) + conj(expiphi) * (
@@ -1054,14 +1065,14 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
                 A.a_perp_left * conj(Atilda.a_scal) + A.a_perp_right * conj(Atilda.a_scal)
             )));
         // h8
-        result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(
+        result[10] = 1.0 / std::sqrt(2.0) * beta2 * imag(
             expiphi * (
                 Atilda.a_long_left * conj(A.a_perp_left) + Atilda.a_long_right * conj(A.a_perp_right)
             ) + conj(expiphi) * (
                 A.a_long_left * conj(Atilda.a_perp_left) + A.a_long_right * conj(Atilda.a_perp_right)
             ));
         // h9
-        result[11] = - 3.0 / 4.0 * beta2 * imag(
+        result[11] = -beta2 * imag(
             expiphi * (
                 Atilda.a_para_left * conj(A.a_perp_left) + Atilda.a_para_right * conj(A.a_perp_right)
             ) + conj(expiphi) * (
@@ -1095,34 +1106,561 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
 
         return BsToPhiDileptonAndConjugate::AngularhCoefficients(integrated_angular_h_coefficients_array);
     }
-
-    double
-    BsToPhiDileptonAndConjugate::integrated_H_1c(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::AngularhCoefficients
+    BsToPhiDileptonAndConjugate::differential_angular_h_coefficients(const double & s) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
-        return a_h_c.h1c;
+        return BsToPhiDileptonAndConjugate::AngularhCoefficients(differential_angular_h_coefficients_array(s));
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_1s(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_H(const double & s_min, const double & s_max, const std::string & name) const
     {
         AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
-        return a_h_c.h1s;
+        if (name == "1s")      return 1.0 / (1.0 - m_y*m_y) * a_h_c.h1s;
+        else if (name == "1c") return 1.0 / (1.0 - m_y*m_y) * a_h_c.h1c;
+        else if (name == "2s") return 1.0 / (1.0 - m_y*m_y) * a_h_c.h2s;
+        else if (name == "2c") return 1.0 / (1.0 - m_y*m_y) * a_h_c.h2c;
+        else if (name == "3")  return 1.0 / (1.0 - m_y*m_y) * a_h_c.h3 ;
+        else if (name == "4")  return 1.0 / (1.0 - m_y*m_y) * a_h_c.h4 ;
+        else if (name == "5")  return 1.0 / (1.0 - m_y*m_y) * a_h_c.h5 ;
+        else if (name == "6s") return 1.0 / (1.0 - m_y*m_y) * a_h_c.h6s;
+        else if (name == "6c") return 1.0 / (1.0 - m_y*m_y) * a_h_c.h6c;
+        else if (name == "7")  return 1.0 / (1.0 - m_y*m_y) * a_h_c.h7 ;
+        else if (name == "8")  return 1.0 / (1.0 - m_y*m_y) * a_h_c.h8 ;
+        else if (name == "9")  return 1.0 / (1.0 - m_y*m_y) * a_h_c.h9 ;
+        else throw InternalError("BsToPhiDileptonAndConjugate::integrated_H: unknown coefficient name '" + name + "'");
+    }
+
+    double BsToPhiDileptonAndConjugate::differential_H(const double & s, const std::string & name) const 
+    {
+        std::array<double, 12> coeffs = BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array(s);
+        if (name == "1s")      return 1.0 / (1.0 - m_y*m_y) * coeffs[0];
+        else if (name == "1c") return 1.0 / (1.0 - m_y*m_y) * coeffs[1];
+        else if (name == "2s") return 1.0 / (1.0 - m_y*m_y) * coeffs[2];
+        else if (name == "2c") return 1.0 / (1.0 - m_y*m_y) * coeffs[3];
+        else if (name == "3")  return 1.0 / (1.0 - m_y*m_y) * coeffs[4];
+        else if (name == "4")  return 1.0 / (1.0 - m_y*m_y) * coeffs[5];
+        else if (name == "5")  return 1.0 / (1.0 - m_y*m_y) * coeffs[6];
+        else if (name == "6s") return 1.0 / (1.0 - m_y*m_y) * coeffs[7];
+        else if (name == "6c") return 1.0 / (1.0 - m_y*m_y) * coeffs[8];
+        else if (name == "7")  return 1.0 / (1.0 - m_y*m_y) * coeffs[9];
+        else if (name == "8")  return 1.0 / (1.0 - m_y*m_y) * coeffs[10];
+        else if (name == "9")  return 1.0 / (1.0 - m_y*m_y) * coeffs[11];
+        else throw InternalError("BsToPhiDileptonAndConjugate::differential_H: unknown coefficient name '" + name + "'");    
+    }
+    
+    struct BsToPhiDileptonAndConjugate::AngularsCoefficients
+    {
+        double s1s, s1c;
+        double s2s, s2c;
+        double s3;
+        double s4;
+        double s5;
+        double s6s, s6c;
+        double s7;
+        double s8;
+        double s9;
+
+        AngularsCoefficients()
+        {
+        }
+
+        AngularsCoefficients(const std::array<double, 12> & a) :
+            s1s(a[0]),
+            s1c(a[1]),
+            s2s(a[2]),
+            s2c(a[3]),
+            s3(a[4]),
+            s4(a[5]),
+            s5(a[6]),
+            s6s(a[7]),
+            s6c(a[8]),
+            s7(a[9]),
+            s8(a[10]),
+            s9(a[11])
+        {
+        }
+    };
+
+    complex<double> BsToPhiDileptonAndConjugate::a_long_right(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_long_right;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_long_left(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_long_left;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_perp_right(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_perp_right;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_perp_left(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_perp_left;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_para_right(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_para_right;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_para_left(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_para_left;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_time(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_time;
+    }
+    complex<double> BsToPhiDileptonAndConjugate::a_scal(const double & s) const 
+    {
+        return bstophidilepton.amplitudes(s).a_scal;
+    }
+
+    double BsToPhiDileptonAndConjugate::a_long_right_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_long_right);
+    }
+    double BsToPhiDileptonAndConjugate::a_long_left_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_long_left);
+    }
+    double BsToPhiDileptonAndConjugate::a_perp_right_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_perp_right);
+    }
+    double BsToPhiDileptonAndConjugate::a_perp_left_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_perp_left);
+    }
+    double BsToPhiDileptonAndConjugate::a_para_right_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_para_right);
+    }
+    double BsToPhiDileptonAndConjugate::a_para_left_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_para_left);
+    }
+    double BsToPhiDileptonAndConjugate::a_time_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_time);
+    }
+    double BsToPhiDileptonAndConjugate::a_scal_real(const double & s) const 
+    {
+        return real(bstophidilepton.amplitudes(s).a_scal);
+    }
+
+    double BsToPhiDileptonAndConjugate::a_long_right_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_long_right);
+    }
+    double BsToPhiDileptonAndConjugate::a_long_left_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_long_left);
+    }
+    double BsToPhiDileptonAndConjugate::a_perp_right_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_perp_right);
+    }
+    double BsToPhiDileptonAndConjugate::a_perp_left_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_perp_left);
+    }
+    double BsToPhiDileptonAndConjugate::a_para_right_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_para_right);
+    }
+    double BsToPhiDileptonAndConjugate::a_para_left_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_para_left);
+    }
+    double BsToPhiDileptonAndConjugate::a_time_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_time);
+    }
+    double BsToPhiDileptonAndConjugate::a_scal_imag(const double & s) const 
+    {
+        return imag(bstophidilepton.amplitudes(s).a_scal);
+    }
+
+    inline std::array<double, 12>
+    BsToPhiDileptonAndConjugate::angular_s_coefficients_array(const BsToPhiDilepton::Amplitudes & A,
+                                                              const BsToPhiDilepton::Amplitudes & Atilda,
+                                                              const double & s) const
+    {
+        // cf. [DV2015], eqs. (117)-(128)
+        std::array<double, 12> result;
+
+        double m_l = bstophidilepton.m_l();
+        double phiBs = bstophidilepton.phiBs();
+
+        double z = 4.0 * power_of<2>(m_l) / s;
+        double y = m_l / std::sqrt(s);
+        double beta2 = 1.0 - z;
+        double beta = std::sqrt(beta2);
+
+        const complex<double> expiphi(cos(phiBs), -1.0 * sin(phiBs)); // e^iphi is the phase of -q/p
+
+        // s1s
+        result[0] = (
+            (2.0 + beta2) / 2.0 * imag( expiphi * (
+                Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
+                + Atilda.a_para_left * conj(A.a_para_left) + Atilda.a_para_right * conj(A.a_para_right)
+            ))
+            + z * imag( expiphi * (Atilda.a_perp_left * conj(A.a_perp_right) + Atilda.a_para_left * conj(A.a_para_right))
+                - conj(expiphi) * (A.a_perp_left * conj(Atilda.a_perp_right) + A.a_para_left * conj(Atilda.a_para_right))
+                )
+        );
+        // s1c
+        result[1] = 2.0 * ( imag(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
+            ))
+            + 2.0 * z * (
+                imag( expiphi * (Atilda.a_time * conj(A.a_time)))
+                + imag( expiphi * (Atilda.a_long_left * conj(A.a_long_right)) - conj(expiphi) * (A.a_long_left * conj(Atilda.a_long_right)) )
+            + beta2 * imag( expiphi * Atilda.a_scal * conj(A.a_scal)))
+        );
+        // s2s
+        result[2] = beta2 / 2.0 * imag( expiphi * (
+            Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
+            + Atilda.a_para_left * conj(A.a_para_left) + Atilda.a_para_right * conj(A.a_para_right)
+        ));
+        // s2c
+        result[3] = -2.0 * beta2 * imag( expiphi * (
+            Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
+        ));
+        // s3
+        result[4] = beta2 * imag( expiphi * (
+            Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
+            - Atilda.a_para_left * conj(A.a_para_left) - Atilda.a_para_right * conj(A.a_para_right)
+        ));
+        // s4
+        result[5] = 1.0 / std::sqrt(2.0) * beta2 * imag(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_para_left) + Atilda.a_long_right * conj(A.a_para_right)
+            ) - conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_para_left) + A.a_long_right * conj(Atilda.a_para_right)
+            ));
+        // s5
+        result[6] = std::sqrt(2.0) * beta * (imag(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_perp_left) - Atilda.a_long_right * conj(A.a_perp_right)
+            ) - conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_perp_left) - A.a_long_right * conj(Atilda.a_perp_right)
+            ))
+            - y * imag(
+            expiphi * (
+                Atilda.a_para_left * conj(A.a_scal) + Atilda.a_para_right * conj(A.a_scal)
+            ) - conj(expiphi) * (
+                A.a_para_left * conj(Atilda.a_scal) + A.a_para_right * conj(Atilda.a_scal)
+            )));
+        // s6s
+        result[7] = 2.0 * beta * imag(
+            expiphi * (
+                Atilda.a_para_left * conj(A.a_perp_left) - Atilda.a_para_right * conj(A.a_perp_right)
+            ) - conj(expiphi) * (
+                A.a_para_left * conj(Atilda.a_perp_left) - A.a_para_right * conj(Atilda.a_perp_right)
+            ));
+        // s6c
+        result[8] = 4.0 * beta * y * imag(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_scal) + Atilda.a_long_right * conj(A.a_scal)
+            ) - conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_scal) + A.a_long_right * conj(Atilda.a_scal)
+            ));
+        // s7 Here a global minus one is added from Im -> Re
+        result[9] = -std::sqrt(2.0) * beta * (real(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_para_left) - Atilda.a_long_right * conj(A.a_para_right)
+            ) - conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_para_left) - A.a_long_right * conj(Atilda.a_para_right)
+            ))
+            + y * real(
+            expiphi * (
+                Atilda.a_perp_left * conj(A.a_scal) + Atilda.a_perp_right * conj(A.a_scal)
+            ) - conj(expiphi) * (
+                A.a_perp_left * conj(Atilda.a_scal) + A.a_perp_right * conj(Atilda.a_scal)
+            )));
+        // s8 Here a global minus one is added from Im -> Re
+        result[10] = -1.0 / std::sqrt(2.0) * beta2 * real(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_perp_left) + Atilda.a_long_right * conj(A.a_perp_right)
+            ) - conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_perp_left) + A.a_long_right * conj(Atilda.a_perp_right)
+            ));
+        // s9 Here a global minus one is added from Im -> Re
+        result[11] = beta2 * real(
+            expiphi * (
+                Atilda.a_para_left * conj(A.a_perp_left) + Atilda.a_para_right * conj(A.a_perp_right)
+            ) - conj(expiphi) * (
+                A.a_para_left * conj(Atilda.a_perp_left) + A.a_para_right * conj(Atilda.a_perp_right)
+            ));
+
+        return result;
+    }
+
+    inline std::array<double, 12>
+    BsToPhiDileptonAndConjugate::differential_angular_s_coefficients_array(const double & s) const
+    {
+        BsToPhiDilepton::Amplitudes A = bstophidilepton.amplitudes(s);
+        BsToPhiDilepton::Amplitudes Atilda = bstophidilepton_conjugate.amplitudes(s);
+
+        Atilda.a_perp_left *= -1;
+        Atilda.a_perp_right *= -1;
+        Atilda.a_scal *= -1;
+        Atilda.a_time_perp *= -1; // TODO Check
+        Atilda.a_long_perp *= -1; // TODO Check
+
+        return angular_s_coefficients_array(A, Atilda, s);
+    }
+
+    BsToPhiDileptonAndConjugate::AngularsCoefficients
+    BsToPhiDileptonAndConjugate::integrated_angular_s_coefficients(const double & s_min, const double & s_max) const
+    {
+        std::function<std::array<double, 12> (const double &)> integrand =
+                std::bind(&BsToPhiDileptonAndConjugate::differential_angular_s_coefficients_array, this, std::placeholders::_1);
+        std::array<double, 12> integrated_angular_s_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+
+        return BsToPhiDileptonAndConjugate::AngularsCoefficients(integrated_angular_s_coefficients_array);
+    }
+
+    BsToPhiDileptonAndConjugate::AngularsCoefficients
+    BsToPhiDileptonAndConjugate::differential_angular_s_coefficients(const double & s) const
+    {
+        return BsToPhiDileptonAndConjugate::AngularsCoefficients(differential_angular_s_coefficients_array(s));
+    }
+
+    double BsToPhiDileptonAndConjugate::decay_width(const BsToPhiDilepton::AngularCoefficients & a_c, 
+                                                    const BsToPhiDilepton::AngularCoefficients & a_cc, 
+                                                    const BsToPhiDileptonAndConjugate::AngularhCoefficients & a_h) const
+    {
+        // cf. [DV2015], eq. (48), additional 1/(1 - y^2) is to get normalisation for the S_i and A_i right. 
+        return (3.0/4.0 * ( 2.0 * ( a_c.j1s + a_cc.j1s - m_y * a_h.h1s ) + ( a_c.j1c + a_cc.j1c - m_y * a_h.h1c ) )
+                - 1.0/4.0 * ( 2.0 * ( a_c.j2s + a_cc.j2s - m_y * a_h.h2s ) + ( a_c.j2c + a_cc.j2c - m_y * a_h.h2c ) )) / (1.0 - m_y * m_y);
+    }
+    double
+    BsToPhiDileptonAndConjugate::differential_decay_width(const double & s) const
+    {
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = differential_angular_h_coefficients(s);
+        return BsToPhiDileptonAndConjugate::decay_width(a_c, a_cc, a_h);
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_2c(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_decay_width(const double & s_min, const double & s_max) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
-        return a_h_c.h2c;
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = integrated_angular_h_coefficients(s_min, s_max);
+        return BsToPhiDileptonAndConjugate::decay_width(a_c, a_cc, a_h);
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_2s(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_Z(const double & s_min, const double & s_max, const std::string & name) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
-        return a_h_c.h2s;
+        AngularsCoefficients a_s_c = integrated_angular_s_coefficients(s_min, s_max);
+        if (name == "1s")      return 1.0/(1.0 - m_y*m_y) * a_s_c.s1s;
+        else if (name == "1c") return 1.0/(1.0 - m_y*m_y) * a_s_c.s1c; 
+        else if (name == "2s") return 1.0/(1.0 - m_y*m_y) * a_s_c.s2s;
+        else if (name == "2c") return 1.0/(1.0 - m_y*m_y) * a_s_c.s2c;
+        else if (name == "3")  return 1.0/(1.0 - m_y*m_y) * a_s_c.s3 ;
+        else if (name == "4")  return 1.0/(1.0 - m_y*m_y) * a_s_c.s4 ;
+        else if (name == "5")  return 1.0/(1.0 - m_y*m_y) * a_s_c.s5 ;
+        else if (name == "6s") return 1.0/(1.0 - m_y*m_y) * a_s_c.s6s;
+        else if (name == "6c") return 1.0/(1.0 - m_y*m_y) * a_s_c.s6c;
+        else if (name == "7")  return 1.0/(1.0 - m_y*m_y) * a_s_c.s7 ;
+        else if (name == "8")  return 1.0/(1.0 - m_y*m_y) * a_s_c.s8 ;
+        else if (name == "9")  return 1.0/(1.0 - m_y*m_y) * a_s_c.s9 ;
+        else throw InternalError("BsToPhiDileptonAndConjugate::integrated_Z: unknown coefficient name '" + name + "'");
     }
+
+    double
+    BsToPhiDileptonAndConjugate::differential_Z(const double & s, const std::string & name) const
+    {
+        std::array<double, 12> coeffs = BsToPhiDileptonAndConjugate::differential_angular_s_coefficients_array(s);
+        if (name == "1s")      return 1.0/(1.0 - m_y*m_y) * coeffs[0] ;
+        else if (name == "1c") return 1.0/(1.0 - m_y*m_y) * coeffs[1] ;
+        else if (name == "2s") return 1.0/(1.0 - m_y*m_y) * coeffs[2] ;
+        else if (name == "2c") return 1.0/(1.0 - m_y*m_y) * coeffs[3] ;
+        else if (name == "3")  return 1.0/(1.0 - m_y*m_y) * coeffs[4] ;
+        else if (name == "4")  return 1.0/(1.0 - m_y*m_y) * coeffs[5] ;
+        else if (name == "5")  return 1.0/(1.0 - m_y*m_y) * coeffs[6] ;
+        else if (name == "6s") return 1.0/(1.0 - m_y*m_y) * coeffs[7] ;
+        else if (name == "6c") return 1.0/(1.0 - m_y*m_y) * coeffs[8] ;
+        else if (name == "7")  return 1.0/(1.0 - m_y*m_y) * coeffs[9] ;
+        else if (name == "8")  return 1.0/(1.0 - m_y*m_y) * coeffs[10];
+        else if (name == "9")  return 1.0/(1.0 - m_y*m_y) * coeffs[11];
+        else throw InternalError("BsToPhiDileptonAndConjugate::differential_Z: unknown coefficient name '" + name + "'");
+    }
+
+    double BsToPhiDileptonAndConjugate::differential_S(const double & s, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::differential_angular_s_coefficients(s);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::differential_angular_h_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
+
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * ((a_c.j1s + a_cc.j1s) - m_y * a_h.h1s);
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * ((a_c.j1c + a_cc.j1c) - m_y * a_h.h1c);
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * ((a_c.j2s + a_cc.j2s) - m_y * a_h.h2s);
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * ((a_c.j2c + a_cc.j2c) - m_y * a_h.h2c);
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * ((a_c.j3 + a_cc.j3)   - m_y * a_h.h3) ;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * ((a_c.j4 + a_cc.j4)   - m_y * a_h.h4) ;
+        if (name == "5")  return  1.0/(1.0+m_x*m_x) * ((a_c.j5 + a_cc.j5)   - m_x * a_s.s5) ;
+        if (name == "6s") return  1.0/(1.0+m_x*m_x) * ((a_c.j6s + a_cc.j6s) - m_x * a_s.s6s);
+        if (name == "6c") return  1.0/(1.0+m_x*m_x) * ((a_c.j6c + a_cc.j6c) - m_x * a_s.s6c);
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * ((a_c.j7 + a_cc.j7)   - m_y * a_h.h7) ;
+        if (name == "8")  return  1.0/(1.0+m_x*m_x) * ((a_c.j8 + a_cc.j8)   - m_x * a_s.s8) ;
+        if (name == "9")  return  1.0/(1.0+m_x*m_x) * ((a_c.j9 + a_cc.j9)   - m_x * a_s.s9) ;
+    }
+
+    double BsToPhiDileptonAndConjugate::integrated_S(const double & s_min, const double & s_max, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::integrated_angular_s_coefficients(s_min, s_max);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
+
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * ((a_c.j1s + a_cc.j1s) - m_y * a_h.h1s);
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * ((a_c.j1c + a_cc.j1c) - m_y * a_h.h1c);
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * ((a_c.j2s + a_cc.j2s) - m_y * a_h.h2s);
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * ((a_c.j2c + a_cc.j2c) - m_y * a_h.h2c);
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * ((a_c.j3 + a_cc.j3)   - m_y * a_h.h3) ;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * ((a_c.j4 + a_cc.j4)   - m_y * a_h.h4) ;
+        if (name == "5")  return  1.0/(1.0+m_x*m_x) * ((a_c.j5 + a_cc.j5)   - m_x * a_s.s5) ;
+        if (name == "6s") return  1.0/(1.0+m_x*m_x) * ((a_c.j6s + a_cc.j6s) - m_x * a_s.s6s);
+        if (name == "6c") return  1.0/(1.0+m_x*m_x) * ((a_c.j6c + a_cc.j6c) - m_x * a_s.s6c);
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * ((a_c.j7 + a_cc.j7)   - m_y * a_h.h7) ;
+        if (name == "8")  return  1.0/(1.0+m_x*m_x) * ((a_c.j8 + a_cc.j8)   - m_x * a_s.s8) ;
+        if (name == "9")  return  1.0/(1.0+m_x*m_x) * ((a_c.j9 + a_cc.j9)   - m_x * a_s.s9) ;
+    }
+
+    double BsToPhiDileptonAndConjugate::differential_K(const double & s, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::differential_angular_s_coefficients(s);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::differential_angular_h_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
+
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s + a_cc.j1s);
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c + a_cc.j1c);
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s + a_cc.j2s);
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c + a_cc.j2c);
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 + a_cc.j3)  ;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 + a_cc.j4)  ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 + a_cc.j5)  ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s + a_cc.j6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c + a_cc.j6c);
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 + a_cc.j7)  ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 + a_cc.j8)  ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 + a_cc.j9)  ;
+    }
+
+    double BsToPhiDileptonAndConjugate::integrated_K(const double & s_min, const double & s_max, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::integrated_angular_s_coefficients(s_min, s_max);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
+
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s + a_cc.j1s);
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c + a_cc.j1c);
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s + a_cc.j2s);
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c + a_cc.j2c);
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 + a_cc.j3)  ;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 + a_cc.j4)  ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 + a_cc.j5)  ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s + a_cc.j6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c + a_cc.j6c);
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 + a_cc.j7)  ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 + a_cc.j8)  ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 + a_cc.j9)  ;
+    }
+
+    double BsToPhiDileptonAndConjugate::differential_A(const double & s, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::differential_angular_s_coefficients(s);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::differential_angular_h_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
+
+        if (name == "1s") return  1.0/(1.0+m_x*m_x) * ((a_c.j1s - a_cc.j1s) - m_x * a_s.s1s);
+        if (name == "1c") return  1.0/(1.0+m_x*m_x) * ((a_c.j1c - a_cc.j1c) - m_x * a_s.s1c);
+        if (name == "2s") return  1.0/(1.0+m_x*m_x) * ((a_c.j2s - a_cc.j2s) - m_x * a_s.s2s);
+        if (name == "2c") return  1.0/(1.0+m_x*m_x) * ((a_c.j2c - a_cc.j2c) - m_x * a_s.s2c);
+        if (name == "3")  return  1.0/(1.0+m_x*m_x) * ((a_c.j3 - a_cc.j3)   - m_x * a_s.s3) ;
+        if (name == "4")  return  1.0/(1.0+m_x*m_x) * ((a_c.j4 - a_cc.j4)   - m_x * a_s.s4) ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * ((a_c.j5 - a_cc.j5)   - m_y * a_h.h5) ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * ((a_c.j6s - a_cc.j6s) - m_y * a_h.h6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * ((a_c.j6c - a_cc.j6c) - m_y * a_h.h6c);
+        if (name == "7")  return  1.0/(1.0+m_x*m_x) * ((a_c.j7 - a_cc.j7)   - m_x * a_s.s7) ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * ((a_c.j8 - a_cc.j8)   - m_y * a_h.h8) ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * ((a_c.j9 - a_cc.j9)   - m_y * a_h.h9) ;
+    }
+
+    double BsToPhiDileptonAndConjugate::integrated_A(const double & s_min, const double & s_max, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::integrated_angular_s_coefficients(s_min, s_max);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
+
+        if (name == "1s") return  1.0/(1.0+m_x*m_x) * ((a_c.j1s - a_cc.j1s) - m_x * a_s.s1s);
+        if (name == "1c") return  1.0/(1.0+m_x*m_x) * ((a_c.j1c - a_cc.j1c) - m_x * a_s.s1c);
+        if (name == "2s") return  1.0/(1.0+m_x*m_x) * ((a_c.j2s - a_cc.j2s) - m_x * a_s.s2s);
+        if (name == "2c") return  1.0/(1.0+m_x*m_x) * ((a_c.j2c - a_cc.j2c) - m_x * a_s.s2c);
+        if (name == "3")  return  1.0/(1.0+m_x*m_x) * ((a_c.j3 - a_cc.j3)   - m_x * a_s.s3) ;
+        if (name == "4")  return  1.0/(1.0+m_x*m_x) * ((a_c.j4 - a_cc.j4)   - m_x * a_s.s4) ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * ((a_c.j5 - a_cc.j5)   - m_y * a_h.h5) ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * ((a_c.j6s - a_cc.j6s) - m_y * a_h.h6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * ((a_c.j6c - a_cc.j6c) - m_y * a_h.h6c);
+        if (name == "7")  return  1.0/(1.0+m_x*m_x) * ((a_c.j7 - a_cc.j7)   - m_x * a_s.s7) ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * ((a_c.j8 - a_cc.j8)   - m_y * a_h.h8) ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * ((a_c.j9 - a_cc.j9)   - m_y * a_h.h9) ;
+    }
+
+    double BsToPhiDileptonAndConjugate::differential_W(const double & s, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::differential_angular_s_coefficients(s);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::differential_angular_h_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_differential_angular_coefficients(s);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_differential_angular_coefficients(s);
+
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s - a_cc.j1s);
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c - a_cc.j1c);
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s - a_cc.j2s);
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c - a_cc.j2c);
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 - a_cc.j3)  ;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 - a_cc.j4)  ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 - a_cc.j5)  ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s - a_cc.j6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c - a_cc.j6c);
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 - a_cc.j7)  ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 - a_cc.j8)  ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 - a_cc.j9)  ;
+    }
+
+    double BsToPhiDileptonAndConjugate::integrated_W(const double & s_min, const double & s_max, const std::string & name) const
+    {
+        BsToPhiDileptonAndConjugate::AngularsCoefficients a_s = BsToPhiDileptonAndConjugate::integrated_angular_s_coefficients(s_min, s_max);
+        BsToPhiDileptonAndConjugate::AngularhCoefficients a_h = BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_c = bstophidilepton.pub_integrated_angular_coefficients(s_min, s_max);
+        BsToPhiDilepton::AngularCoefficients a_cc = bstophidilepton_conjugate.pub_integrated_angular_coefficients(s_min, s_max);
+
+        if (name == "1s") return  1.0/(1.0-m_y*m_y) * (a_c.j1s - a_cc.j1s);
+        if (name == "1c") return  1.0/(1.0-m_y*m_y) * (a_c.j1c - a_cc.j1c);
+        if (name == "2s") return  1.0/(1.0-m_y*m_y) * (a_c.j2s - a_cc.j2s);
+        if (name == "2c") return  1.0/(1.0-m_y*m_y) * (a_c.j2c - a_cc.j2c);
+        if (name == "3")  return  1.0/(1.0-m_y*m_y) * (a_c.j3 - a_cc.j3)  ;
+        if (name == "4")  return  1.0/(1.0-m_y*m_y) * (a_c.j4 - a_cc.j4)  ;
+        if (name == "5")  return  1.0/(1.0-m_y*m_y) * (a_c.j5 - a_cc.j5)  ;
+        if (name == "6s") return  1.0/(1.0-m_y*m_y) * (a_c.j6s - a_cc.j6s);
+        if (name == "6c") return  1.0/(1.0-m_y*m_y) * (a_c.j6c - a_cc.j6c);
+        if (name == "7")  return  1.0/(1.0-m_y*m_y) * (a_c.j7 - a_cc.j7)  ;
+        if (name == "8")  return  1.0/(1.0-m_y*m_y) * (a_c.j8 - a_cc.j8)  ;
+        if (name == "9")  return  1.0/(1.0-m_y*m_y) * (a_c.j9 - a_cc.j9)  ;
+    }
+
 
     const std::set<ReferenceName>
     BsToPhiDileptonAndConjugate::references
