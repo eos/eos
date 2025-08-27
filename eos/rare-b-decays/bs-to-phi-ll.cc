@@ -998,7 +998,7 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
             expiphi * (
                 Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
             ))
-            + z * (
+            + 2.0 * z * (
                 real( expiphi * (Atilda.a_time * conj(A.a_time)))
                 + real( expiphi * (Atilda.a_long_left * conj(A.a_long_right)) + conj(expiphi) * (A.a_long_left * conj(Atilda.a_long_right)) )
             + beta2 * real( expiphi * Atilda.a_scal * conj(A.a_scal)))
