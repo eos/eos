@@ -164,3 +164,13 @@ steps:
       - task: 'corner-plot'
         arguments:
           posterior: 'WET-all'
+
+  - title: 'Find mode of CKM-all posterior'
+    id: 'CKM-all.find-mode'
+    depends_on: ['CKM-all.sample']
+    tasks:
+      - task: 'find-mode'
+        arguments:
+          posterior: 'CKM-all'
+          optimizations: 100
+          importance_samples: True
