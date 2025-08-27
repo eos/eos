@@ -593,6 +593,7 @@ groups:
           min:     +25.0
           max:     +35.0
           latex:    '$g_{B^*B\pi}$'
+          unit:     '1'
           comments: 'cf. [IKMvD2014]'
   # }}}
 
@@ -607,18 +608,21 @@ groups:
           min:     +0.2314
           max:     +0.2466
           latex:    '$\frac{f_s}{f_d}(7 \, \mathrm{TeV})$'
+          unit:     '1'
           comments: 'cf. [LHCb2021]'
       'hadronization::f_s/f_d@LHCb(8TeV)' :
           central: +0.2385
           min:     +0.231
           max:     +0.246
           latex:    '$\frac{f_s}{f_d}(8\, \mathrm{TeV})$'
+          unit:     '1'
           comments: 'cf. [LHCb2021]'
       'hadronization::f_s/f_d@LHCb(13TeV)' :
           central: +0.2539
           min:     +0.246
           max:     +0.2618
           latex:    '$\frac{f_s}{f_d}(13\, \mathrm{TeV})$'
+          unit:     '1'
           comments: 'cf. [LHCb2021]'
   # }}}
 
@@ -718,15 +722,17 @@ groups:
           unit:     's^-1'
           comments: 'cf. [PDG2024]'
       'B_s::ys' :
-          central: 0.0675
-          min:     0.0635
-          max:     0.0715
+          central:  0.0675
+          min:      0.0635
+          max:      0.0715
+          unit:     '1'
           latex:    '$y_{B_s}$'
           comments: 'Temporary result 1909.12524 eq. 74'
       'B_s::q_over_p_phase' :
           central: -0.050
           min:     -0.069
           max:     -0.031
+          unit:     '1'
           latex:    '$\phi_{B_s}$'
           comments: 'Temporary result https://hflav-eos.web.cern.ch/hflav-eos/osc/PDG_2021/#BETAS'
   # }}}
@@ -1526,6 +1532,7 @@ groups:
           min:     0
           max:     0
           latex:   '$R_{uds}$'
+          unit:    '1'
           comment: ''
       # Normalization of R
       'ee->ccbar::exclusive_norm' :
@@ -1533,6 +1540,7 @@ groups:
           min:     0.5
           max:     1.5
           latex:   '$N_\textrm{excl}$'
+          unit:    '1'
           comment: ''
       # Mass of the effective channels
       'ee->ccbar::effective_mass' :
@@ -1540,6 +1548,7 @@ groups:
           min:     1.0e-10
           max:     5.0
           latex:   '$m_\textrm{eff}$'
+          unit:    'GeV'
           comment: ''
 
       # K matrix barrier factor constant
@@ -1548,6 +1557,7 @@ groups:
           min:     1.0e-10
           max:     5.0
           latex:   '$q_0(e^+e^-\to c\bar{c})$'
+          unit:    'GeV'
           comment: 'Temporary parameter'
     #   'ee->ccbar::q_0(%1%)' :
     #       central: 0.2
@@ -1562,6 +1572,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:
             template: '$c(%1%, %2%)$'
             map:
@@ -1578,6 +1589,7 @@ groups:
           central: 0
           min:     0
           max:     0
+          unit:    '1'
           latex:
             template: '$g^0(%1%,%2%)$'
             map:

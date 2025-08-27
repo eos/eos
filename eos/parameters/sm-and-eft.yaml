@@ -27,6 +27,9 @@ groups:
           central: +0.0072973525693
           min:     +0.0072973525682
           max:     +0.0072973525704
+          unit:     '1'
+          latex:    '$\alpha_e(0)$'
+          comments: 'alpha_e(0) = 1/137'
       'QED::alpha_e(m_b)' :
           central: +0.00751879699248120
           min:     +0.00751879699248120
@@ -1587,53 +1590,63 @@ groups:
           min:     6.613114906357177
           max:     6.613114906357177
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
+          unit:    '1'
       'sbnunu::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
+          unit:    '1'
       'sbnunu::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_R}$'
+          unit:    '1'
       'sbnunu::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_R}$'
+          unit:    '1'
         # Scalar coefficients
       'sbnunu::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_L}$'
+          unit:    '1'
       'sbnunu::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_L}$'
+          unit:    '1'
       'sbnunu::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_R}$'
+          unit:    '1'
       'sbnunu::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{S_R}$'
+          unit:    '1'
         # Tensor coefficients
       'sbnunu::Re{cTL}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{T_L}$'
+          unit:    '1'
       'sbnunu::Im{cTL}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{T_L}$'
+          unit:    '1'
   # sbcu WET Parameters
   # {{{
   - title: '$\bar{s}b\bar{c}u$ WET Parameters'
@@ -1668,202 +1681,242 @@ groups:
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{1}$'
+          unit:    '1'
       'sbcu::Im{c1}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{1}$'
+          unit:    '1'
       'sbcu::Re{c2}' :
           central: -0.899772
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{2}$'
+          unit:    '1'
       'sbcu::Im{c2}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{2}$'
+          unit:    '1'
       'sbcu::Re{c3}' :
           central: 0.011126
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{3}$'
+          unit:    '1'
       'sbcu::Im{c3}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{3}$'
+          unit:    '1'
       'sbcu::Re{c4}' :
           central: 0.194904
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{4}$'
+          unit:    '1'
       'sbcu::Im{c4}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{4}$'
+          unit:    '1'
       'sbcu::Re{c5}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{5}$'
+          unit:    '1'
       'sbcu::Im{c5}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{5}$'
+          unit:    '1'
       'sbcu::Re{c6}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{6}$'
+          unit:    '1'
       'sbcu::Im{c6}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{6}$'
+          unit:    '1'
       'sbcu::Re{c7}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{7}$'
+          unit:    '1'
       'sbcu::Im{c7}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{7}$'
+          unit:    '1'
       'sbcu::Re{c8}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{8}$'
+          unit:    '1'
       'sbcu::Im{c8}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{8}$'
+          unit:    '1'
       'sbcu::Re{c9}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{9}$'
+          unit:    '1'
       'sbcu::Im{c9}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{9}$'
+          unit:    '1'
       'sbcu::Re{c10}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{10}$'
+          unit:    '1'
       'sbcu::Im{c10}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{10}$'
+          unit:    '1'
       # Primed coefficients
       "sbcu::Re{c1'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{1\prime}$'
+          unit:    '1'
       "sbcu::Im{c1'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{1\prime}$'
+          unit:    '1'
       "sbcu::Re{c2'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{2\prime}$'
+          unit:    '1'
       "sbcu::Im{c2'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{2\prime}$'
+          unit:    '1'
       "sbcu::Re{c3'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{3\prime}$'
+          unit:    '1'
       "sbcu::Im{c3'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{3\prime}$'
+          unit:    '1'
       "sbcu::Re{c4'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{4\prime}$'
+          unit:    '1'
       "sbcu::Im{c4'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{4\prime}$'
+          unit:    '1'
       "sbcu::Re{c5'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{5\prime}$'
+          unit:    '1'
       "sbcu::Im{c5'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{5\prime}$'
+          unit:    '1'
       "sbcu::Re{c6'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{6\prime}$'
+          unit:    '1'
       "sbcu::Im{c6'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{6\prime}$'
+          unit:    '1'
       "sbcu::Re{c7'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{7\prime}$'
+          unit:    '1'
       "sbcu::Im{c7'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{7\prime}$'
+          unit:    '1'
       "sbcu::Re{c8'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{8\prime}$'
+          unit:    '1'
       "sbcu::Im{c8'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{8\prime}$'
+          unit:    '1'
       "sbcu::Re{c9'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{9\prime}$'
+          unit:    '1'
       "sbcu::Im{c9'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{9\prime}$'
+          unit:    '1'
       "sbcu::Re{c10'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{10\prime}$'
+          unit:    '1'
       "sbcu::Im{c10'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{c}u}_{10\prime}$'
+          unit:    '1'
   # dbcu WET Parameters
   # {{{
   - title: '$\bar{d}b\bar{c}u$ WET Parameters'
@@ -1898,202 +1951,242 @@ groups:
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{1}$'
+          unit:    '1'
       'dbcu::Im{c1}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{1}$'
+          unit:    '1'
       'dbcu::Re{c2}' :
           central: -0.899772
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{2}$'
+          unit:    '1'
       'dbcu::Im{c2}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{2}$'
+          unit:    '1'
       'dbcu::Re{c3}' :
           central: 0.011126
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{3}$'
+          unit:    '1'
       'dbcu::Im{c3}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{3}$'
+          unit:    '1'
       'dbcu::Re{c4}' :
           central: 0.194904
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{4}$'
+          unit:    '1'
       'dbcu::Im{c4}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{4}$'
+          unit:    '1'
       'dbcu::Re{c5}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{5}$'
+          unit:    '1'
       'dbcu::Im{c5}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{5}$'
+          unit:    '1'
       'dbcu::Re{c6}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{6}$'
+          unit:    '1'
       'dbcu::Im{c6}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{6}$'
+          unit:    '1'
       'dbcu::Re{c7}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{7}$'
+          unit:    '1'
       'dbcu::Im{c7}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{7}$'
+          unit:    '1'
       'dbcu::Re{c8}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{8}$'
+          unit:    '1'
       'dbcu::Im{c8}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{8}$'
+          unit:    '1'
       'dbcu::Re{c9}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{9}$'
+          unit:    '1'
       'dbcu::Im{c9}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{9}$'
+          unit:    '1'
       'dbcu::Re{c10}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{10}$'
+          unit:    '1'
       'dbcu::Im{c10}' :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{10}$'
+          unit:    '1'
       # Primed coefficients
       "dbcu::Re{c1'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{1\prime}$'
+          unit:    '1'
       "dbcu::Im{c1'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{1\prime}$'
+          unit:    '1'
       "dbcu::Re{c2'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{2\prime}$'
+          unit:    '1'
       "dbcu::Im{c2'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{2\prime}$'
+          unit:    '1'
       "dbcu::Re{c3'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{3\prime}$'
+          unit:    '1'
       "dbcu::Im{c3'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{3\prime}$'
+          unit:    '1'
       "dbcu::Re{c4'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{4\prime}$'
+          unit:    '1'
       "dbcu::Im{c4'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{4\prime}$'
+          unit:    '1'
       "dbcu::Re{c5'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{5\prime}$'
+          unit:    '1'
       "dbcu::Im{c5'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{5\prime}$'
+          unit:    '1'
       "dbcu::Re{c6'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{6\prime}$'
+          unit:    '1'
       "dbcu::Im{c6'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{6\prime}$'
+          unit:    '1'
       "dbcu::Re{c7'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{7\prime}$'
+          unit:    '1'
       "dbcu::Im{c7'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{7\prime}$'
+          unit:    '1'
       "dbcu::Re{c8'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{8\prime}$'
+          unit:    '1'
       "dbcu::Im{c8'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{8\prime}$'
+          unit:    '1'
       "dbcu::Re{c9'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{9\prime}$'
+          unit:    '1'
       "dbcu::Im{c9'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{9\prime}$'
+          unit:    '1'
       "dbcu::Re{c10'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{10\prime}$'
+          unit:    '1'
       "dbcu::Im{c10'}" :
           central: 0.0
           min:     0.0
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{d}b\bar{c}u}_{10\prime}$'
+          unit:    '1'
 
   # scnul WET Parameters
   # {{{
