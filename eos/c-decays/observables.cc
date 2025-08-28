@@ -155,6 +155,12 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "eta" } }),
 
+                make_observable("D->etalnu::A_FB", R"(A_{\mathrm{FB}}(D\to\eta\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta" } }),
+
                 make_observable("D->eta_primelnu::dBR/dq2", R"(d\mathcal{B}(D\to\eta'\ell^+ \nu)/dq^2)",
                         Unit::InverseGeV2(),
                         &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
@@ -183,6 +189,12 @@ namespace eos
                         Unit::InverseGeV2(),
                         &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
                         std::make_tuple("q2"),
+                        Options{ { "P"_ok, "eta_prime" } }),
+
+                make_observable("D->eta_primelnu::A_FB", R"(A_{\mathrm{FB}}(D\to\eta'\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                        std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta_prime" } }),
             }
         );
