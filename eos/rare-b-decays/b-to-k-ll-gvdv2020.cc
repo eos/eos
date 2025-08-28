@@ -1,10 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
- * Copyright (c) 2011      Christian Wacker
- * Copyright (c) 2014      Frederik Beaujean
- * Copyright (c) 2021      Méril Reboud
+ * Copyright (c) 2021-2025 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,10 +39,10 @@ namespace eos
         f_K(p["decay-constant::K_" + o.get("q"_ok, "d")], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"_ok),
-        opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
+        opt_nonlocal_formfactor(o, options, "nonlocal-formfactor"_ok),
         nonlocal_formfactor(NonlocalFormFactor<PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o))
     {
-        Context ctx("When constructing B->Kll GVdV2020 amplitudes");
+        Context ctx("When constructing B->Kll GvDV2020 amplitudes");
     }
 
     BToKDileptonAmplitudes<tag::GvDV2020>::~BToKDileptonAmplitudes()
