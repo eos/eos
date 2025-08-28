@@ -43,6 +43,8 @@ namespace eos
     class Observable : public ParameterUser, public ReferenceUser, public KinematicUser
     {
         public:
+            virtual ~Observable() = 0;
+
             virtual const QualifiedName & name() const = 0;
 
             virtual double evaluate() const = 0;
