@@ -54,8 +54,8 @@ To **deactivate** the virtual environment, run
     deactivate
 
 
-Of course, you can choose a **different directory** than ``~/eos`` to host your virtual environment. Please see
-the ``virtualenv`` `documentation <https://virtualenv.pypa.io/en/latest/>`_ for more information.
+Of course, you can choose a **different directory** than ``eos/.venv`` to host your virtual environment. Please see
+the ``venv`` `documentation <https://docs.python.org/3/tutorial/venv.html>`_ for more information.
 
 
 ... use EOS remotely?
