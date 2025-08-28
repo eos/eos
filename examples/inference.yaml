@@ -1,3 +1,14 @@
+metadata:
+  title: 'Inference Example'
+  id: 20xy-0z
+  authors:
+    - name: First Author
+      affiliation: Important University
+      email: f.author@example.com
+    - name: Sec O. Author
+      affiliation: Another Important University
+      email: sec.ond.author@example.com
+
 priors:
   - name: CKM
     descriptions:
