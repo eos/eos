@@ -38,7 +38,7 @@ namespace eos
             UsedParameter f_phi_par;
             UsedParameter lambda_B_p_inv;
 
-            SwitchOption opt_nonlocal_formfactor;
+            RestrictedOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<PToV> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;

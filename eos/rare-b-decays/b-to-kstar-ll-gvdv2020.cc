@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2021-2025 Méril Reboud
  * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
@@ -43,7 +43,7 @@ namespace eos
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"_ok),
-        opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020"),
+        opt_nonlocal_formfactor(o, options, "nonlocal-formfactor"_ok),
         nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B->K^*::" + opt_nonlocal_formfactor.value(), p, o))
     {
         Context ctx("When constructing B->K^*ll GVdV2020 amplitudes");

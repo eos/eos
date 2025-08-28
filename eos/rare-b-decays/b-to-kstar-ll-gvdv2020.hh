@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2021-2025 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ namespace eos
 
             QuarkFlavorOption q;
 
-            SwitchOption opt_nonlocal_formfactor;
+            RestrictedOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<PToV> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;

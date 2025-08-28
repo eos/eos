@@ -1,10 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020 Danny van Dyk
- * Copyright (c) 2011 Christian Wacker
- * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2021-2025 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -44,7 +41,7 @@ namespace eos
 
             QuarkFlavorOption q;
 
-            SwitchOption opt_nonlocal_formfactor;
+            RestrictedOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<PToP> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;
