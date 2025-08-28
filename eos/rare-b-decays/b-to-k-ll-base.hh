@@ -74,6 +74,11 @@ namespace eos
     namespace tag
     {
         /*
+         * Set all the charm-loops contributions to zero.
+         */
+        struct Naive;
+
+        /*
          * Approaches that work at small q^2, or large recoil.
          */
         struct BFS2004;
