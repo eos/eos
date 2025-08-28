@@ -102,6 +102,8 @@ signal_pdf_TEST_SOURCES = signal-pdf_TEST.cc
 signal_pdf_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 signal_pdf_TEST_LDADD = $(LDADD) -lyaml-cpp
 
-pkgdata_DATA = references.yaml
+pkgdata_DATA = references.yaml report-template.tex report-logo.pdf
 EXTRA_DIST = \
-	references.yaml
+	references.yaml \
+	report-template.tex \
+	report-logo.pdf
