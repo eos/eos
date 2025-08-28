@@ -41,7 +41,7 @@ for item_key, item_class in reg.items():
 
 
 # Document eos.tasks automatically
-excluded_tasks = ['run']
+excluded_tasks = []
 task_names = [task.__name__ for task in eos.tasks._tasks.values() if task.__name__ not in excluded_tasks]
 task_names = sorted(task_names)
 
