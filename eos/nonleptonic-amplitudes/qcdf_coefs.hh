@@ -21,12 +21,14 @@
 #define EOS_GUARD_EOS_NONLEPTONIC_AMPLITUDES_QCDF_COEFFICIENTS_HH 1
 
 #include <eos/maths/complex.hh>
-#include <eos/utils/parameters.hh>
-#include <eos/models/wilson-coefficients.hh>
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
-#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
+//#include <eos/models/wilson-coefficients.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes-fwd.hh>
+#include <eos/nonleptonic-amplitudes/nonleptonic-amplitudes.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/form-factors/psd-lcdas.hh>
+
 
 #include <array>
 #include <cmath>
@@ -35,11 +37,10 @@ namespace eos
 {
     template <typename Transition_> class QCDFCoefficients;
 
-    template <>
-    class QCDFCoefficients<PToPP> :
-        public NonleptonicAmplitudes<PToPP>
+    template <> class QCDFCoefficients<PToPP> : public NonleptonicAmplitudes<PToPP>
     {
         private:
+            std::shared_ptr<Model> model;
             QuarkFlavorOption opt_q;
             LightMesonOption opt_p1;
             LightMesonOption opt_p2;
@@ -60,6 +61,8 @@ namespace eos
 
             std::shared_ptr<PseudoscalarLCDAs> lcdasP1;
             std::shared_ptr<PseudoscalarLCDAs> lcdasP2;
+
+            eos::WilsonCoefficients<BToS> wc2;
 
             complex<double> lcda;
 
@@ -90,55 +93,17 @@ namespace eos
 
         public:
 
-            QCDFCoefficients(const Parameters & p, const Options & o, ParameterUser & u):
-                opt_q(o, options, "q"),
-                opt_p1(o, options, "P1"),
-                opt_p2(o, options, "P2"),
-                mB(p["mass::B_" + opt_q.str()], *this),
-                mB_q_0(p["mass::B_" + opt_q.str() + ",0@BSZ2015"], *this),
-                mP1(p["mass::" + opt_p1.str()], *this),
-                mP2(p["mass::" + opt_p2.str()], *this),
-                FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),
-                FP2(p["B_" + opt_q.str() + "->" + opt_p2.str() + "::f_+(0)"], *this),
-                fB(p["decay-constant::B_" + opt_q.str()], *this),
-                fP1(p["decay-constant::" + opt_p1.str()], *this),
-                mb(p["mass::b(MSbar)"], *this),
-                mus(p["mass::b(MSbar)"], *this),
-                mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u), //what is this? do I need u for this?
-                fP2(p["decay-constant::" + opt_p2.str()], *this)
+            QCDFCoefficients(const Parameters & p, const Options & o);
+
+            ~QCDFCoefficients() {};
+
+            inline void
+            update() const
             {
-                if (opt_p1.str() == "pi^0" || opt_p1.str() == "pi^+" || opt_p1.str() == "pi^-")
-                {
-                    lcdasP1 = PseudoscalarLCDAs::make("pi", p, o);
-                }
-                else if (opt_p1.str() == "K_d" || opt_p1.str() == "K_u")
-                {
-                    lcdasP1 = PseudoscalarLCDAs::make("K", p, o);
-                }
-                else if (opt_p1.str() == "Kbar_d" ||  opt_p1.str() == "Kbar_u")
-                {
-                    lcdasP1 = PseudoscalarLCDAs::make("Kbar", p, o);
-                }
-
-
-                if (opt_p2.str() == "pi^0" || opt_p2.str() == "pi^+" || opt_p2.str() == "pi^-")
-                {
-                    lcdasP2 = PseudoscalarLCDAs::make("pi", p, o);
-                }
-                else if (opt_p2.str() == "K_d" || opt_p2.str() == "K_u")
-                {
-                    lcdasP1 = PseudoscalarLCDAs::make("K", p, o);
-                }
-                else if (opt_p2.str() == "Kbar_d" ||  opt_p2.str() == "Kbar_u")
-                {
-                    lcdasP1 = PseudoscalarLCDAs::make("Kbar", p, o);
-                }
-
 
             }
 
-
-            ~QCDFCoefficients() {};
+            static NonleptonicAmplitudes<PToPP> * make(const Parameters &, const Options &);
 
             // Helper functions
 
@@ -156,7 +121,7 @@ namespace eos
             std::array<complex<double>, 11> Penguin(const double & x) const;
 
             //wilson coefficients: erase later
-            std::array<complex<double>, 11> WilsonCoefficients(const double & x) const;
+            //std::array<complex<double>, 11> WilsonCoefficients(const double & x) const;
 
     };
 
