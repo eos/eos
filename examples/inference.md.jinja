@@ -1,0 +1,31 @@
+---
+{% for key, value in metadata.items() %}
+{{ key }}: {{ value }}
+{% endfor %}
+---
+# Posteriors
+
+The analysis defines {{ analysis_file.posteriors | length }} posterior{{ 's' if analysis_file.posteriors | length > 1 }}:
+
+{% for name in analysis_file.posteriors %}
+- `{{ name }}`
+{% endfor %}
+
+{% for name in analysis_file.posteriors %}
+## Posterior `{{ name }}`
+
+This posterior involves {{ analyses[name].varied_parameters | length }} varied parameter{{ 's' if analyses[name].varied_parameters | length > 1 }}:
+
+{% for parameter in analyses[name].varied_parameters %}
+- `{{ parameter.name() }}`
+{% endfor %}
+
+{% endfor %}
+
+# Results
+
+The 2D marginal posterior density for the parameters $|V_{cb}|$ (named `CKM::abs(V_cb)`) and $f_+(0)$ (named `B->D::alpha^f+_0@BSZ2015`) is shown in the following figure:
+
+\lipsum
+
+![Contour plot of the 2D marginal posterior density obtained from this analysis, overlaid with a band indicating the PDG world average.](inference-data/fig-Vcb-v-fp0.pdf)
