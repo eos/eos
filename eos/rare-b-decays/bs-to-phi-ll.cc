@@ -23,6 +23,7 @@
 #include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-bfs2004.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-gvdv2020.hh>
+#include <eos/rare-b-decays/bs-to-phi-ll-naive.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos
@@ -97,14 +98,13 @@ namespace eos
             {
                 amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::BFS2004>(p, o));
             }
-            // else if ("GP2004" == tag)
-            // {
-            //     amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::GP2004>(p, o));
-            // }
-            // else
             else if ("GvDV2020" == tag)
             {
                 amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::GvDV2020>(p, o));
+            }
+            else if ("Naive" == tag)
+            {
+                amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::Naive>(p, o));
             }
             else
             {

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Méril Reboud
+ * Copyright (c) 2025 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_GVDV2020_HH
-#define MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_GVDV2020_HH 1
+#ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_NAIVE_HH
+#define MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_NAIVE_HH 1
 
 #include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
@@ -28,7 +28,7 @@
 namespace eos
 {
     template <>
-    class BToKDileptonAmplitudes<tag::GvDV2020> :
+    class BToKDileptonAmplitudes<tag::Naive> :
         public BToKDilepton::AmplitudeGenerator
     {
         public:
@@ -41,7 +41,6 @@ namespace eos
 
             QuarkFlavorOption q;
 
-            RestrictedOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<PToP> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;
