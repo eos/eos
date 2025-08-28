@@ -553,6 +553,13 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::A_FB", R"(A_{\mathrm{FB}}(B^- \to\eta\ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
             }
         );
 
@@ -591,6 +598,12 @@ namespace eos
                 make_observable("B->eta_primelnu::normBR",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::A_FB", R"(A_{\mathrm{FB}}(B^- \to\eta^prime \ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
             }
