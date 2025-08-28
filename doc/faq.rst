@@ -13,13 +13,13 @@ How Do I ...
 ... use EOS within a virtual Python environment?
 ================================================
 
-We highly recommend to use EOS within a **virtual Python environment**. To do so, you
-need to install the ``virtualenv`` package, and then create a new virtual environment:
+We highly recommend to use EOS within a **virtual Python environment**. If you modify the EOS software, we recommend that you place your virtual environment folder within the EOS root directory.
+To create the virtual environment, make sure you have the ``venv`` module installed, and then create a new virtual environment:
 
 ::
 
-    pip3 install virtualenv
-    virtualenv --python=python3 ~/eos
+    cd eos
+    python3 -m venv .venv
 
 
 The new virtual environment will now be **activated**.
@@ -28,12 +28,12 @@ At any later point, you can (re-)activate the virtual environment by running the
 
 ::
 
-    source ~/eos/bin/activate
+    source .venv/bin/activate
 
 
 While activated, you can **install** a binary distribution of EOS using ``pip install eoshep``.
 If you plan to install EOS from source, as discussed in the :ref:`installation section<installation-from-source>`, you must set the prefix
-to match the path to your virtual environment, here: ``~/eos``.
+to match the path to your virtual environment: ``$VIRTUAL_ENV``.
 
 You most likely want to install **jupyter and notebook**.
 To be able to access the virtual environment from the notebook interface, you also need to *install it* (details `here <https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments>`_).
