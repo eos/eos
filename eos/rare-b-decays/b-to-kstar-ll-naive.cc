@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Méril Reboud
+ * Copyright (c) 2021 Méril Reboud
  * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
@@ -19,7 +19,7 @@
  */
 
 #include <eos/maths/power-of.hh>
-#include <eos/rare-b-decays/b-to-kstar-ll-gvdv2020.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-naive.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/utils/kinematic.hh>
@@ -35,7 +35,7 @@ namespace eos
     using std::norm;
     using std::sqrt;
 
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::BToKstarDileptonAmplitudes(const Parameters & p, const Options & o) :
+    BToKstarDileptonAmplitudes<tag::Naive>::BToKstarDileptonAmplitudes(const Parameters & p, const Options & o) :
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
@@ -43,21 +43,19 @@ namespace eos
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"_ok),
-        opt_nonlocal_formfactor(o, options, "nonlocal-formfactor"_ok),
-        nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B->K^*::" + opt_nonlocal_formfactor.value(), p, o))
+        nonlocal_formfactor(NonlocalFormFactor<PToV>::make("B->K^*::naive", p, o))
     {
-        Context ctx("When constructing B->K^*ll GVdV2020 amplitudes");
+        Context ctx("When constructing B->K^*ll Naive amplitudes");
     }
 
     const std::vector<OptionSpecification>
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::options
+    BToKstarDileptonAmplitudes<tag::Naive>::options
     {
         { "q"_ok, { "d", "u" },  "d" },
-        { "nonlocal-formfactor"_ok, { "GvDV2020", "GRvDV2022order5" }, "GvDV2020" }
     };
 
     BToKstarDilepton::FormFactorCorrections
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::sb_contributions(const double & s, const WilsonCoefficients<BToS> & wc) const
+    BToKstarDileptonAmplitudes<tag::Naive>::sb_contributions(const double & s, const WilsonCoefficients<BToS> & wc) const
     {
         // charges of down- and up-type quarks
         static const double e_d = -1.0 / 3.0;
@@ -152,13 +150,13 @@ namespace eos
     }
 
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::mu_f() const
+    BToKstarDileptonAmplitudes<tag::Naive>::mu_f() const
     {
         return 1.5;
     }
 
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::m_b_PS() const
+    BToKstarDileptonAmplitudes<tag::Naive>::m_b_PS() const
     {
         // Actually use the PS mass at mu_f = 1.5 GeV
         return model->m_b_ps(mu_f());
@@ -166,7 +164,7 @@ namespace eos
 
     // For testing purposes, compute the ratio between Qc and non-Qc non-local contributions
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::H_perp_corrections(const double & s) const
+    BToKstarDileptonAmplitudes<tag::Naive>::H_perp_corrections(const double & s) const
     {
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
         // Contributions not probortional to Qc
@@ -193,7 +191,7 @@ namespace eos
     }
 
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::H_para_corrections(const double & s) const
+    BToKstarDileptonAmplitudes<tag::Naive>::H_para_corrections(const double & s) const
     {
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
         // Contributions not probortional to Qc
@@ -218,7 +216,7 @@ namespace eos
     }
 
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::H_long_corrections(const double & s) const
+    BToKstarDileptonAmplitudes<tag::Naive>::H_long_corrections(const double & s) const
     {
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
         // Contributions not probortional to Qc
@@ -248,7 +246,7 @@ namespace eos
     }
 
     BToKstarDilepton::Amplitudes
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::amplitudes(const double & s) const
+    BToKstarDileptonAmplitudes<tag::Naive>::amplitudes(const double & s) const
     {
         BToKstarDilepton::Amplitudes result;
 
@@ -272,7 +270,7 @@ namespace eos
             lambda      = eos::lambda(m_B2, m_V2, s),
             sqrt_lambda = std::sqrt(lambda);
 
-        // vectorial form factors, cf. [GvDV2020], eq. (A.11)
+        // vectorial form factors, cf. [Naive], eq. (A.11)
         const double
             calF_perp = sqrt(2.0) * sqrt_lambda / (m_B * (m_B + m_V)) * ff_V,
             calF_para = sqrt(2.0) * (m_B + m_V) / m_B * ff_A1,
@@ -280,7 +278,7 @@ namespace eos
                         / (2.0 * m_V * m_B2 * (m_B + m_V)),
             calF_time = ff_A0;
 
-        // tensorial form factors, cf. [GvDV2020], eq. (A.11)
+        // tensorial form factors, cf. [Naive], eq. (A.11)
         const double
             calF_T_perp = sqrt(2.0) * sqrt_lambda / m_B2 * ff_T1,
             calF_T_para = sqrt(2.0) * (m_B2 - m_V2) / m_B2 * ff_T2,
@@ -348,7 +346,7 @@ namespace eos
             2.0 * (wc.c10() - wc.c10prime()) + s / m_l / (m_b_MSbar + m_s_MSbar) * (wc.cP() - wc.cPprime())
         );
 
-        // Tensor amplitudes, cf BHvD2012 (B.17)-(B.20) and GVdV2020 (A.11)
+        // Tensor amplitudes, cf BHvD2012 (B.17)-(B.20) and Naive (A.11)
         result.a_scal = -2.0 * calN / m_B * sqrt_lambda * calF_time * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s_MSbar);
 
         result.a_para_perp = 2.0 * calN * m_B2 / s * calF_T_long * wc.cT();
@@ -365,7 +363,7 @@ namespace eos
 
     // C9 and its corrections [BFS2001] eqs. (40-41)
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::real_C9_perp(const double & s) const
+    BToKstarDileptonAmplitudes<tag::Naive>::real_C9_perp(const double & s) const
     {
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
@@ -399,7 +397,7 @@ namespace eos
             ));
     }
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::imag_C9_perp(const double & s) const
+    BToKstarDileptonAmplitudes<tag::Naive>::imag_C9_perp(const double & s) const
     {
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
@@ -433,12 +431,12 @@ namespace eos
             ));
     }
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::real_C9_para(const double & ) const
+    BToKstarDileptonAmplitudes<tag::Naive>::real_C9_para(const double & ) const
     {
         return 0.0;
     }
     double
-    BToKstarDileptonAmplitudes<tag::GvDV2020>::imag_C9_para(const double & ) const
+    BToKstarDileptonAmplitudes<tag::Naive>::imag_C9_para(const double & ) const
     {
         return 0.0;
     }

@@ -12,6 +12,7 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-k-ll-bfs2004.cc b-to-k-ll-bfs2004.hh \
 	b-to-k-ll-gp2004.cc b-to-k-ll-gp2004.hh \
 	b-to-k-ll-gvdv2020.cc b-to-k-ll-gvdv2020.hh \
+	b-to-k-ll-naive.cc b-to-k-ll-naive.hh \
 	b-to-kstar-charmonium.cc b-to-kstar-charmonium.hh \
 	b-to-kstar-gamma.cc b-to-kstar-gamma.hh \
 	b-to-kstar-gamma-base.cc b-to-kstar-gamma-base.hh \
@@ -21,6 +22,7 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-kstar-ll-bfs2004.cc b-to-kstar-ll-bfs2004.hh \
 	b-to-kstar-ll-gp2004.cc b-to-kstar-ll-gp2004.hh \
 	b-to-kstar-ll-gvdv2020.cc b-to-kstar-ll-gvdv2020.hh \
+	b-to-kstar-ll-naive.cc b-to-kstar-ll-naive.hh \
 	b-to-ll.cc b-to-ll.hh \
 	b-to-psd-nu-nu.cc b-to-psd-nu-nu.hh \
 	b-to-vec-nu-nu.cc b-to-vec-nu-nu.hh \
@@ -30,6 +32,7 @@ libeosrarebdecays_la_SOURCES = \
 	bs-to-phi-ll-base.cc bs-to-phi-ll-base.hh \
 	bs-to-phi-ll-bfs2004.cc bs-to-phi-ll-bfs2004.hh \
 	bs-to-phi-ll-gvdv2020.cc bs-to-phi-ll-gvdv2020.hh \
+	bs-to-phi-ll-naive.cc bs-to-phi-ll-naive.hh \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \

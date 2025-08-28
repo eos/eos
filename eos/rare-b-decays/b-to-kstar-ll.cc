@@ -28,6 +28,7 @@
 #include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gvdv2020.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-naive.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos
@@ -78,6 +79,10 @@ namespace eos
             else if ("GvDV2020" == tag)
             {
                 amplitude_generator.reset(new BToKstarDileptonAmplitudes<tag::GvDV2020>(p, o));
+            }
+            else if ("Naive" == tag)
+            {
+                amplitude_generator.reset(new BToKstarDileptonAmplitudes<tag::Naive>(p, o));
             }
             else
             {

@@ -1,8 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +18,7 @@
  */
 
 #include <eos/maths/power-of.hh>
-#include <eos/rare-b-decays/b-to-k-ll-gvdv2020.hh>
+#include <eos/rare-b-decays/b-to-k-ll-naive.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/memoise.hh>
@@ -30,7 +29,7 @@ namespace eos
 {
     using namespace std::placeholders;
 
-    BToKDileptonAmplitudes<tag::GvDV2020>::BToKDileptonAmplitudes(const Parameters & p,
+    BToKDileptonAmplitudes<tag::Naive>::BToKDileptonAmplitudes(const Parameters & p,
             const Options & o) :
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
@@ -39,25 +38,23 @@ namespace eos
         f_K(p["decay-constant::K_" + o.get("q"_ok, "d")], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"_ok),
-        opt_nonlocal_formfactor(o, options, "nonlocal-formfactor"_ok),
-        nonlocal_formfactor(NonlocalFormFactor<PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o))
+        nonlocal_formfactor(NonlocalFormFactor<PToP>::make("B->K::naive", p, o))
     {
-        Context ctx("When constructing B->Kll GvDV2020 amplitudes");
+        Context ctx("When constructing B->Kll Naive amplitudes");
     }
 
-    BToKDileptonAmplitudes<tag::GvDV2020>::~BToKDileptonAmplitudes()
+    BToKDileptonAmplitudes<tag::Naive>::~BToKDileptonAmplitudes()
     {
     }
 
     const std::vector<OptionSpecification>
-    BToKDileptonAmplitudes<tag::GvDV2020>::options
+    BToKDileptonAmplitudes<tag::Naive>::options
     {
         { "q"_ok, { "d", "u" },  "d" },
-        { "nonlocal-formfactor"_ok, { "GvDV2020", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020" }
     };
 
     BToKDilepton::DipoleFormFactors
-    BToKDileptonAmplitudes<tag::GvDV2020>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const
+    BToKDileptonAmplitudes<tag::Naive>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const
     {
         // charges of down- and up-type quarks
         static const double e_d = -1.0 / 3.0;
@@ -166,20 +163,20 @@ namespace eos
     }
 
     double
-    BToKDileptonAmplitudes<tag::GvDV2020>::xi_pseudo(const double & s) const
+    BToKDileptonAmplitudes<tag::Naive>::xi_pseudo(const double & s) const
     {
         // cf. [BF2001], Eq. (22)
         return form_factors->f_p(s);
     }
 
     double
-    BToKDileptonAmplitudes<tag::GvDV2020>::mu_f() const
+    BToKDileptonAmplitudes<tag::Naive>::mu_f() const
     {
         return 1.5;
     }
 
     double
-    BToKDileptonAmplitudes<tag::GvDV2020>::m_b_PS() const
+    BToKDileptonAmplitudes<tag::Naive>::m_b_PS() const
     {
         // Actually use the PS mass at mu_f = 1.5 GeV
         return model->m_b_ps(mu_f());
@@ -187,7 +184,7 @@ namespace eos
 
     /* Amplitudes */
     BToKDilepton::Amplitudes
-    BToKDileptonAmplitudes<tag::GvDV2020>::amplitudes(const double & s) const
+    BToKDileptonAmplitudes<tag::Naive>::amplitudes(const double & s) const
     {
         BToKDilepton::Amplitudes result;
 
@@ -197,7 +194,7 @@ namespace eos
 
         const double m_B2 = m_B * m_B, m_K2 = m_K * m_K;
 
-        // cf. [GvDV2020] Eq. (A.5)
+        // cf. [Naive] Eq. (A.5)
         const double
             calF_plus   = form_factors->f_p(s),
             calF_time   = form_factors->f_0(s),

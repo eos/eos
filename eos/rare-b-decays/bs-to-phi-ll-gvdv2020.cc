@@ -50,7 +50,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BsToPhiDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5" }, "GvDV2020" }
+        { "nonlocal-formfactor"_ok, { "GvDV2020", "GRvDV2022order5" }, "GvDV2020" }
     };
 
 
