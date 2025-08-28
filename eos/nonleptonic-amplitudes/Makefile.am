@@ -11,7 +11,8 @@ libeosnonleptonicamplitudes_la_SOURCES = \
 	observables.cc observables.hh \
 	qcdf-amplitudes.cc qcdf-amplitudes.hh \
 	su3f-amplitudes.cc su3f-amplitudes.hh \
-	topological-amplitudes.cc topological-amplitudes.hh
+	topological-amplitudes.cc topological-amplitudes.hh \
+	qcdf_coefs.cc qcdf_coefs.hh
 
 libeosnonleptonicamplitudes_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosnonleptonicamplitudes_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
@@ -30,7 +31,8 @@ include_eos_nonleptonicamplitudes_HEADERS = \
 	observables.hh \
 	qcdf-amplitudes.hh \
 	su3f-amplitudes.hh \
-	topological-amplitudes.hh
+	topological-amplitudes.hh \
+	qcdf_coefs.hh
 
 EXTRA_DIST =
 

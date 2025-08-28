@@ -24,24 +24,80 @@
 #include <eos/maths/power-of.hh>
 #include <gsl/gsl_sf_dilog.h>
 #include <eos/maths/integrate.hh>
+#include <eos/utils/options-impl.hh>
 
 #include <array>
 #include <cmath>
 #include <vector>
+#include <map>
 
 
 namespace eos
 {
+    using std::sqrt;
 
+    NonleptonicAmplitudes<PToPP> *
+    QCDFCoefficients<PToPP>::make(const Parameters & p, const Options & o)
+    {
+        return new QCDFCoefficients<PToPP>(p, o);
+    }
 
-        const std::vector<OptionSpecification>
-        QCDFCoefficients<PToPP>::options
+        QCDFCoefficients<PToPP>::QCDFCoefficients(const Parameters & p, const Options & o):
+                model(Model::make(o.get("model"_ok, "SM"), p, o)),
+                opt_q(o, options, "q"_ok),
+                opt_p1(o, options, "P1"_ok),
+                opt_p2(o, options, "P2"_ok),
+                mB(p["mass::B_" + opt_q.str()], *this),
+                mB_q_0(p["mass::B_" + opt_q.str() + ",0@BSZ2015"], *this),
+                mP1(p["mass::" + opt_p1.str()], *this),
+                mP2(p["mass::" + opt_p2.str()], *this),
+                FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),
+                FP2(p["B_" + opt_q.str() + "->" + opt_p2.str() + "::f_+(0)"], *this),
+                fB(p["decay-constant::B_" + opt_q.str()], *this),
+                fP1(p["decay-constant::" + opt_p1.str()], *this),
+                mb(p["mass::b(MSbar)"], *this),
+                mus(p["mass::b(MSbar)"], *this),
+                //mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u), //what is this? do I need u for this?
+                fP2(p["decay-constant::" + opt_p2.str()], *this)
         {
+                if (opt_p1.str() == "pi^0" || opt_p1.str() == "pi^+" || opt_p1.str() == "pi^-")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("pi", p, o);
+                }
+                else if (opt_p1.str() == "K_d" || opt_p1.str() == "K_u")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("K", p, o);
+                }
+                else if (opt_p1.str() == "Kbar_d" ||  opt_p1.str() == "Kbar_u")
+                {
+                    lcdasP1 = PseudoscalarLCDAs::make("Kbar", p, o);
+                }
+
+
+                if (opt_p2.str() == "pi^0" || opt_p2.str() == "pi^+" || opt_p2.str() == "pi^-")
+                {
+                    lcdasP2 = PseudoscalarLCDAs::make("pi", p, o);
+                }
+                else if (opt_p2.str() == "K_d" || opt_p2.str() == "K_u")
+                {
+                    lcdasP2 = PseudoscalarLCDAs::make("K", p, o);
+                }
+                else if (opt_p2.str() == "Kbar_d" ||  opt_p2.str() == "Kbar_u")
+                {
+                    lcdasP2 = PseudoscalarLCDAs::make("Kbar", p, o);
+                }
+
+
+        }
+
+        const std::vector<OptionSpecification>  QCDFCoefficients<PToPP>::options{
             Model::option_specification(),
-            { "q", { "u", "d", "s" } },
-            { "P1", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" } },
-            { "P2", { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" } },
+            { "q"_ok, { "u", "d", "s" } },
+            { "P1"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" } },
+            { "P2"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_s", "K_u", "Kbar_u", "eta", "eta_prime", "eta_q", "eta_s" } },
         };
+
+
 
         complex<double>
         QCDFCoefficients<PToPP>::gvertex(const double & x) const
@@ -205,7 +261,7 @@ namespace eos
             {
                 if (i == 4)
                 {
-                    peng[i] = CF * alphas / (4.0 * M_PI * Nc) * (wc[1] * (4.0 / 3.0 * log(mb / mus) + 2.0 / 3.0 - this->GM2(sp)) +
+                    peng[i] = CF * alphas / (4.0 * M_PI * Nc) * (wc2.c1() * (4.0 / 3.0 * log(mb / mus) + 2.0 / 3.0 - this->GM2(sp)) +
                     wc[3] * (8.0 / 3.0 * log(mb / mus) + 4.0 / 3.0 - this->GM2(0.0) - this->GM2(1.0)) +
                     (wc[4] + wc[6]) * (4.0 * nf / 3.0 * log(mb / mus) - (nf - 2.0) * this->GM2(0.0) - this->GM2(sc) - this->GM2(1.0)) -
                     wc[8] * integrate1D(std::function<complex<double>(const double&)>([=, this](const double &x)
