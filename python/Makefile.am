@@ -94,6 +94,7 @@ _eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = \
 	_eos.cc \
 	_eos/external-log-likelihood-block.cc _eos/external-log-likelihood-block.hh \
+	_eos/external-observable.cc _eos/external-observable.hh \
 	_eos/log.cc _eos/log.hh \
 	_eos/version.cc _eos/version.hh \
 	_eos/wrappers.cc _eos/wrappers.hh

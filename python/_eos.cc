@@ -39,6 +39,7 @@
 #include "eos/utils/units.hh"
 
 #include "python/_eos/external-log-likelihood-block.hh"
+#include "python/_eos/external-observable.hh"
 #include "python/_eos/log.hh"
 #include "python/_eos/version.hh"
 #include "python/_eos/wrappers.hh"
@@ -898,6 +899,8 @@ BOOST_PYTHON_MODULE(_eos)
             .def("unit", &ObservableEntry::unit, return_internal_reference<>())
             .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
             .def("options", range(&ObservableEntry::begin_options, &ObservableEntry::end_options));
+
+    def("register_python_observable", &register_python_observable);
 
     // ObservableGroup
     register_ptr_to_python<std::shared_ptr<ObservableGroup>>();
