@@ -688,6 +688,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', output
     result = template.render(
         eos={ 'version': eos.__version__ },
         analysis_file=analysis_file,
+        analyses={posterior: analysis_file.analysis(posterior) for posterior in analysis_file.posteriors},
         base_directory=base_directory,
         len=len,
         zip=zip,
