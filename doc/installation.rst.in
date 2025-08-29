@@ -179,6 +179,12 @@ matplotlib
 scipy
   the Python scientific library;
 
+tqdm
+  for a smart progress bar
+
+pyhf
+  statistical inference of HistFactory likelihoods (pyhf `documentation <https://pyhf.readthedocs.io/en/>`_)
+
 pypmc
   the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods (needed for some functionality);
 
@@ -213,13 +219,13 @@ by running the following commands:
   sudo apt-get install libgsl0-dev
 
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
-the ``dynesty``, ``matplotlib``,  ``scipy``, ``pypmc``, ``pyyaml``, and ``wilson`` packages:
+the ``dynesty``, ``matplotlib``,  ``scipy``, ``pypmc``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
 
 
 ::
 
   # Make sure to activate your virtual environment first
-  pip install dynesty matplotlib scipy pypmc pyyaml wilson
+  pip install dynesty matplotlib scipy pypmc pyyaml pyhf tqdm wilson
 
 
 If you intend to build the EOS documentation, you will also need the following software:
