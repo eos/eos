@@ -1433,6 +1433,101 @@ class SignalPDFItem(Item):
 
         ax.plot(xvalues, _np.exp(pvalues), alpha=self.alpha, color=self.color, label=self.label, ls=self.linestyle)
 
+@dataclass(kw_only=True)
+class ComplexPlaneItem(Item):
+    """Plots a single observable as a function on the complex plan
+
+    :param fixed_kinematics: A dictionary of additional kinematic variables and the values to which they shall be fixed.
+    :type fixed_kinematics: dict[str, float] | None
+    :param fixed_parameters: A dictionary of EOS parameters and the values to which they shall be fixed.
+    :type fixed_parameters: dict[eos.QualifiedName, float] | None
+    :param fixed_parameters_from_file: Path to a file containing EOS parameters to be used for the observable.
+    :type fixed_parameters_from_file: str | None
+    :param observable: The name of the observable to be plotted.
+    :type observable: :class:`eos.QualifiedName`
+    :param options: A dictionary of options to be passed to the observable.
+    :type options: dict[str, str] | None
+    :param range: A tuple of two float values (min, max) representing the range of the kinematic variable to be plotted on the x-axis.
+    :type range: tuple[tuple[float, float], tuple[float, float]]
+    :param resolution: The number of points to use for the plot.
+    :type resolution: int
+    :param variables: The names of the variables to be used as x and y coordinates.
+    :type variables: tuple[str, str]
+    """
+    fixed_kinematics:dict[str,float]|None=None
+    fixed_parameters:dict[eos.QualifiedName,float]|None=None
+    fixed_parameters_from_file:str|None=None
+    observable:eos.QualifiedName
+    options:dict[str, str]|None=None
+    variables:tuple[str,str]
+    resolution:int=100
+
+    def __post_init__(self):
+        eos.info(f'Handling item to plot {self.observable} in the complex plane')
+        self._observable_entry = eos.Observables()[self.observable]
+        valid_kinematic_variables = {kv for kv in self._observable_entry.kinematic_variables()}
+
+        # Create kinematics
+        self._kinematics = eos.Kinematics()
+        if self.fixed_kinematics:
+            for k, v in self.fixed_kinematics.items():
+                if k not in valid_kinematic_variables:
+                    raise ValueError(f"Kinematic variable '{k}' does not match any of the declared kinematic variables '{self.observable}': {valid_kinematic_variables.__repr__()}")
+                self._kinematics.declare(k, v)
+
+        # Create parameters
+        self._parameters = eos.Parameters.Defaults()
+        if self.fixed_parameters_from_file:
+            eos.warn('Overriding parameters from file')
+            self._parameters.override_from_file(self.fixed_parameters_from_file)
+
+        if self.fixed_parameters:
+            if self.fixed_parameters_from_file:
+                eos.warn('Overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+
+            for key, value in self.fixed_parameters.items():
+                self._parameters.set(key, value)
+
+        # Declare variable that is either parameter or kinematic
+        self._variable = None
+
+        # Do the variables correspond to one of the kinematic variables?
+        if self.variables[0] in valid_kinematic_variables:
+            self._kvx = self._kinematics.declare(self.variables[0], _np.nan)
+        else:
+            raise ValueError(f"Value of the first element of 'variables' ('{self.variables[0]}') is not the name of a kinematic variable for observable '{self.observable}'")
+
+        if self.variables[1] in valid_kinematic_variables:
+            self._kvy = self._kinematics.declare(self.variables[1], _np.nan)
+        else:
+            raise ValueError(f"Value of the second element of 'variables' ('{self.variables[1]}') is not the name of a kinematic variable for observable '{self.observable}'")
+
+        # Create options
+        self._options = eos.Options()
+        if self.options:
+            for key, value in self.options.items():
+                self._options.declare(key, value)
+
+        self._observable = eos.Observable.make(self.observable, self._parameters, self._kinematics, self._options)
+
+        self._xvalues = _np.linspace(-2.0, +2.0, self.resolution)
+        self._yvalues = _np.linspace(-2.0, +2.0, self.resolution)
+        self._cvalues = _np.reshape([[x + 1.0j * y for y in self._yvalues] for x in self._xvalues], (self.resolution**2))
+
+    def evaluate(self, c:complex):
+        """Evaluate the observable at a complex-valued kinematic variable."""
+
+        self._kvx.set(_np.real(c))
+        self._kvy.set(_np.imag(c))
+
+        return self._observable.evaluate()
+
+    def prepare(self, context:AnalysisFileContext=None):
+        self._ovalues = _np.reshape(list(map(self.evaluate, self._cvalues)), (self.resolution, self.resolution)).T
+
+    def draw(self, ax):
+        ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap='viridis', rasterized=True)
+
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
@@ -1445,6 +1540,7 @@ class ItemFactory:
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
         'band': BandItem,
         'signal-pdf': SignalPDFItem,
+        'complex-plane': ComplexPlaneItem,
     }
 
     @staticmethod
