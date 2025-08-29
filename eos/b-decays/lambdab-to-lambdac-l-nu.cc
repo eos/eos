@@ -77,7 +77,7 @@ namespace eos
                 double beta       = a.beta;
                 double sqrt1mbeta = sqrt(1.0 - beta);
 
-                // cf. [BKTvD2019], eqs. (2.5)-(2.14), pp. 4-5.
+                // cf. [BKTvD:2019], eqs. (2.5)-(2.14), pp. 4-5.
 
                 // K_{1ss}
                 _k[0] = (
@@ -243,7 +243,7 @@ namespace eos
                 const double s_lam  = std::sqrt(1.0 - c_lam * c_lam);
                 const double c_phi  = std::cos(phi), s_phi = std::sin(phi);
 
-                // cf. [BKTvD2019], p. 2, eqs. (2.3) and (2.4)
+                // cf. [BKTvD:2019], p. 2, eqs. (2.3) and (2.4)
                 return 3.0 / (8.0 * M_PI) * (
                        k1ss() * s2_lep        + k1cc() * c2_lep + k1c() * c_lep
                     + (k2ss() * s2_lep        + k2cc() * c2_lep + k2c() * c_lep) * c_lam
@@ -305,7 +305,7 @@ namespace eos
             if ((lam <= 0) || (q2 <= m_l * m_l))
                 return 0.0;
 
-            // cf. [BKTvD2019], eq. (2.24), w/o the branching fraction B(L_c -> L^0 pi^+).
+            // cf. [BKTvD:2019], eq. (2.24), w/o the branching fraction B(L_c -> L^0 pi^+).
             // The latter cancels in the angular distribution, and is not needed for the
             // branching fraction Lb -> L_c l nu.
             return g_fermi() * model->ckm_cb() * (1.0 - m_l * m_l / q2) * std::sqrt(q2 / 3.0 / 128 / power_of<3>(M_PI * m_Lambda_b()) * std::sqrt(lam));
@@ -351,7 +351,7 @@ namespace eos
             const complex<double> N = norm(s);
 
             // b->c case transversity amplitudes
-            // cf. [BKTvD2019], eqs. (2.18)-(2.23), p. 6, including contributions from the vector and scalar operators.
+            // cf. [BKTvD:2019], eqs. (2.18)-(2.23), p. 6, including contributions from the vector and scalar operators.
             result.perp_1_L = -2.0 * N * ffpV * (cvl + cvr) * sqrtsminus;
             result.para_1_L = +2.0 * N * ffpA * (cvl - cvr) * sqrtsplus;
             result.perp_0_L = +std::sqrt(2.0) * N * ff0V * ((m_Lambda_b + m_Lambda_c) / sqrts) * (cvl + cvr) * sqrtsminus;
@@ -359,7 +359,7 @@ namespace eos
             result.perp_t_L = +std::sqrt(2.0) * N * sqrtsplus  * fftV * ( ((m_Lambda_b - m_Lambda_c) / sqrts) * (cvl + cvr) + ((m_Lambda_b - m_Lambda_c) / (mbatmu - mcatmu)) * (csl + csr) / m_l_hat );
             result.para_t_L = -std::sqrt(2.0) * N * sqrtsminus * fftA * ( ((m_Lambda_b + m_Lambda_c) / sqrts) * (cvl - cvr) - ((m_Lambda_b + m_Lambda_c) / (mbatmu + mcatmu)) * (csl - csr) / m_l_hat );
 
-            // cf. [BKTvD2019], eqs. (2.26)-(2.29), p. 6, including contributions from the tensor operator.
+            // cf. [BKTvD:2019], eqs. (2.26)-(2.29), p. 6, including contributions from the tensor operator.
             result.para_0_T = -sqrt(8.0) * N * ff0T5 * sqrtsplus  * ct;
             result.perp_0_T = -sqrt(8.0) * N * ff0T  * sqrtsminus * ct;
             result.para_1_T = +sqrt(4.0) * N * ffpT5 * sqrtsplus  * ct * (m_Lambda_b - m_Lambda_c) / sqrts;

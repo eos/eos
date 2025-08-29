@@ -116,7 +116,7 @@ namespace eos
              * - the mode is at the central value
              * - the interval [min, max] contains 68% probability
              * - the density at min is the same as at max
-             * For details see [C2004].
+             * For details see [C:2004].
              *
              * @note Finding the correct parameter values needs to be accomplished by the user, by solving
              * a set of two equations corresponding to the condition above, numerically. This is unstable
@@ -139,7 +139,7 @@ namespace eos
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
              *
-             * Internally, it is represented by an Amoroso distribution [C2004] with
+             * Internally, it is represented by an Amoroso distribution [C:2004] with
              * location parameter a set to the physical limit, scale parameter \theta and
              * shape parameters \alpha, \beta supplied by the user.
              *
@@ -169,7 +169,7 @@ namespace eos
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
              *
-             * Internally, it is represented by an Amoroso distribution [C2004] with
+             * Internally, it is represented by an Amoroso distribution [C:2004] with
              * location parameter a set to the physical limit, scale parameter \theta and
              * shape parameters \alpha, \beta supplied by the user.
              *

@@ -30,7 +30,7 @@ Cell[TextData[Cell[BoxData[
   3.5403870098979*^9, 3.54038701712177*^9}}],
 
 Cell[TextData[{
- "Based on [CMM1996]. See Eqs. (39)-(40), p. 9 therein. We fit a polynomial \
+ "Based on [CMM:1996]. See Eqs. (39)-(40), p. 9 therein. We fit a polynomial \
 in ",
  Cell[BoxData[
   FormBox["z", TraditionalForm]]],

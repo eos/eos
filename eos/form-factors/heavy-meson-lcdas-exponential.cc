@@ -98,7 +98,7 @@ namespace eos
         double
         Exponential::phi_plus(const double & omega) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B();
 
             return omega / (omega_0 * omega_0) * std::exp(-omega / omega_0);
@@ -107,7 +107,7 @@ namespace eos
         double
         Exponential::phi_minus(const double & omega) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B();
 
             const double limitWW = 1.0 / omega_0 * std::exp(-omega / omega_0);
@@ -441,7 +441,7 @@ namespace eos
         double
         Exponential::psi_A(const double & omega, const double & xi) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B(), omega_0_2 = omega_0 * omega_0, omega_0_4 = omega_0_2 * omega_0_2;
             const double lambda_E_2 = 3.0 / 2.0 * omega_0_2;
 
@@ -457,7 +457,7 @@ namespace eos
         double
         Exponential::X_A(const double & omega, const double & xi) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B(), omega_0_2 = omega_0 * omega_0, omega_0_4 = omega_0_2 * omega_0_2;
             const double lambda_E_2 = 3.0 / 2.0 * omega_0_2;
 
@@ -467,7 +467,7 @@ namespace eos
         double
         Exponential::Y_A(const double & omega, const double & xi) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B(), omega_0_2 = omega_0 * omega_0, omega_0_4 = omega_0_2 * omega_0_2;
             const double lambda_E_2 = 3.0 / 2.0 * omega_0_2;
 
@@ -477,7 +477,7 @@ namespace eos
         double
         Exponential::Xbar_A(const double & omega, const double & xi) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B(), omega_0_2 = omega_0 * omega_0, omega_0_3 = omega_0_2 * omega_0;
             const double lambda_E_2 = 3.0 / 2.0 * omega_0_2;
 
@@ -489,7 +489,7 @@ namespace eos
         double
         Exponential::Ybar_A(const double & omega, const double & xi) const
         {
-            // cf. [KMO2006], eq. (53), p. 16
+            // cf. [KMO:2006], eq. (53), p. 16
             const double omega_0 = lambda_B(), omega_0_2 = omega_0 * omega_0, omega_0_3 = omega_0_2 * omega_0;
             const double lambda_E_2 = 3.0 / 2.0 * omega_0_2;
 

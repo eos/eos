@@ -46,9 +46,9 @@ namespace eos
 
         ~Implementation() = default;
 
-        /* auxilliary functions from [N1993] */
+        /* auxilliary functions from [N:1993] */
 
-        // r(omega) is defined in [N1993] eq. (3.104), p. 63
+        // r(omega) is defined in [N:1993] eq. (3.104), p. 63
         inline static double r(const double & omega)
         {
             if (omega < 1.0)
@@ -67,7 +67,7 @@ namespace eos
             return log(omega + sqrt(omega * omega - 1.0)) / sqrt(omega * omega - 1.0);
         }
 
-        // f(omega) is defined in [N1993] eq. (3.117), p. 65
+        // f(omega) is defined in [N:1993] eq. (3.117), p. 65
         inline static double f(const double & omega)
         {
             if (omega < 1.0)
@@ -90,7 +90,7 @@ namespace eos
             return omega * r_omega - 2.0 - omega / sqrt(omega * omega - 1.0) * (L2 + (omega * omega - 1.0) * r_omega * r_omega);
         }
 
-        // g(z, omega) is defined in [N1993] eq. (3.129), p. 70
+        // g(z, omega) is defined in [N:1993] eq. (3.129), p. 70
         inline static double g(const double & z, const double & omega)
         {
             if (omega < 1.0)
@@ -118,13 +118,13 @@ namespace eos
 
         /* anomalous dimensions and auxilliaries for next-to-leading log terms */
 
-        // a_hh(omega) is defined in [N1993] eq. (3.119), p. 66
+        // a_hh(omega) is defined in [N:1993] eq. (3.119), p. 66
         inline static double a_hh(const double & omega)
         {
             return 8.0 / 27.0 * (omega * r(omega) - 1.0);
         }
 
-        // Z_hh(omega) is defined in [N1993] eq. (3.119), p. 66
+        // Z_hh(omega) is defined in [N:1993] eq. (3.119), p. 66
         // Note that we use only the Taylor expansion in (omega - 1) up to second order.
         inline static double Z_hh(const double & omega)
         {
@@ -132,7 +132,7 @@ namespace eos
                 - 4.0 / 135.0 * (92.0 / 9.0 - M_PI * M_PI) * power_of<2>(omega - 1.0);
         }
 
-        // S_{1,2,3}^{(5)} for the two currents are defined in [N1993] eq. (3.145)
+        // S_{1,2,3}^{(5)} for the two currents are defined in [N:1993] eq. (3.145)
         inline static double S_1(const double & x, const double & omega)
         {
             return omega * (17.0 / 27.0 - 5.0 / 9.0 * pow(x, -6.0 / 25.0) - 2.0 / 27.0 * pow(x, -9.0 / 25.0) + 8.0 / 25.0 * log(x))
@@ -188,7 +188,7 @@ namespace eos
             return pow(alpha_s_mc / alpha_s_mb, 6.0 / 25.0) * pow(alpha_s_mc, a_hh(omega));
         }
 
-        // h_2(z, omega) is defined in [N1993] eq. (3.129), p. 70
+        // h_2(z, omega) is defined in [N:1993] eq. (3.129), p. 70
         inline static double h_2(const double & z, const double & omega)
         {
             const double denom = 1.0 - 2.0 * omega * z + z * z;
@@ -201,7 +201,7 @@ namespace eos
                     ) * r(omega)
                 ) - z / denom * (log(z) - 1.0 + z);
         }
-        // h_2_5(z, omega) is defined in [N1993] eq. (3.129), p. 70
+        // h_2_5(z, omega) is defined in [N:1993] eq. (3.129), p. 70
         inline static double h_2_5(const double & z, const double & omega)
         {
             const double denom = 1.0 - 2.0 * omega * z + z * z;
@@ -216,7 +216,7 @@ namespace eos
         }
 
         // hatted Wilson coefficients without the universal mu-dependence,
-        // cf. [N1993] eq. (3.142), p. 74
+        // cf. [N:1993] eq. (3.142), p. 74
         double Chat_1_v(const double & omega) const
         {
             static const double Z_4 = -9403.0 / 7500.0 - 7.0 * M_PI * M_PI / 225.0;

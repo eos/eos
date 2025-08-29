@@ -51,7 +51,7 @@ namespace eos
     ShortDistanceLowRecoil::c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
                 const WilsonCoefficients<BToS> & wc)
     {
-        // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
+        // cf. [BFS:2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
         complex<double> result = wc.c7();
         // LO contribution
         result += -1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
@@ -70,7 +70,7 @@ namespace eos
     complex<double>
     ShortDistanceLowRecoil::c8eff(const WilsonCoefficients<BToS> & wc)
     {
-        // cf. [BFS2001], below Eq. (26), p. 8
+        // cf. [BFS:2001], below Eq. (26), p. 8
         complex<double> lo = wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
 
         return wc.c8() + lo;
@@ -81,7 +81,7 @@ namespace eos
                 bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
                 const WilsonCoefficients<BToS> & wc)
     {
-        // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+        // Uses b pole mass according to [BFS:2001], Sec. 3.1, paragraph Quark Masses
         // Substitute pole mass by PS mass
         complex<double> c = -2.0 / 27.0 * (8.0 * wc.c1() + 6.0 * wc.c2() - 6.0 * wc.c3() - 8.0 * wc.c4() - 12.0 * wc.c5() - 160.0 * wc.c6());
         complex<double> c_0 = -2.0 / 27.0 * (48.0 * wc.c1() + 36.0 * wc.c2() + 198.0 * wc.c3() - 24.0 * wc.c4() + 1872.0 * wc.c5() - 384.0 * wc.c6());
@@ -106,7 +106,7 @@ namespace eos
     complex<double>
     CharmLoops::h(const double & mu, const double & s)
     {
-        // cf. [BFS2001], Eq. (11), p. 4 in the limit m_q -> 0
+        // cf. [BFS:2001], Eq. (11), p. 4 in the limit m_q -> 0
         return 4.0 / 9.0 * complex<double>(2.0 / 3.0 + 2.0 * std::log(mu) - std::log(s), M_PI);
     }
 
@@ -136,7 +136,7 @@ namespace eos
             ic = -M_PI / 2.0;
             rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
         }
-        else if (s < 0) // we use [KMPW2010], Eq. (12), p. 7
+        else if (s < 0) // we use [KMPW:2010], Eq. (12), p. 7
         {
             ic = 0.0;
             // note that our prefactor b varies from eq. (12) by a factor of 2.
@@ -149,7 +149,7 @@ namespace eos
             throw InternalError("CharmLoops::h not prepared for its arguments");
         }
 
-        // cf. [BFS2001], Eq. (11), p. 4
+        // cf. [BFS:2001], Eq. (11), p. 4
         return -4.0 / 9.0 * (a + b * complex<double>(rc, ic));
     }
 
@@ -162,7 +162,7 @@ namespace eos
             return -104.0 / 243.0 * 2.0 * log(m_b / mu);
         }
 
-        /* cf. [S2004], Eq. (29), p. 8
+        /* cf. [S:2004], Eq. (29), p. 8
          * We have three different cases for the evaluation of the formula depending on s_hat.
          * 1. s_hat < 1: We can use the formula without modification
          * 2. s_hat > 1: 1 - s_hat is negative. We have to take care, because in this regime
@@ -219,7 +219,7 @@ namespace eos
     complex<double>
     CharmLoops::B(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S2004], Eq. (30), p. 8
+        // cf. [S:2004], Eq. (30), p. 8
         // See remarks in CharmLoops::A
         double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
         double ln = log(s_hat), ln2 = ln * ln;
@@ -299,46 +299,46 @@ namespace eos
     {
         static const double zeta3 = 1.20206;
 
-        // cf. [S2004], Eq. (31), p. 9
+        // cf. [S:2004], Eq. (31), p. 9
         return complex<double>(16.0 / 81.0 * log(mu * mu / s) + 428.0 / 243.0 - 64.0 / 27.0 * zeta3,
                 16.0 / 81.0 * M_PI);
     }
 
-    /* Two-Loop functions for massless quarks from[S2004], suitable for up-quark loops */
+    /* Two-Loop functions for massless quarks from[S:2004], suitable for up-quark loops */
     complex<double>
     CharmLoops::F17_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S2004], Eq. (22), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
+        // cf. [S:2004], Eq. (22), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
         return -A(mu, s, m_b);
     }
 
     complex<double>
     CharmLoops::F19_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S2004], Eq. (24), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
+        // cf. [S:2004], Eq. (24), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
         return -B(mu, s, m_b) - 4.0 * C(mu, s);
     }
 
     complex<double>
     CharmLoops::F27_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S2004], Eq. (23), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
+        // cf. [S:2004], Eq. (23), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
         return 6.0 * A(mu, s, m_b);
     }
 
     complex<double>
     CharmLoops::F29_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S2004], Eq. (25), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
+        // cf. [S:2004], Eq. (25), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
         return 6.0 * B(mu, s, m_b) - 3.0 * C(mu, s);
     }
 
     /* Two-Loop functions for charm-quark loops */
-    // cf. [AAGW2001], Eq. (56), p. 20
+    // cf. [AAGW:2001], Eq. (56), p. 20
     complex<double>
     CharmLoops::F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c)
     {
-        // cf. [ABGW2001], Appendix B, pp. 34-38
+        // cf. [ABGW:2001], Appendix B, pp. 34-38
         static double kap1700[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -536,11 +536,11 @@ namespace eos
         }
     }
 
-    // cf. [AAGW2001], Eq. (56), p. 20
+    // cf. [AAGW:2001], Eq. (56), p. 20
     complex<double>
     CharmLoops::F27_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
-        // cf. [ABGW2001], Appendix B, pp. 34-38
+        // cf. [ABGW:2001], Appendix B, pp. 34-38
         static double kap2700[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -705,7 +705,7 @@ namespace eos
         return r + complex<double>(0.0, 1.0) * i;
     }
 
-    // cf. [AAGW2001], Eq. (54), p. 19
+    // cf. [AAGW:2001], Eq. (54), p. 19
     complex<double>
     CharmLoops::F19_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
@@ -713,7 +713,7 @@ namespace eos
         if (abs(s) < 1e-6) // allow for s = 1e-6, corresponding roughly to the dielectron threshold
             throw InternalError("CharmLoops::F19_massive: F19 diverges for s -> 0. Check that F19 enters via 's * F19(s)' and replace by zero.");
 
-        // cf. [ABGW2001], Appendix B, pp. 34-38
+        // cf. [ABGW:2001], Appendix B, pp. 34-38
         static double kap1900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -896,7 +896,7 @@ namespace eos
         return r + complex<double>(0.0, 1.0) * i;
     }
 
-    // cf. [AAGW2001], Eq. (54), p. 19
+    // cf. [AAGW:2001], Eq. (54), p. 19
     complex<double>
     CharmLoops::F29_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
@@ -904,7 +904,7 @@ namespace eos
         if (abs(s) < 1e-6) // allow for s = 1e-6, corresponding roughly to the dielectron threshold
             throw InternalError("CharmLoops::F29_massive: F29 diverges for s -> 0. Check that F29 enters via 's * F29(s)' and replace by zero.");
 
-        // cf. [ABGW2001], Appendix B, pp. 34-38
+        // cf. [ABGW:2001], Appendix B, pp. 34-38
         static double kap2900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -1086,7 +1086,7 @@ namespace eos
         return r + complex<double>(0.0, 1.0) * i;
     }
 
-    // cf. [AAGW2001], eqs. (48) and (49), p. 18
+    // cf. [AAGW:2001], eqs. (48) and (49), p. 18
     complex<double>
     CharmLoops::delta_F29_massive(const double & mu, const double & s, const double & m_q)
     {
@@ -1095,7 +1095,7 @@ namespace eos
         return 64.0 / 945.0 * (2.0 / 3.0 + log(mu / m_q)) * (105.0 + 84.0 * x + 72.0 * x * x + 64.0 * x * x * x);
     }
 
-    // cf. [BFS2001], Eq. (82), p. 30
+    // cf. [BFS:2001], Eq. (82), p. 30
     complex<double>
     CharmLoops::F87_massless(const double & mu, const double & s, const double & m_q)
     {
@@ -1127,7 +1127,7 @@ namespace eos
         return (1.0 / 9.0) * (a + b + c);
     }
 
-    // cf. [BFS2001], Eq. (83), p. 30
+    // cf. [BFS:2001], Eq. (83), p. 30
     complex<double>
     CharmLoops::F89_massless(const double & s, const double & m_q)
     {
@@ -1157,7 +1157,7 @@ namespace eos
         return (1.0 / 9.0) * (a + b);
     }
 
-    // cf. [BFS2001], Eq. (29), p. 8
+    // cf. [BFS:2001], Eq. (29), p. 8
     complex<double>
     CharmLoops::B0(const double & s, const double & m_q)
     {
@@ -1189,7 +1189,7 @@ namespace eos
         return result;
     }
 
-    // cf. [BFS2001], Eq. (84), p. 30
+    // cf. [BFS:2001], Eq. (84), p. 30
     complex<double>
     CharmLoops::C0(const double & s, const double & m_q)
     {

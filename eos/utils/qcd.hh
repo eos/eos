@@ -36,7 +36,7 @@ namespace eos
             /*!
              * Calculate RGE running of strong coupling alpha_s from scale mu_0 down to scale mu in the MSbar scheme.
              *
-             * Calculation according to [CKS2000].
+             * Calculation according to [CKS:2000].
              *
              * @param mu          scale at which alpha_s shall be evaluated
              * @param alpha_s_0   alpha_s at the initial scale mu_0
@@ -48,7 +48,7 @@ namespace eos
             /*!
              * Calculate RGE running of quark mass m_q in the MSbar scheme.
              *
-             * Calculation according to [CKS2000].
+             * Calculation according to [CKS:2000].
              *
              * @param m_q         quark mass in the MSbar scheme at the scale m_q
              * @param alpha_s_0   alpha_s at the scale mu_0 = m_q
@@ -62,7 +62,7 @@ namespace eos
             /*!
              * Calculate the shift from pole mass scheme to MSbar.
              *
-             * Calculation according to [MvR1999].
+             * Calculation according to [MvR:1999].
              *
              * @param m_q_pole    quark mass in the pole mass scheme
              * @param alpha_s     alpha_s at scale mu = m_q_pole
@@ -84,7 +84,7 @@ namespace eos
             /*!
              * Calculate the shift from MSbar scheme to potential-Subtracted mass (PS mass).
              *
-             * Calculation according to [B1998].
+             * Calculation according to [B:1998].
              *
              * @param m_q         quark mass in the MSbar scheme at the scale m_q
              * @param alpha_s     alpha_s at the scale m_q
@@ -97,7 +97,7 @@ namespace eos
             /*!
              * Calculate the shift from MSbar scheme to kinetic scheme (kin mass)
              *
-             * Calculation according to [BBMU2003].
+             * Calculation according to [BBMU:2003].
              *
              * @param m_q         quark mass in the MSbar scheme at the scale m_q
              * @param alpha_s     alpha_s at the scale m_q

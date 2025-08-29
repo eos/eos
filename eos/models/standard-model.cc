@@ -286,7 +286,7 @@ namespace eos
     {
         // The true (central) pole mass of the bottom is very close to the values
         // that can be calculated by the following quadratic polynomial.
-        // This holds vor 4.13 <= m_b_MSbar <= 4.37, which corresponds to the values from [PDG2010].
+        // This holds vor 4.13 <= m_b_MSbar <= 4.37, which corresponds to the values from [PDG:2010].
         using Coefficients                         = std::array<double, 4>;
         static const std::array<Coefficients, 4> c = {
             {
@@ -379,7 +379,7 @@ namespace eos
     {
         // The true (central) pole mass of the charm is very close to the values
         // that can be calculated by the following quadratic polynomial.
-        // This holds vor 1.16 <= m_c_MSbar <= 1.34, which corresponds to the values from [PDG2010].
+        // This holds vor 1.16 <= m_c_MSbar <= 1.34, which corresponds to the values from [PDG:2010].
         static const double m0 = 1.27, a = 1.59564, b = 1.13191, c = -0.737165;
 
         double m_c_MSbar = _m_c_MSbar__qcd();
@@ -584,7 +584,7 @@ namespace eos
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::WET::USLNu>::wet_uslnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
     {
-        // universal electroweak correction, cf. [S1982]
+        // universal electroweak correction, cf. [S:1982]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
         const double etaEW = 1.009653; // cf. sqrt(S_EW = 1.0194) in [CCH:2017A], p. 2, below eq. (13)
 
@@ -650,7 +650,7 @@ namespace eos
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor /* lepton_flavor */, const bool & /* cp_conjugate */) const
     {
-        // universal electroweak correction, cf. [S1982]
+        // universal electroweak correction, cf. [S:1982]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
         // TODO: provide this to b->ulv and b->clv
         const double etaEW = 1.0066;
@@ -1078,7 +1078,7 @@ namespace eos
     namespace implementation
     {
         /*
-         * Initial scale Wilson coefficients from the charm sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
+         * Initial scale Wilson coefficients from the charm sector, cf. [BMU:1999], between Eqs. (4) and (5), pp. 4-5
          *
          * x_c = m_t(mu_0c)^2 / m_W^2
          * log_c = ln(mu_0c^2 / m_W^2)
@@ -1125,7 +1125,7 @@ namespace eos
         }
 
         /*
-         * Initial scale Wilson coefficients from the top sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
+         * Initial scale Wilson coefficients from the top sector, cf. [BMU:1999], between Eqs. (4) and (5), pp. 4-5
          *
          * x_t = m_t(mu_0t)^2 / m_W^2
          * log_t = ln(mu_0t / m_t(mu_0t))
@@ -1182,7 +1182,7 @@ namespace eos
          * In the SM there is lepton flavor universality.
          */
 
-        // Calculation according to [BMU1999], Eq. (25), p. 7
+        // Calculation according to [BMU:1999], Eq. (25), p. 7
 
         if (mu >= _mu_t__deltabs1)
         {

@@ -49,37 +49,37 @@ namespace eos
     struct CharmLoops
     {
         /* One-loop functions */
-        // cf. [BFS2001], Eq. (11), p. 4 with m_q -> 0
+        // cf. [BFS:2001], Eq. (11), p. 4 with m_q -> 0
         static complex<double> h(const double & mu, const double & s);
-        // cf. [BFS2001], Eq. (11), p. 4 with m_q -> 0
+        // cf. [BFS:2001], Eq. (11), p. 4 with m_q -> 0
         static complex<double> h(const double & mu, const double & s, const double & m_q);
 
         /* Two-loop functions */
-        // cf. [S2004], Eq. (29), p. 8
+        // cf. [S:2004], Eq. (29), p. 8
         static complex<double> A(const double & mu, const double & s, const double & m_b);
-        // cf. [S2004], Eq. (30), pp. 8-9
+        // cf. [S:2004], Eq. (30), pp. 8-9
         static complex<double> B(const double & mu, const double & s, const double & m_b);
-        // cf. [S2004], Eq. (31), p. 9
+        // cf. [S:2004], Eq. (31), p. 9
         static complex<double> C(const double & mu, const double & s);
 
         /* Non-factorizing two loop contributions */
-        // massless case, cf. [S2004], Eq. (16), p. 6
+        // massless case, cf. [S:2004], Eq. (16), p. 6
         static complex<double> F17_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F19_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F27_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F29_massless(const double & mu, const double & s, const double & m_b);
-        // massless case, cf. [BFS2001], Eqs. (82)-(83), p. 30
+        // massless case, cf. [BFS:2001], Eqs. (82)-(83), p. 30
         static complex<double> F87_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F89_massless(                   const double & s, const double & m_b);
 
-        // massive case, cf. [ABGW2003], Eq. (7), p. 8
+        // massive case, cf. [ABGW:2003], Eq. (7), p. 8
         static complex<double> F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F19_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F27_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F29_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> delta_F29_massive(const double & mu, const double & s, const double & m_c);
 
-        // helper functions for F8j, cf. [BFS2001], Eqs. (29) and (84), pp. 8 and 30
+        // helper functions for F8j, cf. [BFS:2001], Eqs. (29) and (84), pp. 8 and 30
         static complex<double> B0(const double & s, const double & m_q);
         static complex<double> C0(const double & s, const double & m_q);
 
@@ -104,7 +104,7 @@ namespace eos
          * @param use_nlo       true, if NLO contributions shall be used
          * @param wc            the Wilson coefficients
          *
-         * For the calculation, cf. [GP2004], Eq. (56)
+         * For the calculation, cf. [GP:2004], Eq. (56)
          */
         static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
                 const WilsonCoefficients<BToS> & wc);
@@ -114,7 +114,7 @@ namespace eos
          *
          * @param wc            the Wilson coefficients
          *
-         * For the calculation, cf. [BFS2001], below eq. (26)
+         * For the calculation, cf. [BFS:2001], below eq. (26)
          */
         static complex<double> c8eff(const WilsonCoefficients<BToS> & wc);
 
@@ -131,7 +131,7 @@ namespace eos
          * @param lambda_hat_u          certain combination of CKM matrix elements: V_ub V_us^* / (V_tb V_ts^*)
          * @param wc                    the Wilson coefficients
          *
-         * For the calculation, cf. [GP2004], Eq. (55), p. 10
+         * For the calculation, cf. [GP:2004], Eq. (55), p. 10
          */
         static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
                 bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,

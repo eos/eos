@@ -30,7 +30,7 @@ namespace eos
 
     /* 6 flavor QCD constants */
 
-    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 6
+    // cf. [CKS:2000], Eq. (2), p. 2 with n_f = 6
     const QCD::BetaFunction QCD::beta_function_nf_6{
         {
          21.0 / 3.0,
@@ -41,7 +41,7 @@ namespace eos
 
     /* 5 flavor QCD constants */
 
-    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 5
+    // cf. [CKS:2000], Eq. (2), p. 2 with n_f = 5
     const QCD::BetaFunction QCD::beta_function_nf_5{
         {
          23.0 / 3.0,
@@ -50,7 +50,7 @@ namespace eos
          4826.1563287908967, }
     };
 
-    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 5
+    // cf. [CKS:2000], Eq. (7), p. 5 with n_f = 5
     const QCD::AnomalousMassDimension QCD::gamma_m_nf_5{
         {
          1.0, 506.0 / 9.0,
@@ -60,7 +60,7 @@ namespace eos
 
     /* 4 flavor QCD constants */
 
-    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 4
+    // cf. [CKS:2000], Eq. (2), p. 2 with n_f = 4
     const QCD::BetaFunction QCD::beta_function_nf_4{
         {
          25.0 / 3.0,
@@ -69,7 +69,7 @@ namespace eos
          8035.1864197901160, }
     };
 
-    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 4
+    // cf. [CKS:2000], Eq. (7), p. 5 with n_f = 4
     const QCD::AnomalousMassDimension QCD::gamma_m_nf_4{
         {
          1.0, 526.0 / 9.0,
@@ -79,7 +79,7 @@ namespace eos
 
     /* 3 flavor QCD constants */
 
-    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 3
+    // cf. [CKS:2000], Eq. (2), p. 2 with n_f = 3
     const QCD::BetaFunction QCD::beta_function_nf_3{
         {
          9.0, 64.0,
@@ -87,7 +87,7 @@ namespace eos
          12090.378130803711, }
     };
 
-    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 3
+    // cf. [CKS:2000], Eq. (7), p. 5 with n_f = 3
     const QCD::AnomalousMassDimension QCD::gamma_m_nf_3{
         { 1.0, 182.0 / 3.0, 794.89311771668714, 11331.304567227756 }
     };
@@ -117,7 +117,7 @@ namespace eos
         double b2    = beta2 / beta0;
         double b3    = beta3 / beta0;
 
-        // cf. [CKS2000], Eq. (4), p. 3
+        // cf. [CKS:2000], Eq. (4), p. 3
         double ln_lambda2 = 2.0 * log(mu_0)
                             - (1.0 / a + b1 * log(a) + (b2 - b1 * b1) * a + (b3 / 2.0 - b1 * b2 + b1 * b1 * b1 / 2.0) * a * a) / beta0
                             // Use C for MSbar definition
@@ -126,7 +126,7 @@ namespace eos
         double L = 2.0 * log(mu) - ln_lambda2, lnL = log(L);
         double denom = beta0 * L, denom2 = denom * denom, denom3 = denom2 * denom, denom4 = denom2 * denom2;
 
-        // cf. [CKS2000], Eq. (5), p. 3
+        // cf. [CKS:2000], Eq. (5), p. 3
         double result = 1.0 / denom - b1 * lnL / denom2 + (b1 * b1 * (lnL * lnL - lnL - 1.0) + b2) / denom3
                         + (b1 * b1 * b1 * (-1.0 * lnL * lnL * lnL + 5.0 / 2.0 * lnL * lnL + 2.0 * lnL - 0.5) - 3.0 * b1 * b2 * lnL + b3 / 2.0) / denom4;
 
@@ -170,21 +170,21 @@ namespace eos
         double c2       = gamma2_m / beta0;
         double c3       = gamma3_m / beta0;
 
-        // cf. [CKS2000], Eq. (10), p. 6
+        // cf. [CKS:2000], Eq. (10), p. 6
         double c_mu0 = pow(a_mu0, c0)
                        * (1.0 + a_mu0 * (c1 - b1 * c0) + a_mu0 * a_mu0 * 0.5 * (pow(c1 - b1 * c0, 2) + c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
                           + a_mu0 * a_mu0 * a_mu0
                                     * (pow(c1 - b1 * c0, 3) / 6.0 + (c1 - b1 * c0) / 2.0 * (c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
                                        + (c3 - b1 * c2 + b1 * b1 * c1 - b2 * c1 - b1 * b1 * b1 * c0 + 2.0 * b1 * b2 * c0 - b3 * c0) / 3.0));
 
-        // cf. [CKS2000], Eq. (10), p. 6
+        // cf. [CKS:2000], Eq. (10), p. 6
         double c_mu = pow(a_mu, c0)
                       * (1.0 + a_mu * (c1 - b1 * c0) + a_mu * a_mu * 0.5 * (pow(c1 - b1 * c0, 2) + c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
                          + a_mu * a_mu * a_mu
                                    * (pow(c1 - b1 * c0, 3) / 6.0 + (c1 - b1 * c0) / 2.0 * (c2 - b1 * c1 + b1 * b1 * c0 - b2 * c0)
                                       + (c3 - b1 * c2 + b1 * b1 * c1 - b2 * c1 - b1 * b1 * b1 * c0 + 2.0 * b1 * b2 * c0 - b3 * c0) / 3.0));
 
-        // cf. [CKS2000], Eq. (9), p. 6
+        // cf. [CKS:2000], Eq. (9), p. 6
         return m_q_0 * c_mu / c_mu0;
     }
 
@@ -193,7 +193,7 @@ namespace eos
     {
         double a_s = alpha_s / M_PI;
 
-        // cf. [MvR1999], Eq. (12), pp. 4-5 for alpha_s = alpha_s(m_q_pole)
+        // cf. [MvR:1999], Eq. (12), pp. 4-5 for alpha_s = alpha_s(m_q_pole)
         // thus we return m_b(mu)
         return m_q_pole * (1.0 + a_s * (-4.0 / 3.0 + a_s * (1.04 * nf - 14.3323 + a_s * (-0.65269 * nf * nf + 26.9239 * nf - 198.8068))));
     }
@@ -232,7 +232,7 @@ namespace eos
         double b_0 = beta[0];
         double L   = log(mu_f / m_q_MSbar);
 
-        // cf. [B1998], Eq. (25), p. 12
+        // cf. [B:1998], Eq. (25), p. 12
         return m_q_MSbar * (1.0 + a_s * (4.0 / 3.0 * (1.0 - mu_f / m_q_MSbar) + a_s * (K - (mu_f / 3.0 / m_q_MSbar) * (a_1 - 2.0 * b_0 * (L - 1.0)))));
     }
 
@@ -244,10 +244,10 @@ namespace eos
         static const double pi = M_PI, pi2 = pi * pi;
 
         double a_s = alpha_s_mq / M_PI, r = mu / m_q_MSbar;
-        double b_0 = beta[0]; // We do not need to adjust for a factor of 4 when using [BBMU2003], Eq. (A.8).
+        double b_0 = beta[0]; // We do not need to adjust for a factor of 4 when using [BBMU:2003], Eq. (A.8).
         double L   = log(m_q_MSbar / (2.0 * mu));
 
-        // cf. [BBMU2003], Eq. (A.8) and the underlying work [MvR2000]. Note that
+        // cf. [BBMU:2003], Eq. (A.8) and the underlying work [MvR:2000]. Note that
         // the latter does use 4 beta_0 = beta_0|here.
         return m_q_MSbar
                * (1.0

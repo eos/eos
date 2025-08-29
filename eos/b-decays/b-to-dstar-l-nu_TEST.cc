@@ -283,7 +283,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_9",  p, k, o)->evaluate(),  0.013735,  eps);
             }
 
-            // SM tests cf. [DSD2014]
+            // SM tests cf. [DSD:2014]
             {
                 Parameters p1 = Parameters::Defaults();
                 /*
@@ -350,7 +350,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(), 0.379092, eps);
             }
 
-            // NP tests cf. [DSD2014]
+            // NP tests cf. [DSD:2014]
             {
                 const double etaEW = 1.0066;
 

@@ -48,7 +48,7 @@ class ExponentialTest :
             static const double eps = 1e-5;
 
             /* m_s = u */
-            /* test cases in the limit lambda_E2 = lambda_H2 as used in [KMPW2010] */
+            /* test cases in the limit lambda_E2 = lambda_H2 as used in [KMPW:2010] */
             {
                 Parameters p = Parameters::Defaults();
                 p["B::1/lambda_B_p"] = 2.1739;

@@ -40,7 +40,7 @@ namespace eos
 
         /* s > 0, cases for B->V(P)l^+l^- */
 
-        // cf. [vD2011], Eq. (26), p. 3
+        // cf. [vD:2011], Eq. (26), p. 3
         inline double j0(const double & sh, const double & a1, const double & a2)
         {
             double lnsh = std::log(sh), sh2 = sh * sh, sh3 = sh2 * sh, sh4 = sh2 * sh2;

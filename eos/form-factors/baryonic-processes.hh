@@ -90,7 +90,7 @@ namespace eos
         // pair production threshold: Lambda_b + Lambda_c(2625)
         static constexpr double tp = (m1 + m2) * (m1 + m2);
         // first resonances sorted by spin/parity
-        // we use the shifts from [DLM2015], table VII.
+        // we use the shifts from [DLM:2015], table VII.
         static constexpr double mBc = 6.2751;
         static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
@@ -113,7 +113,7 @@ namespace eos
         // pair production threshold: Lambda_b + Lambda_c(2625)
         static constexpr double tp = (m1 + m2) * (m1 + m2);
         // first resonances sorted by spin/parity
-        // we use the shifts from [DLM2015], table VII.
+        // we use the shifts from [DLM:2015], table VII.
         static constexpr double mBc = 6.2751;
         static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
