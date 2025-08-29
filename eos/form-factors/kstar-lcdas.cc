@@ -112,7 +112,7 @@ namespace eos
 
         inline double f_perp(const double & mu) const
         {
-            // gamma_0 / (beta_0^Nf=3) = 4 / 23, see [BFS2001], p. 14, below eq. (48)
+            // gamma_0 / (beta_0^Nf=3) = 4 / 23, see [BFS:2001], p. 14, below eq. (48)
             return f_perp_0 * std::pow(c_rge(mu), +4.0 / 23.0 * QCD::beta_function_nf_3[0]);
         }
     };

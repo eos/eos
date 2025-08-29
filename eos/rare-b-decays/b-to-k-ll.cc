@@ -119,7 +119,7 @@ namespace eos
 
         inline std::array<double, 3> angular_coefficients_array(const BToKDilepton::Amplitudes & A, const double & s) const
         {
-            // cf. [BHP2007], Eq. (4.2) - (4.4)
+            // cf. [BHP:2007], Eq. (4.2) - (4.4)
             std::array<double, 3> result;
 
             // a_l
@@ -158,7 +158,7 @@ namespace eos
             return BToKDilepton::AngularCoefficients(differential_angular_coefficients_array(s));
         }
 
-        // cf. [BHP2007], Eq. (4.8)
+        // cf. [BHP:2007], Eq. (4.8)
         inline double unnormalized_decay_width(const BToKDilepton::AngularCoefficients & a) const
         {
             return 2.0 * (a.a_l + a.c_l / 3.0);
@@ -169,7 +169,7 @@ namespace eos
             return unnormalized_decay_width(a) * tau() / hbar();
         }
 
-        // cf. [BHP2007], Eq. (4.9)
+        // cf. [BHP:2007], Eq. (4.9)
         inline double differential_flat_term_numerator(const BToKDilepton::AngularCoefficients & a) const
         {
             return 2.0 * (a.a_l + a.c_l);
@@ -243,7 +243,7 @@ namespace eos
         // using the angular convention of the LHCb experiment
         const double c_theta_l = -c_theta_l_LHCb;
 
-        // cf. [BHP2007], Eq. (4.1)
+        // cf. [BHP:2007], Eq. (4.1)
         return a.a_l + a.b_l * c_theta_l + a.c_l * c_theta_l * c_theta_l;
     }
 

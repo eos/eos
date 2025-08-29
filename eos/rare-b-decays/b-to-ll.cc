@@ -125,7 +125,7 @@ namespace eos
             return tau_B() * delta_gamma_B / 2.0;
         }
 
-        // cf. [BEKU2002], Eq. (3.6)
+        // cf. [BEKU:2002], Eq. (3.6)
         double branching_ratio_time_zero() const
         {
             double lambda_t = abs(lambda(model.get()));
@@ -139,7 +139,7 @@ namespace eos
                         + std::norm(m_B / (m_b + m_q) * (wc.cP() - wc.cPprime()) + 2.0 * m_l / m_B * (wc.c10() - wc.c10prime())));
         }
 
-        // [F2012], Eq. (29), (30)
+        // [F:2012], Eq. (29), (30)
         double branching_ratio_untagged_integrated() const
         {
             xi_t xi = calc_amplitudes();
@@ -148,21 +148,21 @@ namespace eos
             return factor / (1.0 - power_of<2>(y_q())) * (std::real(xi[2]) + std::real(xi[3]) * y_q());
         }
 
-        // [F2012], Eq. (25)
+        // [F:2012], Eq. (25)
         double cp_asymmetry_del_gamma() const
         {
             xi_t xi = calc_amplitudes();
             return 2.0 * std::real(xi[0]) / (1.0 + std::norm(xi[0]));
         }
 
-        // [F2012], Eq. (24)
+        // [F:2012], Eq. (24)
         double cp_asymmetry_mixing_S() const
         {
             xi_t xi = calc_amplitudes();
             return 2.0 * std::imag(xi[0]) / (1.0 + std::norm(xi[0]));
         }
 
-        // [F2012], Eq. (8)
+        // [F:2012], Eq. (8)
         double effective_lifetime() const
         {
             const double cp_asym = cp_asymmetry_del_gamma();

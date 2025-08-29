@@ -203,7 +203,7 @@ namespace eos
     BToDLeptonInclusiveNeutrinos::description = "\
 The neutrino-inclusive decay B->D l X_nu, where l=e,mu is a light lepton, and \
 X_nu = {nu, nu nubar nu} is either a one or three neutrino final state. The \
-numerical implementations for this process follow [BIvD2016].";
+numerical implementations for this process follow [BIvD:2016].";
 
     const std::string
     BToDLeptonInclusiveNeutrinos::kinematics_description_s = "\

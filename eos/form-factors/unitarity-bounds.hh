@@ -344,7 +344,7 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
-    /* Unitarity bound implemented as discussed in [BJvD2019] */
+    /* Unitarity bound implemented as discussed in [BJvD:2019] */
     class HQETUnitarityBounds :
         public virtual ParameterUser,
         public PrivateImplementationPattern<HQETUnitarityBounds>

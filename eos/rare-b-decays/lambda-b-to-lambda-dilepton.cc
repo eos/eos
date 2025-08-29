@@ -351,7 +351,7 @@ namespace eos
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
                 * sqrt(s / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
-                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (?), p. ??
+                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD:2014], Eq. (?), p. ??
         }
 
         double kappa() const
@@ -374,27 +374,27 @@ namespace eos
             double N = norm(s);
 
             /* Y(s) for the up and the top sector */
-            // cf. [BFS2001], Eq. (10), p. 4
+            // cf. [BFS:2001], Eq. (10), p. 4
             complex<double> Y_top_c = 4.0 / 3.0 * wc.c1() + wc.c2() + 6.0 * wc.c3() + 60.0 * wc.c5();
             complex<double> Y_top_b = -0.5 * (7.0 * wc.c3() + 4.0 / 3.0 * wc.c4() + 76.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
             complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64 / 3.0 * wc.c6());
             complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
-            // Use b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses,
+            // Use b pole mass according to [BFS:2001], Sec. 3.1, paragraph Quark Masses,
             // then replace b pole mass by the PS mass.
             complex<double> Y_top = Y_top_c * CharmLoops::h(mu, s, m_c_pole)
                  + Y_top_b * CharmLoops::h(mu, s, m_b_PS)
                  + Y_top_0 * CharmLoops::h(mu, s)
                  + Y_top_;
-            // cf. [BFS2004], Eq. (43), p. 24
+            // cf. [BFS:2004], Eq. (43), p. 24
             complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, s, m_c_pole) - CharmLoops::h(mu, s));
 
             // calculate effective wilson coefficients
-            // cf. [BFS2001], below Eq. (9), p. 4
+            // cf. [BFS:2001], below Eq. (9), p. 4
             complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
-            // cf. [BFS2001], below Eq. (26), p. 8
+            // cf. [BFS:2001], below Eq. (26), p. 8
             complex<double> c8eff = wc.c8() + wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
 
-            // two loop virtual corrections, cf. [AAGW2001]
+            // two loop virtual corrections, cf. [AAGW:2001]
             // charm quarks
             complex<double> F27c = CharmLoops::F27_massive(mu(), s, m_b_PS, m_c_pole);
             complex<double> F17c = -F27c / 6.0;
@@ -410,18 +410,18 @@ namespace eos
             complex<double> F89  = CharmLoops::F89_massless(s, m_b_PS);
 
             // integredients for form factor relations
-            // cf. [FY2011]
+            // cf. [FY:2011]
             double L = -1.0 * (m_b_PS2 - s) / s * std::log(1.0 - s / m_b_PS2);
 
             // ratio of tensor to vector form factors
-            // cf. [BFvD2014], eqs. (??)-(??)
+            // cf. [BFvD:2014], eqs. (??)-(??)
             double R1p = 1.0 + alpha_s / (3.0 * M_PI) * (2.0 * std::log(m_b_PS / mu()) - 2.0 - L);
             double R1m = 1.0 + alpha_s / (3.0 * M_PI) * (2.0 * std::log(m_b_PS / mu()) - 2.0 - L);
             double R0p = 1.0 + alpha_s / (3.0 * M_PI) * (2.0 * std::log(m_b_PS / mu()) - 2.0 + 2.0 * L);
             double R0m = 1.0 + alpha_s / (3.0 * M_PI) * (2.0 * std::log(m_b_PS / mu()) - 2.0 + 2.0 * L);
 
             // functions tau
-            // cf. [BFvD2014], eqs. (??)-(??)
+            // cf. [BFvD:2014], eqs. (??)-(??)
             complex<double> tau_1p = (m_Lambda_b + m_Lambda) / m_Lambda_b * (
                     c7eff + wc.c7prime()
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * F17c + wc.c2() * F27c + c8eff * F87)
@@ -463,7 +463,7 @@ namespace eos
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * (F19c - F19u) + wc.c2() * (F29c - F29u) + wc.c8() * F89) * lambda_hat_u
                 );
 
-            // cf. [BFvD2014], eqs. (??)-(??)
+            // cf. [BFvD:2014], eqs. (??)-(??)
             result.a_perp_1_R = -2.0 *       N * (wc.c9() + wc.c9prime() + (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / s * tau_1p) * form_factors->f_perp_v(s) * sqrtsminus;
             result.a_perp_1_L = -2.0 *       N * (wc.c9() + wc.c9prime() - (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / s * tau_1p) * form_factors->f_perp_v(s) * sqrtsminus;
 
@@ -894,7 +894,7 @@ namespace eos
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
                 * sqrt(s / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
-                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (3.18), p. 6
+                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD:2014], Eq. (3.18), p. 6
         }
 
         double kappa() const
@@ -916,19 +916,19 @@ namespace eos
             complex<double> c7eff = ShortDistanceLowRecoil::c7eff(s, mu(), alpha_s, m_b, true, wc);
             complex<double> c9eff = ShortDistanceLowRecoil::c9eff(s, mu(), alpha_s, m_b, m_c, true, false, lambda_hat_u, wc);
 
-            // cf. [BFvD2014], eq.s (??), p. ??
+            // cf. [BFvD:2014], eq.s (??), p. ??
             double zeta_perp_V = (m_Lambda_b + m_Lambda) / m_Lambda_b * form_factors->f_perp_t(s)  / form_factors->f_perp_v(s);
             double zeta_perp_A = (m_Lambda_b - m_Lambda) / m_Lambda_b * form_factors->f_perp_t5(s) / form_factors->f_perp_a(s);
             double zeta_long_V = s / ((m_Lambda_b + m_Lambda) * m_Lambda_b) * form_factors->f_long_t(s)  / form_factors->f_long_v(s);
             double zeta_long_A = s / ((m_Lambda_b - m_Lambda) * m_Lambda_b) * form_factors->f_long_t5(s) / form_factors->f_long_a(s);
 
-            // parametrize subleading power corrections, cf. [MvD2016], eq. (B1), p. ??
+            // parametrize subleading power corrections, cf. [MvD:2016], eq. (B1), p. ??
             complex<double> x_perp_0 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_perp_0();
             complex<double> x_perp_1 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_perp_1();
             complex<double> x_para_0 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_para_0();
             complex<double> x_para_1 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_para_1();
 
-            // cf. [BFvD2014], eqs. (4.9)-(4.10), p. 11
+            // cf. [BFvD:2014], eqs. (4.9)-(4.10), p. 11
             result.a_perp_1_R = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V + (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(s) * sqrtsminus;
             result.a_perp_1_L = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V - (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(s) * sqrtsminus;
 

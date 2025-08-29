@@ -2181,7 +2181,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -2220,7 +2220,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -2467,7 +2467,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -2512,7 +2512,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -4920,7 +4920,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -4959,7 +4959,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -5206,7 +5206,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -5251,7 +5251,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -7788,7 +7788,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -7828,7 +7828,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -8077,7 +8077,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -8124,7 +8124,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;

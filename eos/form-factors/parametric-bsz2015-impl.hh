@@ -144,7 +144,7 @@ namespace eos
     complex<double>
     BSZ2015FormFactors<Process_, PToV>::a_12(const complex<double> & s) const
     {
-        // use constraint (B.6) in [BSZ2015] to remove A_12(0)
+        // use constraint (B.6) in [BSZ:2015] to remove A_12(0)
         std::array<double, 3> values
         {{
             (power_of<2>(_mB) - power_of<2>(_mV)) / (8.0 * _mB * _mV) * _a_A0[0],

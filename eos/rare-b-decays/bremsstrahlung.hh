@@ -26,25 +26,25 @@ namespace eos
 {
     struct Bremsstrahlung
     {
-        // cf. [AAGW2002], Eqs. (30), (31), p. 12
+        // cf. [AAGW:2002], Eqs. (30), (31), p. 12
         static complex<double> G_m1(const double & t);
         static complex<double> G_0(const double & t);
 
-        // cf. [AAGW2002], Eqs. (28), (29), p. 11
+        // cf. [AAGW:2002], Eqs. (28), (29), p. 11
         static complex<double> Deltai_23(const double & s_hat, const double & w, const double & z);
         static complex<double> Deltai_27(const double & s_hat, const double & w, const double & z);
 
-        // cf. [AAGW2002], Eqs. (23)-(26), p. 10
+        // cf. [AAGW:2002], Eqs. (23)-(26), p. 10
         static complex<double> tau_22(const double & s_hat, const double & w, const double & z);
         static complex<double> tau_27(const double & s_hat, const double & w, const double & z);
         static complex<double> tau_28(const double & s_hat, const double & w, const double & z);
         static complex<double> tau_29(const double & s_hat, const double & w, const double & z);
-        // cf. [AAGW2002], Eqs. (15)-(17), p. 8
+        // cf. [AAGW:2002], Eqs. (15)-(17), p. 8
         static double tau_78(const double & s_hat);
         static double tau_88(const double & s_hat);
         static double tau_89(const double & s_hat);
 
-        // Integrals of tau_2x from w = s_hat to w = 1, cf [AAGW2002], Eq. (22)
+        // Integrals of tau_2x from w = s_hat to w = 1, cf [AAGW:2002], Eq. (22)
         static complex<double> itau_22(const double & s_hat, const double & z);
         static complex<double> itau_27(const double & s_hat, const double & z);
         static complex<double> itau_28(const double & s_hat, const double & z);

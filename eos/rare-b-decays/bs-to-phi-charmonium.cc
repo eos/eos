@@ -109,7 +109,7 @@ namespace eos
 
         ~Implementation() = default;
 
-        // The amplitudes in the conventions of [BCvDV2016], eq. (B14)
+        // The amplitudes in the conventions of [BCvDV:2016], eq. (B14)
         struct AmplitudesBCvDV2016
         {
             complex<double> A_perp, A_para, A_long;

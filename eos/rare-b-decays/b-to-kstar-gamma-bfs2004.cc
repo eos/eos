@@ -146,34 +146,34 @@ namespace eos
         QCDFIntegrals<BToKstarDilepton> qcdf_b = this->qcdf_photon_bottom_case(m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
 
         // inverse of the "negative" moment of the B meson LCDA
-        // cf. [BFS2001], Eq. (54), p. 15
+        // cf. [BFS:2001], Eq. (54), p. 15
         double lambda_B_p_inv = this->lambda_B_p_inv;
 
         /* Effective wilson coefficients */
-        // cf. [BFS2001], below Eq. (9), p. 4
+        // cf. [BFS:2001], below Eq. (9), p. 4
         complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
-        // cf. [BFS2001], below Eq. (26), p. 8
+        // cf. [BFS:2001], below Eq. (26), p. 8
         complex<double> c8eff = wc.c8() + wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
 
         /* perpendicular, top sector */
-        // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1, s -> 0, +/- -> left/right handed
+        // cf. [BFS:2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1, s -> 0, +/- -> left/right handed
         complex<double> C0_top_perp_left  = c7eff;
         complex<double> C0_top_perp_right = wc.c7prime();
-        // cf. [BFS2004], Eq. (44), p. 24, s -> 0
+        // cf. [BFS:2004], Eq. (44), p. 24, s -> 0
         complex<double> C1f_top_perp_left  = c7eff * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
         complex<double> C1f_top_perp_right = wc.c7prime() * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
-        // cf. [BFS2001], Eqs. (34), (37), p. 9, s -> 0
+        // cf. [BFS:2001], Eqs. (34), (37), p. 9, s -> 0
         complex<double> C1nf_top_perp_left = (-1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), 0.0, m_b_PS, m_c_pole) + c8eff * CharmLoops::F87_massless(mu, 0.0, m_b_PS));
         const complex<double> C1nf_top_perp_right = 0.0;
 
         /* perpendicular, up sector */
-        // cf. [BFS2004], comment before Eq. (43), p. 24, s -> 0
+        // cf. [BFS:2004], comment before Eq. (43), p. 24, s -> 0
         const complex<double> C0_up_perp_left = 0.0;
         const complex<double> C0_up_perp_right = 0.0;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
-        // cf. [BFS2001], Eqs. (34), (37), p. 9
-        // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+        // cf. [BFS:2001], Eqs. (34), (37), p. 9
+        // [BFS:2004], [S:2004] have a different sign convention for F{12}{79}_massless than we!
         complex<double> C1nf_up_perp_left = (-1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), 0.0, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, 0.0, m_b_PS)));
         const complex<double> C1nf_up_perp_right = 0.0;
@@ -185,12 +185,12 @@ namespace eos
             + a_mu * (C1f_top_perp_right + C1nf_top_perp_right + lambda_hat_u * C1nf_up_perp_right);
 
         /* perpendicular, top sector */
-        // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
-        // cf. [BFS2004], Eq. (49)
+        // T0_top_perp_{p,m} = 0, cf. [BFS:2001], Eq. (17), p. 6
+        // cf. [BFS:2004], Eq. (49)
         complex<double> T1f_top_perp_p_left  = c7eff * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
         complex<double> T1f_top_perp_p_right = wc.c7prime() * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
-        // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
-        // cf. [BFS2001], Eq. (23), p. 7
+        // T1f_top_perp_m = 0, cf. [BFS:2001], Eq. (22), p. 7
+        // cf. [BFS:2001], Eq. (23), p. 7
         // [Christoph] Use c8 instead of c8eff
         complex<double> T1nf_top_perp_p_left = (-4.0 * e_d * c8eff * qcdf_0.j0bar_perp
             + m_B / (2.0 * m_b_PS) * (
@@ -198,11 +198,11 @@ namespace eos
                     + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
                     + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv;
         const complex<double> T1nf_top_perp_p_right = 0.0;
-        // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
+        // T1nf_top_perp_m = 0, cf. [BFS:2001], Eq. (17), p. 6
 
         /* perpendicular, up sector */
-        // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
-        // cf. [BFS2004], Eq. (50), p. 25
+        // all T1f_up vanish, cf. [BFS:2004], sentence below Eq. (49), p. 25
+        // cf. [BFS:2004], Eq. (50), p. 25
         complex<double> T1nf_up_perp_p_left = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv;
         const complex<double> T1nf_up_perp_p_right = 0.0;
 
@@ -212,7 +212,7 @@ namespace eos
         complex<double> T_perp_right = a_mu_f * (T1f_top_perp_p_right + T1nf_top_perp_p_right + lambda_hat_u * T1nf_up_perp_p_right);
 
         // Compute the numerically leading power-suppressed weak annihilation contributions to order alpha_s^0
-        // cf. [BFS2004], Eq. (51)
+        // cf. [BFS:2004], Eq. (51)
         complex<double> Delta_T_ann_top_perp = e_q * M_PI * M_PI * f_B / 3.0 / m_b_PS / m_B * (
                 -4.0 * f_Kstar_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
                 + 2.0 * f_Kstar_par * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 12.0 * wc.c5() + 16.0 * wc.c6())) *
@@ -220,7 +220,7 @@ namespace eos
         complex<double> Delta_T_ann_up_perp = -e_q * 2.0 * M_PI * M_PI * f_B * f_Kstar_par / 3.0 / m_b_PS / m_B *
             (m_Kstar * lambda_B_p_inv) * 3.0 * delta_qu * wc.c2();
         // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
-        // cf. [BFS2004], Eqs. (52), (53)
+        // cf. [BFS:2004], Eqs. (52), (53)
         complex<double> Delta_T_hsa_top_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
                 12.0 * c8eff * (m_b_PS / m_B) * f_Kstar_perp() * 1.0 / 3.0 * (qcdf_0.j0_perp + qcdf_0.j7_perp)
                 + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (
@@ -250,7 +250,7 @@ namespace eos
                 * model->m_b_msbar(mu())
                 * abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-        // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
+        // cf. [BFS:2001], Eq. (15), and [BHP:2008], Eq. (C.4)
         complex<double> a_left  = complex<double>(0.0, +1.0) * calN * (
                 xi_perp_zero * C_perp_left
                 + (uncertainty_perp() + uncertainty_para()) / 2.0 * (

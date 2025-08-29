@@ -203,7 +203,7 @@ namespace eos
             u.uses(*model);
         }
 
-        // normalization cf. [DSD2014] eq. (7), p. 5
+        // normalization cf. [DSD:2014] eq. (7), p. 5
         double norm(const double & q2) const
         {
             const double lam  = lambda(m_B * m_B, m_V * m_V, q2);
@@ -217,7 +217,7 @@ namespace eos
         {
             b_to_vec_l_nu::Amplitudes result;
 
-            // NP contributions in EFT including tensor operator cf. [DSD2014], p. 3
+            // NP contributions in EFT including tensor operator cf. [DSD:2014], p. 3
             const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
             const complex<double> gV_pl = wc.cvl() + wc.cvr();  // gV_pl = 1 + gV = 1 + VL + VR = cVL + cVR
             const complex<double> gV_mi = wc.cvl() - wc.cvr();  // gV_mi = 1 - gA = 1 + VL - VR = cVL - cVR
@@ -246,7 +246,7 @@ namespace eos
             // isospin factor
             const double isospin = this->isospin_factor;
 
-            // transversity amplitudes A's. cf. [DSD2014], p.17
+            // transversity amplitudes A's. cf. [DSD:2014], p.17
             if ((q2 >= power_of<2>(m_l)) && (q2 <= power_of<2>(m_B - m_V))) {
                 result.a_0          = isospin * gV_mi * 8.0 * m_B * m_V / sqrtq2 * aff12;
                 result.a_0_T        = isospin * TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
@@ -706,11 +706,11 @@ namespace eos
     }
 
 
-    //* cf. [DSD2014], eq. (6), p. 5 - normalized(|Vcb|=1)
+    //* cf. [DSD:2014], eq. (6), p. 5 - normalized(|Vcb|=1)
     double
     BToVectorLeptonNeutrino::normalized_four_differential_decay_width(const double & q2, const double & c_theta_l, const double & c_theta_d, const double & phi) const
     {
-        // compute d^4 Gamma, cf. [DSD2014], p. 5, eq. (6)
+        // compute d^4 Gamma, cf. [DSD:2014], p. 5, eq. (6)
         // Trigonometric identities: Cosine squared of the angles
         double c_theta_d_2 = c_theta_d * c_theta_d;
         double c_theta_l_2 = c_theta_l * c_theta_l;

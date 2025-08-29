@@ -680,7 +680,7 @@ namespace eos
             // Reminder: q2 is the kinematic variable associated with the momentum
             // transfer, while s is the kinematic variable in which the function is
             // analytically continued. See also comment at beginning of Appendix B
-            // of [DKMMO2008], p. 21.
+            // of [DKMMO:2008], p. 21.
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double a2pi = lcdas->a2(mu), a4pi = lcdas->a4(mu);
             const double r1 = q2 / mb2;
@@ -875,7 +875,7 @@ namespace eos
             // Reminder: q2 is the kinematic variable associated with the momentum
             // transfer, while s is the kinematic variable in which the function is
             // analytically continued. See also comment at beginning of Appendix B
-            // of [DKMMO2008], p. 21.
+            // of [DKMMO:2008], p. 21.
 
             static const double pi2 = M_PI * M_PI;
 
@@ -1200,7 +1200,7 @@ namespace eos
             // Reminder: q2 is the kinematic variable associated with the momentum
             // transfer, while s is the kinematic variable in which the function is
             // analytically continued. See also comment at beginning of Appendix B
-            // of [DKMMO2008], p. 21.
+            // of [DKMMO:2008], p. 21.
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double a2pi = lcdas->a2(mu), a4pi = lcdas->a4(mu);
             const double r1 = q2 / mb2;
@@ -1342,7 +1342,7 @@ namespace eos
             // Reminder: q2 is the kinematic variable associated with the momentum
             // transfer, while s is the kinematic variable in which the function is
             // analytically continued. See also comment at beginning of Appendix B
-            // of [DKMMO2008], p. 21.
+            // of [DKMMO:2008], p. 21.
 
             static const double pi2 = M_PI * M_PI;
 
@@ -1576,7 +1576,7 @@ namespace eos
             // Reminder: q2 is the kinematic variable associated with the momentum
             // transfer, while s is the kinematic variable in which the function is
             // analytically continued. See also comment at beginning of Appendix B
-            // of [DKMMO2008], p. 21.
+            // of [DKMMO:2008], p. 21.
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double a2pi = lcdas->a2(mu), a4pi = lcdas->a4(mu);
             const double r1 = q2 / mb2;
@@ -1797,7 +1797,7 @@ namespace eos
             // Reminder: q2 is the kinematic variable associated with the momentum
             // transfer, while s is the kinematic variable in which the function is
             // analytically continued. See also comment at beginning of Appendix B
-            // of [DKMMO2008], p. 21.
+            // of [DKMMO:2008], p. 21.
 
             static const double pi2 = M_PI * M_PI;
 
@@ -2187,33 +2187,33 @@ namespace eos
         {
             Diagnostics results;
 
-            // Function rho_1, cf. [DKMMO2008], eq. (C.2)
+            // Function rho_1, cf. [DKMMO:2008], eq. (C.2)
             {
-                results.add(Diagnostics::Entry{ dkmmo2008::rho_1(19.60, 4.16, 4.16), "rho_1(s = 19.60, m_b = 4.16, mu = 4.16), [DKMMO2008]" });
-                results.add(Diagnostics::Entry{ dkmmo2008::rho_1(22.05, 4.16, 4.16), "rho_1(s = 22.05, m_b = 4.16, mu = 4.16), [DKMMO2008]" });
-                results.add(Diagnostics::Entry{ dkmmo2008::rho_1(25.20, 4.16, 4.16), "rho_1(s = 25.20, m_b = 4.16, mu = 4.16), [DKMMO2008]" });
+                results.add(Diagnostics::Entry{ dkmmo2008::rho_1(19.60, 4.16, 4.16), "rho_1(s = 19.60, m_b = 4.16, mu = 4.16), [DKMMO:2008]" });
+                results.add(Diagnostics::Entry{ dkmmo2008::rho_1(22.05, 4.16, 4.16), "rho_1(s = 22.05, m_b = 4.16, mu = 4.16), [DKMMO:2008]" });
+                results.add(Diagnostics::Entry{ dkmmo2008::rho_1(25.20, 4.16, 4.16), "rho_1(s = 25.20, m_b = 4.16, mu = 4.16), [DKMMO:2008]" });
             }
 
             results.add(Diagnostics::Entry{ this->decay_constant(), "f_B, [DKMM02008]" });
-            results.add(Diagnostics::Entry{ this->MB_svz(),         "M_B(SVZ), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->MB_svz(),         "M_B(SVZ), [DKMMO:2008]" });
 
-            results.add(Diagnostics::Entry{ this->rescale_factor_p( 0.0), "rescale_factor_p(s =  0.0), [DKMMO2008]" });
-            results.add(Diagnostics::Entry{ this->rescale_factor_p(10.0), "rescale_factor_p(s = 10.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_p( 0.0), "rescale_factor_p(s =  0.0), [DKMMO:2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_p(10.0), "rescale_factor_p(s = 10.0), [DKMMO:2008]" });
 
-            results.add(Diagnostics::Entry{ this->rescale_factor_0( 0.0), "rescale_factor_0(s =  0.0), [DKMMO2008]" });
-            results.add(Diagnostics::Entry{ this->rescale_factor_0(10.0), "rescale_factor_0(s = 10.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_0( 0.0), "rescale_factor_0(s =  0.0), [DKMMO:2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_0(10.0), "rescale_factor_0(s = 10.0), [DKMMO:2008]" });
 
-            results.add(Diagnostics::Entry{ this->rescale_factor_T( 0.0), "rescale_factor_T(s =  0.0), [DKMMO2008]" });
-            results.add(Diagnostics::Entry{ this->rescale_factor_T(10.0), "rescale_factor_T(s = 10.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_T( 0.0), "rescale_factor_T(s =  0.0), [DKMMO:2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_T(10.0), "rescale_factor_T(s = 10.0), [DKMMO:2008]" });
 
-            results.add(Diagnostics::Entry{ this->MBp_lcsr( 0.0), "M_B(f_+, q2 =  0.0), [DKMMO2008]"});
-            results.add(Diagnostics::Entry{ this->MBp_lcsr(10.0), "M_B(f_+, q2 =  0.0), [DKMMO2008]"});
+            results.add(Diagnostics::Entry{ this->MBp_lcsr( 0.0), "M_B(f_+, q2 =  0.0), [DKMMO:2008]"});
+            results.add(Diagnostics::Entry{ this->MBp_lcsr(10.0), "M_B(f_+, q2 =  0.0), [DKMMO:2008]"});
 
-            results.add(Diagnostics::Entry{ this->MB0_lcsr( 0.0), "M_B(f_0, q2 =  0.0), [DKMMO2008]"});
-            results.add(Diagnostics::Entry{ this->MB0_lcsr(10.0), "M_B(f_0, q2 = 10.0), [DKMMO2008]"});
+            results.add(Diagnostics::Entry{ this->MB0_lcsr( 0.0), "M_B(f_0, q2 =  0.0), [DKMMO:2008]"});
+            results.add(Diagnostics::Entry{ this->MB0_lcsr(10.0), "M_B(f_0, q2 = 10.0), [DKMMO:2008]"});
 
-            results.add(Diagnostics::Entry{ this->MBT_lcsr( 0.0), "M_B(f_T, q2 =  0.0), [DKMMO2008]"});
-            results.add(Diagnostics::Entry{ this->MBT_lcsr(10.0), "M_B(f_T, q2 = 10.0), [DKMMO2008]"});
+            results.add(Diagnostics::Entry{ this->MBT_lcsr( 0.0), "M_B(f_T, q2 =  0.0), [DKMMO:2008]"});
+            results.add(Diagnostics::Entry{ this->MBT_lcsr(10.0), "M_B(f_T, q2 = 10.0), [DKMMO:2008]"});
 
             return results;
         }
