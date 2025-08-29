@@ -45,6 +45,8 @@
 
 namespace eos
 {
+    Observable::~Observable() = default;
+
     namespace impl
     {
         std::map<QualifiedName, ObservableEntryPtr> observable_entries;

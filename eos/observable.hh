@@ -43,6 +43,8 @@ namespace eos
     class Observable : public ParameterUser, public ReferenceUser, public KinematicUser
     {
         public:
+            virtual ~Observable() = 0;
+
             virtual const QualifiedName & name() const = 0;
 
             virtual double evaluate() const = 0;
@@ -180,6 +182,8 @@ namespace eos
             virtual OptionIterator end_options() const   = 0;
             ///@}
     };
+    extern template class WrappedForwardIterator<ObservableEntry::KinematicVariableIteratorTag, const std::string &>;
+    extern template class WrappedForwardIterator<ObservableEntry::OptionIteratorTag, const OptionSpecification &>;
 
     /*!
      * Container around the known and implemented signal PDFs
