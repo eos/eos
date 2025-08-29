@@ -73,13 +73,13 @@ namespace eos
 
         inline double decay_width(const AngularCoefficients & a_c)
         {
-            // cf. [BHvD2010], p. 6, eq. (2.7)
+            // cf. [BHvD:2010], p. 6, eq. (2.7)
             return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
         inline std::array<double, 12> angular_coefficients_array(const Amplitudes & a)
         {
-            // cf. [BHvD2010], p. 26, eqs. (A1)-(A11)
+            // cf. [BHvD:2010], p. 26, eqs. (A1)-(A11)
             std::array<double, 12> result;
 
             // j1s

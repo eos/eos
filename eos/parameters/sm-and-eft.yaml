@@ -13,7 +13,7 @@ groups:
           max:     +6.58211943e-25
           unit:     'GeV s'
           latex:    '$\hbar$'
-          comments: 'cf. [PDG2012]:  p. 4'
+          comments: 'cf. [PDG:2012]:  p. 4'
       # GSW Parameter
       'GSW::sin^2(theta)' :
           central: +0.23116
@@ -21,7 +21,7 @@ groups:
           max:     +0.23128
           unit:     '1'
           latex:    '$\sin^2(\theta_{\mathrm{GSW}})$'
-          comments: 'cf. [PDG2012]:  p. 4'
+          comments: 'cf. [PDG:2012]:  p. 4'
       # QED inputs
       'QED::alpha_e(0)' :
           central: +0.0072973525693
@@ -51,7 +51,7 @@ groups:
           max:     +1.1663793e-5
           unit:     'GeV^-2'
           latex:    '$G_{F}$'
-          comments: 'cf. [PDG2012], p. 5'
+          comments: 'cf. [PDG:2012], p. 5'
       # b->s matching parameters
       'b->s::mu_0c' :
           central: +80.0
@@ -74,7 +74,7 @@ groups:
           max:     +0.1177
           unit:     '1'
           latex:    '$\alpha_s(M_Z)$'
-          comments: 'cf. [PDG2012], p. 1'
+          comments: 'cf. [PDG:2012], p. 1'
       'QCD::mu_t' :
           central: +170.0
           min:     +170.0
@@ -116,7 +116,7 @@ groups:
           min:     +0.7746
           max:     +1.0
           unit:     'GeV^2'
-          comments: 'in GeV, cf. [DKMMO2008]'
+          comments: 'in GeV, cf. [DKMMO:2008]'
           latex:    '$\left\langle \bar{q} g_s G q\right\rangle / \left\langle \bar{q} q\right\rangle$'
       'QCD::r_vac' :
           central: +0.55
@@ -124,8 +124,8 @@ groups:
           max:     +1.0
           unit:     '1'
           latex:    '$\left\langle \bar{q} q\bar{q}q\right\rangle / \left\langle \bar{q}q\right\rangle^2$'
-          comments: 'cf. [DKMMO2008]'
-      # Wolfenstein parameters of CKM, cf. [UTFIT2013]
+          comments: 'cf. [DKMMO:2008]'
+      # Wolfenstein parameters of CKM, cf. [UTFIT:2013]
       'CKM::A' :
           central: +0.827
           min:     +0.814
@@ -161,42 +161,42 @@ groups:
           max:     +0.0035
           unit:     'GeV'
           latex:    '$\overline{m}_u(2\,\mathrm{GeV})$'
-          comments: 'cf. [PDG2012], p. 21'
+          comments: 'cf. [PDG:2012], p. 21'
       'mass::d(2GeV)' :
           central: +0.0048
           min:     +0.0045
           max:     +0.0055
           unit:     'GeV'
           latex:    '$\overline{m}_d(2\,\mathrm{GeV})$'
-          comments: 'cf. [PDG2012], p. 21'
+          comments: 'cf. [PDG:2012], p. 21'
       'mass::s(2GeV)' :
           central: +0.095
           min:     +0.090
           max:     +0.10
           unit:     'GeV'
           latex:    '$\overline{m}_s(2\,\mathrm{GeV})$'
-          comments: 'cf. [PDG2012], p. 21'
+          comments: 'cf. [PDG:2012], p. 21'
       'mass::c' :
           central: +1.275
           min:     +1.250
           max:     +1.300
           unit:     'GeV'
           latex:    '$\overline{m}_c(\overline{m}_c)$'
-          comments: 'cf. [PDG2012], p. 21'
+          comments: 'cf. [PDG:2012], p. 21'
       'mass::b(MSbar)' :
           central: +4.18
           min:     +4.15
           max:     +4.21
           unit:     'GeV'
           latex:    '$\overline{m}_b(\overline{m}_b)$'
-          comments: 'cf. [PDG2012], p. 21'
+          comments: 'cf. [PDG:2012], p. 21'
       'mass::t(pole)' :
           central: +173.5
           min:     +172.5
           max:     +174.5
           unit:     'GeV'
           latex:    '$m_t^{\mathrm{pole}}$'
-          comments: 'cf. [PDG2012], p. 22'
+          comments: 'cf. [PDG:2012], p. 22'
       # Gauge boson masses
       'mass::W' :
           central: +80.385
@@ -204,14 +204,14 @@ groups:
           max:     +80.400
           unit:     'GeV'
           latex:    '$M_W$'
-          comments: 'cf. [PDG2012], p. 8'
+          comments: 'cf. [PDG:2012], p. 8'
       'mass::Z' :
           central: +91.1876
           min:     +91.1855
           max:     +91.1897
           unit:     'GeV'
           latex:    '$M_Z$'
-          comments: 'cf. [PDG2012], p. 9'
+          comments: 'cf. [PDG:2012], p. 9'
   # }}}
 
   # CKM Parameters
@@ -508,126 +508,126 @@ groups:
           comments: ''
 
       # Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
-      # For the calculations, cf. [BMU1999].
+      # For the calculations, cf. [BMU:1999].
       "b->s::c1" :
           central: -0.29063621
           min:     -0.29063621
           max:     -0.29063621
           unit:     '1'
           latex:    $\mathcal{C}_1$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::c2" :
           central: +1.01029623
           min:     +1.01029623
           max:     +1.01029623
           unit:     '1'
           latex:    $\mathcal{C}_2$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::c3" :
           central: -0.00616220
           min:     -0.00616220
           max:     -0.00616220
           unit:     '1'
           latex:    $\mathcal{C}_3$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::c4" :
           central: -0.08730376
           min:     -0.08730376
           max:     -0.08730376
           unit:     '1'
           latex:    $\mathcal{C}_4$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::c5" :
           central: +0.00042854
           min:     +0.00042854
           max:     +0.00042854
           unit:     '1'
           latex:    $\mathcal{C}_5$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::c6" :
           central: +0.00115807
           min:     +0.00115807
           max:     +0.00115807
           unit:     '1'
           latex:    $\mathcal{C}_6$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::Re{c7}" :
           central: -0.33726473
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_7$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::Im{c7}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_7$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->s::c8" :
           central: -0.18288898
           min:     -0.18288898
           max:     -0.18288898
           unit:     '1'
           latex:    $\mathcal{C}_8$
-          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          comment:  'cf. @REF[BMU:1999]@, eqs. (1) and (2)'
       "b->see::Re{c9}" :
           central: +4.27342842
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_9^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->see::Im{c9}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_9^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->see::Re{c10}" :
           central: -4.16611761
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->see::Im{c10}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c9}" :
           central: +4.27342842
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_9^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c9}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_9^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c10}" :
           central: -4.16611761
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c10}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
 
       # Primed Wilson coefficients are negligible in the SM
       "b->s::Re{c7'}" :
@@ -636,77 +636,77 @@ groups:
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{7'}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->s::Im{c7'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{7'}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->s::c8'" :
           central: +0.0
           min:     +0.0
           max:     +0.0
           unit:     '1'
           latex:    $\mathcal{C}_{8'}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3), with the replacement @MATH[e F_{\mu\nu} \to g_s G_{\mu\nu}]@'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3), with the replacement @MATH[e F_{\mu\nu} \to g_s G_{\mu\nu}]@'
       "b->see::Re{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{9'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->see::Im{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{9'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->see::Re{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{10'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->see::Im{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{10'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{9'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{9'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{10'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{10'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (3)'
 
       # scalar, pseudoscalar, and tensor b -> s ll coefficients
       "b->see::Re{cS}" :
@@ -715,168 +715,168 @@ groups:
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Im{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Re{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{S'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Im{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{S'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Re{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Im{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Re{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{P'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Im{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{P'}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->see::Re{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{T}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->see::Im{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{T}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->see::Re{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{T5}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->see::Im{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{T5}^{(e)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->smumu::Re{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{S'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{S'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{P'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{P'}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{T}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->smumu::Im{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{T}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->smumu::Re{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_{T5}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
       "b->smumu::Im{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
           latex:    $\mathrm{Im}\, \mathcal{C}_{T5}^{(\mu)}$
-          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          comment:  'cf. @REF[BHvD:2012]@, eqs. (2) and (5)'
   # }}}
 
   # uslnu WET Parameters

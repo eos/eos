@@ -68,14 +68,14 @@ namespace eos
         return model->m_b_ps(2.0);
     }
 
-    // cf. [GP2004], Eq. (56)
+    // cf. [GP:2004], Eq. (56)
     complex<double>
     BToKDileptonAmplitudes<tag::GP2004>::c7eff(const WilsonCoefficients<BToS> & wc, const double & s) const
     {
         return ShortDistanceLowRecoil::c7eff(s, mu(), model->alpha_s(mu), m_b_PS(), use_nlo, wc);
     }
 
-    // cf. [GP2004], Eq. (55), p. 10
+    // cf. [GP:2004], Eq. (55), p. 10
     complex<double>
     BToKDileptonAmplitudes<tag::GP2004>::c9eff(const WilsonCoefficients<BToS> & wc, const double & s) const
     {
@@ -91,7 +91,7 @@ namespace eos
     double
     BToKDileptonAmplitudes<tag::GP2004>::kappa() const
     {
-        // cf. [BHvD2010], Eq. (3.8), p. 8
+        // cf. [BHvD:2010], Eq. (3.8), p. 8
         // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa up to NLO only.
         return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
     }
@@ -117,15 +117,15 @@ namespace eos
 
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
-        // cf. [BF2001] Eq. (22 + TODO: 31)
-        // cf. [BF2001] Eq. (22 + TODO: 30)
+        // cf. [BF:2001] Eq. (22 + TODO: 31)
+        // cf. [BF:2001] Eq. (22 + TODO: 30)
         double f_t_over_f_p = form_factors->f_t(s) / form_factors->f_p(s);
         double f_0_over_f_p = form_factors->f_0(s) / form_factors->f_p(s);
 
         double F_Tkin = f_t_over_f_p * 2.0 * std::sqrt(lambda(s)) * beta_l(s) / (m_B() + m_K());
         double F_Skin = f_0_over_f_p * 0.5 * (power_of<2>(m_B()) - power_of<2>(m_K())) / (m_b_MSbar - m_s);
 
-        // cf. [BHP2007], Eq. (3.2), p. 3 and 4
+        // cf. [BHP:2007], Eq. (3.2), p. 3 and 4
         result.F_A  = wc.c10() + wc.c10prime();
         result.F_T  = F_Tkin * wc.cT();
         result.F_T5 = F_Tkin * wc.cT5();

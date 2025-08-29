@@ -88,14 +88,14 @@ namespace eos
     double
     BToKDilepton::AmplitudeGenerator::xi_pseudo(const double & s) const
     {
-        // cf. [BF2001], Eq. (22)
+        // cf. [BF:2001], Eq. (22)
         return form_factors->f_p(s);
     }
 
     double
     BToKDilepton::AmplitudeGenerator::normalisation(const double & s) const
     {
-        // cf. [BHP2007], Eq. (4.2) - (4.4)
+        // cf. [BHP:2007], Eq. (4.2) - (4.4)
         double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
         return power_of<2>(g_fermi * alpha_e() * lambda_t) * sqrt(lambda(s)) * beta_l(s) * xi_pseudo(s) * xi_pseudo(s) /

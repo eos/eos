@@ -139,41 +139,41 @@ namespace eos
         QCDFIntegrals<BToKstarDilepton> qcdf_b = this->qcdf_dilepton_bottom_case(s, m_b_PS, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
 
         // inverse of the "negative" moment of the B meson LCDA
-        // cf. [BFS2001], Eq. (54), p. 15
+        // cf. [BFS:2001], Eq. (54), p. 15
         double lambda_B_p_inv = this->lambda_B_p_inv;
         double omega_0 = 1.0 / lambda_B_p_inv;
         complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
 
         /* Y(s) for the up and the top sector */
-        // cf. [BFS2001], Eq. (10), p. 4
+        // cf. [BFS:2001], Eq. (10), p. 4
         complex<double> Y_top_c = 4.0 / 3.0 * wc.c1() + wc.c2() + 6.0 * wc.c3() + 60.0 * wc.c5();
         complex<double> Y_top_b = -0.5 * (7.0 * wc.c3() + 4.0 / 3.0 * wc.c4() + 76.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
         complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64 / 3.0 * wc.c6());
         complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
 
-        // Use b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses,
+        // Use b pole mass according to [BFS:2001], Sec. 3.1, paragraph Quark Masses,
         // then replace b pole mass by the PS mass.
         complex<double> Y_top = Y_top_c * CharmLoops::h(mu, s, m_c_pole)
              + Y_top_b * CharmLoops::h(mu, s, m_b_PS)
              + Y_top_0 * CharmLoops::h(mu, s)
              + Y_top_;
-        // cf. [BFS2004], Eq. (43), p. 24
+        // cf. [BFS:2004], Eq. (43), p. 24
         complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, s, m_c_pole) - CharmLoops::h(mu, s));
 
         /* Effective wilson coefficients */
-        // cf. [BFS2001], below Eq. (9), p. 4
+        // cf. [BFS:2001], below Eq. (9), p. 4
         complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
-        // cf. [BFS2001], below Eq. (26), p. 8
+        // cf. [BFS:2001], below Eq. (26), p. 8
         complex<double> c8eff = wc.c8() + wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
 
         /* perpendicular, top sector */
-        // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
+        // cf. [BFS:2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
         complex<double> C0_top_perp_left  = (c7eff - wc.c7prime()) + s / (2.0 * m_b_PS * m_B) * Y_top;
         complex<double> C0_top_perp_right = (c7eff + wc.c7prime()) + s / (2.0 * m_b_PS * m_B) * Y_top;
-        // cf. [BFS2004], Eq. (44), p. 24
+        // cf. [BFS:2004], Eq. (44), p. 24
         complex<double> C1f_top_perp_left  = (c7eff - wc.c7prime()) * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
         complex<double> C1f_top_perp_right = (c7eff + wc.c7prime()) * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
-        // cf. [BFS2001], Eqs. (34), (37), p. 9
+        // cf. [BFS:2001], Eqs. (34), (37), p. 9
         complex<double> C1nf_top_perp = (-1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) + c8eff * CharmLoops::F87_massless(mu, s, m_b_PS)
                 + (s / (2.0 * m_b_PS * m_B)) * (
@@ -182,11 +182,11 @@ namespace eos
                     + c8eff * CharmLoops::F89_massless(s, m_b_PS)));
 
         /* perpendicular, up sector */
-        // cf. [BFS2004], comment before Eq. (43), p. 24
+        // cf. [BFS:2004], comment before Eq. (43), p. 24
         complex<double> C0_up_perp = s / (2.0 * m_b_PS * m_B) * Y_up;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
-        // cf. [BFS2001], Eqs. (34), (37), p. 9
-        // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+        // cf. [BFS:2001], Eqs. (34), (37), p. 9
+        // [BFS:2004], [S:2004] have a different sign convention for F{12}{79}_massless than we!
         complex<double> C1nf_up_perp = (-1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
                 + (s / (2.0 * m_b_PS * m_B)) * (
@@ -194,11 +194,11 @@ namespace eos
                     + wc.c2() * (memoise(CharmLoops::F29_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F29_massless(mu, s, m_b_PS))));
 
         /* parallel, top sector */
-        // cf. [BFS2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
+        // cf. [BFS:2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
         complex<double> C0_top_par = -1.0 * (c7eff - wc.c7prime() + m_B / (2.0 * m_b_PS) * Y_top);
-        // cf. [BFS2004], Eq. (45), p. 24
+        // cf. [BFS:2004], Eq. (45), p. 24
         complex<double> C1f_top_par = -1.0 * (c7eff - wc.c7prime()) * (8.0 * std::log(m_b_PS / mu) + 2.0 * L - 4.0 * (1.0 - mu_f() / m_b_PS));
-        // cf. [BFS2001], Eqs. (38), p. 9
+        // cf. [BFS:2001], Eqs. (38), p. 9
         complex<double> C1nf_top_par = (+1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole)
                 + c8eff * CharmLoops::F87_massless(mu, s, m_b_PS)
@@ -208,11 +208,11 @@ namespace eos
                     + c8eff * CharmLoops::F89_massless(s, m_b_PS)));
 
         /* parallel, up sector */
-        // cf. [BFS2004], comment before Eq. (43), p. 24
+        // cf. [BFS:2004], comment before Eq. (43), p. 24
         complex<double> C0_up_par = -1.0 * m_B / (2.0 * m_b_PS) * Y_up;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
-        // cf. [BFS2004], last paragraph in Sec A.1, p. 24
-        // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+        // cf. [BFS:2004], last paragraph in Sec A.1, p. 24
+        // [BFS:2004], [S:2004] have a different sign convention for F{12}{79}_massless than we!
         complex<double> C1nf_up_par = (+1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
                 + (m_B / (2.0 * m_b_PS)) * (
@@ -229,42 +229,42 @@ namespace eos
 
 
         /* perpendicular, top sector */
-        // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
-        // cf. [BFS2004], Eq. (49)
+        // T0_top_perp_{p,m} = 0, cf. [BFS:2001], Eq. (17), p. 6
+        // cf. [BFS:2004], Eq. (49)
         complex<double> T1f_top_perp_p_left  = (c7eff - wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
         complex<double> T1f_top_perp_p_right = (c7eff + wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
-        // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
-        // cf. [BFS2001], Eq. (23), p. 7
+        // T1f_top_perp_m = 0, cf. [BFS:2001], Eq. (22), p. 7
+        // cf. [BFS:2001], Eq. (23), p. 7
         // [Christoph] Use c8 instead of c8eff
         complex<double> T1nf_top_perp_p = (-4.0 * e_d * c8eff * qcdf_0.j0_perp
             + m_B / (2.0 * m_b_PS) * (
                     e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde1_perp
                     + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
                     + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv;
-        // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
+        // T1nf_top_perp_m = 0, cf. [BFS:2001], Eq. (17), p. 6
 
         /* perpendicular, up sector */
-        // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
-        // cf. [BFS2004], Eq. (50), p. 25
+        // all T1f_up vanish, cf. [BFS:2004], sentence below Eq. (49), p. 25
+        // cf. [BFS:2004], Eq. (50), p. 25
         complex<double> T1nf_up_perp_p = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv;
 
         /* parallel, top sector */
-        // T0_top_par_p = 0, cf. [BFS2001], Eq. (17), p. 6
-        // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
+        // T0_top_par_p = 0, cf. [BFS:2001], Eq. (17), p. 6
+        // cf. [BFS:2004], Eqs. (46)-(47), p. 25 without the \omega term.
         complex<double> T0_top_par_m = -e_s * 4.0 * m_B / m_b_PS * (
                 wc.c3()
                 + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()
                 + 12.0 * wc.c3() + 120.0 * wc.c5() // TODO CHECK
             ) * lambda_B_m_inv;
-        // cf. [BFS2004], Eq. (49), p. 25
+        // cf. [BFS:2004], Eq. (49), p. 25
         complex<double> T1f_top_par_p  = (c7eff - wc.c7prime()) * (4.0 * m_B / energy) * invm1_par * lambda_B_p_inv;
-        // T1f_top_par_m = 0, cf. [BFS2001], Eq. (22), p. 7
-        // cf. [BFS2001], Eq. (25), p. 7
+        // T1f_top_par_m = 0, cf. [BFS:2001], Eq. (22), p. 7
+        // cf. [BFS:2001], Eq. (25), p. 7
         complex<double> T1nf_top_par_p = m_B / m_b_PS * (
                 e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
                 + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
                 + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
-        // cf. [BFS2001], Eq. (26), pp. 7-8
+        // cf. [BFS:2001], Eq. (26), pp. 7-8
         complex<double> T1nf_top_par_m = e_s * (8.0 * c8eff * qcdf_0.j0_parallel
                 + 6.0 * m_B / m_b_PS * (
                     (-wc.c1() / 6.0 + wc.c2() + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j4_parallel
@@ -273,14 +273,14 @@ namespace eos
                     -8.0 / 27.0 * (-7.5 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()))) * lambda_B_m_inv;
 
         /* parallel, up sector */
-        // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
-        // cf. [BFS2004], Eqs. (46),(48), p. 25 without the \omega term
+        // all T1f_up vanish, cf. [BFS:2004], sentence below Eq. (49), p. 25
+        // cf. [BFS:2004], Eqs. (46),(48), p. 25 without the \omega term
         complex<double> T0_up_par_m = +e_s * 4.0 * m_B / m_b_PS * (
                 - 4.0 / 3.0 * wc.c1() - wc.c2() // TODO CHECK
             ) * lambda_B_m_inv;
-        // cf. [BFS2004], Eq. (50), p. 25
+        // cf. [BFS:2004], Eq. (50), p. 25
         complex<double> T1nf_up_par_p = +e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
-        // cf. [BFS2004], Eq. (50), p. 25 without the \omega term
+        // cf. [BFS:2004], Eq. (50), p. 25 without the \omega term
         complex<double> T1nf_up_par_m = +e_s * 6.0 * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.j4_parallel - qcdf_0.j4_parallel) * lambda_B_m_inv;
 
 
@@ -291,7 +291,7 @@ namespace eos
             + (T0_top_par_m + lambda_hat_u * T0_up_par_m + a_mu_f * (T1nf_top_par_m + lambda_hat_u * T1nf_up_par_m));
 
         // Compute the numerically leading power-suppressed weak annihilation contributions to order alpha_s^0
-        // cf. [BFS2004], Eq. (51)
+        // cf. [BFS:2004], Eq. (51)
         complex<double> Delta_T_ann_top_perp = e_s * M_PI * M_PI * f_Bs / 3.0 / m_b_PS / m_B * (
                 -4.0 * f_phi_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
                 + 2.0 * f_phi_par * (
@@ -304,7 +304,7 @@ namespace eos
                     - 4.0 / 3.0 * wc.c1() - wc.c2() // TODO CHECK
                 );
         // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
-        // cf. [BFS2004], Eqs. (52), (53)
+        // cf. [BFS:2004], Eqs. (52), (53)
         complex<double> Delta_T_hsa_top_perp = e_s * a_mu_f * (M_PI * M_PI * f_Bs / (3.0 * m_b_PS * m_B)) * (
                 12.0 * c8eff * (m_b_PS / m_B) * f_phi_perp() * 1.0 / 3.0 * (qcdf_0.j0_perp + qcdf_0.j7_perp)
                 + 8.0 * f_phi_perp * (3.0 / 4.0) * (
@@ -328,7 +328,7 @@ namespace eos
         complex<double> Delta_T_perp = Delta_T_top_perp + lambda_hat_u * Delta_T_up_perp;
 
 
-        // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
+        // cf. [BFS:2001], Eq. (15), and [BHP:2008], Eq. (C.4)
         BsToPhiDilepton::DipoleFormFactors result;
         result.calT_perp_left  = xi_perp(s) * C_perp_left
             + power_of<2>(M_PI) / 3.0 * (f_Bs * f_phi_perp) / m_B * T_perp_left
@@ -369,7 +369,7 @@ namespace eos
         return g_fermi() * alpha_e() * std::sqrt(
                   1.0 / 3.0 / 1024 / power_of<5>(M_PI) / m_B()
                   * lambda_t2 * s_hat(s) * std::sqrt(lambda(s)) * beta_l(s)
-               ); // cf. [BHP2008], Eq. (C.6), p. 21
+               ); // cf. [BHP:2008], Eq. (C.6), p. 21
     }
 
     double
@@ -386,8 +386,8 @@ namespace eos
     }
 
     /* Amplitudes */
-    // cf. [BHP2008], p. 20
-    // cf. [BHvD2012], app B, eqs. (B13 - B19)
+    // cf. [BHP:2008], p. 20
+    // cf. [BHvD:2012], app B, eqs. (B13 - B19)
     BsToPhiDilepton::Amplitudes
     BsToPhiDileptonAmplitudes<tag::BFS2004>::amplitudes(const double & s) const
     {
@@ -453,7 +453,7 @@ namespace eos
         // scalar amplitude
         result.a_scal = -2.0 * norm_s * sqrt_lam * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s_MSbar) * form_factors->a_0(s);
 
-        // tensor amplitudes [BHvD2012]  eqs. (B18 - B20)
+        // tensor amplitudes [BHvD:2012]  eqs. (B18 - B20)
         // no form factor relations used
         const double
             ff_T1  = form_factors->t_1(s),
@@ -479,7 +479,7 @@ namespace eos
         return result;
     }
 
-    // C9 and its corrections [BFS2001] eqs. (40-41)
+    // C9 and its corrections [BFS:2001] eqs. (40-41)
     double
     BsToPhiDileptonAmplitudes<tag::BFS2004>::real_C9_perp(const double & s) const
     {
