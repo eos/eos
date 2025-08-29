@@ -609,21 +609,21 @@ groups:
           max:     +0.2466
           latex:    '$\frac{f_s}{f_d}(7 \, \mathrm{TeV})$'
           unit:     '1'
-          comments: 'cf. [LHCb:2021]'
+          comments: 'cf. [LHCb:2021E]'
       'hadronization::f_s/f_d@LHCb(8TeV)' :
           central: +0.2385
           min:     +0.231
           max:     +0.246
           latex:    '$\frac{f_s}{f_d}(8\, \mathrm{TeV})$'
           unit:     '1'
-          comments: 'cf. [LHCb:2021]'
+          comments: 'cf. [LHCb:2021E]'
       'hadronization::f_s/f_d@LHCb(13TeV)' :
           central: +0.2539
           min:     +0.246
           max:     +0.2618
           latex:    '$\frac{f_s}{f_d}(13\, \mathrm{TeV})$'
           unit:     '1'
-          comments: 'cf. [LHCb:2021]'
+          comments: 'cf. [LHCb:2021E]'
   # }}}
 
 
