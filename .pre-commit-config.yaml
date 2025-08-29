@@ -34,9 +34,11 @@ repos:
     - id: rst-inline-touching-normal
 
  - repo: https://github.com/eos/pre-commit-hooks
-   rev: v1.0.3
+   rev: v1.0.4
    hooks:
     - id: eos-test-check-argument-order
       exclude: '^test/test_TEST.cc$'
     - id: eos-test-ordereddict-usage
       exclude: '^src/scripts/eos-make-constraint'
+    - id: eos-test-check-references
+      additional_dependencies: [ 'pyyaml' ]
