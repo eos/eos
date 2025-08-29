@@ -55,15 +55,15 @@ namespace eos
         static complex<double> h(const double & mu, const double & s, const double & m_q);
 
         /* Two-loop functions */
-        // cf. [S:2004], Eq. (29), p. 8
+        // cf. [S:2004A], Eq. (29), p. 8
         static complex<double> A(const double & mu, const double & s, const double & m_b);
-        // cf. [S:2004], Eq. (30), pp. 8-9
+        // cf. [S:2004A], Eq. (30), pp. 8-9
         static complex<double> B(const double & mu, const double & s, const double & m_b);
-        // cf. [S:2004], Eq. (31), p. 9
+        // cf. [S:2004A], Eq. (31), p. 9
         static complex<double> C(const double & mu, const double & s);
 
         /* Non-factorizing two loop contributions */
-        // massless case, cf. [S:2004], Eq. (16), p. 6
+        // massless case, cf. [S:2004A], Eq. (16), p. 6
         static complex<double> F17_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F19_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F27_massless(const double & mu, const double & s, const double & m_b);

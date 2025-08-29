@@ -162,7 +162,7 @@ namespace eos
             return -104.0 / 243.0 * 2.0 * log(m_b / mu);
         }
 
-        /* cf. [S:2004], Eq. (29), p. 8
+        /* cf. [S:2004A], Eq. (29), p. 8
          * We have three different cases for the evaluation of the formula depending on s_hat.
          * 1. s_hat < 1: We can use the formula without modification
          * 2. s_hat > 1: 1 - s_hat is negative. We have to take care, because in this regime
@@ -219,7 +219,7 @@ namespace eos
     complex<double>
     CharmLoops::B(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S:2004], Eq. (30), p. 8
+        // cf. [S:2004A], Eq. (30), p. 8
         // See remarks in CharmLoops::A
         double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
         double ln = log(s_hat), ln2 = ln * ln;
@@ -299,37 +299,37 @@ namespace eos
     {
         static const double zeta3 = 1.20206;
 
-        // cf. [S:2004], Eq. (31), p. 9
+        // cf. [S:2004A], Eq. (31), p. 9
         return complex<double>(16.0 / 81.0 * log(mu * mu / s) + 428.0 / 243.0 - 64.0 / 27.0 * zeta3,
                 16.0 / 81.0 * M_PI);
     }
 
-    /* Two-Loop functions for massless quarks from[S:2004], suitable for up-quark loops */
+    /* Two-Loop functions for massless quarks from[S:2004A], suitable for up-quark loops */
     complex<double>
     CharmLoops::F17_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S:2004], Eq. (22), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
+        // cf. [S:2004A], Eq. (22), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004A], Eq. (16), p. 6)
         return -A(mu, s, m_b);
     }
 
     complex<double>
     CharmLoops::F19_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S:2004], Eq. (24), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
+        // cf. [S:2004A], Eq. (24), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004A], Eq. (16), p. 6)
         return -B(mu, s, m_b) - 4.0 * C(mu, s);
     }
 
     complex<double>
     CharmLoops::F27_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S:2004], Eq. (23), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
+        // cf. [S:2004A], Eq. (23), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004A], Eq. (16), p. 6)
         return 6.0 * A(mu, s, m_b);
     }
 
     complex<double>
     CharmLoops::F29_massless(const double & mu, const double & s, const double & m_b)
     {
-        // cf. [S:2004], Eq. (25), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004], Eq. (16), p. 6)
+        // cf. [S:2004A], Eq. (25), p. 7 and consider a global sign (compare [ABGW:2003], Eq. (7), p. 8 with [S:2004A], Eq. (16), p. 6)
         return 6.0 * B(mu, s, m_b) - 3.0 * C(mu, s);
     }
 

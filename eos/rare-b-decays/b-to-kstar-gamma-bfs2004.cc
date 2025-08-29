@@ -173,7 +173,7 @@ namespace eos
         const complex<double> C0_up_perp_right = 0.0;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
         // cf. [BFS:2001], Eqs. (34), (37), p. 9
-        // [BFS:2004], [S:2004] have a different sign convention for F{12}{79}_massless than we!
+        // [BFS:2004], [S:2004A] have a different sign convention for F{12}{79}_massless than we!
         complex<double> C1nf_up_perp_left = (-1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), 0.0, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, 0.0, m_b_PS)));
         const complex<double> C1nf_up_perp_right = 0.0;
