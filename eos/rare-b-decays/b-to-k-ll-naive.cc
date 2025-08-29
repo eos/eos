@@ -127,9 +127,9 @@ namespace eos
         complex<double> C0_up_psd = 1.0 * m_B / (2.0 * m_b_PS) * Y_up;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
         // cf. [BFS2004], last paragraph in Sec A.1, p. 24
-        // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+        // [BFS2004], [S:2004A] have a different sign convention for F{12}{79}_massless than we!
         // Use here FF_massive - FF_massless because FF_massless is defined with an extra '-'
-        // compared to [S2004]
+        // compared to [S:2004A]
         complex<double> C1nf_up_psd = -(+1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive_Qsb, s) - CharmLoops::F27_massless(mu, s, m_b_PS))
                 + (m_B / (2.0 * m_b_PS)) * (

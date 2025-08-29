@@ -186,7 +186,7 @@ namespace eos
         complex<double> C0_up_perp = s / (2.0 * m_b_PS * m_B) * Y_up;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
         // cf. [BFS:2001], Eqs. (34), (37), p. 9
-        // [BFS:2004], [S:2004] have a different sign convention for F{12}{79}_massless than we!
+        // [BFS:2004], [S:2004A] have a different sign convention for F{12}{79}_massless than we!
         complex<double> C1nf_up_perp = (-1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
                 + (s / (2.0 * m_b_PS * m_B)) * (
@@ -212,7 +212,7 @@ namespace eos
         complex<double> C0_up_par = -1.0 * m_B / (2.0 * m_b_PS) * Y_up;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
         // cf. [BFS:2004], last paragraph in Sec A.1, p. 24
-        // [BFS:2004], [S:2004] have a different sign convention for F{12}{79}_massless than we!
+        // [BFS:2004], [S:2004A] have a different sign convention for F{12}{79}_massless than we!
         complex<double> C1nf_up_par = (+1.0 / QCD::casimir_f) * (
                 (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
                 + (m_B / (2.0 * m_b_PS)) * (

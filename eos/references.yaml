@@ -1974,6 +1974,14 @@ LHCb:2021D:
     id: oai:arXiv.org:2107.13428
   inspire-id: LHCb:2021xxq
   title: Angular analysis of the rare decay $B_s^0\to\phi\mu^+\mu^-$
+LHCb:2021E:
+  authors: Aaij, Roel and others
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arxiv.org:2103.06810
+    inspire-id: LHCb:2021qbv
+  title: Precise measurement of the~$f_s/f_d$ ratio of fragmentation fractions and of $B^0_s$ decay branching fractions
 LMPR:2022A:
   authors: Lenz, A. and Müller, J. and Piscopo, M.L. and Rusov, A.
   eprint:
