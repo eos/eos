@@ -1708,7 +1708,7 @@ namespace eos
 
         // Massless case
 
-        // cf. [vD:2011], Eq. (xx), p. ?
+        // cf. [vD:2011A], Eq. (xx), p. ?
         inline complex<double> j2_massless(const double & sh, const double & a1, const double & a2)
         {
             static const double pi2 = M_PI * M_PI;
@@ -1736,7 +1736,7 @@ namespace eos
             return asymp + a1 * gb1 + a2 * gb2;
         }
 
-        // cf. [vD:2011], Eq. (xx), p. ?
+        // cf. [vD:2011A], Eq. (xx), p. ?
         inline complex<double> j3_massless(const double & sh, const double & a1, const double & a2)
         {
             static const double pi = M_PI, pi2 = pi * pi;
@@ -1766,7 +1766,7 @@ namespace eos
             return asymp + a1 * gb1 + a2 * gb2;
         }
 
-        // cf. [vD:2011], Eq. (xx), p. ?
+        // cf. [vD:2011A], Eq. (xx), p. ?
         inline complex<double> j4_massless(const double & sh, const double & mB, const double & mu, const double & a1, const double & a2)
         {
             static const double pi = M_PI;

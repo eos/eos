@@ -85,7 +85,7 @@ namespace eos
             double z = power_of<2>(m_c_hat);
             double z2 = power_of<2>(z), z3 = z * z2, z4 = z3 * z, lnz = log(z);
 
-            // cf. [BMU:1999], Eq. (46), p. 16
+            // cf. [BMU:1999A], Eq. (46), p. 16
             double g = 1.0 - 8.0 * z + 8.0 * z3 - z4 - 12.0 * z2 * lnz;
             double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * power_of<2>(1.0 - m_c_hat));
 
@@ -140,8 +140,8 @@ namespace eos
 
     /* NLO
      *
-     * Implementation according to [BCMU:2002],
-     * which bases on [CMM:1996].
+     * Implementation according to [BCMU:2002A],
+     * which bases on [CMM:1996A].
      */
 
     template <>
@@ -196,7 +196,7 @@ namespace eos
         };
 
         /*
-         * Compute functions f_ij, cf. [CMM:1996], p.9, Eq. (39) and below.
+         * Compute functions f_ij, cf. [CMM:1996A], p.9, Eq. (39) and below.
          * We use the fit to a polynomial for the results of integrals
          * that arise in f_22 and f_27.
          */
@@ -242,20 +242,20 @@ namespace eos
 
             Fij result;
 
-            // cf. [CMM:1996], f_22 - f_28, Eq. (39), p. 9
+            // cf. [CMM:1996A], f_22 - f_28, Eq. (39), p. 9
             result.f22 = 16.0 * z / 27.0 * (delta * f22int1 + f22int2);
             result.f27 = -8.0 * z * z / 9.0 * (delta * f27int1 + f27int2);
             result.f28 = -result.f27;
-            // cf. [CMM:1996], f_11 - f_18, below Eq. (40), p. 9
+            // cf. [CMM:1996A], f_11 - f_18, below Eq. (40), p. 9
             result.f11 = result.f22 / 36.0;
             result.f12 = -result.f22 / 3.0;
             result.f17 = -result.f27 / 6.0;
             result.f18 = -result.f28 / 6.0;
-            // cf. [CMM:1996], f_77, Eq. (37), p. 8
+            // cf. [CMM:1996A], f_77, Eq. (37), p. 8
             result.f77 = 10.0 * delta / 3.0 + delta2 / 3.0 - 2.0 * delta3 / 9.0 + delta * (delta - 4.0) / 3.0 * lndelta;
-            // cf. [CMM:1996], f_78, Eq. (39), p. 9
+            // cf. [CMM:1996A], f_78, Eq. (39), p. 9
             result.f78 = 8.0 / 9.0 * (dl1mdelta - pi2 / 6.0 - delta * lndelta + 9.0 * delta / 4.0 - delta2 / 4.0 + delta3 / 12.0);
-            // cf. [CMM:1996], f_88, Eq. (38), pp. 8-9
+            // cf. [CMM:1996A], f_88, Eq. (38), pp. 8-9
             result.f88 = (-2.0 * std::log(m_b_MSbar() / model->m_s_msbar(mu())) * (delta2 + 2.0 * delta + 4.0 * ln1mdelta)
                     + 4.0 * dl1mdelta - 2.0 * pi2 / 3.0 - delta * (2.0 + delta) * lndelta + 8.0 * ln1mdelta
                     - 2.0 / 3.0 * delta3 + 3.0 * delta2 + 7.0 * delta) / 27.0;
@@ -275,15 +275,15 @@ namespace eos
             double z2 = z * z, z3 = z2 * z, z4 = z2 * z2, z5 = z3 * z2, z6 = z3 * z3;
             double sqrtz = std::sqrt(z), L = std::log(z), L2 = L * L, L3 = L2 * L;
 
-            // Auxilliary function X_b, cf. [BCMU:2002], Eq. (3.2), p. 3
+            // Auxilliary function X_b, cf. [BCMU:2002A], Eq. (3.2), p. 3
             static const double Xb = -0.1684408;
             // Auxilliary function a and b for bottom quarks (z = 1)
-            // cf. [BCMU:2002], Eqs. (3.6) and (3.7), p. 4
+            // cf. [BCMU:2002A], Eqs. (3.6) and (3.7), p. 4
             static complex<double> a1(4.0859, 4.0 / 9.0 * pi);
             static complex<double> b1(0.0316, 4.0 / 81.0 * pi);
             // Auxilliary function a and b for charm quarks, z ~= 1/4,
             // as an expansion in z^n ln(z)^m
-            // cf. [BCMU:2002], Eqs. (3.8) and (3.9), pp. 4, 5
+            // cf. [BCMU:2002A], Eqs. (3.8) and (3.9), pp. 4, 5
             complex<double> az = 16.0 / 9.0 * complex<double>(
                         z * (5.0 / 2.0 - pi2 / 3.0 - 3.0 * zeta3 + (5.0 / 2.0 - 3.0 * pi2 / 4.0) * L + L2 / 4.0 + L3 / 12.0)
                         + z2 * (7.0 / 4.0 + 2.0 / 3.0 * pi2 - pi2 / 2.0 * L - L2 / 4.0 + L3 / 12.0)
@@ -348,24 +348,24 @@ namespace eos
                 - 32. * z * std::sqrt(z) * (1.0 + z) * (pi * pi - 4.0 * std::real(dilog(sqrtz)) + 4.0 * std::real(dilog(-sqrtz)) - 2.0 * lnz * std::log((1.0 - sqrtz)/(1.0 + sqrt(z))));
         }
 
-        // effective Wilson coefficients c7eff according to [CMM:1996], p. 2, Eq. (5)
+        // effective Wilson coefficients c7eff according to [CMM:1996A], p. 2, Eq. (5)
         inline complex<double> c7eff(const WilsonCoefficients<BToS> & wc) const
         {
             return wc.c7() - wc.c3() / 3.0 - 4.0 * wc.c4() / 9.0 - 20.0 * wc.c5() / 3.0 - 80.0 * wc.c6() / 9.0;
         }
 
-        // effective Wilson coefficient c8eff according to [CMM:1996], p. 2, Eq. (5)
+        // effective Wilson coefficient c8eff according to [CMM:1996A], p. 2, Eq. (5)
         inline complex<double> c8eff(const WilsonCoefficients<BToS> & wc) const
         {
             return wc.c8() + wc.c3() - wc.c4() / 6.0 + 20.0 * wc.c5() - 10.0 * wc.c6() / 3.0;
         }
 
-        // D: perturbative b->sgamma contribution, cf. [CMM:1996], p. 7, Eq. (31)
+        // D: perturbative b->sgamma contribution, cf. [CMM:1996A], p. 7, Eq. (31)
         inline complex<double> perturbative_bsgamma(const double & z, const WilsonCoefficients<BToS> & wc, const double & alpha_s, const double & lnmu) const
         {
             static const double pi = M_PI;
 
-            // Elements of the anomalous mass dimension gamma_i7, cf. [CMM:1996], Eq. (8), p. 3
+            // Elements of the anomalous mass dimension gamma_i7, cf. [CMM:1996A], Eq. (8), p. 3
             static const std::array<double, 8> gamma7
             {{
                  -208.0 / 243.0, 416.0 / 81.0, -176.0 / 81.0, -152.0 / 243.0, -6872.0 / 81.0, 4624.0 / 243.0, 32.0 / 3.0, -32.0 / 9.0
@@ -377,7 +377,7 @@ namespace eos
             // Reduced strong coupling
             double a_s = alpha_s / (4.0 * pi);
 
-            // Partonic contribution, cf. [CMM:1996], Eq. (31), p. 7
+            // Partonic contribution, cf. [CMM:1996A], Eq. (31), p. 7
             complex<double> D = c7eff(wc);
             D += a_s * wc.c1() * (r[1 - 1] + gamma7[1 - 1] * lnmu);
             D += a_s * wc.c2() * (r[2 - 1] + gamma7[2 - 1] * lnmu);
@@ -392,12 +392,12 @@ namespace eos
         }
 
         // Dprime: perturbative b->sgamma contribution, chirality flipped
-        // based on the results given in [CMM:1996], p. 7, Eq. (31)
+        // based on the results given in [CMM:1996A], p. 7, Eq. (31)
         inline complex<double> perturbative_bsgamma_prime(const double & z, const WilsonCoefficients<BToS> & wc, const double & alpha_s, const double & lnmu) const
         {
             static const double pi = M_PI;
 
-            // Elements of the anomalous mass dimension gamma_i7, cf. [CMM:1996], Eq. (8), p. 3
+            // Elements of the anomalous mass dimension gamma_i7, cf. [CMM:1996A], Eq. (8), p. 3
             static const std::array<double, 8> gamma7
             {{
                  -208.0 / 243.0, 416.0 / 81.0, -176.0 / 81.0, -152.0 / 243.0, -6872.0 / 81.0, 4624.0 / 243.0, 32.0 / 3.0, -32.0 / 9.0
@@ -409,7 +409,7 @@ namespace eos
             // Reduced strong coupling
             double a_s = alpha_s / (4.0 * pi);
 
-            // Partonic contribution, cf. [CMM:1996], Eq. (31), p. 7
+            // Partonic contribution, cf. [CMM:1996A], Eq. (31), p. 7
             // use chirality flipped Wilson coefficient only and
             // keep c1 to c6 at their SM values (i.e. 0).
             complex<double> Dprime = wc.c7prime();
@@ -419,7 +419,7 @@ namespace eos
             return Dprime;
         }
 
-        // A: perturbative b->sgammagluon contribution, cf. [CMM:1996], p. 7, Eq. (32)
+        // A: perturbative b->sgammagluon contribution, cf. [CMM:1996A], p. 7, Eq. (32)
         inline double perturbative_bsgammagluon(const double & z, const double & delta, const WilsonCoefficients<BToS> & wc, const double & alpha_s) const
         {
             static const double pi = M_PI;
@@ -431,7 +431,7 @@ namespace eos
             // Reduced strong coupling
             double a_s = alpha_s / (4.0 * pi);
 
-            // b->sgammagluon Bremstrahlung corrections, cf. [CMM:1996], Eq. (32), p. 7
+            // b->sgammagluon Bremstrahlung corrections, cf. [CMM:1996A], Eq. (32), p. 7
             double A = (std::exp(-alpha_s * lndelta * (7.0 + 2.0 * lndelta) / (3.0 * pi)) - 1.0) * (std::norm(c7eff(wc)) + std::norm(wc.c7prime()));
             A += 4.0 * a_s * std::norm(wc.c1()) * std::real(fij.f11);
             A += 4.0 * a_s * std::real(wc.c1() * std::conj(wc.c2()) * fij.f12);
@@ -468,14 +468,14 @@ namespace eos
             complex<double> Dprime = perturbative_bsgamma_prime(z, wc, alpha_s, lnmu);
             double A = perturbative_bsgammagluon(z, delta, wc, alpha_s);
 
-            // phase space factors, cf. [CMM:1996], between Eqs. (43) and (44), p. 10
+            // phase space factors, cf. [CMM:1996A], between Eqs. (43) and (44), p. 10
             double g = phase_space_g(z), h = phase_space_h(z);
 
-            // cf. [CMM:1996], Eq. (43), p. 10
+            // cf. [CMM:1996A], Eq. (43), p. 10
             double kappa = 1.0 - (2.0 * alpha_s * h) / (3.0 * pi * g);
-            // cf. [CMM:1996], Eq. (45), p. 10
+            // cf. [CMM:1996A], Eq. (45), p. 10
             double F = (1.0 - (8.0 * alpha_s) / (3.0 * pi)) / kappa;
-            // cf. [CMM:1996], Eq. (30), p. 7
+            // cf. [CMM:1996A], Eq. (30), p. 7
             double result = power_of<2>(ckm)
                 * 6.0 * alpha_e / (pi * g) * F
                 * (std::norm(D) + std::norm(Dprime) + A);
@@ -497,7 +497,7 @@ namespace eos
             double lnmu = std::log(m_b_MSbar() / mu());
 
             // Kinematics
-            // Use m_c(mu) instead of m_c_pole, cf. [GM:2001], pp. 2-3.
+            // Use m_c(mu) instead of m_c_pole, cf. [GM:2001A], pp. 2-3.
             double m_c_hat = m_c / m_b_msbar;
             double z = m_c_hat * m_c_hat;
 
@@ -525,10 +525,10 @@ namespace eos
             /*
              * We use lambda_1 = -mu^2_pi and lambda_2 = mu^2_G / 3.0 and neglect higher order
              * terms in the 1/m_b expansion. For the alpha_s Lambda / m_b corrections we use the
-             * findings of [EGN:2010], p. 10, eq. (3.17).
+             * findings of [EGN:2010A], p. 10, eq. (3.17).
              *
              * The 1/m_b terms to leading order in alpha_s are not used, since they are
-             * already included in the NLO calculation by [CMM:1996].
+             * already included in the NLO calculation by [CMM:1996A].
              *
              * The remainder enters the rate as (|C7eff|^2 + |C7'|^2) * hqe.
              */
@@ -541,7 +541,7 @@ namespace eos
                             + (-1.0 + 20.0 / delta - 4.0 * delta - 15.0 * delta2)
                             + (13.0 + 8.0 / delta + 92.0 / 3.0 * delta + 7.0 / 3.0 * delta2) * lndelta)) * (mu2_g / (m_b_kin * m_b_kin));
 
-            // cf. [CMM:1996], Eq. (30), p. 7
+            // cf. [CMM:1996A], Eq. (30), p. 7
             double lambda_t2 = std::norm(model->ckm_tb() * conj(model->ckm_ts()));
             double result = power_of<2>(gfermi()) * alpha_e / (32.0 * pi4) * lambda_t2
                 * power_of<3>(m_b_pole) * power_of<2>(model->m_b_msbar(mu()))
@@ -557,7 +557,7 @@ namespace eos
 
         double photon_energy_moment_1(const double & emin) const
         {
-            // Calculation is based on results by [EGN:2010].
+            // Calculation is based on results by [EGN:2010A].
 
             const double a = model->alpha_s(mu()) / (4.0 * M_PI);
             const double m_b = model->m_b_kin(1.0), m_b2 = m_b * m_b;
@@ -578,7 +578,7 @@ namespace eos
 
         double photon_energy_moment_2(const double & emin) const
         {
-            // Calculation is based on results by [EGN:2010].
+            // Calculation is based on results by [EGN:2010A].
 
             const double a = model->alpha_s(mu()) / (4.0 * M_PI);
             const double m_b = model->m_b_kin(1.0), m_b2 = m_b * m_b;
@@ -599,84 +599,84 @@ namespace eos
         {
             Diagnostics results;
 
-            // Functions f_ij, cf. [CMM:1996], p. 9
+            // Functions f_ij, cf. [CMM:1996A], p. 9
             {
                 // z = 0.22^2, delta = 1/6
                 Fij f_ij = this->f_ij(0.22 * 0.22, std::log(0.22 * 0.22), 1.0 / 6.0);
-                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.22^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.22^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.22^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.22^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.22^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.22^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.22^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.22^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.22^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.22^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.22^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.22^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
                 // z = 0.29^2, delta = 1/6
                 f_ij = this->f_ij(0.29 * 0.29, std::log(0.29 * 0.29), 1.0 / 6.0);
-                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.29^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.29^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.29^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.29^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.29^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.29^2, delta = 1/6)), [CMM:1996], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.29^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.29^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.29^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.29^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.29^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.29^2, delta = 1/6)), [CMM:1996A], p. 9, Eq. (39)" });
                 // z = 0.22^2, delta = 1/9
                 f_ij = this->f_ij(0.22 * 0.22, std::log(0.22 * 0.22), 1.0 / 9.0);
-                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.22^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.22^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.22^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.22^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.22^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.22^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.22^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.22^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.22^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.22^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.22^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.22^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
                 // z = 0.29^2, delta = 1/9
                 f_ij = this->f_ij(0.29 * 0.29, std::log(0.29 * 0.29), 1.0 / 9.0);
-                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.29^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.29^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.29^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.29^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.29^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
-                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.29^2, delta = 1/9)), [CMM:1996], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f22), "Re(f_22(z = 0.29^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f22), "Im(f_22(z = 0.29^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f27), "Re(f_27(z = 0.29^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f27), "Im(f_27(z = 0.29^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::real(f_ij.f78), "Re(f_78(z = 0.29^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
+                results.add(Diagnostics::Entry{ std::imag(f_ij.f78), "Im(f_78(z = 0.29^2, delta = 1/9)), [CMM:1996A], p. 9, Eq. (39)" });
             }
 
-            // Function r_i, cf. [CMM:1996], p. 8, Eqs. (33)-(36) and [BCMU:2002], p. 3, Eq. (3.1).
+            // Function r_i, cf. [CMM:1996A], p. 8, Eqs. (33)-(36) and [BCMU:2002A], p. 3, Eq. (3.1).
             {
                 // z = 0.22^2
                 std::array<complex<double>, 8> r_i = this->r_i(0.22 * 0.22);
-                results.add(Diagnostics::Entry{ std::real(r_i[0]), "Re(r_1(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[0]), "Im(r_1(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[1]), "Re(r_2(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[1]), "Im(r_2(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[2]), "Re(r_3(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[2]), "Im(r_3(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[3]), "Re(r_4(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[3]), "Im(r_4(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[4]), "Re(r_5(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[4]), "Im(r_5(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[5]), "Re(r_6(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[5]), "Im(r_6(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[6]), "Re(r_7(z = 0.22^2)), [CMM:1996], p. 8, Eq. (36)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[6]), "Im(r_7(z = 0.22^2)), [CMM:1996], p. 8, Eq. (36)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[7]), "Re(r_8(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[7]), "Im(r_8(z = 0.22^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[0]), "Re(r_1(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[0]), "Im(r_1(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[1]), "Re(r_2(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[1]), "Im(r_2(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[2]), "Re(r_3(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[2]), "Im(r_3(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[3]), "Re(r_4(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[3]), "Im(r_4(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[4]), "Re(r_5(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[4]), "Im(r_5(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[5]), "Re(r_6(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[5]), "Im(r_6(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[6]), "Re(r_7(z = 0.22^2)), [CMM:1996A], p. 8, Eq. (36)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[6]), "Im(r_7(z = 0.22^2)), [CMM:1996A], p. 8, Eq. (36)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[7]), "Re(r_8(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[7]), "Im(r_8(z = 0.22^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
 
                 // z = 0.29^2
                 r_i = this->r_i(0.29 * 0.29);
-                results.add(Diagnostics::Entry{ std::real(r_i[0]), "Re(r_1(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[0]), "Im(r_1(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[1]), "Re(r_2(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[1]), "Im(r_2(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[2]), "Re(r_3(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[2]), "Im(r_3(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[3]), "Re(r_4(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[3]), "Im(r_4(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[4]), "Re(r_5(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[4]), "Im(r_5(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[5]), "Re(r_6(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[5]), "Im(r_6(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[6]), "Re(r_7(z = 0.29^2)), [CMM:1996], p. 8, Eq. (36)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[6]), "Im(r_7(z = 0.29^2)), [CMM:1996], p. 8, Eq. (36)" });
-                results.add(Diagnostics::Entry{ std::real(r_i[7]), "Re(r_8(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
-                results.add(Diagnostics::Entry{ std::imag(r_i[7]), "Im(r_8(z = 0.29^2)), [BCMU:2002], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[0]), "Re(r_1(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[0]), "Im(r_1(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[1]), "Re(r_2(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[1]), "Im(r_2(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[2]), "Re(r_3(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[2]), "Im(r_3(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[3]), "Re(r_4(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[3]), "Im(r_4(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[4]), "Re(r_5(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[4]), "Im(r_5(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[5]), "Re(r_6(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[5]), "Im(r_6(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[6]), "Re(r_7(z = 0.29^2)), [CMM:1996A], p. 8, Eq. (36)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[6]), "Im(r_7(z = 0.29^2)), [CMM:1996A], p. 8, Eq. (36)" });
+                results.add(Diagnostics::Entry{ std::real(r_i[7]), "Re(r_8(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
+                results.add(Diagnostics::Entry{ std::imag(r_i[7]), "Im(r_8(z = 0.29^2)), [BCMU:2002A], p. 3, Eq. (3.1)" });
             }
 
-            // Phase space functions g and h, cf. [CMM:1996], p. 10, Eqs. (42),(43)f
+            // Phase space functions g and h, cf. [CMM:1996A], p. 10, Eqs. (42),(43)f
             {
                 // g
                 results.add(Diagnostics::Entry{ phase_space_g(0.22 * 0.22), "h(z = 0.22^2), CMM[:1996], p. 10, below Eq. (43)" });
@@ -687,7 +687,7 @@ namespace eos
                 results.add(Diagnostics::Entry{ phase_space_h(0.29 * 0.29), "h(z = 0.29^2), CMM[:1996], p. 10, below Eq. (43)" });
             }
 
-            // R_quark, cf. [CMM:1996], p. 10, Eq. (44)
+            // R_quark, cf. [CMM:1996A], p. 10, Eq. (44)
             {
                 results.add(Diagnostics::Entry{ ratio_quark(0.29 * 0.29, 0.29 * 0.29, 0.976, 0.212, 5.0), "R_quark(z = 0.29^, delta = z,   ckm = 0.976, alpha_s = 0.212, mu_b = 5.0), CMM[:1996], p. 10, Eq. (44)" });
                 results.add(Diagnostics::Entry{ ratio_quark(0.29 * 0.29, 1.0 / 3.0,   0.976, 0.212, 5.0), "R_quark(z = 0.29^, delta = 1/3, ckm = 0.976, alpha_s = 0.212, mu_b = 5.0), CMM[:1996], p. 10, Eq. (44)" });

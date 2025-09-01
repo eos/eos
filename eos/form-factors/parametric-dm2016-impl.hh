@@ -232,7 +232,7 @@ namespace eos
         const double z = _traits->calc_z(s), z2 = z * z;
 
         // Using alpha_0_long_a instead of alpha_0_perp_a, in order to
-        // fulfill relation eq. (7), [DM:2016], p. 3.
+        // fulfill relation eq. (7), [DM:2016A], p. 3.
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_a() + _alpha_1_perp_a() * z + _alpha_2_perp_a() * z2);
     }
 
@@ -280,7 +280,7 @@ namespace eos
         const double z = _traits->calc_z(s), z2 = z * z;
 
         // Using alpha_0_long_t5 instead of alpha_0_perp_t5, in order to
-        // fulfill relation eq. (8), [DM:2016], p. 3.
+        // fulfill relation eq. (8), [DM:2016A], p. 3.
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_perp_t5() * z + _alpha_2_perp_t5() * z2);
     }
 

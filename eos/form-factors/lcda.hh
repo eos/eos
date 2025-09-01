@@ -33,7 +33,7 @@ namespace eos
         /*!
          * Evolve the nth Gegenbauer moment a_n_0 from a scale mu_0 to a scale mu according to the LL RGE.
          *
-         * Calculation according to [BBL:2006].
+         * Calculation according to [BBL:2006A].
          *
          * @param a_n_0 The Gegenbauer moment at the scale mu_0.
          * @param n     The index of the Gegenbauer moment.

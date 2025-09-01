@@ -127,7 +127,7 @@ namespace eos
         }
 
         /* NLO functions */
-        // cf. [BMU:1999], Eq. (34), p. 9 and [HLMW:2005], Eq. (127), p. 29
+        // cf. [BMU:1999A], Eq. (34), p. 9 and [HLMW:2005A], Eq. (127), p. 29
         double omega1_99(const double & s_hat) const
         {
             double li2 = gsl_sf_dilog(s_hat);
@@ -140,7 +140,7 @@ namespace eos
                 + (5.0 + 9.0 * s_hat - 6.0 * s_hat2) / (6.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat));
         }
 
-        // cf. [HLMW:2005], Eq. (128), p. 29
+        // cf. [HLMW:2005A], Eq. (128), p. 29
         // only valid for 0 < s_hat < 0.4
         double omega2_99(const double & s_hat) const
         {
@@ -150,7 +150,7 @@ namespace eos
             return (-19.2 + 6.1 * s_hat + (37.9 + 17.2 * ln) * s_hat2 - 18.7 * s_hat3) / ((1.0 - s_hat) * (1.0 - s_hat) * (1.0 + 2.0 * s_hat));
         }
 
-        // cf. [HLMW:2005], Eq. (130), p. 29
+        // cf. [HLMW:2005A], Eq. (130), p. 29
         double omega1_77(const double & s_hat) const
         {
             double li2 = gsl_sf_dilog(s_hat);
@@ -165,7 +165,7 @@ namespace eos
                 - 8.0/3.0 * log(mu / m_b_MSbar());
         }
 
-        // cf.[HLMW:2005], Eq. (131), p. 29
+        // cf.[HLMW:2005A], Eq. (131), p. 29
         double omega1_79(const double & s_hat) const
         {
             double li2 = gsl_sf_dilog(s_hat);
@@ -179,7 +179,7 @@ namespace eos
                 - 4.0/3.0 * log(mu / m_b_MSbar());
         }
 
-        // cf. [HLMW:2005], Eq. (126), p. 28
+        // cf. [HLMW:2005A], Eq. (126), p. 28
         complex<double> g(const double & y) const
         {
             complex<double> x;
@@ -192,12 +192,12 @@ namespace eos
             return 20.0 / 27.0 + 4.0 / 9.0 * y - 2.0 / 9.0 * (2.0 + y) * sqrt(abs(y - 1)) * x;
         }
 
-        // cf. [HLMW:2005], Eq. (72), p. 17
+        // cf. [HLMW:2005A], Eq. (72), p. 17
         // i = { 1 .. 10, Q3 .. Q6, b }
         complex<double> f(unsigned i, const double & s_hat) const
         {
             if ((7 == i) || (8 == i))
-                throw InternalError("[HLMW:2005] f_i not defined for i = 7,8!");
+                throw InternalError("[HLMW:2005A] f_i not defined for i = 7,8!");
 
             static const std::vector<double> rho_b = {
                 /* 1 .. 6 */
@@ -268,7 +268,7 @@ namespace eos
                 - 40.0 / 9.0;
         }
 
-        // cf. [HLMW:2005], Eq. (132), p. 29
+        // cf. [HLMW:2005A], Eq. (132), p. 29
         complex<double> F(const double & s_hat) const
         {
             double r = s_hat * power_of<2>(m_b_pole() / m_c_pole()) / 4.0;
@@ -285,7 +285,7 @@ namespace eos
             return result;
         }
 
-        // cf. [HLMW:2005], Eq. (6), p. 4
+        // cf. [HLMW:2005A], Eq. (6), p. 4
         // see also comments on removing the factor phi_u from the ratio phi_ll / phi_u below.
         double phi_ll(const double & s) const
         {
@@ -311,14 +311,14 @@ namespace eos
 
             WilsonCoefficients<BToS> w = model->wilson_coefficients_b_to_s(mu(), LeptonFlavor::muon /* fake lepton flavor */);
 
-            // cf. [HLMW:2005], Eq. (69), p. 16
+            // cf. [HLMW:2005A], Eq. (69), p. 16
             complex<double> c7eff = w.c7() - w.c3() / 3.0 - 4.0 * w.c4() / 9.0 - 20.0 * w.c5() / 3.0 - 80.0 * w.c6() / 9.0;
             complex<double> c8eff = w.c8() + w.c3() - w.c4() / 6.0 + 20.0 * w.c5() - 10.0 * w.c6() / 3.0;
 
             /* S_{AB} */
-            // cf. [HLMW:2005], Eqs. (112)-(115), p. 26
+            // cf. [HLMW:2005A], Eqs. (112)-(115), p. 26
             // The HQE contributions proportional to lambda_{1,2}_hat have been adjusted to remove
-            // the B->X_ulnu contributions. See also [LT:2007].
+            // the B->X_ulnu contributions. See also [LT:2007A].
             double s77 = power_of<2>(1.0 - s_hat) * (4.0 + 8.0 / s_hat) * (
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_77(s_hat) + u1)
@@ -356,7 +356,7 @@ namespace eos
                 // We use a different basis of operators: O_{9,10} = alpha_e_tilde * P_{9,10} */
                 alpha_s_tilde * kappa * w.c9(),
                 alpha_s_tilde * kappa * w.c10(),
-                // cf. [HLMW:2005], Table 3, p. 17. Using values at mu = 5.0 GeV
+                // cf. [HLMW:2005A], Table 3, p. 17. Using values at mu = 5.0 GeV
                 kappa * -3.72e-2,
                 kappa * -1.04e-2,
                 kappa * -1.71e-6,
@@ -364,7 +364,7 @@ namespace eos
                 0.0
             };
 
-            /* Corrections, cf. [HLMW:2005], Table 6, p. 18 */
+            /* Corrections, cf. [HLMW:2005A], Table 6, p. 18 */
             std::vector<complex<double>> m7 = {
                 -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F17_massive, mu(), s, m_b_msbar, m_c),
                 -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F27_massive, mu(), s, m_b_msbar, m_c),
@@ -402,7 +402,7 @@ namespace eos
             std::vector<complex<double>> m10(14, 0.0);
             m10[9] = 1.0; // M^10_i = delta_{10,i}
 
-            // cf. [HLMW:2005], Eq. (111)
+            // cf. [HLMW:2005A], Eq. (111)
             double phi_ll = 0.0;
             for (unsigned i(0) ; i < 14 ; ++i)
             {
@@ -433,8 +433,8 @@ namespace eos
             {
                 /*
                  * diagonal (i = j) and interference terms are read off the
-                 * matching between Eq. (111) from [HLWM:2005] and Eq. (3.9)
-                 * from [GN:1997].
+                 * matching between Eq. (111) from [HLMW:2005A] and Eq. (3.9)
+                 * from [GN:1997A].
                  */
 
                 // We use a different basis of operators: O_{9,10} = alpha_e_tilde * P_{9,10} */
@@ -520,7 +520,7 @@ namespace eos
             return phi_ll;
         }
 
-        // cf. [HLMW:2005], Eq. (4), p. 4
+        // cf. [HLMW:2005A], Eq. (4), p. 4
         double branching_ratio(const double & s) const
         {
             static const double pi3 = power_of<3>(M_PI);
@@ -535,10 +535,10 @@ namespace eos
         {
             Diagnostics results;
 
-            // Function phi_ll, cf. [HLMW:2005]
+            // Function phi_ll, cf. [HLMW:2005A]
             {
-                results.add(Diagnostics::Entry{ phi_ll(1.0), "phi_ll(s = 1.0Gev^2), [HLMW:2005]" });
-                results.add(Diagnostics::Entry{ phi_ll(6.0), "phi_ll(s = 6.0Gev^2), [HLMW:2005]" });
+                results.add(Diagnostics::Entry{ phi_ll(1.0), "phi_ll(s = 1.0Gev^2), [HLMW:2005A]" });
+                results.add(Diagnostics::Entry{ phi_ll(6.0), "phi_ll(s = 6.0Gev^2), [HLMW:2005A]" });
             }
 
             return results;

@@ -55,15 +55,15 @@ namespace eos
             // We use a kinetic scale of 1 GeV
             static const double mu_kin = 1.0;
 
-            // The NLO contribution is given by [U:2001], eq. (9), p. 5
+            // The NLO contribution is given by [U:2001A], eq. (9), p. 5
             double c = (1.0 + 3.0 * model->alpha_s(4.6) / (2.0 * M_PI) * (2.0 + std::log(mu_kin / 4.6))) / model->m_b_kin(mu_kin);
 
-            // Corrections of order 1/mb^2 can be estimates, cf. [U:2001], eqs. (12) and (18)
+            // Corrections of order 1/mb^2 can be estimates, cf. [U:2001A], eqs. (12) and (18)
             double sum_rho3 = -0.5; // Assumption for the sum of 1/mb^2 operators from eq. (18)
             double delta = sum_rho3 / (3.0 * power_of<2>(model->m_b_kin(mu_kin)));
 
-            // cf. [N:1997], p. 15, eq. (32), we also consider alpha_s corrections
-            // to the rate, cf. [U:2001], eq. (11), p. 5.
+            // cf. [N:1997A], p. 15, eq. (32), we also consider alpha_s corrections
+            // to the rate, cf. [U:2001A], eq. (11), p. 5.
             return 2.0 / 3.0 * c * mu2_g + delta;
         }
     };

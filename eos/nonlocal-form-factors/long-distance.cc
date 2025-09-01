@@ -26,13 +26,13 @@ namespace eos
     complex<double>
     LongDistance::g_had_ccbar(const double & s, const double & m_c)
     {
-        // cf. [KS:1996], Eqs. (3.3) and (3.4), p. 5
+        // cf. [KS:1996A], Eqs. (3.3) and (3.4), p. 5
         static const double alpha = 1.0 / 133.0;
-        // cf. [KS:1996], Appendix: Input Parameters, p. 9
+        // cf. [KS:1996A], Appendix: Input Parameters, p. 9
         static const double m_b = 4.8;
         static const double m_D = 1.865;
         static const double s_0_hat = 4.0 * m_D * m_D / m_b / m_b;
-        // cf. [KS:1996], Eq. (A2), p. 9
+        // cf. [KS:1996A], Eq. (A2), p. 9
         static const double s_1_hat = 0.60;
         static const double s_2_hat = 0.69;
 

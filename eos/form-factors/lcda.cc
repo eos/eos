@@ -31,10 +31,10 @@ namespace eos
         // Euler-Mascheroni constant.
         static const double gamma_e = 0.57721566490153286061;
 
-        // cf. [BBL:2006], Eq. (2.14), p. 5
+        // cf. [BBL:2006A], Eq. (2.14), p. 5
         double gamma_0 = 8 * QCD::casimir_f * (gsl_sf_psi_int(n + 2) + gamma_e - 0.75 - 0.5 / (n + 1) / (n + 2));
 
-        // cf. [BBL:2006], Eq. (2.13), p. 5
+        // cf. [BBL:2006A], Eq. (2.13), p. 5
         return std::pow(eta, gamma_0 / 2.0 / beta[0]) * a_n_0;
     }
 }

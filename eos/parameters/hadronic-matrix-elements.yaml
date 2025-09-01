@@ -795,7 +795,7 @@ groups:
           max:     +0.009554375102511888
           latex:    '$\alpha_{T,2}^{B \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
-      # form factor parameters for B->K according to [KMPW:2010], Table 4, p. 31
+      # form factor parameters for B->K according to [KMPW:2010A], Table 4, p. 31
       'B->K::F^p(0)@KMPW2010' :
           central: +0.34
           min:     +0.32
@@ -906,7 +906,7 @@ groups:
           latex:    '$t_+^{B_s\to K^*}$'
           comment:  '(mBs + mK)^2'
           unit:     'GeV^2'
-      # form factor parameters for B->D from [BIvD:2016] for [BCL:2008A] parametrization
+      # form factor parameters for B->D from [BIvD:2016A] for [BCL:2008A] parametrization
       'B->D::f_+(0)@BCL2008' :
           central: +0.66
           min:     +0.62
@@ -1152,7 +1152,7 @@ groups:
   - title: 'Parameters in $B\to V$ Form Factor Parametrizations'
     description: ''
     parameters:
-      # form factor parameters for B->K^* according to [KMPW:2010], Table 4, p. 31
+      # form factor parameters for B->K^* according to [KMPW:2010A], Table 4, p. 31
       'B->K^*::F^V(0)@KMPW2010' :
           central: +0.36
           min:     +0.24
@@ -2561,7 +2561,7 @@ groups:
   - title: 'Parameters in $B\to PP$ Form Factor Parametrizations'
     description: ''
     parameters:
-      # form factor parameters for parametrization according to [FvDV:2018]
+      # form factor parameters for parametrization according to [FvDV:2018A]
       'B->pipi::%3%^F%4%_%1%_%2%@FvDV2018' :
           central: 0.0
           min:     0.0
@@ -2782,7 +2782,7 @@ groups:
           unit:     'GeV^2'
           comments: 'cf. [DKMMO:2008A]'
           latex:    '$s_0^{f_B}$'
-      # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO:2006] and [KMPW:2010].
+      # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO:2006A] and [KMPW:2010A].
       "B->K^*::s_0@LCSR" :
           central: 1.7
           min:     1.7
@@ -2802,7 +2802,7 @@ groups:
   - title: 'Parameters in LCSR Calculations with B-meson LCDAs'
     description: ''
     parameters:
-      # parameters for LCSR calculation of B->pi hadronic matrix elements, cf. [GKvD:2018]
+      # parameters for LCSR calculation of B->pi hadronic matrix elements, cf. [GKvD:2018A]
       'B->pi::s_0^+,0@B-LCSR' :
           central: 0.7
           min:     0.7
@@ -2851,7 +2851,7 @@ groups:
           max:     0.3
           latex:    '$\mu^{B \to \pi, \mathrm{(B-LCSR)}}$'
           unit:     '1'
-      # parameters for LCSR calculation of B->K hadronic matrix elements, cf. [GKvD:2018]
+      # parameters for LCSR calculation of B->K hadronic matrix elements, cf. [GKvD:2018A]
       'B->K::s_0^+,0@B-LCSR' :
           central: 1.05
           min:     1.05
@@ -2949,7 +2949,7 @@ groups:
           max:     0.3
           latex:    '$\mu^{B_s \to K, \mathrm{(B-LCSR)}}$'
           unit:     '1'
-      # parameters for LCSR calculation of B->D hadronic matrix elements, cf. [GKvD:2018]
+      # parameters for LCSR calculation of B->D hadronic matrix elements, cf. [GKvD:2018A]
       'B->D::s_0^+,0@B-LCSR' :
           central: 6.0
           min:     6.0
@@ -3047,7 +3047,7 @@ groups:
           max:     2.1213
           latex:    '$\mu^{B_s \to D_s, \mathrm{(B-LCSR)}}$'
           unit:     '1'
-      # parameters for LCSR calculation of B->rho hadronic matrix elements, cf. [GKvD:2018]
+      # parameters for LCSR calculation of B->rho hadronic matrix elements, cf. [GKvD:2018A]
       'B->rho::s_0^A1,0@B-LCSR' :
           central: 1.6
           min:     1.6
@@ -3145,7 +3145,7 @@ groups:
           latex:    '$\mu^{B \to \rho \mathrm{(B-LCSR)}}$'
           unit:     '1'
 
-      # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [GKvD:2018]
+      # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [GKvD:2018A]
       'B->K^*::s_0^A1,0@B-LCSR' :
           central: 1.7
           min:     1.7
@@ -3339,7 +3339,7 @@ groups:
           max:     0.3
           latex:    '$\mu^{B_s \to K^*, \mathrm{(B-LCSR)}}$'
           unit:     '1'
-      # parameters for LCSR calculation of B->D^* hadronic matrix elements, cf. [GKvD:2018]
+      # parameters for LCSR calculation of B->D^* hadronic matrix elements, cf. [GKvD:2018A]
       'B->D^*::s_0^A1,0@B-LCSR' :
           central: 8.0
           min:     8.0
@@ -3923,7 +3923,7 @@ groups:
     description: ''
     parameters:
       # form factor parameters for Lambda_b -> Lambda decays according to
-      # [BFvD:2014], table ?, p. ??
+      # [BFvD:2014A], table ?, p. ??
       'Lambda_b->Lambda::f_0^V(0)@BFvD2014' :
           central: +0.28
           min:     +0.22
@@ -3997,7 +3997,7 @@ groups:
           latex:    '$\sigma_{0}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
           unit:     '1'
       # form factor parameters for Lambda_b -> Lambda decays according to
-      # [DM:2016], table ?, p. ??
+      # [DM:2016A], table ?, p. ??
       'Lambda_b->Lambda::a_0_time^V@DM2016' :
           central: +0.373
           min:     +0.373
@@ -4555,7 +4555,7 @@ groups:
             - [0, 1, 2, 3, 4]
           comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
-      # [DKMR:2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
+      # [DKMR:2017A], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
       # params for tensor FFs are included.
       'Lambda_b->Lambda_c::a_0_time^V@DKMR2017' :
           central: +0.74392566003686
@@ -4733,8 +4733,8 @@ groups:
     description: ''
     parameters:
       # Parameters for B*->D* form factors in the Heavy-Quark Expansion (HQE)
-      # The implementation is based on [N:1993], and inspired by the parametrization
-      # in [BLPR:2017] and its modification in [JS:2018].
+      # The implementation is based on [N:1993A], and inspired by the parametrization
+      # in [BLPR:2017A] and its modification in [JS:2018A].
       "B(*)->D(*)::n_f@HQET" :
           central: 2.0
           min: 2.0
@@ -5144,7 +5144,7 @@ groups:
           max:  0.0
           latex: '$l^{(s,2)}_6(1)$'
           unit: '1'
-      # Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in HQET parametrisation from [BBGORvD:2018]
+      # Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in HQET parametrisation from [BBGORvD:2018A]
       "Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET" :
           central: 0.013054
           min:     0.000537
@@ -5542,16 +5542,16 @@ groups:
           max:     +1.14
           unit:     '1'
           latex:    '$\Delta\xi_{\parallel}$'
-      # form factor parameters for QCDF calculation according to [BFvD:2016]
+      # form factor parameters for QCDF calculation according to [BFvD:2014A]
       'B->pipi::mu@BFvD2016' :
           central: 1.5
           min:     1.0
           max:     2.0
           latex:    '$\mu^{B \to \pi\pi,\mathrm{BFvD2016}}$'
           unit:     'GeV'
-          comments: 'cf. [BFvD:2016]'
+          comments: 'cf. [BFvD:2014A]'
       # subleading parameter for Lambda_b -> Lambda ll decays according to
-      # [MvD:2016].
+      # [MvD:2016A].
       'Lambda_b->Lambdall::r_perp_0@MvD2016' :
           central: 0.00
           min:     -0.03
@@ -6202,7 +6202,7 @@ groups:
   - title: 'Parameters in P->PP form-factor parametrization'
     description: ''
     parameters:
-      # Masses used in [HKVT:2025A]
+      # Masses used in [HKvT:2025A]
       'mass::pi^+@HKvT2025' :
           central: +0.13957
           min:     +0.13957

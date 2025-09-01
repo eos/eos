@@ -77,18 +77,18 @@ namespace eos
         complex<double> c8eff = ShortDistanceLowRecoil::c8eff(wc); // LO C8eff
 
         /* Y(s) for the up and the top sector */
-        // cf. [BFS:2001], Eq. (10), p. 4
+        // cf. [BFS:2001A], Eq. (10), p. 4
         complex<double> Y_top_b = -0.5 * (7.0 * wc.c3() + 4.0 / 3.0 * wc.c4() + 76.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
         complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64 / 3.0 * wc.c6());
         complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
 
-        // Use b pole mass according to [BFS:2001], Sec. 3.1, paragraph Quark Masses,
+        // Use b pole mass according to [BFS:2001A], Sec. 3.1, paragraph Quark Masses,
         // then replace b pole mass by the PS mass.
         // CharmLoops::h(mu, s, m_c_pole) contributions are set to zero
         complex<double> Y_top = Y_top_b * CharmLoops::h(mu, s, m_b_PS)
                               + Y_top_0 * CharmLoops::h(mu, s)
                               + Y_top_;
-        // cf. [BFS:2004], Eq. (43), p. 24
+        // cf. [BFS:2004A], Eq. (43), p. 24
         complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (- CharmLoops::h(mu, s));
 
         complex<double> Y_contribution = Y_top + lambda_hat_u * Y_up;
@@ -118,14 +118,14 @@ namespace eos
         ///////////////////////////////////////////
 
         // inverse of the "negative" moment of the B meson LCDA
-        // cf. [BFS:2001], Eq. (54), p. 15
+        // cf. [BFS:2001A], Eq. (54), p. 15
         double lambda_B_p_inv = this->lambda_B_p_inv;
         double omega_0 = 1.0 / lambda_B_p_inv;
         complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
 
         /* parallel, top sector */
-        // T0_top_par_p = 0, cf. [BFS:2001], Eq. (17), p. 6
-        // cf. [BFS:2004], Eqs. (46)-(47), p. 25 without the \omega term.
+        // T0_top_par_p = 0, cf. [BFS:2001A], Eq. (17), p. 6
+        // cf. [BFS:2004A], Eqs. (46)-(47), p. 25 without the \omega term.
         complex<double> T0_top_par_m = - e_s * 4.0 * m_B / m_b_PS * (
             13.0 * wc.c3() + 4.0/3.0 * wc.c4() + 136.0 * wc.c5() + 64.0/3.0 * wc.c6()
         ) * lambda_B_m_inv;
@@ -178,7 +178,7 @@ namespace eos
             lambda      = eos::lambda(m_B2, m_V2, s),
             sqrt_lambda = std::sqrt(lambda);
 
-        // vectorial form factors, cf. [GvDV:2020], eq. (A.11)
+        // vectorial form factors, cf. [GvDV:2020A], eq. (A.11)
         const double
             calF_perp = sqrt(2.0) * sqrt_lambda / (m_B * (m_B + m_V)) * ff_V,
             calF_para = sqrt(2.0) * (m_B + m_V) / m_B * ff_A1,
@@ -186,7 +186,7 @@ namespace eos
                       / (2.0 * m_V * m_B2 * (m_B + m_V)),
             calF_time = ff_A0;
 
-        // tensorial form factors, cf. [GvDV:2020], eq. (A.11)
+        // tensorial form factors, cf. [GvDV:2020A], eq. (A.11)
         const double
             calF_T_perp = sqrt(2.0) * sqrt_lambda / m_B2 * ff_T1,
             calF_T_para = sqrt(2.0) * (m_B2 - m_V2) / m_B2 * ff_T2,
@@ -270,7 +270,7 @@ namespace eos
         return result;
     }
 
-    // C9 and its corrections [BFS:2001] eqs. (40-41)
+    // C9 and its corrections [BFS:2001A] eqs. (40-41)
     double
     BsToPhiDileptonAmplitudes<tag::GvDV2020>::real_C9_perp(const double & s) const
     {

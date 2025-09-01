@@ -39,7 +39,7 @@ namespace eos
         {}; // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
 
         struct ClassIII
-        {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
+        {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGV:2017A], eq. (2.6), p. 7.
     } // namespace bern
 
     using ChargedCurrent = bern::ClassII;
@@ -47,7 +47,7 @@ namespace eos
     template <> struct WilsonCoefficients<ChargedCurrent>
     {
             /*
-             * We follow the definition of [FMvD:2013], eqs. (1) and (2), p. 2.
+             * We follow the definition of [FMvD:2015A], eqs. (1) and (2), p. 2.
              * This coincides with the Bern basis of class II operators in Ref.
              * [AFGV:2017A], eq. (2.5), p. 6, up to a factor of V_Ub, where U=u,c.
              *
@@ -59,7 +59,7 @@ namespace eos
             /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T, or equivalently: 1, 1', 5, 5', 7'. */
             std::array<complex<double>, 5> _coefficients;
 
-            // cf. [FMvD:2015], eqs. (1) and (2)
+            // cf. [FMvD:2015A], eqs. (1) and (2)
             inline complex<double>
             cvl() const
             {
@@ -94,7 +94,7 @@ namespace eos
     template <> struct WilsonCoefficients<bern::ClassIII>
     {
             /*
-             * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.6).
+             * Following the definitions in [AFGV:2017A], cf. Table 1 and Eq. (2.6).
              */
             std::array<complex<double>, 10> _unprimed, _primed;
 
@@ -238,7 +238,7 @@ namespace eos
             /*! Default ctor */
             WilsonCoefficients();
 
-            // Misiak basis, cf. [BMU:1999], Eq. (2), p. 3
+            // Misiak basis, cf. [BMU:1999A], Eq. (2), p. 3
             inline complex<double>
             c1() const
             {
@@ -393,7 +393,7 @@ namespace eos
     /*!
      * Evolution of b -> s Wilson coefficients
      *
-     * Calculation according to [BMU:1999], Eq. (25). The helicity-flipped, scalar,
+     * Calculation according to [BMU:1999A], Eq. (25). The helicity-flipped, scalar,
      * pseudoscalar, and tensor components are implicitly kept at zero.
      *
      * @param wc_qcd_0  The initial scale Wilson coefficients at O(alpha_s^0)

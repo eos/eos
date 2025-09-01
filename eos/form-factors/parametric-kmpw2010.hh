@@ -33,7 +33,7 @@ namespace eos
         public FormFactors<PToV>
     {
         private:
-            // fit parametrisation for P -> V according to [KMPW:2010]
+            // fit parametrisation for P -> V according to [KMPW:2010A]
             UsedParameter
                _f0_V, _b1_V,
                _f0_A0, _b1_A0, _f0_A1, _b1_A1, _f0_A2, _b1_A2,
@@ -88,7 +88,7 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            // fit parametrisation for P -> P according to [KMPW:2010]
+            // fit parametrisation for P -> P according to [KMPW:2010A]
             UsedParameter _b1_p, _b1_0, _b1_t;
             UsedParameter _f0_p, _f0_t;
             static const double _tau_p, _tau_m, _tau_0;

@@ -126,7 +126,7 @@ namespace eos
     double
     BToKstarGamma::branching_ratio() const
     {
-        // cf. [PDG:2008] : Gamma = hbar / tau_B, pp. 5, 79
+        // cf. [PDG:2008A] : Gamma = hbar / tau_B, pp. 5, 79
         double Gamma_B = _imp->hbar() / _imp->tau;
         double gamma   = _imp->decay_rate();
 

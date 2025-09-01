@@ -37,7 +37,7 @@ namespace eos
     {
         const double zs = _calc_z(s), z0 = _calc_z(0.0);
 
-        // cf. [KMPW:2010], Eq. (8.8), p. 30
+        // cf. [KMPW:2010A], Eq. (8.8), p. 30
         return f0 / (1.0 - s / m2) * (1.0 + b1 * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
     }
 
@@ -183,7 +183,7 @@ namespace eos
     double
     KMPW2010FormFactors<PToP>::f_p(const double & s) const
     {
-        // cf. [KMPW:2010], Eq. (8.8), p. 30
+        // cf. [KMPW:2010A], Eq. (8.8), p. 30
         const double zs = _calc_z(s), z0 = _calc_z(0.0);
 
         return _f0_p() / (1 - s / _m_Bs2) * (1 + _b1_p() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
@@ -192,7 +192,7 @@ namespace eos
     double
     KMPW2010FormFactors<PToP>::f_0(const double & s) const
     {
-        // cf. [KMPW:2010], Eq. (8.8), p. 30
+        // cf. [KMPW:2010A], Eq. (8.8), p. 30
         const double zs = _calc_z(s), z0 = _calc_z(0.0);
 
         return _f0_p() * (1 + _b1_0() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
@@ -201,7 +201,7 @@ namespace eos
     double
     KMPW2010FormFactors<PToP>::f_t(const double & s) const
     {
-        // cf. [KMPW:2010], Eq. (8.8), p. 30
+        // cf. [KMPW:2010A], Eq. (8.8), p. 30
         const double zs = _calc_z(s), z0 = _calc_z(0.0);
 
         return _f0_t() / (1 - s / _m_Bs2) * (1 + _b1_t() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));

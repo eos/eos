@@ -49,9 +49,9 @@ namespace eos
     struct CharmLoops
     {
         /* One-loop functions */
-        // cf. [BFS:2001], Eq. (11), p. 4 with m_q -> 0
+        // cf. [BFS:2001A], Eq. (11), p. 4 with m_q -> 0
         static complex<double> h(const double & mu, const double & s);
-        // cf. [BFS:2001], Eq. (11), p. 4 with m_q -> 0
+        // cf. [BFS:2001A], Eq. (11), p. 4 with m_q -> 0
         static complex<double> h(const double & mu, const double & s, const double & m_q);
 
         /* Two-loop functions */
@@ -68,23 +68,23 @@ namespace eos
         static complex<double> F19_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F27_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F29_massless(const double & mu, const double & s, const double & m_b);
-        // massless case, cf. [BFS:2001], Eqs. (82)-(83), p. 30
+        // massless case, cf. [BFS:2001A], Eqs. (82)-(83), p. 30
         static complex<double> F87_massless(const double & mu, const double & s, const double & m_b);
         static complex<double> F89_massless(                   const double & s, const double & m_b);
 
-        // massive case, cf. [ABGW:2003], Eq. (7), p. 8
+        // massive case, cf. [ABGW:2003A], Eq. (7), p. 8
         static complex<double> F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F19_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F27_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F29_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> delta_F29_massive(const double & mu, const double & s, const double & m_c);
 
-        // helper functions for F8j, cf. [BFS:2001], Eqs. (29) and (84), pp. 8 and 30
+        // helper functions for F8j, cf. [BFS:2001A], Eqs. (29) and (84), pp. 8 and 30
         static complex<double> B0(const double & s, const double & m_q);
         static complex<double> C0(const double & s, const double & m_q);
 
         // Contributions proportional to Q_s = Q_b arising from intermediate ccbar pairs at NLO in alpha_s.
-        // These contributions are interpolated from reference values from [AGV:2019]
+        // These contributions are interpolated from reference values from [AGV:2019A]
         // In particular mu = m_b = 4.18 and alpha_s(M_Z) = 0.1185
         static complex<double> F17_massive_Qsb(const double & s);
         static complex<double> F19_massive_Qsb(const double & s);
@@ -104,7 +104,7 @@ namespace eos
          * @param use_nlo       true, if NLO contributions shall be used
          * @param wc            the Wilson coefficients
          *
-         * For the calculation, cf. [GP:2004], Eq. (56)
+         * For the calculation, cf. [GP:2004A], Eq. (56)
          */
         static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
                 const WilsonCoefficients<BToS> & wc);
@@ -114,7 +114,7 @@ namespace eos
          *
          * @param wc            the Wilson coefficients
          *
-         * For the calculation, cf. [BFS:2001], below eq. (26)
+         * For the calculation, cf. [BFS:2001A], below eq. (26)
          */
         static complex<double> c8eff(const WilsonCoefficients<BToS> & wc);
 
@@ -131,7 +131,7 @@ namespace eos
          * @param lambda_hat_u          certain combination of CKM matrix elements: V_ub V_us^* / (V_tb V_ts^*)
          * @param wc                    the Wilson coefficients
          *
-         * For the calculation, cf. [GP:2004], Eq. (55), p. 10
+         * For the calculation, cf. [GP:2004A], Eq. (55), p. 10
          */
         static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
                 bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,

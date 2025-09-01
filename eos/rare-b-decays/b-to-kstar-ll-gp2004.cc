@@ -69,14 +69,14 @@ namespace eos
         { "simple-sl"_ok,       { "true"s, "false"s },  "false"s }
     };
 
-    // cf. [GP:2004], Eq. (56)
+    // cf. [GP:2004A], Eq. (56)
     complex<double>
     BToKstarDileptonAmplitudes<tag::GP2004>::c7eff(const WilsonCoefficients<BToS> & wc, const double & s) const
     {
         return ShortDistanceLowRecoil::c7eff(s, mu(), model->alpha_s(mu), m_b_PS(), use_nlo, wc);
     }
 
-    // cf. [GP:2004], Eq. (55), p. 10
+    // cf. [GP:2004A], Eq. (55), p. 10
     complex<double>
     BToKstarDileptonAmplitudes<tag::GP2004>::c9eff(const WilsonCoefficients<BToS> & wc, const double & s) const
     {
@@ -100,7 +100,7 @@ namespace eos
     double
     BToKstarDileptonAmplitudes<tag::GP2004>::kappa() const
     {
-        // cf. [BHvD:2010], Eq. (3.8), p. 8
+        // cf. [BHvD:2010A], Eq. (3.8), p. 8
         // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa up to NLO only.
         return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
     }
@@ -112,13 +112,13 @@ namespace eos
 
         return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B
                 * lambda_t * lambda_t * s_hat(s) * beta_l(s)
-                * std::sqrt(eos::lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP:2008], Eq. (C.6), p. 21
+                * std::sqrt(eos::lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP:2008A], Eq. (C.6), p. 21
     }
 
     BToKstarDilepton::Amplitudes
     BToKstarDileptonAmplitudes<tag::GP2004>::amplitudes(const double & s) const
     {
-        // compute J_i, [BHvD:2010], p. 26, Eqs. (A1)-(A11)
+        // compute J_i, [BHvD:2010A], p. 26, Eqs. (A1)-(A11)
         // TODO: possibly optimize the calculation
         BToKstarDilepton::Amplitudes result;
 
@@ -158,7 +158,7 @@ namespace eos
 
         double formfactor_long1 = (1.0 - m_Kstarhat2 - s_hat) * power_of<2>(1.0 + m_Kstarhat) * a_1;
         double formfactor_long2 = -eos::lambda(1.0, m_Kstarhat2, s_hat) * a_2;
-        // cf. [BHvD:2010], Eq. (3.15), p. 10
+        // cf. [BHvD:2010A], Eq. (3.15), p. 10
         result.a_long_right = norm_s * prefactor_long * (wilson_long1_right * formfactor_long1 + wilson_long2_right * formfactor_long2);
         result.a_long_left  = norm_s * prefactor_long * (wilson_long1_left  * formfactor_long1 + wilson_long2_left  * formfactor_long2);
 
@@ -168,7 +168,7 @@ namespace eos
         complex<double> wilson_perp_left  = c910_plus_left  + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
 
         double formfactor_perp = std::sqrt(2.0 * eos::lambda(1.0, m_Kstarhat2, s_hat)) / (1.0 + m_Kstarhat) * form_factors->v(s);
-        // cf. [BHvD:2010], Eq. (3.13), p. 10
+        // cf. [BHvD:2010A], Eq. (3.13), p. 10
         result.a_perp_right = norm_s * prefactor_perp * wilson_perp_right * formfactor_perp;
         result.a_perp_left  = norm_s * prefactor_perp * wilson_perp_left  * formfactor_perp;
 
@@ -177,7 +177,7 @@ namespace eos
         complex<double> wilson_par_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
         complex<double> wilson_par_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
         double formfactor_par = std::sqrt(2) * (1.0 + m_Kstarhat) * a_1;
-        // cf. [BHvD:2010], Eq. (3.14), p. 10
+        // cf. [BHvD:2010A], Eq. (3.14), p. 10
         result.a_para_right = norm_s * prefactor_par * wilson_par_right * formfactor_par;
         result.a_para_left  = norm_s * prefactor_par * wilson_par_left  * formfactor_par;
 
@@ -189,7 +189,7 @@ namespace eos
         // scalar amplitude
         result.a_scal = -2.0 * norm_s * sqrt_lam * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s()) * form_factors->a_0(s);
 
-        // tensor amplitudes [BHvD:2012]  eqs. (B18 - B20)
+        // tensor amplitudes [BHvD:2012A]  eqs. (B18 - B20)
         // no form factor relations used
         const double ff_T1  = form_factors->t_1(s);
         const double ff_T2  = form_factors->t_2(s);
@@ -199,7 +199,7 @@ namespace eos
         const double kin_tensor_2 = 2.0 * norm_s * sqrt_lam / sqrt_s * ff_T1;
         const double kin_tensor_3 = 2.0 * norm_s * m2_diff / sqrt_s * ff_T2;
 
-        // correct the sign of C_T5 from [BHvD:2012] (arXiv v4) because of inconsistent use of
+        // correct the sign of C_T5 from [BHvD:2012A] (arXiv v4) because of inconsistent use of
         // gamma5 <-> Levi-Civita
         static const double sign = -1;
 

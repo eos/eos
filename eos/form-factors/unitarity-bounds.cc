@@ -167,7 +167,7 @@ namespace eos
         ~Implementation() = default;
 
         /*
-         * HQET parameters following [BLPR:2017]
+         * HQET parameters following [BLPR:2017A]
          */
         inline double _mu() const { return 2.31; } // mu^2 = m_b * m_c
         inline double _alpha_s() const { return 0.26; }
@@ -2946,8 +2946,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL:1997] quark condensate
-            cond_G2(0.02),     // (p["B->D^*::<alS/pi G^2>@BGL1997"], u), // [BGL:1997] gluon condensate
+            cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL:1997A] quark condensate
+            cond_G2(0.02),     // (p["B->D^*::<alS/pi G^2>@BGL1997"], u), // [BGL:1997A] gluon condensate
             mu(4.2),                                       // TODO remove hard-coded numerical value
             model(Model::make("SM", p, o))
         {
@@ -2998,7 +2998,7 @@ namespace eos
 
         double chi_L(const double & u) const
         {
-            // [BGL:1997] eq.(4.1) + (4.3) + (4.6, 4.9)
+            // [BGL:1997A] eq.(4.1) + (4.3) + (4.6, 4.9)
             // limit for u -> 1 in eq.(4.11)
             // limit for u -> 0 in eq.(4.10)
             const double aS = model->alpha_s(mu) / M_PI;

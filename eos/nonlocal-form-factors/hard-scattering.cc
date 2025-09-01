@@ -304,7 +304,7 @@ namespace eos
     HardScattering::j6(const double & s, const double & u, const double & m_q, const double & m_B,
             const double & mu, const double & a_1, const double & a_2)
     {
-        // cf. [BFS:2004], eq. (52): this integral does not involve the lcda
+        // cf. [BFS:2004A], eq. (52): this integral does not involve the lcda
         // itself, but its first inverse partial moment, as the weight function.
         const double weight = power_of<2>(u) * (3.0 + a_1 * (-9.0 + 12.0 * u) +
                 a_2 * (18.0 - 60.0 * u + 45.0 * power_of<2>(u)));

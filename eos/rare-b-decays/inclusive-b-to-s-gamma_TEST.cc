@@ -43,7 +43,7 @@ class BToXsGammaNLOTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                // Taken from [CMM:1996], p. 6, Eq. (28)
+                // Taken from [CMM:1996A], p. 6, Eq. (28)
                 p["b->s::c1"] = -0.480;
                 p["b->s::c2"] = +1.023;
                 p["b->s::c3"] = -0.0045;
@@ -70,7 +70,7 @@ class BToXsGammaNLOTest :
                 p["CKM::arg(V_cs)"]     = -3.0251458252370057e-05;
                 p["CKM::abs(V_ts)"]     =  0.04012054599802285;
                 p["CKM::arg(V_ts)"]     = -3.123635053579304;
-                // QED coupling as used in [CMM:1996], Sec 5.(iii), p. 11
+                // QED coupling as used in [CMM:1996A], Sec 5.(iii), p. 11
                 p["QED::alpha_e(m_b)"] = 1/130.3;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.19;

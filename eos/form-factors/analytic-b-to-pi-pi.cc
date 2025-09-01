@@ -312,7 +312,7 @@ namespace eos
 
         /*
          * Using the traces s1 through s8, any of the form factors can be cast
-         * in the form given in eq. (3.13), [BFvD:2016].
+         * in the form given in eq. (3.13), [BFvD:2014A].
          */
         complex<double> ff_lo_tw2(const Traces & tr, const double & q2, const double & k2, const double & z) const
         {
@@ -389,7 +389,7 @@ namespace eos
 
         /*
          * Using the traces s1 through s8, any of the form factors can be cast
-         * in the form given in eq. (3.20) and (3.21), [BFvD:2016].
+         * in the form given in eq. (3.20) and (3.21), [BFvD:2014A].
          */
         complex<double> ff_lo_tw3(const Traces & tr, const double & q2, const double & k2, const double & z) const
         {
@@ -419,54 +419,54 @@ namespace eos
 
             const double m_B2 = m_B() * m_B();
 
-            // Integral over f_1, cf. [BFvD:2016], eq. (3.11)
+            // Integral over f_1, cf. [BFvD:2014A], eq. (3.11)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
-            // Integral over f_2, cf. [BFvD:2016], eq. (3.11)
+            // Integral over f_2, cf. [BFvD:2014A], eq. (3.11)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
             }
 
-            // Integral over f_{sigma,1}, cf. [BFvD:2016], eq. (3.21)
+            // Integral over f_{sigma,1}, cf. [BFvD:2014A], eq. (3.21)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
-            // Integral over f_{sigma,2}, cf. [BFvD:2016], eq. (3.21)
+            // Integral over f_{sigma,2}, cf. [BFvD:2014A], eq. (3.21)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
-            // Integral over f_{sigma,finite}, cf. [BFvD:2016], eq. (3.21)
+            // Integral over f_{sigma,finite}, cf. [BFvD:2014A], eq. (3.21)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
             return results;

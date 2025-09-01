@@ -248,7 +248,7 @@ namespace eos
             const double m_B = this->m_B();
             const double m_P1 = this->m_P1();
             const double m_P2 = this->m_P2();
-            // transversity amplitudes A's. cf. [DSD:2014], p.17
+            // transversity amplitudes A's. cf. [DDS:2014A], p.17
             if ((q2 >= power_of<2>(m_l)) && (q2 <= power_of<2>(m_B - m_P1 - m_P2)) && (k2 >= power_of<2>(m_P1 + m_P2)) && (k2 <= power_of<2>(m_B - std::sqrt(q2)))) {
                 double lamq3 = (q2 - power_of<2>(m_B + std::sqrt(k2))) * (q2 - power_of<2>(m_B - std::sqrt(k2)));
                 double lams12 = (k2 - power_of<2>(m_P1 + m_P2)) * (k2 - power_of<2>(m_P1 - m_P2));

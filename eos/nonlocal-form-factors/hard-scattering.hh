@@ -29,7 +29,7 @@ namespace eos
     struct HardScattering
     {
         /*!
-         * cf. [BFS:2001], Eqs. (30)-(32), p. 8
+         * cf. [BFS:2001A], Eqs. (30)-(32), p. 8
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -40,7 +40,7 @@ namespace eos
         /*!
          * Two-particle light-cone distribution amplitude up to 2nd order
          *         in Gegenbauer expansion of light mesons
-         * cf. [BFS:2001], Eq. (48)
+         * cf. [BFS:2001A], Eq. (48)
          * @param u Relative contribution of the quark (versus ubar = 1-u for the
                  antiquark) to the light meson's energy.
          * @param a_1 First Gegenbauer coefficient
@@ -49,7 +49,7 @@ namespace eos
         static double LCDA_2pt(const double & u, const double & a_1, const double & a_2);
 
         /*!
-         * t_perp for q^2 = 0; cf. [BFS:2001], Eq. (33)
+         * t_perp for q^2 = 0; cf. [BFS:2001A], Eq. (33)
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
          * @param m_B Mass of the B meson
@@ -57,7 +57,7 @@ namespace eos
         static complex<double> t_perp_s0(const double & u, const double & m_q, const double & m_B);
 
         /*!
-         * t_perp; cf. [BFS:2001], Eq. (27)
+         * t_perp; cf. [BFS:2001A], Eq. (27)
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -68,7 +68,7 @@ namespace eos
                                       const double & m_B, const double & m_M);
 
         /*!
-         * t_par; cf. [BFS:2001], Eq. (28)
+         * t_par; cf. [BFS:2001A], Eq. (28)
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -79,7 +79,7 @@ namespace eos
                                      const double & m_B, const double & m_M);
 
         /*!
-         * [BFS:2001], Eq. (26), term \propto C_8_eff
+         * [BFS:2001A], Eq. (26), term \propto C_8_eff
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_B Mass of the B meson
@@ -101,7 +101,7 @@ namespace eos
                 const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (25)
+         * [BFS:2001A], Eq. (25)
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -113,7 +113,7 @@ namespace eos
                 const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (25)
+         * [BFS:2001A], Eq. (25)
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_B Mass of the B meson
@@ -124,7 +124,7 @@ namespace eos
                 const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (25)
+         * [BFS:2001A], Eq. (25)
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -136,7 +136,7 @@ namespace eos
                 const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (25)
+         * [BFS:2001A], Eq. (25)
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_B Mass of the B meson
@@ -147,7 +147,7 @@ namespace eos
                 const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (26), term \propto C1 - C6
+         * [BFS:2001A], Eq. (26), term \propto C1 - C6
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -160,7 +160,7 @@ namespace eos
                 const double & mu, const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (23), term \propto C_8_eff
+         * [BFS:2001A], Eq. (23), term \propto C_8_eff
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -173,7 +173,7 @@ namespace eos
                 const double & mu, const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2001], Eq. (23), term \propto C_8_eff
+         * [BFS:2001A], Eq. (23), term \propto C_8_eff
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_q Mass of the internal loop quark
@@ -186,7 +186,7 @@ namespace eos
                 const double & mu, const double & a_1, const double & a_2);
 
         /*!
-         * [BFS:2004], Eq. (52), term \propto C_8_eff
+         * [BFS:2004A], Eq. (52), term \propto C_8_eff
          * @param s Dilepton invariant mass
          * @param u Relative contribution of the quark (versus ubar = 1-u for the antiquark) to the light meson's energy.
          * @param m_B Mass of the B meson
