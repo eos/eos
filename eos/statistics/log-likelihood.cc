@@ -219,7 +219,7 @@ namespace eos
             }
         };
 
-        // For more details on the LogGamma distribution, see [C:2004].
+        // For more details on the LogGamma distribution, see [C:2010A].
         struct LogGammaBlock :
             public LogLikelihoodBlock
         {

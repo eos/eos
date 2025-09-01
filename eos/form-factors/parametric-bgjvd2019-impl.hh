@@ -211,7 +211,7 @@ namespace eos
     {
         const double r = _m_P / _m_B;
 
-        // cf. [FKKM:2008], eq. (22)
+        // cf. [FKKM:2008A], eq. (22)
         return 1.0 / (2.0 * sqrt(r)) * ((1.0 + r) * _h_p(q2) - (1.0 - r) * _h_m(q2));
     }
 
@@ -221,7 +221,7 @@ namespace eos
     {
         const double r = _m_P / _m_B;
 
-        // cf. [FKKM:2008], eq. (22)
+        // cf. [FKKM:2008A], eq. (22)
         return 1.0 / (2.0 * sqrt(r)) * ((1.0 + r) * _h_m(q2) - (1.0 - r) * _h_p(q2));
     }
 
@@ -239,7 +239,7 @@ namespace eos
     {
         const double r = _m_P / _m_B;
 
-        // cf. [BJvD:2019], eq. (A7)
+        // cf. [BJvD:2019A], eq. (A7)
         return (1.0 + r) / (2.0 * sqrt(r)) * _h_T(q2);
     }
 
@@ -696,7 +696,7 @@ namespace eos
     {
         const double r = _m_V / _m_B;
 
-        // cf. [FKKM:2008], eq. (22)
+        // cf. [FKKM:2008A], eq. (22)
         return (1.0 + r) / 2.0 / sqrt(r) * _h_v(q2);
     }
 
@@ -708,7 +708,7 @@ namespace eos
         const double w = _w(q2);
 
         return 1.0 / (2.0 * sqrt(r)) * ((1.0 + w) * _h_a1(q2) + (r * w - 1.0) * _h_a2(q2) + (r - w) * _h_a3(q2));
-        // cf. [FKKM:2008], eq. (22)
+        // cf. [FKKM:2008A], eq. (22)
         //const double a_30 = (1.0 + r * r - 2.0 * r * w) / (4.0 * r * sqrt(r)) * (r * _h_a2(q2) - _h_a3(q2));
         //return a_3(q2) - a_30;
     }
@@ -720,7 +720,7 @@ namespace eos
         const double r = _m_V / _m_B;
         const double w = _w(q2);
 
-        // cf. [FKKM:2008], eq. (22)
+        // cf. [FKKM:2008A], eq. (22)
         return sqrt(r) * (1.0 + w) / (1.0 + r) * _h_a1(q2);
     }
 
@@ -730,7 +730,7 @@ namespace eos
     {
         const double r = _m_V / _m_B;
 
-        // cf. [FKKM:2008], eq. (22)
+        // cf. [FKKM:2008A], eq. (22)
         return (1.0 + r) / (2.0 * sqrt(r)) * (r * _h_a2(q2) + _h_a3(q2));
     }
 
@@ -740,7 +740,7 @@ namespace eos
     {
         const double r = _m_V / _m_B;
 
-        // cf. [FKKM:2008], below eq. (6)
+        // cf. [FKKM:2008A], below eq. (6)
         return ((1.0 + r) * a_1(q2) - (1.0 - r) * a_2(q2)) / (2.0 * r);
     }
 

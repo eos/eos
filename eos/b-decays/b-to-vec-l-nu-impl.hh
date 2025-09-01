@@ -58,7 +58,7 @@ namespace eos
                 friend class BToVectorLeptonNeutrino;
                 friend class Implementation<BToVectorLeptonNeutrino>;
 
-                // angular observables V's. cf. from [DSD:2014], p. 16, redifined V's in order to include NF
+                // angular observables V's. cf. from [DDS:2014A], p. 16, redifined V's in order to include NF
                 AngularObservables(const Amplitudes & a)
                 {
                     // charged lepton velocity in the dilepton rest frame

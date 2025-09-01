@@ -28,7 +28,7 @@
 
 namespace eos
 {
-    // cf. [AAGW:2002], Eq. (30), p. 12
+    // cf. [AAGW:2001A], Eq. (30), p. 12
     complex<double>
     Bremsstrahlung::G_m1(const double & t)
     {
@@ -51,7 +51,7 @@ namespace eos
         return result;
     }
 
-    // cf. [AAGW:2002], Eq. (31), p. 12
+    // cf. [AAGW:2001A], Eq. (31), p. 12
     complex<double>
     Bremsstrahlung::G_0(const double & t)
     {
@@ -75,7 +75,7 @@ namespace eos
         return result;
     }
 
-    // cf. [AAGW:2002], Eq. (28), p. 11
+    // cf. [AAGW:2001A], Eq. (28), p. 11
     complex<double>
     Bremsstrahlung::Deltai_23(const double & s_hat, const double & w, const double & z)
     {
@@ -84,14 +84,14 @@ namespace eos
                 - s_hat / 2.0 * (Bremsstrahlung::G_0(s_hat / z) - Bremsstrahlung::G_0(w / z)));
     }
 
-    // cf. [AAGW:2002], Eq. (29), p. 11
+    // cf. [AAGW:2001A], Eq. (29), p. 11
     complex<double>
     Bremsstrahlung::Deltai_27(const double & s_hat, const double & w, const double & z)
     {
         return 2.0 * (Bremsstrahlung::G_0(s_hat / z) - Bremsstrahlung::G_0(w / z));
     }
 
-    // cf. [AAGW:2002], Eq. (23), p. 10
+    // cf. [AAGW:2001A], Eq. (23), p. 10
     complex<double>
     Bremsstrahlung::tau_22(const double & s_hat, const double & w, const double & z)
     {
@@ -103,7 +103,7 @@ namespace eos
                 + 4.0 * s_hat * (w * (1.0 - w) - s_hat * (2.0 + w)) * real(Deltai_23(s_hat, w, z) * conj(Deltai_27(s_hat, w, z))));
     }
 
-    // cf. [AAGW:2002], Eq. (24), p. 10
+    // cf. [AAGW:2001A], Eq. (24), p. 10
     complex<double>
     Bremsstrahlung::tau_27(const double & s_hat, const double & w, const double & z)
     {
@@ -114,7 +114,7 @@ namespace eos
                 - (4.0 * s_hat2 * (1.0 - w) + s_hat * w * (4.0 + s_hat - w) * log(w)) * Deltai_27(s_hat, w, z));
     }
 
-    // cf. [AAGW:2002], Eq. (25), p. 10
+    // cf. [AAGW:2001A], Eq. (25), p. 10
     complex<double>
     Bremsstrahlung::tau_28(const double & s_hat, const double & w, const double & z)
     {
@@ -128,7 +128,7 @@ namespace eos
                     - 2.0 * (1.0 + s_hat - w) * Deltai_27(s_hat, w, z)) * log(x));
     }
 
-    // cf. [AAGW:2002], Eq. (24), p. 10
+    // cf. [AAGW:2001A], Eq. (24), p. 10
     complex<double>
     Bremsstrahlung::tau_29(const double & s_hat, const double & w, const double & z)
     {
@@ -137,7 +137,7 @@ namespace eos
                 - (2.0 * s_hat * (1.0 - w) * (s_hat + w) + w * (3.0 * s_hat + w) * log(w)) * Deltai_27(s_hat, w, z));
     }
 
-    // cf. [AAGW:2002], Eq. (15), p. 8
+    // cf. [AAGW:2001A], Eq. (15), p. 8
     double
     Bremsstrahlung::tau_78(const double & s_hat)
     {
@@ -155,7 +155,7 @@ namespace eos
                 - 12.0 * ((1.0 - s_hat) * sqrt_s_hat * sqrt_4_m_s_hat - 2.0 * atan2) * (atan3 - atan2));
     }
 
-    // cf. [AAGW:2002], Eq. (16), p. 8
+    // cf. [AAGW:2001A], Eq. (16), p. 8
     double
     Bremsstrahlung::tau_88(const double & s_hat)
     {
@@ -175,7 +175,7 @@ namespace eos
                     * (atan1 - atan2));
     }
 
-    // cf. [AAGW:2002], Eq. (17), p. 8
+    // cf. [AAGW:2001A], Eq. (17), p. 8
     double
     Bremsstrahlung::tau_89(const double & s_hat)
     {

@@ -87,7 +87,7 @@ namespace eos
             {
                 const WilsonCoefficients<ChargedCurrent> wc = model->wet_uslnu(LeptonFlavor::tauon, opt_cp_conjugate.value());
 
-                // cf. [DBG2013], eq. (5), p. 5
+                // cf. [DBG:2013A], eq. (5), p. 5
                 const complex<double> ga = wc.cvl() - wc.cvr();
                 const complex<double> gp = wc.csl() - wc.csr();
 

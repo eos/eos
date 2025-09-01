@@ -286,7 +286,7 @@ namespace eos
                    );
         }
 
-        // normalized to |V_cQ = 1|, obtained using cf. [DSD:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
+        // normalized to |V_cQ = 1|, obtained using cf. [DDS:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
         double normalized_differential_decay_width(const double & s) const
         {
             d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
@@ -330,7 +330,7 @@ namespace eos
                    );
         }
 
-        // obtained using cf. [DDS:2014A], eq. (12) and [BHP:2007] eq.(1.2)
+        // obtained using cf. [DDS:2014A], eq. (12) and [BHP:2007A] eq.(1.2)
         double numerator_differential_flat_term(const double & s) const
         {
             d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
@@ -342,7 +342,7 @@ namespace eos
                    );
         }
 
-        // obtained using cf. [STTW:2013], eq. (49a - 49b)
+        // obtained using cf. [STTW:2013A], eq. (49a - 49b)
         double numerator_differential_lepton_polarization(const double & s) const
         {
             d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));

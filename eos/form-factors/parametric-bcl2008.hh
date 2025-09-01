@@ -27,12 +27,12 @@
 
 namespace eos
 {
-    /* Form Factors according to [BCL:2008] */
+    /* Form Factors according to [BCL:2008A] */
     template <typename Process_, unsigned K_> class BCL2008FormFactors;
 
     /*
      * P -> P Form Factors in the simplified series expansion according to
-     * [BCL:2008].
+     * [BCL:2008A].
      */
     template <typename Process_, unsigned K_, bool with_tensor_> class BCL2008FormFactorBase;
 
@@ -41,7 +41,7 @@ namespace eos
     {
         private:
             /*
-             * Fit parametrisation for P -> P according to [BCL:2008], eq. (11)
+             * Fit parametrisation for P -> P according to [BCL:2008A], eq. (11)
              * with K = 3. Note that we factor out the form factor at q^2 = 0
              * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
              * coefficient b_K is fixed by eq. (14).
@@ -69,7 +69,7 @@ namespace eos
     {
         private:
             /*
-             * Fit parametrisation for P -> P according to [BCL:2008], eq. (11)
+             * Fit parametrisation for P -> P according to [BCL:2008A], eq. (11)
              * with K = 4. Note that we factor out the form factor at q^2 = 0
              * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
              * coefficient b_K is fixed by eq. (14).
@@ -97,7 +97,7 @@ namespace eos
     {
         private:
             /*
-             * Fit parametrisation for P -> P according to [BCL:2008], eq. (11)
+             * Fit parametrisation for P -> P according to [BCL:2008A], eq. (11)
              * with K = 5. Note that we factor out the form factor at q^2 = 0
              * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
              * coefficient b_K is fixed by eq. (14).
@@ -125,7 +125,7 @@ namespace eos
     {
         private:
             /*
-             * Fit parametrisation for P -> P according to [BCL:2008], eq. (11)
+             * Fit parametrisation for P -> P according to [BCL:2008A], eq. (11)
              * with K = 3. Note that we factor out the form factor at q^2 = 0
              * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
              * coefficient b_K is fixed by eq. (14).
@@ -145,7 +145,7 @@ namespace eos
     {
         private:
             /*
-             * Fit parametrisation for P -> P according to [BCL:2008], eq. (11)
+             * Fit parametrisation for P -> P according to [BCL:2008A], eq. (11)
              * with K = 4. Note that we factor out the form factor at q^2 = 0
              * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
              * coefficient b_K is fixed by eq. (14).
@@ -165,7 +165,7 @@ namespace eos
     {
         private:
             /*
-             * Fit parametrisation for P -> P according to [BCL:2008], eq. (11)
+             * Fit parametrisation for P -> P according to [BCL:2008A], eq. (11)
              * with K = 5. Note that we factor out the form factor at q^2 = 0
              * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
              * coefficient b_K is fixed by eq. (14).

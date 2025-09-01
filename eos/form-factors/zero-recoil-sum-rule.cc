@@ -119,7 +119,7 @@ namespace eos
 
         double xiV() const
         {
-            // cf. [U:2003], eq. (27)
+            // cf. [U:2003A], eq. (27)
 
             const double mb = model->m_b_kin(mu), mb2 = mb * mb;
             const double mc = model->m_c_kin(mu), mc2 = mc * mc;
@@ -179,7 +179,7 @@ namespace eos
             const double F12P  = ff_2625->f_perp12_v(q2max);
             const double F32P  = ff_2625->f_perp32_v(q2max);
 
-            // note the normalization N_A = 1.0 in [MvD:2015].
+            // note the normalization N_A = 1.0 in [MvD:2015A].
             const double f_inel_2595 =  1.0 / 3.0 * (power_of<2>(f0) + r * power_of<2>(fT) + 2.0 * power_of<2>(fP));
             const double f_inel_2625 =  2.0 / 3.0 * (power_of<2>(F120) + r * power_of<2>(F12T) + 2.0 * power_of<2>(F12P) + 6.0 * power_of<2>(F32P));
 
@@ -198,7 +198,7 @@ namespace eos
             const double G12P  = ff_2625->f_perp12_a(q2max);
             const double G32P  = ff_2625->f_perp32_a(q2max);
 
-            // note the normalization N_A = 3.0 in [MvD:2015].
+            // note the normalization N_A = 3.0 in [MvD:2015A].
             const double g_inel_2595 = 1.0 / 9.0 * (power_of<2>(g0) + r * power_of<2>(gT) + 2.0 * power_of<2>(gP));
             const double g_inel_2625 = 2.0 / 9.0 * (power_of<2>(G120) + r * power_of<2>(G12T) + 2.0 * power_of<2>(G12P) + 6.0 * power_of<2>(G32P));
 

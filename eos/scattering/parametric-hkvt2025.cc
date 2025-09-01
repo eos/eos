@@ -110,7 +110,7 @@ namespace eos
 
     }
 
-    // D0 wave phase-shift from [GMKPREYD:2011A]
+    // D0 wave phase-shift from [GMKPRDEY:2011A]
     double HKVT2025ScatteringAmplitudes::_phase_D0(const double & s) const
     {
         double mpi2 = _mPi * _mPi;

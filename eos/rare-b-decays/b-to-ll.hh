@@ -31,7 +31,7 @@
 namespace eos
 {
     /*!
-     * Calculation according to [BEKU:2002] and [F:2012].
+     * Calculation according to [BEKU:2002A] and [F:2012A].
      */
     class BToDilepton :
         public ParameterUser,

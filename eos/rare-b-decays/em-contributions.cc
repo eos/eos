@@ -26,7 +26,7 @@
 
 namespace eos
 {
-    // cf. [HLMW:2005], Eq. (94), p. 23
+    // cf. [HLMW:2005A], Eq. (94), p. 23
     double
     EMContributions::omegaem_99(const double & s_hat, const double & log_m_l_hat)
     {
@@ -48,7 +48,7 @@ namespace eos
             - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat)) * ln * ln;
     }
 
-    // cf. [HLMW:2005], Eq. (100), p. 24
+    // cf. [HLMW:2005A], Eq. (100), p. 24
     double
     EMContributions::omegaem_1010(const double & s_hat, const double & log_m_l_hat)
     {
@@ -62,7 +62,7 @@ namespace eos
                 );
     }
 
-    // cf. [HLMW:2005], Eq. (101), p. 25
+    // cf. [HLMW:2005A], Eq. (101), p. 25
     double
     EMContributions::omegaem_77(const double & s_hat, const double & log_m_l_hat)
     {
@@ -76,7 +76,7 @@ namespace eos
                 );
     }
 
-    // cf. [HLMW:2005], Eq. (102), p. 25
+    // cf. [HLMW:2005A], Eq. (102), p. 25
     double
     EMContributions::omegaem_79(const double & s_hat, const double & log_m_l_hat)
     {
@@ -90,7 +90,7 @@ namespace eos
                 );
     }
 
-    // cf. [HLMW:2005], Eq. (103), p. 25
+    // cf. [HLMW:2005A], Eq. (103), p. 25
     complex<double>
     EMContributions::omegaem_29(const double & s_hat, const double & log_m_l_hat, const double & mu)
     {
@@ -102,7 +102,7 @@ namespace eos
             + 16.0 / 9.0 * omegaem_1010(s_hat, log_m_l_hat) * log(mu / 5.0);
     }
 
-    // cf. [HLMW:2005], Eq. (104), p. 25
+    // cf. [HLMW:2005A], Eq. (104), p. 25
     double
     EMContributions::omegaem_22(const double & s_hat, const double & log_m_l_hat, const double & mu)
     {
@@ -117,7 +117,7 @@ namespace eos
             + 64.0 / 81.0 * omegaem_1010(s_hat, log_m_l_hat) * power_of<2>(log(mu / 5.0));
     }
 
-    // cf. [HLMW:2005], Eq. (105), p. 25
+    // cf. [HLMW:2005A], Eq. (105), p. 25
     complex<double>
     EMContributions::omegaem_27(const double & s_hat, const double & log_m_l_hat, const double & mu)
     {

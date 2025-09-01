@@ -37,7 +37,7 @@
 
 namespace eos
 {
-    /* HQET Form Factors, based on [BLPR:2017] and [JS:2018] */
+    /* HQET Form Factors, based on [BLPR:2017A] and [JS:2018A] */
     template <typename Process_, typename Transition_> class HQETFormFactors;
 
     class HQETFormFactorBase :
@@ -116,7 +116,7 @@ namespace eos
 
         protected:
             /*
-             * HQET parameters following [BLPR:2017]
+             * HQET parameters following [BLPR:2017A]
              */
             inline double _mu() const { return 2.31; } // mu^2 = m_b * m_c
             inline double _alpha_s() const { return 0.26; }

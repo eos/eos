@@ -41,10 +41,10 @@ namespace eos
          * dominated operators.
          *
          * For the two-particle decomposition, we use the parametrization as
-         * defined in [KMO:2006], eq. (17), p. 7.
+         * defined in [KMO:2006A], eq. (17), p. 7.
          *
          * For the three-particle decomposition, we use the parametrization
-         * as defined in [KMO:2006], eq. (28), p. 10.
+         * as defined in [KMO:2006A], eq. (28), p. 10.
          */
         class Exponential :
             public HeavyMesonLCDAs
@@ -141,7 +141,7 @@ namespace eos
                 /*!
                  * Auxiliary functions for the three-particle LCDAs
                  *
-                 * See [KMO:2006], below eq. (72), p. 28 for their definition.
+                 * See [KMO:2006A], below eq. (72), p. 28 for their definition.
                  */
                 virtual double Xbar_A(const double &omega, const double &xi) const final override;
                 virtual double Ybar_A(const double &omega, const double &xi) const final override;

@@ -218,7 +218,7 @@ namespace eos
         };
 
         /*
-         * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020].
+         * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020A].
          */
         template <typename Process_>
         class GvDV2020 :
@@ -863,7 +863,7 @@ namespace eos
 
 
         /*
-         * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020],
+         * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020A],
          * but using an ad hoc Lagrange polynomial.
          */
         template <typename Process_>

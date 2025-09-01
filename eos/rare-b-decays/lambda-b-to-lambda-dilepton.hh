@@ -30,7 +30,7 @@
 namespace eos
 {
     /*
-     * Decay: Lambda_b -> Lambda l^+ l^- at large recoil, cf. [BFvD:2014]
+     * Decay: Lambda_b -> Lambda l^+ l^- at large recoil, cf. [BFvD:2014A]
      */
     template <> class LambdaBToLambdaDilepton<LargeRecoil> :
         public ParameterUser,
@@ -100,7 +100,7 @@ namespace eos
     };
 
     /*
-     * Decay: Lambda_b -> Lambda l^+ l^- at low recoil, cf. [BFvD:2014]
+     * Decay: Lambda_b -> Lambda l^+ l^- at low recoil, cf. [BFvD:2014A]
      */
     template <> class LambdaBToLambdaDilepton<LowRecoil> :
         public ParameterUser,

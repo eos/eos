@@ -163,7 +163,7 @@ namespace eos
                 /*!
                 * Auxiliary functions for the three-particle LCDAs
                 *
-                * See [KMO:2006], below eq. (72), p. 28 for their definition.
+                * See [KMO:2006A], below eq. (72), p. 28 for their definition.
                 */
                 virtual double Xbar_A(const double & omega, const double & xi) const final override;
                 virtual double Ybar_A(const double & omega, const double & xi) const final override;

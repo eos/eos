@@ -100,8 +100,8 @@ namespace eos
 
         inline std::array<double, 12> angular_coefficients_array(const BToKstarDilepton::Amplitudes & A, const double & s) const
         {
-            // cf. [BHvD:2010], p. 26, eqs. (A1)-(A11)
-            // cf. [BHvD:2012], app B, eqs. (B1)-(B12)
+            // cf. [BHvD:2010A], p. 26, eqs. (A1)-(A11)
+            // cf. [BHvD:2012A], app B, eqs. (B1)-(B12)
             std::array<double, 12> result;
 
             double z = 4.0 * power_of<2>(m_l()) / s;
@@ -226,7 +226,7 @@ namespace eos
 
         inline double decay_width(const BToKstarDilepton::AngularCoefficients & a_c)
         {
-            // cf. [BHvD:2010], p. 6, eq. (2.7)
+            // cf. [BHvD:2010A], p. 6, eq. (2.7)
             return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
@@ -305,7 +305,7 @@ namespace eos
     double
     BToKstarDilepton::decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
     {
-        // compute d^4 Gamma, cf. [BHvD:2010], p. 5, Eq. (2.6)
+        // compute d^4 Gamma, cf. [BHvD:2010A], p. 5, Eq. (2.6)
         // Cosine squared of the angles
         double c_theta_k_2 = c_theta_k * c_theta_k;
         double c_theta_l_2 = c_theta_l * c_theta_l;
@@ -347,7 +347,7 @@ namespace eos
     double
     BToKstarDilepton::decay_width_LHCb(const double & s, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const
     {
-        // compute d^4 Gamma, cf. [BHvD:2010], p. 5, Eq. (2.6)
+        // compute d^4 Gamma, cf. [BHvD:2010A], p. 5, Eq. (2.6)
         // using the angular convention of the LHCb experiment
 
         return BToKstarDilepton::decay_width(s, -c_theta_l_LHCb, +c_theta_k_LHCb, -phi_LHCb);
@@ -369,8 +369,8 @@ namespace eos
     double
     BToKstarDilepton::differential_forward_backward_asymmetry(const double & s) const
     {
-        // cf. [BHvD:2010], p. 6, eq. (2.8)
-        // cf. [BHvD:2012], eq. (A7)
+        // cf. [BHvD:2010A], p. 6, eq. (2.8)
+        // cf. [BHvD:2012A], eq. (A7)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return (a_c.j6s + 0.5 * a_c.j6c) / _imp->decay_width(a_c);
     }
@@ -378,7 +378,7 @@ namespace eos
     double
     BToKstarDilepton::differential_longitudinal_polarisation(const double & s) const
     {
-        // cf. [BHvD:2012], eq. (A9)
+        // cf. [BHvD:2012A], eq. (A9)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
     }
@@ -386,7 +386,7 @@ namespace eos
     double
     BToKstarDilepton::differential_transversal_polarisation(const double & s) const
     {
-        // cf. [BHvD:2012], eq. (A10)
+        // cf. [BHvD:2012A], eq. (A10)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / _imp->decay_width(a_c);
     }
@@ -394,7 +394,7 @@ namespace eos
     double
     BToKstarDilepton::differential_transverse_asymmetry_2(const double & s) const
     {
-        // cf. [BHvD:2010], p. 6, eq. (2.10)
+        // cf. [BHvD:2010A], p. 6, eq. (2.10)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return 0.5 * a_c.j3 / a_c.j2s;
     }
@@ -402,7 +402,7 @@ namespace eos
     double
     BToKstarDilepton::differential_transverse_asymmetry_3(const double & s) const
     {
-        // cf. [BHvD:2010], p. 6, eq. (2.11)
+        // cf. [BHvD:2010A], p. 6, eq. (2.11)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return std::sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
@@ -410,7 +410,7 @@ namespace eos
     double
     BToKstarDilepton::differential_transverse_asymmetry_4(const double & s) const
     {
-        // cf. [BHvD:2010], p. 6, eq. (2.12)
+        // cf. [BHvD:2010A], p. 6, eq. (2.12)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return std::sqrt((power_of<2>(_imp->beta_l(s) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)));
     }
@@ -420,7 +420,7 @@ namespace eos
     {
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
 
-        // cf. [BS:2011], eq. (34), p. 9 for the massless case
+        // cf. [BS:2011A], eq. (34), p. 9 for the massless case
         return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
             / 8.0 / a_c.j2s;
     }
@@ -428,7 +428,7 @@ namespace eos
     double
     BToKstarDilepton::differential_transverse_asymmetry_re(const double & s) const
     {
-        // cf. [BS:2011], eq. (38), p. 10
+        // cf. [BS:2011A], eq. (38), p. 10
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return 0.25 * _imp->beta_l(s) * a_c.j6s / a_c.j2s;
     }
@@ -436,7 +436,7 @@ namespace eos
     double
     BToKstarDilepton::differential_transverse_asymmetry_im(const double & s) const
     {
-        // cf. [BS:2011], eq. (30), p. 8
+        // cf. [BS:2011A], eq. (30), p. 8
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return 0.5 * a_c.j9 / a_c.j2s;
     }
@@ -444,7 +444,7 @@ namespace eos
     double
     BToKstarDilepton::differential_h_1(const double & s) const
     {
-        // cf. [BHvD:2010], p. 7, eq. (2.13)
+        // cf. [BHvD:2010A], p. 7, eq. (2.13)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
@@ -452,7 +452,7 @@ namespace eos
     double
     BToKstarDilepton::differential_h_2(const double & s) const
     {
-        // cf. [BHvD:2010], p. 7, eq. (2.14)
+        // cf. [BHvD:2010A], p. 7, eq. (2.14)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return _imp->beta_l(s) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
@@ -460,7 +460,7 @@ namespace eos
     double
     BToKstarDilepton::differential_h_3(const double & s) const
     {
-        // cf. [BHvD:2010], p. 7, eq. (2.15)
+        // cf. [BHvD:2010A], p. 7, eq. (2.15)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return _imp->beta_l(s) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }
@@ -587,12 +587,12 @@ namespace eos
     BToKstarDilepton::integrated_unnormalized_forward_backward_asymmetry(const IntermediateResult * ir) const
     {
         // Convert from asymmetry in the decay width to asymmetry in the BR
-        // cf. [PDG:2008] : Gamma = hbar / tau_B, pp. 5, 79
+        // cf. [PDG:2008A] : Gamma = hbar / tau_B, pp. 5, 79
         // TODO: remove fixed value of tau_B and use the one from parameter.cc
         static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
 
-        // cf. [BHvD:2010], eq. (2.8), p. 6
-        // cf. [BHvD:2012], eq. (A7)
+        // cf. [BHvD:2010A], eq. (2.8), p. 6
+        // cf. [BHvD:2012A], eq. (A7)
         AngularCoefficients a_c = ir->ac;
         return (a_c.j6s + 0.5 * a_c.j6c) / Gamma;
      }
@@ -600,8 +600,8 @@ namespace eos
     double
     BToKstarDilepton::integrated_forward_backward_asymmetry(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], eq. (2.8), p. 6
-        // cf. [BHvD:2012], eq. (A7)
+        // cf. [BHvD:2010A], eq. (2.8), p. 6
+        // cf. [BHvD:2012A], eq. (A7)
         AngularCoefficients a_c = ir->ac;
         return (a_c.j6s + 0.5 * a_c.j6c) / _imp->decay_width(a_c);
     }
@@ -609,7 +609,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_longitudinal_polarisation(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2012], eq. (A9)
+        // cf. [BHvD:2012A], eq. (A9)
         AngularCoefficients a_c = ir->ac;
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
     }
@@ -617,7 +617,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_transversal_polarisation(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2012], eq. (A10)
+        // cf. [BHvD:2012A], eq. (A10)
         AngularCoefficients a_c = ir->ac;
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / _imp->decay_width(a_c);
     }
@@ -625,7 +625,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_transverse_asymmetry_2(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], eq. (2.10), p. 6
+        // cf. [BHvD:2010A], eq. (2.10), p. 6
         AngularCoefficients a_c = ir->ac;
         return 0.5 * a_c.j3 / a_c.j2s;
     }
@@ -633,7 +633,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_transverse_asymmetry_3(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], eq. (2.11), p. 6
+        // cf. [BHvD:2010A], eq. (2.11), p. 6
         AngularCoefficients a_c = ir->ac;
         return sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
@@ -641,7 +641,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_transverse_asymmetry_4(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], eq. (2.12), p. 6
+        // cf. [BHvD:2010A], eq. (2.12), p. 6
         AngularCoefficients a_c = ir->ac;
         return sqrt((power_of<2>(a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)));
     }
@@ -650,7 +650,7 @@ namespace eos
     BToKstarDilepton::integrated_transverse_asymmetry_5(const IntermediateResult * ir) const
     {
         AngularCoefficients a_c = ir->ac;
-        // cf. [BS:2011], eq. (34), p. 9 for the massless case
+        // cf. [BS:2011A], eq. (34), p. 9 for the massless case
         return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
             / 8.0 / a_c.j2s;
     }
@@ -658,7 +658,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_transverse_asymmetry_re(const IntermediateResult * ir) const
     {
-        // cf. [BS:2011], eq. (38), p. 10
+        // cf. [BS:2011A], eq. (38), p. 10
         AngularCoefficients a_c = ir->ac;
         return 0.25 * a_c.j6s / a_c.j2s;
     }
@@ -666,7 +666,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_transverse_asymmetry_im(const IntermediateResult * ir) const
     {
-        // cf. [BS:2011], eq. (30), p. 8
+        // cf. [BS:2011A], eq. (30), p. 8
         AngularCoefficients a_c = ir->ac;
         return 0.5 * a_c.j9 / a_c.j2s;
     }
@@ -674,7 +674,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_h_1(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], p. 7, eq. (2.13)
+        // cf. [BHvD:2010A], p. 7, eq. (2.13)
         AngularCoefficients a_c = ir->ac;
         return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
@@ -682,7 +682,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_h_2(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], p. 7, eq. (2.14)
+        // cf. [BHvD:2010A], p. 7, eq. (2.14)
         AngularCoefficients a_c = ir->ac;
         return  a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
@@ -690,7 +690,7 @@ namespace eos
     double
     BToKstarDilepton::integrated_h_3(const IntermediateResult * ir) const
     {
-        // cf. [BHvD:2010], p. 7, eq. (2.15)
+        // cf. [BHvD:2010A], p. 7, eq. (2.15)
         AngularCoefficients a_c = ir->ac;
         return a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }

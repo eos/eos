@@ -259,7 +259,7 @@ namespace eos
 
     const std::string
     BToPiPiLeptonNeutrino::description = "\
-The decay B->pi pi l nubar, where l=e,mu is a light lepton, see e.g. [FFKMvD:2013].";
+The decay B->pi pi l nubar, where l=e,mu is a light lepton, see e.g. [FFKMvD:2013A].";
 
     const std::string
     BToPiPiLeptonNeutrino::kinematics_description_q2 = "\
