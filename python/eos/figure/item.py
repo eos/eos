@@ -1088,6 +1088,7 @@ class ConstraintItem(Item):
         self._xerrors = []
         self._yvalues = []
         self._yerrors = []
+        self._skip_observable = False
 
         for constraint_name in self.constraints:
             entry = constraints[constraint_name]
@@ -1139,6 +1140,7 @@ class ConstraintItem(Item):
                     # Check that the observable match and that the provided options match with those of the constraint
                     if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
                                _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
+                        self._skip_observable = True
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -1164,7 +1166,7 @@ class ConstraintItem(Item):
                 sigma_stat_hi = _np.array(constraint['sigma-stat-hi'])
                 sigma_stat_lo = _np.array(constraint['sigma-stat-lo'])
                 sigma_sys = _np.array(constraint['sigma-sys'])
-                sigma = _np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
+                sigma = _np.sqrt(_np.power(sigma_sys, 2) + 0.25 * _np.power(sigma_stat_hi + sigma_stat_lo, 2))
                 observables = constraint['observables']
                 means = constraint['means']
                 dim = len(means)
@@ -1207,7 +1209,7 @@ class ConstraintItem(Item):
                 raise ValueError(f'constraint type {constraint["type"]} presently not supported')
 
             if len(xvalues) == 0:
-                eos.info(f'   skipping plot for constraint {name} since it does not contain the requested observable')
+                eos.info(f'   skipping plot for constraint {constraint_name} since it does not contain the requested observable')
                 return
 
         self._xvalues = _np.array(xvalues)
@@ -1222,6 +1224,9 @@ class ConstraintItem(Item):
 
     def draw(self, ax):
         "Draw the constraint on the axes."
+
+        if self._skip_observable:
+            return
 
         xvalues = self._xvalues[self._mask]
         yvalues = self._yvalues[self._mask]
