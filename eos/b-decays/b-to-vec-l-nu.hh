@@ -65,6 +65,8 @@ namespace eos
             class IntermediateResult;
             const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const;
+
 
             // integrate ratio of numerator and denominator
             double integrated_a_fb_leptonic(const IntermediateResult *) const;
@@ -110,6 +112,8 @@ namespace eos
             static const std::string kinematics_description_c_theta_l;
             static const std::string kinematics_description_c_theta_d;
             static const std::string kinematics_description_phi;
+            static const std::string kinematics_description_kperp;
+
 
             /*!
              * References used in the computation of our observables.

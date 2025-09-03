@@ -508,6 +508,30 @@ namespace eos
     }
 
     double
+    BToVectorLeptonNeutrino::integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const
+    {
+        std::function<double (const std::array<double, 2> &)> integrand = [this](const std::array<double, 2> & kinematics) -> double
+        {
+            const auto & [kperp, z_B] = kinematics;
+
+            const double m_B = this->_imp->m_B(), m_V = this->_imp->m_V();
+            const double kvec2 = kperp * kperp / (1.0 - z_B * z_B);
+            const double q2 = m_B * m_B + m_V * m_V - 2 * m_B * sqrt(m_V * m_V + kvec2);
+
+            const double jacobian1 = m_B / ((1 - z_B * z_B) * sqrt(m_V * m_V + kvec2));
+            const double jacobian2 = 2.0 * kperp;
+            const double jacobian  = jacobian1 * jacobian2;
+
+            return this->differential_branching_ratio(q2) * jacobian / 2.0;
+        };
+
+        static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
+
+        return integrate(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
+                         config);
+    }
+
+    double
     BToVectorLeptonNeutrino::integrated_pdf_q2(const double & q2_min, const double & q2_max) const
     {
         return _imp->integrated_pdf_q2(q2_min, q2_max);
