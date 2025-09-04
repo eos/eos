@@ -443,7 +443,9 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__iter__", range(&Options::begin, &Options::end))
             .def(init<>())
             .def("declare", &Options::declare)
-            .def("__str__", &Options::as_string);
+            .def("__str__", &Options::as_string)
+            .def("__eq__", &Options::operator==)
+            .def("__getitem__", &Options::operator[], return_value_policy<copy_const_reference>());
 
     // OptionSpecification
     ::impl::std_vector_to_python_converter<std::string> converter_option_specifications;
