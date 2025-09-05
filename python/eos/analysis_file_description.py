@@ -24,6 +24,13 @@ class AnalysisFileContext:
         return os.path.abspath(os.path.join(self.base_directory, relative_path))
 
 
+@dataclass
+class MetadataDescription(Deserializable):
+    title:str=''
+    id:str=''
+    authors:list=field(default_factory=list)
+
+
 class PriorDescription:
     @staticmethod
     def from_dict(**kwargs):
@@ -386,6 +393,7 @@ class MaskComponent(Deserializable):
 # AnalysisFile schema
 
 # dict with keys:
+#   metadata (optional)
 #   priors (mandatory)
 #   likelihoods (mandatory)
 #   posteriors (mandatory)
@@ -395,6 +403,15 @@ class MaskComponent(Deserializable):
 #   parameters (optional)
 #   steps (optional)
 #   masks (optional)
+
+
+# metadata schema:
+# dict with keys:
+#   title (optional): string
+#   id (optional): string
+#   authors (optional): list of dicts, each with keys:
+#       name (mandatory): string
+#       affiliation (mandatory): string
 
 
 # priors schema:
