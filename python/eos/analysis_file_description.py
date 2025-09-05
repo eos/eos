@@ -24,6 +24,27 @@ class AnalysisFileContext:
         return os.path.abspath(os.path.join(self.base_directory, relative_path))
 
 
+@dataclass
+class MetadataAuthorDescription(Deserializable):
+    name:str
+    affiliation:str=''
+    email:str=''
+
+
+@dataclass
+class MetadataDescription(Deserializable):
+    title:str=''
+    id:str=''
+    authors:list[MetadataAuthorDescription]=field(default_factory=list)
+
+    @staticmethod
+    def from_dict(**kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        if 'authors' in kwargs:
+            _kwargs['authors'] = [MetadataAuthorDescription.from_dict(**a) for a in kwargs['authors']]
+        return Deserializable.make(MetadataDescription, **_kwargs)
+
+
 class PriorDescription:
     @staticmethod
     def from_dict(**kwargs):
@@ -386,6 +407,7 @@ class MaskComponent(Deserializable):
 # AnalysisFile schema
 
 # dict with keys:
+#   metadata (optional)
 #   priors (mandatory)
 #   likelihoods (mandatory)
 #   posteriors (mandatory)
@@ -395,6 +417,16 @@ class MaskComponent(Deserializable):
 #   parameters (optional)
 #   steps (optional)
 #   masks (optional)
+
+
+# metadata schema:
+# dict with keys:
+#   title (optional): string
+#   id (optional): string
+#   authors (optional): list of dicts, each with keys:
+#       name (mandatory): string
+#       affiliation (optional): string
+#       email (optional): string
 
 
 # priors schema:
