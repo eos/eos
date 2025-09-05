@@ -32,6 +32,7 @@ import copy as _copy
 import warnings
 import dynesty as _dynesty
 
+from dataclasses import asdict
 from .ipython import __ipython__
 
 class LogfileHandler:
@@ -688,6 +689,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', output
     result = template.render(
         eos={ 'version': eos.__version__ },
         analysis_file=analysis_file,
+        metadata=asdict(analysis_file._metadata),
         analyses={posterior: analysis_file.analysis(posterior) for posterior in analysis_file.posteriors},
         base_directory=base_directory,
         len=len,
