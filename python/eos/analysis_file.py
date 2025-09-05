@@ -26,7 +26,8 @@ from collections import Counter
 from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
-                                       StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent, MaskNamedComponent
+                                       StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent, MaskNamedComponent, \
+                                       MetadataDescription
 from eos.figure import FigureFactory
 
 class AnalysisFile:
@@ -49,6 +50,11 @@ class AnalysisFile:
 
         with open(analysis_file) as input_file:
             self.input_data = yaml.safe_load(input_file)
+
+        if 'metadata' in self.input_data:
+            self._metadata = MetadataDescription.from_dict(**self.input_data['metadata'])
+        else:
+            self._metadata = MetadataDescription()
 
         if 'priors' not in self.input_data:
             raise RuntimeError('Cannot load analysis file: need at least one prior component')
