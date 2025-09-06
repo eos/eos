@@ -572,7 +572,7 @@ Create a mask that can be applied to samples from a named posterior based on a s
         parents = [common_subparser],
         description =
 '''
-Generates a report of the analysis based on the analysis file and the recorded results.
+Generates a report of the analysis based on the analysis file, the recorded results, and a report template file in Jinja2 format.
 ''',
         help = 'Generates a report of the analysis.'
     )
@@ -583,9 +583,9 @@ Generates a report of the analysis based on the analysis file and the recorded r
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
-    parser_report.add_argument('-o', '--output-file',
-        help = 'The file name of the output report. If not provided, the report will be printed to the console.',
-        dest = 'output_file', action = 'store', default = None
+    parser_report.add_argument('--no-pdf',
+        help = 'Do not generate a PDF report.',
+        dest = 'generate_pdf', action = 'store_false', default = True
     )
     parser_report.set_defaults(cmd = cmd_report)
 
@@ -860,7 +860,7 @@ def cmd_create_mask(args):
 
 # Report
 def cmd_report(args):
-    return print(eos.report(**args_to_dict(args)))
+    return eos.report(**args_to_dict(args))
 
 
 # Run steps
