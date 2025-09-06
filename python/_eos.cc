@@ -19,6 +19,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "eos/config.hh"
 #include "eos/constraint.hh"
 #include "eos/models/model.hh"
 #include "eos/nonlocal-form-factors/charm-loops-impl.hh"
@@ -1016,5 +1017,6 @@ BOOST_PYTHON_MODULE(_eos)
     // }}}
 
     // EOS version
-    scope().attr("__version__") = PACKAGE_VERSION;
+    scope().attr("__version__")      = PACKAGE_VERSION;
+    scope().attr("__pkg_data_dir__") = eos::data_dir;
 } // BOOST_PYTHON_MODULE(_eos)
