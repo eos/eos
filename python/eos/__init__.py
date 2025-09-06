@@ -25,6 +25,8 @@ Visit us at github.com/eos/eos
 """
 
 from .config import *
+from _eos import *
+from _eos import __version__, __pkg_data_dir__
 
 # make sure that EOS_HOME points to the location of the wheel supplied data
 # if unset.
@@ -33,11 +35,11 @@ try:
     if is_wheel:
         if not 'EOS_HOME' in _os.environ:
             _os.environ['EOS_HOME'] = _os.path.normpath(_os.path.join(_os.path.dirname(__file__), '..', '_eos_data/'))
+        _pkg_data_dir = _os.environ['EOS_HOME']
 except NameError:
+    _pkg_data_dir = __pkg_data_dir__
     pass
 
-from _eos import *
-from _eos import __version__
 from .data import *
 from .plot import *
 from .datasets import DataSets
