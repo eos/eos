@@ -26,6 +26,7 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
+	config.cc config.hh \
 	constraint.cc constraint.hh \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	reference.cc reference.hh \
