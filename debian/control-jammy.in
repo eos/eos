@@ -1,6 +1,6 @@
 Package: eos
 Version: @VERSION@
 Architecture: amd64
-Depends: libc6 (>= 2.19), libstdc++6 (>= 4.8), libboost-filesystem-dev, libboost-python-dev, libboost-system-dev, libgsl-dev, libyaml-cpp0.7, python3-h5py, python3-matplotlib, python3-numpy, python3-scipy, python3-tqdm, python3-yaml
+Depends: libc6 (>= 2.19), libstdc++6 (>= 4.8), libboost-filesystem-dev, libboost-python-dev, libboost-system-dev, libgsl-dev, libyaml-cpp0.7, python3-h5py, python3-matplotlib, python3-numpy, python3-pypandoc, python3-scipy, python3-tqdm, python3-yaml
 Maintainer: Danny van Dyk <danny.van.dyk@gmail.com>
 Description: EOS -- A HEP program for flavor observables
