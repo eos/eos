@@ -78,7 +78,7 @@ You might need to install the ``curl`` program first, if not already installed. 
 
 ::
 
-  pip3 install --user --upgrade dynesty matplotlib numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade dynesty matplotlib numpy pypandoc pypmc pyyaml scipy
 
 
 *******
@@ -185,6 +185,9 @@ tqdm
 pyhf
   statistical inference of HistFactory likelihoods (pyhf `documentation <https://pyhf.readthedocs.io/en/>`_)
 
+pypandoc
+  the thin Python wrapper for Pandoc;
+
 pypmc
   the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods (needed for some functionality);
 
@@ -214,7 +217,7 @@ by running the following commands:
   # for the 'System Software'
   sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libboost-math-dev libyaml-cpp-dev
   # for the 'Python Software'
-  sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-scipy python3-yaml python3-pip
+  sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-pypandoc python3-scipy python3-yaml python3-pip
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 
