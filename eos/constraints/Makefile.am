@@ -35,6 +35,8 @@ CONSTRAINTS_FILES = \
 	ee-to-ccbar.yaml \
 	ee-to-pipi.yaml \
 	epi-to-epi.yaml \
+	K-to-l-nu.yaml \
+	K-to-pi-l-nu.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	Lc-to-L-form-factors.yaml \

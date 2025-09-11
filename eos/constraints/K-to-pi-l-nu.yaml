@@ -1,0 +1,70 @@
+###################
+# K -> pi l nu #
+###################
+#
+# [KLOE:2008A]
+K^+->pi^0lnu::BR@KLOE:2008A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K_u->pilnu::BR
+        - K_u->pilnu::BR
+    kinematics:
+        - {}
+        - {}
+    options:
+        - {K: K_u, l: e}
+        - {K: K_u, l: mu}
+    means: [ 4.965e-2, 3.233e-2 ]
+    covariance:
+        - [ 0.2780e-6, 0.1268e-6 ]
+        - [ 0.1268e-6, 0.1510e-6 ]
+# [KLOE:2002A]
+K_S->pienu::BR@KLOE:2002A:
+    type: Gaussian
+    observable: K_S->pilnu::BR
+    kinematics: {}
+    options: {K: K_S, l: e}
+    mean: 6.91e-4
+    sigma-stat: { lo: 0.34e-4, hi: 0.34e-4 }
+    sigma-sys: { lo: 0.15e-4, hi: 0.15e-4 }
+# [KLOE-2:2020A]
+K_S->pimunu::BR@KLOE-2:2020A:
+    type: Gaussian
+    observable: K_S->pilnu::BR
+    kinematics: {}
+    options: {K: K_S, l: mu}
+    mean: 4.56e-4
+    sigma-stat: { lo: 0.11e-4, hi: 0.11e-4 }
+    sigma-sys: { lo: 0.17e-4, hi: 0.17e-4 }
+# [KLOE:2006A]
+K_L->pilnu::BR@KLOE:2006A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K_L->pilnu::BR
+        - K_L->pilnu::BR
+    kinematics:
+        - {}
+        - {}
+    options:
+        - {K: K_L, l: e}
+        - {K: K_L, l: mu}
+    means: [ 0.4007, 0.2698 ]
+    covariance:
+        - [ 2.37e-6, -0.5925e-6 ]
+        - [ -0.5925e-6, 2.37e-6 ]
+# [KTEV:2004A]
+K_L->pilnu::BR@KTEV:2004A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K_L->pilnu::BR
+        - K_L->pilnu::BR
+    kinematics:
+        - {}
+        - {}
+    options:
+        - {K: K_L, l: e}
+        - {K: K_L, l: mu}
+    means: [ 0.4067, 0.2701 ]
+    covariance:
+        - [ 1.21e-6, 0.1485e-6 ]
+        - [ 0.1485e-6, 0.81e-6 ]
