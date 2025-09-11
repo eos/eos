@@ -1598,6 +1598,38 @@ KKVDZ:2022A:
     id: oai:arXiv.org:2210.09832
   inspire-id: Kurten:2022zuy
   title: Dispersion relations for $B^- \to \ell^- \bar{\nu}_\ell \ell^{\prime-} \ell^{\prime+}$ form factors
+KLOE:2002A:
+  authors: Aloisio, A. and others
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0203232
+  inspire-id: KLOE:2002lao
+  title: Measurement of the branching fraction for the decay $K(S) \to \pi e \nu$
+KLOE:2006A:
+  authors: Ambrosino, F. and others
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0508027
+  inspire-id: KLOE:2005vdt
+  title: Measurement of the absolute branching ratio for the $K^+ \to \mu
+KLOE:2008A:
+  authors: Ambrosino, F. et al.
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0712.3841
+  inspire-id: KLOE:2007jte
+  title: Measurement of the absolute branching ratios for semileptonic $K^\pm$ decays with the KLOE detector
+KLOE-2:2020A:
+  authors: Babusci, D. and others
+  collaboration: KLOE-2
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1912.05990
+  inspire-id: KLOE-2:2019rev
+  title: Measurement of the branching fraction for the decay $K_S \to \pi \mu \nu$ with the KLOE detector
 KM:2005A:
   authors: Kruger, F. and Matias, J.
   eprint:
@@ -1640,6 +1672,14 @@ KS:1996A:
     id: oai:arXiv.org:hep-ph/9603237
   inspire-id: Kruger:1996cv
   title: Lepton polarization in the decays $B \to X_s \mu^+ \mu^-$ and $B \to X_s \tau^+ \tau^-$
+KTEV:2004A:
+  authors: Alexopoulos, T. and others
+  collaboration: KTeV
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0406002
+  inspire-id: KTeV:2004hpx
+  title: Measurements of $K_L$ Branching Fractions and the CP Violation Parameter $|\eta_{\pm}|$
 LATAVG:2011A:
   authors: Laiho, Jack and Lunghi, Enrico and Van de Water, Ruth S.
   eprint:
