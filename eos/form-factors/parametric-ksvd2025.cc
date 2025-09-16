@@ -79,6 +79,8 @@ namespace eos
         _m_K(p["mass::K_d"], *this),
         _m_pi(p["mass::pi^-"], *this),
         _t_0(p["0->Kpi::t_0@KSvD2025"], *this),
+        _f_K(p["decay-constant::K"], *this),
+        _f_pi(p["decay-constant::pi"], *this),
         _chi_1m(p["0->Kpi::chi_1m"], *this),
         _chi_0p(p["0->Kpi::chi_0p"], *this)
 
@@ -459,6 +461,28 @@ namespace eos
     double KSvD2025FormFactors<VacuumToKPi>::b0_f0() const
     {
         return _b0_fz();
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::Delta_CT() const
+    {
+        const auto fK = this->_f_K();
+        const auto fpi = this->_f_pi();
+
+        const auto mK = this->_m_K();
+        const auto mpi = this->_m_pi();
+        const auto q2 =  power_of<2>(mK) - power_of<2>(mpi);
+        return std::real(this->f_0(q2)) - (fK / fpi);
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::Delta_CTtilde() const
+    {
+        const auto fK = this->_f_K();
+        const auto fpi = this->_f_pi();
+
+        const auto mK = this->_m_K();
+        const auto mpi = this->_m_pi();
+        const auto q2 =  power_of<2>(mpi) - power_of<2>(mK);
+        return std::real(this->f_0(q2)) - (fpi / fK);
     }
 
     const std::set<ReferenceName>

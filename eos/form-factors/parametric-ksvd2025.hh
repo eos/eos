@@ -58,6 +58,10 @@ namespace eos
             // parameter for zero point of z
             UsedParameter _t_0;
 
+            // decay constants for the Callan-Treiman relation
+            UsedParameter _f_K;
+            UsedParameter _f_pi;
+
             // susceptibilities
             UsedParameter _chi_1m;
             UsedParameter _chi_0p;
@@ -136,6 +140,10 @@ namespace eos
             /* auxiliary pseudo observables */
             double b0_fp() const; // value of the series coefficient b_0 for f_+
             double b0_f0() const; // value of the series coefficient b_0 for f_0
+
+            /* Callan-Treiman relations */
+            double Delta_CT() const; // Callan-Treiman point (mK^2 - mpi^2)
+            double Delta_CTtilde() const; // Callan-Treiman point (mpi^2 - mK^2)
 
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();

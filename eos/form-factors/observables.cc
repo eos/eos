@@ -2907,6 +2907,12 @@ namespace eos
                 make_observable("0->Kpi::b0_f0@KSvD2025", R"(b_0^{0, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_f0),
 
+                make_observable("0->Kpi::Delta_CT@KSvD2025", R"(\Delta_{\textrm{CT}})", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::Delta_CT),
+
+                make_observable("0->Kpi::Delta_CTtilde@KSvD2025", R"(\Delta_{\widetilde{\textrm{CT}}})", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::Delta_CTtilde),
+
                 make_observable("0->Kpi::Saturation_f0@KSvD2025", R"(\textrm{Saturation})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::saturation_z)
             }
