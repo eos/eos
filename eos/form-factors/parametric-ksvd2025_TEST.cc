@@ -157,6 +157,8 @@ class ParametricKSvD2025Test :
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.resonance_product_z(ff.z( 0.5))),  0.556192495, eps);
 
                     TEST_CHECK_NEARLY_EQUAL(ff.b0_f0(), -0.879266702, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.Delta_CT(), -6.49076870, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.Delta_CTtilde(), -3.3079410, eps);
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_0(0.0)), -3.33011297, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_0(0.0)),   0.0,       eps);
