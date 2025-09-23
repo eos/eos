@@ -41,6 +41,7 @@ CONSTRAINTS_FILES = \
 	Lc-to-L-l-nu.yaml \
 	miscellaneous.yaml \
 	tau-to-pi-pi-nu.yaml \
+	tau-to-K-pi-nu.yaml \
 	wet-constraints.yaml
 
 EXTRA_DIST = $(CONSTRAINTS_FILES)
