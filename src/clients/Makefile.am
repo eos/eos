@@ -35,7 +35,7 @@ LDADD = \
 	$(top_builddir)/eos/meson-mixing/libeosmesonmixing.la \
 	$(top_builddir)/eos/libeos.la \
 	libcli.a \
-	-lboost_filesystem -lboost_system \
+	-lboost_filesystem \
 	$(YAMLCPP_LDFLAGS)
 
 eos_evaluate_SOURCES = eos-evaluate.cc
