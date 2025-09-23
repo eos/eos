@@ -136,12 +136,6 @@ AC_CHECK_LIB([boost_filesystem], main,
 	[AC_MSG_ERROR([you do seem to be lacking 'libboost_filesystem'.])]
 	)
 dnl }}}
-dnl {{{ boost system
-AC_CHECK_LIB([boost_system], main,
-	[],
-	[AC_MSG_ERROR([you do seem to be lacking 'libboost_system'.])]
-	)
-dnl }}}
 dnl {{{ yaml-cpp
 PKG_CHECK_MODULES([YAMLCPP],
 	[yaml-cpp],

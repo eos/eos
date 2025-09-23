@@ -66,7 +66,7 @@ libeosutils_la_SOURCES = \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 
 libeosutils_la_LIBADD = \
-	-lboost_filesystem -lboost_system \
+	-lboost_filesystem \
 	-lgsl -lgslcblas -lm \
 	-lpthread \
 	-lyaml-cpp
