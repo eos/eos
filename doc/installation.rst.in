@@ -147,7 +147,7 @@ pkg-config
   the freedesktop.org library helper, in version 0.27.1 or higher;
 
 BOOST
-  the BOOST C++ libraries (sub-libraries ``boost-filesystem``, ``boost-system`` and ``boost-math``);
+  the BOOST C++ libraries (sub-libraries ``boost-filesystem`` and ``boost-math``);
 
 yaml-cpp
   a C++ YAML parser and interpreter library, in version 0.5.1 or higher.
