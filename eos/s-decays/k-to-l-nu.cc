@@ -93,12 +93,12 @@ namespace eos
                 const complex<double> gp = wc.csl() - wc.csr();
 
                 // masses
-                const double m_B = this->m_K(), m_K2 = m_K * m_K;
+                const double m_K = this->m_K(), m_K2 = m_K * m_K;
                 const double m_l    = this->m_l();
                 const double msatmu = model->m_s_msbar(mu);
                 const double muatmu = model->m_u_msbar(mu);
 
-                return power_of<2>(g_fermi * std::abs(model->ckm_us()) * f_K * beta_l()) * m_B / (8.0 * M_PI) * norm(ga * m_l - gp * m_K2 / (msatmu + muatmu));
+                return power_of<2>(g_fermi * std::abs(model->ckm_us()) * f_K * beta_l()) * m_K / (8.0 * M_PI) * norm(ga * m_l - gp * m_K2 / (msatmu + muatmu));
             }
 
             double
