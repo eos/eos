@@ -2161,6 +2161,13 @@ S:2010A:
   - MILC Collaborations
   journal: PoS LATTICE2010 (2010) 317
   title: The decay constants $f_{D_s}$, $f_{D^+}$, $f_{B_s}$ and $f_B$ from lattice QCD
+S:2025A:
+  authors: Rodríguez-Sánchez, Antonio
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2504.21732
+  inspire-id: Rodriguez-Sanchez:2025nsm
+  title: Hadronic tau decays
 STTW:2013A:
   authors: Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov, Andrey and Watanabe,
     Ryoutaro

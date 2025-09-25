@@ -19,6 +19,7 @@
  */
 
 #include <eos/observable-impl.hh>
+#include <eos/tau-decays/tau-to-k-nu.hh>
 #include <eos/tau-decays/tau-to-k-pi-nu.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -27,6 +28,22 @@ namespace eos
 {
     // Hadronic tau decays
     // {{{
+
+    // tau^- -> K^- nu
+    // {{{
+    ObservableGroup
+    make_tau_to_k_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+                R"(Observables in $\tau \to K^- \nu_\tau$ decays)",
+                R"()",
+                {
+                    make_observable("tau->Knu::BR", R"(\mathcal{B}(\tau^- \to K^- \nu))", Unit::None(), &TauToKNeutrino::branching_ratio, std::make_tuple(), Options{}),
+                });
+        return ObservableGroup(imp);
+    }
+
+    // }}}
 
     // tau^- -> [K pi]^- nu
     // {{{
@@ -91,7 +108,9 @@ namespace eos
     {
         auto imp = new Implementation<ObservableSection>("Observables in $\tau$ decays",
                                                          "",
-                                                         { // tau^- -> [K pi]^- nu
+                                                         { // tau^- -> K^- nu
+                                                           make_tau_to_k_nu_group(),
+                                                           // tau^- -> [K pi]^- nu
                                                            make_tau_to_k_pi_nu_group() });
 
         return ObservableSection(imp);
