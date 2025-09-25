@@ -1572,16 +1572,18 @@ groups:
   # {{{
   - title: '$\bar{s}b\bar{\nu}\nu$ WET Parameters'
     description: |
-        The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients in the effective Hamiltonian
+        The list of parameters describing the $\bar{s}b\bar{\nu}\nu$ Wilson coefficients in the effective Hamiltonian
         \begin{equation}
           \mathcal{H}^{\bar{s}b\bar{\nu}\nu}_\mathrm{eff}
           = \frac{4 G_F}{\sqrt{2}} \frac{\alpha_e}{2 \pi} V_{tb}^* V_{ts} \sum_i \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_i \mathcal{O}^{\bar{s}b\bar{\nu}\nu}_i\,.
         \end{equation}
         The operators read:
-        \begin{equation}
-          \mathcal{O}_{L(R)} = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{\ell} \gamma_\mu P_L \nu_\ell]
-        \end{equation}
-
+        \begin{align}
+          \mathcal{O}_{V_L(V_R)} & = [\bar{s} \gamma^\mu      P_{L(R)} b]\, [\bar{\nu}     \gamma_\mu      P_L \nu_L]\\
+          \mathcal{O}_{S_L(S_R)} & = [\bar{s}                 P_{L(R)} b]\, [\bar{\nu}_L^c                 P_L \nu_L]\\
+          \mathcal{O}_{T_L}      & = [\bar{s} \sigma^{\mu\nu} P_{L}    b]\, [\bar{\nu}_L^c \sigma_{\mu\nu} P_L \nu_L]
+        \end{align}
+        where $\nu_L$ is a left-handed neutrino and $\nu_L^c \equiv i\gamma^2 \gamma^0 \nu_L^*$ is the charge-conjugated field of a left-handed neutrino.
     wcxf-relevant: true
     parameters:
       'sbnunu::mu' :
