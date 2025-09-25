@@ -6,6 +6,7 @@ AM_LDLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeostaudecays.la
 libeostaudecays_la_SOURCES = \
+	tau-to-k-nu.cc tau-to-k-nu.hh \
 	tau-to-k-pi-nu.cc tau-to-k-pi-nu.hh \
 	observables.cc observables.hh
 libeostaudecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
@@ -20,6 +21,7 @@ libeostaudecays_la_LIBADD = \
 
 include_eos_taudecaysdir = $(includedir)/eos/tau-decays
 include_eos_taudecays_HEADERS = \
+	tau-to-k-nu.hh
 	tau-to-k-pi-nu.hh \
 	observables.hh
 
@@ -29,6 +31,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
+	tau-to-k-nu_TEST \
 	tau-to-k-pi-nu_TEST
 
 LDADD = \
@@ -41,4 +44,5 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+tau_to_k_nu_TEST_SOURCES = tau-to-k-nu_TEST.cc
 tau_to_k_pi_nu_TEST_SOURCES = tau-to-k-pi-nu_TEST.cc
