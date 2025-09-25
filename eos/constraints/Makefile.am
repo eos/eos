@@ -42,6 +42,7 @@ CONSTRAINTS_FILES = \
 	Lc-to-L-form-factors.yaml \
 	Lc-to-L-l-nu.yaml \
 	miscellaneous.yaml \
+	tau-to-K-nu.yaml \
 	tau-to-pi-pi-nu.yaml \
 	tau-to-K-pi-nu.yaml \
 	wet-constraints.yaml
