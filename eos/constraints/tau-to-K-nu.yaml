@@ -1,0 +1,15 @@
+###################
+# tau -> K nu #
+###################
+#
+# [PDG:2024A]
+# {{{
+tau->Knu::BR@PDG:2024A:
+    type: Gaussian
+    observable: tau->Knu::BR
+    kinematics: {}
+    options: {}
+    mean: 0.685e-2
+    sigma-stat: {hi: 0.023e-2, lo: 0.023e-2}
+    sigma-sys: {hi: 0, lo: 0}
+# }}}
