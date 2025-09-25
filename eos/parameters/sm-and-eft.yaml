@@ -356,8 +356,20 @@ groups:
   # {{{
   - title: '$\bar{s}b\bar{s}b$ WET Parameters'
     description: >
-        The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients.
-        See the EOS manual for their physical definitions.
+        The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients in the effective Hamiltonian
+        \begin{equation}
+          \mathcal{H}^{\bar{s}b\bar{s}b}_\mathrm{eff}
+          = \frac{4 G_F}{\sqrt{2}} \left(V_{tb} V_{ts}^*\right)^2 \sum_i \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_i \mathcal{O}^{\bar{s}b\bar{\nu}\nu}_i\,.
+        \end{equation}
+        The operators read:
+        \begin{align}
+          \mathcal{O}_{1(')} & = [\bar{s}_\alpha \gamma^\mu P_{L(R)} b_\alpha]\, [\bar{s}_\beta \gamma_\mu P_{L(R)} b_\beta]  \\
+          \mathcal{O}_{2(')} & = [\bar{s}_\alpha            P_{L(R)} b_\alpha]\, [\bar{s}_\beta            P_{L(R)} b_\beta]  \\
+          \mathcal{O}_{3(')} & = [\bar{s}_\alpha            P_{L(R)} b_\beta]\,  [\bar{s}_\beta            P_{L(R)} b_\alpha] \\
+          \mathcal{O}_{4}    & = [\bar{s}_\alpha            P_{L}    b_\alpha]\, [\bar{s}_\beta            P_{R}    b_\beta]  \\
+          \mathcal{O}_{5}    & = [\bar{s}_\alpha            P_{L}    b_\beta]\,  [\bar{s}_\beta            P_{R}    b_\alpha]
+        \end{align}
+        where $\alpha$ and $\beta$ are color indices and $P_{L,R} = (1 \mp \gamma_5)/2$.
     wcxf-relevant: true
     parameters:
       # Factorization scale
