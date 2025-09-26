@@ -87,7 +87,7 @@ class AnalysisFile:
 
         # Optional: provide a list of observables for posterior prediction
         if 'predictions' not in self.input_data:
-            self._predictions = []
+            self._predictions = {}
         else:
             self._predictions = { p["name"]: PredictionDescription.from_dict(**p) for p in self.input_data['predictions'] }
 
