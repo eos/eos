@@ -48,6 +48,13 @@ AFGV:2017A:
     id: oai:arXiv.org:1704.06639
   inspire-id: Aebischer:2017gaw
   title: 'B physics Beyond the Standard Model at One Loop: Complete Renormalization Group Evolution below the Electroweak Scale'
+AGV:2019A:
+  authors: Asatrian, Hrachia M. and Greub, Christoph and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1912.09099
+  inspire-id: Asatrian:2019kbk
+  title: Exact NLO matching and analyticity in $b\to s\ell\ell$
 ALGH:2001A:
   authors: Ali, A. and Lunghi, E. and Greub, C. and Hiller, G.
   eprint:
@@ -191,6 +198,13 @@ BCMU:2002A:
     id: oai:arXiv.org:hep-ph/0203135
   inspire-id: Buras:2002tp
   title: Completing the NLO QCD calculation of $\bar{B} \to X_s \gamma$
+BCvDV:2017A:
+  authors: Bobeth, Christoph and Chrzaszcz, Marcin and van Dyk, Danny and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1707.07305
+  inspire-id: Bobeth:2017vxj
+  title: Long-distance effects in $B\rightarrow K^*\ell \ell $ from analyticity
 BEKU:2002A:
   authors: Bobeth, C. and Ewerth, T. and Kruger, F. and Urban, J.
   eprint:
@@ -278,6 +292,64 @@ BES:2024A:
     id: oai:arXiv.org:2410.08603
   inspire-id: BESIII:2024njj
   title: Observation of $D^+\to\eta'\mu^+\nu_\mu$ and First Experimental Study of $D^+\to\eta'\ell^+\nu_\ell$ Decay Dynamics
+BESIII:2015A:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1508.07560
+  inspire-id: BESIII:2015tql
+  title: Study of Dynamics of $D^0 \to K^- e^+ \nu_{e}$ and $D^0\to\pi^- e^+ \nu_{e}$ Decays
+BESIII:2017A:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1703.09084
+  inspire-id: BESIII:2017ylw
+  title: Analysis of $D^+\to\bar K^0e^+\nu_e$ and $D^+\to\pi^0e^+\nu_e$ semileptonic decays
+BESIII:2019A:
+  authors: Ablikim, Medina and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1810.03127
+  inspire-id: BESIII:2018ccy
+  title: Study of the $D^0\to K^-\mu^+\nu_\mu$ dynamics and test of lepton flavor universality
+    with $D^0\to K^-\ell^+\nu_\ell$ decays
+BESIII:2022A:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2207.14149
+  inspire-id: BESIII:2022ysa
+  title: Study of the Semileptonic Decay $\Lambda^+_c \to \Lambda e^+ \nu_e$
+BESIII:2023A:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2306.02624
+  inspire-id: BESIII:2023jxv
+  title: Study of $\Lambda_c^+ \rightarrow \Lambda \mu^+\nu_{\mu}$ and test of lepton flavor universality
+    with $\Lambda_c^+ \rightarrow \Lambda \ell^+\nu_{\ell}$ decays
+BESIII:2023B:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2407.11727
+  inspire-id: BESIII:2024dvk
+  title: Measurement of the branching fraction of $D_s^+ \to \ell^+ \nu_\ell$ via $e^+e^- \to D_s^{*+} D_s^{*-}$
+BESIII:2023C:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2304.12159
+  inspire-id: BESIII:2023zjq
+  title: First Experimental Study of the Purely Leptonic Decay $D_s^{*+} \to e^+ \nu_e$
 BF:2001A:
   authors: Beneke, M. and Feldmann, T.
   eprint:
@@ -412,6 +484,27 @@ BJvD:2019A:
   inspire-id: Bordone:2019vic
   title: Theory determination of $\bar{B}\to D^{(*)}\ell^-\bar\nu$ form factors at
     $\mathcal{O}(1/m_c^2)$
+BKMS:2012A:
+  authors: Becirevic, Damir and Kosnik, Nejc and Mescia, Federico and Schneider, Elia
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1205.5811
+  inspire-id: Becirevic:2012fy
+  title: Complementarity of the constraints on New Physics from $B_s \to  \mu^+ \mu^-$ and from $B \to  K l^+l^-$ decays
+BKTvD:2019A:
+  authors: B{\"o}er, Philipp and Kokulu, Ahmet and Toelstede, Jan-Niklas and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1907.12554
+  inspire-id: Boer:2019zmp
+  title: Angular Analysis of $\Lambda_b\to \Lambda_c (\to \Lambda \pi)\ell\bar\nu$
+BL:1998A:
+  authors: Buck, W. W. and Lebed, Richard F.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9802369
+  inspire-id: Buck:1998kp
+  title: New constraints on dispersive form-factor parameterizations from the timelike region
 BLPR:2017A:
   authors: Bernlochner, Florian U. and Ligeti, Zoltan and Papucci, Michele and Robinson, Dean J.
   eprint:
@@ -435,6 +528,21 @@ BMU:1999A:
   inspire-id: Bobeth:1999mk
   title: Photonic penguins at two loops and $m_t$ dependence of $\mathcal{B}(B \to  X_s \ell^+
     \ell^-)$
+BMRvD:2022A:
+  authors: Blake, Thomas and Meinel, Stefan and Rahimi, Muslem and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2205.06041
+  inspire-id: Blake:2022vfl
+  title: Dispersive bounds for local form factors in $\Lambda_b \to \Lambda$ transitions
+BMvD:2019A:
+  authors: Blake, Thomas and Meinel, Stefan and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1912.05811
+  inspire-id: Blake:2019guk
+  title: Bayesian Analysis of $b\to s\mu^+\mu^-$ Wilson Coefficients using the Full Angular
+    Distribution of $\Lambda_b\to \Lambda(\to p\, \pi^-)\mu^+\mu^-$ Decays
 BPR:2021A:
   authors: Bernlochner, Florian U. and Prim, Markus T. and Robinson, Dean J.
   eprint:
@@ -449,6 +557,27 @@ BR:2011A:
     id: oai:arXiv.org:1110.3228
   inspire-id: Beneke:2011nf
   title: B meson distribution amplitude from $B\to\gamma\ell\nu$
+BRV:2024A:
+  authors: Burgos Marcos, M. and Reboud, M. and Vos, K. K.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2504.05209
+  inspire-id: BurgosMarcos:2025xja
+  title: Detailed $SU(3)$ Flavour Symmetry Analysis of Charmless Two-Body $B$-Meson Decays Including Factorizable Corrections
+BRY:2006A:
+  authors: Beneke, Martin and Rohrer, Johannes and Yang, Deshan
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0612290
+  inspire-id: Beneke:2006hg
+  title: Branching fractions, polarisation and asymmetries of $B \to VV$ decays
+BRvDV:2024A:
+  authors: Bolognani, Carolina and Reboud, M{\'e}ril and van Dyk, Danny and Vos, K. Keri
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2407.06145
+  inspire-id: Bolognani:2024cmr
+  title: Constraining |V$_{cs}$| and physics beyond the Standard Model from exclusive (semi)leptonic charm decays
 BS:2011A:
   authors: Becirevic, Damir and Schneider, Elia
   eprint:
@@ -463,6 +592,13 @@ BSZ:2015A:
     id: oai:arXiv.org:1503.05534
   inspire-id: Straub:2015ica
   title: $B\to V\ell^+\ell^-$ in the Standard Model from light-cone sum rules
+BvDV:2023A:
+  authors: Bolognani, Carolina and van Dyk, Danny and Vos, K. Keri
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2308.04347
+  inspire-id: Bolognani:2023mcf
+  title: New determination of $|V_{ub}/V_{cb}|$ from $B_s^0\to \lbrace K^-, D_s^- \rbrace \mu^+\nu$
 BZ:2004A:
   authors: Ball, Patricia and Zwicky, Roman
   eprint:
@@ -785,6 +921,15 @@ Belle:2017C:
   inspire-id: Belle:2017grj
   title: Angular analysis of the $e^+ e^- \to D^{(*) \pm} D^{* \mp}$ process near the
     open charm threshold using initial-state radiation
+Belle:2018A:
+  authors: Vossen, A. and others
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1803.06444
+  inspire-id: Belle:2018yae
+  title: Measurement of the branching fraction of $B \rightarrow D^{(*)}\pi \ell\nu$ at
+    Belle using hadronic tagging in fully reconstructed events
 Belle:2019A:
   authors: Prim, Markus T. et. al.
   collaboration: Belle
@@ -809,6 +954,15 @@ Belle:2019C:
     id: oai:arXiv.org:1908.01848
   inspire-id: Belle:2019xld
   title: Test of lepton flavor universality and search for lepton flavor violation in $B \rightarrow K\ell \ell$ decays
+Belle:2020A:
+  authors: Beleño, C. and others
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2005.07766
+  inspire-id: Belle:2020xgu
+  title: Measurement of the branching fraction of the decay $\boldsymbol{B^{+}\to\pi^{+}\pi^{-}\ell^{+}\nu_\ell}$
+    in fully reconstructed events at Belle
 Belle:2021A:
   authors: Bhuyan, B. et. al.
   collaboration: Belle
@@ -937,6 +1091,13 @@ CHS:2018A:
     id: oai:arXiv.org:1810.00007
   inspire-id: Colangelo:2018mtw
   title: Two-pion contribution to hadronic vacuum polarization
+CJLP:2012A:
+  authors: Celis, Alejandro and Jung, Martin and Li, Xin-Qiang and Pich, Antonio
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1210.8443
+  inspire-id: Celis:2012dk
+  title: Sensitivity to charged scalars in $\boldsymbol{B\to D^{(*)}\tau\nu_\tau}$ and $\boldsymbol{B\to\tau\nu_\tau}$ decays
 CKMfitter:2004A:
   authors: Charles, J. and Hocker, Andreas and Lacker, H. and Laplace, S. and Le Diberder,
     F.R. and Malcles, J. and Ocariz, J. and Pivk, M. and Roos, L.
@@ -1203,6 +1364,13 @@ DN:2019A:
     id: oai:arXiv.org:1903.00448
   inspire-id: Descotes-Genon:2019dbw
   title: Angular analysis of the rare decay $\Lambda_b\to \Lambda(1520)(\to NK)\ell^+\ell^-$
+DV:2015A:
+  authors: Descotes-Genon, S{\'e}bastien and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1502.05509
+  inspire-id: Descotes-Genon:2015hea
+  title: Time dependence in $B \to V\ell\ell$ decays
 EGN:2010A:
   authors: Ewerth, Thorsten and Gambino, Paolo and Nandi, Soumitra
   eprint:
@@ -1250,6 +1418,13 @@ F:2012A:
   inspire-id: Fleischer:2012fy
   title: On Branching Ratios of $B_s$ Decays and the Search for New Physics in $B^0_s\to
     \mu^+\mu^-$
+FJV:2016A:
+  authors: Fleischer, Robert and Jaarsma, Ruben and Vos, K. Keri
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1612.07342
+  inspire-id: Fleischer:2016ofb
+  title: Towards New Frontiers in the Exploration of Charmless Non-Leptonic $B$ Decays
 FK:2002A:
   authors: Feldmann, T. and Kroll, P.
   eprint:
@@ -1279,6 +1454,14 @@ FLAG:2013A:
     id: oai:arXiv.org:1310.8555
   inspire-id: Aoki:2013ldr
   title: Review of lattice results concerning low-energy particle physics
+FLAG:2019A:
+  authors: Aoki, S. and others
+  collaboration: Flavour Lattice Averaging Group
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1902.08191
+  inspire-id: FlavourLatticeAveragingGroup:2019iem
+  title: 'FLAG Review 2019: Flavour Lattice Averaging Group (FLAG)'
 FLAG:2021A:
   authors: Aoki, Y. et al.
   eprint:
@@ -1308,6 +1491,13 @@ FM:2002A:
   inspire-id: Feldmann:2002iw
   title: Forward backward and isospin asymmetry for $B \to K^* \ell^+ \ell^-$ decay in the
     standard model and in supersymmetry
+FMvD:2015A:
+  authors: Feldmann, Thorsten and M{\"u}ller, Bastian and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1503.09063
+  inspire-id: Feldmann:2015xsa
+  title: Analyzing $b\to u$ transitions in semileptonic $\bar{B}_s \to K^{*+}(\to K \pi)\ell^-\bar\nu_\ell$ decays
 FNAL+MILC:2014A:
   authors: Bailey, Jon A. et al.
   collaboration: Fermilab Lattice, MILC
@@ -1373,6 +1563,14 @@ FNAL+MILC:2021A:
     id: oai:arXiv.org:2105.14019
   inspire-id: FermilabLattice:2021cdg
   title: Semileptonic form factors for $B\rightarrow D^*\ell \nu $ at nonzero recoil from $2+1$-flavor lattice QCD
+FNALMILC:2022A:
+  authors: Bazavov, Alexei and others
+  collaboration: Fermilab Lattice, MILC
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2212.12648
+  inspire-id: FermilabLattice:2022gku
+  title: D-meson semileptonic decays to pseudoscalars from four-flavor lattice QCD
 FTW:2016A:
   authors: Frellesvig, Hjalte and Tommasini, Damiano and Wever, Christopher
   eprint:
@@ -1394,6 +1592,13 @@ FY:2011A:
     id: oai:arXiv.org:1111.1844
   inspire-id: Feldmann:2011xf
   title: Form Factors for $\Lambda_b \to \Lambda$ Transitions in {SCET}
+GHMS:2012A:
+  authors: Grigo, Jonathan and Hoff, Jens and Marquard, Peter and Steinhauser, Matthias
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1206.3418
+  inspire-id: Grigo:2012ji
+  title: 'Moments of heavy quark correlators with two masses: exact mass dependence to three loops'
 GKPR:2013A:
   authors: Gelhausen, Patrick and Khodjamirian, Alexander and Pivovarov, Alexei A.
     and Rosenthal, Denis
@@ -1446,6 +1651,20 @@ GR:2004A:
   authors: Goldberger, J. and Roweis, S.
   url: http://eprints.pascal-network.org/archive/00001565/
   title: Hierarchical clustering of a mixture model
+GRvDV:2022A:
+  authors: Gubernari, Nico and Reboud, M{\'e}ril and van Dyk, Danny and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2206.03797
+  inspire-id: Gubernari:2022hxn
+  title: Improved theory predictions and global analysis of exclusive $b \to s\mu^+\mu^-$ processes
+GRvDV:2023A:
+  authors: Gubernari, Nico and Reboud, Méril and van Dyk, Danny and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2305.06301
+  inspire-id: Gubernari:2023puw
+  title: Dispersive analysis of $B \to K^{(*)}$ and $B_{s} \to \phi$ form factors
 GvDV:2020A:
   authors: Gubernari, N. and van Dyk, D. and Virto, J.
   eprint:
@@ -1453,6 +1672,14 @@ GvDV:2020A:
     id: oai:arXiv.org:2011.09813
   inspire-id: Gubernari:2020eft
   title: Non-local matrix elements in $B_{(s)}\to \{K^{(*)},\phi\}\ell^+\ell^-$
+HFAG:2011A:
+  authors: Amhis, Y. and others
+  collaboration: HFLAV
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1207.1158
+  inspire-id: HFLAV:2012imy
+  title: Averages of B-Hadron, C-Hadron, and $\tau$-Lepton Properties as of early 2012
 HFLAV:2019A:
   authors: Amhis, Yasmine Sara et al.
   eprint:
@@ -1460,6 +1687,14 @@ HFLAV:2019A:
     id: oai:arXiv.org:1909.12524
   inspire-id: Amhis:2019ckw
   title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018
+HFLAV:2021A:
+  authors: Amhis, Yasmine Sara and others
+  collaboration: HFLAV
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2206.07501
+  inspire-id: HFLAV:2022esi
+  title: Averages of b-hadron, c-hadron, and $\tau$-lepton properties as of 2021
 HKvT:2025A:
   authors: Herren, F. and Kubis, B. and van Tonder, R.
   eprint:
@@ -1489,6 +1724,14 @@ HLMW:2015A:
     id: oai:arXiv.org:1501.00367
   inspire-id: Horgan:2015vla
   title: Rare $B$ decays using lattice QCD form factors
+HPQCD:2013A:
+  authors: Bouchard, Chris and Lepage, G. Peter and Monahan, Christopher and Na, Heechang and Shigemitsu, Junko
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1306.2384
+  inspire-id: Bouchard:2013eph
+  title: Rare decay $B \to K \ell^+ \ell^-$ form factors from lattice QCD
 HPQCD:2014A:
   authors: Bouchard, C. M. and Lepage, G. Peter and Monahan, Christopher and Na, Heechang and Shigemitsu, Junko
   collaboration: HPQCD
@@ -1533,6 +1776,13 @@ HPQCD:2017A:
   inspire-id: Harrison:2017fmw
   title: Lattice QCD calculation of the ${{B}_{(s)}\to D_{(s)}^{*}\ell{\nu}}$ form
     factors at zero recoil and implications for ${|V_{cb}|}$
+HPQCD:2019A:
+  authors: McLean, E. and Davies, C. T. H. and Koponen, J. and Lytle, A. T.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1906.00701
+  inspire-id: McLean:2019qcx
+  title: $B_s\to D_s \ell\nu$ Form Factors for the full $q^2$ range from Lattice QCD with non-perturbatively normalized currents
 HPQCD:2021A:
   authors: Chakraborty, Bipasha and Parrott, W. G. and Bouchard, C. and Davies, C. T. H. and Koponen, J. and Lepage, G. P.
   collaboration: HPQCD
@@ -1557,6 +1807,13 @@ HPQCD:2023A:
     id: oai:arXiv.org:2304.03137
   inspire-id: Harrison:2023dzh
   title: $B \rightarrow D^*$ vector, axial-vector and tensor form factors for the full $q^2$ range from lattice QCD
+HTX:2021A:
+  authors: Huber, Tobias and Tetlalmatzi-Xolocotzi, Gilberto
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2111.06418
+  inspire-id: Huber:2021cgk
+  title: Estimating QCD-factorization amplitudes through SU(3) symmetry in $B\rightarrow P P$ decays
 IKKR:2007A:
   authors: Ivanov, Mikhail A. and Korner, Jurgen G. and Kovalenko, Sergey G. and Roberts,
     Craig D.
@@ -1982,6 +2239,13 @@ LHCb:2021E:
     id: oai:arxiv.org:2103.06810
     inspire-id: LHCb:2021qbv
   title: Precise measurement of the~$f_s/f_d$ ratio of fragmentation fractions and of $B^0_s$ decay branching fractions
+LMNRvD:2023A:
+  authors: Leljak, Domagoj and Meli{\'c}, Bla{\v{z}}enka and Novak, Filip and Reboud, M{\'e}ril and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2302.05268
+  inspire-id: Leljak:2023gna
+  title: Toward a complete description of $b \to u \ell^- \overline{\nu}$ decays within the Weak Effective Theory
 LMPR:2022A:
   authors: Lenz, A. and Müller, J. and Piscopo, M.L. and Rusov, A.
   eprint:
@@ -2024,6 +2288,13 @@ M:2006A:
     id: oai:arXiv.org:hep-ph/0609232
   inspire-id: Misiak:2006zs
   title: Estimate of $\mathcal{B}(\bar B \to X_s \gamma)$ at $\mathcal{O}(\alpha_s^2)$
+M:2016A:
+  authors: Meinel, Stefan
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1611.09696
+  inspire-id: Meinel:2016dqj
+  title: $\Lambda_c \to \Lambda l^+ \nu_l$ form factors and decay rates from lattice QCD with physical quark masses
 MR:2021A:
   authors: Meinel, S. and Rendon, G.
   eprint:
@@ -2032,6 +2303,13 @@ MR:2021A:
   inspire-id: Meinel:2021mdj
   title: $\Lambda_c\to\Lambda^*(1520)$ form factors from lattice QCD and improved analysis of
     the $\Lambda_b\to\Lambda^*(1520)$ and $\Lambda_b\to\Lambda_c^*(2595,2625)$ form factors
+MvD:2015A:
+  authors: Mannel, Thomas and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1506.08780
+  inspire-id: Mannel:2015osa
+  title: Zero-recoil sum rules for $\Lambda_b \to \Lambda_c$ form factors
 MvD:2016A:
   authors: Meinel, Stefan and van Dyk, Danny
   eprint:
@@ -2040,6 +2318,13 @@ MvD:2016A:
   inspire-id: Meinel:2016grj
   title: Using $\Lambda_b\to \Lambda\mu^+\mu^-$ data within a Bayesian analysis of
     $|\Delta B| = |\Delta S| = 1$ decays
+MvDV:2024A:
+  authors: Meiser, Stefan and van Dyk, Danny and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2411.09458
+  inspire-id: Meiser:2024zea
+  title: Towards a global analysis of the $b \to c \overline{u} q $ puzzle
 MvR:1999A:
   authors: Melnikov, Kirill and Ritbergen, Timo van
   eprint:
@@ -2047,6 +2332,20 @@ MvR:1999A:
     id: oai:arXiv.org:hep-ph/9912391
   inspire-id: Melnikov:2000qh
   title: The Three loop relation between the $\overline{\text{MS}}$ and the pole quark masses
+N:1993A:
+  authors: Neubert, Matthias
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9306320
+  inspire-id: Neubert:1993mb
+  title: Heavy quark symmetry
+N:1997A:
+  authors: Neubert, Matthias
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9702375
+  inspire-id: Neubert:1997gu
+  title: B decays and the heavy quark expansion
 NA7:1986A:
   authors: Amendolia, S.R. and others
   collaboration: NA7
@@ -2079,6 +2378,13 @@ PDG:2012A:
   collaboration: Particle Data Group
   inspire-id: Beringer:1900zz
   journal: Phys. Rev. D 86 010001 (2012)
+  title: Review of Particle Physics
+  url: http://pdg.lbl.gov
+PDG:2016A:
+  authors: Patrignani, C. and others
+  collaboration: Particle Data Group
+  inspire-id: ParticleDataGroup:2016lqr
+  journal: Chin.Phys.C 40 (2016) 10, 100001
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PDG:2018A:
@@ -2184,6 +2490,10 @@ STTW:2013A:
     id: oai:arXiv.org:1309.0301
   inspire-id: Sakaki:2013bfa
   title: Testing leptoquark models in $\bar B \to D^{(*)} \tau \bar\nu$
+T:2002A:
+  authors: T'Jampens, Stephane
+  inspire-id: TJampens:2002cok
+  title: Study of CP symmetry violation in the charmonium-K*(892) channel by a complete time dependent angular analysis (BaBar experiment)
 TEWWG:2010A:
   authors: Group, The Tevatron Electroweak Working
   collaboration: D0
@@ -2201,6 +2511,13 @@ U:2001A:
   inspire-id: Uraltsev:2001ih
   title: On the chromomagnetic expectation value $\mu^2_G$ and higher power corrections
     in heavy flavor mesons
+U:2003A:
+  authors: Uraltsev, Nikolai
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0312001
+  inspire-id: Uraltsev:2003ye
+  title: A 'BPS' expansion for B and D mesons
 UTFIT:2013A:
   authors: Bona, M. et al.
   collaboration: UTfit
@@ -2210,6 +2527,9 @@ UTFIT:2013A:
   inspire-id: Bona:2006ah
   title: 'The Unitarity Triangle Fit in the Standard Model and Hadronic Parameters
     from Lattice QCD: A Reappraisal after the Measurements of $\Delta m_s$ and $\mathcal{B}(B \to \tau \nu_\tau)$'
+vD:2011A:
+  authors: van Dyk, Danny
+  title: Unpublished
 vRVL:1997A:
   authors: van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.
   eprint:
