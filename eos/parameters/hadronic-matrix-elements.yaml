@@ -6071,7 +6071,7 @@ groups:
           min:     -2.0
           max:     +0.0
           unit:    'GeV^2'
-          latex:    '$t_0^\textrm{KSvDvD2025}$'
+          latex:    '$t_0^\textrm{KSvD2025}$'
           comments: ''
       # Susceptibilities
       '0->Kpi::chi_1m' :
