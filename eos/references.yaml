@@ -632,6 +632,14 @@ Belle:2006B:
     id: oai:arXiv.org:hep-ex/0608049
   inspire-id: Ushiroda:2006uzg
   title: Observation of B decays to two kaons
+Belle:2007A:
+  authors: Epifanov, D. and others
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0706.2231
+  inspire-id: Belle:2007goc
+  title: Study of $\tau^- \to K_S \pi^- \nu_\tau$ decay at Belle
 Belle:2008A:
   authors: Schwanda, C. et al.
   collaboration: Belle
@@ -716,6 +724,14 @@ Belle:2014A:
     id: oai:arXiv.org:1409.5269
   inspire-id: Belle:2014eud
   title: Measurement of the branching fraction of $B^+ \to \tau^+ \nu_\tau$ decays with the semileptonic tagging method and the full Belle data sample
+Belle:2014B:
+  authors: Ryu, S. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1402.5213
+  inspire-id: Belle:2014mfl
+  title: Measurements of Branching Fractions of $\tau$ Lepton Decays with one or more $K^0_S$
 Belle:2015A:
   authors: Glattauer, R. et al.
   collaboration: Belle
@@ -1582,6 +1598,38 @@ KKVDZ:2022A:
     id: oai:arXiv.org:2210.09832
   inspire-id: Kurten:2022zuy
   title: Dispersion relations for $B^- \to \ell^- \bar{\nu}_\ell \ell^{\prime-} \ell^{\prime+}$ form factors
+KLOE:2002A:
+  authors: Aloisio, A. and others
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0203232
+  inspire-id: KLOE:2002lao
+  title: Measurement of the branching fraction for the decay $K(S) \to \pi e \nu$
+KLOE:2006A:
+  authors: Ambrosino, F. and others
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0508027
+  inspire-id: KLOE:2005vdt
+  title: Measurement of the absolute branching ratio for the $K^+ \to \mu
+KLOE:2008A:
+  authors: Ambrosino, F. et al.
+  collaboration: KLOE
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0712.3841
+  inspire-id: KLOE:2007jte
+  title: Measurement of the absolute branching ratios for semileptonic $K^\pm$ decays with the KLOE detector
+KLOE-2:2020A:
+  authors: Babusci, D. and others
+  collaboration: KLOE-2
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1912.05990
+  inspire-id: KLOE-2:2019rev
+  title: Measurement of the branching fraction for the decay $K_S \to \pi \mu \nu$ with the KLOE detector
 KM:2005A:
   authors: Kruger, F. and Matias, J.
   eprint:
@@ -1624,6 +1672,14 @@ KS:1996A:
     id: oai:arXiv.org:hep-ph/9603237
   inspire-id: Kruger:1996cv
   title: Lepton polarization in the decays $B \to X_s \mu^+ \mu^-$ and $B \to X_s \tau^+ \tau^-$
+KTEV:2004A:
+  authors: Alexopoulos, T. and others
+  collaboration: KTeV
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0406002
+  inspire-id: KTeV:2004hpx
+  title: Measurements of $K_L$ Branching Fractions and the CP Violation Parameter $|\eta_{\pm}|$
 LATAVG:2011A:
   authors: Laiho, Jack and Lunghi, Enrico and Van de Water, Ruth S.
   eprint:
@@ -2105,6 +2161,13 @@ S:2010A:
   - MILC Collaborations
   journal: PoS LATTICE2010 (2010) 317
   title: The decay constants $f_{D_s}$, $f_{D^+}$, $f_{B_s}$ and $f_B$ from lattice QCD
+S:2025A:
+  authors: Rodríguez-Sánchez, Antonio
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2504.21732
+  inspire-id: Rodriguez-Sanchez:2025nsm
+  title: Hadronic tau decays
 STTW:2013A:
   authors: Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov, Andrey and Watanabe,
     Ryoutaro

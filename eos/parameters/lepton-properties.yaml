@@ -1,0 +1,46 @@
+# vim: set sts=2 et tw=150 fdm=marker :
+title: 'Lepton Property Parameters'
+description: ''
+groups:
+  # Lepton Lifetimes
+  # {{{
+  - title: 'Lepton Lifetimes'
+    description: ''
+    parameters:
+      # Mean life times
+      'life_time::tau' :
+          central: +290.3e-15
+          min:     +289.8e-15
+          max:     +290.8e-15
+          unit:     's'
+          latex:    '$\tau_{\tau^\pm}$'
+          comments: 'cf. [PDG2024], p. 28'
+  # }}}
+
+  # Lepton masses
+  # {{{
+  - title: 'Lepton Masses'
+    description: ''
+    parameters:
+      'mass::e' :
+          central: +5.10999e-4
+          min:     +5.10999e-4
+          max:     +5.10999e-4
+          unit:     'GeV'
+          latex:    '$m_e$'
+          comments: 'cf. [PDG2012], p. 13'
+      'mass::mu' :
+          central: +1.05658e-1
+          min:     +1.05658e-1
+          max:     +1.05658e-1
+          unit:     'GeV'
+          latex:    '$m_\mu$'
+          comments: 'cf. [PDG2012], p. 13'
+      'mass::tau' :
+          central: +1.77682
+          min:     +1.77666
+          max:     +1.77698
+          unit:     'GeV'
+          latex:    '$m_\tau$'
+          comments: 'cf. [PDG2012], p. 14'
+  # }}}

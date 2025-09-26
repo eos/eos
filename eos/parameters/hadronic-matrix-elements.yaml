@@ -6071,8 +6071,21 @@ groups:
           min:     -2.0
           max:     +0.0
           unit:    'GeV^2'
-          latex:    '$t_0^\textrm{KSvDvD2025}$'
+          latex:    '$t_0^\textrm{KSvD2025}$'
           comments: ''
+      # Susceptibilities
+      '0->Kpi::chi_1m@KSvD2025' :
+          central: +3.446e-3
+          min:     +3.437e-3
+          max:     +3.455e-3
+          unit:     'GeV^-2'
+          latex:    '$\chi_{1^-}(4 \textrm{GeV}^2)$'
+      '0->Kpi::chi_0p@KSvD2025' :
+          central: +2.07e-4
+          min:     +1.93e-4
+          max:     +2.21e-4
+          unit:     '1'
+          latex:    '$\chi_{0^+}(4 \textrm{GeV}^2)$'
   # }}}
 
   # Nonleptonic Amplitudes Parameters

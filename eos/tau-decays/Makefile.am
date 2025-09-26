@@ -4,14 +4,14 @@ MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = @AM_CXXFLAGS@
 AM_LDLAGS = @AM_LDFLAGS@
 
-lib_LTLIBRARIES = libeossdecays.la
-libeossdecays_la_SOURCES = \
-	k-to-l-nu.cc k-to-l-nu.hh \
-	k-to-pi-l-nu.cc k-to-pi-l-nu.hh \
+lib_LTLIBRARIES = libeostaudecays.la
+libeostaudecays_la_SOURCES = \
+	tau-to-k-nu.cc tau-to-k-nu.hh \
+	tau-to-k-pi-nu.cc tau-to-k-pi-nu.hh \
 	observables.cc observables.hh
-libeossdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
-libeossdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
-libeossdecays_la_LIBADD = \
+libeostaudecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+libeostaudecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
+libeostaudecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
@@ -19,9 +19,10 @@ libeossdecays_la_LIBADD = \
 	-lgslcblas \
 	-lgsl
 
-include_eos_sdecaysdir = $(includedir)/eos/s-decays
-include_eos_sdecays_HEADERS = \
-	k-to-l-nu.hh \
+include_eos_taudecaysdir = $(includedir)/eos/tau-decays
+include_eos_taudecays_HEADERS = \
+	tau-to-k-nu.hh
+	tau-to-k-pi-nu.hh \
 	observables.hh
 
 EXTRA_DIST =
@@ -30,11 +31,12 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
-	k-to-l-nu_TEST
+	tau-to-k-nu_TEST \
+	tau-to-k-pi-nu_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
-	libeossdecays.la \
+	libeostaudecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/maths/libeosmaths.la \
@@ -42,4 +44,5 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
-k_to_l_nu_TEST_SOURCES = k-to-l-nu_TEST.cc
+tau_to_k_nu_TEST_SOURCES = tau-to-k-nu_TEST.cc
+tau_to_k_pi_nu_TEST_SOURCES = tau-to-k-pi-nu_TEST.cc

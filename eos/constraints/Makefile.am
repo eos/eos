@@ -35,12 +35,16 @@ CONSTRAINTS_FILES = \
 	ee-to-ccbar.yaml \
 	ee-to-pipi.yaml \
 	epi-to-epi.yaml \
+	K-to-l-nu.yaml \
+	K-to-pi-l-nu.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	Lc-to-L-form-factors.yaml \
 	Lc-to-L-l-nu.yaml \
 	miscellaneous.yaml \
+	tau-to-K-nu.yaml \
 	tau-to-pi-pi-nu.yaml \
+	tau-to-K-pi-nu.yaml \
 	wet-constraints.yaml
 
 EXTRA_DIST = $(CONSTRAINTS_FILES)
