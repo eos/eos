@@ -117,7 +117,7 @@ def _check_varied_parameters_match(analysis: eos.Analysis, data):
         raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
 
 
-@task('find-mode', '{posterior}/mode-{label}')
+@task('find-mode', 'data/{posterior}/mode-{label}')
 def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
               importance_samples:bool=None, seed:int=None, label:str='default', mask_name:str=None):
     '''
@@ -127,6 +127,8 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     a provided parameter point, or by extracting the point with the largest posterior
     from among previously obtained MCMC or importance samples. The latter possibility usually gives the better performence.
     The optimization can also be iterated to increase the accuracy of the result.
+
+    The output file will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/mode-LABEL.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -171,7 +173,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         raise ValueError('The argument mask-name can only be used with importance_samples')
 
     if mask_name is not None:
-        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
+        mask = eos.data.SampleMask(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}')).mask
         label += f'_mask-{mask_name}'
     else:
         mask = slice(None) # Equivalent to mask = : but allowed
@@ -191,7 +193,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _chi2 = _gof.total_chi_square()
     elif not chain is None:
         eos.info(f'Using a starting point based on the existing MCMC data file (chain {chain:04})')
-        _chain = eos.data.MarkovChain(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'))
+        _chain = eos.data.MarkovChain(os.path.join(base_directory, 'data', posterior, f'mcmc-{chain:04}'))
         idx_mode = _np.argmax(_chain.weights)
         _check_varied_parameters_match(analysis, _chain)
         analysis_varied_params = [p.name() for p in analysis.varied_parameters]
@@ -208,7 +210,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _chi2 = _gof.total_chi_square()
     elif importance_samples:
         eos.info('Using a starting point based on the existing importance samples')
-        _file = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+        _file = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
         if _file.posterior_values is None:
             FileNotFoundError("The argument importance_samples requires a valid 'posterior_values.npy' file.")
         idx_mode = _np.argmax(_file.posterior_values[mask])
@@ -256,7 +258,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         eos.info(f'  - {n}: chi^2 / dof = {e.chi2:.2f} / {e.dof}, local_pvalue = {100 * local_pvalue:.2f}%')
 
     eos.data.Mode.create(
-        os.path.join(base_directory, posterior, f'mode-{label}'),
+        os.path.join(base_directory, 'data', posterior, f'mode-{label}'),
         analysis.varied_parameters,
         bfp.point,
         pvalue,
@@ -272,12 +274,12 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     return (bfp, gof)
 
 
-@task('sample-mcmc', '{posterior}/mcmc-{chain:04}')
+@task('sample-mcmc', 'data/{posterior}/mcmc-{chain:04}')
 def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str='./', pre_N:int=150, preruns:int=3, N:int=1000, stride:int=5, cov_scale:float=0.1, start_point:list=None):
     """
     Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
 
-    The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-CHAIN.
+    The output file will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/mcmc-CHAIN.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -307,7 +309,7 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
         samples, usamples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point, return_uspace=True)
-        eos.data.MarkovChain.create(os.path.join(base_directory, posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, usamples, weights)
+        eos.data.MarkovChain.create(os.path.join(base_directory, 'data', posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, usamples, weights)
     except RuntimeError as e:
         eos.error(f'encountered run time error ({e}) in parameter point:')
         for p in analysis.varied_parameters:
@@ -315,12 +317,12 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     eos.completed(f'...finished!')
     eos.info(f'Generated {N} samples from posterior {posterior}.')
 
-@task('sample-prior', '{posterior}/samples')
+@task('sample-prior', 'data/{posterior}/samples')
 def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:int=1000, seed:int=1701):
     """
     Samples from a named posterior PDF w/o likelihood information, an effective prior PDF.
 
-    The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/samples.
+    The output file will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
 
     :param analysis_file: The name of the analysis file that describes the named prior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -339,18 +341,18 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
     eos.inprogress(f'Beginning prior sampling...')
     samples = analysis.sample_prior(N=N, rng=rng)
     weights =  _np.ones(N) / N
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters, samples, weights)
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters, samples, weights)
     eos.completed('...finished!')
     eos.info(f'Generated {N} samples of prior PDF for posterior {posterior}.')
 
-@task('find-clusters', '{posterior}/clusters')
+@task('find-clusters', 'data/{posterior}/clusters')
 def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K_g:int=1, analysis_file:str=None):
     r"""
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
 
     Finding clusters and creating a Gaussian mixture density is a necessary intermediate step before using the sample-pmc subcommand.
-    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-\*. All MCMC input files present will be used in the clustering.
-    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
+    The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/mcmc-\*. All MCMC input files present will be used in the clustering.
+    The output files will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/clusters.
 
     :param posterior: The name of the posterior.
     :type posterior: str
@@ -363,7 +365,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     """
 
     import pathlib
-    input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, posterior)).glob('mcmc-*')]
+    input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, 'data', posterior)).glob('mcmc-*')]
     chains    = [eos.data.MarkovChain(path).usamples for path in input_paths]
     n = len(chains[0])
     for chain in chains:
@@ -375,16 +377,16 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     eos.info(f'Found {len(groups)} groups using an R value threshold of {threshold}')
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
     eos.success(f'Created mixture density with {len(density.components)} components')
-    eos.data.MixtureDensity.create(os.path.join(base_directory, posterior, 'clusters'), density)
+    eos.data.MixtureDensity.create(os.path.join(base_directory, 'data', posterior, 'clusters'), density)
 
 
-@task('mixture-product', '{posterior}/product')
+@task('mixture-product', 'data/{posterior}/product')
 def mixture_product(posterior:str, posteriors:list, base_directory:str='./', analysis_file:str=None):
     """
     Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
 
-    The input densities are read from EOS_BASE_DIRECTORY/POSTERIOR_i/pmc, where POSTERIOR_i is listed in posteriors.
-    The output density will be stored in EOS_BASE_DIRECTORY/POSTERIOR/product.
+    The input densities are read from EOS_BASE_DIRECTORY/data/POSTERIOR_i/pmc, where POSTERIOR_i is listed in posteriors.
+    The output density will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/product.
 
     :param posterior: The name of the posterior.
     :type posterior: str
@@ -395,22 +397,22 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     """
 
     eos.inprogress('Beginning computation.')
-    densities = [eos.data.PMCSampler(os.path.join(base_directory, p, 'pmc')).density() for p in posteriors]
-    output_path = os.path.join(base_directory, posterior, 'product')
+    densities = [eos.data.PMCSampler(os.path.join(base_directory, 'data', p, 'pmc')).density() for p in posteriors]
+    output_path = os.path.join(base_directory, 'data', posterior, 'product')
     eos.data.MixtureDensity.create(output_path, eos.data.MixtureDensity.cartesian_product(densities))
     eos.completed('...finished!')
 
 # Sample PMC
-@task('sample-pmc', '{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
+@task('sample-pmc', 'data/{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
 def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N:int=500, steps:int=10, final_N:int=5000,
                perplexity_threshold:float=1.0, weight_threshold:float=1e-10, sigma_test_stat:list=None, initial_proposal:str='clusters',
                pmc_iterations:int=1, pmc_rel_tol:float=1e-10, pmc_abs_tol:float=1e-05, pmc_lookback:int=1):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
-    The results of the find-cluster command are expected in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
-    The output will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
-    In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTERIOR/samples.
+    The results of the find-cluster command are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/clusters.
+    The output will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/pmc.
+    In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -453,12 +455,12 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     rng = _np.random.mtrand.RandomState(1701)
     eos.inprogress('Beginning sampling...')
     if initial_proposal == 'clusters':
-        initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
+        initial_density = eos.data.MixtureDensity(os.path.join(base_directory, 'data', posterior, 'clusters')).density()
     elif initial_proposal == 'pmc':
-        previous_sampler = eos.data.PMCSampler(os.path.join(base_directory, posterior, 'pmc'))
+        previous_sampler = eos.data.PMCSampler(os.path.join(base_directory, 'data', posterior, 'pmc'))
         initial_density = previous_sampler.density()
     elif initial_proposal == 'product':
-        initial_density = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'product')).density()
+        initial_density = eos.data.MixtureDensity(os.path.join(base_directory, 'data', posterior, 'product')).density()
     else:
         eos.error(f"Could not initialize proposal in sample_pmc: argument {initial_proposal} is not supported.")
 
@@ -471,21 +473,21 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
         weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
 
-    eos.data.PMCSampler.create(os.path.join(base_directory, posterior, 'pmc'), analysis.varied_parameters, proposal,
+    eos.data.PMCSampler.create(os.path.join(base_directory, 'data', posterior, 'pmc'), analysis.varied_parameters, proposal,
                                sigma_test_stat=sigma_test_stat, samples=samples, weights=weights)
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
     eos.completed('...finished!')
     eos.info(f'Finished sampling with {len(samples)} samples.')
 
 # Predict observables
-@task('predict-observables', '{posterior}/pred-{prediction}')
+@task('predict-observables', 'data/{posterior}/pred-{prediction}')
 def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name:str=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
-    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
-    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
+    The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/pred-PREDICTION.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -511,9 +513,9 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     if mask_name is not None and (begin != 0 or end is not None):
         raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
     if mask_name is not None:
-        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
+        mask = eos.data.SampleMask(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}')).mask
 
-    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
     _check_varied_parameters_match(_analysis, data)
 
     try:
@@ -547,7 +549,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         weights = data.weights[mask]
     else:
         weights = data.weights[begin:end]
-    output_path = os.path.join(base_directory, posterior, filename)
+    output_path = os.path.join(base_directory, 'data', posterior, filename)
     eos.data.Prediction.create(output_path, observables, observable_samples, weights)
 
 
@@ -601,13 +603,13 @@ class DynestyResultLogger:
 
 
 # Nested sampling
-@task('sample-nested', '{posterior}/nested')
+@task('sample-nested', 'data/{posterior}/nested')
 def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto'):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
-    The output will be stored in EOS_BASE_DIRECTORY/POSTERIOR/nested.
-    In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTERIOR/samples.
+    The output will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/nested.
+    In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -639,14 +641,14 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     weights = _np.exp(posterior_values)
     eos.completed('...finished!')
     eos.info(f'Finished sampling with {len(samples)} samples and evidence estimate {results.logz[-1]:.2f} +/- {results.logzerr[-1]:.2f}')
-    eos.data.DynestyResults.create(os.path.join(base_directory, posterior, 'nested'), analysis.varied_parameters, results)
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, posterior, 'samples'), analysis.varied_parameters,
+    eos.data.DynestyResults.create(os.path.join(base_directory, 'data', posterior, 'nested'), analysis.varied_parameters, results)
+    eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
 
 
 def _get_modes(posterior:str, base_directory:str='./'):
     result = []
-    search_path = os.path.join(base_directory, posterior, 'mode-*')
+    search_path = os.path.join(base_directory, 'data', posterior, 'mode-*')
 
     for mode_dir in glob.glob(search_path):
         name = mode_dir.split('mode-')[1]
@@ -798,8 +800,8 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
-    The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
-    The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
+    The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/plots.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -825,11 +827,11 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     if mask_name is not None and (begin != 0 or end is not None):
         raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
     if mask_name is not None:
-        mask = eos.data.SampleMask(os.path.join(base_directory, posterior, f'mask-{mask_name}')).mask
+        mask = eos.data.SampleMask(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}')).mask
 
     # Provide file with distribution samples and LaTeX labels for either parameters or observables
     if distribution == 'posterior':
-        f = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+        f = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
         _check_varied_parameters_match(analysis, f)
         labels = [p.latex() for p in analysis.varied_parameters]
 
@@ -839,7 +841,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
         except KeyError:
             raise RuntimeError(f"No prediction with name '{distribution}' exists in the analysis file")
 
-        f = eos.data.Prediction(os.path.join(base_directory, posterior, f'pred-{distribution}'))
+        f = eos.data.Prediction(os.path.join(base_directory, 'data', posterior, f'pred-{distribution}'))
 
         observables = eos.Observables()
         qualified_names = [obs.name for obs in prediction.observables]
@@ -905,7 +907,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     if mask_name is not None:
         filename += f'-mask-{mask_name}'
     for f in _format:
-        fig.savefig(os.path.join(base_directory, posterior, 'plots', f'{filename}.{f}'))
+        fig.savefig(os.path.join(base_directory, 'data', posterior, 'plots', f'{filename}.{f}'))
 
 
 @task('validate', '', logfile=False)
@@ -941,11 +943,11 @@ def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Paramet
     return observable_samples > 0
 
 # Create mask
-@task('create-mask', '{posterior}/mask-{mask_name}')
+@task('create-mask', 'data/{posterior}/mask-{mask_name}')
 def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
     _analysis = analysis_file.analysis(posterior)
     _parameters = _analysis.parameters
-    data = eos.data.ImportanceSamples(os.path.join(base_directory, posterior, 'samples'))
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
     _check_varied_parameters_match(_analysis, data)
 
     mask_component = analysis_file._masks[mask_name]
@@ -965,7 +967,7 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
             masks.append(_calculate_mask(analysis_file.observable(posterior, d.name, _parameters), _parameters, data))
             observables.append(d.name)
     mask = mask_combination_function(_np.stack(masks), axis=0)
-    eos.data.SampleMask.create(os.path.join(base_directory, posterior, f'mask-{mask_name}'), mask, observables)
+    eos.data.SampleMask.create(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}'), mask, observables)
     return mask
 
 

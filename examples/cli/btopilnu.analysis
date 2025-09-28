@@ -101,14 +101,14 @@ figures:
         label: 'Posterior Density'
       items:
       - type: 'histogram1D'
-        datafile: 'th+exp/samples'
+        datafile: 'data/th+exp/samples'
         variable: 'CKM::abs(V_ub)'
       - type: 'kde1D'
-        datafile: 'th+exp/samples'
+        datafile: 'data/th+exp/samples'
         variable: 'CKM::abs(V_ub)'
   - name: CKM-Vub-v-FF
     type: 'corner'
     contents:
-      - path: 'th+exp/samples'
+      - path: 'data/th+exp/samples'
         label: 'th+exp'
     variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
