@@ -15,7 +15,7 @@ contents:
       type: 'uncertainty'
       color: 'C0'
       opacity: 0.5
-      data-file: '/tmp/btopilnu/th+exp/pred-differential'
+      data-file: '/tmp/btopilnu/data/th+exp/pred-differential'
 
     - name: 'B->pi mu nu (V_ub inclusive)'
       type: 'observable'
