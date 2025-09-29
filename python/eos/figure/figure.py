@@ -353,8 +353,8 @@ class CornerFigure(Figure):
         plots = []
         size = len(self._variables)
 
-        for i in range(size):
-            for j in range(size):
+        for i in range(size):     # rows
+            for j in range(size): # columns
 
                 if i < j:
                     plots.append(PlotFactory.from_dict(**{
@@ -364,24 +364,28 @@ class CornerFigure(Figure):
                 elif i == j:
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
-                            'ticks': { 'visible': True },
-                            'label': self._labels[i],
-                            'range': [ absmin[i], absmax[i] ]
+                            'ticks': { 'visible': True, 'position': 'bottom' },
+                            'label': self._labels[j],
+                            'range': [ absmin[j], absmax[j] ]
                         }
                         if (i == size - 1) else
                         {
-                            'ticks': { 'visible': False }
+                            'ticks': { 'visible': False },
+                            'range': [ absmin[j], absmax[j] ]
                         },
                         'yaxis': {
                             'ticks': { 'visible': False },
+                            # 1D marginals, no label, no range
                         },
                         'grid': { 'visible': True, 'axis': 'x' },
                         'items': [
                             {
                                 'type': 'kde1D', 'label': content.label,
                                 'datafile': context.data_path(content.path),
-                                'variable': self._variables[i],
+                                'variable': self._variables[j],
                                 'color': content.color,
+                                'level': 68.3,
+                                'range': [absmin[j], absmax[j]]
                             }
                         for content in self.contents]
                     }))
@@ -389,13 +393,14 @@ class CornerFigure(Figure):
                 else:
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
-                            'ticks': { 'visible': True },
+                            'ticks': { 'visible': True, 'position': 'bottom' },
                             'label': self._labels[j],
                             'range': [ absmin[j], absmax[j] ]
                         }
                         if (i == size - 1) else
                         {
-                            'ticks': { 'visible': False }
+                            'ticks': { 'visible': False, 'position': 'both' },
+                            'range': [ absmin[j], absmax[j] ]
                         },
                         'yaxis': {
                             'ticks': { 'visible': True },
@@ -404,20 +409,22 @@ class CornerFigure(Figure):
                         }
                         if (j == 0) else
                         {
-                            'ticks': { 'visible': False }
+                            'ticks': { 'visible': False },
+                            'range': [ absmin[i], absmax[i] ]
                         },
                         'grid': { 'visible': True},
                         'items': [
                             {
-                                'type': 'kde2D', 'label': content.label ,
+                                'type': 'kde2D', 'label': content.label,
                                 'datafile': context.data_path(content.path),
                                 'variables': [self._variables[j], self._variables[i]],
                                 'color': content.color,
+                                'contours': ['lines', 'areas']
                             }
                         for content in self.contents]
                     }))
 
-        self._figure = GridFigure(shape=(size, size), plots=plots)
+        self._figure = GridFigure(shape=(size, size), plots=plots, padding=(0.0, 0.0))
 
 
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
@@ -433,6 +440,7 @@ class CornerFigure(Figure):
             self.prepare(context=context, output=output)
 
         self._figure.draw(context=context, output=output)
+        self._figure._figure.tight_layout()
 
 
     @classmethod
