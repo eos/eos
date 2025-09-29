@@ -44,3 +44,8 @@ from .plot import *
 from .item import *
 from .common import Watermark
 from .data import DataFile
+
+## Inject EOS color names
+import matplotlib.colors as mcolors
+for i, cspec in enumerate(ItemColorCycler._colors):
+    mcolors._colors_full_map[f"eos:C{i}"] = cspec
