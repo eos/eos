@@ -216,6 +216,8 @@ class GridFigure(Figure):
     The list of plots are assigned to the grid positions in row-major order, i.e. the first plot is assigned to the first row
     and first column, the second plot to the first row and second column, and so on.
 
+    :param padding: The tuple of horizontal and vertical padding between the plots in the grid, specified as a tuple of fractions of the average plot size. Defaults to (0.2, 0.2).
+    :type padding: tuple[float, float]
     :param plots: The list of :class:`Plot <eos.figure.Plot>` objects to be drawn in the figure.
     :type plots: list[:class:`Plot <eos.figure.Plot>`]
     :param shape: The tuple specifying the shape of the figure's grid, specifying the number of rows and columns in that order.
@@ -225,6 +227,7 @@ class GridFigure(Figure):
     type:str=field(repr=False, init=False, default='grid')
 
     plots:list[Plot]
+    padding:tuple[float,float]=field(default=(0.2, 0.2))
     shape:tuple[int, int]
 
     _api_doc = inspect.cleandoc("""
@@ -245,7 +248,9 @@ class GridFigure(Figure):
     """)
     def __post_init__(self):
         nrow, ncol = self.shape
-        self._figure, axes = plt.subplots(nrow, ncol, figsize=(3.0 * nrow, 3.0 * ncol))
+        self._figure = plt.figure(figsize=(3.0 * ncol, 3.0 * nrow))
+        self._gridspec = self._figure.add_gridspec(nrow, ncol, hspace=self.padding[0], wspace=self.padding[1])
+        axes = self._gridspec.subplots()
         self._axes = axes.flatten('C') # flatten to row-major style
 
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
