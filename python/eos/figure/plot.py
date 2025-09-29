@@ -86,24 +86,34 @@ class XTicks(Deserializable):
 
     :param minor: Whether to show minor ticks. Defaults to True.
     :type minor: bool
+    :param position: The position of the ticks. Can be 'bottom', 'top', or 'both'. Defaults to 'bottom'.
+    :type position: str
     :param visible: Whether the ticks are visible. Defaults to True.
     :type visible: bool
     """
 
     minor:bool=field(default=True)
+    position:str=field(default='bottom')
     visible:bool=field(default=True)
 
     def __post_init__(self):
-        pass
+        POSITIONS = ['bottom', 'top', 'both']
+        if self.position not in POSITIONS:
+            raise ValueError(f'Unknown position: {self.position}. Must be one of {",".join(POSITIONS)}')
 
     def draw(self, ax):
         if not self.visible:
             ax.xaxis.set_major_formatter(plt.NullFormatter())
+            ax.xaxis.set_minor_formatter(plt.NullFormatter())
+            ax.xaxis.set_tick_params(bottom=False, top=False)
         else:
             ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             if self.minor:
                 ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
-            ax.xaxis.set_tick_params(bottom=self.visible, top=self.visible)
+            ax.xaxis.set_tick_params(
+                bottom=(self.position == 'bottom' or self.position == 'both'),
+                top=(self.position == 'top' or self.position == 'both')
+            )
 
 
 @dataclass
@@ -156,24 +166,34 @@ class YTicks(Deserializable):
 
     :param minor: Whether to show minor ticks. Defaults to True.
     :type minor: bool
+    :param position: The position of the ticks. Can be 'left', 'right', or 'both'. Defaults to 'left'.
+    :type position: str
     :param visible: Whether the ticks are visible. Defaults to True.
     :type visible: bool
     """
 
     minor:bool=field(default=True)
+    position:str=field(default='left')
     visible:bool=field(default=True)
 
     def __post_init__(self):
-        pass
+        POSITIONS = ['left', 'right', 'both']
+        if self.position not in POSITIONS:
+            raise ValueError(f'Unknown position: {self.position}. Must be one of {",".join(POSITIONS)}')
 
     def draw(self, ax):
         if not self.visible:
             ax.yaxis.set_major_formatter(plt.NullFormatter())
+            ax.yaxis.set_minor_formatter(plt.NullFormatter())
+            ax.yaxis.set_tick_params(left=False, right=False)
         else:
             ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             if self.minor:
                 ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
-            ax.yaxis.set_tick_params(bottom=self.visible, top=self.visible)
+            ax.yaxis.set_tick_params(
+                left=(self.position == 'left' or self.position == 'both'),
+                right=(self.position == 'right' or self.position == 'both')
+            )
 
 @dataclass
 class YAxis(Deserializable):
