@@ -7,9 +7,14 @@ from pathlib import Path
 
 class TestAnalysisFile(unittest.TestCase):
 
-    def test_pyhf_likelihood(self):
+    def test_analysis_file(self):
 
         af = eos.AnalysisFile(Path(__file__).parent / 'analysis_file_TEST.d' / 'valid-analysis-file.yaml')
+        af.validate()
+
+    def test_minimal_analysis_file(self):
+
+        af = eos.AnalysisFile(Path(__file__).parent / 'analysis_file_TEST.d' / 'minimal-analysis-file.yaml')
         af.validate()
 
 
