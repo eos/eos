@@ -1,0 +1,44 @@
+likelihoods:
+  - name: TH-pi
+    constraints:
+      - 'B->pi::form-factors[f_+,f_0,f_T]@LMvD:2021A;form-factors=BCL2008-4'
+      - 'B->pi::f_++f_0+f_T@FNAL+MILC:2015C;form-factors=BCL2008-4'
+      - 'B->pi::f_++f_0@RBC+UKQCD:2015A;form-factors=BCL2008-4'
+
+  - name: EXP-pi
+    constraints:
+      - 'B^0->pi^-l^+nu::BR@HFLAV:2019A;form-factors=BCL2008-4'
+
+  - name: EXP-leptonic
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+
+priors:
+  - name: DC-Bu
+    descriptions:
+      - { 'parameter': 'decay-constant::B_u', 'central': 0.1894, 'sigma':  0.0014, 'type': 'gaussian' }
+
+  - name: FF-pi
+    descriptions:
+      - { 'parameter': 'B->pi::f_+(0)@BCL2008', 'min':   0.21, 'max':  0.32, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_+^1@BCL2008' , 'min':  -2.96, 'max': -0.60, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_+^2@BCL2008' , 'min':  -3.98, 'max':  4.38, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_+^3@BCL2008' , 'min': -18.30, 'max':  9.27, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^1@BCL2008' , 'min':  -0.10, 'max':  1.35, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^2@BCL2008' , 'min':  -2.08, 'max':  4.65, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^3@BCL2008' , 'min':  -4.73, 'max':  9.07, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_0^4@BCL2008' , 'min': -60.00, 'max': 38.00, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::f_T(0)@BCL2008', 'min':   0.18, 'max':  0.32, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_T^1@BCL2008' , 'min':  -3.91, 'max': -0.33, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_T^2@BCL2008' , 'min':  -4.32, 'max':  2.00, 'type': 'uniform' }
+      - { 'parameter': 'B->pi::b_T^3@BCL2008' , 'min':  -7.39, 'max': 10.60, 'type': 'uniform' }
+
+posteriors:
+  - name: CKM-all
+    prior:
+      - DC-Bu
+      - FF-pi
+    likelihood:
+      - TH-pi
+      - EXP-pi
+      - EXP-leptonic
