@@ -142,9 +142,12 @@ figures:
       - type: 'histogram1D'
         datafile: 'CKM+FF/samples'
         variable: 'CKM::abs(V_ub)'
+        color: 'eos:C0'
       - type: 'kde1D'
         datafile: 'CKM+FF/samples'
         variable: 'CKM::abs(V_ub)'
+        color: 'eos:C1'
+
   - name: Vub-v-FF
     type: single
     plot:
@@ -158,6 +161,8 @@ figures:
       - type: 'kde2D'
         datafile: 'CKM+FF/samples'
         variables: [ 'CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008' ]
+        color: 'eos:C0'
+
 steps:
   - title: 'Sample from CKM-all and WET-all posteriors'
     id: 'CKM-all,WET-all.sample'
