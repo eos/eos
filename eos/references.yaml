@@ -117,7 +117,7 @@ BB:1999A:
   inspire-id: Buchalla:1998ba
   title: 'The rare decays $K\to \pi \nu\bar\nu$, $B \to X \nu\bar\nu$ and $B \to \ell^+
     \ell^-$: An Update'
-BBGJvD:2020A:
+BBGJvD:2021A:
   authors: Bobeth, Christoph and Bordone, Marzia and Gubernari, Nico and Jung, Martin and van Dyk, Danny
   eprint:
     archive: arXiv
@@ -1699,9 +1699,9 @@ HKvT:2025A:
   authors: Herren, F. and Kubis, B. and van Tonder, R.
   eprint:
     archive: arXiv
-    id: oai:arXiv.org:2502.xxxxx
-  inspire-id: Herren:2025xxx
-  title: A model-independent parameterization of $B\rightarrow\pi\pi\ell\nu$ decays
+    id: oai:arXiv.org:2502.20960
+  inspire-id: Herren:2025cwv
+  title: Model-independent parameterization of $B\rightarrow\pi\pi\ell\nu$ decays
 HLMW:2005A:
   authors: Huber, Tobias and Lunghi, Enrico and Misiak, Mikolaj and Wyler, Daniel
   eprint:
@@ -1848,7 +1848,7 @@ JS:2018A:
 KKRvD:2024A:
   authors: Kirk, Matthew and Kubis, Bastian and Reboud, Meril and van Dyk, Danny
   title: 'A Simple Parametrisation of the Pion Form Factor'
-KKVDZ:2022A:
+KKvDZ:2022A:
   authors: Kürten, Stephan and Zanke, Marvin and Kubis, Bastian and van Dyk, Danny
   eprint:
     archive: arXiv
@@ -1870,7 +1870,7 @@ KLOE:2006A:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/0508027
   inspire-id: KLOE:2005vdt
-  title: Measurement of the absolute branching ratio for the $K^+ \to \mu
+  title: Measurements of the absolute branching ratios for the dominant $K_L$ decays, the $K_L$ lifetime, and $V_{us}$ with the KLOE detector
 KLOE:2008A:
   authors: Ambrosino, F. et al.
   collaboration: KLOE
