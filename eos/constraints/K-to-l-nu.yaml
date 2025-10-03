@@ -1,0 +1,13 @@
+###################
+# K -> l nu #
+###################
+#
+# [PDG:2024A]
+K->munu::BR@PDG:2024A:
+    type: Gaussian
+    observable: K->lnu::BR
+    options: {l: 'mu'}
+    kinematics: {}
+    mean: 63.60e-2
+    sigma-stat: {hi: 0., lo: 0.}
+    sigma-sys: {hi: 0.16e-2, lo: 0.16e-2}

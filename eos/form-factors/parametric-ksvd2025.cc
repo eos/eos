@@ -32,7 +32,7 @@
 
 namespace eos
 {
-    /* Vacuum -> pi pi */
+    /* Vacuum -> K^0 pi^+ */
     KSvD2025FormFactors<VacuumToKPi>::KSvD2025FormFactors(const Parameters & p, const Options & o) :
         n_resonances_1m(o, option_specifications, "n-resonances-1m"_ok),
         n_resonances_0p(o, option_specifications, "n-resonances-0p"_ok),
@@ -78,7 +78,11 @@ namespace eos
         }},
         _m_K(p["mass::K_d"], *this),
         _m_pi(p["mass::pi^-"], *this),
-        _t_0(p["0->Kpi::t_0@KSvD2025"], *this)
+        _t_0(p["0->Kpi::t_0@KSvD2025"], *this),
+        _f_K(p["decay-constant::K"], *this),
+        _f_pi(p["decay-constant::pi"], *this),
+        _chi_1m(p["0->Kpi::chi_1m"], *this),
+        _chi_0p(p["0->Kpi::chi_0p"], *this)
 
     {
     }
@@ -135,13 +139,14 @@ namespace eos
     }
 
     complex<double>
-    KSvD2025FormFactors<VacuumToKPi>::phitilde_p(const complex<double> & z, const double & chi_1m) const
+    KSvD2025FormFactors<VacuumToKPi>::phitilde_p(const complex<double> & z) const
     {
         // The weight function ``(1.0 + z)^2 * (1.0 - z)^(+5/2)`` has been cancelled against the outer function
         // to remove unphysical singularities and correct the asymptotic behaviour
         const double t_p      = this->_t_p();
         const double t_0      = this->_t_0();
         const double t_m      = this->_t_m();
+        const double chi_1m   = this->_chi_1m();
         const double t0factor = 1.0 - t_0 / t_p;
         const double tmfactor = 1.0 - t_m / t_p;
         const double Q2       = 4.0;
@@ -176,32 +181,25 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::resonance_productprime_p(const complex<double> & z) const
     {
         const std::size_t num_resonances = stoi(n_resonances_1m.value());
+        complex<double> tmp = 0.0;
 
-        // factors f in the resonance product, such that result = prod_r f[r]
-        std::vector<complex<double>> f(num_resonances);
         for (auto i = 0u; i < num_resonances; i++)
         {
             complex<double> zr = this->_zr(_M_fp[i], _G_fp[i]);
-            f[i] = 1.0 / (z - zr) / (z - std::conj(zr));
+            tmp += 2.0 * (zr.real() - z) / (z - zr) / (z - std::conj(zr));
         }
-        const auto prod_f = std::accumulate(f.cbegin(), f.cend(), complex<double>(1.0), std::multiplies<complex<double>>());
 
-        std::vector<complex<double>> fprime(num_resonances); // such that Pi' = prod_r fprime[r]
-        for (auto i = 0u; i < num_resonances; i++)
-        {
-            complex<double> zr = this->_zr(_M_fp[i], _G_fp[i]);
-            fprime[i] =  (-2.0 * (z - zr.real()) / power_of<2>(z - zr) / power_of<2>(z - std::conj(zr)) ) * prod_f / f[i];
-        }
-        return std::accumulate(fprime.cbegin(), fprime.cend(), complex<double>(0.0));
+        return resonance_product_p(z) * tmp;
     }
 
     complex<double>
-    KSvD2025FormFactors<VacuumToKPi>::phitildeprime_p(const complex<double> & z, const double & chi_1m) const
+    KSvD2025FormFactors<VacuumToKPi>::phitildeprime_p(const complex<double> & z) const
     {
         // Derivative of the modified outer function phitilde_+ with respect to z
         const double t_p      = this->_t_p();
         const double t_0      = this->_t_0();
         const double t_m      = this->_t_m();
+        const double chi_1m   = this->_chi_1m();
         const double t0factor = 1.0 - t_0 / t_p;
         const double tmfactor = 1.0 - t_m / t_p;
         const double Q2       = 4.0;
@@ -227,13 +225,14 @@ namespace eos
     }
 
     complex<double>
-    KSvD2025FormFactors<VacuumToKPi>::phitilde_z(const complex<double> & z, const double & chi_0p) const
+    KSvD2025FormFactors<VacuumToKPi>::phitilde_z(const complex<double> & z) const
     {
         // The weight function ``(1.0 + z) * (1.0 - z)^(+7/2)`` has been cancelled against the outer function
         // to remove unphysical singularities and correct the asymptotic behaviour
         const double t_p      = this->_t_p();
         const double t_0      = this->_t_0();
         const double t_m      = this->_t_m();
+        const double chi_0p   = this->_chi_0p();
         const double t0factor = 1.0 - t_0 / t_p;
         const double tmfactor = 1.0 - t_m / t_p;
         const double Q2       = 4.0;
@@ -247,12 +246,13 @@ namespace eos
     }
 
     complex<double>
-    KSvD2025FormFactors<VacuumToKPi>::phitildeprime_z(const complex<double> & z, const double & chi_0p) const
+    KSvD2025FormFactors<VacuumToKPi>::phitildeprime_z(const complex<double> & z) const
     {
         // Derivative of the modified outer function phitilde_0 with respect to z
         const double t_p      = this->_t_p();
         const double t_0      = this->_t_0();
         const double t_m      = this->_t_m();
+        const double chi_0p   = this->_chi_0p();
         const double t0factor = 1.0 - t_0 / t_p;
         const double tmfactor = 1.0 - t_m / t_p;
         const double Q2       = 4.0;
@@ -285,11 +285,11 @@ namespace eos
     }
 
     double
-    KSvD2025FormFactors<VacuumToKPi>::_b0_fp(const double & chi_1m) const
+    KSvD2025FormFactors<VacuumToKPi>::_b0_fp() const
     {
         // determine the coefficient b^+_0 of f_+(q^2) by imposing that Im f_+(q^2) ~ sqrt(q^2 - t_+)^3
-        const complex<double> phitilde_m1 = this->phitilde_p(-1.0, chi_1m);
-        const complex<double> phitildeprime_m1 = this->phitildeprime_p(-1.0, chi_1m);
+        const complex<double> phitilde_m1 = this->phitilde_p(-1.0);
+        const complex<double> phitildeprime_m1 = this->phitildeprime_p(-1.0);
 
         const complex<double> resonance_product_m1 = this->resonance_product_p(-1.0);
         const complex<double> resonance_productprime_m1 = this->resonance_productprime_p(-1.0);
@@ -312,13 +312,13 @@ namespace eos
     }
 
     double
-    KSvD2025FormFactors<VacuumToKPi>::_b0_fz(const double & chi_1m, const double & chi_0p) const
+    KSvD2025FormFactors<VacuumToKPi>::_b0_fz() const
     {
         // determine the coefficient b^0_0 of f_0(q^2) by imposing that f_+(0) = f_0(0)
         const complex<double> z0 = this->z(0.0);
 
         std::array<double, 10> bp;
-        bp[0] = this->_b0_fp(chi_1m);
+        bp[0] = this->_b0_fp();
         std::copy(_b_fp.cbegin(), _b_fp.cend(), bp.begin()+1);
 
         std::array<double, 10> bz;
@@ -331,8 +331,8 @@ namespace eos
         const auto Pi_p_z0 = this->resonance_product_p(z0);
         const auto Pi_z_z0 = this->resonance_product_z(z0);
 
-        const auto phitilde_p_z0 = this->phitilde_p(z0, chi_1m);
-        const auto phitilde_z_z0 = this->phitilde_z(z0, chi_0p);
+        const auto phitilde_p_z0 = this->phitilde_p(z0);
+        const auto phitilde_z_z0 = this->phitilde_z(z0);
 
         // Is there a way to write this in manifestly real form?
         const double b0 = std::real( (phitilde_z_z0 / phitilde_p_z0) * (Pi_p_z0 / Pi_z_z0) * bp_sum - b0_sum );
@@ -350,8 +350,7 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::f_p(const complex<double> & q2) const
     {
         const auto z        = this->z(q2);
-        const auto chi_1m   = 3.446e-3;
-        const auto phitilde = this->phitilde_p(z, chi_1m);
+        const auto phitilde = this->phitilde_p(z);
 
         const auto Pi_p = this->resonance_product_p(z);
 
@@ -359,7 +358,7 @@ namespace eos
         std::array<double, 10> bp;
         std::copy(_b_fp.cbegin(), _b_fp.cend(), bp.begin()+1);
         // Fix b[0] to enforce f_+(q2=0) = 1
-        bp[0] = _b0_fp(chi_1m);
+        bp[0] = _b0_fp();
 
         const auto series = this->series_m(z, bp);
 
@@ -377,9 +376,7 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::f_0(const complex<double> & q2) const
     {
         const auto z        = this->z(q2);
-        const auto chi_1m   = 3.446e-3;
-        const auto chi_0p   = 2.07e-4;
-        const auto phitilde = this->phitilde_z(z, chi_0p);
+        const auto phitilde = this->phitilde_z(z);
 
         const auto Pi_z = this->resonance_product_z(z);
 
@@ -387,7 +384,7 @@ namespace eos
         std::array<double, 10> bz;
         std::copy(_b_fz.cbegin(), _b_fz.cend(), bz.begin()+1);
         // Fix b[0] to enforce f_0(0) = f_+(0)
-        bz[0] = _b0_fz(chi_1m, chi_0p);
+        bz[0] = _b0_fz();
 
         const auto series = this->series_m(z, bz);
 
@@ -413,15 +410,13 @@ namespace eos
         const complex<double> z = std::polar(1.0, alpha);
         const complex<double> w = this->w_p(z);
 
-        const auto chi_1m = 3.446e-3;
-
         const auto resonance_product = this->resonance_product_p(z);
 
         // prepare expansion coefficients
         std::array<double, 10> bp;
         std::copy(_b_fp.cbegin(), _b_fp.cend(), bp.begin()+1);
         // Fix b[0] from f_+'(q2=t+) = 0
-        bp[0] = _b0_fp(chi_1m);
+        bp[0] = _b0_fp();
 
         const auto series = this->series_m(z, bp);
 
@@ -439,16 +434,13 @@ namespace eos
         const complex<double> z = std::polar(1.0, alpha);
         const complex<double> w = this->w_z(z);
 
-        const auto chi_1m = 3.446e-3;
-        const auto chi_0p = 2.07e-4;
-
         const auto resonance_product = this->resonance_product_z(z);
 
         // prepare expansion coefficients
         std::array<double, 10> bz;
         std::copy(_b_fz.cbegin(), _b_fz.cend(), bz.begin()+1);
         // Fix b[0] from f_0(0) = f_+(0)
-        bz[0] = _b0_fz(chi_1m, chi_0p);
+        bz[0] = _b0_fz();
 
         const auto series = this->series_m(z, bz);
 
@@ -463,15 +455,34 @@ namespace eos
 
     double KSvD2025FormFactors<VacuumToKPi>::b0_fp() const
     {
-        const auto chi_1m = 3.446e-3;
-        return _b0_fp(chi_1m);
+        return _b0_fp();
     }
 
     double KSvD2025FormFactors<VacuumToKPi>::b0_f0() const
     {
-        const auto chi_1m = 3.446e-3;
-        const auto chi_0p = 2.07e-4;
-        return _b0_fz(chi_1m, chi_0p);
+        return _b0_fz();
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::Delta_CT() const
+    {
+        const auto fK = this->_f_K();
+        const auto fpi = this->_f_pi();
+
+        const auto mK = this->_m_K();
+        const auto mpi = this->_m_pi();
+        const auto q2 =  power_of<2>(mK) - power_of<2>(mpi);
+        return std::real(this->f_0(q2)) - (fK / fpi);
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::Delta_CTtilde() const
+    {
+        const auto fK = this->_f_K();
+        const auto fpi = this->_f_pi();
+
+        const auto mK = this->_m_K();
+        const auto mpi = this->_m_pi();
+        const auto q2 =  power_of<2>(mpi) - power_of<2>(mK);
+        return std::real(this->f_0(q2)) - (fpi / fK);
     }
 
     const std::set<ReferenceName>

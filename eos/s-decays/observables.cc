@@ -19,6 +19,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/s-decays/k-to-l-nu.hh>
+#include <eos/s-decays/k-to-pi-l-nu.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -41,6 +42,42 @@ namespace eos
     }
 
     // }}}
+
+    // K -> pi l nu
+    // {{{
+    ObservableGroup
+    make_k_to_pi_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $K \to pi \ell^+ \bar{\nu}_\ell$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "form-factors" selects the form factor parametrization.)",
+                                                       {
+                                                           make_observable("K_u->pilnu::BR",
+                                                                           R"(\mathcal{B}(K^- \to \pi^0 \ell^- \bar{\nu}_\ell))",
+                                                                           Unit::None(),
+                                                                           &KToPiLeptonNeutrino::total_branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "K"_ok, "K_u" } }
+                                                                           ),
+                                                           make_observable("K_S->pilnu::BR",
+                                                                           R"(\mathcal{B}(K_S \to \pi^+ \ell^- \bar{\nu}_\ell))",
+                                                                           Unit::None(),
+                                                                           &KToPiLeptonNeutrino::total_branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           ),
+                                                           make_observable("K_L->pilnu::BR",
+                                                                           R"(\mathcal{B}(K_L \to \pi^+ \ell^- \bar{\nu}_\ell))",
+                                                                           Unit::None(),
+                                                                           &KToPiLeptonNeutrino::total_branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "K"_ok, "K_L" } }
+                                                                           ),
+        });
+        return ObservableGroup(imp);
+    }
+
+    // }}}
     // }}}
 
     ObservableSection
@@ -49,7 +86,9 @@ namespace eos
         auto imp = new Implementation<ObservableSection>("Observables in (semi)leptonic $s$-hadron decays",
                                                          "",
                                                          { // K -> l^- nubar
-                                                           make_k_to_l_nu_group() });
+                                                           make_k_to_l_nu_group(),
+                                                           // K -> pi l nubar
+                                                           make_k_to_pi_l_nu_group() });
 
         return ObservableSection(imp);
     }

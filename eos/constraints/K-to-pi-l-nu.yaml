@@ -1,0 +1,74 @@
+###################
+# K -> pi l nu #
+###################
+#
+# [KLOE:2008A]
+K^+->pi^0l^+nu::BR@KLOE:2008A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K_u->pilnu::BR
+        - K_u->pilnu::BR
+    kinematics:
+        - {}
+        - {}
+    options:
+        - {l: e}
+        - {l: mu}
+    means: [ 4.965e-2, 3.233e-2 ]
+    covariance:
+        - [ 0.2780e-6, 0.1268e-6 ]
+        - [ 0.1268e-6, 0.1510e-6 ]
+# [KLOE:2002A]
+# Note we have divided by 2 since KLOE quotes only the sum of charge conjugate decay modes
+K_S->pi^-e^+nu::BR@KLOE:2002A:
+    type: Gaussian
+    observable: K_S->pilnu::BR
+    kinematics: {}
+    options: {l: e}
+    mean: 3.455e-4
+    sigma-stat: { lo: 0.17e-4, hi: 0.17e-4 }
+    sigma-sys: { lo: 0.075e-4, hi: 0.075e-4 }
+# [KLOE-2:2020A]
+# Note we have divided by 2 since KLOE quotes only the sum of charge conjugate decay modes
+K_S->pi^-mu^+nu::BR@KLOE-2:2020A:
+    type: Gaussian
+    observable: K_S->pilnu::BR
+    kinematics: {}
+    options: {l: mu}
+    mean: 2.28e-4
+    sigma-stat: { lo: 0.055e-4, hi: 0.055e-4 }
+    sigma-sys: { lo: 0.085e-4, hi: 0.085e-4 }
+# [KLOE:2006A]
+# Note we have divided by 2 since KLOE quotes only the sum of charge conjugate decay modes
+K_L->pi^-l^+nu::BR@KLOE:2006A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K_L->pilnu::BR
+        - K_L->pilnu::BR
+    kinematics:
+        - {}
+        - {}
+    options:
+        - {l: e}
+        - {l: mu}
+    means: [ 0.20035, 0.1349 ]
+    covariance:
+        - [ 5.925e-7, -1.48125e-7 ]
+        - [ -1.48125e-7, 5.925e-7 ]
+# [KTEV:2004A]
+# Note we have divided by 2 since KTeV quotes only the sum of charge conjugate decay modes
+K_L->pi^-l^+nu::BR@KTEV:2004A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+        - K_L->pilnu::BR
+        - K_L->pilnu::BR
+    kinematics:
+        - {}
+        - {}
+    options:
+        - {l: e}
+        - {l: mu}
+    means: [ 0.20335, 0.13505 ]
+    covariance:
+        - [ 0.3025e-6, 0.037125e-6 ]
+        - [ 0.037125e-6, 0.2025e-6 ]

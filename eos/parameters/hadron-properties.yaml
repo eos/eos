@@ -39,7 +39,7 @@ groups:
           comments: "cf. [PDG-Live], December 2024"
       # K meson masses
       'mass::K_d' :
-          alias_of: [ 'mass::Kbar_d', 'mass::K_S' ]
+          alias_of: [ 'mass::Kbar_d', 'mass::K_S', 'mass::K_L' ]
           central: +0.497611
           min:     +0.497598
           max:     +0.497624
@@ -640,6 +640,20 @@ groups:
           unit:     's'
           latex:    '$\tau_{K^\pm}$'
           comments: 'cf. [PDG2012], p. 39'
+      'life_time::K_S' :
+          central: +0.8954e-10
+          min:     +0.8950e-10
+          max:     +0.8958e-10
+          unit:     's'
+          latex:    '$\tau_{K_S}$'
+          comments: 'cf. [PDG:2024A] p. 40'
+      'life_time::K_L' :
+          central: +5.116e-8
+          min:     +5.095e-8
+          max:     +5.137e-8
+          unit:     's'
+          latex:    '$\tau_{K_L}$'
+          comments: 'cf. [PDG:2024A] p. 41'
       'life_time::D_d' :
           central: +1.033e-12
           min:     +1.028e-12

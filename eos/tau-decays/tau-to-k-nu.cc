@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025 Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +20,7 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
-#include <eos/s-decays/k-to-l-nu.hh>
+#include <eos/tau-decays/tau-to-k-nu.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -31,9 +32,9 @@ namespace eos
     using std::norm;
 
     /*
-     * Decay: K^- -> l^- nubar, adapter from cf. [DBG:2013A]
+     * Decay: tau^+ -> K^+ nubar, based on [S:2025A] and [DBG:2013A]
      */
-    template <> struct Implementation<KToLeptonNeutrino>
+    template <> struct Implementation<TauToKNeutrino>
     {
             SpecifiedOption opt_model;
 
@@ -47,11 +48,9 @@ namespace eos
 
             UsedParameter f_K;
 
-            UsedParameter tau_K;
+            UsedParameter tau_tau;
 
-            LeptonFlavorOption opt_l;
-
-            UsedParameter m_l;
+            UsedParameter m_tau;
 
             BooleanOption opt_cp_conjugate;
 
@@ -66,84 +65,82 @@ namespace eos
                 g_fermi(p["WET::G_Fermi"], u),
                 m_K(p["mass::K_u"], u),
                 f_K(p["decay-constant::K_u"], u),
-                tau_K(p["life_time::K_u"], u),
-                opt_l(o, options, "l"_ok),
-                m_l(p["mass::" + opt_l.str()], u),
+                tau_tau(p["life_time::tau"], u),
+                m_tau(p["mass::tau"], u),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-                mu(p["us" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
+                mu(p["ustaunutau::mu"], u)
             {
-                Context ctx("When constructing K_u->lnu observable");
+                Context ctx("When constructing tau->K-nu observable");
 
                 u.uses(*model);
             }
 
             inline double
-            beta_l() const
+            beta_K() const
             {
-                return (1.0 - power_of<2>(m_l() / m_K()));
+                return (1.0 - power_of<2>(m_K() / m_tau()));
             }
 
             double
             decay_width() const
             {
-                const WilsonCoefficients<ChargedCurrent> wc = model->wet_uslnu(opt_l.value(), opt_cp_conjugate.value());
+                const WilsonCoefficients<ChargedCurrent> wc = model->wet_uslnu(LeptonFlavor::tauon, opt_cp_conjugate.value());
 
                 // cf. [DBG2013], eq. (5), p. 5
                 const complex<double> ga = wc.cvl() - wc.cvr();
                 const complex<double> gp = wc.csl() - wc.csr();
 
                 // masses
-                const double m_K = this->m_K(), m_K2 = m_K * m_K;
-                const double m_l    = this->m_l();
+                const double m_tau = this->m_tau(), m_tau3 = power_of<3>(m_tau);
+                const double m_K2   = power_of<2>(this->m_K());
                 const double msatmu = model->m_s_msbar(mu);
                 const double muatmu = model->m_u_msbar(mu);
 
-                return power_of<2>(g_fermi * std::abs(model->ckm_us()) * f_K * beta_l()) * m_K / (8.0 * M_PI) * norm(ga * m_l - gp * m_K2 / (msatmu + muatmu));
+                return power_of<2>(g_fermi * std::abs(model->ckm_us()) * f_K * beta_K()) * m_tau3 / (16.0 * M_PI) * norm(ga - gp * m_K2 / (msatmu + muatmu) / m_tau);
             }
 
             double
             branching_ratio() const
             {
-                return decay_width() * tau_K / hbar;
+                return decay_width() * tau_tau / hbar;
             }
     };
 
-    const std::vector<OptionSpecification> Implementation<KToLeptonNeutrino>::options{
+    const std::vector<OptionSpecification> Implementation<TauToKNeutrino>::options{
         Model::option_specification(),
         { "cp-conjugate"_ok, { "true", "false" }, "false" },
-        {            "l"_ok,       { "e", "mu" },    "mu" },
     };
 
-    KToLeptonNeutrino::KToLeptonNeutrino(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<KToLeptonNeutrino>(new Implementation<KToLeptonNeutrino>(parameters, options, *this))
+    TauToKNeutrino::TauToKNeutrino(const Parameters & parameters, const Options & options) :
+        PrivateImplementationPattern<TauToKNeutrino>(new Implementation<TauToKNeutrino>(parameters, options, *this))
     {
     }
 
-    KToLeptonNeutrino::~KToLeptonNeutrino() {}
+    TauToKNeutrino::~TauToKNeutrino() {}
 
     double
-    KToLeptonNeutrino::branching_ratio() const
+    TauToKNeutrino::branching_ratio() const
     {
         return _imp->branching_ratio();
     }
 
     double
-    KToLeptonNeutrino::decay_width() const
+    TauToKNeutrino::decay_width() const
     {
         return _imp->decay_width();
     }
 
-    const std::set<ReferenceName> KToLeptonNeutrino::references{ "DBG:2013A"_rn };
+    const std::set<ReferenceName> TauToKNeutrino::references{ "DBG:2013A"_rn, "S:2025A"_rn };
 
     std::vector<OptionSpecification>::const_iterator
-    KToLeptonNeutrino::begin_options()
+    TauToKNeutrino::begin_options()
     {
-        return Implementation<KToLeptonNeutrino>::options.cbegin();
+        return Implementation<TauToKNeutrino>::options.cbegin();
     }
 
     std::vector<OptionSpecification>::const_iterator
-    KToLeptonNeutrino::end_options()
+    TauToKNeutrino::end_options()
     {
-        return Implementation<KToLeptonNeutrino>::options.cend();
+        return Implementation<TauToKNeutrino>::options.cend();
     }
 } // namespace eos
