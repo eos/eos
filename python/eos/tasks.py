@@ -795,7 +795,7 @@ def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', for
 
 
 # Corner plot
-@task('corner-plot', '{posterior}/plots')
+@task('corner-plot', 'data/{posterior}/plots')
 def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', format:str='pdf', distribution:str='posterior', begin:int=0, end:int=None, mask_name=None):
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
