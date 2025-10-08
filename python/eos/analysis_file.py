@@ -342,10 +342,10 @@ class AnalysisFile:
         for step_id, step in self._steps.items():
             # Check that all the dependencies of a step exist
             if (unknown_dependencies := step.depends_on - self._steps.keys()):
-                raise messages.append(f'Step \'{step_id}\' depends on unknown steps: {unknown_dependencies}')
+                messages.append(f'Step \'{step_id}\' depends on unknown steps: {unknown_dependencies}')
             # Check that the default arguments correspond to real tasks
             if (unknown_tasks := step.default_arguments.keys() - eos.tasks._tasks.keys()):
-                raise messages.append(f'Step \'{step_id}\' has default arguments for unknown tasks: {unknown_tasks}')
+                messages.append(f'Step \'{step_id}\' has default arguments for unknown tasks: {unknown_tasks}')
             for tc in step.tasks:
                 # Check all posteriors named in steps exist
                 if 'posterior' in tc.arguments:
@@ -356,7 +356,7 @@ class AnalysisFile:
                 provided_arguments = step.default_arguments[tc.task].keys() | tc.arguments.keys()
                 known_arguments = set(inspect.signature(task_func).parameters.keys())
                 for arg in provided_arguments - known_arguments:
-                    raise messages.append(f'Task \'{tc.task}\' does not recognize argument \'{arg}\'')
+                    messages.append(f'Task \'{tc.task}\' does not recognize argument \'{arg}\'')
         # Check that any expression observables defined in masks have unique names
         counts = Counter()
         for mc in self._masks.values():
