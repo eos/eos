@@ -109,14 +109,14 @@ class ObservableItem(Item):
         figure_args = '''
         plot:
           legend: { position: 'upper center' }
-          xaxis: { label: '$q^2$',                range: [0.0, 11.6]   }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$', range: [0.0, 5.0e-3] }
+          xaxis: { label: r'$q^2$',                range: [0.0, 11.6]   }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$', range: [0.0, 5.0e-3] }
           items:
-            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: '$\\ell = \\mu$',
-                variable: 'q2', range: { min: 0.02, max: 11.6, num: 5800 }
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: r'$\\ell = \\mu$',
+                variable: 'q2', range: [0.02, 11.6 ], resolution: 5800
               }
-            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: '$\\ell = \\tau$',
-                variable: 'q2', range: { min: 3.17, max: 11.6, num: 421 }
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: r'$\\ell = \\tau$',
+                variable: 'q2', range: [3.17, 11.6 ], resolution: 421
               }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
@@ -160,13 +160,13 @@ class ObservableItem(Item):
         figure_args = '''
         plot:
           legend: { position: 'upper center' }
-          xaxis: { label: '$q^2$',                range: [0.0, 11.6]   }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$', range: [0.0, 5.0e-3] }
+          xaxis: { label: r'$q^2$',                range: [0.0, 11.6]   }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$', range: [0.0, 5.0e-3] }
           items:
-            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: '$\\ell = \\mu$',
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },  label: r'$\\ell = \\mu$',
                 variable: 'q2', range: { min: 0.02, max: 11.6, num: 5800 }
               }
-            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: '$\\ell = \\tau$',
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'tau' }, label: r'$\\ell = \\tau$',
                 variable: 'q2', range: { min: 3.17, max: 11.6, num: 421 }
               }
         '''
@@ -270,15 +270,15 @@ class UncertaintyBandItem(Item):
 
         figure_args = '''
         plot:
-          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
           legend: { position: 'upper center' }
           items:
-            - { type: 'uncertainty', label: '$\\ell=\\mu$',
+            - { type: 'uncertainty', label: r'$\\ell=\\mu$',
                 variable: 'q2', range: [0.02, 11.63],
                 datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu'
               }
-            - { type: 'uncertainty', label: '$\\ell=\\tau$',
+            - { type: 'uncertainty', label: r'$\\ell=\\tau$',
                 variable: 'q2', range: [3.17, 11.63], resolution: 1000,
                 datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-tau-nu'
               }
@@ -325,15 +325,15 @@ class UncertaintyBandItem(Item):
 
         figure_args = '''
         plot:
-          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
           legend: { position: 'upper center' }
           items:
-            - { type: 'uncertainty', label: '$\\ell=\\mu$',
+            - { type: 'uncertainty', label: r'$\\ell=\\mu$',
                 variable: 'q2', range: [0.02, 11.63],
                 datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu'
               }
-            - { type: 'uncertainty', label: '$\\ell=\\tau$',
+            - { type: 'uncertainty', label: r'$\\ell=\\tau$',
                 variable: 'q2', range: [3.17, 11.63], resolution: 1000,
                 datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-tau-nu'
               }
@@ -454,11 +454,11 @@ class BinnedUncertaintyItem(Item):
 
         figure_args = '''
         plot:
-        xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-        yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+        xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+        yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
         legend: { position: 'upper center' }
         items:
-            - { type: 'uncertainty-binned', label: '$\\ell=\\mu$',
+            - { type: 'uncertainty-binned', label: r'$\\ell=\\mu$',
                 variable: 'q2', range: [0.00, 11.63],
                 datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu-binned'
             }
@@ -992,17 +992,17 @@ class ConstraintItem(Item):
 
         figure_args = '''
         plot:
-          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
           legend: { position: 'lower left' }
           items:
-            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2;l=e,q=d', label: '$\\ell=e$',
-                variable: 'q2', range: { min: 0.02, max: 11.63, num: 100}, color: 'black'
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2;l=e,q=d', label: r'$\\ell=e$',
+                variable: 'q2', range: [ 0.02, 11.63 ], color: 'black'
               }
-            - { type: 'constraint', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=e,\\, q=d$',
+            - { type: 'constraint', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=e,\\, q=d$',
                 variable: 'q2', rescale_by_width: true
               }
-            - { type: 'constraint', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=\\mu,\\, q=d$',
+            - { type: 'constraint', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=\\mu,\\, q=d$',
                 variable: 'q2', rescale_by_width: true
               }
         '''
@@ -1046,17 +1046,17 @@ class ConstraintItem(Item):
 
         figure_args = '''
         plot:
-          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
           legend: { position: 'lower left' }
           items:
-            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2;l=e,q=d', label: '$\\ell=e$',
+            - { type: 'observable', observable: 'B->Dlnu::dBR/dq2;l=e,q=d', label: r'$\\ell=e$',
                 variable: 'q2', range: { min: 0.02, max: 11.63, num: 100}, color: 'black'
               }
-            - { type: 'constraint', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=e,\\, q=d$',
+            - { type: 'constraint', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=e,\\, q=d$',
                 variable: 'q2', rescale_by_width: true
               }
-            - { type: 'constraint', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: 'Belle 2015 $\\ell=\\mu,\\, q=d$',
+            - { type: 'constraint', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=\\mu,\\, q=d$',
                 variable: 'q2', rescale_by_width: true
               }
         '''
@@ -1357,8 +1357,8 @@ class SignalPDFItem(Item):
 
         figure_args = '''
         plot:
-          xaxis: { label: '$q^2$', unit: '$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: '$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
           legend: { position: 'lower left' }
           items:
             - { type: 'signal-pdf', pdf: 'B->Dlnu::dBR/dq2;l=e,q=d', label: 'Signal PDF',
