@@ -1111,8 +1111,8 @@ class Plotter:
                     ymean  = means[yidx]
 
                     cov    = np.array(constraint['covariance'])
-                    xsigma = np.sqrt(covariance[xidx, xidx])
-                    ysigma = np.sqrt(covariance[yidx, yidx])
+                    xsigma = np.sqrt(cov[xidx, xidx])
+                    ysigma = np.sqrt(cov[yidx, yidx])
                     rho    = cov[xidx, yidx] / (xsigma * ysigma)
                 elif constraint['type'] == 'MultivariateGaussian':
                     observables = list(zip(constraint['observables'], constraint['kinematics'], constraint['options']))
