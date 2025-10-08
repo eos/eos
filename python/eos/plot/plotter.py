@@ -1865,8 +1865,8 @@ class Plotter:
            dstarlnu_samples, _ = dstarlnu_pdf.sample_mcmc(N=50000, stride=5, pre_N=1000, preruns=3, rng=rng)
            plot_args = {
                'plot': {
-                   'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [ 0.0, 10.50] },
-                   'y': { 'label': r'$cos(\theta_\\ell)$',                     'range': [-1.0,  +1.0] },
+                   'x': { 'label': r'$q^2$', 'unit': r'$\\textnormal{GeV}^2$', 'range': [ 0.0, 10.50] },
+                   'y': { 'label': r'$cos(\\theta_\\ell)$',                     'range': [-1.0,  +1.0] },
                },
                'contents': [
                    {
