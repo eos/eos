@@ -293,6 +293,7 @@ class CornerFigure(Figure):
 
     contents:list[DataFile]
     variables:list[str]=None
+    kde:bool=False
 
     _api_doc = inspect.cleandoc("""
     Producing a Corner Figure
@@ -383,6 +384,11 @@ class CornerFigure(Figure):
                                 'color': content.color,
                                 'level': 68.3,
                                 'range': [absmin[j], absmax[j]]
+                            } if content.kde else {
+                                'type': 'histogram1D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variable': self._variables[j],
+                                'color': content.color,
                             }
                         for content in self.contents]
                     }))
@@ -417,6 +423,12 @@ class CornerFigure(Figure):
                                 'variables': [self._variables[j], self._variables[i]],
                                 'color': content.color,
                                 'contours': ['lines', 'areas']
+                            } if content.kde else
+                            {
+                                'type': 'histogram2D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variables': [self._variables[j], self._variables[i]],
+                                'color': content.color,
                             }
                         for content in self.contents]
                     }))

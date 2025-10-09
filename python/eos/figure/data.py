@@ -33,10 +33,13 @@ class DataFile(Deserializable):
     :type label: str
     :param color: Color to be used in the plot.
     :type color: str (optional)
+    :param kde: A boolean determining whether to use kernel density estimates (KDE) to visualize the distributions. Defaults to False, in which case histograms are used.
+    :type kde: bool
     """
     path:str
     label:str
     color:str=None
+    kde:bool=False
 
     def __post_init__(self):
         if self.color is None:
