@@ -328,7 +328,7 @@ class CornerFigure(Figure):
         if self.variables:
             self._variables = self.variables
         else:
-            self._variables = list(self.contents[0].variables)
+            self._variables = self.contents[0].variables
 
         # determine useful ranges empirically
         absmin, absmax = np.array([+np.inf] * len(self._variables)), np.array([-np.inf] * len(self._variables))

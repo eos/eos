@@ -65,7 +65,7 @@ class DataFile(Deserializable):
             eos.error(f"Data file '{path}' has an unsupported format")
             raise NotImplementedError
 
-        self._variables = set(self._datafile.lookup_table.keys())
+        self._variables = list(self._datafile.lookup_table.keys())
         return self._datafile
 
     @property
