@@ -19,12 +19,41 @@
 
 #include "python/_eos/log.hh"
 
+#include <iostream>
+
 namespace impl
 {
+    struct LoggingCallbackPayload
+    {
+            PyObject *          callback;
+            const std::string   id;
+            const eos::LogLevel log_level;
+            const std::string   message;
+    };
+
+    int
+    thread_safe_logging_callback(void * p)
+    {
+        // this function is only supposed to be called from the main thread
+        // via Py_AddPendingCall, so we can safely call the Python API here
+        const LoggingCallbackPayload * const payload = static_cast<const LoggingCallbackPayload *>(p);
+        call<void>(payload->callback, payload->id, payload->log_level, payload->message);
+        delete p;
+        return 0;
+    }
+
     void
     logging_callback(PyObject * c, const std::string & id, const eos::LogLevel & l, const std::string & m)
     {
-        call<void>(c, id, l, m);
+        LoggingCallbackPayload * const payload = new LoggingCallbackPayload{ c, id, l, m };
+
+        int result = Py_AddPendingCall(&thread_safe_logging_callback, payload);
+
+        if (result != 0)
+        {
+            std::cerr << "eos::Log: Warning: Could not schedule log callback via Py_AddPendingCall, error code " << result << "." << std::endl;
+            delete payload;
+        }
     }
 
     void
