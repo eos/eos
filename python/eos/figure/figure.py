@@ -339,9 +339,6 @@ class CornerFigure(Figure):
                 absmin[idx] = cmin[cidx] if cmin[cidx] < absmin[idx] else absmin[idx]
                 absmax[idx] = cmax[cidx] if cmax[cidx] > absmax[idx] else absmax[idx]
 
-        for idx, v in enumerate(self._variables):
-            print(f"variable {v}: [{absmin[idx]}, {absmax[idx]}]")
-
         # Check that the variables of the data files match
         for content in self.contents:
             unknown_variables = set(self._variables) - set(content.variables)
