@@ -497,7 +497,7 @@ class FigureFactory:
         The description contains the arguments used for initializing objects of classes within the
         :py:mod:`eos.figure` module.
 
-        A figure can contain one or more individual plots. Each plot containts one or more plottable
+        A figure can contain one or more individual plots. Each plot contains one or more plottable
         items, such as a data series from the evaluation of an observable or a kernel density estimate to
         visualize a set of statistical samples.
 
