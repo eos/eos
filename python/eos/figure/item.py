@@ -211,7 +211,7 @@ class ObservableItem(Item):
             # Is the variable name a QualifiedName?
             try:
                 qn = eos.QualifiedName(self.variable)
-                # Continues only if no failure occures
+                # Continues only if no failure occurs
                 self._variable = self.parameters[qn]
                 self._variable.set(_np.nan)
             except RuntimeError:
@@ -783,7 +783,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     def draw(self, ax):
         "Draw the KDE."
-        # find the PDF value corresponding to a given cummulative probability
+        # find the PDF value corresponding to a given cumulative probability
         if self.level is not None:
             plevelf = lambda x, pdf, P: self.pdf[self.pdf > x * self.pdf_norm].sum() - P * self.pdf_norm
             plevel = _scipy.optimize.brentq(plevelf, 0., 1., args=(self.pdf, self.level / 100.0 ))
