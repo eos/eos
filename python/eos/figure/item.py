@@ -789,6 +789,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         if self.range is None:
             self.range = (self._datafile.samples[:, self.idx].min(), self._datafile.samples[:, self.idx].max())
 
+        eos.inprogress(f"Computing KDE for samples of variable '{self.variable}'")
         self.kde = _scipy.stats.gaussian_kde(self._datafile.samples[:, self.idx], weights=self._datafile.weights)
         self.kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
@@ -927,6 +928,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         samples = self._datafile.samples[:, (self._xidx, self._yidx)]
         weights = self._datafile.weights
 
+        eos.inprogress(f"Computing KDE for samples of variables '{self.variables[0]}' and '{self.variables[1]}'")
         self._kde = _scipy.stats.gaussian_kde(samples.T, weights=weights)
         self._kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
