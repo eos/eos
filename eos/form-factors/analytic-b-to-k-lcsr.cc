@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Danny van Dyk
- * Copyright (c) 2019 Nico Gubernari
+ * Copyright (c) 2018-2025 Danny van Dyk
+ * Copyright (c) 2019      Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,30 +22,18 @@
 
 namespace eos
 {
-    namespace lcsr
+    template <>
+    struct AnalyticFormFactorBToPLCSRProcessTraits<BToK>
     {
-        struct BToK
-        {
-            constexpr static const char * B    = "B";
-            constexpr static const char * m_B  = "mass::B_d";
-            constexpr static const char * f_B  = "decay-constant::B_d";
-            constexpr static const char * P    = "K";
-            constexpr static const char * m_P  = "mass::K_d";
-            constexpr static const char * f_P  = "decay-constant::K_d";
-            constexpr static const char   q_v  = 's';
-            constexpr static const char   q_s  = 'd';
-            constexpr static const double chi2 = 1.0;
-        };
+        static constexpr const char * label  = "B->K";
+        static constexpr const char * name_B = "mass::B_d";
+        static constexpr const char * f_B    = "decay-constant::B_d";
+        static constexpr const char * name_P = "mass::K_d";
+        static constexpr const char * f_P    = "decay-constant::K_d";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange);
+        static constexpr const QuarkFlavor spectator_flavor                             = QuarkFlavor::down;
+        static constexpr const double chi2 = 1.0;
+    };
 
-        // B -> K
-        constexpr const char * BToK::B;
-        constexpr const char * BToK::m_B;
-        constexpr const char * BToK::f_B;
-        constexpr const char * BToK::P;
-        constexpr const char * BToK::m_P;
-        constexpr const char * BToK::f_P;
-        constexpr const char   BToK::q_s;
-    }
-
-    template class AnalyticFormFactorBToPLCSR<lcsr::BToK>;
+    template class AnalyticFormFactorBToPLCSR<BToK>;
 }
