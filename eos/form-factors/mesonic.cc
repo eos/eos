@@ -379,11 +379,11 @@ namespace eos
         // analytic computations
         { "B->pi::DKMMO2008",        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
         { "B_s->K::DKMMO2008",       &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
-        { "B->pi::B-LCSR",           &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make                                                                               },
-        { "B->K::B-LCSR",            &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make                                                                                },
-        { "B->D::B-LCSR",            &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make                                                                                },
-        { "B_s->K::B-LCSR",          &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make                                                                               },
-        { "B_s->D_s::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make                                                                              }
+        { "B->pi::B-LCSR",           &AnalyticFormFactorBToPLCSR<BToPi>::make                                                                                     },
+        { "B->K::B-LCSR",            &AnalyticFormFactorBToPLCSR<BToK>::make                                                                                      },
+        { "B->D::B-LCSR",            &AnalyticFormFactorBToPLCSR<BToD>::make                                                                                      },
+        { "B_s->K::B-LCSR",          &AnalyticFormFactorBToPLCSR<BsToK>::make                                                                                     },
+        { "B_s->D_s::B-LCSR",        &AnalyticFormFactorBToPLCSR<BsToDs>::make                                                                                    }
     };
 
     complex<double>
