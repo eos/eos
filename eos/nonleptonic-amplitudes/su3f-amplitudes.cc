@@ -28,6 +28,7 @@
 namespace eos
 {
     using std::sqrt;
+    using namespace std::literals::string_literals;
 
     NonleptonicAmplitudes<PToPP> *
     SU3FRepresentation<PToPP>::make(const Parameters & p, const Options & o)
@@ -181,11 +182,11 @@ namespace eos
 
     const std::vector<OptionSpecification> SU3FRepresentation<PToPP>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok,                                                                     { "true", "false" }, "false" },
-        {        "B-bar"_ok,                                                                     { "true", "false" }, "false" },
-        {            "q"_ok,                                                                       { "u", "d", "s" },      "" },
-        {           "P1"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
-        {           "P2"_ok, { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" },      "" },
+        { "cp-conjugate"_ok,                                                                             { "true"s, "false"s }, "false"s },
+        {        "B-bar"_ok,                                                                             { "true"s, "false"s }, "false"s },
+        {            "q"_ok,                                                                              { "u"s, "d"s, "s"s },      ""s },
+        {           "P1"_ok, { "pi^0"s, "pi^+"s, "pi^-"s, "K_d"s, "Kbar_d"s, "K_S"s, "K_u"s, "Kbar_u"s, "eta"s, "eta_prime"s },      ""s },
+        {           "P2"_ok, { "pi^0"s, "pi^+"s, "pi^-"s, "K_d"s, "Kbar_d"s, "K_S"s, "K_u"s, "Kbar_u"s, "eta"s, "eta_prime"s },      ""s },
     };
 
     complex<double>

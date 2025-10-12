@@ -34,6 +34,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <> struct Implementation<BGLCoefficients>
     {
         //B^(*)->D^(*)
@@ -2222,7 +2224,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BGLCoefficients>::options
     {
-        { "SU3F-limit-sslp"_ok, { "0", "1" }, "0" }
+        { "SU3F-limit-sslp"_ok, { "0"s, "1"s }, "0"s }
     };
 
     BGLCoefficients::BGLCoefficients(const Parameters & p, const Options & o) :
@@ -2870,8 +2872,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<HQETUnitarityBounds>::options
     {
-        { "SU3F-limit-sslp"_ok, { "0", "1" }, "0" },
-        { "z-order-bound"_ok,   { "1", "2" }, "2" }
+        { "SU3F-limit-sslp"_ok, { "0"s, "1"s }, "0"s },
+        { "z-order-bound"_ok,   { "1"s, "2"s }, "2"s }
     };
 
     HQETUnitarityBounds::HQETUnitarityBounds(const Parameters & p, const Options & o) :
@@ -3238,7 +3240,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BGLUnitarityBounds>::options
     {
-        { "z-order-bound"_ok, { "1", "2" }, "2" }
+        { "z-order-bound"_ok, { "1"s, "2"s }, "2"s }
     };
 
     BGLUnitarityBounds::BGLUnitarityBounds(const Parameters & p, const Options & o) :

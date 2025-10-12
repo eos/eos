@@ -35,6 +35,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<AnalyticFormFactorBToPiPiBFvD2016>
     {
@@ -474,7 +476,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options
     {
-        { "L"_ok, { "S|P|D|F" }, "S|P|D|F"}
+        { "L"_ok, "S|P|D|F"s, "S|P|D|F"s }
     };
 
     AnalyticFormFactorBToPiPiBFvD2016::AnalyticFormFactorBToPiPiBFvD2016(const Parameters & p, const Options & o) :
@@ -808,8 +810,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options
     {
-        { "l"_ok, { "e", "mu", "tau" }, "mu" },
-        { "L"_ok, { "S|P|D|F" }, "S|P|D|F"}
+        { "l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s      },
+        { "L"_ok, "S|P|D|F"s,              "S|P|D|F"s }
     };
 
     AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :

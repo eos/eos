@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2015 Danny van Dyk
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2018      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -69,14 +69,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -88,7 +89,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -133,14 +134,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<OneHalfPlusToOneHalfMinus>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -152,7 +154,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -203,14 +205,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -222,7 +225,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 }

@@ -41,6 +41,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using std::norm;
 
     template <> struct Implementation<BToVectorLeptonNeutrino>
@@ -360,10 +361,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "V"_ok,            { "D^*", "D_s^*", "rho", "omega", "K^*" }, ""      },
-        { "cp-conjugate"_ok, { "true", "false" },                       "false" },
-        { "l"_ok,            { "e", "mu", "tau" },                      "mu"    },
-        { "q"_ok,            { "u", "d", "s" },                         "d"     },
+        { "V"_ok,            { "D^*"s, "D_s^*"s, "rho"s, "omega"s, "K^*"s }, ""s      },
+        { "cp-conjugate"_ok, { "true"s, "false"s },                          "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s },                        "mu"s    },
+        { "q"_ok,            { "u"s, "d"s, "s"s },                           "d"s     },
     };
 
     BToVectorLeptonNeutrino::BToVectorLeptonNeutrino(const Parameters & p, const Options & o) :

@@ -30,6 +30,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKDileptonAmplitudes<tag::BFS2004>::BToKDileptonAmplitudes(const Parameters & p,
@@ -105,7 +106,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "q"_ok, { "d", "u" }, "d" },
+        { "q"_ok, { "d"s, "u"s }, "d"s },
     };
 
     BToKDilepton::DipoleFormFactors

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2022 Danny van Dyk
+ * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2018      Keri Vos
  * Copyright (c) 2025      Florian Herren
  *
@@ -28,6 +28,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <typename Process_>
     double
     FvDV2018FormFactors<Process_>::_calc_z(const double & t, const double & t_p, const double & t_0)
@@ -525,7 +527,7 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options
     {
-        { "L"_ok, { "S|P|D|F" }, "S|P|D|F" },
+        { "L"_ok, "S|P|D|F"s, "S|P|D|F"s },
     };
 
     template<typename Process_>

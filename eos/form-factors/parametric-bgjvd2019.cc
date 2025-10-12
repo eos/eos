@@ -22,6 +22,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     std::string
     HQETFormFactorBase::_sslp_prefix(const std::string & prefix)
     {
@@ -113,10 +115,10 @@ namespace eos
     const std::vector<OptionSpecification>
     HQETFormFactorBase::option_specifications
     {
-        { "z-order-lp"_ok,      { "2", "3", "4", "5" }, "3"     },
-        { "z-order-slp"_ok,     { "1", "2" },           "2"     },
-        { "z-order-sslp"_ok,    { "0", "1", "2" },      "1"     },
-        { "SU3F-limit-sslp"_ok, { "true", "false" },    "false" }
+        { "z-order-lp"_ok,      { "2"s, "3"s, "4"s, "5"s }, "3"s     },
+        { "z-order-slp"_ok,     { "1"s, "2"s },             "2"s     },
+        { "z-order-sslp"_ok,    { "0"s, "1"s, "2"s },       "1"s     },
+        { "SU3F-limit-sslp"_ok, { "true"s, "false"s },      "false"s }
     };
 
     // uses a power series ansatz

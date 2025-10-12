@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2025 Méril Reboud
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,6 +28,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKDileptonAmplitudes<tag::Naive>::BToKDileptonAmplitudes(const Parameters & p,
@@ -50,7 +52,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::Naive>::options
     {
-        { "q"_ok, { "d", "u" },  "d" },
+        { "q"_ok, { "d"s, "u"s },  "d"s },
     };
 
     BToKDilepton::DipoleFormFactors

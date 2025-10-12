@@ -30,6 +30,7 @@ using namespace std;
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
     using std::norm;
     using std::sqrt;
@@ -50,7 +51,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BsToPhiDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "nonlocal-formfactor"_ok, { "GvDV2020", "GRvDV2022order5" }, "GvDV2020" }
+        { "nonlocal-formfactor"_ok, { "GvDV2020"s, "GRvDV2022order5"s }, "GvDV2020"s }
     };
 
 

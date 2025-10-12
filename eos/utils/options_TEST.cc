@@ -26,6 +26,7 @@
 
 using namespace test;
 using namespace eos;
+using namespace std::literals::string_literals;
 
 class OptionsTest : public TestCase
 {
@@ -304,8 +305,8 @@ class SpecifiedOptionTest : public TestCase
         {
             // specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "key-with-full-specification"_ok, { "value1", "value2", "value4" }, "value1" },
-                { "key-without-default"_ok, { "value1", "value2", "value4" } }
+                { "key-with-full-specification"_ok, { "value1"s, "value2"s, "value4"s }, "value1"s },
+                { "key-without-default"_ok, { "value1"s, "value2"s, "value4"s } }
             };
 
             // Creation of fully specified option, with value
@@ -354,12 +355,12 @@ class RestrictedOptionTest : public TestCase
         {
             // specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "key-with-default"_ok, { "value1", "value2", "value4" }, "value1" },
-                { "key-without-value"_ok, { "foo", "bar" }, "foo" },
-                { "key-without-default"_ok, { "value1", "value2", "value4" } },
-                { "key-without-value-and-default"_ok, { "foo", "bar" } },
-                { "key-with-invalid-default"_ok, { "value1", "value2", "value4" }, "value3" },
-                { "key-with-invalid-value"_ok, { "value1", "value2", "value4" }, "value1" },
+                { "key-with-default"_ok, { "value1"s, "value2"s, "value4"s }, "value1"s },
+                { "key-without-value"_ok, { "foo"s, "bar"s }, "foo"s },
+                { "key-without-default"_ok, { "value1"s, "value2"s, "value4"s } },
+                { "key-without-value-and-default"_ok, { "foo"s, "bar"s } },
+                { "key-with-invalid-default"_ok, { "value1"s, "value2"s, "value4"s }, "value3"s },
+                { "key-with-invalid-value"_ok, { "value1"s, "value2"s, "value4"s }, "value1"s },
             };
 
             // Creation of option with valid default value, with value = default value
@@ -426,10 +427,21 @@ class IsospinOptionTest : public TestCase
         virtual void
         run() const
         {
-            // specify permitted options
+            // correctly specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "I"_ok, { "0|2" }, "0" },
+                { "I"_ok, { "0|2"s }, "0"s },
             };
+
+            // incorrectly specify permitted options
+            std::vector<OptionSpecification> invalid_specifications{
+                { "I"_ok, std::vector<std::string>{ "0|2"s }, "0"s },
+            };
+
+            // Creation of option with invalid specification
+            {
+                auto test = [invalid_specifications]() { IsospinOption so{ Options{ { "I"_ok, "0" } }, invalid_specifications, "I"_ok }; };
+                TEST_CHECK_THROWS(InternalError, test());
+            }
 
             // Creation of option with valid default value, with value = default value
             {
@@ -474,10 +486,21 @@ class PartialWaveOptionTest : public TestCase
         virtual void
         run() const
         {
-            // specify permitted options
+            // correctly specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "L"_ok, { "S|P|D" }, "S|P" },
+                { "L"_ok, "S|P|D"s, "S|P"s },
             };
+
+            // incorrectly specify permitted options
+            std::vector<OptionSpecification> invalid_specifications{
+                { "L"_ok, std::vector<std::string>{ "S|P|D"s }, "S|P"s },
+            };
+
+            // Creation of option with invalid specification
+            {
+                auto test = [invalid_specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "S|P" } }, invalid_specifications, "L"_ok }; };
+                TEST_CHECK_THROWS(InternalError, test());
+            }
 
             // Creation of option with valid default value, with value = default value
             {

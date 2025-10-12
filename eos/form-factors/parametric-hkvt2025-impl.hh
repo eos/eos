@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2025 Florian Herren
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +33,8 @@
 #include <iostream>
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     HKVT2025FormFactorTraits<Process_, PToPP>::resonance_0m_names
@@ -727,10 +730,10 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> HKVT2025FormFactors<Process_, PToPP>::options
     {
-        { "I"_ok, { "0|1" }, "0|1" }, // We only handle integer isospin at the moment
-        { "C"_ok, { "+-", "00", "+0" }, "+-" },
-        { "L"_ok, { "S|P|D" }, "S|P|D" }, // We currently do not support F waves here, as the corresponding y-polynomials are unknown
-        { "integration-points"_ok, {"256", "512", "1024", "2048", "4096", "8192", "16384"}, "4096" }
+        { "I"_ok, "0|1"s, "0|1"s }, // We only handle integer isospin at the moment
+        { "C"_ok, { "+-"s, "00"s, "+0"s }, "+-"s },
+        { "L"_ok, "S|P|D"s, "S|P|D"s }, // We currently do not support F waves here, as the corresponding y-polynomials are unknown
+        { "integration-points"_ok, {"256"s, "512"s, "1024"s, "2048"s, "4096"s, "8192"s, "16384"s}, "4096"s }
     };
 
     template<typename Process_>

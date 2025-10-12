@@ -35,6 +35,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using std::norm;
     using std::real;
     using std::imag;
@@ -364,9 +365,9 @@ namespace eos
     Implementation<BqToDqPseudoscalar>::options
     {
         Model::option_specification(),
-        { "accuracy"_ok,     { "LO", "NLO", "NLP", "LO+NLO", "all" }, "all"   },
-        { "cp-conjugate"_ok, { "true", "false" },                     "false" },
-        { "q"_ok,            { "s", "d" },                            ""      }
+        { "accuracy"_ok,     { "LO"s, "NLO"s, "NLP"s, "LO+NLO"s, "all"s }, "all"s   },
+        { "cp-conjugate"_ok, { "true"s, "false"s },                        "false"s },
+        { "q"_ok,            { "s"s, "d"s },                               ""s      }
     };
 
     BqToDqPseudoscalar::BqToDqPseudoscalar(const Parameters & parameters, const Options & options) :

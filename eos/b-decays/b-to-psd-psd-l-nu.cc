@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2025 Florian Herren
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,6 +42,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using std::norm;
 
     template <> struct Implementation<BToPPLeptonNeutrino>
@@ -292,14 +294,14 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToPP>::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },  "false" },
-        { "l"_ok,            { "e", "mu", "tau" }, "mu"    },
-        { "U"_ok,            { "c", "u" },         "c"     },
-        { "q"_ok,            { "u", "d" },    "d"     },
-        { "I1"_ok,           { "1", "0", "1/2" },  "1"     },
-        { "I2"_ok,           { "1", "0", "1/2" },  "1"     },
-        { "C"_ok,            { "+-", "00", "+0" }, "+-"   },
-        { "integration-points"_ok, {"256", "512", "1024", "2048", "4096", "8192", "16384"}, "4096" }
+        { "cp-conjugate"_ok, { "true"s, "false"s },   "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s }, "mu"s    },
+        { "U"_ok,            { "c"s, "u"s },          "c"s     },
+        { "q"_ok,            { "u"s, "d"s },          "d"s     },
+        { "I1"_ok,           { "1"s, "0"s, "1/2"s },  "1"s     },
+        { "I2"_ok,           { "1"s, "0"s, "1/2"s },  "1"s     },
+        { "C"_ok,            { "+-"s, "00"s, "+0"s }, "+-"s    },
+        { "integration-points"_ok, { "256"s, "512"s, "1024"s, "2048"s, "4096"s, "8192"s, "16384"s }, "4096"s }
     };
 
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor, std::string, std::string, std::string>,

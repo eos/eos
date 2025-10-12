@@ -33,6 +33,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K}^* \ell^+ \ell^-@f$.
      */
@@ -290,8 +292,8 @@ namespace eos
     Implementation<BToKstarDilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e", "mu", "tau" }, "mu"},
-        {"q"_ok, { "d", "u" }, "d"}
+        {"l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s},
+        {"q"_ok, { "d"s, "u"s }, "d"s}
     };
 
     double

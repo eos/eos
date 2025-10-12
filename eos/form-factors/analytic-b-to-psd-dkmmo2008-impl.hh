@@ -44,6 +44,7 @@
 namespace eos
 {
     using std::get;
+    using namespace std::literals::string_literals;
 
     namespace dkmmo2008
     {
@@ -2222,8 +2223,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>::options
     {
-        { "rescale-borel"_ok,  { "1", "0" },                "1"         },
-        { "decay-constant"_ok, { "parameter", "sum-rule" }, "parameter" }
+        { "rescale-borel"_ok,  { "1"s, "0"s },                "1"s         },
+        { "decay-constant"_ok, { "parameter"s, "sum-rule"s }, "parameter"s }
     };
 
     template <QuarkFlavor q1_, QuarkFlavor q2_, QuarkFlavor qs_>

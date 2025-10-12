@@ -30,6 +30,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<BToPiPiLeptonNeutrino>
     {
@@ -185,8 +187,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToPP>::option_specification(),
-        { "l"_ok, { "e", "mu" }, "mu" },
-        { "q"_ok, { "d", "u" }, "d" }
+        { "l"_ok, { "e"s, "mu"s }, "mu"s },
+        { "q"_ok, { "d"s, "u"s },  "d"s  }
     };
 
     BToPiPiLeptonNeutrino::BToPiPiLeptonNeutrino(const Parameters & parameters, const Options & options) :

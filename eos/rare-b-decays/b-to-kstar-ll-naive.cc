@@ -31,6 +31,7 @@ using namespace std;
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
     using std::norm;
     using std::sqrt;
@@ -51,7 +52,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::Naive>::options
     {
-        { "q"_ok, { "d", "u" },  "d" },
+        { "q"_ok, { "d"s, "u"s },  "d"s },
     };
 
     BToKstarDilepton::FormFactorCorrections

@@ -34,6 +34,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<BToPseudoscalarDineutrino>
     {
@@ -233,9 +235,9 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },          "false" },
-        { "P"_ok,            { "K", "eta", "eta_prime" },  ""      },
-        { "q"_ok,            { "u", "d", "s" },            "u"     },
+        { "cp-conjugate"_ok, { "true"s, "false"s },          "false"s },
+        { "P"_ok,            { "K"s, "eta"s, "eta_prime"s }, ""s      },
+        { "q"_ok,            { "u"s, "d"s, "s"s },           "u"s     },
     };
 
     BToPseudoscalarDineutrino::BToPseudoscalarDineutrino(const Parameters & parameters, const Options & options) :

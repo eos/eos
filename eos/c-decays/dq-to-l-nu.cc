@@ -30,6 +30,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using std::norm;
 
     /*
@@ -139,9 +140,9 @@ namespace eos
     Implementation<DqToLeptonNeutrino>::options
     {
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },  "false" },
-        { "l"_ok,            { "e", "mu", "tau" }, "mu"    },
-        { "q"_ok,            { "d", "s" },         ""      }
+        { "cp-conjugate"_ok, { "true"s, "false"s },   "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s }, "mu"s    },
+        { "q"_ok,            { "d"s, "s"s },          ""s      }
     };
 
     DqToLeptonNeutrino::DqToLeptonNeutrino(const Parameters & parameters, const Options & options) :

@@ -25,6 +25,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     BToKDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model"_ok, "SM"), p, o)),
         form_factors(FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors"_ok, "KMPW2010"), p)),
@@ -61,8 +63,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },  "false" },
-        { "l"_ok, { "e", "mu", "tau" }, "mu" },
+        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s },
+        { "l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s },
     };
 
     double

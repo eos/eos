@@ -37,6 +37,8 @@ namespace eos
 {
     namespace heavy_meson_lcdas
     {
+        using namespace std::literals::string_literals;
+
         FLvD2022::FLvD2022(const Parameters & p, const Options & o) :
             model(Model::make("SM", p, o)),
             opt_Q(o, options, "Q"_ok),
@@ -548,10 +550,10 @@ namespace eos
         const std::vector<OptionSpecification>
         FLvD2022::options
         {
-            { "Q"_ok,       { "b" },                "b"        },
-            { "q"_ok,       { "u", "s" },           "u"        },
-            { "gminus"_ok,  { "zero", "WW-limit" }, "WW-limit" },
-            { "alpha-s"_ok, { "naive", "full"  },   "full"     },
+            { "Q"_ok,       { "b"s },                 "b"s        },
+            { "q"_ok,       { "u"s, "s"s },           "u"s        },
+            { "gminus"_ok,  { "zero"s, "WW-limit"s }, "WW-limit"s },
+            { "alpha-s"_ok, { "naive"s, "full"s  },   "full"s     },
         };
 
         std::vector<OptionSpecification>::const_iterator

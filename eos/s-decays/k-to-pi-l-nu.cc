@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2025 Matthew Kirk
+ * Copyright (c) 2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +33,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     namespace k_to_pi_l_nu
     {
         struct Amplitudes
@@ -307,9 +310,9 @@ namespace eos
     };
 
     const std::vector<OptionSpecification> Implementation<KToPiLeptonNeutrino>::options{
-        Model::option_specification(),   FormFactorFactory<PToP>::option_specification(), { "cp-conjugate"_ok,     { "true", "false" }, "false" },
-        {            "l"_ok,           { "e", "mu" },    "mu" },
-            {            "K"_ok, { "K_u", "K_S", "K_L" },   "K_u" },
+        Model::option_specification(),      FormFactorFactory<PToP>::option_specification(), { "cp-conjugate"_ok,      { "true"s, "false"s }, "false"s },
+        {            "l"_ok,            { "e"s, "mu"s },    "mu"s },
+               {            "K"_ok, { "K_u"s, "K_S"s, "K_L"s },   "K_u"s },
     };
 
     KToPiLeptonNeutrino::KToPiLeptonNeutrino(const Parameters & parameters, const Options & options) :
