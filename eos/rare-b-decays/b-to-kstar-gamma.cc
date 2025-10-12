@@ -31,6 +31,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
     using std::norm;
 
@@ -113,7 +114,7 @@ namespace eos
     Implementation<BToKstarGamma>::options
     {
         Model::option_specification(),
-        {"q"_ok, { "d", "u" }, "d"}
+        {"q"_ok, { "d"s, "u"s }, "d"s}
     };
 
     double

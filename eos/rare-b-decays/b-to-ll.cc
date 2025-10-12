@@ -30,6 +30,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<BToDilepton>
     {
@@ -183,8 +185,8 @@ namespace eos
     Implementation<BToDilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e", "mu", "tau" }, "mu"},
-        {"q"_ok, { "s" }, "s"}
+        {"l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s},
+        {"q"_ok, { "s"s }, "s"s}
     };
 
     double

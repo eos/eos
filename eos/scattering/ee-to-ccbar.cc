@@ -31,6 +31,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
 
     template <>
     struct Implementation<EEToCCBar>
@@ -413,7 +414,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<EEToCCBar>::options
     {
-        {"assume-isospin"_ok, { "true", "false" }, "false"},
+        {"assume-isospin"_ok, { "true"s, "false"s }, "false"s},
     };
 
     const EEToCCBar::IntermediateResult *

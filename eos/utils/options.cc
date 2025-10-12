@@ -225,6 +225,23 @@ namespace eos
     {
     }
 
+    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in) :
+        key(key_in),
+        allowed_values(allowed_value_in)
+    {
+    }
+
+    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in, const std::string & default_value_in) :
+        key(key_in),
+        allowed_values(allowed_value_in),
+        default_value(default_value_in)
+    {
+    }
+
+    OptionSpecification::~OptionSpecification() = default;
+
+    OptionSpecification & OptionSpecification::operator= (const OptionSpecification & other) = default;
+
     SpecifiedOption::SpecifiedOption(const SpecifiedOption &) = default;
 
     SpecifiedOption::SpecifiedOption(const Options & options, const OptionSpecification & specification) :
@@ -234,7 +251,11 @@ namespace eos
         {
             if ("" == specification.default_value)
             {
-                throw UnspecifiedOptionError(specification.key, join(specification.allowed_values.cbegin(), specification.allowed_values.cend()));
+                auto allowed_values = std::holds_alternative<std::string>(specification.allowed_values)
+                                              ? std::vector<std::string>{ std::get<std::string>(specification.allowed_values) }
+                                              : std::get<std::vector<std::string>>(specification.allowed_values);
+
+                throw UnspecifiedOptionError(specification.key, join(allowed_values.cbegin(), allowed_values.cend()));
             }
 
             _value = specification.default_value;
@@ -246,7 +267,7 @@ namespace eos
     }
 
     SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
-        _specification("dummy"_ok, {}, "")
+        _specification("dummy"_ok, "", "")
     {
         const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&](const auto & e) -> bool { return e.key == key; });
 
@@ -271,9 +292,13 @@ namespace eos
     RestrictedOption::RestrictedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key)
     {
-        if (std::find(_specification.allowed_values.cbegin(), _specification.allowed_values.cend(), _value) == _specification.allowed_values.cend())
+        const auto allowed_values = std::holds_alternative<std::string>(this->_specification.allowed_values)
+                                            ? std::vector<std::string>{ std::get<std::string>(this->_specification.allowed_values) }
+                                            : std::get<std::vector<std::string>>(this->_specification.allowed_values);
+
+        if (std::find(allowed_values.cbegin(), allowed_values.cend(), _value) == allowed_values.cend())
         {
-            throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+            throw InvalidOptionValueError(_specification.key, _value, join(allowed_values.cbegin(), allowed_values.cend()));
         }
     }
 
@@ -446,9 +471,16 @@ namespace eos
         SpecifiedOption(options, specifications, key),
         _isospin_value(destringify<Isospin>(_value))
     {
-        if (((_isospin_value ^ destringify<Isospin>(this->_specification.allowed_values.front())) & _isospin_value) != Isospin::none)
+        if (! std::holds_alternative<std::string>(this->_specification.allowed_values))
         {
-            throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+            throw InternalError("IsospinOption with key " + _specification.key.str() + " expects only one allowed value");
+        }
+
+        std::string allowed_value = std::get<std::string>(this->_specification.allowed_values);
+
+        if (((_isospin_value ^ destringify<Isospin>(allowed_value)) & _isospin_value) != Isospin::none)
+        {
+            throw InvalidOptionValueError(_specification.key, _value, allowed_value);
         }
     }
 
@@ -470,9 +502,16 @@ namespace eos
         SpecifiedOption(options, specifications, key),
         _partial_wave_value(destringify<PartialWave>(_value))
     {
-        if (((_partial_wave_value ^ destringify<PartialWave>(this->_specification.allowed_values.front())) & _partial_wave_value) != PartialWave::none)
+        if (! std::holds_alternative<std::string>(this->_specification.allowed_values))
         {
-            throw InvalidOptionValueError(_specification.key, _value, join(_specification.allowed_values.cbegin(), _specification.allowed_values.cend()));
+            throw InternalError("PartialWaveOption with key " + _specification.key.str() + " expects only one allowed value");
+        }
+
+        std::string allowed_value = std::get<std::string>(this->_specification.allowed_values);
+
+        if (((_partial_wave_value ^ destringify<PartialWave>(allowed_value)) & _partial_wave_value) != PartialWave::none)
+        {
+            throw InvalidOptionValueError(_specification.key, _value, allowed_value);
         }
     }
 

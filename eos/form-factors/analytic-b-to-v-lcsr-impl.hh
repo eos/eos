@@ -46,6 +46,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <typename Process_>
     struct Implementation<AnalyticFormFactorBToVLCSR<Process_>>
     {
@@ -23130,9 +23132,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options
     {
-        { "2pt"_ok,    { "tw2+3", "all", "off" }, "all"   },
-        { "3pt"_ok,    { "tw3+4", "all", "off" }, "all"   },
-        { "method"_ok, { "borel", "dispersive" }, "borel" }
+        { "2pt"_ok,    { "tw2+3"s, "all"s, "off"s }, "all"s   },
+        { "3pt"_ok,    { "tw3+4"s, "all"s, "off"s }, "all"s   },
+        { "method"_ok, { "borel"s, "dispersive"s  }, "borel"s }
     };
 
     template <typename Process_>

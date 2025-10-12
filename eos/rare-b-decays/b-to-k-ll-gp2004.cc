@@ -30,6 +30,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     BToKDileptonAmplitudes<tag::GP2004>::BToKDileptonAmplitudes(const Parameters & p,
             const Options & o) :
         AmplitudeGenerator(p, o),
@@ -54,8 +56,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::GP2004>::options
     {
-        { "ccbar-resonance"_ok, { "true", "false" },  "false" },
-        { "nlo"_ok, { "true", "false" },  "true" },
+        { "ccbar-resonance"_ok, { "true"s, "false"s },  "false"s },
+        { "nlo"_ok, { "true"s, "false"s },  "true"s },
     };
 
     // We use the PS mass except for kappa

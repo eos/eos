@@ -31,6 +31,7 @@
 namespace eos
 {
     using std::norm;
+    using namespace std::literals::string_literals;
 
     /*
      * Decay: B_q -> l nubar, cf. [DBG:2013A]
@@ -138,9 +139,9 @@ namespace eos
     Implementation<BToLeptonNeutrino>::options
     {
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },  "false" },
-        { "l"_ok,            { "e", "mu", "tau" }, "mu"    },
-        { "q"_ok,            { "c", "u" },         "c"     }
+        { "cp-conjugate"_ok, { "true"s, "false"s },   "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s }, "mu"s    },
+        { "q"_ok,            { "c"s, "u"s },          "c"s     }
     };
 
     BToLeptonNeutrino::BToLeptonNeutrino(const Parameters & parameters, const Options & options) :

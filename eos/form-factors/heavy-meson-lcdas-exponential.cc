@@ -35,11 +35,13 @@ namespace eos
 {
     namespace heavy_meson_lcdas
     {
+        using namespace std::literals::string_literals;
+
         const std::vector<OptionSpecification> Exponential::options
         {
-            { "Q"_ok,      { "b" },                "b"        },
-            { "q"_ok,      { "u", "d", "s" },      "u"        },
-            { "gminus"_ok, { "zero", "WW-limit" }, "WW-limit" }
+            { "Q"_ok,      { "b"s },                 "b"s        },
+            { "q"_ok,      { "u"s, "d"s, "s"s },     "u"s        },
+            { "gminus"_ok, { "zero"s, "WW-limit"s }, "WW-limit"s }
         };
 
         Exponential::Exponential(const Parameters & p, const Options & o) :

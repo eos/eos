@@ -48,6 +48,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     /* P -> V Processes */
 
     FormFactors<PToV>::~FormFactors()
@@ -156,14 +158,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<PToV>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<PToV>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -175,7 +178,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -219,14 +222,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<PToGamma>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<PToGamma>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -238,7 +242,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -274,14 +278,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<PToGammaOffShell>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<PToGammaOffShell>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -293,7 +298,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -423,14 +428,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<PToP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<PToP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -442,7 +448,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -485,14 +491,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<PToPP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<PToPP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -504,7 +511,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, { allowed_values.cbegin(), allowed_values.cend() }, "" };
+        OptionSpecification result { "form-factors"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 
@@ -543,14 +550,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<VToP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<VToP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return { result };
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     /* V -> V Processes */
@@ -589,14 +597,15 @@ namespace eos
     OptionSpecification
     FormFactorFactory<VToV>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<VToV>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return result;
+        return { "form-factors"_ok, allowed_values, "" };
     }
 
     /* Vacuum -> P P Processes */
@@ -713,13 +722,14 @@ namespace eos
     OptionSpecification
     FormFactorFactory<VacuumToPP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result { "form-factors"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : FormFactorFactory<VacuumToPP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return { result };
+        return { "form-factors"_ok, allowed_values, "" };
     }
 }

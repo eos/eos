@@ -35,6 +35,8 @@ using std::sqrt;
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<LambdaBToLambdaDineutrino>
     {
@@ -153,7 +155,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },  "false" }
+        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s }
     };
 
 

@@ -5,6 +5,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     BToKstarGamma::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model"_ok, "SM"), p, o)),
         form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"), p)),
@@ -48,8 +50,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "l"_ok, { "e", "mu" }, "mu" },
-        { "q"_ok, { "d", "u" }, "d" },
-        { "cp-conjugate"_ok, { "true", "false" }, "false" }
+        { "l"_ok, { "e"s, "mu"s }, "mu"s },
+        { "q"_ok, { "d"s, "u"s }, "d"s },
+        { "cp-conjugate"_ok, { "true"s, "false"s }, "false"s }
     };
 }

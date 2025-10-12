@@ -51,14 +51,14 @@ namespace eos
     OptionSpecification
     Model::option_specification()
     {
-        OptionSpecification result{ "model"_ok, {}, "SM" };
+        std::vector<std::string> allowed_values;
 
         for (const auto & m : Model::models)
         {
-            result.allowed_values.push_back(std::get<0>(m));
+            allowed_values.push_back(std::get<0>(m));
         }
 
-        return result;
+        return OptionSpecification{ "model"_ok, allowed_values, "SM" };
     }
 
     NoSuchModelError::NoSuchModelError(const std::string & name) :

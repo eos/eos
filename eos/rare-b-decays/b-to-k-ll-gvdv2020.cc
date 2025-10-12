@@ -28,6 +28,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKDileptonAmplitudes<tag::GvDV2020>::BToKDileptonAmplitudes(const Parameters & p,
@@ -52,8 +53,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "q"_ok, { "d", "u" },  "d" },
-        { "nonlocal-formfactor"_ok, { "GvDV2020", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020" }
+        { "q"_ok, { "d"s, "u"s },  "d"s },
+        { "nonlocal-formfactor"_ok, { "GvDV2020"s, "GRvDV2022order5"s, "GRvDV2022order6"s }, "GvDV2020"s }
     };
 
     BToKDilepton::DipoleFormFactors

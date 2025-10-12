@@ -28,6 +28,7 @@
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace eos
@@ -128,10 +129,18 @@ namespace eos
             OptionSpecification(const OptionSpecification &);
             OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in);
             OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in, const std::string & default_value_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in, const std::string & default_value_in);
 
-            qnp::OptionKey           key;
-            std::vector<std::string> allowed_values;
-            std::string              default_value;
+            ~OptionSpecification();
+
+            OptionSpecification & operator= (const OptionSpecification &);
+
+            using AllowedValues = std::variant<std::string, std::vector<std::string>>;
+
+            qnp::OptionKey key;
+            AllowedValues  allowed_values;
+            std::string    default_value;
     };
 
     class SpecifiedOption

@@ -38,6 +38,7 @@ namespace eos
     using std::norm;
     using std::real;
     using std::sqrt;
+    using namespace std::literals::string_literals;
 
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K}^* \psi@f$.
@@ -177,8 +178,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToKstarCharmonium>::options
     {
-        {"q"_ok, { "d", "u" }, "d"},
-        {"psi"_ok, { "J/psi", "psi(2S)" }, "J/psi"}
+        {"q"_ok, { "d"s, "u"s }, "d"s},
+        {"psi"_ok, { "J/psi"s, "psi(2S)"s }, "J/psi"s}
     };
 
     double

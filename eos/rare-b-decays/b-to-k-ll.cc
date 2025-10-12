@@ -34,6 +34,7 @@ namespace eos
     using std::abs;
     using std::norm;
     using std::sqrt;
+    using namespace std::literals::string_literals;
 
     struct BToKDilepton::AngularCoefficients
     {
@@ -208,8 +209,8 @@ namespace eos
     Implementation<BToKDilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e", "mu", "tau" }, "mu"},
-        {"q"_ok, { "d", "u" }, "d"}
+        {"l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s},
+        {"q"_ok, { "d"s, "u"s }, "d"s}
     };
 
     double

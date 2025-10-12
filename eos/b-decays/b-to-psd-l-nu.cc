@@ -36,6 +36,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     namespace b_to_psd_l_nu
     {
         struct Amplitudes
@@ -455,10 +457,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "P"_ok,            { "D", "D_s", "pi", "K", "eta", "eta_prime" },  ""      },
-        { "cp-conjugate"_ok, { "true", "false" },                            "false" },
-        { "l"_ok,            { "e", "mu", "tau" },                           "mu"    },
-        { "q"_ok,            { "u", "d", "s" },                              "d"     },
+        { "P"_ok,            { "D"s, "D_s"s, "pi"s, "K"s, "eta"s, "eta_prime"s }, ""s      },
+        { "cp-conjugate"_ok, { "true"s, "false"s },                               "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s },                             "mu"s    },
+        { "q"_ok,            { "u"s, "d"s, "s"s },                                "d"s     },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :

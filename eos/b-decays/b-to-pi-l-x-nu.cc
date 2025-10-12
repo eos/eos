@@ -27,6 +27,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<BToPiLeptonInclusiveNeutrinos>
     {
@@ -143,7 +145,7 @@ namespace eos
     Implementation<BToPiLeptonInclusiveNeutrinos>::options
     {
         FormFactorFactory<PToP>::option_specification(),
-        { "q"_ok, { "d", "u" }, "d" }
+        { "q"_ok, { "d"s, "u"s }, "d"s }
     };
 
     BToPiLeptonInclusiveNeutrinos::BToPiLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :

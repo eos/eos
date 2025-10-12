@@ -29,6 +29,7 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using std::norm;
 
     /*
@@ -108,7 +109,7 @@ namespace eos
 
     const std::vector<OptionSpecification> Implementation<TauToKNeutrino>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" }, "false" },
+        { "cp-conjugate"_ok, { "true"s, "false"s }, "false"s },
     };
 
     TauToKNeutrino::TauToKNeutrino(const Parameters & parameters, const Options & options) :

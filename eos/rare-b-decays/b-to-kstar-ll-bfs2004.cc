@@ -35,6 +35,7 @@
 #include <gsl/gsl_sf.h>
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKstarDileptonAmplitudes<tag::BFS2004>::BToKstarDileptonAmplitudes(const Parameters & p,
@@ -120,9 +121,9 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "q"_ok, { "d", "u" }, "d" },
-        { "ccbar-resonance"_ok, { "true", "false" },  "false" },
-        { "nlo"_ok, { "true", "false" },  "true" },
+        { "q"_ok, { "d"s, "u"s }, "d"s },
+        { "ccbar-resonance"_ok, { "true"s, "false"s },  "false"s },
+        { "nlo"_ok, { "true"s, "false"s },  "true"s },
     };
 
 

@@ -32,6 +32,7 @@
 #include <gsl/gsl_sf.h>
 namespace eos
 {
+    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BsToPhiDileptonAmplitudes<tag::BFS2004>::BsToPhiDileptonAmplitudes(const Parameters & p,
@@ -102,8 +103,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BsToPhiDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "ccbar-resonance"_ok, { "true", "false" },  "false" },
-        { "nlo"_ok, { "true", "false" },  "true" },
+        { "ccbar-resonance"_ok, { "true"s, "false"s },  "false"s },
+        { "nlo"_ok, { "true"s, "false"s },  "true"s },
     };
 
     BsToPhiDilepton::DipoleFormFactors

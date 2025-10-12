@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2024 Danny van Dyk
+ * Copyright (c) 2017-2025 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  *
@@ -45,6 +45,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <typename Process_>
     struct Implementation<AnalyticFormFactorBToPLCSR<Process_>>
     {
@@ -9495,9 +9497,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPLCSR<Process_>>::options
     {
-        { "2pt"_ok,    { "tw2+3", "all", "off" }, "all"   },
-        { "3pt"_ok,    { "tw3+4", "all", "off" }, "all"   },
-        { "method"_ok, { "borel", "dispersive" }, "borel" }
+        { "2pt"_ok,    { "tw2+3"s, "all"s, "off"s }, "all"s   },
+        { "3pt"_ok,    { "tw3+4"s, "all"s, "off"s }, "all"s   },
+        { "method"_ok, { "borel"s, "dispersive"s  }, "borel"s }
     };
 
     template <typename Process_>

@@ -29,6 +29,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     NoSuchNonleptonicAmplitudeError::NoSuchNonleptonicAmplitudeError(const std::string & process, const std::string & tag) :
         Exception("No nonleptonic amplitude found for process '" + process + "' and tag '" + tag + "'!")
     {
@@ -114,16 +116,17 @@ namespace eos
     OptionSpecification
     NonleptonicAmplitudeFactory<PToPP>::option_specification(const qnp::Prefix & process)
     {
-        OptionSpecification result{ "representation"_ok, {}, "" };
+        std::vector<std::string> allowed_values;
+
         for (const auto & ff : NonleptonicAmplitudeFactory<PToPP>::amplitudes)
         {
             if (process == std::get<0>(ff).prefix_part())
             {
-                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+                allowed_values.push_back(std::get<0>(ff).name_part().str());
             }
         }
 
-        return result;
+        return { "representation"_ok, allowed_values, "" };
     }
 
     OptionSpecification
@@ -135,11 +138,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result{
-            "representation"_ok,
-            { allowed_values.cbegin(), allowed_values.cend() },
-            ""
-        };
+        OptionSpecification result{ "representation"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
         return result;
     }
 

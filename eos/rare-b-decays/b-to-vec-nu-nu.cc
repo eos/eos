@@ -35,6 +35,8 @@
 
 namespace eos
 {
+    using namespace std::literals::string_literals;
+
     template <>
     struct Implementation<BToVectorDineutrino>
     {
@@ -269,10 +271,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "cp-conjugate"_ok, { "true", "false" },  "false" },
-        { "D"_ok, { "s" },             "s" },
-        { "q"_ok, { "u", "d", "s" },   "u" },
-        { "I"_ok, { "1", "0", "1/2" }, ""  },
+        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s },
+        { "D"_ok, { "s"s },               "s"s },
+        { "q"_ok, { "u"s, "d"s, "s"s },   "u"s },
+        { "I"_ok, { "1"s, "0"s, "1/2"s }, ""s  },
     };
 
     BToVectorDineutrino::BToVectorDineutrino(const Parameters & parameters, const Options & options) :
