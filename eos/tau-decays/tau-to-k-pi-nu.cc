@@ -108,7 +108,7 @@ namespace eos
                 // alone, and is taken care of by our RG
 
                 // Compare EOS basis with [CCH:2017A], page 2, eq. (9)
-                const WilsonCoefficients<ChargedCurrent> wc  = model->wet_uslnu(LeptonFlavor::tauon, false); // Check CP conjugation
+                const WilsonCoefficients<ChargedCurrent> wc  = model->wet_uslnu(LeptonFlavor::tauon, false);
                 const complex<double>                    cV  = std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cA  = -std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cS  = std::conj(wc.csl() + wc.csr());
