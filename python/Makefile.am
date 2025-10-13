@@ -21,6 +21,7 @@ EXTRA_DIST = \
 	eos/reference.py \
 	eos/signal_pdf.py \
 	eos/tasks.py \
+	eos/tasks_TEST.py \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
 	eos/data/native.py \
@@ -106,6 +107,7 @@ TESTS = \
 	eos_TEST.py \
 	eos/analysis_TEST.py \
 	eos/analysis_file_TEST.py \
+	eos/tasks_TEST.py \
 	eos/data/native_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
