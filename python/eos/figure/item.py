@@ -697,6 +697,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     Example:
 
     .. code-block::
+
         figure_args = '''
         plot:
           xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
@@ -735,6 +736,22 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional).
         * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
         * ``xsamples`` (*int*) -- The number of samples to be used for the x-axis. Defaults to 100.
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
+          legend: { position: 'upper left' }
+          items:
+            - { type: 'kde1D',       variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0',
+                label: 'posterior'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
 
     """)
 
