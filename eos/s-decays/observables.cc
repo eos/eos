@@ -48,7 +48,7 @@ namespace eos
     ObservableGroup
     make_k_to_pi_l_nu_group()
     {
-        auto imp = new Implementation<ObservableGroup>(R"(Observables in $K \to pi \ell^+ \bar{\nu}_\ell$ decays)",
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $K \to \pi \ell^+ \bar{\nu}_\ell$ decays)",
                                                        R"(The option "l" selects the charged lepton flavor.)"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
