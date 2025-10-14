@@ -54,21 +54,21 @@ namespace eos
                                                        R"()",
                                                        {
                                                            make_observable("tau->K_Spinu::dBR/dq2",
-                                                                           R"(d\mathcal{B}(tau^- \to K_S \pi^- \nu_\tau)/dq^2)",
+                                                                           R"(d\mathcal{B}(\tau^- \to K_S \pi^- \nu_\tau)/dq^2)",
                                                                            Unit::InverseGeV2(),
                                                                            &TauToKPiNeutrino::differential_branching_ratio,
                                                                            std::make_tuple("q2"),
                                                                            Options{ { "K"_ok, "K_S" } }
                                                                            ),
                                                            make_observable("tau->K_Spinu::dGamma/dq2",
-                                                                           R"(d\Gamma(tau^- \to K_S \pi^- \nu_\tau)/dq^2)",
+                                                                           R"(d\Gamma(\tau^- \to K_S \pi^- \nu_\tau)/dq^2)",
                                                                            Unit::InverseGeV(),
                                                                            &TauToKPiNeutrino::differential_decay_width,
                                                                            std::make_tuple("q2"),
                                                                            Options{ { "K"_ok, "K_S" } }
                                                                            ),
                                                            make_observable("tau->K_Spinu::BR",
-                                                                           R"(\mathcal{B}(tau^- \to K_S \pi^- \nu_\tau))",
+                                                                           R"(\mathcal{B}(\tau^- \to K_S \pi^- \nu_\tau))",
                                                                            Unit::None(),
                                                                            &TauToKPiNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
@@ -89,7 +89,7 @@ namespace eos
                                                                            Options{ { "K"_ok, "K_S" } }
                                                                            ),
                                                            make_observable("tau->K^-pinu::BR",
-                                                                           R"(\mathcal{B}(tau^- \to K^- \pi^0 \nu_\tau))",
+                                                                           R"(\mathcal{B}(\tau^- \to K^- \pi^0 \nu_\tau))",
                                                                            Unit::None(),
                                                                            &TauToKPiNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
@@ -106,7 +106,7 @@ namespace eos
     ObservableSection
     make_tau_decays_section()
     {
-        auto imp = new Implementation<ObservableSection>("Observables in $\tau$ decays",
+        auto imp = new Implementation<ObservableSection>("Observables in $\\tau$ decays",
                                                          "",
                                                          { // tau^- -> K^- nu
                                                            make_tau_to_k_nu_group(),
