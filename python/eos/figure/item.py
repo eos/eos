@@ -672,7 +672,7 @@ class TwoDimensionalHistogramItem(Item):
         xidx = self._datafile.lookup_table[self.variables[0]]
         yidx = self._datafile.lookup_table[self.variables[1]]
         ax.hist2d(self._datafile.samples[:, xidx], self._datafile.samples[:, yidx],
-                  bins=self.bins, cmin=1, label=self.label, rasterized=True)
+                  bins=self.bins, cmin=1, label=self.label, rasterized=True, cmap='Greys')
 
 
 @dataclass(kw_only=True)
