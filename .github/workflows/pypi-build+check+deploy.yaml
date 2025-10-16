@@ -22,10 +22,12 @@ jobs:
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04     }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04     }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04     }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04     }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-arm }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04-arm }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm }
+                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm }
         runs-on: ${{ matrix.runner }}
         name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
         steps:
@@ -45,7 +47,7 @@ jobs:
                 fi
 
             - name: Build EOS, run tests, and create wheels
-              uses: pypa/cibuildwheel@v2.23.3
+              uses: pypa/cibuildwheel@v3.2.1
               with:
                 package-dir: eoshep
               env:
