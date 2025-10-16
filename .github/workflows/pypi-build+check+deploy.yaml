@@ -22,10 +22,12 @@ jobs:
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04     }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04     }
                   - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04     }
+                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04     }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-arm }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04-arm }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm }
                   - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm }
+                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm }
         runs-on: ${{ matrix.runner }}
         name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
         steps:
@@ -45,15 +47,15 @@ jobs:
                 fi
 
             - name: Build EOS, run tests, and create wheels
-              uses: pypa/cibuildwheel@v2.23.3
+              uses: pypa/cibuildwheel@v3.2.1
               with:
                 package-dir: eoshep
               env:
                 CIBW_BUILD: ${{ matrix.version}}-*
                 CIBW_SKIP: \*-musllinux_*
                 CIBW_ARCHS: ${{ matrix.arch}}
-                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_28@sha256:3f78a8f83445748224746aefac910b4ad3f1e6920edd2f97896e08d7315ec6f8
-                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_28@sha256:4aaf8ef51bcd9fd90d9eb35f80484f3790e532ef13d45a9663eba89bb734b27b
+                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_28@sha256:3faf15578890329cd139a6c9a0d4a72ac9517ba7684d3e5953cfa23d6c111198
+                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_28@sha256:374f5a36aba8d083547f10bd83e88c98c008e3ef2ffca3830bd99988b782c8bd
                 CIBW_BEFORE_BUILD_LINUX: |
                   pushd {project}
                   ./autogen.bash
