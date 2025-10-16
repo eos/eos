@@ -77,7 +77,7 @@ class Grid(Deserializable):
             raise ValueError(f'Unknown axis: {self.axis}')
 
     def draw(self, ax):
-        ax.grid(visible=self.visible, axis=self.axis)
+        ax.grid(visible=self.visible, axis=self.axis, alpha=0.3)
 
 
 @dataclass
