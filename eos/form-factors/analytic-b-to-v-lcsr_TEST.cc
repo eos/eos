@@ -67,7 +67,7 @@ class LCSRFormFactorsTest :
                     { "3pt"_ok,    "all"  },
                     { "gminus"_ok, "zero" }
                 };
-                AnalyticFormFactorBToVLCSR<lcsr::BToKstar> ff{ p, o };
+                AnalyticFormFactorBToVLCSR<BToKstar> ff{ p, o };
                 auto diagnostics = ff.diagnostics();
 
                 std::cout << "Diagnostics:" << std::endl;

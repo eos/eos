@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Danny van Dyk
- * Copyright (c) 2019 Nico Gubernari
+ * Copyright (c) 2018-2025 Danny van Dyk
+ * Copyright (c) 2019      Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,30 +22,18 @@
 
 namespace eos
 {
-    namespace lcsr
+    template <>
+    struct AnalyticFormFactorBToVLCSRTraits<BsToDsstar>
     {
-        struct BsToDsstar
-        {
-            constexpr static const char * B      = "B_s";
-            constexpr static const char * m_B    = "mass::B_s";
-            constexpr static const char * f_B    = "decay-constant::B_s";
-            constexpr static const char * V      = "D_s^*";
-            constexpr static const char * m_V    = "mass::D_s^*";
-            constexpr static const char * f_V    = "decay-constant::D_s^*";
-            constexpr static const char   q_v    = 'c';
-            constexpr static const char   q_s    = 's';
-            constexpr static const double chi2   = 1.0;
-        };
+        static constexpr const char * label  = "B_s->D_s^*";
+        static constexpr const char * name_B = "mass::B_s";
+        static constexpr const char * f_B    = "decay-constant::B_s";
+        static constexpr const char * name_V = "mass::D_s^*";
+        static constexpr const char * f_V    = "decay-constant::D_s^*";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
+        static constexpr const QuarkFlavor spectator_flavor                             = QuarkFlavor::strange;
+        static constexpr const double chi2 = 1.0;
+    };
 
-        // B -> D_s^*
-        constexpr const char * BsToDsstar::B;
-        constexpr const char * BsToDsstar::m_B;
-        constexpr const char * BsToDsstar::f_B;
-        constexpr const char * BsToDsstar::V;
-        constexpr const char * BsToDsstar::m_V;
-        constexpr const char * BsToDsstar::f_V;
-        constexpr const char   BsToDsstar::q_s;
-    }
-
-    template class AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>;
+    template class AnalyticFormFactorBToVLCSR<BsToDsstar>;
 }

@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Danny van Dyk
- * Copyright (c) 2018 Nico Gubernari
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018-2025 Danny van Dyk
+ * Copyright (c) 2018      Nico Gubernari
+ * Copyright (c) 2018      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +23,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_P_LCSR_HH 1
 
 #include <eos/form-factors/mesonic.hh>
+#include <eos/form-factors/mesonic-processes.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
@@ -30,19 +31,13 @@
 
 namespace eos
 {
-    namespace lcsr
-    {
-        struct BToPi;
-        struct BToK;
-        struct BToD;
-        struct BsToK;
-        struct BsToDs;
-    }
+    template <typename Transition_>
+    struct AnalyticFormFactorBToPLCSRProcessTraits;
 
-    template <typename Process_>
+    template <typename Transition_>
     class AnalyticFormFactorBToPLCSR :
         public FormFactors<PToP>,
-        PrivateImplementationPattern<AnalyticFormFactorBToPLCSR<Process_>>
+        PrivateImplementationPattern<AnalyticFormFactorBToPLCSR<Transition_>>
     {
         public:
             AnalyticFormFactorBToPLCSR(const Parameters &, const Options &);
@@ -81,10 +76,10 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
-    extern template class AnalyticFormFactorBToPLCSR<lcsr::BToPi>;
-    extern template class AnalyticFormFactorBToPLCSR<lcsr::BToK>;
-    extern template class AnalyticFormFactorBToPLCSR<lcsr::BToD>;
-    extern template class AnalyticFormFactorBToPLCSR<lcsr::BsToK>;
-    extern template class AnalyticFormFactorBToPLCSR<lcsr::BsToDs>;
+    extern template class AnalyticFormFactorBToPLCSR<BToPi>;
+    extern template class AnalyticFormFactorBToPLCSR<BToK>;
+    extern template class AnalyticFormFactorBToPLCSR<BToD>;
+    extern template class AnalyticFormFactorBToPLCSR<BsToK>;
+    extern template class AnalyticFormFactorBToPLCSR<BsToDs>;
 }
 #endif

@@ -48,8 +48,8 @@ namespace eos
 {
     using namespace std::literals::string_literals;
 
-    template <typename Process_>
-    struct Implementation<AnalyticFormFactorBToVLCSR<Process_>>
+    template <typename Transition_>
+    struct Implementation<AnalyticFormFactorBToVLCSR<Transition_>>
     {
         std::shared_ptr<Model> model;
 
@@ -106,29 +106,31 @@ namespace eos
 
         static const std::vector<OptionSpecification> options;
 
+        using Traits = AnalyticFormFactorBToVLCSRTraits<Transition_>;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
-            m_B(p[Process_::m_B], u),
-            f_B(p[Process_::f_B], u),
-            m_V(p[stringify(Process_::m_V)], u),
-            f_V(p[stringify(Process_::f_V)], u),
-            s0_0_A1(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^A1,0@B-LCSR"], u),
-            s0_1_A1(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^A1,1@B-LCSR"], u),
-            s0_0_A2(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^A2,0@B-LCSR"], u),
-            s0_1_A2(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^A2,1@B-LCSR"], u),
-            s0_0_A30(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^A30,0@B-LCSR"], u),
-            s0_1_A30(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^A30,1@B-LCSR"], u),
-            s0_0_V(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^V,0@B-LCSR"], u),
-            s0_1_V(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^V,1@B-LCSR"], u),
-            s0_0_T1(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T1,0@B-LCSR"], u),
-            s0_1_T1(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T1,1@B-LCSR"], u),
-            s0_0_T23A(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T23A,0@B-LCSR"], u),
-            s0_1_T23A(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T23A,1@B-LCSR"], u),
-            s0_0_T23B(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T23B,0@B-LCSR"], u),
-            s0_1_T23B(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::s_0^T23B,1@B-LCSR"], u),
-            M2(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::M^2@B-LCSR"], u),
-            mu(p[stringify(Process_::B) + "->" + stringify(Process_::V) + "::mu@B-LCSR"], u),
-            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q"_ok, stringify(Process_::q_s) } })), // operator+ is ordered!
+            m_B(p[Traits::name_B], u),
+            f_B(p[Traits::f_B], u),
+            m_V(p[stringify(Traits::name_V)], u),
+            f_V(p[stringify(Traits::f_V)], u),
+            s0_0_A1(p[stringify(Traits::label) + "::s_0^A1,0@B-LCSR"], u),
+            s0_1_A1(p[stringify(Traits::label) + "::s_0^A1,1@B-LCSR"], u),
+            s0_0_A2(p[stringify(Traits::label) + "::s_0^A2,0@B-LCSR"], u),
+            s0_1_A2(p[stringify(Traits::label) + "::s_0^A2,1@B-LCSR"], u),
+            s0_0_A30(p[stringify(Traits::label) + "::s_0^A30,0@B-LCSR"], u),
+            s0_1_A30(p[stringify(Traits::label) + "::s_0^A30,1@B-LCSR"], u),
+            s0_0_V(p[stringify(Traits::label) + "::s_0^V,0@B-LCSR"], u),
+            s0_1_V(p[stringify(Traits::label) + "::s_0^V,1@B-LCSR"], u),
+            s0_0_T1(p[stringify(Traits::label) + "::s_0^T1,0@B-LCSR"], u),
+            s0_1_T1(p[stringify(Traits::label) + "::s_0^T1,1@B-LCSR"], u),
+            s0_0_T23A(p[stringify(Traits::label) + "::s_0^T23A,0@B-LCSR"], u),
+            s0_1_T23A(p[stringify(Traits::label) + "::s_0^T23A,1@B-LCSR"], u),
+            s0_0_T23B(p[stringify(Traits::label) + "::s_0^T23B,0@B-LCSR"], u),
+            s0_1_T23B(p[stringify(Traits::label) + "::s_0^T23B,1@B-LCSR"], u),
+            M2(p[stringify(Traits::label) + "::M^2@B-LCSR"], u),
+            mu(p[stringify(Traits::label) + "::mu@B-LCSR"], u),
+            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q"_ok, stringify(Traits::spectator_flavor) } })), // operator+ is ordered!
             opt_2pt(o, "2pt"_ok, { "tw2+3", "all", "off" }, "all"),
             opt_3pt(o, "3pt"_ok, { "tw3+4", "all", "off" }, "all"),
             switch_2pt_phi(1.0),
@@ -139,26 +141,25 @@ namespace eos
         {
             u.uses(*b_lcdas);
 
-            switch (Process_::q_v)
+            const QuarkFlavor q_v = std::get<1>(Traits::partonic_transition);
+            switch (q_v)
             {
-                case 'u':
-                    m_v = std::bind(&Implementation::m_u, this);
+                case QuarkFlavor::up:
+                case QuarkFlavor::down:
+                    // TODO: We might need a dedicated parameter mass::u(2GeV)
+                    m_v = [this]() { return model->m_ud_msbar(mu()) / 2.0; };
                     break;
 
-                case 'd':
-                    m_v = std::bind(&Implementation::m_d, this);
+                case QuarkFlavor::strange:
+                    m_v = [this]() { return model->m_s_msbar(mu()); };
                     break;
 
-                case 's':
-                    m_v = std::bind(&Implementation::m_s, this);
-                    break;
-
-                case 'c':
-                    m_v = std::bind(&Implementation::m_c, this);
+                case QuarkFlavor::charm:
+                    m_v = [this]() { return model->m_c_msbar(mu()); };
                     break;
 
                 default:
-                    throw InternalError("Unknown quark flavor: '" + stringify(Process_::q_v) + "'");
+                    throw InternalError("Unknown valence quark flavor: '" + stringify(q_v) + "'");
             }
 
             // selectively enable/disable two-particle contributions
@@ -229,28 +230,6 @@ namespace eos
         }
 
         ~Implementation() = default;
-
-        /* quark masses for the propagating quark */
-
-        double m_u() const
-        {
-            return model->m_ud_msbar(mu()) / 2.0; // TODO: We might need a dedicated parameter mass::u(2GeV)
-        }
-
-        double m_d() const
-        {
-            return model->m_ud_msbar(mu()) / 2.0; // TODO: We might need a dedicated parameter mass::u(2GeV)
-        }
-
-        double m_s() const
-        {
-            return model->m_s_msbar(mu());
-        }
-
-        double m_c() const
-        {
-            return model->m_c_msbar(mu());
-        }
 
         /* forwarding the LCDAs */
         // {{{
@@ -3738,7 +3717,7 @@ namespace eos
                              - surface_A1_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * power_of<3>(m_B()) / (2.0 * f_V() * m_V * (m_B + m_V)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<3>(m_B()) / (2.0 * f_V() * m_V * (m_B + m_V)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_a_1(const double & q2) const
@@ -6494,7 +6473,7 @@ namespace eos
                              - surface_A2_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * m_B() * (m_B + m_V) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * m_B() * (m_B + m_V) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_a_2(const double & q2) const
@@ -9246,7 +9225,7 @@ namespace eos
                              - surface_A30_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * q2 * m_B / (4.0 * f_V() * power_of<2>(m_V)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * q2 * m_B / (4.0 * f_V() * power_of<2>(m_V)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_a_30(const double & q2) const
@@ -11575,7 +11554,7 @@ namespace eos
                              - surface_V_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * power_of<2>(m_B) * (m_B + m_V) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<2>(m_B) * (m_B + m_V) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_v(const double & q2) const
@@ -14224,7 +14203,7 @@ namespace eos
                              - surface_T1_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * power_of<2>(m_B()) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<2>(m_B()) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_t_1(const double & q2) const
@@ -17114,7 +17093,7 @@ namespace eos
                              - surface_T23A_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * power_of<2>(m_B()) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<2>(m_B()) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_t_23A(const double & q2) const
@@ -20297,7 +20276,7 @@ namespace eos
                              - surface_T23B_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * power_of<2>(m_B()) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<2>(m_B()) / (2.0 * f_V() * m_V) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_t_23B(const double & q2) const
@@ -23128,36 +23107,36 @@ namespace eos
 
     };
 
-    template <typename Process_>
+    template <typename Transition_>
     const std::vector<OptionSpecification>
-    Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options
+    Implementation<AnalyticFormFactorBToVLCSR<Transition_>>::options
     {
         { "2pt"_ok,    { "tw2+3"s, "all"s, "off"s }, "all"s   },
         { "3pt"_ok,    { "tw3+4"s, "all"s, "off"s }, "all"s   },
         { "method"_ok, { "borel"s, "dispersive"s  }, "borel"s }
     };
 
-    template <typename Process_>
-    AnalyticFormFactorBToVLCSR<Process_>::AnalyticFormFactorBToVLCSR(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<AnalyticFormFactorBToVLCSR<Process_>>(new Implementation<AnalyticFormFactorBToVLCSR<Process_>>(p, o, *this))
+    template <typename Transition_>
+    AnalyticFormFactorBToVLCSR<Transition_>::AnalyticFormFactorBToVLCSR(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<AnalyticFormFactorBToVLCSR<Transition_>>(new Implementation<AnalyticFormFactorBToVLCSR<Transition_>>(p, o, *this))
     {
     }
 
-    template <typename Process_>
-    AnalyticFormFactorBToVLCSR<Process_>::~AnalyticFormFactorBToVLCSR()
+    template <typename Transition_>
+    AnalyticFormFactorBToVLCSR<Transition_>::~AnalyticFormFactorBToVLCSR()
     {
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     FormFactors<PToV> *
-    AnalyticFormFactorBToVLCSR<Process_>::make(const Parameters & p, const Options & o)
+    AnalyticFormFactorBToVLCSR<Transition_>::make(const Parameters & p, const Options & o)
     {
-        return new AnalyticFormFactorBToVLCSR<Process_>(p, o);
+        return new AnalyticFormFactorBToVLCSR<Transition_>(p, o);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::a_0(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::a_0(const double & q2) const
     {
         const double m_B = this->_imp->m_B();
         const double m_V = this->_imp->m_V();
@@ -23165,23 +23144,23 @@ namespace eos
         return ((m_B + m_V) * this->_imp->a_1(q2) - (m_B - m_V) * this->_imp->a_2(q2) - 2.0 * m_V * this->_imp->a_30(q2)) / (2.0 * m_V);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::a_1(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::a_1(const double & q2) const
     {
         return this->_imp->a_1(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::a_2(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::a_2(const double & q2) const
     {
         return this->_imp->a_2(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::a_12(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::a_12(const double & q2) const
     {
         const double m_B = this->_imp->m_B();
         const double m_V = this->_imp->m_V();
@@ -23192,23 +23171,23 @@ namespace eos
         return c_1 * this->_imp->a_1(q2) - c_2 * this->_imp->a_2(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::v(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::v(const double & q2) const
     {
         return this->_imp->v(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::t_1(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::t_1(const double & q2) const
     {
         return this->_imp->t_1(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::t_2(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::t_2(const double & q2) const
     {
         const double m_B = this->_imp->m_B();
         const double m_V = this->_imp->m_V();
@@ -23219,16 +23198,16 @@ namespace eos
         return c_1 * this->_imp->t_23A(q2) + c_2 * this->_imp->t_23B(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::t_3(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::t_3(const double & q2) const
     {
         return 1.0 * this->_imp->t_23A(q2) - 2.0 * this->_imp->t_23B(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::t_23(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::t_23(const double & q2) const
     {
         const double m_B = this->_imp->m_B();
         const double m_V = this->_imp->m_V();
@@ -23242,107 +23221,107 @@ namespace eos
              + c_2 * (1.0 * this->_imp->t_23A(q2) - 2.0 * this->_imp->t_23B(q2));
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_a_1(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_a_1(const double & q2) const
     {
         return this->_imp->normalized_moment_1_a_1(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_a_2(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_a_2(const double & q2) const
     {
         return this->_imp->normalized_moment_1_a_2(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_a_30(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_a_30(const double & q2) const
     {
         return this->_imp->normalized_moment_1_a_30(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_v(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_v(const double & q2) const
     {
         return this->_imp->normalized_moment_1_v(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_t_1(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_t_1(const double & q2) const
     {
         return this->_imp->normalized_moment_1_t_1(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_t_23A(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_t_23A(const double & q2) const
     {
         return this->_imp->normalized_moment_1_t_23A(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::normalized_moment_1_t_23B(const double & q2) const
+    AnalyticFormFactorBToVLCSR<Transition_>::normalized_moment_1_t_23B(const double & q2) const
     {
         return this->_imp->normalized_moment_1_t_23B(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::f_perp(const double &) const
+    AnalyticFormFactorBToVLCSR<Transition_>::f_perp(const double &) const
     {
         return 0.0;
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::f_para(const double &) const
+    AnalyticFormFactorBToVLCSR<Transition_>::f_para(const double &) const
     {
         return 0.0;
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::f_long(const double &) const
+    AnalyticFormFactorBToVLCSR<Transition_>::f_long(const double &) const
     {
         return 0.0;
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::f_perp_T(const double &) const
+    AnalyticFormFactorBToVLCSR<Transition_>::f_perp_T(const double &) const
     {
         return 0.0;
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::f_para_T(const double &) const
+    AnalyticFormFactorBToVLCSR<Transition_>::f_para_T(const double &) const
     {
         return 0.0;
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToVLCSR<Process_>::f_long_T(const double &) const
+    AnalyticFormFactorBToVLCSR<Transition_>::f_long_T(const double &) const
     {
         return 0.0;
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     Diagnostics
-    AnalyticFormFactorBToVLCSR<Process_>::diagnostics() const
+    AnalyticFormFactorBToVLCSR<Transition_>::diagnostics() const
     {
         return this->_imp->diagnostics();
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     const std::set<ReferenceName>
-    AnalyticFormFactorBToVLCSR<Process_>::references
+    AnalyticFormFactorBToVLCSR<Transition_>::references
     {
         "KMO:2005A"_rn,
         "KMO:2006A"_rn,
@@ -23350,18 +23329,18 @@ namespace eos
         "GKvD:2018A"_rn
     };
 
-    template <typename Process_>
+    template <typename Transition_>
     std::vector<OptionSpecification>::const_iterator
-    AnalyticFormFactorBToVLCSR<Process_>::begin_options()
+    AnalyticFormFactorBToVLCSR<Transition_>::begin_options()
     {
-        return Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options.cbegin();
+        return Implementation<AnalyticFormFactorBToVLCSR<Transition_>>::options.cbegin();
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     std::vector<OptionSpecification>::const_iterator
-    AnalyticFormFactorBToVLCSR<Process_>::end_options()
+    AnalyticFormFactorBToVLCSR<Transition_>::end_options()
     {
-        return Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options.cend();
+        return Implementation<AnalyticFormFactorBToVLCSR<Transition_>>::options.cend();
     }
 }
 

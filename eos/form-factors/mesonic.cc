@@ -73,12 +73,12 @@ namespace eos
         { "B_s->phi::BSZ2015",    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
         { "B_s->phi::BFW2010",    &BFW2010FormFactors<BsToPhi,    PToV>::make         },
         // analytic computations
-        { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
-        { "B->D^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make   },
-        { "B->rho::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::make     },
-        { "B_s->K^*::B-LCSR",     &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::make  },
-        { "B_s->phi::B-LCSR",     &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::make    },
-        { "B_s->D_s^*::B-LCSR",   &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::make }
+        { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToKstar>::make         },
+        { "B->D^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToDstar>::make         },
+        { "B->rho::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToRho>::make           },
+        { "B_s->K^*::B-LCSR",     &AnalyticFormFactorBToVLCSR<BsToKstar>::make        },
+        { "B_s->phi::B-LCSR",     &AnalyticFormFactorBToVLCSR<BsToPhi>::make          },
+        { "B_s->D_s^*::B-LCSR",   &AnalyticFormFactorBToVLCSR<BsToDsstar>::make       }
     };
 
     complex<double>
@@ -379,11 +379,11 @@ namespace eos
         // analytic computations
         { "B->pi::DKMMO2008",        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
         { "B_s->K::DKMMO2008",       &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
-        { "B->pi::B-LCSR",           &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make                                                                               },
-        { "B->K::B-LCSR",            &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make                                                                                },
-        { "B->D::B-LCSR",            &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make                                                                                },
-        { "B_s->K::B-LCSR",          &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make                                                                               },
-        { "B_s->D_s::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make                                                                              }
+        { "B->pi::B-LCSR",           &AnalyticFormFactorBToPLCSR<BToPi>::make                                                                                     },
+        { "B->K::B-LCSR",            &AnalyticFormFactorBToPLCSR<BToK>::make                                                                                      },
+        { "B->D::B-LCSR",            &AnalyticFormFactorBToPLCSR<BToD>::make                                                                                      },
+        { "B_s->K::B-LCSR",          &AnalyticFormFactorBToPLCSR<BsToK>::make                                                                                     },
+        { "B_s->D_s::B-LCSR",        &AnalyticFormFactorBToPLCSR<BsToDs>::make                                                                                    }
     };
 
     complex<double>

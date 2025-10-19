@@ -2,8 +2,8 @@
 
 /*
  * Copyright (c) 2017-2025 Danny van Dyk
- * Copyright (c) 2018 Nico Gubernari
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018      Nico Gubernari
+ * Copyright (c) 2018      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -47,8 +47,8 @@ namespace eos
 {
     using namespace std::literals::string_literals;
 
-    template <typename Process_>
-    struct Implementation<AnalyticFormFactorBToPLCSR<Process_>>
+    template <typename Transition_>
+    struct Implementation<AnalyticFormFactorBToPLCSR<Transition_>>
     {
         std::shared_ptr<Model> model;
 
@@ -93,21 +93,23 @@ namespace eos
 
         static const std::vector<OptionSpecification> options;
 
+        using Traits = AnalyticFormFactorBToPLCSRProcessTraits<Transition_>;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
-            m_B(p[Process_::m_B], u),
-            f_B(p[Process_::f_B], u),
-            m_P(p[stringify(Process_::m_P)], u),
-            f_P(p[stringify(Process_::f_P)], u),
-            s0_0_p(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^+,0@B-LCSR"], u),
-            s0_1_p(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^+,1@B-LCSR"], u),
-            s0_0_pm(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^+/-,0@B-LCSR"], u),
-            s0_1_pm(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^+/-,1@B-LCSR"], u),
-            s0_0_t(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^T,0@B-LCSR"], u),
-            s0_1_t(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::s_0^T,1@B-LCSR"], u),
-            M2(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::M^2@B-LCSR"], u),
-            mu(p[stringify(Process_::B) + "->" + stringify(Process_::P) + "::mu@B-LCSR"], u),
-            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q"_ok, stringify(Process_::q_s) } })), // operator+ is ordered!
+            m_B(p[Traits::name_B], u),
+            f_B(p[Traits::f_B], u),
+            m_P(p[Traits::name_P], u),
+            f_P(p[Traits::f_P], u),
+            s0_0_p(p[stringify(Traits::label) + "::s_0^+,0@B-LCSR"], u),
+            s0_1_p(p[stringify(Traits::label) + "::s_0^+,1@B-LCSR"], u),
+            s0_0_pm(p[stringify(Traits::label) + "::s_0^+/-,0@B-LCSR"], u),
+            s0_1_pm(p[stringify(Traits::label) + "::s_0^+/-,1@B-LCSR"], u),
+            s0_0_t(p[stringify(Traits::label) + "::s_0^T,0@B-LCSR"], u),
+            s0_1_t(p[stringify(Traits::label) + "::s_0^T,1@B-LCSR"], u),
+            M2(p[stringify(Traits::label) + "::M^2@B-LCSR"], u),
+            mu(p[stringify(Traits::label) + "::mu@B-LCSR"], u),
+            b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q"_ok, stringify(Traits::spectator_flavor) } })), // operator+ is ordered!
             opt_2pt(o, "2pt"_ok, { "tw2+3", "all", "off" }, "all"),
             opt_3pt(o, "3pt"_ok, { "tw3+4", "all", "off" }, "all"),
             switch_2pt_phi(1.0),
@@ -116,28 +118,29 @@ namespace eos
             opt_method(o, "method"_ok, { "borel", "dispersive" }, "borel"),
             switch_borel(opt_method.value() == "borel")
         {
+            Context ctx("When creating a B->P LCSR form factor with B-meson LCDAs");
+
             u.uses(*b_lcdas);
 
-            switch (Process_::q_v)
+            // quark masses for the propagating quark
+            const QuarkFlavor q_v = std::get<1>(Traits::partonic_transition);
+            switch (q_v)
             {
-                case 'u':
-                    m_v = std::bind(&Implementation::m_u, this);
+                case QuarkFlavor::up:
+                case QuarkFlavor::down:
+                    m_v = [this]() -> double { return this->model->m_ud_msbar(this->mu()) / 2.0; };
                     break;
 
-                case 'd':
-                    m_v = std::bind(&Implementation::m_d, this);
+                case QuarkFlavor::strange:
+                    m_v = [this]() -> double { return this->model->m_s_msbar(this->mu()); };
                     break;
 
-                case 's':
-                    m_v = std::bind(&Implementation::m_s, this);
-                    break;
-
-                case 'c':
-                    m_v = std::bind(&Implementation::m_c, this);
+                case QuarkFlavor::charm:
+                    m_v = [this]() -> double { return this->model->m_c_msbar(this->mu()); };
                     break;
 
                 default:
-                    throw InternalError("Unknown quark flavor: '" + stringify(Process_::q_v) + "'");
+                    throw InternalError("Unknown valence quark flavor: '" + stringify(q_v) + "'");
             }
 
             // selectively enable/disable two-particle contributions
@@ -175,28 +178,6 @@ namespace eos
         }
 
         ~Implementation() = default;
-
-        /* quark masses for the propagating quark */
-
-        double m_u() const
-        {
-            return model->m_ud_msbar(mu()) / 2.0; // TODO: We might need a dedicated parameter mass::u(2GeV)
-        }
-
-        double m_d() const
-        {
-            return model->m_ud_msbar(mu()) / 2.0; // TODO: We might need a dedicated parameter mass::u(2GeV)
-        }
-
-        double m_s() const
-        {
-            return model->m_s_msbar(mu());
-        }
-
-        double m_c() const
-        {
-            return model->m_c_msbar(mu());
-        }
 
         /* forwarding the LCDAs */
         inline
@@ -2751,7 +2732,7 @@ namespace eos
                              - surface_fp_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * m_B() / f_P() * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * m_B() / f_P() * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_f_p(const double & q2) const
@@ -5490,7 +5471,7 @@ namespace eos
                              - surface_fpm_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * m_B() / f_P() * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * m_B() / f_P() * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_f_pm(const double & q2) const
@@ -8365,7 +8346,7 @@ namespace eos
                              - surface_fT_3pt_D(sigma_0, q2);
             }
 
-            return f_B() * power_of<2>(m_B()) * (m_B() + m_P()) / (f_P() * (power_of<2>(m_B()) - power_of<2>(m_P()) - q2)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Process_::chi2);
+            return f_B() * power_of<2>(m_B()) * (m_B() + m_P()) / (f_P() * (power_of<2>(m_B()) - power_of<2>(m_P()) - q2)) * (integral_2pt + surface_2pt + integral_3pt + surface_3pt) / ( Traits::chi2);
         }
 
         double normalized_moment_1_f_t(const double & q2) const
@@ -9493,43 +9474,43 @@ namespace eos
 
     };
 
-    template <typename Process_>
+    template <typename Transition_>
     const std::vector<OptionSpecification>
-    Implementation<AnalyticFormFactorBToPLCSR<Process_>>::options
+    Implementation<AnalyticFormFactorBToPLCSR<Transition_>>::options
     {
         { "2pt"_ok,    { "tw2+3"s, "all"s, "off"s }, "all"s   },
         { "3pt"_ok,    { "tw3+4"s, "all"s, "off"s }, "all"s   },
         { "method"_ok, { "borel"s, "dispersive"s  }, "borel"s }
     };
 
-    template <typename Process_>
-    AnalyticFormFactorBToPLCSR<Process_>::AnalyticFormFactorBToPLCSR(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<AnalyticFormFactorBToPLCSR<Process_>>(new Implementation<AnalyticFormFactorBToPLCSR<Process_>>(p, o, *this))
+    template <typename Transition_>
+    AnalyticFormFactorBToPLCSR<Transition_>::AnalyticFormFactorBToPLCSR(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<AnalyticFormFactorBToPLCSR<Transition_>>(new Implementation<AnalyticFormFactorBToPLCSR<Transition_>>(p, o, *this))
     {
     }
 
-    template <typename Process_>
-    AnalyticFormFactorBToPLCSR<Process_>::~AnalyticFormFactorBToPLCSR()
+    template <typename Transition_>
+    AnalyticFormFactorBToPLCSR<Transition_>::~AnalyticFormFactorBToPLCSR()
     {
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     FormFactors<PToP> *
-    AnalyticFormFactorBToPLCSR<Process_>::make(const Parameters & p, const Options & o)
+    AnalyticFormFactorBToPLCSR<Transition_>::make(const Parameters & p, const Options & o)
     {
-        return new AnalyticFormFactorBToPLCSR<Process_>(p, o);
+        return new AnalyticFormFactorBToPLCSR<Transition_>(p, o);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::f_p(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::f_p(const double & q2) const
     {
         return this->_imp->f_p(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::f_0(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::f_0(const double & q2) const
     {
         const double m_B = this->_imp->m_B(), m_B2 = power_of<2>(m_B);
         const double m_P = this->_imp->m_P(), m_P2 = power_of<2>(m_P);
@@ -9537,59 +9518,59 @@ namespace eos
         return (this->_imp->f_pm(q2)-this->_imp->f_p(q2)) * q2 / (m_B2 - m_P2) + this->_imp->f_p(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::f_m(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::f_m(const double & q2) const
     {
         return this->_imp->f_pm(q2)-this->_imp->f_p(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::f_t(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::f_t(const double & q2) const
     {
         return this->_imp->f_t(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::f_plus_T(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::f_plus_T(const double & q2) const
     {
         // Conventions of GvDV:2020 eq. (A.5)
         return this->_imp->f_t(q2) * q2 / this->_imp->m_B() / (this->_imp->m_B() + this->_imp->m_P());
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::normalized_moment_1_f_p(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::normalized_moment_1_f_p(const double & q2) const
     {
         return this->_imp->normalized_moment_1_f_p(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::normalized_moment_1_f_pm(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::normalized_moment_1_f_pm(const double & q2) const
     {
         return this->_imp->normalized_moment_1_f_pm(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     double
-    AnalyticFormFactorBToPLCSR<Process_>::normalized_moment_1_f_t(const double & q2) const
+    AnalyticFormFactorBToPLCSR<Transition_>::normalized_moment_1_f_t(const double & q2) const
     {
         return this->_imp->normalized_moment_1_f_t(q2);
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     Diagnostics
-    AnalyticFormFactorBToPLCSR<Process_>::diagnostics() const
+    AnalyticFormFactorBToPLCSR<Transition_>::diagnostics() const
     {
         return this->_imp->diagnostics();
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     const std::set<ReferenceName>
-    AnalyticFormFactorBToPLCSR<Process_>::references
+    AnalyticFormFactorBToPLCSR<Transition_>::references
     {
         "KMO:2005A"_rn,
         "KMO:2006A"_rn,
@@ -9597,18 +9578,18 @@ namespace eos
         "GKvD:2018A"_rn
     };
 
-    template <typename Process_>
+    template <typename Transition_>
     std::vector<OptionSpecification>::const_iterator
-    AnalyticFormFactorBToPLCSR<Process_>::begin_options()
+    AnalyticFormFactorBToPLCSR<Transition_>::begin_options()
     {
-        return Implementation<AnalyticFormFactorBToPLCSR<Process_>>::options.cbegin();
+        return Implementation<AnalyticFormFactorBToPLCSR<Transition_>>::options.cbegin();
     }
 
-    template <typename Process_>
+    template <typename Transition_>
     std::vector<OptionSpecification>::const_iterator
-    AnalyticFormFactorBToPLCSR<Process_>::end_options()
+    AnalyticFormFactorBToPLCSR<Transition_>::end_options()
     {
-        return Implementation<AnalyticFormFactorBToPLCSR<Process_>>::options.cend();
+        return Implementation<AnalyticFormFactorBToPLCSR<Transition_>>::options.cend();
     }
 }
 

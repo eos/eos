@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2024 Danny van Dyk
+ * Copyright (c) 2019-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -114,17 +114,17 @@ namespace eos
                 // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B->pi::f_+[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_p,
+                        &AnalyticFormFactorBToPLCSR<BToPi>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::f_0[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_pm,
+                        &AnalyticFormFactorBToPLCSR<BToPi>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::f_T[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_t,
+                        &AnalyticFormFactorBToPLCSR<BToPi>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 // auxiliary variables, e.g. for determining the pi-LCSR/SVZ threshold parameters
@@ -240,17 +240,17 @@ namespace eos
 
                 make_observable("B->K::f_+[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_p,
+                        &AnalyticFormFactorBToPLCSR<BToK>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B->K::f_0[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_pm,
+                        &AnalyticFormFactorBToPLCSR<BToK>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B->K::f_T[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_t,
+                        &AnalyticFormFactorBToPLCSR<BToK>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->K::F_plus(q2)", R"(F_+^{B\to K}(q^2))",
@@ -335,17 +335,17 @@ namespace eos
 
                 make_observable("B->D::f_+[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_p,
+                        &AnalyticFormFactorBToPLCSR<BToD>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B->D::f_0[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_pm,
+                        &AnalyticFormFactorBToPLCSR<BToD>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B->D::f_T[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_t,
+                        &AnalyticFormFactorBToPLCSR<BToD>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 make_observable("B->D::a_0[S_1]@HQE", R"(a_0^{S_1})",
@@ -526,17 +526,17 @@ namespace eos
                 // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B_s->K::f_+[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_p,
+                        &AnalyticFormFactorBToPLCSR<BsToK>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K::f_0[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_pm,
+                        &AnalyticFormFactorBToPLCSR<BsToK>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K::f_T[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_t,
+                        &AnalyticFormFactorBToPLCSR<BsToK>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 // auxiliary variables, e.g. for determining the pi-LCSR/SVZ threshold parameters
@@ -616,17 +616,17 @@ namespace eos
 
                 make_observable("B_s->D_s::f_+[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_p,
+                        &AnalyticFormFactorBToPLCSR<BsToDs>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s::f_0[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_pm,
+                        &AnalyticFormFactorBToPLCSR<BsToDs>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s::f_T[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_t,
+                        &AnalyticFormFactorBToPLCSR<BsToDs>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 make_expression_observable("B(_s)->D(_s)::f_0(q2_num)/f_0(q2_denom)", R"(f_0(q^2_\mathrm{num})/f_+(q^2_\mathrm{denom}))",
@@ -896,37 +896,37 @@ namespace eos
 
                 make_observable("B->rho::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_a_1,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::A_2[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_a_2,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::A_30[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_a_30,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::V[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_v,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::T_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_1,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::T_23A[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_23A,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::T_23B[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_23B,
+                        &AnalyticFormFactorBToVLCSR<BToRho>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
             }
         );
@@ -1008,37 +1008,37 @@ namespace eos
 
                 make_observable("B->K^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_1,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::A_2[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_2,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::A_30[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_30,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::V[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_v,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::T_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_1,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::T_23A[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23A,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::T_23B[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23B,
+                        &AnalyticFormFactorBToVLCSR<BToKstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
                 make_expression_observable("B->K^*::F_perp_T(q2)/F_perp(q2)", R"(\mathcal{F}_{\perp,T}(q^2)/\mathcal{F}_\perp(q^2))",
@@ -1132,37 +1132,37 @@ namespace eos
 
                 make_observable("B->D^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_a_1,
+                        &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::A_2[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_a_2,
+                        &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::A_30[s^1/s^0](q2)",
                         Unit::GeV2(),
-                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_a_30,
+                         &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::V[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_v,
+                        &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::T_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_1,
+                        &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::T_23A[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_23A,
+                        &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::T_23B[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_23B,
+                        &AnalyticFormFactorBToVLCSR<BToDstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::a_0[A_1]@HQE", R"(a_0^{A_1})",
@@ -1478,37 +1478,37 @@ namespace eos
 
                 make_observable("B_s->K^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_1,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::A_2[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_2,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::A_30[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_30,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::V[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_v,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::T_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_1,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::T_23A[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_23A,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::T_23B[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_23B,
+                        &AnalyticFormFactorBToVLCSR<BsToKstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
             }
         );
@@ -1590,37 +1590,37 @@ namespace eos
 
                 make_observable("B_s->phi::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_1,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::A_2[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_2,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::A_30[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_30,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::V[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_v,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::T_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_1,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::T_23A[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23A,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::T_23B[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23B,
+                        &AnalyticFormFactorBToVLCSR<BsToPhi>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
                 make_expression_observable("B_s->phi::F_perp_T(q2)/F_perp(q2)", R"(\mathcal{F}_{\perp,T}(q^2)/\mathcal{F}_\perp(q^2))",
@@ -1750,37 +1750,37 @@ namespace eos
 
                 make_observable("B_s->D_s^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_1,
+                        &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::A_2[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_2,
+                        &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::A_30[s^1/s^0](q2)",
                         Unit::GeV2(),
-                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_30,
+                         &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::V[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_v,
+                        &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::T_1[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_1,
+                        &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::T_23A[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_23A,
+                        &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::T_23B[s^1/s^0](q2)",
                         Unit::GeV2(),
-                        &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_23B,
+                        &AnalyticFormFactorBToVLCSR<BsToDsstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::a_0[A_1]@HQE", R"(a_0^{A_1})",
