@@ -112,7 +112,8 @@ class XTicks(Deserializable):
                 ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
             ax.xaxis.set_tick_params(
                 bottom=(self.position == 'bottom' or self.position == 'both'),
-                top=(self.position == 'top' or self.position == 'both')
+                top=(self.position == 'top' or self.position == 'both'),
+                labeltop=(self.position == 'top' or self.position == 'both')
             )
 
 
