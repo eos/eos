@@ -362,13 +362,13 @@ class CornerFigure(Figure):
                 elif i == j:
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
-                            'ticks': { 'visible': True, 'position': 'bottom' },
+                            'ticks': { 'visible': True, 'position': 'both' },
                             'label': self._labels[j],
                             'range': [ absmin[j], absmax[j] ]
                         }
                         if (i == size - 1) else
                         {
-                            'ticks': { 'visible': False },
+                            'ticks': { 'visible': True, 'position': 'top' },
                             'range': [ absmin[j], absmax[j] ]
                         },
                         'yaxis': {
