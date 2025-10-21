@@ -298,6 +298,9 @@ _task_argument_map = {
     # report
     ('report', 'TEMPLATE'): 'template',
     ('report', 'o'): 'output_file', ('report', 'output-file'): 'output_file', ('report', 'OUTPUT_FILE'): 'output_file',
+    # draw-figure
+    ('draw-figure', 'FIGURE'): 'figure_name', ('draw-figure', 'figure'): 'figure_name',
+    ('draw-figure', 'F'): 'format', ('draw-figure', 'FORMAT'): 'format',
 }
 
 @dataclass
