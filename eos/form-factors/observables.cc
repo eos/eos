@@ -2886,6 +2886,15 @@ namespace eos
                 make_form_factor_adapter("0->Kpi::Im{f_+}(Re{q2},Im{q2})", R"(\textrm{Im}(f_+^{0\to K\pi}(q^2)))",
                         &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
 
+                make_observable("0->Kpi::f_+(0)", R"(f_+^{0 \to K\pi}(0))", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::fp_at_0),
+
+                make_observable("0->Kpi::lambda_prime_+", R"(\lambda_+^{('), K \to \pi})", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::lambda_prime_plus),
+
+                make_observable("0->Kpi::lambda_doubleprime_+", R"(\lambda^{\prime\prime, 0 \to K \pi}_+)", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::lambda_doubleprime_plus),
+
                 make_observable("0->Kpi::b0_f+@KSvD2025", R"(b_0^{+, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_fp),
 
@@ -2903,6 +2912,12 @@ namespace eos
 
                 make_form_factor_adapter("0->Kpi::Im{f_0}(Re{q2},Im{q2})", R"(\textrm{Im}(f_0^{0\to K\pi}(q^2)))",
                         &FormFactors<VacuumToPP>::im_f_0, std::make_tuple("Re{q2}", "Im{q2}")),
+
+                make_observable("0->Kpi::lambda_prime_0", R"(\lambda_0^{('), K \to \pi})", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::lambda_prime_zero),
+
+                make_observable("0->Kpi::lambda_doubleprime_0", R"(\lambda^{\prime\prime}_0^{K \to \pi})", Unit::None(),
+                        &KSvD2025FormFactors<VacuumToKPi>::lambda_doubleprime_zero),
 
                 make_observable("0->Kpi::b0_f0@KSvD2025", R"(b_0^{0, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_f0),

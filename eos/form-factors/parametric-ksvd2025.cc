@@ -25,6 +25,7 @@
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/stringify.hh>
+#include <eos/maths/derivative.hh>
 #include <eos/maths/integrate.hh>
 
 #include <functional>
@@ -453,6 +454,46 @@ namespace eos
     {
         std::function<double (const double &)> f = [this](const double & alpha) -> double { return this->dispersive_integrand_z(alpha); };
         return integrate<GSL::QAGS>(f, -M_PI, M_PI) / (2.0 * M_PI);
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::fp_at_0() const
+    {
+        return std::real(this->f_p(0.0));
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::lambda_prime_plus() const
+    {
+        const double f_at_0 = this->fp_at_0();
+        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return real(this->f_p(q2)); };
+        const double df_dq2 = derivative<1u, deriv::TwoSided>(f, 0.0);
+        const double mpi = this->_m_pi();
+        return (mpi * mpi / f_at_0) * df_dq2;
+    }
+    double KSvD2025FormFactors<VacuumToKPi>::lambda_prime_zero() const
+    {
+        const double f_at_0 = this->fp_at_0();
+        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return real(this->f_0(q2)); };
+        const double df_dq2 = derivative<1u, deriv::TwoSided>(f, 0.0);
+        const double mpi = this->_m_pi();
+        return (mpi * mpi / f_at_0) * df_dq2;
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::lambda_doubleprime_plus() const
+    {
+        const double f_at_0 = this->fp_at_0();
+        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return real(this->f_p(q2)); };
+        const double d2f_dq22 = derivative<2u, deriv::TwoSided>(f, 0.0);
+        const double mpi = this->_m_pi();
+        return (power_of<4>(mpi) / f_at_0) * d2f_dq22;
+    }
+
+    double KSvD2025FormFactors<VacuumToKPi>::lambda_doubleprime_zero() const
+    {
+        const double f_at_0 = this->fp_at_0();
+        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return real(this->f_0(q2)); };
+        const double d2f_dq22 = derivative<2u, deriv::TwoSided>(f, 0.0);
+        const double mpi = this->_m_pi();
+        return (power_of<4>(mpi) / f_at_0) * d2f_dq22;
     }
 
     double KSvD2025FormFactors<VacuumToKPi>::b0_fp() const
