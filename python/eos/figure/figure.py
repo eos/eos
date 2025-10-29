@@ -287,12 +287,15 @@ class CornerFigure(Figure):
     :type contents: list[:class:`DataFile <eos.figure.DataFile>`]
     :param variables: The list of variable names to be shown. If not provided, all variables contained in the first data file are shown.
     :type variables: list[str] | None
+    :param kde: A boolean determining whether to use kernel density estimates (KDE) to visualize the distributions. Defaults to False, in which case histograms are used.
+    :type kde: bool
     """
 
     type:str=field(repr=False, init=False, default='corner')
 
     contents:list[DataFile]
     variables:list[str]=None
+    kde:bool=False
 
     _api_doc = inspect.cleandoc("""
     Producing a Corner Figure
@@ -306,6 +309,7 @@ class CornerFigure(Figure):
 
     The following keys are optional:
         * ``variables`` (*list[str]*) -- The list of variable names to be considered. Defaults to None, in which case all variables contained in the first data file are shown.
+        * ``kde`` (*bool*) -- Whether to use kernel density estimates (KDE) to visualize the distributions. Defaults to False, in which case histograms are used.
 
     """)
 
@@ -339,9 +343,6 @@ class CornerFigure(Figure):
                 absmin[idx] = cmin[cidx] if cmin[cidx] < absmin[idx] else absmin[idx]
                 absmax[idx] = cmax[cidx] if cmax[cidx] > absmax[idx] else absmax[idx]
 
-        for idx, v in enumerate(self._variables):
-            print(f"variable {v}: [{absmin[idx]}, {absmax[idx]}]")
-
         # Check that the variables of the data files match
         for content in self.contents:
             unknown_variables = set(self._variables) - set(content.variables)
@@ -364,13 +365,13 @@ class CornerFigure(Figure):
                 elif i == j:
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
-                            'ticks': { 'visible': True, 'position': 'bottom' },
+                            'ticks': { 'visible': True, 'position': 'both' },
                             'label': self._labels[j],
                             'range': [ absmin[j], absmax[j] ]
                         }
                         if (i == size - 1) else
                         {
-                            'ticks': { 'visible': False },
+                            'ticks': { 'visible': True, 'position': 'top' },
                             'range': [ absmin[j], absmax[j] ]
                         },
                         'yaxis': {
@@ -386,6 +387,11 @@ class CornerFigure(Figure):
                                 'color': content.color,
                                 'level': 68.3,
                                 'range': [absmin[j], absmax[j]]
+                            } if self.kde else {
+                                'type': 'histogram1D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variable': self._variables[j],
+                                'color': content.color,
                             }
                         for content in self.contents]
                     }))
@@ -420,6 +426,12 @@ class CornerFigure(Figure):
                                 'variables': [self._variables[j], self._variables[i]],
                                 'color': content.color,
                                 'contours': ['lines', 'areas']
+                            } if self.kde else
+                            {
+                                'type': 'histogram2D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variables': [self._variables[j], self._variables[i]],
+                                'color': content.color,
                             }
                         for content in self.contents]
                     }))
