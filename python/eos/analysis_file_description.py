@@ -45,6 +45,20 @@ class MetadataDescription(Deserializable):
         return Deserializable.make(MetadataDescription, **_kwargs)
 
 
+@dataclass
+class FileConstraintDescription(Deserializable):
+    file:str
+
+
+class ConstraintDescription:
+    @staticmethod
+    def from_dict(**kwargs):
+        if 'file' in kwargs:
+            return Deserializable.make(FileConstraintDescription, **kwargs)
+
+        raise ValueError('Unknown type of constraint description')
+
+
 class PriorDescription:
     @staticmethod
     def from_dict(**kwargs):
