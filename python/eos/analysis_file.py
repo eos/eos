@@ -27,7 +27,7 @@ from dataclasses import asdict
 from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
                                        PredictionDescription, ObservableComponent, ParameterComponent, \
                                        StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent, MaskNamedComponent, \
-                                       MetadataDescription
+                                       MetadataDescription, ConstraintDescription, FileConstraintDescription
 from eos.figure import FigureFactory
 
 class AnalysisFile:
@@ -78,6 +78,26 @@ class AnalysisFile:
             for l in pc.likelihood:
                 if l not in self._likelihoods:
                     raise RuntimeError(f'Posterior \'{pc.name}\' references likelihood \'{l}\' which is not defined')
+
+        # Optional: provide a list of global constraints beyond what is already available in EOS
+        if 'constraints' not in self.input_data:
+            self._constraints = { }
+        else:
+            eos.inprogress('Inserting custom constraints ...')
+            self._constraints = { c['name']: ConstraintDescription.from_dict(**c) for c in self.input_data['constraints'] }
+            for n, c in self._constraints.items():
+                if isinstance(c, FileConstraintDescription):
+                    if not os.path.isfile(c.file):
+                        eos.error(f'Cannot insert constraint from file: { c.name }: file { c.file } does not exist')
+                        continue
+
+                    with open(c.file) as f:
+                        entry = f.read()
+
+                    eos.Constraints().insert(n, entry)
+
+                eos.info(f'Inserted constraint from file: { c.name }')
+            eos.completed(f'... finished inserting {len(self._constraints)} custom constraints')
 
         # Optional: provide a list of figures
         if 'figures' not in self.input_data:
