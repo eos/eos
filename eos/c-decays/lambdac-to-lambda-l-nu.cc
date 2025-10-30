@@ -39,6 +39,9 @@
 #include <map>
 #include <string>
 
+// To be removed
+#include <iostream>
+
 namespace eos
 {
     using std::norm;
@@ -373,9 +376,21 @@ namespace eos
 
         std::array<double, 10> _integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
-            std::function<std::array<double, 10> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
+            std::function<std::array<double, 10> (const double &)> integrand = [this] (const double & q2) -> std::array<double, 10>
+            {
+                return this->_differential_angular_observables(q2);
+            };
 
-            return integrate1D(integrand, 64, q2_min, q2_max);
+            auto result = integrate(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
+
+            std::cerr << "until here" << std::endl;
+
+            auto result2 = integrate(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
+
+            std::cerr << "until here as well" << std::endl;
+            // return integrate(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
+
+            return result;
         }
 
         inline lambdac_to_lambda_l_nu::AngularObservables differential_angular_observables(const double & q2)
