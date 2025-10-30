@@ -137,6 +137,11 @@ namespace eos
             double saturation_p() const;
             double saturation_z() const;
 
+            /* auxiliary observables */
+            double fp_at_0() const; // f_+(0)
+            double lambda_plus() const; // lambda_+ parameter in linear expansion
+            double lambda_zero() const; // lambda_0 parameter in linear expansion
+
             /* auxiliary pseudo observables */
             double b0_fp() const; // value of the series coefficient b_0 for f_+
             double b0_f0() const; // value of the series coefficient b_0 for f_0
