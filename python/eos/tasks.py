@@ -951,8 +951,7 @@ def weighted_multivariate_gaussian_fit(in_data:_np.array, in_weights:_np.array, 
     
     fit_result = scipy.optimize.minimize(nll, start_params, method='Nelder-Mead')
     if not fit_result.success:
-        print("WARNING: Fit not converged!")
-        print(fit_result.message)
+        warnings.warn("Fit not converged!\n ", fit_result.message)
 
     return params_to_matrix(fit_result.x, ndims)
 
