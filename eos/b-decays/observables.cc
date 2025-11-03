@@ -432,6 +432,12 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
+                make_observable("B_s->D_slnu::dBR/dkperp", R"(d\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)/dk_\perp)",
+                        Unit::InverseGeV(),
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                        std::make_tuple("kperp"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
                 make_observable("B_s->D_slnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
