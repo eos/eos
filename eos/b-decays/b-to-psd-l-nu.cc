@@ -493,6 +493,27 @@ namespace eos
     }
 
     double
+    BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp(const double & kperp) const
+    {
+        std::function<double (const double &)> integrand = [this, &kperp](const double & z_B) -> double
+        {
+            const double m_B = this->_imp->m_B(), m_P = this->_imp->m_P();
+            const double kvec2 = kperp * kperp / (1.0 - z_B * z_B);
+            const double q2 = m_B * m_B + m_P * m_P - 2 * m_B * sqrt(m_P * m_P + kvec2);
+
+            const double jacobian1 = m_B / ((1 - z_B * z_B) * sqrt(m_P * m_P + kvec2));
+            const double jacobian2 = 2.0 * kperp;
+            const double jacobian  = jacobian1 * jacobian2;
+
+            return this->_imp->differential_branching_ratio(q2) * jacobian / 2.0;
+        };
+
+        static const GSL::QAGS::Config config = GSL::QAGS::Config().epsrel(0.5e-3).epsabs(1.0e-9);
+
+        return integrate<GSL::QAGS>(integrand, -1.0, +1.0, config);
+    }
+
+    double
     BToPseudoscalarLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::differential_branching_ratio,
