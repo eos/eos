@@ -80,9 +80,10 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
             _args.update(kwargs)
             if 'analysis_file' in _args and type(_args['analysis_file']) is str:
                 _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
-            # create output directory
-            outputpath = ('{base_directory}/' + output).format(**_args)
-            os.makedirs(outputpath, exist_ok=True)
+            # create output directory if needed directly or for logging
+            if output or logfile:
+                outputpath = ('{base_directory}/' + output).format(**_args)
+                os.makedirs(outputpath, exist_ok=True)
             if logfile:
                 # create invocation-specific log file handler
                 handler = LogfileHandler(path=outputpath, mode=mode(**_args))

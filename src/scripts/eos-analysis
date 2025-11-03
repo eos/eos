@@ -1,4 +1,4 @@
-#!/home/hep/mesmith/private/eos_analysis/eos_env/bin/python
+#!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
 
 # Copyright (c) 2020-2025 Danny van Dyk
