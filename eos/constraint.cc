@@ -39,6 +39,7 @@
 #include <cmath>
 #include <config.h>
 #include <map>
+#include <algorithm>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
