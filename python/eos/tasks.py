@@ -80,10 +80,9 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
             _args.update(kwargs)
             if 'analysis_file' in _args and type(_args['analysis_file']) is str:
                 _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
-            # create output directory if needed directly or for logging
-            if output or logfile:
-                outputpath = ('{base_directory}/' + output).format(**_args)
-                os.makedirs(outputpath, exist_ok=True)
+            # create output directory
+            outputpath = ('{base_directory}/' + output).format(**_args)
+            os.makedirs(outputpath, exist_ok=True)
             if logfile:
                 # create invocation-specific log file handler
                 handler = LogfileHandler(path=outputpath, mode=mode(**_args))
@@ -921,6 +920,85 @@ def validate(analysis_file:str):
     """
     analysis_file.validate()
 
+
+def weighted_multivariate_gaussian_fit(in_data:_np.array, in_weights:_np.array, in_means:_np.array=None, in_covs:_np.array=None):
+    """
+    Fit a multivariate Gaussain to some weighted data
+    """
+    ndims = in_data.shape[-1]
+    i_upper = _np.triu_indices_from(in_covs)
+    start_params = _np.concatenate([in_means, in_covs[i_upper].tolist()])
+
+    def is_pos_def(x):
+        return _np.all(_np.linalg.eigvals(x) > 0)
+
+    def params_to_matrix(pars, dim):
+        means = pars[:dim]
+        covs = _np.zeros((dim,dim))
+        i_upper = _np.triu_indices(dim)
+        covs[i_upper] = pars[dim:]
+        covs = covs + _np.triu(covs, 1).T
+        return means, covs
+
+    def nll(param_vals):
+        params = params_to_matrix(param_vals, ndims)
+        if not is_pos_def(params[1]):
+            return 1.e6
+        lognorm_values = scipy.stats.multivariate_normal.logpdf(in_data, *params, allow_singular=True)
+        weighted_lognorm_values =  in_weights * lognorm_values
+        return -_np.sum(weighted_lognorm_values)
+    
+    fit_result = scipy.optimize.minimize(nll, start_params, method='Nelder-Mead')
+    if not fit_result.success:
+        print("WARNING: Fit not converged!")
+        print(fit_result.message)
+
+    return params_to_matrix(fit_result.x, ndims)
+
+# Create constraint
+@task('create-constraint', 'constraints/{constraint_name}')
+def create_constraint(analysis_file:str, posterior:str, constraint_name:str, base_directory:str='./', parameters:list[str]=None, density_type:str='MultivariateGaussian', fit_samples:bool=False):
+    """
+    Creates a constraint based on the samples of a given posterior.
+    The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/constraints/CONSTRAINT_NAME.
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or :class:`eos.AnalysisFile`
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param constraint_name: The name of the constraint to create.
+    :type constraint_name: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param parameters: The list of parameter names to include in the constraint. If None, all varied parameters are included.
+    :type parameters: list of str, optional
+    """
+    _analysis = analysis_file.analysis(posterior)
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
+    _check_varied_parameters_match(_analysis, data)
+    if parameters is not None:
+        selected_parameters = [p.name() for p in _analysis.varied_parameters if p.name() in parameters]
+    else:
+        selected_parameters = [p.name() for p in _analysis.varied_parameters]
+
+    SUPPORTED_DENSITY_TYPES = ['MultivariateGaussian']
+    if density_type not in SUPPORTED_DENSITY_TYPES:
+        raise ValueError(f'Constraint density type \'{density_type}\' not supported. Supported types are: {",".join(SUPPORTED_DENSITY_TYPES)}')
+
+    samples = data.samples
+    weights = data.weights
+
+    mean = _np.average(samples, axis=0, weights=weights)
+    diffs = samples - mean
+    covariance = _np.cov(diffs.T, aweights=weights)
+    print(f"mean = {mean}")
+    print(f"covariance = {covariance}")
+
+    if fit_samples:
+        fitted_means, fitted_covs = weighted_multivariate_gaussian_fit(samples, weights, mean, covariance)
+        print(f"fitted means = {fitted_means}")
+        print(f"fitted_covs = {fitted_covs}")
+    
 
 def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Parameters, data: eos.data.ImportanceSamples):
     try:
