@@ -20,6 +20,7 @@ import eos
 import contextlib
 import functools
 import glob
+import yaml
 import inspect
 import logging
 import eos.analysis_file_description
@@ -991,14 +992,24 @@ def create_constraint(analysis_file:str, posterior:str, constraint_name:str, bas
     mean = _np.average(samples, axis=0, weights=weights)
     diffs = samples - mean
     covariance = _np.cov(diffs.T, aweights=weights)
-    print(f"mean = {mean}")
-    print(f"covariance = {covariance}")
 
     if fit_samples:
-        fitted_means, fitted_covs = weighted_multivariate_gaussian_fit(samples, weights, mean, covariance)
-        print(f"fitted means = {fitted_means}")
-        print(f"fitted_covs = {fitted_covs}")
-    
+        eos.inprogress(f"Fitting the samples to derive the {density_type} constraint")
+        mean, covariance = weighted_multivariate_gaussian_fit(samples, weights, mean, covariance)
+
+    # Save to yaml
+    yaml_dict = {
+        'name' : constraint_name,
+        'type' : density_type,
+        'posterior' : posterior,
+        'parameters' : selected_parameters,
+        'mean' : mean.tolist(),
+        'covariance' : covariance.tolist()
+    }
+
+    with open(f"{base_directory}/constraints/{constraint_name}/constraint.yaml", "w") as _f:
+        yaml.dump(yaml_dict, _f, sort_keys=False, indent=4, default_flow_style=False)
+
 
 def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Parameters, data: eos.data.ImportanceSamples):
     try:
