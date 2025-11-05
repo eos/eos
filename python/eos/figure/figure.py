@@ -382,7 +382,6 @@ class CornerFigure(Figure):
                                 'datafile': context.data_path(content.path),
                                 'variable': self._variables[j],
                                 'color': content.color,
-                                'level': 68.3,
                                 'range': [absmin[j], absmax[j]]
                             } if content.kde else {
                                 'type': 'histogram1D', 'label': content.label,
@@ -422,7 +421,9 @@ class CornerFigure(Figure):
                                 'datafile': context.data_path(content.path),
                                 'variables': [self._variables[j], self._variables[i]],
                                 'color': content.color,
-                                'contours': ['lines', 'areas']
+                                'contours': ['lines', 'areas'],
+                                'xrange': [absmin[j], absmax[j]],
+                                'yrange': [absmin[i], absmax[i]]
                             } if content.kde else
                             {
                                 'type': 'histogram2D', 'label': content.label,
