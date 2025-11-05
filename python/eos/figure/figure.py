@@ -388,6 +388,7 @@ class CornerFigure(Figure):
                                 'datafile': context.data_path(content.path),
                                 'variable': self._variables[j],
                                 'color': content.color,
+                                'range': [absmin[j], absmax[j]]
                             }
                         for content in self.contents]
                     }))
@@ -430,6 +431,8 @@ class CornerFigure(Figure):
                                 'datafile': context.data_path(content.path),
                                 'variables': [self._variables[j], self._variables[i]],
                                 'color': content.color,
+                                'xrange': [absmin[j], absmax[j]],
+                                'yrange': [absmin[i], absmax[i]]
                             }
                         for content in self.contents]
                     }))
