@@ -733,7 +733,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     The following keys are optional:
 
         * ``bandwidth`` (*float*) -- The relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional).
+        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional). Defaults to 68.3%
         * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
         * ``xsamples`` (*int*) -- The number of samples to be used for the x-axis. Defaults to 100.
 
@@ -757,6 +757,8 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     def __post_init__(self):
         super().__post_init__()
+        if self.level is None:
+            self.level = 68.3
         if self.level is not None and (self.level <= 0 or self.level >= 100):
             raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
 
