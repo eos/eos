@@ -687,6 +687,7 @@ class TwoDimensionalHistogramItem(Item):
         xidx = self._datafile.lookup_table[self.variables[0]]
         yidx = self._datafile.lookup_table[self.variables[1]]
         self.samples = self._datafile.samples[:, (xidx, yidx)]
+        self.weights = self._datafile.weights[:]
         if self.xrange is None:
             self.xrange = (self.samples[:,0].min(), self.samples[:,0].max())
         if self.yrange is None:
@@ -694,7 +695,7 @@ class TwoDimensionalHistogramItem(Item):
 
     def draw(self, ax):
         "Draw the two-dimensional histogram."
-        ax.hist2d(self.samples[:, 0], self.samples[:, 1], range=[self.xrange, self.yrange],
+        ax.hist2d(self.samples[:, 0], self.samples[:, 1], weights=self.weights, range=[self.xrange, self.yrange],
                   bins=self.bins, cmin=1, label=self.label, rasterized=True, cmap='Greys')
 
 
