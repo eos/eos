@@ -696,7 +696,7 @@ class TwoDimensionalHistogramItem(Item):
     def draw(self, ax):
         "Draw the two-dimensional histogram."
         ax.hist2d(self.samples[:, 0], self.samples[:, 1], weights=self.weights, range=[self.xrange, self.yrange],
-                  bins=self.bins, cmin=1, label=self.label, rasterized=True, cmap='Greys')
+                  bins=self.bins, label=self.label, rasterized=True, cmap='Greys')
 
 
 @dataclass(kw_only=True)
