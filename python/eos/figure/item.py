@@ -786,27 +786,30 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
         self.idx = self._datafile.lookup_table[self.variable]
 
+        samples = self._datafile.samples[:, self.idx]
+        weights = self._datafile.weights
+
         if self.range is None:
-            self.range = (self._datafile.samples[:, self.idx].min(), self._datafile.samples[:, self.idx].max())
+            self.range = (samples.min(), samples.max())
 
         eos.inprogress(f"Computing KDE for samples of variable '{self.variable}'")
-        self.kde = _scipy.stats.gaussian_kde(self._datafile.samples[:, self.idx], weights=self._datafile.weights)
+        self.kde = _scipy.stats.gaussian_kde(samples, weights=weights)
         self.kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
             self.kde.set_bandwidth(bw_method=self.kde.factor * self.bandwidth)
 
         self.xvalues = _np.linspace(self.range[0], self.range[1], self.xsamples)
         self.pdf = self.kde(self.xvalues)
-        self.pdf_norm = self.pdf.sum()
+        self.pdf /= self.pdf.sum()
 
     def draw(self, ax):
         "Draw the KDE."
         # find the PDF value corresponding to a given cumulative probability
         if self.level is not None:
-            plevelf = lambda x, pdf, P: self.pdf[self.pdf > x * self.pdf_norm].sum() - P * self.pdf_norm
+            plevelf = lambda x, pdf, P: self.pdf[self.pdf > x].sum() - P
             plevel = _scipy.optimize.brentq(plevelf, 0., 1., args=(self.pdf, self.level / 100.0 ))
-            ax.fill_between(_np.ma.masked_array(self.xvalues, mask=self.pdf < plevel * self.pdf_norm),
-                                            _np.ma.masked_array(self.pdf, mask=self.pdf < plevel * self.pdf_norm, fill_value=_np.nan),
+            ax.fill_between(_np.ma.masked_array(self.xvalues, mask=self.pdf < plevel),
+                                            _np.ma.masked_array(self.pdf, mask=self.pdf < plevel, fill_value=_np.nan),
                                             facecolor=self.color, alpha=self.alpha)
 
         ax.plot(self.xvalues, self.pdf, color=self.color, linestyle=self.linestyle, label=self.label)
@@ -934,19 +937,20 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         if self.bandwidth is not None:
             self._kde.set_bandwidth(bw_method=self._kde.factor * self.bandwidth)
 
-    def draw(self, ax):
-        "Draw the KDE."
-
         # determine the extent of the plot
-        xrange = ax.get_xlim() if self.xrange is None else self.xrange
-        yrange = ax.get_ylim() if self.yrange is None else self.yrange
+        if self.xrange is None:
+            self.xrange = (samples[:, 0].min(), samples[:, 0].max())
+        if self.yrange is None:
+            self.yrange = (samples[:, 1].min(), samples[:, 1].max())
 
         # compute the PDF on a grid
-        xx,yy = _np.mgrid[xrange[0]:xrange[1]:100j, yrange[0]:yrange[1]:100j]
+        xx,yy = _np.mgrid[self.xrange[0]:self.xrange[1]:100j, self.yrange[0]:self.yrange[1]:100j]
         self._positions = _np.vstack([xx.ravel(), yy.ravel()])
         self._pdf = _np.reshape(self._kde(self._positions).T, xx.shape)
         self._pdf /= self._pdf.sum()
 
+    def draw(self, ax):
+        "Draw the KDE."
         # find the PDF value corresponding to a given cummulative probability
         plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
         plevels = []
@@ -959,12 +963,12 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
             ax.contourf(self._pdf.transpose(),
                         colors=colors,
-                        extent=[xrange[0], xrange[1], yrange[0], yrange[1]],
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1])
 
         CS = ax.contour(self._pdf.transpose(),
                         colors=self.color,
-                        extent=[xrange[0], xrange[1], yrange[0], yrange[1]],
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1],
                         linestyles=self.linestyle)
 
