@@ -524,6 +524,8 @@ class OneDimensionalHistogramItem(Item):
     :type datafile: str
     :param variable: The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
     :type variable: str
+    :param range: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type range: tuple[float, float] | None
 
     Example:
 
@@ -543,6 +545,7 @@ class OneDimensionalHistogramItem(Item):
     bins:int=field(default=100)
     datafile:str
     variable:str
+    range:tuple[float, float]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""\
     Plotting One-Dimensional Histograms
@@ -558,6 +561,7 @@ class OneDimensionalHistogramItem(Item):
 
         * ``bins`` (*int*) -- The number of histogram bins. Defaults to 100.
         * ``variable`` (*str*) -- The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
+        * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
 
     Example:
 
@@ -600,12 +604,17 @@ class OneDimensionalHistogramItem(Item):
         if self.variable not in self._datafile.lookup_table:
             raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variable}'")
 
+        idx = self._datafile.lookup_table[self.variable]
+        self.samples = self._datafile.samples[:, idx]
+
+        if self.range is None:
+            self.range = (self.samples.min(), self.samples.max())
+
         pass
 
     def draw(self, ax):
         "Draw the histogram"
-        idx = self._datafile.lookup_table[self.variable]
-        ax.hist(self._datafile.samples[:, idx], weights=self._datafile.weights,
+        ax.hist(self.samples, weights=self._datafile.weights, range=self.range,
                 alpha=self.alpha, bins=self.bins, color=self.color, density=True, label=self.label)
 
 @dataclass
@@ -618,11 +627,17 @@ class TwoDimensionalHistogramItem(Item):
     :type variables: tuple[str, str]
     :param bins: Number of histogram bins. Defaults to 50.
     :type bins: int
+    :param xrange: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type xrange: tuple[float, float] | None
+    :param yrange: The range of the variable to be plotted on the y-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type yrange: tuple[float, float] | None
     """
 
     datafile:str
     variables:tuple[str, str]
     bins:int=field(default=50)
+    xrange:tuple[float,float]|None=field(default=None)
+    yrange:tuple[float,float]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Plotting Two-Dimensional Histograms
@@ -638,6 +653,8 @@ class TwoDimensionalHistogramItem(Item):
 
     The following keys are optional:
         * ``bins`` (*int*) -- The number of histogram bins. Defaults to 50.
+        * ``xrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``yrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the y-axis. Defaults to the full range of the variable in the data file.
     """)
 
     def __post_init__(self):
@@ -667,11 +684,17 @@ class TwoDimensionalHistogramItem(Item):
             if v not in self._datafile.lookup_table:
                 raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{v}'")
 
-    def draw(self, ax):
-        "Draw the two-dimensional histogram."
         xidx = self._datafile.lookup_table[self.variables[0]]
         yidx = self._datafile.lookup_table[self.variables[1]]
-        ax.hist2d(self._datafile.samples[:, xidx], self._datafile.samples[:, yidx],
+        self.samples = self._datafile.samples[:, (xidx, yidx)]
+        if self.xrange is None:
+            self.xrange = (self.samples[:,0].min(), self.samples[:,0].max())
+        if self.yrange is None:
+            self.yrange = (self.samples[:,1].min(), self.samples[:,1].max())
+
+    def draw(self, ax):
+        "Draw the two-dimensional histogram."
+        ax.hist2d(self.samples[:, 0], self.samples[:, 1], range=[self.xrange, self.yrange],
                   bins=self.bins, cmin=1, label=self.label, rasterized=True, cmap='Greys')
 
 
