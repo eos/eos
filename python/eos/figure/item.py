@@ -1595,6 +1595,104 @@ class ComplexPlaneItem(Item):
         """Draw the observable on the axes."""
         ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap='viridis', rasterized=True)
 
+
+@dataclass(kw_only=True)
+class ErrorBars(Item):
+    """Plots one or more error bars at specified position(s).
+
+    :param positions: The list of (x, y) positions where the error bars will be plotted.
+    :type positions: list[tuple[float, float]]
+    :param xerrors: The list of errors to be used in the plotting. Tuples of errors are interpreted as asymmetric errors (i.e., (error_minus, error_plus)).
+    :type xerrors: list[float] | list[tuple[float, float]]
+    :param yerrors: The list of errors to be used in the plotting. Tuples of errors are interpreted as asymmetric errors (i.e., (error_minus, error_plus)).
+    :type yerrors: list[float] | list[tuple[float, float]]
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$x$', range: [0, 4] }
+          yaxis: { label: '$y$', range: [1, 6] }
+          items:
+            - type: 'errorbar'
+              positions: [(1, 2), (2, 3), (3, 5)]
+              xerrors: [0.5, 0.5, 0.5]
+              yerrors: [0.2, (0.2, 0.3), 0.5]
+              color: 'black'
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    marker:str='o'
+    positions:list[tuple[float,float]]
+    xerrors:list[float]|list[tuple[float,float]]|None=None
+    yerrors:list[float]|list[tuple[float,float]]|None=None
+
+
+    def __post_init__(self):
+        if len(self.positions) == 0:
+            raise ValueError('At least one position must be specified for error bars.')
+
+        if self.xerrors is None and self.yerrors is None:
+            raise ValueError('At least one of xerrors or yerrors must be specified for error bars.')
+
+        if self.xerrors is not None and len(self.xerrors) != len(self.positions):
+            raise ValueError('The number of x errors must match the number of positions.')
+
+        if self.yerrors is not None and len(self.yerrors) != len(self.positions):
+            raise ValueError('The number of y errors must match the number of positions.')
+
+        return super().__post_init__()
+
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the error bars for drawing."""
+        self._x = _np.array([pos[0] for pos in self.positions])
+        self._y = _np.array([pos[1] for pos in self.positions])
+
+        if self.xerrors is None:
+            self._xerr = None
+        else:
+            self._xerr = _np.zeros((self._x.size, 2))
+            for i, xerr in enumerate(self.xerrors):
+                if type(xerr) is tuple or type(xerr) is list:
+                    if len(xerr) != 2:
+                        raise ValueError(f'Invalid x error specification {xerr} at index {i}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+                    self._xerr[i, 0] = xerr[0]
+                    self._xerr[i, 1] = xerr[1]
+                elif type(xerr) is float or type(xerr) is int:
+                    self._xerr[i, 0] = xerr
+                    self._xerr[i, 1] = xerr
+                else:
+                    raise ValueError(f'Invalid x error specification {xerr} at index {i} of type {type(xerr)}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+            self._xerr = self._xerr.T
+
+        if self.yerrors is None:
+            self._yerr = None
+        else:
+            self._yerr = _np.zeros((self._y.size, 2))
+            for i, yerr in enumerate(self.yerrors):
+                if type(yerr) is tuple or type(yerr) is list:
+                    if len(yerr) != 2:
+                        raise ValueError(f'Invalid y error specification {yerr} at index {i}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+                    self._yerr[i, 0] = yerr[0]
+                    self._yerr[i, 1] = yerr[1]
+                elif type(yerr) is float or type(yerr) is int:
+                    self._yerr[i, 0] = yerr
+                    self._yerr[i, 1] = yerr
+                else:
+                    raise ValueError(f'Invalid y error specification {yerr} at index {i} of type {type(yerr)}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+            self._yerr = self._yerr.T
+
+    def draw(self, ax):
+        "Draw the error bars on the axes."
+        ax.errorbar(self._x, self._y, xerr=self._xerr, yerr=self._yerr, fmt='none', color=self.color,
+                    alpha=self.alpha, elinewidth=self.linewidth, linestyle=self.linestyle, label=self.label)
+        ax.plot(self._x, self._y, marker=self.marker, linestyle='none', color=self.color, alpha=self.alpha)
+
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
@@ -1608,6 +1706,7 @@ class ItemFactory:
         'band': BandItem,
         'signal-pdf': SignalPDFItem,
         'complex-plane': ComplexPlaneItem,
+        'errorbars': ErrorBars,
     }
 
     @staticmethod
