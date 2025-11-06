@@ -8,6 +8,7 @@ if EOS_ENABLE_PYTHON
 bin_SCRIPTS = \
 	eos-analysis \
 	eos-data \
+	eos-figure \
 	eos-list-observables \
 	eos-list-references \
 	eos-make-constraint \
@@ -34,6 +35,7 @@ endif
 EXTRA_DIST = \
 	eos-analysis \
 	eos-data \
+	eos-figure \
 	eos-list-observables \
 	eos-list-references \
 	eos-make-constraint \
