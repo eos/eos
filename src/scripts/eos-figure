@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
+
+# Copyright (c) 2025 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import argparse, argcomplete
+import eos
+from eos import debug, info, warn, error
+import logging
+import os
+import sys
+import traceback
+import yaml
+
+try:
+    from termcolor import colored
+except ImportError:
+    colored = lambda s, *args, **kwargs: s
+
+# return the value of the environment variable, or a default value if the variable is unset.
+def get_from_env(envvar, default):
+    if not envvar in os.environ:
+        return default
+    if envvar == "EOS_VERBOSITY":
+        return int(os.environ[envvar])
+
+    return os.environ[envvar]
+
+
+def _parser():
+    parser = argparse.ArgumentParser(description='Create figures using EOS.')
+    # 'parent' parser for common arguments
+    common_subparser = argparse.ArgumentParser(add_help=False)
+    # add verbosity arg to all commands
+    common_subparser.add_argument('-v', '--verbose',
+        help = 'Increases the verbosity of the script. Can also be set via the EOS_VERBOSITY environment variable.',
+        dest = 'verbose', action = 'count', default = None
+    )
+    subparsers = parser.add_subparsers(title = 'commands')
+
+    ## begin of commands
+
+    # draw
+    parser_draw = subparsers.add_parser('draw',
+        parents = [common_subparser],
+        description =
+'''
+Draws the figure based on the YAML input provided.
+''',
+        help = 'Draws the figure.'
+    )
+    parser_draw.add_argument('input_file', metavar='INPUT_FILE',
+        help = 'The YAML input file that specifies the figure to be drawn.'
+    )
+    parser_draw.add_argument('output_file', metavar='OUTPUT_FILE',
+        help = 'The output file where the figure shall be stored.'
+    )
+    parser_draw.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_draw.set_defaults(cmd = cmd_draw)
+
+    ## end of commands
+
+    return parser
+
+
+class CustomLogFormatter(logging.Formatter):
+    _MAP_LEVEL_TO_COLOR = {
+        logging.ERROR:      ('✖', 'red'),
+        logging.WARNING:    ('⚠', 'yellow'),
+        logging.SUCCESS:    ('🗸', 'green'),
+        logging.COMPLETED:  ('🗸', 'green'),
+        logging.INPROGRESS: ('…', 'green'),
+        logging.INFO:       ('ℹ', 'blue'),
+        logging.DEBUG:      ('🤖', None),
+    }
+    def __init__(self):
+        super().__init__(fmt='%(levelname)s %(message)s', datefmt=None, style='%')
+
+    def format(self, record):
+        levelno = record.levelno
+        if record.levelno not in self._MAP_LEVEL_TO_COLOR:
+            levelno = logging.ERROR
+
+        symbol, color = self._MAP_LEVEL_TO_COLOR[record.levelno]
+        record.levelname = colored(symbol, color, attrs=['bold'])
+        record.msg = colored(record.msg, color)
+
+        return super().format(record)
+
+def main():
+    parser = _parser()
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+
+    try:
+        if not 'cmd' in args:
+            parser.print_help()
+        elif not callable(args.cmd):
+            parser.print_help()
+        else:
+            if not args.verbose:
+                args.verbose = get_from_env('EOS_VERBOSITY', 0)
+            if args.verbose > 5:
+                args.verbose = 5
+
+            levels = {
+                0: logging.ERROR,
+                1: logging.WARNING,
+                2: logging.SUCCESS,
+                3: logging.INPROGRESS,
+                4: logging.INFO,
+                5: logging.DEBUG
+            }
+
+            eos.stderr_handler.setLevel(levels[args.verbose])
+            eos.stderr_handler.setFormatter(CustomLogFormatter())
+
+            args.cmd(args)
+    except Exception as e:
+        print(colored('✖ Encountered an unrecoverable error:\n', 'red', attrs=['bold']), f'{e}')
+        if not isinstance(e, ValueError):
+            traceback.print_exception(e, e, e.__traceback__)
+        sys.exit(1)
+
+# Draw command
+def cmd_draw(args):
+    """Draw the figure based on the YAML input provided."""
+    from eos.figure import FigureFactory
+
+    with open(args.input_file, 'r') as f:
+        yaml_input = yaml.safe_load(f)
+
+    figure = FigureFactory.from_dict(**yaml_input)
+    figure.draw(output=args.output_file)
+
+
+if __name__ == '__main__':
+    main()
