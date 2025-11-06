@@ -631,7 +631,7 @@ Draws a figure based on the specification in the analysis file and the recorded 
     )
     parser_draw_figure.add_argument('-F', '--format',
         help = 'The additional formats in which the figure should be saved. Defaults to PDF only.',
-        dest = 'format', action = 'extend', default = ['pdf']
+        dest = 'format', action = 'store', default = ['pdf'], type = lambda f: [str(item) for item in f.split(',')]
     )
     parser_draw_figure.set_defaults(cmd = cmd_draw_figure)
 
