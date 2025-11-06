@@ -266,7 +266,7 @@ class GridFigure(Figure):
             plot.prepare()
             plot.draw(self._axes[idx])
 
-        self._figure.tight_layout()
+        self._gridspec.tight_layout(self._figure)
         if output is not None:
             self._figure.savefig(output, bbox_inches='tight')
 
@@ -453,7 +453,6 @@ class CornerFigure(Figure):
             self.prepare(context=context, output=output)
 
         self._figure.draw(context=context, output=output)
-        self._figure._figure.tight_layout()
 
 
     @classmethod
