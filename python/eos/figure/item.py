@@ -518,7 +518,7 @@ class BinnedUncertaintyItem(Item):
 class OneDimensionalHistogramItem(Item):
     """Plots a one-dimensional histogram.
 
-    :param bins: The number of histogram bins. Defaults to 100.
+    :param bins: The number of histogram bins. Defaults to 50.
     :type bins: int
     :param datafile: The path to an existing data file of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction` that contains the samples.
     :type datafile: str
@@ -542,7 +542,7 @@ class OneDimensionalHistogramItem(Item):
         figure.draw()
     """
 
-    bins:int=field(default=100)
+    bins:int=field(default=50)
     datafile:str
     variable:str
     range:tuple[float, float]|None=field(default=None)
@@ -559,7 +559,7 @@ class OneDimensionalHistogramItem(Item):
 
     The following keys are optional:
 
-        * ``bins`` (*int*) -- The number of histogram bins. Defaults to 100.
+        * ``bins`` (*int*) -- The number of histogram bins. Defaults to 50.
         * ``variable`` (*str*) -- The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
         * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
 
