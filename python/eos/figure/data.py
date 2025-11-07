@@ -95,7 +95,7 @@ class DataFile(Deserializable):
             return [p[dist].latex() for dist in variables]
         elif self._type == 'prediction':
             o = eos.Observables()
-            return ["$" + o[dist].latex() + "$" for dist in variables]
+            return ["$" + o[dist.split(";")[0]].latex() + "$" for dist in variables]
         else:
             eos.error(f"Data file '{self.path}' has an unsupported format")
             raise NotImplementedError
