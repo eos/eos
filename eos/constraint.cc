@@ -36,10 +36,10 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <algorithm>
 #include <cmath>
 #include <config.h>
 #include <map>
-#include <algorithm>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
