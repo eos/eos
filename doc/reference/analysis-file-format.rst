@@ -161,7 +161,7 @@ For example, the following code defines the ratio of two :math:`B \to \pi` form-
 
   observables:
     'B->pi::f_+(q2)/f_0(q2)':
-      latex: '$\frac{f_+}{f_0}$'
+      latex: '\frac{f_+}{f_0}'
       unit: '1'
       options: {}
       expression:
