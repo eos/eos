@@ -801,16 +801,26 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         name = os.path.split(datafile)[-1]
         if name == 'samples':
             self._datafile = eos.data.ImportanceSamples(datafile)
+
+            if self.variable not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variable}'")
+
+            self.idx = self._datafile.lookup_table[self.variable]
         elif name.startswith('pred-'):
             self._datafile = eos.data.Prediction(datafile)
+            stripped_lookup_table = { k.split(';')[0]: v for k, v in self._datafile.lookup_table.items() }
+            if self.variable in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variable}'; specify the full variable name including options and kinematics")
+                self.idx = stripped_lookup_table[self.variable]
+            else:
+                if self.variable not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variable}'")
+                self.idx = self._datafile.lookup_table[self.variable]
         else:
             eos.error(f"Data file '{datafile}' has an unsupported format")
             raise NotImplementedError
-
-        if self.variable not in self._datafile.lookup_table:
-            raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variable}'")
-
-        self.idx = self._datafile.lookup_table[self.variable]
 
         samples = self._datafile.samples[:, self.idx]
         weights = self._datafile.weights
