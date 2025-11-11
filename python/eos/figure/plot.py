@@ -108,9 +108,16 @@ class XTicks(Deserializable):
             ax.xaxis.set_minor_formatter(plt.NullFormatter())
             ax.xaxis.set_tick_params(bottom=False, top=False)
         else:
-            ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            log_scale = ax.xaxis.get_scale() == 'log'
+            if not log_scale:
+                ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            else:
+                ax.xaxis.set_major_locator(matplotlib.ticker.LogLocator(base=10.0))
             if self.minor:
-                ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                if not log_scale:
+                    ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                else:
+                    ax.xaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
             ax.xaxis.set_tick_params(
                 which = 'both' if self.minor else 'major',
                 bottom=(self.position == 'bottom' or self.position == 'both'),
@@ -157,8 +164,8 @@ class XAxis(Deserializable):
 
         if self.range is not None:
             ax.set_xlim(self.range)
-        self.ticks.draw(ax)
         ax.set_xscale(self.scale)
+        self.ticks.draw(ax)
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -195,9 +202,16 @@ class YTicks(Deserializable):
             ax.yaxis.set_minor_formatter(plt.NullFormatter())
             ax.yaxis.set_tick_params(left=False, right=False)
         else:
-            ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            log_scale = ax.yaxis.get_scale() == 'log'
+            if not log_scale:
+                ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            else:
+                ax.yaxis.set_major_locator(matplotlib.ticker.LogLocator(base=10.0))
             if self.minor:
-                ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                if not log_scale:
+                    ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                else:
+                    ax.yaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
             ax.yaxis.set_tick_params(
                 left=(self.position == 'left' or self.position == 'both'),
                 right=(self.position == 'right' or self.position == 'both')
@@ -240,8 +254,8 @@ class YAxis(Deserializable):
 
         if self.range is not None:
             ax.set_ylim(self.range)
-        self.ticks.draw(ax)
         ax.set_yscale(self.scale)
+        self.ticks.draw(ax)
 
     @classmethod
     def from_dict(cls, **kwargs):
