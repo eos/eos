@@ -96,6 +96,7 @@ class XTicks(Deserializable):
     minor:bool=field(default=True)
     position:str=field(default='bottom')
     visible:bool=field(default=True)
+    log_scale:bool=field(default=False)
 
     def __post_init__(self):
         POSITIONS = ['bottom', 'top', 'both']
@@ -108,9 +109,15 @@ class XTicks(Deserializable):
             ax.xaxis.set_minor_formatter(plt.NullFormatter())
             ax.xaxis.set_tick_params(bottom=False, top=False)
         else:
-            ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            if not self.log_scale:
+                ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            else:
+                ax.xaxis.set_major_locator(matplotlib.ticker.LogLocator(base=10.0))
             if self.minor:
-                ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                if not self.log_scale:
+                    ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                else:
+                    ax.xaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
             ax.xaxis.set_tick_params(
                 which = 'both' if self.minor else 'major',
                 bottom=(self.position == 'bottom' or self.position == 'both'),
@@ -149,6 +156,9 @@ class XAxis(Deserializable):
         if self.range is not None:
             self.range = tuple(float(x) for x in self.range)
 
+        if self.scale == 'log':
+            self.ticks.log_scale = True
+
     def draw(self, ax):
         if self.label is not None and self.unit is not None:
             ax.set_xlabel(f'{self.label} [{self.unit}]')
@@ -157,8 +167,8 @@ class XAxis(Deserializable):
 
         if self.range is not None:
             ax.set_xlim(self.range)
-        self.ticks.draw(ax)
         ax.set_xscale(self.scale)
+        self.ticks.draw(ax)
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -183,6 +193,7 @@ class YTicks(Deserializable):
     minor:bool=field(default=True)
     position:str=field(default='left')
     visible:bool=field(default=True)
+    log_scale:bool=field(default=False)
 
     def __post_init__(self):
         POSITIONS = ['left', 'right', 'both']
@@ -195,9 +206,15 @@ class YTicks(Deserializable):
             ax.yaxis.set_minor_formatter(plt.NullFormatter())
             ax.yaxis.set_tick_params(left=False, right=False)
         else:
-            ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            if not self.log_scale:
+                ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            else:
+                ax.yaxis.set_major_locator(matplotlib.ticker.LogLocator(base=10.0))
             if self.minor:
-                ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                if not self.log_scale:
+                    ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+                else:
+                    ax.yaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
             ax.yaxis.set_tick_params(
                 left=(self.position == 'left' or self.position == 'both'),
                 right=(self.position == 'right' or self.position == 'both')
@@ -232,6 +249,9 @@ class YAxis(Deserializable):
         if self.range is not None:
             self.range = tuple(float(y) for y in self.range)
 
+        if self.scale == 'log':
+            self.ticks.log_scale = True
+
     def draw(self, ax):
         if self.label is not None and self.unit is not None:
             ax.set_ylabel(f'{self.label} [{self.unit}]')
@@ -240,8 +260,8 @@ class YAxis(Deserializable):
 
         if self.range is not None:
             ax.set_ylim(self.range)
-        self.ticks.draw(ax)
         ax.set_yscale(self.scale)
+        self.ticks.draw(ax)
 
     @classmethod
     def from_dict(cls, **kwargs):
