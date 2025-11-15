@@ -77,7 +77,8 @@ class Grid(Deserializable):
             raise ValueError(f'Unknown axis: {self.axis}')
 
     def draw(self, ax):
-        ax.grid(visible=self.visible, axis=self.axis)
+        if self.visible:
+            ax.grid(visible=self.visible, axis=self.axis, alpha=0.3)
 
 
 @dataclass
@@ -111,8 +112,11 @@ class XTicks(Deserializable):
             if self.minor:
                 ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
             ax.xaxis.set_tick_params(
+                which = 'both' if self.minor else 'major',
                 bottom=(self.position == 'bottom' or self.position == 'both'),
-                top=(self.position == 'top' or self.position == 'both')
+                labelbottom=(self.position == 'bottom' or self.position == 'both'),
+                top=(self.position == 'top' or self.position == 'both'),
+                labeltop=(self.position == 'top' or self.position == 'both')
             )
 
 
@@ -128,12 +132,15 @@ class XAxis(Deserializable):
     :type ticks: :class:`XTicks <eos.figure.XTicks>`
     :param unit: The unit of the x axis, e.g., 'GeV'. Defaults to None.
     :type unit: str | None
+    :param scale: The scale of the x axis, e.g., 'linear' or 'log'. Defaults to 'linear'.
+    :type scale: str
     """
 
     label:str=field(default=None)
     range:tuple[float, float]=field(default=None)
     ticks:XTicks=field(default_factory=XTicks)
     unit:str=None
+    scale:str='linear'
 
     def __post_init__(self):
         if self.range is not None and len(self.range) != 2:
@@ -151,6 +158,7 @@ class XAxis(Deserializable):
         if self.range is not None:
             ax.set_xlim(self.range)
         self.ticks.draw(ax)
+        ax.set_xscale(self.scale)
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -207,12 +215,15 @@ class YAxis(Deserializable):
     :type ticks: :class:`YTicks <eos.figure.YTicks>`
     :param unit: The unit of the y axis, e.g., 'GeV'. Defaults to None.
     :type unit: str | None
+    :param scale: The scale of the y axis, e.g., 'linear' or 'log'. Defaults to 'linear'.
+    :type scale: str
     """
 
     label:str=None
     range:tuple[float, float]=None
     ticks:YTicks=field(default_factory=YTicks)
     unit:str=None
+    scale:str='linear'
 
     def __post_init__(self):
         if self.range is not None and len(self.range) != 2:
@@ -230,6 +241,7 @@ class YAxis(Deserializable):
         if self.range is not None:
             ax.set_ylim(self.range)
         self.ticks.draw(ax)
+        ax.set_yscale(self.scale)
 
     @classmethod
     def from_dict(cls, **kwargs):

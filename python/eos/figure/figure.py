@@ -266,7 +266,7 @@ class GridFigure(Figure):
             plot.prepare()
             plot.draw(self._axes[idx])
 
-        self._figure.tight_layout()
+        self._gridspec.tight_layout(self._figure)
         if output is not None:
             self._figure.savefig(output, bbox_inches='tight')
 
@@ -293,6 +293,7 @@ class CornerFigure(Figure):
 
     contents:list[DataFile]
     variables:list[str]=None
+    kde:bool=False
 
     _api_doc = inspect.cleandoc("""
     Producing a Corner Figure
@@ -339,9 +340,6 @@ class CornerFigure(Figure):
                 absmin[idx] = cmin[cidx] if cmin[cidx] < absmin[idx] else absmin[idx]
                 absmax[idx] = cmax[cidx] if cmax[cidx] > absmax[idx] else absmax[idx]
 
-        for idx, v in enumerate(self._variables):
-            print(f"variable {v}: [{absmin[idx]}, {absmax[idx]}]")
-
         # Check that the variables of the data files match
         for content in self.contents:
             unknown_variables = set(self._variables) - set(content.variables)
@@ -364,13 +362,13 @@ class CornerFigure(Figure):
                 elif i == j:
                     plots.append(PlotFactory.from_dict(**{
                         'xaxis': {
-                            'ticks': { 'visible': True, 'position': 'bottom' },
+                            'ticks': { 'visible': True, 'position': 'both' },
                             'label': self._labels[j],
                             'range': [ absmin[j], absmax[j] ]
                         }
                         if (i == size - 1) else
                         {
-                            'ticks': { 'visible': False },
+                            'ticks': { 'visible': True, 'position': 'top' },
                             'range': [ absmin[j], absmax[j] ]
                         },
                         'yaxis': {
@@ -384,7 +382,12 @@ class CornerFigure(Figure):
                                 'datafile': context.data_path(content.path),
                                 'variable': self._variables[j],
                                 'color': content.color,
-                                'level': 68.3,
+                                'range': [absmin[j], absmax[j]]
+                            } if content.kde else {
+                                'type': 'histogram1D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variable': self._variables[j],
+                                'color': content.color,
                                 'range': [absmin[j], absmax[j]]
                             }
                         for content in self.contents]
@@ -419,7 +422,17 @@ class CornerFigure(Figure):
                                 'datafile': context.data_path(content.path),
                                 'variables': [self._variables[j], self._variables[i]],
                                 'color': content.color,
-                                'contours': ['lines', 'areas']
+                                'contours': ['lines', 'areas'],
+                                'xrange': [absmin[j], absmax[j]],
+                                'yrange': [absmin[i], absmax[i]]
+                            } if content.kde else
+                            {
+                                'type': 'histogram2D', 'label': content.label,
+                                'datafile': context.data_path(content.path),
+                                'variables': [self._variables[j], self._variables[i]],
+                                'color': content.color,
+                                'xrange': [absmin[j], absmax[j]],
+                                'yrange': [absmin[i], absmax[i]]
                             }
                         for content in self.contents]
                     }))
@@ -440,7 +453,6 @@ class CornerFigure(Figure):
             self.prepare(context=context, output=output)
 
         self._figure.draw(context=context, output=output)
-        self._figure._figure.tight_layout()
 
 
     @classmethod

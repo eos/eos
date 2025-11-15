@@ -137,6 +137,13 @@ namespace eos
             double saturation_p() const;
             double saturation_z() const;
 
+            /* auxiliary observables */
+            double fp_at_0() const; // f_+(0)
+            double lambda_prime_plus() const; // normalised gradient at t=0 ( = lambda_+ parameter in linear expansion, or lambda'_+ in quadratic)
+            double lambda_prime_zero() const; // normalised gradient at t=0 ( = lambda_0 parameter in linear expansion, or lambda'_0 in quadratic)
+            double lambda_doubleprime_plus() const; // normalised second derivative at t=0 ( = lambda''_+ parameter in quadratic expansion)
+            double lambda_doubleprime_zero() const; // normalised second derivative at t=0 ( = lambda''_0 parameter in quadratic expansion)
+
             /* auxiliary pseudo observables */
             double b0_fp() const; // value of the series coefficient b_0 for f_+
             double b0_f0() const; // value of the series coefficient b_0 for f_0

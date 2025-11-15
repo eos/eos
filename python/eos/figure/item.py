@@ -518,12 +518,14 @@ class BinnedUncertaintyItem(Item):
 class OneDimensionalHistogramItem(Item):
     """Plots a one-dimensional histogram.
 
-    :param bins: The number of histogram bins. Defaults to 100.
+    :param bins: The number of histogram bins. Defaults to 50.
     :type bins: int
     :param datafile: The path to an existing data file of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction` that contains the samples.
     :type datafile: str
     :param variable: The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
     :type variable: str
+    :param range: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type range: tuple[float, float] | None
 
     Example:
 
@@ -540,9 +542,10 @@ class OneDimensionalHistogramItem(Item):
         figure.draw()
     """
 
-    bins:int=field(default=100)
+    bins:int=field(default=50)
     datafile:str
     variable:str
+    range:tuple[float, float]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""\
     Plotting One-Dimensional Histograms
@@ -556,8 +559,9 @@ class OneDimensionalHistogramItem(Item):
 
     The following keys are optional:
 
-        * ``bins`` (*int*) -- The number of histogram bins. Defaults to 100.
+        * ``bins`` (*int*) -- The number of histogram bins. Defaults to 50.
         * ``variable`` (*str*) -- The name of the variable that is plotted on the x-axis. Defaults to the first variable in the data file.
+        * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
 
     Example:
 
@@ -600,12 +604,17 @@ class OneDimensionalHistogramItem(Item):
         if self.variable not in self._datafile.lookup_table:
             raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variable}'")
 
+        idx = self._datafile.lookup_table[self.variable]
+        self.samples = self._datafile.samples[:, idx]
+
+        if self.range is None:
+            self.range = (self.samples.min(), self.samples.max())
+
         pass
 
     def draw(self, ax):
         "Draw the histogram"
-        idx = self._datafile.lookup_table[self.variable]
-        ax.hist(self._datafile.samples[:, idx], weights=self._datafile.weights,
+        ax.hist(self.samples, weights=self._datafile.weights, range=self.range,
                 alpha=self.alpha, bins=self.bins, color=self.color, density=True, label=self.label)
 
 @dataclass
@@ -618,11 +627,17 @@ class TwoDimensionalHistogramItem(Item):
     :type variables: tuple[str, str]
     :param bins: Number of histogram bins. Defaults to 50.
     :type bins: int
+    :param xrange: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type xrange: tuple[float, float] | None
+    :param yrange: The range of the variable to be plotted on the y-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type yrange: tuple[float, float] | None
     """
 
     datafile:str
     variables:tuple[str, str]
     bins:int=field(default=50)
+    xrange:tuple[float,float]|None=field(default=None)
+    yrange:tuple[float,float]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Plotting Two-Dimensional Histograms
@@ -638,6 +653,8 @@ class TwoDimensionalHistogramItem(Item):
 
     The following keys are optional:
         * ``bins`` (*int*) -- The number of histogram bins. Defaults to 50.
+        * ``xrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``yrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the y-axis. Defaults to the full range of the variable in the data file.
     """)
 
     def __post_init__(self):
@@ -667,12 +684,19 @@ class TwoDimensionalHistogramItem(Item):
             if v not in self._datafile.lookup_table:
                 raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{v}'")
 
-    def draw(self, ax):
-        "Draw the two-dimensional histogram."
         xidx = self._datafile.lookup_table[self.variables[0]]
         yidx = self._datafile.lookup_table[self.variables[1]]
-        ax.hist2d(self._datafile.samples[:, xidx], self._datafile.samples[:, yidx],
-                  bins=self.bins, cmin=1, label=self.label)
+        self.samples = self._datafile.samples[:, (xidx, yidx)]
+        self.weights = self._datafile.weights[:]
+        if self.xrange is None:
+            self.xrange = (self.samples[:,0].min(), self.samples[:,0].max())
+        if self.yrange is None:
+            self.yrange = (self.samples[:,1].min(), self.samples[:,1].max())
+
+    def draw(self, ax):
+        "Draw the two-dimensional histogram."
+        ax.hist2d(self.samples[:, 0], self.samples[:, 1], weights=self.weights, range=[self.xrange, self.yrange],
+                  bins=self.bins, label=self.label, rasterized=True, cmap='Greys')
 
 
 @dataclass(kw_only=True)
@@ -733,7 +757,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     The following keys are optional:
 
         * ``bandwidth`` (*float*) -- The relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional).
+        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional). Defaults to 68.3%
         * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
         * ``xsamples`` (*int*) -- The number of samples to be used for the x-axis. Defaults to 100.
 
@@ -757,6 +781,8 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     def __post_init__(self):
         super().__post_init__()
+        if self.level is None:
+            self.level = 68.3
         if self.level is not None and (self.level <= 0 or self.level >= 100):
             raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
 
@@ -786,26 +812,30 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
         self.idx = self._datafile.lookup_table[self.variable]
 
-        if self.range is None:
-            self.range = (self._datafile.samples[:, self.idx].min(), self._datafile.samples[:, self.idx].max())
+        samples = self._datafile.samples[:, self.idx]
+        weights = self._datafile.weights
 
-        self.kde = _scipy.stats.gaussian_kde(self._datafile.samples[:, self.idx], weights=self._datafile.weights)
+        if self.range is None:
+            self.range = (samples.min(), samples.max())
+
+        eos.inprogress(f"Computing KDE for samples of variable '{self.variable}'")
+        self.kde = _scipy.stats.gaussian_kde(samples, weights=weights)
         self.kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
             self.kde.set_bandwidth(bw_method=self.kde.factor * self.bandwidth)
 
         self.xvalues = _np.linspace(self.range[0], self.range[1], self.xsamples)
         self.pdf = self.kde(self.xvalues)
-        self.pdf_norm = self.pdf.sum()
+        self.pdf /= self.pdf.sum()
 
     def draw(self, ax):
         "Draw the KDE."
         # find the PDF value corresponding to a given cumulative probability
         if self.level is not None:
-            plevelf = lambda x, pdf, P: self.pdf[self.pdf > x * self.pdf_norm].sum() - P * self.pdf_norm
+            plevelf = lambda x, pdf, P: self.pdf[self.pdf > x].sum() - P
             plevel = _scipy.optimize.brentq(plevelf, 0., 1., args=(self.pdf, self.level / 100.0 ))
-            ax.fill_between(_np.ma.masked_array(self.xvalues, mask=self.pdf < plevel * self.pdf_norm),
-                                            _np.ma.masked_array(self.pdf, mask=self.pdf < plevel * self.pdf_norm, fill_value=_np.nan),
+            ax.fill_between(_np.ma.masked_array(self.xvalues, mask=self.pdf < plevel),
+                                            _np.ma.masked_array(self.pdf, mask=self.pdf < plevel, fill_value=_np.nan),
                                             facecolor=self.color, alpha=self.alpha)
 
         ax.plot(self.xvalues, self.pdf, color=self.color, linestyle=self.linestyle, label=self.label)
@@ -927,24 +957,26 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         samples = self._datafile.samples[:, (self._xidx, self._yidx)]
         weights = self._datafile.weights
 
+        eos.inprogress(f"Computing KDE for samples of variables '{self.variables[0]}' and '{self.variables[1]}'")
         self._kde = _scipy.stats.gaussian_kde(samples.T, weights=weights)
         self._kde.set_bandwidth(bw_method='silverman')
         if self.bandwidth is not None:
             self._kde.set_bandwidth(bw_method=self._kde.factor * self.bandwidth)
 
-    def draw(self, ax):
-        "Draw the KDE."
-
         # determine the extent of the plot
-        xrange = ax.get_xlim() if self.xrange is None else self.xrange
-        yrange = ax.get_ylim() if self.yrange is None else self.yrange
+        if self.xrange is None:
+            self.xrange = (samples[:, 0].min(), samples[:, 0].max())
+        if self.yrange is None:
+            self.yrange = (samples[:, 1].min(), samples[:, 1].max())
 
         # compute the PDF on a grid
-        xx,yy = _np.mgrid[xrange[0]:xrange[1]:100j, yrange[0]:yrange[1]:100j]
+        xx,yy = _np.mgrid[self.xrange[0]:self.xrange[1]:100j, self.yrange[0]:self.yrange[1]:100j]
         self._positions = _np.vstack([xx.ravel(), yy.ravel()])
         self._pdf = _np.reshape(self._kde(self._positions).T, xx.shape)
         self._pdf /= self._pdf.sum()
 
+    def draw(self, ax):
+        "Draw the KDE."
         # find the PDF value corresponding to a given cummulative probability
         plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
         plevels = []
@@ -957,12 +989,12 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
             ax.contourf(self._pdf.transpose(),
                         colors=colors,
-                        extent=[xrange[0], xrange[1], yrange[0], yrange[1]],
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1])
 
         CS = ax.contour(self._pdf.transpose(),
                         colors=self.color,
-                        extent=[xrange[0], xrange[1], yrange[0], yrange[1]],
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1],
                         linestyles=self.linestyle)
 
@@ -1563,6 +1595,104 @@ class ComplexPlaneItem(Item):
         """Draw the observable on the axes."""
         ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap='viridis', rasterized=True)
 
+
+@dataclass(kw_only=True)
+class ErrorBars(Item):
+    """Plots one or more error bars at specified position(s).
+
+    :param positions: The list of (x, y) positions where the error bars will be plotted.
+    :type positions: list[tuple[float, float]]
+    :param xerrors: The list of errors to be used in the plotting. Tuples of errors are interpreted as asymmetric errors (i.e., (error_minus, error_plus)).
+    :type xerrors: list[float] | list[tuple[float, float]]
+    :param yerrors: The list of errors to be used in the plotting. Tuples of errors are interpreted as asymmetric errors (i.e., (error_minus, error_plus)).
+    :type yerrors: list[float] | list[tuple[float, float]]
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$x$', range: [0, 4] }
+          yaxis: { label: '$y$', range: [1, 6] }
+          items:
+            - type: 'errorbar'
+              positions: [(1, 2), (2, 3), (3, 5)]
+              xerrors: [0.5, 0.5, 0.5]
+              yerrors: [0.2, (0.2, 0.3), 0.5]
+              color: 'black'
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    marker:str='o'
+    positions:list[tuple[float,float]]
+    xerrors:list[float]|list[tuple[float,float]]|None=None
+    yerrors:list[float]|list[tuple[float,float]]|None=None
+
+
+    def __post_init__(self):
+        if len(self.positions) == 0:
+            raise ValueError('At least one position must be specified for error bars.')
+
+        if self.xerrors is None and self.yerrors is None:
+            raise ValueError('At least one of xerrors or yerrors must be specified for error bars.')
+
+        if self.xerrors is not None and len(self.xerrors) != len(self.positions):
+            raise ValueError('The number of x errors must match the number of positions.')
+
+        if self.yerrors is not None and len(self.yerrors) != len(self.positions):
+            raise ValueError('The number of y errors must match the number of positions.')
+
+        return super().__post_init__()
+
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the error bars for drawing."""
+        self._x = _np.array([pos[0] for pos in self.positions])
+        self._y = _np.array([pos[1] for pos in self.positions])
+
+        if self.xerrors is None:
+            self._xerr = None
+        else:
+            self._xerr = _np.zeros((self._x.size, 2))
+            for i, xerr in enumerate(self.xerrors):
+                if type(xerr) is tuple or type(xerr) is list:
+                    if len(xerr) != 2:
+                        raise ValueError(f'Invalid x error specification {xerr} at index {i}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+                    self._xerr[i, 0] = xerr[0]
+                    self._xerr[i, 1] = xerr[1]
+                elif type(xerr) is float or type(xerr) is int:
+                    self._xerr[i, 0] = xerr
+                    self._xerr[i, 1] = xerr
+                else:
+                    raise ValueError(f'Invalid x error specification {xerr} at index {i} of type {type(xerr)}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+            self._xerr = self._xerr.T
+
+        if self.yerrors is None:
+            self._yerr = None
+        else:
+            self._yerr = _np.zeros((self._y.size, 2))
+            for i, yerr in enumerate(self.yerrors):
+                if type(yerr) is tuple or type(yerr) is list:
+                    if len(yerr) != 2:
+                        raise ValueError(f'Invalid y error specification {yerr} at index {i}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+                    self._yerr[i, 0] = yerr[0]
+                    self._yerr[i, 1] = yerr[1]
+                elif type(yerr) is float or type(yerr) is int:
+                    self._yerr[i, 0] = yerr
+                    self._yerr[i, 1] = yerr
+                else:
+                    raise ValueError(f'Invalid y error specification {yerr} at index {i} of type {type(yerr)}. Must be a float or a tuple/list of two float values (error_minus, error_plus).')
+            self._yerr = self._yerr.T
+
+    def draw(self, ax):
+        "Draw the error bars on the axes."
+        ax.errorbar(self._x, self._y, xerr=self._xerr, yerr=self._yerr, fmt='none', color=self.color,
+                    alpha=self.alpha, elinewidth=self.linewidth, linestyle=self.linestyle, label=self.label)
+        ax.plot(self._x, self._y, marker=self.marker, linestyle='none', color=self.color, alpha=self.alpha)
+
 class ItemFactory:
     registry = {
         'observable': ObservableItem,
@@ -1576,6 +1706,7 @@ class ItemFactory:
         'band': BandItem,
         'signal-pdf': SignalPDFItem,
         'complex-plane': ComplexPlaneItem,
+        'errorbars': ErrorBars,
     }
 
     @staticmethod

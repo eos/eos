@@ -129,6 +129,11 @@ class ParametricKSvD2025Test :
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(0.1)),  0.0,         eps);
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(0.5)), -11.28826275, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(0.5)),  0.10003175,  eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.fp_at_0(), -3.33011297, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.lambda_prime_plus(), 0.03238868, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.lambda_doubleprime_plus(), 0.00171417, eps);
+
                 }
 
                 /* f_0 at timelike q2 > 0.0 */
@@ -166,6 +171,9 @@ class ParametricKSvD2025Test :
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_0(0.1)),   0.0,       eps);
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_0(0.5)), -8.9575287,  eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_0(0.5)),-13.7266102,  eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.lambda_prime_zero(), 0.03024065, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.lambda_doubleprime_zero(), 0.00198482, eps);
                 }
             }
         }
