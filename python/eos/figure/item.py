@@ -950,19 +950,41 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         name = os.path.split(datafile)[-1]
         if name == 'samples':
             self._datafile = eos.data.ImportanceSamples(datafile)
+
+            if self.variables[0] not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[0]}'")
+            if self.variables[1] not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[1]}'")
+
+            self._xidx = self._datafile.lookup_table[self.variables[0]]
+            self._yidx = self._datafile.lookup_table[self.variables[1]]
         elif name.startswith('pred-'):
             self._datafile = eos.data.Prediction(datafile)
+
+            stripped_lookup_table = { k.split(';')[0]: v for k, v in self._datafile.lookup_table.items() }
+
+            if self.variables[0] in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variables[0]}'; specify the full variable name including options and kinematics")
+                self._xidx = stripped_lookup_table[self.variables[0]]
+            else:
+                if self.variables[0] not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain predictions for variable '{self.variables[0]}'")
+                self._xidx = self._datafile.lookup_table[self.variables[0]]
+
+            if self.variables[1] in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variables[1]}'; specify the full variable name including options and kinematics")
+                self._yidx = stripped_lookup_table[self.variables[1]]
+            else:
+                if self.variables[1] not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain predictions for variable '{self.variables[1]}'")
+                self._yidx = self._datafile.lookup_table[self.variables[1]]
         else:
             eos.error(f"Data file '{datafile}' has an unsupported format")
             raise NotImplementedError
-
-        if self.variables[0] not in self._datafile.lookup_table:
-            raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[0]}'")
-        if self.variables[1] not in self._datafile.lookup_table:
-            raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[1]}'")
-
-        self._xidx = self._datafile.lookup_table[self.variables[0]]
-        self._yidx = self._datafile.lookup_table[self.variables[1]]
 
         samples = self._datafile.samples[:, (self._xidx, self._yidx)]
         weights = self._datafile.weights
