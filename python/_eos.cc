@@ -129,6 +129,7 @@ namespace impl
                 {
                     return nullptr;
                 }
+
                 return obj_ptr;
             }
 
@@ -644,6 +645,7 @@ BOOST_PYTHON_MODULE(_eos)
             .def("insert", &Constraints::insert);
 
     class_<ParameterDescription>("ParameterDescription").def_readonly("parameter", &ParameterDescription::parameter);
+
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
     ::impl::iterable_to_std_vector_converter<QualifiedName>       iterable_to_std_vector_converter_QualifiedName;
