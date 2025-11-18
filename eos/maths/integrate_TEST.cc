@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -57,6 +58,21 @@ class IntegrateTest :
             return std::log(x);
         }
 
+        std::function<std::array<double, 4> (const std::array<double, 1> &)> f6 = [&] (const std::array<double, 1> & x)
+        {
+            return std::array<double, 4>{f4(x[0]), f4(x[0]), f4(x[0]), f4(x[0])};
+        };
+
+        std::function<std::array<double, 4> (const double &)> f7 = [&] (const double & x)
+        {
+            return std::array<double, 4>{std::log(x), 2 * std::log(x), 3 * std::log(x), 4 * std::log(x)};
+        };
+
+        std::function<std::array<double, 4> (const std::array<double, 2> &)> f8 = [&] (const std::array<double, 2> & x)
+        {
+            return std::array<double, 4>{std::log(x[0] * x[1]), 2 * std::log(x[0] * x[1]), 3 * std::log(x[0] * x[1]), 4 * std::log(x[0] * x[1])};
+        };
+
         virtual void run() const
         {
             constexpr double eps = 0.01;
@@ -94,7 +110,7 @@ class IntegrateTest :
             };
             constexpr std::array<double, 1> a_4 { 1.0 };
             static const std::array<double, 1> b_4 { std::exp(1) }; // std::exp isn't constexpr (yet)
-            q4 = integrate(cubature::fdd<1>(f4lam), a_4, b_4, config_cubature);
+            q4 = integrate(cubature::fdd_s_v<1>(f4lam), a_4, b_4, config_cubature);
             TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
 
             // Morokoff test function
@@ -109,7 +125,26 @@ class IntegrateTest :
                     prod *= pow(args[i], p);
                 return prod;
             };
-            auto q5 = integrate(cubature::fdd<dim>(f5lam), a_5, b_5, config_cubature);
+            auto q5 = integrate(cubature::fdd_s_v<dim>(f5lam), a_5, b_5, config_cubature);
             TEST_CHECK_RELATIVE_ERROR(q5, 1.0, eps);
+
+            std::array<double, 4> q6 = integrate(f6, std::array<double, 1>{1.0}, std::array<double, 1>{std::exp(1)}, config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(i4, q6[0], eps);
+            TEST_CHECK_RELATIVE_ERROR(i4, q6[1], eps);
+
+            std::array<double, 4> q7 = integrate(f7, 1.0, std::exp(1), config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(    i4, q7[0], eps);
+            TEST_CHECK_RELATIVE_ERROR(2 * i4, q7[1], eps);
+            TEST_CHECK_RELATIVE_ERROR(3 * i4, q7[2], eps);
+            TEST_CHECK_RELATIVE_ERROR(4 * i4, q7[3], eps);
+
+            double q8 = integrate(cubature::fdd_s_s(f4), 1.0, std::exp(1), config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(i4, q8, eps);
+
+            std::array<double, 4> q9 = integrate(f8, std::array<double, 2>{1.0, 1.0}, std::array<double, 2>{std::exp(1), std::exp(1)}, config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(1 * 3.43656, q9[0], eps);
+            TEST_CHECK_RELATIVE_ERROR(2 * 3.43656, q9[1], eps);
+            TEST_CHECK_RELATIVE_ERROR(3 * 3.43656, q9[2], eps);
+            TEST_CHECK_RELATIVE_ERROR(4 * 3.43656, q9[3], eps);
         }
 } model_test;
