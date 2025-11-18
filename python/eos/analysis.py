@@ -18,75 +18,10 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-import ctypes
 import eos
 import numpy as np
 import scipy
 import pypmc
-
-
-# Set up some code to make gsl compliant data structures, kindly provided by chatGPT
-class gsl_matrix(ctypes.Structure):
-    _fields_ = [
-        ("size1", ctypes.c_size_t),
-        ("size2", ctypes.c_size_t),
-        ("tda",   ctypes.c_size_t),
-        ("data",  ctypes.POINTER(ctypes.c_double)),
-        ("block", ctypes.c_void_p),
-        ("owner", ctypes.c_int),
-    ]
-
-gsl_matrix_p = ctypes.POINTER(gsl_matrix)
-
-class gsl_vector(ctypes.Structure):
-    _fields_ = [
-        ("size",   ctypes.c_size_t),
-        ("data",   ctypes.POINTER(ctypes.c_double)),
-        ("block",  ctypes.c_void_p),      # gsl_block*
-        ("owner",  ctypes.c_int),
-        ("stride", ctypes.c_size_t),
-    ]
-
-gsl_vector_p = ctypes.POINTER(gsl_vector)
-
-
-def numpy_to_gsl_matrix(arr: np.ndarray) -> gsl_matrix:
-    """Return a gsl_matrix view of a NumPy array (no copy)."""
-    
-    if arr.dtype != np.float64:
-        raise TypeError("Array dtype must be float64.")
-    if not arr.flags['C_CONTIGUOUS']:
-        arr = np.ascontiguousarray(arr, dtype=np.float64)
-
-    rows, cols = arr.shape
-    
-    data_ptr = arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-
-    mat = gsl_matrix()
-    mat.size1 = rows
-    mat.size2 = cols
-    mat.tda   = cols   # row stride = number of columns for contiguous data
-    mat.data  = data_ptr
-    mat.block = None   # optional—GSL won't use this if owner = 0
-    mat.owner = 0      # NumPy owns the memory, not GSL
-
-    return mat
-
-def numpy_to_gsl_vector(vec: np.ndarray) -> gsl_vector:
-    if vec.dtype != np.float64:
-        raise TypeError("dtype must be float64")
-    if not vec.flags['C_CONTIGUOUS']:
-        vec = np.ascontiguousarray(vec, dtype=np.float64)
-
-    v = gsl_vector()
-    v.size   = vec.size
-    v.stride = 1
-    v.data   = vec.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-    v.block  = None
-    v.owner  = 0  # NumPy owns memory
-
-    return v
-
 
 class BestFitPoint:
     """

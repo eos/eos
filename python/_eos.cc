@@ -19,8 +19,6 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <iostream>
-
 #include "eos/config.hh"
 #include "eos/constraint.hh"
 #include "eos/models/model.hh"
@@ -154,9 +152,7 @@ namespace impl
                 data->convertible = storage;
             }
     };
-
 } // namespace impl
-
 
 BOOST_PYTHON_MODULE(_eos)
 {
@@ -183,6 +179,7 @@ BOOST_PYTHON_MODULE(_eos)
             .value("INPROGRESS", ll_inprogress)
             .value("INFO", ll_informational)
             .value("DEBUG", ll_debug);
+
     // {{{ eos/utils
     // qnp::Prefix
     class_<qnp::Prefix>("qnpPrefix", init<std::string>())
@@ -647,7 +644,6 @@ BOOST_PYTHON_MODULE(_eos)
             .def("insert", &Constraints::insert);
 
     class_<ParameterDescription>("ParameterDescription").def_readonly("parameter", &ParameterDescription::parameter);
-    //noop
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
     ::impl::iterable_to_std_vector_converter<QualifiedName>       iterable_to_std_vector_converter_QualifiedName;
