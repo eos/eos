@@ -145,7 +145,7 @@ class AnalysisFile:
                             raise ValueError(f"Mask {mc.name} references unknown mask {d.mask_name}")
 
 
-    def analysis(self, _posterior):
+    def analysis(self, _posterior, load_prior_file=None):
         """Create an eos.Analysis object for the named posterior."""
         if _posterior not in self._posteriors:
             raise RuntimeError(f'Cannot create analysis for unknown posterior: \'{_posterior}\'')
@@ -201,7 +201,8 @@ class AnalysisFile:
                             global_options=global_options,
                             manual_constraints=manual_constraints,
                             fixed_parameters=fixed_parameters,
-                            parameters=parameters)
+                            parameters=parameters,
+                            load_prior_file=load_prior_file)
 
 
     def observables(self, _posterior, _prediction, parameters):

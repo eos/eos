@@ -606,7 +606,7 @@ class DynestyResultLogger:
 
 # Nested sampling
 @task('sample-nested', 'data/{posterior}/nested')
-def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto'):
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto', constraint:str=None):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
@@ -635,8 +635,10 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type sample: str, optional
     """
     eos.inprogress('Beginning sampling...')
-    analysis = analysis_file.analysis(posterior)
+
+    analysis = analysis_file.analysis(posterior, os.path.join(base_directory, 'constraints', constraint, 'constraint.yaml'))
     logger = DynestyResultLogger()
+
     results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]

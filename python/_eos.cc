@@ -19,6 +19,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <iostream>
+
 #include "eos/config.hh"
 #include "eos/constraint.hh"
 #include "eos/models/model.hh"
@@ -129,7 +131,6 @@ namespace impl
                 {
                     return nullptr;
                 }
-
                 return obj_ptr;
             }
 
@@ -153,7 +154,9 @@ namespace impl
                 data->convertible = storage;
             }
     };
+
 } // namespace impl
+
 
 BOOST_PYTHON_MODULE(_eos)
 {
@@ -180,7 +183,6 @@ BOOST_PYTHON_MODULE(_eos)
             .value("INPROGRESS", ll_inprogress)
             .value("INFO", ll_informational)
             .value("DEBUG", ll_debug);
-
     // {{{ eos/utils
     // qnp::Prefix
     class_<qnp::Prefix>("qnpPrefix", init<std::string>())
@@ -645,7 +647,7 @@ BOOST_PYTHON_MODULE(_eos)
             .def("insert", &Constraints::insert);
 
     class_<ParameterDescription>("ParameterDescription").def_readonly("parameter", &ParameterDescription::parameter);
-
+    //noop
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
     ::impl::iterable_to_std_vector_converter<QualifiedName>       iterable_to_std_vector_converter_QualifiedName;
@@ -741,6 +743,24 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("parameters", "name", "mu", "sigma"))
             .staticmethod("Gaussian")
+            .def("MultivariateGaussian", &LogPrior::MultivariateGaussianVectors, return_value_policy<return_by_value>(), R"(
+            Returns a new MultivariateGaussian prior as a LogPrior.
+
+            The priors support is infinite. The means are provided by the parameter ``means`` and
+            the covariance matrix by the parameter ``covariance``.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: list
+            :param means: The means of the prior.
+            :type means: float
+            :param covariance: The covariance of the prior.
+            :type covariance: float, strictly positive
+
+        )",
+                args("parameters", "name", "means", "covariance"))
+            .staticmethod("MultivariateGaussian")
             .def("Poisson", &LogPrior::Poisson, return_value_policy<return_by_value>(), R"(
             Returns a new Poisson prior as a LogPrior.
 
