@@ -117,6 +117,13 @@ BB:1999A:
   inspire-id: Buchalla:1998ba
   title: 'The rare decays $K\to \pi \nu\bar\nu$, $B \to X \nu\bar\nu$ and $B \to \ell^+
     \ell^-$: An Update'
+BBvD:2013A:
+  authors: Beaujean, Frederik and Bobeth, Christoph and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1310.2478
+  inspire-id: Beaujean:2013soa
+  title: Comprehensive Bayesian analysis of rare (semi)leptonic and radiative $B$ decays
 BBGJvD:2021A:
   authors: Bobeth, Christoph and Bordone, Marzia and Gubernari, Nico and Jung, Martin and van Dyk, Danny
   eprint:
@@ -1709,14 +1716,6 @@ HLMW:2005A:
     id: oai:arXiv.org:hep-ph/0512066
   inspire-id: Huber:2005ig
   title: Electromagnetic logarithms in $\bar B \to  X_s \ell^+ \ell^-$
-HLMW:2013A:
-  authors: Horgan, Ronald R. and Liu, Zhaofeng and Meinel, Stefan and Wingate, Matthew
-  eprint:
-    archive: arXiv
-    id: oai:arXiv.org:1310.3722
-  inspire-id: Horgan:2013hoa
-  title: Lattice QCD calculation of form factors describing the rare decays $B \to
-    K^* \ell^+ \ell^-$ and $B_s \to \phi \ell^+ \ell^-$
 HLMW:2015A:
   authors: Horgan, R.R. and Liu, Z. and Meinel, S. and Wingate, M.
   eprint:
@@ -1732,6 +1731,14 @@ HPQCD:2013A:
     id: oai:arXiv.org:1306.2384
   inspire-id: Bouchard:2013eph
   title: Rare decay $B \to K \ell^+ \ell^-$ form factors from lattice QCD
+HPQCD:2013B:
+  authors: Horgan, Ronald R. and Liu, Zhaofeng and Meinel, Stefan and Wingate, Matthew
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1310.3722
+  inspire-id: Horgan:2013hoa
+  title: Lattice QCD calculation of form factors describing the rare decays $B \to
+    K^* \ell^+ \ell^-$ and $B_s \to \phi \ell^+ \ell^-$
 HPQCD:2014A:
   authors: Bouchard, C. M. and Lepage, G. Peter and Monahan, Christopher and Na, Heechang and Shigemitsu, Junko
   collaboration: HPQCD
@@ -1783,6 +1790,13 @@ HPQCD:2019A:
     id: oai:arXiv.org:1906.00701
   inspire-id: McLean:2019qcx
   title: $B_s\to D_s \ell\nu$ Form Factors for the full $q^2$ range from Lattice QCD with non-perturbatively normalized currents
+HPQCD:2019B:
+  authors: McLean, E. and Davies, C. T. H. and Lytle, A. T. and Koponen, J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1904.02046
+  inspire-id: McLean:2019sds
+  title: Lattice QCD form factor for $B_s\to D_s^* l\nu$ at zero recoil with non-perturbative current renormalisation
 HPQCD:2021A:
   authors: Chakraborty, Bipasha and Parrott, W. G. and Bouchard, C. and Davies, C. T. H. and Koponen, J. and Lepage, G. P.
   collaboration: HPQCD
