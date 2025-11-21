@@ -1352,5 +1352,26 @@ class ConstraintTest : public TestCase
                     std::cerr << "Caught unexpected unknown exception" << std::endl;
                 }
             }
+
+            /* Test constraint suffixes correspond to reference in references.yaml */
+            {
+                auto constraints = Constraints();
+                auto references  = References();
+
+                for (auto cf = constraints.begin(); cf != constraints.end(); ++cf)
+                {
+                    auto suffix = cf->first.suffix_part();
+                    if (! suffix.str().empty())
+                    {
+                        std::cout << "Testing suffix " << suffix.str() << " from constraint " << cf->first.full() << " corresponds to a known reference in references.yaml"
+                                  << std::endl;
+                        std::shared_ptr<const Reference> r;
+
+                        TEST_CHECK_NO_THROW(r = references[suffix.str()]);
+
+                        TEST_CHECK(r.get() != nullptr);
+                    }
+                }
+            }
         }
 } constraint_test;
