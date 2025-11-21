@@ -299,6 +299,14 @@ BES:2024A:
     id: oai:arXiv.org:2410.08603
   inspire-id: BESIII:2024njj
   title: Observation of $D^+\to\eta'\mu^+\nu_\mu$ and First Experimental Study of $D^+\to\eta'\ell^+\nu_\ell$ Decay Dynamics
+BES:2025A:
+  authors: Ablikim, Medina and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2506.02521
+  inspire-id: BESIII:2025hjc
+  title: Improved Measurements of $D^+ \to \eta e^+\nu_e$ and $D^+ \to \eta \mu^+\nu_\mu$
 BESIII:2015A:
   authors: Ablikim, M. and others
   collaboration: BESIII
@@ -1702,6 +1710,14 @@ HFLAV:2021A:
     id: oai:arXiv.org:2206.07501
   inspire-id: HFLAV:2022esi
   title: Averages of b-hadron, c-hadron, and $\tau$-lepton properties as of 2021
+HFLAV:2024A:
+  authors: Banerjee, Swagato and others
+  collaboration: Heavy Flavor Averaging Group (HFLAV)
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2411.18639
+  inspire-id: HeavyFlavorAveragingGroupHFLAV:2024ctg
+  title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2023
 HKvT:2025A:
   authors: Herren, F. and Kubis, B. and van Tonder, R.
   eprint:
@@ -2317,6 +2333,13 @@ MR:2021A:
   inspire-id: Meinel:2021mdj
   title: $\Lambda_c\to\Lambda^*(1520)$ form factors from lattice QCD and improved analysis of
     the $\Lambda_b\to\Lambda^*(1520)$ and $\Lambda_b\to\Lambda_c^*(2595,2625)$ form factors
+MR:2025A:
+  authors: Meli{\'c}, Bla{\v{z}}enka and Reboud, M{\'e}ril
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2507.13734
+  inspire-id: Melic:2025uha
+  title: Form factors and phenomenology of B$_{(s)}$ and D$_{(s)}$ semileptonic decays to $\eta$ and $\eta'$
 MvD:2015A:
   authors: Mannel, Thomas and van Dyk, Danny
   eprint:
