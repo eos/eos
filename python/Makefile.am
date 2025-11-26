@@ -94,6 +94,7 @@ _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = \
 	_eos.cc \
+	_eos/converters.hh \
 	_eos/external-log-likelihood-block.cc _eos/external-log-likelihood-block.hh \
 	_eos/external-observable.cc _eos/external-observable.hh \
 	_eos/log.cc _eos/log.hh \
