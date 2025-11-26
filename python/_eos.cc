@@ -39,6 +39,7 @@
 #include "eos/utils/reference-name.hh"
 #include "eos/utils/units.hh"
 
+#include "python/_eos/converters.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
 #include "python/_eos/external-observable.hh"
 #include "python/_eos/log.hh"
@@ -454,6 +455,8 @@ BOOST_PYTHON_MODULE(_eos)
             .def_readonly("key", &OptionSpecification::key)
             .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()))
             .def_readonly("default_value", &OptionSpecification::default_value);
+    // register converter for OptionSpecification::allowed_values
+    to_python_converter<std::variant<std::string, std::vector<std::string>>, ::impl::VariantOptionAllowedValuesConverter, true>();
 
     // Units
     class_<Unit>("Unit", R"(
