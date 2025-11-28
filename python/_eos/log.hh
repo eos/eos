@@ -24,8 +24,6 @@
 #ifndef EOS_PYTHON__EOS_LOG_HH
 #  define EOS_PYTHON__EOS_LOG_HH 1
 
-using namespace boost::python;
-
 namespace impl
 {
     void logging_callback(PyObject * c, const std::string & id, const eos::LogLevel & l, const std::string & m);
