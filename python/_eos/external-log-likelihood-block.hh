@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,9 @@
 #include "eos/statistics/log-likelihood.hh"
 
 #include <boost/python.hpp>
+
+#ifndef EOS_PYTHON__EOS_EXTERNAL_LOG_LIKELIHOOD_BLOCK_HH
+#  define EOS_PYTHON__EOS_EXTERNAL_LOG_LIKELIHOOD_BLOCK_HH 1
 
 namespace eos
 {
@@ -54,3 +57,5 @@ namespace eos
             virtual TestStatistic primary_test_statistic() const override;
     };
 } // namespace eos
+
+#endif // EOS_PYTHON__EOS_EXTERNAL_LOG_LIKELIHOOD_BLOCK_HH

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025      Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,9 @@
 #include "eos/observable.hh"
 
 #include <boost/python.hpp>
+
+#ifndef EOS_PYTHON__EOS_EXTERNAL_OBSERVABLE_HH
+#  define EOS_PYTHON__EOS_EXTERNAL_OBSERVABLE_HH 1
 
 namespace eos
 {
@@ -86,3 +89,5 @@ namespace eos
     std::shared_ptr<const ObservableEntry> register_python_observable(const QualifiedName & name, boost::python::object provider, const std::string & latex = "",
                                                                       const Unit & unit = Unit::Undefined());
 } // namespace eos
+
+#endif // EOS_PYTHON__EOS_EXTERNAL_OBSERVABLE_HH

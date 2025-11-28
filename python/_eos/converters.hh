@@ -23,6 +23,9 @@
 #include <variant>
 #include <vector>
 
+#ifndef EOS_PYTHON__EOS_CONVERTERS_HH
+#  define EOS_PYTHON__EOS_CONVERTERS_HH 1
+
 namespace impl
 {
     struct VariantOptionAllowedValuesConverter
@@ -57,3 +60,5 @@ namespace impl
     };
 
 } // namespace impl
+
+#endif // EOS_PYTHON__EOS_CONVERTERS_HH

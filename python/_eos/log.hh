@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2025 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,9 @@
 
 #include <boost/python.hpp>
 
+#ifndef EOS_PYTHON__EOS_LOG_HH
+#  define EOS_PYTHON__EOS_LOG_HH 1
+
 using namespace boost::python;
 
 namespace impl
@@ -34,3 +37,5 @@ namespace impl
     // for testing purposes only
     void emit_native_log(const std::string & id, const eos::LogLevel & log_level, const std::string & m);
 } // namespace impl
+
+#endif // EOS_PYTHON__EOS_LOG_HH
