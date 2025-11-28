@@ -21,6 +21,8 @@
 
 #include <iostream>
 
+using namespace boost::python;
+
 namespace impl
 {
     struct LoggingCallbackPayload
