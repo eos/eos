@@ -20,6 +20,7 @@ import eos
 import contextlib
 import functools
 import glob
+import yaml
 import inspect
 import logging
 import eos.analysis_file_description
@@ -605,7 +606,7 @@ class DynestyResultLogger:
 
 # Nested sampling
 @task('sample-nested', 'data/{posterior}/nested')
-def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto'):
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto', constraint:str=None):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
@@ -634,8 +635,10 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type sample: str, optional
     """
     eos.inprogress('Beginning sampling...')
-    analysis = analysis_file.analysis(posterior)
+
+    analysis = analysis_file.analysis(posterior, os.path.join(base_directory, 'constraints', constraint, 'constraint.yaml'))
     logger = DynestyResultLogger()
+
     results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]
@@ -920,6 +923,94 @@ def validate(analysis_file:str):
     :type analysis_file: str or :class:`eos.AnalysisFile`
     """
     analysis_file.validate()
+
+
+def weighted_multivariate_gaussian_fit(in_data:_np.array, in_weights:_np.array, in_means:_np.array=None, in_covs:_np.array=None):
+    """
+    Fit a multivariate Gaussain to some weighted data
+    """
+    ndims = in_data.shape[-1]
+    i_upper = _np.triu_indices_from(in_covs)
+    start_params = _np.concatenate([in_means, in_covs[i_upper].tolist()])
+
+    def is_pos_def(x):
+        return _np.all(_np.linalg.eigvals(x) > 0)
+
+    def params_to_matrix(pars, dim):
+        means = pars[:dim]
+        covs = _np.zeros((dim,dim))
+        i_upper = _np.triu_indices(dim)
+        covs[i_upper] = pars[dim:]
+        covs = covs + _np.triu(covs, 1).T
+        return means, covs
+
+    def nll(param_vals):
+        params = params_to_matrix(param_vals, ndims)
+        if not is_pos_def(params[1]):
+            return 1.e6
+        lognorm_values = scipy.stats.multivariate_normal.logpdf(in_data, *params, allow_singular=True)
+        weighted_lognorm_values =  in_weights * lognorm_values
+        return -_np.sum(weighted_lognorm_values)
+    
+    fit_result = scipy.optimize.minimize(nll, start_params, method='Nelder-Mead')
+    if not fit_result.success:
+        warnings.warn("Fit not converged!\n ", fit_result.message)
+
+    return params_to_matrix(fit_result.x, ndims)
+
+# Create constraint
+@task('create-constraint', 'constraints/{constraint_name}')
+def create_constraint(analysis_file:str, posterior:str, constraint_name:str, base_directory:str='./', parameters:list[str]=None, density_type:str='MultivariateGaussian', fit_samples:bool=False):
+    """
+    Creates a constraint based on the samples of a given posterior.
+    The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
+    The output files will be stored in EOS_BASE_DIRECTORY/constraints/CONSTRAINT_NAME.
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or :class:`eos.AnalysisFile`
+    :param posterior: The name of the posterior.
+    :type posterior: str
+    :param constraint_name: The name of the constraint to create.
+    :type constraint_name: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param parameters: The list of parameter names to include in the constraint. If None, all varied parameters are included.
+    :type parameters: list of str, optional
+    """
+    _analysis = analysis_file.analysis(posterior)
+    data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
+    _check_varied_parameters_match(_analysis, data)
+    if parameters is not None:
+        selected_parameters = [p.name() for p in _analysis.varied_parameters if p.name() in parameters]
+    else:
+        selected_parameters = [p.name() for p in _analysis.varied_parameters]
+
+    SUPPORTED_DENSITY_TYPES = ['MultivariateGaussian']
+    if density_type not in SUPPORTED_DENSITY_TYPES:
+        raise ValueError(f'Constraint density type \'{density_type}\' not supported. Supported types are: {",".join(SUPPORTED_DENSITY_TYPES)}')
+
+    samples = data.samples
+    weights = data.weights
+
+    mean = _np.average(samples, axis=0, weights=weights)
+    diffs = samples - mean
+    covariance = _np.cov(diffs.T, aweights=weights)
+
+    if fit_samples:
+        eos.inprogress(f"Fitting the samples to derive the {density_type} constraint")
+        mean, covariance = weighted_multivariate_gaussian_fit(samples, weights, mean, covariance)
+
+    # Save to yaml
+    yaml_dict = {
+        'name' : constraint_name,
+        'type' : density_type,
+        'posterior' : posterior,
+        'parameters' : selected_parameters,
+        'mean' : mean.tolist(),
+        'covariance' : covariance.tolist()
+    }
+
+    with open(f"{base_directory}/constraints/{constraint_name}/constraint.yaml", "w") as _f:
+        yaml.dump(yaml_dict, _f, sort_keys=False, indent=4, default_flow_style=False)
 
 
 def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Parameters, data: eos.data.ImportanceSamples):
