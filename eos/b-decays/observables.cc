@@ -422,29 +422,29 @@ namespace eos
     make_bs_to_ds_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_s\to \bar{D_s} \ell^-\bar\nu$ decays)",
+            R"(Observables in $\bar{B}_s\to D_s \ell^-\bar\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor.)"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
-                make_observable("B_s->D_slnu::dBR/dq2", R"(d\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)/dq^2)",
+                make_observable("B_s->D_slnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)/dq^2)",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::dBR/dkperp", R"(d\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)/dk_\perp)",
+                make_observable("B_s->D_slnu::dBR/dkperp", R"(d\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)/dk_\perp)",
                         Unit::InverseGeV(),
                         &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
                         std::make_tuple("kperp"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu))",
+                make_observable("B_s->D_slnu::BR", R"(\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::BR(kperp_min,kperp_max)", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                make_observable("B_s->D_slnu::BR(kperp_min,kperp_max)", R"(\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
                         Unit::InverseGeV(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
                         std::make_tuple("kperp_min", "kperp_max"),
@@ -478,13 +478,13 @@ namespace eos
                         <<B_s->D_slnu::BR;U=c,q=s,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
                         )"),
 
-                make_observable("B_s->D_slnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_slnu::A_FB(q2)", R"(A_{\mathrm{FB}}(\bar{B}_s\to D_s\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::A_FB", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu))",
+                make_observable("B_s->D_slnu::A_FB", R"(A_{\mathrm{FB}}(\bar{B}_s\to D_s\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
