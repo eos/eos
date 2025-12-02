@@ -290,23 +290,23 @@ namespace eos
     make_b_to_d_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B\to \bar{D} \ell^-\bar\nu$ decays)",
+            R"(Observables in $\bar{B}\to D \ell^-\bar\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
-                make_observable("B->Dlnu::dBR/dq2", R"(d\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2)",
+                make_observable("B->Dlnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)/dq^2)",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D" } }),
 
-                make_observable("B->Dlnu::d^2BR/dq2/dcos(theta_l)", R"(d^2\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
+                make_observable("B->Dlnu::d^2BR/dq2/dcos(theta_l)", R"(d^2\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::two_differential_branching_ratio,
                         std::make_tuple("q2", "cos(theta_l)"),
                         Options{ { "P"_ok, "D" } }),
 
-                make_observable("B->Dlnu::BR", R"(\mathcal{B}(B\to \bar{D}\ell^-\bar\nu))",
+                make_observable("B->Dlnu::BR", R"(\mathcal{B}(\bar{B}\to D\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
@@ -340,13 +340,13 @@ namespace eos
                         <<B->Dlnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
                         )"),
 
-                make_observable("B->Dlnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B\to \bar{D}\ell^-\bar\nu)(q^2))",
+                make_observable("B->Dlnu::A_FB(q2)", R"(A_{\mathrm{FB}}(\bar{B}\to D\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D" } }),
 
-                make_observable("B->Dlnu::A_FB", R"(A_{\mathrm{FB}}(B\to \bar{D}\ell^-\bar\nu))",
+                make_observable("B->Dlnu::A_FB", R"(A_{\mathrm{FB}}(\bar{B}\to D\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
