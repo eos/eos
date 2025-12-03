@@ -2445,7 +2445,7 @@ namespace eos
                         Unit::None(),
                         &BGLUnitarityBounds::bound_1m),
 
-                // cf. [BMRvD:2021A] eq. (31-33)
+                // cf. [BMRvD:2022A] eq. (31-33)
                 // sb states
                 make_expression_observable("B_s0::Saturation[0^+_V]", R"(\textrm{Saturation}_{B_{s,0}}[0^+_V])",
                         Unit::None(),

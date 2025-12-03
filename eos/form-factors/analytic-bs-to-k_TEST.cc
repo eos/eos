@@ -276,7 +276,7 @@ class AnalyticFormFactorBsToKDKMMO2008Test :
             }
 
             {
-                // Comparison with Blazenka's notebook underlysing the [DKKMO:2008A] results
+                // Comparison with Blazenka's notebook underlysing the [DKMMO:2008A] results
                 static const double eps = 1e-4;
 
                 Parameters p = Parameters::Defaults();

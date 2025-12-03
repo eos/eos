@@ -145,7 +145,7 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 1.870;
-        // resonance masses from [HPQCD2015A]
+        // resonance masses from [HPQCD:2015A]
         static constexpr const double mR2_1m = 6.330 * 6.330; // B_c^*
         static constexpr const double mR2_0p = 6.420 * 6.420; // B_c scalar
         static constexpr const bool uses_tensor_form_factors = true;
@@ -160,7 +160,7 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
         static constexpr const double m_B = 5.366;
         static constexpr const double m_P = 1.968;
-        // resonance masses from [HPQCD2015A]
+        // resonance masses from [HPQCD:2015A]
         static constexpr const double mR2_1m = 6.330 * 6.330; // B_c^*
         static constexpr const double mR2_0p = 6.420 * 6.420; // B_c scalar
         static constexpr const double tp = (m_B + m_P) * (m_B + m_P);

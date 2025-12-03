@@ -35,7 +35,7 @@ namespace eos
      */
 
 
-    // As given in [HLMW2005]
+    // As given in [HLMW:2005A]
     struct HLMW2005
     {
     };

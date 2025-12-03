@@ -130,7 +130,7 @@ namespace eos
                                              const int & A, const unsigned B, const unsigned C, const unsigned k,
                                              const unsigned p, const unsigned n, const unsigned m) const
     {
-        // [GvDV:2022B]
+        // [GvDV:2020A]
         const double z = _traits.calc_z(t, threshold_tp, _traits.t0),
             kinematic_tp = power_of<2>(_mB + _mV);
         const double norm = std::sqrt(Process_::eta * k * pow(kinematic_tp, A) * pow(_traits.tm(), B)
@@ -677,7 +677,7 @@ namespace eos
                                              const int & A, const unsigned B, const unsigned C, const unsigned k,
                                              const unsigned p, const unsigned n, const unsigned m) const
     {
-        // [GRvDV:2022B]
+        // [GRvDV:2023A]
         const double z = _traits.calc_z(t, threshold_tp, _traits.t0),
             kinematic_tp = power_of<2>(_mB + _mP);
         const double norm = std::sqrt(Process_::eta * k * pow(kinematic_tp, A) * pow(_traits.tm(), B)

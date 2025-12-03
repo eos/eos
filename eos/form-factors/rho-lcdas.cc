@@ -137,7 +137,7 @@ namespace eos
 
         inline double fperp(const double & mu) const
         {
-            // [BBKT1998A], p. 23, eq. (3.59)
+            // [BBKT:1998A], p. 23, eq. (3.59)
             return fperp_0 * std::pow(c_rge(mu), +4.0 / 3.0);
         }
 
