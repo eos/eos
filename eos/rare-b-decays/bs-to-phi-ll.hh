@@ -20,6 +20,60 @@
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_BS_TO_PHI_LL_HH 1
 
+#define DECLARE_DIFFERENTIAL_H_FUNCTION(suffix) \
+    double differential_H_##suffix(const double & s) const { \
+        return differential_H(s, #suffix); \
+    }
+#define DECLARE_INTEGRATED_H_FUNCTION(suffix) \
+    double integrated_H_##suffix(const double & s_min, const double & s_max) const { \
+        return integrated_H(s_min, s_max, #suffix); \
+    }
+
+#define DECLARE_DIFFERENTIAL_Z_FUNCTION(suffix) \
+    double differential_Z_##suffix(const double & s) const { \
+        return differential_Z(s, #suffix); \
+    }
+#define DECLARE_INTEGRATED_Z_FUNCTION(suffix) \
+    double integrated_Z_##suffix(const double & s_min, const double & s_max) const { \
+        return integrated_Z(s_min, s_max, #suffix); \
+    }
+
+#define DECLARE_DIFFERENTIAL_S_FUNCTION(suffix) \
+    double differential_S_##suffix(const double & s) const { \
+        return differential_S(s, CoefficientIndex::_##suffix); \
+    }
+#define DECLARE_INTEGRATED_S_FUNCTION(suffix) \
+    double integrated_S_##suffix(const double & s_min, const double & s_max) const { \
+        return integrated_S(s_min, s_max, CoefficientIndex::_##suffix); \
+    }
+
+#define DECLARE_DIFFERENTIAL_K_FUNCTION(suffix) \
+    double differential_K_##suffix(const double & s) const { \
+        return differential_K(s, #suffix); \
+    }
+#define DECLARE_INTEGRATED_K_FUNCTION(suffix) \
+    double integrated_K_##suffix(const double & s_min, const double & s_max) const { \
+        return integrated_K(s_min, s_max, #suffix); \
+    }
+
+#define DECLARE_DIFFERENTIAL_A_FUNCTION(suffix) \
+    double differential_A_##suffix(const double & s) const { \
+        return differential_A(s, #suffix); \
+    }
+#define DECLARE_INTEGRATED_A_FUNCTION(suffix) \
+    double integrated_A_##suffix(const double & s_min, const double & s_max) const { \
+        return integrated_A(s_min, s_max, #suffix); \
+    }
+
+#define DECLARE_DIFFERENTIAL_W_FUNCTION(suffix) \
+    double differential_W_##suffix(const double & s) const { \
+        return differential_W(s, #suffix); \
+    }
+#define DECLARE_INTEGRATED_W_FUNCTION(suffix) \
+    double integrated_W_##suffix(const double & s_min, const double & s_max) const { \
+        return integrated_W(s_min, s_max, #suffix); \
+    }
+
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/options.hh>
@@ -228,7 +282,10 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
 
-	    /*!
+            AngularCoefficients pub_differential_angular_coefficients(const double & s) const;
+            AngularCoefficients pub_integrated_angular_coefficients(const double & s_min, const double & s_max) const;
+
+    	    /*!
              * Test functions, [BFS2001] eqs. (40-41)
              */
             double real_C9_perp(const double & s) const;
@@ -263,15 +320,220 @@ namespace eos
             BsToPhiDilepton bstophidilepton_conjugate;
 
             struct AngularhCoefficients;
+            struct AngularsCoefficients;
+            enum CoefficientIndex{_1s, _1c, _2s, _2c, _3, _4, _5, _6s, _6c, _7, _8, _9};
+
+            // Parameters related to mixing
+            inline double decay_width(const BsToPhiDilepton::AngularCoefficients & a_c,
+                                      const BsToPhiDilepton::AngularCoefficients & a_cc,
+                                      const BsToPhiDileptonAndConjugate::AngularhCoefficients & a_h) const;
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
+            double differential_decay_width(const double & q2) const;
 
             inline std::array<double, 12> angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const BsToPhiDilepton::Amplitudes & Atilda, const double & s) const;
             inline std::array<double, 12> differential_angular_h_coefficients_array(const double & s) const;
+            BsToPhiDileptonAndConjugate::AngularhCoefficients differential_angular_h_coefficients(const double & s) const;
             BsToPhiDileptonAndConjugate::AngularhCoefficients integrated_angular_h_coefficients(const double & s_min, const double & s_max) const;
+            
+            inline std::array<double, 12> angular_s_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const BsToPhiDilepton::Amplitudes & Atilda, const double & s) const;
+            inline std::array<double, 12> differential_angular_s_coefficients_array(const double & s) const;
+            BsToPhiDileptonAndConjugate::AngularsCoefficients differential_angular_s_coefficients(const double & s) const;
+            BsToPhiDileptonAndConjugate::AngularsCoefficients integrated_angular_s_coefficients(const double & s_min, const double & s_max) const;
 
-            double integrated_H_1s(const double & q2_min, const double & q2_max) const;
-            double integrated_H_1c(const double & q2_min, const double & q2_max) const;
-            double integrated_H_2s(const double & q2_min, const double & q2_max) const;
-            double integrated_H_2c(const double & q2_min, const double & q2_max) const;
+            complex<double> a_long_right(const double & s) const;
+            complex<double> a_long_left(const double & s) const;
+            complex<double> a_perp_right(const double & s) const;
+            complex<double> a_perp_left(const double & s) const;
+            complex<double> a_para_right(const double & s) const;
+            complex<double> a_para_left(const double & s) const;
+            complex<double> a_time(const double & s) const;
+            complex<double> a_scal(const double & s) const;
+
+            double a_long_right_real(const double & s) const;
+            double a_long_left_real(const double & s) const;
+            double a_perp_right_real(const double & s) const;
+            double a_perp_left_real(const double & s) const;
+            double a_para_right_real(const double & s) const;
+            double a_para_left_real(const double & s) const;
+            double a_time_real(const double & s) const;
+            double a_scal_real(const double & s) const;
+
+            double a_long_right_imag(const double & s) const;
+            double a_long_left_imag(const double & s) const;
+            double a_perp_right_imag(const double & s) const;
+            double a_perp_left_imag(const double & s) const;
+            double a_para_right_imag(const double & s) const;
+            double a_para_left_imag(const double & s) const;
+            double a_time_imag(const double & s) const;
+            double a_scal_imag(const double & s) const;
+
+            double integrated_S(const double & s_min, const double & s_max, const CoefficientIndex & name) const;
+            DECLARE_INTEGRATED_S_FUNCTION(1s)
+            DECLARE_INTEGRATED_S_FUNCTION(1c)
+            DECLARE_INTEGRATED_S_FUNCTION(2s)
+            DECLARE_INTEGRATED_S_FUNCTION(2c)
+            DECLARE_INTEGRATED_S_FUNCTION(3)
+            DECLARE_INTEGRATED_S_FUNCTION(4)
+            DECLARE_INTEGRATED_S_FUNCTION(5)
+            DECLARE_INTEGRATED_S_FUNCTION(6s)
+            DECLARE_INTEGRATED_S_FUNCTION(6c)
+            DECLARE_INTEGRATED_S_FUNCTION(7)
+            DECLARE_INTEGRATED_S_FUNCTION(8)
+            DECLARE_INTEGRATED_S_FUNCTION(9)
+
+            double differential_S(const double & s, const CoefficientIndex & name) const;
+            DECLARE_DIFFERENTIAL_S_FUNCTION(1s)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(1c)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(2s)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(2c)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(3)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(4)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(5)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(6s)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(6c)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(7)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(8)
+            DECLARE_DIFFERENTIAL_S_FUNCTION(9)
+
+            double integrated_K(const double & s_min, const double & s_max, const std::string & name) const;
+            DECLARE_INTEGRATED_K_FUNCTION(1s)
+            DECLARE_INTEGRATED_K_FUNCTION(1c)
+            DECLARE_INTEGRATED_K_FUNCTION(2s)
+            DECLARE_INTEGRATED_K_FUNCTION(2c)
+            DECLARE_INTEGRATED_K_FUNCTION(3)
+            DECLARE_INTEGRATED_K_FUNCTION(4)
+            DECLARE_INTEGRATED_K_FUNCTION(5)
+            DECLARE_INTEGRATED_K_FUNCTION(6s)
+            DECLARE_INTEGRATED_K_FUNCTION(6c)
+            DECLARE_INTEGRATED_K_FUNCTION(7)
+            DECLARE_INTEGRATED_K_FUNCTION(8)
+            DECLARE_INTEGRATED_K_FUNCTION(9)
+
+            double differential_K(const double & s, const std::string & name) const;
+            DECLARE_DIFFERENTIAL_K_FUNCTION(1s)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(1c)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(2s)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(2c)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(3)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(4)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(5)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(6s)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(6c)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(7)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(8)
+            DECLARE_DIFFERENTIAL_K_FUNCTION(9)
+
+            double integrated_A(const double & s_min, const double & s_max, const std::string & name) const;
+            DECLARE_INTEGRATED_A_FUNCTION(1s)
+            DECLARE_INTEGRATED_A_FUNCTION(1c)
+            DECLARE_INTEGRATED_A_FUNCTION(2s)
+            DECLARE_INTEGRATED_A_FUNCTION(2c)
+            DECLARE_INTEGRATED_A_FUNCTION(3)
+            DECLARE_INTEGRATED_A_FUNCTION(4)
+            DECLARE_INTEGRATED_A_FUNCTION(5)
+            DECLARE_INTEGRATED_A_FUNCTION(6s)
+            DECLARE_INTEGRATED_A_FUNCTION(6c)
+            DECLARE_INTEGRATED_A_FUNCTION(7)
+            DECLARE_INTEGRATED_A_FUNCTION(8)
+            DECLARE_INTEGRATED_A_FUNCTION(9)
+
+            double differential_A(const double & s, const std::string & name) const;
+            DECLARE_DIFFERENTIAL_A_FUNCTION(1s)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(1c)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(2s)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(2c)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(3)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(4)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(5)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(6s)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(6c)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(7)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(8)
+            DECLARE_DIFFERENTIAL_A_FUNCTION(9)
+
+            double integrated_W(const double & s_min, const double & s_max, const std::string & name) const;
+            DECLARE_INTEGRATED_W_FUNCTION(1s)
+            DECLARE_INTEGRATED_W_FUNCTION(1c)
+            DECLARE_INTEGRATED_W_FUNCTION(2s)
+            DECLARE_INTEGRATED_W_FUNCTION(2c)
+            DECLARE_INTEGRATED_W_FUNCTION(3)
+            DECLARE_INTEGRATED_W_FUNCTION(4)
+            DECLARE_INTEGRATED_W_FUNCTION(5)
+            DECLARE_INTEGRATED_W_FUNCTION(6s)
+            DECLARE_INTEGRATED_W_FUNCTION(6c)
+            DECLARE_INTEGRATED_W_FUNCTION(7)
+            DECLARE_INTEGRATED_W_FUNCTION(8)
+            DECLARE_INTEGRATED_W_FUNCTION(9)
+
+            double differential_W(const double & s, const std::string & name) const;
+            DECLARE_DIFFERENTIAL_W_FUNCTION(1s)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(1c)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(2s)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(2c)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(3)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(4)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(5)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(6s)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(6c)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(7)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(8)
+            DECLARE_DIFFERENTIAL_W_FUNCTION(9)
+
+            double integrated_H(const double & q2_min, const double & q2_max, const std::string & name) const;
+            DECLARE_INTEGRATED_H_FUNCTION(1s)
+            DECLARE_INTEGRATED_H_FUNCTION(1c)
+            DECLARE_INTEGRATED_H_FUNCTION(2s)
+            DECLARE_INTEGRATED_H_FUNCTION(2c)
+            DECLARE_INTEGRATED_H_FUNCTION(3)
+            DECLARE_INTEGRATED_H_FUNCTION(4)
+            DECLARE_INTEGRATED_H_FUNCTION(5)
+            DECLARE_INTEGRATED_H_FUNCTION(6s)
+            DECLARE_INTEGRATED_H_FUNCTION(6c)
+            DECLARE_INTEGRATED_H_FUNCTION(7)
+            DECLARE_INTEGRATED_H_FUNCTION(8)
+            DECLARE_INTEGRATED_H_FUNCTION(9)
+
+            double differential_H(const double & s, const std::string & name) const;
+            DECLARE_DIFFERENTIAL_H_FUNCTION(1s)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(1c)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(2s)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(2c)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(3)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(4)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(5)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(6s)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(6c)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(7)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(8)
+            DECLARE_DIFFERENTIAL_H_FUNCTION(9)
+
+            double integrated_Z(const double & q2_min, const double & q2_max, const std::string & name) const;
+            DECLARE_INTEGRATED_Z_FUNCTION(1s)
+            DECLARE_INTEGRATED_Z_FUNCTION(1c)
+            DECLARE_INTEGRATED_Z_FUNCTION(2s)
+            DECLARE_INTEGRATED_Z_FUNCTION(2c)
+            DECLARE_INTEGRATED_Z_FUNCTION(3)
+            DECLARE_INTEGRATED_Z_FUNCTION(4)
+            DECLARE_INTEGRATED_Z_FUNCTION(5)
+            DECLARE_INTEGRATED_Z_FUNCTION(6c)
+            DECLARE_INTEGRATED_Z_FUNCTION(6s)
+            DECLARE_INTEGRATED_Z_FUNCTION(7)
+            DECLARE_INTEGRATED_Z_FUNCTION(8)
+            DECLARE_INTEGRATED_Z_FUNCTION(9)
+
+            double differential_Z(const double & q2, const std::string & name) const;
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(1s)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(1c)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(2s)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(2c)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(3)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(4)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(5)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(6c)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(6s)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(7)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(8)
+            DECLARE_DIFFERENTIAL_Z_FUNCTION(9)
 
             /*!
              * References used in the computation of our observables.
@@ -284,8 +546,12 @@ namespace eos
             static const std::vector<OptionSpecification> options;
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-    };
 
+        private:
+            const double m_y;       // ΔΓ_s / Γ_s
+            const double m_x;       // ΔM_s / Γ_s
+            const double m_gamma_s; // Γ_s
+    };
 
 }
 

@@ -743,12 +743,12 @@ groups:
           latex:    '$y_{B_s}$'
           comments: 'Temporary result 1909.12524 eq. 74'
       'B_s::q_over_p_phase' :
-          central: -0.050
+          central: -0.052
           min:     -0.069
           max:     -0.031
           unit:     '1'
           latex:    '$\phi_{B_s}$'
-          comments: 'Temporary result https://hflav-eos.web.cern.ch/hflav-eos/osc/PDG_2021/#BETAS'
+          comments: 'From Table 21 in [arXiv:2411.18639]'
   # }}}
 
   # Mean Baryon Lifetimes
