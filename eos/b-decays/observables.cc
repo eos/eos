@@ -3370,11 +3370,11 @@ namespace eos
                         std::make_tuple(),
                         { { "q"_ok, "d" }, { "P1"_ok, "eta_prime" }, { "P2"_ok, "K_d" } }),
 
-                make_observable("B^0->eta^primeK^0::S_CP", R"(S\mathrm{CP}(B^0\to\eta^\prime K^0))",
+                make_observable("B^0->eta^primeK_S::S_CP", R"(S\mathrm{CP}(B^0\to\eta^\prime K_S))",
                         Unit::None(),
                         &BToPseudoscalarPseudoscalar::mixing_induced_cp_asymmetry,
                         std::make_tuple(),
-                        { { "q"_ok, "d" }, { "P1"_ok, "eta_prime" }, { "P2"_ok, "K_d" } }),
+                        { { "q"_ok, "d" }, { "P1"_ok, "eta_prime" }, { "P2"_ok, "K_S" } }),
 
                 make_observable("B^0->eta^primeeta^prime::BR", R"(\mathcal{B}(B^0\to\eta^\prime\eta^\prime))",
                         Unit::None(),
