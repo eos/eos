@@ -519,7 +519,7 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d2(p, o2);
 
-                TEST_CHECK_RELATIVE_ERROR(d2.avg_branching_ratio(), 6.578184442118153e-6, eps);
+                TEST_CHECK_RELATIVE_ERROR(d2.avg_branching_ratio(), 6.578432284530778e-6, eps);
                 TEST_CHECK_RELATIVE_ERROR(d2.cp_asymmetry(), 0.5974882599801686, eps);
 
                 Options o7
@@ -545,8 +545,8 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d8(p, o8);
 
-                TEST_CHECK_RELATIVE_ERROR(d8.exp_branching_ratio(), 0.00015267686389138193, eps);
-                TEST_CHECK_RELATIVE_ERROR(d8.cp_asymmetry(), -0.00454281035369326, eps);
+                TEST_CHECK_RELATIVE_ERROR(d8.exp_branching_ratio(), 0.0001526790101087303, eps);
+                TEST_CHECK_RELATIVE_ERROR(d8.cp_asymmetry(), -0.004537554580614818, eps);
 
                 Options o9
                 {
@@ -558,10 +558,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d9(p, o9);
 
-                TEST_CHECK_RELATIVE_ERROR(d9.exp_branching_ratio(), 0.00015267686389138193/2, eps);
-                TEST_CHECK_RELATIVE_ERROR(d9.cp_asymmetry(), -0.00454281035369326, eps);
-                TEST_CHECK_RELATIVE_ERROR(d9.mixing_induced_cp_asymmetry(), -0.7443181962311635, eps);
-                TEST_CHECK_RELATIVE_ERROR(d9.a_Delta_Gamma(), 0.6678096926769465, eps);
+                TEST_CHECK_RELATIVE_ERROR(d9.exp_branching_ratio(), 0.0000763395050543651, eps);
+                TEST_CHECK_RELATIVE_ERROR(d9.cp_asymmetry(), -0.004537554580615341, eps);
+                TEST_CHECK_RELATIVE_ERROR(d9.mixing_induced_cp_asymmetry(), -0.7443179258993442, eps);
+                TEST_CHECK_RELATIVE_ERROR(d9.a_Delta_Gamma(), 0.6678100297115386, eps);
 
                 Options o10
                 {
@@ -573,7 +573,7 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d10(p, o10);
 
-                TEST_CHECK_RELATIVE_ERROR(d10.exp_branching_ratio(), 6.608293479283136e-6, eps);
+                TEST_CHECK_RELATIVE_ERROR(d10.exp_branching_ratio(), 6.608542456096367e-6, eps);
                 TEST_CHECK_RELATIVE_ERROR(d10.cp_asymmetry(), 0.5974882599801683, eps);
 
                 Options o11
@@ -586,10 +586,10 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d11(p, o11);
 
-                TEST_CHECK_RELATIVE_ERROR(d11.exp_branching_ratio(), 6.660246957763282e-6 / 2, eps);
-                TEST_CHECK_RELATIVE_ERROR(d11.cp_asymmetry(), 0.5974882599801683, eps);
-                TEST_CHECK_RELATIVE_ERROR(d11.mixing_induced_cp_asymmetry(), 0.7933738414149348, eps);
-                TEST_CHECK_RELATIVE_ERROR(d11.a_Delta_Gamma(), 0.11647200068849438, eps);
+                TEST_CHECK_RELATIVE_ERROR(d11.exp_branching_ratio(), 3.3302489459986877e-6, eps);
+                TEST_CHECK_RELATIVE_ERROR(d11.cp_asymmetry(), 0.5974882599801686, eps);
+                TEST_CHECK_RELATIVE_ERROR(d11.mixing_induced_cp_asymmetry(), 0.7933738414149345, eps);
+                TEST_CHECK_RELATIVE_ERROR(d11.a_Delta_Gamma(), 0.11647200068849457, eps);
 
                 Options o12
                 {
@@ -601,8 +601,8 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d12(p, o12);
 
-                TEST_CHECK_RELATIVE_ERROR(d12.exp_branching_ratio(), 0.0006458820066104115, eps);
-                TEST_CHECK_RELATIVE_ERROR(d12.cp_asymmetry(), -0.12499343458253753, eps);
+                TEST_CHECK_RELATIVE_ERROR(d12.exp_branching_ratio(), 0.0006459080267268852, eps);
+                TEST_CHECK_RELATIVE_ERROR(d12.cp_asymmetry(), -0.1249934345825374, eps);
                 /*TEST_CHECK_RELATIVE_ERROR(d12.mixing_induced_cp_asymmetry(), 0.0, eps);
                 TEST_CHECK_RELATIVE_ERROR(d12.a_Delta_Gamma(), 0.0, eps);*/
 
@@ -647,8 +647,8 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d15(p, o15);
 
-                TEST_CHECK_RELATIVE_ERROR(d15.exp_branching_ratio(), 0.0662594630144483, eps);
-                TEST_CHECK_RELATIVE_ERROR(d15.cp_asymmetry(), -0.0026511491186821377, eps);
+                TEST_CHECK_RELATIVE_ERROR(d15.exp_branching_ratio(), 0.06622221727026176, eps);
+                TEST_CHECK_RELATIVE_ERROR(d15.cp_asymmetry(), -0.002650869810514681, eps);
 
                 Options o16
                 {
@@ -660,10 +660,51 @@ class BToPseudoscalarPseudoscalarTest :
 
                 BToPseudoscalarPseudoscalar d16(p, o16);
 
-                TEST_CHECK_RELATIVE_ERROR(d16.exp_branching_ratio(), 0.03037051193347059, eps);
-                TEST_CHECK_RELATIVE_ERROR(d16.cp_asymmetry(), -0.0036695733788966248, eps);
-                TEST_CHECK_RELATIVE_ERROR(d16.mixing_induced_cp_asymmetry(), -0.0270033482282267, eps);
-                TEST_CHECK_RELATIVE_ERROR(d16.a_Delta_Gamma(), -0.9996286077417366, eps);
+                TEST_CHECK_RELATIVE_ERROR(d16.exp_branching_ratio(), 0.03038933764691997, eps);
+                TEST_CHECK_RELATIVE_ERROR(d16.cp_asymmetry(), -0.003669563731992097, eps);
+                TEST_CHECK_RELATIVE_ERROR(d16.mixing_induced_cp_asymmetry(), -0.027003360079687302, eps);
+                TEST_CHECK_RELATIVE_ERROR(d16.a_Delta_Gamma(), -0.9996286074570013, eps);
+
+                Options o17
+                {
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "u" },
+                    { "P1"_ok, "eta_prime" },
+                    { "P2"_ok, "pi^+" },
+                };
+
+                BToPseudoscalarPseudoscalar d17(p, o17);
+
+                TEST_CHECK_RELATIVE_ERROR(d17.exp_branching_ratio(), 0.0017766042223500132, eps);
+                TEST_CHECK_RELATIVE_ERROR(d17.cp_asymmetry(), 0.13664241610163233, eps);
+
+                Options o18
+                {
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "eta_prime" },
+                    { "P2"_ok, "K_S" },
+                };
+
+                BToPseudoscalarPseudoscalar d18(p, o18);
+
+                TEST_CHECK_RELATIVE_ERROR(d18.exp_branching_ratio(), 0.02765228696930411, eps);
+                TEST_CHECK_RELATIVE_ERROR(d18.cp_asymmetry(), -0.002711802885755892, eps);
+                TEST_CHECK_RELATIVE_ERROR(d18.mixing_induced_cp_asymmetry(), -0.7000449931212636, eps);
+                TEST_CHECK_RELATIVE_ERROR(d18.a_Delta_Gamma(), 0.7140935889160178, eps);
+
+                Options o19
+                {
+                    { "representation"_ok, "QCDF" },
+                    { "q"_ok, "d" },
+                    { "P1"_ok, "pi^0" },
+                    { "P2"_ok, "pi^0" },
+                };
+
+                BToPseudoscalarPseudoscalar d19(p, o19);
+
+                TEST_CHECK_RELATIVE_ERROR(d19.exp_branching_ratio(),6.505224144748041e-6, eps);
+                TEST_CHECK_RELATIVE_ERROR(d19.cp_asymmetry(), 0.566001683284775, eps);
 
             }
 
