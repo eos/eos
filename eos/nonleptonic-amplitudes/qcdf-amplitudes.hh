@@ -53,7 +53,8 @@ namespace eos
 
             UsedParameter Gfermi;
             UsedParameter mB;
-            UsedParameter mB_q_0;
+            UsedParameter mB_d_0;
+            UsedParameter mB_s_0;
             UsedParameter mP1;
             UsedParameter mP2;
             UsedParameter FP1;
@@ -98,6 +99,9 @@ namespace eos
             std::function<complex<double>()> lamsu;
             std::function<complex<double>()> lamdc;
             std::function<complex<double>()> lamsc;
+
+            std::function<double()> mB_q_0_p1;
+            std::function<double()> mB_q_0_p2;
 
         public:
             QCDFRepresentation(const Parameters & p, const Options & o);
