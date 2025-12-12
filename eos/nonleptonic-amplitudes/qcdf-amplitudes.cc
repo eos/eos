@@ -49,7 +49,8 @@ namespace eos
         P2{ {} },
         Gfermi(p["WET::G_Fermi"], *this),
         mB(p["mass::B_" + opt_q.str()], *this),
-        mB_q_0(p["mass::B_" + opt_q.str() + ",0@BSZ2015"], *this),
+        mB_d_0(p["mass::B_d,0@BSZ2015"], *this),
+        mB_s_0(p["mass::B_s,0@BSZ2015"], *this),
         mP1(p["mass::" + opt_p1.str()], *this),
         mP2(p["mass::" + opt_p2.str()], *this),
         FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),
@@ -141,6 +142,24 @@ namespace eos
                 { 0.0, lamdc(), lamsc() }
             };
         };
+
+        if((opt_q.str() == "u" || opt_q.str() == "d") && (opt_p1.str() == "K_u" || opt_p1.str() == "Kbar_u" || opt_p1.str() == "K_d" || opt_p1.str() == "Kbar_d" || opt_p1.str() == "K_S"))
+        {
+            mB_q_0_p1 = [this]() { return mB_s_0(); };
+        }
+        else
+        {
+            mB_q_0_p1 = [this]() { return mB_d_0(); };
+        }
+
+        if((opt_q.str() == "u" || opt_q.str() == "d") && (opt_p2.str() == "K_u" || opt_p2.str() == "Kbar_u" || opt_p2.str() == "K_d" || opt_p2.str() == "Kbar_d" || opt_p2.str() == "K_S"))
+        {
+            mB_q_0_p2 = [this]() { return mB_s_0(); };
+        }
+        else
+        {
+            mB_q_0_p2 = [this]() { return mB_d_0(); };
+        }
     }
 
     const std::vector<OptionSpecification> QCDFRepresentation<PToPP>::options{
@@ -389,7 +408,7 @@ namespace eos
         }
 
 
-        return power_of<2>(mB()) * Fp1 * fp2 / (1 - power_of<2>(mp2 / mB_q_0())) * this->alpha_amplitude(p1, p2) + fB() * fp1 * fp2 * this->b_amplitude(p1, p2);
+        return power_of<2>(mB()) * Fp1 * fp2 / (1 - power_of<2>(mp2 / mB_q_0_p1())) * this->alpha_amplitude(p1, p2) + fB() * fp1 * fp2 * this->b_amplitude(p1, p2);
     }
 
 
@@ -506,7 +525,7 @@ namespace eos
         }
 
 
-        return power_of<2>(mB()) * Fp2 * fp1 / (1 - power_of<2>(mp1 / mB_q_0())) * this->alpha_amplitude(p2, p1) + fB() * fp1 * fp2 * this->b_amplitude(p2, p1);
+        return power_of<2>(mB()) * Fp2 * fp1 / (1 - power_of<2>(mp1 / mB_q_0_p2())) * this->alpha_amplitude(p2, p1) + fB() * fp1 * fp2 * this->b_amplitude(p2, p1);
     }
 
     complex<double>
