@@ -20,7 +20,6 @@
  */
 
 #include <eos/observable-impl.hh>
-#include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-3l-nu.hh>
@@ -1357,54 +1356,60 @@ namespace eos
                                 )"),
 
                 // B -> D pi l nu
-                make_observable("B->Dpilnu::P(cos(theta_D))",
+                make_observable("B->D^*lnu::P(w)",
                                 Unit::None(),
-                                &BToDPiLeptonNeutrino::differential_pdf_d,
-                                std::make_tuple("cos(theta_D)")),
+                                &BToVectorLeptonNeutrino::differential_pdf_w,
+                                std::make_tuple("w"),
+                                Options{ { "U"_ok, "c" }, { "I"_ok, "1/2" } }),
 
-                make_observable("B->Dpilnu::P(cos(theta_l))",
-                                Unit::None(),
-                                &BToDPiLeptonNeutrino::differential_pdf_l,
-                                std::make_tuple("cos(theta_l)")),
-
-                make_observable("B->Dpilnu::P(phi)",
-                                Unit::None(),
-                                &BToDPiLeptonNeutrino::differential_pdf_chi,
-                                std::make_tuple("phi")),
-
-                make_observable("B->Dpilnu::P(w)",
-                                Unit::None(),
-                                &BToDPiLeptonNeutrino::differential_pdf_w,
-                                std::make_tuple("w")),
-
-                make_observable("B->Dpilnu::P(q2)",
+                make_observable("B->D^*lnu::P(q2)",
                                 Unit::InverseGeV2(),
-                                &BToDPiLeptonNeutrino::differential_pdf_q2,
-                                std::make_tuple("q2")),
+                                &BToVectorLeptonNeutrino::differential_pdf_q2,
+                                std::make_tuple("q2"),
+                                Options{ { "U"_ok, "c" }, { "I"_ok, "1/2" } }),
 
-                make_observable("B->Dpilnu::A_l",
+                make_observable("B->D^*lnu::P(cos(theta_l))",
                                 Unit::None(),
-                                &BToDPiLeptonNeutrino::integrated_lepton_polarization,
-                                std::make_tuple("q2_min", "q2_max")),
+                                &BToVectorLeptonNeutrino::differential_pdf_l,
+                                std::make_tuple("cos(theta_l)"),
+                                Options{ { "U"_ok, "c" }, { "I"_ok, "1/2" } }),
 
-                make_observable("B->Dpilnu::P(cos(theta_D)_min,cos(theta_D)_max)",
+                make_observable("B->D^*lnu::P(cos(theta_D))",
                                 Unit::None(),
-                                &BToDPiLeptonNeutrino::integrated_pdf_d,
+                                &BToVectorLeptonNeutrino::differential_pdf_v,
+                                std::make_tuple("cos(theta_D)"),
+                                Options{ { "U"_ok, "c" }, { "I"_ok, "1/2" } }),
+
+                make_observable("B->D^*lnu::P(phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::differential_pdf_phi,
+                                std::make_tuple("phi"),
+                                Options{ { "U"_ok, "c" }, { "I"_ok, "1/2" } }),
+
+                make_observable("B->D^*lnu::P(w_min,w_max)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_pdf_w,
+                                std::make_tuple("w_min", "w_max"),
+                                Options{ { "U"_ok, "c" }, { "I"_ok, "1/2" } }),
+
+                make_observable("B->D^*lnu::P(cos(theta_D)_min,cos(theta_D)_max)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_pdf_v,
                                 std::make_tuple("cos(theta_D)_min", "cos(theta_D)_max")),
 
-                make_observable("B->Dpilnu::P(cos(theta_l)_min,cos(theta_l)_max)",
+                make_observable("B->D^*lnu::P(cos(theta_l)_min,cos(theta_l)_max)",
                                 Unit::None(),
-                                &BToDPiLeptonNeutrino::integrated_pdf_l,
+                                &BToVectorLeptonNeutrino::integrated_pdf_l,
                                 std::make_tuple("cos(theta_l)_min", "cos(theta_l)_max")),
 
-                make_observable("B->Dpilnu::P(phi_min,phi_max)",
+                make_observable("B->D^*lnu::P(phi_min,phi_max)",
                                 Unit::None(),
-                                &BToDPiLeptonNeutrino::integrated_pdf_chi,
+                                &BToVectorLeptonNeutrino::integrated_pdf_phi,
                                 std::make_tuple("phi_min", "phi_max")),
 
-                make_observable("B->Dpilnu::P(w_min,w_max)",
+                make_observable("B->D^*lnu::P(w_min,w_max)",
                                 Unit::None(),
-                                &BToDPiLeptonNeutrino::integrated_pdf_w,
+                                &BToVectorLeptonNeutrino::integrated_pdf_w,
                                 std::make_tuple("w_min", "w_max")),
             }
         );
