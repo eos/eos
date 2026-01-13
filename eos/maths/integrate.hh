@@ -36,22 +36,6 @@
 
 namespace eos
 {
-    /// @{
-    /*!
-     * Numerically integrate functions of one real-valued parameter.
-     *
-     * Uses the Delta^2-Rule by Aitkin to refine the result.
-     *
-     * @param f      Integrand.
-     * @param n      Number of evaluations, must be a power of 2.
-     * @param a      Lower limit of the domain of integration.
-     * @param b      Upper limit of the domain of integration.
-     */
-    double integrate1D(const std::function<double (const double &)> & f, unsigned n, const double & a, const double & b);
-    complex<double> integrate1D(const std::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
-
-    template <std::size_t k> std::array<double, k> integrate1D(const std::function<std::array<double, k> (const double &)> & f, unsigned n, const double & a, const double & b);
-    /// @}
 
 namespace GSL
 {
