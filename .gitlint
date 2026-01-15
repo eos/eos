@@ -8,3 +8,7 @@ line-length=120
 # T7
 [title-match-regex]
 regex=^\[(github|infra|scripts|clients|doc|examples|python|eos|test|utils|parameters|constraints|maths|statistics|models|form-factors|nonlocal-form-factors|nonleptonic-amplitudes|b-decays|rare-b-decays|c-decays|s-decays|tau-decays|meson-mixing|scattering)\]\s.*
+
+# B5
+[body-min-length]
+min-length=15
