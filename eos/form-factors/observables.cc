@@ -2946,7 +2946,7 @@ namespace eos
                 make_observable("0->Kpi::b0_f+@KSvD2025", R"(b_0^{+, 0 \to K\pi})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::b0_fp),
 
-                make_observable("0->Kpi::Saturation_f+@KSvD2025", R"(\textrm{Saturation})", Unit::None(),
+                make_observable("0->Kpi::Saturation_f+@KSvD2025", R"(\textrm{Saturation}[1^-])", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::saturation_p),
 
                 make_form_factor_adapter("0->Kpi::Abs{f_0}^2(q2)", R"(|f_0^{0\to K\pi}(q^2)|^2)",
@@ -2976,7 +2976,7 @@ namespace eos
                 make_observable("0->Kpi::Delta_CTtilde@KSvD2025", R"(\Delta_{\widetilde{\textrm{CT}}})", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::Delta_CTtilde),
 
-                make_observable("0->Kpi::Saturation_f0@KSvD2025", R"(\textrm{Saturation})", Unit::None(),
+                make_observable("0->Kpi::Saturation_f0@KSvD2025", R"(\textrm{Saturation}[0^+])", Unit::None(),
                         &KSvD2025FormFactors<VacuumToKPi>::saturation_z)
             }
         };
