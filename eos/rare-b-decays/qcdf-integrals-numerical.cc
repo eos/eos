@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011, 2012, 2016 Danny van Dyk
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,7 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/hard-scattering.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
@@ -88,6 +89,8 @@ namespace eos
         // in the SM of < 0.3%.
         static const double u_max_7 = 1.0 - 0.5 / m_B;
 
+        cubature::Config cub_conf = cubature::Config().epsrel(1e-3);
+
         // perpendicular amplitude
         std::function<double (const double &)>          j_0_perp    = std::bind(&HardScattering::j0, s, _1, m_B, a_1_perp, a_2_perp);
         std::function<double (const double &)>          j_0bar_perp = std::bind(&HardScattering::j0, s, _1, m_B, -a_1_perp, a_2_perp);
@@ -98,24 +101,24 @@ namespace eos
         // This integral arises in perpendicular amplitudes, but depends on parallel Gegenbauer moments!
         std::function<complex<double> (const double &)> j_6_perp    = std::bind(&HardScattering::j6, s, _1, 0.0, m_B, mu, a_1_para, a_2_para);
         std::function<double (const double &)>          j_7_perp    = std::bind(&HardScattering::j7, s, _1, m_B, a_1_perp, a_2_perp);
-        results.j0_perp    = integrate1D(j_0_perp,    128, u_min, u_max);
-        results.j0bar_perp = integrate1D(j_0bar_perp, 128, u_min, u_max);
-        results.j1_perp    = integrate1D(j_1_perp,    128, u_min, u_max);
-        results.j2_perp    = integrate1D(j_2_perp,    128, u_min, u_max);
-        results.j4_perp    = integrate1D(j_4_perp,    128, u_min, u_max);
-        results.j5_perp    = integrate1D(j_5_perp,    128, u_min, u_max);
-        results.j6_perp    = integrate1D(j_6_perp,    128, u_min, u_max);
-        results.j7_perp    = integrate1D(j_7_perp,    128, u_min, u_max_7);
+        results.j0_perp    = integrate<1>(j_0_perp,    u_min, u_max, cub_conf);
+        results.j0bar_perp = integrate<1>(j_0bar_perp, u_min, u_max, cub_conf);
+        results.j1_perp    = integrate<1, 1, complex<double>>(j_1_perp,    u_min, u_max, cub_conf);
+        results.j2_perp    = integrate<1, 1, complex<double>>(j_2_perp,    u_min, u_max, cub_conf);
+        results.j4_perp    = integrate<1, 1, complex<double>>(j_4_perp,    u_min, u_max, cub_conf);
+        results.j5_perp    = integrate<1, 1, complex<double>>(j_5_perp,    u_min, u_max, cub_conf);
+        results.j6_perp    = integrate<1, 1, complex<double>>(j_6_perp,    u_min, u_max, cub_conf);
+        results.j7_perp    = integrate<1>(j_7_perp,    u_min, u_max_7, cub_conf);
 
         // parallel amplitude
         std::function<double (const double &)>          j_0_para = std::bind(&HardScattering::j0, s, _1, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_1_para = std::bind(&HardScattering::j1, s, _1, 0.0, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_3_para = std::bind(&HardScattering::j3_massless, s, _1, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_4_para = std::bind(&HardScattering::j4, s, _1, 0.0, m_B, mu, a_1_para, a_2_para);
-        results.j0_parallel = integrate1D(j_0_para, 128, u_min, u_max);
-        results.j1_parallel = integrate1D(j_1_para, 128, u_min, u_max);
-        results.j3_parallel = integrate1D(j_3_para, 128, u_min, u_max);
-        results.j4_parallel = integrate1D(j_4_para, 128, u_min, u_max);
+        results.j0_parallel = integrate<1>(j_0_para, u_min, u_max, cub_conf);
+        results.j1_parallel = integrate<1, 1, complex<double>>(j_1_para, u_min, u_max, cub_conf);
+        results.j3_parallel = integrate<1, 1, complex<double>>(j_3_para, u_min, u_max, cub_conf);
+        results.j4_parallel = integrate<1, 1, complex<double>>(j_4_para, u_min, u_max, cub_conf);
 
         // composite results
         const double sh = s / m_B / m_B;
@@ -146,6 +149,8 @@ namespace eos
         // in the SM of < 0.3%.
         static const double u_max_7 = 1.0 - 0.5 / m_B;
 
+        cubature::Config cub_conf = cubature::Config().epsrel(1e-3);
+
         // perpendicular amplitude
         std::function<double (const double &)>          j_0_perp    = std::bind(&HardScattering::j0, s, _1, m_B, a_1_perp, a_2_perp);
         std::function<double (const double &)>          j_0bar_perp = std::bind(&HardScattering::j0, s, _1, m_B, -a_1_perp, a_2_perp);
@@ -156,24 +161,24 @@ namespace eos
         // This integral arises in perpendicular amplitudes, but depends on parallel Gegenbauer moments!
         std::function<complex<double> (const double &)> j_6_perp    = std::bind(&HardScattering::j6, s, _1, m_c, m_B, mu, a_1_para, a_2_para);
         std::function<double (const double &)>          j_7_perp    = std::bind(&HardScattering::j7, s, _1, m_B, a_1_perp, a_2_perp);
-        results.j0_perp    = integrate1D(j_0_perp,    128, u_min, u_max);
-        results.j0bar_perp = integrate1D(j_0bar_perp, 128, u_min, u_max);
-        results.j1_perp    = integrate1D(j_1_perp,    128, u_min, u_max);
-        results.j2_perp    = integrate1D(j_2_perp,    128, u_min, u_max);
-        results.j4_perp    = integrate1D(j_4_perp,    128, u_min, u_max);
-        results.j5_perp    = integrate1D(j_5_perp,    128, u_min, u_max);
-        results.j6_perp    = integrate1D(j_6_perp,    128, u_min, u_max);
-        results.j7_perp    = integrate1D(j_7_perp,    128, u_min, u_max_7);
+        results.j0_perp    = integrate<1>(j_0_perp,    u_min, u_max, cub_conf);
+        results.j0bar_perp = integrate<1>(j_0bar_perp, u_min, u_max, cub_conf);
+        results.j1_perp    = integrate<1, 1, complex<double>>(j_1_perp,    u_min, u_max, cub_conf);
+        results.j2_perp    = integrate<1, 1, complex<double>>(j_2_perp,    u_min, u_max, cub_conf);
+        results.j4_perp    = integrate<1, 1, complex<double>>(j_4_perp,    u_min, u_max, cub_conf);
+        results.j5_perp    = integrate<1, 1, complex<double>>(j_5_perp,    u_min, u_max, cub_conf);
+        results.j6_perp    = integrate<1, 1, complex<double>>(j_6_perp,    u_min, u_max, cub_conf);
+        results.j7_perp    = integrate<1>(j_7_perp,    u_min, u_max_7, cub_conf);
 
         // parallel amplitude
         std::function<double (const double &)>          j_0_para = std::bind(&HardScattering::j0, s, _1, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_1_para = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_3_para = std::bind(&HardScattering::j3, s, _1, m_c, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_4_para = std::bind(&HardScattering::j4, s, _1, m_c, m_B, mu, a_1_para, a_2_para);
-        results.j0_parallel = integrate1D(j_0_para, 128, u_min, u_max);
-        results.j1_parallel = integrate1D(j_1_para, 128, u_min, u_max);
-        results.j3_parallel = integrate1D(j_3_para, 128, u_min, u_max);
-        results.j4_parallel = integrate1D(j_4_para, 128, u_min, u_max);
+        results.j0_parallel = integrate<1>(j_0_para, u_min, u_max, cub_conf);
+        results.j1_parallel = integrate<1, 1, complex<double>>(j_1_para, u_min, u_max, cub_conf);
+        results.j3_parallel = integrate<1, 1, complex<double>>(j_3_para, u_min, u_max, cub_conf);
+        results.j4_parallel = integrate<1, 1, complex<double>>(j_4_para, u_min, u_max, cub_conf);
 
         // composite results
         const double sh = s / m_B / m_B;
@@ -204,6 +209,8 @@ namespace eos
         // in the SM of < 0.3%.
         static const double u_max_7 = 1.0 - 0.5 / m_B;
 
+        cubature::Config cub_conf = cubature::Config().epsrel(1e-3);
+
         // perpendicular amplitude
         std::function<double (const double &)>          j_0_perp    = std::bind(&HardScattering::j0, s, _1, m_B, a_1_perp, a_2_perp);
         std::function<double (const double &)>          j_0bar_perp = std::bind(&HardScattering::j0, s, _1, m_B, -a_1_perp, a_2_perp);
@@ -214,24 +221,24 @@ namespace eos
         // This integral arises in perpendicular amplitudes, but depends on parallel Gegenbauer moments!
         std::function<complex<double> (const double &)> j_6_perp    = std::bind(&HardScattering::j6, s, _1, m_b, m_B, mu, a_1_para, a_2_para);
         std::function<double (const double &)>          j_7_perp    = std::bind(&HardScattering::j7, s, _1, m_B, a_1_perp, a_2_perp);
-        results.j0_perp    = integrate1D(j_0_perp,    128, u_min, u_max);
-        results.j0bar_perp = integrate1D(j_0bar_perp, 128, u_min, u_max);
-        results.j1_perp    = integrate1D(j_1_perp,    128, u_min, u_max);
-        results.j2_perp    = integrate1D(j_2_perp,    128, u_min, u_max);
-        results.j4_perp    = integrate1D(j_4_perp,    128, u_min, u_max);
-        results.j5_perp    = integrate1D(j_5_perp,    128, u_min, u_max);
-        results.j6_perp    = integrate1D(j_6_perp,    128, u_min, u_max);
-        results.j7_perp    = integrate1D(j_7_perp,    128, u_min, u_max_7);
+        results.j0_perp    = integrate<1>(j_0_perp,    u_min, u_max, cub_conf);
+        results.j0bar_perp = integrate<1>(j_0bar_perp, u_min, u_max, cub_conf);
+        results.j1_perp    = integrate<1, 1, complex<double>>(j_1_perp,    u_min, u_max, cub_conf);
+        results.j2_perp    = integrate<1, 1, complex<double>>(j_2_perp,    u_min, u_max, cub_conf);
+        results.j4_perp    = integrate<1, 1, complex<double>>(j_4_perp,    u_min, u_max, cub_conf);
+        results.j5_perp    = integrate<1, 1, complex<double>>(j_5_perp,    u_min, u_max, cub_conf);
+        results.j6_perp    = integrate<1, 1, complex<double>>(j_6_perp,    u_min, u_max, cub_conf);
+        results.j7_perp    = integrate<1>(j_7_perp,    u_min, u_max_7, cub_conf);
 
         // parallel amplitude
         std::function<double (const double &)>          j_0_para = std::bind(&HardScattering::j0, s, _1, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_1_para = std::bind(&HardScattering::j1, s, _1, m_b, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_3_para = std::bind(&HardScattering::j3, s, _1, m_b, m_B, a_1_para, a_2_para);
         std::function<complex<double> (const double &)> j_4_para = std::bind(&HardScattering::j4, s, _1, m_b, m_B, mu, a_1_para, a_2_para);
-        results.j0_parallel = integrate1D(j_0_para, 128, u_min, u_max);
-        results.j1_parallel = integrate1D(j_1_para, 128, u_min, u_max);
-        results.j3_parallel = integrate1D(j_3_para, 128, u_min, u_max);
-        results.j4_parallel = integrate1D(j_4_para, 128, u_min, u_max);
+        results.j0_parallel = integrate<1>(j_0_para, u_min, u_max, cub_conf);
+        results.j1_parallel = integrate<1, 1, complex<double>>(j_1_para, u_min, u_max, cub_conf);
+        results.j3_parallel = integrate<1, 1, complex<double>>(j_3_para, u_min, u_max, cub_conf);
+        results.j4_parallel = integrate<1, 1, complex<double>>(j_4_para, u_min, u_max, cub_conf);
 
         // composite results
         const double sh = s / m_B / m_B;

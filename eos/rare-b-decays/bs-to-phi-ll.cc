@@ -233,7 +233,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<BsToPhiDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
 
             return BsToPhiDilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
@@ -1091,7 +1091,7 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     {
         std::function<std::array<double, 12> (const double &)> integrand =
                 std::bind(&BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array, this, std::placeholders::_1);
-        std::array<double, 12> integrated_angular_h_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+        std::array<double, 12> integrated_angular_h_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
 
         return BsToPhiDileptonAndConjugate::AngularhCoefficients(integrated_angular_h_coefficients_array);
     }
