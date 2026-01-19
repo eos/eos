@@ -118,7 +118,7 @@ class BToKDileptonLowRecoilTest :
                     TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), 0.01733521142,  eps);
 
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.022118645e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007311610961,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007311680751,  eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
                     TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::A_CP",  p, k_mu, oo)->evaluate(),  2.256388664e-05, eps);
@@ -183,7 +183,7 @@ class BToKDileptonLowRecoilTest :
                     const double eps = 1e-5;
 
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.037434453e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007257353156,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),       0.007257430947,  eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 22.8}});
                     TEST_CHECK_RELATIVE_ERROR(Observable::make("B->Kll::BR",    p, k_mu, oo)->evaluate(),  9.795048059e-08, eps);

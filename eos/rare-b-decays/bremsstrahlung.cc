@@ -200,9 +200,9 @@ namespace eos
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate1D(std::function<complex<double> (const double &)>(
+        return integrate<1, 1, complex<double>>(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_22, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                s_hat + eps, 1.0, cubature::Config().epsrel(1e-5));
     }
 
     complex<double>
@@ -213,9 +213,9 @@ namespace eos
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate1D(std::function<complex<double> (const double &)>(
+        return integrate<1, 1, complex<double>>(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_27, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                s_hat + eps, 1.0, cubature::Config().epsrel(1e-5));
     }
 
     complex<double>
@@ -226,9 +226,9 @@ namespace eos
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate1D(std::function<complex<double> (const double &)>(
+        return integrate<1, 1, complex<double>>(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_28, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                s_hat + eps, 1.0, cubature::Config().epsrel(1e-5));
     }
 
     complex<double>
@@ -239,8 +239,8 @@ namespace eos
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate1D(std::function<complex<double> (const double &)>(
+        return integrate<1, 1, complex<double>>(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_29, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                s_hat + eps, 1.0, cubature::Config().epsrel(1e-5));
     }
 }

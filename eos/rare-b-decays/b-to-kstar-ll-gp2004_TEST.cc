@@ -115,13 +115,13 @@ class BToKstarDileptonLowRecoilTest :
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.410151, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),   0.315794, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.548440, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),      1.847569, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),      0.524309, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),      1.847751, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),      0.524198, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.122853, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.799275, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,      eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                         0.997726, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.968699, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.968587, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.955853, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,      eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,      eps);
@@ -138,13 +138,13 @@ class BToKstarDileptonLowRecoilTest :
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(ir), -0.374292, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(ir),   0.308243, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(ir),     -0.657588, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),      2.198274, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(ir),      2.198434, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(ir),      0.439617, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(ir),      0.108524, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(ir),    -0.721433, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(ir),     0.0,      eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(ir),                         0.999119, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.966399, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(ir),                        -0.966294, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(ir),                        -0.957599, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(ir),                         0.0,      eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(ir),                         0.0,      eps);
@@ -235,9 +235,9 @@ class BToKstarDileptonLowRecoilTest :
                     static const double eps = 1e-4;
                     auto ir = d.prepare(14.18, 19.21);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(ir),               2.458835412e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir),   -0.4087203569,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(ir),     0.3149021373,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(ir),               2.459191729e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(ir),   -0.4086611668,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(ir),     0.3149343704,    eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(ir),       -0.5572039303,    eps);
 
                     Kinematics k_mu  = Kinematics({{"q2_min", 14.18}, {"q2_max", 19.21}});
@@ -246,10 +246,10 @@ class BToKstarDileptonLowRecoilTest :
                     auto obs_AT2  = Observable::make("B->K^*ll::A_T^2",  p, k_mu, oo);
                     auto obs_AFB  = Observable::make("B->K^*ll::A_FB",  p, k_mu, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(obs_BR->evaluate(),   2.331870232e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(obs_FL->evaluate(),   0.3149648891,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_BR->evaluate(),   2.332203361e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_FL->evaluate(),   0.3149966309,    eps);
                     TEST_CHECK_RELATIVE_ERROR(obs_AT2->evaluate(), -0.556111894,     eps);
-                    TEST_CHECK_RELATIVE_ERROR(obs_AFB->evaluate(), -0.4031418964,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(obs_AFB->evaluate(), -0.4030843795,    eps);
                 }
 
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */

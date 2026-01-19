@@ -290,7 +290,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<LambdaBToLambda1520Dilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
 
             return LambdaBToLambda1520Dilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }

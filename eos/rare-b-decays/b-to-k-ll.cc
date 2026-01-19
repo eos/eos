@@ -184,7 +184,7 @@ namespace eos
         {
             std::function<std::array<double, 3> (const double &)> integrand =
                     std::bind(&Implementation<BToKDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 3> integrated_angular_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+            std::array<double, 3> integrated_angular_coefficients_array = integrate<1, 3>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
 
             return BToKDilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
