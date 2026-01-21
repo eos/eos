@@ -1043,6 +1043,28 @@ namespace eos
             gsl_vector * mean, gsl_matrix * covariance)
     {
         LogPriorPtr prior = std::make_shared<eos::priors::MultivariateGaussian>(parameters, names, mean, covariance);
+        return prior;
+    }
+
+
+    LogPriorPtr
+    LogPrior::MultivariateGaussianVectors(const Parameters & parameters, const std::vector<QualifiedName> & names,
+                                   const std::vector<double> & means, const std::vector<std::vector<double>> & covariance)
+    {
+        gsl_vector * _means = gsl_vector_alloc(means.size());
+        for (unsigned i = 0 ; i < means.size() ; ++i)
+        {
+            gsl_vector_set(_means, i, means[i]);
+        }
+        gsl_matrix * _covariance = gsl_matrix_alloc(covariance.size(), covariance.size());
+        for (unsigned i = 0 ; i < covariance.size() ; ++i)
+        {
+            for (unsigned j = 0 ; j < covariance.size() ; ++j)
+            {
+                gsl_matrix_set(_covariance, i, j, covariance[i][j]);
+            }
+        }
+        LogPriorPtr prior = std::make_shared<eos::priors::MultivariateGaussian>(parameters, names, _means, _covariance);
 
         return prior;
     }
