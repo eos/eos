@@ -167,6 +167,8 @@ For example, the following code defines the ratio of two :math:`B \to \pi` form-
       expression:
         '<<B->pi::f_+(q2)>> / <<B->pi::f_0(q2)>>'
 
+Note that if you define a custom observable in an analysis file, and then plot some results from that analysis interactively, you need to ensure ``EOS`` knows about the new observable by loading in the same analysis file through ``eos.AnalysisFile("my_analysis.yaml")``.
+
 
 Parameters
 ~~~~~~~~~~~
@@ -201,6 +203,8 @@ New parameters can also be defined in the analysis description. This can be usef
         max:     +2.0
         unit:     '1'
         latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\ell}\nu_\ell}_{V_L}$'
+
+  Note that if you define an alias in an analysis file, and then plot some results from that analysis interactively, you need to ensure ``EOS`` knows about the aliases by loading in the same analysis file through ``eos.AnalysisFile("my_analysis.yaml")``.
 
 
 Predictions
