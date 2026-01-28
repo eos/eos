@@ -121,46 +121,46 @@ namespace eos
 
     namespace cubature
     {
-        template <size_t ndim_, size_t fdim_>
+        template <size_t ndim_, size_t fdim_, typename T_>
         int integrand_wrapper(unsigned ndim , const double *x, void *data,
                       unsigned fdim , double *fval)
         {
             assert(ndim == ndim_);
-            assert(fdim == fdim_);
+            auto buffer_size = cubature::integrand_traits<ndim_, fdim_, T_>::buffer_size;
+            assert(fdim == buffer_size);
 
-            auto & f = *static_cast<cubature::integrand<ndim_, fdim_> *>(data);
-            typename cubature::integrand_traits<ndim_, fdim_>::argument_type arguments;
-            cubature::integrand_traits<ndim_, fdim_>::copy_arguments(x, arguments);
-            typename cubature::integrand_traits<ndim_, fdim_>::result_type res = f(arguments);
-            cubature::integrand_traits<ndim_, fdim_>::copy_result(res, fval);
+            auto & f = *static_cast<cubature::integrand<ndim_, fdim_, T_> *>(data);
+            typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type arguments;
+            cubature::integrand_traits<ndim_, fdim_, T_>::copy_arguments(x, arguments);
+            typename cubature::integrand_traits<ndim_, fdim_, T_>::result_type res = f(arguments);
+            cubature::integrand_traits<ndim_, fdim_, T_>::copy_result(res, fval);
 
             return 0;
         }
     }
 
-    template <size_t ndim_, size_t fdim_>
-    typename cubature::integrand_traits<ndim_, fdim_>::result_type integrate(const cubature::integrand<ndim_, fdim_> & f,
-                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & a,
-                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & b,
-                                                                             const cubature::Config & config)
+    template <size_t ndim_, size_t fdim_, typename T_>
+    typename cubature::integrand_traits<ndim_, fdim_, T_>::result_type integrate(const cubature::integrand<ndim_, fdim_, T_> & f,
+                                                                                 const typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type & a,
+                                                                                 const typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type & b,
+                                                                                 const cubature::Config &config)
     {
-        using integrand = cubature::integrand<ndim_, fdim_>;
-        using integrand_traits = cubature::integrand_traits<ndim_, fdim_>;
+        using integrand = cubature::integrand<ndim_, fdim_, T_>;
+        using integrand_traits = cubature::integrand_traits<ndim_, fdim_, T_>;
         using cubature::integrand_wrapper;
 
-        constexpr unsigned nintegrands = fdim_;
-        typename integrand_traits::result_type result;
-        typename integrand_traits::result_type error;
-        if (hcubature(nintegrands, &integrand_wrapper<ndim_, fdim_>,
-                    &const_cast<integrand&>(f), ndim_, integrand_traits::pointer_from_arguments(a),
-                    integrand_traits::pointer_from_arguments(b),
-                    config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, integrand_traits::pointer_from_result(result),
-                    integrand_traits::pointer_from_result(error)))
+        constexpr unsigned nintegrands = integrand_traits::buffer_size;
+        typename integrand_traits::buffer_type result_buffer;
+        typename integrand_traits::buffer_type error_buffer;
+        if (hcubature(nintegrands, &integrand_wrapper<ndim_, fdim_, T_>,
+                      &const_cast<integrand&>(f), ndim_, integrand_traits::pointer_from_arguments(a),
+                      integrand_traits::pointer_from_arguments(b), config.maxeval(), config.epsabs(), config.epsrel(),
+                      ERROR_L2, integrand_traits::pointer_from_buffer(result_buffer), integrand_traits::pointer_from_buffer(error_buffer)))
         {
             throw IntegrationError("hcubature failed");
         }
 
-        return typename integrand_traits::result_type(result);
+        return integrand_traits::contruct_result(result_buffer);
     }
 }
 
