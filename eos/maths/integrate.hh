@@ -127,49 +127,63 @@ namespace GSL
 
 namespace cubature
 {
-    template <size_t ndim_, size_t fdim_> struct integrand_traits
+    template <size_t ndim_, size_t fdim_, typename ResultT_> struct integrand_traits
     {
         // argument type for the integrand function
         using argument_type = std::array<double, ndim_>;
 
         // result type for the integrand function
-        using result_type = std::array<double, fdim_>;
+        using result_type = std::array<ResultT_, fdim_>;
+
+        // buffer type for intermediate storage during integration
+        using buffer_type = result_type;
+        static const unsigned buffer_size = fdim_;
 
         // helpers to copy data between C-style arrays and C++ types
         static void copy_arguments(const double * from, argument_type & to) { std::copy(from, from + ndim_, to.begin()); };
         static void copy_result(result_type & from, double * to) { std::copy(from.cbegin(), from.cend(), to); };
         static const double * pointer_from_arguments(const argument_type & arguments) { return arguments.data(); };
-        static double * pointer_from_result(result_type & result) { return result.data(); };
+        static double * pointer_from_buffer(buffer_type & buffer) { return buffer.data(); };
+        static result_type contruct_result(buffer_type & buffer) { return result_type(buffer); };
 
         // type of the integrand function
         using function_type = std::function<result_type (const argument_type &)>;
     };
 
-    template <size_t ndim_> struct integrand_traits<ndim_, 1>
+    template <size_t ndim_, typename ResultT_> struct integrand_traits<ndim_, 1, ResultT_>
     {
         // argument type for the integrand function
         using argument_type = std::array<double, ndim_>;
 
         // result type for the integrand function
-        using result_type = double;
+        using result_type = ResultT_;
+
+        // buffer type for intermediate storage during integration
+        using buffer_type = result_type;
+        static const unsigned buffer_size = 1;
 
         // helpers to copy data between C-style arrays and C++ types
         static void copy_arguments(const double * from, argument_type & to) { std::copy(from, from + ndim_, to.data()); };
         static void copy_result(result_type & from, double * to) { *to = from; };
-        static double * pointer_from_result(result_type & result) { return &result; };
         static const double * pointer_from_arguments(const argument_type & arguments) { return arguments.data(); };
+        static double * pointer_from_buffer(buffer_type & buffer) { return &buffer; };
+        static result_type contruct_result(buffer_type & buffer) { return result_type(buffer); };
 
         // function type of the integrand function
         using function_type = std::function<result_type (const argument_type &)>;
     };
 
-    template <size_t fdim_> struct integrand_traits<1, fdim_>
+    template <size_t fdim_, typename ResultT_> struct integrand_traits<1, fdim_, ResultT_>
     {
         // argument type for the integrand function
         using argument_type = double;
 
         // result type for the integrand function
-        using result_type = std::array<double, fdim_>;
+        using result_type = std::array<ResultT_, fdim_>;
+
+        // buffer type for intermediate storage during integration
+        using buffer_type = result_type;
+        static const unsigned buffer_size = fdim_;
 
         // helpers to copy data between C-style arrays and C++ types
         static void copy_arguments(const double * from, argument_type & to) { to = *from; };
@@ -181,32 +195,61 @@ namespace cubature
             }
         };
         static const double * pointer_from_arguments(const argument_type & arguments) { return &arguments; };
-        static double * pointer_from_result(result_type & result) { return result.data(); };
+        static double * pointer_from_buffer(buffer_type & buffer) { return buffer.data(); };
+        static result_type contruct_result(buffer_type & buffer) { return result_type(buffer); };
 
         // function type of the integrand function
         using function_type = std::function<result_type (const argument_type &)>;
     };
 
-    template <> struct integrand_traits<1, 1>
+    template <typename ResultT_> struct integrand_traits<1, 1, ResultT_>
     {
         // argument type for the integrand function
         using argument_type = double;
 
         // result type for the integrand function
-        using result_type = double;
+        using result_type = ResultT_;
+
+        // buffer type for intermediate storage during integration
+        using buffer_type = result_type;
+        static const unsigned buffer_size = 1;
 
         // helpers to copy data between C-style arrays and C++ types
         static void copy_arguments(const double * from, argument_type & to) { to = *from; };
         static void copy_result(result_type & from, double * to) { *to = from; };
         static const double * pointer_from_arguments(const argument_type & arguments) { return &arguments; };
-        static double * pointer_from_result(result_type & result) { return &result; };
+        static double * pointer_from_buffer(buffer_type & buffer) { return &buffer; };
+        static result_type contruct_result(buffer_type & buffer) { return result_type(buffer); };
 
         // function type of the integrand function
         using function_type = std::function<result_type (const argument_type &)>;
     };
 
-    template <size_t ndim_, size_t fdim_ = 1> using integrand = typename integrand_traits<ndim_, fdim_>::function_type;
+    template <> struct integrand_traits<1, 1, complex<double>>
+    {
+        // argument type for the integrand function
+        using argument_type = double;
 
+        // result type for the integrand function
+        using result_type = complex<double>;
+
+        // buffer type for intermediate storage during integration
+        using buffer_type = std::array<double, 2>;
+        static const unsigned buffer_size = 2;
+
+        // helpers to copy data between C-style arrays and C++ types
+        static void copy_arguments(const double * from, argument_type & to) { to = *from; };
+        static void copy_result(result_type & from, double * to) { to[0] = from.real(); to[1] = from.imag(); };
+        static const double * pointer_from_arguments(const argument_type & arguments) { return &arguments; };
+        static double * pointer_from_buffer(buffer_type & buffer) { return buffer.data(); };
+        static result_type contruct_result(buffer_type & buffer) { return result_type(buffer[0], buffer[1]); };
+
+        // function type of the integrand function
+        using function_type = std::function<result_type (const argument_type &)>;
+    };
+
+    template <size_t ndim_, size_t fdim_ = 1, typename T_ = double>
+    using integrand = typename integrand_traits<ndim_, fdim_, T_>::function_type;
 
     class Config
     {
@@ -231,11 +274,11 @@ namespace cubature
      * Numerically integrate functions of one or more than one variable with
      * cubature methods.
      */
-    template <size_t ndim_, size_t fdim_ = 1>
-    typename cubature::integrand_traits<ndim_, fdim_>::result_type integrate(const cubature::integrand<ndim_, fdim_> & f,
-                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & a,
-                                                                             const typename cubature::integrand_traits<ndim_, fdim_>::argument_type & b,
-                                                                             const cubature::Config &config = cubature::Config());
+    template <size_t ndim_, size_t fdim_ = 1, typename T_ = double>
+    typename cubature::integrand_traits<ndim_, fdim_, T_>::result_type integrate(const cubature::integrand<ndim_, fdim_, T_> & f,
+                                                                                 const typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type & a,
+                                                                                 const typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type & b,
+                                                                                 const cubature::Config &config = cubature::Config());
 
 
     class IntegrationError :
