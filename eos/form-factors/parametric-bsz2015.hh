@@ -162,6 +162,7 @@ namespace eos
     extern template class BSZ2015FormFactors<BToKstar, PToV>;
     extern template class BSZ2015FormFactors<BToOmega, PToV>;
     extern template class BSZ2015FormFactors<BToRho, PToV>;
+    extern template class BSZ2015FormFactors<BcToJpsi, PToV>;
     extern template class BSZ2015FormFactors<BsToDsstar, PToV>;
     extern template class BSZ2015FormFactors<BsToKstar, PToV>;
     extern template class BSZ2015FormFactors<BsToPhi, PToV>;

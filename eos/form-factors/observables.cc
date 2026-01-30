@@ -1987,6 +1987,54 @@ namespace eos
 
     // }}}
 
+    // B_c -> V(ector)
+    // {{{
+
+    // B_c -> J/psi
+    // {{{
+    ObservableGroup
+    make_bc_to_jpsi_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $B_c\to J/\psi$ transitions)",
+            R"(Pseudo observables representing the full basis of $B_c\to J/\psi$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("B_c->J/psi::V(q2)", R"(V^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::A_0(q2)", R"(A_0^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::a_0, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::A_1(q2)", R"(A_1^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::a_1, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::A_2(q2)", R"(A_2^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::a_2, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::A_12(q2)", R"(A_{12}^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::a_12, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::T_1(q2)", R"(T_1^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::t_1, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::T_2(q2)", R"(T_2^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::t_2, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::T_3(q2)", R"(T_3^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::t_3, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_c->J/psi::T_23(q2)", R"(T_{23}^{B_c\to J/\psi}(q^2))",
+                        &FormFactors<PToV>::t_23, std::make_tuple("q2")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
     // B -> P P
     // {{{
 
@@ -2968,6 +3016,9 @@ namespace eos
                 make_b_to_rho_form_factors_group(),
                 make_b_to_kstar_form_factors_group(),
                 make_b_to_dstar_form_factors_group(),
+
+                // B_c -> V
+                make_bc_to_jpsi_form_factors_group(),
 
                 // B_s -> V
                 make_bs_to_kstar_form_factors_group(),

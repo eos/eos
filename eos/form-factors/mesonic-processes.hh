@@ -350,6 +350,14 @@ namespace eos
         static constexpr double mR2_1p = 5.724 * 5.724;
     };
 
+    struct BcToJpsi {
+        using Transition = PToV;
+        static constexpr const char * label = "B_c->J/psi";
+        static constexpr const char * name_B = "mass::B_c";
+        static constexpr const char * name_V = "mass::J/psi";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
+    };
+
     struct BsToPhi {
         using Transition = PToV;
         static constexpr const char * label = "B_s->phi";
