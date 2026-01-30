@@ -89,8 +89,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         // { q, V } -> { process, U, B_name, V_name, c_I }
-        // q: u, d, s: the spectar quark flavor
-        // V: D, K, pi: the type of daughter meson
+        // q: u, d, s, c: the spectator quark flavor
+        // V: D^*, D_s^*, rho, omega, K^*, Jpsi: the type of daughter meson
         // process: string that can be used to obtain the form factor
         // U: the quark flavor in the weak transition
         // B_name: name of the B meson
@@ -347,6 +347,7 @@ namespace eos
         { { QuarkFlavor::up,      "D^*"   }, { "B->D^*",     QuarkFlavor::charm, "B_u", "D_u^*", 1.0                  } },
         { { QuarkFlavor::down,    "D^*"   }, { "B->D^*",     QuarkFlavor::charm, "B_d", "D_d^*", 1.0                  } },
         { { QuarkFlavor::strange, "D_s^*" }, { "B_s->D_s^*", QuarkFlavor::charm, "B_s", "D_s^*", 1.0                  } },
+        { { QuarkFlavor::charm,   "J/psi" }, { "B_c->J/psi", QuarkFlavor::charm, "B_c", "J/psi", 1.0                  } },
         { { QuarkFlavor::up,      "rho"   }, { "B->rho",     QuarkFlavor::up,    "B_u", "rho^0", 1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::up,      "omega" }, { "B->omega",   QuarkFlavor::up,    "B_u", "omega", 1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::down,    "rho"   }, { "B->rho",     QuarkFlavor::up,    "B_d", "rho^+", 1.0                  } },
@@ -358,10 +359,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "V"_ok,            { "D^*"s, "D_s^*"s, "rho"s, "omega"s, "K^*"s }, ""s      },
-        { "cp-conjugate"_ok, { "true"s, "false"s },                          "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s },                        "mu"s    },
-        { "q"_ok,            { "u"s, "d"s, "s"s },                           "d"s     },
+        { "V"_ok,            { "D^*"s, "D_s^*"s, "rho"s, "omega"s, "K^*"s, "J/psi"s }, ""s      },
+        { "cp-conjugate"_ok, { "true"s, "false"s },                                    "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s },                                  "mu"s    },
+        { "q"_ok,            { "u"s, "d"s, "s"s, "c"s },                               "d"s     },
     };
 
     BToVectorLeptonNeutrino::BToVectorLeptonNeutrino(const Parameters & p, const Options & o) :
