@@ -67,6 +67,7 @@ namespace eos
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
         { "B->D^*::BGJvD2019",    &HQETFormFactors<BToDstar,      PToV>::make         },
         { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar,   PToV>::make         },
+        { "B_c->J/psi::BGL1997",  &BGL1997FormFactors<BcToJpsi,   PToV>::make         },
         { "B_c->J/psi::BSZ2015",  &BSZ2015FormFactors<BcToJpsi,   PToV>::make         },
         { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
         { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
