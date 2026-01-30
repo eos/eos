@@ -2,8 +2,14 @@ CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
 CONSTRAINTS_FILES = \
+	Bc-to-V-form-factors.yaml \
 	Bq-to-dilepton.yaml \
 	Bq-to-Dq-P.yaml \
+	Bs-to-Ds-gamma-l-nu.yaml \
+	Bs-to-Ds-l-nu.yaml \
+	Bs-to-phi-charmonium.yaml \
+	Bs-to-phi-ll.yaml \
+	Bs-to-V-form-factors.yaml \
 	B-to-K-charmonium.yaml \
 	B-to-K-ll.yaml \
 	B-to-Kstar-charmonium.yaml \
@@ -22,16 +28,12 @@ CONSTRAINTS_FILES = \
 	B-to-P-form-factors.yaml \
 	B-to-P-P-form-factors.yaml \
 	B-to-V-form-factors.yaml \
-	Bs-to-Ds-gamma-l-nu.yaml \
-	Bs-to-Ds-l-nu.yaml \
-	Bs-to-phi-charmonium.yaml \
-	Bs-to-phi-ll.yaml \
+	dispersive-bounds.yaml \
+	Dq-to-dilepton.yaml \
+	Ds-to-eta-l-nu.yaml \
 	D-to-eta-l-nu.yaml \
 	D-to-K-l-nu.yaml \
 	D-to-P-form-factors.yaml \
-	Dq-to-dilepton.yaml \
-	Ds-to-eta-l-nu.yaml \
-	dispersive-bounds.yaml \
 	ee-to-ccbar.yaml \
 	ee-to-pipi.yaml \
 	epi-to-epi.yaml \
