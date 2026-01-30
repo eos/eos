@@ -25,6 +25,7 @@ namespace eos
     template class BSZ2015FormFactors<BToKstar, PToV>;
     template class BSZ2015FormFactors<BToOmega, PToV>;
     template class BSZ2015FormFactors<BToRho, PToV>;
+    template class BSZ2015FormFactors<BcToJpsi, PToV>;
     template class BSZ2015FormFactors<BsToDsstar, PToV>;
     template class BSZ2015FormFactors<BsToKstar, PToV>;
     template class BSZ2015FormFactors<BsToPhi, PToV>;

@@ -2103,6 +2103,35 @@ namespace eos
 
         return ObservableGroup(imp);
     }
+
+    // }}}
+    // B_c -> J/psi l nu
+    // {{{
+    ObservableGroup
+    make_bc_to_jpsi_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\bar{B}_c\to J/\psi \ell^-\bar\nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor.)"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                // B_c -> J/psi l nu
+                make_observable("B_c->J/psilnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_c\to J/\psi\ell^-\bar\nu)/dq^2)",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::differential_branching_ratio,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::BR", R"(\mathcal{B}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
     // }}}
 
     // }}}
@@ -3592,6 +3621,9 @@ namespace eos
                 // B_s -> V l^- nubar
                 make_bs_to_kstar_l_nu_group(),
                 make_bs_to_dsstar_l_nu_group(),
+
+                // B_c -> V l^- nubar
+                make_bc_to_jpsi_l_nu_group(),
 
                 // B_{u,d} -> P P l^- nubar
                 make_b_to_pi_pi_l_nu_group(),

@@ -1837,6 +1837,14 @@ HPQCD:2023A:
     id: oai:arXiv.org:2304.03137
   inspire-id: Harrison:2023dzh
   title: $B \rightarrow D^*$ vector, axial-vector and tensor form factors for the full $q^2$ range from lattice QCD
+HPQCD:2025A:
+  authors: Harrison, Judd
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2503.15090
+  inspire-id: Harrison:2025yan
+  title: Improved lattice QCD $B_c \to J/\psi$ vector, axial-vector, and tensor form factors
 HTX:2021A:
   authors: Huber, Tobias and Tetlalmatzi-Xolocotzi, Gilberto
   eprint:

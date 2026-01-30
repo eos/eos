@@ -25,5 +25,6 @@ namespace eos
 {
     // b -> c
     template class BGL1997FormFactors<BToDstar, PToV>;
+    template class BGL1997FormFactors<BcToJpsi, PToV>;
     template class BGL1997FormFactors<BToD, PToP>;
 }
