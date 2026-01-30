@@ -42,7 +42,7 @@ namespace eos
      *
      * with
      *
-     *   PREFIX      := ['a'-'z', 'A'-'Z', '0'-'9', '<', '>', '^', '_', '*', '+', '-', '(', ')']
+     *   PREFIX      := ['a'-'z', 'A'-'Z', '0'-'9', '<', '>', '^', '_', '*', '+', '-', '(', ')', '/']
      *                  but "<<" and ">>" are prohibited (they delimit observables for the expression parser)
      *   NAME        := ['a'-'z', 'A'-'Z', '0'-'9', '(', ')', '[', ']', '{', '}', '|',
      *                   '\'', '.', ',', '/', '^', '_', '*', '+', '-']
