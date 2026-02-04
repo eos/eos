@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,14 +27,15 @@ namespace eos
 {
     /* Build a Wilson polynomial as an exp::Expression from an ObservablePtr */
     exp::Expression
-    make_polynomial(const ObservablePtr & o, const std::list<std::string> & _coefficients)
+    make_polynomial(const ObservablePtr & o, const std::vector<QualifiedName> & _coefficients)
     {
         exp::ExpressionPtr result;
+        auto               parameters = o->parameters();
 
         std::list<std::tuple<Parameter, double, double>> coefficients; // <p_i, q_i, l_i>
         for (const auto & _coefficient : _coefficients)
         {
-            coefficients.push_back(std::make_tuple(o->parameters()[_coefficient], 0.0, 0.0));
+            coefficients.push_back(std::make_tuple(parameters[_coefficient], 0.0, 0.0));
         }
 
         /*
@@ -134,7 +135,7 @@ namespace eos
     }
 
     exp::Expression
-    make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::list<std::string> & coefficients)
+    make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::vector<QualifiedName> & coefficients)
     {
         const auto numerator_exp   = exp::ExpressionPtr(new exp::Expression(std::move(make_polynomial(numerator, coefficients))));
         const auto denominator_exp = exp::ExpressionPtr(new exp::Expression(std::move(make_polynomial(denominator, coefficients))));

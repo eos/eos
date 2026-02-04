@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <list>
+#include <vector>
 
 using namespace eos;
 
@@ -62,7 +63,7 @@ class CommandLine : public InstantiationPolicy<CommandLine, Singleton>
     public:
         Parameters parameters;
 
-        std::list<std::string> coefficients;
+        std::vector<std::string> coefficients;
 
         std::list<ObservableInput> inputs;
 
@@ -158,7 +159,12 @@ main(int argc, char * argv[])
         exp::ExpressionPrinter   printer(std::cout);
         for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend(); i != i_end; ++i)
         {
-            exp::Expression polynomial = make_polynomial(i->observable, CommandLine::instance()->coefficients);
+            std::vector<QualifiedName> coefficients;
+            for (const auto & c : CommandLine::instance()->coefficients)
+            {
+                coefficients.push_back(QualifiedName(c));
+            }
+            exp::Expression polynomial = make_polynomial(i->observable, coefficients);
 
             std::cout << i->observable->name() << "[";
 

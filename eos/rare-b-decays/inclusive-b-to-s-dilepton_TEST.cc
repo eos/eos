@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -240,7 +240,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
                 ObservablePtr observable = Observable::make(name, parameters, kinematics, Options());
                 TEST_CHECK(ObservablePtr() != observable);
 
-                auto polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
+                auto polynomial = make_polynomial(observable, std::vector<QualifiedName>{ "b->s::Re{c7}"_qn, "b->s::Im{c7}"_qn, "b->smumu::Re{c9}"_qn, "b->smumu::Im{c9}"_qn, "b->smumu::Re{c10}"_qn, "b->smumu::Im{c10}"_qn });
 
                 for (const auto & input : inputs)
                 {
