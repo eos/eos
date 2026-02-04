@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2016      Rafael Silva Coutinho
  *
  * This file is part of the EOS project. EOS is free software;
@@ -144,6 +144,13 @@ namespace eos
 
         return lhs;
     }
+
+    inline QualifiedName
+    operator""_qn (const char * str, size_t len)
+    {
+        return QualifiedName(std::string(str, len));
+    }
+
 } // namespace eos
 
 #endif
