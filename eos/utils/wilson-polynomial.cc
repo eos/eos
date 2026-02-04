@@ -18,6 +18,7 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/utils/expression-observable.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -143,4 +144,20 @@ namespace eos
         return exp::BinaryExpression('/', numerator_exp, denominator_exp);
     }
 
+    ObservablePtr
+    make_wilson_polynomial_observable(const QualifiedName & name, const ObservablePtr & reference_observable, const std::vector<QualifiedName> & coefficients)
+    {
+        exp::ExpressionPtr polynomial(new exp::Expression(make_polynomial(reference_observable, coefficients)));
+
+        return ObservablePtr(new ExpressionObservable(name, reference_observable->parameters(), reference_observable->kinematics(), reference_observable->options(), polynomial));
+    }
+
+    ObservablePtr
+    make_wilson_polynomial_ratio_observable(const QualifiedName & name, const ObservablePtr & numerator, const ObservablePtr & denominator,
+                                            const std::vector<QualifiedName> & coefficients)
+    {
+        exp::ExpressionPtr polynomial_ratio(new exp::Expression(make_polynomial_ratio(numerator, denominator, coefficients)));
+
+        return ObservablePtr(new ExpressionObservable(name, numerator->parameters(), numerator->kinematics(), numerator->options(), polynomial_ratio));
+    }
 } // namespace eos
