@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  * Copyright (c) 2024      Lorenz Gärtner
  *
@@ -38,6 +38,7 @@
 #include "eos/utils/qualified-name.hh"
 #include "eos/utils/reference-name.hh"
 #include "eos/utils/units.hh"
+#include "eos/utils/wilson-polynomial.hh"
 
 #include "python/_eos/converters.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
@@ -905,6 +906,37 @@ BOOST_PYTHON_MODULE(_eos)
             .def("unit", &ObservableEntry::unit, return_internal_reference<>())
             .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
             .def("options", range(&ObservableEntry::begin_options, &ObservableEntry::end_options));
+
+    def("make_wilson_polynomial_observable", &make_wilson_polynomial_observable, args("name", "reference_observable", "coefficients"),
+        R"(
+        Creates a new observable based on a polynomial expansion of the reference observable.
+
+        :param name: The name of the new observable.
+        :type name: eos.QualifiedName
+        :param reference_observable: The reference observable that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_observable: eos.Observable
+        :param coefficients: The list of names of Wilson coefficients in which the reference observable shall be expanded.
+        :type coefficients: iterable of eos.QualifiedName
+
+        :return: The new observable.
+        :rtype: eos.Observable
+        )");
+    def("make_wilson_polynomial_ratio_observable", &make_wilson_polynomial_ratio_observable, args("name", "reference_observable", "coefficients"),
+        R"(
+        Creates a new observable as a ratio of two polynomial expansion of reference observables.
+
+        :param name: The name of the new observable.
+        :type name: eos.QualifiedName
+        :param reference_numerator: The reference observable numerator that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_numerator: eos.Observable
+        :param reference_denominator: The reference observable denominator that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_denominator: eos.Observable
+        :param coefficients: The list of names of Wilson coefficients in which the reference observable shall be expanded.
+        :type coefficients: iterable of eos.QualifiedName
+
+        :return: The new observable.
+        :rtype: eos.Observable
+        )");
 
     def("register_python_observable", &register_python_observable);
 
