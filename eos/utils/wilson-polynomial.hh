@@ -32,6 +32,11 @@ namespace eos
     exp::Expression make_polynomial(const ObservablePtr &, const std::vector<QualifiedName> &);
 
     exp::Expression make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::vector<QualifiedName> & coefficients);
+
+    ObservablePtr make_wilson_polynomial_observable(const QualifiedName & name, const ObservablePtr & reference_observable, const std::vector<QualifiedName> & coefficients);
+
+    ObservablePtr make_wilson_polynomial_ratio_observable(const QualifiedName & name, const ObservablePtr & reference_numerator, const ObservablePtr & reference_denominator,
+                                                          const std::vector<QualifiedName> & coefficients);
 } // namespace eos
 
 #endif
