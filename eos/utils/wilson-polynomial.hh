@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,15 +23,15 @@
 #include <eos/observable.hh>
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/expression.hh>
+#include <eos/utils/qualified-name.hh>
 
-#include <list>
-#include <string>
+#include <vector>
 
 namespace eos
 {
-    exp::Expression make_polynomial(const ObservablePtr &, const std::list<std::string> &);
+    exp::Expression make_polynomial(const ObservablePtr &, const std::vector<QualifiedName> &);
 
-    exp::Expression make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::list<std::string> & coefficients);
+    exp::Expression make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::vector<QualifiedName> & coefficients);
 } // namespace eos
 
 #endif
