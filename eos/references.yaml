@@ -1033,6 +1033,13 @@ BG:2016A:
     id: oai:arXiv.org:1606.08030
   inspire-id: Bigi:2016mdz
   title: Revisiting $B\to D \ell \nu$
+BGMT:2025A:
+  authors: Biswas, Aritra and Gubernari, Nico and Matias, Joaquim and Tetlalmatzi-Xolocotzi, Gilberto
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2506.12478
+  inspire-id: Biswas:2025drz
+  title: Impact on $L$-observables of a new combined analysis of $B_{d,s} \to K^{(*)}$ form factors
 BGNS:2014A:
   authors: Buras, Andrzej J. and Girrbach-Noe, Jennifer and Niehoff, Christoph and Straub, David M.
   eprint:
