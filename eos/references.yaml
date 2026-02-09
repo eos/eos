@@ -1503,6 +1503,13 @@ FLAG:2021A:
     id: oai:arXiv.org:2111.09849
   inspire-id: Aoki:2021kgd
   title: FLAG Review 2021
+FLAG:2024A:
+  authors: Aoki, Y. et al.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2411.04268
+  inspire-id: FlavourLatticeAveragingGroupFLAG:2024oxs
+  title: FLAG Review 2024
 FLS:2021A:
   authors: Felkl, Tobias and Li, Sze Lok and Schmidt, Michael A.
   eprint:
