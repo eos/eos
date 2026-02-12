@@ -47,6 +47,7 @@ jobs:
                 fi
 
             - name: Build EOS, run tests, and create wheels
+              timeout-minutes: 60
               uses: pypa/cibuildwheel@v3.2.1
               with:
                 package-dir: eoshep
