@@ -39,7 +39,7 @@ namespace eos
     template<typename Process_>
     std::string BGL1997FormFactors<Process_, PToV>::_par_name(const std::string & ff_name)
     {
-        return std::string("B->D^*") + std::string("::a^") + ff_name + std::string("@BGL1997");
+        return std::string(Process_::label) + std::string("::a^") + ff_name + std::string("@BGL1997");
     }
 
     template<typename Process_>
@@ -370,7 +370,7 @@ namespace eos
     template<typename Process_>
     std::string BGL1997FormFactors<Process_, PToP>::_par_name(const std::string & ff_name)
     {
-        return std::string("B->D") + std::string("::a^") + ff_name + std::string("@BGL1997");
+        return std::string(Process_::label) + std::string("::a^") + ff_name + std::string("@BGL1997");
     }
 
     template<typename Process_>
