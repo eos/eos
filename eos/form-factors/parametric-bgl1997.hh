@@ -89,7 +89,7 @@ namespace eos
                 chi_0m(UsedParameter(p["b->c::chiOPE[0^-_A]"], *this)),
                 chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
                 chi_T_1p(UsedParameter(p["b->c::chiOPE[1^+_T5]"], *this)),
-                t_0(UsedParameter(p["B->D^*::t_0@BGL1997"], *this)),
+                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
                 n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
                 n_bound_states_1p(o, options, "n-bound-states-1p"_ok),
                 n_bound_states_0m(o, options, "n-bound-states-0m"_ok),
@@ -206,7 +206,7 @@ namespace eos
                 chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
                 chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
                 chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
-                t_0(UsedParameter(p["B->D::t_0@BGL1997"], *this)),
+                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
                 n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
                 n_bound_states_0p(o, options, "n-bound-states-0p"_ok)
             {
