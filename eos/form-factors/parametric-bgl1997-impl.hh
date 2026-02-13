@@ -380,7 +380,7 @@ namespace eos
                  UsedParameter(p[_par_name("f+_2")], *this),
                  UsedParameter(p[_par_name("f+_3")], *this)
         }},
-        _a_f_0{{ UsedParameter(p[_par_name("f0_0")], *this),
+        _a_f_0{{ // f0_0 is fixed by the constraint f_+(0) = f_0(0)
                  UsedParameter(p[_par_name("f0_1")], *this),
                  UsedParameter(p[_par_name("f0_2")], *this),
                  UsedParameter(p[_par_name("f0_3")], *this)
@@ -435,11 +435,28 @@ namespace eos
     }
 
     template<typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::a_0_0() const
+    {
+        const double z0   = _traits._z(0.0, _traits.t_0, _traits.tp());
+        const double x_f0 = _traits.blaschke_0p(0.0) * _phi(0.0, _traits.t_0, 16, 1, 1, 1, _traits.chi_0p);
+        const double x_fp = _traits.blaschke_1m(0.0) * _phi(0.0, _traits.t_0, 48, 3, 3, 2, _traits.chi_1m);
+        std::array<double, 4> an, zn;
+        zn[0] = 1.0;
+        an[0]  = x_f0 / x_fp * this->_a_f_p[0];
+        for (unsigned i = 1 ; i < an.size() ; ++i)
+        {
+            an[i] = x_f0 / x_fp * this->_a_f_p[i] - this->_a_f_0[i - 1];
+            zn[i] = z0 * zn[i - 1];
+        }
+        return std::inner_product(an.begin(), an.end(), zn.begin(), 0.0);
+    }
+
+    template<typename Process_>
     double BGL1997FormFactors<Process_, PToP>::f_0(const double & s) const
     {
         const double phi      = _phi(s, _traits.t_0, 16, 1, 1, 1, _traits.chi_0p);
         const double z        = _traits._z(s, _traits.t_0, _traits.tp());
-        const double series   = _a_f_0[0] + _a_f_0[1] * z + _a_f_0[2] * z * z + _a_f_0[3] * z * z * z;
+        const double series   = a_0_0() + _a_f_0[0] * z + _a_f_0[1] * z * z + _a_f_0[2] * z * z * z;
         const double blaschke = _traits.blaschke_0p(s);
 
         return series / phi / blaschke;
