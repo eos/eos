@@ -335,7 +335,9 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            std::array<UsedParameter, 4> _a_f_p, _a_f_0, _a_f_t;
+            std::array<UsedParameter, 4> _a_f_p;
+            std::array<UsedParameter, 3> _a_f_0;
+            std::array<UsedParameter, 4> _a_f_t;
 
             const BGL1997FormFactorTraits<Process_, PToP> _traits;
 
@@ -356,6 +358,8 @@ namespace eos
             virtual double f_p(const double & s) const;
             virtual double f_0(const double & s) const;
             virtual double f_t(const double & s) const;
+
+            double a_0_0() const;
 
             virtual double f_plus_T(const double & s) const;
 

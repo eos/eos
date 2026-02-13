@@ -292,7 +292,6 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^f+_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^f+_3@BGL1997"] = 0.4e-02;
 
-                p["B->D::a^f0_0@BGL1997"] = 0.1e-02;
                 p["B->D::a^f0_1@BGL1997"] = 0.2e-02;
                 p["B->D::a^f0_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^f0_3@BGL1997"] = 0.4e-02;
@@ -302,13 +301,15 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^fT_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^fT_3@BGL1997"] = 0.4e-02;
 
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p(0.0), ff.f_0(0.0), eps);
+
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(-2.0), 0.0862919, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.0911714, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.0970192, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.439279,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.435522,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.432496,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.096857,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.085667,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.073964,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.041750,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.044758,  eps);
@@ -319,7 +320,6 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^f+_2@BGL1997"] = 0.2e-02;
                 p["B->D::a^f+_3@BGL1997"] = 0.1e-02;
 
-                p["B->D::a^f0_0@BGL1997"] = 0.4e-02;
                 p["B->D::a^f0_1@BGL1997"] = 0.3e-02;
                 p["B->D::a^f0_2@BGL1997"] = 0.2e-02;
                 p["B->D::a^f0_3@BGL1997"] = 0.1e-02;
@@ -329,13 +329,15 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^fT_2@BGL1997"] = 0.2e-02;
                 p["B->D::a^fT_3@BGL1997"] = 0.1e-02;
 
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p(0.0), ff.f_0(0.0), eps);
+
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(-2.0), 0.327129, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.352242, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.382318, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 1.66529,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 1.68264,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 1.70431,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.35078,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.33960,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.32796,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.158273, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.172925, eps);
@@ -587,7 +589,6 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^f+_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^f+_3@BGL1997"] = 0.4e-02;
 
-                p["B->D::a^f0_0@BGL1997"] = 0.1e-02;
                 p["B->D::a^f0_1@BGL1997"] = 0.2e-02;
                 p["B->D::a^f0_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^f0_3@BGL1997"] = 0.4e-02;
@@ -597,13 +598,15 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^fT_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^fT_3@BGL1997"] = 0.4e-02;
 
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p(0.0), ff.f_0(0.0), eps);
+
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(-2.0), 0.0922009,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.0973758,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.103574,   eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.469359,   eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.465160,   eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.461717,   eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.103697,   eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.091385,   eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.078481,   eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.044609,   eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.047804,   eps);
@@ -614,7 +617,6 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^f+_2@BGL1997"] = 0.2e-02;
                 p["B->D::a^f+_3@BGL1997"] = 0.1e-02;
 
-                p["B->D::a^f0_0@BGL1997"] = 0.4e-02;
                 p["B->D::a^f0_1@BGL1997"] = 0.3e-02;
                 p["B->D::a^f0_2@BGL1997"] = 0.2e-02;
                 p["B->D::a^f0_3@BGL1997"] = 0.1e-02;
@@ -624,13 +626,15 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^fT_2@BGL1997"] = 0.2e-02;
                 p["B->D::a^fT_3@BGL1997"] = 0.1e-02;
 
+                TEST_CHECK_NEARLY_EQUAL(ff.f_p(0.0), ff.f_0(0.0), eps);
+
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(-2.0), 0.334757,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.360564,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.391470,  eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 1.70412,   eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 1.722398,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 1.745110,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.359116,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.347549,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.335465,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.161964,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.177010,  eps);
