@@ -1999,6 +1999,29 @@ groups:
           matrix:
             - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
             - [0, 1, 2, 3]
+      # form factor parameters for B_c->J/psi for [BGL:1997A]
+      'B_c->J/psi::t_0@BGL1997' :
+          central:  5.6417164
+          min:      0.0
+          max:     10.096
+          latex:    '$t_0^{B_c \to J/\psi,\mathrm{BGL97}}$'
+          unit:     'GeV^2'
+      'B_c->J/psi::a^%1%_%2%@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          unit:     '1'
+          latex:
+            template: '$a_{%1%,%2%}^{B_c \to J/\psi,\mathrm{BGL97}}$'
+            map:
+                "F1": "F_1"
+                "F2": "F_2"
+                "T1": "T_1"
+                "T2": "T_2"
+                "T23": "T_{23}"
+          matrix:
+            - ["g", "f", "F1", "F2", "T1", "T2", "T23"]
+            - [0, 1, 2, 3]
   # }}}
 
   # Parameters in B_s -> V Form Factor Parametrizations
