@@ -2748,88 +2748,95 @@ namespace eos
 
         std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> result;
 
-        fs::path base;
+        std::vector<fs::path> base_list;
         if (std::getenv("EOS_TESTS_CONSTRAINTS"))
         {
             std::string envvar = std::string(std::getenv("EOS_TESTS_CONSTRAINTS"));
-            base               = fs::system_complete(envvar);
+            base_list.push_back(fs::system_complete(envvar) / "experimental");
+            base_list.push_back(fs::system_complete(envvar) / "theoretical");
         }
         else if (std::getenv("EOS_HOME"))
         {
             std::string envvar = std::string(std::getenv("EOS_HOME"));
-            base               = fs::system_complete(envvar) / "constraints";
+            base_list.push_back(fs::system_complete(envvar) / "constraints/experimental");
+            base_list.push_back(fs::system_complete(envvar) / "constraints/theoretical");
         }
         else
         {
-            base = fs::system_complete(EOS_DATADIR "/eos/constraints/");
+            base_list.push_back(fs::system_complete(EOS_DATADIR "/eos/constraints/experimental"));
+            base_list.push_back(fs::system_complete(EOS_DATADIR "/eos/constraints/theoretical"));
         }
 
-        if (! fs::exists(base))
+        // Go over all subdirectories
+        for (const fs::path & base : base_list)
         {
-            throw InternalError("Could not find the constraint input files");
-        }
-
-        if (! fs::is_directory(base))
-        {
-            throw InternalError("Expect '" + base.string() + " to be a directory");
-        }
-
-        for (fs::directory_iterator f(base), f_end; f != f_end; ++f)
-        {
-            auto file_path = f->path();
-
-            if (! fs::is_regular_file(status(file_path)))
+            if (! fs::exists(base))
             {
-                continue;
+                throw InternalError("Could not find the constraint input files");
             }
 
-            if (".yaml" != file_path.extension().string())
+            if (! fs::is_directory(base))
             {
-                continue;
+                throw InternalError("Expect '" + base.string() + " to be a directory");
             }
 
-            std::string file = file_path.string();
-            try
+            for (fs::directory_iterator f(base), f_end; f != f_end; ++f)
             {
-                Context context("When parsing file '" + file_path.string() + "':");
+                auto file_path = f->path();
 
-                YAML::Node node;
+                if (! fs::is_regular_file(status(file_path)))
+                {
+                    continue;
+                }
+
+                if (".yaml" != file_path.extension().string())
+                {
+                    continue;
+                }
+
+                std::string file = file_path.string();
                 try
                 {
-                    node = YAML::LoadFile(file);
+                    Context context("When parsing file '" + file_path.string() + "':");
+
+                    YAML::Node node;
+                    try
+                    {
+                        node = YAML::LoadFile(file);
+                    }
+                    catch (YAML::InvalidNode & e)
+                    {
+                        throw ConstraintInputFileParseError(file, e.what());
+                    }
+                    catch (YAML::ParserException & e)
+                    {
+                        throw ConstraintInputFileParseError(file, e.what());
+                    }
+
+                    for (auto && p : node)
+                    {
+                        std::string keyname = p.first.Scalar();
+
+                        if ("@metadata@" == keyname)
+                        {
+                            continue;
+                        }
+
+                        Context context("When parsing constraint '" + keyname + "':");
+
+                        QualifiedName                          name(keyname);
+                        std::shared_ptr<const ConstraintEntry> entry{ ConstraintEntry::FromYAML(name, p.second) };
+
+                        if (! result.insert(ValueType{ name, entry }).second)
+                        {
+                            throw ConstraintInputFileParseError(file, "encountered duplicate constraint '" + keyname + "'");
+                        }
+                    }
                 }
-                catch (YAML::InvalidNode & e)
+                catch (ConstraintDeserializationError & e)
                 {
                     throw ConstraintInputFileParseError(file, e.what());
                 }
-                catch (YAML::ParserException & e)
-                {
-                    throw ConstraintInputFileParseError(file, e.what());
-                }
-
-                for (auto && p : node)
-                {
-                    std::string keyname = p.first.Scalar();
-
-                    if ("@metadata@" == keyname)
-                    {
-                        continue;
-                    }
-
-                    Context context("When parsing constraint '" + keyname + "':");
-
-                    QualifiedName                          name(keyname);
-                    std::shared_ptr<const ConstraintEntry> entry{ ConstraintEntry::FromYAML(name, p.second) };
-
-                    if (! result.insert(ValueType{ name, entry }).second)
-                    {
-                        throw ConstraintInputFileParseError(file, "encountered duplicate constraint '" + keyname + "'");
-                    }
-                }
-            }
-            catch (ConstraintDeserializationError & e)
-            {
-                throw ConstraintInputFileParseError(file, e.what());
             }
         }
 

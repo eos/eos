@@ -420,6 +420,8 @@ AC_CONFIG_FILES([Makefile
 	eos/s-decays/Makefile
 	eos/tau-decays/Makefile
 	eos/constraints/Makefile
+	eos/constraints/experimental/Makefile
+	eos/constraints/theoretical/Makefile
 	eos/form-factors/Makefile
 	eos/maths/Makefile
 	eos/meson-mixing/Makefile
