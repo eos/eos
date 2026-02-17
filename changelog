@@ -1,0 +1,20 @@
+Since v1.0.19
+
+- Add missing / correct references list (@MJKirk, @ery-mcpartland)
+- BREAKING: the following constraints were renamed (@MJKirk)
+  - B->pi::FormFactors[parametric,LCSR+LQCD]@LvDM:2021A -> LMvD:2021A
+  - B_s->D_s^*::A_1[s_max]@HPQCD:2019A -> HPQCD:2019B
+  - B->K^*::A_12@FNAL+MILC:2013A -> HPQCD:2013B
+  - B->K^*::A_1@FNAL+MILC:2013A -> HPQCD:2013B
+  - B->K^*::V@FNAL+MILC:2013A -> HPQCD:2013B
+  - B_s->K^*::A_12@FNAL+MILC:2013A -> HPQCD:2013B
+  - B_s->K^*::A_1@FNAL+MILC:2013A -> HPQCD:2013B
+  - B_s->K^*::V@FNAL+MILC:2013A -> HPQCD:2013B
+  - D^+->Kbar^0e^+nu::BR[0.0,q2max]@PDG:2023A -> PDG:2024A
+  - 0->pipi::Abs{f_+}^2@CMD3:2023C -> CMD3:2023A
+  - B->K^*::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GRvDV:2021A -> GRvDV:2022A
+- Add functionality to figure framework to allow export to multiple files at
+once (@MJKirk)
+- Purge integrate1d (@mreboud, @Herren)
+- Exports `wilson-polynomials` to python (@mreboud)
+
