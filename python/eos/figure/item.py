@@ -1910,7 +1910,7 @@ class ComplexPlaneItem(Item):
 
 
 @dataclass(kw_only=True)
-class ErrorBars(Item):
+class ErrorBarsItem(Item):
     """Plots one or more error bars at specified position(s).
 
     :param positions: The list of (x, y) positions where the error bars will be plotted.
@@ -1920,7 +1920,7 @@ class ErrorBars(Item):
     :param yerrors: The list of errors to be used in the plotting. Tuples of errors are interpreted as asymmetric errors (i.e., (error_minus, error_plus)).
     :type yerrors: list[float] | list[tuple[float, float]]
 
-    Example:
+    Example: (note the yaml implementation of python's tuple!)
 
     .. code-block::
 
@@ -1929,10 +1929,10 @@ class ErrorBars(Item):
           xaxis: { label: '$x$', range: [0, 4] }
           yaxis: { label: '$y$', range: [1, 6] }
           items:
-            - type: 'errorbar'
-              positions: [(1, 2), (2, 3), (3, 5)]
+            - type: 'errorbars'
+              positions: [!!python/tuple [1, 2], !!python/tuple [2, 3], !!python/tuple [3, 5]]
               xerrors: [0.5, 0.5, 0.5]
-              yerrors: [0.2, (0.2, 0.3), 0.5]
+              yerrors: [0.2, !!python/tuple [0.2, 0.3], 0.5]
               color: 'black'
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
@@ -1953,10 +1953,10 @@ class ErrorBars(Item):
             raise ValueError('At least one of xerrors or yerrors must be specified for error bars.')
 
         if self.xerrors is not None and len(self.xerrors) != len(self.positions):
-            raise ValueError('The number of x errors must match the number of positions.')
+            raise ValueError(f'The number of x errors ({len(self.xerrors)}) must match the number of positions ({len(self.positions)}).')
 
         if self.yerrors is not None and len(self.yerrors) != len(self.positions):
-            raise ValueError('The number of y errors must match the number of positions.')
+            raise ValueError(f'The number of y errors ({len(self.yerrors)}) must match the number of positions ({len(self.positions)}).')
 
         return super().__post_init__()
 
@@ -2020,12 +2020,22 @@ class ItemFactory:
         'band': BandItem,
         'signal-pdf': SignalPDFItem,
         'complex-plane': ComplexPlaneItem,
-        'errorbars': ErrorBars,
+        'errorbars': ErrorBarsItem,
     }
 
     @staticmethod
     def from_yaml(yaml_data:str):
-        kwargs = _yaml.safe_load(yaml_data)
+        "Factory method to create an item from a yaml string"
+        class EOSSafeLoader(_yaml.SafeLoader):
+            "Safe yaml loader that also accepts python tuple"
+            def construct_python_tuple(self, node):
+                return tuple(self.construct_sequence(node))
+
+        EOSSafeLoader.add_constructor(
+            'tag:yaml.org,2002:python/tuple',
+            EOSSafeLoader.construct_python_tuple)
+
+        kwargs = _yaml.load(yaml_data, Loader=EOSSafeLoader)
         return ItemFactory.from_dict(**kwargs)
 
     @staticmethod
