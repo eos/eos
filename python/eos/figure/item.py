@@ -1168,7 +1168,6 @@ class ConstraintItem(Item):
         self._xerrors = []
         self._yvalues = []
         self._yerrors = []
-        self._skip_observable = False
 
         for constraint_name in self.constraints:
             entry = constraints[constraint_name]
@@ -1222,7 +1221,7 @@ class ConstraintItem(Item):
                     # Check that the observable match and that the provided options match with those of the constraint
                     if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
                                _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
-                        self._skip_observable = True
+                        eos.warn(f'    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -1258,7 +1257,9 @@ class ConstraintItem(Item):
                 for i in range(0, dim):
                     width = 1
 
-                    if not observables[i] == self.observable:
+                    if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
+                               _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
+                        eos.warn('    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -1278,14 +1279,14 @@ class ConstraintItem(Item):
             else:
                 raise ValueError(f'constraint type {constraint["type"]} presently not supported')
 
-            if len(xvalues) == 0:
-                eos.info(f'   skipping plot for constraint {constraint_name} since it does not contain the requested observable')
-                return
-
         self._xvalues = _np.array(xvalues)
         self._xerrors = _np.array(xerrors)
         self._yvalues = _np.array(yvalues)
         self._yerrors = _np.array(yerrors)
+
+        if len(xvalues) == 0:
+            eos.info(f'   skipping plot for constraint {constraint_name} since it does not contain the requested observable')
+            return
 
         if self.range:
             self._mask = _np.logical_and(self._xvalues > min(self.range), self._xvalues < max(self.range))
@@ -1295,7 +1296,7 @@ class ConstraintItem(Item):
     def draw(self, ax):
         "Draw the constraint on the axes."
 
-        if self._skip_observable:
+        if len(self._xvalues) == 0:
             return
 
         xvalues = self._xvalues[self._mask]
@@ -1440,7 +1441,6 @@ class ConstraintResidueItem(Item):
         self._xerrors = []
         self._yvalues = []
         self._yerrors = []
-        self._skip_observable = False
 
         for constraint_name in self.constraints:
             entry = constraints[constraint_name]
@@ -1501,7 +1501,7 @@ class ConstraintResidueItem(Item):
                     # Check that the observable match and that the provided options match with those of the constraint
                     if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
                                _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
-                        # self._skip_observable = True
+                        eos.warn('    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -1543,7 +1543,9 @@ class ConstraintResidueItem(Item):
                 for i in range(0, dim):
                     width = 1
 
-                    if not observables[i] == self.observable:
+                    if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
+                               _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
+                        eos.warn('    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -1585,7 +1587,7 @@ class ConstraintResidueItem(Item):
     def draw(self, ax):
         "Draw the constraint on the axes."
 
-        if self._skip_observable:
+        if len(self._xvalues) == 0:
             return
 
         xvalues = self._xvalues[self._mask]
