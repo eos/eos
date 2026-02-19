@@ -22,6 +22,7 @@ jobs:
                     - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
         steps:
@@ -88,6 +89,7 @@ jobs:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
         steps:
@@ -137,6 +139,7 @@ jobs:
                     - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
         steps:
@@ -168,6 +171,7 @@ jobs:
                     - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
         steps:
@@ -209,6 +213,7 @@ jobs:
                     - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
             image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
         steps:
