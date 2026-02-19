@@ -1,0 +1,38 @@
+observables:
+- kinematics:
+    q2: 0.01
+  name: B->pilnu::dBR/dq2
+  options:
+    P: pi
+    form-factors: BCL2008
+    model: CKM
+- kinematics:
+    q2: 0.5
+  name: B->pilnu::dBR/dq2
+  options:
+    P: pi
+    form-factors: BCL2008
+    model: CKM
+- kinematics:
+    q2: 1.0
+  name: B->pilnu::dBR/dq2
+  options:
+    P: pi
+    form-factors: BCL2008
+    model: CKM
+- kinematics:
+    q2: 1.5
+  name: B->pilnu::dBR/dq2
+  options:
+    P: pi
+    form-factors: BCL2008
+    model: CKM
+- kinematics:
+    q2: 2.0
+  name: B->pilnu::dBR/dq2
+  options:
+    P: pi
+    form-factors: BCL2008
+    model: CKM
+type: Prediction
+version: 1.0.19
