@@ -26,6 +26,9 @@ EXTRA_DIST = \
 	eos/data/__init__.py \
 	eos/data/native.py \
     eos/data/native_TEST.d \
+    eos/data/native_TEST.d/predictions \
+    eos/data/native_TEST.d/predictions-binned \
+    eos/data/native_TEST.d/samples \
 	eos/figure/__init__.py \
 	eos/figure/common.py \
 	eos/figure/config.py \
