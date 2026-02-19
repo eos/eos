@@ -108,12 +108,25 @@ predictions:
     global_options:
         model: CKM
         form-factors: BCL2008
+    observables:
+      - name: B->pilnu::P(q2_min,q2_max)
+        kinematics: [{'q2_min': 0.01, 'q2_max': 0.5}, {'q2_min': 0.5, 'q2_max': 1.0}, {'q2_min': 1.0, 'q2_max': 1.5}, {'q2_min': 1.5, 'q2_max': 2.0}]
+  - name: dBRdq2
+    global_options:
+        model: CKM
+        form-factors: BCL2008
+    observables:
+      - name: B->pilnu::dBR/dq2
+        kinematics: [{ 'q2': 0.01}, { 'q2': 0.5}, { 'q2': 1.0}, {'q2': 1.5}, {'q2': 2.0}]
+  - name: BR
+    global_options:
+        model: CKM
+        form-factors: BCL2008
     fixed_parameters:
         mass::e: 5.0e-4  # This is meant to test the "fixed_parameters" key
     observables:
-      - name: B->pilnu::P(q2_min,q2_max)
-        kinematics: { 'q2_min': 0.01, 'q2_max': 2.00 }
       - name: B_u->lnu::BR
+        kinematics: {'q2_min': 0.01, 'q2_max': 2.0 }
 
 steps:
   - title: 'Optimize posterior CKM+FF'
