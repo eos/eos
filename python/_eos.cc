@@ -745,6 +745,24 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("parameters", "name", "mu", "sigma"))
             .staticmethod("Gaussian")
+            .def("MultivariateGaussian", &LogPrior::MultivariateGaussianVectors, return_value_policy<return_by_value>(), R"(
+            Returns a new MultivariateGaussian prior as a LogPrior.
+
+            The priors support is infinite. The means are provided by the parameter ``means`` and
+            the covariance matrix by the parameter ``covariance``.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: list
+            :param means: The means of the prior.
+            :type means: float
+            :param covariance: The covariance of the prior.
+            :type covariance: float, strictly positive
+
+        )",
+                args("parameters", "name", "means", "covariance"))
+            .staticmethod("MultivariateGaussian")
             .def("Poisson", &LogPrior::Poisson, return_value_policy<return_by_value>(), R"(
             Returns a new Poisson prior as a LogPrior.
 
