@@ -42,3 +42,8 @@ repos:
       exclude: '^src/scripts/eos-make-constraint'
     - id: eos-test-check-references
       additional_dependencies: [ 'pyyaml' ]
+
+ - repo: https://github.com/jackdewinter/pymarkdown
+   rev: v0.9.35
+   hooks:
+    - id: pymarkdown
