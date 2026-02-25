@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Rename the following constraints (M. Kirk)
+- Rename the following constraints (M. Kirk, M. Reboud)
   - `B->pi::FormFactors[parametric,LCSR+LQCD]@LvDM:2021A` -> `LMvD:2021A`
   - `B_s->D_s^*::A_1[s_max]@HPQCD:2019A` -> `HPQCD:2019B`
   - `B->K^*::A_12@FNAL+MILC:2013A` -> `HPQCD:2013B`
@@ -16,6 +16,9 @@
   - `D^+->Kbar^0e^+nu::BR[0.0,q2max]@PDG:2023A` -> `PDG:2024A`
   - `0->pipi::Abs{f_+}^2@CMD3:2023C` -> `CMD3:2023A`
   - `B->K^*::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GRvDV:2021A` -> `GRvDV:2022A`
+  - `B_(s)->D_(s)^*::FormFactors@HPQCD:2023A` -> `B_(s)->D_(s)^*::FormFactors[HQETBasis]@HPQCD:2023A`
+  - `B_(s)->D_(s)^*::FormFactors[TraditionalBasis]@HPQCD:2023A` -> `B_(s)->D_(s)^*::FormFactors@HPQCD:2023A`
+- Impose the exact relation `f+(0) = f0(0)` in the BGL parameterisation of P -> P form factors (M. Reboud)
 
 
 ### Added
@@ -23,6 +26,8 @@
 - Add functionality to figure framework to allow export to multiple files at once (M. Kirk)
 - Export `wilson-polynomials` to python (M. Reboud)
 - Add missing references to bibliography (M. Kirk, E. McPartland)
+- Implement a new figure item to plot constraints residues (M. Reboud)
+- Update the examples and the tests of the figure framework (M. Reboud)
 
 
 ### Removed
@@ -33,6 +38,8 @@
 ### Fixed
 
 - Correct references list (M. Kirk, E. McPartland)
+- Fix bugs in the figure framework (M. Reboud)
+- Fix the constraint `B_(s)->D_(s)^*::FormFactors@HPQCD:2023A` (M. Reboud)
 
 
 
