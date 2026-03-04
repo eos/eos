@@ -4362,6 +4362,40 @@ groups:
             - ["V", "A", "T", "T5"]
             - [0, 1, 2, 3, 4]
           comments: ''
+      # form factor parameters for Lambda_c -> neutron decays according to
+      # [BMRvD:2022A]
+      'Lambda_c->neutron::tp_a@BMRvD2022' :
+          central:  4.58
+          min:      4.58
+          max:      4.58
+          latex:    '$t_+^{A, \Lambda_c \to n ,\mathrm{BMRvD2022}}$'
+          comment:  '(mD + mpi + mpi)^2'
+          unit:     'GeV^2'
+      'Lambda_c->neutron::tp_v@BMRvD2022' :
+          central:  4.02
+          min:      4.02
+          max:      4.02
+          latex:    '$t_+^{V, \Lambda_c \to n ,\mathrm{BMRvD2022}}$'
+          comment:  '(mD + mpi)^2'
+          unit:     'GeV^2'
+      'Lambda_c->neutron::t0@BMRvD2022' :
+          central:  1.8
+          min:      1.8
+          max:      1.8
+          latex:    '$t_0^{\Lambda_c \to n ,\mathrm{BMRvD2022}}$'
+          comment:  '(mLc - mN)^2'
+          unit:     'GeV^2'
+      'Lambda_c->neutron::a^(%1%,%2%)_%3%@BMRvD2022':
+          central: -0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to n, \mathrm{BMRvD2022}}$'
+          matrix:
+            - ["t", "0", "perp"]
+            - ["V", "A", "T", "T5"]
+            - [0, 1, 2, 3, 4]
+          comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
       # [DKMR:2017A], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
       # params for tensor FFs are included.
