@@ -20,7 +20,7 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/c-decays/lambdac-to-lambda-l-nu.hh>
+#include <eos/c-decays/lambdac-to-onehalfplus-l-nu.hh>
 #include <eos/maths/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -69,10 +69,11 @@ class LambdaCToLambdaLeptonNeutrinoTest :
                 {
                     { "model"_ok,        "WET"        },
                     { "form-factors"_ok, "BMRvD2022"  },
-                    { "l"_ok,            "mu"         }
+                    { "l"_ok,            "mu"         },
+                    { "B"_ok,            "Lambda"     }
                 };
 
-                LambdaCToLambdaLeptonNeutrino d(p, oo);
+                LambdaCToOneHalfPlusLeptonNeutrino d(p, oo);
 
                 const double eps = 1e-4;
 
