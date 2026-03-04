@@ -47,3 +47,4 @@ repos:
    rev: v0.9.35
    hooks:
     - id: pymarkdown
+      language_version: python3.12
