@@ -4,6 +4,7 @@
  * Copyright (c) 2019 Ahmet Kokulu
  * Copyright (c) 2019 Danny van Dyk
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,8 +20,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_C_DECAYS_LAMBDA_C_TO_LAMBDA_LEPTON_NEUTRINO_HH
-#define EOS_GUARD_EOS_C_DECAYS_LAMBDA_C_TO_LAMBDA_LEPTON_NEUTRINO_HH 1
+#ifndef EOS_GUARD_EOS_C_DECAYS_LAMBDA_C_TO_ONEHALFPLUS_LEPTON_NEUTRINO_HH
+#define EOS_GUARD_EOS_C_DECAYS_LAMBDA_C_TO_ONEHALFPLUS_LEPTON_NEUTRINO_HH 1
 
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -30,15 +31,15 @@
 namespace eos
 {
     /*
-     * Decay: Lambda_c -> Lambda lnu
+     * Decay: Lambda_c -> Baryon(1/2+) lnu
      */
-    class LambdaCToLambdaLeptonNeutrino :
+    class LambdaCToOneHalfPlusLeptonNeutrino :
         public ParameterUser,
-        public PrivateImplementationPattern<LambdaCToLambdaLeptonNeutrino>
+        public PrivateImplementationPattern<LambdaCToOneHalfPlusLeptonNeutrino>
     {
         public:
-            LambdaCToLambdaLeptonNeutrino(const Parameters &, const Options &);
-            ~LambdaCToLambdaLeptonNeutrino();
+            LambdaCToOneHalfPlusLeptonNeutrino(const Parameters &, const Options &);
+            ~LambdaCToOneHalfPlusLeptonNeutrino();
 
             double four_differential_decay_width(const double & q2, const double & c_lep, const double & c_lam, const double & phi) const;
             double integrated_decay_width(const double & q2_min, const double & q2_max) const;
@@ -71,7 +72,7 @@ namespace eos
             static const std::string description;
             static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
-            static const std::string kinematics_description_c_theta_L;
+            static const std::string kinematics_description_c_theta_B;
             static const std::string kinematics_description_phi;
 
             /*!

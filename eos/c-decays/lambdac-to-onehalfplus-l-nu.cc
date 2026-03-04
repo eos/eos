@@ -4,6 +4,7 @@
  * Copyright (c) 2019      Ahmet Kokulu
  * Copyright (c) 2019-2025 Danny van Dyk
  * Copyright (c) 2023      Méril Reboud
+ * Copyright (c) 2026      Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +20,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/c-decays/lambdac-to-lambda-l-nu.hh>
+#include <eos/c-decays/lambdac-to-onehalfplus-l-nu.hh>
 #include <eos/form-factors/baryonic.hh>
 #include <eos/maths/complex.hh>
 #include <eos/maths/integrate.hh>
@@ -41,9 +42,9 @@
 
 namespace eos
 {
-    using std::norm;
+    using namespace std::literals::string_literals;
 
-    namespace lambdac_to_lambda_l_nu
+    namespace lambdac_to_onehalfplus_l_nu
     {
         struct Amplitudes
         {
@@ -255,7 +256,7 @@ namespace eos
         };
     }
 
-    template <> struct Implementation<LambdaCToLambdaLeptonNeutrino>
+    template <> struct Implementation<LambdaCToOneHalfPlusLeptonNeutrino>
     {
         std::shared_ptr<Model> model;
 
@@ -270,7 +271,10 @@ namespace eos
         UsedParameter m_l;
 
         UsedParameter m_Lambda_c;
-        UsedParameter m_Lambda;
+
+        SpecifiedOption opt_B;
+        UsedParameter m_B;
+
         UsedParameter alpha;
 
         UsedParameter mu;
@@ -278,6 +282,53 @@ namespace eos
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
         static const std::vector<OptionSpecification> options;
+
+        std::function<double (const double &)> m_Q_msbar;
+        std::function<complex<double> ()> v_cQ;
+        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
+
+        BooleanOption opt_cp_conjugate;
+
+        // { B } -> { process, Q, B_name }
+        // B: Lambda, Neutron: the type of daughter baryon
+        // process: string that can be used to obtain the form factor
+        // Q: the quark flavor in the weak transition
+        // B_name: name of the daughter baryon
+        static const std::map<std::tuple<std::string>, std::tuple<std::string, QuarkFlavor, std::string>> process_map;
+
+        inline std::string _process() const
+        {
+            const std::string B = opt_B.value();
+            const auto p = process_map.find(std::make_tuple(B));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of Lambda_c -> B , B = " + B);
+
+            return std::get<0>(p->second);
+        }
+
+        inline QuarkFlavor _Q() const
+        {
+            const std::string B = opt_B.value();
+            const auto p = process_map.find(std::make_tuple(B));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of Lambda_c -> B , B = " + B);
+
+            return std::get<1>(p->second);
+        }
+
+        inline std::string _B() const
+        {
+            const std::string B = opt_B.value();
+            const auto p = process_map.find(std::make_tuple(B));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of Lambda_c -> B , B = " + B);
+
+            return std::get<2>(p->second);
+        }
+
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model"_ok, "SM"), p, o)),
@@ -288,32 +339,52 @@ namespace eos
             opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             m_Lambda_c(p["mass::Lambda_c"], u),
-            m_Lambda(p["mass::Lambda"], u),
-            alpha(p["Lambda::alpha"], u),
-            mu(p["scnu" + opt_l.str() + opt_l.str() + "::mu"], u),
-            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_c->Lambda::" + o.get("form-factors"_ok, "BMRvD2022"), p, o))
+            opt_B(o, options, "B"_ok),
+            m_B(p["mass::" + _B()], u),
+            alpha(p[_B()+ "::alpha"], u),
+            mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
+            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(_process() + "::" + o.get("form-factors"_ok, "BMRvD2022"), p, o))
         {
+            Context ctx("When constructing Lambda_c->Baryon(1/2+)lnu observable");
+
+            switch (_Q())
+            {
+                case QuarkFlavor::strange:
+                    m_Q_msbar = [this](const double & mu) -> double { return model->m_s_msbar(mu); };
+                    v_cQ      = [this]() -> complex<double> { return model->ckm_cs(); };
+                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_scnul(l, cp); };
+                    break;
+                case QuarkFlavor::down:
+                    m_Q_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
+                    v_cQ      = [this]() -> complex<double> { return model->ckm_cd(); };
+                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
+                    break;
+                default:
+                    throw InternalError("Invalid quark flavor: " + stringify(_Q()));
+            }
+
             u.uses(*form_factors);
             u.uses(*model);
         }
 
         const complex<double> norm(const double & q2) const
         {
-            double lam = lambda(m_Lambda_c * m_Lambda_c, m_Lambda * m_Lambda, q2);
+            double lam = lambda(m_Lambda_c * m_Lambda_c, m_B * m_B, q2);
 
             if ((lam <= 0) || (q2 <= m_l * m_l))
                 return 0.0;
 
-            return g_fermi() * model->ckm_cs() * (1.0 - m_l * m_l / q2) * std::sqrt(q2 / 3.0 / 128 / power_of<3>(M_PI * m_Lambda_c()) * std::sqrt(lam));
+            return g_fermi() * v_cQ() * (1.0 - m_l * m_l / q2) * std::sqrt(q2 / 3.0 / 128 / power_of<3>(M_PI * m_Lambda_c()) * std::sqrt(lam));
         }
 
-        lambdac_to_lambda_l_nu::Amplitudes amplitudes(const double & s)
+        lambdac_to_onehalfplus_l_nu::Amplitudes amplitudes(const double & s) const
         {
             using std::sqrt;
 
-            lambdac_to_lambda_l_nu::Amplitudes result;
+            lambdac_to_onehalfplus_l_nu::Amplitudes result;
 
-            const auto wc = model->wet_scnul(opt_l.value(), false);
+            auto wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
             const complex<double> cvl = wc.cvl();
             const complex<double> cvr = wc.cvr();
             const complex<double> csl = wc.csl();
@@ -333,13 +404,14 @@ namespace eos
             const double ffpT5 = form_factors->f_perp_t5(s);
             // running quark masses
             const double mcatmu = model->m_c_msbar(mu);
-            const double msatmu = model->m_s_msbar(mu);
+            const double mDatmu = m_Q_msbar(mu);
 
             // kinematics
             const double beta = (1.0 - m_l * m_l / s);
             const double m_l_hat = std::sqrt(1.0 - beta);
-            const double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_c - m_Lambda) - s);
-            const double sqrtsplus  = std::sqrt(power_of<2>(m_Lambda_c + m_Lambda) - s);
+            const double m_B = this->m_B();
+            const double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_c - m_B) - s);
+            const double sqrtsplus  = std::sqrt(power_of<2>(m_Lambda_c + m_B) - s);
             const double sqrts      = std::sqrt(s);
 
             // normalization
@@ -349,16 +421,16 @@ namespace eos
             // cf. [BKTvD:2019A], eqs. (2.18)-(2.23), p. 6, including contributions from the vector and scalar operators.
             result.perp_1_L = -2.0 * N * ffpV * (cvl + cvr) * sqrtsminus;
             result.para_1_L = +2.0 * N * ffpA * (cvl - cvr) * sqrtsplus;
-            result.perp_0_L = +std::sqrt(2.0) * N * ff0V * ((m_Lambda_c + m_Lambda) / sqrts) * (cvl + cvr) * sqrtsminus;
-            result.para_0_L = -std::sqrt(2.0) * N * ff0A * ((m_Lambda_c - m_Lambda) / sqrts) * (cvl - cvr) * sqrtsplus;
-            result.perp_t_L = +std::sqrt(2.0) * N * sqrtsplus  * fftV * ( ((m_Lambda_c - m_Lambda) / sqrts) * (cvl + cvr) + ((m_Lambda_c - m_Lambda) / (mcatmu - msatmu)) * (csl + csr) / m_l_hat );
-            result.para_t_L = -std::sqrt(2.0) * N * sqrtsminus * fftA * ( ((m_Lambda_c + m_Lambda) / sqrts) * (cvl - cvr) - ((m_Lambda_c + m_Lambda) / (mcatmu + msatmu)) * (csl - csr) / m_l_hat );
+            result.perp_0_L = +std::sqrt(2.0) * N * ff0V * ((m_Lambda_c + m_B) / sqrts) * (cvl + cvr) * sqrtsminus;
+            result.para_0_L = -std::sqrt(2.0) * N * ff0A * ((m_Lambda_c - m_B) / sqrts) * (cvl - cvr) * sqrtsplus;
+            result.perp_t_L = +std::sqrt(2.0) * N * sqrtsplus  * fftV * ( ((m_Lambda_c - m_B) / sqrts) * (cvl + cvr) + ((m_Lambda_c - m_B) / (mcatmu - mDatmu)) * (csl + csr) / m_l_hat );
+            result.para_t_L = -std::sqrt(2.0) * N * sqrtsminus * fftA * ( ((m_Lambda_c + m_B) / sqrts) * (cvl - cvr) - ((m_Lambda_c + m_B) / (mcatmu + mDatmu)) * (csl - csr) / m_l_hat );
 
             // cf. [BKTvD:2019A], eqs. (2.26)-(2.29), p. 6, including contributions from the tensor operator.
             result.para_0_T = -sqrt(8.0) * N * ff0T5 * sqrtsplus  * ct;
             result.perp_0_T = -sqrt(8.0) * N * ff0T  * sqrtsminus * ct;
-            result.para_1_T = +sqrt(4.0) * N * ffpT5 * sqrtsplus  * ct * (m_Lambda_c - m_Lambda) / sqrts;
-            result.perp_1_T = +sqrt(4.0) * N * ffpT  * sqrtsminus * ct * (m_Lambda_c + m_Lambda) / sqrts;
+            result.para_1_T = +sqrt(4.0) * N * ffpT5 * sqrtsplus  * ct * (m_Lambda_c - m_B) / sqrts;
+            result.perp_1_T = +sqrt(4.0) * N * ffpT  * sqrtsminus * ct * (m_Lambda_c + m_B) / sqrts;
 
             result.alpha = this->alpha();
             result.beta  = beta;
@@ -368,7 +440,7 @@ namespace eos
 
         std::array<double, 10> _differential_angular_observables(const double & q2)
         {
-            return lambdac_to_lambda_l_nu::AngularObservables(this->amplitudes(q2))._k;
+            return lambdac_to_onehalfplus_l_nu::AngularObservables(this->amplitudes(q2))._k;
         }
 
         std::array<double, 10> _integrated_angular_observables(const double & q2_min, const double & q2_max)
@@ -381,42 +453,51 @@ namespace eos
             return integrate<1, 10>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));;
         }
 
-        inline lambdac_to_lambda_l_nu::AngularObservables differential_angular_observables(const double & q2)
+        inline lambdac_to_onehalfplus_l_nu::AngularObservables differential_angular_observables(const double & q2)
         {
-            return lambdac_to_lambda_l_nu::AngularObservables{ _differential_angular_observables(q2) };
+            return lambdac_to_onehalfplus_l_nu::AngularObservables{ _differential_angular_observables(q2) };
         }
 
-        inline lambdac_to_lambda_l_nu::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max)
+        inline lambdac_to_onehalfplus_l_nu::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
-            return lambdac_to_lambda_l_nu::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
+            return lambdac_to_onehalfplus_l_nu::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
         }
+    };
+
+    const std::map<std::tuple<std::string>, std::tuple<std::string, QuarkFlavor, std::string>>
+    Implementation<LambdaCToOneHalfPlusLeptonNeutrino>::Implementation::process_map
+    {
+        { { "Lambda"        }, { "Lambda_c->Lambda",          QuarkFlavor::strange,    "Lambda"              } },
+        { { "Neutron"       }, { "Lambda_c->Neutron",         QuarkFlavor::down,       "Neutron"             } },
     };
 
     const std::vector<OptionSpecification>
-    Implementation<LambdaCToLambdaLeptonNeutrino>::options
+    Implementation<LambdaCToOneHalfPlusLeptonNeutrino>::options
     {
-        { "l"_ok, { "e", "mu", "tau" }, "mu" }
+        { "cp-conjugate"_ok, { "true"s, "false"s },                 "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s },               "mu"s    },
+        { "B"_ok,            { "Lambda"s, "Neutron"s },             ""s      },
     };
 
-    LambdaCToLambdaLeptonNeutrino::LambdaCToLambdaLeptonNeutrino(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<LambdaCToLambdaLeptonNeutrino>(new Implementation<LambdaCToLambdaLeptonNeutrino>(p, o, *this))
+    LambdaCToOneHalfPlusLeptonNeutrino::LambdaCToOneHalfPlusLeptonNeutrino(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<LambdaCToOneHalfPlusLeptonNeutrino>(new Implementation<LambdaCToOneHalfPlusLeptonNeutrino>(p, o, *this))
     {
     }
 
-    LambdaCToLambdaLeptonNeutrino::~LambdaCToLambdaLeptonNeutrino()
+    LambdaCToOneHalfPlusLeptonNeutrino::~LambdaCToOneHalfPlusLeptonNeutrino()
     {
     }
 
     /* for four-differential signal PDF */
     double
-    LambdaCToLambdaLeptonNeutrino::four_differential_decay_width(const double & q2, const double & c_lep,
+    LambdaCToOneHalfPlusLeptonNeutrino::four_differential_decay_width(const double & q2, const double & c_lep,
             const double & c_lam, const double & phi) const
     {
         return _imp->differential_angular_observables(q2).d4gamma(c_lep, c_lam, phi);
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_decay_width(const double & q2_min, const double & q2_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
         return _imp->integrated_angular_observables(q2_min, q2_max).decay_width();
     }
@@ -424,31 +505,31 @@ namespace eos
     /* q^2-differential observables */
 
     double
-    LambdaCToLambdaLeptonNeutrino::differential_branching_ratio(const double & q2) const
+    LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).decay_width() * _imp->tau_Lambda_c / _imp->hbar;
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::differential_a_fb_leptonic(const double & q2) const
+    LambdaCToOneHalfPlusLeptonNeutrino::differential_a_fb_leptonic(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).a_fb_leptonic();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::differential_a_fb_hadronic(const double & q2) const
+    LambdaCToOneHalfPlusLeptonNeutrino::differential_a_fb_hadronic(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).a_fb_hadronic();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::differential_a_fb_combined(const double & q2) const
+    LambdaCToOneHalfPlusLeptonNeutrino::differential_a_fb_combined(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).a_fb_combined();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::differential_fzero(const double & q2) const
+    LambdaCToOneHalfPlusLeptonNeutrino::differential_fzero(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).f_zero();
     }
@@ -456,139 +537,139 @@ namespace eos
     /* q^2-integrated observables */
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
         return _imp->integrated_angular_observables(s_min, s_max).decay_width() * _imp->tau_Lambda_c / _imp->hbar;
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
     {
         return _imp->integrated_angular_observables(s_min, s_max).a_fb_leptonic();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_a_fb_hadronic(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_hadronic(const double & s_min, const double & s_max) const
     {
         return _imp->integrated_angular_observables(s_min, s_max).a_fb_hadronic();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_a_fb_combined(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_combined(const double & s_min, const double & s_max) const
     {
         return _imp->integrated_angular_observables(s_min, s_max).a_fb_combined();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_fzero(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_fzero(const double & s_min, const double & s_max) const
     {
         return _imp->integrated_angular_observables(s_min, s_max).f_zero();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k1ss(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1ss(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k1ss() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k1cc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1cc(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k1cc() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k1c(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1c(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k1c() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k2ss(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2ss(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k2ss() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k2cc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2cc(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k2cc() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k2c(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2c(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k2c() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k3sc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k3sc(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k3sc() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k3s(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k3s(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k3s() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k4sc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k4sc(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k4sc() / o.decay_width();
     }
 
     double
-    LambdaCToLambdaLeptonNeutrino::integrated_k4s(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k4s(const double & s_min, const double & s_max) const
     {
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k4s() / o.decay_width();
     }
 
     const std::string
-    LambdaCToLambdaLeptonNeutrino::description = "\
-    The decay Lambda_c -> Lambda lbar nu, where lbar=e^+,mu^+,tau^+ is a charged antilepton.";
+    LambdaCToOneHalfPlusLeptonNeutrino::description = "\
+    The decay Lambda_c -> Baryon(1/2)+ lbar nu, where lbar=e^+,mu^+,tau^+ is a charged antilepton.";
 
     const std::string
-    LambdaCToLambdaLeptonNeutrino::kinematics_description_q2 = "\
+    LambdaCToOneHalfPlusLeptonNeutrino::kinematics_description_q2 = "\
     The invariant mass of the lbar-nu pair in GeV^2.";
 
     const std::string
-    LambdaCToLambdaLeptonNeutrino::kinematics_description_c_theta_l = "\
+    LambdaCToOneHalfPlusLeptonNeutrino::kinematics_description_c_theta_l = "\
     The cosine of the helicity angle between the direction of flight of the charged antilepton and of the Lambda_c in the lbar-nu rest frame.";
 
     const std::string
-    LambdaCToLambdaLeptonNeutrino::kinematics_description_c_theta_L = "\
-    The cosine of the helicity angle between the direction of flight of the Lambda and of the pion in the Lambda_c rest frame.";
+    LambdaCToOneHalfPlusLeptonNeutrino::kinematics_description_c_theta_B = "\
+    The cosine of the helicity angle between the direction of flight of the baryon daughter and of the dilepton in the Baryon(1/2+) rest frame. This assumes a 2-body decay of the Baryon(1/2+), e.g. Lambda -> p pi.";
 
     const std::string
-    LambdaCToLambdaLeptonNeutrino::kinematics_description_phi = "\
+    LambdaCToOneHalfPlusLeptonNeutrino::kinematics_description_phi = "\
     The azimuthal angle between the two decay planes.";
 
     const std::set<ReferenceName>
-    LambdaCToLambdaLeptonNeutrino::references
+    LambdaCToOneHalfPlusLeptonNeutrino::references
     {
     };
 
     std::vector<OptionSpecification>::const_iterator
-    LambdaCToLambdaLeptonNeutrino::begin_options()
+    LambdaCToOneHalfPlusLeptonNeutrino::begin_options()
     {
-        return Implementation<LambdaCToLambdaLeptonNeutrino>::options.cbegin();
+        return Implementation<LambdaCToOneHalfPlusLeptonNeutrino>::options.cbegin();
     }
 
     std::vector<OptionSpecification>::const_iterator
-    LambdaCToLambdaLeptonNeutrino::end_options()
+    LambdaCToOneHalfPlusLeptonNeutrino::end_options()
     {
-        return Implementation<LambdaCToLambdaLeptonNeutrino>::options.cend();
+        return Implementation<LambdaCToOneHalfPlusLeptonNeutrino>::options.cend();
     }
 }
