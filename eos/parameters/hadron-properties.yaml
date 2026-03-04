@@ -293,6 +293,21 @@ groups:
   - title: 'Baryon Masses'
     description: ''
     parameters:
+      # light quark baryon masses
+      'mass::proton' :
+          central: +0.93827208816
+          min:     +0.9382720878699999
+          max:     +0.93827208845
+          latex:   '$m_{p}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], March 2026'
+      'mass::neutron' :
+          central: +0.9395654205
+          min:     +0.93956542
+          max:     +0.939565421
+          latex:   '$m_{n}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], March 2026'
       # s baryon masses
       'mass::Lambda' :
           central: +1.115683
@@ -793,6 +808,19 @@ groups:
   - title: 'Parameters for Miscellaneous Baryon Properties'
     description: ''
     parameters:
+      # Decay parameter of the nucleons
+      'proton::alpha' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\alpha_{-}^{p}$'
+      'neutron::alpha' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\alpha_{-}^{n}$'
       # Decay parameter of the Lambda hyperon
       'Lambda::alpha' :
           central: +0.642
