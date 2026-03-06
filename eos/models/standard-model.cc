@@ -1068,6 +1068,7 @@ namespace eos
         _m_t_pole__uc(p["mass::t(pole)"], u),
         _m_W__uc(p["mass::W"], u),
         _m_Z__uc(p["mass::Z"], u),
+        _m_b_MSbar__uc(p["mass::b(MSbar)"], u),
         _mu_0__uc(p["uc::mu_0"], u),
         _mu_0b__uc(p["uc::mu_b"], u),
         _mu__uc(p["uc::mu"], u)
@@ -1077,6 +1078,130 @@ namespace eos
     WilsonCoefficients<wc::UC>
     SMComponent<components::WET::UC>::wilson_coefficients_uc(const LeptonFlavor & /*lepton_flavor*/, const bool & /*cp_conjugate*/) const
     {
+        // SM Wilson coefficients are real so cp conjugation has no effect
+
+        // RGE [dB:2017A] and [dBMS:2016A]
+
+        // RGE mu_b < mu < mu_W
+        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 2u> rgeW{ // gamma_0: eigenvalues
+                                                                                                           std::array<double, 2u>{ { -8., 4. } },
+                                                                                                           // gamma_0: V
+                                                                                                           { {
+                                                                                                               { { -3., 1.5 } },
+                                                                                                               { { 1., 1. } },
+                                                                                                           } },
+                                                                                                           // gamma_1
+                                                                                                           { {
+                                                                                                               { { -355.0 / 9.0, -502.0 / 27.0 } },
+                                                                                                               { { -35.0 / 3.0, -28.0 / 3.0 } },
+                                                                                                           } }
+        };
+
+        // RGE mu_c < mu < mu_b
+        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 4u, 10u> rgeb{
+            // gamma_0: eigenvalues
+            std::array<double, 10u>{ { -16.666666667, -16.6666666667, -14.0856421441, -8., -7.3333333333, -7.0020014176, -6., 5.7817459320, 4., 2.1947865186 } },
+            // gamma_0: V
+            { {
+                { { 0., 0., 0., 24., 0., 0., 0., 0., 11.625, 0. } },
+                { { 0., 0., 0., -8., 0., 0., 0., 0., 7.75, 0. } },
+                { { 0., 0., -7.86200331176, 4. / 3., 0.0, -2.32053410133, 0., 1.86661383453, 0.43055555556, -6.14066447729 } },
+                { { 0., 0., -47.7743291687, -4., 0., 1.80863211686, 0., -0.355178772878, 0.64583333333, 5.56529680325 } },
+                { { 0., 0., 0.380512010965, -1. / 3., 0., 0.427158994274, 0., -0.276300647008, -0.1076388888889, 0.325556486776 } },
+                { { 0., 0., 3.57148781283, 1., 0., -0.853830985457, 0., -0.323919654625, -0.1614583333, -0.395761107980 } },
+                { { 0., 0., 0., 0., -5.33333333333, 0., 1., 0., 0., 0. } },
+                { { 0., 0., 0., 0., 1., 0., 0., 0., 0., 0. } },
+                { { 0., 1., 1., 0., 0., 1., 0., 1., 1., 1. } },
+                { { 1., 0., 0., 0., 0., 0., 0., 0., 0., 0. } },
+            } },
+            // gamma_1
+            { {
+                { { -371.0 / 9.0, -542.0 / 27.0, -1412.0 / 243.0, -1369.0 / 243.0, 134.0 / 243.0, -35.0 / 162.0, 140.0 / 243.0, 167.0 / 162.0, 872.0 / 729.0, 0.0 } },
+                { { -55.0 / 3.0, -28.0 / 3.0, -416.0 / 81.0, 1280.0 / 81.0, 56.0 / 81.0, 35.0 / 27.0, -280.0 / 81.0, 76.0 / 27.0, -448.0 / 243.0, 0.0 } },
+                { { 0.0, 0.0, -4468.0 / 81.0, -31001.0 / 81.0, 400.0 / 81.0, 3397.0 / 108.0, -128.0 / 81.0, 368.0 / 27.0, 3136.0 / 243.0, 0.0 } },
+                { { 0.0, 0.0, -9262.0 / 243.0, -63401.0 / 243.0, 317.0 / 486.0, 13019.0 / 648.0, 592.0 / 243.0, -649.0 / 81.0, 21856.0 / 729.0, 0.0 } },
+                { { 0.0, 0.0, -250240.0 / 81.0, -108848.0 / 81.0, 23692.0 / 81.0, 5662.0 / 27.0, 12928.0 / 81.0, 12080.0 / 27.0, 64384.0 / 243.0, 0.0 } },
+                { { 0.0, 0.0, 62432.0 / 243.0, -26840.0 / 243.0, -15524.0 / 243.0, -6283.0 / 162.0, 40288.0 / 243.0, -3400.0 / 81.0, 246976.0 / 729.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2140.0 / 27.0, 0.0, 0.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4832.0 / 81.0, 1352.0 / 27.0, 0.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -308.0 / 3.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, -308.0 / 3.0 } },
+            } }
+        };
+
+        WilsonCoefficients<wc::UC> wc(0.0);
+        wc._sm_like_coefficients.fill(complex<double>(0.0));
+        wc._primed_coefficients.fill(complex<double>(0.0));
+
+        // only unprimed WCs are non-zero in the SM
+        // leading order in alpha_s
+        const std::array<double, 2u> lo_unprimed  = { 0.0, 1.0 };
+        // next-to-leading order in alpha_s
+        const double                 L            = 2.0 * std::log(_mu_0__uc / _m_W__uc);
+        const std::array<double, 2u> nlo_unprimed = { +15.0 + 6.0 * L, 0.0 };
+
+        static const auto & beta5        = QCD::beta_function_nf_5;
+        static const auto & beta4        = QCD::beta_function_nf_4;
+        const double        alpha_s_mu_0 = QCD::alpha_s(_mu_0__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
+
+        if (_mu__uc <= _mu_0b__uc)
+        {
+            const double alpha_s_mu_b  = QCD::alpha_s(_mu_0b__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
+            const double alpha_s_mu_b4 = QCD::alpha_s(_mu_0b__uc, alpha_s_mu_b, _mu_0b__uc, beta4);
+            const double alpha_s_mu    = QCD::alpha_s(_mu__uc, alpha_s_mu_b, _mu_0b__uc, beta4);
+            wc._alpha_s                = alpha_s_mu;
+            const double as            = alpha_s_mu / (4.0 * M_PI);
+
+            // evolve to mu_b
+            const auto _unprimed_interW = rgeW.evolve_intermediate(alpha_s_mu_b, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+
+            // matching at mu_b
+            std::array<double, 10u> lo_unprimed_b;
+            std::array<double, 10u> nlo_unprimed_b;
+            lo_unprimed_b.fill(0.0);
+            nlo_unprimed_b.fill(0.0);
+            std::copy(std::get<0>(_unprimed_interW).begin(), std::get<0>(_unprimed_interW).end(), lo_unprimed_b.begin());
+            std::copy(std::get<1>(_unprimed_interW).begin(), std::get<1>(_unprimed_interW).end(), nlo_unprimed_b.begin());
+
+            double       m_b_MSbar         = _m_b_MSbar__uc;
+            double       alpha_s_m_b_MSbar = QCD::alpha_s(_mu_0b__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
+            const double mb                = QCD::m_q_msbar(m_b_MSbar, alpha_s_m_b_MSbar, alpha_s_mu_b, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+            const double LogB              = 2.0 * std::log(_mu_0b__uc / mb);
+
+            nlo_unprimed_b[3] += (1.0 / 9.0) * (1 - LogB) * lo_unprimed_b[0] - (2.0 / 3.0) * (1 - LogB) * lo_unprimed_b[1];
+            nlo_unprimed_b[8] += (-8.0 / 27.0) * (1 - LogB) * lo_unprimed_b[0] - (2.0 / 9.0) * (1 - LogB) * lo_unprimed_b[1];
+
+            // evolve to mu
+            const auto _unprimed_inter = rgeb.evolve_intermediate(alpha_s_mu, alpha_s_mu_b4, lo_unprimed_b, nlo_unprimed_b);
+
+            std::array<double, 10u> _unprimed;
+            for (unsigned i = 0; i < 10u; ++i)
+            {
+                _unprimed[i] = std::get<0>(_unprimed_inter)[i] + as * std::get<1>(_unprimed_inter)[i];
+            }
+
+            std::copy(_unprimed.begin(), _unprimed.end(), wc._sm_like_coefficients.begin());
+
+            return wc;
+        }
+        else
+        {
+            const double alpha_s_mu = QCD::alpha_s(_mu__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
+            wc._alpha_s             = alpha_s_mu;
+            const double as         = alpha_s_mu / (4.0 * M_PI);
+
+            const auto _unprimed_inter = rgeW.evolve_intermediate(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+
+            std::array<double, 2u> _unprimed;
+            for (unsigned i = 0; i < 2u; ++i)
+            {
+                _unprimed[i] = std::get<0>(_unprimed_inter)[i] + as * std::get<1>(_unprimed_inter)[i];
+            }
+
+            std::copy(_unprimed.begin(), _unprimed.end(), wc._sm_like_coefficients.begin());
+
+            return wc;
+        }
     }
 
     /* Old-style WET sectors */
