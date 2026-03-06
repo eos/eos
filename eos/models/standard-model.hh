@@ -273,6 +273,7 @@ namespace eos
             UsedParameter _m_t_pole__uc;
             UsedParameter _m_W__uc;
             UsedParameter _m_Z__uc;
+            UsedParameter _m_b_MSbar__uc;
 
             /* Matching scales */
             UsedParameter _mu_0__uc;
