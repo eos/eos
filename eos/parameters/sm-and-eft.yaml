@@ -67,6 +67,21 @@ groups:
           unit:     'GeV'
           latex:    '$\mu^{b \to s}_{0t}$'
           comments: ''
+      # c->u matching parameters
+      'uc::mu_b' :
+          central: +4.18
+          min:     +4.18
+          max:     +4.18
+          unit:     'GeV'
+          latex:    '$\mu^{uc}_{0b}$'
+          comments: ''
+      'uc::mu_0' :
+          central: +80.0
+          min:     +80.0
+          max:     +80.0
+          unit:     'GeV'
+          latex:    '$\mu^{uc}_{0}$'
+          comments: ''
       # QCD inputs
       'QCD::alpha_s(MZ)' :
           central: +0.1184
@@ -466,6 +481,451 @@ groups:
           min:     +0.0
           unit:     '1'
           latex:    '$\textrm{Im}\,C_{5}^{\bar{s}b\bar{s}b}$'
+  # }}}
+
+  # c -> u {qqbar, gamma, l^+l^-} WET Parameters
+  # {{{
+  - title: '$c\to u\left\lbrace \bar{q}q,\, \gamma,\, \ell^+\ell^-\right\rbrace$ WET Parameters'
+    description: >
+        The list of parameters describing the $c\to u \left\lbrace
+        q\bar{q},\gamma,\ell^+\ell^-\right\rbrace$ Wilson coefficients.
+    wcxf-relevant: true
+    parameters:
+      # Factorization scales
+      'uc::mu' :
+          central: +1.3
+          min:     +1.3
+          max:     +1.3
+          unit:     'GeV'
+          latex:    '$\mu^{uc}$'
+          comments: ''
+
+      # Wilson coefficients C1 - C6 at mu = 1.3 GeV to NLL accuracy as calculated in the SM by EOS's StandardModel class.
+      # For the calculations, cf. [dBMS:2016A].
+      "uc::Re{c1}" :
+          central: -0.721090
+          min:     -0.721090
+          max:     -0.721090
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_1$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c1}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_1$
+          comment:  ''
+      "uc::Re{c2}" :
+          central: +1.039098
+          min:     +1.039098
+          max:     +1.039098
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_2$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c2}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_2$
+          comment:  ''
+      "uc::Re{c3}" :
+          central: -0.006528
+          min:     -0.006528
+          max:     -0.006528
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_3$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c3}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_3$
+          comment:  ''
+      "uc::Re{c4}" :
+          central: -0.095337
+          min:     -0.095337
+          max:     -0.095337
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_4$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c4}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_4$
+          comment:  ''
+      "uc::Re{c5}" :
+          central: +0.000422
+          min:     +0.000422
+          max:     +0.000422
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_5$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c5}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_5$
+          comment:  ''
+      "uc::Re{c6}" :
+          central: +0.000593
+          min:     +0.000593
+          max:     +0.000593
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_6$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c6}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_6$
+          comment:  ''
+      "uc::Re{c7}" :
+          central: +0.122692956
+          min:     +0.122692956
+          max:     +0.122692956
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_7$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c7}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_7$
+          comment:  ''
+      "uc::Re{c8}" :
+          central: -0.069421972
+          min:     -0.069421972
+          max:     -0.069421972
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_8$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "uc::Im{c8}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_8$
+          comment:  ''
+      "ucee::Re{c9}" :
+          central: -0.318268105
+          min:     -0.318268105
+          max:     -0.318268105
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_9^{(e)}$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "ucee::Im{c9}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_9^{(e)}$
+          comment:  ''
+      "ucee::Re{c10}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{(e)}$
+          comment:  ''
+      "ucee::Im{c10}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(e)}$
+          comment:  ''
+      "ucmumu::Re{c9}" :
+          central: -0.318268105
+          min:     -0.318268105
+          max:     -0.318268105
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_9^{(\mu)}$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "ucmumu::Im{c9}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_9^{(\mu)}$
+          comment:  ''
+      "ucmumu::Re{c10}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{(\mu)}$
+          comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
+      "ucmumu::Im{c10}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(\mu)}$
+          comment:  ''
+
+      # Primed Wilson coefficients are negligible in the SM
+      "uc::Re{c7'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{7}^{\prime}$
+          comment:  ''
+      "uc::Im{c7'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{7}^{\prime}$
+          comment:  ''
+      "uc::Re{c8'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{8'}$
+          comment:  ''
+      "uc::Im{c8'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{8'}$
+          comment:  ''
+      "ucee::Re{c9'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{9}^{\prime(e)}$
+          comment:  ''
+      "ucee::Im{c9'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{9}^{\prime(e)}$
+          comment:  ''
+      "ucee::Re{c10'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{\prime(e)}$
+          comment:  ''
+      "ucee::Im{c10'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{\prime(e)}$
+          comment:  ''
+      "ucmumu::Re{c9'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{9}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Im{c9'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{9}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Re{c10'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Im{c10'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{\prime(\mu)}$
+          comment:  ''
+
+      # scalar, pseudoscalar, and tensor c -> u ll coefficients
+      "ucee::Re{cS}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{(e)}$
+          comment:  ''
+      "ucee::Im{cS}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{(e)}$
+          comment:  ''
+      "ucee::Re{cS'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{\prime(e)}$
+          comment:  ''
+      "ucee::Im{cS'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{\prime(e)}$
+          comment:  ''
+      "ucee::Re{cP}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{(e)}$
+          comment:  ''
+      "ucee::Im{cP}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{(e)}$
+          comment:  ''
+      "ucee::Re{cP'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{\prime(e)}$
+          comment:  ''
+      "ucee::Im{cP'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{\prime(e)}$
+          comment:  ''
+      "ucee::Re{cT}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T}^{(e)}$
+          comment:  ''
+      "ucee::Im{cT}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T}^{(e)}$
+          comment:  ''
+      "ucee::Re{cT5}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T5}^{(e)}$
+          comment:  ''
+      "ucee::Im{cT5}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T5}^{(e)}$
+          comment:  ''
+      "ucmumu::Re{cS}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Im{cS}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Re{cS'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Im{cS'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Re{cP}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Im{cP}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Re{cP'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Im{cP'}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{\prime(\mu)}$
+          comment:  ''
+      "ucmumu::Re{cT}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Im{cT}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Re{cT5}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T5}^{(\mu)}$
+          comment:  ''
+      "ucmumu::Im{cT5}" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T5}^{(\mu)}$
+          comment:  ''
   # }}}
 
   # b -> s {qqbar, gamma, l^+l^-} WET Parameters
