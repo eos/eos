@@ -4,6 +4,7 @@
  * Copyright (c) 2010-2023 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -421,6 +422,9 @@ namespace eos
 
         struct SBCU
         {};
+
+        struct UC
+        {};
     } // namespace wc
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
@@ -588,6 +592,147 @@ namespace eos
              * Normalisation:
              * H^eff = 4 G_F / sqrt(2) V_cb V_ud^* \sum C_i O_i
              */
+    };
+
+    template <> struct WilsonCoefficients<wc::UC>
+    {
+            /*
+             * The operators are defined as in [dB:2017A], eq. (3.1) for c1..c6 and eq. (2.7) for others
+             */
+
+            /* Order: c1..c6, c7..c10 */
+            std::array<complex<double>, 10> _sm_like_coefficients;
+
+            /* Same order as above, with helicity flip */
+            std::array<complex<double>, 10> _primed_coefficients;
+
+            /* Scalar, pseudoscalar, and tensor coefficients */
+            std::array<complex<double>, 6> _scalar_tensor_coefficients;
+
+            double _alpha_s;
+
+            /*! Default ctor */
+            WilsonCoefficients(const double & alpha_s_mu);
+
+            inline complex<double>
+            c1() const
+            {
+                return _sm_like_coefficients[0];
+            }
+
+            inline complex<double>
+            c2() const
+            {
+                return _sm_like_coefficients[1];
+            }
+
+            inline complex<double>
+            c3() const
+            {
+                return _sm_like_coefficients[2];
+            }
+
+            inline complex<double>
+            c4() const
+            {
+                return _sm_like_coefficients[3];
+            }
+
+            inline complex<double>
+            c5() const
+            {
+                return _sm_like_coefficients[4];
+            }
+
+            inline complex<double>
+            c6() const
+            {
+                return _sm_like_coefficients[5];
+            }
+
+            inline complex<double>
+            c7() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[6];
+            }
+
+            inline complex<double>
+            c8() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[7];
+            }
+
+            inline complex<double>
+            c9() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[8];
+            }
+
+            inline complex<double>
+            c10() const
+            {
+                return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[9];
+            }
+
+            inline complex<double>
+            c7prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[6];
+            }
+
+            inline complex<double>
+            c8prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[7];
+            }
+
+            inline complex<double>
+            c9prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[8];
+            }
+
+            inline complex<double>
+            c10prime() const
+            {
+                return 4.0 * M_PI / _alpha_s * _primed_coefficients[9];
+            }
+
+            inline complex<double>
+            cS() const
+            {
+                return _scalar_tensor_coefficients[0];
+            }
+
+            inline complex<double>
+            cSprime() const
+            {
+                return _scalar_tensor_coefficients[1];
+            }
+
+            inline complex<double>
+            cP() const
+            {
+                return _scalar_tensor_coefficients[2];
+            }
+
+            inline complex<double>
+            cPprime() const
+            {
+                return _scalar_tensor_coefficients[3];
+            }
+
+            inline complex<double>
+            cT() const
+            {
+                return _scalar_tensor_coefficients[4];
+            }
+
+            inline complex<double>
+            cT5() const
+            {
+                return _scalar_tensor_coefficients[5];
+            }
     };
 } // namespace eos
 
