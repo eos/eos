@@ -5,6 +5,7 @@
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -373,6 +374,98 @@ namespace eos
             virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
     };
 
+    template <> class WilsonScanComponent<components::WET::UC> : public virtual ModelComponent<components::WET::UC>
+    {
+        protected:
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__uc;
+            UsedParameter _mu_b__uc;
+
+            /* Masses */
+            UsedParameter _m_Z__uc;
+
+            /* Renormalization scale */
+            UsedParameter _mu__uc;
+
+            /* c->u Wilson coefficients */
+            UsedParameter _re_c1, _im_c1;
+            UsedParameter _re_c2, _im_c2;
+            UsedParameter _re_c3, _im_c3;
+            UsedParameter _re_c4, _im_c4;
+            UsedParameter _re_c5, _im_c5;
+            UsedParameter _re_c6, _im_c6;
+            UsedParameter _re_c7, _im_c7;
+            UsedParameter _re_c7prime, _im_c7prime;
+            UsedParameter _re_c8, _im_c8;
+            UsedParameter _re_c8prime, _im_c8prime;
+            /* c->uee Wilson coefficients */
+            UsedParameter _e_re_c9, _e_im_c9;
+            UsedParameter _e_re_c10, _e_im_c10;
+            UsedParameter _e_re_c9prime, _e_im_c9prime;
+            UsedParameter _e_re_c10prime, _e_im_c10prime;
+            UsedParameter _e_re_cS, _e_im_cS;
+            UsedParameter _e_re_cSprime, _e_im_cSprime;
+            UsedParameter _e_re_cP, _e_im_cP;
+            UsedParameter _e_re_cPprime, _e_im_cPprime;
+            UsedParameter _e_re_cT, _e_im_cT;
+            UsedParameter _e_re_cT5, _e_im_cT5;
+            /* c->umumu Wilson coefficients */
+            UsedParameter _mu_re_c9, _mu_im_c9;
+            UsedParameter _mu_re_c10, _mu_im_c10;
+            UsedParameter _mu_re_c9prime, _mu_im_c9prime;
+            UsedParameter _mu_re_c10prime, _mu_im_c10prime;
+            UsedParameter _mu_re_cS, _mu_im_cS;
+            UsedParameter _mu_re_cSprime, _mu_im_cSprime;
+            UsedParameter _mu_re_cP, _mu_im_cP;
+            UsedParameter _mu_re_cPprime, _mu_im_cPprime;
+            UsedParameter _mu_re_cT, _mu_im_cT;
+            UsedParameter _mu_re_cT5, _mu_im_cT5;
+
+            /* four-quark and gluon */
+            std::function<complex<double>()> _c1;
+            std::function<complex<double>()> _c2;
+            std::function<complex<double>()> _c3;
+            std::function<complex<double>()> _c4;
+            std::function<complex<double>()> _c5;
+            std::function<complex<double>()> _c6;
+            std::function<complex<double>()> _c8;
+            std::function<complex<double>()> _c8prime;
+
+            /* c->ugamma */
+            std::function<complex<double>()> _c7;
+            std::function<complex<double>()> _c7prime;
+
+            /* c->uee */
+            std::function<complex<double>()> _e_c9;
+            std::function<complex<double>()> _e_c10;
+            std::function<complex<double>()> _e_c9prime;
+            std::function<complex<double>()> _e_c10prime;
+            std::function<complex<double>()> _e_cS;
+            std::function<complex<double>()> _e_cSprime;
+            std::function<complex<double>()> _e_cP;
+            std::function<complex<double>()> _e_cPprime;
+            std::function<complex<double>()> _e_cT;
+            std::function<complex<double>()> _e_cT5;
+
+            /* c->umumu */
+            std::function<complex<double>()> _mu_c9;
+            std::function<complex<double>()> _mu_c10;
+            std::function<complex<double>()> _mu_c9prime;
+            std::function<complex<double>()> _mu_c10prime;
+            std::function<complex<double>()> _mu_cS;
+            std::function<complex<double>()> _mu_cSprime;
+            std::function<complex<double>()> _mu_cP;
+            std::function<complex<double>()> _mu_cPprime;
+            std::function<complex<double>()> _mu_cT;
+            std::function<complex<double>()> _mu_cT5;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /*! c->u Wilson coefficients */
+            virtual WilsonCoefficients<wc::UC> wilson_coefficients_uc(const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const;
+    };
+
     /* Old-style WET sectors */
 
     template <> class WilsonScanComponent<components::DeltaBS1> : public virtual ModelComponent<components::DeltaBS1>
@@ -480,6 +573,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBCU>,
         // Hadronic sectors (Delta B = 2)
         public WilsonScanComponent<components::WET::SBSB>,
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        public WilsonScanComponent<components::WET::UC>,
         // Old-style WET sectors
         public WilsonScanComponent<components::DeltaBS1>
     {
@@ -522,6 +617,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBCU>,
         // Hadronic sectors (Delta B = 2)
         public WilsonScanComponent<components::WET::SBSB>,
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        public WilsonScanComponent<components::WET::UC>,
         // Old-style WET sectors
         public ConstrainedWilsonScanComponent
     {

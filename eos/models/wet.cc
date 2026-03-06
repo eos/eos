@@ -5,6 +5,7 @@
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -768,6 +769,208 @@ namespace eos
         return result;
     }
 
+    /* c->u Wilson coefficients */
+    WilsonScanComponent<components::WET::UC>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _alpha_s_Z__uc(p["QCD::alpha_s(MZ)"], u),
+        _mu_b__uc(p["QCD::mu_b"], u),
+        _m_Z__uc(p["mass::Z"], u),
+        _mu__uc(p["uc::mu"], u),
+        /* c->u */
+        _re_c1(p["uc::Re{c1}"], u),
+        _im_c1(p["uc::Im{c1}"], u),
+        _re_c2(p["uc::Re{c2}"], u),
+        _im_c2(p["uc::Im{c2}"], u),
+        _re_c3(p["uc::Re{c3}"], u),
+        _im_c3(p["uc::Im{c3}"], u),
+        _re_c4(p["uc::Re{c4}"], u),
+        _im_c4(p["uc::Im{c4}"], u),
+        _re_c5(p["uc::Re{c5}"], u),
+        _im_c5(p["uc::Im{c5}"], u),
+        _re_c6(p["uc::Re{c6}"], u),
+        _im_c6(p["uc::Im{c6}"], u),
+        _re_c7(p["uc::Re{c7}"], u),
+        _im_c7(p["uc::Im{c7}"], u),
+        _re_c7prime(p["uc::Re{c7'}"], u),
+        _im_c7prime(p["uc::Im{c7'}"], u),
+        _re_c8(p["uc::Re{c8}"], u),
+        _im_c8(p["uc::Im{c8}"], u),
+        _re_c8prime(p["uc::Re{c8'}"], u),
+        _im_c8prime(p["uc::Im{c8'}"], u),
+        /* c->uee */
+        _e_re_c9(p["ucee::Re{c9}"], u),
+        _e_im_c9(p["ucee::Im{c9}"], u),
+        _e_re_c10(p["ucee::Re{c10}"], u),
+        _e_im_c10(p["ucee::Im{c10}"], u),
+        _e_re_c9prime(p["ucee::Re{c9'}"], u),
+        _e_im_c9prime(p["ucee::Im{c9'}"], u),
+        _e_re_c10prime(p["ucee::Re{c10'}"], u),
+        _e_im_c10prime(p["ucee::Im{c10'}"], u),
+        _e_re_cS(p["ucee::Re{cS}"], u),
+        _e_im_cS(p["ucee::Im{cS}"], u),
+        _e_re_cSprime(p["ucee::Re{cS'}"], u),
+        _e_im_cSprime(p["ucee::Im{cS'}"], u),
+        _e_re_cP(p["ucee::Re{cP}"], u),
+        _e_im_cP(p["ucee::Im{cP}"], u),
+        _e_re_cPprime(p["ucee::Re{cP'}"], u),
+        _e_im_cPprime(p["ucee::Im{cP'}"], u),
+        _e_re_cT(p["ucee::Re{cT}"], u),
+        _e_im_cT(p["ucee::Im{cT}"], u),
+        _e_re_cT5(p["ucee::Re{cT5}"], u),
+        _e_im_cT5(p["ucee::Im{cT5}"], u),
+        /* c->umumu */
+        _mu_re_c9(p["ucmumu::Re{c9}"], u),
+        _mu_im_c9(p["ucmumu::Im{c9}"], u),
+        _mu_re_c10(p["ucmumu::Re{c10}"], u),
+        _mu_im_c10(p["ucmumu::Im{c10}"], u),
+        _mu_re_c9prime(p["ucmumu::Re{c9'}"], u),
+        _mu_im_c9prime(p["ucmumu::Im{c9'}"], u),
+        _mu_re_c10prime(p["ucmumu::Re{c10'}"], u),
+        _mu_im_c10prime(p["ucmumu::Im{c10'}"], u),
+        _mu_re_cS(p["ucmumu::Re{cS}"], u),
+        _mu_im_cS(p["ucmumu::Im{cS}"], u),
+        _mu_re_cSprime(p["ucmumu::Re{cS'}"], u),
+        _mu_im_cSprime(p["ucmumu::Im{cS'}"], u),
+        _mu_re_cP(p["ucmumu::Re{cP}"], u),
+        _mu_im_cP(p["ucmumu::Im{cP}"], u),
+        _mu_re_cPprime(p["ucmumu::Re{cP'}"], u),
+        _mu_im_cPprime(p["ucmumu::Im{cP'}"], u),
+        _mu_re_cT(p["ucmumu::Re{cT}"], u),
+        _mu_im_cT(p["ucmumu::Im{cT}"], u),
+        _mu_re_cT5(p["ucmumu::Re{cT5}"], u),
+        _mu_im_cT5(p["ucmumu::Im{cT5}"], u),
+
+        /* functions for four-quark and gluon operators */
+        _c1(std::bind(&wcimplementation::cartesian, _re_c1, _im_c1)),
+        _c2(std::bind(&wcimplementation::cartesian, _re_c2, _im_c2)),
+        _c3(std::bind(&wcimplementation::cartesian, _re_c3, _im_c3)),
+        _c4(std::bind(&wcimplementation::cartesian, _re_c4, _im_c4)),
+        _c5(std::bind(&wcimplementation::cartesian, _re_c5, _im_c5)),
+        _c6(std::bind(&wcimplementation::cartesian, _re_c6, _im_c6)),
+        _c8(std::bind(&wcimplementation::cartesian, _re_c8, _im_c8)),
+        _c8prime(std::bind(&wcimplementation::cartesian, _re_c8prime, _im_c8prime)),
+
+        /* functions for c->ugamma */
+        _c7(std::bind(&wcimplementation::cartesian, _re_c7, _im_c7)),
+        _c7prime(std::bind(&wcimplementation::cartesian, _re_c7prime, _im_c7prime)),
+
+        /* functions for c->uee */
+        _e_c9(std::bind(&wcimplementation::cartesian, _e_re_c9, _e_im_c9)),
+        _e_c10(std::bind(&wcimplementation::cartesian, _e_re_c10, _e_im_c10)),
+        _e_c9prime(std::bind(&wcimplementation::cartesian, _e_re_c9prime, _e_im_c9prime)),
+        _e_c10prime(std::bind(&wcimplementation::cartesian, _e_re_c10prime, _e_im_c10prime)),
+        _e_cS(std::bind(&wcimplementation::cartesian, _e_re_cS, _e_im_cS)),
+        _e_cSprime(std::bind(&wcimplementation::cartesian, _e_re_cSprime, _e_im_cSprime)),
+        _e_cP(std::bind(&wcimplementation::cartesian, _e_re_cP, _e_im_cP)),
+        _e_cPprime(std::bind(&wcimplementation::cartesian, _e_re_cPprime, _e_im_cPprime)),
+        _e_cT(std::bind(&wcimplementation::cartesian, _e_re_cT, _e_im_cT)),
+        _e_cT5(std::bind(&wcimplementation::cartesian, _e_re_cT5, _e_im_cT5)),
+
+        /* functions for c->umumu */
+        _mu_c9(std::bind(&wcimplementation::cartesian, _mu_re_c9, _mu_im_c9)),
+        _mu_c10(std::bind(&wcimplementation::cartesian, _mu_re_c10, _mu_im_c10)),
+        _mu_c9prime(std::bind(&wcimplementation::cartesian, _mu_re_c9prime, _mu_im_c9prime)),
+        _mu_c10prime(std::bind(&wcimplementation::cartesian, _mu_re_c10prime, _mu_im_c10prime)),
+        _mu_cS(std::bind(&wcimplementation::cartesian, _mu_re_cS, _mu_im_cS)),
+        _mu_cSprime(std::bind(&wcimplementation::cartesian, _mu_re_cSprime, _mu_im_cSprime)),
+        _mu_cP(std::bind(&wcimplementation::cartesian, _mu_re_cP, _mu_im_cP)),
+        _mu_cPprime(std::bind(&wcimplementation::cartesian, _mu_re_cPprime, _mu_im_cPprime)),
+        _mu_cT(std::bind(&wcimplementation::cartesian, _mu_re_cT, _mu_im_cT)),
+        _mu_cT5(std::bind(&wcimplementation::cartesian, _mu_re_cT5, _mu_im_cT5))
+    {
+    }
+
+    WilsonCoefficients<wc::UC>
+    WilsonScanComponent<components::WET::UC>::wilson_coefficients_uc(const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const
+    {
+        std::function<complex<double>()> c9, c9prime;
+        std::function<complex<double>()> c10, c10prime;
+        std::function<complex<double>()> cS, cSprime;
+        std::function<complex<double>()> cP, cPprime;
+        std::function<complex<double>()> cT, cT5;
+
+        if (LeptonFlavor::electron == lepton_flavor)
+        {
+            c9       = _e_c9;
+            c9prime  = _e_c9prime;
+            c10      = _e_c10;
+            c10prime = _e_c10prime;
+            cS       = _e_cS;
+            cSprime  = _e_cSprime;
+            cP       = _e_cP;
+            cPprime  = _e_cPprime;
+            cT       = _e_cT;
+            cT5      = _e_cT5;
+        }
+        else if (LeptonFlavor::muon == lepton_flavor)
+        {
+            c9       = _mu_c9;
+            c9prime  = _mu_c9prime;
+            c10      = _mu_c10;
+            c10prime = _mu_c10prime;
+            cS       = _mu_cS;
+            cSprime  = _mu_cSprime;
+            cP       = _mu_cP;
+            cPprime  = _mu_cPprime;
+            cT       = _mu_cT;
+            cT5      = _mu_cT5;
+        }
+        else
+        {
+            throw InternalError("WilsonScan presently only implements 'e' and 'mu' lepton flavors");
+        }
+
+        double alpha_s = 0.0;
+        if (_mu__uc < _mu_b__uc)
+        {
+            alpha_s = QCD::alpha_s(_mu_b__uc, _alpha_s_Z__uc, _m_Z__uc, QCD::beta_function_nf_5);
+            alpha_s = QCD::alpha_s(_mu__uc, alpha_s, _mu_b__uc, QCD::beta_function_nf_4);
+        }
+        else
+        {
+            alpha_s = QCD::alpha_s(_mu__uc, _alpha_s_Z__uc, _m_Z__uc, QCD::beta_function_nf_5);
+        }
+
+        complex<double>            a_s = alpha_s / 4.0 / M_PI;
+        WilsonCoefficients<wc::UC> result(alpha_s);
+        result._sm_like_coefficients = std::array<std::complex<double>, 10>{
+            { _c1(), _c2(), _c3(), _c4(), _c5(), _c6(), a_s * _c7(), a_s * _c8(), a_s * c9(), a_s * c10() }
+        };
+        result._primed_coefficients = std::array<std::complex<double>, 10>{
+            { /* we only consider c7', c8', c9' and c10' */
+              0.0, 0.0,
+             0.0, 0.0,
+             0.0, 0.0,
+             a_s * _c7prime(),
+             a_s * _c8prime(),
+             a_s * c9prime(),
+             a_s * c10prime() }
+        };
+        result._scalar_tensor_coefficients = std::array<std::complex<double>, 6>{
+            { cS(), cSprime(), cP(), cPprime(), cT(), cT5() }
+        };
+        result._alpha_s = alpha_s;
+
+        if (cp_conjugate)
+        {
+            for (auto & c : result._sm_like_coefficients)
+            {
+                c = conj(c);
+            }
+
+            for (auto & c : result._primed_coefficients)
+            {
+                c = conj(c);
+            }
+
+            for (auto & c : result._scalar_tensor_coefficients)
+            {
+                c = conj(c);
+            }
+        }
+
+        return result;
+    }
+
     /* Old-style WET sectors */
 
     /* b->s Wilson coefficients */
@@ -1009,6 +1212,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         // Hadronic sectors (Delta B = 2)
         WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        WilsonScanComponent<components::WET::UC>(parameters, options, *this),
         // Old-style WET sectors
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this)
     {
@@ -1040,6 +1245,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
         // Hadronic sectors (Delta B = 2)
         WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        WilsonScanComponent<components::WET::UC>(parameters, options, *this),
         // Old-style WET sectors
         ConstrainedWilsonScanComponent(parameters, options, *this)
     {

@@ -5,6 +5,7 @@
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018, 2021 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1058,6 +1059,26 @@ namespace eos
         return wc;
     }
 
+    SMComponent<components::WET::UC>::SMComponent(const Parameters & p, ParameterUser & u) :
+        _alpha_s_Z__uc(p["QCD::alpha_s(MZ)"], u),
+        _mu_t__uc(p["QCD::mu_t"], u),
+        _mu_b__uc(p["QCD::mu_b"], u),
+        _mu_c__uc(p["QCD::mu_c"], u),
+        _sw2__uc(p["GSW::sin^2(theta)"], u),
+        _m_t_pole__uc(p["mass::t(pole)"], u),
+        _m_W__uc(p["mass::W"], u),
+        _m_Z__uc(p["mass::Z"], u),
+        _mu_0__uc(p["uc::mu_0"], u),
+        _mu_0b__uc(p["uc::mu_b"], u),
+        _mu__uc(p["uc::mu"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::UC>
+    SMComponent<components::WET::UC>::wilson_coefficients_uc(const LeptonFlavor & /*lepton_flavor*/, const bool & /*cp_conjugate*/) const
+    {
+    }
+
     /* Old-style WET sectors */
 
     SMComponent<components::DeltaBS1>::SMComponent(const Parameters & p, ParameterUser & u) :
@@ -1273,6 +1294,8 @@ namespace eos
         SMComponent<components::WET::SBCU>(p, *this),
         // Hadronic sectors (Delta B = 2)
         SMComponent<components::WET::SBSB>(p, *this),
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        SMComponent<components::WET::UC>(p, *this),
         // Old-style WET sectors
         SMComponent<components::DeltaBS1>(p, *this)
     {

@@ -4,6 +4,7 @@
  * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -256,6 +257,35 @@ namespace eos
             virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
     };
 
+    template <> class SMComponent<components::WET::UC> : public virtual ModelComponent<components::WET::UC>
+    {
+        private:
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__uc;
+            UsedParameter _mu_t__uc;
+            UsedParameter _mu_b__uc;
+            UsedParameter _mu_c__uc;
+
+            /* GSW parameters */
+            UsedParameter _sw2__uc;
+
+            /* Masses */
+            UsedParameter _m_t_pole__uc;
+            UsedParameter _m_W__uc;
+            UsedParameter _m_Z__uc;
+
+            /* Matching scales */
+            UsedParameter _mu_0__uc;
+            UsedParameter _mu_0b__uc;
+            UsedParameter _mu__uc;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            /* c->u Wilson coefficients */
+            virtual WilsonCoefficients<wc::UC> wilson_coefficients_uc(const LeptonFlavor & lepton_flavor, const bool & cp_conjugate) const;
+    };
+
     /* Old-style WET sectors */
 
     template <> class SMComponent<components::DeltaBS1> : public virtual ModelComponent<components::DeltaBS1>
@@ -305,6 +335,8 @@ namespace eos
         public SMComponent<components::WET::SBCU>,
         // Hadronic sectors (Delta B = 2)
         public SMComponent<components::WET::SBSB>,
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        public SMComponent<components::WET::UC>,
         // Old-style WET sectors
         public SMComponent<components::DeltaBS1>
     {
