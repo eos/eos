@@ -20,6 +20,10 @@
 
 #include "python/_eos/wrappers.hh"
 
+#include "eos/utils/wilson-polynomial.hh"
+
+#include <vector>
+
 using boost::python::_;
 using boost::python::dict;
 using boost::python::len;
@@ -112,5 +116,29 @@ namespace impl
     translate_exception(const eos::Exception & e)
     {
         PyErr_SetString(PyExc_RuntimeError, e.what());
+    }
+
+    // export helper for Wilson polynomial observables
+    std::tuple<double, std::vector<double>, std::vector<double>>
+    compute_wilson_polynomial_coefficients(const eos::ObservablePtr & o, const std::vector<eos::QualifiedName> & _coefficients)
+    {
+        /*
+         * Wilson-Polynomials have the form
+         *
+         *   p = c
+         *     + \sum_i q_i P_i^2 + l_i P_i
+         *     + \sum_{i, j > i} b_ij P_i P_j
+         */
+        double              constant;
+        std::vector<double> linear;
+        std::vector<double> bilinear;
+
+        auto size = _coefficients.size();
+        linear.resize(size);
+        bilinear.resize(size * size);
+
+        eos::compute_polynomial_coefficients(o, _coefficients, constant, linear.data(), bilinear.data());
+
+        return std::make_tuple(constant, linear, bilinear);
     }
 } // namespace impl
