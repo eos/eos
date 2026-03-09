@@ -50,6 +50,8 @@
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
 
+#include <tuple>
+
 using namespace boost::python;
 using namespace eos;
 
@@ -83,6 +85,30 @@ namespace impl
                                                    >();
             }
     };
+
+    // converts a std::tuple instance to a Python tuple, from Boost Python example
+    template <typename... Args_> struct std_tuple_to_python_tuple_converter
+    {
+            template <size_t... Indices_>
+            static boost::python::tuple
+            _make_tuple(const std::index_sequence<Indices_...> &, const std::tuple<Args_...> & t)
+            {
+                return boost::python::make_tuple(std::get<Indices_>(t)...);
+            }
+
+            static PyObject *
+            convert(const std::tuple<Args_...> & t)
+            {
+                return boost::python::incref(boost::python::tuple(_make_tuple(std::make_index_sequence<sizeof...(Args_)>{}, t)).ptr());
+            }
+    };
+
+    template <typename... Args>
+    void
+    expose_std_tuple_to_python()
+    {
+        boost::python::to_python_converter<std::tuple<Args...>, std_tuple_to_python_tuple_converter<Args...>>();
+    }
 
     // converter for std::vector
     // converts a std::vector instance to a Python list
@@ -937,6 +963,21 @@ BOOST_PYTHON_MODULE(_eos)
         :return: The new observable.
         :rtype: eos.Observable
         )");
+    ::impl::expose_std_tuple_to_python<double, std::vector<double>, std::vector<double>>();
+    ::impl::std_vector_to_python_converter<double> converter_vector_double;
+    def("compute_wilson_polynomial_coefficients", &::impl::compute_wilson_polynomial_coefficients, args("reference_observable", "coefficients"),
+        R"(
+        Export the coefficients of a polynomial expansion of the reference observable.
+
+        :param reference_observable: The reference observable that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_observable: eos.Observable
+        :param coefficients: The list of names of Wilson coefficients in which the reference observable shall be expanded.
+        :type coefficients: iterable of eos.QualifiedName
+
+        :return: The coefficients of the polynomial expansion.
+        :rtype: [double, iterable, iterable]
+        )");
+
 
     def("register_python_observable", &register_python_observable);
 
