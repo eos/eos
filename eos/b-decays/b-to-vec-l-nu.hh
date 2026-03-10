@@ -40,6 +40,7 @@ namespace eos
             ~BToVectorLeptonNeutrino();
 
             // Differential Observables
+            double differential_decay_width(const double & q2) const;
             double differential_branching_ratio(const double & q2) const;
             double differential_a_fb_leptonic(const double & q2) const;
             double differential_J1c(const double & q2) const;
@@ -56,6 +57,7 @@ namespace eos
             double differential_J9 (const double & q2) const;
 
             // Differential Observables - normalized(|Vcb|=1)
+            double normalized_differential_decay_width(const double & q2) const;
             double normalized_differential_branching_ratio(const double & q2) const;
 
             // Four Differential Observables - normalized(|Vcb|=1)
@@ -64,6 +66,7 @@ namespace eos
             // Integrated Observables
             class IntermediateResult;
             const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const;
 

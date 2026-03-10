@@ -378,6 +378,19 @@ namespace eos
 
     // |Vcb|=1
     double
+    BToVectorLeptonNeutrino::normalized_differential_decay_width(const double & q2) const
+    {
+        return _imp->differential_angular_observables(q2).normalized_decay_width();
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_decay_width(const double & q2) const
+    {
+        return _imp->differential_angular_observables(q2).normalized_decay_width() * std::norm(_imp->v_Ub());
+    }
+
+    // |Vcb|=1
+    double
     BToVectorLeptonNeutrino::normalized_differential_branching_ratio(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).normalized_decay_width() * _imp->tau_B / _imp->hbar;
@@ -498,6 +511,12 @@ namespace eos
     BToVectorLeptonNeutrino::normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * _imp->tau_B / _imp->hbar;
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_decay_width(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->v_Ub());
     }
 
     double
