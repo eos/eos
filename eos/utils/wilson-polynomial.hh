@@ -29,6 +29,9 @@
 
 namespace eos
 {
+    void compute_polynomial_coefficients(const ObservablePtr &, const std::vector<QualifiedName> &, double & constant, std::vector<double> & linear,
+                                         std::vector<std::vector<double>> & bilinear);
+
     exp::Expression make_polynomial(const ObservablePtr &, const std::vector<QualifiedName> &);
 
     exp::Expression make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::vector<QualifiedName> & coefficients);
