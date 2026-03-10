@@ -489,6 +489,12 @@ namespace eos
     }
 
     double
+    BToPseudoscalarLeptonNeutrino::differential_decay_width(const double & s) const
+    {
+        return _imp->differential_decay_width(s);
+    }
+
+    double
     BToPseudoscalarLeptonNeutrino::differential_branching_ratio(const double & s) const
     {
         return _imp->differential_branching_ratio(s);
@@ -511,6 +517,15 @@ namespace eos
         };
 
         return integrate<1, 1>(integrand, -1.0, +1.0, _imp->cub_conf);
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::integrated_decay_width(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::differential_decay_width,
+                _imp.get(), std::placeholders::_1);
+
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -541,6 +556,12 @@ namespace eos
         };
 
         return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0}, _imp->cub_conf);
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::normalized_differential_decay_width(const double & s) const
+    {
+        return _imp->normalized_differential_decay_width(s);
     }
 
     // normalized_differential_branching_ratio (|V_Ub|=1)
