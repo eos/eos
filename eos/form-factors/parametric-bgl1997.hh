@@ -317,6 +317,16 @@ namespace eos
             virtual double f_para_T(const double & s) const;
             virtual double f_long_T(const double & s) const;
 
+            // Saturations of the dispersive bounds
+            // J = 0
+            double saturation_0p_v() const;
+            double saturation_0m_a() const;
+            // J = 1
+            double saturation_1m_v() const;
+            double saturation_1p_a() const;
+            double saturation_1m_t() const;
+            double saturation_1p_t5() const;
+
             /*!
              * References used in the computation of our (pseudo)observables.
              */
@@ -362,6 +372,16 @@ namespace eos
             double a_0_0() const;
 
             virtual double f_plus_T(const double & s) const;
+
+            // Saturations of the dispersive bounds
+            // J = 0
+            double saturation_0p_v() const;
+            double saturation_0m_a() const;
+            // J = 1
+            double saturation_1m_v() const;
+            double saturation_1p_a() const;
+            double saturation_1m_t() const;
+            double saturation_1p_t5() const;
 
             /*!
              * References used in the computation of our (pseudo)observables.

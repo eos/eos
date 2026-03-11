@@ -338,6 +338,60 @@ namespace eos
     }
 
     template<typename Process_>
+    double BGL1997FormFactors<Process_, PToV>::saturation_0p_v() const
+    {
+        return 0.0;
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToV>::saturation_0m_a() const
+    {
+        std::array<double, 4> coefficients;
+        coefficients[0] = a_F2_0();
+        std::copy(_a_F2.begin(), _a_F2.end(), coefficients.begin() + 1);
+
+        return std::inner_product(coefficients.begin(), coefficients.end(), coefficients.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToV>::saturation_1m_v() const
+    {
+        return std::inner_product(_a_g.begin(), _a_g.end(), _a_g.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToV>::saturation_1p_a() const
+    {
+        std::array<double, 4> coefficients_F1;
+        coefficients_F1[0] = a_F1_0();
+        std::copy(_a_F1.begin(), _a_F1.end(), coefficients_F1.begin() + 1);
+
+        return std::inner_product(coefficients_F1.begin(), coefficients_F1.end(), coefficients_F1.begin(), 0.0)
+          + std::inner_product(_a_f.begin(), _a_f.end(), _a_f.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToV>::saturation_1m_t() const
+    {
+        return std::inner_product(_a_T1.begin(), _a_T1.end(), _a_T1.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToV>::saturation_1p_t5() const
+    {
+        std::array<double, 4> coefficients_T2;
+        coefficients_T2[0] = a_T2_0();
+        std::copy(_a_T2.begin(), _a_T2.end(), coefficients_T2.begin() + 1);
+
+        std::array<double, 4> coefficients_T23;
+        coefficients_T23[0] = a_T23_0();
+        std::copy(_a_T23.begin(), _a_T23.end(), coefficients_T23.begin() + 1);
+
+        return std::inner_product(coefficients_T2.begin(), coefficients_T2.end(), coefficients_T2.begin(), 0.0)
+          + std::inner_product(coefficients_T23.begin(), coefficients_T23.end(), coefficients_T23.begin(), 0.0);
+    }
+
+    template<typename Process_>
     const std::set<ReferenceName> BGL1997FormFactors<Process_, PToV>::references
     {
         "BGL:1997A"_rn
@@ -477,6 +531,46 @@ namespace eos
     double BGL1997FormFactors<Process_, PToP>::f_plus_T(const double & /*s*/) const
     {
         return 0.0; //  TODO
+    }
+
+    template <typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::saturation_0p_v() const
+    {
+        std::array<double, 4> coefficients;
+        coefficients[0] = a_0_0();
+        std::copy(_a_f_0.begin(), _a_f_0.end(), coefficients.begin() + 1);
+
+        return std::inner_product(coefficients.begin(), coefficients.end(), coefficients.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::saturation_0m_a() const
+    {
+        return 0.;
+    }
+
+    template <typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::saturation_1m_v() const
+    {
+        return std::inner_product(_a_f_p.begin(), _a_f_p.end(), _a_f_p.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::saturation_1p_a() const
+    {
+        return 0.;
+    }
+
+    template <typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::saturation_1m_t() const
+    {
+        return std::inner_product(_a_f_t.begin(), _a_f_t.end(), _a_f_t.begin(), 0.0);
+    }
+
+    template<typename Process_>
+    double BGL1997FormFactors<Process_, PToP>::saturation_1p_t5() const
+    {
+        return 0.;
     }
 
     template<typename Process_>
