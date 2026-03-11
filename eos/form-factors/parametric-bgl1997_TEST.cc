@@ -269,6 +269,13 @@ class BGL1997FormFactorsTest :
 
                 TEST_CHECK_NEARLY_EQUAL(ff.t_1(0.0),  ff.t_2(0.0),                                                                      eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.t_23(t_m), (mB + mV) * (mB * mB + 3.0 * mV * mV - t_m) / (8.0 * mB * mV * mV) * ff.t_2(t_m), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(),  0.000334093, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_v(),  3.0e-05,     eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(),  4.45454e-05, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_t(),  3.0e-05,     eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_t5(), 3.89269e-05, eps);
             }
 
             /* B -> D FFs*/
@@ -342,6 +349,13 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.158273, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.172925, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+4.0), 0.190572, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(),  0.0,          eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(),  1.45487e-05,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_v(),  3.0e-05,      eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(),  0.0,          eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_t(),  3.0e-05,      eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_t5(), 0.0,          eps);
             }
 
             /* Adapt the parameters */
