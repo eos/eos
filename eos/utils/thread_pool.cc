@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2021 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -63,18 +63,19 @@ namespace eos
 
                 do
                 {
-                    {
-                        Lock l(*terminate_mutex);
-                        if (terminate)
-                        {
-                            break;
-                        }
-                    }
-
                     job = 0;
 
                     {
                         Lock l(*job_mutex);
+
+                        // Before we check the queue: have we been asked to terminate?
+                        {
+                            Lock l(*terminate_mutex);
+                            if (terminate)
+                            {
+                                break;
+                            }
+                        }
 
                         if (queue.empty())
                         {
@@ -83,6 +84,7 @@ namespace eos
                             waiting_for_jobs -= 1;
                         }
 
+                        // If we have been woken up and there is no job: have we been asked to terminate?
                         if (queue.empty())
                         {
                             Lock l(*terminate_mutex);
