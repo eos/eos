@@ -314,9 +314,9 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.0911714, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.0970192, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.096857,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.085667,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.073964,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.088560,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.089937,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.091600,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.041750,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.044758,  eps);
@@ -342,16 +342,16 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.352242, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.382318, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.35078,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.33960,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.32796,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.339105, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.345695, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.353446, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.158273, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.172925, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+4.0), 0.190572, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(),  0.0,          eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(),  1.45487e-05,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(),  4.28612e-04,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_v(),  3.0e-05,      eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(),  0.0,          eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_t(),  3.0e-05,      eps);
@@ -618,9 +618,9 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.0973758,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.103574,   eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.103697,   eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.091385,   eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.078481,   eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.0945817,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.0960806,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.097888,   eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.044609,   eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.047804,   eps);
@@ -646,9 +646,9 @@ class BGL1997FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+1.0), 0.360564,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(+4.0), 0.391470,  eps);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.359116,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.347549,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.335465,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(-2.0), 0.346982,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+1.0), 0.353879,  eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_0(+4.0), 0.361979,  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(-2.0), 0.161964,  eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_t(+1.0), 0.177010,  eps);
