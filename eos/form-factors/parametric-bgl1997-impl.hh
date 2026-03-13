@@ -492,7 +492,7 @@ namespace eos
     double BGL1997FormFactors<Process_, PToP>::a_0_0() const
     {
         const double z0   = _traits._z(0.0, _traits.t_0, _traits.tp());
-        const double x_f0 = _traits.blaschke_0p(0.0) * _phi(0.0, _traits.t_0, 16, 1, 1, 1, _traits.chi_0p);
+        const double x_f0 = _traits.tm() * _traits.blaschke_0p(0.0) * _phi(0.0, _traits.t_0, 16, 1, 1, 1, _traits.chi_0p);
         const double x_fp = _traits.blaschke_1m(0.0) * _phi(0.0, _traits.t_0, 48, 3, 3, 2, _traits.chi_1m);
         std::array<double, 4> an, zn;
         zn[0] = 1.0;
@@ -508,7 +508,8 @@ namespace eos
     template<typename Process_>
     double BGL1997FormFactors<Process_, PToP>::f_0(const double & s) const
     {
-        const double phi      = _phi(s, _traits.t_0, 16, 1, 1, 1, _traits.chi_0p);
+        // Note that EOS's definition of f0 = fp + t / tm * fm differs from the one in [BGL:1997A]
+        const double phi      = _traits.tm() * _phi(s, _traits.t_0, 16, 1, 1, 1, _traits.chi_0p);
         const double z        = _traits._z(s, _traits.t_0, _traits.tp());
         const double series   = a_0_0() + _a_f_0[0] * z + _a_f_0[1] * z * z + _a_f_0[2] * z * z * z;
         const double blaschke = _traits.blaschke_0p(s);

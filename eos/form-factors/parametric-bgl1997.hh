@@ -363,9 +363,10 @@ namespace eos
 
             static FormFactors<PToP> * make(const Parameters & parameters, const Options & options);
 
-            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const                       double & chi) const;
+            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const;
 
             virtual double f_p(const double & s) const;
+            // Note that EOS's definition of f0 = fp + t / tm * fm differs from the one in [BGL:1997A]
             virtual double f_0(const double & s) const;
             virtual double f_t(const double & s) const;
 
