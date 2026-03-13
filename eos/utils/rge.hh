@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -103,7 +104,7 @@ namespace eos
 
             // temporary storage objects
             GSLMatrixPtr _tmp_matrix, _tmp_matrix_2;
-            GSLVectorPtr _tmp_vector, _tmp_vector_2;
+            GSLVectorPtr _tmp_vector, _tmp_vector_2, _tmp_vector_3;
 
         public:
             /*!
@@ -140,6 +141,23 @@ namespace eos
              */
             std::array<double, dim_> evolve(const double & alpha_s_mu, const double & alpha_s_0, const std::array<double, dim_> & c_0_0,
                                             const std::array<double, dim_> & c_0_1) const;
+
+            /*!
+             * Specialized version of evolve(...) with identical arguments.
+             * Returns the evolved Wilson coefficients using evolve() expanded as a series in powers of alpha(mu) / (4 pi),
+             * for further processes. This is needed, for example when running the c->ull Wilson coefficients from
+             * the electroweak matching scale down to the charm-quark scale, with intermediate matching at the bottom-quark scale.
+             *
+             *   c_0 = c_0_0 + alpha_(mu) / (4 pi) c_0_1 + O(alpha_(mu)^2)
+             *
+             * @param alpha_s_mu The value of the strong coupling constant at the scale mu.
+             * @param alpha_s_0 The value of the strong coupling constant at the scale mu_0.
+             * @param c_0_0 The initial conditions for the Wilson coefficients at the scale mu_0 at order alpha_s^0
+             * @param c_0_1 The initial conditions for the Wilson coefficients at the scale mu_0 at order alpha_s^1,
+             *              reduced by r^T . c_0_0, cf. [BBL:1995A], p. 34, eqs. (III.84) & (III.99).
+             */
+            std::tuple<std::array<double, dim_>, std::array<double, dim_>>
+            evolve_intermediate(const double & alpha_s_mu, const double & alpha_s_0, const std::array<double, dim_> & c_0_0, const std::array<double, dim_> & c_0_1) const;
     };
 } // namespace eos
 
