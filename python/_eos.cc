@@ -570,6 +570,11 @@ BOOST_PYTHON_MODULE(_eos)
             // alpha_s
             .def("alpha_s", &Model::alpha_s);
 
+    class_<ObservableCache::ObservableId>("ObservableId", R"(
+    )",
+                                          no_init)
+            .def("value", &ObservableCache::ObservableId::value, return_value_policy<return_by_value>());
+
     // ObservableCache
     class_<ObservableCache>("ObservableCache", R"(
         Provides a cache for the efficient evaluation of observables.
