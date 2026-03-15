@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -159,11 +159,11 @@ namespace eos::exp
     class CachedObservableExpression
     {
         public:
-            ObservableCache         cache;
-            ObservableCache::Id     id;
-            KinematicsSpecification kinematics_specification;
+            ObservableCache               cache;
+            ObservableCache::ObservableId id;
+            KinematicsSpecification       kinematics_specification;
 
-            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::Id & id, const KinematicsSpecification & kinematics_specification) :
+            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::ObservableId & id, const KinematicsSpecification & kinematics_specification) :
                 cache(cache),
                 id(id),
                 kinematics_specification(kinematics_specification)

@@ -161,7 +161,7 @@ class ObservableTest : public TestCase
 
                 TEST_CHECK_RELATIVE_ERROR(obs->evaluate(), obs_num->evaluate() / obs_denom->evaluate(), 1e-3);
 
-                ObservableCache::Id obs_id;
+                ObservableCache::ObservableId obs_id;
                 TEST_CHECK_NO_THROW(obs_id = cache.add(obs));
 
                 TEST_CHECK_NO_THROW(cache.update());

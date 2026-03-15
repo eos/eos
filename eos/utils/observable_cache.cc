@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2026 Danny van Dyk
+ * Copyright (c) 2011      Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -52,16 +52,16 @@ namespace eos
             std::vector<ObservablePtr> observables;
 
             // Contains each regular observable and its associated index
-            std::vector<std::tuple<ObservablePtr, ObservableCache::Id>> regular_observables;
+            std::vector<std::tuple<ObservablePtr, ObservableCache::ObservableId>> regular_observables;
 
             // Contains each cacheable observable and its associated index
-            std::multimap<std::type_index, std::tuple<CacheableObservable *, ObservableCache::Id>> cacheable_observables;
+            std::multimap<std::type_index, std::tuple<CacheableObservable *, ObservableCache::ObservableId>> cacheable_observables;
 
             // Contains each cached observable and its associated index
-            std::vector<std::tuple<ObservablePtr, ObservableCache::Id>> cached_observables;
+            std::vector<std::tuple<ObservablePtr, ObservableCache::ObservableId>> cached_observables;
 
             // Contains each expression observable and its associated index
-            std::vector<std::tuple<ObservablePtr, ObservableCache::Id>> expression_observables;
+            std::vector<std::tuple<ObservablePtr, ObservableCache::ObservableId>> expression_observables;
 
             // Contains values of all observables
             std::vector<double> predictions;
@@ -108,7 +108,7 @@ namespace eos
                 return true;
             }
 
-            ObservableCache::Id
+            ObservableCache::ObservableId
             add(const ObservablePtr & observable, const ObservableCache & cache)
             {
                 if (observable->parameters() != parameters)
@@ -122,7 +122,7 @@ namespace eos
                 {
                     if (identical_observables(*i, observable))
                     {
-                        return index;
+                        return ObservableCache::ObservableId(index);
                     }
                 }
 
@@ -142,9 +142,9 @@ namespace eos
 
                     observables.push_back(cached_expression_observable);
                     predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                    expression_observables.push_back(std::make_tuple(cached_expression_observable, index));
+                    expression_observables.push_back(std::make_tuple(cached_expression_observable, ObservableCache::ObservableId(index)));
 
-                    return index;
+                    return ObservableCache::ObservableId(index);
                 }
                 else if (nullptr != cacheable_observable) // is the new observable cacheable?
                 {
@@ -185,26 +185,26 @@ namespace eos
                         // add the newly created cached observable
                         observables.push_back(cached_observable);
                         predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                        cached_observables.push_back(std::make_tuple(cached_observable, index));
+                        cached_observables.push_back(std::make_tuple(cached_observable, ObservableCache::ObservableId(index)));
 
-                        return index;
+                        return ObservableCache::ObservableId(index);
                     }
 
                     // else add this new cacheable observable
                     observables.push_back(observable);
                     predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                    cacheable_observables.insert(std::make_pair(type_index, std::make_tuple(cacheable_observable, index)));
+                    cacheable_observables.insert(std::make_pair(type_index, std::make_tuple(cacheable_observable, ObservableCache::ObservableId(index))));
 
-                    return index;
+                    return ObservableCache::ObservableId(index);
                 }
                 else
                 {
                     // add this new regular observable
                     observables.push_back(observable);
                     predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                    regular_observables.push_back(std::make_tuple(observable, index));
+                    regular_observables.push_back(std::make_tuple(observable, ObservableCache::ObservableId(index)));
 
-                    return index;
+                    return ObservableCache::ObservableId(index);
                 }
 
                 throw InternalError("should not be reached");
@@ -218,7 +218,7 @@ namespace eos
 
     ObservableCache::~ObservableCache() {}
 
-    ObservableCache::Id
+    ObservableCache::ObservableId
     ObservableCache::add(const ObservablePtr & observable)
     {
         return _imp->add(observable, *this);
@@ -236,17 +236,17 @@ namespace eos
         {
             auto f = [=, this]()
             {
-                auto & o   = std::get<0>(co.second);
-                auto & idx = std::get<1>(co.second);
+                auto & o  = std::get<0>(co.second);
+                auto & id = std::get<1>(co.second);
                 try
                 {
-                    _imp->predictions[idx] = o->evaluate();
+                    _imp->predictions[id.value()] = o->evaluate();
                 }
                 catch (eos::Exception & e)
                 {
                     Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating cacheable observable '" << o->name() << "["
                                                                                   << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
-                    _imp->predictions[idx] = std::numeric_limits<double>::quiet_NaN();
+                    _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
                 }
             };
             cacheable_tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>(f)));
@@ -260,17 +260,17 @@ namespace eos
         {
             auto f = [=, this]()
             {
-                auto & o   = std::get<0>(ro);
-                auto & idx = std::get<1>(ro);
+                auto & o  = std::get<0>(ro);
+                auto & id = std::get<1>(ro);
                 try
                 {
-                    _imp->predictions[idx] = o->evaluate();
+                    _imp->predictions[id.value()] = o->evaluate();
                 }
                 catch (eos::Exception & e)
                 {
                     Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating regular observable '" << o->name() << "["
                                                                                   << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
-                    _imp->predictions[idx] = std::numeric_limits<double>::quiet_NaN();
+                    _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
                 }
             };
             regular_tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>(f)));
@@ -290,17 +290,17 @@ namespace eos
         {
             auto f = [=, this]()
             {
-                auto & o   = std::get<0>(co);
-                auto & idx = std::get<1>(co);
+                auto & o  = std::get<0>(co);
+                auto & id = std::get<1>(co);
                 try
                 {
-                    _imp->predictions[idx] = o->evaluate();
+                    _imp->predictions[id.value()] = o->evaluate();
                 }
                 catch (eos::Exception & e)
                 {
                     Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating cached observable '" << o->name() << "["
                                                                                   << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
-                    _imp->predictions[idx] = std::numeric_limits<double>::quiet_NaN();
+                    _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
                 }
             };
             cached_tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>(f)));
@@ -328,17 +328,17 @@ namespace eos
         // are evaluated very quickly.
         for (auto eo : _imp->expression_observables)
         {
-            auto & o   = std::get<0>(eo);
-            auto & idx = std::get<1>(eo);
+            auto & o  = std::get<0>(eo);
+            auto & id = std::get<1>(eo);
             try
             {
-                _imp->predictions[idx] = o->evaluate();
+                _imp->predictions[id.value()] = o->evaluate();
             }
             catch (eos::Exception & e)
             {
                 Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating expression observable '" << o->name() << "["
                                                                               << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
-                _imp->predictions[idx] = std::numeric_limits<double>::quiet_NaN();
+                _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
             }
         }
     }
@@ -350,15 +350,15 @@ namespace eos
     }
 
     double
-    ObservableCache::operator[] (const ObservableCache::Id & id) const
+    ObservableCache::operator[] (const ObservableCache::ObservableId & id) const
     {
-        return _imp->predictions[id];
+        return _imp->predictions[id.value()];
     }
 
     ObservablePtr
-    ObservableCache::observable(const ObservableCache::Id & id) const
+    ObservableCache::observable(const ObservableCache::ObservableId & id) const
     {
-        return _imp->observables[id];
+        return _imp->observables[id.value()];
     }
 
     unsigned
