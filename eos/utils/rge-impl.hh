@@ -36,6 +36,12 @@ namespace eos
             static constexpr double beta_1 = 116.0 / 3.0;
     };
 
+    template <> struct QCDBetaFunction<4u>
+    {
+            static constexpr double beta_0 = 25.0 / 3.0;
+            static constexpr double beta_1 = 154.0 / 3.0;
+    };
+
     template <unsigned nf_, unsigned dim_>
     MultiplicativeRenormalizationGroupEvolution<accuracy::LL, nf_, dim_>::MultiplicativeRenormalizationGroupEvolution(const std::array<double, dim_> &                   gamma_0_ev,
                                                                                                                       const std::array<std::array<double, dim_>, dim_> & V) :
