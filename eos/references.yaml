@@ -1254,6 +1254,11 @@ D0:2011A:
   inspire-id: Abazov:2011ry
   title: Measurement of the CP-violating phase $\phi_s^{J/\psi \phi}$ using the flavor-tagged
     decay $B_s^0 \rightarrow J/\psi \phi$ in 8 fb$^{-1}$ of $p \bar p$ collisions
+dB:2017A:
+  authors: de Boer, Stefan
+  inspire-id: deBoer:2017dgn
+  url: https://doi.org/10.17877/DE290R-18060
+  title: Probing the standard model with rare charm decays
 DBG:2013A:
   authors: Dutta, Rupak and Bhol, Anupama and Giri, Anjan K.
   eprint:
