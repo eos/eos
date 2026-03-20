@@ -275,3 +275,142 @@ class MultiplicativeRGENLLTest : public TestCase
             }
         }
 } multiplicative_rge_nll_test;
+
+class MultiplicativeRGENNLLTest : public TestCase
+{
+    public:
+        MultiplicativeRGENNLLTest() :
+            TestCase("multiplicative_rge_nnll_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            // trivial test case (nf = 5, dim = 10)
+            {
+                const std::array<double, 10u>                  gamma_0_ev{ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+                const std::array<std::array<double, 10u>, 10u> V{
+                    { { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 } }
+                };
+                const std::array<std::array<double, 10u>, 10u> gamma_1{
+                    { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } }
+                };
+                const std::array<std::array<double, 10u>, 10u> gamma_2{
+                    { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+                     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 } }
+                };
+                const MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, 5u, 10u> rge(gamma_0_ev, V, gamma_1, gamma_2);
+                const std::array<double, 10u>                                              c_0_0{ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
+                const std::array<double, 10u>                                              c_0_1{ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
+                const std::array<double, 10u>                                              c_0_2{ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
+
+                const double            alpha_s_mu = 0.3 * 4.0 * M_PI;
+                const double            alpha_s_0  = 0.1 * 4.0 * M_PI;
+                std::array<double, 10u> result     = rge.evolve(alpha_s_mu, alpha_s_0, c_0_0, c_0_1, c_0_2);
+
+                static const double eps = 1.0e-15;
+                TEST_CHECK_NEARLY_EQUAL(result[0], 0.111, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[1], 0.222, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[2], 0.333, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[3], 0.444, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[4], 0.555, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[5], 0.666, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[6], 0.777, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[7], 0.888, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[8], 0.999, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[9], 1.11, eps);
+            }
+
+            // current-current test case (nf = 5, dim = 2)
+            {
+                const double                                 sq2 = std::sqrt(2.0);
+                const std::array<double, 2u>                 gamma_0_ev{ -8.0, +4.0 };
+                const std::array<std::array<double, 2u>, 2u> V{
+                    {
+                     { -1.0 / sq2, +1.0 / sq2 },
+                     { +1.0 / sq2, +1.0 / sq2 },
+                     }
+                };
+                const std::array<std::array<double, 2u>, 2u> gamma_1{
+                    { { -209.0 / 18.0, +41.0 / 6.0 }, { +41.0 / 6.0, -209.0 / 18.0 } }
+                };
+                const std::array<std::array<double, 2u>, 2u> gamma_2{
+                    { { +239.0 / 18.0, -43.0 / 6.0 }, { -43.0 / 6.0, +239.0 / 18.0 } }
+                };
+                const MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, 5u, 2u> rge(gamma_0_ev, V, gamma_1, gamma_2);
+                const std::array<double, 2u>                                              c_0_0{ 0.0, 1.0 };
+                const std::array<double, 2u>                                              c_0_1{ 11.0 / 2.0, -11.0 / 6.0 };
+                const std::array<double, 2u>                                              c_0_2{ -9.0 / 2.0, -13.0 / 6.0 };
+
+                const double           alpha_s_mu = 0.218017;
+                const double           alpha_s_0  = 0.121864;
+                std::array<double, 2u> result     = rge.evolve(alpha_s_mu, alpha_s_0, c_0_0, c_0_1, c_0_2);
+
+                static const double eps = 1.0e-8;
+                TEST_CHECK_NEARLY_EQUAL(result[0], -0.171944007908276, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[1], +1.072074409306490, eps);
+            }
+
+            // non-symmetric test case (nf = 5, dim = 2)
+            {
+                const std::array<double, 2u>                 gamma_0_ev{ -16.0, +2.0 };
+                const std::array<std::array<double, 2u>, 2u> V{
+                    {
+                     { 1.0 / 6.0, -4.0 / 3.0 },
+                     { 1.0, 1.0 },
+                     }
+                };
+                const std::array<std::array<double, 2u>, 2u> gamma_1{
+                    {
+                     { -28.0 / 3.0, -374.0 / 3.0 },
+                     { -2044.0 / 27.0, -2975.0 / 18.0 },
+                     }
+                };
+                const std::array<std::array<double, 2u>, 2u> gamma_2{
+                    {
+                     { -25.0 / 3.0, -377.0 / 3.0 },
+                     { -2047.0 / 27.0, -2978.0 / 18.0 },
+                     }
+                };
+                const MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, 5u, 2u> rge(gamma_0_ev, V, gamma_1, gamma_2);
+                const std::array<double, 2u>                                              c_0_0{ 0.0, 1.0 };
+                const std::array<double, 2u>                                              c_0_1{ 11.0 / 2.0, -11.0 / 6.0 };
+                const std::array<double, 2u>                                              c_0_2{ -9.0 / 2.0, -13.0 / 6.0 };
+
+                const double           alpha_s_mu = 0.218017;
+                const double           alpha_s_0  = 0.121864;
+                std::array<double, 2u> result     = rge.evolve(alpha_s_mu, alpha_s_0, c_0_0, c_0_1, c_0_2);
+
+                static const double eps = 1.0e-8;
+                TEST_CHECK_NEARLY_EQUAL(result[0], +0.23134566937815798, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[1], +1.82581433200249621, eps);
+            }
+        }
+} multiplicative_rge_nnll_test;
