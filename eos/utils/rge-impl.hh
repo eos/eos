@@ -192,7 +192,7 @@ namespace eos
     {
         // NLL evolution:
         //   U = (1 + a_s_mu J) . U_0 . (1 - a_s_0 J)
-        //   c(mu) = U . c_0(mu_0) + a_s_0 * U_0 . c_0_1(mu_0)
+        //   c(mu) = U . c_0(mu_0) + a_s_0 * U_0 . c_0_1(mu_0) + a_s_mu a_s_0 * J . U_0 . c_0_1
         // where
         //   a_s(x) = alpha_s(x) / (4 pi),
         //   U_0 = V . diag[ eta^(gamma_0_ev / (2 * beta_0)) ] . V^-1
@@ -258,7 +258,7 @@ namespace eos
     {
         // NLL evolution:
         //   U = (1 + a_s_mu J) . U_0 . (1 - a_s_0 J)
-        //   c(mu) = U . c_0(mu_0) + a_s_0 * U_0 . c_0_1(mu_0)
+        //   c(mu) = U . c_0(mu_0) + a_s_0 * U_0 . c_0_1(mu_0) + a_s_mu a_s_0 * J . U_0 . c_0_1
         // where
         //   a_s(x) = alpha_s(x) / (4 pi),
         //   U_0 = V . diag[ eta^(gamma_0_ev / (2 * beta_0)) ] . V^-1
