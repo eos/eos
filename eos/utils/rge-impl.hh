@@ -357,7 +357,8 @@ namespace eos
         _tmp_matrix(make_gsl_matrix(dim_, dim_)),
         _tmp_matrix_2(make_gsl_matrix(dim_, dim_)),
         _tmp_vector(make_gsl_vector(dim_)),
-        _tmp_vector_2(make_gsl_vector(dim_))
+        _tmp_vector_2(make_gsl_vector(dim_)),
+        _tmp_vector_3(make_gsl_vector(dim_))
     {
         // V <- V
         // G1 <- gamma_1
@@ -553,6 +554,165 @@ namespace eos
         }
 
         return result;
+    }
+
+    template <unsigned nf_, unsigned dim_>
+    std::tuple<std::array<double, dim_>, std::array<double, dim_>, std::array<double, dim_>>
+    MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, nf_, dim_>::evolve_intermediate(const double & alpha_s_mu, const double & alpha_s_0,
+                                                                                                const std::array<double, dim_> & c_0_0, const std::array<double, dim_> & c_0_1,
+                                                                                                const std::array<double, dim_> & c_0_2) const
+    {
+        // NNLL evolution:
+        // cf. [BFS:2001A], p. 32, eq. (90)
+        //   U = (1 + a_s_mu J1 + a_s_mu^2 J2) . U_0 . (1 - a_s_0 J1 - a_s_0^2 (J2 - J1^2))
+        //   U_1 = (1 + a_s_mu J1) . U_0 . (1 - a_s_0 J1)
+        //   c(mu) = U . c(mu_0)
+        //         = U . c_0(mu_0) + a_s_0 . U_1 . c_0_1(mu_0)
+        //         + a_s_0^1 a_s_mu^2 J2 . U_0 . (1 - a_s_0 J1) . c_0_1(mu_0)
+        //         + a_s_0^2 U_0 . c_0_2(mu_0)
+        //         + a_s_0^2 (a_s_mu J1 + a_s_mu^2 J2) . U_0 . c_0_2(mu_0) + O(a_s_mu_0^3)
+        // where
+        //   a_s(x) = alpha_s(x) / (4 pi),
+        //   U_0 = V . diag[ eta^(gamma_0_ev / (2 * beta_0)) ] . V^-1
+        //   J1 = V . H1 . V^-1,
+        //   J2 = V . H2 . V^-1,
+        // since
+        //   gamma_0 = V^-1,T . diag[ gamma_0_ev ] . V^T,
+        //   H1 = delta_ij gamma_0_ev_i beta_1 / (2 beta_0^2) - G1_ij / (2 beta_0 + gamma_0_ev_i - gamma_0_ev_j),
+        //   H2 = delta_ij gamma_0_ev_i beta_2 / (4 beta_0^2)
+        //          + sum_k ((2 beta_0 + gamma_0_ev_i - gamma_0_ev_k)/(4 beta_0 + gamma_0_ev_i - gamma_0_ev_j)
+        //                   * ( H1[i,k]H1[k,j] - beta_1 / beta_0 H1[i,j] delta_jk ) )
+        //          - G2_ij / (4 beta_0 + gamma_0_ev_i - gamma_0_ev_j)
+        //   G1 = V^-1 . gamma_1^T . V
+        //   G2 = V^-1 . gamma_2^T . V
+
+        const double eta    = alpha_s_0 / alpha_s_mu;
+        const double beta_0 = QCDBetaFunction<nf_>::beta_0;
+
+        gsl_matrix_set_identity(_U_0.get());
+
+        // U_0 <- diag[ eta^(gamma_0_ev / (2 * beta_0)) ]
+        // cf. [BBL:1995A], p. 34, eq. (III.94)
+        for (unsigned i = 0; i < dim_; ++i)
+        {
+            gsl_matrix_set(_U_0.get(), i, i, std::pow(eta, _gamma_0_ev[i] / (2.0 * beta_0)));
+            gsl_vector_set(_c_0_0.get(), i, c_0_0[i]);
+            gsl_vector_set(_c_0_1.get(), i, c_0_1[i]);
+            gsl_vector_set(_c_0_2.get(), i, c_0_2[i]);
+        }
+        // tmp_matrix <- V . U_0
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, _V.get(), _U_0.get(), 0.0, _tmp_matrix.get());
+        // U_0 <- tmp_matrix * V^-1
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, _tmp_matrix.get(), _Vinv.get(), 0.0, _U_0.get());
+
+        // tmp_vector <- U_0 . c_0_0
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _U_0.get(), _c_0_0.get(), 0.0, _tmp_vector.get());
+
+        std::array<double, dim_> result_LL;
+        for (unsigned i = 0; i < dim_; ++i)
+        {
+            result_LL[i] = gsl_vector_get(_tmp_vector.get(), i);
+        }
+
+        // tmp_vector := c_0_0 + alpha_s_0 / (4 pi) * (c_0_1 - J * c_0_0), cf. [BBL:1995A], p. 34, eq. (III.99)
+        // tmp_vector <- c_0_1
+        gsl_vector_memcpy(_tmp_vector.get(), _c_0_1.get());
+        // tmp_vector <- (-1.0 * J * c_0_0 + 1.0 * tmp_vector) * alpha_s(mu_0) / (4 pi)
+        gsl_blas_dgemv(CblasNoTrans, -1.0, _J1.get(), _c_0_0.get(), 1.0, _tmp_vector.get());
+        gsl_vector_scale(_tmp_vector.get(), alpha_s_0 / (4.0 * M_PI));
+
+        // tmp_matrix <- unit_matrix
+        gsl_matrix_set_zero(_tmp_matrix.get());
+        gsl_matrix_set_identity(_tmp_matrix.get());
+
+        // tmp_vector_2 <- U_0 . tmp_vector
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _U_0.get(), _tmp_vector.get(), 0.0, _tmp_vector_2.get());
+        // tmp_vector <- tmp_matrix . tmp_vector_2
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _tmp_matrix.get(), _tmp_vector_2.get(), 0.0, _tmp_vector.get());
+        // tmp_vector_3 <- tmp_vector
+        gsl_vector_memcpy(_tmp_vector_3.get(), _tmp_vector.get());
+
+
+        // tmp_vector <- c_0_0
+        gsl_vector_memcpy(_tmp_vector.get(), _c_0_0.get());
+        // tmp_matrix2 <- alpha_s(mu) / (4 pi) * J
+        gsl_matrix_memcpy(_tmp_matrix_2.get(), _J1.get());
+        gsl_matrix_scale(_tmp_matrix_2.get(), alpha_s_mu / (4.0 * M_PI));
+
+        // tmp_vector_2 <- U_0 . tmp_vector
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _U_0.get(), _tmp_vector.get(), 0.0, _tmp_vector_2.get());
+        // tmp_vector <- tmp_matrix_2 . tmp_vector_2
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _tmp_matrix_2.get(), _tmp_vector_2.get(), 0.0, _tmp_vector.get());
+        // tmp_vector <- tmp_vector + tmp_vector_3
+        gsl_vector_add(_tmp_vector.get(), _tmp_vector_3.get());
+        gsl_vector_scale(_tmp_vector.get(), (4.0 * M_PI) / alpha_s_mu);
+
+        std::array<double, dim_> result_NLL;
+        for (unsigned i = 0; i < dim_; ++i)
+        {
+            result_NLL[i] = gsl_vector_get(_tmp_vector.get(), i);
+        }
+
+        // tmp_vector <- c_0_1
+        gsl_vector_memcpy(_tmp_vector.get(), _c_0_1.get());
+        // tmp_vector <- -1.0 * J * c_0_0 + 1.0 * tmp_vector
+        gsl_blas_dgemv(CblasNoTrans, -1.0, _J1.get(), _c_0_0.get(), 1.0, _tmp_vector.get());
+        // tmp_vector <- alpha_s(mu_0) / (4 pi) * tmp_vector
+        gsl_vector_scale(_tmp_vector.get(), alpha_s_0 / (4.0 * M_PI));
+
+        // tmp_vector_2 <- U_0 . tmp_vector
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _U_0.get(), _tmp_vector.get(), 0.0, _tmp_vector_2.get());
+        // tmp_vector <- tmp_matrix_2 . tmp_vector_2
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _tmp_matrix_2.get(), _tmp_vector_2.get(), 0.0, _tmp_vector.get());
+
+        // tmp_matrix_1 <- J1 . J1
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, _J1.get(), _J1.get(), 0.0, _tmp_matrix.get());
+        // tmp_matrix_2 <- -J2
+        gsl_matrix_memcpy(_tmp_matrix_2.get(), _J2.get());
+        gsl_matrix_scale(_tmp_matrix_2.get(), -1.0);
+        // tmp_matrix <- tmp_matrix + tmp_matrix_2
+        gsl_matrix_add(_tmp_matrix.get(), _tmp_matrix_2.get());
+
+        // tmp_vector_2 <- c_0_2
+        gsl_vector_memcpy(_tmp_vector_2.get(), _c_0_2.get());
+        // tmp_vector_2 <- 1.0 * (J1^2-J2) * c_0_0 + 1.0 * tmp_vector_2
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _tmp_matrix.get(), _c_0_0.get(), 1.0, _tmp_vector_2.get());
+        // tmp_vector_2 <- -1.0 * J1 * c_0_1 + 1.0 * tmp_vector_2
+        gsl_blas_dgemv(CblasNoTrans, -1.0, _J1.get(), _c_0_1.get(), 1.0, _tmp_vector_2.get());
+        // tmp_vector_2 <- alpha_s(mu_0)^2 / (4 pi)^2 * tmp_vector_2
+        gsl_vector_scale(_tmp_vector_2.get(), alpha_s_0 * alpha_s_0 / (4.0 * M_PI * 4.0 * M_PI));
+
+        // tmp_vector_3 <- tmp_vector_2
+        gsl_vector_memcpy(_tmp_vector_3.get(), _tmp_vector_2.get());
+        // tmp_vector_2 <- U_0 . tmp_vector_3
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _U_0.get(), _tmp_vector_3.get(), 0.0, _tmp_vector_2.get());
+
+        // tmp_vector <- tmp_vector + tmp_vector_2
+        gsl_vector_add(_tmp_vector.get(), _tmp_vector_2.get());
+
+        // tmp_matrix2 <- alpha_s(mu)^2 / (4 pi)^2 * J2
+        gsl_matrix_memcpy(_tmp_matrix.get(), _J2.get());
+        gsl_matrix_scale(_tmp_matrix.get(), alpha_s_mu * alpha_s_mu / (4.0 * M_PI * 4.0 * M_PI));
+
+        // tmp_vector_2 <- c_0_0
+        gsl_vector_memcpy(_tmp_vector_2.get(), _c_0_0.get());
+        // tmp_vector_3 <- U_0 . tmp_vector_2
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _U_0.get(), _tmp_vector_2.get(), 0.0, _tmp_vector_3.get());
+        // tmp_vector_2 <- tmp_matrix . tmp_vector_3
+        gsl_blas_dgemv(CblasNoTrans, 1.0, _tmp_matrix.get(), _tmp_vector_3.get(), 0.0, _tmp_vector_2.get());
+
+        // tmp_vector <- tmp_vector + tmp_vector_2
+        gsl_vector_add(_tmp_vector.get(), _tmp_vector_2.get());
+
+        gsl_vector_scale(_tmp_vector.get(), (4.0 * M_PI) * (4.0 * M_PI) / alpha_s_mu / alpha_s_mu);
+
+        std::array<double, dim_> result_NNLL;
+        for (unsigned i = 0; i < dim_; ++i)
+        {
+            result_NNLL[i] = gsl_vector_get(_tmp_vector.get(), i);
+        }
+
+        return std::tuple(result_LL, result_NLL, result_NNLL);
     }
 } // namespace eos
 
