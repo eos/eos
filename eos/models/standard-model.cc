@@ -1083,22 +1083,27 @@ namespace eos
         // RGE [dB:2017A] and [dBMS:2016A]
 
         // RGE mu_b < mu < mu_W
-        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 5u, 2u> rgeW{ // gamma_0: eigenvalues
-                                                                                                           std::array<double, 2u>{ { -8., 4. } },
-                                                                                                           // gamma_0: V
-                                                                                                           { {
-                                                                                                               { { -3., 1.5 } },
-                                                                                                               { { 1., 1. } },
-                                                                                                           } },
-                                                                                                           // gamma_1
-                                                                                                           { {
-                                                                                                               { { -355.0 / 9.0, -502.0 / 27.0 } },
-                                                                                                               { { -35.0 / 3.0, -28.0 / 3.0 } },
-                                                                                                           } }
+        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, 5u, 2u> rgeW{ // gamma_0: eigenvalues
+                                                                                                            std::array<double, 2u>{ { -8., 4. } },
+                                                                                                            // gamma_0: V
+                                                                                                            { {
+                                                                                                                { { -3., 1.5 } },
+                                                                                                                { { 1., 1. } },
+                                                                                                            } },
+                                                                                                            // gamma_1
+                                                                                                            { {
+                                                                                                                { { -355.0 / 9.0, -502.0 / 27.0 } },
+                                                                                                                { { -35.0 / 3.0, -28.0 / 3.0 } },
+                                                                                                            } },
+                                                                                                            // gamma_2
+                                                                                                            { {
+                                                                                                                { { -119.802, -489.936 } },
+                                                                                                                { { -1988.71, 36.7393 } },
+                                                                                                            } }
         };
 
         // RGE mu_c < mu < mu_b
-        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NLL, 4u, 10u> rgeb{
+        thread_local static const MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, 4u, 10u> rgeb{
             // gamma_0: eigenvalues
             std::array<double, 10u>{ { -16.666666667, -16.6666666667, -14.0856421441, -8., -7.3333333333, -7.0020014176, -6., 5.7817459320, 4., 2.1947865186 } },
             // gamma_0: V
@@ -1126,6 +1131,19 @@ namespace eos
                 { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4832.0 / 81.0, 1352.0 / 27.0, 0.0, 0.0 } },
                 { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -308.0 / 3.0, 0.0 } },
                 { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, -308.0 / 3.0 } },
+            } },
+            // gamma_2
+            { {
+                { { -252.467, -447.27, -12.2288, -168.202, -2.55867, 4.05922, -1030.0 / 729.0, 9161.0 / 1944.0, 26.9223, 0.0 } },
+                { { -1856.71, 62.0726, 167.891, -77.6989, -15.8332, 15.9014, -10288.0 / 243.0, 2633.0 / 162.0, 174.497, 0.0 } },
+                { { 0.0, 0.0, -1718.26, -4501.33, 109.819, 289.682, -76000.0 / 243.0, 23143.0 / 81.0, 270.531, 0.0 } },
+                { { 0.0, 0.0, 731.265, -2724.14, -87.7522, 204.978, 37316.0 / 243.0, -25009.0 / 108.0, 312.357, 0.0 } },
+                { { 0.0, 0.0, -67977.3, -60351.6, 4812.95, 2121.09, -4064768.0 / 729.0, 2977916.0 / 243.0, 15098.6, 0.0 } },
+                { { 0.0, 0.0, 30427.5, -5196.21, -2671.1, -1654.85, 3675760.0 / 2187.0, -2941804.0 / 729.0, 727.757, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 972.829, 0.0, 0.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 212.741, -203.859, 0.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -21943.0 / 27.0, 0.0 } },
+                { { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -21943.0 / 27.0 } },
             } }
         };
 
@@ -1144,6 +1162,18 @@ namespace eos
         static const auto & beta4        = QCD::beta_function_nf_4;
         const double        alpha_s_mu_0 = QCD::alpha_s(_mu_0__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
 
+        // next-to-next-to-leading order in alpha_s
+        // calculate m_t at the matching scales in the MSbar scheme
+        const double alpha_s_m_t_pole   = QCD::alpha_s(_m_t_pole__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
+        const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__uc, alpha_s_m_t_pole, 5.0);
+        const double m_t_mu_0           = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
+        const double x                  = m_t_mu_0 * m_t_mu_0 / (_m_W__uc * _m_W__uc);
+        const double T = -(16.0 * x + 8.0) * std::sqrt(4.0 * x - 1.0) * gsl_sf_clausen(2.0 * std::asin(1.0 / (2.0 * std::sqrt(x)))) + (16.0 * x + 20.0 / 3.0) * std::log(x)
+                         + 32.0 * x + 112.0 / 9.0;
+
+        const std::array<double, 2u> nnlo_unprimed = { -T + 7987.0 / 72.0 + 17.0 / 3.0 * M_PI * M_PI + 475.0 / 6.0 * L + 17.0 * L * L,
+                                                       127.0 / 18.0 + 4.0 / 3.0 * M_PI * M_PI + 46.0 / 3.0 * L + 4.0 * L * L };
+
         if (_mu__uc <= _mu_0b__uc)
         {
             const double alpha_s_mu_b  = QCD::alpha_s(_mu_0b__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
@@ -1153,15 +1183,18 @@ namespace eos
             const double as            = alpha_s_mu / (4.0 * M_PI);
 
             // evolve to mu_b
-            const auto _unprimed_interW = rgeW.evolve_intermediate(alpha_s_mu_b, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+            const auto _unprimed_interW = rgeW.evolve_intermediate(alpha_s_mu_b, alpha_s_mu_0, lo_unprimed, nlo_unprimed, nnlo_unprimed);
 
             // matching at mu_b
             std::array<double, 10u> lo_unprimed_b;
             std::array<double, 10u> nlo_unprimed_b;
+            std::array<double, 10u> nnlo_unprimed_b;
             lo_unprimed_b.fill(0.0);
             nlo_unprimed_b.fill(0.0);
+            nnlo_unprimed_b.fill(0.0);
             std::copy(std::get<0>(_unprimed_interW).begin(), std::get<0>(_unprimed_interW).end(), lo_unprimed_b.begin());
             std::copy(std::get<1>(_unprimed_interW).begin(), std::get<1>(_unprimed_interW).end(), nlo_unprimed_b.begin());
+            std::copy(std::get<2>(_unprimed_interW).begin(), std::get<2>(_unprimed_interW).end(), nnlo_unprimed_b.begin());
 
             double       m_b_MSbar         = _m_b_MSbar__uc;
             double       alpha_s_m_b_MSbar = QCD::alpha_s(_mu_0b__uc, _alpha_s_Z__uc, _m_Z__uc, beta5);
@@ -1171,13 +1204,18 @@ namespace eos
             nlo_unprimed_b[3] += (1.0 / 9.0) * (1 - LogB) * lo_unprimed_b[0] - (2.0 / 3.0) * (1 - LogB) * lo_unprimed_b[1];
             nlo_unprimed_b[8] += (-8.0 / 27.0) * (1 - LogB) * lo_unprimed_b[0] - (2.0 / 9.0) * (1 - LogB) * lo_unprimed_b[1];
 
+            nnlo_unprimed_b[0] += (2.0 / 3.0) * LogB * LogB * nlo_unprimed_b[0] + (59.0 / 54.0 + 148.0 / 81.0 * LogB + 2.0 / 3.0 * LogB * LogB) * lo_unprimed_b[0]
+                                  - (59.0 / 18.0 + 104.0 / 27.0 * LogB + 2.0 * LogB * LogB) * lo_unprimed_b[1];
+            nnlo_unprimed_b[1] += (2.0 / 3.0) * LogB * LogB * nlo_unprimed_b[1] + (-59.0 / 81.0 + 176.0 / 243.0 * LogB - 4.0 / 9.0 * LogB * LogB) * lo_unprimed_b[0]
+                                  - 220.0 / 81.0 * LogB * lo_unprimed_b[1];
+
             // evolve to mu
-            const auto _unprimed_inter = rgeb.evolve_intermediate(alpha_s_mu, alpha_s_mu_b4, lo_unprimed_b, nlo_unprimed_b);
+            const auto _unprimed_inter = rgeb.evolve_intermediate(alpha_s_mu, alpha_s_mu_b4, lo_unprimed_b, nlo_unprimed_b, nnlo_unprimed_b);
 
             std::array<double, 10u> _unprimed;
             for (unsigned i = 0; i < 10u; ++i)
             {
-                _unprimed[i] = std::get<0>(_unprimed_inter)[i] + as * std::get<1>(_unprimed_inter)[i];
+                _unprimed[i] = std::get<0>(_unprimed_inter)[i] + as * std::get<1>(_unprimed_inter)[i] + +as * as * std::get<2>(_unprimed_inter)[i];
             }
 
             std::copy(_unprimed.begin(), _unprimed.end(), wc._sm_like_coefficients.begin());
@@ -1190,12 +1228,12 @@ namespace eos
             wc._alpha_s             = alpha_s_mu;
             const double as         = alpha_s_mu / (4.0 * M_PI);
 
-            const auto _unprimed_inter = rgeW.evolve_intermediate(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed);
+            const auto _unprimed_inter = rgeW.evolve_intermediate(alpha_s_mu, alpha_s_mu_0, lo_unprimed, nlo_unprimed, nnlo_unprimed);
 
             std::array<double, 2u> _unprimed;
             for (unsigned i = 0; i < 2u; ++i)
             {
-                _unprimed[i] = std::get<0>(_unprimed_inter)[i] + as * std::get<1>(_unprimed_inter)[i];
+                _unprimed[i] = std::get<0>(_unprimed_inter)[i] + as * std::get<1>(_unprimed_inter)[i] + as * as * std::get<2>(_unprimed_inter)[i];
             }
 
             std::copy(_unprimed.begin(), _unprimed.end(), wc._sm_like_coefficients.begin());
