@@ -500,12 +500,12 @@ groups:
           latex:    '$\mu^{uc}$'
           comments: ''
 
-      # Wilson coefficients C1 - C6 at mu = 1.3 GeV to NLL accuracy as calculated in the SM by EOS's StandardModel class.
+      # Wilson coefficients C1 - C6 at mu = 1.3 GeV to NNLL accuracy as calculated in the SM by EOS's StandardModel class.
       # For the calculations, cf. [dBMS:2016A].
       "uc::Re{c1}" :
-          central: -0.721090
-          min:     -0.721090
-          max:     -0.721090
+          central: -0.6511905155
+          min:     -0.6511905155
+          max:     -0.6511905155
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_1$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -517,9 +517,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_1$
           comment:  ''
       "uc::Re{c2}" :
-          central: +1.039098
-          min:     +1.039098
-          max:     +1.039098
+          central: +1.035740588
+          min:     +1.035740588
+          max:     +1.035740588
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_2$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -531,9 +531,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_2$
           comment:  ''
       "uc::Re{c3}" :
-          central: -0.006528
-          min:     -0.006528
-          max:     -0.006528
+          central: -0.008919680307
+          min:     -0.008919680307
+          max:     -0.008919680307
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_3$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -545,9 +545,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_3$
           comment:  ''
       "uc::Re{c4}" :
-          central: -0.095337
-          min:     -0.095337
-          max:     -0.095337
+          central: -0.09917618128
+          min:     -0.09917618128
+          max:     -0.09917618128
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_4$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -559,9 +559,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_4$
           comment:  ''
       "uc::Re{c5}" :
-          central: +0.000422
-          min:     +0.000422
-          max:     +0.000422
+          central: +0.0005431321897
+          min:     +0.0005431321897
+          max:     +0.0005431321897
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_5$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -573,9 +573,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_5$
           comment:  ''
       "uc::Re{c6}" :
-          central: +0.000593
-          min:     +0.000593
-          max:     +0.000593
+          central: +0.001012196678
+          min:     +0.001012196678
+          max:     +0.001012196678
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_6$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -587,9 +587,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_6$
           comment:  ''
       "uc::Re{c7}" :
-          central: +0.122692956
-          min:     +0.122692956
-          max:     +0.122692956
+          central: +0.1287292333
+          min:     +0.1287292333
+          max:     +0.1287292333
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_7$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -601,9 +601,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_7$
           comment:  ''
       "uc::Re{c8}" :
-          central: -0.069421972
-          min:     -0.069421972
-          max:     -0.069421972
+          central: -0.08087769358
+          min:     -0.08087769358
+          max:     -0.08087769358
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_8$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -615,9 +615,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_8$
           comment:  ''
       "ucee::Re{c9}" :
-          central: -0.318268105
-          min:     -0.318268105
-          max:     -0.318268105
+          central: -0.4453671240
+          min:     -0.4453671240
+          max:     -0.4453671240
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_9^{(e)}$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
@@ -643,9 +643,9 @@ groups:
           latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(e)}$
           comment:  ''
       "ucmumu::Re{c9}" :
-          central: -0.318268105
-          min:     -0.318268105
-          max:     -0.318268105
+          central: -0.4453671240
+          min:     -0.4453671240
+          max:     -0.4453671240
           unit:     '1'
           latex:    $\mathrm{Re}\, \mathcal{C}_9^{(\mu)}$
           comment:  'cf. @REF[dBMS:2016A]@, Tab. 1'
