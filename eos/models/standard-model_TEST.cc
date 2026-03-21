@@ -472,8 +472,8 @@ class WilsonCoefficientsUCTest : public TestCase
                 StandardModel model(parameters);
 
                 WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), +0.143143, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), +0.1582722277, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.001840898, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0, eps);
@@ -506,8 +506,8 @@ class WilsonCoefficientsUCTest : public TestCase
                 StandardModel model(parameters);
 
                 WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.322704, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.00931, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.2887762145, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.010189030, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0, eps);
@@ -540,15 +540,15 @@ class WilsonCoefficientsUCTest : public TestCase
                 StandardModel model(parameters);
 
                 WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.322236, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.00927, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.2894013188, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.010285004, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), +0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), -0.0134116, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), -0.01341164772, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), +0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()) * wc._alpha_s / (4.0 * M_PI), -0.00126266, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()) * wc._alpha_s / (4.0 * M_PI), -0.001262659765, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()), +0.0, eps);
@@ -576,18 +576,18 @@ class WilsonCoefficientsUCTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.3890153724544784, eps);
 
                 WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.731053, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.03993, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), -0.00686138, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), -0.0981417, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.000445031, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.000644389, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()) * wc._alpha_s / (4.0 * M_PI), +0.00379697, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()) * wc._alpha_s / (4.0 * M_PI), -0.0021484, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()) * wc._alpha_s / (4.0 * M_PI), -0.00984944, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.122692956, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), -0.069421972, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()), -0.318268105, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.6511905155, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.035740588, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), -0.008919680307, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), -0.09917618128, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0005431321897, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.001012196678, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()) * wc._alpha_s / (4.0 * M_PI), +0.003983767585, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()) * wc._alpha_s / (4.0 * M_PI), -0.002502911933, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()) * wc._alpha_s / (4.0 * M_PI), -0.01378272104, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.1287292333, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), -0.08087769358, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()), -0.4453671240, eps);
                 TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()), +0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()), +0.0, eps);
