@@ -412,5 +412,53 @@ class MultiplicativeRGENNLLTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(result[0], +0.23134566937815798, eps);
                 TEST_CHECK_NEARLY_EQUAL(result[1], +1.82581433200249621, eps);
             }
+
+            // test case evolve_intermediate (nf = 5, dim = 2)
+            {
+                const std::array<double, 2u>                 gamma_0_ev{ -16.0, +2.0 };
+                const std::array<std::array<double, 2u>, 2u> V{
+                    {
+                     { 1.0 / 6.0, -4.0 / 3.0 },
+                     { 1.0, 1.0 },
+                     }
+                };
+                const std::array<std::array<double, 2u>, 2u> gamma_1{
+                    {
+                     { -28.0 / 3.0, -374.0 / 3.0 },
+                     { -2044.0 / 27.0, -2975.0 / 18.0 },
+                     }
+                };
+                const std::array<std::array<double, 2u>, 2u> gamma_2{
+                    {
+                     { -25.0 / 3.0, -377.0 / 3.0 },
+                     { -2047.0 / 27.0, -2978.0 / 18.0 },
+                     }
+                };
+                const MultiplicativeRenormalizationGroupEvolution<accuracy::NNLL, 5u, 2u> rge(gamma_0_ev, V, gamma_1, gamma_2);
+                const std::array<double, 2u>                                              c_0_0{ 0.0, 1.0 };
+                const std::array<double, 2u>                                              c_0_1{ 11.0 / 2.0, -11.0 / 6.0 };
+                const std::array<double, 2u>                                              c_0_2{ -9.0 / 2.0, -13.0 / 6.0 };
+
+                const double                                                                             alpha_s_mu = 0.218017;
+                const double                                                                             alpha_s_0  = 0.121864;
+                const std::tuple<std::array<double, 2u>, std::array<double, 2u>, std::array<double, 2u>> result_int =
+                        rge.evolve_intermediate(alpha_s_mu, alpha_s_0, c_0_0, c_0_1, c_0_2);
+                const std::array<double, 2u> result = rge.evolve(alpha_s_mu, alpha_s_0, c_0_0, c_0_1, c_0_2);
+
+                static const double eps = 1.0e-8;
+                static const double as  = (alpha_s_mu / (4 * M_PI));
+                TEST_CHECK_NEARLY_EQUAL(std::get<0>(result_int)[0], 0.13450413841219757694, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::get<0>(result_int)[1], 1.7339618486408014952, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::get<1>(result_int)[0] * as, 0.098644535758156973171, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::get<1>(result_int)[1] * as, 0.094811535670379365470, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::get<2>(result_int)[0] * as * as, -0.0021698664302199910381, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::get<2>(result_int)[1] * as * as, -0.0042409913794314302304, eps);
+                TEST_CHECK_NEARLY_EQUAL(result[0],
+                                        std::get<0>(result_int)[0] + as * std::get<1>(result_int)[0] + as * as * std::get<2>(result_int)[0],
+                                        std::abs(20 * as * as * as * std::get<2>(result_int)[0]));
+                TEST_CHECK_NEARLY_EQUAL(result[1],
+                                        std::get<0>(result_int)[1] + as * std::get<1>(result_int)[1] + as * as * std::get<2>(result_int)[1],
+                                        std::abs(20 * as * as * as * std::get<2>(result_int)[1]));
+            }
         }
 } multiplicative_rge_nnll_test;
