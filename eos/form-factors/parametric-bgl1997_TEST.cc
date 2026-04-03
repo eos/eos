@@ -596,6 +596,7 @@ class BGL1997FormFactorsTest :
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
                 p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
 
+                p["mass::B_d@BSZ2015"] = 5.279;
                 p["mass::D_u@BSZ2015"] = 1.870;
 
                 p["B->D::a^f+_0@BGL1997"] = 0.1e-02;
@@ -611,6 +612,8 @@ class BGL1997FormFactorsTest :
                 p["B->D::a^fT_1@BGL1997"] = 0.2e-02;
                 p["B->D::a^fT_2@BGL1997"] = 0.3e-02;
                 p["B->D::a^fT_3@BGL1997"] = 0.4e-02;
+
+                p["B->D::t_0@BGL1997"] = 11.6213;
 
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(0.0), ff.f_0(0.0), eps);
 
