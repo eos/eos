@@ -1036,6 +1036,7 @@ groups:
           max:      11.628
           latex:    '$t_0^{B\to D,\mathrm{BGL97}}$'
           unit:     'GeV^2'
+          comment:  'Optimized value t0 = tp (1 - sqrt(1 - tm/tp))'
       'B->D::a^%1%_%2%@BGL1997' :
           central:  0.0
           min:      0.0
@@ -1051,11 +1052,12 @@ groups:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
       'B_s->D_s::t_0@BGL1997' :
-          central:  6.1848725
+          central:  6.1215479
           min:      0.0
           max:      11.55
           latex:    '$t_0^{B\to D,\mathrm{BGL97}}$'
           unit:     'GeV^2'
+          comment:  'Optimized value t0 = tp (1 - sqrt(1 - tm/tp))'
       'B_s->D_s::a^%1%_%2%@BGL1997' :
           central:  0.0
           min:      0.0
@@ -1716,6 +1718,7 @@ groups:
           max:     10.684
           latex:    '$t_0^{B\to D^*,\mathrm{BGL97}}$'
           unit:     'GeV^2'
+          comment:  'Optimized value t0 = tp (1 - sqrt(1 - tm/tp))'
       'B->D^*::a^%1%_%2%@BGL1997' :
           central: 0.0
           min:     0.0
@@ -1733,11 +1736,12 @@ groups:
             - ["g", "f", "F1", "F2", "T1", "T2", "T23"]
             - [0, 1, 2, 3]
       'B_s->D_s^*::t_0@BGL1997' :
-          central:  5.6417164
+          central:  5.57147394
           min:      0.0
           max:     10.5929
           latex:    '$t_0^{B\to D^*,\mathrm{BGL97}}$'
           unit:     'GeV^2'
+          comment:  'Optimized value t0 = tp (1 - sqrt(1 - tm/tp))'
       'B_s->D_s^*::a^%1%_%2%@BGL1997' :
           central: 0.0
           min:     0.0
@@ -2007,11 +2011,12 @@ groups:
             - [0, 1, 2, 3]
       # form factor parameters for B_c->J/psi for [BGL:1997A]
       'B_c->J/psi::t_0@BGL1997' :
-          central:  5.6417164
+          central:  5.2046809
           min:      0.0
           max:     10.096
           latex:    '$t_0^{B_c \to J/\psi,\mathrm{BGL97}}$'
           unit:     'GeV^2'
+          comment:  'Optimized value t0 = tp (1 - sqrt(1 - tm/tp))'
       'B_c->J/psi::a^%1%_%2%@BGL1997' :
           central: 0.0
           min:     0.0
