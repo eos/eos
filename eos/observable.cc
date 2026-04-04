@@ -30,6 +30,7 @@
 #include <eos/observable-impl.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/observables.hh>
+#include <eos/rare-c-decays/observables.hh>
 #include <eos/s-decays/observables.hh>
 #include <eos/scattering/observables.hh>
 #include <eos/tau-decays/observables.hh>
@@ -57,16 +58,11 @@ namespace eos
     ObservableEntries::ObservableEntries() :
         _entries(&impl::observable_entries)
     {
-        std::vector<std::function<ObservableSection()>> section_makers = { make_form_factors_section,
-                                                                           make_nonlocal_form_factors_section,
-                                                                           make_nonleptonic_amplitudes_section,
-                                                                           make_b_decays_section,
-                                                                           make_c_decays_section,
-                                                                           make_rare_b_decays_section,
-                                                                           make_meson_mixing_section,
-                                                                           make_scattering_section,
-                                                                           make_s_decays_section,
-                                                                           make_tau_decays_section };
+        std::vector<std::function<ObservableSection()>> section_makers = {
+            make_form_factors_section,  make_nonlocal_form_factors_section, make_nonleptonic_amplitudes_section, make_b_decays_section,   make_c_decays_section,
+            make_rare_b_decays_section, make_rare_c_decays_section,         make_meson_mixing_section,           make_scattering_section, make_s_decays_section,
+            make_tau_decays_section
+        };
 
         for (const auto & section_maker : section_makers)
         {
@@ -133,6 +129,7 @@ namespace eos
                 _sections = std::vector<ObservableSection>({ make_b_decays_section(),
                                                              make_c_decays_section(),
                                                              make_rare_b_decays_section(),
+                                                             make_rare_c_decays_section(),
                                                              make_meson_mixing_section(),
                                                              make_nonleptonic_amplitudes_section(),
                                                              make_nonlocal_form_factors_section(),
