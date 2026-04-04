@@ -1640,6 +1640,13 @@ G:2026A:
     id: In preparation
   inspire-id: Gubernari:2026xxx
   title: Unitarity bounds and form factor predictions for $B$-meson decays
+GHM:2021A:
+  authors: Golz, Marcel and Hiller, Gudrun and Magorsch, Tom
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2107.13010
+  inspire-id: Golz:2021xtu
+  title: 'Probing for New Physics with Rare Charm Baryon $(\Lambda_c,\Xi_c,\Omega_c)$ Decays'
 GHMS:2012A:
   authors: Grigo, Jonathan and Hoff, Jens and Marquard, Peter and Steinhauser, Matthias
   eprint:
