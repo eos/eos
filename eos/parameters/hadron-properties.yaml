@@ -669,6 +669,27 @@ groups:
           unit:     's'
           latex:    '$\tau_{K_L}$'
           comments: 'cf. [PDG:2024A] p. 41'
+      'life_time::rho^0' :
+          central: +4.4655e-24
+          min:     +4.4412e-24
+          max:     +4.4897e-24
+          latex:   '$\tau_{\rho^0}$'
+          unit:     's'
+          comments: 'Extracted from width = 147.4+-0.8 MeV, cf. [PDG-Live], May 2026'
+      'life_time::omega' :
+          central: +7.5831e-23
+          min:     +7.4695e-23
+          max:     +7.6967e-23
+          latex:   '$\tau_{\omega}$'
+          unit:     's'
+          comments: 'Extracted from width = 8.68+-0.13 MeV, cf. [PDG-Live], May 2026'
+      'life_time::phi' :
+          central: +1.5491e-22
+          min:     +1.5444e-22
+          max:     +1.5538e-22
+          latex:   '$\tau_{\phi}$'
+          unit:     's'
+          comments: 'Extracted from width = 4.249+-0.013 MeV, cf. [PDG-Live], May 2026'
       'life_time::D_d' :
           central: +1.033e-12
           min:     +1.028e-12
