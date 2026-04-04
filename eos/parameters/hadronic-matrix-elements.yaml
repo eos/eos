@@ -5274,6 +5274,50 @@ groups:
             - ["V", "A", "T", "T5"]
             - [0, 1, 2, 3, 4]
           comments: ''
+      # data-driven parameters for long-distance contributions to Lambda_c -> proton l l decays according to
+      # [GHM:2021A]
+      'Lambda_c->proton::res_a_rho@GHM2021':
+        central: +0.44
+        min: +0.0
+        max: +1.0
+        latex: '$a_{\rho}^{\Lambda_c\to p \ell\ell}$'
+        unit: 'GeV^2'
+        comments: ''
+      'Lambda_c->proton::res_a_omega@GHM2021':
+        central: +0.073
+        min: +0.0
+        max: +1.0
+        latex: '$a_{\omega}^{\Lambda_c\to p \ell\ell}$'
+        unit: 'GeV^2'
+        comments: ''
+      'Lambda_c->proton::res_a_phi@GHM2021':
+        central: +0.102
+        min: +0.0
+        max: +1.0
+        latex: '$a_{\phi}^{\Lambda_c\to p \ell\ell}$'
+        unit: 'GeV^2'
+        comments: ''
+      'Lambda_c->proton::res_delta_rho@GHM2021':
+        central: +0.0
+        min: -3.14
+        max: +3.14
+        latex: '$\delta_{\rho}^{\Lambda_c\to p \ell\ell}$'
+        unit: '1'
+        comments: ''
+      'Lambda_c->proton::res_delta_omega_m_rho@GHM2021':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex: '$\delta_{\omega}^{\Lambda_c\to p \ell\ell} - \delta_{\rho}^{\Lambda_c\to p \ell\ell}$'
+        unit: '1'
+        comments: ''
+      'Lambda_c->proton::res_delta_phi_m_rho@GHM2021':
+        central: +1.11
+        min: -3.14
+        max: +3.14
+        latex: '$\delta_{\phi}^{\Lambda_c\to p \ell\ell} - \delta_{\rho}^{\Lambda_c\to p \ell\ell}$'
+        unit: '1'
+        comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
       # [DKMR:2017A], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
       # params for tensor FFs are included.
