@@ -18,13 +18,13 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
@@ -86,12 +86,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -135,13 +135,13 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -167,13 +167,13 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -210,12 +210,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
@@ -299,11 +299,11 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-24.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Create repository
               shell: bash
