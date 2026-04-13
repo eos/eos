@@ -413,6 +413,7 @@ AC_SUBST([PYPI_VERSION])
 AC_CONFIG_FILES([Makefile
 	debian/control-focal
 	debian/control-jammy
+	debian/control-resolute
 	debian/Makefile
 	eos/Makefile
 	eos/b-decays/Makefile

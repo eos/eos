@@ -3,7 +3,8 @@ MAINTAINERCLEANFILES = Makefile.in
 
 EXTRA_DIST = \
     control-focal.in \
-    control-jammy.in
+    control-jammy.in \
+    control-resolute.in
 
 # produce the .deb file manually
 deb:
