@@ -25,7 +25,7 @@ except NameError as e:
 
 # set some default values for plotting
 matplotlib.rcParams['font.family'] = 'serif'
-matplotlib.rcParams['font.serif'] = ['Computer Modern', 'cmr10']
+matplotlib.rcParams['font.serif'] = ['Computer Modern Roman', 'cmr10']
 matplotlib.rcParams['font.sans-serif'] = ['Computer Modern Sans Serif', 'cmss10' ]
 matplotlib.rcParams['font.size'] = 14
 matplotlib.rcParams['font.weight'] = 'normal'
