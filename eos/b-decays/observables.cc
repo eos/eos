@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2025 Florian Herren
  *
@@ -148,6 +148,31 @@ namespace eos
                         &BToThreeLeptonsNeutrino::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
                         Options{ { "l"_ok, "tau" }, { "lprime"_ok, "e" } }),
+
+                // PDFs
+                make_observable("B_u->enumumu::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                        std::make_tuple("q2", "k2", "z_gamma", "z_w", "phi"),
+                        Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } }),
+
+                make_observable("B_u->enumumu::NormalizationPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } }),
+
+                make_observable("B_u->munuee::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                        std::make_tuple("q2", "k2", "z_gamma", "z_w", "phi"),
+                        Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } }),
+
+                make_observable("B_u->munuee::NormalizationPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } }),
             }
         );
 
@@ -277,6 +302,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "pi" }}),
+
+                // PDFs
+                make_observable("B->pilnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "pi" }}),
+
+                make_observable("B->pilnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" }}),
+
+                make_observable("B->pilnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "pi" }}),
+
+                make_observable("B->pilnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" }}),
             }
         );
 
@@ -393,6 +443,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::differential_decay_width,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D" } }),
+
+                // PDFs
+                make_observable("B->Dlnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D" } }),
             }
         );
 
@@ -431,6 +506,31 @@ namespace eos
                 make_observable("B_s->Klnu::normBR",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                // PDFs
+                make_observable("B_s->Klnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->Klnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->Klnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->Klnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
             }
@@ -555,6 +655,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::differential_decay_width,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                // PDFs
+                make_observable("B_s->D_slnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
             }
         );
 
@@ -614,6 +739,30 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
 
+                // PDFs
+                make_observable("B->etalnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
             }
         );
 
@@ -660,6 +809,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                // PDFs
+                make_observable("B->eta_primelnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
             }
         );
 
@@ -690,6 +864,17 @@ namespace eos
                         Unit::None(),
                         &BToGammaLeptonNeutrino::forward_backward_asymmetry,
                         std::make_tuple("E_gamma_min")),
+
+                // PDF
+                make_observable("B_u->gammalnu::UnnormalizedPDF(E_gamma,cos(theta_l))",
+                        Unit::None(),
+                        &BToGammaLeptonNeutrino::fully_differential_decay_width,
+                        std::make_tuple("E_gamma", "cos(theta_l)")),
+
+                make_observable("B_u->gammalnu::NormalizationPDF(E_gamma,cos(theta_l))",
+                        Unit::None(),
+                        &BToGammaLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("E_gamma_min"))
             }
         );
 
@@ -1429,6 +1614,19 @@ namespace eos
                                 <<B->D^*lnu::P(w_min,w_max);l=e>>[w_e_max=>w_max,w_e_min=>w_min]
                                 )"),
 
+                // PDF
+                make_observable("B->D^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                                std::make_tuple("q2", "cos(theta_l)", "cos(theta_D)", "phi"),
+                                Options{ { "V"_ok, "D^*" } }),
+
+                make_observable("B->D^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_D),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "D^*" } }),
+
                 // B -> D pi l nu
                 make_observable("B->Dpilnu::P(cos(theta_D))",
                                 Unit::None(),
@@ -1909,6 +2107,19 @@ namespace eos
                         /
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
+
+                // PDF
+                make_observable("B_s->D_s^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                                std::make_tuple("q2", "cos(theta_l)", "cos(theta_D_s)", "phi"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_s^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
             }
         );
 
@@ -2188,6 +2399,19 @@ namespace eos
                         &BToVectorLeptonNeutrino::integrated_pdf_w,
                         std::make_tuple("w_min", "w_max"),
                         { { "U"_ok, "u" }, {"q"_ok, "s"}, {"I"_ok, "1/2"} }),
+
+                // PDF
+                make_observable("B_s->K^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                                std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi"),
+                                Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, {"I"_ok, "1/2"} }),
+
+                make_observable("B_s->K^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_K),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, {"I"_ok, "1/2"} }),
             }
         );
 
@@ -2425,6 +2649,19 @@ namespace eos
                         &BToPPLeptonNeutrino::q2_integrated_mesonic_afb,
                         std::make_tuple("sqrt(k2)_min", "sqrt(k2)_max"),
                         { { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} }),
+
+                // PDF
+                make_observable("B^+->pi^+pi^-lnu::UnnormalizedPDF(q2,k2,cos(theta_pi))",
+                                Unit::None(),
+                                &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
+                                std::make_tuple("q2", "k2", "cos(theta_pi)"),
+                                { { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} }),
+
+                make_observable("B^+->pi^+pi^-lnu::NormalizationPDF(q2,k2,cos(theta_pi))",
+                                Unit::None(),
+                                &BToPiPiLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max", "cos(theta_pi)_min", "cos(theta_pi)_max"),
+                                { { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} }),
             }
         );
 
@@ -2572,6 +2809,17 @@ namespace eos
                         &LambdaBToLambdaCLeptonNeutrino::integrated_k4s,
                         std::make_tuple("q2_min", "q2_max")),
 
+                // PDFs
+                make_observable("Lambda_b->Lambda_clnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_L),phi)",
+                        Unit::None(),
+                        &LambdaBToLambdaCLeptonNeutrino::four_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_L)", "phi")),
+
+                make_observable("Lambda_b->Lambda_clnu::NormalizationPDF(q2,cos(theta_l),cos(theta_L),phi)",
+                        Unit::None(),
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max")),
+
                 // Lambda_b -> Lambda_c(2595) l nubar
                 make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/ds", R"(d\mathcal{B}/dq^2(\Lambda_b\to\Lambda_c(2595) \ell^-\bar\nu))",
                         Unit::InverseGeV2(),
@@ -2659,7 +2907,18 @@ namespace eos
                         <<Lambda_b->Lambda_c(2625)lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
                         /
                         <<Lambda_b->Lambda_c(2625)lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
-                        )")
+                        )"),
+
+                // PDFs
+                make_observable("Lambda_b->Lambda_c(2625)lnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &LambdaBToLambdaC2595LeptonNeutrino::double_differential_branching_ratio,
+                        std::make_tuple("q2", "cos(theta_l)")),
+
+                make_observable("Lambda_b->Lambda_c(2625)lnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &LambdaBToLambdaC2595LeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max")),
             }
         );
 
