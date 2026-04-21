@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,6 +29,8 @@
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/utils/concrete-signal-pdf.hh>
 
+using std::literals::string_literals::operator""s;
+
 namespace eos
 {
     // Leptonic and photoleptonic B decays
@@ -41,55 +43,63 @@ namespace eos
             R"()",
             {
                 // B -> gamma l nu
-                make_signal_pdf("B->gammalnu::d^2Gamma/dEgamma/dcos(theta_l)",
+                make_signal_pdf("B_u->gammalnu::P(E_gamma,cos(theta_l))",
+                    R"(PDF for the decay $B^-\to \gamma \ell^- \bar\nu$ as a function of the photon energy $E_\gamma$
+                    and the angle $\theta_\ell$ between the charged lepton and the photon in the $B$ rest frame.)",
                     Options{ },
-                    &BToGammaLeptonNeutrino::fully_differential_decay_width,
+                    "B_u->gammalnu::UnnormalizedPDF(E_gamma,cos(theta_l))",
                     std::make_tuple(
-                        KinematicRange{ "Egamma", 0.1, 2.64, BToGammaLeptonNeutrino::kinematics_description_Egamma },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToGammaLeptonNeutrino::kinematics_description_c_theta_l}
+                        "E_gamma"s,
+                        "cos(theta_l)"s
                     ),
-                    &BToGammaLeptonNeutrino::integrated_branching_ratio,
+                    "B_u->gammalnu::NormalizationPDF(E_gamma,cos(theta_l))",
                     std::make_tuple(
-                        "E_gamma_min"
+                        "E_gamma_min"s
                     )
                 ),
 
                 // B -> 3l nu
-                make_signal_pdf("B_u->enumumu::d^5Gamma",
+                make_signal_pdf("B_u->enumumu::P(q2,k2,z_gamma,z_w,phi)",
+                    R"(PDF for the decay $B^-\to e^-\bar\nu \mu^+\mu^-$ as a function of the invariant $\mu^+\mu^-$ mass squared $q^2$,
+                    the invariant $e^-\bar\nu$ mass squared $k^2$, the cosine of the photon helicity angle $z_\gamma$, the cosine
+                    of the $W$ helicity angle $z_W$, and the azimuthal angle $\phi$.)",
                     Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } },
-                    &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                    "B_u->enumumu::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0447, 27.8714, BToThreeLeptonsNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "k2", 0.00051, 25.6849, BToThreeLeptonsNeutrino::kinematics_description_k2 },
-                        KinematicRange{ "z_gamma", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_gamma },
-                        KinematicRange{ "z_w", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_w },
-                        KinematicRange{ "phi", -M_PI, +M_PI, BToThreeLeptonsNeutrino::kinematics_description_phi }
+                        "q2"s,
+                        "k2"s,
+                        "z_gamma"s,
+                        "z_w"s,
+                        "phi"s
                     ),
-                    &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                    "B_u->enumumu::NormalizationPDF(q2,k2,z_gamma,z_w,phi)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max",
-                        "k2_min",
-                        "k2_max"
+                        "q2_min"s,
+                        "q2_max"s,
+                        "k2_min"s,
+                        "k2_max"s
                     )
                 ),
 
-                make_signal_pdf("B_u->munuee::d^5Gamma",
+                make_signal_pdf("B_u->munuee::P(q2,k2,z_gamma,z_w,phi)",
+                    R"(PDF for the decay $B^-\to \mu^-\bar\nu e^+e^-$ as a function of the invariant $e^+e^-$ mass squared $q^2$,
+                    the invariant $\mu^-\bar\nu$ mass squared $k^2$, the cosine of the photon helicity angle $z_\gamma$, the cosine
+                    of the $W$ helicity angle $z_W$, and the azimuthal angle $\phi$.)",
                     Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } },
-                    &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                    "B_u->munuee::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 1.0e-6, 26.767, BToThreeLeptonsNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "k2", 0.011, 27.8606, BToThreeLeptonsNeutrino::kinematics_description_k2 },
-                        KinematicRange{ "z_gamma", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_gamma },
-                        KinematicRange{ "z_w", -1.0, +1.0, BToThreeLeptonsNeutrino::kinematics_description_z_w },
-                        KinematicRange{ "phi", -M_PI, +M_PI, BToThreeLeptonsNeutrino::kinematics_description_phi }
+                        "q2"s,
+                        "k2"s,
+                        "z_gamma"s,
+                        "z_w"s,
+                        "phi"s
                     ),
-                    &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                    "B_u->munuee::NormalizationPDF(q2,k2,z_gamma,z_w,phi)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max",
-                        "k2_min",
-                        "k2_max"
+                        "q2_min"s,
+                        "q2_max"s,
+                        "k2_min"s,
+                        "k2_max"s
                     )
                 )
             }
@@ -110,124 +120,190 @@ namespace eos
             R"()",
             {
                 // B -> pi l nu
-                make_signal_pdf("B->pilnu::dGamma/dq2",
+                make_signal_pdf("B->pilnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to \pi \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
                     Options{ { "P"_ok, "pi" } },
-                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                    "B->pilnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
+                        "q2"s
                     ),
-                    &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                    "B->pilnu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
-                make_signal_pdf("B->pilnu::d^2Gamma/dq2/dcos(theta_l)",
+                make_signal_pdf("B->pilnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}\to \pi \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
                     Options{ { "P"_ok, "pi" } },
-                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                    "B->pilnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}
+                        "q2"s,
+                        "cos(theta_l)"s
                     ),
-                    &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                    "B->pilnu::NormalizationPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
-                    )
-                ),
-
-                // B -> pi l X_nubar
-                make_signal_pdf("B->pimu1nu::d^2Gamma",
-                    Options{ },
-                    &BToPiLeptonInclusiveNeutrinos::differential_decay_width_1nu,
-                    std::make_tuple(
-                        KinematicRange{ "s", 0.0, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s},
-                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta}
-                    ),
-                    &BToPiLeptonInclusiveNeutrinos::integrated_decay_width_1nu,
-                    std::make_tuple(
-                        "s_min",
-                        "s_max"
-                    )
-                ),
-
-                make_signal_pdf("B->pimu3nu::d^5Gamma",
-                    Options{ },
-                    &BToPiLeptonInclusiveNeutrinos::differential_decay_width_3nu,
-                    std::make_tuple(
-                        KinematicRange{ "s", 3.16, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s },
-                        KinematicRange{ "snunubar", 0.0, 3.16, BToPiLeptonInclusiveNeutrinos::kinematics_description_snunubar },
-                        KinematicRange{ "cos(theta_tau)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToPiLeptonInclusiveNeutrinos::kinematics_description_phi },
-                        KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }
-                    ),
-                    &BToPiLeptonInclusiveNeutrinos::integrated_decay_width_3nu,
-                    std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
                 // B -> D l nu
-                make_signal_pdf("B->Dlnu::dGamma/dq2",
+                make_signal_pdf("B->Dlnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to D \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
                     Options{ { "P"_ok, "D" } },
-                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                    "B->Dlnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
+                        "q2"s
                     ),
-                    &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                    "B->Dlnu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
-                make_signal_pdf("B->Dlnu::d^2Gamma/dq2/dcos(theta_l)",
+                make_signal_pdf("B->Dlnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}\to D \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
                     Options{ { "P"_ok, "D" } },
-                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                    "B->Dlnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}
+                        "q2"s,
+                        "cos(theta_l)"s
                     ),
-                    &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                    "B->Dlnu::NormalizationPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
-                // B -> D l X_nubar
-                make_signal_pdf("B->Dmu1nu::d^2Gamma",
-                    Options{ },
-                    &BToDLeptonInclusiveNeutrinos::differential_decay_width_1nu,
+                // B_s -> K l nu
+                make_signal_pdf("B_s->Klnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}_s\to K \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
+                    Options{ { "P"_ok, "K" } },
+                    "B_s->Klnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "s", 0.0, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
-                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta}
+                        "q2"s
                     ),
-                    &BToDLeptonInclusiveNeutrinos::integrated_decay_width_1nu,
+                    "B_s->Klnu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
-                make_signal_pdf("B->Dmu3nu::d^5Gamma",
-                    Options{ },
-                    &BToDLeptonInclusiveNeutrinos::differential_decay_width_3nu,
+                make_signal_pdf("B_s->Klnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}_s\to K \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
+                    Options{ { "P"_ok, "K" } },
+                    "B_s->Klnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        KinematicRange{ "s", 3.16, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
-                        KinematicRange{ "snunubar", 0.0, 3.16, BToDLeptonInclusiveNeutrinos::kinematics_description_snunubar },
-                        KinematicRange{ "cos(theta_tau)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDLeptonInclusiveNeutrinos::kinematics_description_phi },
-                        KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }
+                        "q2"s,
+                        "cos(theta_l)"s
                     ),
-                    &BToDLeptonInclusiveNeutrinos::integrated_decay_width_3nu,
+                    "B_s->Klnu::NormalizationPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
+
+                // B_s -> D_s l nu
+                make_signal_pdf("B_s->D_slnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}_s\to D_s \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
+                    Options{ { "P"_ok, "D_s" } },
+                    "B_s->D_slnu::UnnormalizedPDF(q2)",
+                    std::make_tuple(
+                        "q2"s
+                    ),
+                    "B_s->D_slnu::NormalizationPDF(q2)",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                make_signal_pdf("B_s->D_slnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}_s\to D_s \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
+                    Options{ { "P"_ok, "D_s" } },
+                    "B_s->D_slnu::UnnormalizedPDF(q2,cos(theta_l))",
+                    std::make_tuple(
+                        "q2"s,
+                        "cos(theta_l)"s
+                    ),
+                    "B_s->D_slnu::NormalizationPDF(q2,cos(theta_l))",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                // B -> eta l nu
+                make_signal_pdf("B->etalnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to \eta \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
+                    Options{ { "P"_ok, "eta" } },
+                    "B->etalnu::UnnormalizedPDF(q2)",
+                    std::make_tuple(
+                        "q2"s
+                    ),
+                    "B->etalnu::NormalizationPDF(q2)",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                make_signal_pdf("B->etalnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}\to \eta \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
+                    Options{ { "P"_ok, "eta" } },
+                    "B->etalnu::UnnormalizedPDF(q2,cos(theta_l))",
+                    std::make_tuple(
+                        "q2"s,
+                        "cos(theta_l)"s
+                    ),
+                    "B->etalnu::NormalizationPDF(q2,cos(theta_l))",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                // B -> eta' l nu
+                make_signal_pdf("B->eta_primelnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to \eta' \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
+                    Options{ { "P"_ok, "eta_prime" } },
+                    "B->eta_primelnu::UnnormalizedPDF(q2)",
+                    std::make_tuple(
+                        "q2"s
+                    ),
+                    "B->eta_primelnu::NormalizationPDF(q2)",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                make_signal_pdf("B->eta_primelnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}\to \eta' \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
+                    Options{ { "P"_ok, "eta_prime" } },
+                    "B->eta_primelnu::UnnormalizedPDF(q2,cos(theta_l))",
+                    std::make_tuple(
+                        "q2"s,
+                        "cos(theta_l)"s
+                    ),
+                    "B->eta_primelnu::NormalizationPDF(q2,cos(theta_l))",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                )
             }
         );
 
@@ -244,64 +320,108 @@ namespace eos
             R"(Signal PDFs in semileptonic $B\to V \ell^-\bar\nu$ decays)",
             R"()",
             {
-
                 // B -> D^* l nu
-                make_signal_pdf("B->D^*lnu::dBR",
+                make_signal_pdf("B->D^*lnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to D^*(\to D\pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
                     Options{ { "V"_ok, "D^*" } },
-                    &BToVectorLeptonNeutrino::differential_branching_ratio,
+                    "B->D^*lnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 10.68, BToVectorLeptonNeutrino::kinematics_description_q2 }
+                        "q2"s
                     ),
-                    &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                    "B->D^*lnu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
-                make_signal_pdf("B->D^*lnu::d^4Gamma",
+                make_signal_pdf("B->D^*lnu::P(q2,cos(theta_l),cos(theta_D),phi)",
+                    R"(PDF for the decay $\bar{B}\to D^*(\to D\pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$,
+                    the cosine of the angle $\theta_D$ between the $D$ and the negative $\ell^-\bar\nu$ flight direction in the $D^*$ rest frame,
+                    the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $D^*$ flight direction in the $\ell^-\bar\nu$ rest frame,
+                    and the azimuthal angle $\phi$ between the two decay planes.)",
                     Options{ { "V"_ok, "D^*" } },
-                    &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                    "B->D^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D),phi)",
                     std::make_tuple(
-                        KinematicRange{ "q2",            0.0,  10.68,      BToVectorLeptonNeutrino::kinematics_description_q2        },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0,        BToVectorLeptonNeutrino::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_d)", -1.0, +1.0,        BToVectorLeptonNeutrino::kinematics_description_c_theta_d },
-                        KinematicRange{ "phi",           0.0,  2.0 * M_PI, BToVectorLeptonNeutrino::kinematics_description_phi       }
+                        "q2"s,
+                        "cos(theta_l)"s,
+                        "cos(theta_D)"s,
+                        "phi"s
                     ),
-                    &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                    "B->D^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_D),phi)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
                 // B_s -> K^* l nu
-                make_signal_pdf("B_s->K^*lnu::dBR",
+                make_signal_pdf("B_s->K^*lnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}_s\to K^*(\to K\pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
                     Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, { "I"_ok, "1/2" } },
-                    &BToVectorLeptonNeutrino::differential_branching_ratio,
+                    "B_s->K^*lnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 10.68, BToVectorLeptonNeutrino::kinematics_description_q2 }
+                        "q2"s
                     ),
-                    &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                    "B_s->K^*lnu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
-                make_signal_pdf("B_s->K^*lnu::d^4Gamma",
+                make_signal_pdf("B_s->K^*lnu::P(q2,cos(theta_l),cos(theta_K),phi)",
+                    R"(PDF for the decay $\bar{B}_s\to K^*(\to K\pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$,
+                    the cosine of the angle $\theta_K$ between the $K$ and the negative $\ell^-\bar\nu$ flight direction in the $K^*$ rest frame,
+                    the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame,
+                    and the azimuthal angle $\phi$ between the two decay planes.)",
                     Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, { "I"_ok, "1/2" } },
-                    &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                    "B_s->K^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
                     std::make_tuple(
-                        KinematicRange{ "q2",            0.0,  10.68,      BToVectorLeptonNeutrino::kinematics_description_q2        },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0,        BToVectorLeptonNeutrino::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_d)", -1.0, +1.0,        BToVectorLeptonNeutrino::kinematics_description_c_theta_d },
-                        KinematicRange{ "phi",           0.0,  2.0 * M_PI, BToVectorLeptonNeutrino::kinematics_description_phi       }
+                        "q2"s,
+                        "cos(theta_l)"s,
+                        "cos(theta_K)"s,
+                        "phi"s
                     ),
-                    &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                    "B_s->K^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_K),phi)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                // B_s -> D_s^* l nu
+                make_signal_pdf("B_s->D_s^*lnu::P(q2)",
+                    R"(PDF for the decay $\bar{B}_s\to D_s^*(\to D_s\pi^0) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
+                    Options{ { "U"_ok, "c" }, {"q"_ok, "s"}, { "I"_ok, "0" } },
+                    "B_s->D_s^*lnu::UnnormalizedPDF(q2)",
+                    std::make_tuple(
+                        "q2"s
+                    ),
+                    "B_s->D_s^*lnu::NormalizationPDF(q2)",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
+                    )
+                ),
+
+                make_signal_pdf("B_s->D_s^*lnu::P(q2,cos(theta_l),cos(theta_D_s),phi)",
+                    R"(PDF for the decay $\bar{B}_s\to D_s^*(\to D_s\pi^0) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$,
+                    the cosine of the angle $\theta_{D_s}$ between the $D_s$ and the negative $\ell^-\bar\nu$ flight direction in the $D_s^*$ rest frame,
+                    the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame,
+                    and the azimuthal angle $\phi$ between the two decay planes.)",
+                    Options{ { "U"_ok, "c" }, {"q"_ok, "s"}, { "I"_ok, "0" } },
+                    "B_s->D_s^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
+                    std::make_tuple(
+                        "q2"s,
+                        "cos(theta_l)"s,
+                        "cos(theta_D_s)"s,
+                        "phi"s
+                    ),
+                    "B_s->D_s^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
+                    std::make_tuple(
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
             }
@@ -320,22 +440,25 @@ namespace eos
             R"(Signal PDFs in semileptonic $B\to PP \ell^-\bar\nu$ decays)",
             R"()",
             {
-                make_signal_pdf("B->pipimunu::d^3Gamma@QCDF",
-                    Options{ },
-                    &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
+                make_signal_pdf("B^+->pi^+pi^-lnu::PDF(q2,k2,cos(theta_pi))",
+                    R"(PDF for the decay $B^+\to \pi^+\pi^- \ell^+\nu$ as a function of the invariant $\pi^+\pi^-$ mass squared $k^2$,
+                    the invariant $\ell^+\nu$ mass squared $q^2$, and the cosine of the angle $\theta_\pi$ between the $\pi^+$ and the
+                    negative $B^+$ flight direction in the $\pi^+\pi^-$ rest frame.)",
+                    Options{ { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} },
+                    "B^+->pi^+pi^-lnu::UnnormalizedPDF(q2,k2,cos(theta_pi))",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.01, 0.93859, BToPiPiLeptonNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "k2", 18.582, 27.872, BToPiPiLeptonNeutrino::kinematics_description_k2 },
-                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }
+                        "q2"s,
+                        "k2"s,
+                        "cos(theta_pi)"s
                     ),
-                    &BToPiPiLeptonNeutrino::integrated_branching_ratio,
+                    "B^+->pi^+pi^-lnu::NormalizationPDF(q2,k2,cos(theta_pi))",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max",
-                        "k2_min",
-                        "k2_max",
-                        "cos(theta)_min",
-                        "cos(theta)_max"
+                        "q2_min"s,
+                        "q2_max"s,
+                        "k2_min"s,
+                        "k2_max"s,
+                        "cos(theta)_min"s,
+                        "cos(theta)_max"s
                     )
                 ),
             }
@@ -354,33 +477,23 @@ namespace eos
             R"(Signal PDFs in semileptonic $\Lambda_b\to 1/2^+ \ell^-\bar\nu$ decays)",
             R"()",
             {
-                // Lambda_b -> Lambda_c l nu
-                make_signal_pdf("Lambda_b->Lambda_clnu::dGamma",
+                make_signal_pdf("Lambda_b->Lambda_clnu::P(q2,cos(theta_l),cos(theta_L),phi)",
+                    R"(PDF for the decay $\Lambda_b\to \Lambda_c(\to \Lambda \pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$,
+                    the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\Lambda_b$ flight direction in the $\ell^-\bar\nu$ rest frame,
+                    the cosine of the angle $\theta_L$ between the $\Lambda$ and the negative $\Lambda_b$ flight direction in the $\Lambda_c$ rest frame,
+                    and the azimuthal angle $\phi$ between the two decay planes.)",
                     Options{ },
-                    &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
+                    "Lambda_b->Lambda_clnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_L),phi)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 }
+                        "q2"s,
+                        "cos(theta_l)"s,
+                        "cos(theta_L)"s,
+                        "phi"s
                     ),
-                    &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
+                    "Lambda_b->Lambda_clnu::NormalizationPDF(q2,cos(theta_l),cos(theta_L),phi)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
-                    )
-                ),
-
-                make_signal_pdf("Lambda_b->Lambda_clnu::d^4Gamma",
-                    Options{ },
-                    &LambdaBToLambdaCLeptonNeutrino::four_differential_decay_width,
-                    std::make_tuple(
-                        KinematicRange{ "q2", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, LambdaBToLambdaCLeptonNeutrino::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_L)", -1.0, +1.0, LambdaBToLambdaCLeptonNeutrino::kinematics_description_c_theta_L },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, LambdaBToLambdaCLeptonNeutrino::kinematics_description_phi }
-                    ),
-                    &LambdaBToLambdaCLeptonNeutrino::integrated_decay_width,
-                    std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
             }
@@ -400,30 +513,19 @@ namespace eos
             R"()",
             {
                 // Lambda_b -> Lambda_c(2625) l nu
-                make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::dGamma",
+                make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\Lambda_b\to \Lambda_c(2625) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\Lambda_b$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
                     Options{ },
-                    &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
+                    "Lambda_b->Lambda_c(2625)lnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        KinematicRange{ "s", 0.011, 8.9478, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_s }
+                        "q2"s,
+                        "cos(theta_l)"s
                     ),
-                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
+                    "Lambda_b->Lambda_c(2625)lnu::NormalizationPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
-                    )
-                ),
-
-                make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::d^2Gamma",
-                    Options{ },
-                    &LambdaBToLambdaC2625LeptonNeutrino::double_differential_branching_ratio,
-                    std::make_tuple(
-                        KinematicRange{ "s", 0.011, 8.9478, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_c_theta_l }
-                    ),
-                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
-                    std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
             }

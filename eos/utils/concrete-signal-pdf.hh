@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,9 +20,11 @@
 #ifndef EOS_GUARD_EOS_UTILS_CONCRETE_SIGNAL_PDF_HH
 #define EOS_GUARD_EOS_UTILS_CONCRETE_SIGNAL_PDF_HH 1
 
+#include <eos/observable.hh>
 #include <eos/signal-pdf.hh>
 #include <eos/utils/density-impl.hh>
 #include <eos/utils/tuple-maker.hh>
+#include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <cmath>
 #include <functional>
@@ -218,8 +220,8 @@ namespace eos
         }
 
         template <typename Tuple_, int... Indices_>
-        std::array<typename std::tuple_element<0, Bare<Tuple_>>::type, std::tuple_size<Bare<Tuple_>>::value>
-        to_array(Tuple_ && tuple, indices<Indices_...>)
+        std::vector<typename std::tuple_element<0, Bare<Tuple_>>::type>
+        to_vector(Tuple_ && tuple, indices<Indices_...>)
         {
             using std::get;
             return { { get<Indices_>(std::forward<Tuple_>(tuple))... } };
@@ -227,11 +229,12 @@ namespace eos
 
         template <typename Tuple_>
         auto
-        to_array(Tuple_ && tuple) -> decltype(to_array(std::declval<Tuple_>(), make_indices<Tuple_>()))
+        to_vector(Tuple_ && tuple) -> decltype(to_vector(std::declval<Tuple_>(), make_indices<Tuple_>()))
         {
-            return to_array(std::forward<Tuple_>(tuple), make_indices<Tuple_>());
+            return to_vector(std::forward<Tuple_>(tuple), make_indices<Tuple_>());
         }
 
+#if 0
         // convert Decay_ + std::array to std::tuple such that std::apply can be used
         template <typename T_, std::size_t N_, std::size_t... indices_>
         auto
@@ -246,9 +249,10 @@ namespace eos
         {
             return make_tuple(t, args, std::make_index_sequence<N_>());
         }
+#endif
     } // namespace impl
 
-    template <typename Decay_, typename PDFSignature_, unsigned pdf_args_, typename NormSignature_, unsigned norm_args_> class ConcreteSignalPDF : public SignalPDF
+    class ConcreteSignalPDF : public SignalPDF
     {
         public:
         private:
@@ -258,211 +262,90 @@ namespace eos
 
             Kinematics _kinematics;
 
-            std::vector<ParameterDescription> _descriptions;
-
             Options _options;
 
-            Decay_ _decay;
+            ObservablePtr _unnormalized_pdf;
 
-            std::function<PDFSignature_> _pdf;
+            ObservablePtr _normalization;
 
-            std::array<KinematicRange, pdf_args_> _pdf_kinematic_ranges;
-
-            std::array<KinematicVariable, pdf_args_> _pdf_arguments;
-
-            std::function<NormSignature_> _norm;
-
-            std::array<std::string, norm_args_> _norm_kinematic_names;
-
-            std::array<KinematicVariable, norm_args_> _norm_arguments;
+            // TODO: remove
+            std::vector<ParameterDescription> _descriptions;
 
         public:
             ConcreteSignalPDF(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
-                              const std::function<PDFSignature_> & pdf, const std::array<KinematicRange, pdf_args_> & pdf_kinematic_ranges,
-                              const std::function<NormSignature_> & norm, const std::array<std::string, norm_args_> & norm_kinematic_names) :
-                _name(name),
-                _parameters(parameters),
-                _kinematics(kinematics),
-                _descriptions(impl::make_descriptions(_kinematics, pdf_kinematic_ranges)),
-                _options(options),
-                _decay(parameters, options),
-                _pdf(pdf),
-                _pdf_kinematic_ranges(pdf_kinematic_ranges),
-                _pdf_arguments(impl::make_arguments(_kinematics, pdf_kinematic_ranges)),
-                _norm(norm),
-                _norm_kinematic_names(norm_kinematic_names),
-                _norm_arguments(impl::make_arguments(_kinematics, norm_kinematic_names))
-            {
-            }
+                              const QualifiedName & unnormalized_pdf, const QualifiedName & normalization);
 
-            virtual const QualifiedName &
-            name() const
-            {
-                return _name;
-            }
+            virtual const QualifiedName & name() const;
 
-            virtual double
-            evaluate() const
-            {
-                std::array<double, pdf_args_> pdf_arguments = impl::evaluate(_pdf_arguments);
+            virtual double evaluate() const;
 
-                double result = std::apply(_pdf, impl::convert_to_tuple(&_decay, pdf_arguments));
+            virtual double normalization() const;
 
-                return (result > 0 ? std::log(result) : -std::numeric_limits<double>::max());
-            }
+            virtual Parameters parameters();
 
-            virtual double
-            normalization() const
-            {
-                std::array<double, norm_args_> norm_arguments = impl::evaluate(_norm_arguments);
+            virtual Kinematics kinematics();
 
-                double result = std::apply(_norm, impl::convert_to_tuple(&_decay, norm_arguments));
+            virtual Options options();
 
-                return (result > 0 ? std::log(result) : -std::numeric_limits<double>::max());
-            }
+            virtual DensityPtr clone() const;
 
-            virtual Parameters
-            parameters()
-            {
-                return _parameters;
-            }
+            virtual DensityPtr clone(const Parameters & parameters) const;
 
-            virtual Kinematics
-            kinematics()
-            {
-                return _kinematics;
-            }
+            virtual Density::Iterator begin() const;
 
-            virtual Options
-            options()
-            {
-                return _options;
-            }
-
-            virtual DensityPtr
-            clone() const
-            {
-                return DensityPtr(new ConcreteSignalPDF(_name, _parameters.clone(), _kinematics.clone(), _options, _pdf, _pdf_kinematic_ranges, _norm, _norm_kinematic_names));
-            }
-
-            virtual DensityPtr
-            clone(const Parameters & parameters) const
-            {
-                return DensityPtr(new ConcreteSignalPDF(_name, parameters, _kinematics.clone(), _options, _pdf, _pdf_kinematic_ranges, _norm, _norm_kinematic_names));
-            }
-
-            virtual Density::Iterator
-            begin() const
-            {
-                return Density::Iterator(_descriptions.cbegin());
-            }
-
-            virtual Density::Iterator
-            end() const
-            {
-                return Density::Iterator(_descriptions.cend());
-            }
+            virtual Density::Iterator end() const;
     };
 
-    template <typename Decay_, typename PDFSignature_, unsigned pdf_args_, typename NormSignature_, unsigned norm_args_> class ConcreteSignalPDFEntry : public SignalPDFEntry
+    class ConcreteSignalPDFEntry : public SignalPDFEntry
     {
         private:
             QualifiedName _name;
 
+            std::string _description;
+
             Options _default_options;
 
-            std::function<PDFSignature_> _pdf;
+            QualifiedName _numerator;
 
-            std::array<KinematicRange, pdf_args_> _pdf_kinematic_ranges;
+            QualifiedName _normalization;
 
-            std::function<NormSignature_> _norm;
+            std::vector<std::string> _numerator_kinematic_names;
 
-            std::array<std::string, norm_args_> _norm_kinematic_names;
+            std::vector<std::string> _normalization_kinematic_names;
 
         public:
-            ConcreteSignalPDFEntry(const QualifiedName & name, const Options & default_options, const std::function<PDFSignature_> & pdf,
-                                   const std::array<KinematicRange, pdf_args_> & pdf_kinematic_ranges, const std::function<NormSignature_> & norm,
-                                   const std::array<std::string, norm_args_> & norm_kinematic_names) :
-                _name(name),
-                _default_options(default_options),
-                _pdf(pdf),
-                _pdf_kinematic_ranges(pdf_kinematic_ranges),
-                _norm(norm),
-                _norm_kinematic_names(norm_kinematic_names)
-            {
-            }
+            ConcreteSignalPDFEntry(const QualifiedName & name, const std::string & description, const Options & default_options, const QualifiedName & numerator,
+                                   const QualifiedName & normalization, const std::vector<std::string> & numerator_kinematic_names,
+                                   const std::vector<std::string> & normalization_kinematic_names);
+            ~ConcreteSignalPDFEntry();
 
-            ~ConcreteSignalPDFEntry() {}
+            virtual const QualifiedName &                              name() const;
+            virtual const std::string &                                description() const;
+            virtual SignalPDFEntry::NumeratorKinematicVariableIterator begin_numerator_kinematic_variables() const;
 
-            virtual const QualifiedName &
-            name() const
-            {
-                return _name;
-            }
+            virtual SignalPDFEntry::NumeratorKinematicVariableIterator end_numerator_kinematic_variables() const;
 
-            virtual const std::string &
-            description() const
-            {
-                return Decay_::description;
-            }
+            virtual SignalPDFEntry::DenominatorKinematicVariableIterator begin_denominator_kinematic_variables() const;
 
-            virtual SignalPDFEntry::KinematicRangeIterator
-            begin_kinematic_ranges() const
-            {
-                return _pdf_kinematic_ranges.begin();
-            }
+            virtual SignalPDFEntry::DenominatorKinematicVariableIterator end_denominator_kinematic_variables() const;
 
-            virtual SignalPDFEntry::KinematicRangeIterator
-            end_kinematic_ranges() const
-            {
-                return _pdf_kinematic_ranges.end();
-            }
+            virtual SignalPDFPtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
 
-            virtual SignalPDFPtr
-            make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
-            {
-                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, PDFSignature_, pdf_args_, NormSignature_, norm_args_>(_name,
-                                                                                                                        parameters,
-                                                                                                                        kinematics,
-                                                                                                                        _default_options + options,
-                                                                                                                        _pdf,
-                                                                                                                        _pdf_kinematic_ranges,
-                                                                                                                        _norm,
-                                                                                                                        _norm_kinematic_names));
-            }
-
-            virtual std::ostream &
-            insert(std::ostream & os) const
-            {
-                return os;
-            }
+            virtual std::ostream & insert(std::ostream & os) const;
     };
 
-    template <typename Decay_, typename... PDFArgs_, typename... PDFKinematicRanges_, typename... NormArgs_, typename... NormKinematicNames_>
+    template <typename... NumeratorKinematicNames_, typename... NormalizationKinematicNames_>
     SignalPDFEntry *
-    make_concrete_signal_pdf_entry(const QualifiedName & name, const Options & default_options, const std::function<double(const Decay_ *, const PDFArgs_ &...)> & pdf,
-                                   const std::tuple<PDFKinematicRanges_...> & _pdf_kinematic_ranges, const std::function<double(const Decay_ *, const NormArgs_ &...)> & norm,
-                                   const std::tuple<NormKinematicNames_...> & _norm_kinematic_names)
+    make_concrete_signal_pdf_entry(const QualifiedName & name, const std::string & description, const Options & default_options, const QualifiedName & numerator,
+                                   const std::tuple<NumeratorKinematicNames_...> & _numerator_kinematic_names, const QualifiedName & normalization,
+                                   const std::tuple<NormalizationKinematicNames_...> & _normalization_kinematic_names)
     {
-        static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments as kinematics ranges!");
-        static_assert(sizeof...(NormArgs_) == sizeof...(NormKinematicNames_), "Need as many function arguments for the normalization as kinematics names!");
+        std::vector<std::string> __numerator_kinematic_names{ impl::to_vector(_numerator_kinematic_names) };
+        std::vector<std::string> __normalization_kinematic_names{ impl::to_vector(_normalization_kinematic_names) };
 
-        using PDFSignature  = double(const Decay_ *, const PDFArgs_ &...);
-        using NormSignature = double(const Decay_ *, const NormArgs_ &...);
-        std::array<KinematicRange, sizeof...(PDFArgs_)> pdf_kinematic_ranges(impl::to_array(_pdf_kinematic_ranges));
-        std::array<std::string, sizeof...(NormArgs_)>   norm_kinematic_names;
-        std::array<const char *, sizeof...(NormArgs_)>  __norm_kinematic_names(impl::to_array(_norm_kinematic_names));
-        for (auto i = 0u; i < sizeof...(NormArgs_); ++i)
-        {
-            norm_kinematic_names[i] = std::string(__norm_kinematic_names[i]);
-        }
+        auto result = new ConcreteSignalPDFEntry(name, description, default_options, numerator, normalization, __numerator_kinematic_names, __normalization_kinematic_names);
 
-        return new ConcreteSignalPDFEntry<Decay_, PDFSignature, sizeof...(PDFArgs_), NormSignature, sizeof...(NormArgs_)>(name,
-                                                                                                                          default_options,
-                                                                                                                          pdf,
-                                                                                                                          pdf_kinematic_ranges,
-                                                                                                                          norm,
-                                                                                                                          norm_kinematic_names);
+        return result;
     }
 } // namespace eos
 

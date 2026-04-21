@@ -221,7 +221,7 @@ class SignalPDFItemTests(unittest.TestCase):
             input = """
             type: signal-pdf
             label: 'PDF ($\\ell=\\mu$)'
-            pdf: 'B->Dlnu::dGamma/dq2;l=mu'
+            pdf: 'B->Dlnu::P(q2);l=mu'
             variable: 'q2'
             range: [0.02, 11.60]
             resolution: 100
