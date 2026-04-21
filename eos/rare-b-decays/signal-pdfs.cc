@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +24,8 @@
 #include <eos/rare-b-decays/b-to-vec-nu-nu.hh>
 #include <eos/utils/concrete-signal-pdf.hh>
 
+using std::literals::string_literals::operator""s;
+
 namespace eos
 {
     // Rare semileptonic B -> P(seudoscalar) decays
@@ -36,47 +38,37 @@ namespace eos
             R"()",
             {
                 // B -> K nubar nu
-                make_signal_pdf("B^-->K^-nunu::dGamma/dq2",
+                make_signal_pdf("B^-->K^-nunu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to \bar{K} \bar\nu\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
                     Options{ { "q"_ok, "u" }, { "I"_ok, "1/2" }, { "D"_ok, "s" } },
-                    &BToPseudoscalarDineutrino::differential_branching_ratio,
+                    "B->Knunu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 22.90, BToPseudoscalarDineutrino::kinematics_description_q2 }
+                        "q2"s
                     ),
-                    &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                    "B->Knunu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
                 // B -> K l^+ l^-
-                make_signal_pdf("B->Kll::d^2Gamma@LargeRecoil",
+                make_signal_pdf("B->Kll::P(q2,cos(theta_l))",
+                    R"(PDF for the decay $\bar{B}\to \bar{K} \ell^+\ell^-$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the positively charged lepton and the negative $B$
+                    flight direction in the $\ell^+\ell^-$ rest frame.)",
                     Options{ {"tag"_ok, "BFS2004"} },
-                    &BToKDilepton::two_differential_decay_width,
+                    "B->Kll::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        KinematicRange{ "s",                  1.00,  6.00, BToKDilepton::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)^LHCb", -1.0,  +1.0,  BToKDilepton::kinematics_description_c_theta_l }
+                        "q2"s,
+                        "cos(theta_l)"s
                     ),
-                    &BToKDilepton::integrated_decay_width,
+                    "B->Kll::NormalizationPDF(q2,cos(theta_l))",
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
-                ),
-
-                make_signal_pdf("B->Kll::d^2Gamma@LowRecoil",
-                    Options{ {"tag"_ok, "GP2004" }},
-                    &BToKDilepton::two_differential_decay_width,
-                    std::make_tuple(
-                        KinematicRange{ "s",                 15.00, 22.87, BToKDilepton::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)^LHCb", -1.0,  +1.0,  BToKDilepton::kinematics_description_c_theta_l }
-                    ),
-                    &BToKDilepton::integrated_decay_width,
-                    std::make_tuple(
-                        "s_min",
-                        "s_max"
-                    )
-                ),
+                )
             }
         );
 
@@ -94,55 +86,40 @@ namespace eos
             R"()",
             {
                 // B -> K^* nu nu
-                make_signal_pdf("B^-->K^*-nunu::dGamma/dq2",
+                make_signal_pdf("B^-->K^*-nunu::P(q2)",
+                    R"(PDF for the decay $\bar{B}\to \bar{K}^*(\to \bar{K}\pi) \bar\nu\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
                     Options{ { "q"_ok, "u" }, { "I"_ok, "1/2" }, { "D"_ok, "s" } },
-                    &BToVectorDineutrino::differential_branching_ratio,
+                    "B->K^*nunu::UnnormalizedPDF(q2)",
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 19.25, BToVectorDineutrino::kinematics_description_q2 }
+                        "q2"s
                     ),
-                    &BToVectorDineutrino::integrated_branching_ratio,
+                    "B->K^*nunu::NormalizationPDF(q2)",
                     std::make_tuple(
-                        "q2_min",
-                        "q2_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
                 ),
 
                 // B -> K^* l^+ l^-
-                make_signal_pdf("B->K^*ll::d^4Gamma@LargeRecoil",
+                make_signal_pdf("B->K^*ll::P(q2,cos(theta_l),cos(theta_K),phi)",
+                    R"(PDF for the decay $\bar{B}\to \bar{K}^*(\to \bar{K}\pi) \ell^+\ell^-$ as a function of the invariant dilepton mass squared $q^2$,
+                    the cosine of the angle $\theta_K$ between the $\bar{K}$ and the negative $\ell^+\ell^-$ flight direction,
+                    the cosine of the angle $\theta_\ell$ between the positively charged lepton and the negative $B$ flight direction in the $\ell^+\ell^-$ rest frame,
+                    and the azimuthal angle $\phi$ between the two decay planes.)",
                     Options{ {"tag"_ok, "BFS2004"} },
-                    &BToKstarDilepton::decay_width_LHCb,
+                    "B->K^*ll::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
                     std::make_tuple(
-                        KinematicRange{ "s",                  1.00,  6.00,       BToKstarDilepton::kinematics_description_s         },
-                        KinematicRange{ "cos(theta_l)^LHCb", -1.0,  +1.0,        BToKstarDilepton::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)^LHCb", -1.0,  +1.0,        BToKstarDilepton::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi^LHCb",           0.0,   2.0 * M_PI, BToKstarDilepton::kinematics_description_phi       }
+                        "q2"s,
+                        "cos(theta_l)"s,
+                        "cos(theta_K)"s,
+                        "phi"s
                     ),
-                    std::function<double (const BToKstarDilepton *, const double &, const double &)>([] (const BToKstarDilepton * decay, const double & q2_min, const double & q2_max) -> double {
-                        return decay->integrated_decay_width(decay->prepare(q2_min, q2_max));
-                    }),
+                    "B->K^*ll::NormalizationPDF(q2,cos(theta_l),cos(theta_K),phi)",
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min"s,
+                        "q2_max"s
                     )
-                ),
-
-                make_signal_pdf("B->K^*ll::d^4Gamma@LowRecoil",
-                    Options{ {"tag"_ok, "GP2004" }},
-                    &BToKstarDilepton::decay_width_LHCb,
-                    std::make_tuple(
-                        KinematicRange{ "s",                  15.00,  19.21,      BToKstarDilepton::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)^LHCb", -1.0,   +1.0,        BToKstarDilepton::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)^LHCb", -1.0,   +1.0,        BToKstarDilepton::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi^LHCb",           0.0,    2.0 * M_PI, BToKstarDilepton::kinematics_description_phi }
-                    ),
-                    std::function<double (const BToKstarDilepton *, const double &, const double &)>([] (const BToKstarDilepton * decay, const double & q2_min, const double & q2_max) -> double {
-                        return decay->integrated_decay_width(decay->prepare(q2_min, q2_max));
-                    }),
-                    std::make_tuple(
-                        "s_min",
-                        "s_max"
-                    )
-                ),
+                )
             }
         );
 

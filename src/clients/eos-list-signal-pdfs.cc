@@ -20,6 +20,7 @@
 #include <eos/signal-pdf.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/join.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
@@ -113,34 +114,8 @@ struct Printer
 
             cout << endl;
 
-            for (const auto & k : rhs->kinematic_ranges())
-            {
-                cout.fill(' ');
-
-                cout.width(20);
-                cout << std::right;
-                cout << k.name;
-                cout << std::left;
-
-                cout.width(0);
-                cout << " [ ";
-
-                cout.width(10);
-                cout << k.min;
-
-                cout.width(0);
-                cout << " , ";
-
-                cout.width(10);
-                cout << k.max;
-
-                cout.width(0);
-                cout << " ] : ";
-
-                cout << k.description;
-
-                cout << endl;
-            }
+            cout << "    Numerator kinematic variables:" << join(rhs->begin_numerator_kinematic_variables(), rhs->end_numerator_kinematic_variables(), ", ") << endl;
+            cout << "    Denominator kinematic variables:" << join(rhs->begin_denominator_kinematic_variables(), rhs->end_denominator_kinematic_variables(), ", ") << endl;
 
             cout << endl;
         }
