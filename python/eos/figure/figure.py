@@ -237,6 +237,7 @@ class GridFigure(Figure):
     plots:list[Plot]
     padding:tuple[float,float]=field(default=(0.2, 0.2))
     shape:tuple[int, int]
+    watermark:Watermark=field(default_factory=Watermark)
 
     _api_doc = inspect.cleandoc("""
     Producing a Figure with a Grid of Plots
@@ -273,6 +274,7 @@ class GridFigure(Figure):
         for idx, plot in enumerate(self.plots):
             plot.prepare()
             plot.draw(self._axes[idx])
+            self.watermark.draw(self._axes[idx])
 
         self._gridspec.tight_layout(self._figure)
         if output is not None:
