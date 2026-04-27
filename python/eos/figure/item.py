@@ -400,7 +400,7 @@ class UncertaintyBandItem(Item):
         _ovalues_higher  = []
         INTERVAL = [0.15865, 0.5, 0.84135]  # central 68% interval
         for i in range(len(_samples[0])):
-            lower, central, higher = eos.plot.Plotter._weighted_quantiles(_samples[:, i], INTERVAL, _weights)
+            lower, central, higher = _np.quantile(_samples[:, i], q = INTERVAL, weights = _weights, method='inverted_cdf', axis=0)
             _ovalues_lower.append(lower)
             _ovalues_central.append(central)
             _ovalues_higher.append(higher)
