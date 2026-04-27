@@ -263,6 +263,8 @@ class UncertaintyBandItem(Item):
     :type resolution: int
     :param variable: The name of the kinematic variable that is plotted on the x-axis. Defaults to the first kinematic variable recorded in the data file.
     :type variable: str | None
+    :param observable: The name of the observable that is plotted. This name can include options. Defaults to the first observable recorded in the data file.
+    :type observable: str | None
 
     Example:
 
@@ -271,7 +273,7 @@ class UncertaintyBandItem(Item):
         figure_args = '''
         plot:
           xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                 range: [0.0,  5e-3] }
+          yaxis: { label: r'$d\\mathcal{B}/dq^2$',                  range: [0.0,  5e-3] }
           legend: { position: 'upper center' }
           items:
             - { type: 'uncertainty', label: r'$\\ell=\\mu$',
@@ -293,6 +295,7 @@ class UncertaintyBandItem(Item):
     range:tuple[float, float]|None=field(default=None)
     resolution:int=field(default=100)
     variable:str|None=field(default=None)
+    observable:str|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""\
     Plotting Uncertainty Bands
@@ -318,6 +321,7 @@ class UncertaintyBandItem(Item):
         * ``range`` (*tuple* of two *float* values) -- The range of the kinematic variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
         * ``resolution`` (*int*) -- The number of points to be used for the interpolation of the band. Defaults to 100.
         * ``variable`` (*str*) -- The name of the kinematic variable that is plotted on the x-axis. Defaults to the first kinematic variable in the data file.
+        * ``observable`` (*str*) -- The name of the observable that is plotted. This name can include options. Defaults to the first observable in the data file.
 
     Example:
 
@@ -376,7 +380,7 @@ class UncertaintyBandItem(Item):
             raise ValueError(f"Data file '{self.datafile}' does not contain any predictions")
 
         self._variable = self.variable
-        if self._variable is not None:
+        if self._variable is None:
             # assume that the first prediction has only one kinematic variable,
             # which we adopt as the variable to plot
             kinematics = self._datafile.varied_parameters[0]['kinematics']
@@ -384,15 +388,38 @@ class UncertaintyBandItem(Item):
                 raise ValueError(f"Data file '{self.datafile}' contains more than one kinematic variable; specify 'variable' to determine which is supposed to be used")
             self._variable = list(kinematics.keys())[0]
 
+        self._observable = self.observable
+        if self._observable is None:
+            # assume that only one observable was predicted
+            observables = {obs.split(';')[0] for obs in list(self._datafile.lookup_table.keys())}
+            if len(observables) > 1:
+                raise ValueError(f"Data file '{self.datafile}' contains more than one predicted observable; specify 'observable' to determine which is supposed to be used")
+            if len(observables) == 0:
+                raise ValueError(f"Data file '{self.datafile}' contains no observable, check predictions")
+            self._observable = observables.pop()
+        self._observable = eos.QualifiedName(self._observable)
+
+        # Filter the x values and the predictions based on _variable and _observable
         _xvalues = []
+        _observable_mask = []
         for idx, vp in enumerate(self._datafile.varied_parameters):
             kinematics = vp['kinematics']
             if self._variable not in kinematics:
                 raise ValueError(f"Prediction #{idx} in data file '{self.datafile}' does not depend on the chosen kinematic variable '{self._variable}'")
             _xvalues.append(kinematics[self._variable])
 
-        _xvalues = _np.array(_xvalues)
-        _samples = self._datafile.samples
+            valid_observable = (self._observable == eos.QualifiedName(vp["name"])) # Check that the observable names match
+            for k, v in self._observable.options_part(): # Check that thre specified options match
+                if k in vp["options"] and not vp["options"][k] == v:
+                    valid_observable = False
+
+            _observable_mask.append(valid_observable)
+
+        if not _np.any(_observable_mask):
+            raise ValueError(f"No observable of the data file matches the specified observable '{self.observable}'")
+
+        _xvalues = _np.array(_xvalues)[_observable_mask]
+        _samples = self._datafile.samples[:, _observable_mask]
         _weights = self._datafile.weights
 
         _ovalues_lower   = []
