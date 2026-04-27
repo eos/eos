@@ -1619,6 +1619,13 @@ FY:2011A:
     id: oai:arXiv.org:1111.1844
   inspire-id: Feldmann:2011xf
   title: Form Factors for $\Lambda_b \to \Lambda$ Transitions in {SCET}
+G:2026A:
+  authors: Gubernari, Nico
+  eprint:
+    archive: arXiv
+    id: In preparation
+  inspire-id: Gubernari:2026xxx
+  title: Unitarity bounds and form factor predictions for $B$-meson decays
 GHMS:2012A:
   authors: Grigo, Jonathan and Hoff, Jens and Marquard, Peter and Steinhauser, Matthias
   eprint:
