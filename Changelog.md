@@ -19,20 +19,28 @@
   - `B_(s)->D_(s)^*::FormFactors@HPQCD:2023A` -> `B_(s)->D_(s)^*::FormFactors[HQETBasis]@HPQCD:2023A`
   - `B_(s)->D_(s)^*::FormFactors[TraditionalBasis]@HPQCD:2023A` -> `B_(s)->D_(s)^*::FormFactors@HPQCD:2023A`
 - Impose the exact relation `f+(0) = f0(0)` in the BGL parameterisation of P -> P form factors (M. Reboud)
+- Bump the Ubuntu image to resolute and the PyPI container (D. van Dyk)
+- Reorganize the structure of constraints (F. Herren)
 
 
 ### Added
 
 - Add functionality to figure framework to allow export to multiple files at once (M. Kirk)
-- Export `wilson-polynomials` to python (M. Reboud)
-- Add missing references to bibliography (M. Kirk, E. McPartland)
+- Export `wilson-polynomials` to python (M. Reboud, D. van Dyk)
+- Add missing references to bibliography and implement a commit hook to check for missing references (M. Kirk, E. McPartland)
 - Implement a new figure item to plot constraints residues (M. Reboud)
 - Update the examples and the tests of the figure framework (M. Reboud)
+- Implements an observable option to specify which option needs to be plotted in an uncertainty band item (M. Reboud)
+- Implements B_c -> J/psi ell nu decays (C. Bolognani, M. Reboud)
+- Add basis for WCs with Delta c = Delta u = 1 transitions (D. Sue)
+- Extend the WC RGE and test it (D. Sue)
+- Implement L_c -> neutron ell nu decays (C. Bolognani)
 
 
 ### Removed
 
 - Purge `integrate1d` (M. Reboud, F. Herren)
+- Remove the matplotlib backend choice (M. Kirk)
 
 
 ### Fixed
@@ -40,7 +48,9 @@
 - Correct references list (M. Kirk, E. McPartland)
 - Fix bugs in the figure framework (M. Reboud)
 - Fix the constraint `B_(s)->D_(s)^*::FormFactors@HPQCD:2023A` (M. Reboud)
-
+- Fix the bound saturations in the BGL parameterisation (M. Reboud)
+- Fix the font used by matplotlib (M. Kirk)
+- Fix a race condition in TreadPool (D. van Dyk)
 
 
 ## [v1.0.19] - 2025-12-02
