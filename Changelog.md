@@ -4,6 +4,16 @@
 
 ### Changed
 
+### Added
+
+### Removed
+
+### Fixed
+
+## [v1.0.20] - 2026-04-28
+
+### Changed
+
 - Rename the following constraints (M. Kirk, M. Reboud)
   - `B->pi::FormFactors[parametric,LCSR+LQCD]@LvDM:2021A` -> `LMvD:2021A`
   - `B_s->D_s^*::A_1[s_max]@HPQCD:2019A` -> `HPQCD:2019B`
@@ -101,5 +111,6 @@
 
 
 
+[v1.0.20]: https://github.com/eos/eos/releases/tag/v1.0.20
 [v1.0.19]: https://github.com/eos/eos/releases/tag/v1.0.19
 [v1.0.18]: https://github.com/eos/eos/releases/tag/v1.0.18
