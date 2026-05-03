@@ -239,7 +239,7 @@ class ObservableItem(Item):
 
     def draw(self, ax, **kwargs):
         "Draw a curve of the observable."
-        ax.plot(self._xvalues, self._yvalues, label=self.label, color=self.color, **kwargs)
+        ax.plot(self._xvalues, self._yvalues, label=self.label, color=self.color, lw=self.linewidth, ls=self.linestyle, **kwargs)
 
 
 @dataclass(kw_only=True)
@@ -535,9 +535,9 @@ class BinnedUncertaintyItem(Item):
             ohi      /= width
             eos.debug(f"{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}")
             ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=label)
-            ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha)
-            ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha)
-            ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha)
+            ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
+            ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
+            ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
             label = None
 
 
@@ -875,7 +875,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
                                             _np.ma.masked_array(self.pdf, mask=self.pdf < plevel, fill_value=_np.nan),
                                             facecolor=self.color, alpha=self.alpha)
 
-        ax.plot(self.xvalues, self.pdf, color=self.color, linestyle=self.linestyle, label=self.label)
+        ax.plot(self.xvalues, self.pdf, color=self.color, lw=self.linewidth, ls=self.linestyle, label=self.label)
 
 @dataclass(kw_only=True)
 class TwoDimensionalKernelDensityEstimateItem(Item):
@@ -1828,7 +1828,7 @@ class SignalPDFItem(Item):
             self._variable.set(xvalue)
             pvalues[i] += self._pdf.evaluate()
 
-        ax.plot(xvalues, _np.exp(pvalues), alpha=self.alpha, color=self.color, label=self.label, ls=self.linestyle)
+        ax.plot(xvalues, _np.exp(pvalues), alpha=self.alpha, color=self.color, label=self.label, lw=self.linewidth, ls=self.linestyle)
 
 @dataclass(kw_only=True)
 class ComplexPlaneItem(Item):
