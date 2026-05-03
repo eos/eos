@@ -4,16 +4,60 @@
 
 ### Changed
 
+- Rename the following signal PDFs (D. van Dyk)
+  - `B->gammalnu::d^2Gamma/dEgamma/dcos(theta_l)` -> `B_u->gammalnu::P(E_gamma,cos(theta_l))`
+  - `B_u->enumumu::d^5Gamma` -> `B_u->enumumu::P(q2,k2,z_gamma,z_w,phi)`
+  - `B_u->munuee::d^5Gamma` -> `B_u->munuee::P(q2,k2,z_gamma,z_w,phi)`
+  - `B->pilnu::dGamma/dq2` -> `B->pilnu::P(q2)`
+  - `B->pilnu::d^2Gamma/dq2/dcos(theta_l)` -> `B->pilnu::P(q2,cos(theta_l))`
+  - `B->Dlnu::dGamma/dq2` -> `B->Dlnu::P(q2)`
+  - `B->Dlnu::d^2Gamma/dq2/dcos(theta_l)` -> `B->Dlnu::P(q2,cos(theta_l))`
+  - `B->D^*lnu::dBR` -> `B->D^*lnu::P(q2)`
+  - `B->D^*lnu::d^4Gamma` -> `B->D^*lnu::P(q2,cos(theta_l),cos(theta_D),phi)`
+  - `B_s->K^*lnu::dBR` -> `B_s->K^*lnu::P(q2)`
+  - `B_s->K^*lnu::d^4Gamma` -> `B_s->K^*lnu::P(q2,cos(theta_l),cos(theta_K),phi)`
+  - `B->pipimunu::d^3Gamma@QCDF` -> `B^+->pi^+pi^-lnu::PDF(q2,k2,cos(theta_pi))`
+  - `B->Knunu::dGamma/dq2` -> `B->Knunu::P(q2)`
+  - `B->Kll::d^2Gamma@LargeRecoil` -> `B->Kll::P(q2,cos(theta_l))`
+  - `B->K^*nunu::dGamma/dq2` -> `B->K^*nunu::P(q2)`
+  - `B->K^*ll::d^2Gamma@LargeRecoil` -> `B->K^*ll::P(q2,cos(theta_l))`
+
 ### Added
+
 - Add G2026 form factor parameterisation (N. Gubernari)
 - Add B(s) -> K(*) constraints from BGMT:2025A (N. Gubernari)
 - Add BSZ:2025A constraints in the Traditional Basis (N. Gubernari)
 - Add B->pi f0 and f+ constraints from FLAG:2024A (N. Gubernari)
 - Add Lambda_c->pll observables (D. Suelmann)
+- Add the following signal PDFs (D. van Dyk)
+  - `B_s->Klnu::P(q2)`
+  - `B_s->Klnu::P(q2,cos(theta_l))`
+  - `B_s->D_slnu::P(q2)`
+  - `B_s->D_slnu::P(q2,cos(theta_l))`
+  - `B->etalnu::P(q2)`
+  - `B->etalnu::P(q2,cos(theta_l))`
+  - `B->eta'lnu::P(q2)`
+  - `B->eta'lnu::P(q2,cos(theta_l))`
+  - `B_s->D_s^*lnu::P(q2)`
+  - `B_s->D_s^*lnu::P(q2,cos(theta_l),cos(theta_D_s),phi)`
+  - `B^+->pi^+pi^-lnu::PDF(q2,k2,cos(theta_pi))`
 
 ### Removed
 
+- Remove the following univariate signal PDFs, since the corresponding multivariate PDFs render them superfluous (D. van Dyk)
+  - `Lambda_b->Lambda_clnu::dBR`
+  - `Lambda_b->Lambda_c(2625)lnu::dGamma`
+
+- Remove the following signal PDFs, since they are unused and not worth maintaining (D. van Dyk)
+  - `B->pimu1nu::d^2Gamma`
+  - `B->pimu3nu::d^5Gamma`
+  - `B->Dmu1nu::d^2Gamma`
+  - `B->Dmu3nu::d^5Gamma`
+  - `B->Kll::d^2Gamma@LowRecoil`
+  - `B->K^*ll::d^2Gamma@LowRecoil`
+
 ### Fixed
+
 - Fix some linewidth and linestyles arguments in figure framework (D. Suelmann)
 
 
