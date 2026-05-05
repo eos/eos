@@ -2,7 +2,7 @@
 title: 'Hadronic Matrix Element Parameters'
 description: ''
 groups:
-# Parameters in B_q <-> Bbar_q Meson Mixing
+  # Parameters in B_q <-> Bbar_q Meson Mixing
   # {{{
   - title: 'Parameters in $B_q \leftrightarrow \bar{B}_q$ Meson Mixing'
     description: ''
