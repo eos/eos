@@ -1,4 +1,5 @@
 # Copyright (c) 2025-2026 Danny van Dyk
+# Copyright (c) 2026      Dominik Suelmann
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -215,6 +216,7 @@ class UncertaintyBandItemTests(unittest.TestCase):
             type: uncertainty
             label: '$\\ell=\\mu$'
             variable: 'q2'
+            levels: [95]
             range: [0.02, 11.63]
             datafile: 'eos/data/prediction_TEST.d/predictions'
             """
@@ -1215,6 +1217,10 @@ class UncertaintyBandItemValidationTests(unittest.TestCase):
         # an unknown interpolation type is rejected
         with self.assertRaises(ValueError):
             eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\ninterpolation: 'quadratic'")
+
+        # a level value larger than 100 is rejected
+        with self.assertRaisesRegex(ValueError, "not in the interval"):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlevels: [150]")
 
         # a range that is not a pair is rejected
         with self.assertRaises(ValueError):

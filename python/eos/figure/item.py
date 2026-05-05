@@ -1,4 +1,5 @@
 # Copyright (c) 2023-2026 Danny van Dyk
+# Copyright (c) 2026      Dominik Suelmann
 # Copyright (c) 2023      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -579,7 +580,7 @@ class ExpressionItem(Item):
 
 @dataclass(kw_only=True)
 class UncertaintyBandItem(Item):
-    """Plots the 68% uncertainty band as a function of one kinematic variable or one parameter.
+    """Plots the 68.27% (default) uncertainty band as a function of one kinematic variable or one parameter.
 
     This routine requires EOS data file to have been produced, typically by running ``predict-observables`` task.
 
@@ -592,6 +593,8 @@ class UncertaintyBandItem(Item):
     :type datafile: str
     :param interpolation: The type of interpolation to be used for the band. Can be either ``linear`` (default) or ``cubic``.
     :type interpolation: str
+    :param levels: The credibility levels that shall be visualized in percent (optional) ordered from lowest to highest. Defaults to [68.27].
+    :type levels: list[float]
     :param range: A tuple of two float values (min, max) representing the range of the kinematic variable to be plotted on the x-axis.
     :type range: tuple[float, float] | None
     :param resolution: The number of points to be used for the interpolation of the band. Defaults to 100.
@@ -627,6 +630,7 @@ class UncertaintyBandItem(Item):
     band:set[str]|list[str]|str=field(default_factory=lambda : {'area', 'outer', 'median'})
     datafile:str
     interpolation:str=field(default='linear')
+    levels:list[float]=field(default_factory=lambda: [68.27])
     range:tuple[float, float]|None=field(default=None)
     resolution:int=field(default=100)
     variable:str|None=field(default=None)
@@ -695,6 +699,9 @@ class UncertaintyBandItem(Item):
             if band_type not in ['area', 'outer', 'median']:
                 raise ValueError(f"Unrecognized band type '{band_type}'; must be one of 'area', 'outer', or 'median'")
 
+        if 'outer' not in self.band and 'median' not in self.band:
+            self.linewidth = 0.0
+
         if self.interpolation not in ['linear', 'cubic']:
             raise ValueError(f"Unrecognized interpolation type '{self.interpolation}'; must be either 'linear' or 'cubic'")
 
@@ -706,6 +713,14 @@ class UncertaintyBandItem(Item):
             if self.range[0] >= self.range[1]:
                 raise ValueError(f"Range must be a tuple of two values (min, max) with max > min, not {self.range}")
 
+        for level in self.levels:
+            if level < 0 or level >= 100:
+                raise ValueError(f"Credibility level '{level}' is not in the interval (0, 100)")
+
+        # draw the largest contour first (lowest opacity) and the smallest last (highest opacity),
+        # so that nested contours remain visible
+        self.levels = sorted(self.levels, reverse=True)
+        self._alphas = _np.linspace(0.0, self.alpha, len(self.levels) + 1)[1:]
 
     def prepare(self, context:AnalysisFileContext=None):
         """Prepare the uncertainty band for drawing.
@@ -767,27 +782,32 @@ class UncertaintyBandItem(Item):
         _samples = self._datafile.samples[:, _observable_mask]
         _weights = self._datafile.weights
 
-        _ovalues_lower   = []
-        _ovalues_central = []
-        _ovalues_higher  = []
-        INTERVAL = [0.15865, 0.5, 0.84135]  # central 68% interval
-        for i in range(len(_samples[0])):
-            lower, central, higher = _np.quantile(_samples[:, i], q = INTERVAL, weights = _weights, method='inverted_cdf', axis=0)
-            _ovalues_lower.append(lower)
-            _ovalues_central.append(central)
-            _ovalues_higher.append(higher)
+        self._ovalues_lower   = []
+        self._ovalues_central = []
+        self._ovalues_higher  = []
 
-        self._xvalues = _np.linspace(_np.min(_xvalues), _np.max(_xvalues), self.resolution)
+        for level in self.levels:
+            _ovalues_lower   = []
+            _ovalues_central = []
+            _ovalues_higher  = []
+            INTERVAL = [0.5-level/100/2, 0.5, 0.5+level/100/2]
+            for i in range(len(_samples[0])):
+                lower, central, higher = _np.quantile(_samples[:, i], q = INTERVAL, weights = _weights, method='inverted_cdf', axis=0)
+                _ovalues_lower.append(lower)
+                _ovalues_central.append(central)
+                _ovalues_higher.append(higher)
 
-        if self.interpolation == "linear":
-            interpolate = lambda x, y, xv: _np.interp(xv, x, y)
-        elif self.interpolation == "cubic":
-            from scipy.interpolate import CubicSpline
-            interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
+            self._xvalues = _np.linspace(_np.min(_xvalues), _np.max(_xvalues), self.resolution)
 
-        self._ovalues_lower   = interpolate(_xvalues, _ovalues_lower,   self._xvalues)
-        self._ovalues_central = interpolate(_xvalues, _ovalues_central, self._xvalues)
-        self._ovalues_higher  = interpolate(_xvalues, _ovalues_higher,  self._xvalues)
+            if self.interpolation == "linear":
+                interpolate = lambda x, y, xv: _np.interp(xv, x, y)
+            elif self.interpolation == "cubic":
+                from scipy.interpolate import CubicSpline
+                interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
+
+            self._ovalues_lower.append(interpolate(_xvalues, _ovalues_lower,   self._xvalues))
+            self._ovalues_central.append(interpolate(_xvalues, _ovalues_central, self._xvalues))
+            self._ovalues_higher.append(interpolate(_xvalues, _ovalues_higher,  self._xvalues))
 
         if self.range is not None:
             self._xvalues         = _np.ma.masked_outside(self._xvalues,         self.range[0], self.range[1])
@@ -801,20 +821,31 @@ class UncertaintyBandItem(Item):
         :param ax: The matplotlib axes onto which the band is drawn.
         :type ax: matplotlib.axes.Axes
         """
-        label = self.label
-        if 'area' in self.band:
-            ax.fill_between(self._xvalues, self._ovalues_lower, self._ovalues_higher, alpha=self.alpha, color=self.color, label=label, lw=0)
-            label = None # do not label anything else if we fill the band area
-        if 'outer' in self.band:
-            ax.plot(self._xvalues, self._ovalues_lower,                               alpha=self.alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
-            ax.plot(self._xvalues, self._ovalues_higher,                              alpha=self.alpha, color=self.color,              lw=self.linewidth, ls=self.linestyle)
-            label = None # do not label anything else if we plot the outer lines
-        if 'median' in self.band:
-            ax.plot(self._xvalues, self._ovalues_central,                             alpha=self.alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
+        for alpha, ovalues_lower, ovalues_central, ovalues_higher in zip(self._alphas, self._ovalues_lower, self._ovalues_central, self._ovalues_higher):
+            label = self.label
+            if 'area' in self.band:
+                ax.fill_between(self._xvalues, ovalues_lower, ovalues_higher, alpha=alpha, color=self.color, label=label, lw=0)
+                label = None # do not label anything else if we fill the band area
+            if 'outer' in self.band:
+                ax.plot(self._xvalues, ovalues_lower,                               alpha=alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
+                ax.plot(self._xvalues, ovalues_higher,                              alpha=alpha, color=self.color,              lw=self.linewidth, ls=self.linestyle)
+                label = None # do not label anything else if we plot the outer lines
+            if 'median' in self.band:
+                ax.plot(self._xvalues, ovalues_central,                             alpha=alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
 
     def legend(self):
-        """Return the item's legend entry in form of its handle(s) and label(s)."""
-        return self._legend_patch()
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        Provides a filled rectangle handle when band areas are drawn, and a line handle otherwise.
+
+        Since this item draws one nested region per requested confidence level, the key is
+        subdivided into one swatch per region, each carrying the shade that region shows in the
+        plot; see :meth:`Item._legend_composite_patch`.
+        """
+        if 'area' in self.band:
+            return self._legend_composite_patch(self._alphas)
+        else:
+            return self._legend_line()
 
 
 @dataclass(kw_only=True)
@@ -825,6 +856,8 @@ class BinnedUncertaintyItem(Item):
 
     :param datafile: The path to an existing data file of type :class:`eos.data.Prediction` that contains the uncertainty estimates.
     :type datafile: str
+    :param levels: The credibility levels that shall be visualized in percent (optional) ordered from lowest to highest. Defaults to [68.27].
+    :type levels: list[float]
     :param range: A tuple of two float values (min, max) representing the range of the kinematic variable to be plotted on the x-axis.
     :type range: tuple[float, float] | None
     :param rescale_by_width: If set to ``True``, the uncertainty band will be rescaled by the inverse of the width of the bin. Defaults to ``False``.
@@ -852,9 +885,22 @@ class BinnedUncertaintyItem(Item):
     """
 
     datafile:str
+    levels:list[float]=field(default_factory=lambda: [68.27])
     range:tuple[float, float]|None=field(default=None)
     rescale_by_width:bool=field(default=False)
     variable:str
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        for level in self.levels:
+            if level <= 0 or level >= 100:
+                raise ValueError(f"Credibility level '{level}' is not in the interval (0, 100)")
+
+        # draw the largest contour first (lowest opacity) and the smallest last (highest opacity),
+        # so that nested contours remain visible
+        self.levels = sorted(self.levels, reverse=True)
+        self._alphas = _np.linspace(0.0, self.alpha, len(self.levels) + 1)[1:]
 
     def prepare(self, context:AnalysisFileContext=None):
         """Prepare the binned uncertainty band for drawing.
@@ -890,32 +936,38 @@ class BinnedUncertaintyItem(Item):
         :type ax: matplotlib.axes.Axes
         """
 
-        ovalues_lower   = []
-        ovalues_central = []
-        ovalues_higher  = []
-        for i in range(len(self._xvalues)):
-            lower, central, higher = _np.quantile(self._datafile.samples[:, i], [0.15865, 0.5, 0.84135], weights=self._datafile.weights, method='inverted_cdf')
-            ovalues_lower.append(lower)
-            ovalues_central.append(central)
-            ovalues_higher.append(higher)
+        for level, alpha in zip(self.levels, self._alphas):
+            ovalues_lower   = []
+            ovalues_central = []
+            ovalues_higher  = []
+            for i in range(len(self._xvalues)):
+                lower, central, higher = _np.quantile(self._datafile.samples[:, i], [0.5-level/100/2, 0.5, 0.5+level/100/2], weights=self._datafile.weights, method='inverted_cdf')
+                ovalues_lower.append(lower)
+                ovalues_central.append(central)
+                ovalues_higher.append(higher)
 
-        label = self.label
+            label = self.label
 
-        for [xmin, xmax], olo, ocentral, ohi in zip(self._xvalues, ovalues_lower, ovalues_central, ovalues_higher):
-            width = (xmax - xmin) if self.rescale_by_width else 1
-            olo      /= width
-            ocentral /= width
-            ohi      /= width
-            eos.debug(f"{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}")
-            ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=label)
-            ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
-            ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
-            ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
-            label = None
+            for [xmin, xmax], olo, ocentral, ohi in zip(self._xvalues, ovalues_lower, ovalues_central, ovalues_higher):
+                width = (xmax - xmin) if self.rescale_by_width else 1
+                olo      /= width
+                ocentral /= width
+                ohi      /= width
+                eos.debug(f"{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}")
+                ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=alpha, label=label)
+                ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=alpha, lw=self.linewidth, ls=self.linestyle)
+                ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=alpha, lw=self.linewidth, ls=self.linestyle)
+                ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=alpha, lw=self.linewidth, ls=self.linestyle)
+                label = None
 
     def legend(self):
-        """Return the item's legend entry in form of its handle(s) and label(s)."""
-        return self._legend_patch()
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        Since this item draws one nested region per requested credibility level, the key is
+        subdivided into one swatch per region, each carrying the shade that region shows in the
+        plot; see :meth:`Item._legend_composite_patch`.
+        """
+        return self._legend_composite_patch(self._alphas)
 
 
 @dataclass(kw_only=True)
