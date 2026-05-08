@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020-2026 Danny van Dyk
  * Copyright (c) 2025      Florian Herren
  * Copyright (c) 2026      Nico Gubernari
  *
@@ -180,6 +180,12 @@ namespace eos
         static constexpr const double mR2_1m = 2.007 * 2.007; // D^*0
         static constexpr const double mR2_0p = 2.300 * 2.300; // D^*0 scalar
         static constexpr const bool uses_tensor_form_factors = true;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 2.0;
+        // OPE results for the unitarity bounds, currently copied from DToK (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
     };
 
     struct DToK {
@@ -215,6 +221,12 @@ namespace eos
         static constexpr const double mR2_1m = 2.007 * 2.007; // D^*0
         static constexpr const double mR2_0p = 2.300 * 2.300; // D^*0 scalar
         static constexpr const bool uses_tensor_form_factors = true;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+        // OPE results for the unitarity bounds, currently copied from DToK (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
     };
 
     struct DToEta {

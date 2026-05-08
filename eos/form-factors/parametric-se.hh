@@ -360,6 +360,8 @@ namespace eos
     extern template class SEFormFactors<BsToEtaPrime, PToP>;
     extern template class SEFormFactors<DsToEta, PToP>;
     extern template class SEFormFactors<DsToEtaPrime, PToP>;
+    extern template class SEFormFactors<DToPi, PToP>;
+    extern template class SEFormFactors<DsToK, PToP>;
 
 
     // 1/2+ -> 1/2+

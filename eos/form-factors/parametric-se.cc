@@ -48,4 +48,8 @@ namespace eos
     template class SEFormFactors<DToK, PToP>;
     template class SEFormFactors<DsToEta, PToP>;
     template class SEFormFactors<DsToEtaPrime, PToP>;
+
+    // c -> d
+    template class SEFormFactors<DToPi, PToP>;
+    template class SEFormFactors<DsToK, PToP>;
 }

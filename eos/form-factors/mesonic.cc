@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2015      Christoph Bobeth
  * Copyright (c) 2018      Ahmet Kokulu
  * Copyright (c) 2019-2026 Nico Gubernari
@@ -404,8 +404,10 @@ namespace eos
         { "D->eta_prime::SSE",           &SSEFormFactors<DToEtaPrime, PToP>::make                                                                                 },
         { "D->pi::BSZ2015",          &BSZ2015FormFactors<DToPi,       PToP>::make                                                                                 },
         { "D->pi::SSE",                  &SSEFormFactors<DToPi,       PToP>::make                                                                                 },
+        { "D->pi::SE",                   &SEFormFactors<DToPi,        PToP>::make                                                                                 },
         { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,       PToP>::make                                                                                 },
         { "D_s->K::SSE",                 &SSEFormFactors<DsToK,       PToP>::make                                                                                 },
+        { "D_s->K::SE",                   &SEFormFactors<DsToK,       PToP>::make                                                                                 },
         // c -> s
         { "D_s->eta::BSZ2015",       &BSZ2015FormFactors<DsToEta,      PToP>::make                                                                                },
         { "D_s->eta::SSE",               &SSEFormFactors<DsToEta,      PToP>::make                                                                                },
