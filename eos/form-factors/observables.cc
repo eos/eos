@@ -2953,6 +2953,52 @@ namespace eos
     // }}}
     // D -> P(seudoscalar)
 
+    // D -> pi
+    // {{{
+    ObservableGroup
+    make_d_to_pi_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $D \to \pi$ transitions)",
+            R"(Pseudo observables representing the full basis of $D \to \pi$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("D->pi::f_+(q2)", R"(f_+^{D \to \pi}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->pi::f_0(q2)", R"(f_0^{D \to \pi}(q^2))",
+                        &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->pi::f_T(q2)", R"(f_T^{D \to \pi}(q^2))",
+                        &FormFactors<PToP>::f_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D->pi::f_-(q2)", R"(f_-^{D \to \pi}(q^2))",
+                        &FormFactors<PToP>::f_m, std::make_tuple("q2")),
+
+                make_observable("D->pi::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<DToPi, PToP>::saturation_0p_v),
+
+                make_observable("D->pi::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<DToPi, PToP>::saturation_0m_a),
+
+                make_observable("D->pi::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<DToPi, PToP>::saturation_1m_v),
+
+                make_observable("D->pi::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<DToPi, PToP>::saturation_1p_a),
+
+                make_observable("D->pi::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<DToPi, PToP>::saturation_1m_t),
+
+                make_observable("D->pi::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T5}])", Unit::None(),
+                        &BFW2010FormFactors<DToPi, PToP>::saturation_1p_t5)
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // D -> K
     // {{{
     ObservableGroup
@@ -3059,6 +3105,52 @@ namespace eos
 
                 make_form_factor_adapter("D->eta_prime::f_0(q2)", R"(f_0^{D\to\eta'}(q^2))",
                         &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // D_s -> K
+    // {{{
+    ObservableGroup
+    make_ds_to_k_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $D_s \to K$ transitions)",
+            R"(Pseudo observables representing the full basis of $D_s \to K$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("D_s->K::f_+(q2)", R"(f_+^{D_s \to K}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D_s->K::f_0(q2)", R"(f_0^{D_s \to K}(q^2))",
+                        &FormFactors<PToP>::f_0, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D_s->K::f_T(q2)", R"(f_T^{D_s \to K}(q^2))",
+                        &FormFactors<PToP>::f_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("D_s->K::f_-(q2)", R"(f_-^{D_s \to K}(q^2))",
+                        &FormFactors<PToP>::f_m, std::make_tuple("q2")),
+
+                make_observable("D_s->K::Saturation[0^+_V]", R"(\textrm{Saturation}[0^+_V])", Unit::None(),
+                        &BFW2010FormFactors<DsToK, PToP>::saturation_0p_v),
+
+                make_observable("D_s->K::Saturation[0^-_A]", R"(\textrm{Saturation}[0^-_A])", Unit::None(),
+                        &BFW2010FormFactors<DsToK, PToP>::saturation_0m_a),
+
+                make_observable("D_s->K::Saturation[1^-_V]", R"(\textrm{Saturation}[1^-_V])", Unit::None(),
+                        &BFW2010FormFactors<DsToK, PToP>::saturation_1m_v),
+
+                make_observable("D_s->K::Saturation[1^+_A]", R"(\textrm{Saturation}[1^+_A])", Unit::None(),
+                        &BFW2010FormFactors<DsToK, PToP>::saturation_1p_a),
+
+                make_observable("D_s->K::Saturation[1^-_T]", R"(\textrm{Saturation}[1^-_T])", Unit::None(),
+                        &BFW2010FormFactors<DsToK, PToP>::saturation_1m_t),
+
+                make_observable("D_s->K::Saturation[1^+_T5]", R"(\textrm{Saturation}[1^+_{T5}])", Unit::None(),
+                        &BFW2010FormFactors<DsToK, PToP>::saturation_1p_t5)
             }
         );
 
@@ -3289,10 +3381,12 @@ namespace eos
                 make_b_meson_lcdas_group(),
 
                 // D -> P
+                make_d_to_pi_form_factors_group(),
                 make_d_to_k_form_factors_group(),
                 make_d_to_eta_form_factors_group(),
 
                 // D_s -> P
+                make_ds_to_k_form_factors_group(),
                 make_ds_to_eta_form_factors_group(),
 
                 // 0 -> PP

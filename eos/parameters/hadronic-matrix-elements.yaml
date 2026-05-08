@@ -4488,6 +4488,29 @@ groups:
   - title: 'Parameters in $D\to P$ Form Factor Parametrizations'
     description: ''
     parameters:
+      # form factor parameters for D->pi for [BFW:2010A] parametrization
+      'D->pi::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,D \to \pi,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'D->pi::tp@BFW2010' :
+          central:  4.02002
+          min:      4.02002
+          max:      4.02002
+          latex:    '$t_+^{D\to \pi^*}$'
+          comment:  '(mB + mPi)^2'
+          unit:     'GeV'
+      'D->pi::t0@BFW2010' :
+          central:  2.01
+          min:      2.01
+          max:      2.01
+          latex:   '$t_0^{D\to \pi}$'
+          unit:     'GeV'
       # form factor parameters for D->pi inspired by [BSZ:2015A]
       'D->pi::alpha^%1%_%2%@BSZ2015' :
           central:  0.0
@@ -4498,6 +4521,29 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
+      # form factor parameters for D_s->K for [BFW:2010A] parametrization
+      'D_s->K::a^%1%_%2%@BFW2010' :
+          central:  0.
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_%2%^{%1%,D_s \to K,\mathrm{BFW2010}}$'
+          matrix:
+            - ["f+", "f0", "fT"]
+            - [0, 1, 2, 3, 4]
+      'D_s->K::tp@BFW2010' :
+          central:  6.08116
+          min:      6.08116
+          max:      6.08116
+          latex:    '$t_+^{D_s\to K^*}$'
+          comment:  '(mB + mK)^2'
+          unit:     'GeV'
+      'D_s->K::t0@BFW2010' :
+          central:  1.20
+          min:      1.20
+          max:      1.20
+          latex:   '$t_0^{D_s\to K}$'
+          unit:     'GeV'
       # form factor parameters for D_s->K inspired by [BSZ:2015A]
       'D_s->K::alpha^%1%_%2%@BSZ2015' :
           central:  0.0

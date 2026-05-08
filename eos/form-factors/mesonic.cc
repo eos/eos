@@ -383,7 +383,9 @@ namespace eos
         { "D->eta::BSZ2015",         &BSZ2015FormFactors<DToEta,      PToP>::make                                                                                 },
         { "D->eta_prime::BSZ2015",   &BSZ2015FormFactors<DToEtaPrime, PToP>::make                                                                                 },
         { "D->pi::BSZ2015",          &BSZ2015FormFactors<DToPi,       PToP>::make                                                                                 },
+        { "D->pi::BFW2010",          &BFW2010FormFactors<DToPi,       PToP>::make                                                                                 },
         { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,       PToP>::make                                                                                 },
+        { "D_s->K::BFW2010",         &BFW2010FormFactors<DsToK,       PToP>::make                                                                                 },
         // c -> s
         { "D_s->eta::BSZ2015",       &BSZ2015FormFactors<DsToEta,      PToP>::make                                                                                },
         { "D_s->eta::BFW2010",       &BFW2010FormFactors<DsToEta,      PToP>::make                                                                                },

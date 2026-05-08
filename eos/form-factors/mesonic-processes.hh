@@ -172,14 +172,23 @@ namespace eos
     struct DToPi {
         using Transition = PToP;
         static constexpr const char * label = "D->pi";
-        static constexpr const char * name_B = "mass::D_u";
+        static constexpr const char * name_B = "mass::D_d";
         static constexpr const char * name_P = "mass::pi^0";
-        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::up);
-        static constexpr const double m_B = 1.867;
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
+        static constexpr const double m_B = 1.870;
         static constexpr const double m_P = 0.135;
         static constexpr const double mR2_1m = 2.007 * 2.007; // D^*0
         static constexpr const double mR2_0p = 2.300 * 2.300; // D^*0 scalar
         static constexpr const bool uses_tensor_form_factors = true;
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) = - z(tm, t0)
+        static constexpr double t0 = 2.01;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 2.0;
+        // OPE results for the unitarity bounds, currently copied from DToK (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
     };
 
     struct DToK {
@@ -208,13 +217,22 @@ namespace eos
         using Transition = PToP;
         static constexpr const char * label = "D_s->K";
         static constexpr const char * name_B = "mass::D_s";
-        static constexpr const char * name_P = "mass::K_u";
-        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::up);
+        static constexpr const char * name_P = "mass::K_d";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
         static constexpr const double m_B = 1.968;
-        static constexpr const double m_P = 0.492;
+        static constexpr const double m_P = 0.498;
         static constexpr const double mR2_1m = 2.007 * 2.007; // D^*0
         static constexpr const double mR2_0p = 2.300 * 2.300; // D^*0 scalar
         static constexpr const bool uses_tensor_form_factors = true;
+        // zero of the conformal mapping: z(t0, t0) = 0.0
+        // This optimal value follows from z(0, t0) = - z(tm, t0)
+        static constexpr double t0 = 1.20;
+        // Isospin-degeneracy factor
+        static constexpr double eta  = 1.0;
+        // OPE results for the unitarity bounds, currently copied from DToK (1103.1481)
+        static constexpr double chi_0p_v  = 1.38e-2;
+        static constexpr double chi_1m_v  = 9.35e-3;
+        static constexpr double chi_1m_t  = 6.89e-03;
     };
 
     struct DToEta {
