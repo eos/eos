@@ -70,6 +70,52 @@ namespace eos
     // Semileptonic D -> P(seudoscalar) decays
     // {{{
 
+    // D -> pi l nu
+    // {{{
+    ObservableGroup
+    make_d_to_pi_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $D\to \pi \ell^+ \nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                make_observable("D->pilnu::dBR/dq2", R"(d\mathcal{B}(D\to \pi\ell^+ \nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "pi" } }),
+
+                make_observable("D->pilnu::BR", R"(\mathcal{B}(D\to \pi\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" } }),
+
+                make_observable("D->pilnu::width", R"(\Gamma(D\to \pi\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" } }),
+
+                make_observable("D->pilnu::P(q2_min,q2_max)", R"(P(D\to \pi\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" } }),
+
+                make_observable("D->pilnu::P(q2)", R"(dP(D\to \pi\ell^+ \nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "pi" } }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // D -> K l nu
     // {{{
     ObservableGroup
@@ -204,6 +250,54 @@ namespace eos
     }
     // }}}
 
+    // D_s -> K l nu
+    // {{{
+    ObservableGroup
+    make_ds_to_k_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $D_s\to K \ell^+ \nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                make_observable("D_s->Klnu::dBR/dq2", R"(D_s\mathcal{B}(D_s\to K\ell^+ \nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("D_s->Klnu::BR", R"(\mathcal{B}(D_s\to K\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("D_s->Klnu::width", R"(\Gamma(D_s\to K\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("D_s->Klnu::P(q2_min,q2_max)", R"(P(D_s\to K\ell^+ \nu))",
+                        Unit::None(),
+                        &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("D_s->Klnu::P(q2)", R"(dP(D_s\to K\ell^+ \nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
     // Lambda_c decays
     // Lambda_c -> Lambda l nu
     // {{{
@@ -270,8 +364,10 @@ namespace eos
                 make_dq_to_l_nu_group(),
 
                 // D -> P l^+ nu
+                make_d_to_pi_l_nu_group(),
                 make_d_to_k_l_nu_group(),
                 make_d_to_eta_l_nu_group(),
+                make_ds_to_k_l_nu_group(),
 
                 // Lc -> Baryon(1/2+) l^+ nu
                 make_lambdac_to_lambda_l_nu_group(),
