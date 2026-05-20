@@ -5,10 +5,16 @@
 ### Changed
 
 ### Added
+- Add G2026 form factor parameterisation (N. Gubernari)
+- Add B(s) -> K(*) constraints from BGMT:2025A (N. Gubernari)
+- Add BSZ:2025A constraints in the Traditional Basis (N. Gubernari)
+- Add B->pi f0 and f+ constraints from FLAG:2024A (N. Gubernari)
 
 ### Removed
 
 ### Fixed
+- Fix some linewidth and linestyles arguments in figure framework (D. Suelmann)
+
 
 ## [v1.0.20] - 2026-04-28
 
