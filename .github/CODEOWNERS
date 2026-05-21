@@ -19,3 +19,6 @@ python/eos/*pyhf*   @lorenzennio
 eos/b-decays        @Herren
 eos/form-factors    @Herren
 eos/scattering      @Herren
+
+# @DominikSue should review commits to:
+eos/rare-c-decays   @DominikSue
