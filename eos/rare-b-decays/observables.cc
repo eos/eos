@@ -438,7 +438,7 @@ namespace eos
                 make_observable("B->K^*ll::d^4Gamma",
                         Unit::GeV(),
                         &BToKstarDilepton::decay_width,
-                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi")),
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi")),
 
                 make_observable("B->K^*ll::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::InverseGeV2(),
@@ -1391,7 +1391,7 @@ namespace eos
                 make_observable("B_s->phill::d^4Gamma",
                         Unit::InverseGeV2(),
                         &BsToPhiDilepton::decay_width,
-                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi"),
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi"),
                         Options{ { "q"_ok, "s" } }),
 
                 make_observable("B_s->phill::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}_s\to \phi\ell^+\ell^-))",
