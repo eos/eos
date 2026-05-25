@@ -174,6 +174,57 @@ LIBS=$_LIBS
 dnl }}}
 dnl }}}
 
+dnl {{{ use FFTW3 path if supplied via --with-fftw3=, otherwise use pkg-config; check for FFTW3
+AC_ARG_WITH([fftw3],
+	[AS_HELP_STRING([--with-fftw3], [used for DFTs in e.g. unbinned likelihoods])]
+	[],
+	[])
+if test "x$with_fftw3" == xno ; then
+	AC_MSG_FAILURE(["Cannot build EOS without FFTW3"])
+fi
+if test "x$with_fftw3" != x -a "x$with_fftw3" != xyes ; then
+	if ! test -d "$with_fftw3" ; then
+	AC_MSG_FAILURE(["$with_fftw3 is not a directory. Please check the manual for how to compile with FFTW3."])
+	fi
+	FFTW_CXXFLAGS="-I$with_fftw3/include"
+	FFTW_LDFLAGS="-L$with_fftw3/lib"
+else # use pkg-config
+	PKG_CHECK_MODULES([FFTW],
+		[fftw3],
+		[
+			FFTW_CXXFLAGS="$FFTW_CFLAGS"
+			FFTW_LDFLAGS="`pkg-config --libs-only-L fftw3`"
+			AC_MSG_NOTICE([using pkg-config for FFTW3 location])
+		],
+		[
+			FFTW_CXXFLAGS=""
+			FFTW_LDFLAGS=""
+			AC_MSG_NOTICE([falling back to default for FFTW3 location])
+		])
+fi
+
+_CXXFLAGS=$CXXFLAGS
+_LDFLAGS=$LDFLAGS
+_LIBS=$LIBS
+
+CXXFLAGS="$FFTW_CXXFLAGS $CXXFLAGS"
+LDFLAGS="$FFTW_LDFLAGS $LDFLAGS"
+LIBS=""
+
+AC_CHECK_LIB(fftw3, main,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking the FFTW3 library (http://www.fftw.org/).])],
+	[-lfftw3 -lm])
+
+CXXFLAGS=$_CXXFLAGS
+LDFLAGS=$_LDFLAGS
+LIBS=$_LIBS
+
+AC_SUBST([FFTW_LDFLAGS])
+AC_SUBST([FFTW_CXXFLAGS])
+dnl }}}
+
+
 dnl {{{ use GSL path if supplied via --with-gsl=, otherwise use pkg-config; check for GSL
 AC_ARG_WITH([gsl],
 	[AS_HELP_STRING([--with-gsl], [used for e.g. RNG, special functions, linear algebra])]
