@@ -10,6 +10,7 @@ libeosmaths_la_SOURCES = \
 	angular-integrals.cc angular-integrals.hh \
 	complex.hh \
 	derivative.cc derivative.hh \
+	dft-container.cc dft-container.hh dft-container-impl.hh \
 	gegenbauer-polynomial.cc gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
@@ -27,11 +28,12 @@ libeosmaths_la_SOURCES = \
 	szego-polynomial.hh
 
 libeosmaths_la_LIBADD = \
-	-lgsl -lgslcblas -lm
+	-lfftw3 -lgsl -lgslcblas -lm
 libeosmaths_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	-DEOS_DATADIR='"$(datadir)"' \
-	$(GSL_CXXFLAGS)
-libeosmaths_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
+	$(GSL_CXXFLAGS) \
+	$(FFTW_CXXFLAGS)
+libeosmaths_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(FFTW_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -44,6 +46,7 @@ include_eos_utils_HEADERS = \
     angular-integrals.hh \
 	complex.hh \
 	derivative.hh \
+	dft-container.hh \
 	gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.hh \
@@ -65,6 +68,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
     angular-integrals_TEST \
+	dft-container_TEST \
 	derivative_TEST \
 	gegenbauer-polynomial_TEST \
 	gsl-interface_TEST \
@@ -89,6 +93,8 @@ LDADD = \
 check_PROGRAMS = $(TESTS)
 
 angular_integrals_TEST_SOURCES = angular-integrals_TEST.cc
+
+dft_container_TEST_SOURCES = dft-container_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
 
