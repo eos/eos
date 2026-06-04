@@ -11,6 +11,7 @@ libeosmaths_la_SOURCES = \
 	complex.hh \
 	derivative.cc derivative.hh \
 	dft-container.cc dft-container.hh dft-container-impl.hh \
+	dft-plan.cc dft-plan.hh dft-plan-impl.hh \
 	gegenbauer-polynomial.cc gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
@@ -47,6 +48,7 @@ include_eos_utils_HEADERS = \
 	complex.hh \
 	derivative.hh \
 	dft-container.hh \
+	dft-plan.hh \
 	gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.hh \
@@ -69,6 +71,7 @@ AM_TESTS_ENVIRONMENT = \
 TESTS = \
     angular-integrals_TEST \
 	dft-container_TEST \
+	dft-plan_TEST \
 	derivative_TEST \
 	gegenbauer-polynomial_TEST \
 	gsl-interface_TEST \
@@ -95,6 +98,8 @@ check_PROGRAMS = $(TESTS)
 angular_integrals_TEST_SOURCES = angular-integrals_TEST.cc
 
 dft_container_TEST_SOURCES = dft-container_TEST.cc
+
+dft_plan_TEST_SOURCES = dft-plan_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
 
