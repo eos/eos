@@ -67,8 +67,16 @@ class Analysis:
     :type parameters: :class:`eos.Parameters` or None, optional
     """
 
-    def __init__(self, priors, likelihood, external_likelihood=[], global_options={}, manual_constraints={}, fixed_parameters={}, parameters=None):
+    def __init__(self, priors, likelihood, external_likelihood=None, global_options=None, manual_constraints=None, fixed_parameters=None, parameters=None):
         """Constructor."""
+        if external_likelihood is None:
+            external_likelihood = []
+        if global_options is None:
+            global_options = {}
+        if manual_constraints is None:
+            manual_constraints = {}
+        if fixed_parameters is None:
+            fixed_parameters = {}
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'external_likelihood': external_likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = parameters if parameters else eos.Parameters.Defaults()
         """The set of parameters used for this analysis."""

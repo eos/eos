@@ -54,7 +54,9 @@ class LogfileHandler:
 
 _tasks = {}
 
-def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
+def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
+    if modules is None:
+        modules = []
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
