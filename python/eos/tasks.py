@@ -118,7 +118,7 @@ def _check_varied_parameters_match(analysis: eos.Analysis, data):
     analysis_varied_params = [p.name() for p in analysis.varied_parameters]
     samples_varied_params = [p["name"] for p in data.varied_parameters]
     if analysis_varied_params != samples_varied_params:
-        raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+        raise ValueError("Parameters varied in the analysis file don't match those from the loaded sample")
 
 
 @task('find-mode', 'data/{posterior}/mode-{label}')
@@ -203,7 +203,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         analysis_varied_params = [p.name() for p in analysis.varied_parameters]
         samples_varied_params = [p["name"] for p in _chain.varied_parameters]
         if analysis_varied_params != samples_varied_params:
-            raise ValueError(f"Parameters varied in the analysis file don't match those from the loaded sample")
+            raise ValueError("Parameters varied in the analysis file don't match those from the loaded sample")
         mode = '[ ' + ', '.join([f'{v:.4g}' for v in _chain.samples[idx_mode]]) + ' ]'
         eos.info(f'Using starting point {mode}')
         for p, v in zip(analysis.varied_parameters, _chain.samples[idx_mode]):
@@ -235,7 +235,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
 
-    eos.info(f'First optimization finished')
+    eos.info('First optimization finished')
     for i in range(optimizations - 1):
         starting_point = [float(p) for p in analysis.varied_parameters]
         _bfp = analysis.optimize(start_point = starting_point)
@@ -246,7 +246,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
             bfp = _bfp
             min_chi2 = _chi2
 
-    eos.completed(f'... optimization finished')
+    eos.completed('... optimization finished')
     eos.info('The best-fit point is:')
     for p, v in zip(analysis.varied_parameters, _bfp.point):
         eos.info(f'  - {p.name()} -> {v}')
@@ -307,7 +307,7 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     :type start_point: list-like, optional
     """
 
-    eos.inprogress(f'Beginning sampling...')
+    eos.inprogress('Beginning sampling...')
 
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
@@ -318,7 +318,7 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
         eos.error(f'encountered run time error ({e}) in parameter point:')
         for p in analysis.varied_parameters:
             eos.error(f' - {p.name()}: {p.evaluate()}')
-    eos.completed(f'...finished!')
+    eos.completed('...finished!')
     eos.info(f'Generated {N} samples from posterior {posterior}.')
 
 @task('sample-prior', 'data/{posterior}/samples')
@@ -342,7 +342,7 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
 
     analysis = analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(seed)
-    eos.inprogress(f'Beginning prior sampling...')
+    eos.inprogress('Beginning prior sampling...')
     samples = analysis.sample_prior(N=N, rng=rng)
     weights =  _np.ones(N) / N
     eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters, samples, weights)
@@ -545,7 +545,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     if mask_name is not None:
         eos.info(f'Applying mask {mask_name} to the observables')
         observable_samples = observable_samples[mask]
-    eos.completed(f'... done')
+    eos.completed('... done')
 
     filename = f'pred-{prediction}'
     if mask_name is not None:
@@ -736,7 +736,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
         f.write(result)
 
     if not generate_pdf:
-        eos.completed(f'... report generation finished')
+        eos.completed('... report generation finished')
         return
 
     output_file = basename + '.pdf'
@@ -758,7 +758,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
         ]
     )
 
-    eos.completed(f'... report generation finished')
+    eos.completed('... report generation finished')
 
 
 # Draw figures
@@ -795,7 +795,7 @@ def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', for
     for fmt in format:
         eos.info(f'Drawing figure {figure_name} in \'{fmt}\' format')
         figure.draw(context, output=os.path.join(base_directory, 'figures', f'{figure_name}.{fmt}'))
-    eos.completed(f'... drawing finished')
+    eos.completed('... drawing finished')
 
 
 # Corner plot

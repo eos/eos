@@ -219,10 +219,10 @@ class Analysis:
         # check for duplicate entries in the likelihood
         set_likelihood = set(likelihood)
         if len(set_likelihood) != len(likelihood):
-            raise ValueError(f'The likelihood contains duplicate entries')
+            raise ValueError('The likelihood contains duplicate entries')
         set_manual_constraints = set(manual_constraints.keys())
         if len(set_manual_constraints) != len(manual_constraints):
-            raise ValueError(f'The manual constraints contain duplicate entries')
+            raise ValueError('The manual constraints contain duplicate entries')
         set_intersection = set_likelihood.intersection(set_manual_constraints)
         if len(set_intersection) > 0:
             raise ValueError(f'The likelihood contains constraint names also present in the manual_constraints: {set_intersection}')
@@ -667,7 +667,7 @@ class Analysis:
         eos.completed(f'... completed adaptations after {step} steps(s) with perplexity = {last_perplexity}')
 
         # draw final samples
-        eos.inprogress(f'Beginning the final sampling ...')
+        eos.inprogress('Beginning the final sampling ...')
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
 
