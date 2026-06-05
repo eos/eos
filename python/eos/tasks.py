@@ -673,7 +673,7 @@ def _get_references(analysis_file):
 
                 try:
                     result.append(all_references[reference].inspire_id())
-                except:
+                except KeyError:
                     warnings.warn(f'No reference found for {reference}')
 
     result = _np.unique(result)

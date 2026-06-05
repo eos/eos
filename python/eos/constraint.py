@@ -90,7 +90,7 @@ class Constraints(_Constraints):
                 ref         = references[refname]
                 if 'arXiv' == ref.eprint_archive():
                     reflink = fr' href="https://arxiv.org/abs/{ref.eprint_id().split(":")[-1]}"'
-            except:
+            except KeyError:
                 pass
 
             result += fr'''

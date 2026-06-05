@@ -40,7 +40,7 @@ class PyhfLogLikelihood:
                 with open(workspace) as f:
                     f = json.load(f)
                 self.workspace = pyhf.Workspace(f)
-            except:
+            except Exception:
                 raise ValueError('`workspace` must be a pyhf workspace or json file specifying one. ')
 
         self.model = self.workspace.model()
