@@ -1820,7 +1820,7 @@ class Plotter:
                 nbins = int(item['bins']) if 'bins' in item else 100
                 xmin, xmax = self.xlo, self.xhi
                 if xmin >= xmax:
-                    eos.error(f'1D histogram expects the xrange to be non-zero; using empirical xrange instead')
+                    eos.error('1D histogram expects the xrange to be non-zero; using empirical xrange instead')
                     xmin, xmax = np.min(self.samples), np.max(self.samples)
                 self.bins = np.linspace(xmin, xmax, nbins)
             self.histtype = item['histtype']  if 'histtype'  in item     else 'bar'
