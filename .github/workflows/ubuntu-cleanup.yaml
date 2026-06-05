@@ -1,0 +1,40 @@
+on:
+    pull_request:
+        types: [ closed ]
+
+name: Clean up documentation preview
+
+concurrency:
+  # Serialise pushes to the 'doc' repository to avoid racing the deploy workflow.
+  group: doc-deploy
+  cancel-in-progress: false
+
+jobs:
+    cleanup-doc-preview:
+        name: Remove documentation preview for PR #${{ github.event.pull_request.number }}
+        # Only clean up when the PR was actually merged, not merely closed.
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        steps:
+            - name: Remove the per-PR documentation preview
+              shell: bash
+              env:
+                GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
+                PR_ID: "${{ github.event.pull_request.number }}"
+              run: |
+                # Without the access token (e.g. for PRs from forks) no preview was ever
+                # deployed, so there is nothing to clean up.
+                [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
+                git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/doc" doc
+                pushd doc
+                git config user.email "eos-developers@googlegroups.com"
+                git config user.name  "EOS"
+                if [[ -d "pr${PR_ID}" ]] ; then
+                    git rm -r --quiet "pr${PR_ID}"
+                    git commit -m "Removing documentation preview for pull request #${PR_ID}"
+                    git push
+                else
+                    echo "No documentation preview 'pr${PR_ID}' found; nothing to clean up."
+                fi
+                popd
