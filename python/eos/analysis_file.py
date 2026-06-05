@@ -279,7 +279,7 @@ class AnalysisFile:
         options_part = eos.QualifiedName(observable_name).options_part()
         for key, value in options_part:
             if key in global_options and global_options[key] != value:
-                eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} when using posterior {_posterior}.')
+                eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {observable_name} when using posterior {_posterior}.')
 
         observable = eos.Observable.make(
             observable_name,
