@@ -26,7 +26,6 @@ import eos
 import inspect
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 import yaml as _yaml
 
 

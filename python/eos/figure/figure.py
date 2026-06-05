@@ -23,7 +23,6 @@ from .plot import Plot, PlotFactory
 from .common import Watermark
 from .data import DataFile
 
-import os
 import copy as _copy
 import inspect
 import matplotlib.pyplot as plt

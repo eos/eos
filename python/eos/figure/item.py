@@ -14,12 +14,11 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass, field
 from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 
-import copy as _copy
 import inspect
 import eos
 import matplotlib as _matplotlib
