@@ -106,7 +106,6 @@ class DataSets:
             raise RuntimeError("eos.DataSets.download() needs to import the 'requests' module. Please install it.")
         import io, zipfile # part of the Python standard library
 
-        idnoversion = id if 'v' not in id else id[:id.rfind('v')]
         if self._data_sets[id].doi is not None:
             doi             = self._data_sets[id].doi
             url             = self.DOWNLOAD_URL_DOI.format(doi=doi)
