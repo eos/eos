@@ -17,7 +17,6 @@ from dataclasses import dataclass, field
 from eos.deserializable import Deserializable
 from _eos import __version__ as eos_version
 
-import numpy as np
 
 
 @dataclass(kw_only=True)
