@@ -95,6 +95,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=[], logfile=True):
                 ioutput = contextlib.suppress() # can be replaced with contextlib.nullcontext once Python >=3.7 is ensured
                 if __ipython__:
                     import ipywidgets as _ipywidgets
+                    from IPython.display import display
                     ioutput = _ipywidgets.Output(layout={'height': '200px', 'overflow': 'auto'})
                     iaccordion = _ipywidgets.Accordion(children=[ioutput])
                     iaccordion.set_title(0, output.format(**_args))
