@@ -132,11 +132,6 @@ jobs:
 
     ubuntu-check:
         needs: ubuntu-build
-        # Share the 'doc-deploy' concurrency group with the documentation cleanup
-        # workflow so that pushes to the 'doc' repository never race each other.
-        concurrency:
-            group: doc-deploy
-            cancel-in-progress: false
         strategy:
             matrix:
                 cfg:
@@ -301,6 +296,11 @@ jobs:
 
     ubuntu-deploy-doc:
         needs: ubuntu-build-doc
+        # Share the 'doc-deploy' concurrency group with the documentation cleanup
+        # workflow so that pushes to the 'doc' repository never race each other.
+        concurrency:
+            group: doc-deploy
+            cancel-in-progress: false
         strategy:
             matrix:
                 cfg:
