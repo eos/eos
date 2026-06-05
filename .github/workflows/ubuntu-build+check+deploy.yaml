@@ -132,6 +132,11 @@ jobs:
 
     ubuntu-check:
         needs: ubuntu-build
+        # Share the 'doc-deploy' concurrency group with the documentation cleanup
+        # workflow so that pushes to the 'doc' repository never race each other.
+        concurrency:
+            group: doc-deploy
+            cancel-in-progress: false
         strategy:
             matrix:
                 cfg:
@@ -324,14 +329,39 @@ jobs:
                 GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
               run: |
                 [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
-                tar xf doc.tar
+                if [[ "${{ github.event_name }}" == "pull_request" ]] ; then
+                    # Running prior to merging the PR: deploy the documentation into a
+                    # per-PR subdirectory 'pr{id}' of the 'doc' repository instead of its root.
+                    PR_SUBDIR="pr${{ github.event.pull_request.number }}"
+                    # Extract the freshly built documentation into a staging area ...
+                    mkdir -p _staging
+                    tar xf doc.tar -C _staging
+                    # ... and (re)populate the per-PR subdirectory within the cloned 'doc' repo.
+                    # Using '/.' preserves dotfiles such as the Sphinx-generated '.nojekyll'.
+                    rm -rf "_build/doc/html/${PR_SUBDIR}"
+                    mkdir -p "_build/doc/html/${PR_SUBDIR}"
+                    cp -a _staging/_build/doc/html/. "_build/doc/html/${PR_SUBDIR}/"
+                    COMMIT_MSG="Updating documentation for pull request #${{ github.event.pull_request.number }} based on EOS revision ${{ github.sha }}"
+                    # always deploy the per-PR preview
+                    PUSH=1
+                else
+                    # Merging to master (or building the 'release' branch / a versioned tag):
+                    # deploy the documentation into the root of the 'doc' repository.
+                    tar xf doc.tar
+                    COMMIT_MSG="Updating documentation based on EOS revision ${{ github.sha }}"
+                    # only push if running for the release branch or for a versioned release
+                    if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
+                        PUSH=1
+                    else
+                        PUSH=0
+                    fi
+                fi
                 pushd _build/doc/html
                 git config user.email "eos-developers@googlegroups.com"
                 git config user.name  "EOS"
                 git add --all
-                git commit --allow-empty -m "Updating documentation based on EOS revision ${{ github.sha }}"
-                # only push if running for the release branch or for a versioned release
-                if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
+                git commit --allow-empty -m "${COMMIT_MSG}"
+                if [[ ${PUSH} == "1" ]] ; then
                     git push
                 fi
                 popd
