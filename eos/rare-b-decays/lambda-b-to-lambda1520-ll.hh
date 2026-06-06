@@ -54,7 +54,7 @@ namespace eos
              * @name Signal PDFs
              */
             // @{
-            double decay_width(const double & s, const double & c_theta_l, const double & c_theta_Lstar, const double & phi) const;
+            double decay_width(const double & q2, const double & c_theta_l, const double & c_theta_Lstar, const double & phi) const;
             // @}
 
             /*!
@@ -75,18 +75,18 @@ namespace eos
              * @name Angular observables (@f$q^2@f$-differential)
              */
             // @{
-            double differential_L_1c(const double & s) const;
-            double differential_L_1cc(const double & s) const;
-            double differential_L_1ss(const double & s) const;
-            double differential_L_2c(const double & s) const;
-            double differential_L_2cc(const double & s) const;
-            double differential_L_2ss(const double & s) const;
-            double differential_L_3ss(const double & s) const;
-            double differential_L_4ss(const double & s) const;
-            double differential_L_5s(const double & s) const;
-            double differential_L_5sc(const double & s) const;
-            double differential_L_6s(const double & s) const;
-            double differential_L_6sc(const double & s) const;
+            double differential_L_1c(const double & q2) const;
+            double differential_L_1cc(const double & q2) const;
+            double differential_L_1ss(const double & q2) const;
+            double differential_L_2c(const double & q2) const;
+            double differential_L_2cc(const double & q2) const;
+            double differential_L_2ss(const double & q2) const;
+            double differential_L_3ss(const double & q2) const;
+            double differential_L_4ss(const double & q2) const;
+            double differential_L_5s(const double & q2) const;
+            double differential_L_5sc(const double & q2) const;
+            double differential_L_6s(const double & q2) const;
+            double differential_L_6sc(const double & q2) const;
             // @}
 
             /*!
@@ -96,29 +96,29 @@ namespace eos
              * invariant mass.
              */
             // @{
-            double integrated_decay_width(const double & s_min, const double & s_max) const;
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
-            double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
-            double integrated_transversal_polarisation(const double & s_min, const double & s_max) const;
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
+            double integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const;
+            double integrated_transversal_polarisation(const double & q2_min, const double & q2_max) const;
             // @}
 
             /*!
              * @name Angular observables (@f$q^2@f$-integrated)
              */
             // @{
-            double integrated_L_1c(const double & s_min, const double & s_max) const;
-            double integrated_L_1cc(const double & s_min, const double & s_max) const;
-            double integrated_L_1ss(const double & s_min, const double & s_max) const;
-            double integrated_L_2c(const double & s_min, const double & s_max) const;
-            double integrated_L_2cc(const double & s_min, const double & s_max) const;
-            double integrated_L_2ss(const double & s_min, const double & s_max) const;
-            double integrated_L_3ss(const double & s_min, const double & s_max) const;
-            double integrated_L_4ss(const double & s_min, const double & s_max) const;
-            double integrated_L_5s(const double & s_min, const double & s_max) const;
-            double integrated_L_5sc(const double & s_min, const double & s_max) const;
-            double integrated_L_6s(const double & s_min, const double & s_max) const;
-            double integrated_L_6sc(const double & s_min, const double & s_max) const;
+            double integrated_L_1c(const double & q2_min, const double & q2_max) const;
+            double integrated_L_1cc(const double & q2_min, const double & q2_max) const;
+            double integrated_L_1ss(const double & q2_min, const double & q2_max) const;
+            double integrated_L_2c(const double & q2_min, const double & q2_max) const;
+            double integrated_L_2cc(const double & q2_min, const double & q2_max) const;
+            double integrated_L_2ss(const double & q2_min, const double & q2_max) const;
+            double integrated_L_3ss(const double & q2_min, const double & q2_max) const;
+            double integrated_L_4ss(const double & q2_min, const double & q2_max) const;
+            double integrated_L_5s(const double & q2_min, const double & q2_max) const;
+            double integrated_L_5sc(const double & q2_min, const double & q2_max) const;
+            double integrated_L_6s(const double & q2_min, const double & q2_max) const;
+            double integrated_L_6sc(const double & q2_min, const double & q2_max) const;
             // @}
 
 
@@ -127,7 +127,7 @@ namespace eos
              */
             // @{
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
             static const std::string kinematics_description_c_theta_Lstar;
             static const std::string kinematics_description_phi;

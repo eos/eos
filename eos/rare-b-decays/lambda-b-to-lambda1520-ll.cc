@@ -74,13 +74,13 @@ namespace eos
         {
         }
 
-        inline std::array<double, 12> angular_coefficients_array(const LambdaBToLambda1520Dilepton::Amplitudes & A, const double & s) const
+        inline std::array<double, 12> angular_coefficients_array(const LambdaBToLambda1520Dilepton::Amplitudes & A, const double & q2) const
         {
             // cf. [DD:2020A], app. G, which agrees with [DN:2019A], eq. (4.2) for massless leptons
             std::array<double, 12> result;
 
-            double z = 4.0 * power_of<2>(m_l()) / s;
-            double y = m_l / std::sqrt(s);
+            double z = 4.0 * power_of<2>(m_l()) / q2;
+            double y = m_l / std::sqrt(q2);
             double beta2 = 1.0 - z;
             double beta = std::sqrt(beta2);
 
@@ -276,21 +276,21 @@ namespace eos
             return result;
         }
 
-        inline std::array<double, 12> differential_angular_coefficients_array(const double & s) const
+        inline std::array<double, 12> differential_angular_coefficients_array(const double & q2) const
         {
-            return angular_coefficients_array(amplitude_generator->amplitudes(s), s);
+            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
         }
 
-        inline LambdaBToLambda1520Dilepton::AngularCoefficients differential_angular_coefficients(const double & s) const
+        inline LambdaBToLambda1520Dilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
         {
-            return LambdaBToLambda1520Dilepton::AngularCoefficients(differential_angular_coefficients_array(s));
+            return LambdaBToLambda1520Dilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
         }
 
-        LambdaBToLambda1520Dilepton::AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
+        LambdaBToLambda1520Dilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<LambdaBToLambda1520Dilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
             return LambdaBToLambda1520Dilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
@@ -319,7 +319,7 @@ namespace eos
     };
 
     double
-    LambdaBToLambda1520Dilepton::decay_width(const double & s, const double & c_theta_l, const double & c_theta_Lstar, const double & phi) const
+    LambdaBToLambda1520Dilepton::decay_width(const double & q2, const double & c_theta_l, const double & c_theta_Lstar, const double & phi) const
     {
         // compute d^4 Gamma, cf. [DN:2019A], eq. (4.1)
         // Cosine squared of the angles
@@ -335,7 +335,7 @@ namespace eos
         double s_theta_l = sqrt(s_theta_l_2);
         double s_phi = sin(phi);
 
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
 
         double result = 3.0 / 8.0 / M_PI * (
                 c_theta_Lstar_2 * (
@@ -357,245 +357,245 @@ namespace eos
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_decay_width(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_decay_width(const double & q2) const
     {
-        return _imp->decay_width(_imp->differential_angular_coefficients(s));
+        return _imp->decay_width(_imp->differential_angular_coefficients(q2));
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_branching_ratio(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_branching_ratio(const double & q2) const
     {
-        return differential_decay_width(s) * _imp->tau() / _imp->hbar();
+        return differential_decay_width(q2) * _imp->tau() / _imp->hbar();
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_forward_backward_asymmetry(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_forward_backward_asymmetry(const double & q2) const
     {
         // cf. [DN:2019A], eq. (4.7)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return (a_c.L1c + 2.0 * a_c.L2c) / 2.0 / _imp->decay_width(a_c);
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_longitudinal_polarisation(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_longitudinal_polarisation(const double & q2) const
     {
         // cf. [DN:2019A], eq. (4.6)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 1 - 2.0 * (a_c.L1cc + 2.0 * a_c.L2cc) / 3.0 / _imp->decay_width(a_c);
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_transversal_polarisation(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_transversal_polarisation(const double & q2) const
     {
         // cf. [DN:2019A], eq. (4.6)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 2.0 * (a_c.L1cc + 2.0 * a_c.L2cc) / 3.0 / _imp->decay_width(a_c);
     }
 
     // differential angular coefficients
     double
-    LambdaBToLambda1520Dilepton::differential_L_1c(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_1c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L1c;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_1cc(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_1cc(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L1cc;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_1ss(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_1ss(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L1ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_2c(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_2c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L2c;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_2cc(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_2cc(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L2cc;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_2ss(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_2ss(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L2ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_3ss(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_3ss(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L3ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_4ss(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_4ss(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L4ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_5s(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_5s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L5s;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_5sc(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_5sc(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L5sc;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_6s(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_6s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L6s;
     }
 
     double
-    LambdaBToLambda1520Dilepton::differential_L_6sc(const double & s) const
+    LambdaBToLambda1520Dilepton::differential_L_6sc(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.L6sc;
     }
 
 
     double
-    LambdaBToLambda1520Dilepton::integrated_decay_width(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
-        return _imp->decay_width(_imp->integrated_angular_coefficients(s_min, s_max));
+        return _imp->decay_width(_imp->integrated_angular_coefficients(q2_min, q2_max));
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
+        return integrated_decay_width(q2_min, q2_max) * _imp->tau() / _imp->hbar();
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const
     {
         // cf. [DN:2019A], eq. (4.7)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return (a_c.L1c + 2.0 * a_c.L2c) / 2.0 / _imp->decay_width(a_c);
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const
     {
         // cf. [DN:2019A], eq. (4.6)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return 1 - 2.0 * (a_c.L1cc + 2.0 * a_c.L2cc) / 3.0 / _imp->decay_width(a_c);
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_transversal_polarisation(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_transversal_polarisation(const double & q2_min, const double & q2_max) const
     {
         // cf. [DN:2019A], eq. (4.6)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return 2.0 * (a_c.L1cc + 2.0 * a_c.L2cc) / 3.0 / _imp->decay_width(a_c);
     }
 
     // integrated angular coefficients
     double
-    LambdaBToLambda1520Dilepton::integrated_L_1c(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_1c(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L1c;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_1cc(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_1cc(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L1cc;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_1ss(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_1ss(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L1ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_2c(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_2c(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L2c;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_2cc(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_2cc(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L2cc;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_2ss(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_2ss(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L2ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_3ss(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_3ss(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L3ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_4ss(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_4ss(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L4ss;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_5s(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_5s(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L5s;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_5sc(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_5sc(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L5sc;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_6s(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_6s(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L6s;
     }
 
     double
-    LambdaBToLambda1520Dilepton::integrated_L_6sc(const double & s_min, const double & s_max) const
+    LambdaBToLambda1520Dilepton::integrated_L_6sc(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.L6sc;
     }
 
@@ -608,7 +608,7 @@ decaying to \bar{N} K. Various theory models can be selected using the \
 'tag' option";
 
     const std::string
-    LambdaBToLambda1520Dilepton::kinematics_description_s = "\
+    LambdaBToLambda1520Dilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
     const std::string
