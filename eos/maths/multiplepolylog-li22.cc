@@ -28,7 +28,6 @@
 #include <eos/maths/multiplepolylog-li22-const.hh>
 #include <eos/utils/exception.hh>
 
-//#include <stdio.h>
 #include <iostream>
 
 namespace eos
@@ -1012,19 +1011,6 @@ namespace eos
             return libasic(n,x2);
         }
         */
-
-        void writecomplex(complex<double> x)
-        {
-            const double im = x.imag();
-            char c;
-            if(im<0){
-                c='-';
-            }
-            else{
-                c='+';
-            }
-            printf("%.20f%c%.20f*I\n",x.real(),c,abs(im));
-        }
 
     }
 
