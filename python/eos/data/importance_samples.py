@@ -71,7 +71,7 @@ class ImportanceSamples:
         :type parameters: list or iterable of eos.Parameter
         :param samples: Samples as a 2D array of shape (N, P).
         :type samples: 2D numpy array
-        :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
+        :param weights: Weights on a linear scale as a 1D array of shape (N, ).
         :type weights: 1D numpy array, optional
         """
         description = {}
