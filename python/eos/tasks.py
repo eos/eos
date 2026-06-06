@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020-2025 Danny van Dyk
+# Copyright (c) 2020-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -25,7 +25,6 @@ import logging
 import eos.analysis_file_description
 import numpy as _np
 import os
-import pypmc
 import scipy
 import sys
 import copy as _copy
@@ -64,7 +63,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
             try:
                 import importlib as _importlib
                 for module in modules:
-                    _importlib.import_module(module)
+                    func.__globals__[module] = _importlib.import_module(module)
             except ModuleNotFoundError as e:
                 eos.error(f'failed to import missing module \'{module}\': {e}')
                 raise e
@@ -349,7 +348,7 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
     eos.completed('...finished!')
     eos.info(f'Generated {N} samples of prior PDF for posterior {posterior}.')
 
-@task('find-clusters', 'data/{posterior}/clusters')
+@task('find-clusters', 'data/{posterior}/clusters', modules=['pypmc'])
 def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K_g:int=1, analysis_file:str=None):
     r"""
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
@@ -384,7 +383,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     eos.data.MixtureDensity.create(os.path.join(base_directory, 'data', posterior, 'clusters'), density)
 
 
-@task('mixture-product', 'data/{posterior}/product')
+@task('mixture-product', 'data/{posterior}/product', modules=['pypmc'])
 def mixture_product(posterior:str, posteriors:list, base_directory:str='./', analysis_file:str=None):
     """
     Compute the cartesian product of the densities listed in posteriors. Note that this product is not commutative.
@@ -407,7 +406,7 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     eos.completed('...finished!')
 
 # Sample PMC
-@task('sample-pmc', 'data/{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a')
+@task('sample-pmc', 'data/{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a', modules=['pypmc'])
 def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N:int=500, steps:int=10, final_N:int=5000,
                perplexity_threshold:float=1.0, weight_threshold:float=1e-10, sigma_test_stat:list=None, initial_proposal:str='clusters',
                pmc_iterations:int=1, pmc_rel_tol:float=1e-10, pmc_abs_tol:float=1e-05, pmc_lookback:int=1):
