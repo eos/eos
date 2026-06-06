@@ -24,11 +24,20 @@ EXTRA_DIST = \
 	eos/tasks_TEST.py \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
-	eos/data/native.py \
-    eos/data/native_TEST.d \
-    eos/data/native_TEST.d/predictions \
-    eos/data/native_TEST.d/predictions-binned \
-    eos/data/native_TEST.d/samples \
+	eos/data/dynesty_results.py \
+	eos/data/importance_samples.py \
+	eos/data/importance_samples_TEST.d \
+	eos/data/importance_samples_TEST.d/samples \
+	eos/data/markov_chain.py \
+	eos/data/mixture_density.py \
+	eos/data/mode.py \
+	eos/data/nabu_likelihood.py \
+	eos/data/pmc_sampler.py \
+	eos/data/prediction.py \
+	eos/data/prediction_TEST.d \
+	eos/data/prediction_TEST.d/predictions \
+	eos/data/prediction_TEST.d/predictions-binned \
+	eos/data/sample_mask.py \
 	eos/figure/__init__.py \
 	eos/figure/common.py \
 	eos/figure/config.py \
@@ -75,7 +84,15 @@ eos_SCRIPTS = \
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
 	eos/data/__init__.py \
-	eos/data/native.py
+	eos/data/dynesty_results.py \
+	eos/data/importance_samples.py \
+	eos/data/markov_chain.py \
+	eos/data/mixture_density.py \
+	eos/data/mode.py \
+	eos/data/nabu_likelihood.py \
+	eos/data/pmc_sampler.py \
+	eos/data/prediction.py \
+	eos/data/sample_mask.py
 
 eosplotdir = $(pkgpythondir)/plot
 eosplot_SCRIPTS = \
@@ -112,7 +129,9 @@ TESTS = \
 	eos/analysis_TEST.py \
 	eos/analysis_file_TEST.py \
 	eos/tasks_TEST.py \
-	eos/data/native_TEST.py \
+	eos/data/importance_samples_TEST.py \
+	eos/data/pmc_sampler_TEST.py \
+	eos/data/prediction_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
 	eos/figure/figure_TEST.py \

@@ -36,7 +36,7 @@ class UncertaintyBandItemTests(unittest.TestCase):
             label: '$\\ell=\\mu$'
             variable: 'q2'
             range: [0.02, 11.63]
-            datafile: 'eos/data/native_TEST.d/predictions'
+            datafile: 'eos/data/prediction_TEST.d/predictions'
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
@@ -55,7 +55,7 @@ class BinnedUncertaintyItemTests(unittest.TestCase):
             label: '$\\ell=\\mu$'
             variable: 'q2'
             range: [0.02, 11.63]
-            datafile: 'eos/data/native_TEST.d/predictions-binned'
+            datafile: 'eos/data/prediction_TEST.d/predictions-binned'
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
@@ -113,7 +113,7 @@ class OneDimensionalHistogramItemTests(unittest.TestCase):
             input = """
             type: 'histogram1D'
             variable: 'CKM::abs(V_ub)'
-            datafile: 'eos/data/native_TEST.d/samples'
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
@@ -130,7 +130,7 @@ class TwoDimensionalHistogramItemTests(unittest.TestCase):
             input = """
             type: 'histogram2D'
             variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
-            datafile: 'eos/data/native_TEST.d/samples'
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
@@ -150,7 +150,7 @@ class OneDimensionalKernelDensityItemTests(unittest.TestCase):
             level: 2
             xsamples: 150
             variable: 'CKM::abs(V_ub)'
-            datafile: 'eos/data/native_TEST.d/samples'
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
@@ -170,7 +170,7 @@ class TwoDimensionalKernelDensityItemTests(unittest.TestCase):
             contours: ['lines', 'areas', 'labels']
             levels: [1, 3]
             variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
-            datafile: 'eos/data/native_TEST.d/samples'
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
             """
             item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))

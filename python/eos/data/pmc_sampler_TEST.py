@@ -1,8 +1,8 @@
 import unittest
 
 import eos
-import os
 import numpy as np
+
 
 class PMCSamplerTests(unittest.TestCase):
 
@@ -35,16 +35,6 @@ class PMCSamplerTests(unittest.TestCase):
             delta=1e-5
         )
 
-    def test_importing_samples(self):
-        "Test the import of importance samples."
-
-        file = eos.data.ImportanceSamples(os.path.join(os.environ['SOURCE_DIR'], "eos/data/native_TEST.d/samples"))
-
-    def test_importing_predictions(self):
-        "Test the import of importance samples."
-
-        file = eos.data.Prediction(os.path.join(os.environ['SOURCE_DIR'], "eos/data/native_TEST.d/predictions-binned"))
-        file = eos.data.Prediction(os.path.join(os.environ['SOURCE_DIR'], "eos/data/native_TEST.d/predictions"))
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
