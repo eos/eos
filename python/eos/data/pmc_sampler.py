@@ -92,7 +92,7 @@ class PMCSampler:
         :type sigma_test_stat: list or iterable
         :param samples: Samples as a 2D array of shape (N, P). Needed to generate the test statistic.
         :type samples: 2D numpy array, optional
-        :param weights: Weights on a linear scale as a 2D array of shape (N, 1). Needed to generate the test statistic.
+        :param weights: Weights on a linear scale as a 1D array of shape (N, ). Needed to generate the test statistic.
         :type weights: 1D numpy array, optional
         """
         description = {}
@@ -120,7 +120,7 @@ class PMCSampler:
             samplesPDF = list(map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(proposal, x)), samples))
             ind = _np.argsort(samplesPDF)
             sorted_samplesPDF = _np.array(samplesPDF)[ind]
-            sorted_weights = weights[ind]
+            sorted_weights = weights.flatten()[ind]
             cumulant = 1.*sorted_weights.cumsum()/sorted_weights.sum()
             percents = erf(sigma_test_stat/_np.sqrt(2))
             weighted_percentile = _np.interp(percents, cumulant, sorted_samplesPDF)
