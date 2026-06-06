@@ -109,7 +109,13 @@ We recommend installing the most up-to-date Python package from the Python Packa
 
 ::
 
-  pip3 install --user --upgrade dynesty matplotlib numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade dynesty matplotlib numpy pyyaml scipy
+
+To optionally use the Population Monte Carlo code for MCMC-based and PMC-based tasks (such as ``sample-mcmc``, ``sample-pmc``, ``find-clusters``, ``mixture-product``), also install the ``pypmc`` package:
+
+::
+
+  pip3 install --user --upgrade pypmc
 
 
 .. _installation-from-source:
@@ -189,7 +195,7 @@ pypandoc
   the thin Python wrapper for Pandoc;
 
 pypmc
-  the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods (needed for some functionality);
+  the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods (optional; needed for the ``sample-mcmc``, ``sample-pmc``, ``find-clusters``, and ``mixture-product`` tasks);
 
 PyYAML
   the Python YAML parser and emitter library;
@@ -222,13 +228,20 @@ by running the following commands:
   sudo apt-get install libgsl0-dev
 
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
-the ``argcomplete``, ``dynesty``, ``gitlint``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pypmc``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
+the ``argcomplete``, ``dynesty``, ``gitlint``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
 
 
 ::
 
   # Make sure to activate your virtual environment first
-  pip install argcomplete dynesty gitlint matplotlib scipy pre-commit pypmc pyyaml pyhf tqdm wilson
+  pip install argcomplete dynesty gitlint matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
+
+Optionally, to use the Population Monte Carlo code for MCMC-based and PMC-based sampling tasks (such as ``sample-mcmc``, ``sample-pmc``, ``find-clusters``, ``mixture-product``),
+also install the ``pypmc`` package:
+
+::
+
+  pip install pypmc
 
 
 If you intend to build the EOS documentation, you will also need the following software:
@@ -276,7 +289,7 @@ To install the remaining packages, run the following command in a shell
 
 ::
 
-  pip3 install argcomplete dynesty gitlint matplotlib scipy pre-commit pypmc pyyaml pyhf tqdm wilson
+  pip3 install argcomplete dynesty gitlint matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
 
 
 Installing EOS
