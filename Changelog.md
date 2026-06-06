@@ -59,6 +59,15 @@
 ### Fixed
 
 - Fix some linewidth and linestyles arguments in figure framework (D. Suelmann)
+- Fix undefined name errors in Python code (D. van Dyk)
+- Fix usage of mutable default arguments in Python code (D. van Dyk)
+- Fix exception handling in Python code (D. van Dyk)
+- Remove dead code and unused imports in Python code (D. van Dyk)
+- Fix exception handling in ``li22logA1`` (D. van Dyk)
+- Fix use of ``std::abs`` in inclusive B->X_sll decays (D. van Dyk)
+- Remove unused debugging code (D. van Dyk)
+- Remove call to ``exit()`` in ``cubature`` code (D. van Dyk)
+- Use ``context.nullcontext`` instead of ``context.suppress`` (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
