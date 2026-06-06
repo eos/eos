@@ -122,11 +122,11 @@ namespace eos
             return model->m_c_pole();
         }
 
-        double s_hat(const double & s) const
+        double s_hat(const double & q2) const
         {
             double m_b = m_b_pole();
 
-            return s / m_b / m_b;
+            return q2 / m_b / m_b;
         }
 
         /* NLO functions */
@@ -248,10 +248,10 @@ namespace eos
             };
 
             double m_b = m_b_pole(), m_c = m_c_pole();
-            double s = s_hat * power_of<2>(m_b);
+            double q2 = s_hat * power_of<2>(m_b);
 
             complex<double> g_b = g(4.0 / s_hat);
-            complex<double> g_c = g(4.0 * power_of<2>(m_c) / s);
+            complex<double> g_c = g(4.0 * power_of<2>(m_c) / q2);
 
             /* mu == mu in MSbar scheme, so use m_b_MSbar here */
             return gamma9[i-1] * log(m_b_MSbar / mu)
@@ -290,13 +290,13 @@ namespace eos
 
         // cf. [HLMW:2005A], Eq. (6), p. 4
         // see also comments on removing the factor phi_u from the ratio phi_ll / phi_u below.
-        double phi_ll(const double & s) const
+        double phi_ll(const double & q2) const
         {
             double m_c = m_c_pole(), m_b_msbar = this->m_b_msbar();
             double m_b_pole = this->m_b_pole(), m_b_kin = model->m_b_kin(1.0);
             double log_m_l_hat = std::log(m_l / m_b_msbar);
             double m_s_hat = model->m_s_msbar(mu()) / m_b_msbar;
-            double s_hat = s / power_of<2>(m_b_pole), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+            double s_hat = q2 / power_of<2>(m_b_pole), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
             // We express lambda_2 as mu^2_G / 3.0 and neglect terms of
             // higher order in 1/m_b for that relation.
             double lambda_1_hat = mu2_pi / power_of<2>(m_b_kin), lambda_2_hat = mu2_g / (3.0 * power_of<2>(m_b_kin));
@@ -369,14 +369,14 @@ namespace eos
 
             /* Corrections, cf. [HLMW:2005A], Table 6, p. 18 */
             std::vector<complex<double>> m7 = {
-                -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F17_massive, mu(), s, m_b_msbar, m_c),
-                -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F27_massive, mu(), s, m_b_msbar, m_c),
+                -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F17_massive, mu(), q2, m_b_msbar, m_c),
+                -power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F27_massive, mu(), q2, m_b_msbar, m_c),
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 alpha_s_tilde * kappa,
-                -power_of<2>(alpha_s_tilde) * kappa * CharmLoops::F87_massless(mu, s, m_b_msbar),
+                -power_of<2>(alpha_s_tilde) * kappa * CharmLoops::F87_massless(mu, q2, m_b_msbar),
                 0.0,
                 0.0,
                 0.0,
@@ -386,14 +386,14 @@ namespace eos
             };
 
             std::vector<complex<double>> m9 = {
-                alpha_s_tilde * kappa * f(1, s_hat) - power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F19_massive, mu(), s, m_b_msbar, m_c),
-                alpha_s_tilde * kappa * f(2, s_hat) - power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F29_massive, mu(), s, m_b_msbar, m_c),
+                alpha_s_tilde * kappa * f(1, s_hat) - power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F19_massive, mu(), q2, m_b_msbar, m_c),
+                alpha_s_tilde * kappa * f(2, s_hat) - power_of<2>(alpha_s_tilde) * kappa * memoise(CharmLoops::F29_massive, mu(), q2, m_b_msbar, m_c),
                 alpha_s_tilde * kappa * f(3, s_hat),
                 alpha_s_tilde * kappa * f(4, s_hat),
                 alpha_s_tilde * kappa * f(5, s_hat),
                 alpha_s_tilde * kappa * f(6, s_hat),
                 0.0,
-                -power_of<2>(alpha_s_tilde) * kappa * CharmLoops::F89_massless(s, m_b_msbar),
+                -power_of<2>(alpha_s_tilde) * kappa * CharmLoops::F89_massless(q2, m_b_msbar),
                 1.0 + alpha_s_tilde * kappa * f9pen(s_hat),
                 0.0,
                 alpha_s_tilde * kappa * f(11, s_hat),
@@ -524,12 +524,12 @@ namespace eos
         }
 
         // cf. [HLMW:2005A], Eq. (4), p. 4
-        double branching_ratio(const double & s) const
+        double branching_ratio(const double & q2) const
         {
             static const double pi3 = power_of<3>(M_PI);
 
             return power_of<2>(gfermi()) * power_of<5>(m_b_pole())
-                * std::norm(model->ckm_tb() * std::conj(model->ckm_ts())) * phi_ll(s) * tau_B()
+                * std::norm(model->ckm_tb() * std::conj(model->ckm_ts())) * phi_ll(q2) * tau_B()
                 / (48.0 * pi3 * hbar());
         }
 
@@ -565,17 +565,17 @@ namespace eos
     };
 
     double
-    BToXsDilepton<HLMW2005>::differential_branching_ratio(const double & s) const
+    BToXsDilepton<HLMW2005>::differential_branching_ratio(const double & q2) const
     {
-        return _imp->branching_ratio(s) / power_of<2>(_imp->m_b_pole());
+        return _imp->branching_ratio(q2) / power_of<2>(_imp->m_b_pole());
     }
 
     double
-    BToXsDilepton<HLMW2005>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    BToXsDilepton<HLMW2005>::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         return integrate<1>(std::function<double (const double &)>(
                     std::bind(&BToXsDilepton<HLMW2005>::differential_branching_ratio, this, std::placeholders::_1)),
-                    s_min, s_max, _imp->cub_conf);
+                    q2_min, q2_max, _imp->cub_conf);
     }
 
     Diagnostics
