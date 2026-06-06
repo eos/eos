@@ -37,14 +37,14 @@ class SampleMask:
             description = yaml.load(df, Loader=yaml.SafeLoader)
 
         if not description['type'] == 'Mask':
-            raise RuntimeError(f'Path {path} not pointing to a Mode file')
+            raise RuntimeError(f'Path {path} not pointing to a Mask file')
 
         self.type = 'Mask'
         self.observables = description['observables']
 
         f = os.path.join(path, 'mask.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError(f'Weights file {f} does not exist or is not a file')
+            raise RuntimeError(f'Mask file {f} does not exist or is not a file')
         self.mask = _np.load(f)
 
     @staticmethod
