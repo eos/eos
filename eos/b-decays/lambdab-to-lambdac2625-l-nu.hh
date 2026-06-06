@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Elena Graverini
- * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2017      Elena Graverini
+ * Copyright (c) 2017-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -40,28 +40,28 @@ namespace eos
             ~LambdaBToLambdaC2625LeptonNeutrino();
 
             // [BBGIOvD] parametrization for the differential decay width
-            double a_l(const double & s) const;
-            double b_l(const double & s) const;
-            double c_l(const double & s) const;
-            double gamma_0(const double & s) const;
+            double a_l(const double & q2) const;
+            double b_l(const double & q2) const;
+            double c_l(const double & q2) const;
+            double gamma_0(const double & q2) const;
 
             // Differential Observables
-            double differential_branching_ratio(const double & s) const;
-            double differential_forward_backward_asymmetry(const double & s) const;
-            double double_differential_branching_ratio(const double & s, const double & theta_l) const;
+            double differential_branching_ratio(const double & q2) const;
+            double differential_forward_backward_asymmetry(const double & q2) const;
+            double double_differential_branching_ratio(const double & q2, const double & theta_l) const;
 
             // Integrated Observables
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
 
             // Integrated Observables (normalized to 1)
-            double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
              */
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
 
             /*!
