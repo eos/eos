@@ -75,8 +75,8 @@ class MarkovChain:
         :type samples: 2D numpy array
         :param usamples: Samples in u space as a 2D array of shape (N, P).
         :type usamples: 2D numpy array
-        :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
-        :type weights: 2D numpy array, optional
+        :param weights: Weights on a linear scale as a 1D array of shape (N, ).
+        :type weights: 1D numpy array, optional
         """
         description = {}
         description['version'] = eos.__version__
