@@ -55,7 +55,7 @@ class ImportanceSamples:
         self.weights = _np.load(f)
 
         f = os.path.join(path, 'posterior_values.npy')
-        if not os.path.exists(f) and not os.path.isfile(f):
+        if not os.path.exists(f) or not os.path.isfile(f):
             self.posterior_values = None
         else:
             self.posterior_values = _np.load(f)
