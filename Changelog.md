@@ -68,6 +68,9 @@
 - Remove unused debugging code (D. van Dyk)
 - Remove call to ``exit()`` in ``cubature`` code (D. van Dyk)
 - Use ``context.nullcontext`` instead of ``context.suppress`` (D. van Dyk)
+- Fix inconsistent use of ``s`` rather than ``q2`` across B->Plnu, Lambda_b->Lambda_clnu, Lambda_b->Lambda_c(2595)lnu, and Lambda_b->Lambda_c(2625)lnu (D. van Dyk)
+- Fix inconsistent use of ``s`` rather than ``q2`` across D->Plnu, and Lambda_c->(S=1/2)^+lnu (D. van Dyk)
+- Fix inconsistent use of ``s`` rather than ``q2`` across B->Kll, B->K^*ll, B_s->phill, Lambda_b->Lambdall, Lambda_b->Lambda(1520)ll, and B->X_sll (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
