@@ -57,8 +57,8 @@ namespace eos
              * @name Signal PDFs
              */
             // @{
-            double decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
-            double decay_width_LHCb(const double & s, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const;
+            double decay_width(const double & q2, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
+            double decay_width_LHCb(const double & q2, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const;
             // @}
 
             /*!
@@ -119,18 +119,18 @@ namespace eos
              * @name Angular observables (@f$q^2@f$-differential)
              */
             // @{
-            double differential_j_1s(const double & s) const;
-            double differential_j_1c(const double & s) const;
-            double differential_j_2s(const double & s) const;
-            double differential_j_2c(const double & s) const;
-            double differential_j_3(const double & s) const;
-            double differential_j_4(const double & s) const;
-            double differential_j_5(const double & s) const;
-            double differential_j_6s(const double & s) const;
-            double differential_j_6c(const double & s) const;
-            double differential_j_7(const double & s) const;
-            double differential_j_8(const double & s) const;
-            double differential_j_9(const double & s) const;
+            double differential_j_1s(const double & q2) const;
+            double differential_j_1c(const double & q2) const;
+            double differential_j_2s(const double & q2) const;
+            double differential_j_2c(const double & q2) const;
+            double differential_j_3(const double & q2) const;
+            double differential_j_4(const double & q2) const;
+            double differential_j_5(const double & q2) const;
+            double differential_j_6s(const double & q2) const;
+            double differential_j_6c(const double & q2) const;
+            double differential_j_7(const double & q2) const;
+            double differential_j_8(const double & q2) const;
+            double differential_j_9(const double & q2) const;
             // @}
 
             /*!
@@ -210,7 +210,7 @@ namespace eos
              */
             // @{
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
             static const std::string kinematics_description_c_theta_k;
             static const std::string kinematics_description_phi;
@@ -235,17 +235,17 @@ namespace eos
 	         /*!
 	          * Test functions, [BFS:2001A] eqs. (40-41)
              */
-            double real_C9_perp(const double & s) const;
-            double real_C9_para(const double & s) const;
-            double imag_C9_perp(const double & s) const;
-            double imag_C9_para(const double & s) const;
+            double real_C9_perp(const double & q2) const;
+            double real_C9_para(const double & q2) const;
+            double imag_C9_perp(const double & q2) const;
+            double imag_C9_para(const double & q2) const;
 
             /*!
              * Test functions, return H_sb / H_c for each helicity
              */
-            double H_perp_corrections(const double & s) const;
-            double H_para_corrections(const double & s) const;
-            double H_long_corrections(const double & s) const;
+            double H_perp_corrections(const double & q2) const;
+            double H_para_corrections(const double & q2) const;
+            double H_long_corrections(const double & q2) const;
     };
 }
 
