@@ -192,7 +192,7 @@ namespace eos
             else
                 x = 2.0 * atan(1.0 / sqrt(y - 1.0));
 
-            return 20.0 / 27.0 + 4.0 / 9.0 * y - 2.0 / 9.0 * (2.0 + y) * sqrt(abs(y - 1)) * x;
+            return 20.0 / 27.0 + 4.0 / 9.0 * y - 2.0 / 9.0 * (2.0 + y) * sqrt(std::abs(y - 1.0)) * x;
         }
 
         // cf. [HLMW:2005A], Eq. (72), p. 17
