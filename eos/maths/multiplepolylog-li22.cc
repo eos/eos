@@ -697,7 +697,8 @@ namespace eos
 
         complex<double> li22logA1(const complex<double> &x, const complex<double> &y, int ncmax)
         {
-            if(ncmax>99){printf("WRONG!!");}
+            if (ncmax > 99)
+                throw InternalError("li22logA1: expansion order ncmax exceeds the supported maximum of 99");
             return li22logA1ff1(x,y) + li22logA1ff2(x,y,ncmax);
         }
 
