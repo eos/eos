@@ -2,13 +2,17 @@ import unittest
 
 import eos
 import os
-import pypmc
 import numpy as np
 
 class PMCSamplerTests(unittest.TestCase):
 
     def test_evaluate_mixture_pdf(self):
         "Test the evaluation of a mixture PDF, used in the computation of test statistics."
+
+        try:
+            import pypmc
+        except ImportError:
+            raise unittest.SkipTest("skipping 'test_evaluate_mixture_pdf' - pypmc is not installed")
 
         component_weights = np.array([0.3, 0.7])
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2024 Danny van Dyk
+# Copyright (c) 2019-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -16,7 +16,6 @@
 import eos
 import os
 import numpy as _np
-import pypmc
 import yaml
 import dynesty
 from scipy.special import erf
@@ -213,6 +212,10 @@ class MixtureDensity:
 
     def density(self):
         """ Return a pypmc.density.MixtureDensity. """
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.data.MixtureDensity.density requires the PyPMC python module, which can be installed from PyPI.') from e
         components = [pypmc.density.gauss.Gauss(c['mu'], c['sigma']) for c in self.components]
         return pypmc.density.mixture.MixtureDensity(components, self.weights)
 
@@ -235,6 +238,10 @@ class MixtureDensity:
         :type weights: 1D numpy array, optional
 
         """
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.data.MixtureDensity.create requires the PyPMC python module, which can be installed from PyPI.') from e
         description = {}
         description['version'] = eos.__version__
         description['type'] = 'MixtureDensity'
@@ -285,6 +292,10 @@ class MixtureDensity:
         :param densityB: Second mixture density.
         :type densityB: pypmc.density.MixtureDensity
         """
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.data.MixtureDensity._cartesian_product requires the PyPMC python module, which can be installed from PyPI.') from e
         components = []
         weights = []
         for cA, wA in zip(densityA.components, densityA.weights):
@@ -339,6 +350,10 @@ class PMCSampler:
         if not description['type'] == 'PMCSampler':
             raise RuntimeError(f'Path {path} not pointing to a PMCSampler')
 
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.data.PMCSampler requires the PyPMC python module, which can be installed from PyPI.') from e
         self.type = 'PMCSampler'
         self.varied_parameters = description['parameters']
         self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
@@ -348,6 +363,10 @@ class PMCSampler:
 
     def density(self):
         """ Return a pypmc.density.MixtureDensity. """
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.data.PMCSampler.density requires the PyPMC python module, which can be installed from PyPI.') from e
         return pypmc.density.mixture.MixtureDensity(self.components, self.component_weights)
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2018-2024 Danny van Dyk
+# Copyright (c) 2018-2026 Danny van Dyk
 # Copyright (c) 2024 Carolina Bolognani
 # Copyright (c) 2023 Lorenz Gärtner
 #
@@ -21,7 +21,6 @@
 import eos
 import numpy as np
 import scipy
-import pypmc
 
 class BestFitPoint:
     """
@@ -322,6 +321,10 @@ class Analysis:
     @staticmethod
     def _ess(weights):
         """Helper function that computes the effective sample size of an array of weights"""
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.Analysis._ess requires the PyPMC python module, which can be installed from PyPI.') from e
         return pypmc.tools.convergence.ess(weights)
 
 
@@ -481,6 +484,11 @@ class Analysis:
            This method requiries the PyPMC python module, which can be installed from PyPI.
         """
         try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.Analysis.sample requires the PyPMC python module, which can be installed from PyPI.') from e
+
+        try:
             from tqdm.auto import tqdm
             progressbar = tqdm
         except ImportError:
@@ -602,6 +610,11 @@ class Analysis:
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
         """
+        try:
+            import pypmc
+        except ImportError as e:
+            raise ImportError('eos.Analysis.sample_pmc requires the PyPMC python module, which can be installed from PyPI.') from e
+
         try:
             from tqdm.auto import tqdm
             progressbar = tqdm
