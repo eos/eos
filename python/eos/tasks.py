@@ -94,7 +94,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
             # use invocation-specific log file handler
             with handler:
                 iaccordion = None
-                ioutput = contextlib.suppress() # can be replaced with contextlib.nullcontext once Python >=3.7 is ensured
+                ioutput = contextlib.nullcontext()
                 if __ipython__:
                     import ipywidgets as _ipywidgets
                     from IPython.display import display
