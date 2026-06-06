@@ -98,14 +98,14 @@ namespace eos
         {
         }
 
-        inline std::array<double, 12> angular_coefficients_array(const BToKstarDilepton::Amplitudes & A, const double & s) const
+        inline std::array<double, 12> angular_coefficients_array(const BToKstarDilepton::Amplitudes & A, const double & q2) const
         {
             // cf. [BHvD:2010A], p. 26, eqs. (A1)-(A11)
             // cf. [BHvD:2012A], app B, eqs. (B1)-(B12)
             std::array<double, 12> result;
 
-            double z = 4.0 * power_of<2>(m_l()) / s;
-            double y = m_l / std::sqrt(s);
+            double z = 4.0 * power_of<2>(m_l()) / q2;
+            double y = m_l / std::sqrt(q2);
             double beta2 = 1.0 - z;
             double beta = std::sqrt(beta2);
 
@@ -199,21 +199,21 @@ namespace eos
             return result;
         }
 
-        inline std::array<double, 12> differential_angular_coefficients_array(const double & s) const
+        inline std::array<double, 12> differential_angular_coefficients_array(const double & q2) const
         {
-            return angular_coefficients_array(amplitude_generator->amplitudes(s), s);
+            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
         }
 
-        inline BToKstarDilepton::AngularCoefficients differential_angular_coefficients(const double & s) const
+        inline BToKstarDilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
         {
-            return BToKstarDilepton::AngularCoefficients(differential_angular_coefficients_array(s));
+            return BToKstarDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
         }
 
-        BToKstarDilepton::AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
+        BToKstarDilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<BToKstarDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
             return BToKstarDilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
@@ -230,9 +230,9 @@ namespace eos
             return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
-        inline double beta_l(const double & s) const
+        inline double beta_l(const double & q2) const
         {
-            return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
+            return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
         }
 
         double a_fb_zero_crossing() const
@@ -303,7 +303,7 @@ namespace eos
     }
 
     double
-    BToKstarDilepton::decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
+    BToKstarDilepton::decay_width(const double & q2, const double & c_theta_l, const double & c_theta_k, const double & phi) const
     {
         // compute d^4 Gamma, cf. [BHvD:2010A], p. 5, Eq. (2.6)
         // Cosine squared of the angles
@@ -326,7 +326,7 @@ namespace eos
         double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
         double s_2_phi = sin(2.0 * phi);
 
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         double Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
 
         double result = 3.0 / 8.0 / M_PI * (
@@ -345,80 +345,80 @@ namespace eos
     }
 
     double
-    BToKstarDilepton::decay_width_LHCb(const double & s, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const
+    BToKstarDilepton::decay_width_LHCb(const double & q2, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const
     {
         // compute d^4 Gamma, cf. [BHvD:2010A], p. 5, Eq. (2.6)
         // using the angular convention of the LHCb experiment
 
-        return BToKstarDilepton::decay_width(s, -c_theta_l_LHCb, +c_theta_k_LHCb, -phi_LHCb);
+        return BToKstarDilepton::decay_width(q2, -c_theta_l_LHCb, +c_theta_k_LHCb, -phi_LHCb);
     }
 
 
     double
-    BToKstarDilepton::differential_decay_width(const double & s) const
+    BToKstarDilepton::differential_decay_width(const double & q2) const
     {
-        return _imp->decay_width(_imp->differential_angular_coefficients(s));
+        return _imp->decay_width(_imp->differential_angular_coefficients(q2));
     }
 
     double
-    BToKstarDilepton::differential_branching_ratio(const double & s) const
+    BToKstarDilepton::differential_branching_ratio(const double & q2) const
     {
-        return differential_decay_width(s) * _imp->tau() / _imp->hbar();
+        return differential_decay_width(q2) * _imp->tau() / _imp->hbar();
     }
 
     double
-    BToKstarDilepton::differential_forward_backward_asymmetry(const double & s) const
+    BToKstarDilepton::differential_forward_backward_asymmetry(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.8)
         // cf. [BHvD:2012A], eq. (A7)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return (a_c.j6s + 0.5 * a_c.j6c) / _imp->decay_width(a_c);
     }
 
     double
-    BToKstarDilepton::differential_longitudinal_polarisation(const double & s) const
+    BToKstarDilepton::differential_longitudinal_polarisation(const double & q2) const
     {
         // cf. [BHvD:2012A], eq. (A9)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BToKstarDilepton::differential_transversal_polarisation(const double & s) const
+    BToKstarDilepton::differential_transversal_polarisation(const double & q2) const
     {
         // cf. [BHvD:2012A], eq. (A10)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BToKstarDilepton::differential_transverse_asymmetry_2(const double & s) const
+    BToKstarDilepton::differential_transverse_asymmetry_2(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.10)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::differential_transverse_asymmetry_3(const double & s) const
+    BToKstarDilepton::differential_transverse_asymmetry_3(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.11)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return std::sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return std::sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(q2) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
-    BToKstarDilepton::differential_transverse_asymmetry_4(const double & s) const
+    BToKstarDilepton::differential_transverse_asymmetry_4(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.12)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return std::sqrt((power_of<2>(_imp->beta_l(s) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return std::sqrt((power_of<2>(_imp->beta_l(q2) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(q2) * a_c.j7)));
     }
 
     double
-    BToKstarDilepton::differential_transverse_asymmetry_5(const double & s) const
+    BToKstarDilepton::differential_transverse_asymmetry_5(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
 
         // cf. [BS:2011A], eq. (34), p. 9 for the massless case
         return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
@@ -426,141 +426,141 @@ namespace eos
     }
 
     double
-    BToKstarDilepton::differential_transverse_asymmetry_re(const double & s) const
+    BToKstarDilepton::differential_transverse_asymmetry_re(const double & q2) const
     {
         // cf. [BS:2011A], eq. (38), p. 10
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return 0.25 * _imp->beta_l(s) * a_c.j6s / a_c.j2s;
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return 0.25 * _imp->beta_l(q2) * a_c.j6s / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::differential_transverse_asymmetry_im(const double & s) const
+    BToKstarDilepton::differential_transverse_asymmetry_im(const double & q2) const
     {
         // cf. [BS:2011A], eq. (30), p. 8
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
-    BToKstarDilepton::differential_h_1(const double & s) const
+    BToKstarDilepton::differential_h_1(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.13)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
-    BToKstarDilepton::differential_h_2(const double & s) const
+    BToKstarDilepton::differential_h_2(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.14)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return _imp->beta_l(s) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return _imp->beta_l(q2) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BToKstarDilepton::differential_h_3(const double & s) const
+    BToKstarDilepton::differential_h_3(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.15)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return _imp->beta_l(s) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return _imp->beta_l(q2) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }
 
     double
-    BToKstarDilepton::differential_h_4(const double & s) const
+    BToKstarDilepton::differential_h_4(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BToKstarDilepton::differential_h_5(const double & s) const
+    BToKstarDilepton::differential_h_5(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
     }
 
     // differential angular coefficients
     double
-    BToKstarDilepton::differential_j_1c(const double & s) const
+    BToKstarDilepton::differential_j_1c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j1c;
     }
 
     double
-    BToKstarDilepton::differential_j_1s(const double & s) const
+    BToKstarDilepton::differential_j_1s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j1s;
     }
 
     double
-    BToKstarDilepton::differential_j_2c(const double & s) const
+    BToKstarDilepton::differential_j_2c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j2c;
     }
 
     double
-    BToKstarDilepton::differential_j_2s(const double & s) const
+    BToKstarDilepton::differential_j_2s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j2s;
     }
 
     double
-    BToKstarDilepton::differential_j_3(const double & s) const
+    BToKstarDilepton::differential_j_3(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j3;
     }
 
     double
-    BToKstarDilepton::differential_j_4(const double & s) const
+    BToKstarDilepton::differential_j_4(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j4;
     }
 
     double
-    BToKstarDilepton::differential_j_5(const double & s) const
+    BToKstarDilepton::differential_j_5(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j5;
     }
 
     double
-    BToKstarDilepton::differential_j_6c(const double & s) const
+    BToKstarDilepton::differential_j_6c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j6c;
     }
 
     double
-    BToKstarDilepton::differential_j_6s(const double & s) const
+    BToKstarDilepton::differential_j_6s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j6s;
     }
 
     double
-    BToKstarDilepton::differential_j_7(const double & s) const
+    BToKstarDilepton::differential_j_7(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j7;
     }
 
     double
-    BToKstarDilepton::differential_j_8(const double & s) const
+    BToKstarDilepton::differential_j_8(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j8;
     }
 
     double
-    BToKstarDilepton::differential_j_9(const double & s) const
+    BToKstarDilepton::differential_j_9(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j9;
     }
 
@@ -810,40 +810,40 @@ namespace eos
     }
 
     double
-    BToKstarDilepton::real_C9_perp(const double & s) const
+    BToKstarDilepton::real_C9_perp(const double & q2) const
     {
-        return _imp->amplitude_generator->real_C9_perp(s);
+        return _imp->amplitude_generator->real_C9_perp(q2);
     }
     double
-    BToKstarDilepton::real_C9_para(const double & s) const
+    BToKstarDilepton::real_C9_para(const double & q2) const
     {
-        return _imp->amplitude_generator->real_C9_para(s);
+        return _imp->amplitude_generator->real_C9_para(q2);
     }
     double
-    BToKstarDilepton::imag_C9_perp(const double & s) const
+    BToKstarDilepton::imag_C9_perp(const double & q2) const
     {
-        return _imp->amplitude_generator->imag_C9_perp(s);
+        return _imp->amplitude_generator->imag_C9_perp(q2);
     }
     double
-    BToKstarDilepton::imag_C9_para(const double & s) const
+    BToKstarDilepton::imag_C9_para(const double & q2) const
     {
-        return _imp->amplitude_generator->imag_C9_para(s);
+        return _imp->amplitude_generator->imag_C9_para(q2);
     }
 
     double
-    BToKstarDilepton::H_perp_corrections(const double & s) const
+    BToKstarDilepton::H_perp_corrections(const double & q2) const
     {
-        return _imp->amplitude_generator->H_perp_corrections(s);
+        return _imp->amplitude_generator->H_perp_corrections(q2);
     }
     double
-    BToKstarDilepton::H_para_corrections(const double & s) const
+    BToKstarDilepton::H_para_corrections(const double & q2) const
     {
-        return _imp->amplitude_generator->H_para_corrections(s);
+        return _imp->amplitude_generator->H_para_corrections(q2);
     }
     double
-    BToKstarDilepton::H_long_corrections(const double & s) const
+    BToKstarDilepton::H_long_corrections(const double & q2) const
     {
-        return _imp->amplitude_generator->H_long_corrections(s);
+        return _imp->amplitude_generator->H_long_corrections(q2);
     }
 
 
@@ -854,7 +854,7 @@ a charged lepton. Various theory models can be selected using \
 the 'tag' option";
 
     const std::string
-    BToKstarDilepton::kinematics_description_s = "\
+    BToKstarDilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
     const std::string
