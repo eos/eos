@@ -347,11 +347,11 @@ namespace eos
             u.uses(*model);
         }
 
-        double norm(const double & s) const
+        double norm(const double & q2) const
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
-                * sqrt(s / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
-                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD:2014A], Eq. (?), p. ??
+                * sqrt(q2 / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
+                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, q2))); // cf. [BFvD:2014A], Eq. (?), p. ??
         }
 
         double kappa() const
@@ -359,7 +359,7 @@ namespace eos
             return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / model->m_b_msbar(mu)));
         }
 
-        lambdab_to_lambda_dilepton::Amplitudes amplitudes(const double & s)
+        lambdab_to_lambda_dilepton::Amplitudes amplitudes(const double & q2)
         {
             lambdab_to_lambda_dilepton::Amplitudes result;
 
@@ -370,8 +370,8 @@ namespace eos
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), opt_l.value());
 
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / std::abs(model->ckm_tb() * conj(model->ckm_ts()));
-            double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = sqrt(s);
-            double N = norm(s);
+            double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - q2), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - q2), sqrts = sqrt(q2);
+            double N = norm(q2);
 
             /* Y(s) for the up and the top sector */
             // cf. [BFS:2001A], Eq. (10), p. 4
@@ -381,12 +381,12 @@ namespace eos
             complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
             // Use b pole mass according to [BFS:2001A], Sec. 3.1, paragraph Quark Masses,
             // then replace b pole mass by the PS mass.
-            complex<double> Y_top = Y_top_c * CharmLoops::h(mu, s, m_c_pole)
-                 + Y_top_b * CharmLoops::h(mu, s, m_b_PS)
-                 + Y_top_0 * CharmLoops::h(mu, s)
+            complex<double> Y_top = Y_top_c * CharmLoops::h(mu, q2, m_c_pole)
+                 + Y_top_b * CharmLoops::h(mu, q2, m_b_PS)
+                 + Y_top_0 * CharmLoops::h(mu, q2)
                  + Y_top_;
             // cf. [BFS:2004A], Eq. (43), p. 24
-            complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, s, m_c_pole) - CharmLoops::h(mu, s));
+            complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, q2, m_c_pole) - CharmLoops::h(mu, q2));
 
             // calculate effective wilson coefficients
             // cf. [BFS:2001A], below Eq. (9), p. 4
@@ -396,22 +396,22 @@ namespace eos
 
             // two loop virtual corrections, cf. [AAGW:2001A]
             // charm quarks
-            complex<double> F27c = CharmLoops::F27_massive(mu(), s, m_b_PS, m_c_pole);
+            complex<double> F27c = CharmLoops::F27_massive(mu(), q2, m_b_PS, m_c_pole);
             complex<double> F17c = -F27c / 6.0;
-            complex<double> F19c = CharmLoops::F19_massive(mu(), s, m_b_PS, m_c_pole);
-            complex<double> F29c = CharmLoops::F29_massive(mu(), s, m_b_PS, m_c_pole);
+            complex<double> F19c = CharmLoops::F19_massive(mu(), q2, m_b_PS, m_c_pole);
+            complex<double> F29c = CharmLoops::F29_massive(mu(), q2, m_b_PS, m_c_pole);
             // up quarks
-            complex<double> F27u = CharmLoops::F27_massless(mu(), s, m_b_PS);
+            complex<double> F27u = CharmLoops::F27_massless(mu(), q2, m_b_PS);
             complex<double> F17u = -F27u / 6.0;
-            complex<double> F19u = CharmLoops::F19_massless(mu(), s, m_b_PS);
-            complex<double> F29u = CharmLoops::F29_massless(mu(), s, m_b_PS);
+            complex<double> F19u = CharmLoops::F19_massless(mu(), q2, m_b_PS);
+            complex<double> F29u = CharmLoops::F29_massless(mu(), q2, m_b_PS);
             // gluon
-            complex<double> F87  = CharmLoops::F87_massless(mu(), s, m_b_PS);
-            complex<double> F89  = CharmLoops::F89_massless(s, m_b_PS);
+            complex<double> F87  = CharmLoops::F87_massless(mu(), q2, m_b_PS);
+            complex<double> F89  = CharmLoops::F89_massless(q2, m_b_PS);
 
             // integredients for form factor relations
             // cf. [FY:2011A]
-            double L = -1.0 * (m_b_PS2 - s) / s * std::log(1.0 - s / m_b_PS2);
+            double L = -1.0 * (m_b_PS2 - q2) / q2 * std::log(1.0 - q2 / m_b_PS2);
 
             // ratio of tensor to vector form factors
             // cf. [BFvD:2014A], eqs. (??)-(??)
@@ -427,7 +427,7 @@ namespace eos
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * F17c + wc.c2() * F27c + c8eff * F87)
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * (F17c - F17u) + wc.c2() * (F27c - F27u) + c8eff * F87) * lambda_hat_u
                 ) * R1p
-                + s / (2.0 * m_b_MSbar * m_Lambda_b) * (
+                + q2 / (2.0 * m_b_MSbar * m_Lambda_b) * (
                     Y_top + lambda_hat_u * Y_up
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * F19c + wc.c2() * F29c + wc.c8() * F89)
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * (F19c - F19u) + wc.c2() * (F29c - F29u) + wc.c8() * F89) * lambda_hat_u
@@ -437,7 +437,7 @@ namespace eos
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * F17c + wc.c2() * F27c)
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * (F17c - F17u) + wc.c2() * (F27c - F27u) + c8eff * F87) * lambda_hat_u
                 ) * R1m
-                + s / (2.0 * m_b_MSbar * m_Lambda_b) * (
+                + q2 / (2.0 * m_b_MSbar * m_Lambda_b) * (
                     Y_top + lambda_hat_u * Y_up
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * F19c + wc.c2() * F29c + c8eff * F87)
                     - alpha_s / (4.0 * M_PI) * (wc.c1() * (F19c - F19u) + wc.c2() * (F29c - F29u) + wc.c8() * F89) * lambda_hat_u
@@ -464,17 +464,17 @@ namespace eos
                 );
 
             // cf. [BFvD:2014A], eqs. (??)-(??)
-            result.a_perp_1_R = -2.0 *       N * (wc.c9() + wc.c9prime() + (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / s * tau_1p) * form_factors->f_perp_v(s) * sqrtsminus;
-            result.a_perp_1_L = -2.0 *       N * (wc.c9() + wc.c9prime() - (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / s * tau_1p) * form_factors->f_perp_v(s) * sqrtsminus;
+            result.a_perp_1_R = -2.0 *       N * (wc.c9() + wc.c9prime() + (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / q2 * tau_1p) * form_factors->f_perp_v(q2) * sqrtsminus;
+            result.a_perp_1_L = -2.0 *       N * (wc.c9() + wc.c9prime() - (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / q2 * tau_1p) * form_factors->f_perp_v(q2) * sqrtsminus;
 
-            result.a_para_1_R = +2.0 *       N * (wc.c9() - wc.c9prime() + (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / s * tau_1m) * form_factors->f_perp_a(s) * sqrtsplus;
-            result.a_para_1_L = +2.0 *       N * (wc.c9() - wc.c9prime() - (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / s * tau_1m) * form_factors->f_perp_a(s) * sqrtsplus;
+            result.a_para_1_R = +2.0 *       N * (wc.c9() - wc.c9prime() + (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / q2 * tau_1m) * form_factors->f_perp_a(q2) * sqrtsplus;
+            result.a_para_1_L = +2.0 *       N * (wc.c9() - wc.c9prime() - (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar * m_Lambda_b / q2 * tau_1m) * form_factors->f_perp_a(q2) * sqrtsplus;
 
-            result.a_perp_0_R = +sqrt(2.0) * N * (wc.c9() + wc.c9prime() + (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0p) * form_factors->f_long_v(s) * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
-            result.a_perp_0_L = +sqrt(2.0) * N * (wc.c9() + wc.c9prime() - (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0p) * form_factors->f_long_v(s) * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
+            result.a_perp_0_R = +sqrt(2.0) * N * (wc.c9() + wc.c9prime() + (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0p) * form_factors->f_long_v(q2) * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
+            result.a_perp_0_L = +sqrt(2.0) * N * (wc.c9() + wc.c9prime() - (wc.c10() + wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0p) * form_factors->f_long_v(q2) * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
 
-            result.a_para_0_R = -sqrt(2.0) * N * (wc.c9() - wc.c9prime() + (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0m) * form_factors->f_long_a(s) * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
-            result.a_para_0_L = -sqrt(2.0) * N * (wc.c9() - wc.c9prime() - (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0m) * form_factors->f_long_a(s) * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
+            result.a_para_0_R = -sqrt(2.0) * N * (wc.c9() - wc.c9prime() + (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0m) * form_factors->f_long_a(q2) * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
+            result.a_para_0_L = -sqrt(2.0) * N * (wc.c9() - wc.c9prime() - (wc.c10() - wc.c10prime()) + 2.0 * m_b_MSbar / m_Lambda_b * tau_0m) * form_factors->f_long_a(q2) * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
 
             result.alpha = this->alpha();
             result.polarisation = this->polarisation();
@@ -482,26 +482,26 @@ namespace eos
             return result;
         }
 
-        std::array<double, 34> _differential_angular_observables(const double & s)
+        std::array<double, 34> _differential_angular_observables(const double & q2)
         {
-            return lambdab_to_lambda_dilepton::AngularObservables(this->amplitudes(s))._k;
+            return lambdab_to_lambda_dilepton::AngularObservables(this->amplitudes(q2))._k;
         }
 
-        std::array<double, 34> _integrated_angular_observables(const double & s_min, const double & s_max)
+        std::array<double, 34> _integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
             std::function<std::array<double, 34> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
 
-            return integrate<1, 34>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+            return integrate<1, 34>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
         }
 
-        inline lambdab_to_lambda_dilepton::AngularObservables differential_angular_observables(const double & s)
+        inline lambdab_to_lambda_dilepton::AngularObservables differential_angular_observables(const double & q2)
         {
-            return lambdab_to_lambda_dilepton::AngularObservables{ _differential_angular_observables(s) };
+            return lambdab_to_lambda_dilepton::AngularObservables{ _differential_angular_observables(q2) };
         }
 
-        inline lambdab_to_lambda_dilepton::AngularObservables integrated_angular_observables(const double & s_min, const double & s_max)
+        inline lambdab_to_lambda_dilepton::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
-            return lambdab_to_lambda_dilepton::AngularObservables{ _integrated_angular_observables(s_min, s_max) };
+            return lambdab_to_lambda_dilepton::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
         }
     };
 
@@ -522,303 +522,303 @@ namespace eos
 
     /* q^2-differential observables */
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
+    LambdaBToLambdaDilepton<LargeRecoil>::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
+        return _imp->differential_angular_observables(q2).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_leptonic(const double & s) const
+    LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_leptonic(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_leptonic();
+        return _imp->differential_angular_observables(q2).a_fb_leptonic();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_hadronic(const double & s) const
+    LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_hadronic(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_hadronic();
+        return _imp->differential_angular_observables(q2).a_fb_hadronic();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_combined(const double & s) const
+    LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_combined(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_combined();
+        return _imp->differential_angular_observables(q2).a_fb_combined();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::differential_fzero(const double & s) const
+    LambdaBToLambdaDilepton<LargeRecoil>::differential_fzero(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).f_zero();
+        return _imp->differential_angular_observables(q2).f_zero();
     }
 
     /* q^2-integrated observables */
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
+        return _imp->integrated_angular_observables(q2_min, q2_max).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_leptonic();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_leptonic();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_hadronic(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_hadronic(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_hadronic();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_hadronic();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_combined(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_combined(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_combined();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_combined();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_fzero(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_fzero(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).f_zero();
+        return _imp->integrated_angular_observables(q2_min, q2_max).f_zero();
     }
 
     /* Polarised angular observables */
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m1(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m1(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1() / o.decay_width();
     }
 
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m2(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m2(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m3(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m3(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k3() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m4(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m4(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k4() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m5(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m5(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k5() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m6(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m6(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k6() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m7(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m7(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k7() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m8(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m8(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k8() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m9(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m9(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k9() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m10(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m10(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k10() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m11(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m11(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k11() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m12(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m12(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k12() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m13(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m13(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k13() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m14(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m14(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k14() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m15(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m15(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k15() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m16(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m16(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k16() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m17(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m17(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k17() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m18(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m18(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k18() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m19(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m19(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k19() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m20(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m20(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k20() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m21(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m21(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k21() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m22(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m22(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k22() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m23(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m23(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k23() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m24(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m24(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k24() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m25(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m25(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k25() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m26(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m26(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k26() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m27(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m27(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k27() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m28(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m28(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k28() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m29(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m29(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k29() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m30(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m30(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k30() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m31(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m31(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k31() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m32(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m32(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k32() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m33(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m33(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k33() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m34(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LargeRecoil>::integrated_m34(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k34() / o.decay_width();
     }
 
@@ -890,11 +890,11 @@ namespace eos
             u.uses(*model);
         }
 
-        double norm(const double & s) const
+        double norm(const double & q2) const
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
-                * sqrt(s / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
-                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD:2014A], Eq. (3.18), p. 6
+                * sqrt(q2 / 3.0 / 2048 / power_of<5>(M_PI) / power_of<3>(m_Lambda_b())
+                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, q2))); // cf. [BFvD:2014A], Eq. (3.18), p. 6
         }
 
         double kappa() const
@@ -902,25 +902,25 @@ namespace eos
             return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / model->m_b_msbar(mu)));
         }
 
-        lambdab_to_lambda_dilepton::Amplitudes amplitudes(const double & s)
+        lambdab_to_lambda_dilepton::Amplitudes amplitudes(const double & q2)
         {
             lambdab_to_lambda_dilepton::Amplitudes result;
 
             double alpha_s = model->alpha_s(mu()), m_b = model->m_b_ps(2.0), m_c = model->m_c_msbar(mu());
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), opt_l.value());
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / abs(model->ckm_tb() * conj(model->ckm_ts()));
-            double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = sqrt(s);
-            double N = norm(s), kappa = this->kappa();
+            double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - q2), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - q2), sqrts = sqrt(q2);
+            double N = norm(q2), kappa = this->kappa();
 
             // calculate effective wilson coefficients
-            complex<double> c7eff = ShortDistanceLowRecoil::c7eff(s, mu(), alpha_s, m_b, true, wc);
-            complex<double> c9eff = ShortDistanceLowRecoil::c9eff(s, mu(), alpha_s, m_b, m_c, true, false, lambda_hat_u, wc);
+            complex<double> c7eff = ShortDistanceLowRecoil::c7eff(q2, mu(), alpha_s, m_b, true, wc);
+            complex<double> c9eff = ShortDistanceLowRecoil::c9eff(q2, mu(), alpha_s, m_b, m_c, true, false, lambda_hat_u, wc);
 
             // cf. [BFvD:2014A], eq.s (??), p. ??
-            double zeta_perp_V = (m_Lambda_b + m_Lambda) / m_Lambda_b * form_factors->f_perp_t(s)  / form_factors->f_perp_v(s);
-            double zeta_perp_A = (m_Lambda_b - m_Lambda) / m_Lambda_b * form_factors->f_perp_t5(s) / form_factors->f_perp_a(s);
-            double zeta_long_V = s / ((m_Lambda_b + m_Lambda) * m_Lambda_b) * form_factors->f_long_t(s)  / form_factors->f_long_v(s);
-            double zeta_long_A = s / ((m_Lambda_b - m_Lambda) * m_Lambda_b) * form_factors->f_long_t5(s) / form_factors->f_long_a(s);
+            double zeta_perp_V = (m_Lambda_b + m_Lambda) / m_Lambda_b * form_factors->f_perp_t(q2)  / form_factors->f_perp_v(q2);
+            double zeta_perp_A = (m_Lambda_b - m_Lambda) / m_Lambda_b * form_factors->f_perp_t5(q2) / form_factors->f_perp_a(q2);
+            double zeta_long_V = q2 / ((m_Lambda_b + m_Lambda) * m_Lambda_b) * form_factors->f_long_t(q2)  / form_factors->f_long_v(q2);
+            double zeta_long_A = q2 / ((m_Lambda_b - m_Lambda) * m_Lambda_b) * form_factors->f_long_t5(q2) / form_factors->f_long_a(q2);
 
             // parametrize subleading power corrections, cf. [MvD:2016A], eq. (B1), p. ??
             complex<double> x_perp_0 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_perp_0();
@@ -929,20 +929,20 @@ namespace eos
             complex<double> x_para_1 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_para_1();
 
             // cf. [BFvD:2014A], eqs. (4.9)-(4.10), p. 11
-            result.a_perp_1_R = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V + (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(s) * sqrtsminus;
-            result.a_perp_1_L = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V - (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(s) * sqrtsminus;
+            result.a_perp_1_R = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff + wc.c7prime()) * zeta_perp_V + (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(q2) * sqrtsminus;
+            result.a_perp_1_L = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff + wc.c7prime()) * zeta_perp_V - (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(q2) * sqrtsminus;
 
-            result.a_para_1_R = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_perp_A + (wc.c10() - wc.c10prime()) + x_para_1) * form_factors->f_perp_a(s) * sqrtsplus;
-            result.a_para_1_L = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_perp_A - (wc.c10() - wc.c10prime()) + x_para_1) * form_factors->f_perp_a(s) * sqrtsplus;
+            result.a_para_1_R = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff - wc.c7prime()) * zeta_perp_A + (wc.c10() - wc.c10prime()) + x_para_1) * form_factors->f_perp_a(q2) * sqrtsplus;
+            result.a_para_1_L = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff - wc.c7prime()) * zeta_perp_A - (wc.c10() - wc.c10prime()) + x_para_1) * form_factors->f_perp_a(q2) * sqrtsplus;
 
-            result.a_perp_0_R = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_long_V + (wc.c10() + wc.c10prime()) + x_perp_0) * form_factors->f_long_v(s)
+            result.a_perp_0_R = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff + wc.c7prime()) * zeta_long_V + (wc.c10() + wc.c10prime()) + x_perp_0) * form_factors->f_long_v(q2)
                 * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
-            result.a_perp_0_L = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_long_V - (wc.c10() + wc.c10prime()) + x_perp_0) * form_factors->f_long_v(s)
+            result.a_perp_0_L = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff + wc.c7prime()) * zeta_long_V - (wc.c10() + wc.c10prime()) + x_perp_0) * form_factors->f_long_v(q2)
                 * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
 
-            result.a_para_0_R = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_long_A + (wc.c10() - wc.c10prime()) + x_para_0) * form_factors->f_long_a(s)
+            result.a_para_0_R = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff - wc.c7prime()) * zeta_long_A + (wc.c10() - wc.c10prime()) + x_para_0) * form_factors->f_long_a(q2)
                 * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
-            result.a_para_0_L = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_long_A - (wc.c10() - wc.c10prime()) + x_para_0) * form_factors->f_long_a(s)
+            result.a_para_0_L = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / q2) * (c7eff - wc.c7prime()) * zeta_long_A - (wc.c10() - wc.c10prime()) + x_para_0) * form_factors->f_long_a(q2)
                 * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
 
             result.alpha = this->alpha();
@@ -951,26 +951,26 @@ namespace eos
             return result;
         }
 
-        std::array<double, 34> _differential_angular_observables(const double & s)
+        std::array<double, 34> _differential_angular_observables(const double & q2)
         {
-            return lambdab_to_lambda_dilepton::AngularObservables(this->amplitudes(s))._k;
+            return lambdab_to_lambda_dilepton::AngularObservables(this->amplitudes(q2))._k;
         }
 
-        std::array<double, 34> _integrated_angular_observables(const double & s_min, const double & s_max)
+        std::array<double, 34> _integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
             std::function<std::array<double, 34> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
 
-            return integrate<1, 34>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+            return integrate<1, 34>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
         }
 
-        inline lambdab_to_lambda_dilepton::AngularObservables differential_angular_observables(const double & s)
+        inline lambdab_to_lambda_dilepton::AngularObservables differential_angular_observables(const double & q2)
         {
-            return lambdab_to_lambda_dilepton::AngularObservables{ _differential_angular_observables(s) };
+            return lambdab_to_lambda_dilepton::AngularObservables{ _differential_angular_observables(q2) };
         }
 
-        inline lambdab_to_lambda_dilepton::AngularObservables integrated_angular_observables(const double & s_min, const double & s_max)
+        inline lambdab_to_lambda_dilepton::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
-            return lambdab_to_lambda_dilepton::AngularObservables{ _integrated_angular_observables(s_min, s_max) };
+            return lambdab_to_lambda_dilepton::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
         }
     };
 
@@ -992,372 +992,372 @@ namespace eos
 
     /* q^2-differential observables */
     double
-    LambdaBToLambdaDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
+    LambdaBToLambdaDilepton<LowRecoil>::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
+        return _imp->differential_angular_observables(q2).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_leptonic(const double & s) const
+    LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_leptonic(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_leptonic();
+        return _imp->differential_angular_observables(q2).a_fb_leptonic();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_hadronic(const double & s) const
+    LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_hadronic(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_hadronic();
+        return _imp->differential_angular_observables(q2).a_fb_hadronic();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_combined(const double & s) const
+    LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_combined(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_combined();
+        return _imp->differential_angular_observables(q2).a_fb_combined();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::differential_fzero(const double & s) const
+    LambdaBToLambdaDilepton<LowRecoil>::differential_fzero(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).f_zero();
+        return _imp->differential_angular_observables(q2).f_zero();
     }
 
     /* q^2-integrated observables */
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
+        return _imp->integrated_angular_observables(q2_min, q2_max).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_leptonic();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_leptonic();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_hadronic(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_hadronic(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_hadronic();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_hadronic();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_combined(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_combined(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_combined();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_combined();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_fzero(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_fzero(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).f_zero();
+        return _imp->integrated_angular_observables(q2_min, q2_max).f_zero();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1ss(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1ss(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1ss() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1cc(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1cc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1cc() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1c(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1c(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1c() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2ss(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2ss(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2ss() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2cc(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2cc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2cc() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2c(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2c(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2c() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k3sc(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k3sc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k3sc() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k3s(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k3s(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k3s() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k4sc(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k4sc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k4sc() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k4s() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m1(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m1(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1() / o.decay_width();
     }
 
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m2(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m2(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m3(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m3(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k3() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m4(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m4(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k4() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m5(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m5(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k5() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m6(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m6(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k6() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m7(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m7(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k7() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m8(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m8(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k8() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m9(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m9(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k9() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m10(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m10(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k10() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m11(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m11(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k11() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m12(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m12(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k12() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m13(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m13(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k13() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m14(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m14(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k14() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m15(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m15(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k15() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m16(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m16(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k16() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m17(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m17(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k17() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m18(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m18(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k18() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m19(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m19(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k19() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m20(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m20(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k20() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m21(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m21(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k21() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m22(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m22(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k22() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m23(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m23(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k23() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m24(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m24(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k24() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m25(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m25(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k25() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m26(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m26(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k26() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m27(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m27(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k27() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m28(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m28(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k28() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m29(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m29(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k29() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m30(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m30(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k30() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m31(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m31(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k31() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m32(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m32(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k32() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m33(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m33(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k33() / o.decay_width();
     }
 
     double
-    LambdaBToLambdaDilepton<LowRecoil>::integrated_m34(const double & s_min, const double & s_max) const
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_m34(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k34() / o.decay_width();
     }
 
