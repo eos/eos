@@ -65,7 +65,7 @@ class PMCSampler:
     def _evaluate_mixture_pdf(density, x):
         """ Internal function that evaluates the PDF of the mixture density at point x."""
         def evaluate_component(comp, x):
-            # To limit numerical instabilities, the covariance matrix is devided by the median of its diagonal entries
+            # To limit numerical instabilities, the covariance matrix is divided by the median of its diagonal entries
             median_variance = _np.median(_np.diag(comp.sigma))
             chi2 = _np.dot(
                 _np.transpose(x - comp.mu) / median_variance,
