@@ -21,6 +21,7 @@
   - `B->Kll::d^2Gamma@LargeRecoil` -> `B->Kll::P(q2,cos(theta_l))`
   - `B->K^*nunu::dGamma/dq2` -> `B->K^*nunu::P(q2)`
   - `B->K^*ll::d^2Gamma@LargeRecoil` -> `B->K^*ll::P(q2,cos(theta_l))`
+- Make ``pypmc`` an optional Python dependency and adjust the documentation (D. van Dyk)
 
 ### Added
 
