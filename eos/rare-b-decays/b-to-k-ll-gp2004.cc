@@ -70,14 +70,14 @@ namespace eos
 
     // cf. [GP:2004A], Eq. (56)
     complex<double>
-    BToKDileptonAmplitudes<tag::GP2004>::c7eff(const WilsonCoefficients<BToS> & wc, const double & s) const
+    BToKDileptonAmplitudes<tag::GP2004>::c7eff(const WilsonCoefficients<BToS> & wc, const double & q2) const
     {
-        return ShortDistanceLowRecoil::c7eff(s, mu(), model->alpha_s(mu), m_b_PS(), use_nlo, wc);
+        return ShortDistanceLowRecoil::c7eff(q2, mu(), model->alpha_s(mu), m_b_PS(), use_nlo, wc);
     }
 
     // cf. [GP:2004A], Eq. (55), p. 10
     complex<double>
-    BToKDileptonAmplitudes<tag::GP2004>::c9eff(const WilsonCoefficients<BToS> & wc, const double & s) const
+    BToKDileptonAmplitudes<tag::GP2004>::c9eff(const WilsonCoefficients<BToS> & wc, const double & q2) const
     {
         complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
         if (cp_conjugate)
@@ -85,7 +85,7 @@ namespace eos
             lambda_hat_u = conj(lambda_hat_u);
         }
 
-        return ShortDistanceLowRecoil::c9eff(s, mu(), model->alpha_s(mu), m_b_PS(), model->m_c_msbar(mu), use_nlo, ccbar_resonance, lambda_hat_u, wc);
+        return ShortDistanceLowRecoil::c9eff(q2, mu(), model->alpha_s(mu), m_b_PS(), model->m_c_msbar(mu), use_nlo, ccbar_resonance, lambda_hat_u, wc);
     }
 
     double
@@ -111,7 +111,7 @@ namespace eos
 
     /* Amplitudes */
     BToKDilepton::Amplitudes
-    BToKDileptonAmplitudes<tag::GP2004>::amplitudes(const double & s) const
+    BToKDileptonAmplitudes<tag::GP2004>::amplitudes(const double & q2) const
     {
         BToKDilepton::Amplitudes result;
 
@@ -119,10 +119,10 @@ namespace eos
 
         // cf. [BF:2001A] Eq. (22 + TODO: 31)
         // cf. [BF:2001A] Eq. (22 + TODO: 30)
-        double f_t_over_f_p = form_factors->f_t(s) / form_factors->f_p(s);
-        double f_0_over_f_p = form_factors->f_0(s) / form_factors->f_p(s);
+        double f_t_over_f_p = form_factors->f_t(q2) / form_factors->f_p(q2);
+        double f_0_over_f_p = form_factors->f_0(q2) / form_factors->f_p(q2);
 
-        double F_Tkin = f_t_over_f_p * 2.0 * std::sqrt(lambda(s)) * beta_l(s) / (m_B() + m_K());
+        double F_Tkin = f_t_over_f_p * 2.0 * std::sqrt(lambda(q2)) * beta_l(q2) / (m_B() + m_K());
         double F_Skin = f_0_over_f_p * 0.5 * (power_of<2>(m_B()) - power_of<2>(m_K())) / (m_b_MSbar - m_s);
 
         // cf. [BHP:2007A], Eq. (3.2), p. 3 and 4
@@ -131,9 +131,9 @@ namespace eos
         result.F_T5 = F_Tkin * wc.cT5();
         result.F_S  = F_Skin * (wc.cS() + wc.cSprime());
         result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
-                      ((m_B() * m_B() - m_K() * m_K()) / s * (f_0_over_f_p - 1.0) - 1.0);
-        result.F_V  = c9eff(wc, s) + wc.c9prime()
-                      + kappa() * (2.0 * (m_b_MSbar + lambda_psd()) * m_B() / s) * (c7eff(wc, s) + wc.c7prime())
+                      ((m_B() * m_B() - m_K() * m_K()) / q2 * (f_0_over_f_p - 1.0) - 1.0);
+        result.F_V  = c9eff(wc, q2) + wc.c9prime()
+                      + kappa() * (2.0 * (m_b_MSbar + lambda_psd()) * m_B() / q2) * (c7eff(wc, q2) + wc.c7prime())
                       + 0.5 * model->alpha_s(mu) / m_B * std::polar(lambda_psd(), sl_phase_psd())
                       + 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p * wc.cT();
 
