@@ -56,7 +56,7 @@ namespace eos
     };
 
     BToKDilepton::DipoleFormFactors
-    BToKDileptonAmplitudes<tag::Naive>::dipole_form_factors(const double & s, const WilsonCoefficients<BToS> & wc) const
+    BToKDileptonAmplitudes<tag::Naive>::dipole_form_factors(const double & q2, const WilsonCoefficients<BToS> & wc) const
     {
         // charges of down- and up-type quarks
         static const double e_d = -1.0 / 3.0;
@@ -84,7 +84,7 @@ namespace eos
         // inverse of the "negative" moment of the B meson LCDA
         // cf. [BFS:2001A], Eq. (54), p. 15
         double omega_0 = 1.0 / this->lambda_B_p_inv;
-        complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
+        complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(q2 / m_B / omega_0), M_PI) * (std::exp(-q2 / m_B / omega_0) / omega_0);
 
         /* Y(s) for the up and the top sector */
         // cf. [BFS:2001A], Eq. (10), p. 4
@@ -96,12 +96,12 @@ namespace eos
         // Use b pole mass according to [BFS:2001A], Sec. 3.1, paragraph Quark Masses,
         // then replace b pole mass by the PS mass.
         complex<double> Y_top = //Y_top_c * CharmLoops::h(mu, s, m_c_pole);
-                + Y_top_b * CharmLoops::h(mu, s, m_b_PS);
-                + Y_top_0 * CharmLoops::h(mu, s);
+                + Y_top_b * CharmLoops::h(mu, q2, m_b_PS);
+                + Y_top_0 * CharmLoops::h(mu, q2);
                 + Y_top_;
         // cf. [BFS:2004A], Eq. (43), p. 24
         complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (//CharmLoops::h(mu, s, m_c_pole)
-                - CharmLoops::h(mu, s));
+                - CharmLoops::h(mu, q2));
 
         /* Effective wilson coefficients */
         complex<double> c8eff = ShortDistanceLowRecoil::c8eff(wc); // LO C8eff
@@ -115,12 +115,12 @@ namespace eos
 //        complex<double> C1f_top_psd = 1.0 * (c7eff + wc.c7prime()) * (8.0 * std::log(m_b_PS / mu) + 2.0 * L - 4.0 * (1.0 - mu_f() / m_b_PS));
         // cf. [BHP:2007A], Eq. (B.2) and [BFS:2001A], Eqs. (38), p. 9
         complex<double> C1nf_top_psd = -(+1.0 / QCD::casimir_f) * (
-                (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive_Qsb, s)
-                + c8eff * CharmLoops::F87_massless(mu, s, m_b_PS)
+                (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive_Qsb, q2)
+                + c8eff * CharmLoops::F87_massless(mu, q2, m_b_PS)
                 + (m_B / (2.0 * m_b_PS)) * (
-                    wc.c1() * memoise(CharmLoops::F19_massive_Qsb, s)
-                    + wc.c2() * memoise(CharmLoops::F29_massive_Qsb, s)
-                    + c8eff * CharmLoops::F89_massless(s, m_b_PS)));
+                    wc.c1() * memoise(CharmLoops::F19_massive_Qsb, q2)
+                    + wc.c2() * memoise(CharmLoops::F29_massive_Qsb, q2)
+                    + c8eff * CharmLoops::F89_massless(q2, m_b_PS)));
 
         /* parallel, up sector */
         // cf. [BHP:2007A], Eq. (B.2) and [BFS:2004A], comment before Eq. (43), p. 24
@@ -131,10 +131,10 @@ namespace eos
         // Use here FF_massive - FF_massless because FF_massless is defined with an extra '-'
         // compared to [S:2004A]
         complex<double> C1nf_up_psd = -(+1.0 / QCD::casimir_f) * (
-                (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive_Qsb, s) - CharmLoops::F27_massless(mu, s, m_b_PS))
+                (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive_Qsb, q2) - CharmLoops::F27_massless(mu, q2, m_b_PS))
                 + (m_B / (2.0 * m_b_PS)) * (
-                    wc.c1() * (memoise(CharmLoops::F19_massive_Qsb, s) - CharmLoops::F19_massless(mu, s, m_b_PS))
-                    + wc.c2() * (memoise(CharmLoops::F29_massive_Qsb, s) - CharmLoops::F29_massless(mu, s, m_b_PS))));
+                    wc.c1() * (memoise(CharmLoops::F19_massive_Qsb, q2) - CharmLoops::F19_massless(mu, q2, m_b_PS))
+                    + wc.c2() * (memoise(CharmLoops::F29_massive_Qsb, q2) - CharmLoops::F29_massless(mu, q2, m_b_PS))));
 
         // compute the factorizing contributions
         complex<double> C_psd = C0_top_psd + lambda_hat_u * C0_up_psd
@@ -159,16 +159,16 @@ namespace eos
 
         // cf. [BFS:2001A], Eq. (15), and [BHP:2008A], Eq. (C.4)
         BToKDilepton::DipoleFormFactors result;
-        result.calT = xi_pseudo(s) * C_psd + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B * T_psd;
+        result.calT = xi_pseudo(q2) * C_psd + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B * T_psd;
 
         return result;
     }
 
     double
-    BToKDileptonAmplitudes<tag::Naive>::xi_pseudo(const double & s) const
+    BToKDileptonAmplitudes<tag::Naive>::xi_pseudo(const double & q2) const
     {
         // cf. [BF:2001A], Eq. (22)
-        return form_factors->f_p(s);
+        return form_factors->f_p(q2);
     }
 
     double
@@ -186,30 +186,30 @@ namespace eos
 
     /* Amplitudes */
     BToKDilepton::Amplitudes
-    BToKDileptonAmplitudes<tag::Naive>::amplitudes(const double & s) const
+    BToKDileptonAmplitudes<tag::Naive>::amplitudes(const double & q2) const
     {
         BToKDilepton::Amplitudes result;
 
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
-        auto dff = dipole_form_factors(s, wc);
+        auto dff = dipole_form_factors(q2, wc);
 
         const double m_B2 = m_B * m_B, m_K2 = m_K * m_K;
 
         // cf. [Naive] Eq. (A.5)
         const double
-            calF_plus   = form_factors->f_p(s),
-            calF_time   = form_factors->f_0(s),
-            calF_T_plus = s / m_B / (m_B + m_K) * form_factors->f_t(s);
+            calF_plus   = form_factors->f_p(q2),
+            calF_time   = form_factors->f_0(q2),
+            calF_T_plus = q2 / m_B / (m_B + m_K) * form_factors->f_t(q2);
 
-        const complex<double> calH_plus = nonlocal_formfactor->H_plus(s);
+        const complex<double> calH_plus = nonlocal_formfactor->H_plus(q2);
 
-        double F_Tkin = calF_T_plus / calF_plus * 2.0 * std::sqrt(lambda(s)) * beta_l(s) * m_B / s;
+        double F_Tkin = calF_T_plus / calF_plus * 2.0 * std::sqrt(lambda(q2)) * beta_l(q2) * m_B / q2;
         double F_Skin = calF_time / calF_plus * 0.5 * (m_B2 - m_K2) / (m_b_MSbar - m_s_MSbar);
 
         // Wilson coefficients
         const complex<double>
-            c7eff = ShortDistanceLowRecoil::c7eff(s, 0.0, 0.0, 0.0, false, wc); // LO C7eff
+            c7eff = ShortDistanceLowRecoil::c7eff(q2, 0.0, 0.0, 0.0, false, wc); // LO C7eff
         const complex<double>
             c9_p  = wc.c9() + wc.c9prime(),
             c10_p = wc.c10() + wc.c10prime(),
@@ -221,11 +221,11 @@ namespace eos
         result.F_T5 = F_Tkin * wc.cT5();
         result.F_S  = F_Skin * (wc.cS() + wc.cSprime());
         result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * c10_p *
-                      ((m_B2 - m_K2) / s * (calF_time / calF_plus - 1.0) - 1.0);
+                      ((m_B2 - m_K2) / q2 * (calF_time / calF_plus - 1.0) - 1.0);
         result.F_V  = c9_p
-                      + 2.0 * m_b_MSbar() * m_B / s * c7_p * calF_T_plus / calF_plus
-                      + 2.0 * m_b_PS() / m_B / xi_pseudo(s) * (dff.calT - 16.0 * power_of<2>(M_PI) * power_of<3>(m_B()) / m_b_PS() / s * calH_plus)
-                      + 8.0 * m_l * m_B / s * calF_T_plus / calF_plus * wc.cT();
+                      + 2.0 * m_b_MSbar() * m_B / q2 * c7_p * calF_T_plus / calF_plus
+                      + 2.0 * m_b_PS() / m_B / xi_pseudo(q2) * (dff.calT - 16.0 * power_of<2>(M_PI) * power_of<3>(m_B()) / m_b_PS() / q2 * calH_plus)
+                      + 8.0 * m_l * m_B / q2 * calF_T_plus / calF_plus * wc.cT();
 
         return result;
     }

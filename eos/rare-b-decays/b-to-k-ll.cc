@@ -117,45 +117,45 @@ namespace eos
         {
         }
 
-        inline std::array<double, 3> angular_coefficients_array(const BToKDilepton::Amplitudes & A, const double & s) const
+        inline std::array<double, 3> angular_coefficients_array(const BToKDilepton::Amplitudes & A, const double & q2) const
         {
             // cf. [BHP:2007A], Eq. (4.2) - (4.4)
             std::array<double, 3> result;
 
             // a_l
-            result[0] = amplitude_generator->normalisation(s) * (
-                s * (power_of<2>(beta_l(s)) * norm(A.F_S) + norm(A.F_P))
-                + 0.25 * amplitude_generator->lambda(s) * (norm(A.F_A) + norm(A.F_V))
-                + 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + s) * std::real(A.F_P * std::conj(A.F_A))
+            result[0] = amplitude_generator->normalisation(q2) * (
+                q2 * (power_of<2>(beta_l(q2)) * norm(A.F_S) + norm(A.F_P))
+                + 0.25 * amplitude_generator->lambda(q2) * (norm(A.F_A) + norm(A.F_V))
+                + 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + q2) * std::real(A.F_P * std::conj(A.F_A))
                 + 4.0 * m_l * m_l * m_B() * m_B() * norm(A.F_A)
                 );
 
             // b_l
-            result[1] = 2.0 * amplitude_generator->normalisation(s) * (
-                s * (power_of<2>(beta_l(s)) * std::real(A.F_S * std::conj(A.F_T))
+            result[1] = 2.0 * amplitude_generator->normalisation(q2) * (
+                q2 * (power_of<2>(beta_l(q2)) * std::real(A.F_S * std::conj(A.F_T))
                 + std::real(A.F_P * std::conj(A.F_T5)))
-                + m_l * (sqrt(amplitude_generator->lambda(s)) * beta_l(s) * std::real(A.F_S * std::conj(A.F_V))
-                + (m_B() * m_B() - m_K() * m_K() + s) * std::real(A.F_T5 * std::conj(A.F_A)))
+                + m_l * (sqrt(amplitude_generator->lambda(q2)) * beta_l(q2) * std::real(A.F_S * std::conj(A.F_V))
+                + (m_B() * m_B() - m_K() * m_K() + q2) * std::real(A.F_T5 * std::conj(A.F_A)))
                 );
 
             // c_l
-            result[2] = amplitude_generator->normalisation(s) * (
-                s * (power_of<2>(beta_l(s)) * norm(A.F_T) + norm(A.F_T5))
-                - 0.25 * amplitude_generator->lambda(s) * power_of<2>(beta_l(s)) * (norm(A.F_A) + norm(A.F_V))
-                + 2.0 * m_l * sqrt(amplitude_generator->lambda(s)) * beta_l(s) * std::real(A.F_T * std::conj(A.F_V))
+            result[2] = amplitude_generator->normalisation(q2) * (
+                q2 * (power_of<2>(beta_l(q2)) * norm(A.F_T) + norm(A.F_T5))
+                - 0.25 * amplitude_generator->lambda(q2) * power_of<2>(beta_l(q2)) * (norm(A.F_A) + norm(A.F_V))
+                + 2.0 * m_l * sqrt(amplitude_generator->lambda(q2)) * beta_l(q2) * std::real(A.F_T * std::conj(A.F_V))
                 );
 
             return result;
         }
 
-        inline std::array<double, 3> differential_angular_coefficients_array(const double & s) const
+        inline std::array<double, 3> differential_angular_coefficients_array(const double & q2) const
         {
-            return angular_coefficients_array(amplitude_generator->amplitudes(s), s);
+            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
         }
 
-        inline BToKDilepton::AngularCoefficients differential_angular_coefficients(const double & s) const
+        inline BToKDilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
         {
-            return BToKDilepton::AngularCoefficients(differential_angular_coefficients_array(s));
+            return BToKDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
         }
 
         // cf. [BHP:2007A], Eq. (4.8)
@@ -180,18 +180,18 @@ namespace eos
             return a.b_l;
         }
 
-        BToKDilepton::AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
+        BToKDilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 3> (const double &)> integrand =
                     std::bind(&Implementation<BToKDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 3> integrated_angular_coefficients_array = integrate<1, 3>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+            std::array<double, 3> integrated_angular_coefficients_array = integrate<1, 3>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
             return BToKDilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
 
-        inline double beta_l(const double & s) const
+        inline double beta_l(const double & q2) const
         {
-            return sqrt(1.0 - 4.0 * m_l * m_l / s);
+            return sqrt(1.0 - 4.0 * m_l * m_l / q2);
         }
 
     };
@@ -214,31 +214,31 @@ namespace eos
     };
 
     double
-    BToKDilepton::differential_branching_ratio(const double & s) const
+    BToKDilepton::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_branching_ratio(_imp->differential_angular_coefficients(s));
+        return _imp->differential_branching_ratio(_imp->differential_angular_coefficients(q2));
     }
 
     double
-    BToKDilepton::differential_flat_term(const double & s) const
+    BToKDilepton::differential_flat_term(const double & q2) const
     {
-        AngularCoefficients a = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a = _imp->differential_angular_coefficients(q2);
 
         return _imp->differential_flat_term_numerator(a) / _imp->unnormalized_decay_width(a);
     }
 
     double
-    BToKDilepton::differential_forward_backward_asymmetry(const double & s) const
+    BToKDilepton::differential_forward_backward_asymmetry(const double & q2) const
     {
-        AngularCoefficients a = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a = _imp->differential_angular_coefficients(q2);
 
         return _imp->differential_forward_backward_asymmetry_numerator(a) / _imp->unnormalized_decay_width(a);
     }
 
     double
-    BToKDilepton::two_differential_decay_width(const double & s, const double & c_theta_l_LHCb) const
+    BToKDilepton::two_differential_decay_width(const double & q2, const double & c_theta_l_LHCb) const
     {
-        AngularCoefficients a = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a = _imp->differential_angular_coefficients(q2);
 
         // using the angular convention of the LHCb experiment
         const double c_theta_l = -c_theta_l_LHCb;
@@ -249,33 +249,33 @@ namespace eos
 
     // Integrated Observables
     double
-    BToKDilepton::integrated_decay_width(const double & s_min, const double & s_max) const
+    BToKDilepton::integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return _imp->unnormalized_decay_width(a);
     }
 
     double
-    BToKDilepton::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    BToKDilepton::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return _imp->differential_branching_ratio(a);
     }
 
     double
-    BToKDilepton::integrated_flat_term(const double & s_min, const double & s_max) const
+    BToKDilepton::integrated_flat_term(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return _imp->differential_flat_term_numerator(a) / _imp->unnormalized_decay_width(a);
     }
 
     double
-    BToKDilepton::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    BToKDilepton::integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return _imp->differential_forward_backward_asymmetry_numerator(a) / _imp->unnormalized_decay_width(a);
 
@@ -287,7 +287,7 @@ namespace eos
 The decay B->K l^+ l^-, with l=e,mu,tau a charged lepton.";
 
     const std::string
-    BToKDilepton::kinematics_description_s = "\
+    BToKDilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
     const std::string
