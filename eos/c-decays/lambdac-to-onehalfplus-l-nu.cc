@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2019      Ahmet Kokulu
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2023      Méril Reboud
  * Copyright (c) 2026      Carolina Bolognani
  *
@@ -378,7 +378,7 @@ namespace eos
             return g_fermi() * v_cQ() * (1.0 - m_l * m_l / q2) * std::sqrt(q2 / 3.0 / 128 / power_of<3>(M_PI * m_Lambda_c()) * std::sqrt(lam));
         }
 
-        lambdac_to_onehalfplus_l_nu::Amplitudes amplitudes(const double & s) const
+        lambdac_to_onehalfplus_l_nu::Amplitudes amplitudes(const double & q2) const
         {
             using std::sqrt;
 
@@ -392,30 +392,30 @@ namespace eos
             const complex<double> ct  = wc.ct();
 
             // baryonic form factors (10)
-            const double fftV  = form_factors->f_time_v(s);
-            const double ff0V  = form_factors->f_long_v(s);
-            const double ffpV  = form_factors->f_perp_v(s);
-            const double fftA  = form_factors->f_time_a(s);
-            const double ff0A  = form_factors->f_long_a(s);
-            const double ffpA  = form_factors->f_perp_a(s);
-            const double ff0T  = form_factors->f_long_t(s);
-            const double ff0T5 = form_factors->f_long_t5(s);
-            const double ffpT  = form_factors->f_perp_t(s);
-            const double ffpT5 = form_factors->f_perp_t5(s);
+            const double fftV  = form_factors->f_time_v(q2);
+            const double ff0V  = form_factors->f_long_v(q2);
+            const double ffpV  = form_factors->f_perp_v(q2);
+            const double fftA  = form_factors->f_time_a(q2);
+            const double ff0A  = form_factors->f_long_a(q2);
+            const double ffpA  = form_factors->f_perp_a(q2);
+            const double ff0T  = form_factors->f_long_t(q2);
+            const double ff0T5 = form_factors->f_long_t5(q2);
+            const double ffpT  = form_factors->f_perp_t(q2);
+            const double ffpT5 = form_factors->f_perp_t5(q2);
             // running quark masses
             const double mcatmu = model->m_c_msbar(mu);
             const double mDatmu = m_Q_msbar(mu);
 
             // kinematics
-            const double beta = (1.0 - m_l * m_l / s);
+            const double beta = (1.0 - m_l * m_l / q2);
             const double m_l_hat = std::sqrt(1.0 - beta);
             const double m_B = this->m_B();
-            const double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_c - m_B) - s);
-            const double sqrtsplus  = std::sqrt(power_of<2>(m_Lambda_c + m_B) - s);
-            const double sqrts      = std::sqrt(s);
+            const double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_c - m_B) - q2);
+            const double sqrtsplus  = std::sqrt(power_of<2>(m_Lambda_c + m_B) - q2);
+            const double sqrts      = std::sqrt(q2);
 
             // normalization
-            const complex<double> N = norm(s);
+            const complex<double> N = norm(q2);
 
             // b->c case transversity amplitudes
             // cf. [BKTvD:2019A], eqs. (2.18)-(2.23), p. 6, including contributions from the vector and scalar operators.
@@ -537,102 +537,102 @@ namespace eos
     /* q^2-integrated observables */
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).decay_width() * _imp->tau_Lambda_c / _imp->hbar;
+        return _imp->integrated_angular_observables(q2_min, q2_max).decay_width() * _imp->tau_Lambda_c / _imp->hbar;
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_leptonic();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_leptonic();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_hadronic(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_hadronic(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_hadronic();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_hadronic();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_combined(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_a_fb_combined(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).a_fb_combined();
+        return _imp->integrated_angular_observables(q2_min, q2_max).a_fb_combined();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_fzero(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_fzero(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(s_min, s_max).f_zero();
+        return _imp->integrated_angular_observables(q2_min, q2_max).f_zero();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1ss(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1ss(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1ss() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1cc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1cc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1cc() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1c(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k1c(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k1c() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2ss(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2ss(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2ss() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2cc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2cc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2cc() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2c(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k2c(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k2c() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k3sc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k3sc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k3sc() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k3s(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k3s(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k3s() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k4sc(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k4sc(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k4sc() / o.decay_width();
     }
 
     double
-    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k4s(const double & s_min, const double & s_max) const
+    LambdaCToOneHalfPlusLeptonNeutrino::integrated_k4s(const double & q2_min, const double & q2_max) const
     {
-        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        auto o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.k4s() / o.decay_width();
     }
 
