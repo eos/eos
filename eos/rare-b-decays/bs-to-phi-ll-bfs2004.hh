@@ -82,10 +82,10 @@ namespace eos
             double xi_perp(const double & q2) const;
             double xi_par(const double & q2) const;
 
-            virtual double real_C9_perp(const double & s) const;
-            virtual double real_C9_para(const double & s) const;
-            virtual double imag_C9_perp(const double & s) const;
-            virtual double imag_C9_para(const double & s) const;
+            virtual double real_C9_perp(const double & q2) const;
+            virtual double real_C9_para(const double & q2) const;
+            virtual double imag_C9_perp(const double & q2) const;
+            virtual double imag_C9_para(const double & q2) const;
             virtual double H_perp_corrections(const double &) const
             {
                 return 0.0;

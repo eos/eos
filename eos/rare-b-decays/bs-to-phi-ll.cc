@@ -118,14 +118,14 @@ namespace eos
         {
         }
 
-        inline std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & s) const
+        inline std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & q2) const
         {
             // cf. [BHvD:2010A], p. 26, eqs. (A1)-(A11)
             // cf. [BHvD:2012A], app B, eqs. (B1)-(B12)
             std::array<double, 12> result;
 
-            double z = 4.0 * power_of<2>(m_l()) / s;
-            double y = m_l / std::sqrt(s);
+            double z = 4.0 * power_of<2>(m_l()) / q2;
+            double y = m_l / std::sqrt(q2);
             double beta2 = 1.0 - z;
             double beta = std::sqrt(beta2);
 
@@ -219,21 +219,21 @@ namespace eos
             return result;
         }
 
-        inline std::array<double, 12> differential_angular_coefficients_array(const double & s) const
+        inline std::array<double, 12> differential_angular_coefficients_array(const double & q2) const
         {
-            return angular_coefficients_array(amplitude_generator->amplitudes(s), s);
+            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
         }
 
-        inline BsToPhiDilepton::AngularCoefficients differential_angular_coefficients(const double & s) const
+        inline BsToPhiDilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
         {
-            return BsToPhiDilepton::AngularCoefficients(differential_angular_coefficients_array(s));
+            return BsToPhiDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
         }
 
-        BsToPhiDilepton::AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
+        BsToPhiDilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<BsToPhiDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
             return BsToPhiDilepton::AngularCoefficients(integrated_angular_coefficients_array);
         }
@@ -244,9 +244,9 @@ namespace eos
             return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
-        inline double beta_l(const double & s) const
+        inline double beta_l(const double & q2) const
         {
-            return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
+            return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
         }
 
         double a_fb_zero_crossing() const
@@ -316,7 +316,7 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
+    BsToPhiDilepton::decay_width(const double & q2, const double & c_theta_l, const double & c_theta_k, const double & phi) const
     {
         // compute d^4 Gamma, cf. [BHvD:2010A], p. 5, Eq. (2.6)
         // Cosine squared of the angles
@@ -339,7 +339,7 @@ namespace eos
         double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
         double s_2_phi = sin(2.0 * phi);
 
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         double Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
 
         double result = 3.0 / 8.0 / M_PI * (
@@ -358,80 +358,80 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::decay_width_LHCb(const double & s, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const
+    BsToPhiDilepton::decay_width_LHCb(const double & q2, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const
     {
         // compute d^4 Gamma, cf. [BHvD:2010A], p. 5, Eq. (2.6)
         // using the angular convention of the LHCb experiment
 
-        return BsToPhiDilepton::decay_width(s, -c_theta_l_LHCb, +c_theta_k_LHCb, -phi_LHCb);
+        return BsToPhiDilepton::decay_width(q2, -c_theta_l_LHCb, +c_theta_k_LHCb, -phi_LHCb);
     }
 
 
     double
-    BsToPhiDilepton::differential_decay_width(const double & s) const
+    BsToPhiDilepton::differential_decay_width(const double & q2) const
     {
-        return _imp->decay_width(_imp->differential_angular_coefficients(s));
+        return _imp->decay_width(_imp->differential_angular_coefficients(q2));
     }
 
     double
-    BsToPhiDilepton::differential_branching_ratio(const double & s) const
+    BsToPhiDilepton::differential_branching_ratio(const double & q2) const
     {
-        return differential_decay_width(s) * _imp->tau() / _imp->hbar();
+        return differential_decay_width(q2) * _imp->tau() / _imp->hbar();
     }
 
     double
-    BsToPhiDilepton::differential_forward_backward_asymmetry(const double & s) const
+    BsToPhiDilepton::differential_forward_backward_asymmetry(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.8)
         // cf. [BHvD:2012A], eq. (A7)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return (a_c.j6s + 0.5 * a_c.j6c) / _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::differential_longitudinal_polarisation(const double & s) const
+    BsToPhiDilepton::differential_longitudinal_polarisation(const double & q2) const
     {
         // cf. [BHvD:2012A], eq. (A9)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::differential_transversal_polarisation(const double & s) const
+    BsToPhiDilepton::differential_transversal_polarisation(const double & q2) const
     {
         // cf. [BHvD:2012A], eq. (A10)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::differential_transverse_asymmetry_2(const double & s) const
+    BsToPhiDilepton::differential_transverse_asymmetry_2(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.10)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::differential_transverse_asymmetry_3(const double & s) const
+    BsToPhiDilepton::differential_transverse_asymmetry_3(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.11)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return std::sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return std::sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(q2) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
-    BsToPhiDilepton::differential_transverse_asymmetry_4(const double & s) const
+    BsToPhiDilepton::differential_transverse_asymmetry_4(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 6, eq. (2.12)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return std::sqrt((power_of<2>(_imp->beta_l(s) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return std::sqrt((power_of<2>(_imp->beta_l(q2) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(q2) * a_c.j7)));
     }
 
     double
-    BsToPhiDilepton::differential_transverse_asymmetry_5(const double & s) const
+    BsToPhiDilepton::differential_transverse_asymmetry_5(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
 
         // cf. [BS:2011A], eq. (34), p. 9 for the massless case
         return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
@@ -439,160 +439,160 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::differential_transverse_asymmetry_re(const double & s) const
+    BsToPhiDilepton::differential_transverse_asymmetry_re(const double & q2) const
     {
         // cf. [BS:2011A], eq. (38), p. 10
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return 0.25 * _imp->beta_l(s) * a_c.j6s / a_c.j2s;
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return 0.25 * _imp->beta_l(q2) * a_c.j6s / a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::differential_transverse_asymmetry_im(const double & s) const
+    BsToPhiDilepton::differential_transverse_asymmetry_im(const double & q2) const
     {
         // cf. [BS:2011A], eq. (30), p. 8
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::differential_h_1(const double & s) const
+    BsToPhiDilepton::differential_h_1(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.13)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
-    BsToPhiDilepton::differential_h_2(const double & s) const
+    BsToPhiDilepton::differential_h_2(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.14)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return _imp->beta_l(s) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return _imp->beta_l(q2) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BsToPhiDilepton::differential_h_3(const double & s) const
+    BsToPhiDilepton::differential_h_3(const double & q2) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.15)
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return _imp->beta_l(s) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
+        return _imp->beta_l(q2) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }
 
     double
-    BsToPhiDilepton::differential_h_4(const double & s) const
+    BsToPhiDilepton::differential_h_4(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BsToPhiDilepton::differential_h_5(const double & s) const
+    BsToPhiDilepton::differential_h_5(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
     }
 
     // differential angular coefficients
     double
-    BsToPhiDilepton::differential_j_1c(const double & s) const
+    BsToPhiDilepton::differential_j_1c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j1c;
     }
 
     double
-    BsToPhiDilepton::differential_j_1s(const double & s) const
+    BsToPhiDilepton::differential_j_1s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j1s;
     }
 
     double
-    BsToPhiDilepton::differential_j_2c(const double & s) const
+    BsToPhiDilepton::differential_j_2c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j2c;
     }
 
     double
-    BsToPhiDilepton::differential_j_2s(const double & s) const
+    BsToPhiDilepton::differential_j_2s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::differential_j_3(const double & s) const
+    BsToPhiDilepton::differential_j_3(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j3;
     }
 
     double
-    BsToPhiDilepton::differential_j_4(const double & s) const
+    BsToPhiDilepton::differential_j_4(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j4;
     }
 
     double
-    BsToPhiDilepton::differential_j_5(const double & s) const
+    BsToPhiDilepton::differential_j_5(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j5;
     }
 
     double
-    BsToPhiDilepton::differential_j_6c(const double & s) const
+    BsToPhiDilepton::differential_j_6c(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j6c;
     }
 
     double
-    BsToPhiDilepton::differential_j_6s(const double & s) const
+    BsToPhiDilepton::differential_j_6s(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j6s;
     }
 
     double
-    BsToPhiDilepton::differential_j_7(const double & s) const
+    BsToPhiDilepton::differential_j_7(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j7;
     }
 
     double
-    BsToPhiDilepton::differential_j_8(const double & s) const
+    BsToPhiDilepton::differential_j_8(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j8;
     }
 
     double
-    BsToPhiDilepton::differential_j_9(const double & s) const
+    BsToPhiDilepton::differential_j_9(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         return a_c.j9;
     }
 
     double
-    BsToPhiDilepton::integrated_decay_width(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
+        return integrated_decay_width(q2_min, q2_max) * _imp->tau() / _imp->hbar();
     }
 
 
     double
-    BsToPhiDilepton::integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_unnormalized_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const
     {
         // Convert from asymmetry in the decay width to asymmetry in the BR
         // cf. [PDG:2008A] : Gamma = hbar / tau_B, pp. 5, 79
@@ -601,66 +601,66 @@ namespace eos
 
         // cf. [BHvD:2010A], eq. (2.8), p. 6
         // cf. [BHvD:2012A], eq. (A7)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return (a_c.j6s + 0.5 * a_c.j6c) / Gamma;
      }
 
     double
-    BsToPhiDilepton::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], eq. (2.8), p. 6
         // cf. [BHvD:2012A], eq. (A7)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return (a_c.j6s + 0.5 * a_c.j6c) / _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2012A], eq. (A9)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return (a_c.j1c - a_c.j2c / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::integrated_transversal_polarisation(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transversal_polarisation(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2012A], eq. (A10)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / _imp->decay_width(a_c);
     }
 
     double
-    BsToPhiDilepton::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transverse_asymmetry_2(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], eq. (2.10), p. 6
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transverse_asymmetry_3(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], eq. (2.11), p. 6
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
-    BsToPhiDilepton::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transverse_asymmetry_4(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], eq. (2.12), p. 6
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return sqrt((power_of<2>(a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)));
     }
 
     double
-    BsToPhiDilepton::integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transverse_asymmetry_5(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         // cf. [BS:2011A], eq. (34), p. 9 for the massless case
         return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
@@ -668,141 +668,141 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::integrated_transverse_asymmetry_re(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transverse_asymmetry_re(const double & q2_min, const double & q2_max) const
     {
         // cf. [BS:2011A], eq. (38), p. 10
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return 0.25 * a_c.j6s / a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::integrated_transverse_asymmetry_im(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_transverse_asymmetry_im(const double & q2_min, const double & q2_max) const
     {
         // cf. [BS:2011A], eq. (30), p. 8
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::integrated_h_1(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_h_1(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.13)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
-    BsToPhiDilepton::integrated_h_2(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_h_2(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.14)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return  a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BsToPhiDilepton::integrated_h_3(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_h_3(const double & q2_min, const double & q2_max) const
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.15)
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }
 
     double
-    BsToPhiDilepton::integrated_h_4(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_h_4(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
-    BsToPhiDilepton::integrated_h_5(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_h_5(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
     }
 
     // integrated angular coefficients
     double
-    BsToPhiDilepton::integrated_j_1c(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_1c(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j1c;
     }
 
     double
-    BsToPhiDilepton::integrated_j_1s(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_1s(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j1s;
     }
 
     double
-    BsToPhiDilepton::integrated_j_2c(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_2c(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j2c;
     }
 
     double
-    BsToPhiDilepton::integrated_j_2s(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_2s(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j2s;
     }
 
     double
-    BsToPhiDilepton::integrated_j_3(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_3(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j3;
     }
 
     double
-    BsToPhiDilepton::integrated_j_4(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_4(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j4;
     }
 
     double
-    BsToPhiDilepton::integrated_j_5(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_5(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j5;
     }
 
     double
-    BsToPhiDilepton::integrated_j_6c(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_6c(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j6c;
     }
 
     double
-    BsToPhiDilepton::integrated_j_6s(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_6s(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j6s;
     }
 
     double
-    BsToPhiDilepton::integrated_j_7(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_7(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j7;
     }
 
     double
-    BsToPhiDilepton::integrated_j_8(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_8(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j8;
     }
 
     double
-    BsToPhiDilepton::integrated_j_9(const double & s_min, const double & s_max) const
+    BsToPhiDilepton::integrated_j_9(const double & q2_min, const double & q2_max) const
     {
-        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
         return a_c.j9;
     }
 
@@ -834,24 +834,24 @@ namespace eos
     }
 
     double
-    BsToPhiDilepton::real_C9_perp(const double & s) const
+    BsToPhiDilepton::real_C9_perp(const double & q2) const
     {
-        return _imp->amplitude_generator->real_C9_perp(s);
+        return _imp->amplitude_generator->real_C9_perp(q2);
     }
     double
-    BsToPhiDilepton::real_C9_para(const double & s) const
+    BsToPhiDilepton::real_C9_para(const double & q2) const
     {
-        return _imp->amplitude_generator->real_C9_para(s);
+        return _imp->amplitude_generator->real_C9_para(q2);
     }
     double
-    BsToPhiDilepton::imag_C9_perp(const double & s) const
+    BsToPhiDilepton::imag_C9_perp(const double & q2) const
     {
-        return _imp->amplitude_generator->imag_C9_perp(s);
+        return _imp->amplitude_generator->imag_C9_perp(q2);
     }
     double
-    BsToPhiDilepton::imag_C9_para(const double & s) const
+    BsToPhiDilepton::imag_C9_para(const double & q2) const
     {
-        return _imp->amplitude_generator->imag_C9_para(s);
+        return _imp->amplitude_generator->imag_C9_para(q2);
     }
 
     const std::string
@@ -861,7 +861,7 @@ a charged lepton. Various theory models can be selected using \
 the 'tag' option";
 
     const std::string
-    BsToPhiDilepton::kinematics_description_s = "\
+    BsToPhiDilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
     const std::string
@@ -957,7 +957,7 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     inline std::array<double, 12>
     BsToPhiDileptonAndConjugate::angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A,
                                                               const BsToPhiDilepton::Amplitudes & Atilda,
-                                                              const double & s) const
+                                                              const double & q2) const
     {
         // cf. [DV:2015A], eqs. (117)-(128)
         std::array<double, 12> result;
@@ -965,8 +965,8 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         double m_l = bstophidilepton.m_l();
         double phiBs = bstophidilepton.phiBs();
 
-        double z = 4.0 * power_of<2>(m_l) / s;
-        double y = m_l / std::sqrt(s);
+        double z = 4.0 * power_of<2>(m_l) / q2;
+        double y = m_l / std::sqrt(q2);
         double beta2 = 1.0 - z;
         double beta = std::sqrt(beta2);
 
@@ -1072,10 +1072,10 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     }
 
     inline std::array<double, 12>
-    BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array(const double & s) const
+    BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array(const double & q2) const
     {
-        BsToPhiDilepton::Amplitudes A = bstophidilepton.amplitudes(s);
-        BsToPhiDilepton::Amplitudes Atilda = bstophidilepton_conjugate.amplitudes(s);
+        BsToPhiDilepton::Amplitudes A = bstophidilepton.amplitudes(q2);
+        BsToPhiDilepton::Amplitudes Atilda = bstophidilepton_conjugate.amplitudes(q2);
 
         Atilda.a_perp_left *= -1;
         Atilda.a_perp_right *= -1;
@@ -1083,44 +1083,44 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         Atilda.a_time_perp *= -1; // TODO Check
         Atilda.a_long_perp *= -1; // TODO Check
 
-        return angular_h_coefficients_array(A, Atilda, s);
+        return angular_h_coefficients_array(A, Atilda, q2);
     }
 
     BsToPhiDileptonAndConjugate::AngularhCoefficients
-    BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(const double & q2_min, const double & q2_max) const
     {
         std::function<std::array<double, 12> (const double &)> integrand =
                 std::bind(&BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array, this, std::placeholders::_1);
-        std::array<double, 12> integrated_angular_h_coefficients_array = integrate<1, 12>(integrand, s_min, s_max, cubature::Config().epsrel(1e-5));
+        std::array<double, 12> integrated_angular_h_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
         return BsToPhiDileptonAndConjugate::AngularhCoefficients(integrated_angular_h_coefficients_array);
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_1c(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_H_1c(const double & q2_min, const double & q2_max) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(q2_min, q2_max);
         return a_h_c.h1c;
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_1s(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_H_1s(const double & q2_min, const double & q2_max) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(q2_min, q2_max);
         return a_h_c.h1s;
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_2c(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_H_2c(const double & q2_min, const double & q2_max) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(q2_min, q2_max);
         return a_h_c.h2c;
     }
 
     double
-    BsToPhiDileptonAndConjugate::integrated_H_2s(const double & s_min, const double & s_max) const
+    BsToPhiDileptonAndConjugate::integrated_H_2s(const double & q2_min, const double & q2_max) const
     {
-        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(q2_min, q2_max);
         return a_h_c.h2s;
     }
 

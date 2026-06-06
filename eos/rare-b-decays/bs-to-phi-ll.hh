@@ -52,8 +52,8 @@ namespace eos
              * @name Signal PDFs
              */
             // @{
-            double decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
-            double decay_width_LHCb(const double & s, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const;
+            double decay_width(const double & q2, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
+            double decay_width_LHCb(const double & q2, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const;
             // @}
 
             /*!
@@ -114,18 +114,18 @@ namespace eos
              * @name Angular observables (@f$q^2@f$-differential)
              */
             // @{
-            double differential_j_1s(const double & s) const;
-            double differential_j_1c(const double & s) const;
-            double differential_j_2s(const double & s) const;
-            double differential_j_2c(const double & s) const;
-            double differential_j_3(const double & s) const;
-            double differential_j_4(const double & s) const;
-            double differential_j_5(const double & s) const;
-            double differential_j_6s(const double & s) const;
-            double differential_j_6c(const double & s) const;
-            double differential_j_7(const double & s) const;
-            double differential_j_8(const double & s) const;
-            double differential_j_9(const double & s) const;
+            double differential_j_1s(const double & q2) const;
+            double differential_j_1c(const double & q2) const;
+            double differential_j_2s(const double & q2) const;
+            double differential_j_2c(const double & q2) const;
+            double differential_j_3(const double & q2) const;
+            double differential_j_4(const double & q2) const;
+            double differential_j_5(const double & q2) const;
+            double differential_j_6s(const double & q2) const;
+            double differential_j_6c(const double & q2) const;
+            double differential_j_7(const double & q2) const;
+            double differential_j_8(const double & q2) const;
+            double differential_j_9(const double & q2) const;
             // @}
 
             /*!
@@ -138,9 +138,9 @@ namespace eos
             // @{
             double integrated_decay_width(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
-            double integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_unnormalized_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
             double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
-            double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry_cp_averaged(const double & q2_min, const double & q2_max) const;
             double integrated_longitudinal_polarisation(const double & q2_min, const double & q2_max) const;
             double integrated_transversal_polarisation(const double & q2_min, const double & q2_max) const;
             // @}
@@ -204,7 +204,7 @@ namespace eos
              */
             // @{
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
             static const std::string kinematics_description_c_theta_k;
             static const std::string kinematics_description_phi;
@@ -231,10 +231,10 @@ namespace eos
 	    /*!
              * Test functions, [BFS:2001A] eqs. (40-41)
              */
-            double real_C9_perp(const double & s) const;
-            double real_C9_para(const double & s) const;
-            double imag_C9_perp(const double & s) const;
-            double imag_C9_para(const double & s) const;
+            double real_C9_perp(const double & q2) const;
+            double real_C9_para(const double & q2) const;
+            double imag_C9_perp(const double & q2) const;
+            double imag_C9_para(const double & q2) const;
     };
 
     /*!
@@ -264,9 +264,9 @@ namespace eos
 
             struct AngularhCoefficients;
 
-            inline std::array<double, 12> angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const BsToPhiDilepton::Amplitudes & Atilda, const double & s) const;
-            inline std::array<double, 12> differential_angular_h_coefficients_array(const double & s) const;
-            BsToPhiDileptonAndConjugate::AngularhCoefficients integrated_angular_h_coefficients(const double & s_min, const double & s_max) const;
+            inline std::array<double, 12> angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const BsToPhiDilepton::Amplitudes & Atilda, const double & q2) const;
+            inline std::array<double, 12> differential_angular_h_coefficients_array(const double & q2) const;
+            BsToPhiDileptonAndConjugate::AngularhCoefficients integrated_angular_h_coefficients(const double & q2_min, const double & q2_max) const;
 
             double integrated_H_1s(const double & q2_min, const double & q2_max) const;
             double integrated_H_1c(const double & q2_min, const double & q2_max) const;
