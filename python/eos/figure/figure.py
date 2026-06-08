@@ -273,7 +273,7 @@ class GridFigure(Figure):
         for idx, plot in enumerate(self.plots):
             plot.prepare()
             plot.draw(self._axes[idx])
-            self.watermark.draw(self._axes[idx])
+            plot.draw_watermark(self._axes[idx], self.watermark)
 
         self._gridspec.tight_layout(self._figure)
         if output is not None:
