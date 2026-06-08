@@ -286,7 +286,9 @@ class GridFigure(Figure):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        _kwargs['plots'] = [PlotFactory.from_dict(**p) for p in kwargs['plots']]
+        _kwargs['plots'] = [PlotFactory.from_dict(**p) for p in _kwargs['plots']]
+        if 'watermark' in _kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**_kwargs['watermark'])
         return Deserializable.make(cls, **_kwargs)
 
 
