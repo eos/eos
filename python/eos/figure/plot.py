@@ -277,6 +277,10 @@ class Plot(ABC, Deserializable):
         "Draw the plot on the axes"
         raise NotImplementedError
 
+    @abstractmethod
+    def draw_watermark(self, ax, watermark):
+        "Draw the watermark on the axes"
+        watermark.draw(ax)
 
 @dataclass(kw_only=True)
 class TwoDimensionalPlot(Plot):
@@ -365,6 +369,8 @@ class TwoDimensionalPlot(Plot):
         if self.legend is not None:
             self.legend.draw(ax=ax, entries=legend_entries)
 
+    def draw_watermark(self, ax, watermark):
+        watermark.draw(ax)
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -405,6 +411,8 @@ class EmptyPlot(Plot):
     def draw(self, ax):
         ax.set_axis_off()
 
+    def draw_watermark(self, ax, watermark):
+        pass
 
 class PlotFactory:
     # Also build the documentation based on ordered registry
