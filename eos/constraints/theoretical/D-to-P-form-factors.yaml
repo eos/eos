@@ -12,8 +12,8 @@ D->K::f_++f_0@HPQCD:2021A:
     kinematics:
       [{q2: 0.0}, {q2: 0.9}, {q2: 1.88}, {q2: 0.9}, {q2: 1.88}]
     options:
-      [{form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010},
-       {form-factors: BFW2010}, {form-factors: BFW2010}]
+      [{form-factors: SE}, {form-factors: SE}, {form-factors: SE},
+       {form-factors: SE}, {form-factors: SE}]
     means:
       [0.737961, 0.844013, 1.01527, 0.980047, 1.46388]
     covariance:
@@ -31,7 +31,7 @@ D->K::f_++f_0@ETM:2017B:
     kinematics:
       [{q2: 0.0}, {q2: 1.0769}, {q2: 1.0769}]
     options:
-      [{form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010}]
+      [{form-factors: SE}, {form-factors: SE}, {form-factors: SE}]
     means:
       [0.7647, 0.878443, 1.01277]
     covariance:
@@ -45,7 +45,7 @@ D->K::f_T@ETM:2018A:
     kinematics:
       [{q2: 0.0}, {q2: 1.0769}, {q2: 1.88}]
     options:
-      [{form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010}]
+      [{form-factors: SE}, {form-factors: SE}, {form-factors: SE}]
     means:
       [0.6871, 0.928597, 1.16613]
     covariance:
@@ -64,9 +64,9 @@ D->K::f_0+f_++f_T@HPQCD:2022A:
                    {q2: 0.9}, {q2: 1.88},
           {q2: 0}, {q2: 0.9}, {q2: 1.88} ]
     options:
-        [ {form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010},
-                                   {form-factors: BFW2010}, {form-factors: BFW2010},
-          {form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010} ]
+        [ {form-factors: SE}, {form-factors: SE}, {form-factors: SE},
+                                   {form-factors: SE}, {form-factors: SE},
+          {form-factors: SE}, {form-factors: SE}, {form-factors: SE} ]
     means: [ 0.74401,  0.84719,  1.01329,
                        0.985009, 1.46091,
              0.689973, 0.919072, 1.37238 ]
@@ -89,8 +89,8 @@ D->K::f_++f_0@FNALMILC:2022A:
     kinematics:
       [{q2: 0.188009}, {q2: 0.695633}, {q2: 1.18446}, {q2: 1.69208}, {q2: 0.695633}, {q2: 1.18446}, {q2: 1.69208}]
     options:
-      [{form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010},
-       {form-factors: BFW2010}, {form-factors: BFW2010}, {form-factors: BFW2010}]
+      [{form-factors: SE}, {form-factors: SE}, {form-factors: SE}, {form-factors: SE},
+       {form-factors: SE}, {form-factors: SE}, {form-factors: SE}]
     means:
       [0.765347, 0.826568, 0.897305, 0.987439, 0.920402, 1.09208, 1.33979]
     covariance:
@@ -104,17 +104,17 @@ D->K::f_++f_0@FNALMILC:2022A:
 D->K::form-factors@BRvDV:2024A:
   type: MultivariateGaussian(Covariance)
   observables:
-  - D->K::a^f+_0@BFW2010
-  - D->K::a^f+_1@BFW2010
-  - D->K::a^f+_2@BFW2010
-  - D->K::a^f+_3@BFW2010
-  - D->K::a^f0_1@BFW2010
-  - D->K::a^f0_2@BFW2010
-  - D->K::a^f0_3@BFW2010
-  - D->K::a^fT_0@BFW2010
-  - D->K::a^fT_1@BFW2010
-  - D->K::a^fT_2@BFW2010
-  - D->K::a^fT_3@BFW2010
+  - D->K::a^f+_0@SE
+  - D->K::a^f+_1@SE
+  - D->K::a^f+_2@SE
+  - D->K::a^f+_3@SE
+  - D->K::a^f0_1@SE
+  - D->K::a^f0_2@SE
+  - D->K::a^f0_3@SE
+  - D->K::a^fT_0@SE
+  - D->K::a^fT_1@SE
+  - D->K::a^fT_2@SE
+  - D->K::a^fT_3@SE
   kinematics:
   - []
   - []

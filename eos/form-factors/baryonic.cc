@@ -20,10 +20,9 @@
 
 #include <eos/form-factors/baryonic-processes.hh>
 #include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/parametric-abr2022.hh>
 #include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-bbgorvd2018.hh>
-#include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-se.hh>
 #include <eos/form-factors/parametric-dkmr2017.hh>
 #include <eos/form-factors/parametric-dm2016.hh>
 #include <eos/utils/destringify.hh>
@@ -43,10 +42,10 @@ namespace eos
     {
         { "Lambda_b->Lambda::BFvD2014",   &BFvD2014FormFactors::make                      },
         { "Lambda_b->Lambda::DM2016",     &DM2016FormFactors<LambdaBToLambda>::make       },
-        { "Lambda_b->Lambda::BMRvD2022",  &BMRvD2022FormFactors<LambdaBToLambda>::make    },
+        { "Lambda_b->Lambda::SE",  &SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make    },
         { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make    },
-        { "Lambda_c->Lambda::BMRvD2022",  &BMRvD2022FormFactors<LambdaCToLambda>::make    },
-        { "Lambda_c->neutron::BMRvD2022", &BMRvD2022FormFactors<LambdaCToNeutron>::make   }
+        { "Lambda_c->Lambda::SE",  &SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make    },
+        { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make   }
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
@@ -182,7 +181,7 @@ namespace eos
     FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors
     {
         { "Lambda_b->Lambda_c(2625)::HQET",          &HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>::make },
-        { "Lambda_b->Lambda(1520)::ABR2022",         &ABR2022FormFactors<LambdaBToLambda1520>::make },
+        { "Lambda_b->Lambda(1520)::SE",               &SEFormFactors<LambdaBToLambda1520, OneHalfPlusToThreeHalfMinus>::make },
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>

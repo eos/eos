@@ -341,31 +341,31 @@ groups:
           max:     +7.150
           latex:   '$m_{B_{c,1}}[3]^\mathrm{BSZ}$'
           unit:    'GeV'
-      'mass::proton@BMRvD2022' :
+      'mass::proton@SE' :
           central: +0.93827208816
           min:     +0.9382720878699999
           max:     +0.93827208845
           latex:   '$m_{p}^\mathrm{BMRvD}$'
           unit:     'GeV'
-      'mass::neutron@BMRvD2022' :
+      'mass::neutron@SE' :
           central: +0.9395654205
           min:     +0.93956542
           max:     +0.939565421
           latex:   '$m_{n}^\mathrm{BMRvD}$'
           unit:     'GeV'
-      'mass::Lambda@BMRvD2022' :
+      'mass::Lambda@SE' :
           central: +1.115683
           min:     +1.115683
           max:     +1.115683
           latex:   '$m_{\Lambda}^\mathrm{BMRvD}$'
           unit:     'GeV'
-      'mass::Lambda_c@BMRvD2022' :
+      'mass::Lambda_c@SE' :
           central: +2.2865
           min:     +2.2865
           max:     +2.2865
           latex:   '$m_{\Lambda_c}^\mathrm{BMRvD}$'
           unit:     'GeV'
-      'mass::Lambda_b@BMRvD2022' :
+      'mass::Lambda_b@SE' :
           central: +5.61951
           min:     +5.61951
           max:     +5.61951
@@ -821,69 +821,69 @@ groups:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
       # form factor parameters for B->eta for [BFW:2010A] parametrization
-      'B->eta::a^%1%_%2%@BFW2010' :
+      'B->eta::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,B \to \eta,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,B \to \eta,\mathrm{SE}}$'
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3, 4]
-      'B->eta::tp@BFW2010' :
+      'B->eta::tp@SE' :
           central:  33.956283
           min:      33.956283
           max:      33.956283
           latex:    '$t_+^{B\to\eta}$'
           comment:  '(mB + meta)^2'
           unit:     'GeV'
-      'B->eta::t0@BFW2010' :
+      'B->eta::t0@SE' :
           central:  10.0
           min:      10.0
           max:      10.0
           latex:   '$t_0^{B\to\eta}$'
           unit:     'GeV'
       # form factor parameters for B->eta' for [BFW:2010A] parametrization
-      'B->eta_prime::a^%1%_%2%@BFW2010' :
+      'B->eta_prime::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,B \to \eta^\prime,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,B \to \eta^\prime,\mathrm{SE}}$'
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
-      'B->eta_prime::tp@BFW2010' :
+      'B->eta_prime::tp@SE' :
           central:  38.901666
           min:      38.901666
           max:      38.901666
           latex:    '$t_+^{B\to\eta^\prime}$'
           comment:  '(mB + meta)^2'
           unit:     'GeV'
-      'B->eta_prime::t0@BFW2010' :
+      'B->eta_prime::t0@SE' :
           central:  10.0
           min:      10.0
           max:      10.0
           latex:   '$t_0^{B\to\eta^\prime}$'
           unit:     'GeV'
       # form factor parameters for B->K for [BFW:2010A] parametrization
-      'B->K::a^%1%_%2%@BFW2010' :
+      'B->K::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,B \to K,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,B \to K,\mathrm{SE}}$'
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3, 4]
-      'B->K::tp@BFW2010' :
+      'B->K::tp@SE' :
           central:  33.304441
           min:      33.304441
           max:      33.304441
           latex:    '$t_+^{B\to K}$'
           comment:  '(mB + mK)^2'
           unit:     'GeV'
-      'B->K::t0@BFW2010' :
+      'B->K::t0@SE' :
           central:  14.7
           min:      14.7
           max:      14.7
@@ -1151,22 +1151,22 @@ groups:
           latex:    '$\alpha_{T,2}^{B_s \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
       # form factor parameters for B_s->K for [BFW:2010A] parametrization
-      'B_s->K::a^%1%_%2%@BFW2010' :
+      'B_s->K::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,B_s \to K,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,B_s \to K,\mathrm{SE}}$'
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3, 4]
-      'B_s->K::t0@BFW2010' :
+      'B_s->K::t0@SE' :
           central:  14.7
           min:      14.7
           max:      14.7
           latex:   '$t_0^{B_s\to K}$'
           unit:     'GeV'
-      'B_s->K::tp@BFW2010' :
+      'B_s->K::tp@SE' :
           central:  34.346398
           min:      34.346398
           max:      34.346398
@@ -2085,30 +2085,30 @@ groups:
           latex:    '$\alpha_{T_{23},2}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
       # form factor parameters for B->K^* for [BFW:2010A] parametrization
-      'B->K^*::a^%1%_%2%@BFW2010' :
+      'B->K^*::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,B \to K^*,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,B \to K^*,\mathrm{SE}}$'
           matrix:
             - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
             - [0, 1, 2, 3, 4]
-      'B->K^*::tp_a@BFW2010' :
+      'B->K^*::tp_a@SE' :
           central:  34.880836
           min:      34.880836
           max:      34.880836
           latex:    '$t_+^{A, B\to K^*}$'
           comment:  '(mB + mK + mpi)^2'
           unit:     'GeV'
-      'B->K^*::tp_v@BFW2010' :
+      'B->K^*::tp_v@SE' :
           central:  33.304441
           min:      33.304441
           max:      33.304441
           latex:    '$t_+^{V, B\to K^*}$'
           comment:  '(mB + mK)^2'
           unit:     'GeV'
-      'B->K^*::t0@BFW2010' :
+      'B->K^*::t0@SE' :
           central:  11.5
           min:      11.5
           max:      11.5
@@ -3150,30 +3150,30 @@ groups:
           latex:    '$\alpha_{T_{23},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
       # form factor parameters for B_s->phi for [BFW:2010A] parametrization
-      'B_s->phi::a^%1%_%2%@BFW2010' :
+      'B_s->phi::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,B_s \to \phi,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,B_s \to \phi,\mathrm{SE}}$'
           matrix:
             - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
             - [0, 1, 2, 3, 4]
-      'B_s->phi::tp_a@BFW2010' :
+      'B_s->phi::tp_a@SE' :
           central:  34.880836
           min:      34.880836
           max:      34.880836
           latex:    '$t_+^{A, B_s\to\phi}$'
           comment:  '(mB + mK + mpi)^2'
           unit:     'GeV'
-      'B_s->phi::tp_v@BFW2010' :
+      'B_s->phi::tp_v@SE' :
           central:  33.304441
           min:      33.304441
           max:      33.304441
           latex:    '$t_+^{V, B_s\to\phi}$'
           comment:  '(mB + mK)^2'
           unit:     'GeV'
-      'B_s->phi::t0@BFW2010' :
+      'B_s->phi::t0@SE' :
           central:  11.5
           min:      11.5
           max:      11.5
@@ -4509,23 +4509,23 @@ groups:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
       # form factor parameters for D->K for [BFW:2010A] parametrization
-      'D->K::a^%1%_%2%@BFW2010' :
+      'D->K::a^%1%_%2%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%2%^{%1%,D \to K,\mathrm{BFW2010}}$'
+          latex:    '$a_%2%^{%1%,D \to K,\mathrm{SE}}$'
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3, 4]
-      'D->K::tp@BFW2010' :
+      'D->K::tp@SE' :
           central:  5.56488
           min:      5.56488
           max:      5.56488
           latex:    '$t_+^{D\to K^*}$'
           comment:  '(mB + mK)^2'
           unit:     'GeV'
-      'D->K::t0@BFW2010' :
+      'D->K::t0@SE' :
           central:  1.04
           min:      1.04
           max:      1.04
@@ -4872,369 +4872,369 @@ groups:
           comments: ''
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [BMRvD:2022A]
-      'Lambda_b->Lambda::tp_a@BMRvD2022' :
+      'Lambda_b->Lambda::tp_a@SE' :
           central:  33.327529
           min:      33.327529
           max:      33.327529
-          latex:    '$t_+^{A, \Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_+^{A, \Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comment:  'For simplicity (mB + mK)^2 was used in BMRvD:2022A'
           unit:     'GeV^2'
-      'Lambda_b->Lambda::tp_v@BMRvD2022' :
+      'Lambda_b->Lambda::tp_v@SE' :
           central:  33.327529
           min:      33.327529
           max:      33.327529
-          latex:    '$t_+^{V, \Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_+^{V, \Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comment:  '(mB + mK)^2'
           unit:     'GeV^2'
-      'Lambda_b->Lambda::t0@BMRvD2022' :
+      'Lambda_b->Lambda::t0@SE' :
           central:  20.284457646
           min:      20.284457646
           max:      20.284457646
-          latex:    '$t_0^{\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_0^{\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           unit:     'GeV^2'
-      'Lambda_b->Lambda::a^(t,V)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,V)_1@SE' :
           central:  0.4896605330254244
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{t,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,V)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,V)_2@SE' :
           central:  0.5911436400432727
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{t,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,V)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,V)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{t,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,V)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,V)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{t,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,V)_0@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,V)_0@SE' :
           central: -0.0970706117909448
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_0^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_0^{0,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,V)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,V)_1@SE' :
           central:  0.20575657000390518
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{0,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,V)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,V)_2@SE' :
           central:  0.25919997450741056
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{0,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,V)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,V)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{0,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,V)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,V)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{0,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,V)_0@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,V)_0@SE' :
           central: -0.17003698967164574
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_0^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_0^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,V)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,V)_1@SE' :
           central:  0.28214533680157095
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,V)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,V)_2@SE' :
           central:  0.41966553547525054
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,V)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,V)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,V)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,V)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,A)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,A)_1@SE' :
           central:  0.6331868983113765
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{t,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,A)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,A)_2@SE' :
           central:  0.7383188104767887
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{t,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,A)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,A)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{t,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(t,A)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(t,A)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{t,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,A)_0@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,A)_0@SE' :
           central: -0.09945446605295541
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_0^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_0^{0,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,A)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,A)_1@SE' :
           central:  0.2671743834190154
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{0,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,A)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,A)_2@SE' :
           central:  0.29833216513104743
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{0,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,A)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,A)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{0,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,A)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,A)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{0,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,A)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,A)_1@SE' :
           central:  0.5570315792575746
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,A)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,A)_2@SE' :
           central:  0.6774966813204484
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,A)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,A)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,A)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,A)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T)_0@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T)_0@SE' :
           central: -0.06801094642008053
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_0^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_0^{0,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T)_1@SE' :
           central: -0.08249464693203802
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{0,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T)_2@SE' :
           central:  0.06002298912894147
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{0,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{0,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{0,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T)_1@SE' :
           central:  0.32440585925329807
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T)_2@SE' :
           central:  0.383016678864083
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T5)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T5)_1@SE' :
           central:  0.5425990441545133
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{0,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T5)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T5)_2@SE' :
           central:  0.5805380689598787
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{0,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T5)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T5)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{0,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(0,T5)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(0,T5)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{0,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T5)_0@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T5)_0@SE' :
           central: -0.1352023399864286
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_0^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_0^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T5)_1@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T5)_1@SE' :
           central:  0.3800478173547997
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_1^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_1^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T5)_2@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T5)_2@SE' :
           central:  0.4226660980547705
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_2^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_2^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T5)_3@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T5)_3@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_3^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_3^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
-      'Lambda_b->Lambda::a^(perp,T5)_4@BMRvD2022' :
+      'Lambda_b->Lambda::a^(perp,T5)_4@SE' :
           central:  0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_4^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$a_4^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{SE}}$'
           comments: ''
       # form factor parameters for Lambda_c -> Lambda decays according to
       # [BMRvD:2022A]
-      'Lambda_c->Lambda::tp_a@BMRvD2022' :
+      'Lambda_c->Lambda::tp_a@SE' :
           central:  6.26
           min:      6.26
           max:      6.26
-          latex:    '$t_+^{A, \Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_+^{A, \Lambda_c \to \Lambda ,\mathrm{SE}}$'
           comment:  '(mD + mK + mpi)^2'
           unit:     'GeV^2'
-      'Lambda_c->Lambda::tp_v@BMRvD2022' :
+      'Lambda_c->Lambda::tp_v@SE' :
           central:  5.6027
           min:      5.6027
           max:      5.6027
-          latex:    '$t_+^{V, \Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_+^{V, \Lambda_c \to \Lambda ,\mathrm{SE}}$'
           comment:  '(mD + mK)^2'
           unit:     'GeV^2'
-      'Lambda_c->Lambda::t0@BMRvD2022' :
+      'Lambda_c->Lambda::t0@SE' :
           central:  3.
           min:      3.
           max:      3.
-          latex:    '$t_0^{\Lambda_c \to \Lambda ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_0^{\Lambda_c \to \Lambda ,\mathrm{SE}}$'
           unit:     'GeV^2'
-      'Lambda_c->Lambda::a^(%1%,%2%)_%3%@BMRvD2022':
+      'Lambda_c->Lambda::a^(%1%,%2%)_%3%@SE':
           central: -0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to\Lambda, \mathrm{BMRvD2022}}$'
+          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to\Lambda, \mathrm{SE}}$'
           matrix:
             - ["t", "0", "perp"]
             - ["V", "A", "T", "T5"]
@@ -5242,33 +5242,33 @@ groups:
           comments: ''
       # form factor parameters for Lambda_c -> neutron decays according to
       # [BMRvD:2022A]
-      'Lambda_c->neutron::tp_a@BMRvD2022' :
+      'Lambda_c->neutron::tp_a@SE' :
           central:  4.58
           min:      4.58
           max:      4.58
-          latex:    '$t_+^{A, \Lambda_c \to n ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_+^{A, \Lambda_c \to n ,\mathrm{SE}}$'
           comment:  '(mD + mpi + mpi)^2'
           unit:     'GeV^2'
-      'Lambda_c->neutron::tp_v@BMRvD2022' :
+      'Lambda_c->neutron::tp_v@SE' :
           central:  4.02
           min:      4.02
           max:      4.02
-          latex:    '$t_+^{V, \Lambda_c \to n ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_+^{V, \Lambda_c \to n ,\mathrm{SE}}$'
           comment:  '(mD + mpi)^2'
           unit:     'GeV^2'
-      'Lambda_c->neutron::t0@BMRvD2022' :
+      'Lambda_c->neutron::t0@SE' :
           central:  1.8
           min:      1.8
           max:      1.8
-          latex:    '$t_0^{\Lambda_c \to n ,\mathrm{BMRvD2022}}$'
+          latex:    '$t_0^{\Lambda_c \to n ,\mathrm{SE}}$'
           comment:  '(mLc - mN)^2'
           unit:     'GeV^2'
-      'Lambda_c->neutron::a^(%1%,%2%)_%3%@BMRvD2022':
+      'Lambda_c->neutron::a^(%1%,%2%)_%3%@SE':
           central: -0.0
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to n, \mathrm{BMRvD2022}}$'
+          latex:    '$a_%3%^{\mathrm{%1%}, \mathrm{%2%}, \Lambda_c\to n, \mathrm{SE}}$'
           matrix:
             - ["t", "0", "perp"]
             - ["V", "A", "T", "T5"]
@@ -5944,12 +5944,12 @@ groups:
   - title: 'Parameters in ${}^1/_2{}^+ \to {}^3/_2{}^+$ Form Factor Parametrizations'
     description: ''
     parameters:
-      'Lambda_b->Lambda(1520)::a^(%1%,%2%)_%3%@ABR2022' :
+      'Lambda_b->Lambda(1520)::a^(%1%,%2%)_%3%@SE' :
           central:  0.
           min:     -1.0
           max:     +1.0
           unit:     '1'
-          latex:    '$a_%3%^{%1%,%2%,\Lambda_b \to \Lambda(1520) ,\mathrm{ABR2022}}$'
+          latex:    '$a_%3%^{%1%,%2%,\Lambda_b \to \Lambda(1520) ,\mathrm{SE}}$'
           matrix:
             - ["t12", "012", "perp12", "perp32"]
             - ["V", "A", "T", "T5"]

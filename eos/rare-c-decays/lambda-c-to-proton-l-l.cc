@@ -223,7 +223,7 @@ namespace eos
                 delta_phi_m_rho(p["Lambda_c->proton::res_delta_phi_m_rho@GHM2021"], u),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 mu(p["uc::mu"], u),
-                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_c->neutron::" + o.get("form-factors"_ok, "BMRvD2022"_ov).str(), p, o)) // using isospin
+                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_c->neutron::" + o.get("form-factors"_ok, "SE"_ov).str(), p, o)) // using isospin
             {
                 u.uses(*form_factors);
                 u.uses(*model);

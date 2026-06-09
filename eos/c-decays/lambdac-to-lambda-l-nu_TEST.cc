@@ -49,26 +49,26 @@ class LambdaCToLambdaLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
 
-                p["Lambda_c->Lambda::a^(t,V)_1@BMRvD2022"]     = +0.01;
-                p["Lambda_c->Lambda::a^(0,V)_0@BMRvD2022"]     = -0.12;
-                p["Lambda_c->Lambda::a^(0,V)_1@BMRvD2022"]     = +0.03;
-                p["Lambda_c->Lambda::a^(perp,V)_0@BMRvD2022"]  = -0.04;
-                p["Lambda_c->Lambda::a^(perp,V)_1@BMRvD2022"]  = +0.05;
-                p["Lambda_c->Lambda::a^(t,A)_1@BMRvD2022"]     = -0.06;
-                p["Lambda_c->Lambda::a^(0,A)_0@BMRvD2022"]     = +0.07;
-                p["Lambda_c->Lambda::a^(0,A)_1@BMRvD2022"]     = -0.08;
-                p["Lambda_c->Lambda::a^(perp,A)_1@BMRvD2022"]  = +0.09;
-                p["Lambda_c->Lambda::a^(0,T)_0@BMRvD2022"]     = -0.10;
-                p["Lambda_c->Lambda::a^(0,T)_1@BMRvD2022"]     = +0.11;
-                p["Lambda_c->Lambda::a^(perp,T)_1@BMRvD2022"]  = -0.02;
-                p["Lambda_c->Lambda::a^(0,T5)_1@BMRvD2022"]    = +0.13;
-                p["Lambda_c->Lambda::a^(perp,T5)_0@BMRvD2022"] = -0.14;
-                p["Lambda_c->Lambda::a^(perp,T5)_1@BMRvD2022"] = +0.15;
+                p["Lambda_c->Lambda::a^(t,V)_1@SE"]     = +0.01;
+                p["Lambda_c->Lambda::a^(0,V)_0@SE"]     = -0.12;
+                p["Lambda_c->Lambda::a^(0,V)_1@SE"]     = +0.03;
+                p["Lambda_c->Lambda::a^(perp,V)_0@SE"]  = -0.04;
+                p["Lambda_c->Lambda::a^(perp,V)_1@SE"]  = +0.05;
+                p["Lambda_c->Lambda::a^(t,A)_1@SE"]     = -0.06;
+                p["Lambda_c->Lambda::a^(0,A)_0@SE"]     = +0.07;
+                p["Lambda_c->Lambda::a^(0,A)_1@SE"]     = -0.08;
+                p["Lambda_c->Lambda::a^(perp,A)_1@SE"]  = +0.09;
+                p["Lambda_c->Lambda::a^(0,T)_0@SE"]     = -0.10;
+                p["Lambda_c->Lambda::a^(0,T)_1@SE"]     = +0.11;
+                p["Lambda_c->Lambda::a^(perp,T)_1@SE"]  = -0.02;
+                p["Lambda_c->Lambda::a^(0,T5)_1@SE"]    = +0.13;
+                p["Lambda_c->Lambda::a^(perp,T5)_0@SE"] = -0.14;
+                p["Lambda_c->Lambda::a^(perp,T5)_1@SE"] = +0.15;
 
                 Options oo
                 {
                     { "model"_ok,        "WET"_ov        },
-                    { "form-factors"_ok, "BMRvD2022"_ov  },
+                    { "form-factors"_ok, "SE"_ov  },
                     { "l"_ok,            "mu"_ov         },
                     { "B"_ok,            "Lambda"_ov     }
                 };

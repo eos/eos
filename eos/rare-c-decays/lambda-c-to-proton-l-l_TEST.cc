@@ -41,31 +41,31 @@ class LambdaCToProtonLeptonLeptonTest : public TestCase
             {
                 Parameters p = Parameters::Defaults();
 
-                p["Lambda_c->neutron::a^(t,V)_1@BMRvD2022"]     = +0.689012;
-                p["Lambda_c->neutron::a^(t,V)_2@BMRvD2022"]     = +0.399494;
-                p["Lambda_c->neutron::a^(t,A)_1@BMRvD2022"]     = +0.246169;
-                p["Lambda_c->neutron::a^(t,A)_2@BMRvD2022"]     = +0.284617;
-                p["Lambda_c->neutron::a^(0,V)_0@BMRvD2022"]     = +0.0423961;
-                p["Lambda_c->neutron::a^(0,V)_1@BMRvD2022"]     = +0.736818;
-                p["Lambda_c->neutron::a^(0,V)_2@BMRvD2022"]     = +0.413784;
-                p["Lambda_c->neutron::a^(0,A)_0@BMRvD2022"]     = -0.021022;
-                p["Lambda_c->neutron::a^(0,A)_1@BMRvD2022"]     = +0.189028;
-                p["Lambda_c->neutron::a^(0,A)_2@BMRvD2022"]     = +0.13737;
-                p["Lambda_c->neutron::a^(0,T)_0@BMRvD2022"]     = -0.294244;
-                p["Lambda_c->neutron::a^(0,T)_1@BMRvD2022"]     = +0.0525338;
-                p["Lambda_c->neutron::a^(0,T)_2@BMRvD2022"]     = +0.228615;
-                p["Lambda_c->neutron::a^(0,T5)_1@BMRvD2022"]    = +0.181135;
-                p["Lambda_c->neutron::a^(0,T5)_2@BMRvD2022"]    = +0.204599;
-                p["Lambda_c->neutron::a^(perp,V)_0@BMRvD2022"]  = -0.353174;
-                p["Lambda_c->neutron::a^(perp,V)_1@BMRvD2022"]  = +0.321992;
-                p["Lambda_c->neutron::a^(perp,V)_2@BMRvD2022"]  = +0.431261;
-                p["Lambda_c->neutron::a^(perp,A)_1@BMRvD2022"]  = +0.0665121;
-                p["Lambda_c->neutron::a^(perp,A)_2@BMRvD2022"]  = +0.201844;
-                p["Lambda_c->neutron::a^(perp,T)_1@BMRvD2022"]  = +0.569999;
-                p["Lambda_c->neutron::a^(perp,T)_2@BMRvD2022"]  = +0.393516;
-                p["Lambda_c->neutron::a^(perp,T5)_0@BMRvD2022"] = -0.0229303;
-                p["Lambda_c->neutron::a^(perp,T5)_1@BMRvD2022"] = +0.327394;
-                p["Lambda_c->neutron::a^(perp,T5)_2@BMRvD2022"] = +0.223455;
+                p["Lambda_c->neutron::a^(t,V)_1@SE"]     = +0.689012;
+                p["Lambda_c->neutron::a^(t,V)_2@SE"]     = +0.399494;
+                p["Lambda_c->neutron::a^(t,A)_1@SE"]     = +0.246169;
+                p["Lambda_c->neutron::a^(t,A)_2@SE"]     = +0.284617;
+                p["Lambda_c->neutron::a^(0,V)_0@SE"]     = +0.0423961;
+                p["Lambda_c->neutron::a^(0,V)_1@SE"]     = +0.736818;
+                p["Lambda_c->neutron::a^(0,V)_2@SE"]     = +0.413784;
+                p["Lambda_c->neutron::a^(0,A)_0@SE"]     = -0.021022;
+                p["Lambda_c->neutron::a^(0,A)_1@SE"]     = +0.189028;
+                p["Lambda_c->neutron::a^(0,A)_2@SE"]     = +0.13737;
+                p["Lambda_c->neutron::a^(0,T)_0@SE"]     = -0.294244;
+                p["Lambda_c->neutron::a^(0,T)_1@SE"]     = +0.0525338;
+                p["Lambda_c->neutron::a^(0,T)_2@SE"]     = +0.228615;
+                p["Lambda_c->neutron::a^(0,T5)_1@SE"]    = +0.181135;
+                p["Lambda_c->neutron::a^(0,T5)_2@SE"]    = +0.204599;
+                p["Lambda_c->neutron::a^(perp,V)_0@SE"]  = -0.353174;
+                p["Lambda_c->neutron::a^(perp,V)_1@SE"]  = +0.321992;
+                p["Lambda_c->neutron::a^(perp,V)_2@SE"]  = +0.431261;
+                p["Lambda_c->neutron::a^(perp,A)_1@SE"]  = +0.0665121;
+                p["Lambda_c->neutron::a^(perp,A)_2@SE"]  = +0.201844;
+                p["Lambda_c->neutron::a^(perp,T)_1@SE"]  = +0.569999;
+                p["Lambda_c->neutron::a^(perp,T)_2@SE"]  = +0.393516;
+                p["Lambda_c->neutron::a^(perp,T5)_0@SE"] = -0.0229303;
+                p["Lambda_c->neutron::a^(perp,T5)_1@SE"] = +0.327394;
+                p["Lambda_c->neutron::a^(perp,T5)_2@SE"] = +0.223455;
 
                 p["Lambda_c->proton::res_a_rho@GHM2021"]             = +0.54;
                 p["Lambda_c->proton::res_a_omega@GHM2021"]           = +0.074;
@@ -93,9 +93,9 @@ class LambdaCToProtonLeptonLeptonTest : public TestCase
 
 
                 Options oo{
-                    {        "model"_ok,       "WET"_ov },
-                    { "form-factors"_ok, "BMRvD2022"_ov },
-                    {            "l"_ok,        "mu"_ov }
+                    {        "model"_ok, "WET"_ov },
+                    { "form-factors"_ok,  "SE"_ov },
+                    {            "l"_ok,  "mu"_ov }
                 };
 
                 LambdaCToProtonLeptonLepton d(p, oo);
@@ -128,10 +128,10 @@ class LambdaCToProtonLeptonLeptonTest : public TestCase
                 p["ucmumu::Im{c10'}"] = imag(complex<double>(-1.2, 0.4) / ckm_factor_ds);
 
                 Options oobar{
-                    {        "model"_ok,       "WET"_ov },
-                    { "form-factors"_ok, "BMRvD2022"_ov },
-                    {            "l"_ok,        "mu"_ov },
-                    { "cp-conjugate"_ok,      "true"_ov }
+                    {        "model"_ok,  "WET"_ov },
+                    { "form-factors"_ok,   "SE"_ov },
+                    {            "l"_ok,   "mu"_ov },
+                    { "cp-conjugate"_ok, "true"_ov }
                 };
 
                 LambdaCToProtonLeptonLepton dNP(p, oo);

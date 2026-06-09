@@ -19,8 +19,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/parametric-bmrvd2022.hh>
-#include <eos/form-factors/parametric-bmrvd2022-impl.hh>
+#include <eos/form-factors/parametric-se.hh>
+#include <eos/form-factors/parametric-se-impl-onehalfplus-to-onehalfplus.hh>
 
 #include <eos/models/model.hh>
 #include <eos/maths/power-of.hh>
@@ -32,12 +32,12 @@
 using namespace test;
 using namespace eos;
 
-class BMRvD2022FormFactorsTest :
+class SEOneHalfPlusToOneHalfPlusFormFactorsTest :
     public TestCase
 {
     public:
-        BMRvD2022FormFactorsTest() :
-            TestCase("BMRvD2022_form_factor_test")
+        SEOneHalfPlusToOneHalfPlusFormFactorsTest() :
+            TestCase("se_onehalfplus_to_onehalfplus_form_factor_test")
         {
         }
 
@@ -49,70 +49,70 @@ class BMRvD2022FormFactorsTest :
             {
                 Parameters p = Parameters::Defaults();
                 // f_time_v
-                p["Lambda_b->Lambda::a^(t,V)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(t,V)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(t,V)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(t,V)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(t,V)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(t,V)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(t,V)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(t,V)_4@SE"] = +0.5;
                 // f_long_v
-                p["Lambda_b->Lambda::a^(0,V)_0@BMRvD2022"] = +0.1;
-                p["Lambda_b->Lambda::a^(0,V)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(0,V)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(0,V)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(0,V)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(0,V)_0@SE"] = +0.1;
+                p["Lambda_b->Lambda::a^(0,V)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(0,V)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(0,V)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(0,V)_4@SE"] = +0.5;
                 // f_perp_v
-                p["Lambda_b->Lambda::a^(perp,V)_0@BMRvD2022"] = +0.1;
-                p["Lambda_b->Lambda::a^(perp,V)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(perp,V)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(perp,V)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(perp,V)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(perp,V)_0@SE"] = +0.1;
+                p["Lambda_b->Lambda::a^(perp,V)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(perp,V)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(perp,V)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(perp,V)_4@SE"] = +0.5;
                 // f_time_a
-                p["Lambda_b->Lambda::a^(t,A)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(t,A)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(t,A)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(t,A)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(t,A)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(t,A)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(t,A)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(t,A)_4@SE"] = +0.5;
                 // f_long_a
-                p["Lambda_b->Lambda::a^(0,A)_0@BMRvD2022"] = +0.1;
-                p["Lambda_b->Lambda::a^(0,A)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(0,A)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(0,A)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(0,A)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(0,A)_0@SE"] = +0.1;
+                p["Lambda_b->Lambda::a^(0,A)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(0,A)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(0,A)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(0,A)_4@SE"] = +0.5;
                 // f_perp_a
-                p["Lambda_b->Lambda::a^(perp,A)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(perp,A)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(perp,A)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(perp,A)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(perp,A)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(perp,A)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(perp,A)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(perp,A)_4@SE"] = +0.5;
                 // f_long_t
-                p["Lambda_b->Lambda::a^(0,T)_0@BMRvD2022"] = +0.1;
-                p["Lambda_b->Lambda::a^(0,T)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(0,T)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(0,T)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(0,T)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(0,T)_0@SE"] = +0.1;
+                p["Lambda_b->Lambda::a^(0,T)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(0,T)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(0,T)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(0,T)_4@SE"] = +0.5;
                 // f_perp_t
-                p["Lambda_b->Lambda::a^(perp,T)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(perp,T)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(perp,T)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(perp,T)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(perp,T)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(perp,T)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(perp,T)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(perp,T)_4@SE"] = +0.5;
                 // f_long_t5
-                p["Lambda_b->Lambda::a^(0,T5)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(0,T5)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(0,T5)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(0,T5)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(0,T5)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(0,T5)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(0,T5)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(0,T5)_4@SE"] = +0.5;
                 // f_perp_t5
-                p["Lambda_b->Lambda::a^(perp,T5)_0@BMRvD2022"] = +0.1;
-                p["Lambda_b->Lambda::a^(perp,T5)_1@BMRvD2022"] = -0.2;
-                p["Lambda_b->Lambda::a^(perp,T5)_2@BMRvD2022"] = +0.3;
-                p["Lambda_b->Lambda::a^(perp,T5)_3@BMRvD2022"] = -0.4;
-                p["Lambda_b->Lambda::a^(perp,T5)_4@BMRvD2022"] = +0.5;
+                p["Lambda_b->Lambda::a^(perp,T5)_0@SE"] = +0.1;
+                p["Lambda_b->Lambda::a^(perp,T5)_1@SE"] = -0.2;
+                p["Lambda_b->Lambda::a^(perp,T5)_2@SE"] = +0.3;
+                p["Lambda_b->Lambda::a^(perp,T5)_3@SE"] = -0.4;
+                p["Lambda_b->Lambda::a^(perp,T5)_4@SE"] = +0.5;
                 // Resonance masses
                 p["mass::B_s@BSZ2015"]   = 5.367;
                 p["mass::B_s,0@BSZ2015"] = 5.711;
                 p["mass::B_s^*@BSZ2015"] = 5.416;
                 p["mass::B_s,1@BSZ2015"] = 5.750;
                 // Fix tp_a to tp_v to match the initial publication [BMRvD:2022A]
-                p["Lambda_b->Lambda::tp_a@BMRvD2022"] = p["Lambda_b->Lambda::tp_v@BMRvD2022"].evaluate();
+                p["Lambda_b->Lambda::tp_a@SE"] = p["Lambda_b->Lambda::tp_v@SE"].evaluate();
 
 
-                BMRvD2022FormFactors<LambdaBToLambda> ff(p, Options{ });
+                SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus> ff(p, Options{ });
 
                 Diagnostics diagnostics = ff.diagnostics();
                 static const std::vector<std::pair<double, double>> reference
@@ -195,47 +195,47 @@ class BMRvD2022FormFactorsTest :
             {
                 Parameters p = Parameters::Defaults();
                 // f_time_v
-                p["Lambda_c->Lambda::a^(t,V)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(t,V)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(t,V)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(t,V)_2@SE"] = +0.3;
                 // f_long_v
-                p["Lambda_c->Lambda::a^(0,V)_0@BMRvD2022"] = +0.1;
-                p["Lambda_c->Lambda::a^(0,V)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(0,V)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(0,V)_0@SE"] = +0.1;
+                p["Lambda_c->Lambda::a^(0,V)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,V)_2@SE"] = +0.3;
                 // f_perp_v
-                p["Lambda_c->Lambda::a^(perp,V)_0@BMRvD2022"] = +0.1;
-                p["Lambda_c->Lambda::a^(perp,V)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(perp,V)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(perp,V)_0@SE"] = +0.1;
+                p["Lambda_c->Lambda::a^(perp,V)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,V)_2@SE"] = +0.3;
                 // f_time_a
-                p["Lambda_c->Lambda::a^(t,A)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(t,A)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(t,A)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(t,A)_2@SE"] = +0.3;
                 // f_long_a
-                p["Lambda_c->Lambda::a^(0,A)_0@BMRvD2022"] = +0.1;
-                p["Lambda_c->Lambda::a^(0,A)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(0,A)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(0,A)_0@SE"] = +0.1;
+                p["Lambda_c->Lambda::a^(0,A)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,A)_2@SE"] = +0.3;
                 // f_perp_a
-                p["Lambda_c->Lambda::a^(perp,A)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(perp,A)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(perp,A)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,A)_2@SE"] = +0.3;
                 // f_long_t
-                p["Lambda_c->Lambda::a^(0,T)_0@BMRvD2022"] = +0.1;
-                p["Lambda_c->Lambda::a^(0,T)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(0,T)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(0,T)_0@SE"] = +0.1;
+                p["Lambda_c->Lambda::a^(0,T)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,T)_2@SE"] = +0.3;
                 // f_perp_t
-                p["Lambda_c->Lambda::a^(perp,T)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(perp,T)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(perp,T)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,T)_2@SE"] = +0.3;
                 // f_long_t5
-                p["Lambda_c->Lambda::a^(0,T5)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(0,T5)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(0,T5)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(0,T5)_2@SE"] = +0.3;
                 // f_perp_t5
-                p["Lambda_c->Lambda::a^(perp,T5)_0@BMRvD2022"] = +0.1;
-                p["Lambda_c->Lambda::a^(perp,T5)_1@BMRvD2022"] = -0.2;
-                p["Lambda_c->Lambda::a^(perp,T5)_2@BMRvD2022"] = +0.3;
+                p["Lambda_c->Lambda::a^(perp,T5)_0@SE"] = +0.1;
+                p["Lambda_c->Lambda::a^(perp,T5)_1@SE"] = -0.2;
+                p["Lambda_c->Lambda::a^(perp,T5)_2@SE"] = +0.3;
                 // Resonance masses
                 p["mass::D_s@BSZ2015"]   = 1.968;
                 p["mass::D_s,0@BSZ2015"] = 2.318;
                 p["mass::D_s^*@BSZ2015"] = 2.112;
                 p["mass::D_s,1@BSZ2015"] = 2.460;
 
-                BMRvD2022FormFactors<LambdaCToLambda> ff(p, Options{ });
+                SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus> ff(p, Options{ });
 
                 // form factor values
                 TEST_CHECK_RELATIVE_ERROR(ff.f_time_v (0.0), 24.45540515, eps);
@@ -274,4 +274,4 @@ class BMRvD2022FormFactorsTest :
             }
 
         }
-} bmrvd2022_form_factor_test;
+} se_onehalfplus_to_onehalfplus_form_factor_test;

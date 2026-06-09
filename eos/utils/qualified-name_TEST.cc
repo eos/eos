@@ -149,7 +149,7 @@ class QualifiedNameTest : public TestCase
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B^0->K^*0mu^+mu^-::A_FB@LHCb:2015-A;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("mass::b(MSbar);opt=har"));
-            TEST_CHECK_NO_THROW(auto qn = QualifiedName("D->K::f_++f_0@ETM:2017B;form-factors=BFW2010,rescale-factor=6.346"));
+            TEST_CHECK_NO_THROW(auto qn = QualifiedName("D->K::f_++f_0@ETM:2017B;form-factors=SE,rescale-factor=6.346"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName(qnp::Prefix("mass"), qnp::Name("b(MSbar)"), qnp::Suffix("non-empty")));
 
             TEST_CHECK_EQUAL_STR("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010", QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010").full());

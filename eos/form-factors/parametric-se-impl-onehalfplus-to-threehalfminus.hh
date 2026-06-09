@@ -17,21 +17,20 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_ABR2022_IMPL_HH
-#define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_ABR2022_IMPL_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SE_IMPL_ONEHALFPLUS_TO_THREEHALFMINUS_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SE_IMPL_ONEHALFPLUS_TO_THREEHALFMINUS_HH 1
 
-#include <eos/form-factors/parametric-abr2022.hh>
+#include <eos/form-factors/parametric-se.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/diagnostics.hh>
 
 #include <numeric>
 
-#include <iostream>
 
 namespace eos
 {
     template <typename Process_>
-    ABR2022FormFactors<Process_>::ABR2022FormFactors(const Parameters & p, const Options &) :
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::SEFormFactors(const Parameters & p, const Options &) :
         _m_1(Process_::m1),
         _m_2(Process_::m2),
         _t_0(Process_::t0),
@@ -129,28 +128,28 @@ namespace eos
 
     template <typename Process_>
     FormFactors<OneHalfPlusToThreeHalfMinus> *
-    ABR2022FormFactors<Process_>::make(const Parameters & parameters, const Options & options)
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::make(const Parameters & parameters, const Options & options)
     {
-        return new ABR2022FormFactors(parameters, options);
+        return new SEFormFactors(parameters, options);
     }
 
     template <typename Process_>
     QualifiedName
-    ABR2022FormFactors<Process_>::_par_name(const std::string & pol, const std::string & current, unsigned idx) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_par_name(const std::string & pol, const std::string & current, unsigned idx) const
     {
-        return QualifiedName(stringify(Process_::label) + "::a^(" + pol + "," + current + ")_" + stringify(idx) + "@ABR2022");
+        return QualifiedName(stringify(Process_::label) + "::a^(" + pol + "," + current + ")_" + stringify(idx) + "@SE");
     }
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_z(const double & t, const double & t_0) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_z(const double & t, const double & t_0) const
     {
         return (std::sqrt(_t_p - t) - std::sqrt(_t_p - t_0)) / (std::sqrt(_t_p - t) + std::sqrt(_t_p - t_0));
     }
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_phi(const double & s, const double & chi, const double & A, const double & B,
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi(const double & s, const double & chi, const double & A, const double & B,
                                        const double & d, const double & e, const double & f, const double & g,
                                        const double & n) const
     {
@@ -172,98 +171,98 @@ namespace eos
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_time12_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_time12_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_0p_v, 0.0, 1.0,  6.0, 3.0, 1.0, 3.0, 1.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_long12_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m_v, 1.0, 0.0, 18.0, 1.0, 3.0, 3.0, 2.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp12_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m_v, 0.0, 0.0,  9.0, 1.0, 3.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp32_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m_v, 0.0, 0.0,  3.0, 1.0, 3.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_time12_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_time12_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_0m_a, 1.0, 0.0,  6.0, 1.0, 3.0, 3.0, 1.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_long12_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p_a, 0.0, 1.0, 18.0, 3.0, 1.0, 3.0, 2.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp12_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p_a, 0.0, 0.0,  9.0, 3.0, 1.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp32_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p_a, 0.0, 0.0,  3.0, 3.0, 1.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_long12_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_t(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m_t, 0.0, 0.0, 18.0, 1.0, 3.0, 1.0, 3.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp12_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_t(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m_t, 1.0, 0.0,  9.0, 1.0, 3.0, 2.0, 3.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp32_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_t(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m_t, 1.0, 0.0,  3.0, 1.0, 3.0, 2.0, 3.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_long12_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_t5(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p_t5, 0.0, 0.0, 18.0, 3.0, 1.0, 1.0, 3.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp12_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_t5(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p_t5, 0.0, 1.0,  9.0, 3.0, 1.0, 2.0, 3.0);
     }
 
     template <typename Process_>
     inline double
-    ABR2022FormFactors<Process_>::_phi_perp32_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_t5(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p_t5, 0.0, 1.0,  3.0, 3.0, 1.0, 2.0, 3.0);
     }
@@ -271,7 +270,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_long12_v_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_v_0() const
     {
         const double x_long12_v = this->_phi_long12_v(_t_m) * 2.0 * (_m_1 - _m_2) / (_m_1 + _m_2);
         const double x_perp32_v = this->_phi_perp32_v(_t_m);
@@ -287,7 +286,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_perp12_v_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_v_0() const
     {
         const double x_perp12_v = - this->_phi_perp12_v(_t_m);
         const double x_perp32_v =   this->_phi_perp32_v(_t_m);
@@ -303,7 +302,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_time12_a_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_time12_a_0() const
     {
         std::array<double, 5> a;
         a[0] = 0;
@@ -317,7 +316,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_long12_t_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_t_0() const
     {
         const double x_long12_t = this->_phi_long12_t(_t_m) * 2.0 * (_m_1 + _m_2) / (_m_1 - _m_2);
         const double x_perp32_t = this->_phi_perp32_t(_t_m);
@@ -333,7 +332,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_perp12_t_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_t_0() const
     {
         const double x_perp12_t = - this->_phi_perp12_t(_t_m);
         const double x_perp32_t =   this->_phi_perp32_t(_t_m);
@@ -349,7 +348,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_perp32_t5_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp32_t5_0() const
     {
         const double x_perp32_t5 = - this->_z(0.0, Process_::mR2_1p) * this->_phi_perp32_t5(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
         const double x_perp32_t  =   this->_z(0.0, Process_::mR2_1m) * this->_phi_perp32_t(0.0);
@@ -365,7 +364,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_time12_v_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_time12_v_0() const
     {
         const double x_time12_v = this->_z(0.0, Process_::mR2_0p) * this->_phi_time12_v(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
         const double x_long12_v = this->_z(0.0, Process_::mR2_1m) * this->_phi_long12_v(0.0);
@@ -381,7 +380,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_long12_a_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_a_0() const
     {
         const double x_long12_a = this->_z(0.0, Process_::mR2_1p) * this->_phi_long12_a(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
         const double x_time12_a = this->_z(0.0, Process_::mR2_0m) * this->_phi_time12_a(0.0);
@@ -397,7 +396,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_perp12_t5_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_t5_0() const
     {
         const double x_perp12_t5 = this->_z(0.0, Process_::mR2_1p) * this->_phi_perp12_t5(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
         const double x_perp12_t  = this->_z(0.0, Process_::mR2_1m) * this->_phi_perp12_t(0.0);
@@ -413,7 +412,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_perp12_a_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_a_0() const
     {
         const double x_perp12_a = this->_phi_perp12_a(_t_m);
         const double x_long12_a = this->_phi_long12_a(_t_m);
@@ -430,7 +429,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::_a_long12_t5_0() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_t5_0() const
     {
         const double x_long12_t5 = this->_phi_long12_t5(_t_m);
         const double x_perp12_t5 = this->_phi_perp12_t5(_t_m);
@@ -448,7 +447,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_time12_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_time12_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time12_v_0();
@@ -465,7 +464,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_long12_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_long12_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_long12_v_0();
@@ -482,7 +481,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp12_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp12_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp12_v_0();
@@ -499,7 +498,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp32_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp32_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_perp32_v.begin(), _a_perp32_v.end(), coefficients.begin());
@@ -515,7 +514,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_time12_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_time12_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time12_a_0();
@@ -532,7 +531,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_long12_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_long12_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_long12_a_0();
@@ -549,7 +548,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp12_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp12_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp12_a_0();
@@ -566,7 +565,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp32_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp32_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_perp32_a.begin(), _a_perp32_a.end(), coefficients.begin());
@@ -582,7 +581,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_long12_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_long12_t(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_long12_t_0();
@@ -599,7 +598,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp12_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp12_t(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp12_t_0();
@@ -616,7 +615,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp32_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp32_t(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_perp32_t.begin(), _a_perp32_t.end(), coefficients.begin() );
@@ -632,7 +631,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_long12_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_long12_t5(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_long12_t5_0();
@@ -649,7 +648,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp12_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp12_t5(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp12_t5_0();
@@ -666,7 +665,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::f_perp32_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::f_perp32_t5(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp32_t5_0();
@@ -684,7 +683,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::saturation_0p_v() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::saturation_0p_v() const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time12_v_0();
@@ -695,7 +694,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::saturation_1m_v() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::saturation_1m_v() const
     {
         std::array<double, 5> coefficients_long12;
         coefficients_long12[0] = _a_long12_v_0();
@@ -715,7 +714,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::saturation_0m_a() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::saturation_0m_a() const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time12_a_0();
@@ -726,7 +725,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::saturation_1p_a() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::saturation_1p_a() const
     {
         std::array<double, 5> coefficients_long12;
         coefficients_long12[0] = _a_long12_a_0();
@@ -746,7 +745,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::saturation_1m_t() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::saturation_1m_t() const
     {
         std::array<double, 5> coefficients_long12;
         coefficients_long12[0] = _a_long12_t_0();
@@ -766,7 +765,7 @@ namespace eos
 
     template <typename Process_>
     double
-    ABR2022FormFactors<Process_>::saturation_1p_t5() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::saturation_1p_t5() const
     {
         std::array<double, 5> coefficients_long12;
         coefficients_long12[0] = _a_long12_t5_0();
@@ -788,7 +787,7 @@ namespace eos
 
     template <typename Process_>
     Diagnostics
-    ABR2022FormFactors<Process_>::diagnostics() const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::diagnostics() const
     {
         Diagnostics results;
 
@@ -836,26 +835,26 @@ namespace eos
     }
 
     template <typename Process_>
-    const std::set<ReferenceName> ABR2022FormFactors<Process_>::references
+    const std::set<ReferenceName> SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::references
     {
         "ABR:2022A"_rn
     };
 
     template <typename Process_>
-    const std::vector<OptionSpecification> ABR2022FormFactors<Process_>::options
+    const std::vector<OptionSpecification> SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::options
     {
     };
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
-    ABR2022FormFactors<Process_>::begin_options()
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::begin_options()
     {
         return options.cbegin();
     }
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
-    ABR2022FormFactors<Process_>::end_options()
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::end_options()
     {
         return options.cend();
     }

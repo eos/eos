@@ -18,22 +18,21 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BMRvD2022_IMPL_HH
-#define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BMRvD2022_IMPL_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SE_IMPL_ONEHALFPLUS_TO_ONEHALFPLUS_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SE_IMPL_ONEHALFPLUS_TO_ONEHALFPLUS_HH 1
 
-#include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-se.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/diagnostics.hh>
 
 #include <numeric>
 
-#include <iostream>
 
 namespace eos
 {
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    BMRvD2022FormFactorTraits<Process_>::resonance_0m_names
+    SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0m_names
     {
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@BSZ2015" },
@@ -44,7 +43,7 @@ namespace eos
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    BMRvD2022FormFactorTraits<Process_>::resonance_0p_names
+    SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0p_names
     {
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@BSZ2015" },
@@ -55,7 +54,7 @@ namespace eos
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    BMRvD2022FormFactorTraits<Process_>::resonance_1m_names
+    SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1m_names
     {
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
@@ -67,7 +66,7 @@ namespace eos
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    BMRvD2022FormFactorTraits<Process_>::resonance_1p_names
+    SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1p_names
     {
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@BSZ2015" },
@@ -77,7 +76,7 @@ namespace eos
     };
 
     template <typename Process_>
-    BMRvD2022FormFactors<Process_>::BMRvD2022FormFactors(const Parameters & p, const Options &) :
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::SEFormFactors(const Parameters & p, const Options &) :
         _a_time_v{
             // a^(time,V)_0 replaced by equation of motion
             UsedParameter(p[_par_name("t", "V", 1)], *this),
@@ -156,21 +155,21 @@ namespace eos
 
     template <typename Process_>
     FormFactors<OneHalfPlusToOneHalfPlus> *
-    BMRvD2022FormFactors<Process_>::make(const Parameters & parameters, const Options & options)
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::make(const Parameters & parameters, const Options & options)
     {
-        return new BMRvD2022FormFactors(parameters, options);
+        return new SEFormFactors(parameters, options);
     }
 
     template <typename Process_>
     QualifiedName
-    BMRvD2022FormFactors<Process_>::_par_name(const std::string & pol, const std::string & current, unsigned idx) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_par_name(const std::string & pol, const std::string & current, unsigned idx) const
     {
-        return QualifiedName(stringify(Process_::label) + "::a^(" + pol + "," + current + ")_" + stringify(idx) + "@BMRvD2022");
+        return QualifiedName(stringify(Process_::label) + "::a^(" + pol + "," + current + ")_" + stringify(idx) + "@SE");
     }
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::_phi(const double & s, const double & chi, const double & s_p, const double & a,
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi(const double & s, const double & chi, const double & s_p, const double & a,
                                          const double & b, const double & c, const double & d,
                                          const double & e, const double & f, const double & g) const
     {
@@ -199,77 +198,77 @@ namespace eos
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_time_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_time_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_0p, _traits.tp_v, 0.0, 1.0, 0.0, 1.0,       1.0, 3.0, 3.0 + 1.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_long_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_long_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m, _traits.tp_v, 1.0, 0.0, 1.0, 2.0,       3.0, 1.0, 3.0 + 2.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_perp_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_perp_v(const double & q2) const
     {
         return _phi(q2, Process_::chi_1m, _traits.tp_v, 0.0, 0.0, 1.0, 1.0,       3.0, 1.0, 2.0 + 2.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_time_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_time_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_0m, _traits.tp_a, 1.0, 0.0, 1.0, 2.0 / 3.0, 3.0, 1.0, 3.0 + 1.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_long_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_long_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p, _traits.tp_a, 0.0, 1.0, 0.0, 3.0,       1.0, 3.0, 3.0 + 2.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_perp_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_perp_a(const double & q2) const
     {
         return _phi(q2, Process_::chi_1p, _traits.tp_a, 0.0, 0.0, 1.0, 1.0,       1.0, 3.0, 2.0 + 2.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_long_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_long_t(const double & q2) const
     {
         return _phi(q2, Process_::chi_t,  _traits.tp_v, 0.0, 0.0, 1.0, 2.0,       3.0, 1.0, 1.0 + 3.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_perp_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_perp_t(const double & q2) const
     {
         return _phi(q2, Process_::chi_t,  _traits.tp_v, 1.0, 0.0, 1.0, 1.0,       3.0, 1.0, 2.0 + 3.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_long_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_long_t5(const double & q2) const
     {
         return _phi(q2, Process_::chi_t5, _traits.tp_a, 0.0, 0.0, 1.0, 2.0,       1.0, 3.0, 1.0 + 3.0);
     }
 
     template <typename Process_>
     inline double
-    BMRvD2022FormFactors<Process_>::_phi_perp_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_phi_perp_t5(const double & q2) const
     {
         return _phi(q2, Process_::chi_t5, _traits.tp_a, 0.0, 1.0, 1.0, 1.0,       1.0, 3.0, 2.0 + 3.0);
     }
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::_a_time_v_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_a_time_v_0() const
     {
         const double x_time = _phi_time_v(0.0) * (power_of<2>(_traits.m_R_0p) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_0p)) : 1.0);
         const double x_long = _phi_long_v(0.0) * (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
@@ -285,7 +284,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::_a_time_a_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_a_time_a_0() const
     {
         const double x_time = _phi_time_a(0.0) * (power_of<2>(_traits.m_R_0m) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_0m)) : 1.0);
         const double x_long = _phi_long_a(0.0) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
@@ -301,7 +300,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::_a_perp_a_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_a_perp_a_0() const
     {
         const double x_perp = _phi_perp_a(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double x_long = _phi_long_a(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
@@ -317,7 +316,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::_a_perp_t_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_a_perp_t_0() const
     {
         const double x_perp_t  = _phi_perp_t (0.0) * (power_of<2>(_traits.m_R_1m) < _traits.tp_v ? _traits.calc_z(0.0, _traits.tp_v, power_of<2>(_traits.m_R_1m)) : 1.0);
         const double x_perp_t5 = _phi_perp_t5(0.0) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
@@ -335,7 +334,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::_a_long_t5_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::_a_long_t5_0() const
     {
         const double x_long_t5 = _phi_long_t5(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
         const double x_perp_t5 = _phi_perp_t5(_traits.tm()) * (power_of<2>(_traits.m_R_1p) < _traits.tp_a ? _traits.calc_z(0.0, _traits.tp_a, power_of<2>(_traits.m_R_1p)) : 1.0);
@@ -351,7 +350,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_time_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_time_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time_v_0();
@@ -368,7 +367,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_long_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_long_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_long_v.begin(), _a_long_v.end(), coefficients.begin());
@@ -384,7 +383,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_perp_v(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_perp_v(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_perp_v.begin(), _a_perp_v.end(), coefficients.begin());
@@ -400,7 +399,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_time_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_time_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time_a_0();
@@ -417,7 +416,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_long_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_long_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_long_a.begin(), _a_long_a.end(), coefficients.begin());
@@ -433,7 +432,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_perp_a(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_perp_a(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp_a_0();
@@ -450,7 +449,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_long_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_long_t(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_long_t.begin(), _a_long_t.end(), coefficients.begin());
@@ -466,7 +465,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_perp_t(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_perp_t(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_perp_t_0();
@@ -483,7 +482,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_long_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_long_t5(const double & q2) const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_long_t5_0();
@@ -500,7 +499,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::f_perp_t5(const double & q2) const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_perp_t5(const double & q2) const
     {
         std::array<double, 5> coefficients;
         std::copy(_a_perp_t5.begin(), _a_perp_t5.end(), coefficients.begin());
@@ -516,7 +515,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_0p_v() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_0p_v() const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time_v_0();
@@ -527,7 +526,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_0m_a() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_0m_a() const
     {
         std::array<double, 5> coefficients;
         coefficients[0] = _a_time_a_0();
@@ -538,14 +537,14 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_v_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_v_0() const
     {
         return std::inner_product(_a_long_v.begin(), _a_long_v.end(), _a_long_v.begin(), 0.0);
     }
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_v_perp() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_v_perp() const
     {
         // The perp_v form factor contribute equally to 1m_perp and 1m_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -554,7 +553,7 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_v_para() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_v_para() const
     {
         // The perp_v form factor contribute equally to 1m_perp and 1m_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -563,7 +562,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_v() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_v() const
     {
         // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
         return (saturation_1m_v_0() + saturation_1m_v_perp() + saturation_1m_v_para()) / 3.0;
@@ -571,14 +570,14 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_a_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_a_0() const
     {
         return std::inner_product(_a_long_a.begin(), _a_long_a.end(), _a_long_a.begin(), 0.0);
     }
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_a_perp() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_a_perp() const
     {
         // The perp_a form factor contribute equally to 1p_perp and 1p_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -591,7 +590,7 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_a_para() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_a_para() const
     {
         // The perp_a form factor contribute equally to 1p_perp and 1p_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -604,7 +603,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_a() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_a() const
     {
         // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
         return (saturation_1p_a_0() + saturation_1p_a_perp() + saturation_1p_a_para()) / 3.0;
@@ -612,14 +611,14 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_t_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_t_0() const
     {
         return std::inner_product(_a_long_t.begin(), _a_long_t.end(), _a_long_t.begin(), 0.0);
     }
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_t_perp() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_t_perp() const
     {
         // The perp_t form factor contribute equally to 1m_perp and 1m_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -632,7 +631,7 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_t_para() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_t_para() const
     {
         // The perp_t form factor contribute equally to 1m_perp and 1m_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -645,7 +644,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1m_t() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1m_t() const
     {
         // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
         return (saturation_1m_t_0() + saturation_1m_t_perp() + saturation_1m_t_para()) / 3.0;
@@ -653,7 +652,7 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_t5_0() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_t5_0() const
     {
         std::array<double, 5> coefficients_long;
         coefficients_long[0] = _a_long_t5_0();
@@ -664,7 +663,7 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_t5_perp() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_t5_perp() const
     {
         // The perp_t5 form factor contribute equally to 1p_perp and 1p_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -675,7 +674,7 @@ namespace eos
 
     template<typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_t5_para() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_t5_para() const
     {
         // The perp_t5 form factor contribute equally to 1p_perp and 1p_para.
         // The factor of 0.5 compensates the factor of 2.0 in the outer function of [BMRvD:2022A]
@@ -686,7 +685,7 @@ namespace eos
 
     template <typename Process_>
     double
-    BMRvD2022FormFactors<Process_>::saturation_1p_t5() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::saturation_1p_t5() const
     {
         // By convention, the sum is divided by 3 to follow the bound saturation < 1.0
         return (saturation_1p_t5_0() + saturation_1p_t5_perp() + saturation_1p_t5_para()) / 3.0;
@@ -694,7 +693,7 @@ namespace eos
 
     template <typename Process_>
     Diagnostics
-    BMRvD2022FormFactors<Process_>::diagnostics() const
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::diagnostics() const
     {
         Diagnostics results;
 
@@ -746,26 +745,26 @@ namespace eos
     }
 
     template <typename Process_>
-    const std::set<ReferenceName> BMRvD2022FormFactors<Process_>::references
+    const std::set<ReferenceName> SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::references
     {
         "BMRvD:2022A"_rn
     };
 
     template <typename Process_>
-    const std::vector<OptionSpecification> BMRvD2022FormFactors<Process_>::options
+    const std::vector<OptionSpecification> SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::options
     {
     };
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
-    BMRvD2022FormFactors<Process_>::begin_options()
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::begin_options()
     {
         return options.cbegin();
     }
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
-    BMRvD2022FormFactors<Process_>::end_options()
+    SEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::end_options()
     {
         return options.cend();
     }
