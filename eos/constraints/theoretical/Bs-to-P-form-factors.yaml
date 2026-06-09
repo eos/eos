@@ -116,9 +116,9 @@ B_s->K::form-factors[f_+,f_0,f_T]@BvDV:2023A:
       { q2: -10.0 },       { q2: -5.0 },                             { q2: 5.0 },
       { q2: -10.0 },       { q2: -5.0 },        { q2: 0.0 },         { q2: 5.0 } ]
   options:
-    [ { form-factors: BFW2010 }, { form-factors: BFW2010 }, { form-factors: BFW2010 }, { form-factors: BFW2010 },
-      { form-factors: BFW2010 }, { form-factors: BFW2010 },                            { form-factors: BFW2010 },
-      { form-factors: BFW2010 }, { form-factors: BFW2010 }, { form-factors: BFW2010 }, { form-factors: BFW2010 } ]
+    [ { form-factors: SE }, { form-factors: SE }, { form-factors: SE }, { form-factors: SE },
+      { form-factors: SE }, { form-factors: SE },                            { form-factors: SE },
+      { form-factors: SE }, { form-factors: SE }, { form-factors: SE }, { form-factors: SE } ]
   means:
     [ 0.20789639933463822, 0.27777347434250965, 0.3640306031879726,  0.48252352235040846,
       0.2605675265845483,  0.312448185749139,                        0.42565448101813586,

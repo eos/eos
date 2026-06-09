@@ -38,13 +38,13 @@ class LambdaBToLambda1520GammaNaiveTest :
         virtual void run() const
         {
             Parameters p = Parameters::Defaults();
-            p["Lambda_b->Lambda(1520)::a^(012,T)_1@ABR2022"]     =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@ABR2022"]  =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@ABR2022"]  =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@ABR2022"]  =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(012,T5)_1@ABR2022"]    =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@ABR2022"] =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@ABR2022"] =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(012,T)_1@SE"]     =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@SE"]  =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@SE"]  =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@SE"]  =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(012,T5)_1@SE"]    =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@SE"] =  0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@SE"] =  0.1;
 
             p["b->s::c3"] = 0.;
             p["b->s::c4"] = 0.;
@@ -79,7 +79,7 @@ class LambdaBToLambda1520GammaNaiveTest :
             {
                 { "model"_ok, "WET"_ov },
                 { "tag"_ok, "Naive"_ov },
-                { "form-factors"_ok, "ABR2022"_ov },
+                { "form-factors"_ok, "SE"_ov },
                 { "l"_ok, "mu"_ov },
             };
 

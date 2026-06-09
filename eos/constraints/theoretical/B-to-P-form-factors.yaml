@@ -823,9 +823,9 @@ B->K::FormFactors[parametric,BFW]@GRvDV:2023A:
     # This result assumes tp = 30.261001
     type: MultivariateGaussian(Covariance)
     observables:
-      [ 'B->K::a^f+_0@BFW2010', 'B->K::a^f+_1@BFW2010', 'B->K::a^f+_2@BFW2010',
-                                'B->K::a^f0_1@BFW2010', 'B->K::a^f0_2@BFW2010',
-        'B->K::a^fT_0@BFW2010', 'B->K::a^fT_1@BFW2010', 'B->K::a^fT_2@BFW2010' ]
+      [ 'B->K::a^f+_0@SE', 'B->K::a^f+_1@SE', 'B->K::a^f+_2@SE',
+                                'B->K::a^f0_1@SE', 'B->K::a^f0_2@SE',
+        'B->K::a^fT_0@SE', 'B->K::a^fT_1@SE', 'B->K::a^fT_2@SE' ]
     kinematics:
       [ {}, {}, {}, {}, {}, {}, {}, {} ]
     options:

@@ -1232,13 +1232,13 @@ B->K^*::FormFactors[parametric,BFW]@GRvDV:2023A:
     # This result assumes tp_v = 30.261001, tp_a = 31.764496
     type: MultivariateGaussian(Covariance)
     observables:
-      [ 'B->K^*::a^A0_0@BFW2010', 'B->K^*::a^A0_1@BFW2010',  'B->K^*::a^A0_2@BFW2010',
-                                  'B->K^*::a^A1_1@BFW2010',  'B->K^*::a^A1_2@BFW2010',
-                                  'B->K^*::a^A12_1@BFW2010', 'B->K^*::a^A12_2@BFW2010',
-        'B->K^*::a^V_0@BFW2010',  'B->K^*::a^V_1@BFW2010',   'B->K^*::a^V_2@BFW2010',
-        'B->K^*::a^T1_0@BFW2010', 'B->K^*::a^T1_1@BFW2010',  'B->K^*::a^T1_2@BFW2010',
-                                  'B->K^*::a^T2_1@BFW2010',  'B->K^*::a^T2_2@BFW2010',
-                                  'B->K^*::a^T23_1@BFW2010', 'B->K^*::a^T23_2@BFW2010' ]
+      [ 'B->K^*::a^A0_0@SE', 'B->K^*::a^A0_1@SE',  'B->K^*::a^A0_2@SE',
+                                  'B->K^*::a^A1_1@SE',  'B->K^*::a^A1_2@SE',
+                                  'B->K^*::a^A12_1@SE', 'B->K^*::a^A12_2@SE',
+        'B->K^*::a^V_0@SE',  'B->K^*::a^V_1@SE',   'B->K^*::a^V_2@SE',
+        'B->K^*::a^T1_0@SE', 'B->K^*::a^T1_1@SE',  'B->K^*::a^T1_2@SE',
+                                  'B->K^*::a^T2_1@SE',  'B->K^*::a^T2_2@SE',
+                                  'B->K^*::a^T23_1@SE', 'B->K^*::a^T23_2@SE' ]
     kinematics:
       [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ]
     options:

@@ -74,12 +74,12 @@ Lambda_c->Lambda::f_time+long+perp^V+A@M:2016A:
       - Lambda_c->Lambda::f_time^A(q2)
       - Lambda_c->Lambda::f_time^A(q2)
     options: [
-        { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },
-        { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },
-        { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },
-        { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },
-        { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' },
-        { 'form-factors': 'BMRvD2022' },   { 'form-factors': 'BMRvD2022' }
+        { 'form-factors': 'SE' },   { 'form-factors': 'SE' },   { 'form-factors': 'SE' },
+        { 'form-factors': 'SE' },   { 'form-factors': 'SE' },   { 'form-factors': 'SE' },
+        { 'form-factors': 'SE' },   { 'form-factors': 'SE' },   { 'form-factors': 'SE' },
+        { 'form-factors': 'SE' },   { 'form-factors': 'SE' },   { 'form-factors': 'SE' },
+        { 'form-factors': 'SE' },   { 'form-factors': 'SE' },   { 'form-factors': 'SE' },
+        { 'form-factors': 'SE' },   { 'form-factors': 'SE' }
     ]
     kinematics: [ #calculated at 0.15*q2max , 0.40 * q2max , 0.70*q2max
         { 'q2': 0.205608 },                    { 'q2': 0.548288 },                    { 'q2': 0.959503 },

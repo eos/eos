@@ -29,7 +29,7 @@
 #include <eos/form-factors/analytic-p-to-gamma-qcdf.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
-#include <eos/form-factors/parametric-bfw2010.hh>
+#include <eos/form-factors/parametric-se.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
@@ -64,7 +64,7 @@ namespace eos
         { "B->rho::BSZ2015",      &BSZ2015FormFactors<BToRho,     PToV>::make         },
         { "B->K^*::KMPW2010",     &KMPW2010FormFactors<PToV>::make                    },
         { "B->K^*::BSZ2015",      &BSZ2015FormFactors<BToKstar,   PToV>::make         },
-        { "B->K^*::BFW2010",      &BFW2010FormFactors<BToKstar,   PToV>::make         },
+        { "B->K^*::SE",      &SEFormFactors<BToKstar,   PToV>::make         },
         { "B->K^*::G2026",        &G2026FormFactors<BToKstar,     PToV>::make         },
         { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
         { "B->D^*::BGJvD2019",    &HQETFormFactors<BToDstar,      PToV>::make         },
@@ -79,7 +79,7 @@ namespace eos
         { "B_s->D_s^*::BGL1997",  &BGL1997FormFactors<BsToDsstar, PToV>::make         },
         { "B_s->D_s^*::G2026",    &G2026FormFactors<BsToDsstar,   PToV>::make         },
         { "B_s->phi::BSZ2015",    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
-        { "B_s->phi::BFW2010",    &BFW2010FormFactors<BsToPhi,    PToV>::make         },
+        { "B_s->phi::SE",    &SEFormFactors<BsToPhi,    PToV>::make         },
         { "B_s->phi::G2026",      &G2026FormFactors<BsToPhi,      PToV>::make         },
         // analytic computations
         { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToKstar>::make         },
@@ -350,12 +350,12 @@ namespace eos
         { "B->K::BCL2008",           &BCL2008FormFactors<BToK, 3u>::make                                                                                          },
         { "B->K::KMPW2010",          &KMPW2010FormFactors<PToP>::make                                                                                             },
         { "B->K::BSZ2015",           &BSZ2015FormFactors<BToK,    PToP>::make                                                                                     },
-        { "B->K::BFW2010",           &BFW2010FormFactors<BToK,    PToP>::make                                                                                     },
+        { "B->K::SE",           &SEFormFactors<BToK,    PToP>::make                                                                                     },
         { "B->K::G2026",             &G2026FormFactors<BToK, PToP>::make                                                                                          },
         { "B_s->eta::BSZ2015",       &BSZ2015FormFactors<BsToEta, PToP>::make                                                                                     },
-        { "B_s->eta::BFW2010",       &BFW2010FormFactors<BsToEta, PToP>::make                                                                                     },
+        { "B_s->eta::SE",       &SEFormFactors<BsToEta, PToP>::make                                                                                     },
         { "B_s->eta_prime::BSZ2015", &BSZ2015FormFactors<BsToEtaPrime, PToP>::make                                                                                },
-        { "B_s->eta_prime::BFW2010", &BFW2010FormFactors<BsToEtaPrime, PToP>::make                                                                                },
+        { "B_s->eta_prime::SE", &SEFormFactors<BsToEtaPrime, PToP>::make                                                                                },
         // b -> u
         { "B->pi::BCL2008",          &BCL2008FormFactors<BToPi, 3u>::make                                                                                         },
         { "B->pi::BCL2008-4",        &BCL2008FormFactors<BToPi, 4u>::make                                                                                         },
@@ -363,10 +363,10 @@ namespace eos
         { "B->pi::BSZ2015",          &BSZ2015FormFactors<BToPi,  PToP>::make                                                                                      },
         { "B->pi::G2026",            &G2026FormFactors<BToPi,     PToP>::make                                                                                      },
         { "B->eta::BSZ2015",         &BSZ2015FormFactors<BToEta, PToP>::make                                                                                      },
-        { "B->eta::BFW2010",         &BFW2010FormFactors<BToEta, PToP>::make                                                                                      },
+        { "B->eta::SE",         &SEFormFactors<BToEta, PToP>::make                                                                                      },
         { "B->eta_prime::BSZ2015",   &BSZ2015FormFactors<BToEtaPrime, PToP>::make                                                                                 },
-        { "B->eta_prime::BFW2010",   &BFW2010FormFactors<BToEtaPrime, PToP>::make                                                                                 },
-        { "B_s->K::BFW2010",         &BFW2010FormFactors<BsToK,  PToP>::make                                                                                      },
+        { "B->eta_prime::SE",   &SEFormFactors<BToEtaPrime, PToP>::make                                                                                 },
+        { "B_s->K::SE",         &SEFormFactors<BsToK,  PToP>::make                                                                                      },
         { "B_s->K::BSZ2015",         &BSZ2015FormFactors<BsToK,  PToP>::make                                                                                      },
         { "B_s->K::G2026",           &G2026FormFactors<BsToK,     PToP>::make                                                                                      },
         // b -> c
@@ -386,11 +386,11 @@ namespace eos
         { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,       PToP>::make                                                                                 },
         // c -> s
         { "D_s->eta::BSZ2015",       &BSZ2015FormFactors<DsToEta,      PToP>::make                                                                                },
-        { "D_s->eta::BFW2010",       &BFW2010FormFactors<DsToEta,      PToP>::make                                                                                },
+        { "D_s->eta::SE",       &SEFormFactors<DsToEta,      PToP>::make                                                                                },
         { "D_s->eta_prime::BSZ2015", &BSZ2015FormFactors<DsToEtaPrime, PToP>::make                                                                                },
-        { "D_s->eta_prime::BFW2010", &BFW2010FormFactors<DsToEtaPrime, PToP>::make                                                                                },
+        { "D_s->eta_prime::SE", &SEFormFactors<DsToEtaPrime, PToP>::make                                                                                },
         { "D->K::BSZ2015",           &BSZ2015FormFactors<DToK,         PToP>::make                                                                                },
-        { "D->K::BFW2010",           &BFW2010FormFactors<DToK,         PToP>::make                                                                                },
+        { "D->K::SE",           &SEFormFactors<DToK,         PToP>::make                                                                                },
         // analytic computations
         { "B->pi::DKMMO2008",        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
         { "B_s->K::DKMMO2008",       &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },

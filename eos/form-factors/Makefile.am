@@ -31,14 +31,11 @@ libeosformfactors_la_SOURCES = \
 	mesonic.cc mesonic.hh \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
-	parametric-abr2022.hh parametric-abr2022-impl.hh parametric-abr2022.cc \
 	parametric-bbgorvd2018.hh parametric-bbgorvd2018-impl.hh parametric-bbgorvd2018.cc \
 	parametric-bcl2008.hh parametric-bcl2008-impl.hh parametric-bcl2008.cc \
 	parametric-bfvd2014.hh parametric-bfvd2014.cc \
-	parametric-bfw2010.hh parametric-bfw2010-impl.hh parametric-bfw2010.cc \
 	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
 	parametric-bgjvd2019.hh parametric-bgjvd2019-impl.hh parametric-bgjvd2019.cc \
-	parametric-bmrvd2022.hh parametric-bmrvd2022-impl.hh parametric-bmrvd2022.cc \
 	parametric-bsz2015.hh parametric-bsz2015-impl.hh parametric-bsz2015.cc \
 	parametric-dkmr2017.hh parametric-dkmr2017-impl.hh parametric-dkmr2017.cc \
 	parametric-dm2016.hh parametric-dm2016-impl.hh parametric-dm2016.cc \
@@ -49,6 +46,11 @@ libeosformfactors_la_SOURCES = \
 	parametric-kkvdz2022.hh parametric-kkvdz2022.cc \
 	parametric-kmpw2010.hh parametric-kmpw2010-impl.hh parametric-kmpw2010.cc \
 	parametric-ksvd2025.hh parametric-ksvd2025.cc \
+	parametric-se.hh parametric-se.cc \
+	parametric-se-impl-onehalfplus-to-threehalfminus.hh \
+	parametric-se-impl-onehalfplus-to-onehalfplus.hh \
+	parametric-se-impl-p-to-p.hh \
+	parametric-se-impl-p-to-v.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	psd-lcdas.cc psd-lcdas.hh \
 	rho-lcdas.cc rho-lcdas.hh \
@@ -74,10 +76,8 @@ include_eos_rarebdecays_HEADERS = \
 	heavy-meson-lcdas-exponential.hh \
 	heavy-meson-lcdas-flvd2022.hh \
 	observables.hh \
-	parametric-abr2022.hh \
 	parametric-bbgorvd2018.hh \
 	parametric-bcl2008.hh \
-	parametric-bfw2010.hh \
 	parametric-bfvd2014.hh \
 	parametric-bgl1997.hh \
 	parametric-bgjvd2019.hh \
@@ -89,6 +89,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-hkvt2025.hh \
 	parametric-kkrvd2024.hh \
 	parametric-kmpw2010.hh \
+	parametric-se.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -110,14 +111,11 @@ TESTS = \
 	kstar-lcdas_TEST \
 	lcda_TEST \
 	mesonic_TEST \
-	parametric-abr2022_TEST \
 	parametric-bbgorvd2018_TEST \
 	parametric-bcl2008_TEST \
 	parametric-bfvd2014_TEST \
-	parametric-bfw2010_TEST \
 	parametric-bgl1997_TEST \
 	parametric-bgjvd2019_TEST \
-	parametric-bmrvd2022_TEST \
 	parametric-bsz2015_TEST \
 	parametric-dkmr2017_TEST \
 	parametric-dm2016_TEST \
@@ -128,6 +126,10 @@ TESTS = \
 	parametric-ksvd2025_TEST \
 	parametric-kkvdz2022_TEST \
 	parametric-kmpw2010_TEST \
+	parametric-se-b-to-k_TEST \
+	parametric-se-b-to-kstar_TEST \
+	parametric-se-lambdab-to-lambda_TEST \
+	parametric-se-lambdab-to-lambda1520_TEST \
 	pi-lcdas_TEST \
 	psd-lcdas_TEST \
 	rho-lcdas_TEST \
@@ -174,23 +176,17 @@ lcda_TEST_SOURCES = lcda_TEST.cc
 
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 
-parametric_abr2022_TEST_SOURCES = parametric-abr2022_TEST.cc
-
 parametric_bbgorvd2018_TEST_SOURCES = parametric-bbgorvd2018_TEST.cc
 
 parametric_bcl2008_TEST_SOURCES = parametric-bcl2008_TEST.cc
 
 parametric_bfvd2014_TEST_SOURCES = parametric-bfvd2014_TEST.cc
 
-parametric_bfw2010_TEST_SOURCES = parametric-bfw2010_TEST.cc
-
 parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
 
 parametric_bgjvd2019_TEST_SOURCES = parametric-bgjvd2019_TEST.cc
 
 parametric_bsz2015_TEST_SOURCES = parametric-bsz2015_TEST.cc
-
-parametric_bmrvd2022_TEST_SOURCES = parametric-bmrvd2022_TEST.cc
 
 parametric_dkmr2017_TEST_SOURCES = parametric-dkmr2017_TEST.cc
 
@@ -209,6 +205,14 @@ parametric_ksvd2025_TEST_SOURCES = parametric-ksvd2025_TEST.cc
 parametric_kkvdz2022_TEST_SOURCES = parametric-kkvdz2022_TEST.cc
 
 parametric_kmpw2010_TEST_SOURCES = parametric-kmpw2010_TEST.cc
+
+parametric_se_b_to_k_TEST_SOURCES = parametric-se-b-to-k_TEST.cc
+
+parametric_se_b_to_kstar_TEST_SOURCES = parametric-se-b-to-kstar_TEST.cc
+
+parametric_se_lambdab_to_lambda_TEST_SOURCES = parametric-se-lambdab-to-lambda_TEST.cc
+
+parametric_se_lambdab_to_lambda1520_TEST_SOURCES = parametric-se-lambdab-to-lambda1520_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 

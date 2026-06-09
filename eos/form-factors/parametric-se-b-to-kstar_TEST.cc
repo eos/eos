@@ -18,17 +18,17 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/parametric-bfw2010-impl.hh>
+#include <eos/form-factors/parametric-se-impl-p-to-v.hh>
 
 using namespace test;
 using namespace eos;
 
-class BToKBFW2010FormFactorsTest :
+class BToKstarSEFormFactorsTest :
     public TestCase
 {
     public:
-        BToKBFW2010FormFactorsTest() :
-            TestCase("b_to_k_bfw2010_form_factors_test")
+        BToKstarSEFormFactorsTest() :
+            TestCase("b_to_kstar_se_form_factors_test")
         {
         }
 
@@ -38,145 +38,16 @@ class BToKBFW2010FormFactorsTest :
 
             {
                 Parameters p = Parameters::Defaults();
-                p["B->K::a^f+_0@BFW2010"]     =  0.01;
-                p["B->K::a^f+_1@BFW2010"]     = -0.02;
-                p["B->K::a^fT_0@BFW2010"]     =  0.03;
-                p["B->K::a^fT_1@BFW2010"]     = -0.04;
-                p["B->K::a^f0_1@BFW2010"]     =  0.05;
-
-                p["mass::B_d@BSZ2015"]        =  5.279;
-                p["mass::K_d@BSZ2015"]        =  0.492;
-                p["mass::B_s@BSZ2015"]        =  5.367;
-                p["mass::B_s^*@BSZ2015"]      =  5.416;
-                p["mass::B_s,0@BSZ2015"]      =  5.711;
-                p["mass::B_s,1@BSZ2015"]      =  5.750;
-
-                // Optimized t0 = (mB + mK) * (sqrt(mB) - sqrt(mK))^2
-                p["B->K::t0@BFW2010"]         =  14.703305673;
-
-
-                BFW2010FormFactors<BToK, PToP> ff(p, Options{ });
-
-                Diagnostics diagnostics = ff.diagnostics();
-                static const std::vector<std::pair<double, double>> reference
-                {
-                    std::make_pair(  0.144596,  eps), // z(q2 =  0)
-                    std::make_pair(  0.0562957, eps), // z(q2 = 10)
-                    std::make_pair(  0.398942,  eps), // p_0(z = 0.0)
-                    std::make_pair(  0,         eps), // p_1(z = 0.0)
-                    std::make_pair(  0.398942,  eps), // p_0(z = z(q2 = 10))
-                    std::make_pair(  0.0224588, eps), // p_1(z = z(q2 = 10))
-
-                    std::make_pair(  0.0386505, eps), // phi_f_p(z = z(q2 = -2))
-                    std::make_pair(  0.0369224, eps), // phi_f_p(z = z(q2 =  1))
-                    std::make_pair(  0.0350622, eps), // phi_f_p(z = z(q2 =  4))
-                    std::make_pair(  0.0870644, eps), // phi_f_0(z = z(q2 = -2))
-                    std::make_pair(  0.0874959, eps), // phi_f_0(z = z(q2 =  1))
-                    std::make_pair(  0.0878445, eps), // phi_f_0(z = z(q2 =  4))
-                    std::make_pair(  0.0958949, eps), // phi_f_t(z = z(q2 = -2))
-                    std::make_pair(  0.0895891, eps), // phi_f_t(z = z(q2 =  1))
-                    std::make_pair(  0.0830676, eps), // phi_f_t(z = z(q2 =  4))
-
-                    std::make_pair(  0.018232,  eps), // a_f0_0
-                };
-                TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
-
-                // Test end-point relations
-                TEST_CHECK_NEARLY_EQUAL( ff.f_0(0.0),           ff.f_p(0.0), eps);
-
-                // Test against Nico's implementation
-                TEST_CHECK_RELATIVE_ERROR( ff.f_0( -1.0), 0.157128,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_0(  1.0), 0.153515,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_0(  4.0), 0.147786,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_0( 25.0), 0.0736626, eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_p( -1.0), 0.148165,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_p(  1.0), 0.163096,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_p(  4.0), 0.190614,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_p( 25.0), 1.9403,    eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_t( -1.0), 0.206692,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_t(  1.0), 0.227051,  eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_t(  4.0), 0.2649,    eps);
-                TEST_CHECK_RELATIVE_ERROR( ff.f_t( 25.0), 2.87453,   eps);
-
-                TEST_CHECK_NEARLY_EQUAL( ff.saturation_0p_v(),       0.00283240578, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff.saturation_0m_a(),       0,             eps);
-                TEST_CHECK_NEARLY_EQUAL( ff.saturation_1m_v(),       0.0005,        eps);
-                TEST_CHECK_NEARLY_EQUAL( ff.saturation_1p_a(),       0,             eps);
-                TEST_CHECK_NEARLY_EQUAL( ff.saturation_1m_t(),       0.0025,        eps);
-                TEST_CHECK_NEARLY_EQUAL( ff.saturation_1p_t5(),      0,             eps);
-
-                // Test everything for tp smaller than the scalar resonance B_s0
-                p["B->K::tp@BFW2010"]         =  30.261001;
-
-                BFW2010FormFactors<BToK, PToP> ff2(p, Options{ });
-
-                diagnostics = ff2.diagnostics();
-                static const std::vector<std::pair<double, double>> reference2
-                {
-                    std::make_pair(  0.164809,  eps), // z(q2 =  0)
-                    std::make_pair(  0.0659398, eps), // z(q2 = 10)
-                    std::make_pair(  0.465369,  eps), // p_0(z = 0.0)
-                    std::make_pair( -0.1574336, eps), // p_1(z = 0.0)
-                    std::make_pair(  0.465369,  eps), // p_0(z = z(q2 = 10))
-                    std::make_pair( -0.1250388, eps), // p_1(z = z(q2 = 10))
-
-                    std::make_pair(  0.0409811, eps), // phi_f_p(z = z(q2 = -2))
-                    std::make_pair(  0.0391304, eps), // phi_f_p(z = z(q2 =  1))
-                    std::make_pair(  0.0371339, eps), // phi_f_p(z = z(q2 =  4))
-                    std::make_pair(  0.0962603, eps), // phi_f_0(z = z(q2 = -2))
-                    std::make_pair(  0.0968854, eps), // phi_f_0(z = z(q2 =  1))
-                    std::make_pair(  0.0974312, eps), // phi_f_0(z = z(q2 =  4))
-                    std::make_pair(  0.0970603, eps), // phi_f_t(z = z(q2 = -2))
-                    std::make_pair(  0.0904346, eps), // phi_f_t(z = z(q2 =  1))
-                    std::make_pair(  0.0835803, eps), // phi_f_t(z = z(q2 =  4))
-
-                    std::make_pair(  0.0542382,  eps), // a_f0_0
-                };
-                TEST_CHECK_DIAGNOSTICS(diagnostics, reference2);
-
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_0(0.0),           ff2.f_p(0.0), eps);
-
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_0( -1.0), 0.224009, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_0(  1.0), 0.218985, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_0(  4.0), 0.211081, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_0( 25.0), 0.120399, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_p( -1.0), 0.214148, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_p(  1.0), 0.229426, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_p(  4.0), 0.257016, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_p( 25.0), 1.59695,  eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_t( -1.0), 0.251754, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_t(  1.0), 0.2723,   eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_t(  4.0), 0.309838, eps);
-                TEST_CHECK_NEARLY_EQUAL( ff2.f_t( 25.0), 2.36706,  eps);
-            }
-        }
-} b_to_k_bfw2010_form_factors_test;
-
-class BToKstarBFW2010FormFactorsTest :
-    public TestCase
-{
-    public:
-        BToKstarBFW2010FormFactorsTest() :
-            TestCase("b_to_kstar_bfw2010_form_factors_test")
-        {
-        }
-
-        virtual void run() const
-        {
-            static const double eps = 1e-5;
-
-            {
-                Parameters p = Parameters::Defaults();
-                p["B->K^*::a^V_0@BFW2010"]     =  0.01;
-                p["B->K^*::a^V_1@BFW2010"]     = -0.02;
-                p["B->K^*::a^A0_0@BFW2010"]    =  0.03;
-                p["B->K^*::a^A0_1@BFW2010"]    = -0.04;
-                p["B->K^*::a^A1_1@BFW2010"]    =  0.05;
-                p["B->K^*::a^A12_1@BFW2010"]   = -0.06;
-                p["B->K^*::a^T1_0@BFW2010"]    =  0.07;
-                p["B->K^*::a^T1_1@BFW2010"]    = -0.08;
-                p["B->K^*::a^T2_1@BFW2010"]    =  0.09;
-                p["B->K^*::a^T23_1@BFW2010"]   = -0.10;
+                p["B->K^*::a^V_0@SE"]     =  0.01;
+                p["B->K^*::a^V_1@SE"]     = -0.02;
+                p["B->K^*::a^A0_0@SE"]    =  0.03;
+                p["B->K^*::a^A0_1@SE"]    = -0.04;
+                p["B->K^*::a^A1_1@SE"]    =  0.05;
+                p["B->K^*::a^A12_1@SE"]   = -0.06;
+                p["B->K^*::a^T1_0@SE"]    =  0.07;
+                p["B->K^*::a^T1_1@SE"]    = -0.08;
+                p["B->K^*::a^T2_1@SE"]    =  0.09;
+                p["B->K^*::a^T23_1@SE"]   = -0.10;
 
                 p["mass::B_d@BSZ2015"]        =  5.279;
                 p["mass::K_d^*@BSZ2015"]      =  0.896;
@@ -186,11 +57,11 @@ class BToKstarBFW2010FormFactorsTest :
                 p["mass::B_s,1@BSZ2015"]      =  5.750;
 
                 // Optimized t0 = (mB + mK*) * (sqrt(mB) - sqrt(mK*))^2
-                p["B->K^*::t0@BFW2010"]       =  11.271194912;
-                p["B->K^*::tp_v@BFW2010"]     =  30.261001;
-                p["B->K^*::tp_a@BFW2010"]     =  31.764496;
+                p["B->K^*::t0@SE"]       =  11.271194912;
+                p["B->K^*::tp_v@SE"]     =  30.261001;
+                p["B->K^*::tp_a@SE"]     =  31.764496;
 
-                BFW2010FormFactors<BToKstar, PToV> ff(p, Options{ });
+                SEFormFactors<BToKstar, PToV> ff(p, Options{ });
 
                 Diagnostics diagnostics = ff.diagnostics();
                 static const std::vector<std::pair<double, double>> reference
@@ -293,4 +164,4 @@ class BToKstarBFW2010FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL( ff.saturation_1p_t5(),      0.0280612,    eps);
             }
         }
-} b_to_kstar_bfw2010_form_factors_test;
+} b_to_kstar_se_form_factors_test;
