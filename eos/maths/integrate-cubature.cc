@@ -33,6 +33,8 @@
 #include <limits.h>
 #include <float.h>
 
+#include <stdexcept>
+
 /* Adaptive multidimensional integration on hypercubes (or, really,
    hyper-rectangles) using cubature rules.
 
@@ -856,8 +858,7 @@ static heap_item heap_pop(heap *h)
     int i, n, child;
 
     if (!(h->n)) {
-        fprintf(stderr, "attempted to pop an empty heap\n");
-        exit(EXIT_FAILURE);
+        throw std::runtime_error("integrate-cubature: attempted to pop an empty heap");
     }
 
     ret = h->items[0];

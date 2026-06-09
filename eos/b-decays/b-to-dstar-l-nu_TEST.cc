@@ -107,9 +107,9 @@ class BToVectorLeptonNeutrinoTest :
                 // Christoph Bobeth: Adjusted test case because increased number of integration points
                 //                   in numerical integration from 256 -> 4096
                 BToVectorLeptonNeutrino d(p, o);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689), 33.3247, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689),   33.3260288,  eps);
                 auto ir = d.prepare(0.001, 10.689);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir), 0.546, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir),                           0.546,      eps);
 
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(),  0.409302220, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(),  0.255523335, eps);
@@ -283,7 +283,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_9",  p, k, o)->evaluate(),  0.013735,  eps);
             }
 
-            // SM tests cf. [DSD2014]
+            // SM tests cf. [DDS:2014A]
             {
                 Parameters p1 = Parameters::Defaults();
                 /*
@@ -350,7 +350,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(), 0.379092, eps);
             }
 
-            // NP tests cf. [DSD2014]
+            // NP tests cf. [DDS:2014A]
             {
                 const double etaEW = 1.0066;
 

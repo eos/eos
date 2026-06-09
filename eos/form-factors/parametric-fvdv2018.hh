@@ -25,6 +25,7 @@
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
 #include <eos/utils/options.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/reference-name.hh>
 
@@ -52,6 +53,7 @@ namespace eos
 
             PartialWaveOption opt_L;
             double _S_switch, _P_switch, _D_switch, _F_switch;
+            cubature::Config cub_conf;
 
             static double _calc_z(const double & t, const double & t_p, const double & t_0);
             inline double _z(const double & t) const;

@@ -68,37 +68,37 @@ namespace eos
     };
 
     double
-    BToKDilepton::AmplitudeGenerator::beta_l(const double & s) const
+    BToKDilepton::AmplitudeGenerator::beta_l(const double & q2) const
     {
-        return std::sqrt(1.0 - 4.0 * m_l() * m_l() / s);
+        return std::sqrt(1.0 - 4.0 * m_l() * m_l() / q2);
     }
 
     double
-    BToKDilepton::AmplitudeGenerator::lambda(const double & s) const
+    BToKDilepton::AmplitudeGenerator::lambda(const double & q2) const
     {
-        return eos::lambda(m_B() * m_B(), m_K() * m_K(), s);
+        return eos::lambda(m_B() * m_B(), m_K() * m_K(), q2);
     }
 
     double
-    BToKDilepton::AmplitudeGenerator::energy(const double & s) const
+    BToKDilepton::AmplitudeGenerator::energy(const double & q2) const
     {
-        return (m_B() * m_B() + m_K() * m_K() - s) / (2.0 * m_B());
+        return (m_B() * m_B() + m_K() * m_K() - q2) / (2.0 * m_B());
     }
 
     double
-    BToKDilepton::AmplitudeGenerator::xi_pseudo(const double & s) const
+    BToKDilepton::AmplitudeGenerator::xi_pseudo(const double & q2) const
     {
-        // cf. [BF2001], Eq. (22)
-        return form_factors->f_p(s);
+        // cf. [BF:2001A], Eq. (22)
+        return form_factors->f_p(q2);
     }
 
     double
-    BToKDilepton::AmplitudeGenerator::normalisation(const double & s) const
+    BToKDilepton::AmplitudeGenerator::normalisation(const double & q2) const
     {
-        // cf. [BHP2007], Eq. (4.2) - (4.4)
+        // cf. [BHP:2007A], Eq. (4.2) - (4.4)
         double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-        return power_of<2>(g_fermi * alpha_e() * lambda_t) * sqrt(lambda(s)) * beta_l(s) * xi_pseudo(s) * xi_pseudo(s) /
+        return power_of<2>(g_fermi * alpha_e() * lambda_t) * sqrt(lambda(q2)) * beta_l(q2) * xi_pseudo(q2) * xi_pseudo(q2) /
                        (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
     }
 }

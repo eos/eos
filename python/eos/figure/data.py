@@ -14,7 +14,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from eos.analysis_file_description import AnalysisFileContext
 from eos.deserializable import Deserializable
 from eos.figure.item import ItemColorCycler
@@ -94,8 +94,16 @@ class DataFile(Deserializable):
             p = eos.Parameters()
             return [p[dist].latex() for dist in variables]
         elif self._type == 'prediction':
+            label_list = []
             o = eos.Observables()
-            return ["$" + o[dist.split(";")[0]].latex() + "$" for dist in variables]
+            p = eos.Parameters()
+            for dist in variables:
+                name = dist.split(";")[0]
+                try:
+                    label_list.append("$" + o[name].latex() + "$")
+                except RuntimeError:
+                    label_list.append(p[name].latex())
+            return label_list
         else:
             eos.error(f"Data file '{self.path}' has an unsupported format")
             raise NotImplementedError

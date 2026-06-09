@@ -32,11 +32,11 @@ namespace eos
                 throw QualifiedNameSyntaxError("A qualified name's prefix part must not be empty");
             }
 
-            // PREFIX := ['a'-'z', 'A'-'Z', '0'-'9', '<', '>', '^', '_', '*', '+', '-', '(', ')']
+            // PREFIX := ['a'-'z', 'A'-'Z', '0'-'9', '<', '>', '^', '_', '*', '+', '-', '(', ')', '/']
             static const char * valid_prefix_characters = "abcdefghijklmnopqrstuvwxyz"
                                                           "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                                                           "0123456789"
-                                                          "<>^_*+-()";
+                                                          "<>^_*+-()/";
 
             auto pos = prefix.find_first_not_of(valid_prefix_characters);
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2023 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -19,9 +19,14 @@
  */
 
 #include "eos/models/model.hh"
+#include "eos/observable.hh"
 #include "eos/utils/exception.hh"
+#include "eos/utils/qualified-name.hh"
 
 #include <boost/python.hpp>
+
+#ifndef EOS_PYTHON__EOS_WRAPPERS_HH
+#  define EOS_PYTHON__EOS_WRAPPERS_HH 1
 
 namespace impl
 {
@@ -40,4 +45,9 @@ namespace impl
     {
         return m.m_b_pole();
     }
+
+    // export helper for Wilson polynomial observables
+    std::tuple<double, std::vector<double>, std::vector<double>> compute_wilson_polynomial_coefficients(const eos::ObservablePtr &, const std::vector<eos::QualifiedName> &);
 } // namespace impl
+
+#endif // EOS_PYTHON__EOS_WRAPPERS_HH

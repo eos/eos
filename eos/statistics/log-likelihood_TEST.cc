@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2015, 2016 Danny van Dyk
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2026 Danny van Dyk
+ * Copyright (c) 2011      Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -132,9 +132,9 @@ namespace eos
                     llh();
 
                     // use cached values
-                    TEST_CHECK_EQUAL(4.250, llh.observable_cache()[0]);
-                    TEST_CHECK_EQUAL(1.300, llh.observable_cache()[1]);
-                    TEST_CHECK_EQUAL(0.115, llh.observable_cache()[2]);
+                    TEST_CHECK_EQUAL(4.250, llh.observable_cache()[ObservableCache::ObservableId(0)]);
+                    TEST_CHECK_EQUAL(1.300, llh.observable_cache()[ObservableCache::ObservableId(1)]);
+                    TEST_CHECK_EQUAL(0.115, llh.observable_cache()[ObservableCache::ObservableId(2)]);
 
                     // check significances
                     auto c = llh.begin();
@@ -146,7 +146,8 @@ namespace eos
                     auto cache = llh.observable_cache();
                     for (unsigned i = 0 ; i < cache.size() ; ++i)
                     {
-                        observable_values += cache.observable(i)->name().str() + " = " + stringify(double(cache[i])) + "; ";
+                        auto id = ObservableCache::ObservableId(i);
+                        observable_values += cache.observable(id)->name().str() + " = " + stringify(double(cache[id])) + "; ";
                     }
                     TEST_CHECK_EQUAL_STR("mass::b(MSbar) = 4.25; mass::c = 1.3; mass::e = 0.115; ", observable_values);
 

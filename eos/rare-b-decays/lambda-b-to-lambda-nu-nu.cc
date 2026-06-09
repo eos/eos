@@ -87,24 +87,24 @@ namespace eos
             u.uses(*model);
         }
 
-        inline std::array<double, 2> angular_coefficients_array(const double & s) const
+        inline std::array<double, 2> angular_coefficients_array(const double & q2) const
         {
             std::array<double, 2> result;
 
             const auto wc = this->wc();
-            const double lambda = eos::lambda(power_of<2>(m_Lambda_b), power_of<2>(m_Lambda), s),
+            const double lambda = eos::lambda(power_of<2>(m_Lambda_b), power_of<2>(m_Lambda), q2),
                          sqrt_lambda = std::sqrt(lambda),
-                         s_minus = power_of<2>(m_Lambda_b - m_Lambda) - s,
-                         s_plus = power_of<2>(m_Lambda_b + m_Lambda) - s;
+                         s_minus = power_of<2>(m_Lambda_b - m_Lambda) - q2,
+                         s_plus = power_of<2>(m_Lambda_b + m_Lambda) - q2;
 
-            std::complex<double> N = g_fermi * alpha_e * lambda_t() * sqrt(s * sqrt_lambda /
+            std::complex<double> N = g_fermi * alpha_e * lambda_t() * sqrt(q2 * sqrt_lambda /
                 3.0 / 2048.0 / power_of<3>(m_Lambda_b) / power_of<5>(M_PI));
 
             std::complex<double>
-                a_perp_plus =   2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * (- sqrt(2 * s_minus) * form_factors->f_perp_v(s)),
-                a_para_plus = - 2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * (- sqrt(2 * s_plus) * form_factors->f_perp_a(s)),
-                a_perp_long =   2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * ((m_Lambda_b + m_Lambda) * sqrt(s_minus / s) * form_factors->f_long_v(s)),
-                a_para_long = - 2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * ((m_Lambda_b - m_Lambda) * sqrt(s_plus / s) * form_factors->f_long_a(s));
+                a_perp_plus =   2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * (- sqrt(2 * s_minus) * form_factors->f_perp_v(q2)),
+                a_para_plus = - 2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * (- sqrt(2 * s_plus) * form_factors->f_perp_a(q2)),
+                a_perp_long =   2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * ((m_Lambda_b + m_Lambda) * sqrt(s_minus / q2) * form_factors->f_long_v(q2)),
+                a_para_long = - 2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * ((m_Lambda_b - m_Lambda) * sqrt(s_plus / q2) * form_factors->f_long_a(q2));
 
             // K1ss
             result[0] = 0.25 * (norm(a_perp_plus) + norm(a_para_plus) + 2 * norm(a_perp_long) + 2 * norm(a_para_long));
@@ -114,16 +114,16 @@ namespace eos
             return result;
         }
 
-        inline LambdaBToLambdaDineutrino::AngularCoefficients differential_angular_coefficients(const double & s) const
+        inline LambdaBToLambdaDineutrino::AngularCoefficients differential_angular_coefficients(const double & q2) const
         {
-            return LambdaBToLambdaDineutrino::AngularCoefficients(angular_coefficients_array(s));
+            return LambdaBToLambdaDineutrino::AngularCoefficients(angular_coefficients_array(q2));
         }
 
-        LambdaBToLambdaDineutrino::AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
+        LambdaBToLambdaDineutrino::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 2> (const double &)> integrand =
                     std::bind(&Implementation<LambdaBToLambdaDineutrino>::angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 2> integrated_angular_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+            std::array<double, 2> integrated_angular_coefficients_array = integrate<1, 2>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
             return LambdaBToLambdaDineutrino::AngularCoefficients(integrated_angular_coefficients_array);
         }
@@ -160,21 +160,21 @@ namespace eos
 
 
     double
-    LambdaBToLambdaDineutrino::differential_decay_width(const double & s) const
+    LambdaBToLambdaDineutrino::differential_decay_width(const double & q2) const
     {
-        return _imp->decay_width(_imp->differential_angular_coefficients(s));
+        return _imp->decay_width(_imp->differential_angular_coefficients(q2));
     }
 
     double
-    LambdaBToLambdaDineutrino::differential_branching_ratio(const double & s) const
+    LambdaBToLambdaDineutrino::differential_branching_ratio(const double & q2) const
     {
-        return differential_decay_width(s) * _imp->tau_Lambda_b() / _imp->hbar();
+        return differential_decay_width(q2) * _imp->tau_Lambda_b() / _imp->hbar();
     }
 
     double
-    LambdaBToLambdaDineutrino::differential_longitudinal_polarisation(const double & s) const
+    LambdaBToLambdaDineutrino::differential_longitudinal_polarisation(const double & q2) const
     {
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
         // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
         return 3.0 * (2.0 * a_c.K1ss - a_c.K1cc) / _imp->decay_width(a_c);
     }

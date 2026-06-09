@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2021 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 #include <eos/utils/thread.hh>
 #include <eos/utils/thread_pool.hh>
 
+#include <atomic>
 #include <list>
 #include <unistd.h>
 
@@ -38,9 +39,7 @@ namespace eos
             unsigned long stop_capacity;
 
             // Thread termination
-            Mutex * const terminate_mutex;
-
-            bool terminate;
+            std::atomic<bool> terminate;
 
             // Job handling
             Mutex * const job_mutex;
@@ -63,37 +62,33 @@ namespace eos
 
                 do
                 {
-                    {
-                        Lock l(*terminate_mutex);
-                        if (terminate)
-                        {
-                            break;
-                        }
-                    }
-
                     job = 0;
 
                     {
                         Lock l(*job_mutex);
+
+                        // Before we check the queue: have we been asked to terminate?
+                        if (terminate)
+                        {
+                            break;
+                        }
 
                         if (queue.empty())
                         {
                             waiting_for_jobs += 1;
                             job_arrival->wait(*job_mutex);
                             waiting_for_jobs -= 1;
+
+                            // We have been woken up and there is no job: have we been asked to terminate?
+                            if (queue.empty() && terminate)
+                            {
+                                break;
+                            }
                         }
 
                         if (queue.empty())
                         {
-                            Lock l(*terminate_mutex);
-                            if (terminate)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                            continue;
                         }
 
                         ticket = queue.front().first;
@@ -101,7 +96,13 @@ namespace eos
                         queue.pop_front();
                     }
 
-                    (*job)();
+                    // Execute the job outside the critical section
+                    if (job)
+                    {
+                        (*job)();
+                        ticket.mark();
+                    }
+
                     {
                         Lock l(*job_mutex);
                         pending_jobs -= 1;
@@ -111,7 +112,6 @@ namespace eos
                             job_capacity->signal();
                         }
                     }
-                    ticket.mark();
                 }
                 while (true);
             }
@@ -137,7 +137,6 @@ namespace eos
                 number_of_threads(_number_of_threads()),
                 nominal_capacity(number_of_threads * 10),
                 stop_capacity(nominal_capacity * 2),
-                terminate_mutex(new Mutex),
                 terminate(false),
                 job_mutex(new Mutex),
                 job_arrival(new ConditionVariable),
@@ -153,10 +152,7 @@ namespace eos
 
             ~Implementation()
             {
-                {
-                    Lock l(*terminate_mutex);
-                    terminate = true;
-                }
+                terminate = true;
 
                 {
                     Lock l(*job_mutex);

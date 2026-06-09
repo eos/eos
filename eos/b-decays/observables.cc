@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2025 Florian Herren
  *
@@ -148,6 +148,31 @@ namespace eos
                         &BToThreeLeptonsNeutrino::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
                         Options{ { "l"_ok, "tau" }, { "lprime"_ok, "e" } }),
+
+                // PDFs
+                make_observable("B_u->enumumu::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                        std::make_tuple("q2", "k2", "z_gamma", "z_w", "phi"),
+                        Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } }),
+
+                make_observable("B_u->enumumu::NormalizationPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } }),
+
+                make_observable("B_u->munuee::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::quintuple_differential_branching_ratio,
+                        std::make_tuple("q2", "k2", "z_gamma", "z_w", "phi"),
+                        Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } }),
+
+                make_observable("B_u->munuee::NormalizationPDF(q2,k2,z_gamma,z_w,phi)",
+                        Unit::None(),
+                        &BToThreeLeptonsNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max"),
+                        Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } }),
             }
         );
 
@@ -277,6 +302,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "pi" }}),
+
+                // PDFs
+                make_observable("B->pilnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "pi" }}),
+
+                make_observable("B->pilnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" }}),
+
+                make_observable("B->pilnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "pi" }}),
+
+                make_observable("B->pilnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "pi" }}),
             }
         );
 
@@ -290,23 +340,23 @@ namespace eos
     make_b_to_d_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B\to \bar{D} \ell^-\bar\nu$ decays)",
+            R"(Observables in $\bar{B}\to D \ell^-\bar\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
-                make_observable("B->Dlnu::dBR/dq2", R"(d\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2)",
+                make_observable("B->Dlnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)/dq^2)",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D" } }),
 
-                make_observable("B->Dlnu::d^2BR/dq2/dcos(theta_l)", R"(d^2\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
+                make_observable("B->Dlnu::d^2BR/dq2/dcos(theta_l)", R"(d^2\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::two_differential_branching_ratio,
                         std::make_tuple("q2", "cos(theta_l)"),
                         Options{ { "P"_ok, "D" } }),
 
-                make_observable("B->Dlnu::BR", R"(\mathcal{B}(B\to \bar{D}\ell^-\bar\nu))",
+                make_observable("B->Dlnu::BR", R"(\mathcal{B}(\bar{B}\to D\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
@@ -340,13 +390,13 @@ namespace eos
                         <<B->Dlnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
                         )"),
 
-                make_observable("B->Dlnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B\to \bar{D}\ell^-\bar\nu)(q^2))",
+                make_observable("B->Dlnu::A_FB(q2)", R"(A_{\mathrm{FB}}(\bar{B}\to D\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D" } }),
 
-                make_observable("B->Dlnu::A_FB", R"(A_{\mathrm{FB}}(B\to \bar{D}\ell^-\bar\nu))",
+                make_observable("B->Dlnu::A_FB", R"(A_{\mathrm{FB}}(\bar{B}\to D\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
@@ -367,6 +417,55 @@ namespace eos
                 make_observable("B->Dlnu::A_l",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::normGamma", R"(\Gamma(\bar{B}\to D\ell^-\bar\nu)_{|V_{cb}|=1})",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::Gamma", R"(\Gamma(\bar{B}\to D\ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::normdGamma/ds",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::dGamma/dq2", R"(d\Gamma(\bar{B}\to D\ell^-\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D" } }),
+
+                // PDFs
+                make_observable("B->Dlnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "D" } }),
+
+                make_observable("B->Dlnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "D" } }),
             }
@@ -409,6 +508,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                // PDFs
+                make_observable("B_s->Klnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->Klnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->Klnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->Klnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "K" }, {"q"_ok, "s"} }),
             }
         );
 
@@ -422,23 +546,29 @@ namespace eos
     make_bs_to_ds_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_s\to \bar{D_s} \ell^-\bar\nu$ decays)",
+            R"(Observables in $\bar{B}_s\to D_s \ell^-\bar\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor.)"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
-                make_observable("B_s->D_slnu::dBR/dq2", R"(d\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)/dq^2)",
+                make_observable("B_s->D_slnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)/dq^2)",
                         Unit::InverseGeV2(),
                         &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu))",
+                make_observable("B_s->D_slnu::dBR/dkperp", R"(d\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)/dk_\perp)",
+                        Unit::InverseGeV(),
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                        std::make_tuple("kperp"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::BR", R"(\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::BR(kperp_min,kperp_max)", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                make_observable("B_s->D_slnu::BR(kperp_min,kperp_max)", R"(\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
                         Unit::InverseGeV(),
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
                         std::make_tuple("kperp_min", "kperp_max"),
@@ -472,13 +602,13 @@ namespace eos
                         <<B_s->D_slnu::BR;U=c,q=s,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
                         )"),
 
-                make_observable("B_s->D_slnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_slnu::A_FB(q2)", R"(A_{\mathrm{FB}}(\bar{B}_s\to D_s\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
                         std::make_tuple("q2"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_slnu::A_FB", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu))",
+                make_observable("B_s->D_slnu::A_FB", R"(A_{\mathrm{FB}}(\bar{B}_s\to D_s\ell^-\bar\nu))",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
@@ -499,6 +629,55 @@ namespace eos
                 make_observable("B_s->D_slnu::A_l",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::normGamma", R"(\Gamma(\bar{B}_s\to D_s\ell^-\bar\nu)_{|V_{cb}|=1})",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::Gamma", R"(\Gamma(\bar{B}_s\to D_s\ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::normdGamma/ds",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::dGamma/dq2", R"(d\Gamma(\bar{B}_s\to D_s\ell^-\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                // PDFs
+                make_observable("B_s->D_slnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_slnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "D_s" }, {"q"_ok, "s"} }),
             }
@@ -560,6 +739,30 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
 
+                // PDFs
+                make_observable("B->etalnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
+
+                make_observable("B->etalnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta" }, {"q"_ok, "u"} }),
             }
         );
 
@@ -606,6 +809,31 @@ namespace eos
                         &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                // PDFs
+                make_observable("B->eta_primelnu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::differential_decay_width,
+                        std::make_tuple("q2"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
+
+                make_observable("B->eta_primelnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "P"_ok, "eta_prime" }, {"q"_ok, "u"} }),
             }
         );
 
@@ -636,6 +864,17 @@ namespace eos
                         Unit::None(),
                         &BToGammaLeptonNeutrino::forward_backward_asymmetry,
                         std::make_tuple("E_gamma_min")),
+
+                // PDF
+                make_observable("B_u->gammalnu::UnnormalizedPDF(E_gamma,cos(theta_l))",
+                        Unit::None(),
+                        &BToGammaLeptonNeutrino::fully_differential_decay_width,
+                        std::make_tuple("E_gamma", "cos(theta_l)")),
+
+                make_observable("B_u->gammalnu::NormalizationPDF(E_gamma,cos(theta_l))",
+                        Unit::None(),
+                        &BToGammaLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("E_gamma_min"))
             }
         );
 
@@ -705,15 +944,26 @@ namespace eos
     make_b_to_dstar_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B\to \bar{D}^* \ell^-\bar\nu$ decays)",
+            R"(Observables in $\bar{B}\to D^* \ell^-\bar\nu$ decays)",
             R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B -> D^* l nu
 
                 // q^2 - differential
+                make_observable("B->D^*lnu::dGamma/dq2", R"(d\Gamma(\bar{B}\to D^*\ell^-\bar\nu)/dq^2)",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::differential_decay_width,
+                                std::make_tuple("q2"),
+                                { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::dBR/dq2", R"(d\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu)/dq^2)",
+                make_observable("B->D^*lnu::normdGamma/dq2",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::normalized_differential_decay_width,
+                                std::make_tuple("q2"),
+                                { { "V"_ok, "D^*" } }),
+
+                make_observable("B->D^*lnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}\to D^*\ell^-\bar\nu)/dq^2)",
                                 Unit::InverseGeV2(),
                                 &BToVectorLeptonNeutrino::differential_branching_ratio,
                                 std::make_tuple("q2"),
@@ -741,79 +991,79 @@ namespace eos
                                 <<B->D^*lnu::dBR/dq2;l=mu>>
                                 )"),
 
-                make_observable("B->D^*lnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::A_FB(q2)", R"(A_{\mathrm{FB}}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_a_fb_leptonic,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_1c(q2)", R"(J_{1c}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_1c(q2)", R"(J_{1c}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J1c,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_1s(q2)", R"(J_{1s}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_1s(q2)", R"(J_{1s}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J1s,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_2c(q2)", R"(J_{2c}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_2c(q2)", R"(J_{2c}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J2c,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_2s(q2)", R"(J_{2s}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_2s(q2)", R"(J_{2s}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J2s,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_3(q2)", R"(J_{3}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_3(q2)", R"(J_{3}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J3,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_4(q2)", R"(J_{4}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_4(q2)", R"(J_{4}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J4,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_5(q2)", R"(J_{5}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_5(q2)", R"(J_{5}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J5,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_6c(q2)", R"(J_{6c}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_6c(q2)", R"(J_{6c}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J6c,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_6s(q2)", R"(J_{6s}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_6s(q2)", R"(J_{6s}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J6s,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_7(q2)", R"(J_{7}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_7(q2)", R"(J_{7}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J7,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_8(q2)", R"(J_{8}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_8(q2)", R"(J_{8}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J8,
                                 std::make_tuple("q2"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_observable("B->D^*lnu::J_9(q2)", R"(J_{9}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                make_observable("B->D^*lnu::J_9(q2)", R"(J_{9}(\bar{B}\to D^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J9,
                                 std::make_tuple("q2"),
@@ -821,13 +1071,13 @@ namespace eos
 
                 // q^2 - integrated
 
-                make_observable("B->D^*lnu::normGamma_CP_specific", R"(\Gamma(B\to \bar{D}^*\ell^-\bar\nu)_{|V_{cb}|=1})",
+                make_observable("B->D^*lnu::normGamma_CP_specific", R"(\Gamma(\bar{B}\to D^*\ell^-\bar\nu)_{|V_{cb}|=1})",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::normalized_decay_width,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_expression_observable("B->D^*lnu::normGamma", R"(\bar{\Gamma}(B\to \bar{D}^*\ell^-\bar\nu)_{|V_{cb}|=1})",
+                make_expression_observable("B->D^*lnu::normGamma", R"(\bar{\Gamma}(\bar{B}\to D^*\ell^-\bar\nu)_{|V_{cb}|=1})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::normGamma_CP_specific;cp-conjugate=false>>
@@ -835,13 +1085,27 @@ namespace eos
                                 0.5 * <<B->D^*lnu::normGamma_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_observable("B->D^*lnu::BR_CP_specific", R"(\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_observable("B->D^*lnu::Gamma_CP_specific", R"(\Gamma(\bar{B}\to D^*\ell^-\bar\nu))",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_decay_width,
+                                std::make_tuple("q2_min", "q2_max"),
+                                { { "V"_ok, "D^*" } }),
+
+                make_expression_observable("B->D^*lnu::Gamma", R"(\bar{\Gamma}(\bar{B}\to D^*\ell^-\bar\nu))",
+                                Unit::None(),
+                                R"(
+                                0.5 * <<B->D^*lnu::Gamma_CP_specific;cp-conjugate=false>>
+                                +
+                                0.5 * <<B->D^*lnu::Gamma_CP_specific;cp-conjugate=true>>
+                                )"),
+
+                make_observable("B->D^*lnu::BR_CP_specific", R"(\mathcal{B}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_expression_observable("B->D^*lnu::BR", R"(\bar{\mathcal{B}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::BR", R"(\bar{\mathcal{B}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::BR_CP_specific;cp-conjugate=false>>
@@ -849,7 +1113,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::BR_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::BRbar", R"(\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::BRbar", R"(\mathcal{B}(\bar{B}\to D^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -857,7 +1121,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
                                 )"),
 
-                make_expression_observable("B->D^*lnu::DeltaBR", R"(\Delta\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::DeltaBR", R"(\Delta\mathcal{B}(\bar{B}\to D^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 <<B->D^*lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -893,140 +1157,140 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_C^1", R"(A_{\mathrm{C}}^1(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_C^1", R"(A_{\mathrm{C}}^1(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_c_1,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_C^2", R"(A_{\mathrm{C}}^2(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_C^2", R"(A_{\mathrm{C}}^2(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_c_2,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_C^3", R"(A_{\mathrm{C}}^3(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_C^3", R"(A_{\mathrm{C}}^3(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_c_3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_T^1", R"(A_{\mathrm{T}}^1(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_T^1", R"(A_{\mathrm{T}}^1(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_t_1,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_T^2", R"(A_{\mathrm{T}}^2(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_T^2", R"(A_{\mathrm{T}}^2(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_t_2,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_T^3", R"(A_{\mathrm{T}}^3(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_T^3", R"(A_{\mathrm{T}}^3(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_t_3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_1c", R"(J_{1c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_1c", R"(J_{1c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J1c,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_1s", R"(J_{1s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_1s", R"(J_{1s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J1s,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_2c", R"(J_{2c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_2c", R"(J_{2c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J2c,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_2s", R"(J_{2s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_2s", R"(J_{2s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J2s,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_3", R"(J_{3}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_3", R"(J_{3}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_4", R"(J_{4}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_4", R"(J_{4}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J4,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_5", R"(J_{5}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_5", R"(J_{5}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J5,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_6c", R"(J_{6c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_6c", R"(J_{6c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J6c,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_6s", R"(J_{6s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_6s", R"(J_{6s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J6s,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_7", R"(J_{7}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_7", R"(J_{7}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J7,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_8", R"(J_{8}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_8", R"(J_{8}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J8,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::J_9", R"(J_{9}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::J_9", R"(J_{9}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J9,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_cacheable_observable("B->D^*lnu::A_FB_CP_specific", R"(A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::A_FB_CP_specific", R"(A_{\mathrm{FB}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_fb_leptonic,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_expression_observable("B->D^*lnu::A_FB", R"(A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_FB", R"(A_{\mathrm{FB}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::A_FB_CP_specific;cp-conjugate=false>>
@@ -1034,7 +1298,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::A_FB_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::Abar_FB", R"(\bar{A}_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::Abar_FB", R"(\bar{A}_{\mathrm{FB}}(\bar{B}\to D^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::A_FB;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -1050,14 +1314,14 @@ namespace eos
                                 <<B->D^*lnu::A_FB;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
                                 )"),
 
-                make_cacheable_observable("B->D^*lnu::F_L_CP_specific", R"(F_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::F_L_CP_specific", R"(F_{\mathrm{L}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_f_L,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_expression_observable("B->D^*lnu::F_L", R"(F_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::F_L", R"(F_{\mathrm{L}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::F_L_CP_specific;cp-conjugate=false>>
@@ -1065,7 +1329,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::F_L_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::Fbar_L", R"(\bar{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::Fbar_L", R"(\bar{F}_{\mathrm{L}}(\bar{B}\to D^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::F_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -1081,14 +1345,14 @@ namespace eos
                                 <<B->D^*lnu::F_L;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
                                 )"),
 
-                make_cacheable_observable("B->D^*lnu::Ftilde_L_CP_specific", R"(\tilde{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::Ftilde_L_CP_specific", R"(\tilde{F}_{\mathrm{L}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_ftilde_L,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D^*" } }),
 
-                make_expression_observable("B->D^*lnu::Ftilde_L", R"(\tilde{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::Ftilde_L", R"(\tilde{F}_{\mathrm{L}}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::Ftilde_L_CP_specific;cp-conjugate=false>>
@@ -1096,7 +1360,7 @@ namespace eos
                                 0.5 * <<B->D^*lnu::Ftilde_L_CP_specific;cp-conjugate=true>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::Ftildebar_L", R"(\bar{\tilde{F}}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
+                make_expression_observable("B->D^*lnu::Ftildebar_L", R"(\bar{\tilde{F}}_{\mathrm{L}}(\bar{B}\to D^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B->D^*lnu::Ftilde_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
@@ -1116,7 +1380,7 @@ namespace eos
                 *
                 *    S_i ~ (J_i + barJ_i) / (Gam_i + barGam_i)
                 */
-                make_expression_observable("B->D^*lnu::S_1c", R"(S_{1c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_1c", R"(S_{1c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_1c;cp-conjugate=false>> + <<B->D^*lnu::J_1c;cp-conjugate=true>>)
@@ -1124,7 +1388,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_1s", R"(S_{1s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_1s", R"(S_{1s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_1s;cp-conjugate=false>> + <<B->D^*lnu::J_1s;cp-conjugate=true>>)
@@ -1132,7 +1396,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_2c", R"(S_{2c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_2c", R"(S_{2c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_2c;cp-conjugate=false>> + <<B->D^*lnu::J_2c;cp-conjugate=true>>)
@@ -1140,7 +1404,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_2s", R"(S_{2s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_2s", R"(S_{2s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_2s;cp-conjugate=false>> + <<B->D^*lnu::J_2s;cp-conjugate=true>>)
@@ -1148,7 +1412,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_3", R"(S_3(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_3", R"(S_3(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_3;cp-conjugate=false>> + <<B->D^*lnu::J_3;cp-conjugate=true>>)
@@ -1172,7 +1436,7 @@ namespace eos
                                 <<B->D^*lnu::S_3;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_4", R"(S_4(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_4", R"(S_4(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_4;cp-conjugate=false>> + <<B->D^*lnu::J_4;cp-conjugate=true>>)
@@ -1180,7 +1444,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_5", R"(S_5(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_5", R"(S_5(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_5;cp-conjugate=false>> + <<B->D^*lnu::J_5;cp-conjugate=true>>)
@@ -1188,7 +1452,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_6c", R"(S_{6c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_6c", R"(S_{6c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_6c;cp-conjugate=false>> + <<B->D^*lnu::J_6c;cp-conjugate=true>>)
@@ -1196,7 +1460,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_6s", R"(S_{6s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_6s", R"(S_{6s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_6s;cp-conjugate=false>> + <<B->D^*lnu::J_6s;cp-conjugate=true>>)
@@ -1204,7 +1468,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_7", R"(S_7(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_7", R"(S_7(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_7;cp-conjugate=false>> + <<B->D^*lnu::J_7;cp-conjugate=true>>)
@@ -1212,7 +1476,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_8", R"(S_8(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_8", R"(S_8(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_8;cp-conjugate=false>> + <<B->D^*lnu::J_8;cp-conjugate=true>>)
@@ -1220,7 +1484,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::S_9", R"(S_9(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::S_9", R"(S_9(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_9;cp-conjugate=false>> + <<B->D^*lnu::J_9;cp-conjugate=true>>)
@@ -1232,7 +1496,7 @@ namespace eos
                 *
                 *    A_i ~ (J_i - barJ_i) / (Gam_i + barGam_i)
                 */
-                make_expression_observable("B->D^*lnu::A_1c", R"(A_{1c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_1c", R"(A_{1c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_1c;cp-conjugate=false>> - <<B->D^*lnu::J_1c;cp-conjugate=true>>)
@@ -1240,7 +1504,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_1s", R"(A_{1s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_1s", R"(A_{1s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_1s;cp-conjugate=false>> - <<B->D^*lnu::J_1s;cp-conjugate=true>>)
@@ -1248,7 +1512,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_2c", R"(A_{2c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_2c", R"(A_{2c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_2c;cp-conjugate=false>> - <<B->D^*lnu::J_2c;cp-conjugate=true>>)
@@ -1256,7 +1520,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_2s", R"(A_{2s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_2s", R"(A_{2s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_2s;cp-conjugate=false>> - <<B->D^*lnu::J_2s;cp-conjugate=true>>)
@@ -1264,7 +1528,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_3", R"(A_3(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_3", R"(A_3(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_3;cp-conjugate=false>> - <<B->D^*lnu::J_3;cp-conjugate=true>>)
@@ -1272,7 +1536,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_4", R"(A_4(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_4", R"(A_4(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_4;cp-conjugate=false>> - <<B->D^*lnu::J_4;cp-conjugate=true>>)
@@ -1280,7 +1544,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_5", R"(A_5(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_5", R"(A_5(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_5;cp-conjugate=false>> - <<B->D^*lnu::J_5;cp-conjugate=true>>)
@@ -1288,7 +1552,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_6c", R"(A_{6c}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_6c", R"(A_{6c}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_6c;cp-conjugate=false>> - <<B->D^*lnu::J_6c;cp-conjugate=true>>)
@@ -1296,7 +1560,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_6s", R"(A_{6s}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_6s", R"(A_{6s}(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_6s;cp-conjugate=false>> - <<B->D^*lnu::J_6s;cp-conjugate=true>>)
@@ -1304,7 +1568,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_7", R"(A_7(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_7", R"(A_7(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_7;cp-conjugate=false>> - <<B->D^*lnu::J_7;cp-conjugate=true>>)
@@ -1312,7 +1576,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_8", R"(A_8(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_8", R"(A_8(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_8;cp-conjugate=false>> - <<B->D^*lnu::J_8;cp-conjugate=true>>)
@@ -1320,7 +1584,7 @@ namespace eos
                                 <<B->D^*lnu::normGamma>>
                                 )"),
 
-                make_expression_observable("B->D^*lnu::A_9", R"(A_9(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_expression_observable("B->D^*lnu::A_9", R"(A_9(\bar{B}\to D^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 R"(
                                 0.5 * (<<B->D^*lnu::J_9;cp-conjugate=false>> - <<B->D^*lnu::J_9;cp-conjugate=true>>)
@@ -1349,6 +1613,19 @@ namespace eos
                                 -
                                 <<B->D^*lnu::P(w_min,w_max);l=e>>[w_e_max=>w_max,w_e_min=>w_min]
                                 )"),
+
+                // PDF
+                make_observable("B->D^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                                std::make_tuple("q2", "cos(theta_l)", "cos(theta_D)", "phi"),
+                                Options{ { "V"_ok, "D^*" } }),
+
+                make_observable("B->D^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_D),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "D^*" } }),
 
                 // B -> D pi l nu
                 make_observable("B->Dpilnu::P(cos(theta_D))",
@@ -1418,7 +1695,19 @@ namespace eos
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B_s -> D_s^* l nu
-                make_observable("B_s->D_s^*lnu::dBR/dq2", R"(d\mathcal{B}(B_s\to \bar{D}_s^*\ell^-\bar\nu)/dq^2)",
+                make_observable("B_s->D_s^*lnu::dGamma/dq2", R"(d\Gamma(\bar{B}_s\to D_s^*\ell^-\bar\nu)/dq^2)",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::differential_decay_width,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_s^*lnu::normdGamma/dq2",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::normalized_differential_decay_width,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_s^*lnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_s\to D_s^*\ell^-\bar\nu)/dq^2)",
                                 Unit::InverseGeV2(),
                                 &BToVectorLeptonNeutrino::differential_branching_ratio,
                                 std::make_tuple("q2"),
@@ -1430,79 +1719,79 @@ namespace eos
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::A_FB(q2)", R"(A_{\mathrm{FB}}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_a_fb_leptonic,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_1c(q2)", R"(J_{1c}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_1c(q2)", R"(J_{1c}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J1c,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_1s(q2)", R"(J_{1s}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_1s(q2)", R"(J_{1s}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J1s,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_2c(q2)", R"(J_{2c}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_2c(q2)", R"(J_{2c}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J2c,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_2s(q2)", R"(J_{2s}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_2s(q2)", R"(J_{2s}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J2s,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_3(q2)", R"(J_{3}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_3(q2)", R"(J_{3}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J3,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_4(q2)", R"(J_{4}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_4(q2)", R"(J_{4}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J4,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_5(q2)", R"(J_{5}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_5(q2)", R"(J_{5}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J5,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_6c(q2)", R"(J_{6c}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_6c(q2)", R"(J_{6c}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J6c,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_6s(q2)", R"(J_{6s}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_6s(q2)", R"(J_{6s}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J6s,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_7(q2)", R"(J_{7}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_7(q2)", R"(J_{7}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J7,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_8(q2)", R"(J_{8}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_8(q2)", R"(J_{8}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J8,
                                 std::make_tuple("q2"),
                                 Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::J_9(q2)", R"(J_{9}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                make_observable("B_s->D_s^*lnu::J_9(q2)", R"(J_{9}(\bar{B}_s\to D_s^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::differential_J9,
                                 std::make_tuple("q2"),
@@ -1510,13 +1799,13 @@ namespace eos
 
                 // q^2 - integrated
 
-                make_observable("B_s->D_s^*lnu::normGamma_CP_specific", R"(\Gamma(B_s\to \bar{D}_s^*\ell^-\bar\nu)_{|V_{cb}|=1})",
+                make_observable("B_s->D_s^*lnu::normGamma_CP_specific", R"(\Gamma(\bar{B}_s\to D_s^*\ell^-\bar\nu)_{|V_{cb}|=1})",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::normalized_decay_width,
                                 std::make_tuple("q2_min", "q2_max"),
                                 Options{ { "U"_ok, "c" }, {"q"_ok, "s"}, {"I"_ok, "0"} }),
 
-                make_expression_observable("B_s->D_s^*lnu::normGamma", R"(\bar{\Gamma}(B_s\to \bar{D}_s^*\ell^-\bar\nu)_{|V_{cb}|=1})",
+                make_expression_observable("B_s->D_s^*lnu::normGamma", R"(\bar{\Gamma}(\bar{B}_s\to D_s^*\ell^-\bar\nu)_{|V_{cb}|=1})",
                                 Unit::None(),
                                 R"(
                                 0.5 * <<B_s->D_s^*lnu::normGamma_CP_specific;cp-conjugate=false>>
@@ -1524,8 +1813,13 @@ namespace eos
                                 0.5 * <<B_s->D_s^*lnu::normGamma_CP_specific;cp-conjugate=true>>
                                 )"),
 
+                make_observable("B_s->D_s^*lnu::Gamma", R"(\Gamma(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_decay_width,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_observable("B_s->D_s^*lnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_observable("B_s->D_s^*lnu::BR", R"(\mathcal{B}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                 std::make_tuple("q2_min", "q2_max"),
@@ -1553,154 +1847,154 @@ namespace eos
                                 <<B_s->D_s^*lnu::BR;U=c,q=s,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
                                 )"),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_FB", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_FB", R"(A_{\mathrm{FB}}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_fb_leptonic,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_L", R"(A_L(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_L", R"(A_L(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_amplitude_polarization_L,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_T", R"(A_T(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_T", R"(A_T(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_amplitude_polarization_T,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::F_L", R"(F_{\mathrm{L}}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::F_L", R"(F_{\mathrm{L}}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_f_L,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_C^1", R"(A_{\mathrm{C}}^1(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_C^1", R"(A_{\mathrm{C}}^1(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_c_1,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_C^2", R"(A_{\mathrm{C}}^2(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_C^2", R"(A_{\mathrm{C}}^2(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_c_2,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_C^3", R"(A_{\mathrm{C}}^3(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_C^3", R"(A_{\mathrm{C}}^3(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_c_3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_T^1", R"(A_{\mathrm{T}}^1(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_T^1", R"(A_{\mathrm{T}}^1(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_t_1,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_T^2", R"(A_{\mathrm{T}}^2(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_T^2", R"(A_{\mathrm{T}}^2(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_t_2,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::A_T^3", R"(A_{\mathrm{T}}^3(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::A_T^3", R"(A_{\mathrm{T}}^3(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_a_t_3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_1c", R"(J_{1c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_1c", R"(J_{1c}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J1c,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_1s", R"(J_{1s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_1s", R"(J_{1s}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J1s,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_2c", R"(J_{2c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_2c", R"(J_{2c}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J2c,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_2s", R"(J_{2s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_2s", R"(J_{2s}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J2s,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_3", R"(J_{3}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_3", R"(J_{3}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_4", R"(J_{4}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_4", R"(J_{4}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J4,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_5", R"(J_{5}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_5", R"(J_{5}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J5,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_6c", R"(J_{6c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_6c", R"(J_{6c}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J6c,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_6s", R"(J_{6s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_6s", R"(J_{6s}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J6s,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_7", R"(J_{7}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_7", R"(J_{7}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J7,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_8", R"(J_{8}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_8", R"(J_{8}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J8,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
 
-                make_cacheable_observable("B_s->D_s^*lnu::J_9", R"(J_{9}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_cacheable_observable("B_s->D_s^*lnu::J_9", R"(J_{9}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_J9,
@@ -1718,7 +2012,7 @@ namespace eos
                 *    S_i ~ (J_i + barJ_i) / (Gam_i + barGam_i)
                 */
 
-                make_expression_observable("B_s->D_s^*lnu::S_1c", R"(S_{1c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_1c", R"(S_{1c}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_1c;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_1c;cp-conjugate=true>>)
@@ -1726,7 +2020,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_1s", R"(S_{1s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_1s", R"(S_{1s}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_1s;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_1s;cp-conjugate=true>>)
@@ -1734,7 +2028,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_2c", R"(S_{2c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_2c", R"(S_{2c}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_2c;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_2c;cp-conjugate=true>>)
@@ -1742,7 +2036,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_2s", R"(S_{2s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_2s", R"(S_{2s}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_2s;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_2s;cp-conjugate=true>>)
@@ -1750,7 +2044,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_3", R"(S_{3}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_3", R"(S_{3}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_3;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_3;cp-conjugate=true>>)
@@ -1758,7 +2052,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_4", R"(S_{4}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_4", R"(S_{4}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_4;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_4;cp-conjugate=true>>)
@@ -1766,7 +2060,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_5", R"(S_{5}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_5", R"(S_{5}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_5;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_5;cp-conjugate=true>>)
@@ -1774,7 +2068,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_6c", R"(S_{6c}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_6c", R"(S_{6c}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_6c;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_6c;cp-conjugate=true>>)
@@ -1782,7 +2076,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_6s", R"(S_{6s}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_6s", R"(S_{6s}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_6s;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_6s;cp-conjugate=true>>)
@@ -1790,7 +2084,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_7", R"(S_{7}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_7", R"(S_{7}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_7;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_7;cp-conjugate=true>>)
@@ -1798,7 +2092,7 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_8", R"(S_{8}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_8", R"(S_{8}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_8;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_8;cp-conjugate=true>>)
@@ -1806,13 +2100,26 @@ namespace eos
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
 
-                make_expression_observable("B_s->D_s^*lnu::S_9", R"(S_{9}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                make_expression_observable("B_s->D_s^*lnu::S_9", R"(S_{9}(\bar{B}_s\to D_s^*\ell^-\bar\nu))",
                         Unit::None(),
                         R"(
                         0.5 * (<<B_s->D_s^*lnu::J_9;cp-conjugate=false>> + <<B_s->D_s^*lnu::J_9;cp-conjugate=true>>)
                         /
                         <<B_s->D_s^*lnu::normGamma>>
                         )"),
+
+                // PDF
+                make_observable("B_s->D_s^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                                std::make_tuple("q2", "cos(theta_l)", "cos(theta_D_s)", "phi"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
+
+                make_observable("B_s->D_s^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "D_s^*" }, {"q"_ok, "s"} }),
             }
         );
 
@@ -2092,6 +2399,85 @@ namespace eos
                         &BToVectorLeptonNeutrino::integrated_pdf_w,
                         std::make_tuple("w_min", "w_max"),
                         { { "U"_ok, "u" }, {"q"_ok, "s"}, {"I"_ok, "1/2"} }),
+
+                // PDF
+                make_observable("B_s->K^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
+                                std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi"),
+                                Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, {"I"_ok, "1/2"} }),
+
+                make_observable("B_s->K^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_K),phi)",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, {"I"_ok, "1/2"} }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+
+    // }}}
+    // B_c -> J/psi l nu
+    // {{{
+    ObservableGroup
+    make_bc_to_jpsi_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\bar{B}_c\to J/\psi \ell^-\bar\nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor.)"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                // B_c -> J/psi l nu
+                make_observable("B_c->J/psilnu::dGamma/dq2", R"(d\Gamma(\bar{B}_c\to J/\psi\ell^-\bar\nu)/dq^2)",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::differential_decay_width,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::Gamma", R"(\Gamma(\bar{B}_c\to J/\psi\ell^-\bar\nu))",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_decay_width,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::dBR/dq2", R"(d\mathcal{B}(\bar{B}_c\to J/\psi\ell^-\bar\nu)/dq^2)",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::differential_branching_ratio,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::BR", R"(\mathcal{B}(\bar{B}_c\to J/\psi\ell^-\bar\nu))",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                // normalized |V_cb|=1
+                make_observable("B_c->J/psilnu::normdGamma/dq2",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::normalized_differential_decay_width,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::normGamma", R"(\Gamma(\bar{B}_c\to J/\psi\ell^-\bar\nu)_{|V_{cb}|=1})",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_decay_width,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::normdBR/dq2",
+                                Unit::InverseGeV2(),
+                                &BToVectorLeptonNeutrino::normalized_differential_branching_ratio,
+                                std::make_tuple("q2"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
+
+                make_observable("B_c->J/psilnu::normBR", R"(\mathcal{B}(\bar{B}_c\to J/\psi\ell^-\bar\nu)_{|V_{cb}|=1})",
+                                Unit::None(),
+                                &BToVectorLeptonNeutrino::normalized_integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "V"_ok, "J/psi" }, {"q"_ok, "c"} }),
             }
         );
 
@@ -2263,6 +2649,19 @@ namespace eos
                         &BToPPLeptonNeutrino::q2_integrated_mesonic_afb,
                         std::make_tuple("sqrt(k2)_min", "sqrt(k2)_max"),
                         { { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} }),
+
+                // PDF
+                make_observable("B^+->pi^+pi^-lnu::UnnormalizedPDF(q2,k2,cos(theta_pi))",
+                                Unit::None(),
+                                &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
+                                std::make_tuple("q2", "k2", "cos(theta_pi)"),
+                                { { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} }),
+
+                make_observable("B^+->pi^+pi^-lnu::NormalizationPDF(q2,k2,cos(theta_pi))",
+                                Unit::None(),
+                                &BToPiPiLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max", "cos(theta_pi)_min", "cos(theta_pi)_max"),
+                                { { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} }),
             }
         );
 
@@ -2410,6 +2809,17 @@ namespace eos
                         &LambdaBToLambdaCLeptonNeutrino::integrated_k4s,
                         std::make_tuple("q2_min", "q2_max")),
 
+                // PDFs
+                make_observable("Lambda_b->Lambda_clnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_L),phi)",
+                        Unit::None(),
+                        &LambdaBToLambdaCLeptonNeutrino::four_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_L)", "phi")),
+
+                make_observable("Lambda_b->Lambda_clnu::NormalizationPDF(q2,cos(theta_l),cos(theta_L),phi)",
+                        Unit::None(),
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max")),
+
                 // Lambda_b -> Lambda_c(2595) l nubar
                 make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/ds", R"(d\mathcal{B}/dq^2(\Lambda_b\to\Lambda_c(2595) \ell^-\bar\nu))",
                         Unit::InverseGeV2(),
@@ -2497,7 +2907,18 @@ namespace eos
                         <<Lambda_b->Lambda_c(2625)lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
                         /
                         <<Lambda_b->Lambda_c(2625)lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
-                        )")
+                        )"),
+
+                // PDFs
+                make_observable("Lambda_b->Lambda_c(2625)lnu::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &LambdaBToLambdaC2595LeptonNeutrino::double_differential_branching_ratio,
+                        std::make_tuple("q2", "cos(theta_l)")),
+
+                make_observable("Lambda_b->Lambda_c(2625)lnu::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &LambdaBToLambdaC2595LeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max")),
             }
         );
 
@@ -3586,6 +4007,9 @@ namespace eos
                 // B_s -> V l^- nubar
                 make_bs_to_kstar_l_nu_group(),
                 make_bs_to_dsstar_l_nu_group(),
+
+                // B_c -> V l^- nubar
+                make_bc_to_jpsi_l_nu_group(),
 
                 // B_{u,d} -> P P l^- nubar
                 make_b_to_pi_pi_l_nu_group(),

@@ -5,12 +5,8 @@ import inspect
 import os
 import eos
 
-class TestFailedError(BaseException):
-    def __init__(self, msg):
-        self.msg = msg
-
-class DocTests:
-    def check_000_Parameters(self):
+class DocTests(unittest.TestCase):
+    def test_000_Parameters(self):
         """Check the latex representation of all the parameters"""
         from matplotlib.texmanager import TexManager
 
@@ -22,19 +18,10 @@ class DocTests:
                 for parameter in group:
                     try:
                         texmanager.get_text_width_height_descent(parameter.latex(), fontsize=12)
-                    except:
-                        raise TestFailedError(f"Cannot compile latex representation of parameter {parameter.name()}")
+                    except Exception as e:
+                        self.fail(f"Cannot compile latex representation of parameter {parameter.name()}, caucht exception of type {type(e).__name__}: {e}")
 
-# Run legacy test cases
-tests = DocTests()
-for (name, testcase) in inspect.getmembers(tests, predicate=inspect.ismethod):
-    print("%s: " % name)
-    try:
-        testcase()
-    except TestFailedError as e:
-        print("    failed with error: %s" % e.msg)
-        exit(1)
-    print("    passed")
 
 # Run new tests
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()

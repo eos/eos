@@ -15,6 +15,7 @@ SUBDIRS = \
 	nonleptonic-amplitudes \
 	rare-b-decays \
 	b-decays \
+	rare-c-decays \
 	c-decays \
 	s-decays \
 	tau-decays \
@@ -48,6 +49,7 @@ libeos_la_LIBADD = \
 	$(top_builddir)/eos/s-decays/libeossdecays.la \
 	$(top_builddir)/eos/tau-decays/libeostaudecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/eos/rare-c-decays/libeosrarecdecays.la \
 	$(top_builddir)/eos/meson-mixing/libeosmesonmixing.la \
 	$(top_builddir)/eos/scattering/libeosscattering.la
 
@@ -79,6 +81,7 @@ LDADD = \
 	$(top_builddir)/eos/nonleptonic-amplitudes/libeosnonleptonicamplitudes.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/eos/rare-c-decays/libeosrarecdecays.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/scattering/libeosscattering.la \
 	$(top_builddir)/eos/tau-decays/libeostaudecays.la \

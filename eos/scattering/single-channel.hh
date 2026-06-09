@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2024 Florian Herren
+ * Copyright (c) 2024-2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ namespace eos
             virtual complex<double> scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
             virtual complex<double> omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
             virtual complex<double> isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
-            virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const unsigned & npoints, const unsigned & l, const IsospinRepresentation & i) const = 0;
+            virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l, const IsospinRepresentation & i) const = 0;
 
     };
 

@@ -1,0 +1,33 @@
+# vim: set fdm=marker :
+
+#######################
+# D_s decay constants #
+#######################
+# {{{
+D_s^*::decay-constants@PZ:2021A:
+    type: MultivariateGaussian
+    observables: [ "decay-constant::D_s", "decay-constant::D_s^*" ]
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    means: [ 0.2257, 0.279]
+    sigma-stat-hi: [ 0.0171, 0.019]
+    sigma-stat-lo: [ 0.0174, 0.019]
+    sigma-sys: [ 0., 0.]
+    # Correlation estimated via error propagation
+    correlations:
+      - [1., 0.5]
+      - [0.5, 1.]
+D_s^*_T::decay-constants@PZ:2021A:
+    type: MultivariateGaussian
+    observables: [ "decay-constant::D_s", "decay-constant::D_s^*,T" ]
+    kinematics: [ {}, {} ]
+    options: [ {}, {} ]
+    means: [ 0.2257, 0.256]
+    sigma-stat-hi: [ 0.0171, 0.016]
+    sigma-stat-lo: [ 0.0174, 0.017]
+    sigma-sys: [ 0., 0. ]
+    # Correlation estimated via error propagation
+    correlations:
+      - [1., 0.64]
+      - [0.64, 1.]
+#}}}

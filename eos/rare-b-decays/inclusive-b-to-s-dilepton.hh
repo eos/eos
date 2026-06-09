@@ -35,7 +35,7 @@ namespace eos
      */
 
 
-    // As given in [HLMW2005]
+    // As given in [HLMW:2005A]
     struct HLMW2005
     {
     };
@@ -50,10 +50,10 @@ namespace eos
             ~BToXsDilepton();
 
             // Differential Observables
-            double differential_branching_ratio(const double & s) const;
+            double differential_branching_ratio(const double & q2) const;
 
             // Integrated Observables
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             // Diagnostic Values
             Diagnostics diagnostics() const;

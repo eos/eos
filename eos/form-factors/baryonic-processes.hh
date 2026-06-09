@@ -75,6 +75,26 @@ namespace eos
         static constexpr double chi_t5 = 0.88e-2 / (1.275 * 1.275);
     };
 
+    struct LambdaCToNeutron {
+        static constexpr const char * label = "Lambda_c->neutron";
+        static constexpr const char * name_1 = "mass::Lambda_c";
+        static constexpr const char * name_2 = "mass::neutron";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
+        // initial state mass
+        static constexpr double m1 = 2.2865;
+        // final state mass
+        static constexpr double m2 = 0.9395654205;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // OPE results for the unitarity bounds
+        static constexpr double chi_0m = 1.38e-2;
+        static constexpr double chi_0p = 2.51e-2;
+        static constexpr double chi_1m = 1.52e-2 / (1.275 * 1.275);
+        static constexpr double chi_1p = 0.98e-2 / (1.275 * 1.275);
+        static constexpr double chi_t  = 1.12e-2 / (1.275 * 1.275);
+        static constexpr double chi_t5 = 0.88e-2 / (1.275 * 1.275);
+    };
+
     /*
      * J=1/2^+ -> J=1/2^- transitions
      */
@@ -90,7 +110,7 @@ namespace eos
         // pair production threshold: Lambda_b + Lambda_c(2625)
         static constexpr double tp = (m1 + m2) * (m1 + m2);
         // first resonances sorted by spin/parity
-        // we use the shifts from [DLM2015], table VII.
+        // we use the shifts from [DLM:2015A], table VII.
         static constexpr double mBc = 6.2751;
         static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
@@ -113,7 +133,7 @@ namespace eos
         // pair production threshold: Lambda_b + Lambda_c(2625)
         static constexpr double tp = (m1 + m2) * (m1 + m2);
         // first resonances sorted by spin/parity
-        // we use the shifts from [DLM2015], table VII.
+        // we use the shifts from [DLM:2015A], table VII.
         static constexpr double mBc = 6.2751;
         static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);

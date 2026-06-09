@@ -22,7 +22,9 @@ import numpy as np
 import json
 
 class PyhfLogLikelihood:
-    def __init__(self, cache, workspace, parameter_map={}):
+    def __init__(self, cache, workspace, parameter_map=None):
+        if parameter_map is None:
+            parameter_map = {}
         try:
             import pyhf
         except ModuleNotFoundError:
@@ -38,7 +40,7 @@ class PyhfLogLikelihood:
                 with open(workspace) as f:
                     f = json.load(f)
                 self.workspace = pyhf.Workspace(f)
-            except:
+            except Exception:
                 raise ValueError('`workspace` must be a pyhf workspace or json file specifying one. ')
 
         self.model = self.workspace.model()
@@ -103,7 +105,7 @@ class PyhfLogLikelihood:
         return self.model.mainlogpdf(self.data, parameter_values).item()
 
     @staticmethod
-    def factory(cache, workspace, parameter_map={}):
+    def factory(cache, workspace, parameter_map=None):
         return PyhfLogLikelihood(cache, workspace, parameter_map)
 
     def priors(self):

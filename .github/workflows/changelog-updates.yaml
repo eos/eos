@@ -1,0 +1,35 @@
+on:
+  pull_request_target:
+    branches:
+      - master
+
+name: Check if Changelog.md has been updated
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # download all history across all branches
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Check for Changelog update
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          echo "Checking changed files between $BASE_SHA and $HEAD_SHA"
+          changed_files=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+
+          if grep -Fxq 'Changelog.md' <<< "$changed_files"
+          then
+            echo 'Changelog.md was updated in this pull request, not commenting.'
+            exit 0
+          else
+            echo 'PRs should update Changelog.md, commenting on PR.'
+            gh pr comment ${{ github.event.pull_request.number }} -b 'Please add a summary of your changes to `Changelog.md`'
+            exit 1
+          fi

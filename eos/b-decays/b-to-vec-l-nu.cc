@@ -77,9 +77,8 @@ namespace eos
         std::function<complex<double> ()> v_Ub;
         std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
 
-        SwitchOption opt_int_points;
-
-        int int_points;
+        // integration config
+        cubature::Config cub_conf;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
@@ -90,8 +89,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         // { q, V } -> { process, U, B_name, V_name, c_I }
-        // q: u, d, s: the spectar quark flavor
-        // V: D, K, pi: the type of daughter meson
+        // q: u, d, s, c: the spectator quark flavor
+        // V: D^*, D_s^*, rho, omega, K^*, Jpsi: the type of daughter meson
         // process: string that can be used to obtain the form factor
         // U: the quark flavor in the weak transition
         // B_name: name of the B meson
@@ -174,8 +173,7 @@ namespace eos
             isospin_factor(_isospin_factor()),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-            opt_int_points(o, "integration-points"_ok, {"256", "4096"}, "256"),
-            int_points(destringify<int>(opt_int_points.value())),
+            cub_conf(cubature::Config().epsrel(1e-5).epsabs(1.0e-9)),
             form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
         {
             Context ctx("When constructing B->Vlnu observable");
@@ -203,7 +201,7 @@ namespace eos
             u.uses(*model);
         }
 
-        // normalization cf. [DSD2014] eq. (7), p. 5
+        // normalization cf. [DDS:2014A] eq. (7), p. 5
         double norm(const double & q2) const
         {
             const double lam  = lambda(m_B * m_B, m_V * m_V, q2);
@@ -217,7 +215,7 @@ namespace eos
         {
             b_to_vec_l_nu::Amplitudes result;
 
-            // NP contributions in EFT including tensor operator cf. [DSD2014], p. 3
+            // NP contributions in EFT including tensor operator cf. [DDS:2014A], p. 3
             const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
             const complex<double> gV_pl = wc.cvl() + wc.cvr();  // gV_pl = 1 + gV = 1 + VL + VR = cVL + cVR
             const complex<double> gV_mi = wc.cvl() - wc.cvr();  // gV_mi = 1 - gA = 1 + VL - VR = cVL - cVR
@@ -246,7 +244,7 @@ namespace eos
             // isospin factor
             const double isospin = this->isospin_factor;
 
-            // transversity amplitudes A's. cf. [DSD2014], p.17
+            // transversity amplitudes A's. cf. [DDS:2014A], p.17
             if ((q2 >= power_of<2>(m_l)) && (q2 <= power_of<2>(m_B - m_V))) {
                 result.a_0          = isospin * gV_mi * 8.0 * m_B * m_V / sqrtq2 * aff12;
                 result.a_0_T        = isospin * TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
@@ -296,8 +294,7 @@ namespace eos
         std::array<double, 12> _integrated_angular_observables(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 12> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
-            // second argument of integrate1D is some power of 2
-            return integrate1D(integrand, int_points, q2_min, q2_max);
+            return integrate<1, 12>(integrand, q2_min, q2_max, cub_conf);
         }
 
         inline b_to_vec_l_nu::AngularObservables differential_angular_observables(const double & q2) const
@@ -350,6 +347,7 @@ namespace eos
         { { QuarkFlavor::up,      "D^*"   }, { "B->D^*",     QuarkFlavor::charm, "B_u", "D_u^*", 1.0                  } },
         { { QuarkFlavor::down,    "D^*"   }, { "B->D^*",     QuarkFlavor::charm, "B_d", "D_d^*", 1.0                  } },
         { { QuarkFlavor::strange, "D_s^*" }, { "B_s->D_s^*", QuarkFlavor::charm, "B_s", "D_s^*", 1.0                  } },
+        { { QuarkFlavor::charm,   "J/psi" }, { "B_c->J/psi", QuarkFlavor::charm, "B_c", "J/psi", 1.0                  } },
         { { QuarkFlavor::up,      "rho"   }, { "B->rho",     QuarkFlavor::up,    "B_u", "rho^0", 1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::up,      "omega" }, { "B->omega",   QuarkFlavor::up,    "B_u", "omega", 1.0 / std::sqrt(2.0) } },
         { { QuarkFlavor::down,    "rho"   }, { "B->rho",     QuarkFlavor::up,    "B_d", "rho^+", 1.0                  } },
@@ -361,10 +359,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "V"_ok,            { "D^*"s, "D_s^*"s, "rho"s, "omega"s, "K^*"s }, ""s      },
-        { "cp-conjugate"_ok, { "true"s, "false"s },                          "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s },                        "mu"s    },
-        { "q"_ok,            { "u"s, "d"s, "s"s },                           "d"s     },
+        { "V"_ok,            { "D^*"s, "D_s^*"s, "rho"s, "omega"s, "K^*"s, "J/psi"s }, ""s      },
+        { "cp-conjugate"_ok, { "true"s, "false"s },                                    "false"s },
+        { "l"_ok,            { "e"s, "mu"s, "tau"s },                                  "mu"s    },
+        { "q"_ok,            { "u"s, "d"s, "s"s, "c"s },                               "d"s     },
     };
 
     BToVectorLeptonNeutrino::BToVectorLeptonNeutrino(const Parameters & p, const Options & o) :
@@ -377,6 +375,19 @@ namespace eos
     }
 
     /* q^2-differential observables */
+
+    // |Vcb|=1
+    double
+    BToVectorLeptonNeutrino::normalized_differential_decay_width(const double & q2) const
+    {
+        return _imp->differential_angular_observables(q2).normalized_decay_width();
+    }
+
+    double
+    BToVectorLeptonNeutrino::differential_decay_width(const double & q2) const
+    {
+        return _imp->differential_angular_observables(q2).normalized_decay_width() * std::norm(_imp->v_Ub());
+    }
 
     // |Vcb|=1
     double
@@ -503,6 +514,12 @@ namespace eos
     }
 
     double
+    BToVectorLeptonNeutrino::integrated_decay_width(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->v_Ub());
+    }
+
+    double
     BToVectorLeptonNeutrino::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->v_Ub()) * _imp->tau_B / _imp->hbar;
@@ -526,10 +543,7 @@ namespace eos
             return this->differential_branching_ratio(q2) * jacobian / 2.0;
         };
 
-        static cubature::Config config = cubature::Config().epsrel(0.5e-3).epsabs(1.0e-9);
-
-        return integrate(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0},
-                         config);
+        return integrate<2>(integrand, std::array<double, 2>{kperp_min, -1.0}, std::array<double, 2>{kperp_max, 1.0}, _imp->cub_conf);
     }
 
     double
@@ -706,11 +720,11 @@ namespace eos
     }
 
 
-    //* cf. [DSD2014], eq. (6), p. 5 - normalized(|Vcb|=1)
+    //* cf. [DDS:2014A], eq. (6), p. 5 - normalized(|Vcb|=1)
     double
     BToVectorLeptonNeutrino::normalized_four_differential_decay_width(const double & q2, const double & c_theta_l, const double & c_theta_d, const double & phi) const
     {
-        // compute d^4 Gamma, cf. [DSD2014], p. 5, eq. (6)
+        // compute d^4 Gamma, cf. [DDS:2014A], p. 5, eq. (6)
         // Trigonometric identities: Cosine squared of the angles
         double c_theta_d_2 = c_theta_d * c_theta_d;
         double c_theta_l_2 = c_theta_l * c_theta_l;

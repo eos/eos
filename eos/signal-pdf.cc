@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2023 Danny van Dyk
- * Copyright (c) 2019 Ahmet Kokulu
+ * Copyright (c) 2015-2026 Danny van Dyk
+ * Copyright (c) 2019      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +23,7 @@
 #include <eos/rare-b-decays/signal-pdfs.hh>
 #include <eos/signal-pdf-impl.hh>
 #include <eos/signal-pdf.hh>
+#include <eos/utils/concrete-signal-pdf.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
@@ -32,37 +33,6 @@
 #include <functional>
 #include <map>
 #include <ostream>
-
-namespace eos
-{
-    namespace test
-    {
-        // PDF = (1/2 L_0 + 1/3 L_1 + 1/4 L_2) / 2
-        class Legendre1DPDF
-        {
-            public:
-                Legendre1DPDF(const Parameters &, const Options &) {}
-
-                double
-                pdf(const double & z) const
-                {
-                    return (9.0 + 8.0 * z + 9.0 * z * z);
-                }
-
-                double
-                norm(const double & z_min, const double & z_max) const
-                {
-                    return (9.0 * (z_max - z_min) + 4.0 * (power_of<2>(z_max) - power_of<2>(z_min)) + 3.0 * (power_of<3>(z_max) - power_of<3>(z_min)));
-                }
-
-                static const std::string description;
-        };
-
-        const std::string Legendre1DPDF::description = "1D PDF up to 2nd order in z; used for unit tests only.";
-    } // namespace test
-} // namespace eos
-
-#include <eos/utils/concrete-signal-pdf.hh>
 
 namespace eos
 {
@@ -90,12 +60,15 @@ namespace eos
         // add test entries to the list of available signal PDFs, but avoid adding it via a group/section
         // 1D Legendre PDF
         {
-            auto name_and_entry_pair = make_signal_pdf("Test::Legendre1D",
+            using std::literals::string_literals::operator""s;
+
+            auto name_and_entry_pair = make_signal_pdf("TestLegendre1D::P(z)",
+                                                       "PDF for testing purpose only: 1D PDF based on Legendre polynomials as a function of the variable $z$.",
                                                        Options{},
-                                                       &test::Legendre1DPDF::pdf,
-                                                       std::make_tuple(KinematicRange{ "z", -1.0, +1.0, "" }),
-                                                       &test::Legendre1DPDF::norm,
-                                                       std::make_tuple("z_min", "z_max"));
+                                                       "TestLegendre1D::UnnormalizedPDF(z)",
+                                                       std::make_tuple("z"s),
+                                                       "TestLegendre1D::NormalizationPDF(z)",
+                                                       std::make_tuple("z_min"s, "z_max"s));
 
             _entries->insert(name_and_entry_pair);
         }
@@ -111,8 +84,6 @@ namespace eos
     SignalPDFEntry::SignalPDFEntry() {}
 
     SignalPDFEntry::~SignalPDFEntry() = default;
-
-    template class WrappedForwardIterator<SignalPDFEntry::KinematicRangeIteratorTag, const KinematicRange>;
 
     std::ostream &
     SignalPDFEntry::insert(std::ostream & os) const

@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Carolina Bolognani
- * Copyright (c) 2023 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2023      Carolina Bolognani
+ * Copyright (c) 2023      Méril Reboud
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -204,7 +204,7 @@ namespace eos
             u.uses(*model);
         }
 
-        d_to_psd_l_nu::Amplitudes amplitudes(const double & s) const
+        d_to_psd_l_nu::Amplitudes amplitudes(const double & q2) const
         {
             // NP contributions in EFT including tensor operator (cf. [DDS:2014A]).
             auto wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
@@ -213,9 +213,9 @@ namespace eos
             const complex<double> gT = wc.ct();
 
             // form factors
-            const double fp = form_factors->f_p(s);
-            const double f0 = form_factors->f_0(s);
-            const double fT = form_factors->f_t(s);
+            const double fp = form_factors->f_p(q2);
+            const double f0 = form_factors->f_0(q2);
+            const double fT = form_factors->f_t(q2);
 
             // running quark masses
             const double mcatmu = model->m_c_msbar(mu);
@@ -223,14 +223,14 @@ namespace eos
 
             const double m_D = this->m_D(), m_D2 = m_D * m_D;
             const double m_P = this->m_P(), m_P2 = m_P * m_P;
-            const double lam = eos::lambda(m_D2, m_P2, s);
+            const double lam = eos::lambda(m_D2, m_P2, q2);
             const double p = std::sqrt(lam) / (2.0 * m_D);
 
             // v = lepton velocity in the dilepton rest frame
             const double m_l = this->m_l();
-            const double v = (1.0 - m_l * m_l / s);
+            const double v = (1.0 - m_l * m_l / q2);
             const double ml_hat = std::sqrt(1.0 - v);
-            const double NF = v * v * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI) * m_D2);
+            const double NF = v * v * q2 * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI) * m_D2);
 
             // isospin factor
             const double isospin = this->isospin_factor;
@@ -238,10 +238,10 @@ namespace eos
             // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
             d_to_psd_l_nu::Amplitudes result;
 
-            if (s >= power_of<2>(m_l) && s <= power_of<2>(m_D - m_P))
+            if (q2 >= power_of<2>(m_l) && q2 <= power_of<2>(m_D - m_P))
             {
-                result.h_0  =   isospin * 2.0 * m_D * p * fp * (1.0 + gV) / std::sqrt(s);
-                result.h_t  =   isospin * (1.0 + gV) * (m_D2 - m_P2) * f0 / std::sqrt(s);
+                result.h_0  =   isospin * 2.0 * m_D * p * fp * (1.0 + gV) / std::sqrt(q2);
+                result.h_t  =   isospin * (1.0 + gV) * (m_D2 - m_P2) * f0 / std::sqrt(q2);
                 result.h_S  = - isospin * gS * (m_D2 - m_P2) * f0 / (mcatmu - mDatmu);
                 result.h_T  = - isospin * 2.0 * m_D * p * fT * gT / (m_D + m_P);
 
@@ -269,14 +269,14 @@ namespace eos
         }
 
         // normalized (|V_cQ| = 1) two-fold-distribution, cf. [DDS:2014A], eq. (12), p. 6
-        double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
+        double normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const
         {
             //  d^2 Gamma, cf. [DDS:2014A], p. 6, eq. (13)
             double c_thl_2 = c_theta_l * c_theta_l;
             double s_thl_2 = 1.0 - c_thl_2;
             double c_2_thl = 2.0 * c_thl_2 - 1.0;
 
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             return 2.0 * amp.NF * amp.p * (
                        std::norm(amp.h_0) * s_thl_2
@@ -286,10 +286,10 @@ namespace eos
                    );
         }
 
-        // normalized to |V_cQ = 1|, obtained using cf. [DSD:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
-        double normalized_differential_decay_width(const double & s) const
+        // normalized to |V_cQ = 1|, obtained using cf. [DDS:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
+        double normalized_differential_decay_width(const double & q2) const
         {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             return 4.0 / 3.0 * amp.NF * amp.p * (
                        std::norm(amp.h_0) * (3.0 - amp.v)
@@ -299,18 +299,18 @@ namespace eos
                    );
         }
 
-        double normalized_differential_decay_width_p(const double & s) const
+        double normalized_differential_decay_width_p(const double & q2) const
         {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             return 4.0 / 3.0 * amp.NF * amp.p * (
                        std::norm(amp.h_0) * (3.0 - amp.v)
                        );
         }
 
-        double normalized_differential_decay_width_0(const double & s) const
+        double normalized_differential_decay_width_0(const double & q2) const
         {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             return 4.0 / 3.0 * amp.NF * amp.p * (
                        3.0 * std::norm(amp.h_t) * (1.0 - amp.v)
@@ -320,9 +320,9 @@ namespace eos
         // obtained using cf. [DDS:2014A], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
         // in eq. (12) from cf. [DDS:2014A], (H0 * cos(theta) - HtS)^2 we interpret as |H0 * cos(theta) - HtS|^2
         // crosschecked against [BFNT:2019A] and [STTW:2013A]
-        double numerator_differential_a_fb_leptonic(const double & s) const
+        double numerator_differential_a_fb_leptonic(const double & q2) const
         {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             return - 4.0 * amp.NF * amp.p * (
                        std::real(amp.h_0 * std::conj(amp.h_tS)) * (1.0 - amp.v)
@@ -330,10 +330,10 @@ namespace eos
                    );
         }
 
-        // obtained using cf. [DDS:2014A], eq. (12) and [BHP2007] eq.(1.2)
-        double numerator_differential_flat_term(const double & s) const
+        // obtained using cf. [DDS:2014A], eq. (12) and [BHP:2007A] eq.(1.2)
+        double numerator_differential_flat_term(const double & q2) const
         {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             return amp.NF * amp.p * (
                        (std::norm(amp.h_0) + std::norm(amp.h_tS)) * (1.0 - amp.v)
@@ -342,10 +342,10 @@ namespace eos
                    );
         }
 
-        // obtained using cf. [STTW2013], eq. (49a - 49b)
-        double numerator_differential_lepton_polarization(const double & s) const
+        // obtained using cf. [STTW:2013A], eq. (49a - 49b)
+        double numerator_differential_lepton_polarization(const double & q2) const
         {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
             const double dGplus = (std::norm(amp.h_0) + 3.0 * std::norm(amp.h_t)) * (1.0 - amp.v) / 2.0
                                 + 3.0 / 2.0 * std::norm(amp.h_S)
@@ -360,21 +360,21 @@ namespace eos
         }
 
         // differential decay width
-        double differential_decay_width(const double & s) const
+        double differential_decay_width(const double & q2) const
         {
-            return normalized_differential_decay_width(s) * std::norm(v_cQ());
+            return normalized_differential_decay_width(q2) * std::norm(v_cQ());
         }
 
         // differential branching_ratio
-        double differential_branching_ratio(const double & s) const
+        double differential_branching_ratio(const double & q2) const
         {
-            return differential_decay_width(s) * tau_D / hbar;
+            return differential_decay_width(q2) * tau_D / hbar;
         }
 
         // "normalized" (|V_cQ|=1) differential branching_ratio
-        double normalized_differential_branching_ratio(const double & s) const
+        double normalized_differential_branching_ratio(const double & q2) const
         {
-            return normalized_differential_decay_width(s) * tau_D / hbar;
+            return normalized_differential_decay_width(q2) * tau_D / hbar;
         }
 
         double pdf_q2(const double & q2) const
@@ -458,144 +458,144 @@ namespace eos
 
     // normalized (|V_cQ|=1) two-fold-distribution, cf. [DDS:2014A], eq. (13), p. 6
     double
-    DToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
+    DToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const
     {
-        return _imp->normalized_two_differential_decay_width(s, c_theta_l);
+        return _imp->normalized_two_differential_decay_width(q2, c_theta_l);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::differential_branching_ratio(const double & s) const
+    DToPseudoscalarLeptonNeutrino::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_branching_ratio(s);
+        return _imp->differential_branching_ratio(q2);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
 
     // normalized_differential_branching_ratio (|V_cQ|=1)
     double
-    DToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio(const double & s) const
+    DToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio(const double & q2) const
     {
-        return _imp->normalized_differential_branching_ratio(s);
+        return _imp->normalized_differential_branching_ratio(q2);
     }
 
     // normalized (|V_cQ|=1) integrated branching_ratio
     double
-    DToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
 
     // normalized (|V_cQ|=1) integrated decay_width
     double
-    DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_p(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_p(const double & q2_min, const double & q2_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_p,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_0(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_0(const double & q2_min, const double & q2_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_0,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                              _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic(const double & s) const
+    DToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic(const double & q2) const
     {
-        return _imp->numerator_differential_a_fb_leptonic(s) / _imp->normalized_differential_decay_width(s);
+        return _imp->numerator_differential_a_fb_leptonic(q2) / _imp->normalized_differential_decay_width(q2);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const
     {
         double integrated_numerator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_a_fb_leptonic,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_numerator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         double integrated_denominator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_denominator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         return integrated_numerator / integrated_denominator;
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::differential_flat_term(const double & s) const
+    DToPseudoscalarLeptonNeutrino::differential_flat_term(const double & q2) const
     {
-        return _imp->numerator_differential_flat_term(s) / _imp->normalized_differential_decay_width(s);
+        return _imp->numerator_differential_flat_term(q2) / _imp->normalized_differential_decay_width(q2);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::integrated_flat_term(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::integrated_flat_term(const double & q2_min, const double & q2_max) const
     {
         double integrated_numerator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_flat_term,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_numerator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         double integrated_denominator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_denominator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         return integrated_numerator / integrated_denominator;
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::differential_lepton_polarization(const double & s) const
+    DToPseudoscalarLeptonNeutrino::differential_lepton_polarization(const double & q2) const
     {
-        return _imp->numerator_differential_lepton_polarization(s) / _imp->normalized_differential_decay_width(s);
+        return _imp->numerator_differential_lepton_polarization(q2) / _imp->normalized_differential_decay_width(q2);
     }
 
     double
-    DToPseudoscalarLeptonNeutrino::integrated_lepton_polarization(const double & s_min, const double & s_max) const
+    DToPseudoscalarLeptonNeutrino::integrated_lepton_polarization(const double & q2_min, const double & q2_max) const
     {
         double integrated_numerator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_lepton_polarization,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_numerator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         double integrated_denominator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
                                                                  _imp.get(), std::placeholders::_1);
-            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+            integrated_denominator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         return integrated_numerator / integrated_denominator;

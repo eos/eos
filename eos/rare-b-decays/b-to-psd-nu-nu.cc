@@ -215,9 +215,9 @@ namespace eos
         }
 
         // differential branching_ratio
-        double differential_branching_ratio(const double & s) const
+        double differential_branching_ratio(const double & q2) const
         {
-            return differential_decay_width(s) * tau_B / hbar;
+            return differential_decay_width(q2) * tau_B / hbar;
         }
     };
 

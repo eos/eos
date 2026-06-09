@@ -8,6 +8,7 @@ export EOS_BASE_DIRECTORY=$(mktemp -d)
 
 echo using PYTHON=${PYTHON} >&2
 echo using PYTHONPATH=${PYTHONPATH} >&2
+echo using EOS_BASE_DIRECTORY=${EOS_BASE_DIRECTORY} >&2
 
 ###########################################
 ## Run the Analysis's steps automatically ##
@@ -101,6 +102,18 @@ fi
 #########################################
 ## Posterior prediction of observables ##
 #########################################
+echo running prediction tests ... >&2
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        predict-observables \
+        CKM+FF \
+        BR \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+echo running prediction tests ... >&2
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        predict-observables \
+        CKM+FF \
+        dBRdq2 \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo running prediction tests ... >&2
     $PYTHON ${SOURCE_DIR}/eos-analysis \
         predict-observables \

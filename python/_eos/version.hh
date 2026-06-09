@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2023 Danny van Dyk
+ * Copyright (c) 2016-2025 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -18,7 +18,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef EOS_PYTHON__EOS_VERSION_HH
+#define EOS_PYTHON__EOS_VERSION_HH 1
+
 namespace impl
 {
     extern const char version[];
 }
+
+#endif // EOS_PYTHON__EOS_VERSION_HH

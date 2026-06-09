@@ -4,6 +4,7 @@
  * Copyright (c) 2010-2025 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -66,6 +67,9 @@ namespace eos
 
             // Hadronic sectors (Delta B = 2)
             struct SBSB;
+
+            // Neutral-current semileptonic sectors (Delta C = 1)
+            struct UC;
         } // namespace WET
 
         // Old-style WET sectors
@@ -202,6 +206,16 @@ namespace eos
             virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const = 0;
     };
 
+    /*!
+     * Base class for the Delta C = 1 = -Delta U FCNC component of models.
+     */
+    template <> class ModelComponent<components::WET::UC>
+    {
+        public:
+            /* c->u Wilson coefficients */
+            virtual WilsonCoefficients<wc::UC> wilson_coefficients_uc(const LeptonFlavor & lepton_flavor, const bool & cp_conjugate = false) const = 0;
+    };
+
     /* Old-style WET sectors */
 
     /*!
@@ -236,6 +250,8 @@ namespace eos
         public virtual ModelComponent<components::WET::SBCU>,
         // Hadronic sectors (Delta B = 2)
         public virtual ModelComponent<components::WET::SBSB>,
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        public virtual ModelComponent<components::WET::UC>,
         // Old-style WET sectors
         public virtual ModelComponent<components::DeltaBS1>
     {

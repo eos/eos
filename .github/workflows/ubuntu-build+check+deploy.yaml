@@ -18,12 +18,13 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
@@ -85,11 +86,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -133,12 +135,13 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -164,12 +167,13 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: jammy,    cxx: clang++-14,   cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -206,11 +210,12 @@ jobs:
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-24.04
+        timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
@@ -291,14 +296,19 @@ jobs:
 
     ubuntu-deploy-doc:
         needs: ubuntu-build-doc
+        # Share the 'doc-deploy' concurrency group with the documentation cleanup
+        # workflow so that pushes to the 'doc' repository never race each other.
+        concurrency:
+            group: doc-deploy
+            cancel-in-progress: false
         strategy:
             matrix:
                 cfg:
-                    - { os: jammy,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-24.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:da6ac1c6a9a85584c77e6a4f46129742cb1dd22e
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
         steps:
             - name: Create repository
               shell: bash
@@ -319,14 +329,39 @@ jobs:
                 GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
               run: |
                 [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
-                tar xf doc.tar
+                if [[ "${{ github.event_name }}" == "pull_request" ]] ; then
+                    # Running prior to merging the PR: deploy the documentation into a
+                    # per-PR subdirectory 'pr{id}' of the 'doc' repository instead of its root.
+                    PR_SUBDIR="pr${{ github.event.pull_request.number }}"
+                    # Extract the freshly built documentation into a staging area ...
+                    mkdir -p _staging
+                    tar xf doc.tar -C _staging
+                    # ... and (re)populate the per-PR subdirectory within the cloned 'doc' repo.
+                    # Using '/.' preserves dotfiles such as the Sphinx-generated '.nojekyll'.
+                    rm -rf "_build/doc/html/${PR_SUBDIR}"
+                    mkdir -p "_build/doc/html/${PR_SUBDIR}"
+                    cp -a _staging/_build/doc/html/. "_build/doc/html/${PR_SUBDIR}/"
+                    COMMIT_MSG="Updating documentation for pull request #${{ github.event.pull_request.number }} based on EOS revision ${{ github.sha }}"
+                    # always deploy the per-PR preview
+                    PUSH=1
+                else
+                    # Merging to master (or building the 'release' branch / a versioned tag):
+                    # deploy the documentation into the root of the 'doc' repository.
+                    tar xf doc.tar
+                    COMMIT_MSG="Updating documentation based on EOS revision ${{ github.sha }}"
+                    # only push if running for the release branch or for a versioned release
+                    if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
+                        PUSH=1
+                    else
+                        PUSH=0
+                    fi
+                fi
                 pushd _build/doc/html
                 git config user.email "eos-developers@googlegroups.com"
                 git config user.name  "EOS"
                 git add --all
-                git commit --allow-empty -m "Updating documentation based on EOS revision ${{ github.sha }}"
-                # only push if running for the release branch or for a versioned release
-                if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
+                git commit --allow-empty -m "${COMMIT_MSG}"
+                if [[ ${PUSH} == "1" ]] ; then
                     git push
                 fi
                 popd

@@ -67,27 +67,27 @@ namespace eos
     };
 
     double
-    BToKstarDilepton::AmplitudeGenerator::beta_l(const double & s) const
+    BToKstarDilepton::AmplitudeGenerator::beta_l(const double & q2) const
     {
-        return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
+        return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
     }
 
     double
-    BToKstarDilepton::AmplitudeGenerator::lambda(const double & s) const
+    BToKstarDilepton::AmplitudeGenerator::lambda(const double & q2) const
     {
-        return eos::lambda(m_B() * m_B(), m_Kstar() * m_Kstar(), s);
+        return eos::lambda(m_B() * m_B(), m_Kstar() * m_Kstar(), q2);
     }
 
     double
-    BToKstarDilepton::AmplitudeGenerator::energy(const double & s) const
+    BToKstarDilepton::AmplitudeGenerator::energy(const double & q2) const
     {
-        return (m_B() * m_B() + m_Kstar() * m_Kstar() - s) / (2.0 * m_B());
+        return (m_B() * m_B() + m_Kstar() * m_Kstar() - q2) / (2.0 * m_B());
     }
 
     double
-    BToKstarDilepton::AmplitudeGenerator::s_hat(const double & s) const
+    BToKstarDilepton::AmplitudeGenerator::s_hat(const double & q2) const
     {
-        return s / m_B() / m_B();
+        return q2 / m_B() / m_B();
     }
 
 }

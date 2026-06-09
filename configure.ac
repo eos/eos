@@ -1,6 +1,6 @@
 dnl vim: set sw=8 sts=8 noet ft=config foldmethod=marker foldmarker={{{,}}}:
 
-AC_INIT([EOS],[1.0.18])
+AC_INIT([EOS],[1.0.20])
 AC_PREREQ([2.69])
 AC_CONFIG_SRCDIR([])
 AC_CONFIG_AUX_DIR(config)
@@ -413,6 +413,7 @@ AC_SUBST([PYPI_VERSION])
 AC_CONFIG_FILES([Makefile
 	debian/control-focal
 	debian/control-jammy
+	debian/control-resolute
 	debian/Makefile
 	eos/Makefile
 	eos/b-decays/Makefile
@@ -420,6 +421,8 @@ AC_CONFIG_FILES([Makefile
 	eos/s-decays/Makefile
 	eos/tau-decays/Makefile
 	eos/constraints/Makefile
+	eos/constraints/experimental/Makefile
+	eos/constraints/theoretical/Makefile
 	eos/form-factors/Makefile
 	eos/maths/Makefile
 	eos/meson-mixing/Makefile
@@ -428,6 +431,7 @@ AC_CONFIG_FILES([Makefile
 	eos/nonleptonic-amplitudes/Makefile
 	eos/parameters/Makefile
 	eos/rare-b-decays/Makefile
+	eos/rare-c-decays/Makefile
 	eos/scattering/Makefile
 	eos/statistics/Makefile
 	eos/utils/Makefile

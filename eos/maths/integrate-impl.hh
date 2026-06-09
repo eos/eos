@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Frederik Beaujean
+ * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,134 +32,49 @@
 
 namespace eos
 {
-    template <std::size_t k> std::array<double, k> integrate1D(const std::function<std::array<double, k> (const double &)> & f, unsigned n, const double & a, const double & b)
-    {
-        if (n & 0x1)
-            n += 1;
-
-        if (n < 16)
-            n = 16;
-
-        // step width
-        double h = (b - a) / n;
-
-        // evaluate function for every sampling point
-        std::vector<std::array<double, k>> y;
-        for (unsigned i = 0 ; i < n + 1 ; ++i)
-        {
-            y.push_back(f(a + i * h));
-        }
-
-        std::array<double, k> Q0; Q0.fill(0.0);
-        std::array<double, k> Q1; Q1.fill(0.0);
-        std::array<double, k> Q2; Q2.fill(0.0);
-
-        for (unsigned i = 0 ; i < n / 8 ; ++i)
-        {
-            Q0 = Q0 + y[8 * i] + 4.0 * y[8 * i + 4] + y[8 * i + 4];
-        }
-        for (unsigned i = 0 ; i < n / 4 ; ++i)
-        {
-            Q1 = Q1 + y[4 * i] + 4.0 * y[4 * i + 2] + y[4 * i + 4];
-        }
-        for (unsigned i = 0 ; i < n / 2 ; ++i)
-        {
-            Q2 = Q2 + y[2 * i] + 4.0 * y[2 * i + 1] + y[2 * i + 2];
-        }
-
-        Q0 = (h / 3.0 * 4.0) * Q0;
-        Q1 = (h / 3.0 * 2.0) * Q1;
-        Q2 = (h / 3.0) * Q2;
-
-        std::array<double, k> denom = Q0 + Q2 - 2.0 * Q1;
-        std::array<double, k> num = Q2 - Q1;
-        std::array<double, k> correction = divide(mult(num, num), denom);
-
-        bool correction_valid = true;
-        for (unsigned i = 0 ; i < k ; ++i)
-        {
-            if (std::isnan(correction[i]))
-            {
-                correction_valid = false;
-                break;
-            }
-        }
-
-        if (!correction_valid)
-        {
-            return Q2;
-        }
-        else
-        {
-            bool correction_small = true;
-
-            for (unsigned i = 0 ; i < k ; ++i)
-            {
-                if ((abs(correction[i] / Q2[i])) > 1.0)
-                {
-                    correction_small = false;
-                    break;
-                }
-            }
-
-            if (correction_small || n >= 1 << 10)
-            {
-                return Q2 - correction;
-            }
-            else
-            {
-#if 0
-                std::cerr << "Q0 = " << Q0 << std::endl;
-                std::cerr << "Q1 = " << Q1 << std::endl;
-                std::cerr << "Q2 = " << Q2 << std::endl;
-                std::cerr << "Reintegrating with twice the number of data points" << std::endl;
-#endif
-                return integrate1D(f, 2 * n, a, b);
-            }
-        }
-    }
-
     namespace cubature
     {
-
-        template <size_t dim_>
-        int scalar_integrand(unsigned ndim , const double *x, void *data,
+        template <size_t ndim_, size_t fdim_, typename T_>
+        int integrand_wrapper(unsigned ndim , const double *x, void *data,
                       unsigned fdim , double *fval)
         {
-            assert(ndim == dim_);
-            assert(fdim == 1);
+            assert(ndim == ndim_);
+            auto buffer_size = cubature::integrand_traits<ndim_, fdim_, T_>::buffer_size;
+            assert(fdim == buffer_size);
 
-            auto& f = *static_cast<cubature::fdd<dim_> *>(data);
-            // TODO use std::array_view once available
-            std::array<double, dim_> args;
-            std::copy(x, x + dim_, args.data());
-            *fval = f(args);
+            auto & f = *static_cast<cubature::integrand<ndim_, fdim_, T_> *>(data);
+            typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type arguments;
+            cubature::integrand_traits<ndim_, fdim_, T_>::copy_arguments(x, arguments);
+            typename cubature::integrand_traits<ndim_, fdim_, T_>::result_type res = f(arguments);
+            cubature::integrand_traits<ndim_, fdim_, T_>::copy_result(res, fval);
 
             return 0;
         }
-
     }
 
-    template <size_t dim_>
-    double integrate(const cubature::fdd<dim_> & f,
-                     const std::array<double, dim_> &a,
-                     const std::array<double, dim_> &b,
-                     const cubature::Config &config)
+    template <size_t ndim_, size_t fdim_, typename T_>
+    typename cubature::integrand_traits<ndim_, fdim_, T_>::result_type integrate(const cubature::integrand<ndim_, fdim_, T_> & f,
+                                                                                 const typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type & a,
+                                                                                 const typename cubature::integrand_traits<ndim_, fdim_, T_>::argument_type & b,
+                                                                                 const cubature::Config &config)
     {
-        // TODO Support infinite intervals by param trafo? Not for now.
-        constexpr unsigned nintegrands = 1;
-        double res;
-        double err;
-        if (hcubature(nintegrands, &cubature::scalar_integrand<dim_>,
-                      &const_cast<cubature::fdd<dim_>&>(f), dim_, a.data(), b.data(),
-                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
+        using integrand = cubature::integrand<ndim_, fdim_, T_>;
+        using integrand_traits = cubature::integrand_traits<ndim_, fdim_, T_>;
+        using cubature::integrand_wrapper;
+
+        constexpr unsigned nintegrands = integrand_traits::buffer_size;
+        typename integrand_traits::buffer_type result_buffer;
+        typename integrand_traits::buffer_type error_buffer;
+        if (hcubature(nintegrands, &integrand_wrapper<ndim_, fdim_, T_>,
+                      &const_cast<integrand&>(f), ndim_, integrand_traits::pointer_from_arguments(a),
+                      integrand_traits::pointer_from_arguments(b), config.maxeval(), config.epsabs(), config.epsrel(),
+                      ERROR_L2, integrand_traits::pointer_from_buffer(result_buffer), integrand_traits::pointer_from_buffer(error_buffer)))
         {
             throw IntegrationError("hcubature failed");
         }
 
-        return res;
+        return integrand_traits::contruct_result(result_buffer);
     }
-
 }
 
 #endif

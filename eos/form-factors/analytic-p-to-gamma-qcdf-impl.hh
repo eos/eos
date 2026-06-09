@@ -114,7 +114,7 @@ namespace eos
             // Exclude this contribution from "all" intentionally because it is incomplete.
             //
             // The tw-3,4 contribution is implemented for delta_xi, where it only depends on phi_+,
-            // but not for xi, where higher-twist LCDAs enter (see [BBJW:1018A], Eqs. (4.13) and (4.14)).
+            // but not for xi, where higher-twist LCDAs enter (see [BBJW:2018A], Eqs. (4.13) and (4.14)).
             // We still make the partial implementation accessible as an option.
             //
             // To complete the implementation just with phi_+, one should use the ''profile function''

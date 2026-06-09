@@ -22,6 +22,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/maths/szego-polynomial.hh>
 #include <eos/scattering/scattering-amplitudes.hh>
@@ -185,6 +186,7 @@ namespace eos
             PartialWaveOption opt_L;
             SwitchOption opt_C;
             IntegerOption opt_int_points;
+            cubature::Config cub_conf;
 
             std::shared_ptr<ScatteringAmplitudes<PPToPP>> scattering_amplitudes;
 

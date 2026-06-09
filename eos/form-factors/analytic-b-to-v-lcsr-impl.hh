@@ -25,6 +25,7 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/utils/exception.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
@@ -3154,7 +3155,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -3197,7 +3198,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -3446,7 +3447,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -3495,7 +3496,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -3704,14 +3705,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_A1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_A1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_A1_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_A1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_A1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_A1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_A1_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_A1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_A1_3pt_D(sigma_0, q2);
@@ -3737,14 +3738,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_A1_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_A1_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_A1_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_A1_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_A1_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_A1_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_A1_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_A1_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_A1_3pt_D_m1(sigma_0, q2);
@@ -3759,14 +3760,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_A1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_A1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_A1_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_A1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_A1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_A1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_A1_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_A1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_A1_3pt_D(sigma_0, q2);
@@ -5923,7 +5924,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -5962,7 +5963,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -6208,7 +6209,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -6253,7 +6254,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -6460,14 +6461,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_A2_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_A2_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_A2_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_A2_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_A2_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_A2_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_A2_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_A2_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_A2_3pt_D(sigma_0, q2);
@@ -6493,14 +6494,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_A2_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_A2_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_A2_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_A2_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_A2_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_A2_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_A2_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_A2_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_A2_3pt_D_m1(sigma_0, q2);
@@ -6515,14 +6516,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_A2_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_A2_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_A2_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_A2_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_A2_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_A2_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_A2_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_A2_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_A2_3pt_D(sigma_0, q2);
@@ -8673,7 +8674,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -8712,7 +8713,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -8960,7 +8961,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -9005,7 +9006,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -9212,14 +9213,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_A30_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_A30_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_A30_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_A30_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_A30_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_A30_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_A30_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_A30_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_A30_3pt_D(sigma_0, q2);
@@ -9245,14 +9246,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_A30_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_A30_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_A30_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_A30_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_A30_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_A30_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_A30_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_A30_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_A30_3pt_D_m1(sigma_0, q2);
@@ -9267,14 +9268,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_A30_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_A30_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_A30_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_A30_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_A30_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_A30_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_A30_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_A30_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_A30_3pt_D(sigma_0, q2);
@@ -11003,7 +11004,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -11042,7 +11043,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -11289,7 +11290,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -11334,7 +11335,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -11541,14 +11542,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_V_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_V_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_V_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_V_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_V_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_V_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_V_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_V_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_V_3pt_D(sigma_0, q2);
@@ -11574,14 +11575,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_V_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_V_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_V_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_V_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_V_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_V_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_V_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_V_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_V_3pt_D_m1(sigma_0, q2);
@@ -11596,14 +11597,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_V_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_V_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_V_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_V_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_V_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_V_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_V_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_V_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_V_3pt_D(sigma_0, q2);
@@ -13644,7 +13645,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -13685,7 +13686,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -13934,7 +13935,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -13981,7 +13982,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -14190,14 +14191,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_T1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_T1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_T1_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_T1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_T1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_T1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_T1_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_T1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_T1_3pt_D(sigma_0, q2);
@@ -14223,14 +14224,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_T1_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_T1_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_T1_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_T1_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_T1_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_T1_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_T1_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_T1_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_T1_3pt_D_m1(sigma_0, q2);
@@ -14245,14 +14246,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_T1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_T1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_T1_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_T1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_T1_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_T1_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_T1_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_T1_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_T1_3pt_D(sigma_0, q2);
@@ -16533,7 +16534,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -16574,7 +16575,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -16824,7 +16825,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -16871,7 +16872,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -17080,14 +17081,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_T23A_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_T23A_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_T23A_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_T23A_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_T23A_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_T23A_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_T23A_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_T23A_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_T23A_3pt_D(sigma_0, q2);
@@ -17113,14 +17114,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_T23A_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_T23A_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_T23A_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_T23A_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_T23A_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_T23A_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_T23A_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_T23A_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_T23A_3pt_D_m1(sigma_0, q2);
@@ -17135,14 +17136,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_T23A_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_T23A_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_T23A_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_T23A_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_T23A_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_T23A_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_T23A_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_T23A_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_T23A_3pt_D(sigma_0, q2);
@@ -19716,7 +19717,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -19757,7 +19758,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -20007,7 +20008,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -20054,7 +20055,7 @@ namespace eos
             const double xbar_2 = 1.0 - x_2;
 
             // this includes the original factor of 1 / omega_2 (which corresponds to 1 / xi in the notation of
-            // [KMO2006]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
+            // [KMO:2006A]), as well as the Jacobian from the transformation (omega_1, omega_2 -> x_1, x_2).
             const double prefactor = sigma * m_B() / ((xbar_1 * xbar_2 + x_2) * xbar_2);
 
             const double omega_1 = sigma * m_B() * x_1;
@@ -20263,14 +20264,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B = std::bind(&Implementation::surface_T23B_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C = std::bind(&Implementation::surface_T23B_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_T23B_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_T23B_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B = std::bind(&Implementation::surface_T23B_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C = std::bind(&Implementation::surface_T23B_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_T23B_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_T23B_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt  = 0.0
-                             - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                             - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                              - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                              - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                              - surface_T23B_3pt_D(sigma_0, q2);
@@ -20296,14 +20297,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B_m1 = std::bind(&Implementation::surface_T23B_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C_m1 = std::bind(&Implementation::surface_T23B_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt_m1 = std::bind(&Implementation::integrand_T23B_3pt_m1, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A_m1 = std::bind(&Implementation::surface_T23B_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B_m1 = std::bind(&Implementation::surface_T23B_3pt_B_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C_m1 = std::bind(&Implementation::surface_T23B_3pt_C_m1, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt_m1 = std::bind(&Implementation::integrand_T23B_3pt_m1, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A_m1 = std::bind(&Implementation::surface_T23B_3pt_A_m1, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt_m1 = integrate(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt_m1 = integrate<3>(integrand_3pt_m1, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt_m1  = 0.0
-                                - integrate(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A_m1, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B_m1, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C_m1, 0.0, 1.0)                            // integrate over x_2
                                 - surface_T23B_3pt_D_m1(sigma_0, q2);
@@ -20318,14 +20319,14 @@ namespace eos
 
             if (switch_3pt != 0.0)
             {
-                const std::function<double (const double &)> surface_3pt_B    = std::bind(&Implementation::surface_T23B_3pt_B, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const double &)> surface_3pt_C    = std::bind(&Implementation::surface_T23B_3pt_C, this, std::placeholders::_1, sigma_0, q2);
-                const std::function<double (const std::array<double, 3> &)> integrand_3pt = std::bind(&Implementation::integrand_T23B_3pt, this, std::placeholders::_1, q2);
-                const std::function<double (const std::array<double, 2> &)> surface_3pt_A = std::bind(&Implementation::surface_T23B_3pt_A, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_B    = std::bind(&Implementation::surface_T23B_3pt_B, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<1> surface_3pt_C    = std::bind(&Implementation::surface_T23B_3pt_C, this, std::placeholders::_1, sigma_0, q2);
+                const cubature::integrand<3> integrand_3pt = std::bind(&Implementation::integrand_T23B_3pt, this, std::placeholders::_1, q2);
+                const cubature::integrand<2> surface_3pt_A = std::bind(&Implementation::surface_T23B_3pt_A, this, std::placeholders::_1, sigma_0, q2);
 
-                integral_3pt    = integrate(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
+                integral_3pt    = integrate<3>(integrand_3pt, { 0.0, 0.0, 0.0 }, { sigma_0, 1.0, 1.0 }, cubature::Config());
                 surface_3pt     = 0.0
-                                - integrate(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
+                                - integrate<2>(surface_3pt_A, { 0.0, 0.0 }, { 1.0, 1.0 }, cubature::Config()) // integrate over x_1 and x_2
                                 - integrate<GSL::QAGS>(surface_3pt_B, 0.0, 1.0)                            // integrate over x_1
                                 - integrate<GSL::QAGS>(surface_3pt_C, 0.0, 1.0)                            // integrate over x_2
                                 - surface_T23B_3pt_D(sigma_0, q2);

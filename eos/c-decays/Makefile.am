@@ -9,7 +9,7 @@ libeoscdecays_la_SOURCES = \
 	dq-to-l-nu.cc dq-to-l-nu.hh \
 	dstarq-to-l-nu.cc dstarq-to-l-nu.hh \
 	d-to-psd-l-nu.cc d-to-psd-l-nu.hh \
-	lambdac-to-lambda-l-nu.cc lambdac-to-lambda-l-nu.hh \
+	lambdac-to-onehalfplus-l-nu.cc lambdac-to-onehalfplus-l-nu.hh \
 	observables.cc observables.hh
 libeoscdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeoscdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
@@ -25,7 +25,7 @@ include_eos_cdecaysdir = $(includedir)/eos/c-decays
 include_eos_cdecays_HEADERS = \
 	dq-to-l-nu.hh \
 	d-to-psd-l-nu.hh \
-	lambdac-to-lambda-l-nu.hh \
+	lambdac-to-onehalfplus-l-nu.hh \
 	observables.hh
 
 EXTRA_DIST =

@@ -67,8 +67,16 @@ class Analysis:
     :type parameters: :class:`eos.Parameters` or None, optional
     """
 
-    def __init__(self, priors, likelihood, external_likelihood=[], global_options={}, manual_constraints={}, fixed_parameters={}, parameters=None, load_prior_file=None):
+    def __init__(self, priors, likelihood, external_likelihood=None, global_options=None, manual_constraints=None, fixed_parameters=None, parameters=None, load_prior_file=None):
         """Constructor."""
+        if external_likelihood is None:
+            external_likelihood = []
+        if global_options is None:
+            global_options = {}
+        if manual_constraints is None:
+            manual_constraints = {}
+        if fixed_parameters is None:
+            fixed_parameters = {}
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'external_likelihood': external_likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = parameters if parameters else eos.Parameters.Defaults()
         """The set of parameters used for this analysis."""
@@ -239,10 +247,10 @@ class Analysis:
         # check for duplicate entries in the likelihood
         set_likelihood = set(likelihood)
         if len(set_likelihood) != len(likelihood):
-            raise ValueError(f'The likelihood contains duplicate entries')
+            raise ValueError('The likelihood contains duplicate entries')
         set_manual_constraints = set(manual_constraints.keys())
         if len(set_manual_constraints) != len(manual_constraints):
-            raise ValueError(f'The manual constraints contain duplicate entries')
+            raise ValueError('The manual constraints contain duplicate entries')
         set_intersection = set_likelihood.intersection(set_manual_constraints)
         if len(set_intersection) > 0:
             raise ValueError(f'The likelihood contains constraint names also present in the manual_constraints: {set_intersection}')
@@ -687,7 +695,7 @@ class Analysis:
         eos.completed(f'... completed adaptations after {step} steps(s) with perplexity = {last_perplexity}')
 
         # draw final samples
-        eos.inprogress(f'Beginning the final sampling ...')
+        eos.inprogress('Beginning the final sampling ...')
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
 

@@ -68,10 +68,10 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 const double eps = 1e-4;
 
                 // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), -0.20167, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  0.32745, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.11727, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),          0.58742, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), -0.20052, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  0.32750, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.11678, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),          0.58731, eps);
             }
 
             // tests for SM observables, Re{cVL}=1.0 in the SM and all other couplings are zero, l = mu
@@ -96,10 +96,10 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 const double eps = 1e-4;
 
                 // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(3.154, 11.1), +0.02447,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(3.154, 11.1),  0.29600,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(3.154, 11.1), -0.022086, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(3.154, 11.1),          0.38041,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(3.154, 11.1), +0.024465, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(3.154, 11.1),  0.295939, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(3.154, 11.1), -0.022105, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(3.154, 11.1),          0.380371, eps);
             }
 
             // Consistency check for R_lambda
@@ -174,10 +174,10 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 const double eps = 1e-4;
 
                 // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1),   0.04665,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  -0.01808,  eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1),  -0.015045, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),           0.401858, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1),   0.046821, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  -0.018187, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1),  -0.015075, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),           0.401914, eps);
             }
 
             // tests for NP observables (no tensors)

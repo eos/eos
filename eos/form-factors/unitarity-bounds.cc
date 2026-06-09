@@ -167,7 +167,7 @@ namespace eos
         ~Implementation() = default;
 
         /*
-         * HQET parameters following [BLPR2017]
+         * HQET parameters following [BLPR:2017A]
          */
         inline double _mu() const { return 2.31; } // mu^2 = m_b * m_c
         inline double _alpha_s() const { return 0.26; }
@@ -2946,8 +2946,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL1997] quark condensate
-            cond_G2(0.02),     // (p["B->D^*::<alS/pi G^2>@BGL1997"], u), // [BGL1997] gluon condensate
+            cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL:1997A] quark condensate
+            cond_G2(0.02),     // (p["B->D^*::<alS/pi G^2>@BGL1997"], u), // [BGL:1997A] gluon condensate
             mu(4.2),                                       // TODO remove hard-coded numerical value
             model(Model::make("SM", p, o))
         {
@@ -2998,7 +2998,7 @@ namespace eos
 
         double chi_L(const double & u) const
         {
-            // [BGL1997] eq.(4.1) + (4.3) + (4.6, 4.9)
+            // [BGL:1997A] eq.(4.1) + (4.3) + (4.6, 4.9)
             // limit for u -> 1 in eq.(4.11)
             // limit for u -> 0 in eq.(4.10)
             const double aS = model->alpha_s(mu) / M_PI;
@@ -3104,190 +3104,5 @@ namespace eos
     OPEUnitarityBounds::end_options()
     {
         return Implementation<OPEUnitarityBounds>::options.cend();
-    }
-
-    template <> struct Implementation<BGLUnitarityBounds>
-    {
-        // B->D^* parameters
-        std::array<UsedParameter, 4> _a_g, _a_f, _a_F1, _a_F2;
-        // B->D parameters
-        std::array<UsedParameter, 4> _a_f_p, _a_f_0, _a_f_t;
-
-        // option to determine if we use z^3 terms in the leading-power IW function
-        SwitchOption opt_zorder_bound;
-        unsigned zorder_bound;
-
-        // number of light flavor multiplets
-        UsedParameter nf;
-
-        static const std::vector<OptionSpecification> options;
-
-        std::string _par_name_dstar(const std::string & ff_name)
-        {
-            return std::string("B->D^*") + std::string("::a^") + ff_name + std::string("@BGL1997");
-        }
-
-        std::string _par_name_d(const std::string & ff_name)
-        {
-            return std::string("B->D") + std::string("::a^") + ff_name + std::string("@BGL1997");
-        }
-
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            // B->D^*
-            _a_g{{   UsedParameter(p[_par_name_dstar("g_0")],  u),
-                     UsedParameter(p[_par_name_dstar("g_1")],  u),
-                     UsedParameter(p[_par_name_dstar("g_2")],  u),
-                     UsedParameter(p[_par_name_dstar("g_3")],  u) }},
-            _a_f{{   UsedParameter(p[_par_name_dstar("f_0")],  u),
-                     UsedParameter(p[_par_name_dstar("f_1")],  u),
-                     UsedParameter(p[_par_name_dstar("f_2")],  u),
-                     UsedParameter(p[_par_name_dstar("f_3")],  u) }},
-            _a_F1{{  UsedParameter(p[_par_name_dstar("F1_0")], u),
-                     UsedParameter(p[_par_name_dstar("F1_1")], u),
-                     UsedParameter(p[_par_name_dstar("F1_2")], u),
-                     UsedParameter(p[_par_name_dstar("F1_3")], u) }},
-            _a_F2{{  UsedParameter(p[_par_name_dstar("F2_0")], u),
-                     UsedParameter(p[_par_name_dstar("F2_1")], u),
-                     UsedParameter(p[_par_name_dstar("F2_2")], u),
-                     UsedParameter(p[_par_name_dstar("F2_3")], u) }},
-            // B->D
-            _a_f_p{{ UsedParameter(p[_par_name_d("f+_0")], u),
-                     UsedParameter(p[_par_name_d("f+_1")], u),
-                     UsedParameter(p[_par_name_d("f+_2")], u),
-                     UsedParameter(p[_par_name_d("f+_3")], u) }},
-            _a_f_0{{ UsedParameter(p[_par_name_d("f0_0")], u),
-                     UsedParameter(p[_par_name_d("f0_1")], u),
-                     UsedParameter(p[_par_name_d("f0_2")], u),
-                     UsedParameter(p[_par_name_d("f0_3")], u) }},
-            _a_f_t{{ UsedParameter(p[_par_name_d("fT_0")], u),
-                     UsedParameter(p[_par_name_d("fT_1")], u),
-                     UsedParameter(p[_par_name_d("fT_2")], u),
-                     UsedParameter(p[_par_name_d("fT_3")], u) }},
-            // further parameters
-            opt_zorder_bound(o, "z-order-bound"_ok, { "1", "2" }, "2"),
-            nf(p["B(*)->D(*)::n_f@BGL1997"], u)
-        {
-            if ("1" == opt_zorder_bound.value())
-            {
-                zorder_bound = 1;
-            }
-            else if ("2" == opt_zorder_bound.value())
-            {
-                zorder_bound = 2;
-            }
-            else
-            {
-                throw InternalError("Only z-order-bound=2 is presently supported");
-            }
-        }
-
-        ~Implementation() = default;
-
-        // bounds up to z^2
-        // {{{
-        double bound_0p() const
-        {
-            double result = 0.0;
-
-            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
-            {
-                result += power_of<2>(_a_f_0[i]) * nf; // to account for flavor symmetry
-            }
-
-            return result;
-        }
-
-        double bound_0m() const
-        {
-            double result = 0.0;
-
-            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
-            {
-                result += power_of<2>(_a_F2[i]) * nf; // to account for flavor symmetry
-            }
-
-            return result;
-        }
-
-        double bound_1p() const
-        {
-            double result = 0.0;
-
-            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
-            {
-                result += power_of<2>(_a_f[i]) * nf; // to account for flavor symmetry
-                result += power_of<2>(_a_F1[i]) * nf; // to account for flavor symmetry
-            }
-
-            return result;
-        }
-
-        double bound_1m() const
-        {
-            double result = 0.0;
-
-            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
-            {
-                result += power_of<2>(_a_f_p[i]) * nf; // to account for flavor symmetry
-                result += power_of<2>(_a_g[i]) * nf; // to account for flavor symmetry
-            }
-
-            return result;
-        }
-        // }}}
-    };
-
-    const std::vector<OptionSpecification>
-    Implementation<BGLUnitarityBounds>::options
-    {
-        { "z-order-bound"_ok, { "1"s, "2"s }, "2"s }
-    };
-
-    BGLUnitarityBounds::BGLUnitarityBounds(const Parameters & p, const Options & o) :
-        PrivateImplementationPattern<BGLUnitarityBounds>(new Implementation<BGLUnitarityBounds>(p, o, *this))
-    {
-    }
-
-    BGLUnitarityBounds::~BGLUnitarityBounds() = default;
-
-    double
-    BGLUnitarityBounds::bound_0p() const
-    {
-        return _imp->bound_0p();
-    }
-
-    double
-    BGLUnitarityBounds::bound_0m() const
-    {
-        return _imp->bound_0m();
-    }
-
-    double
-    BGLUnitarityBounds::bound_1p() const
-    {
-        return _imp->bound_1p();
-    }
-
-    double
-    BGLUnitarityBounds::bound_1m() const
-    {
-        return _imp->bound_1m();
-    }
-
-    const std::set<ReferenceName>
-    BGLUnitarityBounds::references
-    {
-    };
-
-    std::vector<OptionSpecification>::const_iterator
-    BGLUnitarityBounds::begin_options()
-    {
-        return Implementation<BGLUnitarityBounds>::options.cbegin();
-    }
-
-    std::vector<OptionSpecification>::const_iterator
-    BGLUnitarityBounds::end_options()
-    {
-        return Implementation<BGLUnitarityBounds>::options.cend();
     }
 }

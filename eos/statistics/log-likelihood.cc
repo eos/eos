@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013-2019 Danny van Dyk
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2026 Danny van Dyk
+ * Copyright (c) 2011      Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -63,7 +63,7 @@ namespace eos
         {
             ObservableCache cache;
 
-            ObservableCache::Id id;
+            ObservableCache::ObservableId id;
 
             const double mode, sigma_lower, sigma_upper;
 
@@ -82,7 +82,7 @@ namespace eos
 
             const unsigned _number_of_observations;
 
-            GaussianBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max,
+            GaussianBlock(const ObservableCache & cache, ObservableCache::ObservableId id, const double & min, const double & central, const double & max,
                     const unsigned & number_of_observations) :
                 cache(cache),
                 id(id),
@@ -219,13 +219,13 @@ namespace eos
             }
         };
 
-        // For more details on the LogGamma distribution, see [C2004].
+        // For more details on the LogGamma distribution, see [C:2010A].
         struct LogGammaBlock :
             public LogLikelihoodBlock
         {
             ObservableCache cache;
 
-            ObservableCache::Id id;
+            ObservableCache::ObservableId id;
 
             double central, sigma_lower, sigma_upper;
 
@@ -235,7 +235,7 @@ namespace eos
 
             unsigned _number_of_observations;
 
-            LogGammaBlock(const ObservableCache & cache, ObservableCache::Id id,
+            LogGammaBlock(const ObservableCache & cache, ObservableCache::ObservableId id,
                           const double & min, const double & central, const double & max,
                           const double & alpha, const double & lambda,
                           const unsigned & number_of_observations) :
@@ -475,7 +475,7 @@ namespace eos
         {
             ObservableCache cache;
 
-            ObservableCache::Id id;
+            ObservableCache::ObservableId id;
 
             const double physical_limit;
 
@@ -485,7 +485,7 @@ namespace eos
 
             unsigned _number_of_observations;
 
-            AmorosoBlock(const ObservableCache & cache, ObservableCache::Id id, const double & physical_limit,
+            AmorosoBlock(const ObservableCache & cache, ObservableCache::ObservableId id, const double & physical_limit,
                          const double & theta, const double & alpha, const double & beta,
                          const unsigned & number_of_observations) :
                 cache(cache),
@@ -787,7 +787,7 @@ namespace eos
         {
             ObservableCache _cache;
 
-            std::vector<ObservableCache::Id> _ids;
+            std::vector<ObservableCache::ObservableId> _ids;
 
             const unsigned _dim_pred;
             const unsigned _dim_meas;
@@ -810,7 +810,7 @@ namespace eos
             gsl_vector * _measurements;
             gsl_vector * _measurements_2;
 
-            MultivariateGaussianBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> && ids,
+            MultivariateGaussianBlock(const ObservableCache & cache, const std::vector<ObservableCache::ObservableId> && ids,
                     gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations) :
                 _cache(cache),
                 _ids(ids),
@@ -935,7 +935,7 @@ namespace eos
                 const auto dim_meas = _mean->size;
                 const auto dim_pred = _ids.size();
 
-                std::vector<ObservableCache::Id> ids;
+                std::vector<ObservableCache::ObservableId> ids;
 
                 // add observables to cache
                 for (auto i = 0u ; i < dim_pred ; ++i)
@@ -1060,14 +1060,14 @@ namespace eos
         {
             ObservableCache cache;
 
-            std::vector<ObservableCache::Id> ids;
+            std::vector<ObservableCache::ObservableId> ids;
 
             const unsigned number_of_observables;
 
             const double bound;
             const double uncertainty;
 
-            UniformBoundBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> && ids,
+            UniformBoundBlock(const ObservableCache & cache, const std::vector<ObservableCache::ObservableId> && ids,
                               const double & bound, const double & uncertainty) :
                 cache(cache),
                 ids(ids),
@@ -1169,7 +1169,7 @@ namespace eos
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
-                std::vector<ObservableCache::Id> ids;
+                std::vector<ObservableCache::ObservableId> ids;
 
                 // add observables to cache
                 for (auto i = 0u ; i < number_of_observables ; ++i)
@@ -1198,9 +1198,9 @@ namespace eos
         if (max <= central)
             throw InternalError("LogLikelihoodBlock::Gaussian: max value <= central value");
 
-        unsigned index = cache.add(observable);
+        auto id = cache.add(observable);
 
-        return LogLikelihoodBlockPtr(new implementation::GaussianBlock(cache, index, min, central, max, number_of_observations));
+        return LogLikelihoodBlockPtr(new implementation::GaussianBlock(cache, id, min, central, max, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
@@ -1221,9 +1221,9 @@ namespace eos
             throw InternalError("LogLikelihoodBlock::LogGamma: shape parameter alpha (" + stringify(alpha) +
                                 ") must be positive");
 
-        unsigned index = cache.add(observable);
+        auto id = cache.add(observable);
 
-        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, alpha, lambda, number_of_observations));
+        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, id, min, central, max, alpha, lambda, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
@@ -1243,8 +1243,8 @@ namespace eos
         if (upper_limit_90 <= upper_limit_50)
             throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_90 <= upper_limit_50");
 
-        unsigned index = cache.add(observable);
-        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta, number_of_observations);
+        auto id = cache.add(observable);
+        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, id, physical_limit, theta, alpha, beta, number_of_observations);
 
         // check consistency
         if (std::abs(a->cdf(upper_limit_10) - 0.10) > 1e-4)
@@ -1271,8 +1271,8 @@ namespace eos
         const double & physical_limit, const double & theta, const double & alpha, const double & beta,
         const unsigned & number_of_observations)
     {
-        unsigned index = cache.add(observable);
-        return LogLikelihoodBlockPtr(new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta, number_of_observations));
+        auto id = cache.add(observable);
+        return LogLikelihoodBlockPtr(new implementation::AmorosoBlock(cache, id, physical_limit, theta, alpha, beta, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
@@ -1302,26 +1302,26 @@ namespace eos
     LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
             gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations)
     {
-        std::vector<unsigned> indices;
+        std::vector<ObservableCache::ObservableId> ids;
         for (auto & o : observables)
         {
-            indices.push_back(cache.add(o));
+            ids.push_back(cache.add(o));
         }
 
-        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(indices), mean, covariance, response, number_of_observations));
+        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(ids), mean, covariance, response, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::UniformBound(ObservableCache cache, const std::vector<ObservablePtr> & observables,
             const double & bound, const double & uncertainty)
     {
-        std::vector<unsigned> indices;
+        std::vector<ObservableCache::ObservableId> ids;
         for (auto & o : observables)
         {
-            indices.push_back(cache.add(o));
+            ids.push_back(cache.add(o));
         }
 
-        return LogLikelihoodBlockPtr(new implementation::UniformBoundBlock(cache, std::move(indices), bound, uncertainty));
+        return LogLikelihoodBlockPtr(new implementation::UniformBoundBlock(cache, std::move(ids), bound, uncertainty));
     }
 
     template <>

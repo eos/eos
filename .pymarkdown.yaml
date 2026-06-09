@@ -1,0 +1,17 @@
+plugins:
+  MD012: # multiple consecutive blank lines
+    enabled: false
+  MD013: # line length
+    enabled: false
+  MD024: # multiple headings with the same content
+    siblings_only: true
+  MD032: # lists should be surrounded by blank lines
+    enabled: false
+  MD041: # first line in file should be a top level heading
+    enabled: false # Since it complains about the images in the README.md file
+  MD031: # Fenced code blocks should be surrounded by blank lines
+    enabled: false
+  MD040: # Fenced code blocks should have a language specified
+    enabled: false
+  MD022: # Headings should be surrounded by blank lines
+    enabled: false # Since really we are fine with any number of blank lines around headings

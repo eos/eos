@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -418,6 +418,17 @@ namespace eos
                         /
                         <<B->Kll::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
                         )"),
+
+                // PDFs
+                make_observable("B->Kll::UnnormalizedPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToKDilepton::two_differential_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)")),
+
+                make_observable("B->Kll::NormalizationPDF(q2,cos(theta_l))",
+                        Unit::None(),
+                        &BToKDilepton::integrated_decay_width,
+                        std::make_tuple("q2", "cos(theta_l)"))
             }
         );
 
@@ -438,7 +449,7 @@ namespace eos
                 make_observable("B->K^*ll::d^4Gamma",
                         Unit::GeV(),
                         &BToKstarDilepton::decay_width,
-                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi")),
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi")),
 
                 make_observable("B->K^*ll::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
                         Unit::InverseGeV2(),
@@ -1382,6 +1393,18 @@ namespace eos
                         &BToKstarDilepton::H_long_corrections,
                         std::make_tuple("q2")),
 
+                // PDFs
+                make_observable("B->K^*ll::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
+                        Unit::None(),
+                        &BToKstarDilepton::decay_width_LHCb,
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi")),
+
+                make_cacheable_observable("B->K^*ll::NormalizationPDF(q2,cos(theta_l),cos(theta_K),phi)",
+                        Unit::None(),
+                        &BToKstarDilepton::prepare,
+                        &BToKstarDilepton::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options()),
 
 
 
@@ -1391,7 +1414,7 @@ namespace eos
                 make_observable("B_s->phill::d^4Gamma",
                         Unit::InverseGeV2(),
                         &BsToPhiDilepton::decay_width,
-                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi"),
+                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi"),
                         Options{ { "q"_ok, "s" } }),
 
                 make_observable("B_s->phill::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}_s\to \phi\ell^+\ell^-))",
@@ -2565,6 +2588,18 @@ namespace eos
                         Unit::None(),
                         &BToPseudoscalarDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q"_ok, "u" }, { "P"_ok, "K" } }),
+
+                // PDFs
+                make_observable("B->Knunu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "q"_ok, "u" }, { "P"_ok, "K" } }),
+                make_observable("B->Knunu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
                         Options{ { "q"_ok, "u" }, { "P"_ok, "K" } })
             }
         );
@@ -2636,6 +2671,18 @@ namespace eos
                 make_observable("B->K^*nunu::F_L", R"(F_L(\bar{B}\to \bar{K}^*\nu\bar\nu))",
                         Unit::None(),
                         &BToVectorDineutrino::integrated_longitudinal_polarisation,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "D"_ok, "s" }, { "I"_ok, "1/2" } }),
+
+                // PDFs
+                make_observable("B->K^*nunu::UnnormalizedPDF(q2)",
+                        Unit::None(),
+                        &BToVectorDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "D"_ok, "s" }, { "I"_ok, "1/2" } }),
+                make_observable("B->K^*nunu::NormalizationPDF(q2)",
+                        Unit::None(),
+                        &BToVectorDineutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "D"_ok, "s" }, { "I"_ok, "1/2" } })
             }

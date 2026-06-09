@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2014, 2015, 2016, 2017 Danny van Dyk
- * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019 Christoph Bobeth
- * Copyright (c) 2025 Méril Reboud
+ * Copyright (c) 2013-2017 Danny van Dyk
+ * Copyright (c) 2018-2019 Ahmet Kokulu
+ * Copyright (c) 2019      Christoph Bobeth
+ * Copyright (c) 2025      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -48,15 +48,19 @@ namespace eos
             double normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const;
 
             // Single-differential Observables
+            double differential_decay_width(const double & q2) const;
             double differential_branching_ratio(const double & q2) const;
             double differential_a_fb_leptonic(const double & q2) const;
             double differential_flat_term(const double & q2) const;
             double differential_lepton_polarization(const double & q2) const;
+            double differential_branching_ratio_perp(const double & kperp) const;
 
             // Single-differential Observables - normalized(|V{c,u}b|=1)
+            double normalized_differential_decay_width(const double & q2) const;
             double normalized_differential_branching_ratio(const double & q2) const;
 
             // Integrated Observables
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
             double integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
             double integrated_flat_term(const double & q2_min, const double & q2_max) const;

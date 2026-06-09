@@ -61,14 +61,14 @@ namespace eos
     };
 
     double
-    LambdaBToLambda1520Dilepton::AmplitudeGenerator::lambda(const double & s) const
+    LambdaBToLambda1520Dilepton::AmplitudeGenerator::lambda(const double & q2) const
     {
-        return eos::lambda(m_Lb() * m_Lb(), m_Lstar() * m_Lstar(), s);
+        return eos::lambda(m_Lb() * m_Lb(), m_Lstar() * m_Lstar(), q2);
     }
 
     double
-    LambdaBToLambda1520Dilepton::AmplitudeGenerator::beta_l(const double & s) const
+    LambdaBToLambda1520Dilepton::AmplitudeGenerator::beta_l(const double & q2) const
     {
-        return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
+        return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
     }
 }

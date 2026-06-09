@@ -28,7 +28,6 @@
 #include <eos/maths/multiplepolylog-li22-const.hh>
 #include <eos/utils/exception.hh>
 
-//#include <stdio.h>
 #include <iostream>
 
 namespace eos
@@ -697,7 +696,8 @@ namespace eos
 
         complex<double> li22logA1(const complex<double> &x, const complex<double> &y, int ncmax)
         {
-            if(ncmax>99){printf("WRONG!!");}
+            if (ncmax > 99)
+                throw InternalError("li22logA1: expansion order ncmax exceeds the supported maximum of 99");
             return li22logA1ff1(x,y) + li22logA1ff2(x,y,ncmax);
         }
 
@@ -1011,19 +1011,6 @@ namespace eos
             return libasic(n,x2);
         }
         */
-
-        void writecomplex(complex<double> x)
-        {
-            const double im = x.imag();
-            char c;
-            if(im<0){
-                c='-';
-            }
-            else{
-                c='+';
-            }
-            printf("%.20f%c%.20f*I\n",x.real(),c,abs(im));
-        }
 
     }
 

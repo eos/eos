@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2026 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,7 +22,7 @@
 #include <eos/c-decays/dq-to-l-nu.hh>
 #include <eos/c-decays/dstarq-to-l-nu.hh>
 #include <eos/c-decays/d-to-psd-l-nu.hh>
-#include <eos/c-decays/lambdac-to-lambda-l-nu.hh>
+#include <eos/c-decays/lambdac-to-onehalfplus-l-nu.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -204,6 +205,7 @@ namespace eos
     // }}}
 
     // Lambda_c decays
+    // Lambda_c -> Lambda l nu
     // {{{
     ObservableGroup
     make_lambdac_to_lambda_l_nu_group()
@@ -214,15 +216,42 @@ namespace eos
             {
                 make_observable("Lambda_c->Lambdalnu::BR", R"(\mathcal{B}(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
                         Unit::None(),
-                        &LambdaCToLambdaLeptonNeutrino::integrated_branching_ratio,
+                        &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
-                        Options{}),
+                        Options{ { "B"_ok, "Lambda" } }),
 
                 make_observable("Lambda_c->Lambdalnu::dBR/dq2", R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
                         Unit::InverseGeV2(),
-                        &LambdaCToLambdaLeptonNeutrino::differential_branching_ratio,
+                        &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2"),
-                        Options{}),
+                        Options{ { "B"_ok, "Lambda" } }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // Lambda_c -> Neutron l nu
+    // {{{
+    ObservableGroup
+    make_lambdac_to_neutron_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\Lambda_c \to n \ell^+ \nu$ decays)",
+            R"(The option "l" selects the charged lepton flavor.)",
+            {
+                make_observable("Lambda_c->Neutronlnu::BR", R"(\mathcal{B}(\Lambda_c^+ \to n \ell^+ \nu))",
+                        Unit::None(),
+                        &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "B"_ok, "Neutron" } }),
+
+                make_observable("Lambda_c->Neutronlnu::dBR/dq2", R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to n \ell^+ \nu))",
+                        Unit::InverseGeV2(),
+                        &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "B"_ok, "Neutron" } }),
             }
         );
 
@@ -244,8 +273,9 @@ namespace eos
                 make_d_to_k_l_nu_group(),
                 make_d_to_eta_l_nu_group(),
 
-                // Lc -> L l^+ nu
-                make_lambdac_to_lambda_l_nu_group()
+                // Lc -> Baryon(1/2+) l^+ nu
+                make_lambdac_to_lambda_l_nu_group(),
+                make_lambdac_to_neutron_l_nu_group()
             }
         );
 

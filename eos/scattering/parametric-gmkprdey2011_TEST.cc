@@ -131,8 +131,8 @@ class GMKPRDEY2011ScatteringAmplitudesTest :
                 TEST_CHECK_NEARLY_EQUAL( amp.omnes_factor(100.0 , 2 , IsospinRepresentation::zero).imag()   ,  0.0      ,  eps);
 
                 double sp = 4.0 * 0.496 * 0.496;
-                TEST_CHECK_NEARLY_EQUAL( amp.omnes_outer_function(-100000.0 , sp , 0.0 , 4096 , 1 , IsospinRepresentation::one).real(),  0.0      ,  eps);
-                TEST_CHECK_NEARLY_EQUAL( amp.omnes_outer_function(      0.0 , sp , 0.0 , 4096 , 1 , IsospinRepresentation::one).real(),  0.26187  ,  eps);
+                TEST_CHECK_NEARLY_EQUAL( amp.omnes_outer_function(-100000.0 , sp , 0.0 , 1e-5, 1 , IsospinRepresentation::one).real(),  0.0      ,  eps);
+                TEST_CHECK_NEARLY_EQUAL( amp.omnes_outer_function(      0.0 , sp , 0.0 , 1e-5, 1 , IsospinRepresentation::one).real(),  0.26187  ,  eps);
 
                 p["pipi->pipi::P1_B_0@GMKPRDEY2011"]    = 1.066;
                 TEST_CHECK_NEARLY_EQUAL( amp.scattering_amplitude(0.9 , 1 , IsospinRepresentation::one).real() , -0.495833 ,  eps);

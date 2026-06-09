@@ -23,7 +23,7 @@
 #include <eos/form-factors/pi-lcdas.hh>
 #include <eos/maths/derivative.hh>
 #include <eos/utils/exception.hh>
-#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
 #include <eos/maths/polylog.hh>
@@ -66,6 +66,9 @@ namespace eos
         // routine to determine renormlization scale
         std::function<double (const double &)> mu;
 
+        // cubature config
+        cubature::Config cub_conf;
+
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -79,7 +82,8 @@ namespace eos
             _S_switch(opt_L.value() && PartialWave::S),
             _P_switch(opt_L.value() && PartialWave::P),
             _D_switch(opt_L.value() && PartialWave::D),
-            _F_switch(opt_L.value() && PartialWave::F)
+            _F_switch(opt_L.value() && PartialWave::F),
+            cub_conf(cubature::Config().epsrel(5e-3))
         {
             std::string scale = o.get("scale"_ok, "fixed");
 
@@ -95,96 +99,7 @@ namespace eos
             {
                 throw InvalidOptionValueError("scale"_ok, scale, "fixed, variable");
             }
-
-#if 0
-            static const double q2 = 0.6, k2 = 18.6;
-            std::cout << "q2 = " << q2 << std::endl;
-            std::cout << "k2 = " << k2 << std::endl;
-
-            auto tr = traces_long(q2, k2, 0.0);
-            std::cout << "s_1 = " << tr.s1 << std::endl;
-            std::cout << "s_2 = " << tr.s2 << std::endl;
-            std::cout << "s_3 = " << tr.s3 << std::endl;
-            std::cout << "s_4 = " << tr.s4 << std::endl;
-            std::cout << "s_5 = " << tr.s5 << std::endl;
-            std::cout << "s_6 = " << tr.s6 << std::endl;
-            std::cout << "s_7 = " << tr.s7 << std::endl;
-            std::cout << "s_8 = " << tr.s8 << std::endl;
-
-            check_thorsten();
-#endif
         }
-
-#if 0
-        static double gsl_adapter(double * parameters, size_t dim, void * _imp)
-        {
-            if (dim != 3u)
-                throw InternalError("Implemenation<BToPiPiLeptonNeutrino::normalized_differentia_decay_width_gsl_adapter(): wrong number of parameters!");
-
-            const double q2 = parameters[0];
-            const double k2 = parameters[1];
-            const double z  = parameters[2];
-
-            auto imp = reinterpret_cast<const Implementation<AnalyticFormFactorBToPiPiBFvD2016> *>(_imp);
-
-            auto lambda = eos::lambda(q2, k2, imp->m_B() * imp->m_B());
-            auto lambda_pi = eos::lambda(q2, 0.135 * 0.135, imp->m_B() * imp->m_B());
-            if (lambda <= 0)
-                return 0.0;
-
-            auto tr = imp->traces_long(q2, k2, z);
-
-            const double E1 = imp->energy_1(q2, k2, z), E2 = imp->energy_2(q2, k2, z), m_B = imp->m_B();
-            const double c12 = 2.0 * E1 * m_B / k2 - 1.0, c13 = 0.5;
-            const double c21 = 1.0, c22 = 1.0, c25 = -m_B / (2.0 * E2), c27 = -0.5;
-
-            complex<double> M_long = complex<double>(1.0, 0.0) * (
-                        imp->integral_lo_tw2_f1(q2, k2, z) * (c12 * tr.s2 + c13 * tr.s3)
-                    +   imp->integral_lo_tw2_f2(q2, k2, z) * (c21 * tr.s1 + c22 * tr.s2 + c25 * tr.s5 + c27 * tr.s7)
-                    );
-            return std::norm(M_long / k2) * q2 ;
-        }
-
-        inline double R_int_num()
-        {
-            // Yields a numerical error of approximately 0.2%.
-            static const size_t calls = 50000;
-
-            const double x_min[3] = { 0.02, 18.60, -1.0 };
-            const double x_max[3] = { 1.00, 24.60, +1.0 };
-
-            gsl_monte_function integrand{ &gsl_adapter, 3u, const_cast<void *>(reinterpret_cast<const void *>(this)) };
-
-            double result, error;
-
-            gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
-            gsl_monte_miser_state * state = gsl_monte_miser_alloc(3u);
-
-            gsl_monte_miser_integrate(&integrand, x_min, x_max, 3u, calls, rng, state, &result, &error);
-
-            gsl_monte_miser_free(state);
-            gsl_rng_free(rng);
-
-            return result;
-        }
-
-        inline double R_int_denom_integrand(const double & q2)
-        {
-            return eos::lambda(m_B() * m_B(), 0.135 * 0.135, q2) / power_of<2>(b_to_pi_ff->f_p(q2));
-        }
-
-        inline double R_int_denom()
-        {
-            std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiPiBFvD2016>::R_int_denom_integrand, *this, std::placeholders::_1));
-
-            return integrate<GSL::QNG>(integrand, 0.02, 0.95);
-        }
-
-        inline void check_thorsten()
-        {
-            std::cout << "R_int = " << R_int_num() / R_int_denom() << std::endl;
-        }
-#endif
 
         /*!
          * Returns the renormalization scale value as a parameter value.
@@ -312,7 +227,7 @@ namespace eos
 
         /*
          * Using the traces s1 through s8, any of the form factors can be cast
-         * in the form given in eq. (3.13), [BFvD2016].
+         * in the form given in eq. (3.13), [BFvD:2014A].
          */
         complex<double> ff_lo_tw2(const Traces & tr, const double & q2, const double & k2, const double & z) const
         {
@@ -389,7 +304,7 @@ namespace eos
 
         /*
          * Using the traces s1 through s8, any of the form factors can be cast
-         * in the form given in eq. (3.20) and (3.21), [BFvD2016].
+         * in the form given in eq. (3.20) and (3.21), [BFvD:2014A].
          */
         complex<double> ff_lo_tw3(const Traces & tr, const double & q2, const double & k2, const double & z) const
         {
@@ -419,54 +334,54 @@ namespace eos
 
             const double m_B2 = m_B() * m_B();
 
-            // Integral over f_1, cf. [BFvD2016], eq. (3.11)
+            // Integral over f_1, cf. [BFvD:2014A], eq. (3.11)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_1(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_1(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
-            // Integral over f_2, cf. [BFvD2016], eq. (3.11)
+            // Integral over f_2, cf. [BFvD:2014A], eq. (3.11)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw2_f2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_2(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
             }
 
-            // Integral over f_{sigma,1}, cf. [BFvD2016], eq. (3.21)
+            // Integral over f_{sigma,1}, cf. [BFvD:2014A], eq. (3.21)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma1(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_1}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
-            // Integral over f_{sigma,2}, cf. [BFvD2016], eq. (3.21)
+            // Integral over f_{sigma,2}, cf. [BFvD:2014A], eq. (3.21)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_sigma2(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma_2}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
-            // Integral over f_{sigma,finite}, cf. [BFvD2016], eq. (3.21)
+            // Integral over f_{sigma,finite}, cf. [BFvD:2014A], eq. (3.21)
             {
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD2016]" });
-                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD2016]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0112245 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0112245, k2: 0.6666667, z: +1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, -1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: -1), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2,  0.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z:  0), [BFvD:2014A]" });
+                results.add(Diagnostics::Entry{ integral_lo_tw3_finite(0.0224490 * m_B2, 0.6666667 * m_B2, +1.0), "I_{sigma,finite}(q2: 0.0224490, k2: 0.6666667, z: +1), [BFvD:2014A]" });
             }
 
             return results;
@@ -562,9 +477,9 @@ namespace eos
             return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_perp(q2, k2, x);
         };
 
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * _imp->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * _imp->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * _imp->_F_switch;
+        res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, _imp->cub_conf) * _imp->_P_switch;
+        res[2] = integrate<1, 1, complex<double>>(integrandD, -1.0, 1.0, _imp->cub_conf) * _imp->_D_switch;
+        res[3] = integrate<1, 1, complex<double>>(integrandF, -1.0, 1.0, _imp->cub_conf) * _imp->_F_switch;
 
         return res;
     }
@@ -589,9 +504,9 @@ namespace eos
             return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_para(q2, k2, x);
         };
 
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * _imp->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * _imp->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * _imp->_F_switch;
+        res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, _imp->cub_conf) * _imp->_P_switch;
+        res[2] = integrate<1, 1, complex<double>>(integrandD, -1.0, 1.0, _imp->cub_conf) * _imp->_D_switch;
+        res[3] = integrate<1, 1, complex<double>>(integrandF, -1.0, 1.0, _imp->cub_conf) * _imp->_F_switch;
 
         return res;
     }
@@ -621,10 +536,10 @@ namespace eos
             return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_long(q2, k2, x);
         };
 
-        res[0] = integrate1D(integrandS, 1024, -1.0, +1.0) * _imp->_S_switch;
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * _imp->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * _imp->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * _imp->_F_switch;
+        res[0] = integrate<1, 1, complex<double>>(integrandS, -1.0, 1.0, _imp->cub_conf) * _imp->_S_switch;
+        res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, _imp->cub_conf) * _imp->_P_switch;
+        res[2] = integrate<1, 1, complex<double>>(integrandD, -1.0, 1.0, _imp->cub_conf) * _imp->_D_switch;
+        res[3] = integrate<1, 1, complex<double>>(integrandF, -1.0, 1.0, _imp->cub_conf) * _imp->_F_switch;
 
         return res;
     }
@@ -654,10 +569,10 @@ namespace eos
             return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_time(q2, k2, x);
         };
 
-        res[0] = integrate1D(integrandS, 1024, -1.0, +1.0) * _imp->_S_switch;
-        res[1] = integrate1D(integrandP, 1024, -1.0, +1.0) * _imp->_P_switch;
-        res[2] = integrate1D(integrandD, 1024, -1.0, +1.0) * _imp->_D_switch;
-        res[3] = integrate1D(integrandF, 1024, -1.0, +1.0) * _imp->_F_switch;
+        res[0] = integrate<1, 1, complex<double>>(integrandS, -1.0, 1.0, _imp->cub_conf) * _imp->_S_switch;
+        res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, _imp->cub_conf) * _imp->_P_switch;
+        res[2] = integrate<1, 1, complex<double>>(integrandD, -1.0, 1.0, _imp->cub_conf) * _imp->_D_switch;
+        res[3] = integrate<1, 1, complex<double>>(integrandF, -1.0, 1.0, _imp->cub_conf) * _imp->_F_switch;
 
         return res;
     }

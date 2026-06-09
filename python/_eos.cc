@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  * Copyright (c) 2024      Lorenz Gärtner
  *
@@ -38,7 +38,9 @@
 #include "eos/utils/qualified-name.hh"
 #include "eos/utils/reference-name.hh"
 #include "eos/utils/units.hh"
+#include "eos/utils/wilson-polynomial.hh"
 
+#include "python/_eos/converters.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
 #include "python/_eos/external-observable.hh"
 #include "python/_eos/log.hh"
@@ -47,6 +49,8 @@
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
+
+#include <tuple>
 
 using namespace boost::python;
 using namespace eos;
@@ -81,6 +85,30 @@ namespace impl
                                                    >();
             }
     };
+
+    // converts a std::tuple instance to a Python tuple, from Boost Python example
+    template <typename... Args_> struct std_tuple_to_python_tuple_converter
+    {
+            template <size_t... Indices_>
+            static boost::python::tuple
+            _make_tuple(const std::index_sequence<Indices_...> &, const std::tuple<Args_...> & t)
+            {
+                return boost::python::make_tuple(std::get<Indices_>(t)...);
+            }
+
+            static PyObject *
+            convert(const std::tuple<Args_...> & t)
+            {
+                return boost::python::incref(boost::python::tuple(_make_tuple(std::make_index_sequence<sizeof...(Args_)>{}, t)).ptr());
+            }
+    };
+
+    template <typename... Args>
+    void
+    expose_std_tuple_to_python()
+    {
+        boost::python::to_python_converter<std::tuple<Args...>, std_tuple_to_python_tuple_converter<Args...>>();
+    }
 
     // converter for std::vector
     // converts a std::vector instance to a Python list
@@ -454,6 +482,8 @@ BOOST_PYTHON_MODULE(_eos)
             .def_readonly("key", &OptionSpecification::key)
             .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()))
             .def_readonly("default_value", &OptionSpecification::default_value);
+    // register converter for OptionSpecification::allowed_values
+    to_python_converter<std::variant<std::string, std::vector<std::string>>, ::impl::VariantOptionAllowedValuesConverter, true>();
 
     // Units
     class_<Unit>("Unit", R"(
@@ -539,6 +569,11 @@ BOOST_PYTHON_MODULE(_eos)
             .def("wilson_coefficients_b_to_s", &Model::wilson_coefficients_b_to_s)
             // alpha_s
             .def("alpha_s", &Model::alpha_s);
+
+    class_<ObservableCache::ObservableId>("ObservableId", R"(
+    )",
+                                          no_init)
+            .def("value", &ObservableCache::ObservableId::value, return_value_policy<return_by_value>());
 
     // ObservableCache
     class_<ObservableCache>("ObservableCache", R"(
@@ -920,6 +955,52 @@ BOOST_PYTHON_MODULE(_eos)
             .def("unit", &ObservableEntry::unit, return_internal_reference<>())
             .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
             .def("options", range(&ObservableEntry::begin_options, &ObservableEntry::end_options));
+
+    def("make_wilson_polynomial_observable", &make_wilson_polynomial_observable, args("name", "reference_observable", "coefficients"),
+        R"(
+        Creates a new observable based on a polynomial expansion of the reference observable.
+
+        :param name: The name of the new observable.
+        :type name: eos.QualifiedName
+        :param reference_observable: The reference observable that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_observable: eos.Observable
+        :param coefficients: The list of names of Wilson coefficients in which the reference observable shall be expanded.
+        :type coefficients: iterable of eos.QualifiedName
+
+        :return: The new observable.
+        :rtype: eos.Observable
+        )");
+    def("make_wilson_polynomial_ratio_observable", &make_wilson_polynomial_ratio_observable, args("name", "reference_observable", "coefficients"),
+        R"(
+        Creates a new observable as a ratio of two polynomial expansion of reference observables.
+
+        :param name: The name of the new observable.
+        :type name: eos.QualifiedName
+        :param reference_numerator: The reference observable numerator that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_numerator: eos.Observable
+        :param reference_denominator: The reference observable denominator that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_denominator: eos.Observable
+        :param coefficients: The list of names of Wilson coefficients in which the reference observable shall be expanded.
+        :type coefficients: iterable of eos.QualifiedName
+
+        :return: The new observable.
+        :rtype: eos.Observable
+        )");
+    ::impl::expose_std_tuple_to_python<double, std::vector<double>, std::vector<double>>();
+    ::impl::std_vector_to_python_converter<double> converter_vector_double;
+    def("compute_wilson_polynomial_coefficients", &::impl::compute_wilson_polynomial_coefficients, args("reference_observable", "coefficients"),
+        R"(
+        Export the coefficients of a polynomial expansion of the reference observable.
+
+        :param reference_observable: The reference observable that shall be expanded as a polynomial in Wilson coefficients.
+        :type reference_observable: eos.Observable
+        :param coefficients: The list of names of Wilson coefficients in which the reference observable shall be expanded.
+        :type coefficients: iterable of eos.QualifiedName
+
+        :return: The coefficients of the polynomial expansion.
+        :rtype: [double, iterable, iterable]
+        )");
+
 
     def("register_python_observable", &register_python_observable);
 

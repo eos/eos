@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -90,6 +91,8 @@ namespace eos
         public SMComponent<components::WET::SBCU>,
         // Hadronic sectors (Delta B = 2)
         public SMComponent<components::WET::SBSB>,
+        // Neutral-current semileptonic sectors (Delta C = 1)
+        public SMComponent<components::WET::UC>,
         // Old-style WET sectors
         public SMComponent<components::DeltaBS1>
     {

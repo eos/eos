@@ -222,13 +222,13 @@ by running the following commands:
   sudo apt-get install libgsl0-dev
 
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
-the ``dynesty``, ``matplotlib``,  ``scipy``, ``pypmc``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
+the ``argcomplete``, ``dynesty``, ``gitlint``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pypmc``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
 
 
 ::
 
   # Make sure to activate your virtual environment first
-  pip install dynesty matplotlib scipy pypmc pyyaml pyhf tqdm wilson
+  pip install argcomplete dynesty gitlint matplotlib scipy pre-commit pypmc pyyaml pyhf tqdm wilson
 
 
 If you intend to build the EOS documentation, you will also need the following software:
@@ -276,7 +276,7 @@ To install the remaining packages, run the following command in a shell
 
 ::
 
-  pip3 install dynesty matplotlib scipy pypmc pyyaml wilson
+  pip3 install argcomplete dynesty gitlint matplotlib scipy pre-commit pypmc pyyaml pyhf tqdm wilson
 
 
 Installing EOS

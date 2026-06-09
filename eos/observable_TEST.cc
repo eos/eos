@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  * Copyright (c) 2024      Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
@@ -24,6 +24,7 @@
 
 #include <test/test.hh>
 
+#include <format>
 #include <iostream>
 #include <ranges>
 
@@ -161,7 +162,7 @@ class ObservableTest : public TestCase
 
                 TEST_CHECK_RELATIVE_ERROR(obs->evaluate(), obs_num->evaluate() / obs_denom->evaluate(), 1e-3);
 
-                ObservableCache::Id obs_id;
+                ObservableCache::ObservableId obs_id;
                 TEST_CHECK_NO_THROW(obs_id = cache.add(obs));
 
                 TEST_CHECK_NO_THROW(cache.update());
@@ -184,76 +185,82 @@ class ObservableTest : public TestCase
 
             /* Test the names of the kinematic variables against a whitelist */
             {
-                static const std::set<std::string> allowed_kinematic_variables{ "q2",
-                                                                                "q2_min",
-                                                                                "q2_max",
-                                                                                "q2_num",
-                                                                                "q2_min_num",
-                                                                                "q2_max_num",
-                                                                                "q2_denom",
-                                                                                "q2_min_denom",
-                                                                                "q2_max_denom",
-                                                                                "Re{q2}",
-                                                                                "Im{q2}",
-                                                                                "q2_e",
-                                                                                "q2_e_min",
-                                                                                "q2_e_max",
-                                                                                "q2_mu",
-                                                                                "q2_mu_min",
-                                                                                "q2_mu_max",
-                                                                                "q2_tau",
-                                                                                "q2_tau_min",
-                                                                                "q2_tau_max",
-                                                                                "k2",
-                                                                                "sqrt(k2)",
-                                                                                "k2_min",
-                                                                                "sqrt(k2)_min",
-                                                                                "k2_max",
-                                                                                "sqrt(k2)_max",
-                                                                                "k2_min_num",
-                                                                                "k2_max_num",
-                                                                                "k2_min_denom",
-                                                                                "k2_max_denom",
-                                                                                "kperp",
-                                                                                "kperp_min",
-                                                                                "kperp_max",
-                                                                                "cos(theta_l)",
-                                                                                "cos(theta_l)_min",
-                                                                                "cos(theta_l)_max",
-                                                                                "cos(theta_D)",
-                                                                                "cos(theta_D)_min",
-                                                                                "cos(theta_D)_max",
-                                                                                "cos(theta_pi)",
-                                                                                "cos(theta_k)",
-                                                                                "phi",
-                                                                                "phi_min",
-                                                                                "phi_max",
-                                                                                "E",
-                                                                                "E_min",
-                                                                                "E_max",
-                                                                                "Re{E}",
-                                                                                "Im{E}",
-                                                                                "E_gamma",
-                                                                                "E_gamma_min",
-                                                                                "E_pi",
-                                                                                "w",
-                                                                                "w_min",
-                                                                                "w_max",
-                                                                                "w_min_num",
-                                                                                "w_max_num",
-                                                                                "w_min_denom",
-                                                                                "w_max_denom",
-                                                                                "mu",
-                                                                                "tau",
-                                                                                "z",
-                                                                                "z_min",
-                                                                                "z_max",
-                                                                                "z_min_num",
-                                                                                "z_max_num",
-                                                                                "z_min_denom",
-                                                                                "z_max_denom",
-                                                                                // Temporary hack for discrete itemization
-                                                                                "k" };
+                auto return_allowed_kinematic_variables = []() -> std::set<std::string>
+                {
+                    std::set<std::string> result{ "q2",
+                                                  "q2_min",
+                                                  "q2_max",
+                                                  "q2_num",
+                                                  "q2_min_num",
+                                                  "q2_max_num",
+                                                  "q2_denom",
+                                                  "q2_min_denom",
+                                                  "q2_max_denom",
+                                                  "Re{q2}",
+                                                  "Im{q2}",
+                                                  "k2",
+                                                  "k2_min",
+                                                  "k2_max",
+                                                  "sqrt(k2)",
+                                                  "sqrt(k2)_min",
+                                                  "sqrt(k2)_max",
+                                                  "k2_min_num",
+                                                  "k2_max_num",
+                                                  "k2_min_denom",
+                                                  "k2_max_denom",
+                                                  "kperp",
+                                                  "kperp_min",
+                                                  "kperp_max",
+                                                  "phi",
+                                                  "phi_min",
+                                                  "phi_max",
+                                                  "E",
+                                                  "E_min",
+                                                  "E_max",
+                                                  "Re{E}",
+                                                  "Im{E}",
+                                                  "E_gamma",
+                                                  "E_gamma_min",
+                                                  "E_pi",
+                                                  "w",
+                                                  "w_min",
+                                                  "w_max",
+                                                  "w_min_num",
+                                                  "w_max_num",
+                                                  "w_min_denom",
+                                                  "w_max_denom",
+                                                  "mu",
+                                                  "tau",
+                                                  "z",
+                                                  "z_min",
+                                                  "z_max",
+                                                  "z_min_num",
+                                                  "z_max_num",
+                                                  "z_min_denom",
+                                                  "z_max_denom",
+                                                  "z_gamma",
+                                                  "z_w",
+                                                  // Temporary hack for discrete itemization
+                                                  "k" };
+
+                    for (std::string l : { "e", "mu", "tau" })
+                    {
+                        result.insert(std::format("q2_{}", l));
+                        result.insert(std::format("q2_{}_min", l));
+                        result.insert(std::format("q2_{}_max", l));
+                    }
+
+                    for (std::string M : { "l", "pi", "K", "D", "D_s", "L" })
+                    {
+                        result.insert(std::format("cos(theta_{})", M));
+                        result.insert(std::format("cos(theta_{})_min", M));
+                        result.insert(std::format("cos(theta_{})_max", M));
+                    }
+
+                    return result;
+                };
+
+                static const auto allowed_kinematic_variables = return_allowed_kinematic_variables();
 
                 auto observables = Observables();
 

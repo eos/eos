@@ -23,7 +23,6 @@ from .plot import Plot, PlotFactory
 from .common import Watermark
 from .data import DataFile
 
-import os
 import copy as _copy
 import inspect
 import matplotlib.pyplot as plt
@@ -41,8 +40,8 @@ class Figure(ABC, Deserializable):
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
-        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
-        :type output: str | None
+        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
+        :type output: str | list[str] | None
         """
 
         raise NotImplementedError
@@ -87,13 +86,17 @@ class SingleFigure(Figure):
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=self.size)
 
-    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
         self.plot.draw(self._ax)
         self.watermark.draw(self._ax)
         if output is not None:
-            self._figure.savefig(output, bbox_inches='tight')
+            if isinstance(output, list):
+                for out in output:
+                    self._figure.savefig(out, bbox_inches='tight')
+            else:
+                self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -182,13 +185,13 @@ class InsetFigure(Figure):
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=self.size)
 
-    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         """Draw the inset figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
-        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
-        :type output: str | None
+        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
+        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
@@ -197,7 +200,11 @@ class InsetFigure(Figure):
         self.inset.prepare(context, self._ax)
         self.inset.draw(self._ax)
         if output is not None:
-            self._figure.savefig(output, bbox_inches='tight')
+            if isinstance(output, list):
+                for out in output:
+                    self._figure.savefig(out, bbox_inches='tight')
+            else:
+                self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -229,6 +236,7 @@ class GridFigure(Figure):
     plots:list[Plot]
     padding:tuple[float,float]=field(default=(0.2, 0.2))
     shape:tuple[int, int]
+    watermark:Watermark=field(default_factory=Watermark)
 
     _api_doc = inspect.cleandoc("""
     Producing a Figure with a Grid of Plots
@@ -253,22 +261,27 @@ class GridFigure(Figure):
         axes = self._gridspec.subplots()
         self._axes = axes.flatten('C') # flatten to row-major style
 
-    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         """Draw the grid figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
-        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
-        :type output: str | None
+        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
+        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         for idx, plot in enumerate(self.plots):
             plot.prepare()
             plot.draw(self._axes[idx])
+            self.watermark.draw(self._axes[idx])
 
         self._gridspec.tight_layout(self._figure)
         if output is not None:
-            self._figure.savefig(output, bbox_inches='tight')
+            if isinstance(output, list):
+                for out in output:
+                    self._figure.savefig(out, bbox_inches='tight')
+            else:
+                self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -440,13 +453,13 @@ class CornerFigure(Figure):
         self._figure = GridFigure(shape=(size, size), plots=plots, padding=(0.0, 0.0))
 
 
-    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         """Draw the corner figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
-        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
-        :type output: str | None
+        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
+        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         if not hasattr(self, '_figure'):

@@ -44,34 +44,34 @@ class SzegoPolynomialTest :
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p(-0.1);
 
-                    TEST_CHECK_RELATIVE_ERROR(p0, +0.6351351032391984, 1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p1, -0.847745,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p2, +1.54489,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p3, -2.82388,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p4, +5.166081,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p5, -9.464102,           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p0, complex<double>(+0.6351351032391984, 0.0), 1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p1, complex<double>(-0.847745, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p2, complex<double>(+1.54489, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p3, complex<double>(-2.82388, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p4, complex<double>(+5.166081, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p5, complex<double>(-9.464102, 0.0),           1.0e-5);
                 }
 
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p(+0.0);
 
-                    TEST_CHECK_RELATIVE_ERROR(p0, +0.6351351032391984, 1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p1, -0.749503,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p2, +1.304458,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p3, -2.237009,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p4, +3.834085,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p5, -6.577731,           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p0, complex<double>(+0.6351351032391984, 0.0), 1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p1, complex<double>(-0.749503, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p2, complex<double>(+1.304458, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p3, complex<double>(-2.237009, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p4, complex<double>(+3.834085, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p5, complex<double>(-6.577731, 0.0),           1.0e-5);
                 }
 
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p(+0.1);
 
-                    TEST_CHECK_RELATIVE_ERROR(p0, +0.6351351032391984, 1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p1, -0.651261,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p2, +1.09668,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p3, -1.76188,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p4, +2.82970,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p5, -4.54691,            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p0, complex<double>(+0.6351351032391984, 0.0), 1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p1, complex<double>(-0.651261, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p2, complex<double>(+1.09668, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p3, complex<double>(-1.76188, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p4, complex<double>(+2.82970, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p5, complex<double>(-4.54691, 0.0),            1.0e-5);
                 }
 
                 {
@@ -105,12 +105,12 @@ class SzegoPolynomialTest :
                 {
                     const auto [p0, p1, p2, p3, p4, p5] = p.derivatives(-0.1);
 
-                    TEST_CHECK_NEARLY_EQUAL(p0,    0.0,                1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p1, +0.982422,           1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p2, -2.56765,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p3, +6.48297,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p4, -15.2203,            1.0e-5);
-                    TEST_CHECK_RELATIVE_ERROR(p5, +34.0797,            1.0e-5);
+                    TEST_CHECK_NEARLY_EQUAL(p0,   0.0,                                       1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p1, complex<double>(+0.982422, 0.0),           1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p2, complex<double>(-2.56765, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p3, complex<double>(+6.48297, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p4, complex<double>(-15.2203, 0.0),            1.0e-5);
+                    TEST_CHECK_RELATIVE_ERROR(p5, complex<double>(+34.0797, 0.0),            1.0e-5);
                 }
 
                 {
@@ -125,6 +125,5 @@ class SzegoPolynomialTest :
                     TEST_CHECK_RELATIVE_ERROR_C(p5, complex<double>(-0.881431,  14.1859),  1.0e-5);
                 }
             }
-
         }
 } szego_polynomial_test;

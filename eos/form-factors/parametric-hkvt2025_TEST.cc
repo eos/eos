@@ -128,8 +128,8 @@ class BToPiPiHKVT2025FormFactorsTest :
                 };
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(),   0.077122, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_v(),   0.299065, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(),   0.082125, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.saturation_1m_v(),   0.326186, eps);
             }
 
         }

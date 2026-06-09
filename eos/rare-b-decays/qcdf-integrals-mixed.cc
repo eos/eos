@@ -102,8 +102,9 @@ namespace eos
         // we only need to correct integral J_1
         std::function<complex<double> (const double &)> j_1_perp = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_perp, a_2_perp);
         std::function<complex<double> (const double &)> j_1_para = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_para, a_2_para);
-        results.j1_perp     = integrate1D(j_1_perp, 128, u_min, u_max);
-        results.j1_parallel = integrate1D(j_1_para, 128, u_min, u_max);
+        cubature::Config cub_conf = cubature::Config().epsrel(1e-3);
+        results.j1_perp     = integrate<1, 1, complex<double>>(j_1_perp, u_min, u_max, cub_conf);
+        results.j1_parallel = integrate<1, 1, complex<double>>(j_1_para, u_min, u_max, cub_conf);
 
         // composite results
         const double sh = s / m_B / m_B;

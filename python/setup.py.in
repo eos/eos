@@ -45,7 +45,10 @@ setup(
     scripts=[
         'bin/eos-analysis',
         'bin/eos-list-references',
+        'bin/eos-list-observables',
         'bin/eos-plot',
+        'bin/eos-figure',
+        'bin/eos-data'
     ],
     include_package_data=True,
     ext_modules=[Extension('_eos', sources=['dummy.cc'])],

@@ -30,7 +30,7 @@
 
 namespace eos
 {
-    /* Form Factors according to [BSZ2015] */
+    /* Form Factors according to [BSZ:2015A] */
     template <typename Process_, typename Transition_> class BSZ2015FormFactors;
 
     template <typename Process_, typename Transition_> class BSZ2015FormFactorTraits;
@@ -90,9 +90,9 @@ namespace eos
         public FormFactors<PToV>
     {
         private:
-            // fit parametrization for P -> V according to [BSZ2015]
+            // fit parametrization for P -> V according to [BSZ:2015A]
             std::array<UsedParameter, 3> _a_A0, _a_A1, _a_V, _a_T1, _a_T23;
-            // use constraint (B.6) in [BSZ2015] to remove A_12(0)
+            // use constraint (B.6) in [BSZ:2015A] to remove A_12(0)
             std::array<UsedParameter, 2> _a_A12, _a_T2;
 
             const BSZ2015FormFactorTraits<Process_, PToV> _traits;
@@ -162,6 +162,7 @@ namespace eos
     extern template class BSZ2015FormFactors<BToKstar, PToV>;
     extern template class BSZ2015FormFactors<BToOmega, PToV>;
     extern template class BSZ2015FormFactors<BToRho, PToV>;
+    extern template class BSZ2015FormFactors<BcToJpsi, PToV>;
     extern template class BSZ2015FormFactors<BsToDsstar, PToV>;
     extern template class BSZ2015FormFactors<BsToKstar, PToV>;
     extern template class BSZ2015FormFactors<BsToPhi, PToV>;
@@ -219,7 +220,7 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            // fit parametrization for P -> P inspired by [BSZ2015]
+            // fit parametrization for P -> P inspired by [BSZ:2015A]
             std::array<UsedParameter, 3> _a_fp, _a_ft;
             // use equation of motion to remove f_0(0) as a free parameter
             std::array<UsedParameter, 2> _a_fz;

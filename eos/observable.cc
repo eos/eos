@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2017, 2021-2022 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2018, 2019 Nico Gubernari
@@ -24,15 +24,18 @@
 #include <eos/b-decays/observables.hh>
 #include <eos/c-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/meson-mixing/observables.hh>
 #include <eos/nonleptonic-amplitudes/observables.hh>
 #include <eos/nonlocal-form-factors/observables.hh>
 #include <eos/observable-impl.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/observables.hh>
+#include <eos/rare-c-decays/observables.hh>
 #include <eos/s-decays/observables.hh>
 #include <eos/scattering/observables.hh>
 #include <eos/tau-decays/observables.hh>
+#include <eos/utils/concrete_observable.hh>
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser-impl.hh>
@@ -47,6 +50,52 @@
 
 namespace eos
 {
+    namespace test
+    {
+        // PDF = (1/2 L_0 + 1/3 L_1 + 1/4 L_2) / 2
+        class Legendre1DPDF : public ParameterUser
+        {
+            public:
+                static const std::vector<OptionSpecification> options;
+
+                static const std::set<ReferenceName> references;
+
+                static const std::string description;
+
+                Legendre1DPDF(const Parameters &, const Options &) {}
+
+                double
+                pdf(const double & z) const
+                {
+                    return (9.0 + 8.0 * z + 9.0 * z * z);
+                }
+
+                double
+                norm(const double & z_min, const double & z_max) const
+                {
+                    return (9.0 * (z_max - z_min) + 4.0 * (power_of<2>(z_max) - power_of<2>(z_min)) + 3.0 * (power_of<3>(z_max) - power_of<3>(z_min)));
+                }
+
+                static ObservableEntry::OptionIterator
+                begin_options()
+                {
+                    return options.begin();
+                }
+
+                static ObservableEntry::OptionIterator
+                end_options()
+                {
+                    return options.end();
+                }
+        };
+
+        const std::vector<OptionSpecification> Legendre1DPDF::options{};
+
+        const std::set<ReferenceName> Legendre1DPDF::references{};
+
+        const std::string Legendre1DPDF::description = "1D PDF up to 2nd order in z; used for unit tests only.";
+    } // namespace test
+
     Observable::~Observable() = default;
 
     namespace impl
@@ -57,16 +106,11 @@ namespace eos
     ObservableEntries::ObservableEntries() :
         _entries(&impl::observable_entries)
     {
-        std::vector<std::function<ObservableSection()>> section_makers = { make_form_factors_section,
-                                                                           make_nonlocal_form_factors_section,
-                                                                           make_nonleptonic_amplitudes_section,
-                                                                           make_b_decays_section,
-                                                                           make_c_decays_section,
-                                                                           make_rare_b_decays_section,
-                                                                           make_meson_mixing_section,
-                                                                           make_scattering_section,
-                                                                           make_s_decays_section,
-                                                                           make_tau_decays_section };
+        std::vector<std::function<ObservableSection()>> section_makers = {
+            make_form_factors_section,  make_nonlocal_form_factors_section, make_nonleptonic_amplitudes_section, make_b_decays_section,   make_c_decays_section,
+            make_rare_b_decays_section, make_rare_c_decays_section,         make_meson_mixing_section,           make_scattering_section, make_s_decays_section,
+            make_tau_decays_section
+        };
 
         for (const auto & section_maker : section_makers)
         {
@@ -74,6 +118,18 @@ namespace eos
             {
                 _entries->insert(group.begin(), group.end());
             }
+        }
+
+        // add test entries to the list of available signal PDFs, but avoid adding it via a group/section
+        // 1D Legendre PDF
+        {
+            auto numerator_and_entry_pair = make_observable("TestLegendre1D::UnnormalizedPDF(z)", Unit::None(), &test::Legendre1DPDF::pdf, std::make_tuple("z"));
+
+            _entries->insert(numerator_and_entry_pair);
+
+            auto normalization_and_entry_pair = make_observable("TestLegendre1D::NormalizationPDF(z)", Unit::None(), &test::Legendre1DPDF::norm, std::make_tuple("z_min", "z_max"));
+
+            _entries->insert(normalization_and_entry_pair);
         }
     }
 
@@ -133,6 +189,7 @@ namespace eos
                 _sections = std::vector<ObservableSection>({ make_b_decays_section(),
                                                              make_c_decays_section(),
                                                              make_rare_b_decays_section(),
+                                                             make_rare_c_decays_section(),
                                                              make_meson_mixing_section(),
                                                              make_nonleptonic_amplitudes_section(),
                                                              make_nonlocal_form_factors_section(),

@@ -1,5 +1,5 @@
-const github = require('@actions/github');
-const core = require('@actions/core');
+import * as core from "@actions/core";
+import * as github from "@actions/github";
 
 const token = process.env.GITHUB_ACCESS_TOKEN;
 if (! token)
@@ -13,12 +13,12 @@ const octokit = github.getOctokit(token);
 const REPO    = 'eos/eos'
 
 /* determine current date and last date */
-const moment   = require('moment');
+import moment from 'moment';
 const current = moment().format('YYYY-MM-DD')
 const last    = moment().subtract(2, 'weeks').format('YYYY-MM-DD')
 
-const nunjucks = require('nunjucks');
-const fs       = require('fs');
+import nunjucks from 'nunjucks';
+import fs from 'fs';
 
 
 const fetchClosedIssues = async () => {

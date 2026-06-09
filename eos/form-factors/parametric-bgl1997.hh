@@ -89,7 +89,7 @@ namespace eos
                 chi_0m(UsedParameter(p["b->c::chiOPE[0^-_A]"], *this)),
                 chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
                 chi_T_1p(UsedParameter(p["b->c::chiOPE[1^+_T5]"], *this)),
-                t_0(UsedParameter(p["B->D^*::t_0@BGL1997"], *this)),
+                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
                 n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
                 n_bound_states_1p(o, options, "n-bound-states-1p"_ok),
                 n_bound_states_0m(o, options, "n-bound-states-0m"_ok),
@@ -206,7 +206,7 @@ namespace eos
                 chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
                 chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
                 chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
-                t_0(UsedParameter(p["B->D::t_0@BGL1997"], *this)),
+                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
                 n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
                 n_bound_states_0p(o, options, "n-bound-states-0p"_ok)
             {
@@ -317,6 +317,16 @@ namespace eos
             virtual double f_para_T(const double & s) const;
             virtual double f_long_T(const double & s) const;
 
+            // Saturations of the dispersive bounds
+            // J = 0
+            double saturation_0p_v() const;
+            double saturation_0m_a() const;
+            // J = 1
+            double saturation_1m_v() const;
+            double saturation_1p_a() const;
+            double saturation_1m_t() const;
+            double saturation_1p_t5() const;
+
             /*!
              * References used in the computation of our (pseudo)observables.
              */
@@ -335,7 +345,9 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            std::array<UsedParameter, 4> _a_f_p, _a_f_0, _a_f_t;
+            std::array<UsedParameter, 4> _a_f_p;
+            std::array<UsedParameter, 3> _a_f_0;
+            std::array<UsedParameter, 4> _a_f_t;
 
             const BGL1997FormFactorTraits<Process_, PToP> _traits;
 
@@ -351,13 +363,26 @@ namespace eos
 
             static FormFactors<PToP> * make(const Parameters & parameters, const Options & options);
 
-            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const                       double & chi) const;
+            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const;
 
             virtual double f_p(const double & s) const;
+            // Note that EOS's definition of f0 = fp + t / sqrt(tm * tp) * fm differs from the one in [BGL:1997A]
             virtual double f_0(const double & s) const;
             virtual double f_t(const double & s) const;
 
+            double a_0_0() const;
+
             virtual double f_plus_T(const double & s) const;
+
+            // Saturations of the dispersive bounds
+            // J = 0
+            double saturation_0p_v() const;
+            double saturation_0m_a() const;
+            // J = 1
+            double saturation_1m_v() const;
+            double saturation_1p_a() const;
+            double saturation_1m_t() const;
+            double saturation_1p_t5() const;
 
             /*!
              * References used in the computation of our (pseudo)observables.

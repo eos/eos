@@ -10,7 +10,7 @@ libeosutils_la_SOURCES = \
 	cartesian-product.hh \
 	concrete_observable.cc concrete_observable.hh \
 	concrete-cacheable-observable.hh \
-	concrete-signal-pdf.hh \
+	concrete-signal-pdf.cc concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
 	density.cc density.hh density-fwd.hh density-impl.hh \
 	destringify.cc destringify.hh \
@@ -52,6 +52,7 @@ libeosutils_la_SOURCES = \
 	quantum-numbers.cc quantum-numbers.hh \
 	reference-name.cc reference-name.hh \
 	stringify.hh \
+	strong-typedef.hh \
 	test-observable.cc test-observable.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \

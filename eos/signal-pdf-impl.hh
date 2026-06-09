@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019-2023 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #include <eos/utils/stringify.hh>
 
 #include <array>
+#include <iostream>
 #include <map>
 
 namespace eos
@@ -66,49 +67,23 @@ namespace eos
             }
     };
 
-    template <typename Decay_, typename... PDFArgs_, typename... PDFKinematicRanges_, typename... NormArgs_, typename... NormKinematicNames_>
+    template <typename... NumeratorKinematicNames_, typename... NormalizationKinematicNames_>
     std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>>
-    make_signal_pdf(const char * name, const Options & default_options, double (Decay_::*pdf)(const PDFArgs_ &...) const,
-                    const std::tuple<PDFKinematicRanges_...> & pdf_kinematic_ranges, double (Decay_::*norm)(const NormArgs_ &...) const,
-                    const std::tuple<NormKinematicNames_...> & norm_kinematic_names)
+    make_signal_pdf(const char * name, const char * description, const Options & default_options, const char * numerator,
+                    const std::tuple<NumeratorKinematicNames_...> & numerator_kinematic_names, const char * normalization,
+                    const std::tuple<NormalizationKinematicNames_...> & normalization_kinematic_names)
     {
-        static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments for the PDF as kinematics ranges!");
-        static_assert(sizeof...(NormArgs_) == sizeof...(NormKinematicNames_), "Need as many function arguments for the normalization as kinematics names!");
+        QualifiedName _name(name);
+        QualifiedName _numerator(numerator);
+        QualifiedName _normalization(normalization);
 
-        QualifiedName qn(name);
+        std::string _description(description);
 
-        std::function<double(const Decay_ *, const PDFArgs_ &...)>  pdf_function  = std::mem_fn(pdf);
-        std::function<double(const Decay_ *, const NormArgs_ &...)> norm_function = std::mem_fn(norm);
+        auto entry_ptr = std::shared_ptr<SignalPDFEntry>(
+                make_concrete_signal_pdf_entry(_name, _description, default_options, _numerator, numerator_kinematic_names, _normalization, normalization_kinematic_names));
 
-        auto entry_ptr =
-                std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf_function, pdf_kinematic_ranges, norm_function, norm_kinematic_names));
-
-        return std::make_pair(qn, entry_ptr);
+        return std::make_pair(_name, entry_ptr);
     }
-
-    template <typename Decay_, typename... PDFArgs_, typename... PDFKinematicRanges_, typename... NormArgs_, typename... NormKinematicNames_>
-    std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>>
-    make_signal_pdf(const char * name, const Options & default_options, double (Decay_::*pdf)(const PDFArgs_ &...) const,
-                    const std::tuple<PDFKinematicRanges_...> & pdf_kinematic_ranges, const std::function<double(const Decay_ *, const NormArgs_ &...)> & norm_function,
-                    const std::tuple<NormKinematicNames_...> & norm_kinematic_names)
-    {
-        static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments for the PDF as kinematics ranges!");
-        static_assert(sizeof...(NormArgs_) == sizeof...(NormKinematicNames_), "Need as many function arguments for the normalization as kinematics names!");
-
-        QualifiedName qn(name);
-
-        std::function<double(const Decay_ *, const PDFArgs_ &...)> pdf_function = std::mem_fn(pdf);
-
-        auto entry_ptr =
-                std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf_function, pdf_kinematic_ranges, norm_function, norm_kinematic_names));
-
-        return std::make_pair(qn, entry_ptr);
-    }
-
-    template <> struct WrappedForwardIteratorTraits<SignalPDFEntry::KinematicRangeIteratorTag>
-    {
-            using UnderlyingIterator = const KinematicRange *;
-    };
 } // namespace eos
 
 #endif

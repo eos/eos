@@ -149,27 +149,24 @@ namespace eos
             /// Return the SignalPDF description
             virtual const std::string & description() const = 0;
 
-            ///@name Iteration over our kinematic ranges
+            ///@name Iteration over kinematic variables
             ///@{
-            struct KinematicRangeIteratorTag;
-            using KinematicRangeIterator = WrappedForwardIterator<KinematicRangeIteratorTag, const KinematicRange>;
+            struct NumeratorKinematicVariableIteratorTag;
+            using NumeratorKinematicVariableIterator = WrappedForwardIterator<NumeratorKinematicVariableIteratorTag, const std::string &>;
 
-            virtual KinematicRangeIterator begin_kinematic_ranges() const = 0;
-            virtual KinematicRangeIterator end_kinematic_ranges() const   = 0;
+            virtual NumeratorKinematicVariableIterator begin_numerator_kinematic_variables() const = 0;
+            virtual NumeratorKinematicVariableIterator end_numerator_kinematic_variables() const   = 0;
 
-            inline IteratorRange<KinematicRangeIterator>
-            kinematic_ranges() const
-            {
-                return IteratorRange<KinematicRangeIterator>(begin_kinematic_ranges(), end_kinematic_ranges());
-            }
+            struct DenominatorKinematicVariableIteratorTag;
+            using DenominatorKinematicVariableIterator = WrappedForwardIterator<DenominatorKinematicVariableIteratorTag, const std::string &>;
 
+            virtual DenominatorKinematicVariableIterator begin_denominator_kinematic_variables() const = 0;
+            virtual DenominatorKinematicVariableIterator end_denominator_kinematic_variables() const   = 0;
             ///@}
 
         protected:
             virtual std::ostream & insert(std::ostream & os) const = 0;
     };
-
-    extern template class WrappedForwardIterator<SignalPDFEntry::KinematicRangeIteratorTag, const KinematicRange>;
 
     /*!
      * Output stream operator for SignalPDFEntry.

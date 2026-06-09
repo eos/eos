@@ -106,7 +106,6 @@ class DataSets:
             raise RuntimeError("eos.DataSets.download() needs to import the 'requests' module. Please install it.")
         import io, zipfile # part of the Python standard library
 
-        idnoversion = id if 'v' not in id else id[:id.rfind('v')]
         if self._data_sets[id].doi is not None:
             doi             = self._data_sets[id].doi
             url             = self.DOWNLOAD_URL_DOI.format(doi=doi)
@@ -142,7 +141,7 @@ class DataSets:
                 zi.filename = newname
                 targetdir = os.path.join(self.storage_directory, id)
                 zf.extract(zi, path=targetdir)
-        eos.completed(f"... done")
+        eos.completed("... done")
 
 
     def update(self, ref:str='main'):
@@ -164,7 +163,7 @@ class DataSets:
             raise RuntimeError(f"Could not download data sets information from '{update_url}'; status code: {r.status_code}")
         with open(os.path.join(self.storage_directory, 'datasets.yaml'), 'w') as f:
             f.write(r.text)
-        eos.completed(f"... done")
+        eos.completed("... done")
 
         data = _yaml.safe_load(r.text)
         self._data_sets = { k: DataSetDescription.from_dict(**v) for k, v in data.items() }

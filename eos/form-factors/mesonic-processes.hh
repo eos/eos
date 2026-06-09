@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2020-2025 Danny van Dyk
  * Copyright (c) 2025      Florian Herren
+ * Copyright (c) 2026      Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -145,7 +146,7 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 1.870;
-        // resonance masses from [HPQCD2015A]
+        // resonance masses from [HPQCD:2015A]
         static constexpr const double mR2_1m = 6.330 * 6.330; // B_c^*
         static constexpr const double mR2_0p = 6.420 * 6.420; // B_c scalar
         static constexpr const bool uses_tensor_form_factors = true;
@@ -160,7 +161,7 @@ namespace eos
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
         static constexpr const double m_B = 5.366;
         static constexpr const double m_P = 1.968;
-        // resonance masses from [HPQCD2015A]
+        // resonance masses from [HPQCD:2015A]
         static constexpr const double mR2_1m = 6.330 * 6.330; // B_c^*
         static constexpr const double mR2_0p = 6.420 * 6.420; // B_c scalar
         static constexpr const double tp = (m_B + m_P) * (m_B + m_P);
@@ -348,6 +349,14 @@ namespace eos
         static constexpr double mR2_0m = 5.279 * 5.279;
         static constexpr double mR2_1m = 5.325 * 5.325;
         static constexpr double mR2_1p = 5.724 * 5.724;
+    };
+
+    struct BcToJpsi {
+        using Transition = PToV;
+        static constexpr const char * label = "B_c->J/psi";
+        static constexpr const char * name_B = "mass::B_c";
+        static constexpr const char * name_V = "mass::J/psi";
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
     };
 
     struct BsToPhi {

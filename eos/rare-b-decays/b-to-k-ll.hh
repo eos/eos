@@ -47,26 +47,26 @@ namespace eos
             struct DipoleFormFactors;
 
             // Differential Observables
-            double differential_branching_ratio(const double & s) const;
-            double differential_flat_term(const double & s) const;
-            double differential_forward_backward_asymmetry(const double & s) const;
-            double differential_ratio_muons_electrons(const double & s) const;
+            double differential_branching_ratio(const double & q2) const;
+            double differential_flat_term(const double & q2) const;
+            double differential_forward_backward_asymmetry(const double & q2) const;
+            double differential_ratio_muons_electrons(const double & q2) const;
 
             // Two Differential decay with in LHCb angular convention
-            double two_differential_decay_width(const double & s, const double & c_theta_l) const;
+            double two_differential_decay_width(const double & q2, const double & c_theta_l) const;
 
             // Integrated Observables
-            double integrated_decay_width(const double & s_min, const double & s_max) const;
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_flat_term(const double & s_min, const double & s_max) const;
-            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
-            double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_flat_term(const double & q2_min, const double & q2_max) const;
+            double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const;
+            double integrated_ratio_muons_electrons(const double & q2_min, const double & q2_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
              */
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
 
             /*!

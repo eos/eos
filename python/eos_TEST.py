@@ -176,11 +176,12 @@ class PythonTests:
 
         for attr, value in Unit.__dict__.items():
             if attr[0] != "_" and attr != "latex":
+                s = '<problem in test logic>'
                 try:
                     s = value.__func__().latex()
                     matplotlib.texmanager.TexManager.get_text_width_height_descent(f"${s}$", 1)
-                except:
-                    raise TestFailedError('invalid latex string for unit ' + attr)
+                except Exception as e:
+                    raise TestFailedError(f'invalid latex string "${s}$" for unit \'{attr}\': {e}')
 
 
 class LoggingTests(unittest.TestCase):

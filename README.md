@@ -12,11 +12,11 @@ EOS - A software for Flavor Physics Phenomenology
 EOS is a software package that addresses several use cases in the field of
 high-energy flavor physics:
 
- 1. [theory predictions of and uncertainty estimation for flavor observables](https://eos.github.io/doc/use-cases.html#theory-predictions-and-their-uncertainties)
+1. [theory predictions of and uncertainty estimation for flavor observables](https://eos.github.io/doc/use-cases.html#theory-predictions-and-their-uncertainties)
    within the Standard Model or within the Weak Effective Theory;
- 2. [Bayesian parameter inference](https://eos.github.io/doc/use-cases.html#parameter-inference)
-    from both experimental and theoretical constraints; and
- 3. [Monte Carlo simulation of pseudo events](https://eos.github.io/doc/use-cases.html#pseudo-event-simulation) for flavor processes.
+2. [Bayesian parameter inference](https://eos.github.io/doc/use-cases.html#parameter-inference)
+   from both experimental and theoretical constraints; and
+3. [Monte Carlo simulation of pseudo events](https://eos.github.io/doc/use-cases.html#pseudo-event-simulation) for flavor processes.
 
 An up-to-date list of publications that use EOS can be found [here](https://eos.github.io/publications/).
 
@@ -24,9 +24,9 @@ EOS is written in C++20 and designed to be used through its Python 3 interface,
 ideally within a Jupyter notebook environment.
 It depends on as a small set of external software:
 
- - the GNU Scientific Library (libgsl),
- - a subset of the BOOST C++ libraries,
- - the Python 3 interpreter.
+- the GNU Scientific Library (libgsl),
+- a subset of the BOOST C++ libraries,
+- the Python 3 interpreter.
 
 For details on these dependencies we refer to the [online documentation](https://eos.github.io/doc/installation.html#installing-the-dependencies-on-linux).
 
@@ -57,44 +57,44 @@ Authors and Contributors
 
 The main authors are:
 
- * Frederik Beaujean,
- * Christoph Bobeth,
- * Carolina Bolognani <carolinabolognani@gmail.com>,
- * Nico Gubernari <nicogubernari@gmail.com>,
- * Florian Herren <florian.s.herren@gmail.com>,
- * Matthew J. Kirk <matthew.j.kirk@durham.ac.uk>,
- * Meril Reboud <merilreboud@gmail.com>,
- * Danny van Dyk <danny.van.dyk@gmail.com>,
+- Frederik Beaujean,
+- Christoph Bobeth,
+- Carolina Bolognani <carolinabolognani@gmail.com>,
+- Nico Gubernari <nicogubernari@gmail.com>,
+- Florian Herren <florian.s.herren@gmail.com>,
+- Matthew J. Kirk <matthew.j.kirk@durham.ac.uk>,
+- Meril Reboud <merilreboud@gmail.com>,
+- Danny van Dyk <danny.van.dyk@gmail.com>,
 
 with further code contributions by:
 
- * Marzia Bordone,
- * Thomas Blake,
- * Lorenz Gaertner,
- * Elena Graverini,
- * Stephan Jahn,
- * Ahmet Kokulu,
- * Viktor Kuschke,
- * Stephan Kürten,
- * Philip Lüghausen,
- * Bastian Müller,
- * Filip Novak,
- * Stefanie Reichert,
- * Eduardo Romero,
- * Rafael Silva Coutinho,
- * Ismo Tojiala,
- * K. Keri Vos,
- * Christian Wacker.
+- Marzia Bordone,
+- Thomas Blake,
+- Lorenz Gaertner,
+- Elena Graverini,
+- Stephan Jahn,
+- Ahmet Kokulu,
+- Viktor Kuschke,
+- Stephan Kürten,
+- Philip Lüghausen,
+- Bastian Müller,
+- Filip Novak,
+- Stefanie Reichert,
+- Eduardo Romero,
+- Rafael Silva Coutinho,
+- Ismo Tojiala,
+- K. Keri Vos,
+- Christian Wacker.
 
 We would like to extend our thanks to the following people whose input and
 support were most helpful in either the development or the maintenance of EOS:
 
- * Gudrun Hiller
- * Gino Isidori
- * David Leverton
- * Thomas Mannel
- * Ciaran McCreesh
- * Hideki Miyake
- * Konstantinos Petridis
- * Nicola Serra
- * Alexander Shires
+- Gudrun Hiller
+- Gino Isidori
+- David Leverton
+- Thomas Mannel
+- Ciaran McCreesh
+- Hideki Miyake
+- Konstantinos Petridis
+- Nicola Serra
+- Alexander Shires

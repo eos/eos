@@ -189,7 +189,7 @@ namespace eos
                                        - std::sqrt(1.0 - amp.v) * std::real(amp.h_T * (std::conj(amp.h_0) - std::conj(amp.h_tS) * c_theta_l))));
             }
 
-            // normalized to |V_us = 1|, obtained using cf. [DSD:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
+            // normalized to |V_us = 1|, obtained using cf. [DDS:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
             double
             normalized_differential_decay_width(const double & s) const
             {
@@ -227,7 +227,7 @@ namespace eos
                 return -4.0 * amp.NF * amp.p * (std::real(amp.h_0 * std::conj(amp.h_tS)) * (1.0 - amp.v) - 4.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_tS)));
             }
 
-            // obtained using cf. [DDS:2014A], eq. (12) and [BHP2007] eq.(1.2)
+            // obtained using cf. [DDS:2014A], eq. (12) and [BHP:2007A] eq.(1.2)
             double
             numerator_differential_flat_term(const double & s) const
             {

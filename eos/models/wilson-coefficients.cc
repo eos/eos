@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -402,5 +403,13 @@ namespace eos
     WilsonCoefficients<wc::SBNuNu>::WilsonCoefficients()
     {
         _coefficients.fill(0.0);
+    }
+
+    WilsonCoefficients<wc::UC>::WilsonCoefficients(const double & alpha_s_mu) :
+        _alpha_s(alpha_s_mu)
+    {
+        _sm_like_coefficients.fill(0.0);
+        _primed_coefficients.fill(0.0);
+        _scalar_tensor_coefficients.fill(0.0);
     }
 } // namespace eos

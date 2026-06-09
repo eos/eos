@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2026 Danny van Dyk
+ * Copyright (c) 2011      Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/strong-typedef.hh>
 
 namespace eos
 {
@@ -46,14 +47,20 @@ namespace eos
 
             ///@name Access
             ///@{
-            using Id = unsigned;
+            struct ObservableIdTag;
+
+            class ObservableId : public StrongTypedef<unsigned, ObservableCache::ObservableIdTag>
+            {
+                public:
+                    using StrongTypedef::StrongTypedef;
+            };
 
             /*!
-             * Add a given observable to the cache and return its unique Id.
+             * Add a given observable to the cache and return its unique ObservableId.
              *
              * @param observable The observable which shall be added to the cache.
              */
-            Id add(const ObservablePtr & observable);
+            ObservableId add(const ObservablePtr & observable);
 
             /// Update the predictions for all observables.
             void update();
@@ -62,18 +69,18 @@ namespace eos
             Parameters parameters() const;
 
             /*!
-             * Retrieve a unique observable by its ObservableCache::Id.
+             * Retrieve a unique observable by its ObservableCache::ObservableId.
              *
-             * @param id The ObservableCache::Id whose associated ObservablePtr shall be retrieved.
+             * @param id The ObservableCache::ObservableId whose associated ObservablePtr shall be retrieved.
              */
-            ObservablePtr observable(const ObservableCache::Id & id) const;
+            ObservablePtr observable(const ObservableCache::ObservableId & id) const;
 
             /*!
              * Retrieve the prediction for a given observable from the cache.
              *
-             * @param id The unique ObservableCache::Id whose associated observable's prediction shall be retrieved.
+             * @param id The unique ObservableCache::ObservableId whose associated observable's prediction shall be retrieved.
              */
-            double operator[] (const ObservableCache::Id & id) const;
+            double operator[] (const ObservableCache::ObservableId & id) const;
 
             /// Retrieve the number of independent predictions from the cache.
             unsigned size() const;

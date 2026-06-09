@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -104,7 +105,7 @@ class AlphaSTest : public TestCase
             // So check for relative error
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(91.1876), 0.117620, 5e-5);
 
-            // Data in agreement with RunDec, cf. [CKS2000]
+            // Data in agreement with RunDec, cf. [CKS:2000A]
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(120.0), 0.112968, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(80.403), 0.119918, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(80.0), 0.120011, eps);
@@ -447,6 +448,160 @@ class WilsonCoefficientsBToSTest : public TestCase
             }
         }
 } wilson_coefficients_b_to_s_test;
+
+class WilsonCoefficientsUCTest : public TestCase
+{
+    public:
+        WilsonCoefficientsUCTest() :
+            TestCase("wilson_coefficients_uc_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            /* Test for 5 active flavors, evolving from mu_0 = 80.398 to mu = 80.398 */
+            {
+                static const double eps = 1e-5;
+                static const double mu  = 80.398;
+
+                Parameters parameters  = reference_parameters();
+                parameters["uc::mu"]   = mu;
+                parameters["uc::mu_0"] = mu;
+                parameters["uc::mu_b"] = 0.0;
+                StandardModel model(parameters);
+
+                WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), +0.1582722277, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.001840898, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()), +0.0, eps);
+            }
+
+            /* Test for 5 active flavors, evolving from mu_0 = 80.398 to mu = 4.18 */
+            {
+                static const double eps = 1e-5;
+                static const double mu  = 4.18;
+
+                Parameters parameters  = reference_parameters();
+                parameters["uc::mu"]   = mu;
+                parameters["uc::mu_0"] = 80.398;
+                parameters["uc::mu_b"] = 0.0;
+                StandardModel model(parameters);
+
+                WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.2887762145, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.010189030, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()), +0.0, eps);
+            }
+
+            /* Test matching from 5 active flavors to 4 active flavors, evolving from mu_0 = 80.398 to mu = 4.18 */
+            {
+                static const double eps = 1e-5;
+                static const double mu  = 4.18;
+
+                Parameters parameters  = reference_parameters();
+                parameters["uc::mu"]   = mu;
+                parameters["uc::mu_0"] = 80.398;
+                parameters["uc::mu_b"] = mu;
+                StandardModel model(parameters);
+
+                WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.2894013188, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.010285004, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), -0.01341164772, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()) * wc._alpha_s / (4.0 * M_PI), -0.001262659765, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()), +0.0, eps);
+            }
+
+            /* Test for 4 active flavors, evolving from mu_0 = 80.398 to mu = 2 */
+            {
+                static const double eps = 1e-5;
+                static const double mu  = 1.275;
+
+                Parameters parameters  = reference_parameters();
+                parameters["uc::mu"]   = mu;
+                parameters["uc::mu_0"] = 80.398;
+                parameters["uc::mu_b"] = 4.18;
+                StandardModel model(parameters);
+
+                TEST_CHECK_NEARLY_EQUAL(model.alpha_s(mu), +0.3890153724544784, eps);
+
+                WilsonCoefficients<wc::UC> wc = model.wilson_coefficients_uc(LeptonFlavor::muon, false);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c1()), -0.6511905155, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.c2()), +1.035740588, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c3()), -0.008919680307, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c4()), -0.09917618128, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c5()), +0.0005431321897, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c6()), +0.001012196678, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()) * wc._alpha_s / (4.0 * M_PI), +0.003983767585, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()) * wc._alpha_s / (4.0 * M_PI), -0.002502911933, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()) * wc._alpha_s / (4.0 * M_PI), -0.01378272104, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c7()), +0.1287292333, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c8()), -0.08087769358, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c9()), -0.4453671240, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(wc.c10()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c1()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c2()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c3()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c4()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c5()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c6()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c7()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c8()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c9()), +0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(wc.c10()), +0.0, eps);
+            }
+        }
+} wilson_coefficients_c_to_u_test;
 
 class WilsonCoefficientsUSLNUTest : public TestCase
 {

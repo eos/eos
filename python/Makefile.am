@@ -26,6 +26,9 @@ EXTRA_DIST = \
 	eos/data/__init__.py \
 	eos/data/native.py \
     eos/data/native_TEST.d \
+    eos/data/native_TEST.d/predictions \
+    eos/data/native_TEST.d/predictions-binned \
+    eos/data/native_TEST.d/samples \
 	eos/figure/__init__.py \
 	eos/figure/common.py \
 	eos/figure/config.py \
@@ -94,6 +97,7 @@ _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = \
 	_eos.cc \
+	_eos/converters.hh \
 	_eos/external-log-likelihood-block.cc _eos/external-log-likelihood-block.hh \
 	_eos/external-observable.cc _eos/external-observable.hh \
 	_eos/log.cc _eos/log.hh \

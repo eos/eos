@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -148,7 +148,13 @@ class WilsonPolynomialTest : public TestCase
             Kinematics kinematics;
 
             auto o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            auto p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
+            auto p = make_polynomial(o,
+                                     std::vector<QualifiedName>{ "b->s::Re{c7}"_qn,
+                                                                 "b->s::Im{c7}"_qn,
+                                                                 "b->smumu::Re{c9}"_qn,
+                                                                 "b->smumu::Im{c9}"_qn,
+                                                                 "b->smumu::Re{c10}"_qn,
+                                                                 "b->smumu::Im{c10}"_qn });
 
             exp::ExpressionPrinter printer(std::cout);
             std::visit(printer, p);
@@ -186,7 +192,7 @@ class WilsonPolynomialClonerTest : public TestCase
             Kinematics kinematics;
 
             auto o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            auto p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->smumu::Re{c9}", "b->smumu::Re{c10}" });
+            auto p = make_polynomial(o, std::vector<QualifiedName>{ "b->s::Re{c7}"_qn, "b->smumu::Re{c9}"_qn, "b->smumu::Re{c10}"_qn });
 
             Parameters            clone_parameters = Parameters::Defaults();
             exp::ExpressionCloner cloner(clone_parameters, kinematics, Options());
