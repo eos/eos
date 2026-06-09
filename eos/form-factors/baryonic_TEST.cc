@@ -85,7 +85,7 @@ class OneHalfPlusToThreeHalfMinusFormFactorsTest :
                 auto parameter = Parameters::Defaults();
                 auto options   = Options();
 
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Foo->Bar::ABR2022",              parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Foo->Bar::SE",                  parameter, options));
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda(1520)::FooBar", parameter, options));
             }
         }

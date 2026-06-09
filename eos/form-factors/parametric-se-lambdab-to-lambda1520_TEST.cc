@@ -16,8 +16,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/form-factors/parametric-abr2022.hh>
-#include <eos/form-factors/parametric-abr2022-impl.hh>
+#include <eos/form-factors/parametric-se.hh>
+#include <eos/form-factors/parametric-se-impl-onehalfplus-to-threehalfminus.hh>
 
 #include <eos/models/model.hh>
 #include <eos/maths/power-of.hh>
@@ -25,12 +25,12 @@
 using namespace test;
 using namespace eos;
 
-class ABR2022FormFactorsTest :
+class SEOneHalfPlusToThreeHalfMinusFormFactorsTest :
     public TestCase
 {
     public:
-        ABR2022FormFactorsTest() :
-            TestCase("ABR2022_form_factor_test")
+        SEOneHalfPlusToThreeHalfMinusFormFactorsTest() :
+            TestCase("se_onehalfplus_to_threehalfminus_form_factor_test")
         {
         }
 
@@ -43,25 +43,25 @@ class ABR2022FormFactorsTest :
 
                 const auto ratio = (LambdaBToLambda1520::m1 + LambdaBToLambda1520::m2) / (LambdaBToLambda1520::m1 - LambdaBToLambda1520::m2);
 
-                p["Lambda_b->Lambda(1520)::a^(t12,V)_1@ABR2022"]     =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(012,V)_1@ABR2022"]     = -0.2;
-                p["Lambda_b->Lambda(1520)::a^(perp12,V)_1@ABR2022"]  =  0.3;
-                p["Lambda_b->Lambda(1520)::a^(perp32,V)_0@ABR2022"]  = -0.4;
-                p["Lambda_b->Lambda(1520)::a^(perp32,V)_1@ABR2022"]  =  0.5;
-                p["Lambda_b->Lambda(1520)::a^(t12,A)_1@ABR2022"]     = -0.6;
-                p["Lambda_b->Lambda(1520)::a^(012,A)_1@ABR2022"]     =  0.7;
-                p["Lambda_b->Lambda(1520)::a^(perp12,A)_1@ABR2022"]  = -0.8;
-                p["Lambda_b->Lambda(1520)::a^(perp32,A)_0@ABR2022"]  =  0.9;
-                p["Lambda_b->Lambda(1520)::a^(perp32,A)_1@ABR2022"]  = -1.0;
-                p["Lambda_b->Lambda(1520)::a^(012,T)_1@ABR2022"]     =  1.1;
-                p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@ABR2022"]  = -1.2;
-                p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@ABR2022"]  =  1.3;
-                p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@ABR2022"]  = -1.4;
-                p["Lambda_b->Lambda(1520)::a^(012,T5)_1@ABR2022"]    =  1.5;
-                p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@ABR2022"] = -1.6;
-                p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@ABR2022"] =  1.7;
+                p["Lambda_b->Lambda(1520)::a^(t12,V)_1@SE"]     =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(012,V)_1@SE"]     = -0.2;
+                p["Lambda_b->Lambda(1520)::a^(perp12,V)_1@SE"]  =  0.3;
+                p["Lambda_b->Lambda(1520)::a^(perp32,V)_0@SE"]  = -0.4;
+                p["Lambda_b->Lambda(1520)::a^(perp32,V)_1@SE"]  =  0.5;
+                p["Lambda_b->Lambda(1520)::a^(t12,A)_1@SE"]     = -0.6;
+                p["Lambda_b->Lambda(1520)::a^(012,A)_1@SE"]     =  0.7;
+                p["Lambda_b->Lambda(1520)::a^(perp12,A)_1@SE"]  = -0.8;
+                p["Lambda_b->Lambda(1520)::a^(perp32,A)_0@SE"]  =  0.9;
+                p["Lambda_b->Lambda(1520)::a^(perp32,A)_1@SE"]  = -1.0;
+                p["Lambda_b->Lambda(1520)::a^(012,T)_1@SE"]     =  1.1;
+                p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@SE"]  = -1.2;
+                p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@SE"]  =  1.3;
+                p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@SE"]  = -1.4;
+                p["Lambda_b->Lambda(1520)::a^(012,T5)_1@SE"]    =  1.5;
+                p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@SE"] = -1.6;
+                p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@SE"] =  1.7;
 
-                ABR2022FormFactors<LambdaBToLambda1520> ff(p, Options{ });
+                SEFormFactors<LambdaBToLambda1520, OneHalfPlusToThreeHalfMinus> ff(p, Options{ });
 
                 Diagnostics diagnostics = ff.diagnostics();
                 for (const auto & d : diagnostics)
@@ -121,23 +121,23 @@ class ABR2022FormFactorsTest :
 
                 // Cross-check against Marzia's Mathematica notebook
 
-                p["Lambda_b->Lambda(1520)::a^(t12,V)_1@ABR2022"]     =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(012,V)_1@ABR2022"]     =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp12,V)_1@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,V)_0@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,V)_1@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(t12,A)_1@ABR2022"]     =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(012,A)_1@ABR2022"]     =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp12,A)_1@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,A)_0@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,A)_1@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(012,T)_1@ABR2022"]     =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@ABR2022"]  =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(012,T5)_1@ABR2022"]    =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@ABR2022"] =  0.1;
-                p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@ABR2022"] =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(t12,V)_1@SE"]     =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(012,V)_1@SE"]     =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp12,V)_1@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,V)_0@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,V)_1@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(t12,A)_1@SE"]     =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(012,A)_1@SE"]     =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp12,A)_1@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,A)_0@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,A)_1@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(012,T)_1@SE"]     =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@SE"]  =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(012,T5)_1@SE"]    =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@SE"] =  0.1;
+                p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@SE"] =  0.1;
 
                 TEST_CHECK_NEARLY_EQUAL( ff.f_time12_v(1.0),    5.42425   , eps);
                 TEST_CHECK_NEARLY_EQUAL( ff.f_long12_v(1.0),    1.73399   , eps);
@@ -162,4 +162,4 @@ class ABR2022FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL( ff.saturation_1p_t5(), 0.150838  , eps);
             }
         }
-} abr2022_form_factor_test;
+} se_onehalfplus_to_threehalfminus_form_factor_test;
