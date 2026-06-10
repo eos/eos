@@ -169,8 +169,8 @@ class XAxis(Deserializable):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        if 'ticks' in kwargs:
-            _kwargs['ticks'] = XTicks.from_dict(**kwargs['ticks'])
+        if 'ticks' in _kwargs:
+            _kwargs['ticks'] = XTicks.from_dict(**_kwargs['ticks'])
         return Deserializable.make(cls, **_kwargs)
 
 
@@ -259,8 +259,8 @@ class YAxis(Deserializable):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        if 'ticks' in kwargs:
-            _kwargs['ticks'] = YTicks.from_dict(**kwargs['ticks'])
+        if 'ticks' in _kwargs:
+            _kwargs['ticks'] = YTicks.from_dict(**_kwargs['ticks'])
         return Deserializable.make(cls, **_kwargs)
 
 
@@ -375,15 +375,15 @@ class TwoDimensionalPlot(Plot):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        if 'grid' in kwargs:
-            _kwargs['grid'] = Grid.from_dict(**kwargs['grid'])
-        if 'legend' in kwargs:
-            _kwargs['legend'] = Legend.from_dict(**kwargs['legend'])
-        if 'xaxis' in kwargs:
-            _kwargs['xaxis'] = XAxis.from_dict(**kwargs['xaxis'])
-        if 'yaxis' in kwargs:
-            _kwargs['yaxis'] = YAxis.from_dict(**kwargs['yaxis'])
-        _kwargs['items'] = [ItemFactory.from_dict(**i) for i in kwargs['items']]
+        if 'grid' in _kwargs:
+            _kwargs['grid'] = Grid.from_dict(**_kwargs['grid'])
+        if 'legend' in _kwargs:
+            _kwargs['legend'] = Legend.from_dict(**_kwargs['legend'])
+        if 'xaxis' in _kwargs:
+            _kwargs['xaxis'] = XAxis.from_dict(**_kwargs['xaxis'])
+        if 'yaxis' in _kwargs:
+            _kwargs['yaxis'] = YAxis.from_dict(**_kwargs['yaxis'])
+        _kwargs['items'] = [ItemFactory.from_dict(**i) for i in _kwargs['items']]
         return Deserializable.make(cls, **_kwargs)
 
 

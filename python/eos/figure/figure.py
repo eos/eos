@@ -101,9 +101,9 @@ class SingleFigure(Figure):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
-        if 'watermark' in kwargs:
-            _kwargs['watermark'] = Watermark.from_dict(**kwargs['watermark'])
+        _kwargs['plot'] = PlotFactory.from_dict(**_kwargs['plot'])
+        if 'watermark' in _kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**_kwargs['watermark'])
         return Deserializable.make(cls, **_kwargs)
 
 
@@ -139,7 +139,7 @@ class Inset(Deserializable):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
+        _kwargs['plot'] = PlotFactory.from_dict(**_kwargs['plot'])
         return Deserializable.make(cls, **_kwargs)
 
 
@@ -209,10 +209,10 @@ class InsetFigure(Figure):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        _kwargs['plot'] = PlotFactory.from_dict(**kwargs['plot'])
-        _kwargs['inset'] = Inset.from_dict(**kwargs['inset'])
-        if 'watermark' in kwargs:
-            _kwargs['watermark'] = Watermark.from_dict(**kwargs['watermark'])
+        _kwargs['plot'] = PlotFactory.from_dict(**_kwargs['plot'])
+        _kwargs['inset'] = Inset.from_dict(**_kwargs['inset'])
+        if 'watermark' in _kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**_kwargs['watermark'])
         return Deserializable.make(cls, **_kwargs)
 
 
@@ -473,8 +473,8 @@ class CornerFigure(Figure):
     @classmethod
     def from_dict(cls, **kwargs):
         _kwargs = _copy.deepcopy(kwargs)
-        if 'contents' in kwargs:
-            _kwargs['contents'] = [DataFile.from_dict(**c) for c in kwargs['contents']]
+        if 'contents' in _kwargs:
+            _kwargs['contents'] = [DataFile.from_dict(**c) for c in _kwargs['contents']]
         return Deserializable.make(cls, **_kwargs)
 
 
