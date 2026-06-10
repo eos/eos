@@ -40,6 +40,7 @@ except NameError:
     _pkg_data_dir = __pkg_data_dir__
     pass
 
+from . import log_likelihood # patches LogLikelihoodBlock.Unbinned1D to accept the resolution in natural order
 from .data import *
 from .plot import *
 from .datasets import DataSets

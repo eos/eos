@@ -640,7 +640,17 @@ BOOST_PYTHON_MODULE(_eos)
             :rtype: eos.LogLikelihoodBlock
         )",
                  args("cache", "factory"))
-            .staticmethod("External");
+            .staticmethod("External")
+            .def("_Unbinned1D", &LogLikelihoodBlock::Unbinned1D, R"(
+            Internal binding for the unbinned log-likelihood block; use :py:meth:`eos.LogLikelihoodBlock.Unbinned1D` instead.
+
+            This binding expects the resolution function in wrap-around ("FFT-native") order, with the zero
+            offset at index 0 and the negative offsets at the high end of the array. The public
+            :py:meth:`eos.LogLikelihoodBlock.Unbinned1D` wrapper accepts the resolution in natural (centred)
+            order and converts it before calling this binding.
+        )",
+                 args("cache", "pdf_name", "kinematics", "options", "resolution", "observations"))
+            .staticmethod("_Unbinned1D");
 
     // LogLikelihood
     class_<LogLikelihood>("LogLikelihood", R"(
@@ -687,6 +697,7 @@ BOOST_PYTHON_MODULE(_eos)
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
     ::impl::iterable_to_std_vector_converter<QualifiedName>       iterable_to_std_vector_converter_QualifiedName;
     ::impl::iterable_to_std_vector_converter<double>              iterable_to_std_vector_converter_double;
+    ::impl::iterable_to_std_vector_converter<Kinematics>          iterable_to_std_vector_converter_Kinematics;
     ::impl::iterable_to_std_vector_converter<std::vector<double>> iterable_to_std_vector_converter_vector_double;
     class_<LogPrior, boost::noncopyable>("LogPrior", R"(
             Represents a Bayesian prior on the log scale.
