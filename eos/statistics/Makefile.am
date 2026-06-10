@@ -12,9 +12,11 @@ libeosstatistics_la_SOURCES = \
 	log-posterior.cc log-posterior.hh log-posterior-fwd.hh \
 	log-prior.cc log-prior.hh log-prior-fwd.hh \
 	test-statistic.cc test-statistic.hh test-statistic-impl.hh
-libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lyaml-cpp
-libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
-libeosstatistics_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
+libeosstatistics_la_LIBADD = \
+	$(top_builddir)/eos/maths/libeosmaths.la \
+	-lpthread -lgsl -lgslcblas -lm -lyaml-cpp
+libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(FFTW_CXXFLAGS) $(GSL_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeosstatistics_la_LDFLAGS = $(AM_LDFLAGS) $(FFTW_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 include_eos_statisticsdir = $(includedir)/eos/statistics
 include_eos_statistics_HEADERS = \

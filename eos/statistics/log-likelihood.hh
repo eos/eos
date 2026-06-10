@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2014, 2017 Danny van Dyk
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2026 Danny van Dyk
+ * Copyright (c) 2011      Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -299,6 +299,45 @@ namespace eos
              */
             static LogLikelihoodBlockPtr UniformBound(ObservableCache cache, const std::vector<ObservablePtr> & observables,
                                                       const double & bound, const double & uncertainty);
+
+            /*!
+             * Create a new LogLikelihoodBlock for an unbinned likelihood with a resolution function.
+             *
+             * The signal PDF is evaluated on the supplied grid and convolved with the resolution function
+             * via a discrete Fourier transform, yielding the resolution-smeared PDF sampled on the grid.
+             * The log-likelihood is then the sum over the observed events of the logarithm of the smeared
+             * PDF, evaluated at each observation by linear interpolation from the surrounding grid points.
+             *
+             * @param cache        The observable cache used by the total log-likelihood.
+             * @param pdf_name     The name of the SignalPDF to evaluate at each grid point.
+             * @param kinematics   One Kinematics object per grid point, fixing the observable.
+             *                     Must describe a uniform grid in the relevant kinematic variable.
+             * @param options      Options forwarded to SignalPDF::make.
+             * @param resolution   Discretised resolution function on the same grid. Must have the same size
+             *                     as @p kinematics.
+             *
+             *                     The convolution is carried out as a circular (cyclic) convolution via the
+             *                     discrete Fourier transform. The resolution function must therefore be supplied
+             *                     in wrap-around ("FFT-native") order, *not* centred in the array:
+             *                       - index 0 holds the value at zero offset (the peak of a symmetric kernel);
+             *                       - ascending indices 1, 2, ... hold increasing positive offsets;
+             *                       - the highest indices N-1, N-2, ... hold the negative offsets -1, -2, ... .
+             *                     Storing the kernel centred in the array instead shifts the convolved result by
+             *                     N/2 grid points and yields incorrect likelihoods.
+             *
+             *                     Because the convolution is circular, the kernel that runs off one end of the
+             *                     grid re-enters at the other end. The grid must therefore be padded with a
+             *                     sufficiently large region in which both the PDF and the resolution function are
+             *                     negligible, so that no appreciable density wraps across the boundary.
+             * @param observations The observed events, expressed as kinematic variables. Each must lie
+             *                     within the range spanned by @p kinematics.
+             */
+            static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache,
+                                                    const QualifiedName & pdf_name,
+                                                    const std::vector<Kinematics> & kinematics,
+                                                    const Options & options,
+                                                    const std::vector<double> & resolution,
+                                                    const std::vector<Kinematics> & observations);
     };
 
     /*!

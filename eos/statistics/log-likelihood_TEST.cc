@@ -23,6 +23,7 @@
 #include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/maths/power-of.hh>
 #include <algorithm>
+#include <cmath>
 
 using namespace test;
 using namespace eos;
@@ -658,4 +659,148 @@ namespace eos
                 }
             }
     } log_likelihood_test;
+
+    class UnbinnedLogLikelihoodTest :
+        public TestCase
+    {
+        public:
+            UnbinnedLogLikelihoodTest() :
+                TestCase("unbinned_log_likelihood_test")
+            {
+            }
+
+            virtual void run() const
+            {
+                // The convolution of the test PDF 'TestLegendre1D::P(z)' with a Gaussian resolution
+                // function (mean 0, standard deviation 0.1), evaluated on a uniform grid of N = 2^8
+                // points spanning the smeared domain [z_smeared_min, z_smeared_max] = [-1.5, 5.5].
+                //
+                // The reference values below are the resolution-smeared density on that grid, computed
+                // independently with Mathematica. They were generated with a grid spacing of 7/(N-1)
+                // (inclusive endpoints), whereas the periodic grid underlying the discrete Fourier
+                // transform has spacing 7/N; the factor (N-1)/N = 255/256 below corrects for this.
+                static const std::size_t N = 256;
+                static const double      z_smeared_min = -1.5;
+                static const double      z_smeared_max = +5.5;
+                static const double      dz            = (z_smeared_max - z_smeared_min) / N; // = 7/256
+                static const double      sigma         = 0.1;
+
+                static const std::array<double, N> reference{{
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 9.8096750507335319e-11, 4.8994547536473863e-10,
+                2.2808818915303313e-09, 9.9003955209872559e-09, 4.0081628049196628e-08, 1.5140779927891626e-07,
+                5.3388787147320642e-07, 1.7581873495209658e-06, 5.4105051871749915e-06, 1.5568520639437843e-05,
+                4.1919296052406931e-05, 0.00010570750226186107, 0.00024988876108756496, 0.00055440287373774097,
+                0.0011558617225092187, 0.0022679740834220794, 0.0041953727246893521, 0.0073309847622660407,
+                0.012128152463587722, 0.019044987204231922, 0.028468940703678169, 0.04064010963427709,
+                0.055596606477380954, 0.073160581334740057, 0.092970184593649696, 0.11454685534998099,
+                0.1373763355568024, 0.1609803899497354, 0.18496366568521261, 0.2090315355161908,
+                0.23298444582654129, 0.25669891391220345, 0.28010488476152967, 0.30316582942180786,
+                0.32586420951757183, 0.34819226096975547, 0.37014681131077348, 0.3917266630519648,
+                0.41293139836227799, 0.43376088240169014, 0.45421507490612867, 0.47429396474657715,
+                0.49399754907484072, 0.51332582721581699, 0.53227879902127051, 0.55085646446104319,
+                0.56905882352944925, 0.58688587622549537, 0.60433762254902035, 0.62141406250000009,
+                0.63811519607843126, 0.65444102328431364, 0.67039154411764701, 0.68596675857843137,
+                0.7011666666666666, 0.71599126838235294, 0.73044056372549016, 0.74451455269607825,
+                0.75821323529411755, 0.77153661151960795, 0.78448468137254912, 0.79705744485294128,
+                0.80925490196078442, 0.82107705269607856, 0.83252389705882368, 0.84359543504901957,
+                0.85429166666666667, 0.86461259191176476, 0.87455821078431406, 0.88412852328431379,
+                0.89332352941176485, 0.90214322916666678, 0.9105876225490197, 0.91865670955882361,
+                0.92635049019607851, 0.9336689644607844, 0.9406121323529415, 0.94717999387254914,
+                0.95337254901960788, 0.95918979779411773, 0.96463174019607867, 0.96969837622549004,
+                0.97438970588235285, 0.97870572916666654, 0.98264644607843143, 0.98621185661764721,
+                0.98940196078431364, 0.99221675857843128, 0.99465625000000024, 0.9967204350490193,
+                0.99840931372549024, 0.99972288602941162, 1.0006611519607844, 1.0012241115196079,
+                1.0014117647058822, 1.0012241115196079, 1.0006611519607844, 0.99972288602941184,
+                0.99840931372549013, 0.99672043504901953, 0.99465625000000024, 0.9922167585784315,
+                0.98940196078431386, 0.98621185661764721, 0.98264644607843143, 0.97870572916666676,
+                0.97438970588235307, 0.96969837622549027, 0.96463174019607867, 0.95918979779411773,
+                0.95337254901960788, 0.94717999387254914, 0.9406121323529415, 0.93366896446078418,
+                0.92635049019607829, 0.91865670955882339, 0.9105876225490197, 0.90214322916666678,
+                0.89332352941176463, 0.88412852328431357, 0.87455821078431406, 0.86461259191176443,
+                0.85429166666666678, 0.84359543504901946, 0.83252389705882368, 0.82107705269607856,
+                0.80925490196078442, 0.79705744485294128, 0.78448468137254912, 0.77153661151960784,
+                0.75821323529411766, 0.74451455269607847, 0.73044056372549027, 0.71599126838235305,
+                0.70116666666666672, 0.68596675857843148, 0.67039154411764712, 0.65444102328431386,
+                0.63811519607843137, 0.62141406250000009, 0.60433762254902035, 0.58688587622549537,
+                0.56905882352944925, 0.55085646446104319, 0.53227879902127051, 0.51332582721581699,
+                0.49399754907484072, 0.47429396474657715, 0.45421507490612856, 0.43376088240169008,
+                0.41293139836227799, 0.3917266630519648, 0.37014681131077348, 0.34819226096975542,
+                0.32586420951757178, 0.30316582942180792, 0.28010488476152967, 0.2566989139122034,
+                0.23298444582654129, 0.2090315355161908, 0.18496366568521261, 0.16098038994973554,
+                0.13737633555680248, 0.11454685534998099, 0.092970184593649793, 0.073160581334740071,
+                0.055596606477381003, 0.040640109634277083, 0.028468940703678156, 0.019044987204231999,
+                0.012128152463587784, 0.0073309847622661031, 0.0041953727246893035, 0.0022679740834221449,
+                0.0011558617225092449, 0.00055440287373768361, 0.00024988876108765246, 0.00010570750226200931,
+                4.1919296052469313e-05, 1.5568520639573728e-05, 5.4105051872746119e-06, 1.7581873495215873e-06,
+                5.3388787161756879e-07, 1.5140779946748343e-07, 4.0081628093235466e-08, 9.9003956910643878e-09,
+                2.2808819007805453e-09, 4.8994546284965436e-10, 9.8096741187619583e-11, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0
+                }};
+
+                Parameters    p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                // Build the grid of kinematics at which the PDF is evaluated, and the resolution function
+                // sampled on the same grid in wrap-around ("FFT-native") order: index 0 is the zero offset,
+                // ascending indices are positive offsets, the high indices are the negative offsets.
+                // The resolution evaluations span [-3.5, +3.5] (= [-N/2, N/2] grid steps from zero).
+                //
+                // The factor 1/4 = 1/max(z (4 - z)) peak-normalizes the *unnormalized* test PDF that the
+                // block evaluates via SignalPDF::evaluate_linear() (whose maximum is 4 at z = 2), so that
+                // the convolved grid matches the unit-peak reference values.
+                std::vector<Kinematics> kinematics;
+                std::vector<double>     resolution(N);
+                for (std::size_t i = 0 ; i < N ; ++i)
+                {
+                    Kinematics k;
+                    k.declare("z",     z_smeared_min + i * dz);
+                    k.declare("z_min", z_smeared_min);
+                    k.declare("z_max", z_smeared_max);
+                    kinematics.push_back(k);
+
+                    const double offset = (i <= N / 2 ? static_cast<double>(i) : static_cast<double>(static_cast<long>(i) - static_cast<long>(N))) * dz;
+                    resolution[i] = std::exp(-offset * offset / (2.0 * sigma * sigma)) / (sigma * std::sqrt(2.0 * M_PI)) * dz / 4.0;
+                }
+
+                // Place one observation at each grid point at which the smeared density is safely positive,
+                // so that interpolation returns the grid value and std::log() stays well-conditioned.
+                std::vector<Kinematics> observations;
+                double                  expected = 0.0;
+                for (std::size_t i = 0 ; i < N ; ++i)
+                {
+                    const double value = reference[i] * 255.0 / 256.0;
+                    if (value < 1.0e-3)
+                        continue;
+
+                    Kinematics k;
+                    k.declare("z",     z_smeared_min + i * dz);
+                    k.declare("z_min", z_smeared_min);
+                    k.declare("z_max", z_smeared_max);
+                    observations.push_back(k);
+
+                    expected += std::log(value);
+                }
+
+                auto block = LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, resolution, observations);
+
+                // The block convolves the PDF with the resolution and sums the logarithm of the smeared
+                // density evaluated at each observation; this must reproduce the reference values.
+                TEST_CHECK_NEARLY_EQUAL(block->evaluate(), expected, 1.0e-6);
+            }
+    } unbinned_log_likelihood_test;
 }
