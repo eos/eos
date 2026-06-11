@@ -143,6 +143,10 @@ namespace eos
                 {
                     return _value;
                 }
+
+                inline auto operator<=> (const OptionValue & rhs) const = default;
+                inline bool operator== (const OptionValue & rhs) const  = default;
+                inline bool operator< (const OptionValue & rhs) const   = default;
         };
     } // namespace qnp
 
