@@ -137,11 +137,11 @@ namespace eos
                 throw QualifiedNameSyntaxError("A qualified name's option value part must not be empty");
             }
 
-            // VALUE := ['a'-'z', 'A'-'Z', '0'-'9', '+', '-', '/', '.', '^', '_']
+            // VALUE := ['a'-'z', 'A'-'Z', '0'-'9', '+', '-', '/', '.', '^', '_', '|', '(', ')', '*']
             static const char * valid_option_value_characters = "abcdefghijklmnopqrstuvwxyz"
                                                                 "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                                                                 "0123456789"
-                                                                "+-/.^_";
+                                                                "+-/.^_|()*";
 
             auto pos = value.find_first_not_of(valid_option_value_characters);
 
