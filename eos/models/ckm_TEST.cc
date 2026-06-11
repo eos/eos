@@ -67,7 +67,7 @@ class CKMScanModelMakeTest : public TestCase
         {
             try
             {
-                std::shared_ptr<Model> m = Model::make("CKM", reference_parameters(), Options());
+                std::shared_ptr<Model> m = Model::make("CKM"_ov, reference_parameters(), Options());
             }
             catch (NoSuchModelError &)
             {

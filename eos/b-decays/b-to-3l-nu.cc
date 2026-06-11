@@ -68,8 +68,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
-            form_factors(FormFactorFactory<PToGammaOffShell>::create("B->gamma^*::" + o.get("form-factors"_ok, "KKvDZ2022"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+            form_factors(FormFactorFactory<PToGammaOffShell>::create("B->gamma^*::" + o.get("form-factors"_ok, "KKvDZ2022"_ov).str(), p, o)),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
             m_B(p["mass::B_u"], u),
@@ -864,8 +864,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToGammaOffShell>::option_specification(),
-        { "lprime"_ok, { "e", "mu", "tau" }, "mu" },
-        { "l"_ok, { "e", "mu", "tau" }, "e" },
+        { "lprime"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "e"_ov },
     };
 
     BToThreeLeptonsNeutrino::BToThreeLeptonsNeutrino(const Parameters & parameters, const Options & options) :

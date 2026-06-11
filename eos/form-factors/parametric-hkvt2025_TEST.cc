@@ -74,8 +74,8 @@ class BToPiPiHKVT2025FormFactorsTest :
                 p["B->pipi::a^F1_0_0_0_1@HKvT2025"]   = -1.63231083e-02;
 
                 Options oo;
-                oo.declare("C"_ok, "+-");
-                oo.declare("I"_ok, "0|1");
+                oo.declare("C"_ok, "+-"_ov);
+                oo.declare("I"_ok, "0|1"_ov);
                 HKVT2025FormFactors<BToPiPi, PToPP> ff(p, oo);
 
                 Diagnostics  diagnostics = ff.diagnostics();

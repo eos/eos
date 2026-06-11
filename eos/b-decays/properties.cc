@@ -41,7 +41,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             opt_q(o, options, "q"_ok),
             mu2_g(p["B->B::mu_G^2@1GeV"], u)
         {
@@ -72,7 +72,7 @@ namespace eos
     Implementation<BMesonProperties>::options
     {
         Model::option_specification(),
-        { "q"_ok, { "u", "d", "s", "c"}, "d" }
+        { "q"_ok, { "u"_ov, "d"_ov, "s"_ov, "c"_ov}, "d"_ov }
     };
 
     BMesonProperties::BMesonProperties(const Parameters & parameters, const Options & options) :

@@ -89,12 +89,12 @@ class BToKDileptonGvDV2020Test :
 
             Options oo
             {
-                {"model"_ok,                   "WET"},
-                {"tag"_ok,                     "GvDV2020"},
-                {"nonlocal-formfactors"_ok,    "GvDV2020"},
-                {"form-factors"_ok,            "BSZ2015"},
-                {"l"_ok,                       "mu"},
-                {"q"_ok,                       "d"}
+                {"model"_ok,                   "WET"_ov},
+                {"tag"_ok,                     "GvDV2020"_ov},
+                {"nonlocal-formfactors"_ok,    "GvDV2020"_ov},
+                {"form-factors"_ok,            "BSZ2015"_ov},
+                {"l"_ok,                       "mu"_ov},
+                {"q"_ok,                       "d"_ov}
             };
 
             static const double eps = 1e-5;
@@ -159,12 +159,12 @@ class BToKDileptonJavierTest :
 
             Options oo
             {
-                {"model"_ok,                   "WET"},
-                {"tag"_ok,                     "GvDV2020"},
-                {"nonlocal-formfactors"_ok,    "GvDV2020"},
-                {"form-factors"_ok,            "BSZ2015"},
-                {"l"_ok,                       "mu"},
-                {"q"_ok,                       "d"}
+                {"model"_ok,                   "WET"_ov},
+                {"tag"_ok,                     "GvDV2020"_ov},
+                {"nonlocal-formfactors"_ok,    "GvDV2020"_ov},
+                {"form-factors"_ok,            "BSZ2015"_ov},
+                {"l"_ok,                       "mu"_ov},
+                {"q"_ok,                       "d"_ov}
             };
 
             static const double eps = 1e-5;

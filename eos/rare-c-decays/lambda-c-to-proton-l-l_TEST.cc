@@ -93,9 +93,9 @@ class LambdaCToProtonLeptonLeptonTest : public TestCase
 
 
                 Options oo{
-                    {        "model"_ok,       "WET" },
-                    { "form-factors"_ok, "BMRvD2022" },
-                    {            "l"_ok,        "mu" }
+                    {        "model"_ok,       "WET"_ov },
+                    { "form-factors"_ok, "BMRvD2022"_ov },
+                    {            "l"_ok,        "mu"_ov }
                 };
 
                 LambdaCToProtonLeptonLepton d(p, oo);
@@ -128,10 +128,10 @@ class LambdaCToProtonLeptonLeptonTest : public TestCase
                 p["ucmumu::Im{c10'}"] = imag(complex<double>(-1.2, 0.4) / ckm_factor_ds);
 
                 Options oobar{
-                    {        "model"_ok,       "WET" },
-                    { "form-factors"_ok, "BMRvD2022" },
-                    {            "l"_ok,        "mu" },
-                    { "cp-conjugate"_ok,      "true" }
+                    {        "model"_ok,       "WET"_ov },
+                    { "form-factors"_ok, "BMRvD2022"_ov },
+                    {            "l"_ok,        "mu"_ov },
+                    { "cp-conjugate"_ok,      "true"_ov }
                 };
 
                 LambdaCToProtonLeptonLepton dNP(p, oo);

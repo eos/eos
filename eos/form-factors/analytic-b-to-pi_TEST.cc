@@ -56,7 +56,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             {
                 Parameters p = Parameters::Defaults();
                 Options o{
-                    { "decay-constant"_ok, "sum-rule" }
+                    { "decay-constant"_ok, "sum-rule"_ov }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, o);
                 p["mass::B_d"] = 5.2795;
@@ -135,7 +135,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["QCD::alpha_s(MZ)"] = 0.1184;
 
                 Options o{
-                    { "decay-constant"_ok, "sum-rule" }
+                    { "decay-constant"_ok, "sum-rule"_ov }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff(p, o);
 
@@ -181,8 +181,8 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_p(10.0),        0.5346, 10 * eps);
 
                 o = Options{
-                    { "decay-constant"_ok, "sum-rule" },
-                    { "rescale-borel"_ok,  "0"        }
+                    { "decay-constant"_ok, "sum-rule"_ov },
+                    { "rescale-borel"_ok,  "0"_ov        }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 
@@ -309,8 +309,8 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["QCD::alpha_s(MZ)"] = 0.1176;
 
                 Options o{
-                    { "decay-constant"_ok, "sum-rule" },
-                    { "rescale-borel"_ok,  "0"        }
+                    { "decay-constant"_ok, "sum-rule"_ov },
+                    { "rescale-borel"_ok,  "0"_ov        }
                 };
                 AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down> ff_no_rescale(p, o);
 

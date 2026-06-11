@@ -24,11 +24,10 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     LambdaBToLambda1520Dilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model"_ok, "SM"), p, o)),
-        form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda(1520)::" + o.get("form-factors"_ok, "ABR2022"), p)),
+        model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+        form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda(1520)::" + o.get("form-factors"_ok, "ABR2022"_ov).str(), p)),
         opt_l(o, options, "l"_ok),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
@@ -56,8 +55,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s },
-        { "l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
     };
 
     double

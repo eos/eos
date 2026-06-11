@@ -63,11 +63,11 @@ class BToRhoLeptonNeutrinoTest :
 
                 Options ooplus
                 {
-                    { "model"_ok,        "CKM"     },
-                    { "form-factors"_ok, "BSZ2015" },
-                    { "V"_ok,            "rho"     },
-                    { "q"_ok,            "d"       },
-                    { "l"_ok,            "e"       },
+                    { "model"_ok,        "CKM"_ov     },
+                    { "form-factors"_ok, "BSZ2015"_ov },
+                    { "V"_ok,            "rho"_ov     },
+                    { "q"_ok,            "d"_ov       },
+                    { "l"_ok,            "e"_ov       },
                 };
 
                 BToVectorLeptonNeutrino dplus(p, ooplus);
@@ -83,11 +83,11 @@ class BToRhoLeptonNeutrinoTest :
 
                 Options oozero
                 {
-                    { "model"_ok,        "CKM"     },
-                    { "form-factors"_ok, "BSZ2015" },
-                    { "V"_ok,            "rho"     },
-                    { "q"_ok,            "u"       },
-                    { "l"_ok,            "e"       },
+                    { "model"_ok,        "CKM"_ov     },
+                    { "form-factors"_ok, "BSZ2015"_ov },
+                    { "V"_ok,            "rho"_ov     },
+                    { "q"_ok,            "u"_ov       },
+                    { "l"_ok,            "e"_ov       },
                 };
 
                 BToVectorLeptonNeutrino dzero(p, oozero);

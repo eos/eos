@@ -30,7 +30,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <>
     struct Implementation<BToDLeptonInclusiveNeutrinos>
@@ -60,7 +59,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            form_factors(FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors"_ok, "BCL2008"), p, o)),
+            form_factors(FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors"_ok, "BCL2008"_ov).str(), p, o)),
             opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
@@ -69,7 +68,7 @@ namespace eos
             m_tau(p["mass::tau"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            opt_model(o, "model"_ok, {"SM"}, "SM"),
+            opt_model(o, "model"_ok, {"SM"_ov}, "SM"_ov),
             model(Model::make(opt_model.value(), p, o))
         {
             Context ctx("When constructing B->DlX observable");
@@ -156,7 +155,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "q"_ok, { "d"s, "u"s }, "d"s }
+        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov }
     };
 
     BToDLeptonInclusiveNeutrinos::BToDLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :

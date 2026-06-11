@@ -31,7 +31,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using namespace std::placeholders;
     using std::norm;
 
@@ -56,11 +55,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             hbar(p["QM::hbar"], u),
             q(o, options, "q"_ok),
             tau(p["life_time::B_" + q.str()], u),
-            tag(o, "tag"_ok, { "BFS2004"})
+            tag(o, "tag"_ok, { "BFS2004"_ov })
         {
             Context ctx("When constructing B->K^*gamma observables");
 
@@ -114,7 +113,7 @@ namespace eos
     Implementation<BToKstarGamma>::options
     {
         Model::option_specification(),
-        {"q"_ok, { "d"s, "u"s }, "d"s}
+        {"q"_ok, { "d"_ov, "u"_ov }, "d"_ov}
     };
 
     double

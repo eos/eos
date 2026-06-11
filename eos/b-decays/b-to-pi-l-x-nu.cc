@@ -27,7 +27,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <>
     struct Implementation<BToPiLeptonInclusiveNeutrinos>
@@ -53,7 +52,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors"_ok, "BCL2008"), p, o)),
+            form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors"_ok, "BCL2008"_ov).str(), p, o)),
             opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
@@ -145,7 +144,7 @@ namespace eos
     Implementation<BToPiLeptonInclusiveNeutrinos>::options
     {
         FormFactorFactory<PToP>::option_specification(),
-        { "q"_ok, { "d"s, "u"s }, "d"s }
+        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov }
     };
 
     BToPiLeptonInclusiveNeutrinos::BToPiLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :

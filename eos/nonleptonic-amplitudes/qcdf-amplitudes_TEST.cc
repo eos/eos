@@ -89,10 +89,10 @@ class QCDFAmplitudesTest : public TestCase
                 static const double eps = 0.1e-6;
 
                 Options o{
-                    {     "q"_ok,    "u" },
-                    {    "P1"_ok, "pi^0" },
-                    {    "P2"_ok, "pi^+" },
-                    { "model"_ok,  "CKM" },
+                    {     "q"_ok,    "u"_ov },
+                    {    "P1"_ok, "pi^0"_ov },
+                    {    "P2"_ok, "pi^+"_ov },
+                    { "model"_ok,  "CKM"_ov },
                 };
 
                 QCDFRepresentation<PToPP> d(p, o);
@@ -102,10 +102,10 @@ class QCDFAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d.amplitude(), complex<double>(1.9525029039373238e-7, -7.648360103046585e-9), eps);
 
                 Options o2{
-                    {     "q"_ok,    "d" },
-                    {    "P1"_ok, "pi^+" },
-                    {    "P2"_ok, "pi^-" },
-                    { "model"_ok,  "CKM" },
+                    {     "q"_ok,    "d"_ov },
+                    {    "P1"_ok, "pi^+"_ov },
+                    {    "P2"_ok, "pi^-"_ov },
+                    { "model"_ok,  "CKM"_ov },
                 };
 
                 QCDFRepresentation<PToPP> d2(p, o2);
@@ -116,10 +116,10 @@ class QCDFAmplitudesTest : public TestCase
 
 
                 Options o3{
-                    {     "q"_ok,    "d" },
-                    {    "P1"_ok, "pi^0" },
-                    {    "P2"_ok, "pi^0" },
-                    { "model"_ok,  "CKM" },
+                    {     "q"_ok,    "d"_ov },
+                    {    "P1"_ok, "pi^0"_ov },
+                    {    "P2"_ok, "pi^0"_ov },
+                    { "model"_ok,  "CKM"_ov },
                 };
 
                 QCDFRepresentation<PToPP> d3(p, o3);
@@ -129,10 +129,10 @@ class QCDFAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d3.amplitude(), complex<double>(-2.49380601140184e-8, -4.1522713904845995e-8), eps);
 
                 Options o4{
-                    {     "q"_ok,      "d" },
-                    {    "P1"_ok,    "K_d" },
-                    {    "P2"_ok, "Kbar_d" },
-                    { "model"_ok,    "CKM" },
+                    {     "q"_ok,      "d"_ov },
+                    {    "P1"_ok,    "K_d"_ov },
+                    {    "P2"_ok, "Kbar_d"_ov },
+                    { "model"_ok,    "CKM"_ov },
                 };
 
                 QCDFRepresentation<PToPP> d4(p, o4);
@@ -142,11 +142,11 @@ class QCDFAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d4.amplitude(), complex<double>(1.6454780827208397e-7, 1.540242668734127e-8), eps);
 
                 Options o5{
-                    {            "q"_ok,      "s" },
-                    {           "P1"_ok,    "K_d" },
-                    {           "P2"_ok, "Kbar_d" },
-                    {        "model"_ok,    "CKM" },
-                    { "cp-conjugate"_ok,  "false" }
+                    {            "q"_ok,      "s"_ov },
+                    {           "P1"_ok,    "K_d"_ov },
+                    {           "P2"_ok, "Kbar_d"_ov },
+                    {        "model"_ok,    "CKM"_ov },
+                    { "cp-conjugate"_ok,  "false"_ov }
                 };
 
                 QCDFRepresentation<PToPP> d5(p, o5);
@@ -157,10 +157,10 @@ class QCDFAmplitudesTest : public TestCase
 
 
                 Options o6{
-                    {     "q"_ok,      "s" },
-                    {    "P1"_ok, "Kbar_d" },
-                    {    "P2"_ok,    "eta" },
-                    { "model"_ok,    "CKM" },
+                    {     "q"_ok,      "s"_ov },
+                    {    "P1"_ok, "Kbar_d"_ov },
+                    {    "P2"_ok,    "eta"_ov },
+                    { "model"_ok,    "CKM"_ov },
                 };
 
                 QCDFRepresentation<PToPP> d6(p, o6);
@@ -171,10 +171,10 @@ class QCDFAmplitudesTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR_C(d6.amplitude(), complex<double>(1.5834870498126266e-8, 1.625814857768706e-8), eps);
 
                 Options o7{
-                    {     "q"_ok,         "d" },
-                    {    "P1"_ok,       "K_d" },
-                    {    "P2"_ok, "eta_prime" },
-                    { "model"_ok,       "CKM" },
+                    {     "q"_ok,         "d"_ov },
+                    {    "P1"_ok,       "K_d"_ov },
+                    {    "P2"_ok, "eta_prime"_ov },
+                    { "model"_ok,       "CKM"_ov },
                 };
 
                 QCDFRepresentation<PToPP> d7(p, o7);

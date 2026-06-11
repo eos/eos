@@ -33,7 +33,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K}^* \ell^+ \ell^-@f$.
@@ -59,16 +58,16 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
             opt_l(o, options, "l"_ok),
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.str()], u),
-            tau(p["life_time::B_" + o.get("q"_ok, "d")], u),
+            tau(p["life_time::B_" + o.get("q"_ok, "d"_ov).str()], u),
             mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
         {
             Context ctx("When constructing B->K^*ll observables");
 
-            std::string tag = o.get("tag"_ok, "");
+            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
 
             if ("BFS2004" == tag)
             {
@@ -292,8 +291,8 @@ namespace eos
     Implementation<BToKstarDilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s},
-        {"q"_ok, { "d"s, "u"s }, "d"s}
+        {"l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov},
+        {"q"_ok, { "d"_ov, "u"_ov }, "d"_ov}
     };
 
     double

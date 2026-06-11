@@ -55,7 +55,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             opt_q(o, options, "q"_ok),
             opt_p1(o, options, "P1"_ok),
             opt_p2(o, options, "P2"_ok),
@@ -65,9 +65,9 @@ namespace eos
             mP1(p["mass::" + opt_p1.str()], u),
             mP2(p["mass::" + opt_p2.str()], u),
             opt_rep(o, options, "representation"_ok),
-            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"}})),
-            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "true"}})),
-            Bbar_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"}} + Options{{"B-bar"_ok, "true"}}))
+            nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"_ov}})),
+            cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "true"_ov}})),
+            Bbar_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"_ov}} + Options{{"B-bar"_ok, "true"_ov}}))
         {
             Context ctx("When constructing B->PP observable");
 
@@ -165,10 +165,10 @@ namespace eos
     {
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-        { "q"_ok,              { "u", "d", "s" },                                                                       "" },
-        { "P1"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "P2"_ok,             { "pi^0", "pi^+", "pi^-", "K_d", "Kbar_d", "K_S", "K_u", "Kbar_u", "eta", "eta_prime" }, "" },
-        { "representation"_ok, { "topological", "SU3F", "QCDF" },                                                       "" }
+        { "q"_ok,              { "u"_ov, "d"_ov, "s"_ov } },
+        { "P1"_ok,             { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
+        { "P2"_ok,             { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
+        { "representation"_ok, { "topological"_ov, "SU3F"_ov, "QCDF"_ov } }
     };
 
     BToPseudoscalarPseudoscalar::BToPseudoscalarPseudoscalar(const Parameters & parameters, const Options & options) :

@@ -36,13 +36,13 @@ namespace eos
     };
 
     std::shared_ptr<Model>
-    Model::make(const std::string & name, const Parameters & parameters, const Options & options)
+    Model::make(const qnp::OptionValue & name, const Parameters & parameters, const Options & options)
     {
-        auto i = Model::models.find(name);
+        auto i = Model::models.find(name.str());
 
         if (Model::models.cend() == i)
         {
-            throw NoSuchModelError(name);
+            throw NoSuchModelError(name.str());
         }
 
         return i->second(parameters, options);
@@ -51,14 +51,14 @@ namespace eos
     OptionSpecification
     Model::option_specification()
     {
-        std::vector<std::string> allowed_values;
+        std::vector<qnp::OptionValue> allowed_values;
 
         for (const auto & m : Model::models)
         {
             allowed_values.push_back(std::get<0>(m));
         }
 
-        return OptionSpecification{ "model"_ok, allowed_values, "SM" };
+        return OptionSpecification{ "model"_ok, allowed_values, "SM"_ov };
     }
 
     NoSuchModelError::NoSuchModelError(const std::string & name) :

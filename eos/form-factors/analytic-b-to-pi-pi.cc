@@ -35,7 +35,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <>
     struct Implementation<AnalyticFormFactorBToPiPiBFvD2016>
@@ -72,8 +71,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
-            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor"_ok, "BCL2008"), p, o)),
+            model(Model::make("SM"_ov, p, o)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor"_ok, "BCL2008"_ov).str(), p, o)),
             m_B(p["mass::B_d"], u),
             f_pi(p["decay-constant::pi"], u),
             _mu(p["B->pipi::mu@BFvD2016"], u),
@@ -85,7 +84,7 @@ namespace eos
             _F_switch(opt_L.value() && PartialWave::F),
             cub_conf(cubature::Config().epsrel(5e-3))
         {
-            std::string scale = o.get("scale"_ok, "fixed");
+            std::string scale = o.get("scale"_ok, "fixed"_ov).str();
 
             if ("fixed" == scale)
             {
@@ -391,7 +390,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options
     {
-        { "L"_ok, "S|P|D|F"s, "S|P|D|F"s }
+        { "L"_ok, "S|P|D|F"_ov, "S|P|D|F"_ov }
     };
 
     AnalyticFormFactorBToPiPiBFvD2016::AnalyticFormFactorBToPiPiBFvD2016(const Parameters & p, const Options & o) :
@@ -645,8 +644,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
-            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor"_ok, "BCL2008"), p)),
+            model(Model::make("SM"_ov, p, o)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor"_ok, "BCL2008"_ov).str(), p)),
             m_B(p["mass::B_d"], u),
             m_Bst(p["mass::B_d^*"], u),
             g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u),
@@ -725,8 +724,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options
     {
-        { "l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s      },
-        { "L"_ok, "S|P|D|F"s,              "S|P|D|F"s }
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov      },
+        { "L"_ok, "S|P|D|F"_ov,              "S|P|D|F"_ov }
     };
 
     AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :

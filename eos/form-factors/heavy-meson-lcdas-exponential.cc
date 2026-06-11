@@ -39,9 +39,9 @@ namespace eos
 
         const std::vector<OptionSpecification> Exponential::options
         {
-            { "Q"_ok,      { "b"s },                 "b"s        },
-            { "q"_ok,      { "u"s, "d"s, "s"s },     "u"s        },
-            { "gminus"_ok, { "zero"s, "WW-limit"s }, "WW-limit"s }
+            { "Q"_ok,      { "b"_ov },                 "b"_ov        },
+            { "q"_ok,      { "u"_ov, "d"_ov, "s"_ov },     "u"_ov        },
+            { "gminus"_ok, { "zero"_ov, "WW-limit"_ov }, "WW-limit"_ov }
         };
 
         Exponential::Exponential(const Parameters & p, const Options & o) :

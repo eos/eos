@@ -45,7 +45,7 @@ namespace eos
 
     AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o) :
         blcdas(HeavyMesonLCDAs::make("FLvD2022", p, o)),
-        model(Model::make("SM", p, o))
+        model(Model::make("SM"_ov, p, o))
     {
     }
 
@@ -74,7 +74,7 @@ namespace eos
     template <typename Process_>
     AnalyticFormFactorPToGammaQCDF<Process_>::AnalyticFormFactorPToGammaQCDF(const Parameters & p, const Options & o):
         traits(p, o),
-        model(Model::make("SM", p, o)),
+        model(Model::make("SM"_ov, p, o)),
         mu(p[QualifiedName(Traits::process, qnp::Name("mu"), qnp::Suffix("FLvD2022QCDF"))], *this),
         omega_0(p[QualifiedName(Traits::prefix, qnp::Name("omega_0"), qnp::Suffix("FLvD2022"))], *this),
         f_B(p[Traits::decay_constant], *this),
@@ -87,7 +87,7 @@ namespace eos
         s_0(p[QualifiedName(Traits::process, qnp::Name("s_0"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h1(p[QualifiedName(Traits::process, qnp::Name("mu_h1"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h2(p[QualifiedName(Traits::process, qnp::Name("mu_h2"), qnp::Suffix("FLvD2022QCDF"))], *this),
-        opt_contributions(o, "contributions"_ok, { "all", "ht", "soft", "partial-soft-tw-3+4", "none"}, "all"),
+        opt_contributions(o, "contributions"_ok, { "all"_ov, "ht"_ov, "soft"_ov, "partial-soft-tw-3+4"_ov, "none"_ov}, "all"_ov),
         switch_ht(0.0),
         switch_soft(0.0),
         switch_soft_tw_3_4(0.0)

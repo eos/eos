@@ -634,8 +634,8 @@ class ConstraintDeserializationTest : public TestCase
 
                 Constraint                         c = entry->make("Test::MultivariateGaussian",
                                            Options{
-                                                                       { "begin"_ok, "0" },
-                                                                       {   "end"_ok, "2" }
+                                                                       { "begin"_ok, "0"_ov },
+                                                                       {   "end"_ok, "2"_ov }
                 });
                 std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
                 TEST_CHECK_EQUAL(1, blocks.size());
@@ -1000,8 +1000,8 @@ class ConstraintDeserializationTest : public TestCase
 
                 Constraint                         c = entry->make("Test::MultivariateGaussian(Covariance)",
                                            Options{
-                                                                       { "begin"_ok, "0" },
-                                                                       {   "end"_ok, "2" }
+                                                                       { "begin"_ok, "0"_ov },
+                                                                       {   "end"_ok, "2"_ov }
                 });
                 std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
                 TEST_CHECK_EQUAL(1, blocks.size());

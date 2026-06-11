@@ -72,7 +72,7 @@ class MakeTest : public TestCase
         {
             try
             {
-                std::shared_ptr<Model> m = Model::make("SM", reference_parameters(), Options());
+                std::shared_ptr<Model> m = Model::make("SM"_ov, reference_parameters(), Options());
             }
             catch (NoSuchModelError &)
             {

@@ -76,9 +76,9 @@ class BqToDqPSDTest :
                 p["sbcu::Im{c4}" ] = 0.0;
                 Options oo
                 {
-                    { "accuracy"_ok,     "LO+NLO" },
-                    { "q"_ok,            "d"      },
-                    { "model"_ok,        "WET"    }
+                    { "accuracy"_ok,     "LO+NLO"_ov },
+                    { "q"_ok,            "d"_ov      },
+                    { "model"_ok,        "WET"_ov    }
                 };
                 BqToDqPseudoscalar d(p, oo);
 
@@ -129,9 +129,9 @@ class BqToDqPSDTest :
                 p["sbcu::Im{c4}" ] = 0;
                 Options oo
                 {
-                    { "accuracy"_ok,     "NLP"    },
-                    { "q"_ok,            "d"      },
-                    { "model"_ok,        "WET"    }
+                    { "accuracy"_ok,     "NLP"_ov    },
+                    { "q"_ok,            "d"_ov      },
+                    { "model"_ok,        "WET"_ov    }
                 };
                 BqToDqPseudoscalar d(p, oo);
 
@@ -214,9 +214,9 @@ class BqToDqPSDTest :
 
                 Options oo
                 {
-                    { "accuracy"_ok,     "LO+NLO" },
-                    { "q"_ok,            "d"      },
-                    { "model"_ok,        "WET"    }
+                    { "accuracy"_ok,     "LO+NLO"_ov },
+                    { "q"_ok,            "d"_ov      },
+                    { "model"_ok,        "WET"_ov    }
                 };
                 BqToDqPseudoscalar d(p, oo);
 
@@ -300,9 +300,9 @@ class BqToDqPSDTest :
 
                 Options oo
                 {
-                    { "accuracy"_ok,     "NLP"    },
-                    { "q"_ok,            "d"      },
-                    { "model"_ok,        "WET"    }
+                    { "accuracy"_ok,     "NLP"_ov    },
+                    { "q"_ok,            "d"_ov      },
+                    { "model"_ok,        "WET"_ov    }
                 };
                 BqToDqPseudoscalar d(p, oo);
 

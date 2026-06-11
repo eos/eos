@@ -89,7 +89,7 @@ class WilsonCoefficientsBToSTest : public TestCase
                 p["sb::mu"]           = mu;
 
                 Options o;
-                o.declare("scan-mode"_ok, "cartesian");
+                o.declare("scan-mode"_ok, "cartesian"_ov);
 
                 WilsonScanModel model(p, o);
 
@@ -147,7 +147,7 @@ class WilsonCoefficientsBToSTest : public TestCase
                 p["b->smumu::Im{c10'}"] = -M_PI;
 
                 Options o;
-                o.declare("scan-mode"_ok, "cartesian");
+                o.declare("scan-mode"_ok, "cartesian"_ov);
 
                 WilsonScanModel model(p, o);
 
@@ -694,7 +694,7 @@ class ConstrainedWilsonScanModelTest : public TestCase
             {
                 Parameters p = Parameters::Defaults();
                 Options    o;
-                o.declare("scan-mode"_ok, "cartesian");
+                o.declare("scan-mode"_ok, "cartesian"_ov);
 
                 p["b->s::Re{c7}"]      = 1.008;
                 p["b->smumu::Re{cS}"]  = 42;

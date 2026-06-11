@@ -237,7 +237,9 @@ BOOST_PYTHON_MODULE(_eos)
     // qnp::OptionValue
     class_<qnp::OptionValue>("qnpOptionValue", init<std::string>())
             .def("__repr__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>())
-            .def("__str__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>());
+            .def("__str__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>())
+            .def("__eq__", &qnp::OptionValue::operator==)
+            .def("__lt__", &qnp::OptionValue::operator<);
     implicitly_convertible<std::string, qnp::OptionValue>();
 
     // QualifiedName
@@ -453,7 +455,7 @@ BOOST_PYTHON_MODULE(_eos)
             .def("evaluate", &KinematicVariable::evaluate);
 
     // Options
-    ::impl::std_pair_to_python_converter<const qnp::OptionKey, std::string> converter_options_iter;
+    ::impl::std_pair_to_python_converter<const qnp::OptionKey, qnp::OptionValue> converter_options_iter;
     class_<Options>("Options", R"(
             Represents the set of options provided to an observable.
 
@@ -481,9 +483,9 @@ BOOST_PYTHON_MODULE(_eos)
     class_<OptionSpecification>("OptionSpecification", no_init)
             .def_readonly("key", &OptionSpecification::key)
             .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()))
-            .def_readonly("default_value", &OptionSpecification::default_value);
+            .add_property("default_value", &::impl::OptionSpecification_default_value);
     // register converter for OptionSpecification::allowed_values
-    to_python_converter<std::variant<std::string, std::vector<std::string>>, ::impl::VariantOptionAllowedValuesConverter, true>();
+    to_python_converter<std::variant<qnp::OptionValue, std::vector<qnp::OptionValue>>, ::impl::VariantOptionAllowedValuesConverter, true>();
 
     // Units
     class_<Unit>("Unit", R"(
@@ -541,7 +543,7 @@ BOOST_PYTHON_MODULE(_eos)
     // Model
     register_ptr_to_python<std::shared_ptr<Model>>();
     class_<Model, boost::noncopyable>("Model", no_init)
-            .def("make", &Model::make, return_value_policy<return_by_value>())
+            .def("make", &::impl::Model_make, return_value_policy<return_by_value>())
             .staticmethod("make")
             // CKM component
             .def("ckm_cd", &Model::ckm_cd)

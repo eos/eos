@@ -42,7 +42,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     namespace lambdac_to_onehalfplus_l_nu
     {
@@ -331,7 +330,7 @@ namespace eos
 
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             parameters(p),
             hbar(p["QM::hbar"], u),
             tau_Lambda_c(p["life_time::Lambda_c"], u),
@@ -344,7 +343,7 @@ namespace eos
             alpha(p[_B()+ "::alpha"], u),
             mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(_process() + "::" + o.get("form-factors"_ok, "BMRvD2022"), p, o))
+            form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(_process() + "::" + o.get("form-factors"_ok, "BMRvD2022"_ov).str(), p, o))
         {
             Context ctx("When constructing Lambda_c->Baryon(1/2+)lnu observable");
 
@@ -474,9 +473,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<LambdaCToOneHalfPlusLeptonNeutrino>::options
     {
-        { "cp-conjugate"_ok, { "true"s, "false"s },                 "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s },               "mu"s    },
-        { "B"_ok,            { "Lambda"s, "neutron"s },             ""s      },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },                 "false"_ov },
+        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov },               "mu"_ov    },
+        { "B"_ok,            { "Lambda"_ov, "neutron"_ov } },
     };
 
     LambdaCToOneHalfPlusLeptonNeutrino::LambdaCToOneHalfPlusLeptonNeutrino(const Parameters & p, const Options & o) :

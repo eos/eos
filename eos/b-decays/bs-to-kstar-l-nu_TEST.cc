@@ -64,11 +64,11 @@ class BsToKstarLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok,        "WET"     },
-                    { "form-factors"_ok, "BSZ2015" },
-                    { "V"_ok,            "K^*"     },
-                    { "q"_ok,            "s"       },
-                    { "l"_ok,            "mu"      }
+                    { "model"_ok,        "WET"_ov     },
+                    { "form-factors"_ok, "BSZ2015"_ov },
+                    { "V"_ok,            "K^*"_ov     },
+                    { "q"_ok,            "s"_ov       },
+                    { "l"_ok,            "mu"_ov      }
                 };
 
                 BToVectorLeptonNeutrino d(p, oo);

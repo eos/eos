@@ -1579,7 +1579,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<CharmLoopsAdapter>::options
     {
-        { "contribution"_ok, { "0", "Qc", "Qsb", "a", "b", "c", "d", "e", "ctQc", "ctQs", "ctQb", "all" }, "all" },
+        { "contribution"_ok, { "0"_ov, "Qc"_ov, "Qsb"_ov, "a"_ov, "b"_ov, "c"_ov, "d"_ov, "e"_ov, "ctQc"_ov, "ctQs"_ov, "ctQb"_ov, "all"_ov }, "all"_ov },
     };
 
     const std::map<std::string, std::tuple<double, double, double, double, double, double, double, double, double>>

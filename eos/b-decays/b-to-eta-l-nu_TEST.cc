@@ -59,11 +59,11 @@ class BToEtaLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok,        "CKM"     },
-                    { "form-factors"_ok, "BSZ2015" },
-                    { "P"_ok,            "eta"     },
-                    { "q"_ok,            "u"       },
-                    { "l"_ok,            "e"       },
+                    { "model"_ok,        "CKM"_ov     },
+                    { "form-factors"_ok, "BSZ2015"_ov },
+                    { "P"_ok,            "eta"_ov     },
+                    { "q"_ok,            "u"_ov       },
+                    { "l"_ok,            "e"_ov       },
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);

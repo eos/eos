@@ -34,7 +34,6 @@ namespace eos
     using std::abs;
     using std::norm;
     using std::sqrt;
-    using namespace std::literals::string_literals;
 
     struct BToKDilepton::AngularCoefficients
     {
@@ -75,7 +74,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
             opt_l(o, options, "l"_ok),
             opt_q(o, options, "q"_ok),
             hbar(p["QM::hbar"], u),
@@ -87,7 +86,7 @@ namespace eos
         {
             Context ctx("When constructing B->Kll observables");
 
-            std::string tag = o.get("tag"_ok, "");
+            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
 
             if ("BFS2004" == tag)
             {
@@ -209,8 +208,8 @@ namespace eos
     Implementation<BToKDilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s},
-        {"q"_ok, { "d"s, "u"s }, "d"s}
+        {"l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov},
+        {"q"_ok, { "d"_ov, "u"_ov }, "d"_ov}
     };
 
     double

@@ -87,15 +87,15 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "V"_ok,                  "D^*"       },
-                    { "q"_ok,                  "d"         },
-                    { "l"_ok,                  "e"         },
-                    { "model"_ok,              "CKM"       },
-                    { "z-order-lp"_ok,         "3"         },
-                    { "z-order-slp"_ok,        "2"         },
-                    { "z-order-sslp"_ok,       "1"         },
-                    { "form-factors"_ok,       "BGJvD2019" },
-                    { "integration-points"_ok, "4096"      }
+                    { "V"_ok,                  "D^*"_ov       },
+                    { "q"_ok,                  "d"_ov         },
+                    { "l"_ok,                  "e"_ov         },
+                    { "model"_ok,              "CKM"_ov       },
+                    { "z-order-lp"_ok,         "3"_ov         },
+                    { "z-order-slp"_ok,        "2"_ov         },
+                    { "z-order-sslp"_ok,       "1"_ov         },
+                    { "form-factors"_ok,       "BGJvD2019"_ov },
+                    { "integration-points"_ok, "4096"_ov      }
                 };
 
                 Kinematics k
@@ -163,15 +163,15 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "V"_ok,                  "D^*"       },
-                    { "q"_ok,                  "d"         },
-                    { "l"_ok,                  "tau"       },
-                    { "model"_ok,              "CKM"       },
-                    { "z-order-lp"_ok,         "3"         },
-                    { "z-order-slp"_ok,        "2"         },
-                    { "z-order-sslp"_ok,       "1"         },
-                    { "form-factors"_ok,       "BGJvD2019" },
-                    { "integration-points"_ok, "4096"      }
+                    { "V"_ok,                  "D^*"_ov       },
+                    { "q"_ok,                  "d"_ov         },
+                    { "l"_ok,                  "tau"_ov       },
+                    { "model"_ok,              "CKM"_ov       },
+                    { "z-order-lp"_ok,         "3"_ov         },
+                    { "z-order-slp"_ok,        "2"_ov         },
+                    { "z-order-sslp"_ok,       "1"_ov         },
+                    { "form-factors"_ok,       "BGJvD2019"_ov },
+                    { "integration-points"_ok, "4096"_ov      }
                 };
 
                 Kinematics k
@@ -251,15 +251,15 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "V"_ok,                  "D^*"       },
-                    { "q"_ok,                  "d"         },
-                    { "l"_ok,                  "mu"        },
-                    { "model"_ok,              "WET"       },
-                    { "z-order-lp"_ok,         "3"         },
-                    { "z-order-slp"_ok,        "2"         },
-                    { "z-order-sslp"_ok,       "1"         },
-                    { "form-factors"_ok,       "BGJvD2019" },
-                    { "integration-points"_ok, "4096"      }
+                    { "V"_ok,                  "D^*"_ov       },
+                    { "q"_ok,                  "d"_ov         },
+                    { "l"_ok,                  "mu"_ov        },
+                    { "model"_ok,              "WET"_ov       },
+                    { "z-order-lp"_ok,         "3"_ov         },
+                    { "z-order-slp"_ok,        "2"_ov         },
+                    { "z-order-sslp"_ok,       "1"_ov         },
+                    { "form-factors"_ok,       "BGJvD2019"_ov },
+                    { "integration-points"_ok, "4096"_ov      }
                 };
 
                 Kinematics k
@@ -317,11 +317,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "V"_ok,                  "D^*"     },
-                    { "q"_ok,                  "d"       },
-                    { "model"_ok,              "WET"     },
-                    { "form-factors"_ok,       "BSZ2015" },
-                    { "integration-points"_ok, "4096"    }
+                    { "V"_ok,                  "D^*"_ov     },
+                    { "q"_ok,                  "d"_ov       },
+                    { "model"_ok,              "WET"_ov     },
+                    { "form-factors"_ok,       "BSZ2015"_ov },
+                    { "integration-points"_ok, "4096"_ov    }
                 };
 
                 BToVectorLeptonNeutrino d(p1, oo);
@@ -416,11 +416,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "V"_ok,                  "D^*"     },
-                    { "q"_ok,                  "d"       },
-                    { "model"_ok,              "WET"     },
-                    { "form-factors"_ok,       "BSZ2015" },
-                    { "integration-points"_ok, "4096"    }
+                    { "V"_ok,                  "D^*"_ov     },
+                    { "q"_ok,                  "d"_ov       },
+                    { "model"_ok,              "WET"_ov     },
+                    { "form-factors"_ok,       "BSZ2015"_ov },
+                    { "integration-points"_ok, "4096"_ov    }
                 };
 
                 BToVectorLeptonNeutrino d(p3, oo);
@@ -460,13 +460,13 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "V"_ok,             "D^*"       },
-                    { "q"_ok,             "d"         },
-                    { "model"_ok,         "CKM"       },
-                    { "z-order-lp"_ok,    "3"         },
-                    { "z-order-slp"_ok,   "2"         },
-                    { "z-order-sslp"_ok,  "1"         },
-                    { "form-factors"_ok,  "BGJvD2019" },
+                    { "V"_ok,             "D^*"_ov       },
+                    { "q"_ok,             "d"_ov         },
+                    { "model"_ok,         "CKM"_ov       },
+                    { "z-order-lp"_ok,    "3"_ov         },
+                    { "z-order-slp"_ok,   "2"_ov         },
+                    { "z-order-sslp"_ok,  "1"_ov         },
+                    { "form-factors"_ok,  "BGJvD2019"_ov },
                 };
                 Kinematics k
                 {

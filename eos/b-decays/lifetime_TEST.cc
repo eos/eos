@@ -67,8 +67,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "CKM" },
-                        { "q"_ok,     "s"   }
+                        { "model"_ok, "CKM"_ov },
+                        { "q"_ok,     "s"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -83,8 +83,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "CKM" },
-                        { "q"_ok,     "u"   }
+                        { "model"_ok, "CKM"_ov },
+                        { "q"_ok,     "u"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -101,8 +101,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "CKM" },
-                        { "q"_ok,     "d"   }
+                        { "model"_ok, "CKM"_ov },
+                        { "q"_ok,     "d"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -119,8 +119,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "CKM" },
-                        { "q"_ok,     "s"   }
+                        { "model"_ok, "CKM"_ov },
+                        { "q"_ok,     "s"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -234,8 +234,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "WET" },
-                        { "q"_ok,     "s"   }
+                        { "model"_ok, "WET"_ov },
+                        { "q"_ok,     "s"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -250,8 +250,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "WET" },
-                        { "q"_ok,     "u"   }
+                        { "model"_ok, "WET"_ov },
+                        { "q"_ok,     "u"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -266,8 +266,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "WET" },
-                        { "q"_ok,     "d"   }
+                        { "model"_ok, "WET"_ov },
+                        { "q"_ok,     "d"_ov   }
                     };
 
                     Lifetime d(p, oo);
@@ -282,8 +282,8 @@ class LifetimeTest :
 
                     Options oo
                     {
-                        { "model"_ok, "WET" },
-                        { "q"_ok,     "s"   }
+                        { "model"_ok, "WET"_ov },
+                        { "q"_ok,     "s"_ov   }
                     };
 
                     Lifetime d(p, oo);

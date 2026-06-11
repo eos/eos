@@ -63,7 +63,7 @@ namespace eos
                     R"(PDF for the decay $B^-\to e^-\bar\nu \mu^+\mu^-$ as a function of the invariant $\mu^+\mu^-$ mass squared $q^2$,
                     the invariant $e^-\bar\nu$ mass squared $k^2$, the cosine of the photon helicity angle $z_\gamma$, the cosine
                     of the $W$ helicity angle $z_W$, and the azimuthal angle $\phi$.)",
-                    Options{ { "l"_ok, "e" }, { "lprime"_ok, "mu" } },
+                    Options{ { "l"_ok, "e"_ov }, { "lprime"_ok, "mu"_ov } },
                     "B_u->enumumu::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
                     std::make_tuple(
                         "q2"s,
@@ -85,7 +85,7 @@ namespace eos
                     R"(PDF for the decay $B^-\to \mu^-\bar\nu e^+e^-$ as a function of the invariant $e^+e^-$ mass squared $q^2$,
                     the invariant $\mu^-\bar\nu$ mass squared $k^2$, the cosine of the photon helicity angle $z_\gamma$, the cosine
                     of the $W$ helicity angle $z_W$, and the azimuthal angle $\phi$.)",
-                    Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } },
+                    Options{ { "l"_ok, "mu"_ov }, { "lprime"_ok, "e"_ov } },
                     "B_u->munuee::UnnormalizedPDF(q2,k2,z_gamma,z_w,phi)",
                     std::make_tuple(
                         "q2"s,
@@ -122,7 +122,7 @@ namespace eos
                 // B -> pi l nu
                 make_signal_pdf("B->pilnu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to \pi \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "P"_ok, "pi" } },
+                    Options{ { "P"_ok, "pi"_ov } },
                     "B->pilnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -137,7 +137,7 @@ namespace eos
                 make_signal_pdf("B->pilnu::P(q2,cos(theta_l))",
                     R"(PDF for the decay $\bar{B}\to \pi \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
-                    Options{ { "P"_ok, "pi" } },
+                    Options{ { "P"_ok, "pi"_ov } },
                     "B->pilnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -153,7 +153,7 @@ namespace eos
                 // B -> D l nu
                 make_signal_pdf("B->Dlnu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to D \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "P"_ok, "D" } },
+                    Options{ { "P"_ok, "D"_ov } },
                     "B->Dlnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -168,7 +168,7 @@ namespace eos
                 make_signal_pdf("B->Dlnu::P(q2,cos(theta_l))",
                     R"(PDF for the decay $\bar{B}\to D \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
-                    Options{ { "P"_ok, "D" } },
+                    Options{ { "P"_ok, "D"_ov } },
                     "B->Dlnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -184,7 +184,7 @@ namespace eos
                 // B_s -> K l nu
                 make_signal_pdf("B_s->Klnu::P(q2)",
                     R"(PDF for the decay $\bar{B}_s\to K \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "P"_ok, "K" } },
+                    Options{ { "P"_ok, "K"_ov } },
                     "B_s->Klnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -199,7 +199,7 @@ namespace eos
                 make_signal_pdf("B_s->Klnu::P(q2,cos(theta_l))",
                     R"(PDF for the decay $\bar{B}_s\to K \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
-                    Options{ { "P"_ok, "K" } },
+                    Options{ { "P"_ok, "K"_ov } },
                     "B_s->Klnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -215,7 +215,7 @@ namespace eos
                 // B_s -> D_s l nu
                 make_signal_pdf("B_s->D_slnu::P(q2)",
                     R"(PDF for the decay $\bar{B}_s\to D_s \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "P"_ok, "D_s" } },
+                    Options{ { "P"_ok, "D_s"_ov } },
                     "B_s->D_slnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -230,7 +230,7 @@ namespace eos
                 make_signal_pdf("B_s->D_slnu::P(q2,cos(theta_l))",
                     R"(PDF for the decay $\bar{B}_s\to D_s \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
-                    Options{ { "P"_ok, "D_s" } },
+                    Options{ { "P"_ok, "D_s"_ov } },
                     "B_s->D_slnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -246,7 +246,7 @@ namespace eos
                 // B -> eta l nu
                 make_signal_pdf("B->etalnu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to \eta \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "P"_ok, "eta" } },
+                    Options{ { "P"_ok, "eta"_ov } },
                     "B->etalnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -261,7 +261,7 @@ namespace eos
                 make_signal_pdf("B->etalnu::P(q2,cos(theta_l))",
                     R"(PDF for the decay $\bar{B}\to \eta \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
-                    Options{ { "P"_ok, "eta" } },
+                    Options{ { "P"_ok, "eta"_ov } },
                     "B->etalnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -277,7 +277,7 @@ namespace eos
                 // B -> eta' l nu
                 make_signal_pdf("B->eta_primelnu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to \eta' \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "P"_ok, "eta_prime" } },
+                    Options{ { "P"_ok, "eta_prime"_ov } },
                     "B->eta_primelnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -292,7 +292,7 @@ namespace eos
                 make_signal_pdf("B->eta_primelnu::P(q2,cos(theta_l))",
                     R"(PDF for the decay $\bar{B}\to \eta' \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.)",
-                    Options{ { "P"_ok, "eta_prime" } },
+                    Options{ { "P"_ok, "eta_prime"_ov } },
                     "B->eta_primelnu::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -323,7 +323,7 @@ namespace eos
                 // B -> D^* l nu
                 make_signal_pdf("B->D^*lnu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to D^*(\to D\pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "V"_ok, "D^*" } },
+                    Options{ { "V"_ok, "D^*"_ov } },
                     "B->D^*lnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -340,7 +340,7 @@ namespace eos
                     the cosine of the angle $\theta_D$ between the $D$ and the negative $\ell^-\bar\nu$ flight direction in the $D^*$ rest frame,
                     the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $D^*$ flight direction in the $\ell^-\bar\nu$ rest frame,
                     and the azimuthal angle $\phi$ between the two decay planes.)",
-                    Options{ { "V"_ok, "D^*" } },
+                    Options{ { "V"_ok, "D^*"_ov } },
                     "B->D^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D),phi)",
                     std::make_tuple(
                         "q2"s,
@@ -358,7 +358,7 @@ namespace eos
                 // B_s -> K^* l nu
                 make_signal_pdf("B_s->K^*lnu::P(q2)",
                     R"(PDF for the decay $\bar{B}_s\to K^*(\to K\pi) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, { "I"_ok, "1/2" } },
+                    Options{ { "U"_ok, "u"_ov }, {"q"_ok, "s"_ov}, { "I"_ok, "1/2"_ov } },
                     "B_s->K^*lnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -375,7 +375,7 @@ namespace eos
                     the cosine of the angle $\theta_K$ between the $K$ and the negative $\ell^-\bar\nu$ flight direction in the $K^*$ rest frame,
                     the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame,
                     and the azimuthal angle $\phi$ between the two decay planes.)",
-                    Options{ { "U"_ok, "u" }, {"q"_ok, "s"}, { "I"_ok, "1/2" } },
+                    Options{ { "U"_ok, "u"_ov }, {"q"_ok, "s"_ov}, { "I"_ok, "1/2"_ov } },
                     "B_s->K^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
                     std::make_tuple(
                         "q2"s,
@@ -393,7 +393,7 @@ namespace eos
                 // B_s -> D_s^* l nu
                 make_signal_pdf("B_s->D_s^*lnu::P(q2)",
                     R"(PDF for the decay $\bar{B}_s\to D_s^*(\to D_s\pi^0) \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "U"_ok, "c" }, {"q"_ok, "s"}, { "I"_ok, "0" } },
+                    Options{ { "U"_ok, "c"_ov }, {"q"_ok, "s"_ov}, { "I"_ok, "0"_ov } },
                     "B_s->D_s^*lnu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -410,7 +410,7 @@ namespace eos
                     the cosine of the angle $\theta_{D_s}$ between the $D_s$ and the negative $\ell^-\bar\nu$ flight direction in the $D_s^*$ rest frame,
                     the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}_s$ flight direction in the $\ell^-\bar\nu$ rest frame,
                     and the azimuthal angle $\phi$ between the two decay planes.)",
-                    Options{ { "U"_ok, "c" }, {"q"_ok, "s"}, { "I"_ok, "0" } },
+                    Options{ { "U"_ok, "c"_ov }, {"q"_ok, "s"_ov}, { "I"_ok, "0"_ov } },
                     "B_s->D_s^*lnu::UnnormalizedPDF(q2,cos(theta_l),cos(theta_D_s),phi)",
                     std::make_tuple(
                         "q2"s,
@@ -444,7 +444,7 @@ namespace eos
                     R"(PDF for the decay $B^+\to \pi^+\pi^- \ell^+\nu$ as a function of the invariant $\pi^+\pi^-$ mass squared $k^2$,
                     the invariant $\ell^+\nu$ mass squared $q^2$, and the cosine of the angle $\theta_\pi$ between the $\pi^+$ and the
                     negative $B^+$ flight direction in the $\pi^+\pi^-$ rest frame.)",
-                    Options{ { "U"_ok, "u" }, {"q"_ok, "u"}, {"I1"_ok, "1"}, {"I2"_ok, "1"}, {"C"_ok, "+-"}, {"I"_ok, "0|1"}, {"L"_ok, "S|P|D"} },
+                    Options{ { "U"_ok, "u"_ov }, {"q"_ok, "u"_ov}, {"I1"_ok, "1"_ov}, {"I2"_ok, "1"_ov}, {"C"_ok, "+-"_ov}, {"I"_ok, "0|1"_ov}, {"L"_ok, "S|P|D"_ov} },
                     "B^+->pi^+pi^-lnu::UnnormalizedPDF(q2,k2,cos(theta_pi))",
                     std::make_tuple(
                         "q2"s,

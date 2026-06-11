@@ -47,7 +47,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
             opt_l(o, options, "l"_ok),
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.str()], u),
@@ -56,7 +56,7 @@ namespace eos
         {
             Context ctx("When constructing Lb->L(1520)ll observables");
 
-            std::string tag = o.get("tag"_ok, "");
+            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
 
             if ("Naive" == tag)
             {
@@ -315,7 +315,7 @@ namespace eos
     Implementation<LambdaBToLambda1520Dilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e", "mu", "tau" }, "mu"}
+        {"l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov}
     };
 
     double

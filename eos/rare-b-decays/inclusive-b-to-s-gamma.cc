@@ -52,7 +52,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             br_bcsl(p["exp::BR(B->X_clnu)"], u),
@@ -61,7 +61,7 @@ namespace eos
         {
             Context ctx("When constructing B->X_sgamma observables");
 
-            if ("SM" != o.get("model"_ok, "SM"))
+            if ("SM"_ov != o.get("model"_ok, "SM"_ov))
             {
                 Log::instance()->message("B->X_sgamma.model", ll_error)
                     << "B->X_sgamma is not yet capable to handle models beyond SM, e.g. for helicity flipped operators; use it carefully";
@@ -170,7 +170,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             hbar(p["QM::hbar"], u),
             mu(p["sb::mu"], u),
             m_B(p["mass::B_d"], u),
@@ -179,7 +179,7 @@ namespace eos
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             gfermi(p["WET::G_Fermi"], u),
-            tau(p["life_time::B" + (destringify<bool>(o.get("admixture"_ok, "true")) ? ("@Y(4S)") : ("_" + o.get("q"_ok, "d")))], u)
+            tau(p["life_time::B" + (destringify<bool>(o.get("admixture"_ok, "true"_ov).str()) ? ("@Y(4S)") : ("_" + o.get("q"_ok, "d"_ov).str()))], u)
         {
             u.uses(*model);
         }

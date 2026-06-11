@@ -232,7 +232,7 @@ namespace eos
                 }
 
                 double min = 0.0, max = 0.0;
-                if ("asymmetric+quadratic" == options.get("uncertainty"_ok, "asymmetric+quadratic"))
+                if ("asymmetric+quadratic"_ov == options.get("uncertainty"_ok, "asymmetric+quadratic"_ov))
                 {
                     min = this->central - std::sqrt(power_of<2>(this->sigma_lo_stat) + power_of<2>(this->sigma_lo_sys));
                     max = this->central + std::sqrt(power_of<2>(this->sigma_hi_stat) + power_of<2>(this->sigma_hi_sys));
@@ -276,7 +276,7 @@ namespace eos
                 out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
                 for (const auto & o : options)
                 {
-                    out << YAML::Key << o.first.str() << YAML::Value << o.second;
+                    out << YAML::Key << o.first.str() << YAML::Value << o.second.str();
                 }
                 out << YAML::EndMap;
                 out << YAML::Key << "mean" << YAML::Value << central;
@@ -506,7 +506,7 @@ namespace eos
                 out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
                 for (const auto & o : options)
                 {
-                    out << YAML::Key << o.first.str() << YAML::Value << o.second;
+                    out << YAML::Key << o.first.str() << YAML::Value << o.second.str();
                 }
                 out << YAML::EndMap;
                 out << YAML::Key << "mode" << YAML::Value << central;
@@ -721,7 +721,7 @@ namespace eos
                 out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
                 for (const auto & o : options)
                 {
-                    out << YAML::Key << o.first.str() << YAML::Value << o.second;
+                    out << YAML::Key << o.first.str() << YAML::Value << o.second.str();
                 }
                 out << YAML::EndMap;
                 out << YAML::Key << "physical-limit" << YAML::Value << physical_limit;
@@ -942,17 +942,17 @@ namespace eos
                 ObservableCache cache(parameters);
 
                 // If specified, these options allow to specify a subset of the measurements
-                const unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"));
-                const unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim)));
+                const unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"_ov).str());
+                const unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim)).str());
 
                 if (end > dim)
                 {
-                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim)).str(), "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"_ov).str(), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 const unsigned subdim_meas = end - begin;
@@ -979,7 +979,7 @@ namespace eos
                 }
 
                 std::vector<double> variances(subdim_meas, 0.0);
-                if ("symmetric+quadratic" == options.get("uncertainty"_ok, "symmetric+quadratic"))
+                if ("symmetric+quadratic"_ov == options.get("uncertainty"_ok, "symmetric+quadratic"_ov))
                 {
                     for (auto i = begin; i < end; ++i)
                     {
@@ -1028,17 +1028,17 @@ namespace eos
             make_prior(const Parameters & parameters, const Options & options) const
             {
                 // If specified, these options allow to specify a subset of the measurements
-                unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"));
-                unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim)));
+                unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"_ov).str());
+                unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim)).str());
 
                 if (end > dim)
                 {
-                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim)).str(), "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"_ov).str(), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 unsigned subdim = end - begin;
@@ -1051,7 +1051,7 @@ namespace eos
                 }
 
                 std::vector<double> variances(subdim, 0.0);
-                if ("symmetric+quadratic" == options.get("uncertainty"_ok, "symmetric+quadratic"))
+                if ("symmetric+quadratic"_ov == options.get("uncertainty"_ok, "symmetric+quadratic"_ov))
                 {
                     for (auto i = begin; i < end; ++i)
                     {
@@ -1114,7 +1114,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second.str();
                     }
                     out << YAML::EndMap;
                 }
@@ -1442,19 +1442,21 @@ namespace eos
                 }
 
                 // If specified, these options allow to specify a subset of the measurements
-                unsigned begin          = destringify<unsigned>(options.get("begin"_ok, "0"));
-                unsigned end            = destringify<unsigned>(options.get("end"_ok, stringify(dim_meas)));
+                unsigned begin          = destringify<unsigned>(options.get("begin"_ok, "0"_ov).str());
+                unsigned end            = destringify<unsigned>(options.get("end"_ok, stringify(dim_meas)).str());
                 // If specified, this option allows to rescale the covariance matrix by a factor
-                double   rescale_factor = destringify<double>(options.get("rescale-factor"_ok, "1.0"));
+                double   rescale_factor = destringify<double>(options.get("rescale-factor"_ok, "1.0"_ov).str());
 
                 if (end > dim_meas)
                 {
-                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim_meas)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok,
+                                                  options.get("end"_ok, stringify(dim_meas)).str(),
+                                                  "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"_ov).str(), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 if ((nullptr != this->response) && (end != dim_meas))
@@ -1518,17 +1520,19 @@ namespace eos
             make_prior(const Parameters & parameters, const Options & options) const
             {
                 // If specified, these options allow to specify a subset of the measurements
-                unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"));
-                unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim_meas)));
+                unsigned begin = destringify<unsigned>(options.get("begin"_ok, "0"_ov).str());
+                unsigned end   = destringify<unsigned>(options.get("end"_ok, stringify(dim_meas)).str());
 
                 if (end > dim_meas)
                 {
-                    throw InvalidOptionValueError("end"_ok, options.get("end"_ok, stringify(dim_meas)), "Cannot use a value of 'end' pointing beyond the number of measurements.");
+                    throw InvalidOptionValueError("end"_ok,
+                                                  options.get("end"_ok, stringify(dim_meas)).str(),
+                                                  "Cannot use a value of 'end' pointing beyond the number of measurements.");
                 }
 
                 if (begin >= end)
                 {
-                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+                    throw InvalidOptionValueError("begin"_ok, options.get("begin"_ok, "0"_ov).str(), "Cannot use a value for 'begin' equal to or larger than 'end'");
                 }
 
                 unsigned subdim_meas = end - begin;
@@ -1584,7 +1588,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second.str();
                     }
                     out << YAML::EndMap;
                 }
@@ -1959,7 +1963,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second.str();
                     }
                     out << YAML::EndMap;
                 }
@@ -2296,7 +2300,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginMap;
                     for (const auto & oo : o)
                     {
-                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second;
+                        out << YAML::Key << oo.first.str() << YAML::Value << oo.second.str();
                     }
                     out << YAML::EndMap;
                 }

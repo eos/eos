@@ -97,9 +97,9 @@ class BToKstarGammaTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "BFS2004"},
-                    {"form-factors"_ok, "KMPW2010"}
+                    {"model"_ok, "WET"_ov},
+                    {"tag"_ok, "BFS2004"_ov},
+                    {"form-factors"_ok, "KMPW2010"_ov}
                 };
 
                 BToKstarGamma d(p, oo);
@@ -158,9 +158,9 @@ class BToKstarGammaTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "BFS2004"},
-                    {"form-factors"_ok, "KMPW2010"}
+                    {"model"_ok, "WET"_ov},
+                    {"tag"_ok, "BFS2004"_ov},
+                    {"form-factors"_ok, "KMPW2010"_ov}
                 };
 
                 BToKstarGamma d(p, oo);
@@ -218,9 +218,9 @@ class BToKstarGammaBobethCompatibilityTest :
 
             Options o
             {
-                {"model"_ok, "WET"},
-                {"tag"_ok, "BFS2004"},
-                {"form-factors"_ok, "KMPW2010"}
+                {"model"_ok, "WET"_ov},
+                {"tag"_ok, "BFS2004"_ov},
+                {"form-factors"_ok, "KMPW2010"_ov}
             };
 
             std::vector<Parameter> variations;

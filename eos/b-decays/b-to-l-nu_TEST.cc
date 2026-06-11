@@ -63,9 +63,9 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok, "CKM" },
-                    { "l"_ok,     "e"   },
-                    { "q"_ok,     "u"   }
+                    { "model"_ok, "CKM"_ov },
+                    { "l"_ok,     "e"_ov   },
+                    { "q"_ok,     "u"_ov   }
                 };
 
                 BToLeptonNeutrino d(p, oo);
@@ -95,9 +95,9 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok, "CKM" },
-                    { "l"_ok,     "e"   },
-                    { "q"_ok,     "c"   }
+                    { "model"_ok, "CKM"_ov },
+                    { "l"_ok,     "e"_ov   },
+                    { "q"_ok,     "c"_ov   }
                 };
 
                 BToLeptonNeutrino d(p, oo);
@@ -128,9 +128,9 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok, "WET" },
-                    { "l"_ok,     "e"   },
-                    { "q"_ok,     "u"   }
+                    { "model"_ok, "WET"_ov },
+                    { "l"_ok,     "e"_ov   },
+                    { "q"_ok,     "u"_ov   }
                 };
 
                 BToLeptonNeutrino d(p, oo);

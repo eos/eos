@@ -37,7 +37,7 @@ namespace eos
 
 
         Implementation(const Parameters & p, const Options &, ParameterUser & u) :
-            model(Model::make("SM", p, Options{ })),
+            model(Model::make("SM"_ov, p, Options{ })),
             m_b_msbar(p["mass::b(MSbar)"], u),
             m_c_msbar(p["mass::c"], u)
         {

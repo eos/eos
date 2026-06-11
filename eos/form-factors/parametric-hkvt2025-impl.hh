@@ -33,7 +33,6 @@
 #include <iostream>
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
@@ -152,10 +151,10 @@ namespace eos
         mP2(traits.m_P2),
         opt_I(o, options, "I"_ok),
         opt_L(o, options, "L"_ok),
-        opt_C(o, "C"_ok, { "+-", "+0", "00" }),
+        opt_C(o, "C"_ok, { "+-"_ov, "+0"_ov, "00"_ov }),
         opt_int_points(o, options, "integration-points"_ok),
         cub_conf(cubature::Config().epsrel(1e-5)),
-        scattering_amplitudes(ScatteringAmplitudeFactory<PPToPP>::create("pipi->pipi::" + o.get("scattering-amplitudes"_ok, "HKvT2025"), p, o)),
+        scattering_amplitudes(ScatteringAmplitudeFactory<PPToPP>::create("pipi->pipi::" + o.get("scattering-amplitudes"_ok, "HKvT2025"_ov).str(), p, o)),
         charge(traits.charge_map.at(opt_C.value()))
     {
         switch_L[0] = (opt_L.value() && PartialWave::S);
@@ -731,10 +730,10 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> HKVT2025FormFactors<Process_, PToPP>::options
     {
-        { "I"_ok, "0|1"s, "0|1"s }, // We only handle integer isospin at the moment
-        { "C"_ok, { "+-"s, "00"s, "+0"s }, "+-"s },
-        { "L"_ok, "S|P|D"s, "S|P|D"s }, // We currently do not support F waves here, as the corresponding y-polynomials are unknown
-        { "integration-points"_ok, {"256"s, "512"s, "1024"s, "2048"s, "4096"s, "8192"s, "16384"s}, "4096"s }
+        { "I"_ok, "0|1"_ov, "0|1"_ov }, // We only handle integer isospin at the moment
+        { "C"_ok, { "+-"_ov, "00"_ov, "+0"_ov }, "+-"_ov },
+        { "L"_ok, "S|P|D"_ov, "S|P|D"_ov }, // We currently do not support F waves here, as the corresponding y-polynomials are unknown
+        { "integration-points"_ok, {"256"_ov, "512"_ov, "1024"_ov, "2048"_ov, "4096"_ov, "8192"_ov, "16384"_ov}, "4096"_ov }
     };
 
     template<typename Process_>

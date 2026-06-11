@@ -28,7 +28,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using std::norm;
 
     /*
@@ -111,8 +110,8 @@ namespace eos
 
     const std::vector<OptionSpecification> Implementation<KToLeptonNeutrino>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s }, "false"s },
-        {            "l"_ok,       { "e"s, "mu"s },    "mu"s },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        {            "l"_ok,       { "e"_ov, "mu"_ov },    "mu"_ov },
     };
 
     KToLeptonNeutrino::KToLeptonNeutrino(const Parameters & parameters, const Options & options) :

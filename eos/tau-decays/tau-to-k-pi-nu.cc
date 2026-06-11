@@ -173,7 +173,7 @@ namespace eos
 
     const std::vector<OptionSpecification> Implementation<TauToKPiNeutrino>::options{
         Model::option_specification(),
-        { "K"_ok, { "K_u", "K_S", "K_L" }, "K_u" },
+        { "K"_ok, { "K_u"_ov, "K_S"_ov, "K_L"_ov }, "K_u"_ov },
     };
 
     TauToKPiNeutrino::TauToKPiNeutrino(const Parameters & parameters, const Options & options) :

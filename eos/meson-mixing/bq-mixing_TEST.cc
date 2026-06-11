@@ -50,8 +50,8 @@ class BsMixingTest :
 
                 Options oo
                 {
-                    { "model"_ok,        "SM"         },
-                    { "q"_ok,            "s"          },
+                    { "model"_ok,        "SM"_ov         },
+                    { "q"_ok,            "s"_ov          },
                 };
 
                 BMixing process(p, oo);

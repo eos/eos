@@ -260,7 +260,7 @@ class deltaC79Test :
             p["b->s::c1"] = -0.5;
             p["b->s::c2"] = 2.0;
 
-            auto m = Model::make("WET", p, Options());
+            auto m = Model::make("WET"_ov, p, Options());
             const auto wc = m->wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
 
             const complex<double> deltaC7_ref = -0.080829295482612 - 0.047566420817994316 * 1.0i;

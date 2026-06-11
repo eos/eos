@@ -25,19 +25,18 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     BToKDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model"_ok, "SM"), p, o)),
-        form_factors(FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors"_ok, "KMPW2010"), p)),
+        model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+        form_factors(FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors"_ok, "KMPW2010"_ov).str(), p)),
         opt_l(o, options, "l"_ok),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         hbar(p["QM::hbar"], *this),
-        tau(p["life_time::B_" + o.get("q"_ok, "d")], *this),
-        m_B(p["mass::B_" + o.get("q"_ok, "d")], *this),
-        m_K(p["mass::K_" + o.get("q"_ok, "d")], *this),
+        tau(p["life_time::B_" + o.get("q"_ok, "d"_ov).str()], *this),
+        m_B(p["mass::B_" + o.get("q"_ok, "d"_ov).str()], *this),
+        m_K(p["mass::K_" + o.get("q"_ok, "d"_ov).str()], *this),
         m_l(p["mass::" + opt_l.str()], *this),
         opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         cp_conjugate(opt_cp_conjugate.value()),
@@ -63,8 +62,8 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s },
-        { "l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
     };
 
     double

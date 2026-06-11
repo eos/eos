@@ -187,7 +187,7 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
 
             /* F_long, variable scale */
             {
-                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale"_ok, "variable" } });
+                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale"_ok, "variable"_ov } });
 
                 TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_long(0.30, 18.60, -1.0)),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_long(0.30, 18.60, -1.0)), +0.157064905, eps);
@@ -205,7 +205,7 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
 
             /* F_time, variable scale */
             {
-                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale"_ok, "variable" } });
+                AnalyticFormFactorBToPiPiBFvD2016 ff(p, Options{ { "scale"_ok, "variable"_ov } });
 
                 TEST_CHECK_NEARLY_EQUAL(std::real(ff.f_time(0.30, 18.60, -1.0)),  0.0,         eps);
                 TEST_CHECK_NEARLY_EQUAL(std::imag(ff.f_time(0.30, 18.60, -1.0)), +0.167697744, eps);

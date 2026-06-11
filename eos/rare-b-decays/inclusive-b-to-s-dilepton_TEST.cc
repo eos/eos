@@ -77,12 +77,12 @@ class BToXsDileptonLargeRecoilTest :
                 p["mass::c"] = 1.27;
 
                 Options oo;
-                oo.declare("model"_ok, "WET");
-                oo.declare("l"_ok, "mu");
+                oo.declare("model"_ok, "WET"_ov);
+                oo.declare("l"_ok, "mu"_ov);
 
                 BToXsDilepton<HLMW2005> d_mu(p, oo);
 
-                oo.declare("l"_ok, "e");
+                oo.declare("l"_ok, "e"_ov);
                 BToXsDilepton<HLMW2005> d_e(p, oo);
 
                 {
@@ -139,12 +139,12 @@ class BToXsDileptonLargeRecoilTest :
                 p["mass::c"] = 1.27;
 
                 Options oo;
-                oo.declare("model"_ok, "WET");
-                oo.declare("l"_ok, "mu");
+                oo.declare("model"_ok, "WET"_ov);
+                oo.declare("l"_ok, "mu"_ov);
 
                 BToXsDilepton<HLMW2005> d_mu(p, oo);
 
-                oo.declare("l"_ok, "e");
+                oo.declare("l"_ok, "e"_ov);
                 BToXsDilepton<HLMW2005> d_e(p, oo);
 
                 const double eps = 1e-11;

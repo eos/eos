@@ -31,17 +31,17 @@ namespace eos
 {
     template <> struct WrappedForwardIteratorTraits<Options::OptionIteratorTag>
     {
-            using UnderlyingIterator = std::map<qnp::OptionKey, std::string>::const_iterator;
+            using UnderlyingIterator = std::map<qnp::OptionKey, qnp::OptionValue>::const_iterator;
     };
-    template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
+    template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, qnp::OptionValue>>;
 
     template <> struct Implementation<Options>
     {
-            std::map<qnp::OptionKey, std::string> options;
+            std::map<qnp::OptionKey, qnp::OptionValue> options;
 
             Implementation() {}
 
-            Implementation(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & _options)
+            Implementation(const std::initializer_list<std::pair<qnp::OptionKey, qnp::OptionValue>> & _options)
             {
                 for (const auto & _option : _options)
                 {
@@ -55,7 +55,7 @@ namespace eos
     {
     }
 
-    Options::Options(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & options) :
+    Options::Options(const std::initializer_list<std::pair<qnp::OptionKey, qnp::OptionValue>> & options) :
         PrivateImplementationPattern<Options>(new Implementation<Options>(options))
     {
     }
@@ -87,7 +87,7 @@ namespace eos
         return ! (*this == rhs);
     }
 
-    const std::string &
+    const qnp::OptionValue &
     Options::operator[] (const qnp::OptionKey & key) const
     {
         auto i(_imp->options.find(key));
@@ -106,7 +106,7 @@ namespace eos
     }
 
     void
-    Options::declare(const qnp::OptionKey & key, const std::string & value)
+    Options::declare(const qnp::OptionKey & key, const qnp::OptionValue & value)
     {
         auto i(_imp->options.find(key));
         if (_imp->options.end() != i)
@@ -115,12 +115,12 @@ namespace eos
         }
         else
         {
-            _imp->options[key] = value;
+            _imp->options.insert(std::make_pair(key, value));
         }
     }
 
-    std::string
-    Options::get(const qnp::OptionKey & key, const std::string & default_value) const
+    qnp::OptionValue
+    Options::get(const qnp::OptionKey & key, const qnp::OptionValue & default_value) const
     {
         auto i(_imp->options.find(key));
 
@@ -141,13 +141,13 @@ namespace eos
 
         if (i != i_end)
         {
-            result += i->first.str() + '=' + i->second;
+            result += i->first.str() + '=' + i->second.str();
             ++i;
         }
 
         for (; i != i_end; ++i)
         {
-            result += ',' + i->first.str() + '=' + i->second;
+            result += ',' + i->first.str() + '=' + i->second.str();
         }
 
         return result;
@@ -212,26 +212,26 @@ namespace eos
 
     OptionSpecification::OptionSpecification(const OptionSpecification &) = default;
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in) :
+    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in) :
         key(key_in),
         allowed_values(allowed_values_in)
     {
     }
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in, const std::string & default_value_in) :
+    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in, const qnp::OptionValue & default_value_in) :
         key(key_in),
         allowed_values(allowed_values_in),
         default_value(default_value_in)
     {
     }
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in) :
+    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in) :
         key(key_in),
         allowed_values(allowed_value_in)
     {
     }
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in, const std::string & default_value_in) :
+    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in, const qnp::OptionValue & default_value_in) :
         key(key_in),
         allowed_values(allowed_value_in),
         default_value(default_value_in)
@@ -249,25 +249,25 @@ namespace eos
     {
         if (! options.has(specification.key))
         {
-            if ("" == specification.default_value)
+            if (! specification.default_value.has_value())
             {
-                auto allowed_values = std::holds_alternative<std::string>(specification.allowed_values)
-                                              ? std::vector<std::string>{ std::get<std::string>(specification.allowed_values) }
-                                              : std::get<std::vector<std::string>>(specification.allowed_values);
+                auto allowed_values = std::holds_alternative<qnp::OptionValue>(specification.allowed_values)
+                                              ? std::vector<qnp::OptionValue>{ std::get<qnp::OptionValue>(specification.allowed_values) }
+                                              : std::get<std::vector<qnp::OptionValue>>(specification.allowed_values);
 
                 throw UnspecifiedOptionError(specification.key, join(allowed_values.cbegin(), allowed_values.cend()));
             }
 
-            _value = specification.default_value;
+            _value = specification.default_value->str();
         }
         else
         {
-            _value = options[specification.key];
+            _value = options[specification.key].str();
         }
     }
 
     SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
-        _specification("dummy"_ok, "", "")
+        _specification("dummy"_ok, "dummy"_ov, "dummy"_ov)
     {
         const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&](const auto & e) -> bool { return e.key == key; });
 
@@ -292,11 +292,11 @@ namespace eos
     RestrictedOption::RestrictedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         SpecifiedOption(options, specifications, key)
     {
-        const auto allowed_values = std::holds_alternative<std::string>(this->_specification.allowed_values)
-                                            ? std::vector<std::string>{ std::get<std::string>(this->_specification.allowed_values) }
-                                            : std::get<std::vector<std::string>>(this->_specification.allowed_values);
+        const auto allowed_values = std::holds_alternative<qnp::OptionValue>(this->_specification.allowed_values)
+                                            ? std::vector<qnp::OptionValue>{ std::get<qnp::OptionValue>(this->_specification.allowed_values) }
+                                            : std::get<std::vector<qnp::OptionValue>>(this->_specification.allowed_values);
 
-        if (std::find(allowed_values.cbegin(), allowed_values.cend(), _value) == allowed_values.cend())
+        if (std::find_if(allowed_values.cbegin(), allowed_values.cend(), [this](const auto & v) { return v.str() == _value; }) == allowed_values.cend())
         {
             throw InvalidOptionValueError(_specification.key, _value, join(allowed_values.cbegin(), allowed_values.cend()));
         }
@@ -471,12 +471,12 @@ namespace eos
         SpecifiedOption(options, specifications, key),
         _isospin_value(destringify<Isospin>(_value))
     {
-        if (! std::holds_alternative<std::string>(this->_specification.allowed_values))
+        if (! std::holds_alternative<qnp::OptionValue>(this->_specification.allowed_values))
         {
             throw InternalError("IsospinOption with key " + _specification.key.str() + " expects only one allowed value");
         }
 
-        std::string allowed_value = std::get<std::string>(this->_specification.allowed_values);
+        std::string allowed_value = std::get<qnp::OptionValue>(this->_specification.allowed_values).str();
 
         if (((_isospin_value ^ destringify<Isospin>(allowed_value)) & _isospin_value) != Isospin::none)
         {
@@ -502,12 +502,12 @@ namespace eos
         SpecifiedOption(options, specifications, key),
         _partial_wave_value(destringify<PartialWave>(_value))
     {
-        if (! std::holds_alternative<std::string>(this->_specification.allowed_values))
+        if (! std::holds_alternative<qnp::OptionValue>(this->_specification.allowed_values))
         {
             throw InternalError("PartialWaveOption with key " + _specification.key.str() + " expects only one allowed value");
         }
 
-        std::string allowed_value = std::get<std::string>(this->_specification.allowed_values);
+        std::string allowed_value = std::get<qnp::OptionValue>(this->_specification.allowed_values).str();
 
         if (((_partial_wave_value ^ destringify<PartialWave>(allowed_value)) & _partial_wave_value) != PartialWave::none)
         {

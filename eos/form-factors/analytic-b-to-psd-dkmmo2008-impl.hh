@@ -44,7 +44,6 @@
 namespace eos
 {
     using std::get;
-    using namespace std::literals::string_literals;
 
     namespace dkmmo2008
     {
@@ -115,7 +114,7 @@ namespace eos
         GSL::QAGS::Config config;
 
         DKMMO2008Base(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make("SM"_ov, p, o)),
             lcdas(PseudoscalarLCDAs::make("pi", p, o)),
             prefix("B->pi"),
             MB(p["mass::B_u"], u),
@@ -217,7 +216,7 @@ namespace eos
         GSL::QAGS::Config config;
 
         DKMMO2008Base(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make("SM"_ov, p, o)),
             lcdas(PseudoscalarLCDAs::make("K", p, o)),
             prefix("B_s->K"),
             MB(p["mass::B_s"], u),
@@ -336,7 +335,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             DKMMO2008Base<q1_, q2_, qs_>(p, o, u),
-            opt_rescale_borel(o, "rescale-borel"_ok, { "1", "0" }, "1"),
+            opt_rescale_borel(o, "rescale-borel"_ok, { "1"_ov, "0"_ov }, "1"_ov),
             M2(p[prefix + "::M^2@DKMMO2008"], u),
             _s0_plus(p[prefix + "::s_0^+(0)@DKMMO2008"], u),
             _s0_plus_p(p[prefix + "::s_0^+'(0)@DKMMO2008"], u),
@@ -2223,8 +2222,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>::options
     {
-        { "rescale-borel"_ok,  { "1"s, "0"s },                "1"s         },
-        { "decay-constant"_ok, { "parameter"s, "sum-rule"s }, "parameter"s }
+        { "rescale-borel"_ok,  { "1"_ov, "0"_ov },                "1"_ov         },
+        { "decay-constant"_ok, { "parameter"_ov, "sum-rule"_ov }, "parameter"_ov }
     };
 
     template <QuarkFlavor q1_, QuarkFlavor q2_, QuarkFlavor qs_>

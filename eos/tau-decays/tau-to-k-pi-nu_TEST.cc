@@ -71,8 +71,8 @@ class TauToKPiNeutrinoTest : public TestCase
                 // tau -> K- pi0 nu
                 TauToKPiNeutrino d(p,
                                    Options{
-                                       { "n-resonances-1m"_ok, "2" },
-                                       { "n-resonances-0m"_ok, "1" }
+                                       { "n-resonances-1m"_ok, "2"_ov },
+                                       { "n-resonances-0m"_ok, "1"_ov }
                 });
 
                 TEST_CHECK_NEARLY_EQUAL(d.differential_branching_ratio(1.0), 0.0017916075697680681, eps);
@@ -84,18 +84,18 @@ class TauToKPiNeutrinoTest : public TestCase
                 // tau -> K_S pi- nu
                 d = TauToKPiNeutrino(p,
                                      Options{
-                                         {               "K"_ok, "K_S" },
-                                         { "n-resonances-1m"_ok,   "2" },
-                                         { "n-resonances-0m"_ok,   "1" }
+                                         {               "K"_ok, "K_S"_ov },
+                                         { "n-resonances-1m"_ok,   "2"_ov },
+                                         { "n-resonances-0m"_ok,   "1"_ov }
                 });
                 TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 4.25288e-3, eps); // Compare with [Belle:2014B] 4.16e-3
 
                 // tau -> K_L pi- nu
                 d = TauToKPiNeutrino(p,
                                      Options{
-                                         {               "K"_ok, "K_L" },
-                                         { "n-resonances-1m"_ok,   "2" },
-                                         { "n-resonances-0m"_ok,   "1" }
+                                         {               "K"_ok, "K_L"_ov },
+                                         { "n-resonances-1m"_ok,   "2"_ov },
+                                         { "n-resonances-0m"_ok,   "1"_ov }
                 });
                 TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 4.25288e-3, eps);
             }

@@ -46,7 +46,7 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c(p["mass::c"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d"_ov).str()], *this),
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
@@ -56,7 +56,7 @@ namespace eos
         a_2_perp(p["K^*::a_2_perp@1GeV"], *this),
         uncertainty_para(p["B->K^*ll::A_para_uncertainty@LargeRecoil"], *this),
         uncertainty_perp(p["B->K^*ll::A_perp_uncertainty@LargeRecoil"], *this),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"), p)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p)),
         mu(p["sb::mu"], *this)
     {
         Context ctx("When constructing B->K^*gamma BFS2004 amplitudes");
@@ -65,7 +65,7 @@ namespace eos
         this->uses(*form_factors);
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"_ov).str());
         if ("mixed" == qcdf_integrals)
         {
             qcdf_photon_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_massless_case,

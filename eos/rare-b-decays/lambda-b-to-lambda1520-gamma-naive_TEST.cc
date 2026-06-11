@@ -77,10 +77,10 @@ class LambdaBToLambda1520GammaNaiveTest :
 
             Options oo
             {
-                { "model"_ok, "WET" },
-                { "tag"_ok, "Naive" },
-                { "form-factors"_ok, "ABR2022" },
-                { "l"_ok, "mu" },
+                { "model"_ok, "WET"_ov },
+                { "tag"_ok, "Naive"_ov },
+                { "form-factors"_ok, "ABR2022"_ov },
+                { "l"_ok, "mu"_ov },
             };
 
             static const double eps = 1e-5;

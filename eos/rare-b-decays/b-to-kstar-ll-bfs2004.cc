@@ -35,7 +35,6 @@
 #include <gsl/gsl_sf.h>
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKstarDileptonAmplitudes<tag::BFS2004>::BToKstarDileptonAmplitudes(const Parameters & p,
@@ -44,7 +43,7 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c(p["mass::c"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d"_ov).str()], *this),
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
@@ -80,7 +79,7 @@ namespace eos
         }
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"_ov).str());
         if ("mixed" == qcdf_integrals)
         {
             qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case,
@@ -121,9 +120,9 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "q"_ok, { "d"s, "u"s }, "d"s },
-        { "ccbar-resonance"_ok, { "true"s, "false"s },  "false"s },
-        { "nlo"_ok, { "true"s, "false"s },  "true"s },
+        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov },
+        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "nlo"_ok, { "true"_ov, "false"_ov },  "true"_ov },
     };
 
 

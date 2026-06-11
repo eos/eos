@@ -40,10 +40,10 @@ class BToKCharmoniumGvDV2020Test :
 
             Options oo
             {
-                {"model"_ok,               "WET"},
-                {"q"_ok,                   "d"},
-                {"nonlocal-formfactor"_ok, "GvDV2020"},
-                {"psi"_ok,                 "J/psi"}
+                {"model"_ok,               "WET"_ov},
+                {"q"_ok,                   "d"_ov},
+                {"nonlocal-formfactor"_ok, "GvDV2020"_ov},
+                {"psi"_ok,                 "J/psi"_ov}
             };
 
             BToKCharmonium c(p, oo);

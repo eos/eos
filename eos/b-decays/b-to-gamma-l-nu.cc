@@ -57,8 +57,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
-            form_factors(FormFactorFactory<PToGamma>::create("B->gamma::" + o.get("form-factors"_ok, "FLvD2022QCDF"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+            form_factors(FormFactorFactory<PToGamma>::create("B->gamma::" + o.get("form-factors"_ok, "FLvD2022QCDF"_ov).str(), p, o)),
             alpha_qed(p["QED::alpha_e(m_b)"] ,u),
             g_fermi(p["WET::G_Fermi"], u),
             v_ub_abs(p["CKM::abs(V_ub)"], u),

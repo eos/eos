@@ -37,7 +37,7 @@ namespace eos
     }
 
     QCDFRepresentation<PToPP>::QCDFRepresentation(const Parameters & p, const Options & o) :
-        model(Model::make(o.get("model"_ok, "SM"), p, o)),
+        model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
         opt_q(o, options, "q"_ok),
         opt_p1(o, options, "P1"_ok),
         opt_p2(o, options, "P2"_ok),
@@ -139,11 +139,11 @@ namespace eos
 
     const std::vector<OptionSpecification> QCDFRepresentation<PToPP>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok,                                                                             { "true"s, "false"s }, "false"s },
-        {        "B-bar"_ok,                                                                             { "true"s, "false"s }, "false"s },
-        {            "q"_ok,                                                                              { "u"s, "d"s, "s"s },      ""s },
-        {           "P1"_ok, { "pi^0"s, "pi^+"s, "pi^-"s, "K_d"s, "Kbar_d"s, "K_S"s, "K_u"s, "Kbar_u"s, "eta"s, "eta_prime"s },      ""s },
-        {           "P2"_ok, { "pi^0"s, "pi^+"s, "pi^-"s, "K_d"s, "Kbar_d"s, "K_S"s, "K_u"s, "Kbar_u"s, "eta"s, "eta_prime"s },      ""s },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        { "B-bar"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        { "q"_ok, { "u"_ov, "d"_ov, "s"_ov } },
+        { "P1"_ok, { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
+        { "P2"_ok, { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
     };
 
     complex<double>

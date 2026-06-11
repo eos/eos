@@ -34,7 +34,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <> struct Implementation<BGLCoefficients>
     {
@@ -131,7 +130,7 @@ namespace eos
             l6one(p["B(*)->D(*)::l_6(1)@HQET"], u),
             l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], u),
             l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], u),
-            opt_sslp_limit(o, "SU3F-limit-sslp"_ok, { "0", "1" }, "0"),
+            opt_sslp_limit(o, "SU3F-limit-sslp"_ok, { "0"_ov, "1"_ov }, "0"_ov),
             xispone(p["B_s(*)->D_s(*)::xi'(1)@HQET"], u),
             xisppone(p["B_s(*)->D_s(*)::xi''(1)@HQET"], u),
             xispppone(p["B_s(*)->D_s(*)::xi'''(1)@HQET"], u),
@@ -2224,7 +2223,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BGLCoefficients>::options
     {
-        { "SU3F-limit-sslp"_ok, { "0"s, "1"s }, "0"s }
+        { "SU3F-limit-sslp"_ok, { "0"_ov, "1"_ov }, "0"_ov }
     };
 
     BGLCoefficients::BGLCoefficients(const Parameters & p, const Options & o) :
@@ -2503,7 +2502,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_zorder_bound(o, "z-order-bound"_ok, { "1", "2" }, "2"),
+            opt_zorder_bound(o, "z-order-bound"_ok, { "1"_ov, "2"_ov }, "2"_ov),
             nf(p["B(*)->D(*)::n_f@HQET"], u),
             ns(p["B_s(*)->D_s(*)::n_s@HQET"], u),
             bgl(new BGLCoefficients(p, o))
@@ -2872,8 +2871,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<HQETUnitarityBounds>::options
     {
-        { "SU3F-limit-sslp"_ok, { "0"s, "1"s }, "0"s },
-        { "z-order-bound"_ok,   { "1"s, "2"s }, "2"s }
+        { "SU3F-limit-sslp"_ok, { "0"_ov, "1"_ov }, "0"_ov },
+        { "z-order-bound"_ok,   { "1"_ov, "2"_ov }, "2"_ov }
     };
 
     HQETUnitarityBounds::HQETUnitarityBounds(const Parameters & p, const Options & o) :
@@ -2949,7 +2948,7 @@ namespace eos
             cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL:1997A] quark condensate
             cond_G2(0.02),     // (p["B->D^*::<alS/pi G^2>@BGL1997"], u), // [BGL:1997A] gluon condensate
             mu(4.2),                                       // TODO remove hard-coded numerical value
-            model(Model::make("SM", p, o))
+            model(Model::make("SM"_ov, p, o))
         {
             u.uses(*model);
         }

@@ -59,9 +59,9 @@ class DqToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok, "CKM" },
-                    { "l"_ok,     "e"   },
-                    { "q"_ok,     "d"   }
+                    { "model"_ok, "CKM"_ov },
+                    { "l"_ok,     "e"_ov   },
+                    { "q"_ok,     "d"_ov   }
                 };
 
                 DqToLeptonNeutrino d(p, oo);
@@ -88,9 +88,9 @@ class DqToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok, "CKM" },
-                    { "l"_ok,     "e"   },
-                    { "q"_ok,     "s"   }
+                    { "model"_ok, "CKM"_ov },
+                    { "l"_ok,     "e"_ov   },
+                    { "q"_ok,     "s"_ov   }
                 };
 
                 DqToLeptonNeutrino d(p, oo);

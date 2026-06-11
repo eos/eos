@@ -35,7 +35,6 @@ using std::sqrt;
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <>
     struct Implementation<LambdaBToLambdaDineutrino>
@@ -65,7 +64,7 @@ namespace eos
         bool cp_conjugate;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             m_Lambda_b(p["mass::Lambda_b"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             m_Lambda(p["mass::Lambda"], u),
@@ -78,7 +77,7 @@ namespace eos
         {
             Context ctx("When constructing Lb->Lnunu observables");
 
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"), p, o);
+            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"_ov).str(), p, o);
 
             lambda_t  = [*this] () { return model->ckm_tb() * std::conj(model->ckm_ts()); };
             wc        = [*this] () { return model->wet_sbnunu(cp_conjugate); };
@@ -155,7 +154,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s }
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov }
     };
 
 

@@ -31,7 +31,6 @@ using namespace std;
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using namespace std::placeholders;
     using std::norm;
     using std::sqrt;
@@ -40,7 +39,7 @@ namespace eos
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d"_ov).str()], *this),
         f_Kstar_par(p["B->K^*::f_Kstar_par"], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"_ok),
@@ -52,7 +51,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::Naive>::options
     {
-        { "q"_ok, { "d"s, "u"s },  "d"s },
+        { "q"_ok, { "d"_ov, "u"_ov },  "d"_ov },
     };
 
     BToKstarDilepton::FormFactorCorrections

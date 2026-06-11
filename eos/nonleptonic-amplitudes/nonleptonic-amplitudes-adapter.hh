@@ -62,7 +62,7 @@ namespace eos
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _nonleptonic_amplitudes(NonleptonicAmplitudeFactory<Transition_>::create(process.str() + "::" + options["representation"_ok], _parameters, _options)),
+                _nonleptonic_amplitudes(NonleptonicAmplitudeFactory<Transition_>::create(process.str() + "::" + options["representation"_ok].str(), _parameters, _options)),
                 _nonleptonic_amplitudes_function(nonleptonic_amplitudes_function),
                 _kinematics_names(kinematics_names),
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _nonleptonic_amplitudes.get()))
@@ -74,7 +74,7 @@ namespace eos
 
                 if (! _nonleptonic_amplitudes)
                 {
-                    throw NoSuchNonleptonicAmplitudeError(process.str(), options["representation"_ok]);
+                    throw NoSuchNonleptonicAmplitudeError(process.str(), options["representation"_ok].str());
                 }
 
                 uses(*_nonleptonic_amplitudes);

@@ -32,7 +32,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     BToKstarDileptonAmplitudes<tag::GP2004>::BToKstarDileptonAmplitudes(const Parameters & p,
             const Options & o) :
@@ -64,9 +63,9 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKstarDileptonAmplitudes<tag::GP2004>::options
     {
-        { "ccbar-resonance"_ok, { "true"s, "false"s },  "false"s },
-        { "nlo"_ok,             { "true"s, "false"s },  "true"s  },
-        { "simple-sl"_ok,       { "true"s, "false"s },  "false"s }
+        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "nlo"_ok,             { "true"_ov, "false"_ov },  "true"_ov  },
+        { "simple-sl"_ok,       { "true"_ov, "false"_ov },  "false"_ov }
     };
 
     // cf. [GP:2004A], Eq. (56)

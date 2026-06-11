@@ -85,9 +85,9 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model"_ok, "WET");
-                    oo.declare("q"_ok, "s");
-                    oo.declare("l"_ok, "mu");
+                    oo.declare("model"_ok, "WET"_ov);
+                    oo.declare("q"_ok, "s"_ov);
+                    oo.declare("l"_ok, "mu"_ov);
 
                     BToDilepton d(p, oo);
 
@@ -100,9 +100,9 @@ class BToDileptonTest :
                 // B_s -> e^+ e^-
                 {
                     Options oo;
-                    oo.declare("model"_ok, "WET");
-                    oo.declare("q"_ok, "s");
-                    oo.declare("l"_ok, "e");
+                    oo.declare("model"_ok, "WET"_ov);
+                    oo.declare("q"_ok, "s"_ov);
+                    oo.declare("l"_ok, "e"_ov);
 
                     BToDilepton d(p, oo);
 
@@ -158,10 +158,10 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model"_ok, "WET");
-                    oo.declare("scan-mode"_ok, "cartesian");
-                    oo.declare("q"_ok, "s");
-                    oo.declare("l"_ok, "mu");
+                    oo.declare("model"_ok, "WET"_ov);
+                    oo.declare("scan-mode"_ok, "cartesian"_ov);
+                    oo.declare("q"_ok, "s"_ov);
+                    oo.declare("l"_ok, "mu"_ov);
 
                     BToDilepton d(p, oo);
 

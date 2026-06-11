@@ -262,7 +262,7 @@ namespace eos
             using ValueType = std::function<std::shared_ptr<Model>(const Parameters &, const Options &)>;
             static const std::map<KeyType, ValueType> models;
 
-            static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters, const Options & options);
+            static std::shared_ptr<Model> make(const qnp::OptionValue & name, const Parameters & parameters, const Options & options);
             static OptionSpecification    option_specification();
     };
 

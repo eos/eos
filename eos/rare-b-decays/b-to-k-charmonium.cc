@@ -35,7 +35,6 @@ namespace eos
     using std::arg;
     using std::norm;
     using std::sqrt;
-    using namespace std::literals::string_literals;
 
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K} \psi@f$.
@@ -74,14 +73,14 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             opt_q(o, options, "q"_ok),
             m_B(p["mass::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             m_K(p["mass::K_" + opt_q.str()], u),
-            opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020", "naive", "GRvDV2022order5", "GRvDV2022order6" }, "GvDV2020"),
+            opt_nonlocal_formfactor(o, "nonlocal-formfactor"_ok, { "GvDV2020"_ov, "naive"_ov, "GRvDV2022order5"_ov, "GRvDV2022order6"_ov }, "GvDV2020"_ov),
             nonlocal_formfactor(NonlocalFormFactor<PToP>::make("B->K::" + opt_nonlocal_formfactor.value(), p, o)),
-            opt_psi(o, "psi"_ok, { "J/psi", "psi(2S)" }, "J/psi"),
+            opt_psi(o, "psi"_ok, { "J/psi"_ov, "psi(2S)"_ov }, "J/psi"_ov),
             m_psi(p["mass::" + opt_psi.value()], u),
             f_psi(p["decay-constant::" + opt_psi.value()], u)
         {
@@ -126,8 +125,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToKCharmonium>::options
     {
-        {"q"_ok, { "d"s, "u"s }, "d"s},
-        {"psi"_ok, { "J/psi"s, "psi(2S)"s }, "J/psi"s}
+        {"q"_ok, { "d"_ov, "u"_ov }, "d"_ov},
+        {"psi"_ok, { "J/psi"_ov, "psi(2S)"_ov }, "J/psi"_ov}
     };
 
     double

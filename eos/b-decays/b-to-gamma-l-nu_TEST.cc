@@ -74,7 +74,7 @@ class BToGammaLeptonNeutrinoTest :
 
             Options oo
             {
-                { "form-factors"_ok, "FLvD2022QCDF" },
+                { "form-factors"_ok, "FLvD2022QCDF"_ov },
             };
 
             // Branching ratio tests

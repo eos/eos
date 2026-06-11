@@ -159,7 +159,7 @@ namespace eos
         }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             parameters(p),
             opt_q(o, options, "q"_ok),
             opt_V(o, options, "V"_ok),
@@ -174,7 +174,7 @@ namespace eos
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             cub_conf(cubature::Config().epsrel(1e-5).epsabs(1.0e-9)),
-            form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
+            form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
         {
             Context ctx("When constructing B->Vlnu observable");
 
@@ -359,10 +359,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "V"_ok,            { "D^*"s, "D_s^*"s, "rho"s, "omega"s, "K^*"s, "J/psi"s }, ""s      },
-        { "cp-conjugate"_ok, { "true"s, "false"s },                                    "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s },                                  "mu"s    },
-        { "q"_ok,            { "u"s, "d"s, "s"s, "c"s },                               "d"s     },
+        { "V"_ok,            { "D^*"_ov, "D_s^*"_ov, "rho"_ov, "omega"_ov, "K^*"_ov, "J/psi"_ov } },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },                                    "false"_ov },
+        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov },                                  "mu"_ov    },
+        { "q"_ok,            { "u"_ov, "d"_ov, "s"_ov, "c"_ov },                               "d"_ov     },
     };
 
     BToVectorLeptonNeutrino::BToVectorLeptonNeutrino(const Parameters & p, const Options & o) :

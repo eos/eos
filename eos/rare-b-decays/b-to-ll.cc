@@ -69,7 +69,7 @@ namespace eos
         using xi_t = std::array<complex<double>, 4>;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             opt_l(o, options, "l"_ok),
             opt_q(o, options, "q"_ok),
             f_B(p["decay-constant::B_" + opt_q.str()], u),
@@ -185,8 +185,8 @@ namespace eos
     Implementation<BToDilepton>::options
     {
         Model::option_specification(),
-        {"l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s},
-        {"q"_ok, { "s"s }, "s"s}
+        {"l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov},
+        {"q"_ok, { "s"_ov }, "s"_ov}
     };
 
     double

@@ -70,7 +70,7 @@ namespace eos
         UsedParameter _mu_t;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make("SM"_ov, p, o)),
             a1para_0(p["K^*::a1para@1GeV"], u),
             a2para_0(p["K^*::a2para@1GeV"], u),
             a3para_0(p["K^*::a3para@1GeV"], u),
@@ -1068,7 +1068,7 @@ namespace eos
         UsedParameter _mu_t;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make("SM"_ov, p, o)),
             a1para_0(p["K^*::a1para@1GeV"], u),
             a2para_0(p["K^*::a2para@1GeV"], u),
             a3para_0(p["K^*::a3para@1GeV"], u),
