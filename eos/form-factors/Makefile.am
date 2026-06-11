@@ -51,6 +51,9 @@ libeosformfactors_la_SOURCES = \
 	parametric-se-impl-onehalfplus-to-onehalfplus.hh \
 	parametric-se-impl-p-to-p.hh \
 	parametric-se-impl-p-to-v.hh \
+	parametric-sse.hh parametric-sse.cc \
+	parametric-sse-impl-p-to-p.hh \
+	parametric-sse-impl-p-to-v.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	psd-lcdas.cc psd-lcdas.hh \
 	rho-lcdas.cc rho-lcdas.hh \
@@ -90,6 +93,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-kkrvd2024.hh \
 	parametric-kmpw2010.hh \
 	parametric-se.hh \
+	parametric-sse.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -130,6 +134,8 @@ TESTS = \
 	parametric-se-b-to-kstar_TEST \
 	parametric-se-lambdab-to-lambda_TEST \
 	parametric-se-lambdab-to-lambda1520_TEST \
+	parametric-sse-b-to-pi_TEST \
+	parametric-sse-b-to-kstar_TEST \
 	pi-lcdas_TEST \
 	psd-lcdas_TEST \
 	rho-lcdas_TEST \
@@ -213,6 +219,10 @@ parametric_se_b_to_kstar_TEST_SOURCES = parametric-se-b-to-kstar_TEST.cc
 parametric_se_lambdab_to_lambda_TEST_SOURCES = parametric-se-lambdab-to-lambda_TEST.cc
 
 parametric_se_lambdab_to_lambda1520_TEST_SOURCES = parametric-se-lambdab-to-lambda1520_TEST.cc
+
+parametric_sse_b_to_pi_TEST_SOURCES = parametric-sse-b-to-pi_TEST.cc
+
+parametric_sse_b_to_kstar_TEST_SOURCES = parametric-sse-b-to-kstar_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 
