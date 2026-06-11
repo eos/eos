@@ -22,7 +22,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     std::string
     HQETFormFactorBase::_sslp_prefix(const std::string & prefix)
@@ -37,10 +36,10 @@ namespace eos
     }
 
     HQETFormFactorBase::HQETFormFactorBase(const Parameters & p, const Options & o, const std::string & prefix) :
-        _model(Model::make("SM", p, o)),
+        _model(Model::make("SM"_ov, p, o)),
         _mBar(p[prefix + "::mBar@HQET"], *this),
         _a(p[prefix + "::a@HQET"], *this),
-        _opt_lp_model(o, "model-lp"_ok, { "power-series", "exponential" }, "power-series"),
+        _opt_lp_model(o, "model-lp"_ok, { "power-series"_ov, "exponential"_ov }, "power-series"_ov),
         _opt_lp_zorder(o, option_specifications, "z-order-lp"_ok),
         _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= 3 : 0.0),
         _enable_lp_z4(1.0 ? _opt_lp_zorder.value() >= 4 : 0.0),
@@ -115,10 +114,10 @@ namespace eos
     const std::vector<OptionSpecification>
     HQETFormFactorBase::option_specifications
     {
-        { "z-order-lp"_ok,      { "2"s, "3"s, "4"s, "5"s }, "3"s     },
-        { "z-order-slp"_ok,     { "1"s, "2"s },             "2"s     },
-        { "z-order-sslp"_ok,    { "0"s, "1"s, "2"s },       "1"s     },
-        { "SU3F-limit-sslp"_ok, { "true"s, "false"s },      "false"s }
+        { "z-order-lp"_ok,      { "2"_ov, "3"_ov, "4"_ov, "5"_ov }, "3"_ov     },
+        { "z-order-slp"_ok,     { "1"_ov, "2"_ov },             "2"_ov     },
+        { "z-order-sslp"_ok,    { "0"_ov, "1"_ov, "2"_ov },       "1"_ov     },
+        { "SU3F-limit-sslp"_ok, { "true"_ov, "false"_ov },      "false"_ov }
     };
 
     // uses a power series ansatz

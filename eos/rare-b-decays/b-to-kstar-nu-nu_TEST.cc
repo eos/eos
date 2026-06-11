@@ -69,11 +69,11 @@ class BToKDineutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok,        "CKM"     },
-                    { "form-factors"_ok, "BSZ2015" },
-                    { "D"_ok,            "s"       },
-                    { "q"_ok,            "d"       },
-                    { "I"_ok,            "1/2"     }
+                    { "model"_ok,        "CKM"_ov     },
+                    { "form-factors"_ok, "BSZ2015"_ov },
+                    { "D"_ok,            "s"_ov       },
+                    { "q"_ok,            "d"_ov       },
+                    { "I"_ok,            "1/2"_ov     }
                 };
 
                 BToVectorDineutrino d(p, oo);

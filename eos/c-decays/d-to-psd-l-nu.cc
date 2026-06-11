@@ -165,7 +165,7 @@ namespace eos
 
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             parameters(p),
             opt_q(o, options, "q"_ok),
             opt_P(o, options, "P"_ok),
@@ -180,7 +180,7 @@ namespace eos
             mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
+            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
         {
             Context ctx("When constructing D->Plnu observable");
 
@@ -441,10 +441,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },                 "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s },               "mu"s    },
-        { "P"_ok,            { "pi"s, "K"s, "eta"s, "eta_prime"s }, ""s      },
-        { "q"_ok,            { "u"s, "d"s, "s"s },                  "u"s     },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },                 "false"_ov },
+        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov },               "mu"_ov    },
+        { "P"_ok,            { "pi"_ov, "K"_ov, "eta"_ov, "eta_prime"_ov } },
+        { "q"_ok,            { "u"_ov, "d"_ov, "s"_ov },                  "u"_ov     },
     };
 
     DToPseudoscalarLeptonNeutrino::DToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :

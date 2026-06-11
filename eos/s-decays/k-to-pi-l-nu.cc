@@ -86,7 +86,7 @@ namespace eos
             std::shared_ptr<FormFactors<VacuumToPP>> form_factors;
 
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-                model(Model::make(o.get("model"_ok, "SM"), p, o)),
+                model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
                 parameters(p),
                 opt_K(o, options, "K"_ok),
                 m_K(p["mass::" + opt_K.value()], u),
@@ -310,9 +310,11 @@ namespace eos
     };
 
     const std::vector<OptionSpecification> Implementation<KToPiLeptonNeutrino>::options{
-        Model::option_specification(),      FormFactorFactory<PToP>::option_specification(), { "cp-conjugate"_ok,      { "true"s, "false"s }, "false"s },
-        {            "l"_ok,            { "e"s, "mu"s },    "mu"s },
-               {            "K"_ok, { "K_u"s, "K_S"s, "K_L"s },   "K_u"s },
+        Model::option_specification(),
+        FormFactorFactory<PToP>::option_specification(),
+        { "cp-conjugate"_ok,            { "true"s, "false"s }, "false"s },
+        {            "l"_ok,              { "e"_ov, "mu"_ov },  "mu"_ov },
+        {            "K"_ok, { "K_u"_ov, "K_S"_ov, "K_L"_ov }, "K_u"_ov },
     };
 
     KToPiLeptonNeutrino::KToPiLeptonNeutrino(const Parameters & parameters, const Options & options) :

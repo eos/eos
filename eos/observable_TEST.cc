@@ -90,7 +90,7 @@ class ObservableTest : public TestCase
                 auto observable = Observable::make("B->D^*lnu::2*S_1c", p, k, o);
                 TEST_CHECK_NO_THROW(observable->evaluate());
 
-                o.declare("l"_ok, "mu");
+                o.declare("l"_ok, "mu"_ov);
                 auto obs_S1c = Observable::make("B->D^*lnu::S_1c", p, k, o);
                 TEST_CHECK_EQUAL(observable->evaluate(), 2 * obs_S1c->evaluate());
             }

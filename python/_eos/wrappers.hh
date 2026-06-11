@@ -21,6 +21,7 @@
 #include "eos/models/model.hh"
 #include "eos/observable.hh"
 #include "eos/utils/exception.hh"
+#include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
 
 #include <boost/python.hpp>
@@ -35,6 +36,12 @@ namespace impl
 
     // raw constructor for class Options
     boost::python::object Options_ctor(boost::python::tuple args, boost::python::dict kwargs);
+
+    // getter for OptionSpecification::default_value, mapping an unset default value to None
+    boost::python::object OptionSpecification_default_value(const eos::OptionSpecification & spec);
+
+    // shim for Model::make, accepting a Python str and implicitly converting it to a qnp::OptionValue
+    std::shared_ptr<eos::Model> Model_make(const std::string & name, const eos::Parameters & parameters, const eos::Options & options);
 
     // converter for eos::Exception
     void translate_exception(const eos::Exception & e);

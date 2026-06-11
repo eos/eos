@@ -58,42 +58,42 @@ namespace eos
                                                                            Unit::InverseGeV2(),
                                                                            &TauToKPiNeutrino::differential_branching_ratio,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
                                                                            ),
                                                            make_observable("tau->K_Spinu::dGamma/dq2",
                                                                            R"(d\Gamma(\tau^- \to K_S \pi^- \nu_\tau)/dq^2)",
                                                                            Unit::InverseGeV(),
                                                                            &TauToKPiNeutrino::differential_decay_width,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
                                                                            ),
                                                            make_observable("tau->K_Spinu::BR",
                                                                            R"(\mathcal{B}(\tau^- \to K_S \pi^- \nu_\tau))",
                                                                            Unit::None(),
                                                                            &TauToKPiNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
-                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
                                                                            ),
                                                            make_observable("tau->K_Spinu::P(q2_min,q2_max)",
                                                                            R"(P(\tau^-\to K_S \pi^- \nu_\tau))",
                                                                            Unit::None(),
                                                                            &TauToKPiNeutrino::integrated_pdf_q2,
                                                                            std::make_tuple("q2_min", "q2_max"),
-                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
                                                                            ),
                                                            make_observable("tau->K_Spinu::P(q2)",
                                                                            R"(dP(\tau^- \to K_S \pi^- \nu_\tau)/dq^2)",
                                                                            Unit::InverseGeV2(),
                                                                            &TauToKPiNeutrino::differential_pdf_q2,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
                                                                            ),
                                                            make_observable("tau->K^-pinu::BR",
                                                                            R"(\mathcal{B}(\tau^- \to K^- \pi^0 \nu_\tau))",
                                                                            Unit::None(),
                                                                            &TauToKPiNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
-                                                                           Options{ { "K"_ok, "K_u" } }
+                                                                           Options{ { "K"_ok, "K_u"_ov } }
                                                                            ),
         });
         return ObservableGroup(imp);

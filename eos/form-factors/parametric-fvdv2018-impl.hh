@@ -28,7 +28,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <typename Process_>
     double
@@ -528,7 +527,7 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options
     {
-        { "L"_ok, "S|P|D|F"s, "S|P|D|F"s },
+        { "L"_ok, "S|P|D|F"_ov, "S|P|D|F"_ov },
     };
 
     template<typename Process_>

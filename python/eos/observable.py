@@ -175,7 +175,7 @@ class Observables(_Observables):
                         </a>'''
 
                         keys           += [fr'''<tt>{option.key}</tt>''']
-                        default_values += [fr'''<tt>{option.default_value}</tt>''']
+                        default_values += [fr'''<tt>{option.default_value}</tt>''' if option.default_value is not None else '&mdash;']
                         allowed_values += [av]
                     if len(keys) == 0:
                         keys           += ['&mdash;']

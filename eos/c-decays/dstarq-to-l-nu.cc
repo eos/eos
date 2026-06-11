@@ -143,9 +143,9 @@ namespace eos
     Implementation<DstarqToLeptonNeutrino>::options
     {
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },   "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s }, "mu"s    },
-        { "q"_ok,            { "d"s, "s"s },          ""s      }
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },   "false"_ov },
+        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov    },
+        { "q"_ok,            { "d"_ov, "s"_ov } }
     };
 
     DstarqToLeptonNeutrino::DstarqToLeptonNeutrino(const Parameters & parameters, const Options & options) :

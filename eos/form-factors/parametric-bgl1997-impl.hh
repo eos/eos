@@ -34,7 +34,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template<typename Process_>
     std::string BGL1997FormFactors<Process_, PToV>::_par_name(const std::string & ff_name)
@@ -400,10 +399,10 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> BGL1997FormFactors<Process_, PToV>::_options
     {
-        { "n-bound-states-1m"_ok, { "1"s, "2"s, "3"s, "4"s }, "3"s },
-        { "n-bound-states-1p"_ok, { "1"s, "2"s, "3"s, "4"s }, "4"s },
-        { "n-bound-states-0m"_ok, { "1"s, "2"s, "3"s       }, "3"s },
-        { "n-bound-states-0p"_ok, { "1"s, "2"s             }, "2"s }
+        { "n-bound-states-1m"_ok, { "1"_ov, "2"_ov, "3"_ov, "4"_ov }, "3"_ov },
+        { "n-bound-states-1p"_ok, { "1"_ov, "2"_ov, "3"_ov, "4"_ov }, "4"_ov },
+        { "n-bound-states-0m"_ok, { "1"_ov, "2"_ov, "3"_ov       }, "3"_ov },
+        { "n-bound-states-0p"_ok, { "1"_ov, "2"_ov             }, "2"_ov }
     };
 
     template<typename Process_>
@@ -583,8 +582,8 @@ namespace eos
     template<typename Process_>
     const std::vector<OptionSpecification> BGL1997FormFactors<Process_, PToP>::_options
     {
-        { "n-bound-states-1m"_ok, { "1"s, "2"s, "3"s, "4"s }, "3"s },
-        { "n-bound-states-0p"_ok, { "1"s, "2"s             }, "2"s }
+        { "n-bound-states-1m"_ok, { "1"_ov, "2"_ov, "3"_ov, "4"_ov }, "3"_ov },
+        { "n-bound-states-0p"_ok, { "1"_ov, "2"_ov             }, "2"_ov }
     };
 
     template<typename Process_>

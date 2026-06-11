@@ -40,7 +40,7 @@ class BToThreeLeptonsNeutrinoTest :
 
             {
 
-                BToThreeLeptonsNeutrino three_lnu(p, Options{ { "l"_ok, "mu" }, { "lprime"_ok, "e" } });
+                BToThreeLeptonsNeutrino three_lnu(p, Options{ { "l"_ok, "mu"_ov }, { "lprime"_ok, "e"_ov } });
 
                 // Tested against an IPython/Jupyter notebook implementation of Stephan Kürten
                 TEST_CHECK_NEARLY_EQUAL(three_lnu.double_differential_branching_ratio( 0.0,  0.0), 0.0                   , 1e-24);
@@ -102,7 +102,7 @@ class BToThreeLeptonsNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(three_lnu.integrated_forward_backward_asymmetry(1.2, 3.0, 0.2, 5.0), -0.10745200783863061, 1e-5);
                 TEST_CHECK_NEARLY_EQUAL(three_lnu.integrated_forward_backward_asymmetry(1.2, 3.5, 2.2, 5.0), -0.1334186883151141 , 1e-5);
 
-                BToThreeLeptonsNeutrino three_lnu_with_tau(p, Options{ { "l"_ok, "tau" }, { "lprime"_ok, "mu" } });
+                BToThreeLeptonsNeutrino three_lnu_with_tau(p, Options{ { "l"_ok, "tau"_ov }, { "lprime"_ok, "mu"_ov } });
 
                 TEST_CHECK_NEARLY_EQUAL(three_lnu_with_tau.double_differential_branching_ratio( 0.0,  0.0), 0.0                   , 1e-24);
                 TEST_CHECK_NEARLY_EQUAL(three_lnu_with_tau.double_differential_branching_ratio( 0.0,  1.5), 0.0                   , 1e-24);

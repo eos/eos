@@ -46,7 +46,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     /* HLMW2005 */
 
@@ -86,11 +85,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             opt_l(o, options, "l"_ok),
             gfermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture"_ok, "true")) ? ("@Y(4S)") : ("_" + o.get("q"_ok, "d")))], u),
+            tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture"_ok, "true"_ov).str()) ? ("@Y(4S)") : ("_" + o.get("q"_ok, "d"_ov).str()))], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_tau(p["mass::tau"], u),
@@ -560,8 +559,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToXsDilepton<HLMW2005>>::options
     {
-        { "l"_ok, { "e"s, "mu"s, "tau"s }, "mu"s },
-        { "q"_ok, { "d"s, "u"s }, "d"s }
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov }
     };
 
     double

@@ -44,10 +44,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // unpolarised SM
                 {
                     Options oo;
-                    oo.declare("model"_ok,                   "WET");
-                    oo.declare("q"_ok,                       "d");
-                    oo.declare("l"_ok,                       "mu");
-                    oo.declare("production-polarisation"_ok, "unpolarised");
+                    oo.declare("model"_ok,                   "WET"_ov);
+                    oo.declare("q"_ok,                       "d"_ov);
+                    oo.declare("l"_ok,                       "mu"_ov);
+                    oo.declare("production-polarisation"_ok, "unpolarised"_ov);
 
                     Parameters p = Parameters::Defaults();
                     p["mass::Lambda_b"] =  5.6194;
@@ -109,10 +109,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 {
                     Options oo
                     {
-                        {"model"_ok,                   "WET"},
-                        {"q"_ok,                       "d"},
-                        {"l"_ok,                       "mu"},
-                        {"production-polarisation"_ok, "LHCb"}
+                        {"model"_ok,                   "WET"_ov},
+                        {"q"_ok,                       "d"_ov},
+                        {"l"_ok,                       "mu"_ov},
+                        {"production-polarisation"_ok, "LHCb"_ov}
                     };
 
                     Parameters p = Parameters::Defaults();
@@ -174,10 +174,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 {
                     Options oo
                     {
-                        {"model"_ok,                   "WET"},
-                        {"q"_ok,                       "d"},
-                        {"l"_ok,                       "mu"},
-                        {"production-polarisation"_ok, "unpolarised"}
+                        {"model"_ok,                   "WET"_ov},
+                        {"q"_ok,                       "d"_ov},
+                        {"l"_ok,                       "mu"_ov},
+                        {"production-polarisation"_ok, "unpolarised"_ov}
                     };
 
                     Parameters p = Parameters::Defaults();
@@ -244,10 +244,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 {
                     Options oo
                     {
-                        {"model"_ok,                   "WET"},
-                        {"q"_ok,                       "d"},
-                        {"l"_ok,                       "mu"},
-                        {"production-polarisation"_ok, "LHCb"}
+                        {"model"_ok,                   "WET"_ov},
+                        {"q"_ok,                       "d"_ov},
+                        {"l"_ok,                       "mu"_ov},
+                        {"production-polarisation"_ok, "LHCb"_ov}
                     };
 
                     Parameters p = Parameters::Defaults();

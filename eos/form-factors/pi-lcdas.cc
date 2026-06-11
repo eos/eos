@@ -52,7 +52,7 @@ namespace eos
         UsedParameter _mu_t;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make("SM"_ov, p, o)),
             a2pi_0(p["pi::a2@1GeV"], u),
             a4pi_0(p["pi::a4@1GeV"], u),
             f3pi_0(p["pi::f3@1GeV"], u),

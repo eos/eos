@@ -56,11 +56,11 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             mu(p["sbsb::mu"], u),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_q(o, "q"_ok, {"s"}),
+            opt_q(o, "q"_ok, {"s"_ov}),
             m_B(p["mass::B_" + opt_q.value()], u),
             f_B(p["decay-constant::B_" + opt_q.value()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),

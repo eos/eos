@@ -59,14 +59,14 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, "model"_ok, { "SM", "CKMScan" }, "SM"),
+            opt_model(o, "model"_ok, { "SM"_ov, "CKMScan"_ov }, "SM"_ov),
             model(Model::make(opt_model.value(), p, o)),
             m_B(p["mass::B_d"], u),
             m_Dstar(p["mass::D_d^*"], u),
             opt_l(o, options, "l"_ok),
             m_l(p["mass::" + opt_l.str()], u),
             cub_conf(cubature::Config().epsrel(1e-5)),
-            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors"_ok, "BGJvD2019"), p, o))
+            ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors"_ok, "BGJvD2019"_ov).str(), p, o))
         {
             Context ctx("When constructing B->Dpilnu observable");
 
@@ -470,7 +470,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "l"_ok, { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov }
     };
 
     BToDPiLeptonNeutrino::BToDPiLeptonNeutrino(const Parameters & parameters, const Options & options) :

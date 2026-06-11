@@ -56,8 +56,8 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
-            form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)::" + o.get("form-factors"_ok, "HQET"), p)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+            form_factors(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)::" + o.get("form-factors"_ok, "HQET"_ov).str(), p)),
             parameters(p),
             m_LambdaB(p["mass::Lambda_b"], u),
             tau_LambdaB(p["life_time::Lambda_b"], u),
@@ -211,7 +211,7 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
-        { "l"_ok, { "e", "mu", "tau" }, "mu" }
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov }
     };
 
     LambdaBToLambdaC2625LeptonNeutrino::LambdaBToLambdaC2625LeptonNeutrino(const Parameters & parameters, const Options & options) :

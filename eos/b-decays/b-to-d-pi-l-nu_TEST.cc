@@ -75,12 +75,12 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "l"_ok,             "tau"       },
-                    { "q"_ok,             "d"         },
-                    { "z-order-lp"_ok,    "3"         },
-                    { "z-order-slp"_ok,   "2"         },
-                    { "z-order-sslp"_ok,  "1"         },
-                    { "form-factors"_ok,  "BGJvD2019" }
+                    { "l"_ok,             "tau"_ov       },
+                    { "q"_ok,             "d"_ov         },
+                    { "z-order-lp"_ok,    "3"_ov         },
+                    { "z-order-slp"_ok,   "2"_ov         },
+                    { "z-order-sslp"_ok,  "1"_ov         },
+                    { "form-factors"_ok,  "BGJvD2019"_ov }
                 };
 
                 BToDPiLeptonNeutrino d(p, o);
@@ -125,12 +125,12 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "l"_ok,             "mu"        },
-                    { "q"_ok,             "d"         },
-                    { "z-order-lp"_ok,    "2"         },
-                    { "z-order-slp"_ok,   "1"         },
-                    { "z-order-sslp"_ok,  "0"         },
-                    { "form-factors"_ok,  "BGJvD2019" }
+                    { "l"_ok,             "mu"_ov        },
+                    { "q"_ok,             "d"_ov         },
+                    { "z-order-lp"_ok,    "2"_ov         },
+                    { "z-order-slp"_ok,   "1"_ov         },
+                    { "z-order-sslp"_ok,  "0"_ov         },
+                    { "form-factors"_ok,  "BGJvD2019"_ov }
                 };
 
                 BToDPiLeptonNeutrino d(p, o);

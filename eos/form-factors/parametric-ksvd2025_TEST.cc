@@ -138,7 +138,7 @@ class ParametricKSvD2025Test :
 
                 /* f_0 at timelike q2 > 0.0 */
                 {
-                    KSvD2025FormFactors<VacuumToKPi> ff(p, Options{ {"n-resonances-0p"_ok, "1"} });
+                    KSvD2025FormFactors<VacuumToKPi> ff(p, Options{ {"n-resonances-0p"_ok, "1"_ov} });
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.phitilde_z(ff.z( 0.0))),  0.147701097,  eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.phitilde_z(ff.z( 0.0))),  0.0,          eps);

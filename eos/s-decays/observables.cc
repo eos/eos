@@ -57,21 +57,21 @@ namespace eos
                                                                            Unit::None(),
                                                                            &KToPiLeptonNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
-                                                                           Options{ { "K"_ok, "K_u" } }
+                                                                           Options{ { "K"_ok, "K_u"_ov } }
                                                                            ),
                                                            make_observable("K_S->pilnu::BR",
                                                                            R"(\mathcal{B}(K_S \to \pi^+ \ell^- \bar{\nu}_\ell))",
                                                                            Unit::None(),
                                                                            &KToPiLeptonNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
-                                                                           Options{ { "K"_ok, "K_S" } }
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
                                                                            ),
                                                            make_observable("K_L->pilnu::BR",
                                                                            R"(\mathcal{B}(K_L \to \pi^+ \ell^- \bar{\nu}_\ell))",
                                                                            Unit::None(),
                                                                            &KToPiLeptonNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
-                                                                           Options{ { "K"_ok, "K_L" } }
+                                                                           Options{ { "K"_ok, "K_L"_ov } }
                                                                            ),
         });
         return ObservableGroup(imp);

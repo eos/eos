@@ -27,6 +27,7 @@
 #include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -79,7 +80,7 @@ namespace eos
              *
              * @param options The set of initial options from which this object shall be constructed.
              */
-            Options(const std::initializer_list<std::pair<qnp::OptionKey, std::string>> & options);
+            Options(const std::initializer_list<std::pair<qnp::OptionKey, qnp::OptionValue>> & options);
 
             /// Destructor.
             ~Options();
@@ -93,13 +94,13 @@ namespace eos
 
             ///@name Access
             ///@{
-            const std::string & operator[] (const qnp::OptionKey & key) const;
+            const qnp::OptionValue & operator[] (const qnp::OptionKey & key) const;
 
             bool has(const qnp::OptionKey & key) const;
 
-            void declare(const qnp::OptionKey & key, const std::string & value = "");
+            void declare(const qnp::OptionKey & key, const qnp::OptionValue & value);
 
-            std::string get(const qnp::OptionKey & key, const std::string & default_value = "") const;
+            qnp::OptionValue get(const qnp::OptionKey & key, const qnp::OptionValue & default_value) const;
 
             std::string as_string() const;
 
@@ -109,14 +110,14 @@ namespace eos
             ///@name Iteration over our options
             ///@{
             struct OptionIteratorTag;
-            using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
+            using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const std::pair<const qnp::OptionKey, qnp::OptionValue>>;
 
             OptionIterator begin() const;
             OptionIterator end() const;
             ///@}
     };
 
-    extern template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, std::string>>;
+    extern template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const qnp::OptionKey, qnp::OptionValue>>;
 
     /// Merge operator.
     Options operator+ (const Options & lhs, const Options & rhs);
@@ -127,20 +128,20 @@ namespace eos
     struct OptionSpecification
     {
             OptionSpecification(const OptionSpecification &);
-            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in);
-            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<std::string> & allowed_values_in, const std::string & default_value_in);
-            OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in);
-            OptionSpecification(const qnp::OptionKey & key_in, const std::string & allowed_value_in, const std::string & default_value_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in, const qnp::OptionValue & default_value_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in);
+            OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in, const qnp::OptionValue & default_value_in);
 
             ~OptionSpecification();
 
             OptionSpecification & operator= (const OptionSpecification &);
 
-            using AllowedValues = std::variant<std::string, std::vector<std::string>>;
+            using AllowedValues = std::variant<qnp::OptionValue, std::vector<qnp::OptionValue>>;
 
-            qnp::OptionKey key;
-            AllowedValues  allowed_values;
-            std::string    default_value;
+            qnp::OptionKey                  key;
+            AllowedValues                   allowed_values;
+            std::optional<qnp::OptionValue> default_value;
     };
 
     class SpecifiedOption

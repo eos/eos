@@ -31,7 +31,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <>
     struct Implementation<EEToCCBar>
@@ -238,7 +237,7 @@ namespace eos
             m_eff(p["ee->ccbar::effective_mass"], u),
             m_D0(p["mass::D^0"], u),
             m_Dp(p["mass::D^+"], u),
-            assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"))),
+            assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"_ov).str())),
             m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
             g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
             q(_channel_effective_momentum(p, u, std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -414,7 +413,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<EEToCCBar>::options
     {
-        {"assume-isospin"_ok, { "true"s, "false"s }, "false"s},
+        {"assume-isospin"_ok, { "true"_ov, "false"_ov }, "false"_ov},
     };
 
     const EEToCCBar::IntermediateResult *

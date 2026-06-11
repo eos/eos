@@ -42,7 +42,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using std::norm;
 
     template <> struct Implementation<BToPPLeptonNeutrino>
@@ -198,13 +197,13 @@ namespace eos
         }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             parameters(p),
             opt_U(o, options, "U"_ok),
             opt_q(o, options, "q"_ok),
-            opt_I1(o, "I1"_ok, { "1", "0", "1/2" }),
-            opt_I2(o, "I2"_ok, { "1", "0", "1/2" }),
-            opt_C(o, "C"_ok, { "+-", "+0", "00" }),
+            opt_I1(o, "I1"_ok, { "1"_ov, "0"_ov, "1/2"_ov }),
+            opt_I2(o, "I2"_ok, { "1"_ov, "0"_ov, "1/2"_ov }),
+            opt_C(o, "C"_ok, { "+-"_ov, "+0"_ov, "00"_ov }),
             hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
@@ -220,7 +219,7 @@ namespace eos
             mu(p[opt_U.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             opt_int_points(o, options, "integration-points"_ok),
             cub_conf(cubature::Config().epsrel(5e-3)),
-            form_factors(FormFactorFactory<PToPP>::create(_process() + "::" + o.get("form-factors"_ok, "HKvT2025"), p, o))
+            form_factors(FormFactorFactory<PToPP>::create(_process() + "::" + o.get("form-factors"_ok, "HKvT2025"_ov).str(), p, o))
         {
             Context ctx("When constructing B->PPlnu observable");
 
@@ -296,14 +295,14 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToPP>::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },   "false"s },
-        { "l"_ok,            { "e"s, "mu"s, "tau"s }, "mu"s    },
-        { "U"_ok,            { "c"s, "u"s },          "c"s     },
-        { "q"_ok,            { "u"s, "d"s },          "d"s     },
-        { "I1"_ok,           { "1"s, "0"s, "1/2"s },  "1"s     },
-        { "I2"_ok,           { "1"s, "0"s, "1/2"s },  "1"s     },
-        { "C"_ok,            { "+-"s, "00"s, "+0"s }, "+-"s    },
-        { "integration-points"_ok, { "256"s, "512"s, "1024"s, "2048"s, "4096"s, "8192"s, "16384"s }, "4096"s }
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },   "false"_ov },
+        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov    },
+        { "U"_ok,            { "c"_ov, "u"_ov },          "c"_ov     },
+        { "q"_ok,            { "u"_ov, "d"_ov },          "d"_ov     },
+        { "I1"_ok,           { "1"_ov, "0"_ov, "1/2"_ov },  "1"_ov     },
+        { "I2"_ok,           { "1"_ov, "0"_ov, "1/2"_ov },  "1"_ov     },
+        { "C"_ok,            { "+-"_ov, "00"_ov, "+0"_ov }, "+-"_ov    },
+        { "integration-points"_ok, { "256"_ov, "512"_ov, "1024"_ov, "2048"_ov, "4096"_ov, "8192"_ov, "16384"_ov }, "4096"_ov }
     };
 
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor, std::string, std::string, std::string>,

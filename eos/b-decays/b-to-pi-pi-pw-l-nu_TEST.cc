@@ -67,24 +67,24 @@ class BToPiPiPWLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok,        "CKM" },
-                    { "form-factors"_ok, "HKvT2025" },
-                    { "scattering-amplitudes"_ok, "HKvT2025" },
-                    { "integration-points"_ok, "4096" },
-                    { "U"_ok,            "u"       },
-                    { "q"_ok,            "u"       },
-                    { "l"_ok,            "e"       },
-                    { "I1"_ok,           "1"       },
-                    { "I2"_ok,           "1"       },
-                    { "C"_ok,           "+-"       },
-                    { "I"_ok,           "0|1"      }
+                    { "model"_ok,        "CKM"_ov },
+                    { "form-factors"_ok, "HKvT2025"_ov },
+                    { "scattering-amplitudes"_ok, "HKvT2025"_ov },
+                    { "integration-points"_ok, "4096"_ov },
+                    { "U"_ok,            "u"_ov       },
+                    { "q"_ok,            "u"_ov       },
+                    { "l"_ok,            "e"_ov       },
+                    { "I1"_ok,           "1"_ov       },
+                    { "I2"_ok,           "1"_ov       },
+                    { "C"_ok,           "+-"_ov       },
+                    { "I"_ok,           "0|1"_ov      }
                 };
 
-                oo.declare("L"_ok, "S");
+                oo.declare("L"_ok, "S"_ov);
                 BToPPLeptonNeutrino testS(p, oo);
-                oo.declare("L"_ok, "P");
+                oo.declare("L"_ok, "P"_ov);
                 BToPPLeptonNeutrino testP(p, oo);
-                oo.declare("L"_ok, "D");
+                oo.declare("L"_ok, "D"_ov);
                 BToPPLeptonNeutrino testD(p, oo);
 
                 TEST_CHECK_NEARLY_EQUAL(testS.fully_integrated_branching_ratio(),    1.59995e-05, 1e-8);

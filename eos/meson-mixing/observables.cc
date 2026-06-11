@@ -37,7 +37,7 @@ namespace eos
                         Unit::InversePicoSecond(),
                         &BMixing::delta_m,
                         std::make_tuple(),
-                        Options{ { "q"_ok, "s" } }),
+                        Options{ { "q"_ok, "s"_ov } }),
             }
         );
 

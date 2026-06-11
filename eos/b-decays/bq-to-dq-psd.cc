@@ -365,9 +365,9 @@ namespace eos
     Implementation<BqToDqPseudoscalar>::options
     {
         Model::option_specification(),
-        { "accuracy"_ok,     { "LO"s, "NLO"s, "NLP"s, "LO+NLO"s, "all"s }, "all"s   },
-        { "cp-conjugate"_ok, { "true"s, "false"s },                        "false"s },
-        { "q"_ok,            { "s"s, "d"s },                               ""s      }
+        { "accuracy"_ok,     { "LO"_ov, "NLO"_ov, "NLP"_ov, "LO+NLO"_ov, "all"_ov }, "all"_ov   },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },                        "false"_ov },
+        { "q"_ok,            { "s"_ov, "d"_ov } }
     };
 
     BqToDqPseudoscalar::BqToDqPseudoscalar(const Parameters & parameters, const Options & options) :

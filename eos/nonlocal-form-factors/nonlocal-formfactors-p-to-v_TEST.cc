@@ -68,8 +68,8 @@ class NonlocalFormFactorGvDV2020Test :
                 p["B->K^*ccbar::Im{alpha_2^long}@GvDV2020"]  = 19.0;
 
                 Options o = {
-                    { "model"_ok, "WET" },
-                    { "q"_ok, "d" }
+                    { "model"_ok, "WET"_ov },
+                    { "q"_ok, "d"_ov }
                 };
 
                 auto nff = NonlocalFormFactor<PToV>::make("B->K^*::GvDV2020", p, o);

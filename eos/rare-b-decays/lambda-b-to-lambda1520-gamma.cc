@@ -52,14 +52,14 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"), p, o)),
+            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
             hbar(p["QM::hbar"], u),
             tau(p["life_time::Lambda_b"], u),
             mu(p["sb::mu"], u)
         {
             Context ctx("When constructing Lb->L(1520)gamma observables");
 
-            std::string tag = o.get("tag"_ok, "");
+            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
 
             if ("Naive" == tag)
             {

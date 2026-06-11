@@ -50,13 +50,13 @@ class BsToPhiDileptonBFS2004NaiveTest :
 
             Options oo
             {
-                { "model"_ok, "WET" },
-                { "scan-mode"_ok, "cartesian" },
-                { "tag"_ok, "BFS2004" },
-                { "qcdf-integrals"_ok, "mixed" },
-                { "form-factors"_ok, "BSZ2015" },
-                { "l"_ok, "mu" },
-                { "q"_ok, "s" }
+                { "model"_ok, "WET"_ov },
+                { "scan-mode"_ok, "cartesian"_ov },
+                { "tag"_ok, "BFS2004"_ov },
+                { "qcdf-integrals"_ok, "mixed"_ov },
+                { "form-factors"_ok, "BSZ2015"_ov },
+                { "l"_ok, "mu"_ov },
+                { "q"_ok, "s"_ov }
             };
 
             static const double eps = 1e-3;

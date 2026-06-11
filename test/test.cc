@@ -108,7 +108,7 @@ main(int, char ** argv)
     auto test_function = [](const eos::Parameters & p, const std::vector<eos::KinematicVariable> & kv, const eos::Options & o)
     {
         using namespace eos;
-        return p["mass::c"] * std::stoi(o.get("multiplier"_ok, "1")) * (kv[1] - kv[0]);
+        return p["mass::c"] * std::stoi(o.get("multiplier"_ok, "1"_ov).str()) * (kv[1] - kv[0]);
     };
 
     std::shared_ptr<const eos::TestObservableEntry> obs_entry =

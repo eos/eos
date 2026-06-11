@@ -142,7 +142,7 @@ namespace eos
 
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"), p, o)),
+            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             parameters(p),
             opt_D(o, options, "D"_ok),
             opt_q(o, options, "q"_ok),
@@ -158,7 +158,7 @@ namespace eos
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             opt_cp_conjugate(o, options, "cp-conjugate"_ok),
             cp_conjugate(opt_cp_conjugate.value()),
-            form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"), p, o))
+            form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
         {
             Context ctx("When constructing B->Vnunu observables");
 
@@ -271,10 +271,10 @@ namespace eos
     {
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "cp-conjugate"_ok, { "true"s, "false"s },  "false"s },
-        { "D"_ok, { "s"s },               "s"s },
-        { "q"_ok, { "u"s, "d"s, "s"s },   "u"s },
-        { "I"_ok, { "1"s, "0"s, "1/2"s }, ""s  },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "D"_ok, { "s"_ov },               "s"_ov },
+        { "q"_ok, { "u"_ov, "d"_ov, "s"_ov },   "u"_ov },
+        { "I"_ok, { "1"_ov, "0"_ov, "1/2"_ov } },
     };
 
     BToVectorDineutrino::BToVectorDineutrino(const Parameters & parameters, const Options & options) :

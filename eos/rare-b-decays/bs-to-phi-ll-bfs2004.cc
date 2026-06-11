@@ -32,7 +32,6 @@
 #include <gsl/gsl_sf.h>
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BsToPhiDileptonAmplitudes<tag::BFS2004>::BsToPhiDileptonAmplitudes(const Parameters & p,
@@ -62,7 +61,7 @@ namespace eos
         Context ctx("When constructing Bs->Phill BFS2004 amplitudes");
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"_ov).str());
         if ("mixed" == qcdf_integrals)
         {
             qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case,
@@ -103,8 +102,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BsToPhiDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "ccbar-resonance"_ok, { "true"s, "false"s },  "false"s },
-        { "nlo"_ok, { "true"s, "false"s },  "true"s },
+        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "nlo"_ok, { "true"_ov, "false"_ov },  "true"_ov },
     };
 
     BsToPhiDilepton::DipoleFormFactors

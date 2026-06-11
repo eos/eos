@@ -101,13 +101,13 @@ class BToKDileptonBFS2004BobethCompatibilityTest :
 
             Options oo
             {
-                {"model"_ok, "WET"},
-                {"scan-mode"_ok, "cartesian"},
-                {"tag"_ok, "BFS2004"},
-                {"qcdf-integrals"_ok, "mixed"},
-                {"form-factors"_ok, "KMPW2010"},
-                {"l"_ok, "mu"},
-                {"q"_ok, "u"}
+                {"model"_ok, "WET"_ov},
+                {"scan-mode"_ok, "cartesian"_ov},
+                {"tag"_ok, "BFS2004"_ov},
+                {"qcdf-integrals"_ok, "mixed"_ov},
+                {"form-factors"_ok, "KMPW2010"_ov},
+                {"l"_ok, "mu"_ov},
+                {"q"_ok, "u"_ov}
             };
 
             double eps = 1e-3;

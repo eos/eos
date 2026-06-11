@@ -46,7 +46,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     template <typename Transition_>
     struct Implementation<AnalyticFormFactorBToPLCSR<Transition_>>
@@ -97,7 +96,7 @@ namespace eos
         using Traits = AnalyticFormFactorBToPLCSRProcessTraits<Transition_>;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make("SM"_ov, p, o)),
             m_B(p[Traits::name_B], u),
             f_B(p[Traits::f_B], u),
             m_P(p[Traits::name_P], u),
@@ -111,12 +110,12 @@ namespace eos
             M2(p[stringify(Traits::label) + "::M^2@B-LCSR"], u),
             mu(p[stringify(Traits::label) + "::mu@B-LCSR"], u),
             b_lcdas(HeavyMesonLCDAs::make("exponential", p, o + Options{ { "q"_ok, stringify(Traits::spectator_flavor) } })), // operator+ is ordered!
-            opt_2pt(o, "2pt"_ok, { "tw2+3", "all", "off" }, "all"),
-            opt_3pt(o, "3pt"_ok, { "tw3+4", "all", "off" }, "all"),
+            opt_2pt(o, "2pt"_ok, { "tw2+3"_ov, "all"_ov, "off"_ov }, "all"_ov),
+            opt_3pt(o, "3pt"_ok, { "tw3+4"_ov, "all"_ov, "off"_ov }, "all"_ov),
             switch_2pt_phi(1.0),
             switch_2pt_g(1.0),
             switch_3pt(1.0),
-            opt_method(o, "method"_ok, { "borel", "dispersive" }, "borel"),
+            opt_method(o, "method"_ok, { "borel"_ov, "dispersive"_ov }, "borel"_ov),
             switch_borel(opt_method.value() == "borel")
         {
             Context ctx("When creating a B->P LCSR form factor with B-meson LCDAs");
@@ -9479,9 +9478,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<AnalyticFormFactorBToPLCSR<Transition_>>::options
     {
-        { "2pt"_ok,    { "tw2+3"s, "all"s, "off"s }, "all"s   },
-        { "3pt"_ok,    { "tw3+4"s, "all"s, "off"s }, "all"s   },
-        { "method"_ok, { "borel"s, "dispersive"s  }, "borel"s }
+        { "2pt"_ok,    { "tw2+3"_ov, "all"_ov, "off"_ov }, "all"_ov   },
+        { "3pt"_ok,    { "tw3+4"_ov, "all"_ov, "off"_ov }, "all"_ov   },
+        { "method"_ok, { "borel"_ov, "dispersive"_ov  }, "borel"_ov }
     };
 
     template <typename Transition_>

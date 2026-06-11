@@ -42,7 +42,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using std::norm;
 
     namespace lambda_c_to_proton_l_l
@@ -200,7 +199,7 @@ namespace eos
             static const std::vector<OptionSpecification> options;
 
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-                model(Model::make(o.get("model"_ok, "WET"), p, o)),
+                model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
                 parameters(p),
                 hbar(p["QM::hbar"], u),
                 tau_Lambda_c(p["life_time::Lambda_c"], u),
@@ -224,7 +223,7 @@ namespace eos
                 delta_phi_m_rho(p["Lambda_c->proton::res_delta_phi_m_rho@GHM2021"], u),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 mu(p["uc::mu"], u),
-                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_c->neutron::" + o.get("form-factors"_ok, "BMRvD2022"), p, o)) // using isospin
+                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_c->neutron::" + o.get("form-factors"_ok, "BMRvD2022"_ov).str(), p, o)) // using isospin
             {
                 u.uses(*form_factors);
                 u.uses(*model);
@@ -377,8 +376,8 @@ namespace eos
 
     const std::vector<OptionSpecification> Implementation<LambdaCToProtonLeptonLepton>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok,   { "true"s, "false"s }, "false"s },
-        {            "l"_ok, { "e"s, "mu"s, "tau"s },    "mu"s },
+        { "cp-conjugate"_ok,     { "true"_ov, "false"_ov }, "false"_ov },
+        {            "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov },    "mu"_ov },
     };
 
     LambdaCToProtonLeptonLepton::LambdaCToProtonLeptonLepton(const Parameters & p, const Options & o) :

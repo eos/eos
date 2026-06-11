@@ -111,6 +111,25 @@ namespace impl
         return object();
     }
 
+    // getter for OptionSpecification::default_value, mapping an unset default value to None
+    object
+    OptionSpecification_default_value(const eos::OptionSpecification & spec)
+    {
+        if (! spec.default_value.has_value())
+        {
+            return object();
+        }
+
+        return object(spec.default_value->str());
+    }
+
+    // shim for Model::make, accepting a Python str and implicitly converting it to a qnp::OptionValue
+    std::shared_ptr<eos::Model>
+    Model_make(const std::string & name, const eos::Parameters & parameters, const eos::Options & options)
+    {
+        return eos::Model::make(eos::qnp::OptionValue(name), parameters, options);
+    }
+
     // converter for eos::Exception
     void
     translate_exception(const eos::Exception & e)

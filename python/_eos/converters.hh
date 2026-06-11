@@ -17,6 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/qualified-name-parts.hh>
+
 #include <boost/python.hpp>
 
 #include <string>
@@ -31,21 +33,21 @@ namespace impl
     struct VariantOptionAllowedValuesConverter
     {
             static PyObject *
-            convert(const std::variant<std::string, std::vector<std::string>> & value)
+            convert(const std::variant<eos::qnp::OptionValue, std::vector<eos::qnp::OptionValue>> & value)
             {
                 boost::python::list result;
 
-                if (std::holds_alternative<std::string>(value))
+                if (std::holds_alternative<eos::qnp::OptionValue>(value))
                 {
-                    result.append(std::get<std::string>(value));
+                    result.append(std::get<eos::qnp::OptionValue>(value).str());
                 }
                 else
                 {
-                    const auto & vector = std::get<std::vector<std::string>>(value);
+                    const auto & vector = std::get<std::vector<eos::qnp::OptionValue>>(value);
 
                     for (const auto & element : vector)
                     {
-                        result.append(element);
+                        result.append(element.str());
                     }
                 }
 

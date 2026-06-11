@@ -94,7 +94,7 @@ class AnalyticFormFactorBToGammaQCDFTest :
                 // Integration test: observable evaluation
 
                 Kinematics k = Kinematics({ { "E_gamma", 2.16 } });
-                Options o { {"form-factors"_ok, "FLvD2022QCDF"} };
+                Options o { {"form-factors"_ok, "FLvD2022QCDF"_ov} };
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 

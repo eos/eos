@@ -79,10 +79,10 @@ class BsToPhiCharmoniumGvDV2020Test :
 
             Options oo
             {
-                {"model"_ok,               "WET"},
-                {"nonlocal-formfactor"_ok, "GvDV2020"},
-                {"psi"_ok,                 "J/psi"},
-                {"q"_ok,                   "s"}
+                {"model"_ok,               "WET"_ov},
+                {"nonlocal-formfactor"_ok, "GvDV2020"_ov},
+                {"psi"_ok,                 "J/psi"_ov},
+                {"q"_ok,                   "s"_ov}
             };
 
             BsToPhiCharmonium c(p, oo);

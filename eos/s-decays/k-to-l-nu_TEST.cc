@@ -58,8 +58,8 @@ class KToLeptonNeutrinoTest : public TestCase
                 p["life_time::K_u"]      = 1.000;
 
                 Options oo{
-                    { "model"_ok, "CKM" },
-                    {     "l"_ok,   "e" },
+                    { "model"_ok, "CKM"_ov },
+                    {     "l"_ok,   "e"_ov },
                 };
 
                 KToLeptonNeutrino d(p, oo);
@@ -80,8 +80,8 @@ class KToLeptonNeutrinoTest : public TestCase
                 p["life_time::K_u"]      = 0.100;
 
                 Options oo{
-                    { "model"_ok, "CKM" },
-                    {     "l"_ok,   "e" },
+                    { "model"_ok, "CKM"_ov },
+                    {     "l"_ok,   "e"_ov },
                 };
 
                 KToLeptonNeutrino d(p, oo);
@@ -107,8 +107,8 @@ class KToLeptonNeutrinoTest : public TestCase
 
 
                 Options oo{
-                    { "model"_ok, "WET" },
-                    {     "l"_ok,   "e" },
+                    { "model"_ok, "WET"_ov },
+                    {     "l"_ok,   "e"_ov },
                 };
 
                 KToLeptonNeutrino d(p, oo);

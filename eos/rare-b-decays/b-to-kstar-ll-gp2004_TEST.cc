@@ -99,10 +99,10 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok,        "WET"     },
-                    {"tag"_ok,          "GP2004"  },
-                    {"l"_ok,            "mu"      },
-                    {"form-factors"_ok, "BSZ2015" }
+                    {"model"_ok,        "WET"_ov     },
+                    {"tag"_ok,          "GP2004"_ov  },
+                    {"l"_ok,            "mu"_ov      },
+                    {"form-factors"_ok, "BSZ2015"_ov }
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -222,10 +222,10 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok,        "WET"     },
-                    {"tag"_ok,          "GP2004"  },
-                    {"l"_ok,            "mu"      },
-                    {"form-factors"_ok, "BSZ2015" }
+                    {"model"_ok,        "WET"_ov     },
+                    {"tag"_ok,          "GP2004"_ov  },
+                    {"l"_ok,            "mu"_ov      },
+                    {"form-factors"_ok, "BSZ2015"_ov }
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -316,10 +316,10 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok,        "WET"     },
-                    {"tag"_ok,          "GP2004"  },
-                    {"l"_ok,            "mu"      },
-                    {"form-factors"_ok, "BSZ2015" }
+                    {"model"_ok,        "WET"_ov     },
+                    {"tag"_ok,          "GP2004"_ov  },
+                    {"l"_ok,            "mu"_ov      },
+                    {"form-factors"_ok, "BSZ2015"_ov }
                 };
 
                 BToKstarDilepton d(p, oo);
@@ -419,10 +419,10 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 };
                 Options options
                 {
-                    { "model"_ok,        "WET"     },
-                    { "l"_ok,            "mu"      },
-                    { "tag"_ok,          "GP2004"  },
-                    { "form-factors"_ok, "BSZ2015" }
+                    { "model"_ok,        "WET"_ov     },
+                    { "l"_ok,            "mu"_ov      },
+                    { "tag"_ok,          "GP2004"_ov  },
+                    { "form-factors"_ok, "BSZ2015"_ov }
                 };
 
                 for (const auto & name : names)
@@ -452,8 +452,8 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 Parameter A = parameters["CKM::A"];
 
                 Options options;
-                options.declare("model"_ok, "WET");
-                options.declare("tag"_ok, "GP2004");
+                options.declare("model"_ok, "WET"_ov);
+                options.declare("tag"_ok, "GP2004"_ov);
 
                 ObservablePtr numerator = Observable::make("B->K^*ll::Abar_FB", parameters, kinematics, options);
                 ObservablePtr denominator = Observable::make("B->K^*ll::BR", parameters, kinematics, options);
@@ -558,11 +558,11 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options o;
-            o.declare("model"_ok, "WET");
-            o.declare("l"_ok, "mu");
-            o.declare("q"_ok, "d");
-            o.declare("tag"_ok, "GP2004");
-            o.declare("form-factors"_ok, "BSZ2015");
+            o.declare("model"_ok, "WET"_ov);
+            o.declare("l"_ok, "mu"_ov);
+            o.declare("q"_ok, "d"_ov);
+            o.declare("tag"_ok, "GP2004"_ov);
+            o.declare("form-factors"_ok, "BSZ2015"_ov);
 
             std::vector<Parameter> variations;
 
@@ -714,12 +714,12 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             p["mass::mu"] = 1.5;
 
             Options oo;
-            oo.declare("model"_ok, "WET");
-            oo.declare("scan-mode"_ok, "cartesian");
-            oo.declare("tag"_ok, "GP2004");
-            oo.declare("form-factors"_ok, "KMPW2010");
-            oo.declare("l"_ok, "mu");
-            oo.declare("q"_ok, "d");
+            oo.declare("model"_ok, "WET"_ov);
+            oo.declare("scan-mode"_ok, "cartesian"_ov);
+            oo.declare("tag"_ok, "GP2004"_ov);
+            oo.declare("form-factors"_ok, "KMPW2010"_ov);
+            oo.declare("l"_ok, "mu"_ov);
+            oo.declare("q"_ok, "d"_ov);
 
             static const double q2 = 14.0;
             static const double q2_max = 19.0;
@@ -772,7 +772,7 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             }
 
             {
-                oo.declare("cp-conjugate"_ok, "true");
+                oo.declare("cp-conjugate"_ok, "true"_ov);
                 BToKstarDilepton d(p, oo);
 
                 auto amps = d.amplitudes(q2);
@@ -824,12 +824,12 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
 
             {
                 Options o{
-                    {"model"_ok, "WET"},
-                    {"scan-mode"_ok, "cartesian"},
-                    {"tag"_ok, "GP2004"},
-                    {"form-factors"_ok, "KMPW2010"},
-                    {"l"_ok, "mu"},
-                    {"q"_ok, "d"}
+                    {"model"_ok, "WET"_ov},
+                    {"scan-mode"_ok, "cartesian"_ov},
+                    {"tag"_ok, "GP2004"_ov},
+                    {"form-factors"_ok, "KMPW2010"_ov},
+                    {"l"_ok, "mu"_ov},
+                    {"q"_ok, "d"_ov}
                 };
                 Kinematics k{{"q2", q2}};
 

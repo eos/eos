@@ -44,7 +44,7 @@ namespace eos
                     throw UnspecifiedOptionError(key);
                 }
 
-                std::string raw_value(options[key]);
+                std::string raw_value(options[key].str());
                 try
                 {
                     _value = std::make_unique<qnp::Name>(raw_value);
@@ -60,7 +60,7 @@ namespace eos
             {
                 if (options.has(key))
                 {
-                    std::string raw_value(options[key]);
+                    std::string raw_value(options[key].str());
                     try
                     {
                         _value = std::make_unique<qnp::Name>(raw_value);
@@ -85,7 +85,7 @@ namespace eos
             std::string _value;
 
         public:
-            SwitchOption(const Options & options, const qnp::OptionKey & key, const std::initializer_list<std::string> & allowed_values)
+            SwitchOption(const Options & options, const qnp::OptionKey & key, const std::initializer_list<qnp::OptionValue> & allowed_values)
             {
                 if (allowed_values.begin() == allowed_values.end())
                 {
@@ -97,16 +97,17 @@ namespace eos
                     throw UnspecifiedOptionError(key, join(allowed_values.begin(), allowed_values.end()));
                 }
 
-                _value = options[key];
+                _value = options[key].str();
 
-                if (std::find(allowed_values.begin(), allowed_values.end(), _value) == allowed_values.end())
+                if (std::find(allowed_values.begin(), allowed_values.end(), qnp::OptionValue(_value)) == allowed_values.end())
                 {
                     throw InvalidOptionValueError(key, _value, join(allowed_values.begin(), allowed_values.end()));
                 }
             }
 
-            SwitchOption(const Options & options, const qnp::OptionKey & key, const std::initializer_list<std::string> & allowed_values, const std::string & default_value) :
-                _value(options.get(key, default_value))
+            SwitchOption(const Options & options, const qnp::OptionKey & key, const std::initializer_list<qnp::OptionValue> & allowed_values,
+                         const qnp::OptionValue & default_value) :
+                _value(options.get(key, default_value).str())
             {
                 if (allowed_values.begin() == allowed_values.end())
                 {
@@ -115,11 +116,11 @@ namespace eos
 
                 if (std::find(allowed_values.begin(), allowed_values.end(), default_value) == allowed_values.end())
                 {
-                    throw InternalError("SwitchOption: The default value '" + default_value + "'is not in the list of allowed values: '"
+                    throw InternalError("SwitchOption: The default value '" + default_value.str() + "' is not in the list of allowed values: '"
                                         + join(allowed_values.begin(), allowed_values.end()) + "'");
                 }
 
-                if (std::find(allowed_values.begin(), allowed_values.end(), _value) == allowed_values.end())
+                if (std::find(allowed_values.begin(), allowed_values.end(), qnp::OptionValue(_value)) == allowed_values.end())
                 {
                     throw InvalidOptionValueError(key, _value, join(allowed_values.begin(), allowed_values.end()));
                 }

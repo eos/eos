@@ -116,7 +116,7 @@ namespace eos
     OptionSpecification
     NonleptonicAmplitudeFactory<PToPP>::option_specification(const qnp::Prefix & process)
     {
-        std::vector<std::string> allowed_values;
+        std::vector<qnp::OptionValue> allowed_values;
 
         for (const auto & ff : NonleptonicAmplitudeFactory<PToPP>::amplitudes)
         {
@@ -126,7 +126,7 @@ namespace eos
             }
         }
 
-        return { "representation"_ok, allowed_values, "" };
+        return { "representation"_ok, allowed_values };
     }
 
     OptionSpecification
@@ -138,7 +138,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result{ "representation"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), "" };
+        OptionSpecification result{ "representation"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 

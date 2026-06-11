@@ -42,55 +42,55 @@ class OptionsTest : public TestCase
             // Creation from initializer list
             {
                 Options options{
-                    { "q"_ok,  "d" },
-                    { "l"_ok, "mu" },
+                    { "q"_ok,  "d"_ov },
+                    { "l"_ok, "mu"_ov },
                 };
 
-                TEST_CHECK_EQUAL("d", options.get("q"_ok, "s"));
-                TEST_CHECK_EQUAL("mu", options.get("l"_ok, "tau"));
+                TEST_CHECK_EQUAL("d"_ov, options.get("q"_ok, "s"_ov));
+                TEST_CHECK_EQUAL("mu"_ov, options.get("l"_ok, "tau"_ov));
             }
 
             // Access
             {
                 Options options;
-                options.declare("foo"_ok, "bar");
+                options.declare("foo"_ok, "bar"_ov);
 
                 TEST_CHECK(options.has("foo"_ok));
                 TEST_CHECK(! options.has("baz"_ok));
-                TEST_CHECK_EQUAL("bar", options.get("foo"_ok, ""));
+                TEST_CHECK_EQUAL("bar"_ov, options.get("foo"_ok, "baz"_ov));
             }
 
             // Merging w/o duplicates
             {
                 Options o1{
-                    { "q"_ok, "d" }
+                    { "q"_ok, "d"_ov }
                 };
 
                 Options o2{
-                    { "l"_ok, "mu" }
+                    { "l"_ok, "mu"_ov }
                 };
 
                 Options o3 = o1 + o2;
 
-                TEST_CHECK_EQUAL("d"_ok, o3.get("q"_ok, "s"));
-                TEST_CHECK_EQUAL("mu"_ok, o3.get("l"_ok, "tau"));
+                TEST_CHECK_EQUAL("d"_ov, o3.get("q"_ok, "s"_ov));
+                TEST_CHECK_EQUAL("mu"_ov, o3.get("l"_ok, "tau"_ov));
             }
 
             // Merging w/ duplicates
             {
                 Options o1{
-                    { "q"_ok, "d" }
+                    { "q"_ok, "d"_ov }
                 };
 
                 Options o2{
-                    { "q"_ok,  "s" },
-                    { "l"_ok, "mu" }
+                    { "q"_ok,  "s"_ov },
+                    { "l"_ok, "mu"_ov }
                 };
 
                 Options o3 = o1 + o2;
 
-                TEST_CHECK_EQUAL("s"_ok, o3.get("q"_ok, "foo"));
-                TEST_CHECK_EQUAL("mu"_ok, o3.get("l"_ok, "tau"));
+                TEST_CHECK_EQUAL("s"_ov, o3.get("q"_ok, "foo"_ov));
+                TEST_CHECK_EQUAL("mu"_ov, o3.get("l"_ok, "tau"_ov));
             }
 
             // Equality/Inequality
@@ -105,16 +105,16 @@ class OptionsTest : public TestCase
                 TEST_CHECK(a == b);
 
                 // populate a
-                a.declare("foo"_ok, "bar");
+                a.declare("foo"_ok, "bar"_ov);
                 TEST_CHECK(! (a == b));
                 TEST_CHECK(a != b);
 
                 // populate b false
-                b.declare("foo"_ok, "baz");
+                b.declare("foo"_ok, "baz"_ov);
                 TEST_CHECK(! (a == b));
 
                 // populate b correctly
-                b.declare("foo"_ok, "bar");
+                b.declare("foo"_ok, "bar"_ov);
                 TEST_CHECK(a == b);
 
                 // copy
@@ -126,22 +126,22 @@ class OptionsTest : public TestCase
             // Iteration (check for names, values, and lexicographical order)
             {
                 Options o{
-                    {     "l"_ok, "tau" },
-                    {     "q"_ok,   "u" },
-                    { "model"_ok, "CKM" },
+                    {     "l"_ok, "tau"_ov },
+                    {     "q"_ok,   "u"_ov },
+                    { "model"_ok, "CKM"_ov },
                 };
 
                 auto i = o.begin();
                 TEST_CHECK("l"_ok == i->first);
-                TEST_CHECK("tau" == i->second);
+                TEST_CHECK("tau"_ov == i->second);
 
                 ++i;
                 TEST_CHECK("model"_ok == i->first);
-                TEST_CHECK("CKM" == i->second);
+                TEST_CHECK("CKM"_ov == i->second);
 
                 ++i;
                 TEST_CHECK("q"_ok == i->first);
-                TEST_CHECK("u" == i->second);
+                TEST_CHECK("u"_ov == i->second);
 
                 ++i;
                 TEST_CHECK(o.end() == i);
@@ -163,7 +163,7 @@ class NameOptionTest : public TestCase
             // Creation with valid default value, value = default value
             {
                 NameOption no{
-                    Options{ { "key"_ok, "value1" }, { "unused"_ok, "foo" } },
+                    Options{ { "key"_ok, "value1"_ov }, { "unused"_ok, "foo"_ov } },
                     "key"_ok,
                     qnp::Name("value1")
                 };
@@ -172,14 +172,14 @@ class NameOptionTest : public TestCase
 
             // Creation with unspecified value
             {
-                NameOption no{ Options{ { "unused"_ok, "foo" } }, "key"_ok, qnp::Name("value1") };
+                NameOption no{ Options{ { "unused"_ok, "foo"_ov } }, "key"_ok, qnp::Name("value1") };
                 TEST_CHECK_EQUAL(no.value(), qnp::Name("value1"));
             }
 
             // Creation without default value
             {
                 NameOption no{
-                    Options{ { "key"_ok, "value4" }, { "unused"_ok, "foo" } },
+                    Options{ { "key"_ok, "value4"_ov }, { "unused"_ok, "foo"_ov } },
                     "key"_ok,
                 };
                 TEST_CHECK_EQUAL(no.value(), qnp::Name("value4"));
@@ -187,21 +187,8 @@ class NameOptionTest : public TestCase
 
             // Creation with unspecified value, non-empty list, no default value
             {
-                auto test = []() { NameOption no{ Options{ { "unused"_ok, "foo" } }, "key"_ok }; };
+                auto test = []() { NameOption no{ Options{ { "unused"_ok, "foo"_ov } }, "key"_ok }; };
                 TEST_CHECK_THROWS(UnspecifiedOptionError, test());
-            }
-
-            // Creation with invalid value
-            {
-                auto test = []()
-                {
-                    NameOption so{
-                        Options{ { "key"_ok, "invalid@value" }, { "unused"_ok, "foo" } },
-                        "key"_ok,
-                        qnp::Name("value1")
-                    };
-                };
-                TEST_CHECK_THROWS(InvalidOptionValueError, test());
             }
         }
 } name_option_test;
@@ -220,10 +207,10 @@ class SwitchOptionTest : public TestCase
             // Creation with valid default value, value = default value, non-empty list
             {
                 SwitchOption so{
-                    Options{ { "key"_ok, "value1" }, { "unused"_ok, "foo" } },
+                    Options{ { "key"_ok, "value1"_ov }, { "unused"_ok, "foo"_ov } },
                     "key"_ok,
-                    { "value1", "value2", "value4" },
-                    "value1"
+                    { "value1"_ov, "value2"_ov, "value4"_ov },
+                    "value1"_ov
                 };
                 TEST_CHECK_EQUAL(so.value(), "value1");
             }
@@ -231,10 +218,10 @@ class SwitchOptionTest : public TestCase
             // Creation with unspecified value, non-empty list
             {
                 SwitchOption so{
-                    Options{ { "unused"_ok, "foo" } },
+                    Options{ { "unused"_ok, "foo"_ov } },
                     "key"_ok,
-                    { "value1", "value2", "value4" },
-                    "value1"
+                    { "value1"_ov, "value2"_ov, "value4"_ov },
+                    "value1"_ov
                 };
                 TEST_CHECK_EQUAL(so.value(), "value1");
             }
@@ -242,9 +229,9 @@ class SwitchOptionTest : public TestCase
             // Creation with non-empty list, no default value
             {
                 SwitchOption so{
-                    Options{ { "key"_ok, "value4" }, { "unused"_ok, "foo" } },
+                    Options{ { "key"_ok, "value4"_ov }, { "unused"_ok, "foo"_ov } },
                     "key"_ok,
-                    { "value1", "value2", "value4" }
+                    { "value1"_ov, "value2"_ov, "value4"_ov }
                 };
                 TEST_CHECK_EQUAL(so.value(), "value4");
             }
@@ -254,9 +241,9 @@ class SwitchOptionTest : public TestCase
                 auto test = []()
                 {
                     SwitchOption so{
-                        Options{ { "unused"_ok, "foo" } },
+                        Options{ { "unused"_ok, "foo"_ov } },
                         "key"_ok,
-                        { "value1", "value2", "value4" }
+                        { "value1"_ov, "value2"_ov, "value4"_ov }
                     };
                 };
                 TEST_CHECK_THROWS(UnspecifiedOptionError, test());
@@ -267,10 +254,10 @@ class SwitchOptionTest : public TestCase
                 auto test = []()
                 {
                     SwitchOption so{
-                        Options{ { "key"_ok, "value3" }, { "unused"_ok, "foo" } },
+                        Options{ { "key"_ok, "value3"_ov }, { "unused"_ok, "foo"_ov } },
                         "key"_ok,
-                        { "value1", "value2", "value4" },
-                        "value1"
+                        { "value1"_ov, "value2"_ov, "value4"_ov },
+                        "value1"_ov
                     };
                 };
                 TEST_CHECK_THROWS(InvalidOptionValueError, test());
@@ -281,10 +268,10 @@ class SwitchOptionTest : public TestCase
                 auto test = []()
                 {
                     SwitchOption so{
-                        Options{ { "key"_ok, "value1" }, { "unused"_ok, "foo" } },
+                        Options{ { "key"_ok, "value1"_ov }, { "unused"_ok, "foo"_ov } },
                         "key"_ok,
                         {},
-                        "value1"
+                        "value1"_ov
                     };
                 };
                 TEST_CHECK_THROWS(InternalError, test());
@@ -305,14 +292,14 @@ class SpecifiedOptionTest : public TestCase
         {
             // specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "key-with-full-specification"_ok, { "value1"s, "value2"s, "value4"s }, "value1"s },
-                { "key-without-default"_ok, { "value1"s, "value2"s, "value4"s } }
+                { "key-with-full-specification"_ok, { "value1"_ov, "value2"_ov, "value4"_ov }, "value1"_ov },
+                { "key-without-default"_ok, { "value1"_ov, "value2"_ov, "value4"_ov } }
             };
 
             // Creation of fully specified option, with value
             {
                 SpecifiedOption so{
-                    Options{ { "key-with-full-specification"_ok, "value1" }, { "unused"_ok, "foo" } },
+                    Options{ { "key-with-full-specification"_ok, "value1"_ov }, { "unused"_ok, "foo"_ov } },
                     specifications,
                     "key-with-full-specification"_ok
                 };
@@ -321,14 +308,14 @@ class SpecifiedOptionTest : public TestCase
 
             // Creation of fully specified option, without value
             {
-                SpecifiedOption so{ Options{ { "unused"_ok, "foo" } }, specifications, "key-with-full-specification"_ok };
+                SpecifiedOption so{ Options{ { "unused"_ok, "foo"_ov } }, specifications, "key-with-full-specification"_ok };
                 TEST_CHECK_EQUAL(so.value(), "value1");
             }
 
             // Creation of specified option without default value, with value
             {
                 SpecifiedOption so{
-                    Options{ { "key-without-default"_ok, "value4" }, { "unused"_ok, "foo" } },
+                    Options{ { "key-without-default"_ok, "value4"_ov }, { "unused"_ok, "foo"_ov } },
                     specifications,
                     "key-without-default"_ok
                 };
@@ -336,7 +323,7 @@ class SpecifiedOptionTest : public TestCase
             }
             // Creation of specified option without default value, without value
             {
-                auto test = [specifications]() { SpecifiedOption so{ Options{ { "unused"_ok, "foo" } }, specifications, "key-without-default"_ok }; };
+                auto test = [specifications]() { SpecifiedOption so{ Options{ { "unused"_ok, "foo"_ov } }, specifications, "key-without-default"_ok }; };
                 TEST_CHECK_THROWS(UnspecifiedOptionError, test());
             }
         }
@@ -355,18 +342,18 @@ class RestrictedOptionTest : public TestCase
         {
             // specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "key-with-default"_ok, { "value1"s, "value2"s, "value4"s }, "value1"s },
-                { "key-without-value"_ok, { "foo"s, "bar"s }, "foo"s },
-                { "key-without-default"_ok, { "value1"s, "value2"s, "value4"s } },
-                { "key-without-value-and-default"_ok, { "foo"s, "bar"s } },
-                { "key-with-invalid-default"_ok, { "value1"s, "value2"s, "value4"s }, "value3"s },
-                { "key-with-invalid-value"_ok, { "value1"s, "value2"s, "value4"s }, "value1"s },
+                { "key-with-default"_ok, { "value1"_ov, "value2"_ov, "value4"_ov }, "value1"_ov },
+                { "key-without-value"_ok, { "foo"_ov, "bar"_ov }, "foo"_ov },
+                { "key-without-default"_ok, { "value1"_ov, "value2"_ov, "value4"_ov } },
+                { "key-without-value-and-default"_ok, { "foo"_ov, "bar"_ov } },
+                { "key-with-invalid-default"_ok, { "value1"_ov, "value2"_ov, "value4"_ov }, "value3"_ov },
+                { "key-with-invalid-value"_ok, { "value1"_ov, "value2"_ov, "value4"_ov }, "value1"_ov },
             };
 
             // Creation of option with valid default value, with value = default value
             {
                 RestrictedOption so{
-                    Options{ { "key-with-default"_ok, "value1" }, { "unused"_ok, "foo" } },
+                    Options{ { "key-with-default"_ok, "value1"_ov }, { "unused"_ok, "foo"_ov } },
                     specifications,
                     "key-with-default"_ok
                 };
@@ -375,14 +362,14 @@ class RestrictedOptionTest : public TestCase
 
             // Creation of option with valid default value, with unspecified value
             {
-                RestrictedOption so{ Options{ { "unused"_ok, "foo" } }, specifications, "key-without-value"_ok };
+                RestrictedOption so{ Options{ { "unused"_ok, "foo"_ov } }, specifications, "key-without-value"_ok };
                 TEST_CHECK_EQUAL(so.value(), "foo");
             }
 
             // Creation of option without default valuee, with valid value
             {
                 RestrictedOption so{
-                    Options{ { "key-without-default"_ok, "value4" }, { "unused"_ok, "foo" } },
+                    Options{ { "key-without-default"_ok, "value4"_ov }, { "unused"_ok, "foo"_ov } },
                     specifications,
                     "key-without-default"_ok
                 };
@@ -391,13 +378,13 @@ class RestrictedOptionTest : public TestCase
 
             // Creation of option without default value, with unspecified valu
             {
-                auto test = [specifications]() { RestrictedOption so{ Options{ { "unused"_ok, "foo" } }, specifications, "key-without-value-and-default"_ok }; };
+                auto test = [specifications]() { RestrictedOption so{ Options{ { "unused"_ok, "foo"_ov } }, specifications, "key-without-value-and-default"_ok }; };
                 TEST_CHECK_THROWS(UnspecifiedOptionError, test());
             }
 
             // Creation with invalid value
             {
-                auto test = [specifications]() { RestrictedOption so{ Options{ { "unused"_ok, "foo" } }, specifications, "key-with-invalid-default"_ok }; };
+                auto test = [specifications]() { RestrictedOption so{ Options{ { "unused"_ok, "foo"_ov } }, specifications, "key-with-invalid-default"_ok }; };
                 TEST_CHECK_THROWS(InvalidOptionValueError, test());
             }
 
@@ -406,7 +393,7 @@ class RestrictedOptionTest : public TestCase
                 auto test = [specifications]()
                 {
                     RestrictedOption so{
-                        Options{ { "key-with-invalid-value"_ok, "value3" }, { "unused"_ok, "foo" } },
+                        Options{ { "key-with-invalid-value"_ok, "value3"_ov }, { "unused"_ok, "foo"_ov } },
                         specifications,
                         "key-with-invalid-value"_ok
                     };
@@ -429,47 +416,47 @@ class IsospinOptionTest : public TestCase
         {
             // correctly specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "I"_ok, { "0|2"s }, "0"s },
+                { "I"_ok, { "0|2"_ov }, "0"_ov },
             };
 
             // incorrectly specify permitted options
             std::vector<OptionSpecification> invalid_specifications{
-                { "I"_ok, std::vector<std::string>{ "0|2"s }, "0"s },
+                { "I"_ok, std::vector<qnp::OptionValue>{ "0|2"_ov }, "0"_ov },
             };
 
             // Creation of option with invalid specification
             {
-                auto test = [invalid_specifications]() { IsospinOption so{ Options{ { "I"_ok, "0" } }, invalid_specifications, "I"_ok }; };
+                auto test = [invalid_specifications]() { IsospinOption so{ Options{ { "I"_ok, "0"_ov } }, invalid_specifications, "I"_ok }; };
                 TEST_CHECK_THROWS(InternalError, test());
             }
 
             // Creation of option with valid default value, with value = default value
             {
-                IsospinOption so{ Options{ { "I"_ok, "0" } }, specifications, "I"_ok };
+                IsospinOption so{ Options{ { "I"_ok, "0"_ov } }, specifications, "I"_ok };
                 TEST_CHECK_EQUAL(so.value(), Isospin::zero);
             }
 
             // Creation of option with valid default value, with value != default value
             {
-                IsospinOption so{ Options{ { "I"_ok, "2" } }, specifications, "I"_ok };
+                IsospinOption so{ Options{ { "I"_ok, "2"_ov } }, specifications, "I"_ok };
                 TEST_CHECK_EQUAL(so.value(), Isospin::two);
             }
 
             // Creation of option with valid default value, with value != default value but containing default value
             {
-                IsospinOption so{ Options{ { "I"_ok, "0|2" } }, specifications, "I"_ok };
+                IsospinOption so{ Options{ { "I"_ok, "0|2"_ov } }, specifications, "I"_ok };
                 TEST_CHECK_EQUAL(so.value(), Isospin::zero | Isospin::two);
             }
 
             // Creation with invalid value
             {
-                auto test = [specifications]() { IsospinOption so{ Options{ { "I"_ok, "1" } }, specifications, "I"_ok }; };
+                auto test = [specifications]() { IsospinOption so{ Options{ { "I"_ok, "1"_ov } }, specifications, "I"_ok }; };
                 TEST_CHECK_THROWS(InvalidOptionValueError, test());
             }
 
             // Creation with invalid value but containing a valid value
             {
-                auto test = [specifications]() { IsospinOption so{ Options{ { "I"_ok, "0|1" } }, specifications, "I"_ok }; };
+                auto test = [specifications]() { IsospinOption so{ Options{ { "I"_ok, "0|1"_ov } }, specifications, "I"_ok }; };
                 TEST_CHECK_THROWS(InvalidOptionValueError, test());
             }
         }
@@ -488,47 +475,47 @@ class PartialWaveOptionTest : public TestCase
         {
             // correctly specify permitted options
             std::vector<OptionSpecification> specifications{
-                { "L"_ok, "S|P|D"s, "S|P"s },
+                { "L"_ok, "S|P|D"_ov, "S|P"_ov },
             };
 
             // incorrectly specify permitted options
             std::vector<OptionSpecification> invalid_specifications{
-                { "L"_ok, std::vector<std::string>{ "S|P|D"s }, "S|P"s },
+                { "L"_ok, std::vector<qnp::OptionValue>{ "S|P|D"_ov }, "S|P"_ov },
             };
 
             // Creation of option with invalid specification
             {
-                auto test = [invalid_specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "S|P" } }, invalid_specifications, "L"_ok }; };
+                auto test = [invalid_specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "S|P"_ov } }, invalid_specifications, "L"_ok }; };
                 TEST_CHECK_THROWS(InternalError, test());
             }
 
             // Creation of option with valid default value, with value = default value
             {
-                PartialWaveOption so{ Options{ { "L"_ok, "S|P" } }, specifications, "L"_ok };
+                PartialWaveOption so{ Options{ { "L"_ok, "S|P"_ov } }, specifications, "L"_ok };
                 TEST_CHECK_EQUAL(so.value(), PartialWave::S | PartialWave::P);
             }
 
             // Creation of option with valid default value, with value != default value but part of default value
             {
-                PartialWaveOption so{ Options{ { "L"_ok, "P" } }, specifications, "L"_ok };
+                PartialWaveOption so{ Options{ { "L"_ok, "P"_ov } }, specifications, "L"_ok };
                 TEST_CHECK_EQUAL(so.value(), PartialWave::P);
             }
 
             // Creation of option with valid default value, with value != default value but containing default value
             {
-                PartialWaveOption so{ Options{ { "L"_ok, "S|P|D" } }, specifications, "L"_ok };
+                PartialWaveOption so{ Options{ { "L"_ok, "S|P|D"_ov } }, specifications, "L"_ok };
                 TEST_CHECK_EQUAL(so.value(), PartialWave::S | PartialWave::P | PartialWave::D);
             }
 
             // Creation with invalid value
             {
-                auto test = [specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "F" } }, specifications, "L"_ok }; };
+                auto test = [specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "F"_ov } }, specifications, "L"_ok }; };
                 TEST_CHECK_THROWS(InvalidOptionValueError, test());
             }
 
             // Creation with invalid value but containing a valid value
             {
-                auto test = [specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "P|F" } }, specifications, "L"_ok }; };
+                auto test = [specifications]() { PartialWaveOption so{ Options{ { "L"_ok, "P|F"_ov } }, specifications, "L"_ok }; };
                 TEST_CHECK_THROWS(InvalidOptionValueError, test());
             }
         }

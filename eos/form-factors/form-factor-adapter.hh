@@ -75,7 +75,7 @@ namespace eos
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors.get()))
             {
                 if (! _form_factors)
-                    throw NoSuchFormFactorError(process.str(), options["form-factors"_ok]);
+                    throw NoSuchFormFactorError(process.str(), options["form-factors"_ok].str());
 
                 uses(*_form_factors);
                 auto _register_kinematics = [this](const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type... args)

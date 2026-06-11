@@ -30,7 +30,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
 
     /* PP -> PP Processes */
 
@@ -66,7 +65,7 @@ namespace eos
     OptionSpecification
     ScatteringAmplitudeFactory<PPToPP>::option_specification(const qnp::Prefix & process)
     {
-        std::vector<std::string> allowed_values;
+        std::vector<qnp::OptionValue> allowed_values;
 
         for (const auto & t : ScatteringAmplitudeFactory<PPToPP>::scattering_amplitudes)
         {
@@ -74,7 +73,7 @@ namespace eos
                 allowed_values.push_back(std::get<0>(t).name_part().str());
         }
 
-        return { "scattering-amplitudes"_ok, allowed_values, ""s };
+        return { "scattering-amplitudes"_ok, allowed_values };
     }
 
     OptionSpecification
@@ -86,7 +85,7 @@ namespace eos
             allowed_values.insert(std::get<0>(t).name_part().str());
         }
 
-        OptionSpecification result { "scattering-amplitudes"_ok, std::vector<std::string>(allowed_values.cbegin(), allowed_values.cend()), ""s };
+        OptionSpecification result { "scattering-amplitudes"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 

@@ -44,7 +44,7 @@ class FLvD2022Test :
                 Parameters p = Parameters::Defaults();
                 Options o
                 {
-                    { "alpha-s"_ok, "naive" }
+                    { "alpha-s"_ok, "naive"_ov }
                 };
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
@@ -70,7 +70,7 @@ class FLvD2022Test :
                 Parameters p = Parameters::Defaults();
                 Options o
                 {
-                    { "alpha-s"_ok, "naive" }
+                    { "alpha-s"_ok, "naive"_ov }
                 };
 
                 p["B_u::mu_0@FLvD2022"] = 1.0;
@@ -110,7 +110,7 @@ class FLvD2022Test :
                 Kinematics k = Kinematics({ { "tau", 0.4 }, {"mu", p["B_u::mu_0@FLvD2022"]} });
                 Options o
                 {
-                    { "alpha-s"_ok, "naive" }
+                    { "alpha-s"_ok, "naive"_ov }
                 };
 
                 auto phitilde = Observable::make("B::phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
@@ -138,7 +138,7 @@ class FLvD2022Test :
                 Kinematics k = Kinematics({ {"mu", 1.0} });
                 Options o
                 {
-                    { "alpha-s"_ok, "naive" }
+                    { "alpha-s"_ok, "naive"_ov }
                 };
 
                 auto L0 = Observable::make("B::L0@FLvD2022", p, k, o);

@@ -28,7 +28,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKDileptonAmplitudes<tag::GvDV2020>::BToKDileptonAmplitudes(const Parameters & p,
@@ -36,8 +35,8 @@ namespace eos
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
-        f_K(p["decay-constant::K_" + o.get("q"_ok, "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d"_ov).str()], *this),
+        f_K(p["decay-constant::K_" + o.get("q"_ok, "d"_ov).str()], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         q(o, options, "q"_ok),
         opt_nonlocal_formfactor(o, options, "nonlocal-formfactor"_ok),
@@ -53,8 +52,8 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::GvDV2020>::options
     {
-        { "q"_ok, { "d"s, "u"s },  "d"s },
-        { "nonlocal-formfactor"_ok, { "GvDV2020"s, "GRvDV2022order5"s, "GRvDV2022order6"s }, "GvDV2020"s }
+        { "q"_ok, { "d"_ov, "u"_ov },  "d"_ov },
+        { "nonlocal-formfactor"_ok, { "GvDV2020"_ov, "GRvDV2022order5"_ov, "GRvDV2022order6"_ov }, "GvDV2020"_ov }
     };
 
     BToKDilepton::DipoleFormFactors

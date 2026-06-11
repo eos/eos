@@ -67,10 +67,10 @@ class LambdaCToLambdaLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model"_ok,        "WET"        },
-                    { "form-factors"_ok, "BMRvD2022"  },
-                    { "l"_ok,            "mu"         },
-                    { "B"_ok,            "Lambda"     }
+                    { "model"_ok,        "WET"_ov        },
+                    { "form-factors"_ok, "BMRvD2022"_ov  },
+                    { "l"_ok,            "mu"_ov         },
+                    { "B"_ok,            "Lambda"_ov     }
                 };
 
                 LambdaCToOneHalfPlusLeptonNeutrino d(p, oo);

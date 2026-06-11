@@ -78,7 +78,7 @@ class BToXsGammaNLOTest :
                 p["B->B::mu_pi^2@1GeV"] = 0.4;
                 p["B->B::mu_G^2@1GeV"] = 0.36;
 
-                Options oo { {"model"_ok, "WET"} };
+                Options oo { {"model"_ok, "WET"_ov} };
 
                 const double eps = 1e-9;
                 BToXsGamma<NLO> decay(p, oo);

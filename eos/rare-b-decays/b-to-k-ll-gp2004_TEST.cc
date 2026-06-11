@@ -94,9 +94,9 @@ class BToKDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "GP2004"},
-                    {"form-factors"_ok, "BSZ2015"}
+                    {"model"_ok, "WET"_ov},
+                    {"tag"_ok, "GP2004"_ov},
+                    {"form-factors"_ok, "BSZ2015"_ov}
                 };
 
                 BToKDilepton d(p, oo);
@@ -170,10 +170,10 @@ class BToKDileptonLowRecoilTest :
 
                 Options oo
                 {
-                    {"model"_ok, "WET"},
-                    {"tag"_ok, "GP2004"},
-                    {"l"_ok, "mu"},
-                    {"form-factors"_ok, "BSZ2015"}
+                    {"model"_ok, "WET"_ov},
+                    {"tag"_ok, "GP2004"_ov},
+                    {"l"_ok, "mu"_ov},
+                    {"form-factors"_ok, "BSZ2015"_ov}
                 };
 
                 BToKDilepton d(p, oo);
@@ -230,11 +230,11 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
 
             Options o
             {
-                {"model"_ok, "WET"},
-                {"tag"_ok, "GP2004"},
-                {"l"_ok, "mu"},
-                {"q"_ok, "u"},
-                {"form-factors"_ok, "KMPW2010"}
+                {"model"_ok, "WET"_ov},
+                {"tag"_ok, "GP2004"_ov},
+                {"l"_ok, "mu"_ov},
+                {"q"_ok, "u"_ov},
+                {"form-factors"_ok, "KMPW2010"_ov}
             };
 
             std::vector<Parameter> variations;

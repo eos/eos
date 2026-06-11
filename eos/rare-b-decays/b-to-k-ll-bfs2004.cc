@@ -30,7 +30,6 @@
 
 namespace eos
 {
-    using namespace std::literals::string_literals;
     using namespace std::placeholders;
 
     BToKDileptonAmplitudes<tag::BFS2004>::BToKDileptonAmplitudes(const Parameters & p,
@@ -39,8 +38,8 @@ namespace eos
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c(p["mass::c"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        f_B(p["decay-constant::B_" + o.get("q"_ok, "d")], *this),
-        f_K(p["decay-constant::K_" + o.get("q"_ok, "d")], *this),
+        f_B(p["decay-constant::B_" + o.get("q"_ok, "d"_ov).str()], *this),
+        f_K(p["decay-constant::K_" + o.get("q"_ok, "d"_ov).str()], *this),
         lambda_B_p_inv(p["B::1/lambda_B_p"], *this),
         a_1(p["K::a_1@1GeV"], *this),
         a_2(p["K::a_2@1GeV"], *this),
@@ -65,7 +64,7 @@ namespace eos
         }
 
         // Select the appropriate calculator for the QCDF integrals
-        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"));
+        std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"_ov).str());
         if ("mixed" == qcdf_integrals)
         {
             qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case,
@@ -106,7 +105,7 @@ namespace eos
     const std::vector<OptionSpecification>
     BToKDileptonAmplitudes<tag::BFS2004>::options
     {
-        { "q"_ok, { "d"s, "u"s }, "d"s },
+        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov },
     };
 
     BToKDilepton::DipoleFormFactors

@@ -40,7 +40,7 @@ namespace eos
                 // B -> K nubar nu
                 make_signal_pdf("B^-->K^-nunu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to \bar{K} \bar\nu\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "q"_ok, "u" }, { "I"_ok, "1/2" }, { "D"_ok, "s" } },
+                    Options{ { "q"_ok, "u"_ov }, { "I"_ok, "1/2"_ov }, { "D"_ok, "s"_ov } },
                     "B->Knunu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -57,7 +57,7 @@ namespace eos
                     R"(PDF for the decay $\bar{B}\to \bar{K} \ell^+\ell^-$ as a function of the invariant dilepton mass squared $q^2$
                     and the cosine of the angle $\theta_\ell$ between the positively charged lepton and the negative $B$
                     flight direction in the $\ell^+\ell^-$ rest frame.)",
-                    Options{ {"tag"_ok, "BFS2004"} },
+                    Options{ {"tag"_ok, "BFS2004"_ov} },
                     "B->Kll::UnnormalizedPDF(q2,cos(theta_l))",
                     std::make_tuple(
                         "q2"s,
@@ -88,7 +88,7 @@ namespace eos
                 // B -> K^* nu nu
                 make_signal_pdf("B^-->K^*-nunu::P(q2)",
                     R"(PDF for the decay $\bar{B}\to \bar{K}^*(\to \bar{K}\pi) \bar\nu\nu$ as a function of the invariant dilepton mass squared $q^2$.)",
-                    Options{ { "q"_ok, "u" }, { "I"_ok, "1/2" }, { "D"_ok, "s" } },
+                    Options{ { "q"_ok, "u"_ov }, { "I"_ok, "1/2"_ov }, { "D"_ok, "s"_ov } },
                     "B->K^*nunu::UnnormalizedPDF(q2)",
                     std::make_tuple(
                         "q2"s
@@ -106,7 +106,7 @@ namespace eos
                     the cosine of the angle $\theta_K$ between the $\bar{K}$ and the negative $\ell^+\ell^-$ flight direction,
                     the cosine of the angle $\theta_\ell$ between the positively charged lepton and the negative $B$ flight direction in the $\ell^+\ell^-$ rest frame,
                     and the azimuthal angle $\phi$ between the two decay planes.)",
-                    Options{ {"tag"_ok, "BFS2004"} },
+                    Options{ {"tag"_ok, "BFS2004"_ov} },
                     "B->K^*ll::UnnormalizedPDF(q2,cos(theta_l),cos(theta_K),phi)",
                     std::make_tuple(
                         "q2"s,
