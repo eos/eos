@@ -23,6 +23,9 @@
   - `B->K^*ll::d^2Gamma@LargeRecoil` -> `B->K^*ll::P(q2,cos(theta_l))`
 - Make ``pypmc`` an optional Python dependency and adjust the documentation (D. van Dyk)
 - Split the ``eos.data`` package into multiple modules, one per class (D. van Dyk)
+- Allow the characters `|`, `(`, `)`, and `*` in ``qnp::OptionValue`` (D. van Dyk)
+- Switch ``Options`` to use ``qnp::OptionValue`` in lieu of ``std::string`` for its option values; hard-coded option values are now expressed using the ``_ov`` user-defined literal (D. van Dyk)
+- Use ``qnp::OptionValue`` keys in the the factory method ``Model::make`` (D. van Dyk)
 
 ### Added
 
@@ -45,6 +48,8 @@
   - `B^+->pi^+pi^-lnu::PDF(q2,k2,cos(theta_pi))`
 - Expand the unit test coverage of the Python interface (D. van Dyk)
 - Add a workflow to determine code coverage with test cases (D. van Dyk)
+- Add comparison operators for ``qnp::OptionValue`` (D. van Dyk)
+- Add an output stream operator for ``qnp::OptionValue`` (D. van Dyk)
 
 ### Removed
 
