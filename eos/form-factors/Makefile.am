@@ -51,6 +51,9 @@ libeosformfactors_la_SOURCES = \
 	parametric-se-impl-onehalfplus-to-onehalfplus.hh \
 	parametric-se-impl-p-to-p.hh \
 	parametric-se-impl-p-to-v.hh \
+	parametric-sse.hh parametric-sse.cc \
+	parametric-sse-impl-p-to-p.hh \
+	parametric-sse-impl-p-to-v.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	psd-lcdas.cc psd-lcdas.hh \
 	rho-lcdas.cc rho-lcdas.hh \
@@ -90,6 +93,7 @@ include_eos_rarebdecays_HEADERS = \
 	parametric-kkrvd2024.hh \
 	parametric-kmpw2010.hh \
 	parametric-se.hh \
+	parametric-sse.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
