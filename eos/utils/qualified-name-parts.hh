@@ -23,6 +23,7 @@
 
 #include <eos/utils/stringify.hh>
 
+#include <ostream>
 #include <string>
 
 namespace eos
@@ -148,6 +149,12 @@ namespace eos
                 inline bool operator== (const OptionValue & rhs) const  = default;
                 inline bool operator< (const OptionValue & rhs) const   = default;
         };
+
+        inline std::ostream &
+        operator<< (std::ostream & os, const OptionValue & value)
+        {
+            return os << value.str();
+        }
     } // namespace qnp
 
     inline qnp::OptionKey
