@@ -1,0 +1,167 @@
+on:
+  # Run once weekly, 2h before the ``Report Activity`` workflow
+  # (which runs at '5 7 * * TUE').
+  schedule:
+    - cron: '5 5 * * TUE'
+
+  # Allow manual triggering.
+  workflow_dispatch:
+
+  # Also run when a GitHub release is published.
+  release:
+    types: [ published ]
+
+name: Determine Code Coverage
+
+concurrency:
+  group: Coverage
+  cancel-in-progress: true
+
+jobs:
+    coverage:
+        # In contrast to the PyPI and Ubuntu builds we only build on the most
+        # recent Ubuntu EOS image, using g++ so that we can use gcov/gcovr to
+        # determine the C++ code coverage.
+        name: Determine C++ and Python code coverage
+        runs-on: ubuntu-24.04
+        timeout-minutes: 120
+        container:
+            image: eoshep/ubuntu-resolute:2315df29acac4d7723224dd904b59d02ef89ecf6
+        env:
+            CXX: g++
+            # Disable optimisation/LTO and enable gcov instrumentation so that
+            # the C++ coverage data is meaningful and complete.
+            CXXFLAGS: "-O0 -g --coverage -fprofile-update=atomic"
+            LDFLAGS: "--coverage"
+            # Collect the Python coverage data files in a single, fixed location.
+            COVERAGE_FILE: "${{ github.workspace }}/.coverage"
+            COVERAGE_RCFILE: "${{ github.workspace }}/.coveragerc"
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v5
+              with:
+                path: _src/
+
+            - name: Fetch tags
+              shell: bash
+              run: |
+                pushd _src
+                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+                popd
+
+            - name: Install coverage tooling
+              shell: bash
+              run: |
+                python3 -m pip install --upgrade 'gcovr>=6.0' coverage \
+                  || python3 -m pip install --break-system-packages --upgrade 'gcovr>=6.0' coverage
+
+            - name: Create coverage configuration
+              shell: bash
+              run: |
+                # Restrict the Python coverage to the 'eos' package and run in
+                # parallel mode, since 'make check' executes each test in its
+                # own process.
+                cat > "${COVERAGE_RCFILE}" <<'EOF'
+                [run]
+                parallel = True
+                source = eos
+                EOF
+
+            - name: Configure
+              shell: bash
+              run: |
+                pushd _src
+                ./autogen.bash
+                popd
+                mkdir -p _build
+                pushd _build
+                which ${CXX} || ( echo c++ compiler not found ; exit 1 )
+                ../_src/configure \
+                  --enable-python \
+                  --prefix=/opt/venv/ \
+                  || ( cat config.log ; exit 2 )
+                popd
+
+            - name: Build
+              shell: bash
+              run: |
+                pushd _build
+                make -j4 all
+                popd
+
+            - name: Run tests with coverage instrumentation
+              shell: bash
+              run: |
+                pushd _build
+                # Run 'make check' wrapping the Python interpreter with
+                # 'coverage run' so that the Python tests are instrumented.
+                # The C++ tests are instrumented at compile time via gcov.
+                # Do not abort on test failures so that the coverage data is
+                # collected regardless.
+                make check PYTHON="python3 -m coverage run" || echo "::warning::Some tests failed; coverage data still collected"
+                popd
+
+            - name: Determine C++ coverage
+              shell: bash
+              run: |
+                mkdir -p _intermediate
+                # Produce only the machine-readable summary needed for the
+                # overall percentage (printing a human-readable summary to the
+                # log). The full intermediate report is far too large to commit.
+                gcovr \
+                  --root _src \
+                  --object-directory _build \
+                  --filter '_src/eos/' \
+                  --exclude '.*_TEST\.' \
+                  --gcov-ignore-parse-errors \
+                  --json-summary _intermediate/coverage-cpp-summary.json \
+                  --txt
+
+            - name: Determine Python coverage
+              shell: bash
+              run: |
+                # Combine the per-process coverage data files ...
+                python3 -m coverage combine || echo "::warning::No Python coverage data to combine"
+                # ... and produce only the summary needed for the overall
+                # percentage (printing a human-readable summary to the log).
+                python3 -m coverage json -o _intermediate/coverage-python.json
+                python3 -m coverage report || true
+
+            - name: Clone the coverage repository
+              shell: bash
+              env:
+                GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
+              run: |
+                [[ -n ${GITHUB_ACCESS_TOKEN} ]] || ( echo "::error::GITHUB_ACCESS_TOKEN is not set" ; exit 1 )
+                git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/coverage" _coverage
+
+            - name: Update summary and badge
+              shell: bash
+              run: |
+                export DATE=$(date -u +%Y-%m-%d)
+                # Append the overall percentages to 'coverage.csv' and generate
+                # 'badge.svg' from the most recent entry.
+                python3 _src/.github/scripts/coverage-summary.py \
+                  --date "${DATE}" \
+                  --cpp-summary _intermediate/coverage-cpp-summary.json \
+                  --python-json _intermediate/coverage-python.json \
+                  --csv _coverage/coverage.csv \
+                  --badge _coverage/badge.svg
+
+            - name: Commit and push the coverage results
+              shell: bash
+              run: |
+                export DATE=$(date -u +%Y-%m-%d)
+                # Include the release tag in the commit message when triggered
+                # by a published release.
+                COMMIT_MSG="Update code coverage for ${DATE}"
+                if [[ "${{ github.event_name }}" == "release" ]] ; then
+                    COMMIT_MSG="${COMMIT_MSG} (release ${{ github.event.release.tag_name }})"
+                fi
+                pushd _coverage
+                git config user.name  "EOS"
+                git config user.email "eos-developers@googlegroups.com"
+                git add --all
+                git commit --allow-empty -m "${COMMIT_MSG}"
+                git push
+                popd
