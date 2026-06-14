@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Danny van Dyk
+# Copyright (c) 2024-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -89,6 +89,40 @@ class InsetFigureTests(unittest.TestCase):
             figure.draw()
         except Exception as e:
             self.fail(f"Error when testing figure of type 'inset': {e}")
+
+
+class GridFigureTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'grid'
+            shape: [1, 2]
+            plots:
+              - xaxis: { label: '$q^2$' }
+                yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+                items:
+                  - type: 'observable'
+                    observable: 'B->Dlnu::dBR/dq2'
+                    options: { 'l': 'e' }
+                    variable: 'q2'
+                    range: [0.1, 1.0]
+                    resolution: 100
+              - xaxis: { label: '$q^2$' }
+                yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+                items:
+                  - type: 'observable'
+                    observable: 'B->Dlnu::dBR/dq2'
+                    options: { 'l': 'mu' }
+                    variable: 'q2'
+                    range: [0.1, 1.0]
+                    resolution: 100
+            """
+            figure = eos.figure.FigureFactory.from_yaml(input)
+            figure.draw()
+        except Exception as e:
+            self.fail(f"Error when testing figure of type 'grid': {e}")
 
 
 class CornerFigureTests(unittest.TestCase):
