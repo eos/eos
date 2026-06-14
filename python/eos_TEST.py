@@ -38,6 +38,38 @@ class QualifiedNameTests(unittest.TestCase):
         except Exception as e:
             self.fail(f'cannot initialize QualifiedName: {e}')
 
+        # syntactically invalid names must raise
+        with self.assertRaises(Exception):
+            QualifiedName('')
+
+    def test_parts(self):
+        "Check if the individual parts of a QualifiedName are parsed correctly."
+        from eos import QualifiedName
+
+        qn = QualifiedName('B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010')
+
+        self.assertEqual(str(qn.prefix_part()), 'B->K^*ll')
+        self.assertEqual(str(qn.name_part()),   'A_FB(s)')
+        self.assertEqual(str(qn.suffix_part()), 'LargeRecoil')
+
+        # __str__ yields the short name (suffix included, options excluded)
+        self.assertEqual(str(qn), 'B->K^*ll::A_FB(s)@LargeRecoil')
+        # full() yields the complete name, including options
+        self.assertEqual(qn.full(), 'B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010')
+
+    def test_equality(self):
+        "Check that QualifiedNames compare equal based on their short name only."
+        from eos import QualifiedName
+
+        # the two names share a short name and differ only in their options
+        qn1 = QualifiedName('B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010')
+        qn2 = QualifiedName('B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015')
+        self.assertEqual(qn1, qn2)
+
+        # a differing suffix changes the short name
+        qn3 = QualifiedName('B->K^*ll::A_FB(s)@LowRecoil')
+        self.assertNotEqual(qn1, qn3)
+
 
 class KinematicsTests(unittest.TestCase):
 
@@ -187,6 +219,43 @@ class UnitTests(unittest.TestCase):
                     matplotlib.texmanager.TexManager.get_text_width_height_descent(f"${s}$", 1)
                 except Exception as e:
                     self.fail(f'invalid latex string "${s}$" for unit \'{attr}\': {e}')
+
+
+class SignalPDFTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of SignalPDF can be created and evaluated."
+        from eos import SignalPDF, Parameters, Kinematics, Options
+        from math import log
+
+        # 'TestLegendre1D::P(z)' is a PDF provided for testing purposes:
+        # its unnormalized density is pdf(z) = 9 + 8 z + 9 z^2.
+        try:
+            pdf = SignalPDF.make('TestLegendre1D::P(z)', Parameters.Defaults(),
+                    Kinematics(z=0.0, z_min=-1.0, z_max=+1.0), Options())
+        except Exception as e:
+            self.fail(f'cannot create SignalPDF: {e}')
+
+        self.assertIsNotNone(pdf, 'lookup of SignalPDF failed')
+        self.assertEqual(pdf.name(), 'TestLegendre1D::P(z)', 'cannot obtain SignalPDF name')
+
+        try:
+            value = pdf.evaluate()
+        except Exception as e:
+            self.fail(f'cannot evaluate SignalPDF: {e}')
+
+        # evaluate() returns the logarithm of the unnormalized PDF;
+        # pdf(z=0) = 9 + 8 * 0 + 9 * 0^2 = 9
+        self.assertAlmostEqual(value, log(9.0), delta=1.0e-10)
+
+        try:
+            norm = pdf.normalization()
+        except Exception as e:
+            self.fail(f'cannot evaluate SignalPDF normalization: {e}')
+
+        # normalization() returns the logarithm of the normalization integral;
+        # int_{-1}^{+1} dz (9 + 8 z + 9 z^2) = 9 * 2 + 0 + 3 * 2 = 24
+        self.assertAlmostEqual(norm, log(24.0), delta=1.0e-10)
 
 
 class LoggingTests(unittest.TestCase):
