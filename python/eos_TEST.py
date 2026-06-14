@@ -71,6 +71,33 @@ class QualifiedNameTests(unittest.TestCase):
         self.assertNotEqual(qn1, qn3)
 
 
+class ReferenceNameTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of ReferenceName can be created."
+        from eos import ReferenceName
+
+        try:
+            ReferenceName('IKMvD:2014A')
+        except Exception as e:
+            self.fail(f'cannot initialize ReferenceName: {e}')
+
+        # syntactically invalid names must raise
+        for invalid in ['', 'A', 'A:199', 'A:1999', 'A:1999-', '[A:1999-B]']:
+            with self.assertRaises(Exception):
+                ReferenceName(invalid)
+
+    def test_str_and_equality(self):
+        "Check the string representation and equality of ReferenceName."
+        from eos import ReferenceName
+
+        rn = ReferenceName('LHCb:2010A')
+        self.assertEqual(str(rn), 'LHCb:2010A')
+
+        self.assertEqual(ReferenceName('BES2:2006A'), ReferenceName('BES2:2006A'))
+        self.assertNotEqual(ReferenceName('BES2:2006A'), ReferenceName('LHCb:2010A'))
+
+
 class KinematicsTests(unittest.TestCase):
 
     def test_creation(self):
