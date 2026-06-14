@@ -1,0 +1,10 @@
+has-weights: true
+parameters:
+- max: 0.0045
+  min: 0.003
+  name: CKM::abs(V_ub)
+- max: 0.32
+  min: 0.21
+  name: B->pi::f_+(0)@BCL2008
+type: MarkovChain
+version: test
