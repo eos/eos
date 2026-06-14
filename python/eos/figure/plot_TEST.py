@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Danny van Dyk
+# Copyright (c) 2024-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -47,6 +47,21 @@ class PlotTests(unittest.TestCase):
             plot.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing plot of type '2D': {e}")
+
+class EmptyPlotTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'empty'
+            """
+            plot = eos.figure.PlotFactory.from_yaml(input)
+            plot.prepare()
+            fig, ax = plt.subplots()
+            plot.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing plot of type 'empty': {e}")
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
