@@ -1,0 +1,23 @@
+EXAMPLE:2024A:
+  authors: ['Jane Doe', 'John Roe']
+  title: 'Example data set'
+  keywords: ['B decays', 'CKM']
+  eos_version: '1.0.0'
+  doi: '10.5281/zenodo.0000000'
+  likelihoods:
+    ckm:
+      filename: 'ckm/mixture_density'
+      filetype: 'MixtureDensity'
+    wet:
+      filename: 'wet/nabu'
+      filetype: 'NabuLikelihood'
+
+ANOTHER:2024B:
+  authors: ['Alice Smith']
+  title: 'Another data set'
+  keywords: ['rare decays']
+  eos_version: '1.0.1'
+  likelihoods:
+    main:
+      filename: 'main/mixture_density'
+      filetype: 'MixtureDensity'
