@@ -135,6 +135,7 @@ TESTS = \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
 	eos/figure/common_TEST.py \
+	eos/figure/data_TEST.py \
 	eos/figure/figure_TEST.py \
 	eos/figure/item_TEST.py \
 	eos/figure/plot_TEST.py \
