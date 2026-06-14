@@ -1,0 +1,30 @@
+components:
+- mu:
+  - 0.0037
+  - 0.27
+  sigma:
+  - - 1.0e-07
+    - 0.0
+  - - 0.0
+    - 0.001
+  type: gauss
+- mu:
+  - 0.004
+  - 0.3
+  sigma:
+  - - 2.0e-07
+    - 0.0
+  - - 0.0
+    - 0.002
+  type: gauss
+test_statistics:
+  densities: []
+  sigma: []
+type: MixtureDensity
+varied_parameters:
+- CKM::abs(V_ub)
+- B->pi::f_+(0)@BCL2008
+version: test
+weights:
+- 0.4
+- 0.6
