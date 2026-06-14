@@ -22,6 +22,28 @@ import os
 from eos.analysis_file_description import AnalysisFileContext
 from matplotlib import pyplot as plt
 
+class ItemColorCyclerTests(unittest.TestCase):
+
+    def test_cycle(self):
+
+        from eos.figure.item import ItemColorCycler
+
+        # the cycler holds class-level state that other tests may have advanced
+        ItemColorCycler.reset()
+
+        colors = ItemColorCycler._colors
+
+        # next_color() yields the colors in order, starting from the first
+        for expected in colors:
+            self.assertEqual(ItemColorCycler.next_color(), expected)
+
+        # after a full cycle the index wraps around to the first color
+        self.assertEqual(ItemColorCycler.next_color(), colors[0])
+
+        # reset() returns the cycle to its starting point
+        ItemColorCycler.reset()
+        self.assertEqual(ItemColorCycler.next_color(), colors[0])
+
 class ObservableItemTests(unittest.TestCase):
 
     def test_full(self):
