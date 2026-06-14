@@ -30,6 +30,7 @@ EXTRA_DIST = \
 	eos/data/importance_samples_TEST.d \
 	eos/data/importance_samples_TEST.d/samples \
 	eos/data/markov_chain.py \
+	eos/data/markov_chain_TEST.d \
 	eos/data/mixture_density.py \
 	eos/data/mode.py \
 	eos/data/nabu_likelihood.py \
@@ -133,6 +134,7 @@ TESTS = \
 	eos/tasks_TEST.py \
 	eos/data/dynesty_results_TEST.py \
 	eos/data/importance_samples_TEST.py \
+	eos/data/markov_chain_TEST.py \
 	eos/data/pmc_sampler_TEST.py \
 	eos/data/prediction_TEST.py \
 	eos/observable_TEST.py \
