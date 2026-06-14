@@ -1,140 +1,144 @@
 # vim: set sts=4 tw=120 :
 
 import unittest
-import inspect
 import os
 import numpy as _np
 
-class TestFailedError(BaseException):
-    def __init__(self, msg):
-        self.msg = msg
 
-class PythonTests:
-    def check_000_PYTHONPATH(self):
-        """Check that the first term in the PYTHONPATH environment variable ends in '.libs'."""
-        try:
-            pythonpath = os.environ['PYTHONPATH'].split(os.pathsep)[0]
-            print('PYTHONPATH={}'.format(os.environ['PYTHONPATH']))
-            if not pythonpath.endswith('python/.libs/'):
-                raise TestFailedError('PYTHONPATH not correctly set for running test cases')
+class EnvironmentTests(unittest.TestCase):
 
-        except KeyError:
-            raise TestFailedError('PYTHONPATH not set')
+    def test_PYTHONPATH(self):
+        "Check that the first term in the PYTHONPATH environment variable ends in '.libs'."
+        self.assertIn('PYTHONPATH', os.environ, 'PYTHONPATH not set')
+        pythonpath = os.environ['PYTHONPATH'].split(os.pathsep)[0]
+        self.assertTrue(pythonpath.endswith('python/.libs/'),
+                'PYTHONPATH not correctly set for running test cases')
 
-    def check_001_cpp_module(self):
-        """Check if the module Python/C++ interface can be imported."""
+    def test_cpp_module(self):
+        "Check if the module Python/C++ interface can be imported."
         try:
             import _eos
         except ImportError as e:
-            raise TestFailedError(f'importing \'_eos\' failed: \'{str(e)}\'')
+            self.fail(f'importing \'_eos\' failed: \'{str(e)}\'')
 
         try:
             import eos
         except ImportError as e:
-            raise TestFailedError(f'importing \'eos\' failed: \'{str(e)}\'')
+            self.fail(f'importing \'eos\' failed: \'{str(e)}\'')
 
-    def check_002_QualifiedName(self):
-        """Check if an instance of QualifiedName can be created."""
+
+class QualifiedNameTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of QualifiedName can be created."
         from eos import QualifiedName
 
         try:
-            qn = QualifiedName('B->K^*ll::A_FB(s)@LargeRecoil;foo=bar,baz=harr')
-        except:
-            raise TestFailedError('cannot initialize QualifiedName')
+            QualifiedName('B->K^*ll::A_FB(s)@LargeRecoil;foo=bar,baz=harr')
+        except Exception as e:
+            self.fail(f'cannot initialize QualifiedName: {e}')
 
-    def check_003_Kinematics(self):
-        """Check if an instance of Kinematics can be created."""
+
+class KinematicsTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of Kinematics can be created."
         from eos import Kinematics
 
         try:
-            kin = Kinematics()
-        except:
-            raise TestFailedError('cannot initialize empty Kinematics')
+            Kinematics()
+        except Exception as e:
+            self.fail(f'cannot initialize empty Kinematics: {e}')
 
         try:
-            kin = Kinematics(s_min=1.0, s_max=6.0)
-        except:
-            raise TestFailedError('cannot initialize Kinematics with kwargs')
+            Kinematics(s_min=1.0, s_max=6.0)
+        except Exception as e:
+            self.fail(f'cannot initialize Kinematics with kwargs: {e}')
 
         try:
-            kin = Kinematics(**{'s_min': 1.0, 's_max': 6.0})
-        except:
-            raise TestFailedError('cannot initialize Kinematics with explicit kwargs')
+            Kinematics(**{'s_min': 1.0, 's_max': 6.0})
+        except Exception as e:
+            self.fail(f'cannot initialize Kinematics with explicit kwargs: {e}')
 
-    def check_004_Options(self):
-        """Check if an instance of Options can be created."""
+
+class OptionsTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of Options can be created."
         from eos import Options
 
         try:
-            opt = Options()
-        except:
-            raise TestFailedError('cannot initialize empty Options')
+            Options()
+        except Exception as e:
+            self.fail(f'cannot initialize empty Options: {e}')
 
         try:
-            kin = Options(foo='bar', baz='harr')
-        except:
-            raise TestFailedError('cannot initialize Options with kwargs')
+            Options(foo='bar', baz='harr')
+        except Exception as e:
+            self.fail(f'cannot initialize Options with kwargs: {e}')
 
         try:
-            kin = Options(**{'foo': 'bar', 'baz': 'harr'})
-        except:
-            raise TestFailedError('cannot initialize Options with explicit kwargs')
+            Options(**{'foo': 'bar', 'baz': 'harr'})
+        except Exception as e:
+            self.fail(f'cannot initialize Options with explicit kwargs: {e}')
 
-    def check_005_Parameters(self):
-        """Check if an instance of Parameters can be created."""
+
+class ParametersTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of Parameters can be created."
         from eos import Parameters
 
         try:
             par = Parameters.Defaults()
-        except:
-            raise TestFailedError('cannot initialize default Parameters')
+        except Exception as e:
+            self.fail(f'cannot initialize default Parameters: {e}')
 
-        if _np.any([p.unit().__str__()=='undefined' for p in par]):
-            raise TestFailedError('some parameters have undefined units')
+        self.assertFalse(_np.any([p.unit().__str__() == 'undefined' for p in par]),
+                'some parameters have undefined units')
 
         try:
-            electron_mass = par['mass::e']
-        except:
-            raise TestFailedError('cannot lookup existing Parameter \'mass::e\'')
+            par['mass::e']
+        except Exception as e:
+            self.fail(f'cannot lookup existing Parameter \'mass::e\': {e}')
 
-    def check_006_Observable(self):
-        """Check if an instance of Observable can be created."""
-        from eos import Observable, Parameters, Kinematics, Options, QualifiedName
 
-        obs = None
+class ObservableTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an instance of Observable can be created."
+        from eos import Observable, Parameters, Kinematics, Options
+
         try:
             obs = Observable.make('B->Dlnu::BR', Parameters.Defaults(), Kinematics(q2_min=0.02, q2_max=10),
                     Options(model='SM'))
-        except:
-            raise TestFailedError('cannot create Observable')
+        except Exception as e:
+            self.fail(f'cannot create Observable: {e}')
 
-        if not obs:
-            raise TestFailedError('lookup of Observable failed')
+        self.assertIsNotNone(obs, 'lookup of Observable failed')
+        self.assertEqual(obs.name(), 'B->Dlnu::BR', 'cannot obtain Observable name')
 
-        if not obs.name() == 'B->Dlnu::BR':
-            raise TestFailedError('cannot obtain Observable name')
-
-        value = None
         try:
-            value = obs.evaluate()
-        except:
-            raise TestFailedError('cannote evaluate Observable')
+            obs.evaluate()
+        except Exception as e:
+            self.fail(f'cannot evaluate Observable: {e}')
 
-    def check_007_Constraint(self):
+
+class ConstraintTests(unittest.TestCase):
+
+    def test_creation(self):
         """
         Check if an instance of Constraint can be created, and if we can iterate over
         its LogLikelihoodBlock range.
         """
         from eos import Constraint, Options
 
-        con = None
         try:
             con = Constraint.make('B->D::f_++f_0@HPQCD:2015A', Options())
-        except:
-            raise TestFailedError('cannot create Constraint')
+        except Exception as e:
+            self.fail(f'cannot create Constraint: {e}')
 
-        if not con.name() == 'B->D::f_++f_0@HPQCD:2015A':
-            raise TestFailedError('cannot obtain Constraint name')
+        self.assertEqual(con.name(), 'B->D::f_++f_0@HPQCD:2015A', 'cannot obtain Constraint name')
 
         for llhb in con.blocks():
             print(llhb)
@@ -142,37 +146,38 @@ class PythonTests:
         for obs in con.observables():
             print(obs.name())
 
-    """
-    Check if an instance of Model can be created, and if we can compute the
-    running MSbar mass of the b quark.
-    """
-    def check_008_Model(self):
+
+class ModelTests(unittest.TestCase):
+
+    def test_creation(self):
+        """
+        Check if an instance of Model can be created, and if we can compute the
+        running MSbar mass of the b quark.
+        """
         from eos import Model, Parameters, Options
 
-        m = None
-        p = None
         try:
             p = Parameters.Defaults()
             o = Options()
             m = Model.make('SM', p, o)
-        except:
-            raise TestFailedError('cannot create Model')
+        except Exception as e:
+            self.fail(f'cannot create Model: {e}')
 
         try:
             pvalue = p['mass::b(MSbar)'].evaluate()
             mvalue = m.m_b_msbar(pvalue)
-            if not pvalue == mvalue:
-                raise TestFailedError('internal error')
-        except:
-            raise TestFailedError('cannot determine running b quark mass')
+        except Exception as e:
+            self.fail(f'cannot determine running b quark mass: {e}')
 
-    """
-    Check if the latex strings of the Units are valid.
-    """
-    def check_009_Units(self):
+        self.assertEqual(pvalue, mvalue, 'internal error')
+
+
+class UnitTests(unittest.TestCase):
+
+    def test_latex(self):
+        "Check if the latex strings of the Units are valid."
         from eos import Unit
         import matplotlib
-        from matplotlib import texmanager
 
         for attr, value in Unit.__dict__.items():
             if attr[0] != "_" and attr != "latex":
@@ -181,7 +186,7 @@ class PythonTests:
                     s = value.__func__().latex()
                     matplotlib.texmanager.TexManager.get_text_width_height_descent(f"${s}$", 1)
                 except Exception as e:
-                    raise TestFailedError(f'invalid latex string "${s}$" for unit \'{attr}\': {e}')
+                    self.fail(f'invalid latex string "${s}$" for unit \'{attr}\': {e}')
 
 
 class LoggingTests(unittest.TestCase):
@@ -223,16 +228,5 @@ class LoggingTests(unittest.TestCase):
                     [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'P' to value 'pi', overriding user-provided value 'D'"""])
 
 
-# Run legacy test cases
-tests = PythonTests()
-for (name, testcase) in inspect.getmembers(tests, predicate=inspect.ismethod):
-    print("%s: " % name)
-    try:
-        testcase()
-    except TestFailedError as e:
-        print("    failed with error: %s" % e.msg)
-        exit(1)
-    print("    passed")
-
-# Run new tests
-unittest.main()
+if __name__ == '__main__':
+    unittest.main(verbosity=5)
