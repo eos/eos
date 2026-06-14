@@ -63,5 +63,200 @@ class EmptyPlotTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing plot of type 'empty': {e}")
 
+class LegendTests(unittest.TestCase):
+
+    def test_defaults_and_custom(self):
+        from eos.figure.plot import Legend
+
+        self.assertEqual(Legend.from_dict().position, 'best')
+        self.assertEqual(Legend.from_dict(position='lower left').position, 'lower left')
+
+    def test_draw(self):
+        from eos.figure.plot import Legend
+
+        try:
+            _, ax = plt.subplots()
+            ax.plot([0, 1], [0, 1], label='line')
+            Legend.from_dict(position='upper right').draw(ax)
+            # also exercise the explicit-entries branch
+            handle, = ax.plot([0, 1], [1, 0], label='other')
+            Legend().draw(ax, entries=[(handle, 'other')])
+        except Exception as e:
+            self.fail(f"Error when drawing Legend: {e}")
+
+
+class GridTests(unittest.TestCase):
+
+    def test_defaults_and_custom(self):
+        from eos.figure.plot import Grid
+
+        grid = Grid.from_dict()
+        self.assertFalse(grid.visible)
+        self.assertEqual(grid.axis, 'both')
+
+        grid = Grid.from_dict(visible=True, axis='x')
+        self.assertTrue(grid.visible)
+        self.assertEqual(grid.axis, 'x')
+
+    def test_invalid_axis(self):
+        from eos.figure.plot import Grid
+
+        with self.assertRaises(ValueError):
+            Grid.from_dict(axis='diagonal')
+
+    def test_draw(self):
+        from eos.figure.plot import Grid
+
+        try:
+            _, ax = plt.subplots()
+            Grid.from_dict(visible=True, axis='both').draw(ax)
+        except Exception as e:
+            self.fail(f"Error when drawing Grid: {e}")
+
+
+class XTicksTests(unittest.TestCase):
+
+    def test_defaults_and_custom(self):
+        from eos.figure.plot import XTicks
+
+        ticks = XTicks.from_dict()
+        self.assertTrue(ticks.minor)
+        self.assertEqual(ticks.position, 'bottom')
+        self.assertTrue(ticks.visible)
+
+        ticks = XTicks.from_dict(minor=False, position='both', visible=False)
+        self.assertFalse(ticks.minor)
+        self.assertEqual(ticks.position, 'both')
+        self.assertFalse(ticks.visible)
+
+    def test_invalid_position(self):
+        from eos.figure.plot import XTicks
+
+        with self.assertRaises(ValueError):
+            XTicks.from_dict(position='left')
+
+    def test_draw(self):
+        from eos.figure.plot import XTicks
+
+        try:
+            _, ax = plt.subplots()
+            XTicks.from_dict(position='top').draw(ax)
+            _, ax = plt.subplots()
+            XTicks.from_dict(visible=False).draw(ax)
+        except Exception as e:
+            self.fail(f"Error when drawing XTicks: {e}")
+
+
+class YTicksTests(unittest.TestCase):
+
+    def test_defaults_and_custom(self):
+        from eos.figure.plot import YTicks
+
+        ticks = YTicks.from_dict()
+        self.assertTrue(ticks.minor)
+        self.assertEqual(ticks.position, 'left')
+        self.assertTrue(ticks.visible)
+
+        ticks = YTicks.from_dict(minor=False, position='both', visible=False)
+        self.assertFalse(ticks.minor)
+        self.assertEqual(ticks.position, 'both')
+        self.assertFalse(ticks.visible)
+
+    def test_invalid_position(self):
+        from eos.figure.plot import YTicks
+
+        with self.assertRaises(ValueError):
+            YTicks.from_dict(position='bottom')
+
+    def test_draw(self):
+        from eos.figure.plot import YTicks
+
+        try:
+            _, ax = plt.subplots()
+            YTicks.from_dict(position='right').draw(ax)
+            _, ax = plt.subplots()
+            YTicks.from_dict(visible=False).draw(ax)
+        except Exception as e:
+            self.fail(f"Error when drawing YTicks: {e}")
+
+
+class XAxisTests(unittest.TestCase):
+
+    def test_defaults(self):
+        from eos.figure.plot import XAxis, XTicks
+
+        xaxis = XAxis.from_dict()
+        self.assertIsNone(xaxis.label)
+        self.assertIsNone(xaxis.range)
+        self.assertEqual(xaxis.scale, 'linear')
+        # the ticks default to an XTicks instance
+        self.assertIsInstance(xaxis.ticks, XTicks)
+
+    def test_nested_ticks_and_range(self):
+        from eos.figure.plot import XAxis, XTicks
+
+        xaxis = XAxis.from_dict(label='$q^2$', range=[1, 6], ticks={'position': 'both'})
+        # nested ticks dict is deserialized into an XTicks instance
+        self.assertIsInstance(xaxis.ticks, XTicks)
+        self.assertEqual(xaxis.ticks.position, 'both')
+        # the range is converted to a tuple of floats
+        self.assertEqual(xaxis.range, (1.0, 6.0))
+        self.assertTrue(all(isinstance(x, float) for x in xaxis.range))
+
+    def test_invalid_range(self):
+        from eos.figure.plot import XAxis
+
+        with self.assertRaises(ValueError):
+            XAxis.from_dict(range=[1, 2, 3])
+
+    def test_draw(self):
+        from eos.figure.plot import XAxis
+
+        try:
+            _, ax = plt.subplots()
+            XAxis.from_dict(label='mass', unit='GeV', range=[0.0, 1.0], scale='linear').draw(ax)
+        except Exception as e:
+            self.fail(f"Error when drawing XAxis: {e}")
+
+
+class YAxisTests(unittest.TestCase):
+
+    def test_defaults(self):
+        from eos.figure.plot import YAxis, YTicks
+
+        yaxis = YAxis.from_dict()
+        self.assertIsNone(yaxis.label)
+        self.assertIsNone(yaxis.range)
+        self.assertEqual(yaxis.scale, 'linear')
+        # the ticks default to a YTicks instance
+        self.assertIsInstance(yaxis.ticks, YTicks)
+
+    def test_nested_ticks_and_range(self):
+        from eos.figure.plot import YAxis, YTicks
+
+        yaxis = YAxis.from_dict(label='$d\\mathcal{B}/dq^2$', range=[0, 5], ticks={'position': 'right'})
+        # nested ticks dict is deserialized into a YTicks instance
+        self.assertIsInstance(yaxis.ticks, YTicks)
+        self.assertEqual(yaxis.ticks.position, 'right')
+        # the range is converted to a tuple of floats
+        self.assertEqual(yaxis.range, (0.0, 5.0))
+        self.assertTrue(all(isinstance(y, float) for y in yaxis.range))
+
+    def test_invalid_range(self):
+        from eos.figure.plot import YAxis
+
+        with self.assertRaises(ValueError):
+            YAxis.from_dict(range=[1, 2, 3])
+
+    def test_draw(self):
+        from eos.figure.plot import YAxis
+
+        try:
+            _, ax = plt.subplots()
+            YAxis.from_dict(label='rate', unit='GeV', range=[1.0e-3, 1.0], scale='log').draw(ax)
+        except Exception as e:
+            self.fail(f"Error when drawing YAxis: {e}")
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)
