@@ -25,6 +25,7 @@ EXTRA_DIST = \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
 	eos/data/dynesty_results.py \
+	eos/data/dynesty_results_TEST.d \
 	eos/data/importance_samples.py \
 	eos/data/importance_samples_TEST.d \
 	eos/data/importance_samples_TEST.d/samples \
@@ -130,6 +131,7 @@ TESTS = \
 	eos/analysis_file_TEST.py \
 	eos/analysis_file_description_TEST.py \
 	eos/tasks_TEST.py \
+	eos/data/dynesty_results_TEST.py \
 	eos/data/importance_samples_TEST.py \
 	eos/data/pmc_sampler_TEST.py \
 	eos/data/prediction_TEST.py \
