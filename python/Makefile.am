@@ -128,6 +128,7 @@ TESTS = \
 	eos_TEST.py \
 	eos/analysis_TEST.py \
 	eos/analysis_file_TEST.py \
+	eos/analysis_file_description_TEST.py \
 	eos/tasks_TEST.py \
 	eos/data/importance_samples_TEST.py \
 	eos/data/pmc_sampler_TEST.py \
