@@ -1,0 +1,8 @@
+observables:
+- B->Dlnu::BR
+- B->pilnu::BR
+- B->Dlnu::dBR/dq2
+- B->pilnu::dBR/dq2
+- B_u->lnu::BR
+type: Mask
+version: test
