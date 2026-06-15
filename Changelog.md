@@ -44,6 +44,7 @@
   - `B_s->D_s^*lnu::P(q2,cos(theta_l),cos(theta_D_s),phi)`
   - `B^+->pi^+pi^-lnu::PDF(q2,k2,cos(theta_pi))`
 - Expand the unit test coverage of the Python interface (D. van Dyk)
+- Add a workflow to determine code coverage with test cases (D. van Dyk)
 
 ### Removed
 
