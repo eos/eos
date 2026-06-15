@@ -29,16 +29,16 @@ namespace eos
     Model::~Model() {}
 
     const std::map<Model::KeyType, Model::ValueType> Model::models{
-        std::make_pair("CKM", &CKMScanModel::make),
-        std::make_pair("SM", &StandardModel::make),
-        std::make_pair("WET", &WilsonScanModel::make),
-        std::make_pair("WET-SMEFT", &ConstrainedWilsonScanModel::make),
+        std::make_pair("CKM"_ov, &CKMScanModel::make),
+        std::make_pair("SM"_ov, &StandardModel::make),
+        std::make_pair("WET"_ov, &WilsonScanModel::make),
+        std::make_pair("WET-SMEFT"_ov, &ConstrainedWilsonScanModel::make),
     };
 
     std::shared_ptr<Model>
     Model::make(const qnp::OptionValue & name, const Parameters & parameters, const Options & options)
     {
-        auto i = Model::models.find(name.str());
+        auto i = Model::models.find(name);
 
         if (Model::models.cend() == i)
         {

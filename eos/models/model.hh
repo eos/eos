@@ -258,7 +258,7 @@ namespace eos
         public:
             virtual ~Model() = 0;
 
-            using KeyType   = std::string;
+            using KeyType   = qnp::OptionValue;
             using ValueType = std::function<std::shared_ptr<Model>(const Parameters &, const Options &)>;
             static const std::map<KeyType, ValueType> models;
 
