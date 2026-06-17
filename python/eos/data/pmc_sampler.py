@@ -22,6 +22,21 @@ from scipy.special import erf
 
 
 class PMCSampler:
+    r"""Represents the proposal density of a population Monte Carlo (PMC) sampler stored on disk.
+
+    Stores the Gaussian components and weights of the PMC proposal mixture together with the descriptions
+    of the varied parameters. Instances are created either by reading an existing sampler from disk
+    (passing its ``path`` to the constructor) or by writing a new sampler with :meth:`create`. Use
+    :meth:`density` to obtain the corresponding :class:`pypmc.density.mixture.MixtureDensity`. Reading
+    requires the optional PyPMC module.
+
+    :ivar type: The type identifier of the data object, always ``'PMCSampler'``.
+    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
+    :ivar lookup_table: A mapping from each parameter name to its index in :attr:`varied_parameters`.
+    :ivar components: The Gaussian components of the proposal mixture.
+    :ivar component_weights: The weights of the proposal mixture components.
+    """
+
     def __init__(self, path):
         """ Read a PMCSampler object from disk.
 
@@ -53,7 +68,12 @@ class PMCSampler:
 
 
     def density(self):
-        """ Return a pypmc.density.MixtureDensity. """
+        """Construct the corresponding PyPMC mixture density.
+
+        :returns: A Gaussian mixture density built from the stored proposal components and weights.
+        :rtype: pypmc.density.mixture.MixtureDensity
+        :raises ImportError: If the optional PyPMC module is not installed.
+        """
         try:
             import pypmc
         except ImportError as e:

@@ -21,6 +21,19 @@ import yaml
 
 
 class Prediction:
+    r"""Represents weighted samples of theory predictions for one or more observables, stored on disk.
+
+    Bundles the predictive samples of a set of observables with their importance weights. Instances are
+    created either by reading an existing data set from disk (passing its ``path`` to the constructor) or
+    by writing a new data set with :meth:`create`.
+
+    :ivar type: The type identifier of the data object, always ``'Prediction'``.
+    :ivar varied_parameters: The descriptions (name, kinematics, options) of the predicted observables.
+    :ivar lookup_table: A mapping from each observable's qualified name (including options and kinematics) to its column index in :attr:`samples`.
+    :ivar samples: The predictive samples as a 2D array of shape (N, O).
+    :ivar weights: The importance weights on a linear scale as a 1D array of shape (N, ).
+    """
+
     def __init__(self, path):
         """ Read a Prediction object from disk.
 

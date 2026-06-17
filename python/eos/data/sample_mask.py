@@ -20,6 +20,17 @@ import yaml
 
 
 class SampleMask:
+    r"""Represents a boolean mask over a set of observables, stored on disk.
+
+    A mask selects a subset of samples (e.g. to remove unphysical points) and records the observables it
+    applies to. Instances are created either by reading an existing mask from disk (passing its ``path``
+    to the constructor) or by writing a new mask with :meth:`create`.
+
+    :ivar type: The type identifier of the data object, always ``'Mask'``.
+    :ivar observables: The observables to which the mask applies.
+    :ivar mask: The boolean mask as a 1D array.
+    """
+
     def __init__(self, path):
         """ Read a mask from a file.
 

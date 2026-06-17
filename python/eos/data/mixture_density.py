@@ -23,6 +23,21 @@ from scipy.linalg import block_diag
 
 
 class MixtureDensity:
+    r"""Represents a mixture density (e.g. a PMC proposal or a fit to a posterior) stored on disk.
+
+    Stores the components and weights of a mixture of (Gaussian) densities, optionally together with the
+    qualified names of the varied parameters and precomputed test statistics. Instances are created
+    either by reading an existing density from disk (passing its ``path`` to the constructor) or by
+    writing a new density with :meth:`create`. Use :meth:`density` to obtain the corresponding
+    :class:`pypmc.density.mixture.MixtureDensity`.
+
+    :ivar type: The type identifier of the data object, always ``'MixtureDensity'``.
+    :ivar components: The descriptions of the mixture components.
+    :ivar weights: The component weights of the mixture.
+    :ivar varied_parameters: The qualified names of the varied parameters, or ``None`` if not stored.
+    :ivar test_statistics: The precomputed test statistics, or ``None`` if not stored.
+    """
+
     def __init__(self, path):
         """ Read a MixtureDensity object from disk.
 
@@ -55,7 +70,12 @@ class MixtureDensity:
         self.test_statistics = description['test_statistics'] if 'test_statistics' in description else None
 
     def density(self):
-        """ Return a pypmc.density.MixtureDensity. """
+        """Construct the corresponding PyPMC mixture density.
+
+        :returns: A Gaussian mixture density built from the stored components and weights.
+        :rtype: pypmc.density.mixture.MixtureDensity
+        :raises ImportError: If the optional PyPMC module is not installed.
+        """
         try:
             import pypmc
         except ImportError as e:
