@@ -9,7 +9,13 @@ import os
 @dataclass(kw_only=True)
 class AnalysisFileContext:
     """
-    Auxiliary class to transfer information to consumers of the analysis file.
+    Auxiliary class used to resolve paths relative to an analysis file's base directory.
+
+    Instances are passed to consumers of an analysis file (e.g. figures and tasks) so that relative data
+    paths can be resolved against a common base directory.
+
+    :param base_directory: The base directory against which relative paths are resolved. Defaults to the current working directory.
+    :type base_directory: str
     """
     base_directory:str='./'
 
@@ -21,11 +27,27 @@ class AnalysisFileContext:
             raise ValueError(f'Base directory \'{self.base_directory}\' is not a directory')
 
     def data_path(self, relative_path:str):
+        """Resolve a path relative to :attr:`base_directory` into an absolute path.
+
+        :param relative_path: A path relative to the base directory.
+        :type relative_path: str
+        :returns: The corresponding absolute path.
+        :rtype: str
+        """
         return os.path.abspath(os.path.join(self.base_directory, relative_path))
 
 
 @dataclass
 class MetadataAuthorDescription(Deserializable):
+    """Describes a single author in an analysis file's metadata.
+
+    :param name: The author's name.
+    :type name: str
+    :param affiliation: The author's affiliation. Optional.
+    :type affiliation: str
+    :param email: The author's email address. Optional.
+    :type email: str
+    """
     name:str
     affiliation:str=''
     email:str=''
@@ -33,12 +55,28 @@ class MetadataAuthorDescription(Deserializable):
 
 @dataclass
 class MetadataDescription(Deserializable):
+    """Describes the metadata of an analysis file.
+
+    :param title: A human-readable title for the analysis. Optional.
+    :type title: str
+    :param id: A unique identifier for the analysis. Optional.
+    :type id: str
+    :param authors: The list of authors of the analysis. Optional.
+    :type authors: list[MetadataAuthorDescription]
+    """
     title:str=''
     id:str=''
     authors:list[MetadataAuthorDescription]=field(default_factory=list)
 
     @staticmethod
     def from_dict(**kwargs):
+        """Create a :class:`MetadataDescription` from its keyword description.
+
+        Deserializes the nested ``authors`` list into :class:`MetadataAuthorDescription` instances.
+
+        :returns: The instantiated metadata description.
+        :rtype: MetadataDescription
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if 'authors' in kwargs:
             _kwargs['authors'] = [MetadataAuthorDescription.from_dict(**a) for a in kwargs['authors']]
@@ -46,8 +84,24 @@ class MetadataDescription(Deserializable):
 
 
 class PriorDescription:
+    """Polymorphic description of a single prior on one or more parameters.
+
+    This is a dispatcher rather than a concrete description: :meth:`from_dict` inspects the keys of a
+    prior description and returns an instance of the matching concrete type. A description containing a
+    ``constraint`` key yields a :class:`ConstraintPriorDescription`; a description containing
+    ``parameters`` yields a :class:`TransformPriorDescription`; otherwise the ``type`` key selects among
+    :class:`UniformPriorDescription`, :class:`ScalePriorDescription`, :class:`GaussianPriorDescription`,
+    :class:`CurtailedGaussianDescription` (a Gaussian with a ``min``/``max`` truncation), and
+    :class:`PoissonPriorDescription`.
+    """
+
     @staticmethod
     def from_dict(**kwargs):
+        """Create the concrete prior description matching the given keyword description.
+
+        :returns: An instance of the concrete :class:`PriorDescription` subtype selected from the keys.
+        :raises ValueError: If the keys do not identify a known type of prior description.
+        """
         if 'constraint' in kwargs:
             return Deserializable.make(ConstraintPriorDescription, **kwargs)
         elif 'parameter' in kwargs and 'type' in kwargs:
@@ -73,12 +127,32 @@ class PriorDescription:
 
 @dataclass
 class PoissonPriorDescription(Deserializable):
+    r"""Describes a Poisson prior on a single parameter (selected by ``type: poisson``).
+
+    :param parameter: The qualified name of the parameter.
+    :type parameter: str
+    :param k: The number of observed counts that parametrizes the Poisson distribution.
+    :type k: float
+    """
     parameter:str
     k:float
     type:str=field(repr=False, init=False, default="poisson")
 
 @dataclass
 class CurtailedGaussianDescription(Deserializable):
+    r"""Describes a Gaussian prior truncated to a finite interval (``type: gauss`` with ``min``/``max``).
+
+    :param parameter: The qualified name of the parameter.
+    :type parameter: str
+    :param central: The central value (mean) of the Gaussian.
+    :type central: float
+    :param sigma: The standard deviation of the Gaussian.
+    :type sigma: float
+    :param min: The lower bound to which the prior is truncated.
+    :type min: float
+    :param max: The upper bound to which the prior is truncated.
+    :type max: float
+    """
     parameter:str
     central:float
     sigma:float
@@ -88,6 +162,15 @@ class CurtailedGaussianDescription(Deserializable):
 
 @dataclass
 class GaussianPriorDescription(Deserializable):
+    r"""Describes a Gaussian prior on a single parameter (``type: gauss`` without ``min``/``max``).
+
+    :param parameter: The qualified name of the parameter.
+    :type parameter: str
+    :param central: The central value (mean) of the Gaussian.
+    :type central: float
+    :param sigma: The standard deviation of the Gaussian.
+    :type sigma: float
+    """
     parameter:str
     central:float
     sigma:float
@@ -96,6 +179,19 @@ class GaussianPriorDescription(Deserializable):
 
 @dataclass
 class ScalePriorDescription(Deserializable):
+    r"""Describes a prior on a renormalization scale parameter (selected by ``type: scale``).
+
+    :param parameter: The qualified name of the scale parameter.
+    :type parameter: str
+    :param min: The lower bound of the scale variation.
+    :type min: float
+    :param max: The upper bound of the scale variation.
+    :type max: float
+    :param mu_0: The default (central) scale.
+    :type mu_0: float
+    :param lambda_scale: The multiplicative factor that controls the width of the log-uniform variation.
+    :type lambda_scale: float
+    """
     parameter:str
     min:float
     max:float
@@ -105,6 +201,15 @@ class ScalePriorDescription(Deserializable):
 
 @dataclass
 class UniformPriorDescription(Deserializable):
+    r"""Describes a uniform (flat) prior on a single parameter (``type: uniform`` or ``flat``).
+
+    :param parameter: The qualified name of the parameter.
+    :type parameter: str
+    :param min: The lower bound of the prior's support.
+    :type min: float
+    :param max: The upper bound of the prior's support.
+    :type max: float
+    """
     parameter:str
     min:float
     max:float
@@ -112,10 +217,28 @@ class UniformPriorDescription(Deserializable):
 
 @dataclass
 class ConstraintPriorDescription(Deserializable):
-     constraint:str
+    r"""Describes a prior taken from a built-in EOS constraint (selected by the ``constraint`` key).
+
+    :param constraint: The qualified name of the EOS constraint used as the prior.
+    :type constraint: str
+    """
+    constraint:str
 
 @dataclass
 class TransformPriorDescription(Deserializable):
+    r"""Describes a prior on a linear transformation of several parameters (selected by ``type: transform``).
+
+    :param parameters: The qualified names of the parameters that enter the transformation.
+    :type parameters: list[str]
+    :param shift: The constant shift applied to the parameters before the transformation.
+    :type shift: list[float]
+    :param transform: The transformation matrix applied to the (shifted) parameters.
+    :type transform: list[list[float]]
+    :param min: The lower bounds of the transformed parameters' support.
+    :type min: list[float]
+    :param max: The upper bounds of the transformed parameters' support.
+    :type max: list[float]
+    """
     parameters:list[str]
     shift:list[float]
     transform:list[list[float]]
@@ -123,13 +246,47 @@ class TransformPriorDescription(Deserializable):
     max:list[float]
     type:str=field(repr=False, init=False, default="transform")
 
+# Maps the YAML selector of a prior description to the corresponding concrete description class.
+# The canonical dispatch logic lives in PriorDescription.from_dict; this mapping mirrors it and is
+# used to generate the reference documentation of the recognized prior types. It is assigned here,
+# rather than in the class body, because the concrete classes are only defined above.
+PriorDescription.registry = {
+    'constraint':           ConstraintPriorDescription,
+    'uniform':              UniformPriorDescription,
+    'flat':                 UniformPriorDescription,
+    'scale':                ScalePriorDescription,
+    'gauss':                GaussianPriorDescription,
+    'gaussian':             GaussianPriorDescription,
+    'gauss (with min/max)': CurtailedGaussianDescription,
+    'poisson':              PoissonPriorDescription,
+    'transform':            TransformPriorDescription,
+}
+
 @dataclass
 class PriorComponent(Deserializable):
+    r"""Describes a single named prior, i.e. one entry of an analysis file's ``priors`` list.
+
+    A named prior bundles one or more prior descriptions: a single description for a univariate prior, or
+    several for an (uncorrelated) multivariate prior.
+
+    :param name: The unique name of the prior, by which posteriors refer to it.
+    :type name: str
+    :param descriptions: The list of prior descriptions that make up this prior.
+    :type descriptions: list[PriorDescription]
+    """
     name:str
     descriptions:list
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`PriorComponent` from its keyword description.
+
+        Deserializes each entry of ``descriptions`` via :meth:`PriorDescription.from_dict`. The deprecated
+        ``parameters`` key is still accepted as a fall-back alias for ``descriptions``.
+
+        :returns: The instantiated prior component.
+        :rtype: PriorComponent
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if "descriptions" in kwargs:
             if "parameters" in kwargs:
@@ -145,20 +302,53 @@ class PriorComponent(Deserializable):
 
 @dataclass
 class ConstraintLikelihoodDescription(Deserializable):
+    r"""Describes a likelihood contribution taken from a built-in EOS constraint.
+
+    :param constraint: The qualified name of the EOS constraint.
+    :type constraint: eos.QualifiedName
+    """
     constraint:eos.QualifiedName
 
 @dataclass
 class ManualConstraintDescription(Deserializable):
+    r"""Describes a likelihood contribution from a constraint defined inline in the analysis file.
+
+    :param name: The qualified name under which the manual constraint is registered.
+    :type name: eos.QualifiedName
+    :param info: The constraint definition, in the same format as a built-in EOS constraint entry.
+    :type info: dict
+    """
     name:eos.QualifiedName
     info:dict
 
 @dataclass
 class PyHFConstraintDescription(Deserializable):
+    r"""Describes a likelihood contribution imported from a pyhf workspace.
+
+    :param file: The path to the JSON file specifying the pyhf workspace.
+    :type file: str
+    :param parameter_map: An optional mapping from pyhf parameter names to EOS observables or parameters; see :class:`eos.PyhfLogLikelihood`.
+    :type parameter_map: dict
+    """
     file:str
     parameter_map:dict=field(default_factory=dict)
 
 @dataclass
 class LikelihoodComponent(Deserializable):
+    r"""Describes a single named likelihood, i.e. one entry of an analysis file's ``likelihoods`` list.
+
+    A named likelihood may combine any number of built-in constraints, inline (manual) constraints, and
+    pyhf-based contributions; at least one of the three must be present.
+
+    :param name: The unique name of the likelihood, by which posteriors refer to it.
+    :type name: str
+    :param constraints: The built-in EOS constraints contributing to the likelihood. Optional.
+    :type constraints: list[ConstraintLikelihoodDescription]
+    :param manual_constraints: The inline constraint definitions contributing to the likelihood. Optional.
+    :type manual_constraints: list[ManualConstraintDescription]
+    :param pyhf: The pyhf-based contribution to the likelihood. Optional.
+    :type pyhf: PyHFConstraintDescription
+    """
     name:str
     constraints:list=field(default_factory=list)
     manual_constraints:list=field(default_factory=list)
@@ -166,6 +356,15 @@ class LikelihoodComponent(Deserializable):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`LikelihoodComponent` from its keyword description.
+
+        Deserializes the ``constraints``, ``manual_constraints``, and ``pyhf`` entries into their
+        respective description types.
+
+        :returns: The instantiated likelihood component.
+        :rtype: LikelihoodComponent
+        :raises ValueError: If none of ``constraints``, ``manual_constraints``, or ``pyhf`` is provided.
+        """
         if not ('constraints' in kwargs or 'manual_constraints' in kwargs or 'pyhf' in kwargs):
             raise ValueError('LikelihoodComponent must have at least one of constraints, manual_constraints, or pyhf')
         _kwargs = _copy.deepcopy(kwargs)
@@ -181,6 +380,22 @@ class LikelihoodComponent(Deserializable):
 
 @dataclass
 class PosteriorDescription(Deserializable):
+    r"""Describes a single named posterior, i.e. one entry of an analysis file's ``posteriors`` list.
+
+    A posterior combines one or more named priors with one or more named likelihoods, optionally fixing
+    parameters and setting global options for all of its theory predictions.
+
+    :param name: The unique name of the posterior.
+    :type name: str
+    :param prior: The names of the priors that make up the posterior.
+    :type prior: list[str]
+    :param likelihood: The names of the likelihoods that make up the posterior.
+    :type likelihood: list[str]
+    :param global_options: Options forwarded to all theory predictions of the posterior. Optional.
+    :type global_options: dict
+    :param fixed_parameters: Parameters to fix, given as a mapping from qualified name to value. Optional.
+    :type fixed_parameters: dict
+    """
     name:str
     prior:list
     likelihood:list
@@ -191,6 +406,19 @@ class PosteriorDescription(Deserializable):
 
 @dataclass
 class ObservableComponent(Deserializable):
+    r"""Describes a custom observable defined in an analysis file's ``observables`` section.
+
+    :param name: The qualified name under which the new observable is registered.
+    :type name: str
+    :param latex: The LaTeX representation of the observable, used in figures and tables.
+    :type latex: str
+    :param unit: The unit of the observable.
+    :type unit: str
+    :param expression: The EOS expression that defines the observable.
+    :type expression: str
+    :param options: Default options applied when evaluating the observable. Optional.
+    :type options: dict
+    """
     name:str
     latex:str
     unit:str
@@ -201,12 +429,35 @@ class ObservableComponent(Deserializable):
 
 @dataclass
 class PredictionObservableComponent(Deserializable):
+    r"""Describes a single observable to be predicted, i.e. one entry of a prediction's ``observables`` list.
+
+    :param name: The qualified name of the observable to predict.
+    :type name: str
+    :param kinematics: The kinematic configuration(s) at which to evaluate the observable. Optional.
+    :type kinematics: dict
+    :param options: Options applied when evaluating the observable. Optional.
+    :type options: dict
+    """
     name:str
     kinematics:dict=field(default_factory=dict) # TODO: once we bump the minimum python version to 3.10, use dict | list[dict] instead
     options:dict=field(default_factory=dict)
 
 @dataclass
 class PredictionDescription(Deserializable):
+    r"""Describes a single named prediction, i.e. one entry of an analysis file's ``predictions`` list.
+
+    A prediction lists the observables to be evaluated on previously obtained importance samples,
+    optionally fixing parameters and setting global options.
+
+    :param name: The unique name of the prediction.
+    :type name: str
+    :param observables: The observables to be predicted.
+    :type observables: list[PredictionObservableComponent]
+    :param global_options: Options forwarded to all observables of the prediction. Optional.
+    :type global_options: dict
+    :param fixed_parameters: Parameters to fix, given as a mapping from qualified name to value. Optional.
+    :type fixed_parameters: dict
+    """
     name:str
     observables:list
     global_options:dict=field(default_factory=dict)
@@ -214,6 +465,13 @@ class PredictionDescription(Deserializable):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`PredictionDescription` from its keyword description.
+
+        Deserializes each entry of ``observables`` into a :class:`PredictionObservableComponent`.
+
+        :returns: The instantiated prediction description.
+        :rtype: PredictionDescription
+        """
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs["observables"] = [PredictionObservableComponent.from_dict(**o) for o in kwargs["observables"]]
         return Deserializable.make(cls, **_kwargs)
@@ -222,6 +480,23 @@ class PredictionDescription(Deserializable):
 
 @dataclass
 class ParameterComponent(Deserializable):
+    r"""Describes a custom parameter defined in an analysis file's ``parameters`` section.
+
+    :param name: The new EOS qualified name of the parameter.
+    :type name: str
+    :param latex: The LaTeX representation of the parameter, used in figures and tables.
+    :type latex: str
+    :param unit: The unit of the parameter.
+    :type unit: str
+    :param central: The default (central) value of the parameter.
+    :type central: float
+    :param min: The lower end of the parameter's allowed range.
+    :type min: float
+    :param max: The upper end of the parameter's allowed range.
+    :type max: float
+    :param alias_of: The qualified names of existing parameters for which this parameter is an alias. Optional.
+    :type alias_of: list[str]
+    """
     name:str
     latex:str
     unit:str
@@ -305,6 +580,13 @@ _task_argument_map = {
 
 @dataclass
 class TaskComponent(Deserializable):
+    r"""Describes a single task invocation within a step, i.e. one entry of a step's ``tasks`` list.
+
+    :param task: The name of the task to run; must be a registered EOS task.
+    :type task: str
+    :param arguments: The arguments passed to the task, given as a mapping from argument name to value. Optional.
+    :type arguments: dict
+    """
     task:str
     arguments:dict=field(default_factory=dict)
 
@@ -340,6 +622,22 @@ class TaskComponent(Deserializable):
 
 @dataclass
 class StepComponent(Deserializable):
+    r"""Describes a single step of a reproducible analysis, i.e. one entry of an analysis file's ``steps`` list.
+
+    A step bundles one or more task invocations, may declare dependencies on other steps, and may supply
+    default arguments shared by its tasks.
+
+    :param title: A human-readable title for the step.
+    :type title: str
+    :param id: The unique identifier of the step. Must not contain ``/`` or whitespace.
+    :type id: str
+    :param tasks: The tasks executed by the step.
+    :type tasks: list[TaskComponent]
+    :param depends_on: The ids of steps that must complete before this step runs. Optional.
+    :type depends_on: list[str]
+    :param default_arguments: Default arguments per task name, applied to this step's task invocations. Optional.
+    :type default_arguments: dict
+    """
     title:str
     id:str
     tasks:list
@@ -357,6 +655,14 @@ class StepComponent(Deserializable):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`StepComponent` from its keyword description.
+
+        Deserializes each entry of ``tasks`` into a :class:`TaskComponent` and normalizes the
+        ``default_arguments`` keys against the per-task command-line argument map.
+
+        :returns: The instantiated step component.
+        :rtype: StepComponent
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if "default_arguments" in kwargs:
             for task, args in kwargs["default_arguments"].items():
@@ -369,8 +675,21 @@ class StepComponent(Deserializable):
 
 
 class MaskDescription(Deserializable):
+    """Polymorphic description of a single entry in a mask's ``description`` list.
+
+    This is a dispatcher rather than a concrete description: :meth:`from_dict` inspects the keys of an
+    entry and returns the matching concrete type. An entry containing an ``expression`` key yields a
+    :class:`MaskExpressionComponent`, one containing a ``mask_name`` key yields a
+    :class:`MaskNamedComponent`, and otherwise the entry yields a :class:`MaskObservableComponent`.
+    """
+
     @staticmethod
     def from_dict(**kwargs):
+        """Create the concrete mask-description entry matching the given keyword description.
+
+        :returns: An instance of the concrete :class:`MaskDescription` subtype selected from the keys.
+        :rtype: MaskExpressionComponent | MaskNamedComponent | MaskObservableComponent
+        """
         if 'expression' in kwargs:
             return Deserializable.make(MaskExpressionComponent, **kwargs)
         if 'mask_name' in kwargs:
@@ -380,19 +699,48 @@ class MaskDescription(Deserializable):
 
 @dataclass
 class MaskExpressionComponent(Deserializable):
+    r"""Describes a mask entry given by a new observable defined through an expression.
+
+    :param expression: The EOS expression that defines the (pseudo-)observable used for masking.
+    :type expression: str
+    :param name: The qualified name under which the new observable is registered.
+    :type name: str
+    """
     expression:str
     name:str
 
 @dataclass
 class MaskObservableComponent(Deserializable):
+    r"""Describes a mask entry given by the name of an existing EOS observable.
+
+    :param name: The qualified name of the observable used for masking.
+    :type name: str
+    """
     name:str
 
 @dataclass
 class MaskNamedComponent(Deserializable):
+    r"""Describes a mask entry that refers to another, previously defined mask.
+
+    :param mask_name: The name of the previously defined mask to include.
+    :type mask_name: str
+    """
     mask_name:str
 
 @dataclass
 class MaskComponent(Deserializable):
+    r"""Describes a single named mask, i.e. one entry of an analysis file's ``masks`` list.
+
+    A mask selects a subset of posterior samples by combining one or more (pseudo-)observables and/or
+    other masks, keeping samples for which all (``and``) or any (``or``) of them evaluate positive.
+
+    :param name: The unique name of the mask.
+    :type name: str
+    :param description: The entries that make up the mask.
+    :type description: list[MaskDescription]
+    :param logical_combination: How the entries are combined, either ``'and'`` or ``'or'``. Defaults to ``'and'``.
+    :type logical_combination: str
+    """
     name:str
     description:dict
     logical_combination: str = "and"
@@ -403,9 +751,25 @@ class MaskComponent(Deserializable):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`MaskComponent` from its keyword description.
+
+        Deserializes each entry of ``description`` via :meth:`MaskDescription.from_dict`.
+
+        :returns: The instantiated mask component.
+        :rtype: MaskComponent
+        """
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['description'] = [MaskDescription.from_dict(**d) for d in kwargs['description']]
         return Deserializable.make(cls, **_kwargs)
+
+# Maps the discriminating key of a mask-description entry to the corresponding concrete description
+# class. The canonical dispatch logic lives in MaskDescription.from_dict; this mapping mirrors it and
+# is used to generate the reference documentation of the recognized mask-description types.
+MaskDescription.registry = {
+    'observable': MaskObservableComponent,
+    'expression': MaskExpressionComponent,
+    'mask_name':  MaskNamedComponent,
+}
 
 # AnalysisFile schema
 
