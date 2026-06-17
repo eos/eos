@@ -1,8 +1,8 @@
 on:
-  # Run once weekly, 2h before the ``Report Activity`` workflow
-  # (which runs at '5 7 * * TUE').
+  # Run once weekly, 3h before the ``Report Activity`` workflow
+  # (which runs at '17 4 * * TUE'), as well as on new releases.
   schedule:
-    - cron: '5 5 * * TUE'
+    - cron: '17 1 * * TUE'
 
   # Allow manual triggering.
   workflow_dispatch:
