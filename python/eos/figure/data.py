@@ -46,6 +46,21 @@ class DataFile(Deserializable):
             self.color = ItemColorCycler.next_color()
 
     def prepare(self, context:AnalysisFileContext=None):
+        """Load the underlying data file and cache it for subsequent access.
+
+        Resolves ``path`` against the given context, opens the file as either
+        :class:`eos.data.ImportanceSamples` (a file named ``samples``) or :class:`eos.data.Prediction`
+        (a file whose name starts with ``pred-``), and records the available variable names. The result
+        is cached, so repeated calls return the already-loaded data file without reloading.
+
+        :param context: The analysis file context used to resolve the relative ``path``. If ``None``,
+            a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        :returns: The loaded data file.
+        :rtype: eos.data.ImportanceSamples | eos.data.Prediction
+        :raises ValueError: If the data file does not exist.
+        :raises NotImplementedError: If the data file has an unsupported format.
+        """
         if hasattr(self, '_datafile'):
             return self._datafile
 
@@ -73,11 +88,24 @@ class DataFile(Deserializable):
 
     @property
     def variables(self):
+        """The names of the variables contained in the data file.
+
+        :returns: The list of variable names, in the order in which they appear in the data file.
+        :rtype: list[str]
+        """
         self.prepare()
         return self._variables
 
     @property
     def empirical_range(self):
+        """An empirically determined plotting range for each variable in the data file.
+
+        For each variable, the range is centered on the weighted median and extends to 1.3 times the
+        distance from the median to the weighted 1% and 99% quantiles, respectively.
+
+        :returns: A tuple ``(min, max)`` of arrays holding the lower and upper bound for each variable.
+        :rtype: tuple[numpy.ndarray, numpy.ndarray]
+        """
         self.prepare()
         lower  = np.quantile(self._datafile.samples, 0.01, weights=self._datafile.weights, method='inverted_cdf', axis=0)
         median = np.quantile(self._datafile.samples, 0.50, weights=self._datafile.weights, method='inverted_cdf', axis=0)
@@ -88,6 +116,18 @@ class DataFile(Deserializable):
         return (min, max)
 
     def labels(self, variables):
+        """Return LaTeX labels for the given variables.
+
+        For parameter samples, the labels are taken from the corresponding EOS parameters; for
+        predictions, they are taken from the corresponding EOS observables, falling back to the
+        parameter label if the name does not identify an observable.
+
+        :param variables: The names of the variables for which labels are requested.
+        :type variables: list[str]
+        :returns: The LaTeX label for each requested variable, in the same order.
+        :rtype: list[str]
+        :raises NotImplementedError: If the data file has an unsupported format.
+        """
         self.prepare()
 
         if self._type == 'samples':

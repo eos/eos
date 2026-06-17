@@ -28,6 +28,13 @@ import scipy as _scipy
 import yaml as _yaml
 
 class ItemColorCycler:
+    """Cycles through a fixed, colorblind-friendly palette of colors.
+
+    Items that are not assigned an explicit color draw their next color from this shared cycle, so that
+    consecutive items in a plot are automatically given distinct colors. The cycle is reset, via
+    :meth:`reset`, whenever a new plot is created.
+    """
+
     _colors = [
         # 10-colors colorblind-friendly cycle from 2107.02270
         (0.247, 0.565, 0.855), (1.000, 0.663, 0.055), (0.741, 0.122, 0.004), (0.580, 0.643, 0.635), (0.514, 0.176, 0.714), (0.663, 0.420, 0.349), (0.906, 0.388, 0.000), (0.725, 0.675, 0.439), (0.443, 0.459, 0.506), (0.573, 0.855, 0.867)
@@ -36,11 +43,19 @@ class ItemColorCycler:
 
     @classmethod
     def reset(cls):
+        """Reset the color cycle so that the next call to :meth:`next_color` returns the first color again."""
         cls._color_idx = 0
 
     @classmethod
     def next_color(cls):
-        """Returns the next available color"""
+        """Return the next color in the cycle.
+
+        Successive calls cycle through a fixed, colorblind-friendly palette of ten colors,
+        wrapping around to the first color once the palette is exhausted.
+
+        :returns: An RGB color as a tuple of three floats in the range :math:`[0, 1]`.
+        :rtype: tuple[float, float, float]
+        """
         result = cls._colors[cls._color_idx]
         cls._color_idx = (cls._color_idx + 1) % len(cls._colors)
         return result
@@ -61,16 +76,37 @@ class Item(Deserializable):
 
     @abstractmethod
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the item for drawing"
+        """Prepare the item for drawing.
+
+        Subclasses override this method to load any required data files and to evaluate and
+        cache the quantities that :meth:`draw` will render. It is called once before :meth:`draw`.
+
+        :param context: The analysis file context used to resolve relative paths to data files.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
         raise NotImplementedError
 
     @abstractmethod
     def draw(self, ax):
-        "Draw the item on the axes"
+        """Draw the item on the provided axes.
+
+        Subclasses override this method to render the quantities cached by :meth:`prepare`.
+
+        :param ax: The matplotlib axes onto which the item is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         raise NotImplementedError
 
     def legend(self):
-        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        The default implementation returns an empty tuple, i.e. the item contributes no
+        dedicated legend entry. Subclasses that require a custom legend handle override this.
+
+        :returns: A sequence of ``(handle, label)`` pairs to be added to the plot legend.
+        :rtype: list[tuple[matplotlib.artist.Artist, str]]
+        """
         return ()
 
 
@@ -228,7 +264,15 @@ class ObservableItem(Item):
 
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the drawing by evaluating the observable at the sample points."
+        """Prepare the drawing by evaluating the observable at the sample points.
+
+        Evaluates the observable on a grid of ``resolution`` points spanning ``range`` of the
+        chosen kinematic or parameter ``variable`` and caches the results for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve relative paths. If ``None``,
+            a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
         self._yvalues = _np.empty((len(self._xvalues),))
         for i, x in enumerate(self._xvalues):
@@ -237,7 +281,12 @@ class ObservableItem(Item):
 
 
     def draw(self, ax, **kwargs):
-        "Draw a curve of the observable."
+        """Draw a curve of the observable as a function of the chosen variable.
+
+        :param ax: The matplotlib axes onto which the curve is drawn.
+        :type ax: matplotlib.axes.Axes
+        :param kwargs: Additional keyword arguments forwarded to :meth:`matplotlib.axes.Axes.plot`.
+        """
         ax.plot(self._xvalues, self._yvalues, label=self.label, color=self.color, lw=self.linewidth, ls=self.linestyle, **kwargs)
 
 
@@ -372,6 +421,16 @@ class UncertaintyBandItem(Item):
 
 
     def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the uncertainty band for drawing.
+
+        Loads the predictive samples from the data file, selects the requested observable and
+        kinematic variable, computes the central 68% interval at each sample point, and
+        interpolates the lower, central, and upper bounds onto a regular grid for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
 
         self._datafile = eos.data.Prediction(context.data_path(self.datafile))
@@ -447,6 +506,14 @@ class UncertaintyBandItem(Item):
             self._xvalues         = _np.ma.masked_outside(self._xvalues,         self.range[0], self.range[1])
 
     def draw(self, ax):
+        """Draw the uncertainty band on the provided axes.
+
+        Depending on the ``band`` setting, fills the area between the lower and upper bounds,
+        draws the outer lines, and/or draws the median line.
+
+        :param ax: The matplotlib axes onto which the band is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         label = self.label
         if 'area' in self.band:
             ax.fill_between(self._xvalues, self._ovalues_lower, self._ovalues_higher, alpha=self.alpha, color=self.color, label=label, lw=0)
@@ -499,7 +566,16 @@ class BinnedUncertaintyItem(Item):
     variable:str
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the item for drawing."""
+        """Prepare the binned uncertainty band for drawing.
+
+        Loads the predictive samples from the data file and reads, for each bin, the lower and
+        upper edges of the integrated kinematic ``variable``. The samples themselves are reduced
+        to quantiles in :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
 
         self._datafile = eos.data.Prediction(context.data_path(self.datafile))
@@ -514,7 +590,14 @@ class BinnedUncertaintyItem(Item):
             self._xvalues = _np.ma.masked_outside(self._xvalues, xmin, xmax)
 
     def draw(self, ax):
-        """Draw the uncertainty band."""
+        """Draw the binned uncertainty band on the provided axes.
+
+        For each bin, the central 68% interval and the median are drawn as a filled box with
+        outer and median lines, optionally rescaled by the inverse of the bin width.
+
+        :param ax: The matplotlib axes onto which the band is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
 
         ovalues_lower   = []
         ovalues_central = []
@@ -610,7 +693,16 @@ class OneDimensionalHistogramItem(Item):
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the histogram for drawing"
+        """Prepare the histogram for drawing.
+
+        Loads the data file (of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`),
+        extracts the samples of the chosen ``variable``, and determines the histogram range if it was
+        not provided explicitly.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
 
         context = AnalysisFileContext() if context is None else context
 
@@ -639,7 +731,11 @@ class OneDimensionalHistogramItem(Item):
         pass
 
     def draw(self, ax):
-        "Draw the histogram"
+        """Draw the one-dimensional histogram on the provided axes.
+
+        :param ax: The matplotlib axes onto which the histogram is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         ax.hist(self.samples, weights=self._datafile.weights, range=self.range,
                 alpha=self.alpha, bins=self.bins, color=self.color, density=True, label=self.label)
 
@@ -689,7 +785,16 @@ class TwoDimensionalHistogramItem(Item):
             raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the histogram for drawing."
+        """Prepare the two-dimensional histogram for drawing.
+
+        Loads the data file (of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`),
+        extracts the samples of the two chosen ``variables``, and determines the x- and y-ranges if they
+        were not provided explicitly.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
 
         context = AnalysisFileContext() if context is None else context
 
@@ -720,7 +825,11 @@ class TwoDimensionalHistogramItem(Item):
             self.yrange = (self.samples[:,1].min(), self.samples[:,1].max())
 
     def draw(self, ax):
-        "Draw the two-dimensional histogram."
+        """Draw the two-dimensional histogram on the provided axes.
+
+        :param ax: The matplotlib axes onto which the histogram is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         ax.hist2d(self.samples[:, 0], self.samples[:, 1], weights=self.weights, range=[self.xrange, self.yrange],
                   bins=self.bins, label=self.label, rasterized=True, cmap='Greys')
 
@@ -816,7 +925,16 @@ class OneDimensionalKernelDensityEstimateItem(Item):
             raise ValueError(f"Bandwidth factor '{self.bandwidth}' is not positive")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the KDE for drawing."
+        """Prepare the kernel density estimate for drawing.
+
+        Loads the data file, extracts the samples of the chosen ``variable``, fits a Gaussian KDE
+        (optionally rescaling the automatically determined bandwidth), and evaluates the resulting
+        probability density on a grid of ``xsamples`` points for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
 
         context = AnalysisFileContext() if context is None else context
 
@@ -865,7 +983,14 @@ class OneDimensionalKernelDensityEstimateItem(Item):
         self.pdf /= self.pdf.sum()
 
     def draw(self, ax):
-        "Draw the KDE."
+        """Draw the kernel density estimate on the provided axes.
+
+        Plots the estimated probability density and, if ``level`` is set, shades the smallest
+        region containing the requested credibility level.
+
+        :param ax: The matplotlib axes onto which the KDE is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         # find the PDF value corresponding to a given cumulative probability
         if self.level is not None:
             plevelf = lambda x, pdf, P: self.pdf[self.pdf > x].sum() - P
@@ -965,7 +1090,16 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
                 raise ValueError(f"Contour type '{contour_type}' is not supported")
 
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the KDE for drawing."
+        """Prepare the two-dimensional kernel density estimate for drawing.
+
+        Loads the data file, extracts the samples of the two chosen ``variables``, fits a Gaussian KDE
+        (optionally rescaling the automatically determined bandwidth), and evaluates the resulting
+        probability density on a regular grid spanning the x- and y-ranges for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
 
         context = AnalysisFileContext() if context is None else context
 
@@ -1034,7 +1168,14 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         self._pdf /= self._pdf.sum()
 
     def draw(self, ax):
-        "Draw the KDE."
+        """Draw the two-dimensional kernel density estimate on the provided axes.
+
+        Draws contour lines at the requested credibility ``levels`` and, depending on the
+        ``contours`` setting, optionally fills the contour areas and/or labels the contour lines.
+
+        :param ax: The matplotlib axes onto which the KDE is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         # find the PDF value corresponding to a given cummulative probability
         plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
         plevels = []
@@ -1064,7 +1205,13 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
             ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
     def legend(self):
-        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        Provides a filled rectangle handle when contour areas are drawn, and a line handle otherwise.
+
+        :returns: A list containing a single ``(handle, label)`` pair if a label is set, otherwise empty.
+        :rtype: list[tuple[matplotlib.artist.Artist, str]]
+        """
         entries = []
 
         if self.label:
@@ -1183,7 +1330,18 @@ class ConstraintItem(Item):
             raise TypeError(f'constraints must be a QualifiedName or a list of QualifiedNames, not {type(self.constraints)}')
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the constraint for drawing."""
+        """Prepare the constraint for drawing.
+
+        Looks up and deserializes each named constraint, then extracts the central values and
+        (a)symmetric uncertainties of the chosen ``observable`` as a function of the kinematic
+        ``variable``, optionally rescaling binned constraints by the inverse of the bin width.
+        The supported constraint types are ``Gaussian``, ``MultivariateGaussian(Covariance)``,
+        and ``MultivariateGaussian``.
+
+        :param context: The analysis file context. Accepted for interface consistency; this item
+            does not read any data files. If ``None``, a default context is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
 
         import yaml
@@ -1320,7 +1478,14 @@ class ConstraintItem(Item):
             self._mask = _np.array([True] * len(self._xvalues))
 
     def draw(self, ax):
-        "Draw the constraint on the axes."
+        """Draw the constraint on the provided axes.
+
+        Renders each data point as an error bar, using horizontal error bars to indicate the bin
+        width of binned constraints.
+
+        :param ax: The matplotlib axes onto which the constraint is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
 
         if len(self._xvalues) == 0:
             return
@@ -1455,7 +1620,17 @@ class ConstraintResidueItem(Item):
                 self._parameters.set(key, value)
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the constraint for drawing."""
+        """Prepare the constraint residues for drawing.
+
+        Looks up and deserializes each named constraint, evaluates the corresponding ``observable``
+        at the given ``parameters``, and computes the residues (measured value minus prediction)
+        together with their uncertainties as a function of the kinematic ``variable``, optionally
+        rescaling binned constraints by the inverse of the bin width.
+
+        :param context: The analysis file context. Accepted for interface consistency; this item
+            does not read any data files. If ``None``, a default context is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
 
         import yaml
@@ -1611,7 +1786,14 @@ class ConstraintResidueItem(Item):
             self._mask = _np.array([True] * len(self._xvalues))
 
     def draw(self, ax):
-        "Draw the constraint on the axes."
+        """Draw the constraint residues on the provided axes.
+
+        Renders each residue as an error bar, using horizontal error bars to indicate the bin
+        width of binned constraints.
+
+        :param ax: The matplotlib axes onto which the residues are drawn.
+        :type ax: matplotlib.axes.Axes
+        """
 
         if len(self._xvalues) == 0:
             return
@@ -1687,11 +1869,25 @@ class BandItem(Item):
                 raise ValueError(f"Invalid 'y' range: {self.y}. The first value must be less than the second value.")
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the band for drawing."""
+        """Prepare the band for drawing.
+
+        This item requires no preparation, since its extent is fully determined by the ``x`` and
+        ``y`` attributes (or the axes limits) at draw time.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
         pass
 
     def draw(self, ax):
-        "Draw the band on the axes."
+        """Draw the shaded band on the provided axes.
+
+        Draws a rectangle spanning ``x`` horizontally and ``y`` vertically. Whichever of the two is
+        left unspecified spans the full corresponding axis range, yielding a vertical or horizontal band.
+
+        :param ax: The matplotlib axes onto which the band is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
 
         if self.x is not None:
             _xmin, _xmax = tuple(self.x)
@@ -1709,7 +1905,13 @@ class BandItem(Item):
         ax.add_patch(rect)
 
     def legend(self):
-        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        Provides a filled rectangle handle matching the band's color and transparency.
+
+        :returns: A list containing a single ``(handle, label)`` pair if a label is set, otherwise empty.
+        :rtype: list[tuple[matplotlib.artist.Artist, str]]
+        """
         entries = []
 
         if self.label:
@@ -1778,7 +1980,16 @@ class SignalPDFItem(Item):
             raise ValueError(f"Invalid resolution '{self.resolution}'. It must be a positive integer.")
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the signal PDF for plotting."""
+        """Prepare the signal PDF for plotting.
+
+        Builds the parameters (optionally overridden from file), kinematics, and options, instantiates
+        the signal PDF, and caches its normalization for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to
+            ``parameters_from_file``. If ``None``, a default context rooted at the current working
+            directory is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
 
         self._parameters = eos.Parameters.Defaults()
@@ -1819,7 +2030,14 @@ class SignalPDFItem(Item):
         self._norm = self._pdf.normalization()
 
     def draw(self, ax):
-        """Draw the signal PDF on the axes."""
+        """Draw the signal PDF on the provided axes.
+
+        Evaluates the normalized signal PDF on a grid of ``resolution`` points spanning ``range`` of
+        the chosen kinematic ``variable`` and plots the resulting curve.
+
+        :param ax: The matplotlib axes onto which the signal PDF is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
 
         xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
         pvalues = _np.full(xvalues.shape, -self._norm)
@@ -1919,7 +2137,16 @@ class ComplexPlaneItem(Item):
         self._cvalues = _np.reshape([[x + 1.0j * y for y in self._yvalues] for x in self._xvalues], (self.resolution**2))
 
     def evaluate(self, c:complex):
-        """Evaluate the observable at a complex-valued kinematic variable."""
+        """Evaluate the observable at a complex-valued kinematic variable.
+
+        Sets the two kinematic variables given by ``variables`` to the real and imaginary parts of
+        ``c``, respectively, and evaluates the observable.
+
+        :param c: The complex value at which to evaluate the observable.
+        :type c: complex
+        :returns: The value of the observable at ``c``.
+        :rtype: float
+        """
 
         self._kvx.set(_np.real(c))
         self._kvy.set(_np.imag(c))
@@ -1927,11 +2154,22 @@ class ComplexPlaneItem(Item):
         return self._observable.evaluate()
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the observable for plotting in the complex plane."""
+        """Prepare the observable for plotting in the complex plane.
+
+        Evaluates the observable on a regular ``resolution`` x ``resolution`` grid of complex values
+        spanning the two ranges given by ``ranges`` and caches the results for :meth:`draw`.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
         self._ovalues = _np.reshape(list(map(self.evaluate, self._cvalues)), (self.resolution, self.resolution)).T
 
     def draw(self, ax):
-        """Draw the observable on the axes."""
+        """Draw the observable on the provided axes as a pseudocolor plot over the complex plane.
+
+        :param ax: The matplotlib axes onto which the observable is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap='viridis', rasterized=True)
 
 
@@ -1988,7 +2226,14 @@ class ErrorBarsItem(Item):
 
 
     def prepare(self, context:AnalysisFileContext=None):
-        """Prepare the error bars for drawing."""
+        """Prepare the error bars for drawing.
+
+        Converts the ``positions`` into x- and y-coordinate arrays and normalizes the ``xerrors`` and
+        ``yerrors`` into the asymmetric (lower, upper) form expected by :meth:`draw`.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
         self._x = _np.array([pos[0] for pos in self.positions])
         self._y = _np.array([pos[1] for pos in self.positions])
 
@@ -2027,12 +2272,23 @@ class ErrorBarsItem(Item):
             self._yerr = self._yerr.T
 
     def draw(self, ax):
-        "Draw the error bars on the axes."
+        """Draw the error bars on the provided axes.
+
+        :param ax: The matplotlib axes onto which the error bars are drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         ax.errorbar(self._x, self._y, xerr=self._xerr, yerr=self._yerr, fmt='none', color=self.color,
                     alpha=self.alpha, elinewidth=self.linewidth, linestyle=self.linestyle, label=self.label)
         ax.plot(self._x, self._y, marker=self.marker, linestyle='none', color=self.color, alpha=self.alpha)
 
 class ItemFactory:
+    """Factory that creates :class:`Item` instances from their YAML or dictionary description.
+
+    The concrete item class is selected from the mandatory ``type`` key using the :attr:`registry`,
+    which maps each supported type string (e.g. ``'observable'``, ``'kde1D'``, ``'constraint'``) to
+    its corresponding :class:`Item` subclass.
+    """
+
     registry = {
         'observable': ObservableItem,
         'uncertainty': UncertaintyBandItem,
@@ -2051,13 +2307,28 @@ class ItemFactory:
 
     @staticmethod
     def from_yaml(yaml_data:str):
-        "Factory method to create an item from a yaml string"
+        """Create an item from a YAML description.
+
+        :param yaml_data: A YAML string describing a single item, including its ``type`` key.
+        :type yaml_data: str
+        :returns: The instantiated item.
+        :rtype: Item
+        """
         kwargs = _yaml.safe_load(yaml_data)
         return ItemFactory.from_dict(**kwargs)
 
     @staticmethod
     def from_dict(**kwargs):
-        "Factory method to create an item from a dictionary"
+        """Create an item from its keyword description.
+
+        The mandatory ``type`` key selects the concrete :class:`Item` subclass from :attr:`registry`;
+        the remaining keyword arguments are forwarded to that subclass.
+
+        :param kwargs: The item description. Must contain a ``type`` key identifying a registered item type.
+        :returns: The instantiated item.
+        :rtype: Item
+        :raises ValueError: If the ``type`` key is missing or names an unknown item type.
+        """
         if 'type' not in kwargs:
             raise ValueError(f"Content item { kwargs } does not contain element 'type'")
 
