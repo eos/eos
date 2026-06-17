@@ -19,6 +19,19 @@ import yaml
 
 
 class NabuLikelihood:
+    r"""Represents a likelihood serialized with the nabu package, stored on disk.
+
+    Wraps a :class:`nabu.Likelihood` object together with the descriptions of the varied parameters.
+    Instances are created either by reading an existing likelihood from disk (passing its ``path`` to
+    the constructor) or by writing a new likelihood with :meth:`create`. Reading requires the optional
+    nabu module.
+
+    :ivar type: The type identifier of the data object, always ``'NabuLikelihood'``.
+    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
+    :ivar lookup_table: A mapping from each parameter name to its index in :attr:`varied_parameters`.
+    :ivar likelihood: The underlying :class:`nabu.Likelihood` object.
+    """
+
     def __init__(self, path):
         """ Read a nabu serialized likelihood from disk.
 

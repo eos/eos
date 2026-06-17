@@ -21,6 +21,20 @@ import yaml
 
 
 class ImportanceSamples:
+    r"""Represents a set of weighted importance samples stored on disk.
+
+    Bundles samples in parameter space with their importance weights and, optionally, the values of the
+    posterior density at each sample. Instances are created either by reading an existing data set from
+    disk (passing its ``path`` to the constructor) or by writing a new data set with :meth:`create`.
+
+    :ivar type: The type identifier of the data object, always ``'ImportanceSamples'``.
+    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
+    :ivar lookup_table: A mapping from each parameter name to its column index in :attr:`samples`.
+    :ivar samples: The samples in parameter space as a 2D array of shape (N, P).
+    :ivar weights: The importance weights on a linear scale as a 1D array of shape (N, ).
+    :ivar posterior_values: The posterior density values at each sample as a 1D array of shape (N, ), or ``None`` if not stored.
+    """
+
     def __init__(self, path):
         """ Read an ImportanceSamples object from disk.
 

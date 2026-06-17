@@ -22,6 +22,21 @@ import yaml
 
 
 class Mode:
+    r"""Represents a (local) mode of a posterior density stored on disk.
+
+    Stores the location of the mode in parameter space together with goodness-of-fit information.
+    Instances are created either by reading an existing mode from disk (passing its ``path`` to the
+    constructor) or by writing a new mode with :meth:`create`.
+
+    :ivar type: The type identifier of the data object, always ``'Mode'``.
+    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
+    :ivar mode: The location of the mode in parameter space.
+    :ivar pvalue: The global p-value at the mode.
+    :ivar local_pvalues: The local p-values at the mode.
+    :ivar global_chi2: The global :math:`\chi^2` value at the mode, or ``None`` if not stored.
+    :ivar dof: The number of degrees of freedom, or ``None`` if not stored.
+    """
+
     def __init__(self, path):
         """ Read a posterior's (local) mode from a file.
 

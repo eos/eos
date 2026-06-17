@@ -21,6 +21,20 @@ import yaml
 
 
 class DynestyResults:
+    r"""Represents the results of a nested-sampling run with dynesty, stored on disk.
+
+    Wraps a :class:`dynesty.results.Results` object together with the descriptions of the varied
+    parameters. Instances are created either by reading existing results from disk (passing their
+    ``path`` to the constructor) or by writing new results with :meth:`create`.
+
+    :ivar type: The type identifier of the data object, always ``'DynestyResults'``.
+    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
+    :ivar lookup_table: A mapping from each parameter name to its column index in :attr:`samples`.
+    :ivar results: The underlying :class:`dynesty.results.Results` object.
+    :ivar samples: The samples in parameter space as a 2D array.
+    :ivar weights: The importance weights on a linear scale, derived from the nested-sampling log-weights.
+    """
+
     def __init__(self, path):
         """ Read Results object (in the dynesty.results module) from disk.
 
