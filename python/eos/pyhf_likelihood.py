@@ -22,6 +22,32 @@ import numpy as np
 import json
 
 class PyhfLogLikelihood:
+    r"""Wraps a HistFactory likelihood, specified as a pyhf workspace, for use within EOS.
+
+    On construction, the pyhf model's modifiers (its parameters) are mapped onto EOS observables or
+    parameters: each pyhf parameter is associated with the EOS observable or parameter named by
+    ``parameter_map``, defaulting to a parameter ``pyhf::<name>`` that is declared if it does not yet
+    exist. The corresponding observables are registered with the supplied observable cache, so that
+    :meth:`evaluate` can compute the main term of the pyhf log-likelihood from the current EOS parameter
+    values. The constraint terms of the pyhf likelihood are not evaluated here; they are instead exposed
+    as EOS priors via :meth:`priors`.
+
+    Using this class requires the optional ``pyhf`` module.
+
+    :param cache: The EOS observable cache to which the observables backing the pyhf parameters are added.
+    :type cache: eos.ObservableCache
+    :param workspace: A pyhf workspace, or the path to a JSON file specifying one.
+    :type workspace: pyhf.workspace.Workspace | str
+    :param parameter_map: An optional mapping from pyhf parameter names to EOS observables or parameters.
+        Each value is either the qualified name of an EOS observable/parameter, or a dictionary with a
+        ``name`` key and optional ``kinematics`` and ``options`` keys. Parameters not listed default to an
+        EOS parameter named ``pyhf::<name>``.
+    :type parameter_map: dict | None
+    :raises RuntimeError: If the ``pyhf`` module is not installed.
+    :raises ValueError: If ``workspace`` is neither a pyhf workspace nor a path to a valid JSON file, or
+        if a ``parameter_map`` value is neither a string nor a dictionary.
+    """
+
     def __init__(self, cache, workspace, parameter_map=None):
         if parameter_map is None:
             parameter_map = {}
@@ -100,15 +126,44 @@ class PyhfLogLikelihood:
         self.number_of_observations = int(1)
 
     def evaluate(self):
+        """Evaluate the main term of the pyhf log-likelihood at the current parameter values.
+
+        The pyhf parameters are read from their associated EOS observables/parameters, and the main
+        (non-constraint) term of the HistFactory log-likelihood is returned. Constraint terms are handled
+        separately within EOS via the priors returned by :meth:`priors`.
+
+        :returns: The value of the main log-likelihood term.
+        :rtype: float
+        """
         parameter_values = np.array([p.evaluate() for p in self._pyhf_parameters])
         # only main term in pyhf - constraints are handled in EOS
         return self.model.mainlogpdf(self.data, parameter_values).item()
 
     @staticmethod
     def factory(cache, workspace, parameter_map=None):
+        """Construct a :class:`PyhfLogLikelihood`.
+
+        Convenience factory with the same signature as the constructor; see the class documentation for a
+        description of the arguments.
+
+        :returns: The constructed likelihood.
+        :rtype: PyhfLogLikelihood
+        """
         return PyhfLogLikelihood(cache, workspace, parameter_map)
 
     def priors(self):
+        """Return the EOS prior descriptions corresponding to the pyhf constraint terms.
+
+        Each modifier (parameter) of the pyhf model is translated into an EOS prior description:
+        unconstrained parameters yield a uniform prior over their suggested bounds, while parameters with
+        a normal or Poisson constraint yield Gaussian or Poisson priors, respectively. Parameters mapped
+        to an EOS observable (a dictionary entry in ``parameter_map``) are skipped, since they are not
+        free parameters.
+
+        :returns: A list of prior descriptions, each a dictionary with a ``parameter`` name, a ``type``,
+            and the type-specific keys (e.g. ``min``/``max``, ``central``/``sigma``, or ``k``).
+        :rtype: list[dict]
+        """
         priors = []
         for name, _ in self.model.config.modifiers:
             param_name = 'pyhf::' + name
