@@ -35,6 +35,19 @@ from dataclasses import asdict
 from .ipython import __ipython__
 
 class LogfileHandler:
+    """Context manager that redirects EOS log output to a file for the duration of a ``with`` block.
+
+    On entry, a :class:`logging.FileHandler` writing to ``<path>/<name>`` is added to the EOS logger; on
+    exit, it is removed again. Used by :func:`task` to capture an invocation-specific log file.
+
+    :param path: The directory in which the log file is created.
+    :type path: str
+    :param name: The name of the log file. Defaults to ``'log'``.
+    :type name: str
+    :param mode: The file mode passed to :class:`logging.FileHandler`, e.g. ``'w'`` to truncate or ``'a'`` to append. Defaults to ``'w'``.
+    :type mode: str
+    """
+
     def __init__(self, path, name='log', mode='w'):
         self.path = path
         self.name = name
@@ -54,6 +67,29 @@ class LogfileHandler:
 _tasks = {}
 
 def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
+    """Decorator that registers a function as a named EOS task.
+
+    The decorated function is wrapped so that, on each invocation, it imports any optional ``modules``,
+    resolves a string ``analysis_file`` argument into an :class:`eos.AnalysisFile`, creates the output
+    directory, and (unless disabled) captures its log output into a per-invocation log file. When running
+    under IPython, the task's log output is additionally shown in a collapsible output widget. The wrapped
+    function is registered in the task registry under ``name`` so that it can be looked up and run by the
+    ``run`` task and the command-line interface.
+
+    :param name: The name under which the task is registered.
+    :type name: str
+    :param output: A format string, relative to the base directory, for the task's output directory.
+        It may reference the task's arguments (e.g. ``'data/{posterior}/nested'``).
+    :type output: str
+    :param mode: A callable that, given the task's arguments as keyword arguments, returns the file mode
+        for the log file (e.g. ``'w'`` or ``'a'``). Defaults to always returning ``'w'``.
+    :type mode: callable
+    :param modules: The names of optional Python modules to import before the task runs. Defaults to none.
+    :type modules: list[str] | None
+    :param logfile: Whether to capture the task's log output into a log file in the output directory. Defaults to True.
+    :type logfile: bool
+    :returns: A decorator that registers and returns the wrapped task function.
+    """
     if modules is None:
         modules = []
     def _task(func):
@@ -594,10 +630,34 @@ def run(analysis_file:str, id:str, base_directory:str='./', dry_run:bool=False):
 
 
 class DynestyResultLogger:
+    """Throttled progress logger for dynesty nested-sampling runs.
+
+    An instance is passed as the ``print_function`` to a dynesty sampler. It forwards a one-line progress
+    summary to the EOS logger, but at most once every 15 seconds, to avoid flooding the log.
+    """
+
     def __init__(self):
         self.timer = _dynesty.utils.DelayTimer(15)
 
     def print_function(self, results, niter, ncall, add_live_it=None, dlogz=None, stop_val=None, nbatch=None, logl_min=-_np.inf, logl_max=_np.inf):
+        """Log a one-line summary of the current nested-sampling state.
+
+        Intended to be supplied as the ``print_function`` of a dynesty sampler. The summary is emitted to
+        the EOS logger at most once per throttling interval; calls in between return without logging. The
+        arguments mirror those passed by dynesty to its print function.
+
+        :param results: The current sampling results as provided by dynesty.
+        :param niter: The current iteration number.
+        :type niter: int
+        :param ncall: The cumulative number of likelihood evaluations.
+        :type ncall: int
+        :param add_live_it: The iteration at which the final live points were added, if applicable.
+        :param dlogz: The current remaining-evidence estimate, if applicable.
+        :param stop_val: The current value of the stopping criterion, if applicable.
+        :param nbatch: The current batch number for dynamic nested sampling, if applicable.
+        :param logl_min: The lower log-likelihood bound of the current batch.
+        :param logl_max: The upper log-likelihood bound of the current batch.
+        """
         if not self.timer.is_time():
             return
 
@@ -948,6 +1008,25 @@ def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Paramet
 # Create mask
 @task('create-mask', 'data/{posterior}/mask-{mask_name}')
 def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:str='./'):
+    """
+    Creates a sample mask for a named posterior from a mask description in the analysis file.
+
+    The named mask's description is a logical combination (``and`` or ``or``) of observables and/or other
+    masks. Each observable contributes the subset of samples for which it evaluates positive, and nested
+    masks are created recursively. The combined mask is stored as an :class:`eos.data.SampleMask` in
+    EOS_BASE_DIRECTORY/data/POSTERIOR/mask-MASK_NAME, and is also returned as a boolean array.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior and mask, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior whose samples are masked.
+    :type posterior: str
+    :param mask_name: The name of the mask to create, as defined in the analysis file.
+    :type mask_name: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :returns: The combined boolean mask, with one entry per posterior sample.
+    :rtype: numpy.ndarray
+    """
     _analysis = analysis_file.analysis(posterior)
     _parameters = _analysis.parameters
     data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
